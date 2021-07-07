@@ -88,7 +88,19 @@ workflow RAREDISEASE {
     FASTQC (
         INPUT_CHECK.out.reads
     )
-    ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
+    ch_software_versions = ch_software_versions.mix(FASTQC.out.version.ifEmpty(null))
+
+    //
+    // MODULE: Run BWAMEM2
+    //
+    BWAMEM2_INDEX (
+        params.fasta
+    )
+
+    BWAMEM2_MEM (
+        INPUT_CHECK.out.reads, BWAMEM2_INDEX.out.index
+    )
+    ch_software_versions = ch_software_versions.mix(BWAMEM2_MEM.out.version.ifEmpty(null))
 
     //
     // MODULE: Pipeline reporting
