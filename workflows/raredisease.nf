@@ -57,7 +57,9 @@ multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"
 //
 // MODULE: Installed directly from nf-core/modules
 //
-include { FASTQC  } from '../modules/nf-core/software/fastqc/main'  addParams( options: modules['fastqc'] )
+include { FASTQC } from '../modules/nf-core/software/fastqc/main'  addParams( options: modules['fastqc'] )
+include { BWAMEM2_INDEX } from '../modules/nf-core/software/bwamem2/index/main'  addParams( options: modules['bwa_mem2_index'] )
+include { BWAMEM2_MEM } from '../modules/nf-core/software/bwamem2/mem/main'  addParams( options: modules['bwa_mem2_mem'] )
 include { MULTIQC } from '../modules/nf-core/software/multiqc/main' addParams( options: multiqc_options   )
 
 /*
