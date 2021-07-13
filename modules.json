@@ -8,6 +8,12 @@
             },
             "multiqc": {
                 "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+            },
+            "bwamem2/index": {
+                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
+            },
+            "bwamem2/mem": {
+                "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
             }
         }
     }
