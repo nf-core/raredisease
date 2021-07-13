@@ -60,6 +60,8 @@ multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"
 include { FASTQC } from '../modules/nf-core/modules/fastqc/main'  addParams( options: modules['fastqc'] )
 include { BWAMEM2_INDEX } from '../modules/nf-core/modules/bwamem2/index/main'  addParams( options: modules['bwa_mem2_index'] )
 include { BWAMEM2_MEM } from '../modules/nf-core/modules/bwamem2/mem/main'  addParams( options: modules['bwa_mem2_mem'] )
+include { SAMTOOLS_MERGE } from '../modules/nf-core/modules/samtools/merge/main' addParams(options: modules['merge_bam_mapping'])
+include { SAMTOOLS_INDEX } from '../modules/nf-core/modules/samtools/index/main' addParams(options: modules['samtools_index_mapping'])
 include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( options: multiqc_options   )
 
 /*
@@ -101,6 +103,19 @@ workflow RAREDISEASE {
         INPUT_CHECK.out.reads, BWAMEM2_INDEX.out.index
     )
     ch_software_versions = ch_software_versions.mix(BWAMEM2_MEM.out.version.ifEmpty(null))
+
+    bam_bwa = BWAMEM2_MEM.out.bam
+
+    bam_bwa.map{ meta, bam ->
+        meta.id = meta.id.split('_')[0]
+        [meta, bam]
+    }.groupTuple().branch{
+        single: it[1].size() == 1
+        multiple: it[1].size() > 1
+    }.set{ bam_bwa_to_sort }
+
+    SAMTOOLS_MERGE(bam_bwa_to_sort.multiple)
+    ch_software_versions = ch_software_versions.mix(SAMTOOLS_MERGE.out.version.ifEmpty(null))
 
     //
     // MODULE: Pipeline reporting
