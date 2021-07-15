@@ -58,12 +58,18 @@ multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"
 // MODULE: Installed directly from nf-core/modules
 //
 include { FASTQC } from '../modules/nf-core/modules/fastqc/main'  addParams( options: modules['fastqc'] )
-include { BWAMEM2_INDEX } from '../modules/nf-core/modules/bwamem2/index/main'  addParams( options: modules['bwa_mem2_index'] )
-include { BWAMEM2_MEM } from '../modules/nf-core/modules/bwamem2/mem/main'  addParams( options: modules['bwa_mem2_mem'] )
-include { SAMTOOLS_SORT } from '../modules/nf-core/modules/samtools/sort/main' addParams(options: modules['samtools_sort'])
-include { SAMTOOLS_MERGE } from '../modules/nf-core/modules/samtools/merge/main' addParams(options: modules['merge_bam_mapping'])
-include { SAMTOOLS_INDEX } from '../modules/nf-core/modules/samtools/index/main' addParams(options: modules['samtools_index_mapping'])
 include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( options: multiqc_options   )
+
+//
+// SUBWORKFLOW: Consists entirely of nf-core/modules
+//
+include { MAPPING } from  '../subworkflows/nf-core/mapping' addParams(
+    bwamem2_idx_options: modules['bwa_mem2_index'],
+    bwamem2_mem_options: modules['bwa_mem2_mem'],
+    samtools_idx_options: modules['samtools_index_mapping'],
+    samtools_merge_options: modules['merge_bam_mapping'],
+    samtools_sort_options: modules['samtools_sort'],
+    )
 
 /*
 ========================================================================================
@@ -93,32 +99,9 @@ workflow RAREDISEASE {
     )
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.ifEmpty(null))
 
-    //
-    // MODULE: Run BWAMEM2
-    //
-    BWAMEM2_INDEX ( params.fasta )
-
-    BWAMEM2_MEM (
-        INPUT_CHECK.out.reads, BWAMEM2_INDEX.out.index
-    )
-    ch_software_versions = ch_software_versions.mix(BWAMEM2_MEM.out.version.ifEmpty(null))
-
-    SAMTOOLS_SORT( BWAMEM2_MEM.out.bam )
-
-    sorted_bam_bwa = SAMTOOLS_SORT.out.bam
-
-    sorted_bam_bwa.map{ meta, bam ->
-        meta.id = meta.id.split('_')[0]
-        [meta, bam]
-    }.groupTuple().branch{
-        single: it[1].size() == 1
-        multiple: it[1].size() > 1
-    }.set{ bam_bwa }
-
-    SAMTOOLS_MERGE(bam_bwa.multiple)
-    ch_software_versions = ch_software_versions.mix(SAMTOOLS_MERGE.out.version.ifEmpty(null))
-
-    SAMTOOLS_INDEX(SAMTOOLS_MERGE.out.merged_bam)
+    MAPPING ( INPUT_CHECK.out.reads, params.fasta )
+    ch_software_versions = ch_software_versions.mix(MAPPING.out.bwamem2_version.ifEmpty(null))
+    ch_software_versions = ch_software_versions.mix(MAPPING.out.samtools_version.ifEmpty(null))
 
     //
     // MODULE: Pipeline reporting
