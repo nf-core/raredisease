@@ -32,6 +32,8 @@ workflow MERGE2BREAK {
         }.set{ bam_bwa }
 
         SAMTOOLS_MERGE ( bam_bwa.multiple, chr )
+        // TODO: Singles? WELLL, we shall re-name instead
+        // SAMTOOLS_VIEW ( bam_bwa.single )
 
     emit:
         bam = SAMTOOLS_MERGE.out.merged_bam
