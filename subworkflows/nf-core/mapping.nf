@@ -26,6 +26,16 @@ workflow MAPPING {
         // Index
         BWAMEM2_INDEX ( fasta )
 
+        // Add @RG, there should be a conditional for this in case read group is not needed
+        reads_input.map{ meta, reads ->
+            new_meta = meta.clone()
+            reads[0].baseName.split('_').init()
+
+            // Should there be a process to catch the RG from fastq headers?
+            // "\"@RG\\tID:${row.lane}\\t${CN}PU:${row.lane}\\tSM:${row.sample}\\tLB:${row.sample}\\tPL:ILLUMINA\""
+            // meta.read_group = read_group
+        }.view()
+
         // Map, sort, and index
         BWAMEM2_MEM ( reads_input, BWAMEM2_INDEX.out.index )
         SAMTOOLS_SORT ( BWAMEM2_MEM.out.bam )
