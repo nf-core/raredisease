@@ -96,18 +96,18 @@ workflow RAREDISEASE {
         ch_input
     )
 
-    //
-    // MODULE: Run FastQC
-    //
+    // STEP 0: QUALITY CHECK.
     FASTQC (
         INPUT_CHECK.out.reads
     )
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.ifEmpty(null))
 
+    // STEP 1: MAPPING READS AND CHOP BAM INTO CONTIGS.
     MAPPING ( INPUT_CHECK.out.reads, params.fasta )
     ch_software_versions = ch_software_versions.mix(MAPPING.out.bwamem2_version.ifEmpty(null))
     ch_software_versions = ch_software_versions.mix(MAPPING.out.samtools_version.ifEmpty(null))
 
+    // Merge and then chop into chromosomes.
     MERGE2BREAK ( params.fasta, MAPPING.out.bam, MAPPING.out.bai )
 
     //

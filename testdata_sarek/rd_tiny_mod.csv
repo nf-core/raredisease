@@ -1,0 +1,6 @@
+sample,lane,fastq_1,fastq_2,sex,phenotype,paternal_id,maternal_id,case_id
+1234N,1,testdata_sarek/normal/tiny_n_L001_R1_xxx.fastq.gz,testdata_sarek/normal/tiny_n_L001_R2_xxx.fastq.gz,2,1,caseyupper,caseyupperlamb,caseydonkey
+1234N,4,testdata_sarek/normal/tiny_n_L004_R1_xxx.fastq.gz,testdata_sarek/normal/tiny_n_L004_R2_xxx.fastq.gz,2,1,caseyupper,caseyupperlamb,caseydonkey
+1234N,2,testdata_sarek/normal/tiny_n_L002_R1_xxx.fastq.gz,testdata_sarek/normal/tiny_n_L002_R2_xxx.fastq.gz,2,1,caseyupper,caseyupperlamb,caseydonkey
+1234N,7,testdata_sarek/normal/tiny_n_L007_R1_xxx.fastq.gz,testdata_sarek/normal/tiny_n_L007_R2_xxx.fastq.gz,2,1,caseyupper,caseyupperlamb,caseydonkey
+1234N,8,testdata_sarek/normal/tiny_n_L008_R1_xxx.fastq.gz,testdata_sarek/normal/tiny_n_L008_R2_xxx.fastq.gz,2,1,caseyupper,caseyupperlamb,caseydonkey
