@@ -50,7 +50,7 @@ def create_fastq_channels(LinkedHashMap row) {
 def create_sample_channels(LinkedHashMap row) {
     def sample = [:]
     sample.id = row.sample
-    sample.sex = row.sex
+    sample.gender = row.gender
     sample.phenotype = row.phenotype
     sample.maternal = row.maternal_id
     sample.paternal = row.paternal_id
