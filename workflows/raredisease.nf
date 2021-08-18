@@ -45,11 +45,6 @@ include { GET_SOFTWARE_VERSIONS } from '../modules/local/get_software_versions' 
 //
 include { INPUT_CHECK } from '../subworkflows/local/input_check' addParams( options: [:] )
 
-include { MERGE2BREAK } from '../subworkflows/local/merge2break' addParams(
-    samtools_merge_options: modules['samtools_merge'],
-    samtools_view_options: modules['samtools_view'],
-)
-
 /*
 ========================================================================================
     IMPORT NF-CORE MODULES/SUBWORKFLOWS
@@ -73,7 +68,8 @@ include { MAPPING } from  '../subworkflows/nf-core/mapping' addParams(
     bwamem2_mem_options: modules['bwa_mem2_mem'],
     samtools_idx_options: modules['samtools_index'],
     samtools_sort_options: modules['samtools_sort'],
-    samtools_stats_options: modules['samtools_stats']
+    samtools_stats_options: modules['samtools_stats'],
+    samtools_merge_options: modules['samtools_merge'],
     )
 
 /*
@@ -102,13 +98,10 @@ workflow RAREDISEASE {
     )
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.ifEmpty(null))
 
-    // STEP 1: MAPPING READS AND CHOP BAM INTO CONTIGS.
+    // STEP 1: MAPPING READS, FETCH STATS, AND MERGE.
     MAPPING ( INPUT_CHECK.out.reads, params.fasta )
     ch_software_versions = ch_software_versions.mix(MAPPING.out.bwamem2_version.ifEmpty(null))
     ch_software_versions = ch_software_versions.mix(MAPPING.out.samtools_version.ifEmpty(null))
-
-    // Merge and then chop into chromosomes.
-    MERGE2BREAK ( params.fasta, MAPPING.out.bam, MAPPING.out.bai )
 
     //
     // MODULE: Pipeline reporting

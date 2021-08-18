@@ -11,27 +11,25 @@ process SAMTOOLS_MERGE {
         mode: params.publish_dir_mode,
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), meta:meta, publish_by_meta:['id']) }
 
-    conda (params.enable_conda ? "bioconda::samtools=1.12" : null)
+    conda (params.enable_conda ? 'bioconda::samtools=1.13' : null)
     if (workflow.containerEngine == 'singularity' && !params.singularity_pull_docker_container) {
-        container "https://depot.galaxyproject.org/singularity/samtools:1.12--hd5e65b6_0"
+        container "https://depot.galaxyproject.org/singularity/samtools:1.13--h8c37831_0"
     } else {
-        container "quay.io/biocontainers/samtools:1.12--hd5e65b6_0"
+        container "quay.io/biocontainers/samtools:1.13--h8c37831_0"
     }
 
     input:
-    tuple val(meta), path(bams), path(bai)
-    val chr
+    tuple val(meta), path(bams)
 
     output:
-    tuple val(meta), path("*.bam"), emit: merged_bam
-    tuple val(meta), path("*.csi"), optional:true, emit: csi
-    path  "*.version.txt"              , emit: version
+    tuple val(meta), path("${prefix}.bam"), emit: bam
+    path  "*.version.txt"                 , emit: version
 
     script:
     def software = getSoftwareName(task.process)
-    def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
+    prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
     """
-    samtools merge $options.args -R ${chr} ${prefix}.sorted.${chr}.bam $bams
+    samtools merge ${prefix}.bam $bams
     echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//' > ${software}.version.txt
     """
 }
