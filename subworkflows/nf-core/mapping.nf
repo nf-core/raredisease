@@ -52,7 +52,7 @@ workflow MAPPING {
         SAMTOOLS_MERGE ( bams_to_merge.multiple )
         bam = bams_to_merge.single.mix(SAMTOOLS_MERGE.out.bam)
 
-        SAMTOOLS_INDEX_2 ( bam_merged )
+        SAMTOOLS_INDEX_2 ( bam )
         bai = SAMTOOLS_INDEX_2.out.bai
 
 
