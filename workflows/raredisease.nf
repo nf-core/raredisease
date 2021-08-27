@@ -57,8 +57,20 @@ multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"
 //
 // MODULE: Installed directly from nf-core/modules
 //
-include { FASTQC  } from '../modules/nf-core/modules/fastqc/main'  addParams( options: modules['fastqc'] )
+include { FASTQC } from '../modules/nf-core/modules/fastqc/main'  addParams( options: modules['fastqc'] )
 include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( options: multiqc_options   )
+
+//
+// SUBWORKFLOW: Consists entirely of nf-core/modules
+//
+include { MAPPING } from  '../subworkflows/nf-core/mapping' addParams(
+    bwamem2_idx_options: modules['bwa_mem2_index'],
+    bwamem2_mem_options: modules['bwa_mem2_mem'],
+    samtools_idx_options: modules['samtools_index'],
+    samtools_sort_options: modules['samtools_sort'],
+    samtools_stats_options: modules['samtools_stats'],
+    samtools_merge_options: modules['samtools_merge'],
+    )
 
 /*
 ========================================================================================
@@ -80,13 +92,16 @@ workflow RAREDISEASE {
         ch_input
     )
 
-    //
-    // MODULE: Run FastQC
-    //
+    // STEP 0: QUALITY CHECK.
     FASTQC (
         INPUT_CHECK.out.reads
     )
-    ch_software_versions = ch_software_versions.mix(FASTQC.out.version.first().ifEmpty(null))
+    ch_software_versions = ch_software_versions.mix(FASTQC.out.version.ifEmpty(null))
+
+    // STEP 1: MAPPING READS, FETCH STATS, AND MERGE.
+    MAPPING ( INPUT_CHECK.out.reads, params.fasta )
+    ch_software_versions = ch_software_versions.mix(MAPPING.out.bwamem2_version.ifEmpty(null))
+    ch_software_versions = ch_software_versions.mix(MAPPING.out.samtools_version.ifEmpty(null))
 
     //
     // MODULE: Pipeline reporting
