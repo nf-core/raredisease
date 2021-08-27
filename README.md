@@ -29,7 +29,9 @@ On release, automated continuous integration tests run the pipeline on a full-si
 <!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
 
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+2. Map reads to reference ([`BWA mem`](http://bio-bwa.sourceforge.net/bwa.shtml), `BWA mem2`) with the option to ([`merge`](http://www.htslib.org/doc/samtools-merge.html))
+3. Mark duplicated reads ([`GATK4 MarkDuplicates`](https://gatk.broadinstitute.org/hc/en-us/articles/360037052812-MarkDuplicates-Picard-))
+4. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
 ## Quick Start
 

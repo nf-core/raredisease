@@ -2,7 +2,7 @@
 // Map to reference, fetch stats for each demultiplexed read pair, merge, mark duplicates, and index.
 //
 
-params.bwamem2_idx_options = [:]
+// params.bwamem2_idx_options = [:]
 params.bwamem2_mem_options = [:]
 params.samtools_idx_options = [:]
 params.samtools_sort_options = [:]
@@ -11,7 +11,7 @@ params.samtools_merge_options = [:]
 params.markduplicates_options = [:]
 params.samtools_idx_md_options = [:]
 
-include { BWAMEM2_INDEX } from '../../modules/nf-core/modules/bwamem2/index/main'  addParams( options: params.bwamem2_idx_options )
+// include { BWAMEM2_INDEX } from '../../modules/nf-core/modules/bwamem2/index/main'  addParams( options: params.bwamem2_idx_options )
 include { BWAMEM2_MEM } from '../../modules/nf-core/modules/bwamem2/mem/main'  addParams( options: params.bwamem2_mem_options )
 include { SAMTOOLS_INDEX } from '../../modules/nf-core/modules/samtools/index/main' addParams(options: params.samtools_idx_options )
 include { SAMTOOLS_SORT } from '../../modules/nf-core/modules/samtools/sort/main' addParams(options: params.samtools_sort_options )
@@ -24,14 +24,12 @@ include { PICARD_MARKDUPLICATES as MARKDUPLICATES } from '../../modules/nf-core/
 workflow MAPPING {
     take:
         reads_input // channel: [mandatory] meta, reads_input
-        fasta // channel: [mandatory] fasta
+        // fasta // channel: [mandatory] fasta
+        index // channel: /path/to/bwamem2/index/
 
     main:
-        // Index
-        BWAMEM2_INDEX ( fasta )
-
         // Map, sort, and index
-        BWAMEM2_MEM ( reads_input, BWAMEM2_INDEX.out.index )
+        BWAMEM2_MEM ( reads_input, index )
         SAMTOOLS_SORT ( BWAMEM2_MEM.out.bam )
         SAMTOOLS_INDEX ( SAMTOOLS_SORT.out.bam )
 
