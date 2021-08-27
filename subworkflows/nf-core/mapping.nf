@@ -4,7 +4,6 @@
 
 params.bwamem2_idx_options = [:]
 params.bwamem2_mem_options = [:]
-params.samtools_idx_options = [:]
 params.samtools_sort_options = [:]
 params.samtools_stats_options = [:]
 params.samtools_merge_options = [:]
@@ -13,7 +12,7 @@ params.samtools_idx_md_options = [:]
 
 include { BWAMEM2_INDEX } from '../../modules/nf-core/modules/bwamem2/index/main'  addParams( options: params.bwamem2_idx_options )
 include { BWAMEM2_MEM } from '../../modules/nf-core/modules/bwamem2/mem/main'  addParams( options: params.bwamem2_mem_options )
-include { SAMTOOLS_INDEX } from '../../modules/nf-core/modules/samtools/index/main' addParams(options: params.samtools_idx_options )
+include { SAMTOOLS_INDEX } from '../../modules/nf-core/modules/samtools/index/main'
 include { SAMTOOLS_SORT } from '../../modules/nf-core/modules/samtools/sort/main' addParams(options: params.samtools_sort_options )
 include { SAMTOOLS_STATS } from '../../modules/nf-core/modules/samtools/stats/main' addParams(options: params.samtools_stats_options )
 include { SAMTOOLS_MERGE } from '../../modules/nf-core/modules/samtools/merge/main' addParams( options: params.samtools_merge_options )

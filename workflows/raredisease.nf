@@ -66,7 +66,6 @@ include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( op
 include { MAPPING } from  '../subworkflows/nf-core/mapping' addParams(
     bwamem2_idx_options: modules['bwa_mem2_index'],
     bwamem2_mem_options: modules['bwa_mem2_mem'],
-    samtools_idx_options: modules['samtools_index'],
     samtools_sort_options: modules['samtools_sort'],
     samtools_stats_options: modules['samtools_stats'],
     samtools_merge_options: modules['samtools_merge'],
