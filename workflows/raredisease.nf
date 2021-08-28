@@ -70,6 +70,8 @@ include { MAPPING } from  '../subworkflows/nf-core/mapping' addParams(
     samtools_sort_options: modules['samtools_sort'],
     samtools_stats_options: modules['samtools_stats'],
     samtools_merge_options: modules['samtools_merge'],
+    markduplicates_options: modules['picard_markduplicates'],
+    samtools_idx_md_options: modules['samtools_index_md'],
     )
 
 /*
@@ -101,6 +103,7 @@ workflow RAREDISEASE {
     // STEP 1: MAPPING READS, FETCH STATS, AND MERGE.
     MAPPING ( INPUT_CHECK.out.reads, params.fasta )
     ch_software_versions = ch_software_versions.mix(MAPPING.out.bwamem2_version.ifEmpty(null))
+    ch_software_versions = ch_software_versions.mix(MAPPING.out.markduplicates_version.ifEmpty(null))
     ch_software_versions = ch_software_versions.mix(MAPPING.out.samtools_version.ifEmpty(null))
 
     //
