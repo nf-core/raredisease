@@ -14,7 +14,7 @@ workflow PREPARE_GENOME {
 
         ch_bwamem2_index = Channel.empty()
         ch_bwamem2_version = Channel.empty()
-        // Download BWAMEM2 index or create from scratch if required
+        // Fetch BWAMEM2 index or create from scratch if required
         if ('bwamem2' in prepare_tool_indicies) {
             if (params.bwamem2_index) {
                 ch_bwamem2_index = file(params.bwamem2_index)
