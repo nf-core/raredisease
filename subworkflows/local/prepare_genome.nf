@@ -18,6 +18,8 @@ workflow PREPARE_GENOME {
         if ('bwamem2' in prepare_tool_indicies) {
             if (params.bwamem2_index) {
                 ch_bwamem2_index = file(params.bwamem2_index)
+            } else if (params.bwamem2){
+                ch_bwamem2_index = file(params.bwamem2)
             } else {
                 ch_bwamem2_index = BWAMEM2_INDEX ( params.fasta ).index
                 ch_bwamem2_version = BWAMEM2_INDEX.out.version
