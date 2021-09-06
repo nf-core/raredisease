@@ -112,7 +112,6 @@ workflow RAREDISEASE {
     PREPARE_GENOME ( prepareToolIndices )
 
     // STEP 1: MAPPING READS, FETCH STATS, AND MERGE.
-    // MAPPING ( INPUT_CHECK.out.reads, params.fasta )
     MAPPING ( INPUT_CHECK.out.reads, PREPARE_GENOME.out.bwamem2_index )
     ch_software_versions = ch_software_versions.mix(MAPPING.out.bwamem2_version.ifEmpty(null))
     ch_software_versions = ch_software_versions.mix(MAPPING.out.markduplicates_version.ifEmpty(null))
