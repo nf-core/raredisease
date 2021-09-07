@@ -13,7 +13,7 @@ WorkflowRaredisease.initialise(params, log)
 // Check input path parameters to see if they exist
 def checkPathParamList = [
     params.input, params.multiqc_config, params.fasta,
-    params.bwamem2_index
+    params.bwamem2
 ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
@@ -39,7 +39,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 def modules = params.modules.clone()
 
 def publish_idx_options = params.save_reference ? modules['bwa_mem2_index'] : [publish_files: false]
-def prepareToolIndices = ['bwamem2']
+
 //
 // MODULE: Local to the pipeline
 //
@@ -94,6 +94,7 @@ def multiqc_report = []
 workflow RAREDISEASE {
 
     ch_software_versions = Channel.empty()
+    ch_fasta = file(params.fasta)
 
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
@@ -109,7 +110,7 @@ workflow RAREDISEASE {
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.ifEmpty(null))
 
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
-    PREPARE_GENOME ( prepareToolIndices )
+    PREPARE_GENOME ( ch_fasta )
 
     // STEP 1: MAPPING READS, FETCH STATS, AND MERGE.
     MAPPING ( INPUT_CHECK.out.reads, PREPARE_GENOME.out.bwamem2_index )

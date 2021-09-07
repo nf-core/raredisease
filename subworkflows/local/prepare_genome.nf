@@ -8,22 +8,18 @@ include { BWAMEM2_INDEX } from '../../modules/nf-core/modules/bwamem2/index/main
 
 workflow PREPARE_GENOME {
     take:
-        prepare_tool_indicies // list: tools to prepare indices for
+        fasta
 
     main:
 
         ch_bwamem2_index = Channel.empty()
         ch_bwamem2_version = Channel.empty()
         // Fetch BWAMEM2 index or create from scratch if required
-        if ('bwamem2' in prepare_tool_indicies) {
-            if (params.bwamem2_index) {
-                ch_bwamem2_index = file(params.bwamem2_index)
-            } else if (params.bwamem2){
-                ch_bwamem2_index = file(params.bwamem2)
-            } else {
-                ch_bwamem2_index = BWAMEM2_INDEX ( params.fasta ).index
-                ch_bwamem2_version = BWAMEM2_INDEX.out.version
-            }
+        if ( params.bwamem2 && file(params.bwamem2, checkIfExists:true) ) {
+            ch_bwamem2_index = file(params.bwamem2)
+        } else {
+            ch_bwamem2_index = BWAMEM2_INDEX ( fasta ).index
+            ch_bwamem2_version = BWAMEM2_INDEX.out.version
         }
 
 

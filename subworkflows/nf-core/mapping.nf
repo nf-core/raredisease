@@ -2,7 +2,6 @@
 // Map to reference, fetch stats for each demultiplexed read pair, merge, mark duplicates, and index.
 //
 
-// params.bwamem2_idx_options = [:]
 params.bwamem2_mem_options = [:]
 params.samtools_idx_options = [:]
 params.samtools_sort_options = [:]

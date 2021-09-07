@@ -80,9 +80,9 @@
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
                 },
-                "bwamem2_index": {
+                "bwamem2": {
                     "type": "string",
-                    "format": "directory-path",
+                    "format": "file-path",
                     "fa_icon": "fas fa-copy",
                     "description": "Path to directory for pre-built bwamem2 index.",
                     "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference."
