@@ -50,7 +50,7 @@ workflow MAPPING {
 
         // Marking duplicates + index
         MARKDUPLICATES ( merged_bam )
-        SAMTOOLS_INDEX_MD ( marked_bam )
+        SAMTOOLS_INDEX_MD ( MARKDUPLICATES.out.bam )
 
     emit:
         stats                  = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), [ stats ] ]
