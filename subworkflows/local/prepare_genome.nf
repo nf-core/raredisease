@@ -8,10 +8,9 @@ include { BWAMEM2_INDEX } from '../../modules/nf-core/modules/bwamem2/index/main
 
 workflow PREPARE_GENOME {
     take:
-        fasta
+        fasta // path: genome.fasta
 
     main:
-
         ch_bwamem2_index = Channel.empty()
         ch_bwamem2_version = Channel.empty()
         // Fetch BWAMEM2 index or create from scratch if required
@@ -22,8 +21,7 @@ workflow PREPARE_GENOME {
             ch_bwamem2_version = BWAMEM2_INDEX.out.version
         }
 
-
     emit:
-        bwamem2_index = ch_bwamem2_index
-        bwamem2_version = ch_bwamem2_version
+        bwamem2_index               = ch_bwamem2_index          // path: bwamem2/index
+        bwamem2_version             = ch_bwamem2_version        // path: *.version.txt
 }
