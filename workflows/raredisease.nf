@@ -38,6 +38,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 // Don't overwrite global params.modules, create a copy instead and use that within the main script.
 def modules = params.modules.clone()
 
+// Switch for saving references
 def publish_idx_options = params.save_reference ? modules['bwa_mem2_index'] : [publish_files: false]
 
 //
@@ -115,7 +116,7 @@ workflow RAREDISEASE {
     // STEP 1: MAPPING READS, FETCH STATS, AND MERGE.
     MAPPING ( INPUT_CHECK.out.reads, PREPARE_GENOME.out.bwamem2_index )
     ch_software_versions = ch_software_versions.mix(MAPPING.out.bwamem2_version.ifEmpty(null))
-    ch_software_versions = ch_software_versions.mix(MAPPING.out.markduplicates_version.ifEmpty(null))
+    ch_software_versions = ch_software_versions.mix(MAPPING.out.picard_version.ifEmpty(null))
     ch_software_versions = ch_software_versions.mix(MAPPING.out.samtools_version.ifEmpty(null))
 
     //
@@ -139,12 +140,12 @@ workflow RAREDISEASE {
     workflow_summary    = WorkflowRaredisease.paramsSummaryMultiqc(workflow, summary_params)
     ch_workflow_summary = Channel.value(workflow_summary)
 
-    ch_multiqc_files = Channel.empty()
-    ch_multiqc_files = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    ch_multiqc_files = ch_multiqc_files.mix(GET_SOFTWARE_VERSIONS.out.yaml.collect())
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files    = Channel.empty()
+    ch_multiqc_files    = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
+    ch_multiqc_files    = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
+    ch_multiqc_files    = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+    ch_multiqc_files    = ch_multiqc_files.mix(GET_SOFTWARE_VERSIONS.out.yaml.collect())
+    ch_multiqc_files    = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect()
