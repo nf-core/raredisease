@@ -82,6 +82,13 @@ include { MAPPING } from  '../subworkflows/nf-core/mapping' addParams(
     samtools_idx_md_options: modules['samtools_index_md'],
     )
 
+
+//
+// SUBWORKFLOW: Consists of mix/local modules
+//
+
+include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams( deepvariant_options: modules['deepvariant'] )
+
 /*
 ========================================================================================
     RUN MAIN WORKFLOW
@@ -117,6 +124,11 @@ workflow RAREDISEASE {
     ch_software_versions = ch_software_versions.mix(MAPPING.out.bwamem2_version.ifEmpty(null))
     ch_software_versions = ch_software_versions.mix(MAPPING.out.markduplicates_version.ifEmpty(null))
     ch_software_versions = ch_software_versions.mix(MAPPING.out.samtools_version.ifEmpty(null))
+
+    // STEP 2: VARIANT CALLING
+    // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
+    DEEPVARIANT_CALLER ( MAPPING.out.marked_bam, ch_fasta )
+    ch_software_versions = ch_software_versions.mix(DEEPVARIANT_CALLER.out.deepvariant_version.ifEmpty(null))
 
     //
     // MODULE: Pipeline reporting
