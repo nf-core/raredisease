@@ -13,7 +13,7 @@ WorkflowRaredisease.initialise(params, log)
 // Check input path parameters to see if they exist
 def checkPathParamList = [
     params.input, params.multiqc_config, params.fasta,
-    params.bwamem2
+    params.bwamem2, params.fai
 ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
@@ -39,7 +39,10 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 def modules = params.modules.clone()
 
 // Switch for saving references
-def publish_idx_options = params.save_reference ? modules['bwa_mem2_index'] : [publish_files: false]
+if (!params.save_reference) {
+    modules['bwa_mem2_index'].publish_files = false
+    modules['samtools_faidx'].publish_files = false
+}
 
 //
 // MODULE: Local to the pipeline
@@ -70,7 +73,7 @@ include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( op
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome' addParams( bwamem2_idx_options: publish_idx_options )
+include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome' addParams( bwamem2_idx_options: modules['bwa_mem2_index'], samtools_faidx_options: modules['samtools_faidx'] )
 
 include { MAPPING } from  '../subworkflows/nf-core/mapping' addParams(
     bwamem2_idx_options: modules['bwa_mem2_index'],
