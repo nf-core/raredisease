@@ -95,7 +95,6 @@ def multiqc_report = []
 workflow RAREDISEASE {
 
     ch_software_versions = Channel.empty()
-    ch_fasta = file(params.fasta)
 
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
@@ -111,7 +110,7 @@ workflow RAREDISEASE {
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.ifEmpty(null))
 
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
-    PREPARE_GENOME ( ch_fasta )
+    PREPARE_GENOME ( params.fasta )
 
     // STEP 1: MAPPING READS, FETCH STATS, AND MERGE.
     MAPPING ( INPUT_CHECK.out.reads, PREPARE_GENOME.out.bwamem2_index )
