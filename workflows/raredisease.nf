@@ -73,7 +73,10 @@ include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( op
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome' addParams( bwamem2_idx_options: modules['bwa_mem2_index'], samtools_faidx_options: modules['samtools_faidx'] )
+include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome' addParams(
+    bwamem2_idx_options: modules['bwa_mem2_index'],
+    samtools_faidx_options: modules['samtools_faidx']
+)
 
 include { MAPPING } from  '../subworkflows/nf-core/mapping' addParams(
     bwamem2_idx_options: modules['bwa_mem2_index'],
@@ -84,7 +87,7 @@ include { MAPPING } from  '../subworkflows/nf-core/mapping' addParams(
     samtools_merge_options: modules['samtools_merge'],
     markduplicates_options: modules['picard_markduplicates'],
     samtools_idx_md_options: modules['samtools_index_md'],
-    )
+)
 
 /*
 ========================================================================================
