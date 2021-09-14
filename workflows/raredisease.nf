@@ -13,7 +13,7 @@ WorkflowRaredisease.initialise(params, log)
 // Check input path parameters to see if they exist
 def checkPathParamList = [
     params.input, params.multiqc_config, params.fasta,
-    params.bwamem2, params.fai
+    params.bwamem2, params.fasta_fai
 ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 

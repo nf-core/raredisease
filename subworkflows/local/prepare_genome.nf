@@ -26,8 +26,8 @@ workflow PREPARE_GENOME {
         }
 
         ch_samtools_version = Channel.empty()
-        if ( params.fai ) {
-            ch_fai = file(params.fai)
+        if ( params.fasta_fai ) {
+            ch_fai = file(params.fasta_fai)
         } else {
             ch_fai = SAMTOOLS_FAIDX ( ch_fasta ).fai
             ch_samtools_version = SAMTOOLS_FAIDX.out.version
