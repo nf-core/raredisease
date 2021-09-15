@@ -13,7 +13,7 @@ WorkflowRaredisease.initialise(params, log)
 // Check input path parameters to see if they exist
 def checkPathParamList = [
     params.input, params.multiqc_config, params.fasta,
-    params.bwamem2
+    params.bwamem2, params.fasta_fai
 ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
@@ -39,7 +39,10 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 def modules = params.modules.clone()
 
 // Switch for saving references
-def publish_idx_options = params.save_reference ? modules['bwa_mem2_index'] : [publish_files: false]
+if (!params.save_reference) {
+    modules['bwa_mem2_index'].publish_files = false
+    modules['samtools_faidx'].publish_files = false
+}
 
 //
 // MODULE: Local to the pipeline
@@ -70,7 +73,10 @@ include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( op
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome' addParams( bwamem2_idx_options: publish_idx_options )
+include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome' addParams(
+    bwamem2_idx_options: modules['bwa_mem2_index'],
+    samtools_faidx_options: modules['samtools_faidx']
+)
 
 include { MAPPING } from  '../subworkflows/nf-core/mapping' addParams(
     bwamem2_idx_options: modules['bwa_mem2_index'],
@@ -81,7 +87,7 @@ include { MAPPING } from  '../subworkflows/nf-core/mapping' addParams(
     samtools_merge_options: modules['samtools_merge'],
     markduplicates_options: modules['picard_markduplicates'],
     samtools_idx_md_options: modules['samtools_index_md'],
-    )
+)
 
 /*
 ========================================================================================
@@ -95,7 +101,6 @@ def multiqc_report = []
 workflow RAREDISEASE {
 
     ch_software_versions = Channel.empty()
-    ch_fasta = file(params.fasta)
 
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
@@ -111,7 +116,7 @@ workflow RAREDISEASE {
     ch_software_versions = ch_software_versions.mix(FASTQC.out.version.ifEmpty(null))
 
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
-    PREPARE_GENOME ( ch_fasta )
+    PREPARE_GENOME ( params.fasta )
 
     // STEP 1: MAPPING READS, FETCH STATS, AND MERGE.
     MAPPING ( INPUT_CHECK.out.reads, PREPARE_GENOME.out.bwamem2_index )
