@@ -9,10 +9,11 @@ include { DEEPVARIANT } from '../../modules/local/deepvariant/main'  addParams( 
 workflow DEEPVARIANT_CALLER {
     take:
         bam // channel: [ val(meta), path(bam), path(bai) ]
-        fasta // channel: [ path(fasta), path(fai) ]
+        fasta // path(fasta)
+        fai // path(fai)
 
     main:
-        DEEPVARIANT ( bam, fasta )
+        DEEPVARIANT ( bam, fasta, fai )
 
     emit:
         vcf                         = DEEPVARIANT.out.vcf
