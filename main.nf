@@ -17,8 +17,9 @@ nextflow.enable.dsl = 2
 ========================================================================================
 */
 
-params.fasta = WorkflowMain.getGenomeAttribute(params, 'fasta')
-params.bwamem2 = WorkflowMain.getGenomeAttribute(params, 'bwamem2')
+params.fasta     = WorkflowMain.getGenomeAttribute(params, 'fasta')
+params.fasta_fai = WorkflowMain.getGenomeAttribute(params, 'fai')
+params.bwamem2   = WorkflowMain.getGenomeAttribute(params, 'bwamem2')
 
 /*
 ========================================================================================

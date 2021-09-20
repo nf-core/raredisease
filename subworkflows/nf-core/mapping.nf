@@ -21,7 +21,7 @@ include { PICARD_MARKDUPLICATES as MARKDUPLICATES } from '../../modules/nf-core/
 
 workflow MAPPING {
     take:
-        reads_input // channel: [mandatory] meta, reads_input
+        reads_input // channel: [ val(meta), reads_input ]
         index // channel: /path/to/bwamem2/index/
 
     main:
@@ -34,7 +34,6 @@ workflow MAPPING {
         // Get stats for each demultiplexed read pair.
         bam_sorted_indexed = SAMTOOLS_SORT.out.bam.join(SAMTOOLS_INDEX.out.bai)
         SAMTOOLS_STATS ( bam_sorted_indexed )
-        stats = SAMTOOLS_STATS.out.stats
 
         // Merge multiple lane samples and index
         SAMTOOLS_SORT.out.bam.map{ meta, bam ->
@@ -51,24 +50,16 @@ workflow MAPPING {
 
         // Marking duplicates + index
         MARKDUPLICATES ( merged_bam )
-        marked_bam = MARKDUPLICATES.out.bam
-
-        SAMTOOLS_INDEX_MD ( marked_bam )
-        marked_bai = SAMTOOLS_INDEX_MD.out.bai
-
-
-        // Collect versions
-        bwamem2_version = BWAMEM2_MEM.out.version
-        markduplicates_version = MARKDUPLICATES.out.version
-        samtools_version = SAMTOOLS_SORT.out.version
+        SAMTOOLS_INDEX_MD ( MARKDUPLICATES.out.bam )
 
     emit:
-        stats
-        marked_bam
-        marked_bai
+        stats                  = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), [ stats ] ]
+        metrics                = MARKDUPLICATES.out.metrics     // channel: [ val(meta), [ metrics ] ]
+        marked_bam             = MARKDUPLICATES.out.bam         // channel: [ val(meta), [ marked_bam ] ]
+        marked_bai             = SAMTOOLS_INDEX_MD.out.bai      // channel: [ val(meta), [ marked_bai ] ]
 
-
-        bwamem2_version
-        markduplicates_version
-        samtools_version
+        // Collect versions
+        bwamem2_version        = BWAMEM2_MEM.out.version        //      path: *.version.txt
+        picard_version         = MARKDUPLICATES.out.version     //      path: *.version.txt
+        samtools_version       = SAMTOOLS_SORT.out.version      //      path: *.version.txt
 }
