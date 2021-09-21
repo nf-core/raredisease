@@ -44,13 +44,9 @@ workflow MAPPING {
             multiple: it[1].size() > 1
         }.set{ bams }
 
-        // If there are no samples to merge, skip the process
-        if ( bams.multiple.ifEmpty(false) ) {
-            prepared_bam = bams.single
-        } else {
-            SAMTOOLS_MERGE ( bams.multiple )
-            prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
-        }
+        // TODO: If there are no samples to merge, skip the process
+        SAMTOOLS_MERGE ( bams.multiple )
+        prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
 
         // Marking duplicates
         MARKDUPLICATES ( prepared_bam )
