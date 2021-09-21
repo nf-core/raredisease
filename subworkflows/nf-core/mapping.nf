@@ -15,7 +15,6 @@ include { SAMTOOLS_INDEX } from '../../modules/nf-core/modules/samtools/index/ma
 include { SAMTOOLS_SORT } from '../../modules/nf-core/modules/samtools/sort/main' addParams(options: params.samtools_sort_options )
 include { SAMTOOLS_STATS } from '../../modules/nf-core/modules/samtools/stats/main' addParams(options: params.samtools_stats_options )
 include { SAMTOOLS_MERGE } from '../../modules/nf-core/modules/samtools/merge/main' addParams( options: params.samtools_merge_options )
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MD } from '../../modules/nf-core/modules/samtools/index/main' addParams(options: params.samtools_idx_md_options )
 include { PICARD_MARKDUPLICATES as MARKDUPLICATES } from '../../modules/nf-core/modules/picard/markduplicates/main' addParams(options: params.markduplicates_options )
 
 
@@ -40,23 +39,27 @@ workflow MAPPING {
             new_meta = meta.clone()
             new_meta.id = new_meta.id.split('_')[0]
             [new_meta, bam]
-        }.groupTuple().branch{
+        }.groupTuple(by: 0).branch{
             single: it[1].size() == 1
             multiple: it[1].size() > 1
-        }.set{ bams_to_merge }
+        }.set{ bams }
 
-        SAMTOOLS_MERGE ( bams_to_merge.multiple )
-        merged_bam = bams_to_merge.single.mix(SAMTOOLS_MERGE.out.bam)
+        // If there are no samples to merge, skip the process
+        if ( bams.multiple.ifEmpty(false) ) {
+            prepared_bam = bams.single
+        } else {
+            SAMTOOLS_MERGE ( bams.multiple )
+            prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
+        }
 
-        // Marking duplicates + index
-        MARKDUPLICATES ( merged_bam )
-        SAMTOOLS_INDEX_MD ( MARKDUPLICATES.out.bam )
+        // Marking duplicates
+        MARKDUPLICATES ( prepared_bam )
 
     emit:
         stats                  = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), [ stats ] ]
         metrics                = MARKDUPLICATES.out.metrics     // channel: [ val(meta), [ metrics ] ]
         marked_bam             = MARKDUPLICATES.out.bam         // channel: [ val(meta), [ marked_bam ] ]
-        marked_bai             = SAMTOOLS_INDEX_MD.out.bai      // channel: [ val(meta), [ marked_bai ] ]
+        marked_bai             = MARKDUPLICATES.out.bai         // channel: [ val(meta), [ marked_bai ] ]
 
         // Collect versions
         bwamem2_version        = BWAMEM2_MEM.out.version        //      path: *.version.txt
