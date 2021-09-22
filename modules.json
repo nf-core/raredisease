@@ -12,6 +12,9 @@
             "fastqc": {
                 "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
             },
+            "glnexus": {
+                "git_sha": "25943a4c23c6ab585e740599df246b66078e966a"
+            },
             "multiqc": {
                 "git_sha": "c5235a983d454787fa0c3247b02086969217163b"
             },
