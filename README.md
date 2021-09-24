@@ -32,6 +32,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 3. Mark duplicated reads ([`GATK4 MarkDuplicates`](https://gatk.broadinstitute.org/hc/en-us/articles/360037052812-MarkDuplicates-Picard-))
 4. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 5. Variant calling ([deepvariant](https://github.com/google/deepvariant) and [glnexus](https://github.com/dnanexus-rnd/GLnexus))
+
 ## Quick Start
 
 1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=21.04.0`)
