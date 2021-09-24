@@ -19,7 +19,7 @@
                 "git_sha": "c5235a983d454787fa0c3247b02086969217163b"
             },
             "picard/markduplicates": {
-                "git_sha": "c5235a983d454787fa0c3247b02086969217163b"
+                "git_sha": "b2a6f5409efa6eb065c8186c606e68ff8004ba51"
             },
             "samtools/faidx": {
                 "git_sha": "c5235a983d454787fa0c3247b02086969217163b"

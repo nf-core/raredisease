@@ -15,14 +15,13 @@ include { SAMTOOLS_INDEX } from '../../modules/nf-core/modules/samtools/index/ma
 include { SAMTOOLS_SORT } from '../../modules/nf-core/modules/samtools/sort/main' addParams(options: params.samtools_sort_options )
 include { SAMTOOLS_STATS } from '../../modules/nf-core/modules/samtools/stats/main' addParams(options: params.samtools_stats_options )
 include { SAMTOOLS_MERGE } from '../../modules/nf-core/modules/samtools/merge/main' addParams( options: params.samtools_merge_options )
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MD } from '../../modules/nf-core/modules/samtools/index/main' addParams(options: params.samtools_idx_md_options )
 include { PICARD_MARKDUPLICATES as MARKDUPLICATES } from '../../modules/nf-core/modules/picard/markduplicates/main' addParams(options: params.markduplicates_options )
 
 
 workflow MAPPING {
     take:
         reads_input // channel: [ val(meta), reads_input ]
-        index // channel: /path/to/bwamem2/index/
+        index       // channel: /path/to/bwamem2/index/
 
     main:
         // Map, sort, and index
@@ -36,27 +35,32 @@ workflow MAPPING {
         SAMTOOLS_STATS ( bam_sorted_indexed )
 
         // Merge multiple lane samples and index
-        SAMTOOLS_SORT.out.bam.map{ meta, bam ->
-            new_meta = meta.clone()
-            new_meta.id = new_meta.id.split('_')[0]
-            [new_meta, bam]
-        }.groupTuple().branch{
+        SAMTOOLS_SORT.out.bam
+        .map{ meta, bam ->
+            new_meta = meta.clone()                 // clone to avoid overriding the global meta
+            new_meta.id = new_meta.id.split('_')[0] // access the .id attribute of meta to split samplename_lane into samplename
+            [new_meta, bam]}                        // end the closure to return newly modified channel
+        .groupTuple(by: 0)                          // group them bam paths with the same [ [samplename], [bam path, bam path, ..] ]
+        .branch{                                    // branch the channel into multiple channels (single, multiple) depending on size of list
             single: it[1].size() == 1
             multiple: it[1].size() > 1
-        }.set{ bams_to_merge }
+            }
+        .set{ bams }                                // create a new multi-channel named bams
 
-        SAMTOOLS_MERGE ( bams_to_merge.multiple )
-        merged_bam = bams_to_merge.single.mix(SAMTOOLS_MERGE.out.bam)
+        bams.multiple.view()
 
-        // Marking duplicates + index
-        MARKDUPLICATES ( merged_bam )
-        SAMTOOLS_INDEX_MD ( MARKDUPLICATES.out.bam )
+        // TODO: If there are no samples to merge, skip the process
+        SAMTOOLS_MERGE ( bams.multiple )
+        prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
+
+        // Marking duplicates
+        MARKDUPLICATES ( prepared_bam )
 
     emit:
         stats                  = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), [ stats ] ]
         metrics                = MARKDUPLICATES.out.metrics     // channel: [ val(meta), [ metrics ] ]
         marked_bam             = MARKDUPLICATES.out.bam         // channel: [ val(meta), [ marked_bam ] ]
-        marked_bai             = SAMTOOLS_INDEX_MD.out.bai      // channel: [ val(meta), [ marked_bai ] ]
+        marked_bai             = MARKDUPLICATES.out.bai         // channel: [ val(meta), [ marked_bai ] ]
 
         // Collect versions
         bwamem2_version        = BWAMEM2_MEM.out.version        //      path: *.version.txt
