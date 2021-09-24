@@ -47,8 +47,6 @@ workflow MAPPING {
             }
         .set{ bams }                                // create a new multi-channel named bams
 
-        bams.multiple.view()
-
         // TODO: If there are no samples to merge, skip the process
         SAMTOOLS_MERGE ( bams.multiple )
         prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
