@@ -21,7 +21,7 @@ include { PICARD_MARKDUPLICATES as MARKDUPLICATES } from '../../modules/nf-core/
 workflow MAPPING {
     take:
         reads_input // channel: [ val(meta), reads_input ]
-        index // channel: /path/to/bwamem2/index/
+        index       // channel: /path/to/bwamem2/index/
 
     main:
         // Map, sort, and index
@@ -35,14 +35,17 @@ workflow MAPPING {
         SAMTOOLS_STATS ( bam_sorted_indexed )
 
         // Merge multiple lane samples and index
-        SAMTOOLS_SORT.out.bam.map{ meta, bam ->
-            new_meta = meta.clone()
-            new_meta.id = new_meta.id.split('_')[0]
-            [new_meta, bam]
-        }.groupTuple(by: 0).branch{
+        SAMTOOLS_SORT.out.bam
+        .map{ meta, bam ->
+            new_meta = meta.clone()                 // clone to avoid overriding the global meta
+            new_meta.id = new_meta.id.split('_')[0] // access the .id attribute of meta to split samplename_lane into samplename
+            [new_meta, bam]}                        // end the closure to return newly modified channel
+        .groupTuple(by: 0)                          // group them bam paths with the same [ samplename, [[bam path], [bam path], ..] ]
+        .branch{                                    // branch the channel into multiple channels (single, multiple) depending on size of list
             single: it[1].size() == 1
             multiple: it[1].size() > 1
-        }.set{ bams }
+            }
+        .set{ bams }                                // create a new multi-channel named bams
 
         // TODO: If there are no samples to merge, skip the process
         SAMTOOLS_MERGE ( bams.multiple )
