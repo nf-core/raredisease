@@ -44,6 +44,23 @@
                 }
             }
         },
+        "main_options": {
+            "title": "Main options",
+            "type": "object",
+            "fa_icon": "fas fa-user-cog",
+            "description": "Options used to steer the direction of the pipeline.",
+            "properties": {
+                "analysis_type": {
+                    "type": "string",
+                    "default": "WGS",
+                    "description": "Specifies which analysis type for the pipeline- either 'WGS' or 'WES'. It'll mainly change the resources consumed.",
+                    "fa_icon": "fas fa-book",
+                    "enum": [
+                        "WES"
+                    ]
+                }
+            }
+        },
         "reference_genome_options": {
             "title": "Reference genome options",
             "type": "object",
@@ -69,8 +86,8 @@
                     "type": "string",
                     "format": "file-path",
                     "help_text": "If none provided, will be generated automatically from the FASTA reference",
-                    "description": "Path to FASTA reference index.",
-                    "fa_icon": "fas fa-file"
+                    "description": "Path to FASTA genome index file.",
+                    "fa_icon": "far fa-file-code"
                 },
                 "igenomes_base": {
                     "type": "string",
@@ -89,10 +106,11 @@
                 },
                 "bwamem2": {
                     "type": "string",
-                    "format": "file-path",
-                    "fa_icon": "fas fa-copy",
-                    "description": "Path to directory for pre-built bwamem2 index.",
-                    "help_text": "> **NB** If none provided, will be generated automatically from the FASTA reference."
+                    "format": "directory-path",
+                    "description": "Directory for pre-built bwamem2 index.",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
                 },
                 "save_reference": {
                     "type": "boolean",
@@ -103,8 +121,9 @@
                 },
                 "local_genomes": {
                     "type": "string",
+                    "format": "directory-path",
                     "fa_icon": "fas fa-map-marker-alt",
-                    "description": "Directory / URL base for genomes references.",
+                    "description": "Local directory base for genomes references.",
                     "help_text": "All files are supposed to be in the same folder defining a flat structure"
                 }
             }
