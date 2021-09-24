@@ -16,7 +16,6 @@
 
 ## Introduction
 
-<!-- TODO nf-core: Write a 1-2 sentence summary of what data the pipeline is for and what it does -->
 **nf-core/raredisease** is a bioinformatics best-practice analysis pipeline for call and score variants from WGS/WES of rare disease patients.
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
@@ -32,7 +31,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 2. Map reads to reference ([`BWA mem`](http://bio-bwa.sourceforge.net/bwa.shtml), `BWA mem2`) with the option to ([`merge`](http://www.htslib.org/doc/samtools-merge.html))
 3. Mark duplicated reads ([`GATK4 MarkDuplicates`](https://gatk.broadinstitute.org/hc/en-us/articles/360037052812-MarkDuplicates-Picard-))
 4. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
-
+5. Variant calling ([deepvariant](https://github.com/google/deepvariant) and [glnexus](https://github.com/dnanexus-rnd/GLnexus))
 ## Quick Start
 
 1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=21.04.0`)

@@ -16,12 +16,12 @@ workflow DEEPVARIANT_CALLER {
 
     main:
         DEEPVARIANT ( bam, fasta, fai )
-        def file_list = DEEPVARIANT.out.gvcf.collect{it[1]}.toList() 
+        def file_list = DEEPVARIANT.out.gvcf.collect{it[1]}.toList()
 
         //retrieve case id for glnexus and store it in a new channel called case_meta
         sample
             .first()
-            .map{ 
+            .map{
                 it ->
                     new_sample_meta = it.clone()
                     new_sample_meta.id = new_sample_meta.case_id
@@ -29,7 +29,7 @@ workflow DEEPVARIANT_CALLER {
             .set {case_meta}
 
         //Combine case meta with the list of gvcfs
-        ch_sample_new.mix(file_list)
+        case_meta.mix(file_list)
             .collect()
             .set { ch_gvcfs }
         GLNEXUS ( ch_gvcfs )
