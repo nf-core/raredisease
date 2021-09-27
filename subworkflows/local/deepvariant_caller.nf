@@ -5,7 +5,7 @@
 params.deepvariant_options = [:]
 
 include { DEEPVARIANT } from '../../modules/local/deepvariant/main'  addParams( options: params.deepvariant_options )
-include { GLNEXUS } from '../../modules/nf-core/modules/glnexus/main'  addParams( options: params.deepvariant_options )
+include { GLNEXUS } from '../../modules/nf-core/modules/glnexus/main'  addParams( options: params.glnexus_options )
 
 workflow DEEPVARIANT_CALLER {
     take:
