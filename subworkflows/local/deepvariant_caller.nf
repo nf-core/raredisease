@@ -1,6 +1,7 @@
 //
 // A variant caller workflow for deepvariant
 //
+include { getCaseMeta } from './functions'
 
 params.deepvariant_options = [:]
 
@@ -9,30 +10,31 @@ include { GLNEXUS } from '../../modules/nf-core/modules/glnexus/main'  addParams
 
 workflow DEEPVARIANT_CALLER {
     take:
-        bam // channel: [ val(meta), path(bam), path(bai) ]
-        fasta // path(fasta)
-        fai // path(fai)
-        sample // channel: [ sample, sex, phenotype, paternal_id, maternal_id, case_id ]
+        bam     // channel: [ val(meta), path(bam), path(bai) ]
+        fasta   // path(fasta)
+        fai     // path(fai)
+        sample  // channel: [ sample, sex, phenotype, paternal_id, maternal_id, case_id ]
 
     main:
+        //
+        // Run DeepVariant and create a channel containing a list of gvcf files
+        //
         DEEPVARIANT ( bam, fasta, fai )
-        DEEPVARIANT.out.gvcf.collect{it[1]}
-            .toList()
-            .set { file_list }
+        ch_dv_gvcfs = DEEPVARIANT.out.gvcf.collect{it[1]}.toList()
 
-        //retrieve case id for glnexus and store it in a new channel called case_meta
-        sample
-            .first()
-            .map{
-                it ->
-                    new_sample_meta = it.clone()
-                    new_sample_meta.id = new_sample_meta.case_id
-                    [ [ 'id':new_sample_meta.id ] ] }
-            .set {case_meta}
+        //
+        // Retrieve case id for glnexus and store it in a new channel called case_meta
+        //
+        ch_case_meta = getCaseMeta(sample)
 
+        //
         //Combine case meta with the list of gvcfs
-        case_meta.combine(file_list)
-            .set { ch_gvcfs }
+        //
+        ch_gvcfs = ch_case_meta.combine(ch_dv_gvcfs)
+
+        //
+        // Run glnexus and normalize the output
+        //
         GLNEXUS ( ch_gvcfs )
 
     emit:
