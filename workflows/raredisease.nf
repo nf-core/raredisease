@@ -137,7 +137,7 @@ workflow RAREDISEASE {
                         MAPPING.out.marked_bam.join(MAPPING.out.marked_bai),
                         PREPARE_GENOME.out.fasta,
                         PREPARE_GENOME.out.fai,
-                        INPUT_CHECK.out.sample
+                        INPUT_CHECK.out.ch_case_info
                         )
     ch_software_versions = ch_software_versions.mix(DEEPVARIANT_CALLER.out.deepvariant_version.ifEmpty(null))
 
