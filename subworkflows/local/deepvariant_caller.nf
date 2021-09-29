@@ -10,10 +10,10 @@ include { GLNEXUS } from '../../modules/nf-core/modules/glnexus/main'  addParams
 
 workflow DEEPVARIANT_CALLER {
     take:
-        bam // channel: [ val(meta), path(bam), path(bai) ]
-        fasta // path(fasta)
-        fai // path(fai)
-        ch_case_info // channel: [ sample, sex, phenotype, paternal_id, maternal_id, case_id ]
+        bam          // channel: [ val(meta), path(bam), path(bai) ]
+        fasta        // path(fasta)
+        fai          // path(fai)
+        ch_case_info // channel: [ case_id ]
 
     main:
         DEEPVARIANT ( bam, fasta, fai )
