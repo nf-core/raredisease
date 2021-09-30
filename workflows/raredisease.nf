@@ -102,9 +102,9 @@ rm_duplicates_deepvar_sub.publish_dir        = "glnexus/"
 rm_duplicates_deepvar_sub.suffix             = "_split_rmdup"
 
 include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams( deepvariant_options: modules['deepvariant'],
-                                                                                          glnexus_options: modules['glnexus'],
-                                                                                          rm_duplicates_options: rm_duplicates_deepvar_sub,
-                                                                                          split_multiallelics_options: split_multiallelics_deepvar_sub  )
+                                                                                        glnexus_options: modules['glnexus'],
+                                                                                        rm_duplicates_options: rm_duplicates_deepvar_sub,
+                                                                                        split_multiallelics_options: split_multiallelics_deepvar_sub )
 
 /*
 ========================================================================================
