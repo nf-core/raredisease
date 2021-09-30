@@ -93,8 +93,18 @@ include { MAPPING } from  '../subworkflows/nf-core/mapping' addParams(
 //
 // SUBWORKFLOW: Consists of mix/local modules
 //
+def split_multiallelics_deepvar_sub          = modules['bcftools_norm_split_multiallelics'].clone()
+split_multiallelics_deepvar_sub.publish_dir  = "glnexus/"
+split_multiallelics_deepvar_sub.suffix       = "_split"
 
-include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams( deepvariant_options: modules['deepvariant'] )
+def rm_duplicates_deepvar_sub                = modules['bcftools_norm_rm_duplicates'].clone()
+rm_duplicates_deepvar_sub.publish_dir        = "glnexus/"
+rm_duplicates_deepvar_sub.suffix             = "_split_rmdup"
+
+include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams( deepvariant_options: modules['deepvariant'],
+                                                                                          glnexus_options: modules['glnexus'],
+                                                                                          rm_duplicates_options: rm_duplicates_deepvar_sub,
+                                                                                          split_multiallelics_options: split_multiallelics_deepvar_sub  )
 
 /*
 ========================================================================================

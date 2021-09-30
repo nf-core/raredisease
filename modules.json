@@ -3,6 +3,9 @@
     "homePage": "https://github.com/nf-core/raredisease",
     "repos": {
         "nf-core/modules": {
+            "bcftools/norm": {
+                "git_sha": "906577873b66253b0d244871bfec2eeeaff73053"
+            },
             "bwamem2/index": {
                 "git_sha": "e937c7950af70930d1f34bb961403d9d2aa81c7d"
             },
