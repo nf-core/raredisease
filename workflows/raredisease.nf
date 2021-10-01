@@ -94,7 +94,10 @@ include { MAPPING } from  '../subworkflows/nf-core/mapping' addParams(
 // SUBWORKFLOW: Consists of mix/local modules
 //
 
-include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams( deepvariant_options: modules['deepvariant'] )
+include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams( deepvariant_options: modules['deepvariant'],
+                                                                                        glnexus_options: modules['glnexus'],
+                                                                                        rm_duplicates_options: modules['bcftools_norm_rm_duplicates'],
+                                                                                        split_multiallelics_options: modules['bcftools_norm_split_multiallelics'] )
 
 /*
 ========================================================================================
