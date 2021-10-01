@@ -17,7 +17,7 @@ workflow INPUT_CHECK {
 
     ch_case_info = sheet.first()
                         .map { create_case_channel(it) }
-    reads        = sheet.map { create_fastq_channel(it) }
+    reads        = sheet.map { create_fastq_channels(it) }
     samples      = sheet.map { create_samples_channel(it) }
 
     emit:
