@@ -10,27 +10,27 @@ include { GLNEXUS } from '../../modules/nf-core/modules/glnexus/main'  addParams
 
 workflow DEEPVARIANT_CALLER {
     take:
-        bam          // channel: [ val(meta), path(bam), path(bai) ]
-        fasta        // path(fasta)
-        fai          // path(fai)
-        ch_case_info // channel: [ case_id ]
+    bam          // channel: [ val(meta), path(bam), path(bai) ]
+    fasta        // path(fasta
+    fai          // path(fai)
+    ch_case_info // channel: [ case_id ]
 
     main:
-        DEEPVARIANT ( bam, fasta, fai )
-        DEEPVARIANT.out.gvcf.collect{it[1]}
-            .toList()
-            .set { file_list }
+    DEEPVARIANT ( bam, fasta, fai )
+    DEEPVARIANT.out.gvcf.collect{it[1]}
+        .toList()
+        .set { file_list }
 
-        //Combine case meta with the list of gvcfs
-        ch_case_info.combine(file_list)
-            .set { ch_gvcfs }
-        GLNEXUS ( ch_gvcfs )
+    //Combine case meta with the list of gvcfs
+    ch_case_info.combine(file_list)
+        .set { ch_gvcfs }
+    GLNEXUS ( ch_gvcfs )
 
     emit:
-        vcf                         = GLNEXUS.out.bcf
+    vcf                         = GLNEXUS.out.bcf
 
-        // Collect versions
-        deepvariant_version         = DEEPVARIANT.out.version
-        glnexus_version             = GLNEXUS.out.version
+    // Collect versions
+    deepvariant_version         = DEEPVARIANT.out.version
+    glnexus_version             = GLNEXUS.out.version
 
 }
