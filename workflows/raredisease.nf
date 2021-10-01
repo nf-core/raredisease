@@ -92,7 +92,10 @@ include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2' addParam
 // SUBWORKFLOW: Consists of mix/local modules
 //
 
-include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams( deepvariant_options: modules['deepvariant'] )
+include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams( deepvariant_options: modules['deepvariant'],
+                                                                                        glnexus_options: modules['glnexus'],
+                                                                                        rm_duplicates_options: modules['bcftools_norm_rm_duplicates'],
+                                                                                        split_multiallelics_options: modules['bcftools_norm_split_multiallelics'] )
 
 /*
 ========================================================================================
@@ -144,8 +147,8 @@ workflow RAREDISEASE {
                         ch_marked_bam.join(ch_marked_bai, by: [0]),
                         PREPARE_GENOME.out.fasta,
                         PREPARE_GENOME.out.fai,
-                        INPUT_CHECK.out.sample
-    )
+                        INPUT_CHECK.out.ch_case_info
+                        )
     ch_software_versions = ch_software_versions.mix(DEEPVARIANT_CALLER.out.deepvariant_version.ifEmpty(null))
 
     //
