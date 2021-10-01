@@ -6,6 +6,7 @@ params.split_multiallelics_options = [:]
 params.rm_duplicates_options = [:]
 params.deepvariant_options = [:]
 params.glnexus_options = [:]
+params.tabix_options = [:]
 
 def split_multiallelics_glnexus           = params.split_multiallelics_options.clone()
 split_multiallelics_glnexus.publish_files = "false"
@@ -19,6 +20,7 @@ include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS } from '../../modules/nf-core/mod
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES } from '../../modules/nf-core/modules/bcftools/norm/main'  addParams( options: rm_duplicates_glnexus )
 include { DEEPVARIANT } from '../../modules/local/deepvariant/main'  addParams( options: params.deepvariant_options )
 include { GLNEXUS } from '../../modules/nf-core/modules/glnexus/main'  addParams( options: params.glnexus_options )
+include { TABIX_TABIX } from '../../modules/nf-core/modules/tabix/tabix/main'  addParams( options: params.glnexus_options )
 
 workflow DEEPVARIANT_CALLER {
     take:
@@ -37,9 +39,13 @@ workflow DEEPVARIANT_CALLER {
     ch_case_info.combine(file_list)
         .set { ch_gvcfs }
     GLNEXUS ( ch_gvcfs )
+    SPLIT_MULTIALLELICS (GLNEXUS.out.bcf, fasta)
+    REMOVE_DUPLICATES (SPLIT_MULTIALLELICS.out.vcf, fasta)
+    TABIX_TABIX (REMOVE_DUPLICATES.out.vcf)
 
     emit:
-    vcf                         = GLNEXUS.out.bcf
+    vcf                         = REMOVE_DUPLICATES.out.vcf
+    tbi                         = TABIX_TABIX.out.tbi
 
     // Collect versions
     deepvariant_version         = DEEPVARIANT.out.version
