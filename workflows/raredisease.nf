@@ -125,7 +125,14 @@ workflow RAREDISEASE {
 
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
     if (params.aligner == 'bwamem2') {
-        ALIGN_BWAMEM2 ( INPUT_CHECK.out.reads, PREPARE_GENOME.out.bwamem2_index )
+        ALIGN_BWAMEM2 (
+            INPUT_CHECK.out.reads,
+            PREPARE_GENOME.out.bwamem2_index
+        )
+
+        ch_bwamem2_marked_bam = ALIGN_BWAMEM2.out.marked_bam
+        ch_bwamem2_marked_bai = ALIGN_BWAMEM2.out.marked_bai
+
         ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.bwamem2_version.ifEmpty(null))
         ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.picard_version.ifEmpty(null))
         ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.samtools_version.ifEmpty(null))
@@ -134,11 +141,11 @@ workflow RAREDISEASE {
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
     DEEPVARIANT_CALLER (
-                        ALIGN_BWAMEM2.out.marked_bam.join(ALIGN_BWAMEM2.out.marked_bai),
+                        ch_bwamem2_marked_bam.join(ch_bwamem2_marked_bai, by: [0]),
                         PREPARE_GENOME.out.fasta,
                         PREPARE_GENOME.out.fai,
                         INPUT_CHECK.out.sample
-                        )
+    )
     ch_software_versions = ch_software_versions.mix(DEEPVARIANT_CALLER.out.deepvariant_version.ifEmpty(null))
 
     //

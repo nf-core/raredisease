@@ -18,12 +18,15 @@ workflow PREPARE_GENOME {
 
         ch_bwamem2_version = Channel.empty()
         // Fetch BWAMEM2 index or create from scratch if required
-        if ( params.bwamem2_index && file(params.bwamem2_index, checkIfExists:true) ) {
-            ch_bwamem2_index = file(params.bwamem2)
-        } else {
-            ch_bwamem2_index = BWAMEM2_INDEX ( ch_fasta ).index
-            ch_bwamem2_version = BWAMEM2_INDEX.out.version
+        if ( params.aligner == 'bwamem2' ) {
+            if ( params.bwamem2_index && file(params.bwamem2_index, checkIfExists:true) ) {
+                ch_bwamem2_index = file(params.bwamem2)
+            } else {
+                ch_bwamem2_index = BWAMEM2_INDEX ( ch_fasta ).index
+                ch_bwamem2_version = BWAMEM2_INDEX.out.version
+            }
         }
+
 
         ch_samtools_version = Channel.empty()
         if ( params.fasta_fai ) {
