@@ -9,11 +9,10 @@ def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 // Validate input parameters
 WorkflowRaredisease.initialise(params, log)
 
-// TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
 def checkPathParamList = [
     params.input, params.multiqc_config, params.fasta,
-    params.bwamem2, params.fasta_fai
+    params.bwamem2_index, params.fasta_fai
 ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
@@ -78,15 +77,14 @@ include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome' addParams
     samtools_faidx_options: modules['samtools_faidx']
 )
 
-include { MAPPING } from  '../subworkflows/nf-core/mapping' addParams(
+include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2' addParams(
     bwamem2_idx_options: modules['bwa_mem2_index'],
     bwamem2_mem_options: modules['bwa_mem2_mem'],
     samtools_idx_options: modules['samtools_index'],
     samtools_sort_options: modules['samtools_sort'],
     samtools_stats_options: modules['samtools_stats'],
     samtools_merge_options: modules['samtools_merge'],
-    markduplicates_options: modules['picard_markduplicates'],
-    samtools_idx_md_options: modules['samtools_index_md'],
+    markduplicates_options: modules['picard_markduplicates']
 )
 
 
@@ -128,16 +126,25 @@ workflow RAREDISEASE {
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
     PREPARE_GENOME ( params.fasta )
 
-    // STEP 1: MAPPING READS, FETCH STATS, AND MERGE.
-    MAPPING ( INPUT_CHECK.out.reads, PREPARE_GENOME.out.bwamem2_index )
-    ch_software_versions = ch_software_versions.mix(MAPPING.out.bwamem2_version.ifEmpty(null))
-    ch_software_versions = ch_software_versions.mix(MAPPING.out.picard_version.ifEmpty(null))
-    ch_software_versions = ch_software_versions.mix(MAPPING.out.samtools_version.ifEmpty(null))
+    // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
+    if (params.aligner == 'bwamem2') {
+        ALIGN_BWAMEM2 (
+            INPUT_CHECK.out.reads,
+            PREPARE_GENOME.out.bwamem2_index
+        )
+
+        ch_marked_bam = ALIGN_BWAMEM2.out.marked_bam
+        ch_marked_bai = ALIGN_BWAMEM2.out.marked_bai
+
+        ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.bwamem2_version.ifEmpty(null))
+        ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.picard_version.ifEmpty(null))
+        ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.samtools_version.ifEmpty(null))
+    }
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
     DEEPVARIANT_CALLER (
-                        MAPPING.out.marked_bam.join(MAPPING.out.marked_bai),
+                        ch_marked_bam.join(ch_marked_bai, by: [0]),
                         PREPARE_GENOME.out.fasta,
                         PREPARE_GENOME.out.fai,
                         INPUT_CHECK.out.ch_case_info
