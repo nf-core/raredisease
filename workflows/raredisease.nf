@@ -95,7 +95,8 @@ include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2' addParam
 include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams( deepvariant_options: modules['deepvariant'],
                                                                                         glnexus_options: modules['glnexus'],
                                                                                         rm_duplicates_options: modules['bcftools_norm_rm_duplicates'],
-                                                                                        split_multiallelics_options: modules['bcftools_norm_split_multiallelics'] )
+                                                                                        split_multiallelics_options: modules['bcftools_norm_split_multiallelics'],
+                                                                                        tabix_options: modules['tabix'] )
 
 /*
 ========================================================================================

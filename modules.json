@@ -38,6 +38,9 @@
             },
             "samtools/stats": {
                 "git_sha": "43c27792583b3db3faedf189adea48939e300cf2"
+            },
+            "tabix/tabix": {
+                "git_sha": "7b3315591a149609e27914965f858c9a7e071564"
             }
         }
     }
