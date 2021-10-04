@@ -4,34 +4,34 @@ include { initOptions; saveFiles; getSoftwareName; getProcessName } from './func
 params.options = [:]
 options        = initOptions(params.options)
 
-process SAMTOOLS_STATS {
+process TABIX_TABIX {
     tag "$meta.id"
-    label 'process_low'
+    label 'process_medium'
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
         saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), meta:meta, publish_by_meta:['id']) }
 
-    conda (params.enable_conda ? 'bioconda::samtools=1.13' : null)
+    conda (params.enable_conda ? 'bioconda::tabix=1.11' : null)
     if (workflow.containerEngine == 'singularity' && !params.singularity_pull_docker_container) {
-        container "https://depot.galaxyproject.org/singularity/samtools:1.13--h8c37831_0"
+        container "https://depot.galaxyproject.org/singularity/tabix:1.11--hdfd78af_0"
     } else {
-        container "quay.io/biocontainers/samtools:1.13--h8c37831_0"
+        container "quay.io/biocontainers/tabix:1.11--hdfd78af_0"
     }
 
     input:
-    tuple val(meta), path(bam), path(bai)
+    tuple val(meta), path(tab)
 
     output:
-    tuple val(meta), path("*.stats"), emit: stats
-    path  "versions.yml"            , emit: version
+    tuple val(meta), path("*.tbi"), emit: tbi
+    path  "versions.yml"          , emit: versions
 
     script:
-    def software = getSoftwareName(task.process)
     """
-    samtools stats $bam > ${bam}.stats
+    tabix $options.args $tab
+
     cat <<-END_VERSIONS > versions.yml
     ${getProcessName(task.process)}:
-        ${getSoftwareName(task.process)}: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
+        ${getSoftwareName(task.process)}: \$(echo \$(tabix -h 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
     END_VERSIONS
     """
 }

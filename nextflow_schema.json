@@ -105,7 +105,7 @@
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
                 },
-                "bwamem2": {
+                "bwamem2_index": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "Directory for pre-built bwamem2 index.",
@@ -126,6 +126,23 @@
                     "fa_icon": "fas fa-map-marker-alt",
                     "description": "Local directory base for genomes references.",
                     "help_text": "All files are supposed to be in the same folder defining a flat structure"
+                }
+            }
+        },
+        "alignment_options": {
+            "title": "Alignment options",
+            "type": "object",
+            "fa_icon": "fas fa-map-signs",
+            "description": "Options to adjust parameters and filtering criteria for read alignments.",
+            "properties": {
+                "aligner": {
+                    "type": "string",
+                    "default": "bwamem2",
+                    "description": "Specifies the alignment algorithm to use - available options are 'bwamem2'.",
+                    "fa_icon": "fas fa-map-signs",
+                    "enum": [
+                        "bwamem2"
+                    ]
                 }
             }
         },
@@ -327,6 +344,9 @@
         },
         {
             "$ref": "#/definitions/reference_genome_options"
+        },
+        {
+            "$ref": "#/definitions/alignment_options"
         },
         {
             "$ref": "#/definitions/institutional_config_options"

@@ -8,7 +8,6 @@ params.samtools_sort_options = [:]
 params.samtools_stats_options = [:]
 params.samtools_merge_options = [:]
 params.markduplicates_options = [:]
-params.samtools_idx_md_options = [:]
 
 include { BWAMEM2_MEM } from '../../modules/nf-core/modules/bwamem2/mem/main'  addParams( options: params.bwamem2_mem_options )
 include { SAMTOOLS_INDEX } from '../../modules/nf-core/modules/samtools/index/main' addParams( options: params.samtools_idx_options )
@@ -18,7 +17,7 @@ include { SAMTOOLS_MERGE } from '../../modules/nf-core/modules/samtools/merge/ma
 include { PICARD_MARKDUPLICATES as MARKDUPLICATES } from '../../modules/nf-core/modules/picard/markduplicates/main' addParams(options: params.markduplicates_options )
 
 
-workflow MAPPING {
+workflow ALIGN_BWAMEM2 {
     take:
         reads_input // channel: [ val(meta), reads_input ]
         index       // channel: /path/to/bwamem2/index/
@@ -46,8 +45,6 @@ workflow MAPPING {
             multiple: it[1].size() > 1
             }
         .set{ bams }                                // create a new multi-channel named bams
-
-        bams.multiple.view()
 
         // TODO: If there are no samples to merge, skip the process
         SAMTOOLS_MERGE ( bams.multiple )

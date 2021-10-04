@@ -1,5 +1,5 @@
 //
-// Check input samplesheet and get read channels
+// Check input samplesheet and get read, sample, and case channels
 //
 
 params.options = [:]
@@ -15,12 +15,15 @@ workflow INPUT_CHECK {
         .splitCsv ( header:true, sep:',' )
         .set { sheet }
 
-    reads = sheet.map { create_fastq_channels(it) }
-    sample = sheet.map { create_sample_channels(it) }
+    ch_case_info = sheet.first()
+                        .map { create_case_channel(it) }
+    reads        = sheet.map { create_fastq_channels(it) }
+    samples      = sheet.map { create_samples_channel(it) }
 
     emit:
-    reads // channel: [ val(meta), [ reads ] ]
-    sample // channel: [ sample, sex, phenotype, paternal_id, maternal_id, case_id ]
+    ch_case_info    // channel: [ case_id ]
+    reads           // channel: [ val(meta), [ reads ] ]
+    samples         // channel: [ sample_id, sex, phenotype, paternal_id, maternal_id, case_id ]
 }
 
 // Function to get list of [ meta, [ fastq_1, fastq_2 ] ]
@@ -47,14 +50,22 @@ def create_fastq_channels(LinkedHashMap row) {
 }
 
 // Function to get a list of metadata (e.g. pedigree, case id) from the sample; [ meta ]
-def create_sample_channels(LinkedHashMap row) {
-    def sample = [:]
-    sample.id = row.sample
-    sample.gender = row.gender
+def create_samples_channel(LinkedHashMap row) {
+    def sample       = [:]
+    sample.id        = row.sample
+    sample.gender    = row.gender
     sample.phenotype = row.phenotype
-    sample.maternal = row.maternal_id
-    sample.paternal = row.paternal_id
-    sample.case_id = row.case_id
+    sample.maternal  = row.maternal_id
+    sample.paternal  = row.paternal_id
+    sample.case_id   = row.case_id
 
     return sample
+}
+
+// Function to get a list of metadata (e.g. case id) for the case [ meta ]
+def create_case_channel(LinkedHashMap row) {
+    def case_info   = [:]
+    case_info.id    = row.case_id
+
+    return case_info
 }
