@@ -43,25 +43,7 @@
                     "fa_icon": "fas fa-file-signature"
                 }
             }
-        },
-        "main_options": {
-            "title": "Main options",
-            "type": "object",
-            "fa_icon": "fas fa-user-cog",
-            "description": "Options used to steer the direction of the pipeline.",
-            "properties": {
-                "analysis_type": {
-                    "type": "string",
-                    "default": "WGS",
-                    "description": "Specifies which analysis type for the pipeline- either 'WGS' or 'WES'. It'll mainly change the resources consumed.",
-                    "fa_icon": "fas fa-book",
-                    "enum": [
-                        "WGS",
-                        "WES"
-                    ]
-                }
-            }
-        },
+        },        
         "reference_genome_options": {
             "title": "Reference genome options",
             "type": "object",
@@ -126,6 +108,24 @@
                     "fa_icon": "fas fa-map-marker-alt",
                     "description": "Local directory base for genomes references.",
                     "help_text": "All files are supposed to be in the same folder defining a flat structure"
+                }
+            }
+        },
+        "analysis_options": {
+            "title": "Analysis options",
+            "type": "object",
+            "fa_icon": "fas fa-user-cog",
+            "description": "Options used to steer the direction of the pipeline.",
+            "properties": {
+                "analysis_type": {
+                    "type": "string",
+                    "default": "WGS",
+                    "description": "Specifies which analysis type for the pipeline- either 'WGS' or 'WES'. It'll mainly change the resources consumed.",
+                    "fa_icon": "fas fa-book",
+                    "enum": [
+                        "WGS",
+                        "WES"
+                    ]
                 }
             }
         },
@@ -340,10 +340,10 @@
             "$ref": "#/definitions/input_output_options"
         },
         {
-            "$ref": "#/definitions/main_options"
+            "$ref": "#/definitions/reference_genome_options"
         },
         {
-            "$ref": "#/definitions/reference_genome_options"
+            "$ref": "#/definitions/analysis_options"
         },
         {
             "$ref": "#/definitions/alignment_options"
