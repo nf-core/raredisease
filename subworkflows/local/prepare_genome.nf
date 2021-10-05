@@ -20,7 +20,7 @@ workflow PREPARE_GENOME {
         // Fetch BWAMEM2 index or create from scratch if required
         if ( params.aligner == 'bwamem2' ) {
             if ( params.bwamem2_index && file(params.bwamem2_index, checkIfExists:true) ) {
-                ch_bwamem2_index = file(params.bwamem2)
+                ch_bwamem2_index = file(params.bwamem2_index)
             } else {
                 ch_bwamem2_index = BWAMEM2_INDEX ( ch_fasta ).index
                 ch_bwamem2_version = BWAMEM2_INDEX.out.version
