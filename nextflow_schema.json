@@ -43,7 +43,7 @@
                     "fa_icon": "fas fa-file-signature"
                 }
             }
-        },        
+        },
         "reference_genome_options": {
             "title": "Reference genome options",
             "type": "object",
