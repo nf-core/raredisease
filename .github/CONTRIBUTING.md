@@ -98,9 +98,9 @@ Please use the following naming schemes, to make it easy to understand what is g
 * initial process channel: `ch_output_from_<process>`
 * intermediate and terminal channels: `ch_<previousprocess>_for_<nextprocess>`
 
-For subworkflows:
-
-* verb_tool or verb_variant_tool: `align_bwamem2.nf` or `call_snv_deepvariant.nf`
+* subworkflows: `verb_maintool` or `verb_variant_maintool`
+    * `verb_maintool` : `align_bwamem2.nf`
+    * `verb_variant_maintool` : `call_snv_deepvariant.nf`
 
 ### Nextflow version bumping
 
