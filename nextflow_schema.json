@@ -94,6 +94,12 @@
                     "description": "Path to directory for pre-built bwamem2 index.",
                     "help_text": "If none provided, will be generated automatically from the FASTA reference."
                 },
+                "clinvar": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-bezier-curve",
+                    "description": "Path to directory for clinvar vcf."
+                },
                 "save_reference": {
                     "type": "boolean",
                     "default": false,

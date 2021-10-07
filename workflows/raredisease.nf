@@ -12,8 +12,9 @@ WorkflowRaredisease.initialise(params, log)
 // Check input path parameters to see if they exist
 def checkPathParamList = [
     params.input, params.multiqc_config, params.fasta,
-    params.bwamem2_index, params.fasta_fai
+    params.bwamem2_index, params.fasta_fai, params.clinvar
 ]
+
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
@@ -52,6 +53,7 @@ include { GET_SOFTWARE_VERSIONS } from '../modules/local/get_software_versions' 
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 include { INPUT_CHECK } from '../subworkflows/local/input_check' addParams( options: [:] )
+include { CHECK_VCF } from '../subworkflows/local/prepare_vcf' addParams( options: [:] )
 
 /*
 ========================================================================================
@@ -116,6 +118,10 @@ workflow RAREDISEASE {
     //
     INPUT_CHECK (
         ch_input
+    )
+    ch_vcfs = Channel.fromPath(params.clinvar)
+    CHECK_VCF(
+        ch_vcfs
     )
 
     // STEP 0: QUALITY CHECK.
