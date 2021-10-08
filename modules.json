@@ -21,6 +21,9 @@
             "multiqc": {
                 "git_sha": "ab67a1d41b63bf52fd7c147f7f8f6e8d167590b5"
             },
+            "picard/collectmultiplemetrics": {
+                "git_sha": "49da8642876ae4d91128168cd0db4f1c858d7792"
+            },
             "picard/markduplicates": {
                 "git_sha": "e971f538a99bfa190f36f9303bede205e00b90a4"
             },
