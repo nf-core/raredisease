@@ -67,6 +67,7 @@ multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"
 //
 include { FASTQC } from '../modules/nf-core/modules/fastqc/main'  addParams( options: modules['fastqc'] )
 include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( options: multiqc_options   )
+include { QUALIMAP_BAMQC } from '../modules/nf-core/modules/qualimap/bamqc/main' addParams( options: [:]   )
 
 //
 // SUBWORKFLOW: Consists entirely of nf-core/modules
@@ -147,20 +148,25 @@ workflow RAREDISEASE {
     }
 
     // STEP 1.5: BAM QUALITY CHECK
+    QUALIMAP_BAMQC (
+        ch_marked_bam
+        
+    )
     QC_BAM (
         ch_marked_bam,
         PREPARE_GENOME.out.fasta
     )
 
+
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
-    DEEPVARIANT_CALLER (
-                        ch_marked_bam.join(ch_marked_bai, by: [0]),
-                        PREPARE_GENOME.out.fasta,
-                        PREPARE_GENOME.out.fai,
-                        INPUT_CHECK.out.ch_case_info
-                        )
-    ch_software_versions = ch_software_versions.mix(DEEPVARIANT_CALLER.out.deepvariant_version.ifEmpty(null))
+    //DEEPVARIANT_CALLER (
+     //                   ch_marked_bam.join(ch_marked_bai, by: [0]),
+     //                   PREPARE_GENOME.out.fasta,
+     //                   PREPARE_GENOME.out.fai,
+     //                   INPUT_CHECK.out.ch_case_info
+     //                   )
+    // ch_software_versions = ch_software_versions.mix(DEEPVARIANT_CALLER.out.deepvariant_version.ifEmpty(null))
 
     //
     // MODULE: Pipeline reporting
