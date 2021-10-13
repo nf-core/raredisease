@@ -31,6 +31,7 @@ def check_vcf(files_in, file_out):
                             break
                         elif not line.startswith("#"):
                             base = os.path.basename(file).split(".")[0]
+                            out.write("id,filepath\n")
                             out.write(base + "," + os.path.abspath(file) + "\n")
                             break
             else:

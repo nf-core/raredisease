@@ -123,10 +123,6 @@ workflow RAREDISEASE {
     INPUT_CHECK (
         ch_input
     )
-    ch_clinvar_in = Channel.fromPath(params.clinvar)
-    CHECK_VCF(
-        ch_clinvar_in, params.fasta
-    ).set { ch_clinvar_out }
 
     // STEP 0: QUALITY CHECK.
     FASTQC (
@@ -137,6 +133,14 @@ workflow RAREDISEASE {
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
     PREPARE_GENOME ( params.fasta )
 
+    if (params.clinvar != '')
+    {
+        ch_clinvar_in = Channel.fromPath(params.clinvar)
+        CHECK_VCF(
+            ch_clinvar_in, PREPARE_GENOME.out.fasta,
+        ).set { ch_clinvar_out }
+
+    }
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
     if (params.aligner == 'bwamem2') {
         ALIGN_BWAMEM2 (

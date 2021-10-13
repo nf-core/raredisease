@@ -23,15 +23,16 @@ include { TABIX_TABIX as TABIX } from '../../modules/nf-core/modules/tabix/tabix
 
 workflow CHECK_VCF {
     take:
-    vcfs   // array: [ vcf files ]
+    vcf   // channel: [ vcf file ]
     fasta  // path(fasta)
 
     main:
-    CHECK_INPUT_VCF( vcfs )
+    CHECK_INPUT_VCF( vcf )
         .filter { it.size()>0 }
-        .splitCsv()
-        .map { [ [ 'id':it[0] ], it[1] ] }
-        .set{ ch_unprocessed_vcfs }
+        .splitCsv( header:true )
+        .map { it ->
+                [ [ id: it['id']], it['filepath'] ] }
+        .set { ch_unprocessed_vcfs }
 
     SPLIT_MULTIALLELICS (ch_unprocessed_vcfs, fasta)
     REMOVE_DUPLICATES (SPLIT_MULTIALLELICS.out.vcf, fasta)
