@@ -89,6 +89,10 @@ include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2' addParam
     markduplicates_options: modules['picard_markduplicates']
 )
 
+include { QC_BAM } from '../subworkflows/nf-core/qc_bam' addParams (
+    picard_collectmultiplemetrics_options: modules['picard_collectmultiplemetrics']
+)
+
 
 //
 // SUBWORKFLOW: Consists of mix/local modules
@@ -147,6 +151,12 @@ workflow RAREDISEASE {
         ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.picard_version.ifEmpty(null))
         ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.samtools_version.ifEmpty(null))
     }
+
+    // STEP 1.5: BAM QUALITY CHECK
+    QC_BAM (
+        ch_marked_bam,
+        PREPARE_GENOME.out.fasta
+    )
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
