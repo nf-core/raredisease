@@ -119,10 +119,10 @@ workflow RAREDISEASE {
     INPUT_CHECK (
         ch_input
     )
-    ch_vcfs = Channel.fromPath(params.clinvar)
+    ch_clinvar_in = Channel.fromPath(params.clinvar)
     CHECK_VCF(
-        ch_vcfs
-    )
+        ch_clinvar_in, params.fasta
+    ).set { ch_clinvar_out }
 
     // STEP 0: QUALITY CHECK.
     FASTQC (

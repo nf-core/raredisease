@@ -27,7 +27,7 @@ include { TABIX_TABIX as TABIX } from '../../modules/nf-core/modules/tabix/tabix
 workflow DEEPVARIANT_CALLER {
     take:
     bam          // channel: [ val(meta), path(bam), path(bai) ]
-    fasta        // path(fasta
+    fasta        // path(fasta)
     fai          // path(fai)
     ch_case_info // channel: [ case_id ]
 

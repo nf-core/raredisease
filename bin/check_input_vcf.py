@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
+import os
 import sys
 import gzip
 import argparse
-
 
 def parse_args(args=None):
     Description = "Check that input vcf files have been normalized."
@@ -30,7 +30,8 @@ def check_vcf(files_in, file_out):
                         if line.startswith("##bcftools_norm"):
                             break
                         elif not line.startswith("#"):
-                            out.write(file+"\n")
+                            base = os.path.basename(file).split(".")[0]
+                            out.write(base + "," + os.path.abspath(file) + "\n")
                             break
             else:
                 print("Please compress %s using bgzip" %file )
