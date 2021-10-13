@@ -33,8 +33,6 @@ workflow CHECK_VCF {
         .map { [ [ 'id':it[0] ], it[1] ] }
         .set{ ch_unprocessed_vcfs }
 
-    ch_unprocessed_vcfs.view()
-
     SPLIT_MULTIALLELICS (ch_unprocessed_vcfs, fasta)
     REMOVE_DUPLICATES (SPLIT_MULTIALLELICS.out.vcf, fasta)
     TABIX (REMOVE_DUPLICATES.out.vcf)
