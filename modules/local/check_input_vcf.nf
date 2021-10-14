@@ -26,7 +26,7 @@ process CHECK_INPUT_VCF {
     def input = vcfs.collect { it.toString() }
     """
     check_input_vcf.py \\
-        --INPUT_VCFS ${input.join(' ')} \\
+        --INPUT_VCF ${input.join(' ')} \\
         --OUTPUT unprocessed_vcfs.txt
     """
 }
