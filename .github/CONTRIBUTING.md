@@ -98,6 +98,10 @@ Please use the following naming schemes, to make it easy to understand what is g
 * initial process channel: `ch_output_from_<process>`
 * intermediate and terminal channels: `ch_<previousprocess>_for_<nextprocess>`
 
+* subworkflows: `verb_noun` or `verb_variant_noun`
+    * `verb_noun` : `align_bwamem2.nf`
+    * `verb_variant_noun` : `call_snv_deepvariant.nf`
+
 ### Nextflow version bumping
 
 If you are using a new feature from core Nextflow, you may bump the minimum required version of nextflow in the pipeline with: `nf-core bump-version --nextflow . [min-nf-version]`
