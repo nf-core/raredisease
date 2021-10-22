@@ -88,7 +88,8 @@ include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2' addParam
 )
 
 include { QC_BAM } from '../subworkflows/nf-core/qc_bam' addParams (
-    picard_collectmultiplemetrics_options: modules['picard_collectmultiplemetrics']
+    picard_collectmultiplemetrics_options: modules['picard_collectmultiplemetrics'],
+    qualimap_bamqc_options: modules['qualimap_bamqc']
 )
 
 
@@ -147,9 +148,13 @@ workflow RAREDISEASE {
     }
 
     // STEP 1.5: BAM QUALITY CHECK
+    gff = []
+    use_gff = false
     QC_BAM (
         ch_marked_bam,
-        PREPARE_GENOME.out.fasta
+        PREPARE_GENOME.out.fasta,
+        gff,
+        use_gff
     )
 
     // STEP 2: VARIANT CALLING
