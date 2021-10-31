@@ -95,11 +95,11 @@
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
-                "clinvar": {
+                "gnomad": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-bezier-curve",
-                    "description": "Path to directory for clinvar vcf."
+                    "description": "Path to directory for gnomad vcf."
                 },
                 "save_reference": {
                     "type": "boolean",
