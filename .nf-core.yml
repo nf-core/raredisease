@@ -1,0 +1,4 @@
+lint:
+  files_unchanged:
+    - .github/CONTRIBUTING.md
+    - assets/multiqc_config.yaml
