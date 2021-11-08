@@ -13,11 +13,12 @@ workflow QC_BAM {
     take:
         bam     // channel: [ val(meta), path(bam) ]
         fasta   // path: genome.fasta
-        gff     // path: file.gff
-        use_gff // boolean
 
     main:
         PICARD_COLLECTMULTIPLEMETRICS ( bam, fasta )
+
+        gff = []
+        use_gff = false
         QUALIMAP_BAMQC ( bam, gff, use_gff )
 
     emit:

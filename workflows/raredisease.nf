@@ -97,12 +97,13 @@ include { QC_BAM } from '../subworkflows/nf-core/qc_bam' addParams (
 // SUBWORKFLOW: Consists of mix/local modules
 //
 
-include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams( deepvariant_options: modules['deepvariant'],
-                                                                                        glnexus_options: modules['glnexus'],
-                                                                                        rm_duplicates_options: modules['bcftools_norm_rm_duplicates'],
-                                                                                        split_multiallelics_options: modules['bcftools_norm_split_multiallelics'],
-                                                                                        tabix_options: modules['tabix'] )
-
+include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams(
+    deepvariant_options: modules['deepvariant'],
+    glnexus_options: modules['glnexus'],
+    rm_duplicates_options: modules['bcftools_norm_rm_duplicates'],
+    split_multiallelics_options: modules['bcftools_norm_split_multiallelics'],
+    tabix_options: modules['tabix']
+    )
 /*
 ========================================================================================
     RUN MAIN WORKFLOW
@@ -148,13 +149,9 @@ workflow RAREDISEASE {
     }
 
     // STEP 1.5: BAM QUALITY CHECK
-    gff = []
-    use_gff = false
     QC_BAM (
         ch_marked_bam,
-        PREPARE_GENOME.out.fasta,
-        gff,
-        use_gff
+        PREPARE_GENOME.out.fasta
     )
 
     // STEP 2: VARIANT CALLING
