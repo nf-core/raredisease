@@ -26,31 +26,36 @@ include { TABIX_TABIX as TABIX } from '../../modules/nf-core/modules/tabix/tabix
 
 workflow DEEPVARIANT_CALLER {
     take:
-    bam          // channel: [ val(meta), path(bam), path(bai) ]
-    fasta        // path(fasta
-    fai          // path(fai)
-    ch_case_info // channel: [ case_id ]
+        bam          // channel: [ val(meta), path(bam), path(bai) ]
+        fasta        // path(fasta
+        fai          // path(fai)
+        ch_case_info // channel: [ case_id ]
 
     main:
-    DEEPVARIANT ( bam, fasta, fai )
-    DEEPVARIANT.out.gvcf.collect{it[1]}
-        .toList()
-        .set { file_list }
+        ch_versions = Channel.empty()
+
+        DEEPVARIANT ( bam, fasta, fai )
+        DEEPVARIANT.out.gvcf.collect{it[1]}
+            .toList()
+            .set { file_list }
+        ch_versions = ch_versions.mix(DEEPVARIANT.out.versions)
 
     //Combine case meta with the list of gvcfs
-    ch_case_info.combine(file_list)
-        .set { ch_gvcfs }
-    GLNEXUS ( ch_gvcfs )
-    SPLIT_MULTIALLELICS (GLNEXUS.out.bcf, fasta)
-    REMOVE_DUPLICATES (SPLIT_MULTIALLELICS.out.vcf, fasta)
-    TABIX (REMOVE_DUPLICATES.out.vcf)
+        ch_case_info.combine(file_list)
+            .set { ch_gvcfs }
+        GLNEXUS ( ch_gvcfs )
+        ch_versions = ch_versions.mix(GLNEXUS.out.versions)
+
+        SPLIT_MULTIALLELICS (GLNEXUS.out.bcf, fasta)
+        REMOVE_DUPLICATES (SPLIT_MULTIALLELICS.out.vcf, fasta)
+        ch_versions = ch_versions.mix(REMOVE_DUPLICATES.out.versions)
+
+        TABIX (REMOVE_DUPLICATES.out.vcf)
+        ch_versions = ch_versions.mix(TABIX.out.versions)
 
     emit:
-    vcf                         = REMOVE_DUPLICATES.out.vcf
-    tbi                         = TABIX.out.tbi
+        vcf         = REMOVE_DUPLICATES.out.vcf
+        tabix       = TABIX.out.tbi
 
-    // Collect versions
-    deepvariant_version         = DEEPVARIANT.out.version
-    glnexus_version             = GLNEXUS.out.version
-
+        versions    = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }

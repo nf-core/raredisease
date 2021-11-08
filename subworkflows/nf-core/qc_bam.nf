@@ -13,8 +13,13 @@ workflow QC_BAM {
         fasta // path: genome.fasta
 
     main:
+        ch_versions = Channel.empty()
+
         PICARD_COLLECTMULTIPLEMETRICS ( bam, fasta )
+        ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions)
 
     emit:
-        multiple_metrics        = PICARD_COLLECTMULTIPLEMETRICS.out.metrics
+        multiple_metrics        = PICARD_COLLECTMULTIPLEMETRICS.out.metrics     // channel: [ val(meta), path(metrics) ]
+
+        versions                = ch_versions.ifEmpty(null)                     // channel: [ versions.yml ]
 }
