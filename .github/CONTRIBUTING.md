@@ -104,7 +104,7 @@ Please use the following naming schemes, to make it easy to understand what is g
 
 ### Reusing modules in the workflow
 
-Default options for modules should be defined in the `base/modules.config`. If you have a module that you would like to reuse in a subworkflow with non-default options, we recommend modifying the defaults within the context of the subworkflow. For a working example, please have a look at how the default options for bcftools norm tool are modified in both `subworkflows/local/deepvariant_caller.nf` and `subworkflows/local/prepare_vcf.nf`
+Default options for modules should be defined in the [conf/modules.config](../conf/modules.config). If you have a module that you would like to reuse in a subworkflow with non-default options, we recommend modifying the defaults within the context of the subworkflow. For a working example, please have a look at how the default options for bcftools norm tool are modified in both [subworkflows/local/deepvariant_caller.nf](../subworkflows/local/deepvariant_caller.nf) and [subworkflows/local/prepare_vcf.nf](../subworkflows/local/prepare_vcf.nf)
 
 ### Nextflow version bumping
 
