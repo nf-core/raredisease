@@ -85,7 +85,8 @@ include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2' addParam
 )
 
 include { QC_BAM } from '../subworkflows/nf-core/qc_bam' addParams (
-    picard_collectmultiplemetrics_options: modules['picard_collectmultiplemetrics']
+    picard_collectmultiplemetrics_options: modules['picard_collectmultiplemetrics'],
+    qualimap_bamqc_options: modules['qualimap_bamqc']
 )
 
 
@@ -93,12 +94,13 @@ include { QC_BAM } from '../subworkflows/nf-core/qc_bam' addParams (
 // SUBWORKFLOW: Consists of mix/local modules
 //
 
-include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams( deepvariant_options: modules['deepvariant'],
-                                                                                        glnexus_options: modules['glnexus'],
-                                                                                        rm_duplicates_options: modules['bcftools_norm_rm_duplicates'],
-                                                                                        split_multiallelics_options: modules['bcftools_norm_split_multiallelics'],
-                                                                                        tabix_options: modules['tabix'] )
-
+include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams(
+    deepvariant_options: modules['deepvariant'],
+    glnexus_options: modules['glnexus'],
+    rm_duplicates_options: modules['bcftools_norm_rm_duplicates'],
+    split_multiallelics_options: modules['bcftools_norm_split_multiallelics'],
+    tabix_options: modules['tabix']
+    )
 /*
 ========================================================================================
     RUN MAIN WORKFLOW
