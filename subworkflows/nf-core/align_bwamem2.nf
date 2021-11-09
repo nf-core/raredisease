@@ -20,18 +20,22 @@ include { PICARD_MARKDUPLICATES as MARKDUPLICATES } from '../../modules/nf-core/
 workflow ALIGN_BWAMEM2 {
     take:
         reads_input // channel: [ val(meta), reads_input ]
-        index       // channel: /path/to/bwamem2/index/
+        index       // channel: [ /path/to/bwamem2/index/ ]
 
     main:
+        ch_versions = Channel.empty()
+
         // Map, sort, and index
         BWAMEM2_MEM ( reads_input, index )
+        ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions)
+
         SAMTOOLS_SORT ( BWAMEM2_MEM.out.bam )
         SAMTOOLS_INDEX ( SAMTOOLS_SORT.out.bam )
 
         // Join the mapped bam + bai paths by their keys for stats
         // Get stats for each demultiplexed read pair.
         bam_sorted_indexed = SAMTOOLS_SORT.out.bam.join(SAMTOOLS_INDEX.out.bai)
-        SAMTOOLS_STATS ( bam_sorted_indexed )
+        SAMTOOLS_STATS ( bam_sorted_indexed, [] )
 
         // Merge multiple lane samples and index
         SAMTOOLS_SORT.out.bam
@@ -47,11 +51,13 @@ workflow ALIGN_BWAMEM2 {
         .set{ bams }                                // create a new multi-channel named bams
 
         // TODO: If there are no samples to merge, skip the process
-        SAMTOOLS_MERGE ( bams.multiple )
+        SAMTOOLS_MERGE ( bams.multiple, [] )
         prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
+        ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions)
 
         // Marking duplicates
         MARKDUPLICATES ( prepared_bam )
+        ch_versions = ch_versions.mix(MARKDUPLICATES.out.versions)
 
     emit:
         stats                  = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), [ stats ] ]
@@ -59,8 +65,5 @@ workflow ALIGN_BWAMEM2 {
         marked_bam             = MARKDUPLICATES.out.bam         // channel: [ val(meta), [ marked_bam ] ]
         marked_bai             = MARKDUPLICATES.out.bai         // channel: [ val(meta), [ marked_bai ] ]
 
-        // Collect versions
-        bwamem2_version        = BWAMEM2_MEM.out.version        //      path: *.version.txt
-        picard_version         = MARKDUPLICATES.out.version     //      path: *.version.txt
-        samtools_version       = SAMTOOLS_SORT.out.version      //      path: *.version.txt
+        versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }

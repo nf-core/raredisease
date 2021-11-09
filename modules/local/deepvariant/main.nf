@@ -1,4 +1,4 @@
-include { initOptions; saveFiles; getSoftwareName } from './functions'
+include { initOptions; saveFiles; getSoftwareName; getProcessName } from './functions'
 
 params.options = [:]
 options        = initOptions(params.options)
@@ -23,14 +23,12 @@ process DEEPVARIANT {
     path(fai)
 
     output:
-    tuple val(meta), path("*.vcf.gz"),  emit: vcf
-    tuple val(meta), path("*g.vcf.gz"),  emit: gvcf
-    path "*.version.txt"          , emit: version
+    tuple val(meta), path("*.vcf.gz"),      emit: vcf
+    tuple val(meta), path("*g.vcf.gz"),     emit: gvcf
+    path  "versions.yml",                   emit: versions
 
     script:
-    def software = getSoftwareName(task.process)
     def prefix   = options.suffix ? "${meta.id}${options.suffix}" : "${meta.id}"
-
     """
     /opt/deepvariant/bin/run_deepvariant \\
         --ref=${fasta} \\
@@ -40,7 +38,10 @@ process DEEPVARIANT {
         ${options.args} \\
         --num_shards=${task.cpus}
 
-    echo \$(/opt/deepvariant/bin/run_deepvariant --version) | sed 's/^.*version //; s/ .*\$//' > ${software}.version.txt
+    cat <<-END_VERSIONS > versions.yml
+    ${getProcessName(task.process)}:
+        deepvariant: \$(echo \$(/opt/deepvariant/bin/run_deepvariant --version) | sed 's/^.*version //; s/ .*\$//')
+    END_VERSIONS
     """
 
 }
