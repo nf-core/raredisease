@@ -97,7 +97,6 @@ include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/local/call_repeat_expan
     expansionhunter_options: modules['expansionhunter']
 )
 
-
 //
 // SUBWORKFLOW: Consists of mix/local modules
 //
