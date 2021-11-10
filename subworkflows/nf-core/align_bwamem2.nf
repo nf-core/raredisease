@@ -4,6 +4,7 @@
 
 params.bwamem2_mem_options = [:]
 params.samtools_idx_options = [:]
+params.samtools_idx_md_options  = [:]
 params.samtools_sort_options = [:]
 params.samtools_stats_options = [:]
 params.samtools_merge_options = [:]
@@ -11,6 +12,7 @@ params.markduplicates_options = [:]
 
 include { BWAMEM2_MEM } from '../../modules/nf-core/modules/bwamem2/mem/main'  addParams( options: params.bwamem2_mem_options )
 include { SAMTOOLS_INDEX } from '../../modules/nf-core/modules/samtools/index/main' addParams( options: params.samtools_idx_options )
+include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MD } from '../../modules/nf-core/modules/samtools/index/main' addParams( options: params.samtools_idx_md_options )
 include { SAMTOOLS_SORT } from '../../modules/nf-core/modules/samtools/sort/main' addParams(options: params.samtools_sort_options )
 include { SAMTOOLS_STATS } from '../../modules/nf-core/modules/samtools/stats/main' addParams(options: params.samtools_stats_options )
 include { SAMTOOLS_MERGE } from '../../modules/nf-core/modules/samtools/merge/main' addParams( options: params.samtools_merge_options )
@@ -57,13 +59,14 @@ workflow ALIGN_BWAMEM2 {
 
         // Marking duplicates
         MARKDUPLICATES ( prepared_bam )
+        SAMTOOLS_INDEX_MD ( MARKDUPLICATES.out.bam )
         ch_versions = ch_versions.mix(MARKDUPLICATES.out.versions)
 
     emit:
         stats                  = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), [ stats ] ]
         metrics                = MARKDUPLICATES.out.metrics     // channel: [ val(meta), [ metrics ] ]
         marked_bam             = MARKDUPLICATES.out.bam         // channel: [ val(meta), [ marked_bam ] ]
-        marked_bai             = MARKDUPLICATES.out.bai         // channel: [ val(meta), [ marked_bai ] ]
+        marked_bai             = SAMTOOLS_INDEX_MD.out.bai      // channel: [ val(meta), [ marked_bai ] ]
 
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }
