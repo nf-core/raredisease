@@ -14,7 +14,10 @@ workflow CALL_REPEAT_EXPANSIONS {
 
     main:
 
+        ch_versions = Channel.empty()
+        
         EXPANSIONHUNTER( bam, fasta, file(variant_catalog) )
+        ch_versions = ch_versions.mix(EXPANSIONHUNTER.out.versions)
 
     emit:
         vcf                       	= EXPANSIONHUNTER.out.vcf       // path: *.vcf
