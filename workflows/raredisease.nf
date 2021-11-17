@@ -163,7 +163,7 @@ workflow RAREDISEASE {
             PREPARE_GENOME.out.fasta,
             params.variant_catalog
             )
-    ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.expansionhunter_version.ifEmpty(null))
+    ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
