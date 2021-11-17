@@ -20,6 +20,6 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_versions = ch_versions.mix(EXPANSIONHUNTER.out.versions)
 
     emit:
-        vcf                       	= EXPANSIONHUNTER.out.vcf       // path: *.vcf
-        expansionhunter_version     = EXPANSIONHUNTER.out.versions 	// path: versions.yml
+        vcf         = EXPANSIONHUNTER.out.vcf       // channel: [ val(meta), path(*.vcf) ]
+        versions    = ch_versions.ifEmpty(null)     // channel: [ versions.yml ]
 }
