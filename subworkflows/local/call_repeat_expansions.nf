@@ -9,7 +9,7 @@ include { EXPANSIONHUNTER } from '../../modules/nf-core/modules/expansionhunter/
 workflow CALL_REPEAT_EXPANSIONS {
     take:
         bam 				// channel: [ val(meta), path(bam), path(bai) ]
-        fasta 				// path: genome.fasta
+        fasta 			// channel: /path/to/genome.fasta
         variant_catalog		// channel: /path/to/variant_catalog.json
 
     main:
