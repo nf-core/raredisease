@@ -161,7 +161,7 @@ workflow RAREDISEASE {
     CALL_REPEAT_EXPANSIONS (
             ch_marked_bam.join(ch_marked_bai, by: [0]),
             PREPARE_GENOME.out.fasta,
-            params.genomes.GRCh38.variant_catalog
+            params.variant_catalog
             )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.expansionhunter_version.ifEmpty(null))
 
