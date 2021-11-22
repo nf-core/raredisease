@@ -7,7 +7,7 @@ import argparse
 
 def parse_args(args=None):
     Description = "Check that input vcf file has been normalized."
-    Epilog = "Example usage: python check_input_vcf.py --INPUT_VCF <VCF_FILE_1> <VCF_FILE_2>...<VCF_FILE_N> --OUTPUT <output.txt>"
+    Epilog = "Example usage: python check_input_vcf.py --INPUT_VCF <VCF_FILE> --OUTPUT <output.txt>"
 
     parser = argparse.ArgumentParser(description=Description, epilog=Epilog)
     parser.add_argument("--INPUT_VCF", help="Input vcf file.")
