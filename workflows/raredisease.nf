@@ -45,11 +45,6 @@ if (!params.save_reference) {
 }
 
 //
-// MODULE: Local to the pipeline
-//
-include { GET_SOFTWARE_VERSIONS } from '../modules/local/get_software_versions' addParams( options: [publish_files : ['tsv':'']] )
-
-//
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 include { INPUT_CHECK } from '../subworkflows/local/input_check' addParams( options: [:] )
@@ -68,7 +63,9 @@ multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"
 // MODULE: Installed directly from nf-core/modules
 //
 include { FASTQC } from '../modules/nf-core/modules/fastqc/main'  addParams( options: modules['fastqc'] )
-include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( options: multiqc_options   )
+include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( options: multiqc_options )
+include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main' addParams( options: [publish_files : ['_versions.yml':'']] )
+
 
 //
 // SUBWORKFLOW: Consists entirely of nf-core/modules
@@ -90,7 +87,8 @@ include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2' addParam
 )
 
 include { QC_BAM } from '../subworkflows/nf-core/qc_bam' addParams (
-    picard_collectmultiplemetrics_options: modules['picard_collectmultiplemetrics']
+    picard_collectmultiplemetrics_options: modules['picard_collectmultiplemetrics'],
+    qualimap_bamqc_options: modules['qualimap_bamqc']
 )
 
 
@@ -98,12 +96,13 @@ include { QC_BAM } from '../subworkflows/nf-core/qc_bam' addParams (
 // SUBWORKFLOW: Consists of mix/local modules
 //
 
-include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams( deepvariant_options: modules['deepvariant'],
-                                                                                        glnexus_options: modules['glnexus'],
-                                                                                        rm_duplicates_options: modules['bcftools_norm_rm_duplicates'],
-                                                                                        split_multiallelics_options: modules['bcftools_norm_split_multiallelics'],
-                                                                                        tabix_options: modules['tabix'] )
-
+include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams(
+    deepvariant_options: modules['deepvariant'],
+    glnexus_options: modules['glnexus'],
+    rm_duplicates_options: modules['bcftools_norm_rm_duplicates'],
+    split_multiallelics_options: modules['bcftools_norm_split_multiallelics'],
+    tabix_options: modules['tabix']
+    )
 /*
 ========================================================================================
     RUN MAIN WORKFLOW
@@ -115,7 +114,7 @@ def multiqc_report = []
 
 workflow RAREDISEASE {
 
-    ch_software_versions = Channel.empty()
+    ch_versions = Channel.empty()
 
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
@@ -128,10 +127,11 @@ workflow RAREDISEASE {
     FASTQC (
         INPUT_CHECK.out.reads
     )
-    ch_software_versions = ch_software_versions.mix(FASTQC.out.version.ifEmpty(null))
+    ch_versions = ch_versions.mix(FASTQC.out.versions)
 
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
     PREPARE_GENOME ( params.fasta )
+    ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
     if (params.gnomad != '')
     {
@@ -151,9 +151,7 @@ workflow RAREDISEASE {
         ch_marked_bam = ALIGN_BWAMEM2.out.marked_bam
         ch_marked_bai = ALIGN_BWAMEM2.out.marked_bai
 
-        ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.bwamem2_version.ifEmpty(null))
-        ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.picard_version.ifEmpty(null))
-        ch_software_versions = ch_software_versions.mix(ALIGN_BWAMEM2.out.samtools_version.ifEmpty(null))
+        ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
     }
 
     // STEP 1.5: BAM QUALITY CHECK
@@ -165,26 +163,18 @@ workflow RAREDISEASE {
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
     DEEPVARIANT_CALLER (
-                        ch_marked_bam.join(ch_marked_bai, by: [0]),
-                        PREPARE_GENOME.out.fasta,
-                        PREPARE_GENOME.out.fai,
-                        INPUT_CHECK.out.ch_case_info
-                        )
-    ch_software_versions = ch_software_versions.mix(DEEPVARIANT_CALLER.out.deepvariant_version.ifEmpty(null))
+        ch_marked_bam.join(ch_marked_bai, by: [0]),
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.fai,
+        INPUT_CHECK.out.ch_case_info
+    )
+    ch_versions = ch_versions.mix(DEEPVARIANT_CALLER.out.versions)
 
     //
     // MODULE: Pipeline reporting
     //
-    ch_software_versions
-        .map { it -> if (it) [ it.baseName, it ] }
-        .groupTuple()
-        .map { it[1][0] }
-        .flatten()
-        .collect()
-        .set { ch_software_versions }
-
-    GET_SOFTWARE_VERSIONS (
-        ch_software_versions.map { it }.collect()
+    CUSTOM_DUMPSOFTWAREVERSIONS (
+        ch_versions.unique().collectFile()
     )
 
     //
@@ -197,14 +187,13 @@ workflow RAREDISEASE {
     ch_multiqc_files    = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
     ch_multiqc_files    = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
     ch_multiqc_files    = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    ch_multiqc_files    = ch_multiqc_files.mix(GET_SOFTWARE_VERSIONS.out.yaml.collect())
+    ch_multiqc_files    = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
     ch_multiqc_files    = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect()
     )
     multiqc_report       = MULTIQC.out.report.toList()
-    ch_software_versions = ch_software_versions.mix(MULTIQC.out.version.ifEmpty(null))
 }
 
 /*
