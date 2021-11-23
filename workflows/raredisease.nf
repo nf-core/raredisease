@@ -133,7 +133,7 @@ workflow RAREDISEASE {
     PREPARE_GENOME ( params.fasta )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
-    if (params.gnomad != '')
+    if (params.gnomad)
     {
         ch_gnomad_in = Channel.fromPath(params.gnomad)
         CHECK_VCF(

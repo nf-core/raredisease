@@ -17,16 +17,15 @@ process CHECK_INPUT_VCF {
     }
 
     input:
-    path vcfs
+    path vcf
 
     output:
     path '*.txt'       , emit: txt
 
     script: // This script is bundled with the pipeline, in nf-core/raredisease/bin/
-    def input = vcfs.collect { it.toString() }
     """
     check_input_vcf.py \\
-        --INPUT_VCF ${input.join(' ')} \\
+        --INPUT_VCF $vcf \\
         --OUTPUT unprocessed_vcfs.txt
     """
 }
