@@ -67,7 +67,8 @@ multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"
 //
 include { FASTQC } from '../modules/nf-core/modules/fastqc/main'  addParams( options: modules['fastqc'] )
 include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( options: multiqc_options   )
-
+include { QUALIMAP_BAMQC } from '../modules/nf-core/modules/qualimap/bamqc/main' addParams( options: [:]   )
+include { SAMBAMBA } from '../modules/nf-core/modules/sambamba/main' addParams( options: [:]   )
 //
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
@@ -150,6 +151,13 @@ workflow RAREDISEASE {
     QC_BAM (
         ch_marked_bam,
         PREPARE_GENOME.out.fasta
+    )
+    QUALIMAP_BAMQC (
+        ch_marked_bam
+        
+    )
+    SAMBAMBA (
+        ch_marked_bam.join(ch_marked_bai, by: [0])
     )
 
     // STEP 2: VARIANT CALLING

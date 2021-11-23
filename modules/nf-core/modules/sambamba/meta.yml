@@ -1,0 +1,46 @@
+name: sambamba
+description: Produces comprehensive statistics from SAM/BAM/CRAM file
+keywords:
+    - Mitochondria
+    - bam
+    - sam
+    - cram
+tools:
+    - sambamba:
+        description: |
+            Sambamba-view a tool for extracting information from SAM/BAM files
+            Fast copying of a region to a new file with the slice tool.
+            These files are generated as output by short read aligners like BWA.
+        homepage: https://lomereiter.github.io/sambamba/
+        documentation: https://lomereiter.github.io/sambamba/docs/sambamba-view.html
+        doi: 10.1093/bioinformatics/btv098
+input:
+    - meta:
+        type: map
+        description: |
+            Groovy Map containing sample information
+            e.g. [ id:'test', single_end:false ]
+    - bam:
+        type: file
+        description: BAM/CRAM/SAM file
+        pattern: "*.{bam,cram,sam}"
+    - bai:
+        type: file
+        description: Index for BAM/CRAM/SAM file
+        pattern: "*.{bai,crai,sai}"
+output:
+    - meta:
+        type: map
+        description: |
+            Groovy Map containing sample information
+            e.g. [ id:'test', single_end:false ]
+    - bam:
+        type: file
+        description:  BAM/CRAM/SAM file
+        pattern: "*.{bam,cram,sam}"
+    - version:
+        type: file
+        description: File containing software version
+        pattern: "versions.yml"
+authors:
+    - "@sysbiocoder"
