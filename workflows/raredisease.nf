@@ -89,6 +89,13 @@ include { QC_BAM } from '../subworkflows/nf-core/qc_bam' addParams (
     qualimap_bamqc_options: modules['qualimap_bamqc']
 )
 
+//
+// SUBWORKFLOW: Consists entirely of nf-core/modules
+//
+
+include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/local/call_repeat_expansions' addParams(
+    expansionhunter_options: modules['expansionhunter']
+)
 
 //
 // SUBWORKFLOW: Consists of mix/local modules
@@ -149,6 +156,14 @@ workflow RAREDISEASE {
         ch_marked_bam,
         PREPARE_GENOME.out.fasta
     )
+
+    // STEP 1.6: EXPANSIONHUNTER
+    CALL_REPEAT_EXPANSIONS (
+            ch_marked_bam.join(ch_marked_bai, by: [0]),
+            PREPARE_GENOME.out.fasta,
+            params.variant_catalog
+            )
+    ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
