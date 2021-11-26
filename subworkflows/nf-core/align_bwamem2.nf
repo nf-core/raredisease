@@ -40,7 +40,7 @@ workflow ALIGN_BWAMEM2 {
         // Merge multiple lane samples and index
         SAMTOOLS_SORT.out.bam
         .map{ meta, bam ->
-            new_meta = meta = [:]                   // to avoid overriding the global meta
+            new_meta = [:]                   // to avoid overriding the global meta
             new_meta.id = meta.id.split('_')[0]     // access the .id attribute of meta to split samplename_lane into samplename
             [new_meta, bam]}                        // end the closure to return newly modified channel
         .groupTuple(by: 0)                          // group them bam paths with the same [ [samplename], [bam path, bam path, ..] ]
