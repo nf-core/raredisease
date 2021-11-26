@@ -32,7 +32,7 @@ def create_fastq_channels(LinkedHashMap row) {
     meta.id           = row.sample
     meta.single_end   = row.single_end.toBoolean()
     //TODO: think about adding LB and PU, make sure only illumina will be used, ID can also contain a flowcell id
-    meta.read_group   =     "\'@RG\\tID:"+row.sample + "_" + row.fastq_1.split('/')[0].split('_R1*.fastq')[0] + "_" + row.lane + "\\tPL:ILLUMINA\\tSM:"+row.sample.split('_')[0]+"\'"
+    meta.read_group   =     "\'@RG\\tID:"+ row.sample.split('_')[0] + "_" + row.fastq_1.split('/')[-1].split('_R1_')[0] + "_" + row.lane + "\\tPL:ILLUMINA\\tSM:"+row.sample.split('_')[0]+"\'"
 
 
     def array = []
