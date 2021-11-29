@@ -15,6 +15,9 @@
             "custom/dumpsoftwareversions": {
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
             },
+            "expansionhunter": {
+                "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
+            },
             "fastqc": {
                 "git_sha": "3aacd46da2b221ed47aaa05c413a828538d2c2ae"
             },
