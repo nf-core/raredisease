@@ -24,16 +24,14 @@ def check_vcf(file_in, file_out):
 
     with open(file_out,'w') as out:
         if file_in.endswith(".gz"):
+            base = os.path.basename(file_in).rsplit(".",2)[0]
+            out.write("id,filepath,processed\n")
             with gzip.open(file_in,'rt') as vcf:
                 for line in vcf:
                     if line.startswith("##bcftools_norm"):
-                        base = os.path.basename(file_in).rsplit(".",2)[0]
-                        out.write("id,filepath,processed\n")
                         out.write(base + "," + os.path.abspath(file_in) + ",yes\n")
                         break
                     elif not line.startswith("#"):
-                        base = os.path.basename(file_in).rsplit(".",2)[0]
-                        out.write("id,filepath,processed\n")
                         out.write(base + "," + os.path.abspath(file_in) + ",no\n")
                         break
         else:

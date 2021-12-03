@@ -26,6 +26,6 @@ process CHECK_INPUT_VCF {
     """
     check_input_vcf.py \\
         --INPUT_VCF $vcf \\
-        --OUTPUT unprocessed_vcfs.txt
+        --OUTPUT checked_vcfs.txt
     """
 }
