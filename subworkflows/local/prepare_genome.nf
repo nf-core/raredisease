@@ -2,12 +2,8 @@
 // Prepare reference genome files
 //
 
-
-// params.bwamem2_idx_options = [:]
-// params.samtools_faidx_options = [:]
-
-include { BWAMEM2_INDEX } from '../../modules/nf-core/modules/bwamem2/index/main'  //addParams( options: params.bwamem2_idx_options )
-include { SAMTOOLS_FAIDX } from '../../modules/nf-core/modules/samtools/faidx/main'  //addParams( options: params.samtools_faidx_options )
+include { BWAMEM2_INDEX } from '../../modules/nf-core/modules/bwamem2/index/main'
+include { SAMTOOLS_FAIDX } from '../../modules/nf-core/modules/samtools/faidx/main'
 
 workflow PREPARE_GENOME {
     take:
@@ -30,7 +26,7 @@ workflow PREPARE_GENOME {
         if ( params.fasta_fai ) {
             ch_fai = file(params.fasta_fai)
         } else {
-            ch_fai = SAMTOOLS_FAIDX ( ch_fasta ).fai
+            ch_fai = SAMTOOLS_FAIDX ( [[], ch_fasta] ).fai // TODO: faidx now requires meta info for fasta due to pipelines with multi references e.g. de novo
             ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
         }
 

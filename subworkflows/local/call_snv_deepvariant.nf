@@ -18,13 +18,13 @@
 // def tabix_glnexus                         = params.tabix_options.clone()
 // tabix_glnexus.publish_dir                 = "glnexus/"
 
-include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS } from '../../modules/nf-core/modules/bcftools/norm/main'  addParams( options: split_multiallelics_glnexus )
-include { BCFTOOLS_NORM as REMOVE_DUPLICATES } from '../../modules/nf-core/modules/bcftools/norm/main'  addParams( options: rm_duplicates_glnexus )
-include { DEEPVARIANT } from '../../modules/local/deepvariant/main'  addParams( options: params.deepvariant_options )
-include { GLNEXUS } from '../../modules/nf-core/modules/glnexus/main'  addParams( options: params.glnexus_options )
-include { TABIX_TABIX as TABIX } from '../../modules/nf-core/modules/tabix/tabix/main'  addParams( options: tabix_glnexus)
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS } from '../../modules/nf-core/modules/bcftools/norm/main'  //addParams( options: split_multiallelics_glnexus )
+include { BCFTOOLS_NORM as REMOVE_DUPLICATES } from '../../modules/nf-core/modules/bcftools/norm/main'  //addParams( options: rm_duplicates_glnexus )
+include { DEEPVARIANT } from '../../modules/local/deepvariant/main'  //addParams( options: params.deepvariant_options )
+include { GLNEXUS } from '../../modules/nf-core/modules/glnexus/main'  //addParams( options: params.glnexus_options )
+include { TABIX_TABIX as TABIX } from '../../modules/nf-core/modules/tabix/tabix/main'  //addParams( options: tabix_glnexus)
 
-workflow DEEPVARIANT_CALLER {
+workflow CALL_SNV_DEEPVARIANT {
     take:
     bam          // channel: [ val(meta), path(bam), path(bai) ]
     fasta        // path(fasta)

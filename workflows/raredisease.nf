@@ -39,7 +39,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
-include { CHECK_VCF } from '../subworkflows/local/prepare_vcf' //addParams( options: [:] )
+// include { CHECK_VCF } from '../subworkflows/local/prepare_vcf' //addParams( options: [:] )
 
 /*
 ========================================================================================
@@ -69,7 +69,7 @@ include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/local/call_repeat_expan
 // SUBWORKFLOW: Consists of mix/local modules
 //
 
-include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' //addParams( deepvariant_options: modules['deepvariant'], glnexus_options: modules['glnexus'], rm_duplicates_options: modules['bcftools_norm_rm_duplicates'], split_multiallelics_options: modules['bcftools_norm_split_multiallelics'], tabix_options: modules['tabix'] )
+include { CALL_SNV_DEEPVARIANT } from '../subworkflows/local/call_snv_deepvariant' //addParams( deepvariant_options: modules['deepvariant'], glnexus_options: modules['glnexus'], rm_duplicates_options: modules['bcftools_norm_rm_duplicates'], split_multiallelics_options: modules['bcftools_norm_split_multiallelics'], tabix_options: modules['tabix'] )
 
 /*
 ========================================================================================
@@ -102,13 +102,13 @@ workflow RAREDISEASE {
     PREPARE_GENOME ( params.fasta )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
-    if (params.gnomad)
-    {
-        ch_gnomad_in = Channel.fromPath(params.gnomad)
-        CHECK_VCF(
-            ch_gnomad_in, PREPARE_GENOME.out.fasta,
-        ).set { ch_gnomad_out }
-    }
+    // if (params.gnomad)
+    // {
+    //     ch_gnomad_in = Channel.fromPath(params.gnomad)
+    //     CHECK_VCF(
+    //         ch_gnomad_in, PREPARE_GENOME.out.fasta,
+    //     ).set { ch_gnomad_out }
+    // }
 
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
     if (params.aligner == 'bwamem2') {
@@ -139,13 +139,13 @@ workflow RAREDISEASE {
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
-    DEEPVARIANT_CALLER (
-        ch_marked_bam.join(ch_marked_bai, by: [0]),
-        PREPARE_GENOME.out.fasta,
-        PREPARE_GENOME.out.fai,
-        INPUT_CHECK.out.ch_case_info
-    )
-    ch_versions = ch_versions.mix(DEEPVARIANT_CALLER.out.versions)
+    // CALL_SNV_DEEPVARIANT (
+    //     ch_marked_bam.join(ch_marked_bai, by: [0]),
+    //     PREPARE_GENOME.out.fasta,
+    //     PREPARE_GENOME.out.fai,
+    //     INPUT_CHECK.out.ch_case_info
+    // )
+    // ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
 
     //
     // MODULE: Pipeline reporting
