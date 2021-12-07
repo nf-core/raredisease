@@ -2,7 +2,7 @@
 // Run ExpansionHunter
 //
 
-params.expansionhunter_options = [:]
+//params.expansionhunter_options = [:]
 
 include { EXPANSIONHUNTER } from '../../modules/nf-core/modules/expansionhunter/main'  addParams( options: params.expansionhunter_options )
 

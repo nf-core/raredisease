@@ -2,21 +2,21 @@
 // Map to reference, fetch stats for each demultiplexed read pair, merge, mark duplicates, and index.
 //
 
-params.bwamem2_mem_options = [:]
-params.samtools_idx_options = [:]
-params.samtools_idx_md_options  = [:]
-params.samtools_sort_options = [:]
-params.samtools_stats_options = [:]
-params.samtools_merge_options = [:]
-params.markduplicates_options = [:]
+// params.bwamem2_mem_options = [:]
+// params.samtools_idx_options = [:]
+// params.samtools_idx_md_options  = [:]
+// params.samtools_sort_options = [:]
+// params.samtools_stats_options = [:]
+// params.samtools_merge_options = [:]
+// params.markduplicates_options = [:]
 
-include { BWAMEM2_MEM } from '../../modules/nf-core/modules/bwamem2/mem/main'  addParams( options: params.bwamem2_mem_options )
-include { SAMTOOLS_INDEX } from '../../modules/nf-core/modules/samtools/index/main' addParams( options: params.samtools_idx_options )
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MD } from '../../modules/nf-core/modules/samtools/index/main' addParams( options: params.samtools_idx_md_options )
-include { SAMTOOLS_SORT } from '../../modules/nf-core/modules/samtools/sort/main' addParams(options: params.samtools_sort_options )
-include { SAMTOOLS_STATS } from '../../modules/nf-core/modules/samtools/stats/main' addParams(options: params.samtools_stats_options )
-include { SAMTOOLS_MERGE } from '../../modules/nf-core/modules/samtools/merge/main' addParams( options: params.samtools_merge_options )
-include { PICARD_MARKDUPLICATES as MARKDUPLICATES } from '../../modules/nf-core/modules/picard/markduplicates/main' addParams(options: params.markduplicates_options )
+include { BWAMEM2_MEM } from '../../modules/nf-core/modules/bwamem2/mem/main'  //addParams( options: params.bwamem2_mem_options )
+include { SAMTOOLS_INDEX } from '../../modules/nf-core/modules/samtools/index/main' //addParams( options: params.samtools_idx_options )
+include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MD } from '../../modules/nf-core/modules/samtools/index/main' //addParams( options: params.samtools_idx_md_options )
+include { SAMTOOLS_SORT } from '../../modules/nf-core/modules/samtools/sort/main' //addParams(options: params.samtools_sort_options )
+include { SAMTOOLS_STATS } from '../../modules/nf-core/modules/samtools/stats/main' //addParams(options: params.samtools_stats_options )
+include { SAMTOOLS_MERGE } from '../../modules/nf-core/modules/samtools/merge/main' //addParams( options: params.samtools_merge_options )
+include { PICARD_MARKDUPLICATES as MARKDUPLICATES } from '../../modules/nf-core/modules/picard/markduplicates/main' //addParams(options: params.markduplicates_options )
 
 
 workflow ALIGN_BWAMEM2 {

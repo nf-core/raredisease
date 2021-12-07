@@ -3,11 +3,11 @@
 //
 
 
-params.bwamem2_idx_options = [:]
-params.samtools_faidx_options = [:]
+// params.bwamem2_idx_options = [:]
+// params.samtools_faidx_options = [:]
 
-include { BWAMEM2_INDEX } from '../../modules/nf-core/modules/bwamem2/index/main'  addParams( options: params.bwamem2_idx_options )
-include { SAMTOOLS_FAIDX } from '../../modules/nf-core/modules/samtools/faidx/main'  addParams( options: params.samtools_faidx_options )
+include { BWAMEM2_INDEX } from '../../modules/nf-core/modules/bwamem2/index/main'  //addParams( options: params.bwamem2_idx_options )
+include { SAMTOOLS_FAIDX } from '../../modules/nf-core/modules/samtools/faidx/main'  //addParams( options: params.samtools_faidx_options )
 
 workflow PREPARE_GENOME {
     take:

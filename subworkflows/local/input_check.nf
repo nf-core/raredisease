@@ -20,14 +20,11 @@ workflow INPUT_CHECK {
     samples      = sheet.map { create_samples_channel(it) }
 
     emit:
-<<<<<<< HEAD
     ch_case_info    // channel: [ case_id ]
     reads           // channel: [ val(meta), [ reads ] ]
     samples         // channel: [ sample_id, sex, phenotype, paternal_id, maternal_id, case_id ]
-=======
-    reads                                     // channel: [ val(meta), [ reads ] ]
+
     versions = SAMPLESHEET_CHECK.out.versions // channel: [ versions.yml ]
->>>>>>> TEMPLATE
 }
 
 // Function to get list of [ meta, [ fastq_1, fastq_2 ] ]

@@ -1,27 +1,10 @@
-<<<<<<< HEAD
-// Import generic module functions
-include { initOptions; saveFiles; getSoftwareName; getProcessName } from './functions'
-
-params.options = [:]
-options        = initOptions(params.options)
-
-=======
->>>>>>> TEMPLATE
 process MULTIQC {
     label 'process_medium'
 
     conda (params.enable_conda ? 'bioconda::multiqc=1.11' : null)
-<<<<<<< HEAD
-    if (workflow.containerEngine == 'singularity' && !params.singularity_pull_docker_container) {
-        container "https://depot.galaxyproject.org/singularity/multiqc:1.11--pyhdfd78af_0"
-    } else {
-        container "quay.io/biocontainers/multiqc:1.11--pyhdfd78af_0"
-    }
-=======
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/multiqc:1.11--pyhdfd78af_0' :
         'quay.io/biocontainers/multiqc:1.11--pyhdfd78af_0' }"
->>>>>>> TEMPLATE
 
     input:
     path multiqc_files
@@ -33,14 +16,6 @@ process MULTIQC {
     path "versions.yml"        , emit: versions
 
     script:
-<<<<<<< HEAD
-    """
-    multiqc -f $options.args .
-
-    cat <<-END_VERSIONS > versions.yml
-    ${getProcessName(task.process)}:
-        ${getSoftwareName(task.process)}: \$( multiqc --version | sed -e "s/multiqc, version //g" )
-=======
     def args = task.ext.args ?: ''
     """
     multiqc -f $args .
@@ -48,7 +23,6 @@ process MULTIQC {
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         multiqc: \$( multiqc --version | sed -e "s/multiqc, version //g" )
->>>>>>> TEMPLATE
     END_VERSIONS
     """
 }
