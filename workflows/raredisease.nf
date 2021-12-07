@@ -12,8 +12,9 @@ WorkflowRaredisease.initialise(params, log)
 // Check input path parameters to see if they exist
 def checkPathParamList = [
     params.input, params.multiqc_config, params.fasta,
-    params.bwamem2_index, params.fasta_fai
+    params.bwamem2_index, params.fasta_fai, params.gnomad
 ]
+
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
@@ -38,6 +39,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
+include { CHECK_VCF } from '../subworkflows/local/prepare_vcf' //addParams( options: [:] )
 
 /*
 ========================================================================================
@@ -99,6 +101,14 @@ workflow RAREDISEASE {
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
     PREPARE_GENOME ( params.fasta )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
+
+    if (params.gnomad)
+    {
+        ch_gnomad_in = Channel.fromPath(params.gnomad)
+        CHECK_VCF(
+            ch_gnomad_in, PREPARE_GENOME.out.fasta,
+        ).set { ch_gnomad_out }
+    }
 
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
     if (params.aligner == 'bwamem2') {

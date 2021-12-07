@@ -26,10 +26,10 @@ include { TABIX_TABIX as TABIX } from '../../modules/nf-core/modules/tabix/tabix
 
 workflow DEEPVARIANT_CALLER {
     take:
-        bam          // channel: [ val(meta), path(bam), path(bai) ]
-        fasta        // path(fasta
-        fai          // path(fai)
-        ch_case_info // channel: [ case_id ]
+    bam          // channel: [ val(meta), path(bam), path(bai) ]
+    fasta        // path(fasta)
+    fai          // path(fai)
+    ch_case_info // channel: [ case_id ]
 
     main:
         ch_versions = Channel.empty()
@@ -40,7 +40,7 @@ workflow DEEPVARIANT_CALLER {
             .set { file_list }
         ch_versions = ch_versions.mix(DEEPVARIANT.out.versions)
 
-    //Combine case meta with the list of gvcfs
+        //Combine case meta with the list of gvcfs
         ch_case_info.combine(file_list)
             .set { ch_gvcfs }
         GLNEXUS ( ch_gvcfs )
