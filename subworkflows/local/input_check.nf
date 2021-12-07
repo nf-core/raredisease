@@ -2,9 +2,7 @@
 // Check input samplesheet and get read, sample, and case channels
 //
 
-params.options = [:]
-
-include { SAMPLESHEET_CHECK } from '../../modules/local/samplesheet_check' addParams( options: params.options )
+include { SAMPLESHEET_CHECK } from '../../modules/local/samplesheet_check'
 
 workflow INPUT_CHECK {
     take:
@@ -12,6 +10,7 @@ workflow INPUT_CHECK {
 
     main:
     SAMPLESHEET_CHECK ( samplesheet )
+        .csv
         .splitCsv ( header:true, sep:',' )
         .set { sheet }
 
@@ -21,9 +20,14 @@ workflow INPUT_CHECK {
     samples      = sheet.map { create_samples_channel(it) }
 
     emit:
+<<<<<<< HEAD
     ch_case_info    // channel: [ case_id ]
     reads           // channel: [ val(meta), [ reads ] ]
     samples         // channel: [ sample_id, sex, phenotype, paternal_id, maternal_id, case_id ]
+=======
+    reads                                     // channel: [ val(meta), [ reads ] ]
+    versions = SAMPLESHEET_CHECK.out.versions // channel: [ versions.yml ]
+>>>>>>> TEMPLATE
 }
 
 // Function to get list of [ meta, [ fastq_1, fastq_2 ] ]
