@@ -4,3 +4,8 @@ lint:
     - assets/multiqc_config.yaml
     - .github/workflows/linting.yml
     - lib/NfcoreTemplate.groovy
+    - assets/sendmail_template.txt
+  files_exist:
+    - docs/images/nf-core-raredisease_logo_dark.png
+    - assets/nf-core-raredisease_logo.png
+    - docs/images/nf-core-raredisease_logo.png
