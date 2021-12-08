@@ -5,6 +5,8 @@ lint:
     - .github/workflows/linting.yml
     - lib/NfcoreTemplate.groovy
     - assets/sendmail_template.txt
+    - assets/nf-core-raredisease_logo_light.png
+    - docs/images/nf-core-raredisease_logo_light.png
   files_exist:
     - docs/images/nf-core-raredisease_logo_dark.png
     - assets/nf-core-raredisease_logo.png
