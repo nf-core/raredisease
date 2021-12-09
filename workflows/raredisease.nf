@@ -139,13 +139,13 @@ workflow RAREDISEASE {
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
-    // CALL_SNV_DEEPVARIANT (
-    //     ch_marked_bam.join(ch_marked_bai, by: [0]),
-    //     PREPARE_GENOME.out.fasta,
-    //     PREPARE_GENOME.out.fai,
-    //     INPUT_CHECK.out.ch_case_info
-    // )
-    // ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
+    CALL_SNV_DEEPVARIANT (
+        ch_marked_bam.join(ch_marked_bai, by: [0]),
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.fai,
+        INPUT_CHECK.out.ch_case_info
+    )
+    ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
 
     //
     // MODULE: Pipeline reporting

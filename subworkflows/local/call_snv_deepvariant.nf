@@ -2,27 +2,11 @@
 // A variant caller workflow for deepvariant
 //
 
-// params.split_multiallelics_options = [:]
-// params.rm_duplicates_options = [:]
-// params.deepvariant_options = [:]
-// params.glnexus_options = [:]
-// params.tabix_options = [:]
-
-// def split_multiallelics_glnexus           = params.split_multiallelics_options.clone()
-// split_multiallelics_glnexus.publish_files = "false"
-
-// def rm_duplicates_glnexus                 = params.rm_duplicates_options.clone()
-// rm_duplicates_glnexus.publish_dir         = "glnexus/"
-// rm_duplicates_glnexus.suffix              = "_split_rmdup"
-
-// def tabix_glnexus                         = params.tabix_options.clone()
-// tabix_glnexus.publish_dir                 = "glnexus/"
-
-include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS } from '../../modules/nf-core/modules/bcftools/norm/main'  //addParams( options: split_multiallelics_glnexus )
-include { BCFTOOLS_NORM as REMOVE_DUPLICATES } from '../../modules/nf-core/modules/bcftools/norm/main'  //addParams( options: rm_duplicates_glnexus )
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_GL } from '../../modules/nf-core/modules/bcftools/norm/main'  //addParams( options: split_multiallelics_glnexus )
+include { BCFTOOLS_NORM as REMOVE_DUPLICATES_GL } from '../../modules/nf-core/modules/bcftools/norm/main'  //addParams( options: rm_duplicates_glnexus )
 include { DEEPVARIANT } from '../../modules/local/deepvariant/main'  //addParams( options: params.deepvariant_options )
 include { GLNEXUS } from '../../modules/nf-core/modules/glnexus/main'  //addParams( options: params.glnexus_options )
-include { TABIX_TABIX as TABIX } from '../../modules/nf-core/modules/tabix/tabix/main'  //addParams( options: tabix_glnexus)
+include { TABIX_TABIX as TABIX_GL } from '../../modules/nf-core/modules/tabix/tabix/main'  //addParams( options: tabix_glnexus)
 
 workflow CALL_SNV_DEEPVARIANT {
     take:
@@ -46,16 +30,16 @@ workflow CALL_SNV_DEEPVARIANT {
         GLNEXUS ( ch_gvcfs )
         ch_versions = ch_versions.mix(GLNEXUS.out.versions)
 
-        SPLIT_MULTIALLELICS (GLNEXUS.out.bcf, fasta)
-        REMOVE_DUPLICATES (SPLIT_MULTIALLELICS.out.vcf, fasta)
-        ch_versions = ch_versions.mix(REMOVE_DUPLICATES.out.versions)
+        SPLIT_MULTIALLELICS_GL (GLNEXUS.out.bcf, fasta)
+        REMOVE_DUPLICATES_GL (SPLIT_MULTIALLELICS_GL.out.vcf, fasta)
+        ch_versions = ch_versions.mix(REMOVE_DUPLICATES_GL.out.versions)
 
-        TABIX (REMOVE_DUPLICATES.out.vcf)
-        ch_versions = ch_versions.mix(TABIX.out.versions)
+        TABIX_GL (REMOVE_DUPLICATES_GL.out.vcf)
+        ch_versions = ch_versions.mix(TABIX_GL.out.versions)
 
     emit:
-        vcf         = REMOVE_DUPLICATES.out.vcf
-        tabix       = TABIX.out.tbi
+        vcf         = REMOVE_DUPLICATES_GL.out.vcf
+        tabix       = TABIX_GL.out.tbi
 
         versions    = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
