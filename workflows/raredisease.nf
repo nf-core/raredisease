@@ -39,7 +39,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
-// include { CHECK_VCF } from '../subworkflows/local/prepare_vcf' //addParams( options: [:] )
+include { CHECK_VCF } from '../subworkflows/local/prepare_vcf' //addParams( options: [:] )
 
 /*
 ========================================================================================
@@ -102,13 +102,12 @@ workflow RAREDISEASE {
     PREPARE_GENOME ( params.fasta )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
-    // if (params.gnomad)
-    // {
-    //     ch_gnomad_in = Channel.fromPath(params.gnomad)
-    //     CHECK_VCF(
-    //         ch_gnomad_in, PREPARE_GENOME.out.fasta,
-    //     ).set { ch_gnomad_out }
-    // }
+    if (params.gnomad) {
+        ch_gnomad_in = Channel.fromPath(params.gnomad)
+        CHECK_VCF(
+           ch_gnomad_in, PREPARE_GENOME.out.fasta,
+        ).set { ch_gnomad_out }
+    }
 
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
     if (params.aligner == 'bwamem2') {

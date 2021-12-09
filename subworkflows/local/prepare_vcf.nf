@@ -2,26 +2,10 @@
 // Prepare reference vcf files
 //
 
-// params.split_multiallelics_options = [:]
-// params.rm_duplicates_options = [:]
-// params.vcf_options = [:]
-// params.tabix_options = [:]
-
-// def split_multiallelics_vcf_check           = params.split_multiallelics_options.clone()
-// split_multiallelics_vcf_check.publish_files = "false"
-// split_multiallelics_vcf_check.suffix        = "_split"
-
-// def rm_duplicates_vcf_check                 = params.rm_duplicates_options.clone()
-// rm_duplicates_vcf_check.publish_dir         = "vcf_check/"
-// rm_duplicates_vcf_check.suffix              = "_split_rmdup"
-
-// def tabix_vcf_check                         = params.tabix_options.clone()
-// tabix_vcf_check.publish_dir                 = "vcf_check/"
-
-include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS } from '../../modules/nf-core/modules/bcftools/norm/main'  //addParams( options: split_multiallelics_vcf_check )
-include { BCFTOOLS_NORM as REMOVE_DUPLICATES } from '../../modules/nf-core/modules/bcftools/norm/main'  //addParams( options: rm_duplicates_vcf_check )
-include { CHECK_INPUT_VCF } from '../../modules/local/check_input_vcf' //addParams( options: params.vcf_options )
-include { TABIX_TABIX as TABIX } from '../../modules/nf-core/modules/tabix/tabix/main'  //addParams( options: tabix_vcf_check )
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_PV } from '../../modules/nf-core/modules/bcftools/norm/main'
+include { BCFTOOLS_NORM as REMOVE_DUPLICATES_PV } from '../../modules/nf-core/modules/bcftools/norm/main'
+include { CHECK_INPUT_VCF } from '../../modules/local/check_input_vcf'
+include { TABIX_TABIX as TABIX_PV } from '../../modules/nf-core/modules/tabix/tabix/main'
 
 workflow CHECK_VCF {
     take:
@@ -45,16 +29,17 @@ workflow CHECK_VCF {
         }
         .set { ch_vcfs_norm }
 
-    SPLIT_MULTIALLELICS (ch_vcfs_norm.unprocessed, fasta)
+    ch_vcfs_norm.unprocessed.view()
+    SPLIT_MULTIALLELICS_PV (ch_vcfs_norm.unprocessed, fasta)
 
-    REMOVE_DUPLICATES (SPLIT_MULTIALLELICS.out.vcf, fasta).vcf
+    REMOVE_DUPLICATES_PV (SPLIT_MULTIALLELICS_PV.out.vcf, fasta).vcf
         .set { ch_vcfs_rmdup }
 
     vcf_out = ch_vcfs_rmdup.mix( ch_vcfs_norm.processed )
 
-    TABIX (vcf_out)
+    TABIX_PV (vcf_out)
 
     emit:
         vcf  =  vcf_out        // path: normalized_vcf
-        idx  =  TABIX.out.tbi
+        idx  =  TABIX_PV.out.tbi
 }

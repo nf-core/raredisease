@@ -2,11 +2,11 @@
 // A variant caller workflow for deepvariant
 //
 
-include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_GL } from '../../modules/nf-core/modules/bcftools/norm/main'  //addParams( options: split_multiallelics_glnexus )
-include { BCFTOOLS_NORM as REMOVE_DUPLICATES_GL } from '../../modules/nf-core/modules/bcftools/norm/main'  //addParams( options: rm_duplicates_glnexus )
-include { DEEPVARIANT } from '../../modules/local/deepvariant/main'  //addParams( options: params.deepvariant_options )
-include { GLNEXUS } from '../../modules/nf-core/modules/glnexus/main'  //addParams( options: params.glnexus_options )
-include { TABIX_TABIX as TABIX_GL } from '../../modules/nf-core/modules/tabix/tabix/main'  //addParams( options: tabix_glnexus)
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_GL } from '../../modules/nf-core/modules/bcftools/norm/main'
+include { BCFTOOLS_NORM as REMOVE_DUPLICATES_GL } from '../../modules/nf-core/modules/bcftools/norm/main'
+include { DEEPVARIANT } from '../../modules/local/deepvariant/main'
+include { GLNEXUS } from '../../modules/nf-core/modules/glnexus/main'
+include { TABIX_TABIX as TABIX_GL } from '../../modules/nf-core/modules/tabix/tabix/main'
 
 workflow CALL_SNV_DEEPVARIANT {
     take:
