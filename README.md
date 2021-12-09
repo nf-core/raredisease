@@ -1,4 +1,4 @@
-# ![nf-core/raredisease](docs/images/nf-core-raredisease_logo.png)
+# ![nf-core/raredisease](docs/images/nf-core-raredisease_logo_light.png)
 
 [![GitHub Actions CI Status](https://github.com/nf-core/raredisease/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/raredisease/actions?query=workflow%3A%22nf-core+CI%22)
 [![GitHub Actions Linting Status](https://github.com/nf-core/raredisease/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/raredisease/actions?query=workflow%3A%22nf-core+linting%22)
