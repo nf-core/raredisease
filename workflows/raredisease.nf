@@ -39,7 +39,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
-include { CHECK_VCF } from '../subworkflows/local/prepare_vcf' //addParams( options: [:] )
+include { CHECK_VCF } from '../subworkflows/local/prepare_vcf'
 
 /*
 ========================================================================================
@@ -51,25 +51,25 @@ include { CHECK_VCF } from '../subworkflows/local/prepare_vcf' //addParams( opti
 // MODULE: Installed directly from nf-core/modules
 //
 
-include { FASTQC  } from '../modules/nf-core/modules/fastqc/main'   //addParams( options: modules['fastqc'] )
-include { MULTIQC } from '../modules/nf-core/modules/multiqc/main'  //addParams( options: multiqc_options )
-include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'  //addParams( options: [publish_files : ['_versions.yml':'']] )
+include { FASTQC  } from '../modules/nf-core/modules/fastqc/main'
+include { MULTIQC } from '../modules/nf-core/modules/multiqc/main'
+include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
 
 //
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome' //addParams( bwamem2_idx_options: modules['bwa_mem2_index'], samtools_faidx_options: modules['samtools_faidx'] )
-include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2' //addParams( bwamem2_idx_options: modules['bwa_mem2_index'], bwamem2_mem_options: modules['bwa_mem2_mem'], samtools_idx_options: modules['samtools_index'], samtools_sort_options: modules['samtools_sort'], samtools_stats_options: modules['samtools_stats'], samtools_merge_options: modules['samtools_merge'], markduplicates_options: modules['picard_markduplicates'] )
+include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
+include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2'
 
-include { QC_BAM } from '../subworkflows/nf-core/qc_bam' //addParams ( picard_collectmultiplemetrics_options: modules['picard_collectmultiplemetrics'], qualimap_bamqc_options: modules['qualimap_bamqc'] )
-include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/local/call_repeat_expansions' //addParams( expansionhunter_options: modules['expansionhunter'] )
+include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
+include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/local/call_repeat_expansions'
 
 //
 // SUBWORKFLOW: Consists of mix/local modules
 //
 
-include { CALL_SNV_DEEPVARIANT } from '../subworkflows/local/call_snv_deepvariant' //addParams( deepvariant_options: modules['deepvariant'], glnexus_options: modules['glnexus'], rm_duplicates_options: modules['bcftools_norm_rm_duplicates'], split_multiallelics_options: modules['bcftools_norm_split_multiallelics'], tabix_options: modules['tabix'] )
+include { CALL_SNV_DEEPVARIANT } from '../subworkflows/local/call_snv_deepvariant'
 
 /*
 ========================================================================================

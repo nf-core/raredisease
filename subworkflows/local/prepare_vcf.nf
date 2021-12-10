@@ -29,7 +29,6 @@ workflow CHECK_VCF {
         }
         .set { ch_vcfs_norm }
 
-    ch_vcfs_norm.unprocessed.view()
     SPLIT_MULTIALLELICS_PV (ch_vcfs_norm.unprocessed, fasta)
 
     REMOVE_DUPLICATES_PV (SPLIT_MULTIALLELICS_PV.out.vcf, fasta).vcf
