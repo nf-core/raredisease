@@ -105,7 +105,7 @@ workflow RAREDISEASE {
     if (params.gnomad) {
         ch_gnomad_in = Channel.fromPath(params.gnomad)
         CHECK_VCF(
-           ch_gnomad_in, PREPARE_GENOME.out.fasta,
+            ch_gnomad_in, PREPARE_GENOME.out.fasta,
         ).set { ch_gnomad_out }
     }
 
