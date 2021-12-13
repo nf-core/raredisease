@@ -35,20 +35,11 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 ========================================================================================
 */
 
-// Don't overwrite global params.modules, create a copy instead and use that within the main script.
-def modules = params.modules.clone()
-
-// Switch for saving references
-if (!params.save_reference) {
-    modules['bwa_mem2_index'].publish_files = false
-    modules['samtools_faidx'].publish_files = false
-}
-
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK } from '../subworkflows/local/input_check' addParams( options: [:] )
-include { CHECK_VCF } from '../subworkflows/local/prepare_vcf' addParams( options: [:] )
+include { INPUT_CHECK } from '../subworkflows/local/input_check'
+include { CHECK_VCF } from '../subworkflows/local/prepare_vcf'
 
 /*
 ========================================================================================
@@ -56,60 +47,30 @@ include { CHECK_VCF } from '../subworkflows/local/prepare_vcf' addParams( option
 ========================================================================================
 */
 
-def multiqc_options   = modules['multiqc']
-multiqc_options.args += params.multiqc_title ? Utils.joinModuleArgs(["--title \"$params.multiqc_title\""]) : ''
-
 //
 // MODULE: Installed directly from nf-core/modules
 //
-include { FASTQC } from '../modules/nf-core/modules/fastqc/main'  addParams( options: modules['fastqc'] )
-include { MULTIQC } from '../modules/nf-core/modules/multiqc/main' addParams( options: multiqc_options )
-include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main' addParams( options: [publish_files : ['_versions.yml':'']] )
 
-
-//
-// SUBWORKFLOW: Consists entirely of nf-core/modules
-//
-
-include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome' addParams(
-    bwamem2_idx_options: modules['bwa_mem2_index'],
-    samtools_faidx_options: modules['samtools_faidx']
-)
-
-include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2' addParams(
-    bwamem2_idx_options: modules['bwa_mem2_index'],
-    bwamem2_mem_options: modules['bwa_mem2_mem'],
-    samtools_idx_options: modules['samtools_index'],
-    samtools_sort_options: modules['samtools_sort'],
-    samtools_stats_options: modules['samtools_stats'],
-    samtools_merge_options: modules['samtools_merge'],
-    markduplicates_options: modules['picard_markduplicates']
-)
-
-include { QC_BAM } from '../subworkflows/nf-core/qc_bam' addParams (
-    picard_collectmultiplemetrics_options: modules['picard_collectmultiplemetrics'],
-    qualimap_bamqc_options: modules['qualimap_bamqc']
-)
+include { FASTQC  } from '../modules/nf-core/modules/fastqc/main'
+include { MULTIQC } from '../modules/nf-core/modules/multiqc/main'
+include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
 
 //
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/local/call_repeat_expansions' addParams(
-    expansionhunter_options: modules['expansionhunter']
-)
+include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
+include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2'
+
+include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
+include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/local/call_repeat_expansions'
 
 //
 // SUBWORKFLOW: Consists of mix/local modules
 //
 
-include { DEEPVARIANT_CALLER } from '../subworkflows/local/deepvariant_caller' addParams(
-    deepvariant_options: modules['deepvariant'],
-    glnexus_options: modules['glnexus'],
-    rm_duplicates_options: modules['bcftools_norm_rm_duplicates'],
-    split_multiallelics_options: modules['bcftools_norm_split_multiallelics'],
-    tabix_options: modules['tabix']
-    )
+include { CALL_SNV_DEEPVARIANT } from '../subworkflows/local/call_snv_deepvariant'
+
 /*
 ========================================================================================
     RUN MAIN WORKFLOW
@@ -129,19 +90,19 @@ workflow RAREDISEASE {
     INPUT_CHECK (
         ch_input
     )
+    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
 
     // STEP 0: QUALITY CHECK.
     FASTQC (
         INPUT_CHECK.out.reads
     )
-    ch_versions = ch_versions.mix(FASTQC.out.versions)
+    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
     PREPARE_GENOME ( params.fasta )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
-    if (params.gnomad)
-    {
+    if (params.gnomad) {
         ch_gnomad_in = Channel.fromPath(params.gnomad)
         CHECK_VCF(
             ch_gnomad_in, PREPARE_GENOME.out.fasta,
@@ -177,19 +138,19 @@ workflow RAREDISEASE {
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
-    DEEPVARIANT_CALLER (
+    CALL_SNV_DEEPVARIANT (
         ch_marked_bam.join(ch_marked_bai, by: [0]),
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
         INPUT_CHECK.out.ch_case_info
     )
-    ch_versions = ch_versions.mix(DEEPVARIANT_CALLER.out.versions)
+    ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
 
     //
     // MODULE: Pipeline reporting
     //
     CUSTOM_DUMPSOFTWAREVERSIONS (
-        ch_versions.unique().collectFile()
+        ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
 
     //
@@ -198,17 +159,18 @@ workflow RAREDISEASE {
     workflow_summary    = WorkflowRaredisease.paramsSummaryMultiqc(workflow, summary_params)
     ch_workflow_summary = Channel.value(workflow_summary)
 
-    ch_multiqc_files    = Channel.empty()
-    ch_multiqc_files    = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
-    ch_multiqc_files    = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
-    ch_multiqc_files    = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    ch_multiqc_files    = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
-    ch_multiqc_files    = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = Channel.empty()
+    ch_multiqc_files = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+    ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
+    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect()
     )
-    multiqc_report       = MULTIQC.out.report.toList()
+    multiqc_report = MULTIQC.out.report.toList()
+    ch_versions    = ch_versions.mix(MULTIQC.out.versions)
 }
 
 /*

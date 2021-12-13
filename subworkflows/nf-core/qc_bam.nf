@@ -2,11 +2,8 @@
 // A quality check subworkflow for processed bams.
 //
 
-params.picard_collectmultiplemetrics_options = [:]
-params.qualimap_bamqc_options = [:]
-
-include { PICARD_COLLECTMULTIPLEMETRICS } from '../../modules/nf-core/modules/picard/collectmultiplemetrics/main'  addParams( options: params.picard_collectmultiplemetrics_options )
-include { QUALIMAP_BAMQC } from '../../modules/nf-core/modules/qualimap/bamqc/main'  addParams( options: params.qualimap_bamqc_options )
+include { PICARD_COLLECTMULTIPLEMETRICS } from '../../modules/nf-core/modules/picard/collectmultiplemetrics/main'
+include { QUALIMAP_BAMQC } from '../../modules/nf-core/modules/qualimap/bamqc/main'
 
 workflow QC_BAM {
 
