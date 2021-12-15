@@ -106,7 +106,7 @@ Please use the following naming schemes, to make it easy to understand what is g
 
 Occasionally, you might find yourself wanting to reuse a module with options that are different from what has already been defined in [conf/modules.config](../conf/modules.config). In that case, we recommend  importing the module using an unique alias within the subworkflow, and then defining the options for the alias in [conf/modules.config](../conf/modules.config).
 
-For a working example, please have a look at how we have reused `bcftools norm` in both [subworkflows/local/call_snv_deepvariant.nf](../subworkflows/local/call_snv_deepvariant.nf) and [subworkflows/local/prepare_vcf.nf](../subworkflows/local/prepare_vcf.nf), and defined subworkflow-specific options in [conf/modules.config](../conf/modules.config).
+For a working example, please have a look at how we have reused `bcftools norm` in both [subworkflows/local/call_snv_deepvariant.nf](../subworkflows/local/call_snv_deepvariant.nf) and [subworkflows/local/prepare_vcf.nf](../subworkflows/local/prepare_vcf.nf), and defined its subworkflow-specific options in [conf/modules.config](../conf/modules.config).
 
 ### Nextflow version bumping
 
