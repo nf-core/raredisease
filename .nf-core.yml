@@ -2,13 +2,6 @@ lint:
   files_unchanged:
     - .github/CONTRIBUTING.md
     - assets/multiqc_config.yaml
-    - .github/workflows/linting.yml
     - lib/NfcoreTemplate.groovy
     - lib/NfcoreSchema.groovy
     - assets/sendmail_template.txt
-    - assets/nf-core-raredisease_logo_light.png
-    - docs/images/nf-core-raredisease_logo_light.png
-  files_exist:
-    - docs/images/nf-core-raredisease_logo_dark.png
-    - assets/nf-core-raredisease_logo.png
-    - docs/images/nf-core-raredisease_logo.png
