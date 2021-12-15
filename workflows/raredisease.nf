@@ -70,6 +70,7 @@ include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/local/call_repeat_expan
 //
 
 include { CALL_SNV_DEEPVARIANT } from '../subworkflows/local/call_snv_deepvariant'
+include { CALL_SV_MANTA } from '../subworkflows/local/call_sv_manta'
 
 /*
 ========================================================================================
@@ -145,6 +146,15 @@ workflow RAREDISEASE {
         INPUT_CHECK.out.ch_case_info
     )
     ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
+
+    CALL_SV_MANTA (
+        ch_marked_bam,
+        ch_marked_bai,
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.fai,
+        INPUT_CHECK.out.ch_case_info
+    )
+    ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
 
     //
     // MODULE: Pipeline reporting

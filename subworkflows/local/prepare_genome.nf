@@ -26,7 +26,9 @@ workflow PREPARE_GENOME {
         if ( params.fasta_fai ) {
             ch_fai = file(params.fasta_fai)
         } else {
-            ch_fai = SAMTOOLS_FAIDX ( [[], ch_fasta] ).fai // TODO: faidx now requires meta info for fasta due to pipelines with multi references e.g. de novo
+            ch_fai = SAMTOOLS_FAIDX ( [[], ch_fasta] )
+                        .fai
+                        .collect{it[1]} // TODO: faidx now requires meta info for fasta due to pipelines with multi references e.g. de novo
             ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
         }
 
