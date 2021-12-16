@@ -12,6 +12,8 @@ process MANTA_GERMLINE {
     path bam_index
     path fasta
     path fasta_fai
+    tuple val(meta), path(target_bed), path(target_bed_tbi)
+
 
     output:
     tuple val(meta), path("*candidate_small_indels.vcf.gz")    , emit: candidate_small_indels_vcf
@@ -25,10 +27,12 @@ process MANTA_GERMLINE {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+    def options_manta = target_bed ? "--exome --callRegions $target_bed" : ""
     """
     configManta.py \
         --bam ${bams.join(' --bam ')} \
         --reference $fasta \
+        $options_manta \
         --runDir manta
 
     python manta/runWorkflow.py -m local -j $task.cpus
