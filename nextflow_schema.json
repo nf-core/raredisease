@@ -101,6 +101,12 @@
                     "fa_icon": "fas fa-bezier-curve",
                     "description": "Path to directory for gnomad vcf."
                 },
+                "target_bed": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-bezier-curve",
+                    "description": "Path to directory for target bed file."
+                },
                 "variant_catalog": {
                     "type": "string",
                     "format": "file-path",
