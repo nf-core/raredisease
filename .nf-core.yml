@@ -2,6 +2,3 @@ lint:
   files_unchanged:
     - .github/CONTRIBUTING.md
     - assets/multiqc_config.yaml
-    - lib/NfcoreTemplate.groovy
-    - lib/NfcoreSchema.groovy
-    - assets/sendmail_template.txt
