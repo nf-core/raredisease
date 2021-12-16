@@ -20,7 +20,7 @@ workflow CHECK_BED {
                 tbi_out = TABIX_PT (ch_bed).tbi
                 tab_out = ch_bed.join(tbi_out)
             } else if ( file(bed, checkIfExists:true) ) {
-                tab_out = TABIX_PBT (ch_bed).tbi
+                tab_out = TABIX_PBT (ch_bed).gz_tbi
             }
         }
 
