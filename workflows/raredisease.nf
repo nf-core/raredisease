@@ -52,8 +52,8 @@ include { CHECK_BED } from '../subworkflows/local/prepare_bed'
 // MODULE: Installed directly from nf-core/modules
 //
 
-include { FASTQC  } from '../modules/nf-core/modules/fastqc/main'
-include { MULTIQC } from '../modules/nf-core/modules/multiqc/main'
+include { FASTQC                      } from '../modules/nf-core/modules/fastqc/main'
+include { MULTIQC                     } from '../modules/nf-core/modules/multiqc/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
 
 //
