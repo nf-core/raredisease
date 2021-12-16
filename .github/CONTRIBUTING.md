@@ -108,6 +108,8 @@ Occasionally, you might find yourself wanting to reuse a module with options tha
 
 For a working example, please have a look at how we have reused `bcftools norm` in both [subworkflows/local/call_snv_deepvariant.nf](../subworkflows/local/call_snv_deepvariant.nf) and [subworkflows/local/prepare_vcf.nf](../subworkflows/local/prepare_vcf.nf), and defined its subworkflow-specific options in [conf/modules.config](../conf/modules.config).
 
+You can find more information about aliases in the nextflow documentation [here](https://www.nextflow.io/docs/edge/dsl2.html#module-aliases).
+
 ### Nextflow version bumping
 
 If you are using a new feature from core Nextflow, you may bump the minimum required version of nextflow in the pipeline with: `nf-core bump-version --nextflow . [min-nf-version]`
