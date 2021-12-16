@@ -95,6 +95,14 @@ Please use the following naming schemes, to make it easy to understand what is g
 * initial process channel: `ch_output_from_<process>`
 * intermediate and terminal channels: `ch_<previousprocess>_for_<nextprocess>`
 
+* subworkflows: `verb_noun` or `verb_variant_noun`
+    * `verb_noun` : `align_bwamem2.nf`
+    * `verb_variant_noun` : `call_snv_deepvariant.nf`
+
+### Reusing modules in the workflow
+
+Default options for modules should be defined in the [conf/modules.config](../conf/modules.config). If you have a module that you would like to reuse in a subworkflow with non-default options, we recommend modifying the defaults within the context of the subworkflow. For a working example, please have a look at how the default options for bcftools norm tool are modified in both [subworkflows/local/deepvariant_caller.nf](../subworkflows/local/deepvariant_caller.nf) and [subworkflows/local/prepare_vcf.nf](../subworkflows/local/prepare_vcf.nf)
+
 ### Nextflow version bumping
 
 If you are using a new feature from core Nextflow, you may bump the minimum required version of nextflow in the pipeline with: `nf-core bump-version --nextflow . [min-nf-version]`

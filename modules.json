@@ -3,13 +3,55 @@
     "homePage": "https://github.com/nf-core/raredisease",
     "repos": {
         "nf-core/modules": {
+            "bcftools/norm": {
+                "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
+            },
+            "bwamem2/index": {
+                "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+            },
+            "bwamem2/mem": {
+                "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
+            },
             "custom/dumpsoftwareversions": {
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+            },
+            "expansionhunter": {
+                "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
             },
             "fastqc": {
                 "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
             },
+            "glnexus": {
+                "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
+            },
             "multiqc": {
+                "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+            },
+            "picard/collectmultiplemetrics": {
+                "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
+            },
+            "picard/markduplicates": {
+                "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
+            },
+            "qualimap/bamqc": {
+                "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+            },
+            "samtools/faidx": {
+                "git_sha": "e0aa89141ffecb5f54d230f7ea46de242b74e084"
+            },
+            "samtools/index": {
+                "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+            },
+            "samtools/merge": {
+                "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+            },
+            "samtools/sort": {
+                "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
+            },
+            "samtools/stats": {
+                "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+            },
+            "tabix/tabix": {
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
             }
         }
