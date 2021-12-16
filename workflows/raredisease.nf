@@ -40,6 +40,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 //
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { CHECK_VCF } from '../subworkflows/local/prepare_vcf'
+include { CHECK_BED } from '../subworkflows/local/prepare_bed'
 
 /*
 ========================================================================================
@@ -107,6 +108,12 @@ workflow RAREDISEASE {
         CHECK_VCF(
             ch_gnomad_in, PREPARE_GENOME.out.fasta,
         ).set { ch_gnomad_out }
+    }
+
+    if (params.target_bed) {
+        CHECK_BED(
+            params.target_bed
+        ).set { ch_target_bed_out }
     }
 
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
