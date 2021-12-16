@@ -161,7 +161,7 @@ workflow RAREDISEASE {
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
         INPUT_CHECK.out.ch_case_info,
-        ch_target_bed
+        ch_bed
     )
     ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
 
