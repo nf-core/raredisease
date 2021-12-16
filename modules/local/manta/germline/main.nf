@@ -12,7 +12,7 @@ process MANTA_GERMLINE {
     path bam_index
     path fasta
     path fasta_fai
-    tuple val(meta), path(target_bed), path(target_bed_tbi)
+    tuple val(bed_meta), path(target_bed), path(target_bed_tbi)
 
 
     output:

@@ -111,10 +111,11 @@ workflow RAREDISEASE {
         ).set { ch_gnomad_out }
     }
 
+    ch_bed = Channel.empty()
     if (params.target_bed) {
         CHECK_BED(
             params.target_bed
-        ).set { ch_target_bed_out }
+        ).set { ch_target_bed }
     }
 
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
@@ -159,7 +160,8 @@ workflow RAREDISEASE {
         ch_marked_bai,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
-        INPUT_CHECK.out.ch_case_info
+        INPUT_CHECK.out.ch_case_info,
+        ch_target_bed
     )
     ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
 

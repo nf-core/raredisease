@@ -6,11 +6,12 @@ include { MANTA_GERMLINE as MANTA } from '../../modules/local/manta/germline/mai
 
 workflow CALL_SV_MANTA {
     take:
-    bam          // channel: [ val(meta), path(bam) ]
-    bai          // channel: [ val(meta), path(bai) ]
-    fasta        // path(fasta)
-    fai          // path(fai)
-    ch_case_info // channel: [ case_id ]
+    bam            // channel: [ val(meta), path(bam) ]
+    bai            // channel: [ val(meta), path(bai) ]
+    fasta          // path(fasta)
+    fai            // path(fai)
+    ch_case_info   // channel: [ case_id ]
+    ch_bed         // channel: [ val(meta), path(bed), path(bed_tbi) ]
 
     main:
         ch_versions = Channel.empty()
@@ -25,7 +26,9 @@ workflow CALL_SV_MANTA {
         ch_case_info.combine(bam_file_list)
             .set { manta_input_bams }
 
-        MANTA ( manta_input_bams, bai_file_list, fasta, fai )
+        ch_target_bed = ch_bed.ifEmpty([[],[],[]])
+
+        MANTA ( manta_input_bams, bai_file_list, fasta, fai, ch_target_bed )
         ch_versions = ch_versions.mix(MANTA.out.versions)
 
     emit:
