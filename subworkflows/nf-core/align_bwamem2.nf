@@ -36,6 +36,7 @@ workflow ALIGN_BWAMEM2 {
         .map{ meta, bam ->
             new_meta = meta.clone()                 // clone to avoid overriding the global meta
             new_meta.id = new_meta.id.split('_')[0] // access the .id attribute of meta to split samplename_lane into samplename
+            new_meta.read_group = []                // remove read group from cloned meta to get a single file per sample
             [new_meta, bam]}                        // end the closure to return newly modified channel
         .groupTuple(by: 0)                          // group them bam paths with the same [ [samplename], [bam path, bam path, ..] ]
         .branch{                                    // branch the channel into multiple channels (single, multiple) depending on size of list
