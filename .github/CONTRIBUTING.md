@@ -101,7 +101,11 @@ Please use the following naming schemes, to make it easy to understand what is g
 
 ### Reusing modules in the workflow
 
-Default options for modules should be defined in the [conf/modules.config](../conf/modules.config). If you have a module that you would like to reuse in a subworkflow with non-default options, we recommend modifying the defaults within the context of the subworkflow. For a working example, please have a look at how the default options for bcftools norm tool are modified in both [subworkflows/local/deepvariant_caller.nf](../subworkflows/local/deepvariant_caller.nf) and [subworkflows/local/prepare_vcf.nf](../subworkflows/local/prepare_vcf.nf)
+Occasionally, you might find yourself wanting to reuse a module with options that are different from what has already been defined in [conf/modules.config](../conf/modules.config). In that case, we recommend  importing the module using an unique alias within the subworkflow, and then defining the options for the alias in [conf/modules.config](../conf/modules.config).
+
+For a working example, please have a look at how we have reused `bcftools norm` in both [subworkflows/local/call_snv_deepvariant.nf](../subworkflows/local/call_snv_deepvariant.nf) and [subworkflows/local/prepare_vcf.nf](../subworkflows/local/prepare_vcf.nf), and defined its subworkflow-specific options in [conf/modules.config](../conf/modules.config).
+
+You can find more information about aliases in the nextflow documentation [here](https://www.nextflow.io/docs/edge/dsl2.html#module-aliases).
 
 ### Nextflow version bumping
 
