@@ -111,7 +111,7 @@ workflow RAREDISEASE {
         ).set { ch_gnomad_out }
     }
 
-    ch_bed = Channel.empty()
+    ch_target_bed = Channel.empty()
     if (params.target_bed) {
         CHECK_BED(
             params.target_bed
@@ -161,7 +161,7 @@ workflow RAREDISEASE {
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
         INPUT_CHECK.out.ch_case_info,
-        ch_bed
+        ch_target_bed
     )
     ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
 

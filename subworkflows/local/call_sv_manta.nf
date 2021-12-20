@@ -14,8 +14,6 @@ workflow CALL_SV_MANTA {
     ch_bed         // channel: [ val(meta), path(bed), path(bed_tbi) ]
 
     main:
-        ch_versions = Channel.empty()
-
         bam.collect{it[1]}
             .toList()
             .set { bam_file_list }
@@ -29,7 +27,7 @@ workflow CALL_SV_MANTA {
         ch_target_bed = ch_bed.ifEmpty([[],[],[]])
 
         MANTA ( manta_input_bams, bai_file_list, fasta, fai, ch_target_bed )
-        ch_versions = ch_versions.mix(MANTA.out.versions)
+        ch_versions = MANTA.out.versions
 
     emit:
         candidate_small_indels_vcf      = MANTA.out.candidate_small_indels_vcf

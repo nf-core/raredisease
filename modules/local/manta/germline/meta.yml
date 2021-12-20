@@ -21,8 +21,8 @@ input:
   - meta:
       type: map
       description: |
-        Groovy Map containing sample information
-        e.g. [ id:'test', single_end:false ]
+        Groovy Map containing case information
+        e.g. [ id:'case_id' ]
   - input:
       type: file
       description: BAM/CRAM/SAM file
