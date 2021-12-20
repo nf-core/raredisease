@@ -24,9 +24,12 @@ workflow CALL_SV_MANTA {
         ch_case_info.combine(bam_file_list)
             .set { manta_input_bams }
 
-        ch_target_bed = ch_bed.ifEmpty([[],[],[]])
-
-        MANTA ( manta_input_bams, bai_file_list, fasta, fai, ch_target_bed )
+        if (params.analysis_type == "WGS") {
+            MANTA ( manta_input_bams, bai_file_list, fasta, fai, [[],[],[]] )
+        } else {
+            ch_target_bed = ch_bed.ifEmpty([[],[],[]])
+            MANTA ( manta_input_bams, bai_file_list, fasta, fai, ch_target_bed )
+        }
         ch_versions = MANTA.out.versions
 
     emit:
