@@ -155,6 +155,7 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
 
+    // TODO: Move this to a SV calling workflow
     CALL_SV_MANTA (
         ch_marked_bam,
         ch_marked_bai,
