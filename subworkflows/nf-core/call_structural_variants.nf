@@ -3,19 +3,14 @@
 //
 
 // CHANGE: swap this example line for the real subworkflow
-params.bwamem2_idx_options = [:]
-
-// CHANGE: swap this example line for the real subworkflow
-include { PREPARE_GENOME } from './prepare_genome' addParams(
-    options: params.bwamem2_idx_options
-)
+include { CALL_SV_MANTA } from '../local/call_sv_manta'
 
 workflow CALL_STRUCTURAL_VARIANTS {
 
     take:
         bam     // channel: [ val(meta), path(bam) ]
         fasta   // channel: [ path(genome.fasta) ]
-        fai   // channel: [ path(genome.fai) ]
+        fai     // channel: [ path(genome.fai) ]
 
     main:
         ch_versions = Channel.empty()
