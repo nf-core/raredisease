@@ -2,19 +2,13 @@
 // Map to reference, fetch stats for each demultiplexed read pair, merge, mark duplicates, and index.
 //
 
-params.bwamem2_mem_options = [:]
-params.samtools_idx_options = [:]
-params.samtools_sort_options = [:]
-params.samtools_stats_options = [:]
-params.samtools_merge_options = [:]
-params.markduplicates_options = [:]
-
-include { BWAMEM2_MEM } from '../../modules/nf-core/modules/bwamem2/mem/main'  addParams( options: params.bwamem2_mem_options )
-include { SAMTOOLS_INDEX } from '../../modules/nf-core/modules/samtools/index/main' addParams( options: params.samtools_idx_options )
-include { SAMTOOLS_SORT } from '../../modules/nf-core/modules/samtools/sort/main' addParams(options: params.samtools_sort_options )
-include { SAMTOOLS_STATS } from '../../modules/nf-core/modules/samtools/stats/main' addParams(options: params.samtools_stats_options )
-include { SAMTOOLS_MERGE } from '../../modules/nf-core/modules/samtools/merge/main' addParams( options: params.samtools_merge_options )
-include { PICARD_MARKDUPLICATES as MARKDUPLICATES } from '../../modules/nf-core/modules/picard/markduplicates/main' addParams(options: params.markduplicates_options )
+include { BWAMEM2_MEM } from '../../modules/nf-core/modules/bwamem2/mem/main'
+include { SAMTOOLS_INDEX } from '../../modules/nf-core/modules/samtools/index/main'
+include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MD } from '../../modules/nf-core/modules/samtools/index/main'
+include { SAMTOOLS_SORT } from '../../modules/nf-core/modules/samtools/sort/main'
+include { SAMTOOLS_STATS } from '../../modules/nf-core/modules/samtools/stats/main'
+include { SAMTOOLS_MERGE } from '../../modules/nf-core/modules/samtools/merge/main'
+include { PICARD_MARKDUPLICATES as MARKDUPLICATES } from '../../modules/nf-core/modules/picard/markduplicates/main'
 
 
 workflow ALIGN_BWAMEM2 {
@@ -42,6 +36,7 @@ workflow ALIGN_BWAMEM2 {
         .map{ meta, bam ->
             new_meta = meta.clone()                 // clone to avoid overriding the global meta
             new_meta.id = new_meta.id.split('_')[0] // access the .id attribute of meta to split samplename_lane into samplename
+            new_meta.read_group = []                // remove read group from cloned meta to get a single file per sample
             [new_meta, bam]}                        // end the closure to return newly modified channel
         .groupTuple(by: 0)                          // group them bam paths with the same [ [samplename], [bam path, bam path, ..] ]
         .branch{                                    // branch the channel into multiple channels (single, multiple) depending on size of list
@@ -57,13 +52,14 @@ workflow ALIGN_BWAMEM2 {
 
         // Marking duplicates
         MARKDUPLICATES ( prepared_bam )
+        SAMTOOLS_INDEX_MD ( MARKDUPLICATES.out.bam )
         ch_versions = ch_versions.mix(MARKDUPLICATES.out.versions)
 
     emit:
         stats                  = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), [ stats ] ]
         metrics                = MARKDUPLICATES.out.metrics     // channel: [ val(meta), [ metrics ] ]
         marked_bam             = MARKDUPLICATES.out.bam         // channel: [ val(meta), [ marked_bam ] ]
-        marked_bai             = MARKDUPLICATES.out.bai         // channel: [ val(meta), [ marked_bai ] ]
+        marked_bai             = SAMTOOLS_INDEX_MD.out.bai      // channel: [ val(meta), [ marked_bai ] ]
 
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }

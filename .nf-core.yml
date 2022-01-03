@@ -1,4 +1,5 @@
 lint:
   files_unchanged:
     - .github/CONTRIBUTING.md
+    - .github/ISSUE_TEMPLATE/bug_report.yml
     - assets/multiqc_config.yaml
