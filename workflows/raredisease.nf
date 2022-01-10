@@ -40,6 +40,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 //
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { CHECK_VCF } from '../subworkflows/local/prepare_vcf'
+include { CHECK_BED } from '../subworkflows/local/prepare_bed'
 
 /*
 ========================================================================================
@@ -70,6 +71,7 @@ include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/local/call_repeat_expan
 //
 
 include { CALL_SNV_DEEPVARIANT } from '../subworkflows/local/call_snv_deepvariant'
+include { CALL_SV_MANTA } from '../subworkflows/local/call_sv_manta'
 
 /*
 ========================================================================================
@@ -109,6 +111,13 @@ workflow RAREDISEASE {
         ).set { ch_gnomad_out }
     }
 
+    ch_target_bed = Channel.empty()
+    if (params.target_bed) {
+        CHECK_BED(
+            params.target_bed
+        ).set { ch_target_bed }
+    }
+
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
     if (params.aligner == 'bwamem2') {
         ALIGN_BWAMEM2 (
@@ -145,6 +154,17 @@ workflow RAREDISEASE {
         INPUT_CHECK.out.ch_case_info
     )
     ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
+
+    // TODO: Move this to a SV calling workflow
+    CALL_SV_MANTA (
+        ch_marked_bam,
+        ch_marked_bai,
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.fai,
+        INPUT_CHECK.out.ch_case_info,
+        ch_target_bed
+    )
+    ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
 
     //
     // MODULE: Pipeline reporting
