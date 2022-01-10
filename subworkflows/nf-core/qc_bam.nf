@@ -4,7 +4,9 @@
 
 include { PICARD_COLLECTMULTIPLEMETRICS } from '../../modules/nf-core/modules/picard/collectmultiplemetrics/main'
 include { QUALIMAP_BAMQC } from '../../modules/nf-core/modules/qualimap/bamqc/main'
+
 include { TIDDIT_COV } from '../../modules/nf-core/modules/tiddit/cov/main'
+include { UCSC_WIGTOBIGWIG } from '../../modules/nf-core/modules/ucsc/wigtobigwig/main'
 
 workflow QC_BAM {
 
@@ -27,6 +29,8 @@ workflow QC_BAM {
 
         // TIDDIT COVERAGE
         TIDDIT_COV ( bam, [] ) // 2nd pos. arg is req. only for cram input
+        UCSC_WIGTOBIGWIG ( TIDDIT_COV.out.wig )
+        ch_wig = TIDDIT_COV.out.wig
         ch_versions = ch_versions.mix(TIDDIT_COV.out.versions)
 
 
