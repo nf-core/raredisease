@@ -5,13 +5,15 @@
 include { BWAMEM2_INDEX } from '../../modules/nf-core/modules/bwamem2/index/main'
 include { SAMTOOLS_FAIDX } from '../../modules/nf-core/modules/samtools/faidx/main'
 
+include { GET_CHROM_SIZES } from '../../modules/local/get_chrom_sizes'
+
 workflow PREPARE_GENOME {
     take:
         fasta // path: genome.fasta
         variant_catalog // path: variant_catalog.json
 
     main:
-        ch_fasta = file(fasta)
+        ch_fasta    = file(fasta)
         ch_versions = Channel.empty()
 
         // Fetch BWAMEM2 index or create from scratch if required
@@ -43,12 +45,16 @@ workflow PREPARE_GENOME {
             }
         }
 
+        ch_chrom_sizes = GET_CHROM_SIZES ( ch_fai ).sizes
+        ch_versions    = ch_versions.mix(GET_CHROM_SIZES.out.versions)
+
 
     emit:
         fasta                       = ch_fasta                  // path: genome.fasta
         fai                         = ch_fai                    // path: genome.fasta.fai
         bwamem2_index               = ch_bwamem2_index          // path: bwamem2/index
         variant_catalog             = ch_variant_catalog        // path: variant_catalog.json
+        chrom_sizes                 = ch_chrom_sizes            // path: chrom.sizes
 
         versions                    = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
