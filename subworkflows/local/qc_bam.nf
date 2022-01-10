@@ -38,7 +38,7 @@ workflow QC_BAM {
         multiple_metrics        = PICARD_COLLECTMULTIPLEMETRICS.out.metrics     // channel: [ val(meta), path(metrics) ]
         qualimap_results        = QUALIMAP_BAMQC.out.results                    // channel: [ val(meta), path(qualimap files) ]
         tiddit_wig              = TIDDIT_COV.out.wig                            // channel: [ val(meta), path(*.wig) ]
-        bigwig                  = UCSC_WIGTOBIGWIG.out.bw                       // path: *.bigwig
+        bigwig                  = UCSC_WIGTOBIGWIG.out.bw                       // channel: [ val(meta), path(*.bw) ]
 
         versions                = ch_versions.ifEmpty(null)                     // channel: [ versions.yml ]
 }
