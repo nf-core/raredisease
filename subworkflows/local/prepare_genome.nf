@@ -8,6 +8,7 @@ include { SAMTOOLS_FAIDX } from '../../modules/nf-core/modules/samtools/faidx/ma
 workflow PREPARE_GENOME {
     take:
         fasta // path: genome.fasta
+        variant_catalog // path: variant_catalog.json
 
     main:
         ch_fasta = file(fasta)
@@ -32,11 +33,22 @@ workflow PREPARE_GENOME {
             ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
         }
 
+        if ( params.variant_catalog && file(params.variant_catalog, checkIfExists:true) ) {
+            ch_variant_catalog = file(params.variant_catalog)
+        } else {
+            if ( params.genome == 'GRCh38' ) {
+                ch_variant_catalog = file("https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/testdata/reference/variant_catalog_grch38.json")
+            } else {
+                ch_variant_catalog = file("https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/testdata/reference/variant_catalog_grch37.json")
+            }
+        }
+
 
     emit:
         fasta                       = ch_fasta                  // path: genome.fasta
         fai                         = ch_fai                    // path: genome.fasta.fai
         bwamem2_index               = ch_bwamem2_index          // path: bwamem2/index
+        variant_catalog             = ch_variant_catalog        // path: variant_catalog.json
 
         versions                    = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }

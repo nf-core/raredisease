@@ -101,7 +101,7 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
-    PREPARE_GENOME ( params.fasta )
+    PREPARE_GENOME ( params.fasta, params.variant_catalog )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
     if (params.gnomad) {
@@ -141,7 +141,7 @@ workflow RAREDISEASE {
     CALL_REPEAT_EXPANSIONS (
             ch_marked_bam.join(ch_marked_bai, by: [0]),
             PREPARE_GENOME.out.fasta,
-            params.variant_catalog
+            PREPARE_GENOME.out.variant_catalog
             )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
 
