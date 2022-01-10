@@ -60,15 +60,15 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
 include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2'
-
-include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
-include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/local/call_repeat_expansions'
+include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/nf-core/call_repeat_expansions'
+include { QC_BAM } from '../subworkflows/local/qc_bam'
 
 //
 // SUBWORKFLOW: Consists of mix/local modules
 //
+
+include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
 
 include { CALL_SNV_DEEPVARIANT } from '../subworkflows/local/call_snv_deepvariant'
 include { CALL_SV_MANTA } from '../subworkflows/local/call_sv_manta'
@@ -134,8 +134,10 @@ workflow RAREDISEASE {
     // STEP 1.5: BAM QUALITY CHECK
     QC_BAM (
         ch_marked_bam,
-        PREPARE_GENOME.out.fasta
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.chrom_sizes
     )
+    ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
 
     // STEP 1.6: EXPANSIONHUNTER
     CALL_REPEAT_EXPANSIONS (
