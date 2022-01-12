@@ -59,6 +59,9 @@
             },
             "tiddit/cov": {
                 "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
+            },
+            "ucsc/wigtobigwig": {
+                "git_sha": "30e64becaa1e6c807a09a49a6d3d457ff3cf7251"
             }
         }
     }

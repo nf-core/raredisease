@@ -62,7 +62,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 
 include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2'
 include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/nf-core/call_repeat_expansions'
-include { QC_BAM } from '../subworkflows/local/qc_bam'
+include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
 
 //
 // SUBWORKFLOW: Consists of mix/local modules

@@ -6,7 +6,7 @@ include { PICARD_COLLECTMULTIPLEMETRICS } from '../../modules/nf-core/modules/pi
 include { QUALIMAP_BAMQC } from '../../modules/nf-core/modules/qualimap/bamqc/main'
 
 include { TIDDIT_COV } from '../../modules/nf-core/modules/tiddit/cov/main'
-include { UCSC_WIGTOBIGWIG } from '../../modules/local/ucsc/wigtobigwig/main'
+include { UCSC_WIGTOBIGWIG } from '../../modules/nf-core/modules/ucsc/wigtobigwig/main'
 
 workflow QC_BAM {
 
