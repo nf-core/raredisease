@@ -114,7 +114,8 @@ workflow RAREDISEASE {
     ch_target_bed = Channel.empty()
     if (params.target_bed) {
         CHECK_BED(
-            params.target_bed
+            params.target_bed,
+            PREPARE_GENOME.out.sequence_dict
         ).set { ch_target_bed }
     }
 
@@ -135,6 +136,9 @@ workflow RAREDISEASE {
     QC_BAM (
         ch_marked_bam,
         PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.fai,
+        CHECK_BED.out.bait_intervals,
+        CHECK_BED.out.target_intervals,
         PREPARE_GENOME.out.chrom_sizes
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
@@ -164,7 +168,7 @@ workflow RAREDISEASE {
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
         INPUT_CHECK.out.ch_case_info,
-        ch_target_bed
+        ch_target_bed.bed
     )
     ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
 
