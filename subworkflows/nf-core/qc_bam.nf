@@ -29,7 +29,7 @@ workflow QC_BAM {
 
         // COLLECT HS METRICS
         CAT_CAT_BAIT ( bait_intervals, "bait.intervals_list" )
-        PICARD_COLLECTHSMETRICS ( bam, fasta, fai, CAT_CAT.out.file_out, target_intervals )
+        PICARD_COLLECTHSMETRICS ( bam, fasta, fai, CAT_CAT_BAIT.out.file_out, target_intervals )
         ch_versions = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions)
 
         // QUALIMAP BAMQC
