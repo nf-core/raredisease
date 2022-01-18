@@ -104,11 +104,11 @@ workflow RAREDISEASE {
     PREPARE_GENOME ( params.fasta )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
+    ch_gnomad = Channel.empty()
     if (params.gnomad) {
-        ch_gnomad_in = Channel.fromPath(params.gnomad)
         CHECK_VCF(
-            ch_gnomad_in, PREPARE_GENOME.out.fasta,
-        ).set { ch_gnomad_out }
+            params.gnomad, PREPARE_GENOME.out.fasta,
+        ).set { ch_gnomad }
     }
 
     ch_target_bed = Channel.empty()

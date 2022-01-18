@@ -14,8 +14,27 @@ process CHECK_INPUT_VCF {
 
     script: // This script is bundled with the pipeline, in nf-core/raredisease/bin/
     """
-    check_input_vcf.py \\
-        --INPUT_VCF $vcf \\
-        --OUTPUT checked_vcfs.txt
+    export INPUT_FILE=${vcf}
+    export OUTPUT_FILE="checked_vcfs.txt"
+
+    python3 <<CODE
+    import os, gzip
+    file_in  = os.environ.get('INPUT_FILE')
+    file_out = os.environ.get('OUTPUT_FILE')
+    if file_in.endswith(".gz"):
+        with open(file_out,'w') as out:
+            base = os.path.basename(file_in).rsplit(".",2)[0]
+            out.write("id,filepath,processed\\n")
+            with gzip.open(file_in,'rt') as vcf:
+                for line in vcf:
+                    if line.startswith("##bcftools_norm"):
+                        out.write(base + "," + os.path.abspath(file_in) + ",yes\\n")
+                        break
+                    elif not line.startswith("#"):
+                        out.write(base + "," + os.path.abspath(file_in) + ",no\\n")
+                        break
+    else:
+        print("Please compress %s using bgzip" %file_in)
+    CODE
     """
 }
