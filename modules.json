@@ -18,6 +18,9 @@
             "custom/dumpsoftwareversions": {
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
             },
+            "deepvariant": {
+                "git_sha": "1287ba48fe6b2acb7449cfca387c91dc2ddf6538"
+            },
             "expansionhunter": {
                 "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
             },
