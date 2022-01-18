@@ -17,8 +17,12 @@ workflow CALL_SNV_DEEPVARIANT {
 
     main:
         ch_versions = Channel.empty()
+        bam.map { meta, bam, bai ->
+                        return [meta, bam, bai, []]
+            }
+            .set { ch_bam }
 
-        DEEPVARIANT ( bam, fasta, fai )
+        DEEPVARIANT ( ch_bam, fasta, fai )
         DEEPVARIANT.out.gvcf.collect{it[1]}
             .toList()
             .set { file_list }
