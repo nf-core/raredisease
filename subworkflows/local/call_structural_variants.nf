@@ -23,7 +23,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
 
         TIDDIT_SV ( bam, fasta, fai )
-        
+
     emit:
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }
