@@ -9,8 +9,8 @@ include { TABIX_BGZIPTABIX as TABIX_PBT } from '../../modules/nf-core/modules/ta
 
 workflow CHECK_BED {
     take:
-        bed    // file: bed file
-        sd     // path: sequence_dictionary
+        bed                // file: bed file
+        seq_dictionary     // path: sequence_dictionary
 
     main:
         tab_out = Channel.empty()
@@ -25,10 +25,9 @@ workflow CHECK_BED {
             } else if ( file(bed, checkIfExists:true) ) {
                 tab_out = TABIX_PBT (ch_bed).gz_tbi
             }
-            if (sd) {
-                interval_list = GATK_BILT (ch_bed, sd).interval_list
-                GATK_ILT(interval_list)
-            }
+
+            interval_list = GATK_BILT (ch_bed, seq_dictionary).interval_list
+            GATK_ILT(interval_list)
         }
 
     emit:
