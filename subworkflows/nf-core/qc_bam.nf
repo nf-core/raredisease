@@ -28,7 +28,15 @@ workflow QC_BAM {
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions)
 
         // COLLECT HS METRICS
-        CAT_CAT_BAIT ( bait_intervals, "bait.intervals_list" )
+        bait_intervals_out = bait_intervals
+            .collect { it[0]
+                .toString()
+                .split("_split")[0]
+                .split("/")[-1] + "_bait.intervals_list"
+            }
+            .flatten()
+
+        CAT_CAT_BAIT ( bait_intervals, bait_intervals_out )
         PICARD_COLLECTHSMETRICS ( bam, fasta, fai, CAT_CAT_BAIT.out.file_out, target_intervals )
         ch_versions = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions)
 
