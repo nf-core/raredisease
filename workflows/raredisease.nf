@@ -71,7 +71,7 @@ include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
 include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
 
 include { CALL_SNV_DEEPVARIANT } from '../subworkflows/local/call_snv_deepvariant'
-include { CALL_SV_MANTA } from '../subworkflows/local/call_sv_manta'
+include { CALL_STRUCTURAL_VARIANTS } from '../subworkflows/local/call_structural_variants'
 
 /*
 ========================================================================================
@@ -161,8 +161,7 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
 
-    // TODO: Move this to a SV calling workflow
-    CALL_SV_MANTA (
+    CALL_STRUCTURAL_VARIANTS (
         ch_marked_bam,
         ch_marked_bai,
         PREPARE_GENOME.out.fasta,
@@ -170,7 +169,7 @@ workflow RAREDISEASE {
         INPUT_CHECK.out.ch_case_info,
         ch_target_bed.bed
     )
-    ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
+    ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
     //
     // MODULE: Pipeline reporting
