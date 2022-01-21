@@ -12,6 +12,9 @@
             "bwamem2/mem": {
                 "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
             },
+            "cat/cat": {
+                "git_sha": "c4549c0ecd1b02473471b507fd88a9fd5289d91c"
+            },
             "custom/dumpsoftwareversions": {
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
             },
@@ -24,11 +27,23 @@
             "fastqc": {
                 "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
             },
+            "gatk4/bedtointervallist": {
+                "git_sha": "598d7abdb2a8df1aa3471c48d9186a9e3465983f"
+            },
+            "gatk4/createsequencedictionary": {
+                "git_sha": "598d7abdb2a8df1aa3471c48d9186a9e3465983f"
+            },
+            "gatk4/intervallisttools": {
+                "git_sha": "598d7abdb2a8df1aa3471c48d9186a9e3465983f"
+            },
             "glnexus": {
                 "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
             },
             "multiqc": {
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
+            },
+            "picard/collecthsmetrics": {
+                "git_sha": "e751e5040af57e1b4e06ed4e0f3efe6de25c1683"
             },
             "picard/collectmultiplemetrics": {
                 "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
