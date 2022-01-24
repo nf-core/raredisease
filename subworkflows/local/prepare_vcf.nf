@@ -9,11 +9,12 @@ include { TABIX_TABIX as TABIX_PV } from '../../modules/nf-core/modules/tabix/ta
 
 workflow CHECK_VCF {
     take:
-    vcf    // channel: [ vcf file ]
+    vcf    // file: vcf file
     fasta  // path(fasta)
 
     main:
-    CHECK_INPUT_VCF( vcf )
+    vcf_file = file(vcf)
+    CHECK_INPUT_VCF( vcf_file )
         .splitCsv( header:true )
         .map { row ->
             def id        = "${row.id}"

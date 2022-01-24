@@ -4,7 +4,7 @@
 
 include { BWAMEM2_INDEX } from '../../modules/nf-core/modules/bwamem2/index/main'
 include { SAMTOOLS_FAIDX } from '../../modules/nf-core/modules/samtools/faidx/main'
-
+include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD} from '../../modules/nf-core/modules/gatk4/createsequencedictionary/main'
 include { GET_CHROM_SIZES } from '../../modules/local/get_chrom_sizes'
 
 workflow PREPARE_GENOME {
@@ -47,6 +47,7 @@ workflow PREPARE_GENOME {
 
         ch_chrom_sizes = GET_CHROM_SIZES ( ch_fai ).sizes
         ch_versions    = ch_versions.mix(GET_CHROM_SIZES.out.versions)
+        ch_sequence_dict = GATK_SD ( ch_fasta ).dict
 
 
     emit:
@@ -55,6 +56,6 @@ workflow PREPARE_GENOME {
         bwamem2_index               = ch_bwamem2_index          // path: bwamem2/index
         variant_catalog             = ch_variant_catalog        // path: variant_catalog.json
         chrom_sizes                 = ch_chrom_sizes            // path: chrom.sizes
-
+        sequence_dict               = ch_sequence_dict
         versions                    = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
