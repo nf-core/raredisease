@@ -45,9 +45,9 @@ workflow PREPARE_GENOME {
             }
         }
 
-        ch_chrom_sizes = GET_CHROM_SIZES ( ch_fai ).sizes
-        ch_versions    = ch_versions.mix(GET_CHROM_SIZES.out.versions)
         ch_sequence_dict = GATK_SD ( ch_fasta ).dict
+        ch_chrom_sizes   = GET_CHROM_SIZES ( ch_fai ).sizes
+        ch_versions      = ch_versions.mix(GET_CHROM_SIZES.out.versions)
 
 
     emit:
