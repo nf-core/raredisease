@@ -62,6 +62,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 
 include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2'
 include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/nf-core/call_repeat_expansions'
+include { CALL_SNV_DEEPVARIANT } from '../subworkflows/nf-core/call_snv_deepvariant'
 include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
 
 //
@@ -70,7 +71,6 @@ include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
 
 include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
 
-include { CALL_SNV_DEEPVARIANT } from '../subworkflows/local/call_snv_deepvariant'
 include { CALL_STRUCTURAL_VARIANTS } from '../subworkflows/local/call_structural_variants'
 
 /*

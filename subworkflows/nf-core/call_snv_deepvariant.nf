@@ -10,10 +10,10 @@ include { TABIX_TABIX as TABIX_GL } from '../../modules/nf-core/modules/tabix/ta
 
 workflow CALL_SNV_DEEPVARIANT {
     take:
-    bam          // channel: [ val(meta), path(bam), path(bai) ]
-    fasta        // path(fasta)
-    fai          // path(fai)
-    ch_case_info // channel: [ case_id ]
+        bam          // channel: [ val(meta), path(bam), path(bai) ]
+        fasta        // path(fasta)
+        fai          // path(fai)
+        ch_case_info // channel: [ case_id ]
 
     main:
         ch_versions = Channel.empty()
