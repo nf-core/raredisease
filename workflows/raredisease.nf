@@ -72,6 +72,7 @@ include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
 include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
 
 include { CALL_STRUCTURAL_VARIANTS } from '../subworkflows/local/call_structural_variants'
+include { ANNOTATE_VCFANNO } from '../subworkflows/local/annotate_vcfanno'
 
 /*
 ========================================================================================
@@ -170,6 +171,11 @@ workflow RAREDISEASE {
         ch_target_bed.bed
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
+
+    // STEP 3: VARIANT ANNOTATION
+    ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
+    ANNOTATE_VCFANNO ( ch_dv_vcf, file("/home/mei.wu/nextflow/nf-core/vcfanno_resource_dir") )
+    ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
 
     //
     // MODULE: Pipeline reporting
