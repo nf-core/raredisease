@@ -10,6 +10,7 @@ include { GET_CHROM_SIZES } from '../../modules/local/get_chrom_sizes'
 workflow PREPARE_GENOME {
     take:
         fasta // path: genome.fasta
+        variant_catalog // path: variant_catalog.json
 
     main:
         ch_fasta    = file(fasta)
@@ -34,6 +35,16 @@ workflow PREPARE_GENOME {
             ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
         }
 
+        if ( params.variant_catalog && file(params.variant_catalog, checkIfExists:true) ) {
+            ch_variant_catalog = file(params.variant_catalog)
+        } else {
+            if ( params.genome == 'GRCh38' ) {
+                ch_variant_catalog = file("https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/testdata/reference/variant_catalog_grch38.json")
+            } else {
+                ch_variant_catalog = file("https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/testdata/reference/variant_catalog_grch37.json")
+            }
+        }
+
         ch_sequence_dict = GATK_SD ( ch_fasta ).dict
         ch_chrom_sizes   = GET_CHROM_SIZES ( ch_fai ).sizes
         ch_versions      = ch_versions.mix(GET_CHROM_SIZES.out.versions)
@@ -43,6 +54,7 @@ workflow PREPARE_GENOME {
         fasta                       = ch_fasta                  // path: genome.fasta
         fai                         = ch_fai                    // path: genome.fasta.fai
         bwamem2_index               = ch_bwamem2_index          // path: bwamem2/index
+        variant_catalog             = ch_variant_catalog        // path: variant_catalog.json
         chrom_sizes                 = ch_chrom_sizes            // path: chrom.sizes
         sequence_dict               = ch_sequence_dict
         versions                    = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
