@@ -2,13 +2,14 @@
 // Annotate with VCFanno
 //
 
-include { VCFANNO } from '../../modules/nf-core/modules/vcfanno/main'
+include { VCFANNO } from '../../modules/local/vcfanno/main'
+
 include { BCFTOOLS_VIEW } from '../../modules/nf-core/modules/bcftools/view/main'
 
 workflow ANNOTATION_VCFANNO {
     take:
         vcf             // channel: [ val(meta), path(vcf), path(tbi) ]
-        toml_config     // channel: path(.toml)
+        resource_dir    // channel: path(resource_dir)
 
     main:
         ch_versions = Channel.empty()

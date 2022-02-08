@@ -86,9 +86,6 @@
             },
             "ucsc/wigtobigwig": {
                 "git_sha": "30e64becaa1e6c807a09a49a6d3d457ff3cf7251"
-            },
-            "vcfanno": {
-                "git_sha": "435ca4100ac07d1932cd0cb38226b7c4b2109fc1"
             }
         }
     }
