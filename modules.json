@@ -69,6 +69,9 @@
             "samtools/stats": {
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
             },
+            "svdb/merge": {
+                "git_sha": "f44e6c74b4c51c5e49bc91e3d9d225544b5c1685"
+            },
             "tabix/bgziptabix": {
                 "git_sha": "e22966ce74340cb671576143e5fdbbd71670cffa"
             },
