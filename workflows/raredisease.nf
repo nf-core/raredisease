@@ -135,6 +135,7 @@ workflow RAREDISEASE {
     // STEP 1.5: BAM QUALITY CHECK
     QC_BAM (
         ch_marked_bam,
+        ch_marked_bai,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
         CHECK_BED.out.bait_intervals,
