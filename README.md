@@ -33,6 +33,10 @@ On release, automated continuous integration tests run the pipeline on a full-si
 4. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 5. Variant calling ([deepvariant](https://github.com/google/deepvariant) and [glnexus](https://github.com/dnanexus-rnd/GLnexus))
 
+The different steps and corresponding tools are represented in the flowchart below. Note that this chart is meant as a tool to help with coordination during pipeline development and hence is modified regularly. Some tools might be added or removed as suitable. If you would like to modify the flowchart, please contact us on the slack channel (see "Contributions and Support" further down).
+
+<img src="https://docs.google.com/drawings/d/e/2PACX-1vTam7xjHBQTo1QsOpMUpd5F2vUZK5aXuf51OpSBaaV_2xMwfS1oN6GgVeQEJHjNNXRtCVHdGjCVFyzO/pub?w=2268&amp;h=2268">
+
 ## Quick Start
 
 1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=21.10.3`)
