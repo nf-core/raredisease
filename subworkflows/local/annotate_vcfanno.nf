@@ -14,8 +14,10 @@ workflow ANNOTATE_VCFANNO {
         ch_versions = Channel.empty()
 
         VCFANNO (vcf, resource_dir)
-        BCFTOOLS_ANNOTATE ( VCFANNO.out.vcf )
         ch_versions = ch_versions.mix(VCFANNO.out.versions)
+
+        BCFTOOLS_ANNOTATE ( VCFANNO.out.vcf )
+        ch_versions = ch_versions.mix(BCFTOOLS_ANNOTATE.out.versions)
 
     emit:
         annotated_vcf          = BCFTOOLS_ANNOTATE.out.vcf      // channel: [ val(meta), path(*.vcf.gz) ]
