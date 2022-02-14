@@ -54,8 +54,7 @@ workflow QC_BAM {
         ch_versions = ch_versions.mix(TIDDIT_COV.out.versions)
 
         // MOSDEPTH
-        bam.join(bai, by: [0])
-            .set { mosdepth_input_bams }
+        mosdepth_input_bams = bam.join(bai, by: [0])
         MOSDEPTH (mosdepth_input_bams,[],[])
         ch_versions = ch_versions.mix(MOSDEPTH.out.versions)
 
