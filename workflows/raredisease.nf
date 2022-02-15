@@ -12,7 +12,8 @@ WorkflowRaredisease.initialise(params, log)
 // Check input path parameters to see if they exist
 def checkPathParamList = [
     params.input, params.multiqc_config, params.fasta,
-    params.bwamem2_index, params.fasta_fai, params.gnomad
+    params.bwamem2_index, params.fasta_fai, params.gnomad,
+    params.vcfanno_resources
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
@@ -174,7 +175,8 @@ workflow RAREDISEASE {
 
     // STEP 3: VARIANT ANNOTATION
     ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
-    ANNOTATE_VCFANNO ( ch_dv_vcf, file("/home/mei.wu/nextflow/nf-core/vcfanno_resource_dir") )
+    
+    ANNOTATE_VCFANNO ( ch_dv_vcf, PREPARE_GENOME.out.vcfanno_resources )
     ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
 
     //
