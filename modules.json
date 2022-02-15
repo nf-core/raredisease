@@ -39,6 +39,9 @@
             "glnexus": {
                 "git_sha": "9d0cad583b9a71a6509b754fdf589cbfbed08961"
             },
+            "mosdepth": {
+                "git_sha": "45acc79667b58b5888cdea7327e76c728e94d6df"
+            },
             "multiqc": {
                 "git_sha": "20d8250d9f39ddb05dfb437603aaf99b5c0b2b41"
             },
