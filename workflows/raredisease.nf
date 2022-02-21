@@ -175,7 +175,7 @@ workflow RAREDISEASE {
 
     // STEP 3: VARIANT ANNOTATION
     ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
-    
+
     ANNOTATE_VCFANNO ( params.vcfanno_toml, ch_dv_vcf, PREPARE_GENOME.out.vcfanno_resources )
     ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
 
