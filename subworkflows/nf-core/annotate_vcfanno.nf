@@ -2,24 +2,22 @@
 // Annotate with VCFanno
 //
 
-include { VCFANNO } from '../../modules/local/vcfanno/main'
-include { BCFTOOLS_ANNOTATE } from '../../modules/local/bcftools_annotate/main'
+include { VCFANNO } from '../../modules/nf-core/modules/vcfanno/main'
 
 workflow ANNOTATE_VCFANNO {
     take:
+        toml            // channel: path(toml)
         vcf             // channel: [ val(meta), path(vcf), path(tbi) ]
         resource_dir    // channel: path(resource_dir)
 
     main:
         ch_versions = Channel.empty()
 
-        VCFANNO (vcf, resource_dir)
+        ch_placeholder = vcf.map { meta, vcf, idx -> vcf = []; [meta, vcf] }
+        VCFANNO (vcf, ch_placeholder, toml, resource_dir)
         ch_versions = ch_versions.mix(VCFANNO.out.versions)
 
-        BCFTOOLS_ANNOTATE ( VCFANNO.out.vcf )
-        ch_versions = ch_versions.mix(BCFTOOLS_ANNOTATE.out.versions)
-
     emit:
-        annotated_vcf          = BCFTOOLS_ANNOTATE.out.vcf      // channel: [ val(meta), path(*.vcf.gz) ]
+        annotated_vcf          = VCFANNO.out.vcf                // channel: [ val(meta), path(*.vcf.gz) ]
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }

@@ -116,9 +116,15 @@
                 },
                 "vcfanno_resources": {
                     "type": "string",
-                    "description": "Directory path or tar.gz archive that holds resources defined within the vcfanno toml file, including itself.",
+                    "description": "Directory path or tar.gz archive that holds resources defined within the vcfanno toml file.",
                     "help_text": "If no directory path is passed, default configurations will be used according to genome build within the context of the pipeline.",
                     "fa_icon": "fas fa-folder-open"
+                },
+                "vcfanno_toml": {
+                    "type": "string",
+                    "description": "Path to the vcfanno toml file.",
+                    "help_text": "If toml is passed, default configurations will be used according to genome build within the context of the pipeline.",
+                    "fa_icon": "fas fa-file-csv"
                 },
                 "save_reference": {
                     "type": "boolean",

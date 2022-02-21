@@ -24,6 +24,7 @@ params.gnomad               = WorkflowMain.getGenomeAttribute(params, 'gnomad')
 params.target_bed           = WorkflowMain.getGenomeAttribute(params, 'target_bed')
 params.variant_catalog      = WorkflowMain.getGenomeAttribute(params, 'variant_catalog')
 params.vcfanno_resources    = WorkflowMain.getGenomeAttribute(params, 'vcfanno_resources')
+params.vcfanno_toml         = WorkflowMain.getGenomeAttribute(params, 'vcfanno_toml')
 
 /*
 ========================================================================================

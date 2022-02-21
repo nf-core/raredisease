@@ -66,6 +66,7 @@ include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/nf-core/call_repeat_exp
 include { CALL_SNV_DEEPVARIANT } from '../subworkflows/nf-core/call_snv_deepvariant'
 include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
 
+include { ANNOTATE_VCFANNO } from '../subworkflows/nf-core/annotate_vcfanno'
 //
 // SUBWORKFLOW: Consists of mix/local modules
 //
@@ -73,7 +74,6 @@ include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
 include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
 
 include { CALL_STRUCTURAL_VARIANTS } from '../subworkflows/local/call_structural_variants'
-include { ANNOTATE_VCFANNO } from '../subworkflows/local/annotate_vcfanno'
 
 /*
 ========================================================================================
@@ -176,7 +176,7 @@ workflow RAREDISEASE {
     // STEP 3: VARIANT ANNOTATION
     ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
     
-    ANNOTATE_VCFANNO ( ch_dv_vcf, PREPARE_GENOME.out.vcfanno_resources )
+    ANNOTATE_VCFANNO ( params.vcfanno_toml, ch_dv_vcf, PREPARE_GENOME.out.vcfanno_resources )
     ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
 
     //
