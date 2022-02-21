@@ -12,7 +12,8 @@ WorkflowRaredisease.initialise(params, log)
 // Check input path parameters to see if they exist
 def checkPathParamList = [
     params.input, params.multiqc_config, params.fasta,
-    params.bwamem2_index, params.fasta_fai, params.gnomad
+    params.bwamem2_index, params.fasta_fai, params.gnomad,
+    params.vcfanno_resources
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
@@ -65,6 +66,7 @@ include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/nf-core/call_repeat_exp
 include { CALL_SNV_DEEPVARIANT } from '../subworkflows/nf-core/call_snv_deepvariant'
 include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
 
+include { ANNOTATE_VCFANNO } from '../subworkflows/nf-core/annotate_vcfanno'
 //
 // SUBWORKFLOW: Consists of mix/local modules
 //
@@ -171,6 +173,12 @@ workflow RAREDISEASE {
         ch_target_bed.bed
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
+
+    // STEP 3: VARIANT ANNOTATION
+    ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
+
+    ANNOTATE_VCFANNO ( params.vcfanno_toml, ch_dv_vcf, PREPARE_GENOME.out.vcfanno_resources )
+    ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
 
     //
     // MODULE: Pipeline reporting
