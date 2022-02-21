@@ -13,6 +13,9 @@ process GET_CHROM_SIZES {
     path '*.sizes'     , emit: sizes
     path "versions.yml", emit: versions
 
+    when:
+    task.ext.when == null || task.ext.when
+
     script:
     """
     cut -f 1,2 $fai > ${fai}.sizes
