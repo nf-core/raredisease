@@ -12,6 +12,9 @@ process CHECK_INPUT_VCF {
     output:
     path '*.txt'       , emit: txt
 
+    when:
+    task.ext.when == null || task.ext.when
+
     script: // This script is bundled with the pipeline, in nf-core/raredisease/bin/
     """
     export INPUT_FILE=${vcf}
