@@ -38,7 +38,6 @@ process SVDB_MERGE {
         $prio \\
         --vcf $input \\
         > ${prefix}_sv_merge.vcf
-
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         svdb: \$( echo \$(svdb) | head -1 | sed 's/usage: SVDB-\\([0-9]\\.[0-9]\\.[0-9]\\).*/\\1/' )
@@ -49,7 +48,6 @@ process SVDB_MERGE {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}_sv_merge.vcf
-
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         svdb: \$( echo \$(svdb) | head -1 | sed 's/usage: SVDB-\\([0-9]\\.[0-9]\\.[0-9]\\).*/\\1/' )

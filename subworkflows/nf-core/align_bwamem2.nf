@@ -20,7 +20,7 @@ workflow ALIGN_BWAMEM2 {
         ch_versions = Channel.empty()
 
         // Map, sort, and index
-        BWAMEM2_MEM ( reads_input, index )
+        BWAMEM2_MEM ( reads_input, index, false )
         ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions)
 
         SAMTOOLS_SORT ( BWAMEM2_MEM.out.bam )

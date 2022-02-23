@@ -44,8 +44,7 @@ workflow QC_BAM {
 
         // QUALIMAP BAMQC
         gff = []
-        use_gff = false
-        QUALIMAP_BAMQC ( bam, gff, use_gff )
+        QUALIMAP_BAMQC ( bam, gff )
         ch_versions = ch_versions.mix(QUALIMAP_BAMQC.out.versions)
 
         // TIDDIT COVERAGE
