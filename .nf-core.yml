@@ -6,3 +6,5 @@ lint:
     - assets/multiqc_config.yaml
     - lib/NfcoreSchema.groovy
     - .github/workflows/linting.yml
+    - .github/workflows/linting_comment.yml
+    - .github/workflows/branch.yml
