@@ -33,6 +33,9 @@
             "gatk4/createsequencedictionary": {
                 "git_sha": "598d7abdb2a8df1aa3471c48d9186a9e3465983f"
             },
+            "gatk4/haplotypecaller": {
+                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+            },
             "gatk4/intervallisttools": {
                 "git_sha": "598d7abdb2a8df1aa3471c48d9186a9e3465983f"
             },

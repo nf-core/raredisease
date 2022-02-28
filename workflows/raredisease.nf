@@ -41,6 +41,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { CHECK_VCF } from '../subworkflows/local/prepare_vcf'
 include { CHECK_BED } from '../subworkflows/local/prepare_bed'
+include { GENS } from '../subworkflows/local/gens'
 
 /*
 ========================================================================================
@@ -150,6 +151,18 @@ workflow RAREDISEASE {
             params.variant_catalog
             )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
+
+    // STEP 1.7: GENS
+    GENS (
+        ch_marked_bam,
+        ch_marked_bai,
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.fai,
+        params.gens_pon,
+        params.gens_gnomad_pos,
+        INPUT_CHECK.out.ch_case_info,
+        PREPARE_GENOME.out.sequence_dict
+    )
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
