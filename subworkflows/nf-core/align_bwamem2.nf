@@ -5,7 +5,6 @@
 include { BWAMEM2_MEM } from '../../modules/nf-core/modules/bwamem2/mem/main'
 include { SAMTOOLS_INDEX } from '../../modules/nf-core/modules/samtools/index/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MD } from '../../modules/nf-core/modules/samtools/index/main'
-include { SAMTOOLS_SORT } from '../../modules/nf-core/modules/samtools/sort/main'
 include { SAMTOOLS_STATS } from '../../modules/nf-core/modules/samtools/stats/main'
 include { SAMTOOLS_MERGE } from '../../modules/nf-core/modules/samtools/merge/main'
 include { PICARD_MARKDUPLICATES as MARKDUPLICATES } from '../../modules/nf-core/modules/picard/markduplicates/main'
@@ -20,19 +19,18 @@ workflow ALIGN_BWAMEM2 {
         ch_versions = Channel.empty()
 
         // Map, sort, and index
-        BWAMEM2_MEM ( reads_input, index, false )
+        BWAMEM2_MEM ( reads_input, index, true )
         ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions)
 
-        SAMTOOLS_SORT ( BWAMEM2_MEM.out.bam )
-        SAMTOOLS_INDEX ( SAMTOOLS_SORT.out.bam )
+        SAMTOOLS_INDEX ( BWAMEM2_MEM.out.bam )
 
         // Join the mapped bam + bai paths by their keys for stats
         // Get stats for each demultiplexed read pair.
-        bam_sorted_indexed = SAMTOOLS_SORT.out.bam.join(SAMTOOLS_INDEX.out.bai)
+        bam_sorted_indexed = BWAMEM2_MEM.out.bam.join(SAMTOOLS_INDEX.out.bai)
         SAMTOOLS_STATS ( bam_sorted_indexed, [] )
 
         // Merge multiple lane samples and index
-        SAMTOOLS_SORT.out.bam
+        BWAMEM2_MEM.out.bam
         .map{ meta, bam ->
             new_meta = meta.clone()                 // clone to avoid overriding the global meta
             new_meta.id = new_meta.id.split('_')[0] // access the .id attribute of meta to split samplename_lane into samplename

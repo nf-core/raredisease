@@ -66,9 +66,6 @@
             "samtools/merge": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
-            "samtools/sort": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
             "samtools/stats": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
