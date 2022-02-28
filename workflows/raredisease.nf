@@ -122,17 +122,15 @@ workflow RAREDISEASE {
     }
 
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
-    if (params.aligner == 'bwamem2') {
-        ALIGN_BWAMEM2 (
-            INPUT_CHECK.out.reads,
-            PREPARE_GENOME.out.bwamem2_index
-        )
+    ALIGN_BWAMEM2 (
+        INPUT_CHECK.out.reads,
+        PREPARE_GENOME.out.bwamem2_index
+    )
 
-        ch_marked_bam = ALIGN_BWAMEM2.out.marked_bam
-        ch_marked_bai = ALIGN_BWAMEM2.out.marked_bai
+    ch_marked_bam = ALIGN_BWAMEM2.out.marked_bam
+    ch_marked_bai = ALIGN_BWAMEM2.out.marked_bai
 
-        ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
-    }
+    ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
 
     // STEP 1.5: BAM QUALITY CHECK
     QC_BAM (
