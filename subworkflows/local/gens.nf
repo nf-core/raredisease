@@ -6,7 +6,7 @@ include { GATK4_COLLECTREADCOUNTS as COLLECTREADCOUNTS } from '../../modules/loc
 include { GATK4_DENOISEREADCOUNTS as DENOISEREADCOUNTS } from '../../modules/local/gatk4/denoisereadcounts/main'
 include { GATK4_HAPLOTYPECALLER as HAPLOTYPECALLER } from '../../modules/nf-core/modules/gatk4/haplotypecaller/main'
 
-workflow PREPARE_GENS {
+workflow GENS {
     take:
         bam         // channel: [ val(meta), path(bam) ]
         bai         // channel: [ val(meta), path(bai) ]
