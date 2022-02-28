@@ -18,7 +18,7 @@ workflow GENS {
         seq_dict    // path: seq_dict
 
     main:
-        HAPLOTYPECALLER ( bam.join(bai, by: [0]), fasta, fai, seq_dict )
+        HAPLOTYPECALLER ( bam.join(bai, by: [0]), fasta, fai, seq_dict, [], [] )
 
         COLLECTREADCOUNTS ( bam, fasta )
 
