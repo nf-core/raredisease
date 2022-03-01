@@ -11,6 +11,7 @@ process GATK4_COLLECTREADCOUNTS {
     tuple val(meta), path(bam), path(bai)
     path fasta
     path fai
+    path sequence_dict
     path interval_list
 
     output:
