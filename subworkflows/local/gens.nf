@@ -5,6 +5,7 @@
 include { GATK4_COLLECTREADCOUNTS as COLLECTREADCOUNTS } from '../../modules/local/gatk4/collectreadcounts/main'
 include { GATK4_DENOISEREADCOUNTS as DENOISEREADCOUNTS } from '../../modules/local/gatk4/denoisereadcounts/main'
 include { GATK4_HAPLOTYPECALLER as HAPLOTYPECALLER } from '../../modules/nf-core/modules/gatk4/haplotypecaller/main'
+include { GENS as GENS_GENERATE } from '../../modules/local/gens/main'
 
 workflow GENS {
     take:
@@ -25,7 +26,7 @@ workflow GENS {
 
         DENOISEREADCOUNTS ( COLLECTREADCOUNTS.out.read_counts, pon )
 
-        GENS ( DENOISEREADCOUNTS.out.standardized_read_counts, HAPLOTYPECALLER.out.vcf, gnomad_pos )
+        GENS_GENERATE ( DENOISEREADCOUNTS.out.standardized_read_counts, HAPLOTYPECALLER.out.vcf, gnomad_pos )
 
     emit:
         gens_cov_bed_gz = GENS.out.cov

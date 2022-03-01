@@ -13,8 +13,8 @@ process GENS {
     path gnomad_positions
 
     output:
-    tuple val(meta), path('*.bed.gz'), emit: cov
-    path  '*.bed.gz'                 , emit: baf
+    tuple val(meta), path('*.cov.bed.gz'), emit: cov
+    tuple val(meta), path('*.baf.bed.gz'), emit: baf
     path  "versions.yml"             , emit: versions
 
     script:
@@ -26,7 +26,7 @@ process GENS {
         avail_mem = task.memory.giga
     }
     """
-    gatk --java-options "-Xmx${avail_mem}g" CollectReadCounts \\
+    generate_gens_data.pl \\
         $vcf \\
         $read_counts \\
         $prefix \\
@@ -34,7 +34,7 @@ process GENS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        gatk4: \$(echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//')
+        generate_gens_data.pl: \$(echo \$(generate_gens_data.pl --version 2>&1))
     END_VERSIONS
     """
 }
