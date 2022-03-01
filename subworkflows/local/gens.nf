@@ -20,8 +20,12 @@ workflow GENS {
 
     main:
         ch_versions = Channel.empty()
+        bam.map { meta, bam, bai ->
+                        return [meta, bam, bai, []]
+            }
+            .set { ch_bam }
 
-        HAPLOTYPECALLER ( bam, fasta, fai, seq_dict, [], [] )
+        HAPLOTYPECALLER ( ch_bam, fasta, fai, seq_dict, [], [] )
         ch_versions = ch_versions.mix(HAPLOTYPECALLER.out.versions)
 
         COLLECTREADCOUNTS ( bam, fasta, interval_list )
