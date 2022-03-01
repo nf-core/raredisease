@@ -21,15 +21,13 @@ process SVDB_MERGE {
     script:
     def args   = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def input  = ""
+    def input  = "${vcfs.join(" ")}"
+    def prio   = ""
     if(priority) {
         prio = "--priority ${priority.join(',')}"
         for (int index = 0; index < vcfs.size(); index++) {
             input += " ${vcfs[index]}:${priority[index]}"
         }
-    } else {
-        prio = ""
-        input = "${vcfs.join(" ")}"
     }
     """
     svdb \\
@@ -38,6 +36,7 @@ process SVDB_MERGE {
         $prio \\
         --vcf $input \\
         > ${prefix}_sv_merge.vcf
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         svdb: \$( echo \$(svdb) | head -1 | sed 's/usage: SVDB-\\([0-9]\\.[0-9]\\.[0-9]\\).*/\\1/' )
@@ -48,6 +47,7 @@ process SVDB_MERGE {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}_sv_merge.vcf
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         svdb: \$( echo \$(svdb) | head -1 | sed 's/usage: SVDB-\\([0-9]\\.[0-9]\\.[0-9]\\).*/\\1/' )

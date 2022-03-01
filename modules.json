@@ -66,14 +66,11 @@
             "samtools/merge": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
-            "samtools/sort": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
             "samtools/stats": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
             "svdb/merge": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                "git_sha": "ee915a43e405324e62ee5d4c14a6a6ec6c610058"
             },
             "svdb/query": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
