@@ -28,7 +28,7 @@ workflow GENS {
         HAPLOTYPECALLER ( ch_bam, fasta, fai, seq_dict, [], [] )
         ch_versions = ch_versions.mix(HAPLOTYPECALLER.out.versions)
 
-        COLLECTREADCOUNTS ( bam, fasta, interval_list )
+        COLLECTREADCOUNTS ( bam, fasta, fai, interval_list )
         ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions)
 
         DENOISEREADCOUNTS ( COLLECTREADCOUNTS.out.read_counts, pon )

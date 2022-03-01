@@ -10,6 +10,7 @@ process GATK4_COLLECTREADCOUNTS {
     input:
     tuple val(meta), path(bam), path(bai)
     path fasta
+    path fai
     path interval_list
 
     output:
