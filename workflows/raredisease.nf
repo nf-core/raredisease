@@ -164,6 +164,7 @@ workflow RAREDISEASE {
         INPUT_CHECK.out.ch_case_info,
         PREPARE_GENOME.out.sequence_dict
     )
+    ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.

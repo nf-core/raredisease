@@ -15,7 +15,7 @@ process GENS {
     output:
     tuple val(meta), path('*.cov.bed.gz'), emit: cov
     tuple val(meta), path('*.baf.bed.gz'), emit: baf
-    path  "versions.yml"             , emit: versions
+    path  "versions.yml"                 , emit: versions
 
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"

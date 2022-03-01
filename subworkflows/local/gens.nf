@@ -20,13 +20,19 @@ workflow GENS {
         seq_dict        // path: seq_dict
 
     main:
+        ch_versions = Channel.empty()
+
         HAPLOTYPECALLER ( bam.join(bai, by: [0]), fasta, fai, seq_dict, [], [] )
+        ch_versions = ch_versions.mix(HAPLOTYPECALLER.out.versions)
 
         COLLECTREADCOUNTS ( bam, fasta, interval_list )
+        ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions)
 
         DENOISEREADCOUNTS ( COLLECTREADCOUNTS.out.read_counts, pon )
+        ch_versions = ch_versions.mix(DENOISEREADCOUNTS.out.versions)
 
         GENS_GENERATE ( DENOISEREADCOUNTS.out.standardized_read_counts, HAPLOTYPECALLER.out.vcf, gnomad_pos )
+        ch_versions = ch_versions.mix(GENS_GENERATE.out.versions)
 
     emit:
         gens_cov_bed_gz = GENS_GENERATE.out.cov
