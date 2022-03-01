@@ -28,6 +28,7 @@ process GATK4_COLLECTREADCOUNTS {
     """
     gatk --java-options "-Xmx${avail_mem}g" CollectReadCounts \\
         -I $bam \\
+        --read-index $bai \\
         -R $fasta \\
         -L $interval_list \\
         -O ${prefix}.hdf5 \\
