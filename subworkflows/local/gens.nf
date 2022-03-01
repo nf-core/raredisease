@@ -8,19 +8,20 @@ include { GATK4_HAPLOTYPECALLER as HAPLOTYPECALLER } from '../../modules/nf-core
 
 workflow GENS {
     take:
-        bam         // channel: [ val(meta), path(bam) ]
-        bai         // channel: [ val(meta), path(bai) ]
-        fasta       // path(fasta)
-        fai         // path(fai)
-        pon         // path(pon)
-        gnomad_pos  // path(gnomad_pos)
-        case_info   // channel: [ val(case_info) ]
-        seq_dict    // path: seq_dict
+        bam             // channel: [ val(meta), path(bam) ]
+        bai             // channel: [ val(meta), path(bai) ]
+        fasta           // path(fasta)
+        fai             // path(fai)
+        interval_list   // path(interval_list)
+        pon             // path(pon)
+        gnomad_pos      // path(gnomad_pos)
+        case_info       // channel: [ val(case_info) ]
+        seq_dict        // path: seq_dict
 
     main:
         HAPLOTYPECALLER ( bam.join(bai, by: [0]), fasta, fai, seq_dict, [], [] )
 
-        COLLECTREADCOUNTS ( bam, fasta )
+        COLLECTREADCOUNTS ( bam, fasta, interval_list )
 
         DENOISEREADCOUNTS ( COLLECTREADCOUNTS.out.read_counts, fasta, pon )
 

@@ -158,6 +158,7 @@ workflow RAREDISEASE {
         ch_marked_bai,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
+        params.gens_interval_list,
         params.gens_pon,
         params.gens_gnomad_pos,
         INPUT_CHECK.out.ch_case_info,
