@@ -23,7 +23,7 @@ workflow GENS {
 
         COLLECTREADCOUNTS ( bam, fasta, interval_list )
 
-        DENOISEREADCOUNTS ( COLLECTREADCOUNTS.out.read_counts, fasta, pon )
+        DENOISEREADCOUNTS ( COLLECTREADCOUNTS.out.read_counts, pon )
 
         GENS ( DENOISEREADCOUNTS.out.standardized_read_counts, HAPLOTYPECALLER.out.vcf, gnomad_pos )
 
