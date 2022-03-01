@@ -29,7 +29,7 @@ workflow GENS {
         GENS_GENERATE ( DENOISEREADCOUNTS.out.standardized_read_counts, HAPLOTYPECALLER.out.vcf, gnomad_pos )
 
     emit:
-        gens_cov_bed_gz = GENS.out.cov
-        gens_baf_bed_gz = GENS.out.baf
+        gens_cov_bed_gz = GENS_GENERATE.out.cov
+        gens_baf_bed_gz = GENS_GENERATE.out.baf
         versions        = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
