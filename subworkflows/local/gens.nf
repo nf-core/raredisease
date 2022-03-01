@@ -9,8 +9,7 @@ include { GENS as GENS_GENERATE } from '../../modules/local/gens/main'
 
 workflow GENS {
     take:
-        bam             // channel: [ val(meta), path(bam) ]
-        bai             // channel: [ val(meta), path(bai) ]
+        bam             // channel: [ val(meta), path(bam), path(bai) ]
         fasta           // path(fasta)
         fai             // path(fai)
         interval_list   // path(interval_list)
@@ -20,16 +19,12 @@ workflow GENS {
         seq_dict        // path: seq_dict
 
     main:
-        bam.map { meta, bam, bai ->
-                return [meta, bam, bai, []]
-            }
-            .set { ch_bam }
         ch_versions = Channel.empty()
 
-        HAPLOTYPECALLER ( ch_bam, fasta, fai, seq_dict, [], [] )
+        HAPLOTYPECALLER ( bam, fasta, fai, seq_dict, [], [] )
         ch_versions = ch_versions.mix(HAPLOTYPECALLER.out.versions)
 
-        COLLECTREADCOUNTS ( ch_bam, fasta, interval_list )
+        COLLECTREADCOUNTS ( bam, fasta, interval_list )
         ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions)
 
         DENOISEREADCOUNTS ( COLLECTREADCOUNTS.out.read_counts, pon )

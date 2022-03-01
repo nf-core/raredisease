@@ -154,8 +154,7 @@ workflow RAREDISEASE {
 
     // STEP 1.7: GENS
     GENS (
-        ch_marked_bam,
-        ch_marked_bai,
+        ch_marked_bam.join(ch_marked_bai, by: [0]),
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
         params.gens_interval_list,
