@@ -8,8 +8,7 @@ process SVDB_QUERY {
         'quay.io/biocontainers/svdb:2.5.0--py39hcbe4a3b_0' }"
 
     input:
-    tuple val(meta), path(vcf)
-    path (vcf_db)
+    tuple val(meta), path(vcf), path(vcf_db), val(in_occ), val(in_frq), val(out_occ), val(out_frq)
 
     output:
     tuple val(meta), path("*_ann_svdbq.vcf"), emit: vcf
@@ -21,10 +20,24 @@ process SVDB_QUERY {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+    def input  = ""
+    if(in_occ) {
+            input += "--in_occ ${in_occ} "
+    }
+    if(in_frq) {
+            input += "--in_frq ${in_frq} "
+    }
+    if(out_occ) {
+            input += "--out_occ ${out_occ} "
+    }
+    if(out_frq) {
+            input += "--out_frq ${out_frq} "
+    }
     """
     svdb \\
         --query \\
         $args \\
+        $input \\
         --db $vcf_db \\
         --query_vcf $vcf \\
         >${prefix}_ann_svdbq.vcf

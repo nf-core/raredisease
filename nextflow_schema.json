@@ -107,6 +107,12 @@
                     "fa_icon": "fas fa-bezier-curve",
                     "description": "Path to directory for target bed file."
                 },
+                "svdb_query_dbs": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to comma-separated file containing information about the databases used for structural variant annotation.",
+                    "fa_icon": "far fa-file-code"
+                },
                 "variant_catalog": {
                     "type": "string",
                     "format": "file-path",

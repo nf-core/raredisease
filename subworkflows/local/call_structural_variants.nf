@@ -46,5 +46,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
 
     emit:
-        versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
+        vcf        = SVDB_MERGE.out.vcf
+        versions   = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }
