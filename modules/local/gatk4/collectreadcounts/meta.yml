@@ -22,12 +22,27 @@ input:
         e.g. [ id:'test']
   - bam:
       type: file
-      description: Input bam file
-      pattern: "*.bam"
+      description: BAM/CRAM file from alignment
+      pattern: "*.{bam,cram}"
+  - bai:
+      type: file
+      description: BAI/CRAI file from alignment
+      pattern: "*.{bai,crai}"
+  - intervals:
+      type: file
+      description: Bed file with the genomic regions included in the library (optional)
   - fasta:
       type: file
       description: The reference fasta file
       pattern: "*.fasta"
+  - fai:
+      type: file
+      description: Index of reference fasta file
+      pattern: "fasta.fai"
+  - sequence_dict:
+      type: file
+      description: GATK sequence dictionary
+      pattern: "*.dict"
   - interval_list:
       type: file
       description: Binning intervals file
