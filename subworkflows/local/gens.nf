@@ -21,8 +21,7 @@ workflow GENS {
     main:
         ch_versions = Channel.empty()
         bam.map { meta, bam, bai ->
-                new_meta = meta.clone()
-                [new_meta, bam, bai, []]
+                [meta, bam, bai, []]
             }.set { ch_bam }
 
         bam.view()
