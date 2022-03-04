@@ -23,7 +23,7 @@ workflow GENS {
         bam.map { meta, bam, bai ->
                         return [meta, bam, bai, []]
             }
-            .into { ch_bam_hc, ch_bam_cr }
+            .into { ch_bam_hc; ch_bam_cr }
 
         HAPLOTYPECALLER ( ch_bam_hc, fasta, fai, seq_dict, [], [] )
         ch_versions = ch_versions.mix(HAPLOTYPECALLER.out.versions)
