@@ -157,9 +157,9 @@ workflow RAREDISEASE {
         ch_marked_bam.join(ch_marked_bai, by: [0]),
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
-        params.gens_interval_list,
-        params.gens_pon,
-        params.gens_gnomad_pos,
+        file(params.gens_interval_list),
+        file(params.gens_pon),
+        file(params.gens_gnomad_pos),
         INPUT_CHECK.out.ch_case_info,
         PREPARE_GENOME.out.sequence_dict
     )
