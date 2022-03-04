@@ -29,8 +29,8 @@ process GATK4_DENOISEREADCOUNTS {
     gatk --java-options "-Xmx${avail_mem}g" DenoiseReadCounts \\
         -I $read_counts \\
         --count-panel-of-normals $panel_of_normals \\
-        --standardized-copy-ratios ${prefix}.standardizedCR.tsv" \\
-        --denoised-copy-ratios ${prefix}.denoisedCR.tsv" \\
+        --standardized-copy-ratios ${prefix}.standardizedCR.tsv \\
+        --denoised-copy-ratios ${prefix}.denoisedCR.tsv \\
         $args
 
     cat <<-END_VERSIONS > versions.yml
