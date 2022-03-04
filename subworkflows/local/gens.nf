@@ -23,13 +23,13 @@ workflow GENS {
         bam.map { meta, bam, bai ->
                         return [meta, bam, bai, []]
             }
-            .into { ch_bam_hc; ch_bam_cr }
+            .set { ch_bam }
 
-        HAPLOTYPECALLER ( ch_bam_hc, fasta, fai, seq_dict, [], [] )
-        ch_versions = ch_versions.mix(HAPLOTYPECALLER.out.versions)
-
-        COLLECTREADCOUNTS ( ch_bam_cr, fasta, fai, seq_dict, interval_list )
+        COLLECTREADCOUNTS ( bam, fasta, fai, seq_dict, interval_list )
         ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions)
+
+        HAPLOTYPECALLER ( ch_bam, fasta, fai, seq_dict, [], [] )
+        ch_versions = ch_versions.mix(HAPLOTYPECALLER.out.versions)
 
         DENOISEREADCOUNTS ( COLLECTREADCOUNTS.out.read_counts, pon )
         ch_versions = ch_versions.mix(DENOISEREADCOUNTS.out.versions)
