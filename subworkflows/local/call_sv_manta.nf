@@ -26,11 +26,15 @@ workflow CALL_SV_MANTA {
             .combine(bai_file_list)
             .set { manta_input_bams }
 
+        bed_input = ch_bed.map{ id, bed, index ->
+                            return [bed, index]
+                            }
+
         if (params.analysis_type == "WGS") {
             MANTA ( manta_input_bams, fasta, fai, [[],[]] )
         } else {
             ch_target_bed = ch_bed.ifEmpty([[],[]])
-            MANTA ( manta_input_bams, fasta, fai, ch_target_bed )
+            MANTA ( manta_input_bams, fasta, fai, bed_input )
         }
         ch_versions = MANTA.out.versions
 
