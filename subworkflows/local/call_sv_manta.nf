@@ -19,16 +19,18 @@ workflow CALL_SV_MANTA {
             .set { bam_file_list }
 
         bai.collect{it[1]}
+            .toList()
             .set { bai_file_list }
 
         ch_case_info.combine(bam_file_list)
+            .combine(bai_file_list)
             .set { manta_input_bams }
 
         if (params.analysis_type == "WGS") {
-            MANTA ( manta_input_bams, bai_file_list, fasta, fai, [[],[],[]] )
+            MANTA ( manta_input_bams, fasta, fai, [[],[]] )
         } else {
-            ch_target_bed = ch_bed.ifEmpty([[],[],[]])
-            MANTA ( manta_input_bams, bai_file_list, fasta, fai, ch_target_bed )
+            ch_target_bed = ch_bed.ifEmpty([[],[]])
+            MANTA ( manta_input_bams, fasta, fai, ch_target_bed )
         }
         ch_versions = MANTA.out.versions
 
