@@ -12,22 +12,17 @@ include { GET_CHROM_SIZES } from '../../modules/local/get_chrom_sizes'
 
 workflow PREPARE_GENOME {
     take:
-        fasta // path: genome.fasta
-        variant_catalog // path: variant_catalog.json
+        fasta           // channel: [mandatory] genome.fasta
+        variant_catalog // channel: [optional] variant_catalog.json
 
     main:
         ch_fasta    = file(fasta)
         ch_versions = Channel.empty()
 
         // Fetch BWAMEM2 index or create from scratch if required
-        if ( params.aligner == 'bwamem2' ) {
-            if ( params.bwamem2_index && file(params.bwamem2_index, checkIfExists:true) ) {
-                ch_bwamem2_index = file(params.bwamem2_index)
-            } else {
-                ch_bwamem2_index = BWAMEM2_INDEX ( ch_fasta ).index
-                ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
-            }
-        }
+        BWAMEM2_INDEX ( ch_fasta )
+        ch_bwamem2_index = params.bwamem2_index && params.aligner == "bwamem2" ? file(params.bwamem2_index) : BWAMEM2_INDEX.out.index
+        ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
 
         if ( params.fasta_fai ) {
             ch_fai = file(params.fasta_fai)
