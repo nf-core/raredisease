@@ -15,30 +15,38 @@ tools:
       documentation: https://github.com/Illumina/manta/blob/v1.6.0/docs/userGuide/README.md
       tool_dev_url: https://github.com/Illumina/manta
       doi: "10.1093/bioinformatics/btv710"
-      licence: ['GPL v3']
+      licence: ["GPL v3"]
 
 input:
   - meta:
       type: map
       description: |
-        Groovy Map containing case information
-        e.g. [ id:'case_id' ]
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
   - input:
       type: file
-      description: BAM/CRAM/SAM file
+      description: BAM/CRAM/SAM file. For joint calling use a list of files.
       pattern: "*.{bam,cram,sam}"
-  - input_index:
+  - index:
       type: file
-      description: BAM/CRAM/SAM index file
+      description: BAM/CRAM/SAM index file. For joint calling use a list of files.
       pattern: "*.{bai,crai,sai}"
   - fasta:
       type: file
       description: Genome reference FASTA file
       pattern: "*.{fa,fasta}"
-  - fai:
+  - fasta_fai:
       type: file
       description: Genome reference FASTA index file
       pattern: "*.{fa.fai,fasta.fai}"
+  - target_bed:
+      type: file
+      description: BED file containing target regions for variant calling
+      pattern: "*.{bed}"
+  - target_bed_tbi:
+      type: file
+      description: Index for BED file containing target regions for variant calling
+      pattern: "*.{bed.tbi}"
 
 output:
   - meta:
@@ -74,3 +82,7 @@ output:
       type: file
       description: File containing software versions
       pattern: "versions.yml"
+
+authors:
+  - "@maxulysse"
+  - "@ramprasadn"
