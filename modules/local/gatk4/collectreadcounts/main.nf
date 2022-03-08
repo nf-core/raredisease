@@ -25,7 +25,7 @@ process GATK4_COLLECTREADCOUNTS {
     if (!task.memory) {
         log.info '[GATK CollectReadCounts] Available memory not known - defaulting to 12GB. Specify process memory requirements to change this.'
     } else {
-        avail_mem = task.memory.giga
+        avail_mem = task.memory.giga * 14 / 15
     }
     """
     gatk --java-options "-Xmx${avail_mem}g" CollectReadCounts \\
@@ -34,7 +34,8 @@ process GATK4_COLLECTREADCOUNTS {
         -R $fasta \\
         -L $interval_list \\
         -O ${prefix}.hdf5 \\
-        $args
+        $args \\
+        --tmp-dir .
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

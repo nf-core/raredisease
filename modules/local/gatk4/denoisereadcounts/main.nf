@@ -1,6 +1,6 @@
 process GATK4_DENOISEREADCOUNTS {
     tag "$meta.id"
-    label 'process_medium'
+    label 'process_high'
 
     conda (params.enable_conda ? "bioconda::gatk4=4.2.4.1" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -23,7 +23,7 @@ process GATK4_DENOISEREADCOUNTS {
     if (!task.memory) {
         log.info '[GATK DenoiseReadCounts] Available memory not known - defaulting to 12GB. Specify process memory requirements to change this.'
     } else {
-        avail_mem = task.memory.giga
+        avail_mem = task.memory.giga * 14 / 15
     }
     """
     gatk --java-options "-Xmx${avail_mem}g" DenoiseReadCounts \\
@@ -31,7 +31,8 @@ process GATK4_DENOISEREADCOUNTS {
         --count-panel-of-normals $panel_of_normals \\
         --standardized-copy-ratios ${prefix}.standardizedCR.tsv \\
         --denoised-copy-ratios ${prefix}.denoisedCR.tsv \\
-        $args
+        $args \\
+        --tmp-dir .
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
