@@ -39,6 +39,9 @@
             "glnexus": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
+            "manta/germline": {
+                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+            },
             "mosdepth": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
