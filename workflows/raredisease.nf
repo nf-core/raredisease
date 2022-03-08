@@ -13,7 +13,7 @@ WorkflowRaredisease.initialise(params, log)
 def checkPathParamList = [
     params.input, params.multiqc_config, params.fasta,
     params.bwamem2_index, params.fasta_fai, params.gnomad,
-    params.vcfanno_resources
+    params.vcfanno_resources, params.svdb_query_dbs
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
@@ -74,6 +74,8 @@ include { ANNOTATE_VCFANNO } from '../subworkflows/nf-core/annotate_vcfanno'
 include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
 
 include { CALL_STRUCTURAL_VARIANTS } from '../subworkflows/local/call_structural_variants'
+
+include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_structural_variants'
 
 /*
 ========================================================================================
@@ -173,6 +175,12 @@ workflow RAREDISEASE {
         ch_target_bed.bed
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
+
+    ANNOTATE_STRUCTURAL_VARIANTS (
+        CALL_STRUCTURAL_VARIANTS.out.vcf,
+        file(params.svdb_query_dbs)
+    )
+    ch_versions = ch_versions.mix(ANNOTATE_STRUCTURAL_VARIANTS.out.versions)
 
     // STEP 3: VARIANT ANNOTATION
     ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
