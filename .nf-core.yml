@@ -8,3 +8,4 @@ lint:
     - .github/workflows/linting.yml
     - .github/workflows/linting_comment.yml
     - .github/workflows/branch.yml
+repository_type: pipeline
