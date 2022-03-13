@@ -5,13 +5,15 @@
 include { SVDB_QUERY } from '../../modules/local/svdb/query/main'
 
 
-// include { PICARD_SORTVCF } from '../../modules/nf-core/modules/picard/sortvcf/main'
+include { PICARD_SORTVCF } from '../../modules/nf-core/modules/picard/sortvcf/main'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
     take:
         vcf         // channel: [ val(meta), path(vcf) ]
         sv_dbs      // file: dbs.csv
+        fasta       // file: genome.fasta
+        seq_dict    // file: genome.dict
 
     main:
         ch_versions = Channel.empty()
@@ -34,6 +36,11 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             ch_svdb_dbs.out_occs.toList(),
             ch_svdb_dbs.vcf_dbs.toList()
             )
+
+        PICARD_SORTVCF(SVDB_QUERY.out.vcf,
+            fasta,
+            seq_dict
+        )
 
     emit:
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]

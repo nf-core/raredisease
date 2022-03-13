@@ -178,7 +178,9 @@ workflow RAREDISEASE {
 
     ANNOTATE_STRUCTURAL_VARIANTS (
         CALL_STRUCTURAL_VARIANTS.out.vcf,
-        file(params.svdb_query_dbs)
+        params.svdb_query_dbs,
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.sequence_dict
     )
     ch_versions = ch_versions.mix(ANNOTATE_STRUCTURAL_VARIANTS.out.versions)
 

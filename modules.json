@@ -6,6 +6,9 @@
             "bcftools/norm": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
+            "bcftools/view": {
+                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+            },
             "bwamem2/index": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
@@ -57,6 +60,9 @@
             "picard/markduplicates": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
+            "picard/sortvcf": {
+                "git_sha": "d8028dc1c3ef64c2ee3494ce65d4f4a76c42bde9"
+            },
             "qualimap/bamqc": {
                 "git_sha": "e31f1ff3b1375b30db08637d8937e25cc046f3cc"
             },
@@ -74,9 +80,6 @@
             },
             "svdb/merge": {
                 "git_sha": "ee915a43e405324e62ee5d4c14a6a6ec6c610058"
-            },
-            "svdb/query": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
             "tabix/bgziptabix": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
