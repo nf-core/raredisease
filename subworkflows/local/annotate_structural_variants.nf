@@ -2,8 +2,7 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SVDB_QUERY as SVDB_QUERY_FILTER } from '../../modules/nf-core/modules/svdb/query/main'
-include { SVDB_QUERY as SVDB_QUERY_NOFILTER } from '../../modules/nf-core/modules/svdb/query/main'
+include { SVDB_QUERY } from '../../modules/local/svdb/query/main'
 
 
 // include { PICARD_SORTVCF } from '../../modules/nf-core/modules/picard/sortvcf/main'
@@ -19,27 +18,22 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
         Channel.fromPath(sv_dbs)
             .splitCsv ( header:true )
-            .branch { row ->
-                freq_filter: row.use_in_freq_filter == "1"
-                    return [row.filename,
-                            row.in_freq_info_key,
-                            row.in_allele_count_info_key,
-                            row.out_freq_info_key,
-                            row.out_allele_count_info_key]
-                no_freq_filter: row.use_in_freq_filter == "0"
-                    return [row.filename,
-                            row.in_freq_info_key,
-                            row.in_allele_count_info_key,
-                            row.out_freq_info_key,
-                            row.out_allele_count_info_key]
+            .multiMap { row ->
+                vcf_dbs:  row.filename
+                in_frqs:  row.in_freq_info_key
+                in_occs:  row.in_allele_count_info_key
+                out_frqs: row.out_freq_info_key
+                out_occs: row.out_allele_count_info_key
             }
             .set { ch_svdb_dbs }
 
-        ch_input_filter   = vcf.combine(ch_svdb_dbs.freq_filter).view()
-        ch_input_nofilter = vcf.combine(ch_svdb_dbs.no_freq_filter).view()
-
-        SVDB_QUERY_FILTER(ch_input_filter)
-        SVDB_QUERY_NOFILTER(ch_input_nofilter)
+        SVDB_QUERY(vcf,
+            ch_svdb_dbs.in_frqs.toList(),
+            ch_svdb_dbs.in_occs.toList(),
+            ch_svdb_dbs.out_frqs.toList(),
+            ch_svdb_dbs.out_occs.toList(),
+            ch_svdb_dbs.vcf_dbs.toList()
+            )
 
     emit:
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
