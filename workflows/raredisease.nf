@@ -152,19 +152,6 @@ workflow RAREDISEASE {
             )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
 
-    // STEP 1.7: GENS
-    GENS (
-        ch_marked_bam.join(ch_marked_bai, by: [0]),
-        PREPARE_GENOME.out.fasta,
-        PREPARE_GENOME.out.fai,
-        file(params.gens_interval_list),
-        file(params.gens_pon),
-        file(params.gens_gnomad_pos),
-        INPUT_CHECK.out.ch_case_info,
-        PREPARE_GENOME.out.sequence_dict
-    )
-    ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
-
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
     CALL_SNV_DEEPVARIANT (
@@ -184,6 +171,20 @@ workflow RAREDISEASE {
         ch_target_bed.bed
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
+
+    // STEP 2.1: GENS
+    GENS (
+        ch_marked_bam.join(ch_marked_bai, by: [0]),
+        CALL_SNV_DEEPVARIANT.out.vcf,
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.fai,
+        file(params.gens_interval_list),
+        file(params.gens_pon),
+        file(params.gens_gnomad_pos),
+        INPUT_CHECK.out.ch_case_info,
+        PREPARE_GENOME.out.sequence_dict
+    )
+    ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
 
     //
     // MODULE: Pipeline reporting
