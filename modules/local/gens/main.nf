@@ -27,8 +27,8 @@ process GENS {
     }
     """
     generate_gens_data.pl \\
-        $vcf \\
         $read_counts \\
+        $vcf \\
         $prefix \\
         $gnomad_positions
 
