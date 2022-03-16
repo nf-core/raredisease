@@ -61,7 +61,7 @@ The different steps and corresponding tools are represented in the flowchart bel
     ```console
     nextflow run nf-core/raredisease \
         --input samplesheet.csv --genome GRCh38 \
-        --analysis_type <wgs|wes|mito> \ # wgs is default
+        --analysis_type <wgs|wes|mito> \
         -revision dev \
         -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
     ```
