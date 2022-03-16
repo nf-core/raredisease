@@ -61,9 +61,12 @@ The different steps and corresponding tools are represented in the flowchart bel
     ```console
     nextflow run nf-core/raredisease \
         --input samplesheet.csv --genome GRCh38 \
+        --analysis_type <WGS|WES|MITO> \ # WGS is default
         -revision dev \
         -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
     ```
+
+Note that the `-revision` is used because pipeline is still under development and the latest working branch is dev.
 
 ## Documentation
 
