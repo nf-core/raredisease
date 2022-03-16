@@ -61,9 +61,12 @@ The different steps and corresponding tools are represented in the flowchart bel
     ```console
     nextflow run nf-core/raredisease \
         --input samplesheet.csv --genome GRCh38 \
+        --analysis_type <wgs|wes|mito> \
         -revision dev \
         -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
     ```
+
+Note that the `-revision` is used because pipeline is still under development and the latest working branch is dev.
 
 ## Documentation
 
@@ -73,9 +76,7 @@ The nf-core/raredisease pipeline comes with documentation about the pipeline [us
 
 nf-core/raredisease was originally written by Clinical Genomics Stockholm.
 
-We thank the following people for their extensive assistance in the development of this pipeline:
-
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
+Big thanks to the contributors for their extensive assistance in the development of this pipeline.
 
 ## Contributions and Support
 
