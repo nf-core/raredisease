@@ -176,13 +176,17 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
-    ANNOTATE_STRUCTURAL_VARIANTS (
-        CALL_STRUCTURAL_VARIANTS.out.vcf,
-        params.svdb_query_dbs,
-        PREPARE_GENOME.out.fasta,
-        PREPARE_GENOME.out.sequence_dict
-    )
-    ch_versions = ch_versions.mix(ANNOTATE_STRUCTURAL_VARIANTS.out.versions)
+    ch_sv_annotate = Channel.empty()
+    if (params.svdb_query_dbs) {
+        ANNOTATE_STRUCTURAL_VARIANTS (
+            CALL_STRUCTURAL_VARIANTS.out.vcf,
+            params.svdb_query_dbs,
+            PREPARE_GENOME.out.fasta,
+            PREPARE_GENOME.out.sequence_dict
+        ).set {ch_sv_annotate}
+
+        ch_versions = ch_versions.mix(ch_sv_annotate.versions)
+    }
 
     // STEP 3: VARIANT ANNOTATION
     ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
