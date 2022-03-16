@@ -46,7 +46,7 @@ The different steps and corresponding tools are represented in the flowchart bel
 3. Download the pipeline and test it on a minimal dataset with a single command:
 
     ```console
-    nextflow run nf-core/raredisease -profile test,YOURPROFILE
+    nextflow run nf-core/raredisease -revision dev -profile test,YOURPROFILE
     ```
 
     Note that some form of configuration will be needed so that Nextflow knows how to fetch the required software. This is usually done in the form of a config profile (`YOURPROFILE` in the example command above). You can chain multiple config profiles in a comma-separated string.
@@ -58,10 +58,11 @@ The different steps and corresponding tools are represented in the flowchart bel
 
 4. Start running your own analysis!
 
-    <!-- TODO nf-core: Update the example "typical command" below used to run the pipeline -->
-
     ```console
-    nextflow run nf-core/raredisease -profile <docker/singularity/podman/shifter/charliecloud/conda/institute> --input samplesheet.csv --genome GRCh37
+    nextflow run nf-core/raredisease \
+        --input samplesheet.csv --genome GRCh38 \
+        -revision dev \
+        -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
     ```
 
 ## Documentation
