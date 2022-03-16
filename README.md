@@ -76,7 +76,9 @@ The nf-core/raredisease pipeline comes with documentation about the pipeline [us
 
 nf-core/raredisease was originally written by Clinical Genomics Stockholm.
 
-Big thanks to the contributors for their extensive assistance in the development of this pipeline.
+We thank the following people for their extensive assistance in the development of this pipeline:
+
+<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
 
 ## Contributions and Support
 
