@@ -150,12 +150,13 @@
             "properties": {
                 "analysis_type": {
                     "type": "string",
-                    "default": "WGS",
-                    "description": "Specifies which analysis type for the pipeline- either 'WGS' or 'WES'. It'll mainly change the resources consumed.",
+                    "default": "wgs",
+                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-book",
                     "enum": [
-                        "WGS",
-                        "WES"
+                        "wgs",
+                        "wes",
+                        "mito"
                     ]
                 }
             }
