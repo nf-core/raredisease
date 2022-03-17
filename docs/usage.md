@@ -30,7 +30,7 @@ AEG588A2,4,AEG588A2_S1_L004_R1_001.fastq.gz,AEG588A2_S1_L004_R2_001.fastq.gz,2,1
 AEG588A3,4,AEG588A3_S1_L004_R1_001.fastq.gz,AEG588A3_S1_L004_R2_001.fastq.gz,1,1,,,fam_1
 ```
 
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The pedigree information (sex/gender and phenotype) should be provided using the ped file format way of annotating.
+The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The pedigree information in the samplesheet (sex/gender and phenotype) should be provided as they would be for a [ped file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format) (i.e. 1 for male, 2 for female, other for unknown).
 
 | Column         | Description                                                                                                                                                                            |
 |----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
