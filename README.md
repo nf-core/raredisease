@@ -26,15 +26,16 @@ On release, automated continuous integration tests run the pipeline on a full-si
 ## Pipeline summary
 
 1. Metrics: [`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [`MultiQC`](http://multiqc.info/)
-2. Data preprocessing: [`bwamem2`](http://bio-bwa.sourceforge.net/bwa.shtml) (can [`merge`](http://www.htslib.org/doc/samtools-merge.html)), [`MarkDuplicates`](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates),
+2. Data preprocessing: [`MarkDuplicates`](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates),
+    1. [`bwamem2`](http://bio-bwa.sourceforge.net/bwa.shtml) (can [`merge`](http://www.htslib.org/doc/samtools-merge.html)),
 3. Variant calling + multiple calls are aggregated:
     1. SNVs: [`DeepVariant`](https://github.com/google/deepvariant)
     2. SVs: [`CNVpytor`](https://github.com/abyzovlab/CNVpytor/), [`MANTA`](https://github.com/Illumina/manta), [`tiddit/sv`](https://github.com/SciLifeLab/TIDDIT),
+    3. Mitochondria: [`Mutect2`](https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2)
 4. Annotation: [`VCFanno`](https://github.com/brentp/vcfanno),[`VEP`](https://www.ensembl.org/info/docs/tools/vep/index.html)
     1. SNVs:
     2. SVs:
-    3. Mitochondria: [`HmtNote`](https://github.com/robertopreste/HmtNote)
-
+    3. Mitochondria: [`HmtNote`](https://github.com/robertopreste/HmtNote), [`eKLIPse`](https://github.com/dooguypapua/eKLIPse),
 5. Variant ranking: something will be here
 
 > Databases: [`gnomAD`](https://gnomad.broadinstitute.org/)
