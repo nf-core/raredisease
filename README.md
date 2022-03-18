@@ -29,8 +29,11 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 1. Metrics: [`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [`MultiQC`](http://multiqc.info/)
 2. Data preprocessing: [`bwamem2`](http://bio-bwa.sourceforge.net/bwa.shtml) (can [`merge`](http://www.htslib.org/doc/samtools-merge.html)), [`MarkDuplicates`](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates),
-3. Variant discovery:
-4. Annotation + aggregation: [`VCFanno`](https://github.com/brentp/vcfanno),
+3. Variant calling + aggregation:
+    1. SNVs: [`DeepVariant`](https://github.com/google/deepvariant)
+    2. SVs: [`TIDDIT`](https://github.com/SciLifeLab/TIDDIT),
+4. Annotation:
+    1. SNVs: [`VCFanno`](https://github.com/brentp/vcfanno),
 5. Variant ranking:
 
 The different steps and corresponding tools are represented in the flowchart below. Note that this chart is meant as a tool to help with coordination during pipeline development and hence is modified regularly. Some tools might be added or removed as suitable. If you would like to modify the flowchart, please contact us on the slack channel (see "Contributions and Support" further down).
