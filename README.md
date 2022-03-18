@@ -26,8 +26,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 ## Pipeline summary
 
 1. Metrics: [`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [`MultiQC`](http://multiqc.info/)
-2. Data preprocessing: [`MarkDuplicates`](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates),
-    1. [`bwamem2`](http://bio-bwa.sourceforge.net/bwa.shtml) (can [`merge`](http://www.htslib.org/doc/samtools-merge.html)),
+2. Data preprocessing: [`MarkDuplicates`](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates), [`bwamem2`](http://bio-bwa.sourceforge.net/bwa.shtml) (can [`merge`](http://www.htslib.org/doc/samtools-merge.html)),
 3. Variant calling + multiple calls are aggregated:
     1. SNVs: [`DeepVariant`](https://github.com/google/deepvariant)
     2. SVs: [`CNVpytor`](https://github.com/abyzovlab/CNVpytor/), [`MANTA`](https://github.com/Illumina/manta), [`tiddit/sv`](https://github.com/SciLifeLab/TIDDIT),
