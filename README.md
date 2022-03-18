@@ -35,9 +35,9 @@ On release, automated continuous integration tests run the pipeline on a full-si
     2. SVs:
     3. Mitochondria: [`HmtNote`](https://github.com/robertopreste/HmtNote)
 
-> Databases: [`gnomAD`](https://gnomad.broadinstitute.org/)
+5. Variant ranking: something will be here
 
-5. Variant ranking:
+> Databases: [`gnomAD`](https://gnomad.broadinstitute.org/)
 
 The different steps and corresponding tools are represented in the flowchart below. Note that this chart is meant as a tool to help with coordination during pipeline development and hence is modified regularly. Some tools might be added or removed as suitable. If you would like to modify the flowchart, please contact us on the slack channel (see "Contributions and Support" further down).
 
