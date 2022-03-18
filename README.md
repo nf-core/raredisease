@@ -35,7 +35,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
     2. SVs:
     3. Mitochondria: [`HmtNote`](https://github.com/robertopreste/HmtNote)
 
->Databases: [`gnomAD`](https://gnomad.broadinstitute.org/)
+> Databases: [`gnomAD`](https://gnomad.broadinstitute.org/)
 
 5. Variant ranking:
 
