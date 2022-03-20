@@ -35,7 +35,7 @@ workflow CALL_SV_MANTA {
         if (params.analysis_type == "WGS") {
             MANTA ( manta_input_bams, fasta, fai, [[],[]] )
         } else {
-            ch_target_bed = ch_bed.ifEmpty([[],[]])
+            ch_target_bed = bed.ifEmpty([[],[]])
             MANTA ( manta_input_bams, fasta, fai, bed_input )
         }
         ch_versions = MANTA.out.versions
