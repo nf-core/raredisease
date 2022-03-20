@@ -14,13 +14,13 @@ workflow INPUT_CHECK {
             .splitCsv ( header:true, sep:',' )
             .set { sheet }
 
-        ch_case_info = sheet.first()
+        case_info    = sheet.first()
                             .map { create_case_channel(it) }
         reads        = sheet.map { create_fastq_channel(it) }
         samples      = sheet.map { create_samples_channel(it) }
 
     emit:
-        ch_case_info    // channel: [ case_id ]
+        case_info       // channel: [ case_id ]
         reads           // channel: [ val(meta), [ reads ] ]
         samples         // channel: [ sample_id, sex, phenotype, paternal_id, maternal_id, case_id ]
         versions = SAMPLESHEET_CHECK.out.versions // channel: [ versions.yml ]

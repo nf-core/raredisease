@@ -165,7 +165,7 @@ workflow RAREDISEASE {
         ch_marked_bam.join(ch_marked_bai, by: [0]),
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
-        INPUT_CHECK.out.ch_case_info
+        INPUT_CHECK.out.case_info
     )
     ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
 
@@ -174,7 +174,7 @@ workflow RAREDISEASE {
         ch_marked_bai,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
-        INPUT_CHECK.out.ch_case_info,
+        INPUT_CHECK.out.case_info,
         ch_target_bed.bed
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
