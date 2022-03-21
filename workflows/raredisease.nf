@@ -11,9 +11,14 @@ WorkflowRaredisease.initialise(params, log)
 
 // Check input path parameters to see if they exist
 def checkPathParamList = [
-    params.input, params.multiqc_config, params.fasta,
-    params.bwamem2_index, params.fasta_fai, params.gnomad,
-    params.vcfanno_resources, params.svdb_query_dbs
+    params.bwamem2_index,
+    params.fasta,
+    params.fasta_fai,
+    params.gnomad,
+    params.input,
+    params.multiqc_config,
+    params.svdb_query_dbs,
+    params.vcfanno_resources
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
@@ -39,9 +44,11 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK } from '../subworkflows/local/input_check'
-include { CHECK_VCF } from '../subworkflows/local/prepare_vcf'
-include { CHECK_BED } from '../subworkflows/local/prepare_bed'
+include { INPUT_CHECK    } from '../subworkflows/local/input_check'
+include { CHECK_VCF      } from '../subworkflows/local/prepare_vcf'
+include { CHECK_BED      } from '../subworkflows/local/prepare_bed'
+include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -61,19 +68,13 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2'
-include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/nf-core/call_repeat_expansions'
-include { CALL_SNV_DEEPVARIANT } from '../subworkflows/nf-core/call_snv_deepvariant'
-include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
+include { ALIGN_BWAMEM2               } from  '../subworkflows/nf-core/align_bwamem2'
+include { CALL_REPEAT_EXPANSIONS      } from '../subworkflows/nf-core/call_repeat_expansions'
+include { CALL_SNV_DEEPVARIANT        } from '../subworkflows/nf-core/call_snv_deepvariant'
+include { QC_BAM                      } from '../subworkflows/nf-core/qc_bam'
+include { ANNOTATE_VCFANNO            } from '../subworkflows/nf-core/annotate_vcfanno'
+include { CALL_STRUCTURAL_VARIANTS    } from '../subworkflows/nf-core/call_structural_variants'
 
-include { ANNOTATE_VCFANNO } from '../subworkflows/nf-core/annotate_vcfanno'
-//
-// SUBWORKFLOW: Consists of mix/local modules
-//
-
-include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
-
-include { CALL_STRUCTURAL_VARIANTS } from '../subworkflows/local/call_structural_variants'
 
 include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_structural_variants'
 
@@ -105,14 +106,19 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
-    PREPARE_GENOME ( params.fasta, params.variant_catalog )
+    PREPARE_GENOME (
+        params.fasta,
+        params.variant_catalog
+    )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
     ch_gnomad = Channel.empty()
     if (params.gnomad) {
         CHECK_VCF(
-            params.gnomad, PREPARE_GENOME.out.fasta,
-        ).set { ch_gnomad }
+            params.gnomad,
+            PREPARE_GENOME.out.fasta
+        )
+        .set { ch_gnomad }
     }
 
     ch_target_bed = Channel.empty()
@@ -120,7 +126,8 @@ workflow RAREDISEASE {
         CHECK_BED(
             params.target_bed,
             PREPARE_GENOME.out.sequence_dict
-        ).set { ch_target_bed }
+        )
+        .set { ch_target_bed }
     }
 
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
@@ -132,8 +139,7 @@ workflow RAREDISEASE {
 
         ch_marked_bam = ALIGN_BWAMEM2.out.marked_bam
         ch_marked_bai = ALIGN_BWAMEM2.out.marked_bai
-
-        ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
+        ch_versions   = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
     }
 
     // STEP 1.5: BAM QUALITY CHECK
@@ -150,10 +156,10 @@ workflow RAREDISEASE {
 
     // STEP 1.6: EXPANSIONHUNTER
     CALL_REPEAT_EXPANSIONS (
-            ch_marked_bam.join(ch_marked_bai, by: [0]),
-            PREPARE_GENOME.out.fasta,
-            PREPARE_GENOME.out.variant_catalog
-            )
+        ch_marked_bam.join(ch_marked_bai, by: [0]),
+        PREPARE_GENOME.out.fasta,
+        PREPARE_GENOME.out.variant_catalog
+    )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
 
     // STEP 2: VARIANT CALLING
@@ -162,7 +168,7 @@ workflow RAREDISEASE {
         ch_marked_bam.join(ch_marked_bai, by: [0]),
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
-        INPUT_CHECK.out.ch_case_info
+        INPUT_CHECK.out.case_info
     )
     ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
 
@@ -171,7 +177,7 @@ workflow RAREDISEASE {
         ch_marked_bai,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
-        INPUT_CHECK.out.ch_case_info,
+        INPUT_CHECK.out.case_info,
         ch_target_bed.bed
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
@@ -191,7 +197,11 @@ workflow RAREDISEASE {
     // STEP 3: VARIANT ANNOTATION
     ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
 
-    ANNOTATE_VCFANNO ( params.vcfanno_toml, ch_dv_vcf, PREPARE_GENOME.out.vcfanno_resources )
+    ANNOTATE_VCFANNO (
+        params.vcfanno_toml,
+        ch_dv_vcf,
+        PREPARE_GENOME.out.vcfanno_resources
+    )
     ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
 
     //

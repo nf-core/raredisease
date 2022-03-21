@@ -6,25 +6,24 @@ include { SAMPLESHEET_CHECK } from '../../modules/local/samplesheet_check'
 
 workflow INPUT_CHECK {
     take:
-    samplesheet // file: /path/to/samplesheet.csv
+        samplesheet // file: /path/to/samplesheet.csv
 
     main:
-    SAMPLESHEET_CHECK ( samplesheet )
-        .csv
-        .splitCsv ( header:true, sep:',' )
-        .set { sheet }
+        SAMPLESHEET_CHECK ( samplesheet )
+            .csv
+            .splitCsv ( header:true, sep:',' )
+            .set { sheet }
 
-    ch_case_info = sheet.first()
-                        .map { create_case_channel(it) }
-    reads        = sheet.map { create_fastq_channel(it) }
-    samples      = sheet.map { create_samples_channel(it) }
+        case_info    = sheet.first()
+                            .map { create_case_channel(it) }
+        reads        = sheet.map { create_fastq_channel(it) }
+        samples      = sheet.map { create_samples_channel(it) }
 
     emit:
-    ch_case_info    // channel: [ case_id ]
-    reads           // channel: [ val(meta), [ reads ] ]
-    samples         // channel: [ sample_id, sex, phenotype, paternal_id, maternal_id, case_id ]
-
-    versions = SAMPLESHEET_CHECK.out.versions // channel: [ versions.yml ]
+        case_info       // channel: [ case_id ]
+        reads           // channel: [ val(meta), [ reads ] ]
+        samples         // channel: [ sample_id, sex, phenotype, paternal_id, maternal_id, case_id ]
+        versions = SAMPLESHEET_CHECK.out.versions // channel: [ versions.yml ]
 }
 
 // Function to get list of [ meta, [ fastq_1, fastq_2 ] ]
