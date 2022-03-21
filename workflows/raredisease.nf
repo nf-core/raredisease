@@ -61,7 +61,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2'
+include { ALIGN } from  '../subworkflows/nf-core/align'
 include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/nf-core/call_repeat_expansions'
 include { CALL_SNV_DEEPVARIANT } from '../subworkflows/nf-core/call_snv_deepvariant'
 include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
@@ -122,15 +122,17 @@ workflow RAREDISEASE {
     }
 
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
-    ALIGN_BWAMEM2 (
+    ALIGN (
+        params.aligner,
         INPUT_CHECK.out.reads,
         PREPARE_GENOME.out.bwamem2_index
     )
 
-    ch_marked_bam = ALIGN_BWAMEM2.out.marked_bam
-    ch_marked_bai = ALIGN_BWAMEM2.out.marked_bai
+    ch_marked_bam = ALIGN.out.marked_bam
+    ch_marked_bai = ALIGN.out.marked_bai
+    ch_bam_bai    = ch_marked_bam.join(ch_marked_bai, by: [0])
 
-    ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
+    ch_versions = ch_versions.mix(ALIGN.out.versions)
 
     // STEP 1.5: BAM QUALITY CHECK
     QC_BAM (
@@ -146,7 +148,7 @@ workflow RAREDISEASE {
 
     // STEP 1.6: EXPANSIONHUNTER
     CALL_REPEAT_EXPANSIONS (
-            ch_marked_bam.join(ch_marked_bai, by: [0]),
+            ch_bam_bai,
             PREPARE_GENOME.out.fasta,
             PREPARE_GENOME.out.variant_catalog
             )
@@ -155,7 +157,7 @@ workflow RAREDISEASE {
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
     CALL_SNV_DEEPVARIANT (
-        ch_marked_bam.join(ch_marked_bai, by: [0]),
+        ch_bam_bai,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
         INPUT_CHECK.out.ch_case_info
