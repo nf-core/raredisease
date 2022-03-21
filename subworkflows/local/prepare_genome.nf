@@ -10,7 +10,7 @@ include { GET_CHROM_SIZES                           } from '../../modules/local/
 
 workflow PREPARE_GENOME {
     take:
-        fasta // path: genome.fasta
+        fasta           // path: genome.fasta
         variant_catalog // path: variant_catalog.json
 
     main:
