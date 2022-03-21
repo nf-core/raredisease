@@ -1,8 +1,9 @@
 //
-// Run ExpansionHunter
+// Run ExpansionHunter and Stranger
 //
 
 include { EXPANSIONHUNTER } from '../../modules/nf-core/modules/expansionhunter/main'
+include { STRANGER } from '../../modules/nf-core/modules/stranger/main'
 
 workflow CALL_REPEAT_EXPANSIONS {
     take:
@@ -16,7 +17,10 @@ workflow CALL_REPEAT_EXPANSIONS {
         EXPANSIONHUNTER( bam, fasta, variant_catalog )
         ch_versions = ch_versions.mix(EXPANSIONHUNTER.out.versions)
 
+        STRANGER ( EXPANSIONHUNTER.out.vcf )
+        ch_versions = ch_versions.mix(STRANGER.out.versions)
+
     emit:
-        vcf         = EXPANSIONHUNTER.out.vcf       // channel: [ val(meta), path(*.vcf) ]
+        vcf         = STRANGER.out.vcf       // channel: [ val(meta), path(*.vcf.gz) ]
         versions    = ch_versions.ifEmpty(null)     // channel: [ versions.yml ]
 }

@@ -146,7 +146,7 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
 
-    // STEP 1.6: EXPANSIONHUNTER
+    // STEP 1.6: EXPANSIONHUNTER AND STRANGER
     CALL_REPEAT_EXPANSIONS (
             ch_marked_bam.join(ch_marked_bai, by: [0]),
             PREPARE_GENOME.out.fasta,
