@@ -2,9 +2,7 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SVDB_QUERY } from '../../modules/local/svdb/query/main'
-
-
+include { SVDB_QUERY     } from '../../modules/nf-core/modules/svdb/query/main'
 include { PICARD_SORTVCF } from '../../modules/nf-core/modules/picard/sortvcf/main'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {

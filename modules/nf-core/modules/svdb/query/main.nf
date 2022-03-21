@@ -53,6 +53,7 @@ process SVDB_QUERY {
         --db ${vcf_dbs.join(',')} \\
         --query_vcf $vcf \\
         --prefix ${prefix}
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         svdb: \$( echo \$(svdb) | head -1 | sed 's/usage: SVDB-\\([0-9]\\.[0-9]\\.[0-9]\\).*/\\1/' )
@@ -63,6 +64,7 @@ process SVDB_QUERY {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}_query.vcf
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         svdb: \$( echo \$(svdb) | head -1 | sed 's/usage: SVDB-\\([0-9]\\.[0-9]\\.[0-9]\\).*/\\1/' )

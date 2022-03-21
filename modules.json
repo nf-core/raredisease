@@ -81,6 +81,9 @@
             "svdb/merge": {
                 "git_sha": "ee915a43e405324e62ee5d4c14a6a6ec6c610058"
             },
+            "svdb/query": {
+                "git_sha": "5297d27fbf50b7aa5a37cce9b85c7aac3ff7c4ff"
+            },
             "tabix/bgziptabix": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
