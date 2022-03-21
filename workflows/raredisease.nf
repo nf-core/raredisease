@@ -142,8 +142,8 @@ workflow RAREDISEASE {
         ch_marked_bai,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
-        CHECK_BED.out.bait_intervals,
-        CHECK_BED.out.target_intervals,
+        ch_target_bed.bait_intervals,
+        ch_target_bed.target_intervals,
         PREPARE_GENOME.out.chrom_sizes
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
