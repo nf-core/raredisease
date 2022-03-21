@@ -34,6 +34,8 @@ workflow PREPARE_REFERENCES {
             )
             ch_gnomad_vcf = CHECK_VCF.out.vcf
             ch_gnomad_idx = CHECK_VCF.out.idx
+            ch_versions   = ch_versions.mix(CHECK_VCF.out.versions)
+
         }
 
         //
@@ -50,6 +52,8 @@ workflow PREPARE_REFERENCES {
             ch_target_bed       = CHECK_BED.out.bed
             ch_target_intervals = CHECK_BED.out.target_intervals
             ch_bait_intervals   = CHECK_BED.out.bait_intervals
+            ch_versions         = ch_versions.mix(CHECK_BED.out.versions)
+
         }
 
     emit:
