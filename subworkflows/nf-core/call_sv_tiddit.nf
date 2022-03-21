@@ -11,23 +11,26 @@ workflow CALL_SV_TIDDIT {
     bam            // channel: [ val(meta), path(bam) ]
     fasta          // path(fasta)
     fai            // path(fai)
-    ch_case_info   // channel: [ case_id ]
+    case_info   // channel: [ case_id ]
 
     main:
         TIDDIT_SV ( bam, fasta, fai )
         ch_versions = TIDDIT_SV.out.versions
 
-        TIDDIT_SV.out.vcf.collect{it[1]}
+        TIDDIT_SV.out
+            .vcf
+            .collect{it[1]}
             .toList()
             .set { vcf_file_list }
 
-        ch_case_info.combine(vcf_file_list)
+        case_info
+            .combine(vcf_file_list)
             .set { merge_input_vcfs }
 
         SVDB_MERGE_TIDDIT ( merge_input_vcfs, [] )
         ch_versions = ch_versions.mix(SVDB_MERGE_TIDDIT.out.versions)
 
     emit:
-        vcf                             = SVDB_MERGE_TIDDIT.out.vcf
-        versions                        = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+        vcf          = SVDB_MERGE_TIDDIT.out.vcf
+        versions     = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
