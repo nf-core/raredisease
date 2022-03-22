@@ -21,7 +21,7 @@ workflow PREPARE_GENOME {
 
         // Fetch BWAMEM2 index or create from scratch if required
         BWAMEM2_INDEX ( ch_fasta )
-        ch_bwamem2_index = params.bwamem2_index && params.aligner == "bwamem2" ? file(params.bwamem2_index) : BWAMEM2_INDEX.out.index
+        ch_bwamem2_index = !params.bwamem2_index ? params.aligner == "bwamem2" ? BWAMEM2_INDEX.out.index : Channel.fromPath(params.bwamem2_index).collect() : Channel.empty()
         ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
 
         if ( params.fasta_fai ) {
