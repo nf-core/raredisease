@@ -34,7 +34,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 4. Annotation: [`VCFanno`](https://github.com/brentp/vcfanno),[`VEP`](https://www.ensembl.org/info/docs/tools/vep/index.html)
     1. SNVs: [`CADD`](https://cadd.gs.washington.edu/)
     2. SVs:
-    3. Mitochondria: [`HmtNote`](https://github.com/robertopreste/HmtNote), [`eKLIPse`](https://github.com/dooguypapua/eKLIPse), [`gnomAD_mt`](https://gnomad.broadinstitute.org/downloads#v3-mitochondrial-dna)
+    3. Mitochondria: [`eKLIPse`](https://github.com/dooguypapua/eKLIPse), [`gnomAD_mt`](https://gnomad.broadinstitute.org/downloads#v3-mitochondrial-dna), [`Haplogrep`](https://github.com/seppinho/haplogrep-cmd/tree/v2.1.21), [`HmtNote`](https://github.com/robertopreste/HmtNote)
 5. Variant ranking: something will be here
 
 > Databases: [`gnomAD`](https://gnomad.broadinstitute.org/)
