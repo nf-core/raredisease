@@ -2,11 +2,11 @@
 // Map to reference, fetch stats for each demultiplexed read pair, merge, mark duplicates, and index.
 //
 
-include { BWAMEM2_MEM } from '../../modules/nf-core/modules/bwamem2/mem/main'
-include { SAMTOOLS_INDEX } from '../../modules/nf-core/modules/samtools/index/main'
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MD } from '../../modules/nf-core/modules/samtools/index/main'
-include { SAMTOOLS_STATS } from '../../modules/nf-core/modules/samtools/stats/main'
-include { SAMTOOLS_MERGE } from '../../modules/nf-core/modules/samtools/merge/main'
+include { BWAMEM2_MEM                             } from '../../modules/nf-core/modules/bwamem2/mem/main'
+include { SAMTOOLS_INDEX                          } from '../../modules/nf-core/modules/samtools/index/main'
+include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MD     } from '../../modules/nf-core/modules/samtools/index/main'
+include { SAMTOOLS_STATS                          } from '../../modules/nf-core/modules/samtools/stats/main'
+include { SAMTOOLS_MERGE                          } from '../../modules/nf-core/modules/samtools/merge/main'
 include { PICARD_MARKDUPLICATES as MARKDUPLICATES } from '../../modules/nf-core/modules/picard/markduplicates/main'
 
 

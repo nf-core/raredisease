@@ -3,9 +3,9 @@
 //
 
 include { GATK4_BEDTOINTERVALLIST as GATK_BILT } from '../../modules/nf-core/modules/gatk4/bedtointervallist/main'
-include { GATK4_INTERVALLISTTOOLS as GATK_ILT } from '../../modules/nf-core/modules/gatk4/intervallisttools/main'
-include { TABIX_TABIX as TABIX_PT } from '../../modules/nf-core/modules/tabix/tabix/main'
-include { TABIX_BGZIPTABIX as TABIX_PBT } from '../../modules/nf-core/modules/tabix/bgziptabix/main'
+include { GATK4_INTERVALLISTTOOLS as GATK_ILT  } from '../../modules/nf-core/modules/gatk4/intervallisttools/main'
+include { TABIX_TABIX as TABIX_PT              } from '../../modules/nf-core/modules/tabix/tabix/main'
+include { TABIX_BGZIPTABIX as TABIX_PBT        } from '../../modules/nf-core/modules/tabix/bgziptabix/main'
 
 workflow CHECK_BED {
     take:
@@ -31,7 +31,7 @@ workflow CHECK_BED {
         }
 
     emit:
-        bed  =  tab_out
+        bed              = tab_out
         target_intervals = interval_list.collect{it[1]}
         bait_intervals   = GATK_ILT.out.interval_list.collect{it[1]}
 }
