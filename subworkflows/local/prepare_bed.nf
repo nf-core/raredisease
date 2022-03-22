@@ -16,7 +16,6 @@ workflow CHECK_BED {
         tab_out = Channel.empty()
         ch_versions = Channel.empty()
 
-
         if (bed) {
             bed_file = file(bed)
             id       = bed.split('/')[-1]
