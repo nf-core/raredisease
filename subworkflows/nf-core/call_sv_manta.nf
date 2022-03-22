@@ -10,8 +10,8 @@ workflow CALL_SV_MANTA {
     bai            // channel: [ val(meta), path(bai) ]
     fasta          // path(fasta)
     fai            // path(fai)
-    ch_case_info   // channel: [ case_id ]
-    ch_bed         // channel: [ val(meta), path(bed), path(bed_tbi) ]
+    case_info      // channel: [ case_id ]
+    bed            // channel: [ val(meta), path(bed), path(bed_tbi) ]
 
     main:
         bam.collect{it[1]}
@@ -22,18 +22,20 @@ workflow CALL_SV_MANTA {
             .toList()
             .set { bai_file_list }
 
-        ch_case_info.combine(bam_file_list)
+        case_info.combine(bam_file_list)
             .combine(bai_file_list)
             .set { manta_input_bams }
 
-        bed_input = ch_bed.map{ id, bed, index ->
-                            return [bed, index]
-                            }
+        bed
+            .map {
+                id, bed_file, index ->
+                    return [bed_file, index]}
+            .set { bed_input }
 
         if (params.analysis_type == "WGS") {
             MANTA ( manta_input_bams, fasta, fai, [[],[]] )
         } else {
-            ch_target_bed = ch_bed.ifEmpty([[],[]])
+            ch_target_bed = bed.ifEmpty([[],[]])
             MANTA ( manta_input_bams, fasta, fai, bed_input )
         }
         ch_versions = MANTA.out.versions

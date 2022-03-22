@@ -2,13 +2,11 @@
 // Prepare reference genome files
 //
 
-include { UNTAR as UNTAR_VCFANNO } from '../../modules/nf-core/modules/untar/main'
-
-include { BWAMEM2_INDEX } from '../../modules/nf-core/modules/bwamem2/index/main'
-include { SAMTOOLS_FAIDX } from '../../modules/nf-core/modules/samtools/faidx/main'
-
-include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD} from '../../modules/nf-core/modules/gatk4/createsequencedictionary/main'
-include { GET_CHROM_SIZES } from '../../modules/local/get_chrom_sizes'
+include { UNTAR as UNTAR_VCFANNO                    } from '../../modules/nf-core/modules/untar/main'
+include { BWAMEM2_INDEX                             } from '../../modules/nf-core/modules/bwamem2/index/main'
+include { SAMTOOLS_FAIDX                            } from '../../modules/nf-core/modules/samtools/faidx/main'
+include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD } from '../../modules/nf-core/modules/gatk4/createsequencedictionary/main'
+include { GET_CHROM_SIZES                           } from '../../modules/local/get_chrom_sizes'
 
 workflow PREPARE_GENOME {
     take:
@@ -64,6 +62,5 @@ workflow PREPARE_GENOME {
         sequence_dict               = ch_sequence_dict
         variant_catalog             = ch_variant_catalog        // path: variant_catalog.json
         vcfanno_resources           = ch_vcfanno_resources      // channel: [ untar'd files, ]
-
         versions                    = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
