@@ -26,11 +26,9 @@ workflow CHECK_BED {
                 tbi_out     = TABIX_PT (ch_bed).tbi
                 tab_out     = ch_bed.join(tbi_out)
                 ch_versions = ch_versions.mix(TABIX_PT.out.versions)
-
             } else if ( file(bed, checkIfExists:true) ) {
                 tab_out     = TABIX_PBT (ch_bed).gz_tbi
                 ch_versions = ch_versions.mix(TABIX_PBT.out.versions)
-
             }
 
             interval_list = GATK_BILT (ch_bed, seq_dictionary).interval_list
@@ -38,7 +36,6 @@ workflow CHECK_BED {
 
             GATK_ILT(interval_list)
             ch_versions   = ch_versions.mix(GATK_ILT.out.versions)
-
         }
 
     emit:
