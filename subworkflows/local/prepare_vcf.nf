@@ -35,7 +35,6 @@ workflow CHECK_VCF {
         SPLIT_MULTIALLELICS_PV (ch_vcfs_norm.unprocessed, fasta)
         ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_PV.out.versions)
 
-
         REMOVE_DUPLICATES_PV (SPLIT_MULTIALLELICS_PV.out.vcf, fasta)
             .vcf
             .set { ch_vcfs_rmdup }
