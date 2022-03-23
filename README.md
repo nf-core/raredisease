@@ -25,13 +25,19 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 ## Pipeline summary
 
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
+1. Metrics: [`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [`MultiQC`](http://multiqc.info/)
+2. Data preprocessing: [`bwamem2`](http://bio-bwa.sourceforge.net/bwa.shtml) (can [`merge`](http://www.htslib.org/doc/samtools-merge.html)), [`MarkDuplicates`](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates)
+3. Variant calling + multiple calls are aggregated:
+    1. SNVs + short indels: [`DeepVariant`](https://github.com/google/deepvariant), [`DNAscope`](https://support.sentieon.com/manual/DNAscope_usage/dnascope/)
+    2. SVs: [`CNVpytor`](https://github.com/abyzovlab/CNVpytor/), [`ExpansionHunter`](https://github.com/Illumina/ExpansionHunter), [`MANTA`](https://github.com/Illumina/manta), [`tiddit/sv`](https://github.com/SciLifeLab/TIDDIT),
+    3. Mitochondria: [`eKLIPse`](https://github.com/dooguypapua/eKLIPse), [`Mutect2`](https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2)
+4. Annotation: [`VCFanno`](https://github.com/brentp/vcfanno),[`VEP`](https://www.ensembl.org/info/docs/tools/vep/index.html)
+    1. SNVs: [`CADD`](https://cadd.gs.washington.edu/)
+    2. SVs:
+    3. Mitochondria: [`gnomAD_mt`](https://gnomad.broadinstitute.org/downloads#v3-mitochondrial-dna), [`Haplogrep`](https://github.com/seppinho/haplogrep-cmd/tree/v2.1.21), [`HmtNote`](https://github.com/robertopreste/HmtNote)
+5. Variant ranking: something will be here
 
-1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-2. Map reads to reference ([`BWA mem`](http://bio-bwa.sourceforge.net/bwa.shtml), `BWA mem2`) with the option to ([`merge`](http://www.htslib.org/doc/samtools-merge.html))
-3. Mark duplicated reads ([`GATK4 MarkDuplicates`](https://gatk.broadinstitute.org/hc/en-us/articles/360037052812-MarkDuplicates-Picard-))
-4. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
-5. Variant calling ([deepvariant](https://github.com/google/deepvariant) and [glnexus](https://github.com/dnanexus-rnd/GLnexus))
+> Databases: [`gnomAD`](https://gnomad.broadinstitute.org/)
 
 The different steps and corresponding tools are represented in the flowchart below. Note that this chart is meant as a tool to help with coordination during pipeline development and hence is modified regularly. Some tools might be added or removed as suitable. If you would like to modify the flowchart, please contact us on the slack channel (see "Contributions and Support" further down).
 
