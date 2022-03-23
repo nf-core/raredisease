@@ -43,11 +43,8 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK    } from '../subworkflows/local/input_check'
-include { CHECK_VCF      } from '../subworkflows/local/prepare_vcf'
-include { CHECK_BED      } from '../subworkflows/local/prepare_bed'
-include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
-
+include { CHECK_INPUT        } from '../subworkflows/local/check_input'
+include { PREPARE_REFERENCES } from '../subworkflows/local/prepare_references'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -91,41 +88,20 @@ workflow RAREDISEASE {
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
     //
-    INPUT_CHECK (
+    CHECK_INPUT (
         ch_input
     )
-    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
+    ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
 
     // STEP 0: QUALITY CHECK.
     FASTQC (
-        INPUT_CHECK.out.reads
+        CHECK_INPUT.out.reads
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
-    PREPARE_GENOME (
-        params.fasta,
-        params.variant_catalog
-    )
-    ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
-
-    ch_gnomad = Channel.empty()
-    if (params.gnomad) {
-        CHECK_VCF(
-            params.gnomad,
-            PREPARE_GENOME.out.fasta
-        )
-        .set { ch_gnomad }
-    }
-
-    ch_target_bed = Channel.empty()
-    if (params.target_bed) {
-        CHECK_BED(
-            params.target_bed,
-            PREPARE_GENOME.out.sequence_dict
-        )
-        .set { ch_target_bed }
-    }
+    PREPARE_REFERENCES ().set { ch_references }
+    ch_versions = ch_versions.mix(ch_references.versions)
 
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
     ALIGN (
@@ -143,11 +119,11 @@ workflow RAREDISEASE {
     QC_BAM (
         ch_marked_bam,
         ch_marked_bai,
-        PREPARE_GENOME.out.fasta,
-        PREPARE_GENOME.out.fai,
-        CHECK_BED.out.bait_intervals,
-        CHECK_BED.out.target_intervals,
-        PREPARE_GENOME.out.chrom_sizes
+        ch_references.genome_fasta,
+        ch_references.genome_fai,
+        ch_references.bait_intervals,
+        ch_references.target_intervals,
+        ch_references.chrom_sizes
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
 
@@ -165,17 +141,17 @@ workflow RAREDISEASE {
         ch_bam_bai,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
-        INPUT_CHECK.out.case_info
+        CHECK_INPUT.out.case_info
     )
     ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
 
     CALL_STRUCTURAL_VARIANTS (
         ch_marked_bam,
         ch_marked_bai,
-        PREPARE_GENOME.out.fasta,
-        PREPARE_GENOME.out.fai,
-        INPUT_CHECK.out.case_info,
-        ch_target_bed.bed
+        ch_references.genome_fasta,
+        ch_references.genome_fai,
+        CHECK_INPUT.out.case_info,
+        ch_references.target_bed
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
@@ -185,7 +161,7 @@ workflow RAREDISEASE {
     ANNOTATE_VCFANNO (
         params.vcfanno_toml,
         ch_dv_vcf,
-        PREPARE_GENOME.out.vcfanno_resources
+        ch_references.vcfanno_resources
     )
     ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
 
