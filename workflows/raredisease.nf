@@ -106,7 +106,7 @@ workflow RAREDISEASE {
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
     ALIGN (
         params.aligner,
-        INPUT_CHECK.out.reads,
+        CHECK_INPUT.out.reads,
         PREPARE_GENOME.out.bwamem2_index
     )
     ch_marked_bam = ALIGN.out.marked_bam
