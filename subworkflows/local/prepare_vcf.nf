@@ -14,6 +14,8 @@ workflow CHECK_VCF {
 
     main:
         vcf_file = file(vcf)
+        ch_versions = Channel.empty()
+
         CHECK_INPUT_VCF( vcf_file )
             .splitCsv( header:true )
             .map { row ->
@@ -31,16 +33,19 @@ workflow CHECK_VCF {
             .set { ch_vcfs_norm }
 
         SPLIT_MULTIALLELICS_PV (ch_vcfs_norm.unprocessed, fasta)
+        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_PV.out.versions)
 
         REMOVE_DUPLICATES_PV (SPLIT_MULTIALLELICS_PV.out.vcf, fasta)
             .vcf
             .set { ch_vcfs_rmdup }
+        ch_versions = ch_versions.mix(REMOVE_DUPLICATES_PV.out.versions)
 
         vcf_out = ch_vcfs_rmdup.mix( ch_vcfs_norm.processed )
 
         TABIX_PV (vcf_out)
 
     emit:
-        vcf  =  vcf_out        // path: normalized_vcf
-        idx  =  TABIX_PV.out.tbi
+        vcf      =  vcf_out        // path: normalized_vcf
+        idx      =  TABIX_PV.out.tbi
+        versions =  ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
