@@ -3,13 +3,12 @@
 //
 
 include { PICARD_COLLECTMULTIPLEMETRICS } from '../../modules/nf-core/modules/picard/collectmultiplemetrics/main'
-include { PICARD_COLLECTHSMETRICS } from '../../modules/nf-core/modules/picard/collecthsmetrics/main'
-include { QUALIMAP_BAMQC } from '../../modules/nf-core/modules/qualimap/bamqc/main'
-include { CAT_CAT as CAT_CAT_BAIT } from '../../modules/nf-core/modules/cat/cat/main'
-
-include { TIDDIT_COV } from '../../modules/nf-core/modules/tiddit/cov/main'
-include { MOSDEPTH } from '../../modules/nf-core/modules/mosdepth/main'
-include { UCSC_WIGTOBIGWIG } from '../../modules/nf-core/modules/ucsc/wigtobigwig/main'
+include { PICARD_COLLECTHSMETRICS       } from '../../modules/nf-core/modules/picard/collecthsmetrics/main'
+include { QUALIMAP_BAMQC                } from '../../modules/nf-core/modules/qualimap/bamqc/main'
+include { CAT_CAT as CAT_CAT_BAIT       } from '../../modules/nf-core/modules/cat/cat/main'
+include { TIDDIT_COV                    } from '../../modules/nf-core/modules/tiddit/cov/main'
+include { MOSDEPTH                      } from '../../modules/nf-core/modules/mosdepth/main'
+include { UCSC_WIGTOBIGWIG              } from '../../modules/nf-core/modules/ucsc/wigtobigwig/main'
 
 workflow QC_BAM {
 
