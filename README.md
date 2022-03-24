@@ -29,13 +29,13 @@ On release, automated continuous integration tests run the pipeline on a full-si
 1. Metrics: [`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [`MultiQC`](http://multiqc.info/)
 2. Data preprocessing: [`bwamem2`](http://bio-bwa.sourceforge.net/bwa.shtml) (can [`merge`](http://www.htslib.org/doc/samtools-merge.html)), [`MarkDuplicates`](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates)
 3. Variant calling + multiple calls are aggregated:
-    1. SNVs + short indels: [`DeepVariant`](https://github.com/google/deepvariant), [`DNAscope`](https://support.sentieon.com/manual/DNAscope_usage/dnascope/)
-    2. SVs: [`CNVpytor`](https://github.com/abyzovlab/CNVpytor/), [`ExpansionHunter`](https://github.com/Illumina/ExpansionHunter), [`MANTA`](https://github.com/Illumina/manta), [`tiddit/sv`](https://github.com/SciLifeLab/TIDDIT),
-    3. Mitochondria: [`eKLIPse`](https://github.com/dooguypapua/eKLIPse), [`Mutect2`](https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2)
+   1. SNVs + short indels: [`DeepVariant`](https://github.com/google/deepvariant), [`DNAscope`](https://support.sentieon.com/manual/DNAscope_usage/dnascope/)
+   2. SVs: [`CNVpytor`](https://github.com/abyzovlab/CNVpytor/), [`ExpansionHunter`](https://github.com/Illumina/ExpansionHunter), [`MANTA`](https://github.com/Illumina/manta), [`tiddit/sv`](https://github.com/SciLifeLab/TIDDIT),
+   3. Mitochondria: [`eKLIPse`](https://github.com/dooguypapua/eKLIPse), [`Mutect2`](https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2)
 4. Annotation: [`VCFanno`](https://github.com/brentp/vcfanno),[`VEP`](https://www.ensembl.org/info/docs/tools/vep/index.html)
-    1. SNVs: [`CADD`](https://cadd.gs.washington.edu/)
-    2. SVs:
-    3. Mitochondria: [`gnomAD_mt`](https://gnomad.broadinstitute.org/downloads#v3-mitochondrial-dna), [`Haplogrep`](https://github.com/seppinho/haplogrep-cmd/tree/v2.1.21), [`HmtNote`](https://github.com/robertopreste/HmtNote)
+   1. SNVs: [`CADD`](https://cadd.gs.washington.edu/)
+   2. SVs:
+   3. Mitochondria: [`gnomAD_mt`](https://gnomad.broadinstitute.org/downloads#v3-mitochondrial-dna), [`Haplogrep`](https://github.com/seppinho/haplogrep-cmd/tree/v2.1.21), [`HmtNote`](https://github.com/robertopreste/HmtNote)
 5. Variant ranking: something will be here
 
 > Databases: [`gnomAD`](https://gnomad.broadinstitute.org/)
@@ -52,9 +52,9 @@ The different steps and corresponding tools are represented in the flowchart bel
 
 3. Download the pipeline and test it on a minimal dataset with a single command:
 
-    ```console
-    nextflow run nf-core/raredisease -revision dev -profile test,YOURPROFILE --outdir <OUTDIR>
-    ```
+   ```console
+   nextflow run nf-core/raredisease -revision dev -profile test,YOURPROFILE --outdir <OUTDIR>
+   ```
 
    Note that some form of configuration will be needed so that Nextflow knows how to fetch the required software. This is usually done in the form of a config profile (`YOURPROFILE` in the example command above). You can chain multiple config profiles in a comma-separated string.
 
@@ -65,13 +65,13 @@ The different steps and corresponding tools are represented in the flowchart bel
 
 4. Start running your own analysis!
 
-    ```console
-    nextflow run nf-core/raredisease \
-        --input samplesheet.csv --outdir <OUTDIR> --genome GRCh38 \
-        --analysis_type <wgs|wes|mito> \
-        -revision dev \
-        -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
-    ```
+   ```console
+   nextflow run nf-core/raredisease \
+       --input samplesheet.csv --outdir <OUTDIR> --genome GRCh38 \
+       --analysis_type <wgs|wes|mito> \
+       -revision dev \
+       -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
+   ```
 
 Note that the `-revision` is used because pipeline is still under development and the latest working branch is dev.
 

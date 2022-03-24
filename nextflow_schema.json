@@ -150,11 +150,7 @@
                     "default": "wgs",
                     "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-book",
-                    "enum": [
-                        "wgs",
-                        "wes",
-                        "mito"
-                    ]
+                    "enum": ["wgs", "wes", "mito"]
                 }
             }
         },
@@ -169,9 +165,7 @@
                     "default": "bwamem2",
                     "description": "Specifies the alignment algorithm to use - available options are 'bwamem2'.",
                     "fa_icon": "fas fa-map-signs",
-                    "enum": [
-                        "bwamem2"
-                    ]
+                    "enum": ["bwamem2"]
                 }
             }
         },

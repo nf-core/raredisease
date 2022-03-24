@@ -32,17 +32,17 @@ AEG588A3,4,AEG588A3_S1_L004_R1_001.fastq.gz,AEG588A3_S1_L004_R2_001.fastq.gz,1,1
 
 The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The pedigree information in the samplesheet (sex/gender and phenotype) should be provided as they would be for a [ped file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format) (i.e. 1 for male, 2 for female, other for unknown).
 
-| Column         | Description                                                                                                                                                                            |
-|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `sample`       | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `lane`         | Used to generate seperate channels during the alignment step |
-| `fastq_1`      | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2`      | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `gender`       | Sex (1=male; 2=female; other=unknown)                                                   |
-| `phenotype`    | Affected status of patient (0 = missing;  1=unaffected; 2=affected)                                                   |
-| `paternal_id`  | Sample ID of the father, can be blank if the father isn't part of the analysis or for other samples than the proband.           |
-| `maternal_id`  | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for other samples than the proband.           |
-| `case_id`      | Case ID, for the analysis used when generating a family VCF                                                              |
+| Column        | Description                                                                                                                                                                            |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
+| `lane`        | Used to generate seperate channels during the alignment step                                                                                                                           |
+| `fastq_1`     | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+| `fastq_2`     | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+| `gender`      | Sex (1=male; 2=female; other=unknown)                                                                                                                                                  |
+| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected)                                                                                                                     |
+| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for other samples than the proband.                                                                  |
+| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for other samples than the proband.                                                                  |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF                                                                                                                            |
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
