@@ -28,10 +28,10 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             .set { ch_svdb_dbs }
 
         SVDB_QUERY(vcf,
-            ch_svdb_dbs.in_frqs.toList(),
             ch_svdb_dbs.in_occs.toList(),
-            ch_svdb_dbs.out_frqs.toList(),
+            ch_svdb_dbs.in_frqs.toList(),
             ch_svdb_dbs.out_occs.toList(),
+            ch_svdb_dbs.out_frqs.toList(),
             ch_svdb_dbs.vcf_dbs.toList()
             )
 
