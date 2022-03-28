@@ -12,7 +12,8 @@ WorkflowRaredisease.initialise(params, log)
 // Check input path parameters to see if they exist
 def checkPathParamList = [
     params.input, params.multiqc_config, params.fasta,
-    params.bwamem2_index, params.fasta_fai, params.gnomad
+    params.bwamem2_index, params.fasta_fai, params.gnomad,
+    params.vcfanno_resources
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
@@ -63,15 +64,16 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 
 include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2'
 include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/nf-core/call_repeat_expansions'
+include { CALL_SNV_DEEPVARIANT } from '../subworkflows/nf-core/call_snv_deepvariant'
 include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
 
+include { ANNOTATE_VCFANNO } from '../subworkflows/nf-core/annotate_vcfanno'
 //
 // SUBWORKFLOW: Consists of mix/local modules
 //
 
 include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
 
-include { CALL_SNV_DEEPVARIANT } from '../subworkflows/local/call_snv_deepvariant'
 include { CALL_STRUCTURAL_VARIANTS } from '../subworkflows/local/call_structural_variants'
 
 /*
@@ -102,7 +104,7 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
-    PREPARE_GENOME ( params.fasta )
+    PREPARE_GENOME ( params.fasta, params.variant_catalog )
     ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
 
     ch_gnomad = Channel.empty()
@@ -136,6 +138,7 @@ workflow RAREDISEASE {
     // STEP 1.5: BAM QUALITY CHECK
     QC_BAM (
         ch_marked_bam,
+        ch_marked_bai,
         PREPARE_GENOME.out.fasta,
         PREPARE_GENOME.out.fai,
         CHECK_BED.out.bait_intervals,
@@ -148,7 +151,7 @@ workflow RAREDISEASE {
     CALL_REPEAT_EXPANSIONS (
             ch_marked_bam.join(ch_marked_bai, by: [0]),
             PREPARE_GENOME.out.fasta,
-            params.variant_catalog
+            PREPARE_GENOME.out.variant_catalog
             )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
 
@@ -185,6 +188,12 @@ workflow RAREDISEASE {
         PREPARE_GENOME.out.sequence_dict
     )
     ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
+    
+    // STEP 3: VARIANT ANNOTATION
+    ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
+
+    ANNOTATE_VCFANNO ( params.vcfanno_toml, ch_dv_vcf, PREPARE_GENOME.out.vcfanno_resources )
+    ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
 
     //
     // MODULE: Pipeline reporting

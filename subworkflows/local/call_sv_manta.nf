@@ -2,7 +2,7 @@
 // A structural variant caller workflow for manta
 //
 
-include { MANTA_GERMLINE as MANTA } from '../../modules/local/manta/germline/main'
+include { MANTA_GERMLINE as MANTA } from '../../modules/nf-core/modules/manta/germline/main'
 
 workflow CALL_SV_MANTA {
     take:
@@ -19,16 +19,22 @@ workflow CALL_SV_MANTA {
             .set { bam_file_list }
 
         bai.collect{it[1]}
+            .toList()
             .set { bai_file_list }
 
         ch_case_info.combine(bam_file_list)
+            .combine(bai_file_list)
             .set { manta_input_bams }
 
+        bed_input = ch_bed.map{ id, bed, index ->
+                            return [bed, index]
+                            }
+
         if (params.analysis_type == "WGS") {
-            MANTA ( manta_input_bams, bai_file_list, fasta, fai, [[],[],[]] )
+            MANTA ( manta_input_bams, fasta, fai, [[],[]] )
         } else {
-            ch_target_bed = ch_bed.ifEmpty([[],[],[]])
-            MANTA ( manta_input_bams, bai_file_list, fasta, fai, ch_target_bed )
+            ch_target_bed = ch_bed.ifEmpty([[],[]])
+            MANTA ( manta_input_bams, fasta, fai, bed_input )
         }
         ch_versions = MANTA.out.versions
 
