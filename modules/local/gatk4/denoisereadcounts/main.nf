@@ -23,7 +23,7 @@ process GATK4_DENOISEREADCOUNTS {
     if (!task.memory) {
         log.info '[GATK DenoiseReadCounts] Available memory not known - defaulting to 12GB. Specify process memory requirements to change this.'
     } else {
-        avail_mem = task.memory.giga * 14 / 15 as long
+        avail_mem = task.memory.giga
     }
     """
     gatk --java-options "-Xmx${avail_mem}g" DenoiseReadCounts \\
