@@ -25,13 +25,19 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 ## Pipeline summary
 
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
+1. Metrics: [`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [`MultiQC`](http://multiqc.info/)
+2. Data preprocessing: [`bwamem2`](http://bio-bwa.sourceforge.net/bwa.shtml) (can [`merge`](http://www.htslib.org/doc/samtools-merge.html)), [`MarkDuplicates`](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates)
+3. Variant calling + multiple calls are aggregated:
+    1. SNVs + short indels: [`DeepVariant`](https://github.com/google/deepvariant), [`DNAscope`](https://support.sentieon.com/manual/DNAscope_usage/dnascope/)
+    2. SVs: [`CNVpytor`](https://github.com/abyzovlab/CNVpytor/), [`ExpansionHunter`](https://github.com/Illumina/ExpansionHunter), [`MANTA`](https://github.com/Illumina/manta), [`tiddit/sv`](https://github.com/SciLifeLab/TIDDIT),
+    3. Mitochondria: [`eKLIPse`](https://github.com/dooguypapua/eKLIPse), [`Mutect2`](https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2)
+4. Annotation: [`VCFanno`](https://github.com/brentp/vcfanno),[`VEP`](https://www.ensembl.org/info/docs/tools/vep/index.html)
+    1. SNVs: [`CADD`](https://cadd.gs.washington.edu/)
+    2. SVs:
+    3. Mitochondria: [`gnomAD_mt`](https://gnomad.broadinstitute.org/downloads#v3-mitochondrial-dna), [`Haplogrep`](https://github.com/seppinho/haplogrep-cmd/tree/v2.1.21), [`HmtNote`](https://github.com/robertopreste/HmtNote)
+5. Variant ranking: something will be here
 
-1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-2. Map reads to reference ([`BWA mem`](http://bio-bwa.sourceforge.net/bwa.shtml), `BWA mem2`) with the option to ([`merge`](http://www.htslib.org/doc/samtools-merge.html))
-3. Mark duplicated reads ([`GATK4 MarkDuplicates`](https://gatk.broadinstitute.org/hc/en-us/articles/360037052812-MarkDuplicates-Picard-))
-4. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
-5. Variant calling ([deepvariant](https://github.com/google/deepvariant) and [glnexus](https://github.com/dnanexus-rnd/GLnexus))
+> Databases: [`gnomAD`](https://gnomad.broadinstitute.org/)
 
 The different steps and corresponding tools are represented in the flowchart below. Note that this chart is meant as a tool to help with coordination during pipeline development and hence is modified regularly. Some tools might be added or removed as suitable. If you would like to modify the flowchart, please contact us on the slack channel (see "Contributions and Support" further down).
 
@@ -46,23 +52,27 @@ The different steps and corresponding tools are represented in the flowchart bel
 3. Download the pipeline and test it on a minimal dataset with a single command:
 
     ```console
-    nextflow run nf-core/raredisease -profile test,YOURPROFILE
+    nextflow run nf-core/raredisease -revision dev -profile test,YOURPROFILE --outdir <OUTDIR>
     ```
 
     Note that some form of configuration will be needed so that Nextflow knows how to fetch the required software. This is usually done in the form of a config profile (`YOURPROFILE` in the example command above). You can chain multiple config profiles in a comma-separated string.
 
     > * The pipeline comes with config profiles called `docker`, `singularity`, `podman`, `shifter`, `charliecloud` and `conda` which instruct the pipeline to use the named tool for software management. For example, `-profile test,docker`.
     > * Please check [nf-core/configs](https://github.com/nf-core/configs#documentation) to see if a custom config file to run nf-core pipelines already exists for your Institute. If so, you can simply use `-profile <institute>` in your command. This will enable either `docker` or `singularity` and set the appropriate execution settings for your local compute environment.
-    > * If you are using `singularity` and are persistently observing issues downloading Singularity images directly due to timeout or network issues, then you can use the `--singularity_pull_docker_container` parameter to pull and convert the Docker image instead. Alternatively, you can use the [`nf-core download`](https://nf-co.re/tools/#downloading-pipelines-for-offline-use) command to download images first, before running the pipeline. Setting the [`NXF_SINGULARITY_CACHEDIR` or `singularity.cacheDir`](https://www.nextflow.io/docs/latest/singularity.html?#singularity-docker-hub) Nextflow options enables you to store and re-use the images from a central location for future pipeline runs.
+    > * If you are using `singularity`, please use the [`nf-core download`](https://nf-co.re/tools/#downloading-pipelines-for-offline-use) command to download images first, before running the pipeline. Setting the [`NXF_SINGULARITY_CACHEDIR` or `singularity.cacheDir`](https://www.nextflow.io/docs/latest/singularity.html?#singularity-docker-hub) Nextflow options enables you to store and re-use the images from a central location for future pipeline runs.
     > * If you are using `conda`, it is highly recommended to use the [`NXF_CONDA_CACHEDIR` or `conda.cacheDir`](https://www.nextflow.io/docs/latest/conda.html) settings to store the environments in a central location for future pipeline runs.
 
 4. Start running your own analysis!
 
-    <!-- TODO nf-core: Update the example "typical command" below used to run the pipeline -->
-
     ```console
-    nextflow run nf-core/raredisease -profile <docker/singularity/podman/shifter/charliecloud/conda/institute> --input samplesheet.csv --genome GRCh37
+    nextflow run nf-core/raredisease \
+        --input samplesheet.csv --outdir <OUTDIR> --genome GRCh38 \
+        --analysis_type <wgs|wes|mito> \
+        -revision dev \
+        -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
     ```
+
+Note that the `-revision` is used because pipeline is still under development and the latest working branch is dev.
 
 ## Documentation
 
@@ -72,9 +82,7 @@ The nf-core/raredisease pipeline comes with documentation about the pipeline [us
 
 nf-core/raredisease was originally written by Clinical Genomics Stockholm.
 
-We thank the following people for their extensive assistance in the development of this pipeline:
-
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
+Big thanks to the contributors for their extensive assistance in the development of this pipeline.
 
 ## Contributions and Support
 
