@@ -15,6 +15,18 @@
             "cat/cat": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
+            "cnvpytor/callcnvs": {
+                "git_sha": "f0800157544a82ae222931764483331a81812012"
+            },
+            "cnvpytor/histogram": {
+                "git_sha": "f0800157544a82ae222931764483331a81812012"
+            },
+            "cnvpytor/importreaddepth": {
+                "git_sha": "f0800157544a82ae222931764483331a81812012"
+            },
+            "cnvpytor/partition": {
+                "git_sha": "f0800157544a82ae222931764483331a81812012"
+            },
             "custom/dumpsoftwareversions": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },

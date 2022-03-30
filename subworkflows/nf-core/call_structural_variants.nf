@@ -5,6 +5,7 @@
 include { CALL_SV_MANTA  } from './call_sv_manta'
 include { CALL_SV_TIDDIT } from './call_sv_tiddit'
 include { SVDB_MERGE     } from '../../modules/nf-core/modules/svdb/merge/main'
+include { CALL_CNV_CNVPYTOR } from './call_cnv_cnvpytor'
 
 workflow CALL_STRUCTURAL_VARIANTS {
 
@@ -43,6 +44,15 @@ workflow CALL_STRUCTURAL_VARIANTS {
             .set { merge_input_vcfs }
 
         SVDB_MERGE ( merge_input_vcfs, ["tiddit","manta"] )
+
+        //cnvpytor
+        CALL_CNV_CNVPYTOR ( bam, bai, case_info )
+            .candidate_cnvs_tsv
+            .collect{it[1]}
+            .set {cnvpytor_tsv }
+        ch_versions = ch_versions.mix(CALL_CNV_CNVPYTOR.out.versions)
+
+
 
 
     emit:
