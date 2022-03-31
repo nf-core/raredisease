@@ -2,9 +2,9 @@
 // A nested subworkflow to call structural variants.
 //
 
-include { CALL_SV_MANTA  } from './call_sv_manta'
-include { CALL_SV_TIDDIT } from './call_sv_tiddit'
-include { SVDB_MERGE     } from '../../modules/nf-core/modules/svdb/merge/main'
+include { CALL_SV_MANTA     } from './call_sv_manta'
+include { CALL_SV_TIDDIT    } from './call_sv_tiddit'
+include { SVDB_MERGE        } from '../../modules/nf-core/modules/svdb/merge/main'
 include { CALL_CNV_CNVPYTOR } from './call_cnv_cnvpytor'
 
 workflow CALL_STRUCTURAL_VARIANTS {
