@@ -175,10 +175,10 @@
             "fa_icon": "fas fa-map-signs",
             "description": "Options to adjust parameters and filtering criteria for structural variant callers.",
             "properties": {
-                "aligner": {
+                "cnvpytor_chr": {
                     "type": "string",
                     "default": null,
-                    "description": "Specifies the alignment algorithm to use - available options are 'bwamem2'.",
+                    "description": "Specifies the chromosome for cnvpytor run",
                     "fa_icon": "fas fa-map-signs"
                 }
             }
