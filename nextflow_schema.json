@@ -169,6 +169,20 @@
                 }
             }
         },
+        "sv_caller_options": {
+            "title": "Structural variant calling options",
+            "type": "object",
+            "fa_icon": "fas fa-map-signs",
+            "description": "Options to adjust parameters and filtering criteria for structural variant callers.",
+            "properties": {
+                "aligner": {
+                    "type": "string",
+                    "default": null,
+                    "description": "Specifies the alignment algorithm to use - available options are 'bwamem2'.",
+                    "fa_icon": "fas fa-map-signs"
+                }
+            }
+        },
         "institutional_config_options": {
             "title": "Institutional config options",
             "type": "object",
