@@ -157,6 +157,12 @@
                     "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-book",
                     "enum": ["wgs", "wes", "mito"]
+                },
+                "annotate_sv_switch": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies whether or not to run annotate structural variant subworkflow.",
+                    "fa_icon": "fas fa-book"
                 }
             }
         },

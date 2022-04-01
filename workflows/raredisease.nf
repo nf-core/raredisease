@@ -65,15 +65,13 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { ALIGN_BWAMEM2               } from  '../subworkflows/nf-core/align_bwamem2'
-include { CALL_REPEAT_EXPANSIONS      } from '../subworkflows/nf-core/call_repeat_expansions'
-include { CALL_SNV_DEEPVARIANT        } from '../subworkflows/nf-core/call_snv_deepvariant'
-include { QC_BAM                      } from '../subworkflows/nf-core/qc_bam'
-include { ANNOTATE_VCFANNO            } from '../subworkflows/nf-core/annotate_vcfanno'
-include { CALL_STRUCTURAL_VARIANTS    } from '../subworkflows/nf-core/call_structural_variants'
-
-
-include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_structural_variants'
+include { ALIGN_BWAMEM2                } from '../subworkflows/nf-core/align_bwamem2'
+include { CALL_REPEAT_EXPANSIONS       } from '../subworkflows/nf-core/call_repeat_expansions'
+include { CALL_SNV_DEEPVARIANT         } from '../subworkflows/nf-core/call_snv_deepvariant'
+include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
+include { ANNOTATE_VCFANNO             } from '../subworkflows/nf-core/annotate_vcfanno'
+include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
+include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/nf-core/annotate_structural_variants'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -159,7 +157,7 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
     ch_sv_annotate = Channel.empty()
-    if (params.svdb_query_dbs) {
+    if (params.annotate_sv_switch) {
         ANNOTATE_STRUCTURAL_VARIANTS (
             CALL_STRUCTURAL_VARIANTS.out.vcf,
             params.svdb_query_dbs,
