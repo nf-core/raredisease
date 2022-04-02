@@ -17,7 +17,8 @@ def checkPathParamList = [
     params.gnomad,
     params.input,
     params.multiqc_config,
-    params.vcfanno_resources
+    params.vcfanno_resources,
+    params.vep_cache
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
