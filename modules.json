@@ -21,6 +21,9 @@
             "deepvariant": {
                 "git_sha": "fd5f6f5f4ffef4ab5a4e809bd3211bbc71c38d30"
             },
+            "ensemblvep": {
+                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+            },
             "expansionhunter": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
