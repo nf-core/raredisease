@@ -27,3 +27,4 @@ workflow ANNOTATE_VEP {
         vcf_ann  = ch_vcf_ann      // channel: [ val(meta), vcf.gz, vcf.gz.tbi ]
         reports  = ch_reports      // path: *.html
         versions = ch_versions     // path: versions.yml}
+}
