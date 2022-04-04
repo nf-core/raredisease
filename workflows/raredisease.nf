@@ -64,7 +64,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { ALIGN                       } from  '../subworkflows/nf-core/align'
+include { ALIGN                       } from '../subworkflows/nf-core/align'
 include { CALL_REPEAT_EXPANSIONS      } from '../subworkflows/nf-core/call_repeat_expansions'
 include { CALL_SNV_DEEPVARIANT        } from '../subworkflows/nf-core/call_snv_deepvariant'
 include { QC_BAM                      } from '../subworkflows/nf-core/qc_bam'
@@ -100,25 +100,31 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
-    PREPARE_REFERENCES ().set { ch_references }
+    PREPARE_REFERENCES (
+        params.bwamem2_index,
+        params.gnomad,
+        params.fasta,
+        params.fasta_fai,
+        params.target_bed,
+        params.variant_catalog,
+        params.vcfanno_resources
+    )
+    .set { ch_references }
     ch_versions = ch_versions.mix(ch_references.versions)
 
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
     ALIGN (
         params.aligner,
         CHECK_INPUT.out.reads,
-        PREPARE_GENOME.out.bwamem2_index
+        ch_references.bwamem2_index
     )
-    ch_marked_bam = ALIGN.out.marked_bam
-    ch_marked_bai = ALIGN.out.marked_bai
-    ch_bam_bai    = ch_marked_bam.join(ch_marked_bai, by: [0])
-
+    .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
 
     // STEP 1.5: BAM QUALITY CHECK
     QC_BAM (
-        ch_marked_bam,
-        ch_marked_bai,
+        ch_mapped.marked_bam,
+        ch_mapped.marked_bai,
         ch_references.genome_fasta,
         ch_references.genome_fai,
         ch_references.bait_intervals,
@@ -129,25 +135,25 @@ workflow RAREDISEASE {
 
     // STEP 1.6: EXPANSIONHUNTER
     CALL_REPEAT_EXPANSIONS (
-        ch_bam_bai,
-        PREPARE_GENOME.out.fasta,
-        PREPARE_GENOME.out.variant_catalog
+        ch_mapped.bam_bai,
+        ch_references.genome_fasta,
+        ch_references.variant_catalog
     )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
     CALL_SNV_DEEPVARIANT (
-        ch_bam_bai,
-        PREPARE_GENOME.out.fasta,
-        PREPARE_GENOME.out.fai,
+        ch_mapped.bam_bai,
+        ch_references.genome_fasta,
+        ch_references.genome_fai,
         CHECK_INPUT.out.case_info
     )
     ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
 
     CALL_STRUCTURAL_VARIANTS (
-        ch_marked_bam,
-        ch_marked_bai,
+        ch_mapped.marked_bam,
+        ch_mapped.marked_bai,
         ch_references.genome_fasta,
         ch_references.genome_fai,
         CHECK_INPUT.out.case_info,

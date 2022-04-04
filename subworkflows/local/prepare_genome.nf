@@ -10,8 +10,11 @@ include { GET_CHROM_SIZES                           } from '../../modules/local/
 
 workflow PREPARE_GENOME {
     take:
-        fasta           // channel: [mandatory] genome.fasta
-        variant_catalog // channel: [optional] variant_catalog.json
+        bwamem2_index       // [mandatory] bwamem2_index
+        fasta               // [mandatory] genome.fasta
+        fai                 // [mandatory] genome.fai
+        variant_catalog     // [optional] variant_catalog.json
+        vcfanno_resources   // [mandatory] vcfanno resource file
 
     main:
         ch_fasta    = file(fasta)
@@ -19,11 +22,11 @@ workflow PREPARE_GENOME {
 
         // Fetch BWAMEM2 index or create from scratch if required
         BWAMEM2_INDEX ( ch_fasta )
-        ch_bwamem2_index = !params.bwamem2_index ? params.aligner == "bwamem2" ? BWAMEM2_INDEX.out.index : Channel.fromPath(params.bwamem2_index).collect() : Channel.empty()
+        ch_bwamem2_index = !bwamem2_index ? BWAMEM2_INDEX.out.index : Channel.fromPath(bwamem2_index).collect()
         ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
 
-        if ( params.fasta_fai ) {
-            ch_fai = file(params.fasta_fai)
+        if ( fai ) {
+            ch_fai = file(fai)
         } else {
             ch_fai = SAMTOOLS_FAIDX ( [[], ch_fasta] )
                         .fai
@@ -32,15 +35,15 @@ workflow PREPARE_GENOME {
         }
 
         // Uncompress vcfanno resources if nothing else given
-        if ( params.vcfanno_resources.endsWith('.tar.gz') ) {
-            ch_vcfanno_resources = UNTAR_VCFANNO ( params.vcfanno_resources ).untar
+        if ( vcfanno_resources.endsWith('.tar.gz') ) {
+            ch_vcfanno_resources = UNTAR_VCFANNO ( vcfanno_resources ).untar
             ch_versions          = ch_versions.mix(UNTAR_VCFANNO.out.versions)
         } else {
-            ch_vcfanno_resources = file(params.vcfanno_resources)
+            ch_vcfanno_resources = file(vcfanno_resources)
         }
 
-        if ( params.variant_catalog && file(params.variant_catalog, checkIfExists:true) ) {
-            ch_variant_catalog = file(params.variant_catalog)
+        if ( variant_catalog && file(variant_catalog, checkIfExists:true) ) {
+            ch_variant_catalog = file(variant_catalog)
         } else {
             if ( params.genome == 'GRCh38' ) {
                 ch_variant_catalog = file("https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/testdata/reference/variant_catalog_grch38.json")
