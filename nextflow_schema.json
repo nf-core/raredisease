@@ -105,6 +105,12 @@
                     "fa_icon": "fas fa-bezier-curve",
                     "description": "Path to directory for target bed file."
                 },
+                "svdb_query_dbs": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to comma-separated file containing information about the databases used for structural variant annotation.",
+                    "fa_icon": "far fa-file-code"
+                },
                 "variant_catalog": {
                     "type": "string",
                     "format": "file-path",
@@ -151,6 +157,12 @@
                     "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-book",
                     "enum": ["wgs", "wes", "mito"]
+                },
+                "annotate_sv_switch": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies whether or not to run annotate structural variant subworkflow.",
+                    "fa_icon": "fas fa-book"
                 }
             }
         },

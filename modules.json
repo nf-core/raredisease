@@ -69,6 +69,9 @@
             "picard/markduplicates": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
+            "picard/sortvcf": {
+                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+            },
             "qualimap/bamqc": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
@@ -85,6 +88,9 @@
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
             "svdb/merge": {
+                "git_sha": "a973b68200da801be1c2e27b8fd72d7256f5db6b"
+            },
+            "svdb/query": {
                 "git_sha": "a973b68200da801be1c2e27b8fd72d7256f5db6b"
             },
             "tabix/bgziptabix": {
