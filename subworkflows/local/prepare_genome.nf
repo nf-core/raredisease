@@ -35,8 +35,12 @@ workflow PREPARE_GENOME {
         }
 
         // Uncompress vcfanno resources if nothing else given
-        if ( vcfanno_resources.endsWith('.tar.gz') ) {
-            ch_vcfanno_resources = UNTAR_VCFANNO ( vcfanno_resources ).untar
+        if ( params.vcfanno_resources.endsWith('.tar.gz') ) {
+            ch_vcfanno_resources = UNTAR_VCFANNO ( [[],params.vcfanno_resources] ).untar
+                                    .map {
+                                        id, resources ->
+                                            return [resources]
+                                    }
             ch_versions          = ch_versions.mix(UNTAR_VCFANNO.out.versions)
         } else {
             ch_vcfanno_resources = file(vcfanno_resources)
