@@ -4,6 +4,7 @@
 
 include { SVDB_QUERY     } from '../../modules/nf-core/modules/svdb/query/main'
 include { PICARD_SORTVCF } from '../../modules/nf-core/modules/picard/sortvcf/main'
+include { ENSEMBLVEP     } from '../../modules/nf-core/modules/ensemblvep/main'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
@@ -40,6 +41,9 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             seq_dict
         )
 
+        ENSEMBLVEP(PICARD_SORTVCF.out.vcf, params.vep_genome, "homo_sapiens", params.vep_cache_version, params.vep_cache)
+
     emit:
+        vcf_ann                = ENSEMBLVEP.out.vcf_tbi
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }
