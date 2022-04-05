@@ -160,13 +160,13 @@ workflow RAREDISEASE {
     GENS (
         ch_marked_bam.join(ch_marked_bai, by: [0]),
         CALL_SNV_DEEPVARIANT.out.vcf,
-        PREPARE_GENOME.out.fasta,
-        PREPARE_GENOME.out.fai,
+        ch_references.genome_fasta,
+        ch_references.genome_fai,
         file(params.gens_interval_list),
         file(params.gens_pon),
         file(params.gens_gnomad_pos),
         INPUT_CHECK.out.ch_case_info,
-        PREPARE_GENOME.out.sequence_dict
+        ch_references.sequence_dict
     )
     ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
     
