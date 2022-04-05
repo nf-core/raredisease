@@ -179,13 +179,6 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
 
-    ANNOTATE_VEP (
-        params.vcfanno_toml,
-        ch_dv_vcf,
-        ch_references.vcfanno_resources
-    )
-    ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
-
     //
     // MODULE: Pipeline reporting
     //

@@ -26,6 +26,8 @@ params.svdb_query_dbs       = WorkflowMain.getGenomeAttribute(params, 'svdb_quer
 params.variant_catalog      = WorkflowMain.getGenomeAttribute(params, 'variant_catalog')
 params.vcfanno_resources    = WorkflowMain.getGenomeAttribute(params, 'vcfanno_resources')
 params.vcfanno_toml         = WorkflowMain.getGenomeAttribute(params, 'vcfanno_toml')
+params.vep_cache            = WorkflowMain.getGenomeAttribute(params, 'vep_cache')
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
