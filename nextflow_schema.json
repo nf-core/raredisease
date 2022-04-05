@@ -190,7 +190,7 @@
                 "cnvpytor_chr": {
                     "type": "string",
                     "default": null,
-                    "description": "Specifies the chromosome for cnvpytor run",
+                    "description": "Chromosome names must be specified the same way as they are described in the sam/bam/cram header, e.g., chrX or X. One can specify multiple chromosomes separated by space.",
                     "fa_icon": "fas fa-map-signs"
                 }
             }
