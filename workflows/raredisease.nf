@@ -17,6 +17,7 @@ def checkPathParamList = [
     params.gnomad,
     params.input,
     params.multiqc_config,
+    params.svdb_query_dbs,
     params.vcfanno_resources
 ]
 
@@ -70,7 +71,7 @@ include { CALL_SNV_DEEPVARIANT        } from '../subworkflows/nf-core/call_snv_d
 include { QC_BAM                      } from '../subworkflows/nf-core/qc_bam'
 include { ANNOTATE_VCFANNO            } from '../subworkflows/nf-core/annotate_vcfanno'
 include { CALL_STRUCTURAL_VARIANTS    } from '../subworkflows/nf-core/call_structural_variants'
-
+include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/nf-core/annotate_structural_variants'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -160,6 +161,18 @@ workflow RAREDISEASE {
         ch_references.target_bed
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
+
+    ch_sv_annotate = Channel.empty()
+    if (params.annotate_sv_switch) {
+        ANNOTATE_STRUCTURAL_VARIANTS (
+            CALL_STRUCTURAL_VARIANTS.out.vcf,
+            params.svdb_query_dbs,
+            ch_references.genome_fasta,
+            ch_references.sequence_dict
+        ).set {ch_sv_annotate}
+
+        ch_versions = ch_versions.mix(ch_sv_annotate.versions)
+    }
 
     // STEP 3: VARIANT ANNOTATION
     ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
