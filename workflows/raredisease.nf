@@ -71,6 +71,7 @@ include { CALL_SNV_DEEPVARIANT        } from '../subworkflows/nf-core/call_snv_d
 include { QC_BAM                      } from '../subworkflows/nf-core/qc_bam'
 include { ANNOTATE_VCFANNO            } from '../subworkflows/nf-core/annotate_vcfanno'
 include { CALL_STRUCTURAL_VARIANTS    } from '../subworkflows/nf-core/call_structural_variants'
+include { ANNOTATE_VEP                } from '../subworkflows/nf-core/annotate_variants'
 
 
 /*
@@ -160,6 +161,13 @@ workflow RAREDISEASE {
     ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
 
     ANNOTATE_VCFANNO (
+        params.vcfanno_toml,
+        ch_dv_vcf,
+        ch_references.vcfanno_resources
+    )
+    ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
+
+    ANNOTATE_VEP (
         params.vcfanno_toml,
         ch_dv_vcf,
         ch_references.vcfanno_resources

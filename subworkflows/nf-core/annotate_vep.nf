@@ -6,18 +6,14 @@ include { ENSEMBLVEP } from '../../modules/nf-core/modules/ensemblvep/main'
 
 workflow ANNOTATE_VEP {
     take:
-        vcf          // channel: [ val(meta), vcf ]
-        vep_genome
-        vep_species
-        vep_cache_version
-        vep_cache
+        sv_vcf          // channel: [ val(meta), vcf ]
 
     main:
         ch_reports  = Channel.empty()
         ch_vcf_ann  = Channel.empty()
         ch_versions = Channel.empty()
 
-        ENSEMBLVEP(vcf, vep_genome, vep_species, vep_cache_version, vep_cache)
+        ENSEMBLVEP(sv_vcf, params.vep_genome, "homo_sapiens", params.vep_cache_version, params.vep_cache)
 
         ch_reports  = ch_reports.mix(ENSEMBLVEP.out.reports)
         ch_vcf_ann  = ch_vcf_ann.mix(ENSEMBLVEP.out.vcf_tbi)
