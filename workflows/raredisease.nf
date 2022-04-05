@@ -165,7 +165,7 @@ workflow RAREDISEASE {
         file(params.gens_interval_list),
         file(params.gens_pon),
         file(params.gens_gnomad_pos),
-        INPUT_CHECK.out.ch_case_info,
+        CHECK_INPUT.out.ch_case_info,
         ch_references.sequence_dict
     )
     ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
