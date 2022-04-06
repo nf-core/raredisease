@@ -1,0 +1,27 @@
+{
+  "name": "raredisease",
+  "version": "1.0.0",
+  "description": "[![GitHub Actions CI Status](https://github.com/nf-core/raredisease/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/raredisease/actions?query=workflow%3A%22nf-core+CI%22) [![GitHub Actions Linting Status](https://github.com/nf-core/raredisease/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/raredisease/actions?query=workflow%3A%22nf-core+linting%22) [![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/raredisease/results) [![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "prettier": "2.6.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sysbiocoder/raredisease.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sysbiocoder/raredisease/issues"
+  },
+  "homepage": "https://github.com/sysbiocoder/raredisease#readme"
+}
