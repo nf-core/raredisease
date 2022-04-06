@@ -16,6 +16,12 @@
 
 ## Introduction
 
+> NOTE
+> 
+> This pipeline is under development and no stable release has been made yet.  
+> 
+> You can follow the work in the [dev](https://github.com/nf-core/raredisease/tree/dev) branch.
+
 <!-- TODO nf-core: Write a 1-2 sentence summary of what data the pipeline is for and what it does -->
 **nf-core/raredisease** is a bioinformatics best-practice analysis pipeline for call and score variants from WGS/WES of rare disease patients.
 
