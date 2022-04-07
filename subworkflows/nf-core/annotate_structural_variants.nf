@@ -9,10 +9,13 @@ include { ENSEMBLVEP     } from '../../modules/nf-core/modules/ensemblvep/main'
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
     take:
-        vcf         // channel: [ val(meta), path(vcf) ]
-        sv_dbs      // file: dbs.csv
-        fasta       // file: genome.fasta
-        seq_dict    // file: genome.dict
+        vcf               // channel: [ val(meta), path(vcf) ]
+        sv_dbs            // file: dbs.csv
+        vep_genome
+        vep_cache_version
+        vep_cache
+        fasta             // file: genome.fasta
+        seq_dict          // file: genome.dict
 
     main:
         ch_versions = Channel.empty()
@@ -41,9 +44,9 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             seq_dict
         )
 
-        ENSEMBLVEP(PICARD_SORTVCF.out.vcf, params.vep_genome, "homo_sapiens", params.vep_cache_version, params.vep_cache)
+        ENSEMBLVEP(PICARD_SORTVCF.out.vcf, vep_genome, "homo_sapiens", vep_cache_version, file(vep_cache))
 
     emit:
-        vcf_ann                = ENSEMBLVEP.out.vcf_tbi
+        vcf_ann                = ENSEMBLVEP.out.vcf
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }
