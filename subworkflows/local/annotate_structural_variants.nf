@@ -44,9 +44,9 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             seq_dict
         )
 
-        ENSEMBLVEP(PICARD_SORTVCF.out.vcf, vep_genome, "homo_sapiens", vep_cache_version, file(vep_cache))
+        ENSEMBLVEP_SV(PICARD_SORTVCF.out.vcf, vep_genome, "homo_sapiens", vep_cache_version, file(vep_cache))
 
     emit:
-        vcf_ann                = ENSEMBLVEP.out.vcf
+        vcf_ann                = ENSEMBLVEP_SV.out.vcf
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }
