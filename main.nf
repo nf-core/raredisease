@@ -28,7 +28,6 @@ params.vcfanno_resources    = WorkflowMain.getGenomeAttribute(params, 'vcfanno_r
 params.vcfanno_toml         = WorkflowMain.getGenomeAttribute(params, 'vcfanno_toml')
 params.vep_cache            = WorkflowMain.getGenomeAttribute(params, 'vep_cache')
 
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     VALIDATE & PRINT PARAMETER SUMMARY

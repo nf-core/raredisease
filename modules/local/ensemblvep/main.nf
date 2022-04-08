@@ -2,7 +2,7 @@ process ENSEMBLVEP {
     tag "$meta.id"
     label 'process_medium'
 
-    conda (params.enable_conda ? "bioconda::ensembl-vep=104.3" : null)
+    conda (params.enable_conda ? "bioconda::ensembl-vep=105.0" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/ensembl-vep:105.0--pl5321h4a94de4_1' :
         'quay.io/biocontainers/ensembl-vep:105.0--pl5321h4a94de4_1' }"
@@ -15,9 +15,9 @@ process ENSEMBLVEP {
     path  cache
 
     output:
-    tuple val(meta), path("*.ann.vcf"), emit: vcf
-    path "*.summary.html"             , emit: report
-    path "versions.yml"               , emit: versions
+    tuple val(meta), path("*.ann.vcf.gz"), emit: vcf
+    path "*.summary.html"                , emit: report
+    path "versions.yml"                  , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -40,6 +40,7 @@ process ENSEMBLVEP {
         --dir_cache $dir_cache \\
         --fork $task.cpus \\
         --vcf \\
+        --compress_output bgzip \\
         --stats_file ${prefix}.summary.html
 
     rm -rf $prefix

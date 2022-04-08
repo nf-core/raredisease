@@ -45,8 +45,9 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { CHECK_INPUT        } from '../subworkflows/local/check_input'
-include { PREPARE_REFERENCES } from '../subworkflows/local/prepare_references'
+include { CHECK_INPUT                  } from '../subworkflows/local/check_input'
+include { PREPARE_REFERENCES           } from '../subworkflows/local/prepare_references'
+include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_structural_variants'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -72,7 +73,6 @@ include { CALL_SNV_DEEPVARIANT         } from '../subworkflows/nf-core/call_snv_
 include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
 include { ANNOTATE_VCFANNO             } from '../subworkflows/nf-core/annotate_vcfanno'
 include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
-include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/nf-core/annotate_structural_variants'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -162,7 +162,7 @@ workflow RAREDISEASE {
         ANNOTATE_STRUCTURAL_VARIANTS (
             CALL_STRUCTURAL_VARIANTS.out.vcf,
             params.svdb_query_dbs,
-            params.vep_genome,
+            params.genome,
             params.vep_cache_version,
             params.vep_cache,
             ch_references.genome_fasta,
