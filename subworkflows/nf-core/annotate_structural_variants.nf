@@ -4,7 +4,7 @@
 
 include { SVDB_QUERY     } from '../../modules/nf-core/modules/svdb/query/main'
 include { PICARD_SORTVCF } from '../../modules/nf-core/modules/picard/sortvcf/main'
-include { ENSEMBLVEP     } from '../../modules/nf-core/modules/ensemblvep/main'
+include { ENSEMBLVEP     } from '../../modules/local/ensemblvep/main'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
