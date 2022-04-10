@@ -16,7 +16,7 @@ process ENSEMBLVEP {
 
     output:
     tuple val(meta), path("*.ann.vcf.gz"), emit: vcf
-    path "*.summary.html"                , emit: report
+    path "*.summary.html"                , emit: report, optional: true
     path "versions.yml"                  , emit: versions
 
     when:
