@@ -31,7 +31,7 @@ process ENSEMBLVEP {
 
     vep \\
         -i $vcf \\
-        -o ${prefix}.ann.vcf \\
+        -o ${prefix}.ann.vcf.gz \\
         $args \\
         --assembly $genome \\
         --species $species \\
