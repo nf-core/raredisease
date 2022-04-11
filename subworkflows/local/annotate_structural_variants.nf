@@ -40,13 +40,13 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             )
         ch_versions = ch_versions.mix(SVDB_QUERY.out.versions)
 
-        // PICARD_SORTVCF(SVDB_QUERY.out.vcf,
-            // fasta,
-            // seq_dict
-        // )
-        // ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
+        PICARD_SORTVCF(SVDB_QUERY.out.vcf,
+            fasta,
+            seq_dict
+        )
+        ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
 
-        ENSEMBLVEP_SV(SVDB_QUERY.out.vcf, vep_genome, "homo_sapiens", vep_cache_version, file(vep_cache))
+        ENSEMBLVEP_SV(PICARD_SORTVCF.out.vcf, vep_genome, "homo_sapiens", vep_cache_version, file(vep_cache))
         ch_versions = ch_versions.mix(ENSEMBLVEP_SV.out.versions)
 
     emit:
