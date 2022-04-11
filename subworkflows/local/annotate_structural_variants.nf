@@ -2,16 +2,20 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SVDB_QUERY     } from '../../modules/nf-core/modules/svdb/query/main'
-include { PICARD_SORTVCF } from '../../modules/nf-core/modules/picard/sortvcf/main'
+include { SVDB_QUERY                  } from '../../modules/nf-core/modules/svdb/query/main'
+include { PICARD_SORTVCF              } from '../../modules/nf-core/modules/picard/sortvcf/main'
+include { ENSEMBLVEP as ENSEMBLVEP_SV } from '../../modules/local/ensemblvep/main'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
     take:
-        vcf         // channel: [ val(meta), path(vcf) ]
-        sv_dbs      // file: dbs.csv
-        fasta       // file: genome.fasta
-        seq_dict    // file: genome.dict
+        vcf               // channel: [ val(meta), path(vcf) ]
+        sv_dbs            // file: dbs.csv
+        vep_genome
+        vep_cache_version
+        vep_cache
+        fasta             // file: genome.fasta
+        seq_dict          // file: genome.dict
 
     main:
         ch_versions = Channel.empty()
@@ -34,12 +38,18 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             ch_svdb_dbs.out_frqs.toList(),
             ch_svdb_dbs.vcf_dbs.toList()
             )
+        ch_versions = ch_versions.mix(SVDB_QUERY.out.versions)
 
         PICARD_SORTVCF(SVDB_QUERY.out.vcf,
             fasta,
             seq_dict
         )
+        ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
+
+        ENSEMBLVEP_SV(PICARD_SORTVCF.out.vcf, vep_genome, "homo_sapiens", vep_cache_version, file(vep_cache))
+        ch_versions = ch_versions.mix(ENSEMBLVEP_SV.out.versions)
 
     emit:
+        vcf_ann                = ENSEMBLVEP_SV.out.vcf
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }
