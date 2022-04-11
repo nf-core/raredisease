@@ -130,12 +130,12 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
 
     // STEP 1.6: EXPANSIONHUNTER
-    CALL_REPEAT_EXPANSIONS (
-        ch_marked_bam.join(ch_marked_bai, by: [0]),
-        ch_references.genome_fasta,
-        ch_references.variant_catalog
-    )
-    ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
+    // CALL_REPEAT_EXPANSIONS (
+        // ch_marked_bam.join(ch_marked_bai, by: [0]),
+        // ch_references.genome_fasta,
+        // ch_references.variant_catalog
+    // )
+    // ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
@@ -175,12 +175,12 @@ workflow RAREDISEASE {
     // STEP 3: VARIANT ANNOTATION
     ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
 
-    ANNOTATE_VCFANNO (
-        params.vcfanno_toml,
-        ch_dv_vcf,
-        ch_references.vcfanno_resources
-    )
-    ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
+    // ANNOTATE_VCFANNO (
+        // params.vcfanno_toml,
+        // ch_dv_vcf,
+        // ch_references.vcfanno_resources
+    // )
+    // ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
 
     //
     // MODULE: Pipeline reporting
