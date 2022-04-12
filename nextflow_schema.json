@@ -98,19 +98,22 @@
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-bezier-curve",
-                    "description": "Path to directory for gnomad vcf."
+                    "description": "Path to directory for gnomad vcf.",
+                    "help_text": "Path to the gnomad vcf file. If you don't provide one, gnomad annotations will not be used."
                 },
                 "target_bed": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-bezier-curve",
-                    "description": "Path to directory for target bed file."
+                    "description": "Path to directory for target bed file.",
+                    "help_text": "If you would like to limit your analysis to specific regions of the genome, you can pass those regions in a bed file using this option"
                 },
                 "svdb_query_dbs": {
                     "type": "string",
                     "format": "file-path",
-                    "description": "Path to comma-separated file containing information about the databases used for structural variant annotation.",
-                    "fa_icon": "far fa-file-code"
+                    "description": "Databases used for structural variant annotation.",
+                    "fa_icon": "far fa-file-code",
+                    "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation."
                 },
                 "variant_catalog": {
                     "type": "string",
