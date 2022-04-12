@@ -18,7 +18,8 @@ def checkPathParamList = [
     params.input,
     params.multiqc_config,
     params.svdb_query_dbs,
-    params.vcfanno_resources
+    params.vcfanno_resources,
+    params.vep_cache
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
@@ -44,8 +45,9 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { CHECK_INPUT        } from '../subworkflows/local/check_input'
-include { PREPARE_REFERENCES } from '../subworkflows/local/prepare_references'
+include { CHECK_INPUT                  } from '../subworkflows/local/check_input'
+include { PREPARE_REFERENCES           } from '../subworkflows/local/prepare_references'
+include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_structural_variants'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,6 +67,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
+<<<<<<< HEAD
 include { ALIGN                       } from '../subworkflows/nf-core/align'
 include { CALL_REPEAT_EXPANSIONS      } from '../subworkflows/nf-core/call_repeat_expansions'
 include { CALL_SNV_DEEPVARIANT        } from '../subworkflows/nf-core/call_snv_deepvariant'
@@ -72,6 +75,14 @@ include { QC_BAM                      } from '../subworkflows/nf-core/qc_bam'
 include { ANNOTATE_VCFANNO            } from '../subworkflows/nf-core/annotate_vcfanno'
 include { CALL_STRUCTURAL_VARIANTS    } from '../subworkflows/nf-core/call_structural_variants'
 include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/nf-core/annotate_structural_variants'
+=======
+include { ALIGN_BWAMEM2                } from '../subworkflows/nf-core/align_bwamem2'
+include { CALL_REPEAT_EXPANSIONS       } from '../subworkflows/nf-core/call_repeat_expansions'
+include { CALL_SNV_DEEPVARIANT         } from '../subworkflows/nf-core/call_snv_deepvariant'
+include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
+include { ANNOTATE_VCFANNO             } from '../subworkflows/nf-core/annotate_vcfanno'
+include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
+>>>>>>> dev
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -167,6 +178,9 @@ workflow RAREDISEASE {
         ANNOTATE_STRUCTURAL_VARIANTS (
             CALL_STRUCTURAL_VARIANTS.out.vcf,
             params.svdb_query_dbs,
+            params.genome,
+            params.vep_cache_version,
+            params.vep_cache,
             ch_references.genome_fasta,
             ch_references.sequence_dict
         ).set {ch_sv_annotate}
