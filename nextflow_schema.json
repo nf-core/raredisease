@@ -106,7 +106,8 @@
                     "format": "path",
                     "fa_icon": "fas fa-bezier-curve",
                     "description": "Path to directory for target bed file.",
-                    "help_text": "If you would like to limit your analysis to specific regions of the genome, you can pass those regions in a bed file using this option"
+                    "help_text": "If you would like to limit your analysis to specific regions of the genome, you can pass those regions in a bed file using this option",
+                    "hidden": true
                 },
                 "svdb_query_dbs": {
                     "type": "string",
@@ -127,13 +128,15 @@
                     "type": "string",
                     "description": "Directory path or tar.gz archive that holds resources defined within the vcfanno toml file.",
                     "help_text": "If no directory path is passed, default configurations will be used according to genome build within the context of the pipeline.",
-                    "fa_icon": "fas fa-folder-open"
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
                 },
                 "vcfanno_toml": {
                     "type": "string",
                     "description": "Path to the vcfanno toml file.",
                     "help_text": "If no toml is passed, default configurations will be used according to genome build within the context of the pipeline.",
-                    "fa_icon": "fas fa-file-csv"
+                    "fa_icon": "fas fa-file-csv",
+                    "hidden": true
                 },
                 "vep_cache": {
                     "type": "string",
