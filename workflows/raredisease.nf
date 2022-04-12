@@ -67,22 +67,13 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-<<<<<<< HEAD
-include { ALIGN                       } from '../subworkflows/nf-core/align'
-include { CALL_REPEAT_EXPANSIONS      } from '../subworkflows/nf-core/call_repeat_expansions'
-include { CALL_SNV_DEEPVARIANT        } from '../subworkflows/nf-core/call_snv_deepvariant'
-include { QC_BAM                      } from '../subworkflows/nf-core/qc_bam'
-include { ANNOTATE_VCFANNO            } from '../subworkflows/nf-core/annotate_vcfanno'
-include { CALL_STRUCTURAL_VARIANTS    } from '../subworkflows/nf-core/call_structural_variants'
-include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/nf-core/annotate_structural_variants'
-=======
-include { ALIGN_BWAMEM2                } from '../subworkflows/nf-core/align_bwamem2'
+include { ALIGN                        } from '../subworkflows/nf-core/align'
 include { CALL_REPEAT_EXPANSIONS       } from '../subworkflows/nf-core/call_repeat_expansions'
 include { CALL_SNV_DEEPVARIANT         } from '../subworkflows/nf-core/call_snv_deepvariant'
 include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
 include { ANNOTATE_VCFANNO             } from '../subworkflows/nf-core/annotate_vcfanno'
 include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
->>>>>>> dev
+include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/nf-core/annotate_structural_variants'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
