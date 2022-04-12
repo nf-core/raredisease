@@ -68,7 +68,8 @@
                     "format": "file-path",
                     "help_text": "If none provided, will be generated automatically from the FASTA reference",
                     "description": "Path to FASTA genome index file.",
-                    "fa_icon": "far fa-file-code"
+                    "fa_icon": "far fa-file-code",
+                    "hidden": true
                 },
                 "igenomes_base": {
                     "type": "string",
@@ -115,8 +116,9 @@
                     "type": "string",
                     "format": "file-path",
                     "description": "Path to variant catalog file",
-                    "help_text": "This parameter is mandatory for use with ExpansionHunter",
-                    "fa_icon": "far fa-file-code"
+                    "help_text": "Used with ExpansionHunter and if no catalogue is passed, then a default will be used.",
+                    "fa_icon": "far fa-file-code",
+                    "hidden": true
                 },
                 "vcfanno_resources": {
                     "type": "string",
@@ -127,7 +129,7 @@
                 "vcfanno_toml": {
                     "type": "string",
                     "description": "Path to the vcfanno toml file.",
-                    "help_text": "If toml is passed, default configurations will be used according to genome build within the context of the pipeline.",
+                    "help_text": "If no toml is passed, default configurations will be used according to genome build within the context of the pipeline.",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "vep_cache": {
