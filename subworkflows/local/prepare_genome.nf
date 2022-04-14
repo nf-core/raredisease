@@ -11,6 +11,7 @@ include { SENTIEON_BWAINDEX                         } from '../../modules/local/
 
 workflow PREPARE_GENOME {
     take:
+        aligner             // [mandatory] params.aligner
         bwamem2_index       // [mandatory] bwamem2_index
         sentieon_index      // [mandatory] sentieon_index
         fasta               // [mandatory] genome.fasta
@@ -23,13 +24,17 @@ workflow PREPARE_GENOME {
         ch_versions = Channel.empty()
 
         // Fetch aligner index or create from scratch if required
-        BWAMEM2_INDEX ( ch_fasta )
-        ch_aligner_index  = !bwamem2_index ? BWAMEM2_INDEX.out.index : Channel.fromPath(bwamem2_index).collect()
-        ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
-
-        SENTIEON_BWAINDEX ( ch_fasta )
-        ch_aligner_index = !sentieon_index ? SENTIEON_BWAINDEX.out.index : Channel.fromPath(sentieon_index).collect()
-        ch_versions = ch_versions.mix(SENTIEON_BWAINDEX.out.versions)
+        if (aligner == "bwamem2") {
+            BWAMEM2_INDEX ( ch_fasta )
+            ch_aligner_index  = !bwamem2_index ? BWAMEM2_INDEX.out.index : Channel.fromPath(bwamem2_index).collect()
+            ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
+        } else if (aligner == "sentieon") {
+            SENTIEON_BWAINDEX ( ch_fasta )
+            ch_aligner_index = !sentieon_index ? SENTIEON_BWAINDEX.out.index : Channel.fromPath(sentieon_index).collect()
+            ch_versions = ch_versions.mix(SENTIEON_BWAINDEX.out.versions)
+        } else {
+            exit 1, 'Please provide a valid aligner!'
+        }
 
         if ( fai ) {
             ch_fai = file(fai)

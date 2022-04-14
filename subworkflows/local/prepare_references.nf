@@ -9,6 +9,7 @@ include { PREPARE_GENOME } from './prepare_genome'
 
 workflow PREPARE_REFERENCES {
     take:
+        aligner             // [mandatory] params.aligner
         bwamem2_index       // [mandatory] bwamem2_index
         gnomad
         fasta               // [mandatory] genome.fasta
@@ -22,6 +23,7 @@ workflow PREPARE_REFERENCES {
         // Prepare genome
         ch_versions = Channel.empty()
         PREPARE_GENOME (
+            aligner,
             bwamem2_index,
             sentieonbwa_index,
             fasta,

@@ -104,6 +104,7 @@ workflow RAREDISEASE {
 
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
     PREPARE_REFERENCES (
+        params.aligner,
         params.bwamem2_index,
         params.gnomad,
         params.fasta,
