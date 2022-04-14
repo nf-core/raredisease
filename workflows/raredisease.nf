@@ -17,6 +17,7 @@ def checkPathParamList = [
     params.gnomad,
     params.input,
     params.multiqc_config,
+    params.sentieonbwa_index,
     params.svdb_query_dbs,
     params.vcfanno_resources,
     params.vep_cache
@@ -107,6 +108,7 @@ workflow RAREDISEASE {
         params.gnomad,
         params.fasta,
         params.fasta_fai,
+        params.sentieonbwa_index,
         params.target_bed,
         params.variant_catalog,
         params.vcfanno_resources
@@ -118,7 +120,9 @@ workflow RAREDISEASE {
     ALIGN (
         params.aligner,
         CHECK_INPUT.out.reads,
-        ch_references.bwamem2_index
+        ch_references.genome_fasta,
+        ch_references.genome_fai,
+        ch_references.aligner_index
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)

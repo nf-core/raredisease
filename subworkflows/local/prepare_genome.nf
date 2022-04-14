@@ -7,10 +7,12 @@ include { BWAMEM2_INDEX                             } from '../../modules/nf-cor
 include { SAMTOOLS_FAIDX                            } from '../../modules/nf-core/modules/samtools/faidx/main'
 include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD } from '../../modules/nf-core/modules/gatk4/createsequencedictionary/main'
 include { GET_CHROM_SIZES                           } from '../../modules/local/get_chrom_sizes'
+include { SENTIEON_BWAINDEX                         } from '../../modules/local/sentieon/bwamemindex'
 
 workflow PREPARE_GENOME {
     take:
         bwamem2_index       // [mandatory] bwamem2_index
+        sentieon_index      // [mandatory] sentieon_index
         fasta               // [mandatory] genome.fasta
         fai                 // [mandatory] genome.fai
         variant_catalog     // [optional] variant_catalog.json
@@ -20,10 +22,14 @@ workflow PREPARE_GENOME {
         ch_fasta    = file(fasta)
         ch_versions = Channel.empty()
 
-        // Fetch BWAMEM2 index or create from scratch if required
+        // Fetch aligner index or create from scratch if required
         BWAMEM2_INDEX ( ch_fasta )
-        ch_bwamem2_index = !bwamem2_index ? BWAMEM2_INDEX.out.index : Channel.fromPath(bwamem2_index).collect()
+        ch_aligner_index  = !bwamem2_index ? BWAMEM2_INDEX.out.index : Channel.fromPath(bwamem2_index).collect()
         ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
+
+        SENTIEON_BWAINDEX ( ch_fasta )
+        ch_aligner_index = !sentieon_index ? SENTIEON_BWAINDEX.out.index : Channel.fromPath(sentieon_index).collect()
+        ch_versions = ch_versions.mix(SENTIEON_BWAINDEX.out.versions)
 
         if ( fai ) {
             ch_fai = file(fai)
@@ -62,7 +68,7 @@ workflow PREPARE_GENOME {
 
 
     emit:
-        bwamem2_index               = ch_bwamem2_index          // path: bwamem2/index
+        aligner_index               = ch_aligner_index          // path: bwamem2/index
         chrom_sizes                 = ch_chrom_sizes            // path: chrom.sizes
         fasta                       = ch_fasta                  // path: genome.fasta
         fai                         = ch_fai                    // path: genome.fasta.fai

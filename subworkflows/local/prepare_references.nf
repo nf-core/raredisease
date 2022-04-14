@@ -13,6 +13,7 @@ workflow PREPARE_REFERENCES {
         gnomad
         fasta               // [mandatory] genome.fasta
         fai                 // [mandatory] genome.fai
+        sentieonbwa_index
         target_bed
         variant_catalog     // [optional] variant_catalog.json
         vcfanno_resources   // [mandatory] vcfanno resource file
@@ -22,6 +23,7 @@ workflow PREPARE_REFERENCES {
         ch_versions = Channel.empty()
         PREPARE_GENOME (
             bwamem2_index,
+            sentieonbwa_index,
             fasta,
             fai,
             variant_catalog,
@@ -59,7 +61,7 @@ workflow PREPARE_REFERENCES {
         }
 
     emit:
-        bwamem2_index     = ch_genome.bwamem2_index
+        aligner_index     = ch_genome.aligner_index
         chrom_sizes       = ch_genome.chrom_sizes
         genome_fasta      = ch_genome.fasta
         genome_fai        = ch_genome.fai

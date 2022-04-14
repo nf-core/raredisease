@@ -35,6 +35,12 @@
                     "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
                 },
+                "sentieon_install_dir": {
+                    "type": "string",
+                    "fa_icon": "fas fa-folder-open",
+                    "description": "Directory where Sentieon binary is installed if not on $PATH",
+                    "default": null
+                },
                 "multiqc_title": {
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
@@ -107,6 +113,15 @@
                     "fa_icon": "fas fa-bezier-curve",
                     "description": "Path to directory for target bed file.",
                     "help_text": "If you would like to limit your analysis to specific regions of the genome, you can pass those regions in a bed file using this option",
+                    "hidden": true
+                },
+                "sentieonbwa_index": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "default": null,
+                    "description": "Directory for pre-built sentieon index.",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
                 "svdb_query_dbs": {
@@ -189,9 +204,9 @@
                 "aligner": {
                     "type": "string",
                     "default": "bwamem2",
-                    "description": "Specifies the alignment algorithm to use - available options are 'bwamem2'.",
+                    "description": "Specifies the alignment algorithm to use - available options are 'bwamem2' and 'sentieon'.",
                     "fa_icon": "fas fa-map-signs",
-                    "enum": ["bwamem2"]
+                    "enum": ["bwamem2", "sentieon"]
                 }
             }
         },
