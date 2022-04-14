@@ -40,11 +40,6 @@ process SENTIEON_BWAINDEX {
     """
     mkdir bwa_index
 
-    touch bwa_index/${fasta}.ann
-    touch bwa_index/${fasta}.pac
-    touch bwa_index/${fasta}.amb
-    touch bwa_index/${fasta}.bwt
-
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         sentieon: \$(echo \$($sentieon_exe driver --version 2>&1) | sed -e "s/sentieon-genomics-//g")
