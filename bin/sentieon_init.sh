@@ -4,7 +4,7 @@
 # This script takes as input the name of a environment
 # variable holding the Sentieon license encoded as Base64 text
 set -eu
-LICENSE_ENCODED="\${!1}"
+LICENSE_ENCODED="${!1}"
 if [ "${#LICENSE_ENCODED}" -lt "1500" ]; then  # Sentieon License server
     export SENTIEON_LICENSE=$(echo -e "$LICENSE_ENCODED" | base64 -d)
 else  # Localhost license file
