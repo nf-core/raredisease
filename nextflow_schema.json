@@ -231,6 +231,21 @@
                 }
             }
         },
+        "variant_calling_options": {
+            "title": "Variant calling options",
+            "type": "object",
+            "fa_icon": "fas fa-map-signs",
+            "description": "Options to adjust parameters and filtering criteria for variant calling.",
+            "properties": {
+                "variant_caller": {
+                    "type": "string",
+                    "default": "deepvariant",
+                    "description": "Specifies the variant caller to use - available options are 'deepvariant' and 'sentieon'.",
+                    "fa_icon": "fas fa-map-signs",
+                    "enum": ["deepvariant", "sentieon"]
+                }
+            }
+        },
         "annotation_options": {
             "title": "Annotation options",
             "type": "object",
@@ -432,6 +447,9 @@
         },
         {
             "$ref": "#/definitions/alignment_options"
+        },
+        {
+            "$ref": "#/definitions/variant_calling_options"
         },
         {
             "$ref": "#/definitions/annotation_options"

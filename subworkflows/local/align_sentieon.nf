@@ -19,7 +19,8 @@ workflow ALIGN_SENTIEON {
         known_mills  // path: params.known_mills
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions  = Channel.empty()
+        ch_recal_pre = Channel.empty()
 
         SENTIEON_BWAMEM ( reads_input, fasta, fai, index )
         ch_versions = ch_versions.mix(SENTIEON_BWAMEM.out.versions)
@@ -44,18 +45,18 @@ workflow ALIGN_SENTIEON {
 
         SENTIEON_DEDUP ( ch_bam_bai_score, fasta, fai, [], [], [] )
 
-        SENTIEON_DEDUP.out.bam
-            .join(SENTIEON_DEDUP.out.bai)
-            .map { it -> it + [ [], [], [], [] ] }
-            .set { ch_dedup_bam_bai }
-
-        SENTIEON_BQSR ( ch_dedup_bam_bai, fasta, fai, known_dbsnp, known_mills, known_indels )
+        if (params.variant_caller == "sentieon") {
+            SENTIEON_DEDUP.out.bam
+                .join(SENTIEON_DEDUP.out.bai)
+                .map { it -> it + [ [], [], [], [] ] }
+                .set { ch_dedup_bam_bai }
+            ch_recal_pre = SENTIEON_BQSR ( ch_dedup_bam_bai, fasta, fai, known_dbsnp, known_mills, known_indels ).out.recal_pre
+        }
 
     emit:
-        bam                    = SENTIEON_DEDUP.out.bam
-        bai                    = SENTIEON_DEDUP.out.bai
-        marked_bam_bai         = ch_dedup_bam_bai
-        recal_pre              = SENTIEON_BQSR.out.recal_pre
+        marked_bam             = SENTIEON_DEDUP.out.bam
+        marked_bai             = SENTIEON_DEDUP.out.bai
+        recal_pre              = ch_recal_pre
         mq_metrics             = SENTIEON_DATAMETRICS.out.mq_metrics.ifEmpty(null)
         qd_metrics             = SENTIEON_DATAMETRICS.out.qd_metrics.ifEmpty(null)
         gc_metrics             = SENTIEON_DATAMETRICS.out.gc_metrics.ifEmpty(null)

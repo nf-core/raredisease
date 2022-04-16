@@ -28,8 +28,8 @@ workflow ALIGN {
             ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
         } else if( aligner == "sentieon" ) {
             ALIGN_SENTIEON ( reads_input, fasta, fai, index, known_dbsnp, known_indels, known_mills )
-            ch_marked_bam = ALIGN_SENTIEON.out.bam
-            ch_marked_bai = ALIGN_SENTIEON.out.bai
+            ch_marked_bam = ALIGN_SENTIEON.out.marked_bam
+            ch_marked_bai = ALIGN_SENTIEON.out.marked_bai
             ch_versions = ch_versions.mix(ALIGN_SENTIEON.out.versions)
         } else {
             exit 1, 'Please provide a valid aligner!'
