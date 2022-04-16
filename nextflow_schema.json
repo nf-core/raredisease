@@ -107,6 +107,27 @@
                     "description": "Path to directory for gnomad vcf.",
                     "help_text": "Path to the gnomad vcf file. If you don't provide one, gnomad annotations will not be used."
                 },
+                "known_dbsnp": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Path to known dbSNP file.",
+                    "hidden": true
+                },
+                "known_indels": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Path to known indels file.",
+                    "hidden": true
+                },
+                "known_mills": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Path to known Mills file.",
+                    "hidden": true
+                },
                 "target_bed": {
                     "type": "string",
                     "format": "path",

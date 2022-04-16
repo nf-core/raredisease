@@ -34,11 +34,11 @@ process SENTIEON_BWAMEM {
         \$INDEX \\
         $reads \\
         $args \\
-        | sentieon \\
+        | $sentieon_exe \\
             util \\
             sort \\
             -r $fasta \\
-            -o $prefix \\
+            -o ${prefix}.bam \\
             -t $task.cpus \\
             $args2 \\
             --sam2bam \\

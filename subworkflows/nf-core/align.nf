@@ -7,11 +7,14 @@ include { ALIGN_SENTIEON } from '../local/align_sentieon'
 
 workflow ALIGN {
     take:
-        aligner     // string:  params.aligner
-        reads_input // channel: [ val(meta), reads_input ]
-        fasta       // channel: [genome.fasta]
-        fai         // channel: [genome.fai]
-        index       // channel: [ /path/to/bwamem2/index/ ]
+        aligner      // string:  params.aligner
+        reads_input  // channel: [ val(meta), reads_input  ]
+        fasta        // channel: [genome.fasta]
+        fai          // channel: [genome.fai]
+        index        // channel: [ /path/to/bwamem2/index/ ]
+        known_dbsnp  // channel: [ /path/to/known_dbsnp/   ]
+        known_indels // channel: [ /path/to/known_indels/  ]
+        known_mills  // channel: [ /path/to/known_mills/   ]
 
     main:
         ch_versions   = Channel.empty()
@@ -24,7 +27,7 @@ workflow ALIGN {
             ch_marked_bai = ALIGN_BWAMEM2.out.marked_bai
             ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
         } else if( aligner == "sentieon" ) {
-            ALIGN_SENTIEON ( reads_input, fasta, fai, index )
+            ALIGN_SENTIEON ( reads_input, fasta, fai, index, known_dbsnp, known_indels, known_mills )
             ch_marked_bam = ALIGN_SENTIEON.out.bam
             ch_marked_bai = ALIGN_SENTIEON.out.bai
             ch_versions = ch_versions.mix(ALIGN_SENTIEON.out.versions)
