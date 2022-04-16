@@ -2,8 +2,8 @@
 // Map to reference
 //
 
-include { ALIGN_BWAMEM2  } from './align_bwamem2'
-include { ALIGN_SENTIEON } from '../local/align_sentieon'
+include { ALIGN_BWAMEM2  } from '../nf-core/align_bwamem2'
+include { ALIGN_SENTIEON } from './align_sentieon'
 
 workflow ALIGN {
     take:
