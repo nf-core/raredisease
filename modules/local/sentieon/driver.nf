@@ -31,7 +31,7 @@ process SENTIEON_DRIVER {
     tuple val(meta), path('*is_metrics.txt')        , emit: is_metrics   , optional: true
     tuple val(meta), path('*dedup_metrics.txt')     , emit: metrics_dedup, optional: true
     tuple val(meta), path('*score.txt.gz')          , emit: score        , optional: true
-    tuple val(meta), path('*score.txt.gz.idx')      , emit: score_idx    , optional: true
+    tuple val(meta), path('*score.txt.gz.tbi')      , emit: score_idx    , optional: true
     path  "versions.yml"                            , emit: versions
 
     when:

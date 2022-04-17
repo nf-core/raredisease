@@ -18,8 +18,6 @@ workflow ALIGN {
 
     main:
         ch_versions   = Channel.empty()
-        ch_marked_bai = Channel.empty()
-        ch_marked_bam = Channel.empty()
 
         if( aligner == "bwamem2" ) {
             ALIGN_BWAMEM2 ( reads_input, index )
