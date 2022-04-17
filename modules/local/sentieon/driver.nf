@@ -73,20 +73,21 @@ process SENTIEON_DRIVER {
     """
 
     stub:
+    def prefix       = task.ext.prefix ?: "${meta.id}"
     def sentieon_exe = params.sentieon_install_dir ? "${params.sentieon_install_dir}/sentieon" : 'sentieon'
     """
-    touch ${prefix}.bam'
-    touch ${prefix}.bai'
-    touch ${prefix}.cram'
-    touch ${prefix}.crai'
-    touch ${prefix}.vcf.gz'
-    touch ${prefix}.vcf.gz.tbi'
-    touch ${prefix}.recal_data.table'
-    touch ${prefix}.recal_data.table.post'
-    touch ${prefix}.recal.csv'
-    touch ${prefix}.dedup_metrics.txt'
-    touch ${prefix}.score.txt'
-    touch ${prefix}.score.txt.idx'
+    touch ${prefix}.bam
+    touch ${prefix}.bai
+    touch ${prefix}.cram
+    touch ${prefix}.crai
+    touch ${prefix}.vcf.gz
+    touch ${prefix}.vcf.gz.tbi
+    touch ${prefix}.recal_data.table
+    touch ${prefix}.recal_data.table.post
+    touch ${prefix}.recal.csv
+    touch ${prefix}.dedup_metrics.txt
+    touch ${prefix}.score.txt.gz
+    touch ${prefix}.score.txt.gz.tbi
     touch ${prefix}.mq_metrics.txt
     touch ${prefix}.qd_metrics.txt
     touch ${prefix}.gc_summary.txt
