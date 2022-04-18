@@ -76,6 +76,8 @@ process SENTIEON_DRIVER {
     def prefix       = task.ext.prefix ?: "${meta.id}"
     def sentieon_exe = params.sentieon_install_dir ? "${params.sentieon_install_dir}/sentieon" : 'sentieon'
     """
+    source sentieon_init.sh SENTIEON_LICENSE_BASE64
+
     touch ${prefix}.bam
     touch ${prefix}.bai
     touch ${prefix}.cram
