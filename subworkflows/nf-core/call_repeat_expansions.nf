@@ -17,7 +17,7 @@ workflow CALL_REPEAT_EXPANSIONS {
         EXPANSIONHUNTER( bam, fasta, variant_catalog )
         ch_versions = ch_versions.mix(EXPANSIONHUNTER.out.versions)
 
-        STRANGER ( EXPANSIONHUNTER.out.vcf )
+        STRANGER ( EXPANSIONHUNTER.out.vcf, variant_catalog )
         ch_versions = ch_versions.mix(STRANGER.out.versions)
 
     emit:
