@@ -2,11 +2,9 @@
 // A nested subworkflow to call structural variants.
 //
 
-include { CALL_SV_MANTA } from './call_sv_manta'
-
+include { CALL_SV_MANTA  } from './call_sv_manta'
 include { CALL_SV_TIDDIT } from './call_sv_tiddit'
-
-include { SVDB_MERGE } from '../../modules/nf-core/modules/svdb/merge/main'
+include { SVDB_MERGE     } from '../../modules/nf-core/modules/svdb/merge/main'
 
 workflow CALL_STRUCTURAL_VARIANTS {
 
@@ -22,13 +20,15 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_versions = Channel.empty()
 
         //manta
-        CALL_SV_MANTA ( bam, bai, fasta, fai, case_info, target_bed ).diploid_sv_vcf
+        CALL_SV_MANTA ( bam, bai, fasta, fai, case_info, target_bed )
+            .diploid_sv_vcf
             .collect{it[1]}
             .set{ manta_vcf }
         ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
 
         //tiddit
-        CALL_SV_TIDDIT ( bam, fasta, fai, case_info ).vcf
+        CALL_SV_TIDDIT ( bam, fasta, fai, case_info )
+            .vcf
             .collect{it[1]}
             .set { tiddit_vcf }
         ch_versions = ch_versions.mix(CALL_SV_TIDDIT.out.versions)
@@ -46,5 +46,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
 
     emit:
-        versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
+        vcf        = SVDB_MERGE.out.vcf
+        versions   = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }
