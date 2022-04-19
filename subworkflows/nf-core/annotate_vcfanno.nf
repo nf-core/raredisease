@@ -12,9 +12,10 @@ workflow ANNOTATE_VCFANNO {
 
     main:
         ch_versions = Channel.empty()
+        ch_toml     =  file(toml)
 
         ch_placeholder = vcf.map { meta, vcf, idx -> vcf = []; [meta, vcf] }
-        VCFANNO (vcf, ch_placeholder, toml, resource_dir)
+        VCFANNO (vcf, ch_placeholder, ch_toml, resource_dir)
         ch_versions = ch_versions.mix(VCFANNO.out.versions)
 
     emit:

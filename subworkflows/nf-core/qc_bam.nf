@@ -3,13 +3,12 @@
 //
 
 include { PICARD_COLLECTMULTIPLEMETRICS } from '../../modules/nf-core/modules/picard/collectmultiplemetrics/main'
-include { PICARD_COLLECTHSMETRICS } from '../../modules/nf-core/modules/picard/collecthsmetrics/main'
-include { QUALIMAP_BAMQC } from '../../modules/nf-core/modules/qualimap/bamqc/main'
-include { CAT_CAT as CAT_CAT_BAIT } from '../../modules/nf-core/modules/cat/cat/main'
-
-include { TIDDIT_COV } from '../../modules/nf-core/modules/tiddit/cov/main'
-include { MOSDEPTH } from '../../modules/nf-core/modules/mosdepth/main'
-include { UCSC_WIGTOBIGWIG } from '../../modules/nf-core/modules/ucsc/wigtobigwig/main'
+include { PICARD_COLLECTHSMETRICS       } from '../../modules/nf-core/modules/picard/collecthsmetrics/main'
+include { QUALIMAP_BAMQC                } from '../../modules/nf-core/modules/qualimap/bamqc/main'
+include { CAT_CAT as CAT_CAT_BAIT       } from '../../modules/nf-core/modules/cat/cat/main'
+include { TIDDIT_COV                    } from '../../modules/nf-core/modules/tiddit/cov/main'
+include { MOSDEPTH                      } from '../../modules/nf-core/modules/mosdepth/main'
+include { UCSC_WIGTOBIGWIG              } from '../../modules/nf-core/modules/ucsc/wigtobigwig/main'
 
 workflow QC_BAM {
 
@@ -30,16 +29,30 @@ workflow QC_BAM {
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions)
 
         // COLLECT HS METRICS
-        bait_intervals_out = bait_intervals
+        bait_intervals
             .collect { it[0]
                 .toString()
                 .split("_split")[0]
                 .split("/")[-1] + "_bait.intervals_list"
             }
             .flatten()
+            .concat(bait_intervals)
+            .toList()
+            .map {
+                id, bait ->
+                    return [['id':id], bait]
+            }
+            .set { bait_intervals_cat_in }
 
-        CAT_CAT_BAIT ( bait_intervals, bait_intervals_out )
-        PICARD_COLLECTHSMETRICS ( bam, fasta, fai, CAT_CAT_BAIT.out.file_out, target_intervals )
+        CAT_CAT_BAIT ( bait_intervals_cat_in )
+            .file_out
+            .map {
+                id, file ->
+                    return [file]
+            }
+            .set { bait_intervals_cat_out }
+
+        PICARD_COLLECTHSMETRICS ( bam, fasta, fai, bait_intervals_cat_out, target_intervals )
         ch_versions = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions)
 
         // QUALIMAP BAMQC

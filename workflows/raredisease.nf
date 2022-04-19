@@ -11,9 +11,15 @@ WorkflowRaredisease.initialise(params, log)
 
 // Check input path parameters to see if they exist
 def checkPathParamList = [
-    params.input, params.multiqc_config, params.fasta,
-    params.bwamem2_index, params.fasta_fai, params.gnomad,
-    params.vcfanno_resources
+    params.bwamem2_index,
+    params.fasta,
+    params.fasta_fai,
+    params.gnomad,
+    params.input,
+    params.multiqc_config,
+    params.svdb_query_dbs,
+    params.vcfanno_resources,
+    params.vep_cache
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
@@ -27,7 +33,7 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yaml", checkIfExists: true)
+ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
 ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : Channel.empty()
 
 /*
@@ -39,9 +45,9 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK } from '../subworkflows/local/input_check'
-include { CHECK_VCF } from '../subworkflows/local/prepare_vcf'
-include { CHECK_BED } from '../subworkflows/local/prepare_bed'
+include { CHECK_INPUT                  } from '../subworkflows/local/check_input'
+include { PREPARE_REFERENCES           } from '../subworkflows/local/prepare_references'
+include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_structural_variants'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -61,19 +67,12 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { ALIGN_BWAMEM2 } from  '../subworkflows/nf-core/align_bwamem2'
-include { CALL_REPEAT_EXPANSIONS } from '../subworkflows/nf-core/call_repeat_expansions'
-include { CALL_SNV_DEEPVARIANT } from '../subworkflows/nf-core/call_snv_deepvariant'
-include { QC_BAM } from '../subworkflows/nf-core/qc_bam'
-
-include { ANNOTATE_VCFANNO } from '../subworkflows/nf-core/annotate_vcfanno'
-//
-// SUBWORKFLOW: Consists of mix/local modules
-//
-
-include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome'
-
-include { CALL_STRUCTURAL_VARIANTS } from '../subworkflows/local/call_structural_variants'
+include { ALIGN                        } from '../subworkflows/nf-core/align'
+include { CALL_REPEAT_EXPANSIONS       } from '../subworkflows/nf-core/call_repeat_expansions'
+include { CALL_SNV_DEEPVARIANT         } from '../subworkflows/nf-core/call_snv_deepvariant'
+include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
+include { ANNOTATE_VCFANNO             } from '../subworkflows/nf-core/annotate_vcfanno'
+include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -91,93 +90,102 @@ workflow RAREDISEASE {
     //
     // SUBWORKFLOW: Read in samplesheet, validate and stage input files
     //
-    INPUT_CHECK (
+    CHECK_INPUT (
         ch_input
     )
-    ch_versions = ch_versions.mix(INPUT_CHECK.out.versions)
+    ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
 
     // STEP 0: QUALITY CHECK.
     FASTQC (
-        INPUT_CHECK.out.reads
+        CHECK_INPUT.out.reads
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
-    PREPARE_GENOME ( params.fasta, params.variant_catalog )
-    ch_versions = ch_versions.mix(PREPARE_GENOME.out.versions)
-
-    ch_gnomad = Channel.empty()
-    if (params.gnomad) {
-        CHECK_VCF(
-            params.gnomad, PREPARE_GENOME.out.fasta,
-        ).set { ch_gnomad }
-    }
-
-    ch_target_bed = Channel.empty()
-    if (params.target_bed) {
-        CHECK_BED(
-            params.target_bed,
-            PREPARE_GENOME.out.sequence_dict
-        ).set { ch_target_bed }
-    }
+    PREPARE_REFERENCES (
+        params.bwamem2_index,
+        params.gnomad,
+        params.fasta,
+        params.fasta_fai,
+        params.target_bed,
+        params.variant_catalog,
+        params.vcfanno_resources
+    )
+    .set { ch_references }
+    ch_versions = ch_versions.mix(ch_references.versions)
 
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
-    if (params.aligner == 'bwamem2') {
-        ALIGN_BWAMEM2 (
-            INPUT_CHECK.out.reads,
-            PREPARE_GENOME.out.bwamem2_index
-        )
-
-        ch_marked_bam = ALIGN_BWAMEM2.out.marked_bam
-        ch_marked_bai = ALIGN_BWAMEM2.out.marked_bai
-
-        ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
-    }
+    ALIGN (
+        params.aligner,
+        CHECK_INPUT.out.reads,
+        ch_references.bwamem2_index
+    )
+    .set { ch_mapped }
+    ch_versions   = ch_versions.mix(ALIGN.out.versions)
 
     // STEP 1.5: BAM QUALITY CHECK
     QC_BAM (
-        ch_marked_bam,
-        ch_marked_bai,
-        PREPARE_GENOME.out.fasta,
-        PREPARE_GENOME.out.fai,
-        CHECK_BED.out.bait_intervals,
-        CHECK_BED.out.target_intervals,
-        PREPARE_GENOME.out.chrom_sizes
+        ch_mapped.marked_bam,
+        ch_mapped.marked_bai,
+        ch_references.genome_fasta,
+        ch_references.genome_fai,
+        ch_references.bait_intervals,
+        ch_references.target_intervals,
+        ch_references.chrom_sizes
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
 
     // STEP 1.6: EXPANSIONHUNTER AND STRANGER
     CALL_REPEAT_EXPANSIONS (
-            ch_marked_bam.join(ch_marked_bai, by: [0]),
-            PREPARE_GENOME.out.fasta,
-            PREPARE_GENOME.out.variant_catalog
-            )
+        ch_mapped.bam_bai,
+        ch_references.genome_fasta,
+        ch_references.variant_catalog
+    )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
     CALL_SNV_DEEPVARIANT (
-        ch_marked_bam.join(ch_marked_bai, by: [0]),
-        PREPARE_GENOME.out.fasta,
-        PREPARE_GENOME.out.fai,
-        INPUT_CHECK.out.ch_case_info
+        ch_mapped.bam_bai,
+        ch_references.genome_fasta,
+        ch_references.genome_fai,
+        CHECK_INPUT.out.case_info
     )
     ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
 
     CALL_STRUCTURAL_VARIANTS (
-        ch_marked_bam,
-        ch_marked_bai,
-        PREPARE_GENOME.out.fasta,
-        PREPARE_GENOME.out.fai,
-        INPUT_CHECK.out.ch_case_info,
-        ch_target_bed.bed
+        ch_mapped.marked_bam,
+        ch_mapped.marked_bai,
+        ch_references.genome_fasta,
+        ch_references.genome_fai,
+        CHECK_INPUT.out.case_info,
+        ch_references.target_bed
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
+
+    ch_sv_annotate = Channel.empty()
+    if (params.annotate_sv_switch) {
+        ANNOTATE_STRUCTURAL_VARIANTS (
+            CALL_STRUCTURAL_VARIANTS.out.vcf,
+            params.svdb_query_dbs,
+            params.genome,
+            params.vep_cache_version,
+            params.vep_cache,
+            ch_references.genome_fasta,
+            ch_references.sequence_dict
+        ).set {ch_sv_annotate}
+
+        ch_versions = ch_versions.mix(ch_sv_annotate.versions)
+    }
 
     // STEP 3: VARIANT ANNOTATION
     ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
 
-    ANNOTATE_VCFANNO ( params.vcfanno_toml, ch_dv_vcf, PREPARE_GENOME.out.vcfanno_resources )
+    ANNOTATE_VCFANNO (
+        params.vcfanno_toml,
+        ch_dv_vcf,
+        ch_references.vcfanno_resources
+    )
     ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
 
     //
