@@ -21,6 +21,6 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_versions = ch_versions.mix(STRANGER.out.versions)
 
     emit:
-        vcf         = STRANGER.out.vcf       // channel: [ val(meta), path(*.vcf.gz) ]
+        vcf         = STRANGER.out.vcf                    // channel: [ val(meta), path(*.vcf.gz) ]
         versions    = ch_versions.ifEmpty(null)     // channel: [ versions.yml ]
 }
