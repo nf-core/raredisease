@@ -52,11 +52,10 @@ process SENTIEON_DRIVER {
             args = args_list.join(' ')
         }
     }
-    def sentieon_exe = params.sentieon_install_dir ? "${params.sentieon_install_dir}/sentieon" : 'sentieon'
     """
     source sentieon_init.sh SENTIEON_LICENSE_BASE64
 
-    $sentieon_exe \\
+    sentieon \\
         driver \\
         $ref \\
         -t $task.cpus \\
@@ -68,13 +67,12 @@ process SENTIEON_DRIVER {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        sentieon: \$(echo \$($sentieon_exe driver --version 2>&1) | sed -e "s/sentieon-genomics-//g")
+        sentieon: \$(echo \$(sentieon driver --version 2>&1) | sed -e "s/sentieon-genomics-//g")
     END_VERSIONS
     """
 
     stub:
     def prefix       = task.ext.prefix ?: "${meta.id}"
-    def sentieon_exe = params.sentieon_install_dir ? "${params.sentieon_install_dir}/sentieon" : 'sentieon'
     """
     source sentieon_init.sh SENTIEON_LICENSE_BASE64
 
@@ -99,7 +97,7 @@ process SENTIEON_DRIVER {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        sentieon: \$(echo \$($sentieon_exe driver --version 2>&1) | sed -e "s/sentieon-genomics-//g")
+        sentieon: \$(echo \$(sentieon driver --version 2>&1) | sed -e "s/sentieon-genomics-//g")
     END_VERSIONS
     """
 }

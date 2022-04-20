@@ -23,13 +23,12 @@ process SENTIEON_BWAMEM {
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def sentieon_exe = params.sentieon_install_dir ? "${params.sentieon_install_dir}/sentieon" : 'sentieon'
     """
     source sentieon_init.sh SENTIEON_LICENSE_BASE64
 
     INDEX=`find -L ./ -name "*.amb" | sed 's/.amb//'`
 
-    $sentieon_exe bwa mem \\
+    sentieon bwa mem \\
         -t $task.cpus \\
         \$INDEX \\
         $reads \\
@@ -46,14 +45,13 @@ process SENTIEON_BWAMEM {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        sentieon: \$(echo \$($sentieon_exe driver --version 2>&1) | sed -e "s/sentieon-genomics-//g")
-        bwa: \$(echo \$($sentieon_exe bwa 2>&1) | sed 's/^.*Version: //; s/Contact:.*\$//')
+        sentieon: \$(echo \$(sentieon driver --version 2>&1) | sed -e "s/sentieon-genomics-//g")
+        bwa: \$(echo \$(sentieon bwa 2>&1) | sed 's/^.*Version: //; s/Contact:.*\$//')
     END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def sentieon_exe = params.sentieon_install_dir ? "${params.sentieon_install_dir}/sentieon" : 'sentieon'
     """
     source sentieon_init.sh SENTIEON_LICENSE_BASE64
 
@@ -62,8 +60,8 @@ process SENTIEON_BWAMEM {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        sentieon: \$(echo \$($sentieon_exe driver --version 2>&1) | sed -e "s/sentieon-genomics-//g")
-        bwa: \$(echo \$($sentieon_exe bwa 2>&1) | sed 's/^.*Version: //; s/Contact:.*\$//')
+        sentieon: \$(echo \$(sentieon driver --version 2>&1) | sed -e "s/sentieon-genomics-//g")
+        bwa: \$(echo \$(sentieon bwa 2>&1) | sed 's/^.*Version: //; s/Contact:.*\$//')
     END_VERSIONS
     """
 }
