@@ -3,8 +3,6 @@ process SENTIEON_DRIVER {
     label 'process_high'
     label 'sentieon'
 
-    secret 'SENTIEON_LICENSE_BASE64'
-
     input:
     tuple val(meta), path(bam), path(bai), path(score), path(score_idx), path(recal_pre), path(recal_post)
     path fasta
@@ -53,8 +51,6 @@ process SENTIEON_DRIVER {
         }
     }
     """
-    source sentieon_init.sh SENTIEON_LICENSE_BASE64
-
     sentieon \\
         driver \\
         $ref \\
@@ -74,8 +70,6 @@ process SENTIEON_DRIVER {
     stub:
     def prefix       = task.ext.prefix ?: "${meta.id}"
     """
-    source sentieon_init.sh SENTIEON_LICENSE_BASE64
-
     touch ${prefix}.bam
     touch ${prefix}.bai
     touch ${prefix}.cram

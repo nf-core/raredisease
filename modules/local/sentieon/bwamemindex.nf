@@ -3,8 +3,6 @@ process SENTIEON_BWAINDEX {
     label 'process_high'
     label 'sentieon'
 
-    secret 'SENTIEON_LICENSE_BASE64'
-
     input:
     path fasta
 
@@ -18,8 +16,6 @@ process SENTIEON_BWAINDEX {
     script:
     def args = task.ext.args ?: ''
     """
-    source sentieon_init.sh SENTIEON_LICENSE_BASE64
-
     mkdir bwa_index
 
     sentieon bwa index \\
@@ -36,8 +32,6 @@ process SENTIEON_BWAINDEX {
 
     stub:
     """
-    source sentieon_init.sh SENTIEON_LICENSE_BASE64
-
     mkdir bwa_index
 
     cat <<-END_VERSIONS > versions.yml

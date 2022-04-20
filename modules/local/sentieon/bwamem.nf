@@ -3,8 +3,6 @@ process SENTIEON_BWAMEM {
     label 'process_high'
     label 'sentieon'
 
-    secret 'SENTIEON_LICENSE_BASE64'
-
     input:
     tuple val(meta), path(reads)
     path fasta
@@ -24,8 +22,6 @@ process SENTIEON_BWAMEM {
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    source sentieon_init.sh SENTIEON_LICENSE_BASE64
-
     INDEX=`find -L ./ -name "*.amb" | sed 's/.amb//'`
 
     sentieon bwa mem \\
@@ -53,8 +49,6 @@ process SENTIEON_BWAMEM {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    source sentieon_init.sh SENTIEON_LICENSE_BASE64
-
     touch ${prefix}.bam
     touch ${prefix}.bai
 
