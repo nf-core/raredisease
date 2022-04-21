@@ -36,6 +36,12 @@
             "gatk4/intervallisttools": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
+            "gatk4/revertsam": {
+                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+            },
+            "gatk4/samtofastq": {
+                "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+            },
             "glnexus": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
