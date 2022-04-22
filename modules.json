@@ -76,10 +76,10 @@
                 "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
             },
             "samtools/view": {
-                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
+                "git_sha": "12afb6b0faf3cabf769c9a2a7dd477e3f066eac0"
             },
             "stranger": {
-                "git_sha": "a6cb75174bfbd131f3da14d8cd3e34c1a2e6e268"
+                "git_sha": "c7329a3a5730872dea512921217993cfa7acd959"
             },
             "svdb/merge": {
                 "git_sha": "a973b68200da801be1c2e27b8fd72d7256f5db6b"
