@@ -180,10 +180,9 @@ workflow RAREDISEASE {
     }
     
     // STEP 2.1: MT CALLING
-    ch_bam_bai  = ch_marked_bam.join(ch_marked_bai, by: [0])
     
     PREPARE_MT_ALIGNMENT (
-        ch_bam_bai
+        ch_mapped.bam_bai
     )
     ch_versions = ch_versions.mix(PREPARE_MT_ALIGNMENT.out.versions)
 
