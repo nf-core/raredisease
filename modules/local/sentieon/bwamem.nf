@@ -29,7 +29,7 @@ process SENTIEON_BWAMEM {
         \$INDEX \\
         $reads \\
         $args \\
-        | $sentieon_exe \\
+        | sentieon \\
             util \\
             sort \\
             -r $fasta \\
