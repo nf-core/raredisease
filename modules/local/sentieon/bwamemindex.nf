@@ -7,8 +7,8 @@ process SENTIEON_BWAINDEX {
     path fasta
 
     output:
-    path "bwa_index"   , emit: index
-    path "versions.yml", emit: versions
+    path "bwa_index"    , emit: index
+    path "versions.yml" , emit: versions
 
     when:
     task.ext.when == null || task.ext.when

@@ -9,10 +9,10 @@ process SENTIEON_DEDUP {
     path fai
 
     output:
-    tuple val(meta), path('*.bam')                  , emit: bam          , optional: true
-    tuple val(meta), path('*.bai')                  , emit: bai          , optional: true
-    tuple val(meta), path('*dedup_metrics.txt')     , emit: metrics_dedup, optional: true
-    path  "versions.yml"                            , emit: versions
+    tuple val(meta), path('*dedup.bam')          , emit: bam
+    tuple val(meta), path('*dedup.bai')          , emit: bai
+    tuple val(meta), path('*dedup_metrics.txt')  , emit: metrics_dedup
+    path  "versions.yml"                         , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -30,7 +30,7 @@ process SENTIEON_DEDUP {
         --algo Dedup \\
         --score_info $score \\
         --metrics ${prefix}_dedup_metrics.txt \\
-        ${prefix}.deduped.bam
+        ${prefix}.dedup.bam
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -41,8 +41,8 @@ process SENTIEON_DEDUP {
     stub:
     def prefix       = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.bam
-    touch ${prefix}.bai
+    touch ${prefix}.dedup.bam
+    touch ${prefix}.dedup.bai
     touch ${prefix}.dedup_metrics.txt
 
     cat <<-END_VERSIONS > versions.yml
