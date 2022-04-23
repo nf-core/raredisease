@@ -128,8 +128,6 @@ workflow RAREDISEASE {
         ch_references.genome_fai,
         ch_references.aligner_index,
         ch_known_dbsnp,
-        ch_known_indels,
-        ch_known_mills
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)

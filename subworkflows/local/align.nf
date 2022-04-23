@@ -13,8 +13,6 @@ workflow ALIGN {
         fai          // channel: [genome.fai]
         index        // channel: [ /path/to/bwamem2/index/ ]
         known_dbsnp  // channel: [ /path/to/known_dbsnp/   ]
-        known_indels // channel: [ /path/to/known_indels/  ]
-        known_mills  // channel: [ /path/to/known_mills/   ]
 
     main:
         ch_versions   = Channel.empty()
@@ -25,7 +23,7 @@ workflow ALIGN {
             ch_marked_bai = ALIGN_BWAMEM2.out.marked_bai
             ch_versions = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
         } else if( aligner == "sentieon" ) {
-            ALIGN_SENTIEON ( reads_input, fasta, fai, index, known_dbsnp, known_indels, known_mills )
+            ALIGN_SENTIEON ( reads_input, fasta, fai, index, known_dbsnp )
             ch_marked_bam = ALIGN_SENTIEON.out.marked_bam
             ch_marked_bai = ALIGN_SENTIEON.out.marked_bai
             ch_versions = ch_versions.mix(ALIGN_SENTIEON.out.versions)

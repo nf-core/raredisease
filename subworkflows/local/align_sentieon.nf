@@ -2,11 +2,11 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SENTIEON_BWAMEM                            } from '../../modules/local/sentieon/bwamem'
-include { SENTIEON_DRIVER as SENTIEON_DATAMETRICS    } from '../../modules/local/sentieon/driver'
-include { SENTIEON_DRIVER as SENTIEON_LOCUSCOLLECTOR } from '../../modules/local/sentieon/driver'
-include { SENTIEON_DRIVER as SENTIEON_DEDUP          } from '../../modules/local/sentieon/driver'
-include { SENTIEON_DRIVER as SENTIEON_BQSR           } from '../../modules/local/sentieon/driver'
+include { SENTIEON_BWAMEM         } from '../../modules/local/sentieon/bwamem'
+include { SENTIEON_DATAMETRICS    } from '../../modules/local/sentieon/datametrics'
+include { SENTIEON_LOCUSCOLLECTOR } from '../../modules/local/sentieon/locuscollector'
+include { SENTIEON_DEDUP          } from '../../modules/local/sentieon/dedup'
+include { SENTIEON_BQSR           } from '../../modules/local/sentieon/bqsr'
 
 workflow ALIGN_SENTIEON {
     take:
@@ -15,12 +15,12 @@ workflow ALIGN_SENTIEON {
         fai          // path: genome.fai
         index        // channel: [ /path/to/bwamem2/index/ ]
         known_dbsnp  // path: params.known_dbsnp
-        known_indels // path: params.known_indels
-        known_mills  // path: params.known_mills
 
     main:
-        ch_versions  = Channel.empty()
-        ch_recal_pre = Channel.empty()
+        ch_versions = Channel.empty()
+        ch_bqsr_bam = Channel.empty()
+        ch_bqsr_bai = Channel.empty()
+        ch_bqsr_csv = Channel.empty()
 
         SENTIEON_BWAMEM ( reads_input, fasta, fai, index )
         ch_versions = ch_versions.mix(SENTIEON_BWAMEM.out.versions)
@@ -28,35 +28,36 @@ workflow ALIGN_SENTIEON {
         SENTIEON_BWAMEM.out
             .bam
             .join(SENTIEON_BWAMEM.out.bai)
-            .map { it -> it + [ [], [], [], [] ] }
             .set { ch_bam_bai }
 
-        SENTIEON_DATAMETRICS (ch_bam_bai, fasta, fai, [], [], [] )
+        SENTIEON_DATAMETRICS (ch_bam_bai, fasta, fai )
         ch_versions = ch_versions.mix(SENTIEON_DATAMETRICS.out.versions)
 
-        SENTIEON_LOCUSCOLLECTOR (ch_bam_bai, fasta, fai, [], [], [] )
+        SENTIEON_LOCUSCOLLECTOR ( ch_bam_bai )
 
         ch_bam_bai
-            .map { meta, bam, bai, score, score_idx, recal_pre, recal_post -> [ meta, bam, bai ] }
             .join(SENTIEON_LOCUSCOLLECTOR.out.score)
             .join(SENTIEON_LOCUSCOLLECTOR.out.score_idx)
-            .map { it -> it + [ [], [] ] }
             .set { ch_bam_bai_score }
 
-        SENTIEON_DEDUP ( ch_bam_bai_score, fasta, fai, [], [], [] )
+        SENTIEON_DEDUP ( ch_bam_bai_score, fasta, fai )
 
         if (params.variant_caller == "sentieon") {
             SENTIEON_DEDUP.out.bam
                 .join(SENTIEON_DEDUP.out.bai)
-                .map { it -> it + [ [], [], [], [] ] }
                 .set { ch_dedup_bam_bai }
-            ch_recal_pre = SENTIEON_BQSR ( ch_dedup_bam_bai, fasta, fai, known_dbsnp, known_mills, known_indels ).out.recal_pre
+            SENTIEON_BQSR ( ch_dedup_bam_bai, fasta, fai, known_dbsnp )
+            ch_bqsr_bam = SENTIEON_BQSR.out.bam
+            ch_bqsr_bai = SENTIEON_BQSR.out.bai
+            ch_bqsr_csv = SENTIEON_BQSR.out.recal_csv
         }
 
     emit:
         marked_bam             = SENTIEON_DEDUP.out.bam
         marked_bai             = SENTIEON_DEDUP.out.bai
-        recal_pre              = ch_recal_pre
+        recal_bam              = ch_bqsr_bam.ifEmpty(null)
+        recal_bai              = ch_bqsr_bai.ifEmpty(null)
+        recal_csv              = ch_bqsr_csv.ifEmpty(null)
         mq_metrics             = SENTIEON_DATAMETRICS.out.mq_metrics.ifEmpty(null)
         qd_metrics             = SENTIEON_DATAMETRICS.out.qd_metrics.ifEmpty(null)
         gc_metrics             = SENTIEON_DATAMETRICS.out.gc_metrics.ifEmpty(null)
