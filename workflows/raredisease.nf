@@ -145,12 +145,12 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
 
     // STEP 1.6: EXPANSIONHUNTER AND STRANGER
-    CALL_REPEAT_EXPANSIONS (
-        ch_mapped.bam_bai,
-        ch_references.genome_fasta,
-        ch_references.variant_catalog
-    )
-    ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
+    // CALL_REPEAT_EXPANSIONS (
+        // ch_mapped.bam_bai,
+        // ch_references.genome_fasta,
+        // ch_references.variant_catalog
+    // )
+    // ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
