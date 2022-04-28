@@ -10,7 +10,7 @@ process SENTIEON_DEDUP {
 
     output:
     tuple val(meta), path('*dedup.bam')          , emit: bam
-    tuple val(meta), path('*dedup.bai')          , emit: bai
+    tuple val(meta), path('*dedup.bam.bai')      , emit: bai
     tuple val(meta), path('*dedup_metrics.txt')  , emit: metrics_dedup
     path  "versions.yml"                         , emit: versions
 
@@ -42,7 +42,7 @@ process SENTIEON_DEDUP {
     def prefix       = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}.dedup.bam
-    touch ${prefix}.dedup.bai
+    touch ${prefix}.dedup.bam.bai
     touch ${prefix}_dedup_metrics.txt
 
     cat <<-END_VERSIONS > versions.yml

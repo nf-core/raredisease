@@ -15,17 +15,15 @@ process SENTIEON_LOCUSCOLLECTOR {
     task.ext.when == null || task.ext.when
 
     script:
-    def args   = task.ext.args ?: ''
     def input  = bam ? '-i ' + bam.sort().join(' -i ') : ''
     def prefix = task.ext.prefix ? "${task.ext.prefix}_score.txt.gz" : "${meta.id}_score.txt.gz"
     """
     sentieon \\
         driver \\
-        --algo LocusCollector \\
-        --fun score_info $prefix \\
         -t $task.cpus \\
         $input \\
-        $args
+        --algo LocusCollector \\
+        --fun score_info $prefix
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -28,15 +28,15 @@ process SENTIEON_DATAMETRICS {
     """
     sentieon \\
         driver \\
+        -t $task.cpus \\
+        -r $fasta \\
+        $input \\
+        $args \\
         --algo GCBias --summary ${prefix}_gc_summary.txt ${prefix}_gc_metrics.txt \\
         --algo MeanQualityByCycle ${prefix}_mq_metrics.txt \\
         --algo QualDistribution ${prefix}_qd_metrics.txt \\
         --algo InsertSizeMetricAlgo ${prefix}_is_metrics.txt  \\
-        --algo AlignmentStat ${prefix}_aln_metrics.txt \\
-        -t $task.cpus \\
-        -r $fasta \\
-        $input \\
-        $args
+        --algo AlignmentStat ${prefix}_aln_metrics.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
