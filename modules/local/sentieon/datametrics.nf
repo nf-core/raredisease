@@ -34,8 +34,8 @@ process SENTIEON_DATAMETRICS {
         --algo InsertSizeMetricAlgo ${prefix}_is_metrics.txt  \\
         --algo AlignmentStat ${prefix}_aln_metrics.txt \\
         -t $task.cpus \\
+        -r $fasta \\
         $input \\
-        $ref \\
         $args
 
     cat <<-END_VERSIONS > versions.yml
@@ -47,12 +47,12 @@ process SENTIEON_DATAMETRICS {
     stub:
     def prefix       = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.mq_metrics.txt
-    touch ${prefix}.qd_metrics.txt
-    touch ${prefix}.gc_summary.txt
-    touch ${prefix}.gc_metrics.txt
-    touch ${prefix}.aln_metrics.txt
-    touch ${prefix}.is_metrics.txt
+    touch ${prefix}_mq_metrics.txt
+    touch ${prefix}_qd_metrics.txt
+    touch ${prefix}_gc_summary.txt
+    touch ${prefix}_gc_metrics.txt
+    touch ${prefix}_aln_metrics.txt
+    touch ${prefix}_is_metrics.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

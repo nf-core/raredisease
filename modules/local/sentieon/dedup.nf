@@ -43,7 +43,7 @@ process SENTIEON_DEDUP {
     """
     touch ${prefix}.dedup.bam
     touch ${prefix}.dedup.bai
-    touch ${prefix}.dedup_metrics.txt
+    touch ${prefix}_dedup_metrics.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

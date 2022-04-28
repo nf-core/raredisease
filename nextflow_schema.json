@@ -222,6 +222,13 @@
                     "description": "Specifies the alignment algorithm to use - available options are 'bwamem2' and 'sentieon'.",
                     "fa_icon": "fas fa-map-signs",
                     "enum": ["bwamem2", "sentieon"]
+                },
+                "rmdup": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies whether duplicates reads should be removed prior to variant calling.",
+                    "fa_icon": "fas fa-map-signs",
+                    "hidden": true
                 }
             }
         },

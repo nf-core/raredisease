@@ -14,13 +14,14 @@ process SENTIEON_BWAINDEX {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
+    def args   = task.ext.args ?: ''
+    def prefix = task.ext.prefix ? "-p bwa_index/${task.ext.prefix}" : "-p bwa_index/${fasta.baseName}"
     """
     mkdir bwa_index
 
     sentieon bwa index \\
         $args \\
-        -p bwa_index/${fasta.baseName} \\
+        $prefix \\
         $fasta
 
     cat <<-END_VERSIONS > versions.yml

@@ -17,11 +17,12 @@ process SENTIEON_LOCUSCOLLECTOR {
     script:
     def args   = task.ext.args ?: ''
     def input  = bam ? '-i ' + bam.sort().join(' -i ') : ''
+    def prefix = task.ext.prefix ? "${task.ext.prefix}_score.txt.gz" : "${meta.id}_score.txt.gz"
     """
     sentieon \\
         driver \\
         --algo LocusCollector \\
-        --fun score_info ${idSample}_score.gz \\
+        --fun score_info $prefix \\
         -t $task.cpus \\
         $input \\
         $args
@@ -33,7 +34,7 @@ process SENTIEON_LOCUSCOLLECTOR {
     """
 
     stub:
-    def prefix       = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ? "${task.ext.prefix}_score.gz" : "${meta.id}_score.gz"
     """
     touch ${prefix}.score.txt.gz
     touch ${prefix}.score.txt.gz.tbi
