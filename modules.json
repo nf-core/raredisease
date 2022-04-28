@@ -49,7 +49,7 @@
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
             "picard/collecthsmetrics": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                "git_sha": "35231d394940dca2291ac2321c8f9b2e3b039905"
             },
             "picard/collectmultiplemetrics": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
@@ -103,7 +103,7 @@
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
             "untar": {
-                "git_sha": "9ae34a01d1747019fd37753ff4cafb05aec35a2b"
+                "git_sha": "9aadd9a6d3f5964476582319b3a1c54a3e3fe7c9"
             },
             "vcfanno": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
