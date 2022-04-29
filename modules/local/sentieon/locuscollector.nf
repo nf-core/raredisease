@@ -15,7 +15,7 @@ process SENTIEON_LOCUSCOLLECTOR {
     task.ext.when == null || task.ext.when
 
     script:
-    def input  = bam ? '-i ' + bam.sort().join(' -i ') : ''
+    def input = bam.sort().collect{"-i $it"}.join(' ')
     def prefix = task.ext.prefix ? "${task.ext.prefix}_score.txt.gz" : "${meta.id}_score.txt.gz"
     """
     sentieon \\

@@ -27,9 +27,9 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-if (params.known_dbsnp)  { ch_known_dbsnp  = file(params.known_dbsnp)  } else { ch_known_dbsnp  = [] }
-if (params.known_mills)  { ch_known_mills  = file(params.known_mills)  } else { ch_known_mills  = [] }
-if (params.known_indels) { ch_known_indels = file(params.known_indels) } else { ch_known_indels = [] }
+ch_known_dbsnp  = params.known_dbsnp  ? file(params.known_dbsnp)  : []
+ch_known_mills  = params.known_mills  ? file(params.known_mills)  : []
+ch_known_indels = params.known_indels ? file(params.known_indels) : []
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

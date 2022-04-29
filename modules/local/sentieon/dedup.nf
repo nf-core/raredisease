@@ -19,7 +19,7 @@ process SENTIEON_DEDUP {
 
     script:
     def args   = task.ext.args ?: ''
-    def input  = bam ? '-i ' + bam.sort().join(' -i ') : ''
+    def input = bam.sort().collect{"-i $it"}.join(' ')
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     sentieon \\

@@ -22,7 +22,7 @@ process SENTIEON_BQSR {
 
     script:
     def args   = task.ext.args ?: ''
-    def input  = bam ? '-i ' + bam.sort().join(' -i ') : ''
+    def input  = bam.sort().collect{"-i $it"}.join(' ')
     def dbsnp  = known_dbsnp  ? "-k $known_dbsnp" : ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """

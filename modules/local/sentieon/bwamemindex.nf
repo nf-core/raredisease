@@ -7,7 +7,7 @@ process SENTIEON_BWAINDEX {
     path fasta
 
     output:
-    path "bwa_index"    , emit: index
+    path "bwa"          , emit: index
     path "versions.yml" , emit: versions
 
     when:
@@ -15,13 +15,13 @@ process SENTIEON_BWAINDEX {
 
     script:
     def args   = task.ext.args ?: ''
-    def prefix = task.ext.prefix ? "-p bwa_index/${task.ext.prefix}" : "-p bwa_index/${fasta.baseName}"
+    def prefix = task.ext.prefix ? "bwa/${task.ext.prefix}" : "bwa/${fasta.baseName}"
     """
-    mkdir bwa_index
+    mkdir bwa
 
     sentieon bwa index \\
         $args \\
-        $prefix \\
+        -p $prefix \\
         $fasta
 
     cat <<-END_VERSIONS > versions.yml
@@ -33,7 +33,7 @@ process SENTIEON_BWAINDEX {
 
     stub:
     """
-    mkdir bwa_index
+    mkdir bwa
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
