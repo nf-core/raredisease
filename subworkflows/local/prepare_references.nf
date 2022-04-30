@@ -41,13 +41,13 @@ workflow PREPARE_REFERENCES {
         ch_dbsnp_vcf = Channel.empty()
         ch_dbsnp_tbi = Channel.empty()
         if (!known_dbsnp_tbi && known_dbsnp) {
-            ch_dbsnp_vcf = file(known_dbsnp)
-            TABIX_DBSNP([[id:'dbsnp'], ch_dbsnp_vcf])
+            TABIX_DBSNP([[id:'dbsnp'], file(known_dbsnp)])
+            ch_dbsnp_vcf = Channel.fromPath(known_dbsnp)
             ch_dbsnp_tbi = TABIX_DBSNP.out.tbi.collect {it[1]}
             ch_versions  = ch_versions.mix(TABIX_DBSNP.out.versions)
         } else if (known_dbsnp_tbi && known_dbsnp) {
-            ch_dbsnp_vcf = file(known_dbsnp)
-            ch_dbsnp_tbi = file(known_dbsnp_tbi)
+            ch_dbsnp_vcf = Channel.fromPath(known_dbsnp)
+            ch_dbsnp_tbi = Channel.fromPath(known_dbsnp_tbi)
         }
 
         // Gnomad vcf
