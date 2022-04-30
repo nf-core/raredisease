@@ -27,9 +27,10 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-ch_known_dbsnp  = params.known_dbsnp  ? file(params.known_dbsnp)  : []
-ch_known_mills  = params.known_mills  ? file(params.known_mills)  : []
-ch_known_indels = params.known_indels ? file(params.known_indels) : []
+ch_known_dbsnp     = params.known_dbsnp     ? file(params.known_dbsnp)     : []
+ch_known_dbsnp_tbi = params.known_dbsnp_tbi ? file(params.known_dbsnp_tbi) : []
+ch_known_mills     = params.known_mills     ? file(params.known_mills)     : []
+ch_known_indels    = params.known_indels    ? file(params.known_indels)    : []
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -109,9 +110,11 @@ workflow RAREDISEASE {
     PREPARE_REFERENCES (
         params.aligner,
         params.bwamem2_index,
-        params.gnomad,
         params.fasta,
         params.fasta_fai,
+        params.gnomad,
+        params.known_dbsnp,
+        params.known_dbsnp_tbi,
         params.sentieonbwa_index,
         params.target_bed,
         params.variant_catalog,
@@ -127,7 +130,8 @@ workflow RAREDISEASE {
         ch_references.genome_fasta,
         ch_references.genome_fai,
         ch_references.aligner_index,
-        ch_known_dbsnp,
+        ch_references.known_dbsnp,
+        ch_references.known_dbsnp_tbi
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)

@@ -108,6 +108,13 @@
                     "description": "Path to known dbSNP file.",
                     "hidden": true
                 },
+                "known_dbsnp_tbi": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Path to known dbSNP file index.",
+                    "hidden": true
+                },
                 "known_indels": {
                     "type": "string",
                     "format": "path",

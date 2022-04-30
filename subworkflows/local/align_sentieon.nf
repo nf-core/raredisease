@@ -10,11 +10,12 @@ include { SENTIEON_BQSR           } from '../../modules/local/sentieon/bqsr'
 
 workflow ALIGN_SENTIEON {
     take:
-        reads_input  // channel: [ val(meta), reads_input ]
-        fasta        // path: genome.fasta
-        fai          // path: genome.fai
-        index        // channel: [ /path/to/bwamem2/index/ ]
-        known_dbsnp  // path: params.known_dbsnp
+        reads_input     // channel: [ val(meta), reads_input ]
+        fasta           // path: genome.fasta
+        fai             // path: genome.fai
+        index           // channel: [ /path/to/bwamem2/index/ ]
+        known_dbsnp     // path: params.known_dbsnp
+        known_dbsnp_tbi // path: params.known_dbsnp
 
     main:
         ch_versions = Channel.empty()
@@ -46,7 +47,7 @@ workflow ALIGN_SENTIEON {
             SENTIEON_DEDUP.out.bam
                 .join(SENTIEON_DEDUP.out.bai)
                 .set { ch_dedup_bam_bai }
-            SENTIEON_BQSR ( ch_dedup_bam_bai, fasta, fai, known_dbsnp )
+            SENTIEON_BQSR ( ch_dedup_bam_bai, fasta, fai, known_dbsnp, known_dbsnp_tbi )
             ch_bqsr_bam = SENTIEON_BQSR.out.bam
             ch_bqsr_bai = SENTIEON_BQSR.out.bai
             ch_bqsr_csv = SENTIEON_BQSR.out.recal_csv

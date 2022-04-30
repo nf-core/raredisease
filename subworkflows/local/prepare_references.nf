@@ -2,18 +2,21 @@
 // Prepare reference files
 //
 
-include { CHECK_BED      } from './prepare_bed'
-include { CHECK_VCF      } from './prepare_vcf'
-include { PREPARE_GENOME } from './prepare_genome'
+include { CHECK_BED                  } from './prepare_bed'
+include { CHECK_VCF                  } from './prepare_vcf'
+include { PREPARE_GENOME             } from './prepare_genome'
+include { TABIX_TABIX as TABIX_DBSNP } from '../../modules/nf-core/modules/tabix/tabix/main'
 
 
 workflow PREPARE_REFERENCES {
     take:
         aligner             // [mandatory] params.aligner
         bwamem2_index       // [mandatory] bwamem2_index
-        gnomad
         fasta               // [mandatory] genome.fasta
         fai                 // [mandatory] genome.fai
+        gnomad
+        known_dbsnp
+        known_dbsnp_tbi
         sentieonbwa_index
         target_bed
         variant_catalog     // [optional] variant_catalog.json
@@ -33,6 +36,19 @@ workflow PREPARE_REFERENCES {
         )
         .set { ch_genome }
         ch_versions = ch_versions.mix(ch_genome.versions)
+
+        // Dbsnp vcf
+        ch_dbsnp_vcf = Channel.empty()
+        ch_dbsnp_tbi = Channel.empty()
+        if (!known_dbsnp_tbi && known_dbsnp) {
+            ch_dbsnp_vcf = file(known_dbsnp)
+            TABIX_DBSNP([[id:'dbsnp'], ch_dbsnp_vcf])
+            ch_dbsnp_tbi = TABIX_DBSNP.out.tbi.collect {it[1]}
+            ch_versions  = ch_versions.mix(TABIX_DBSNP.out.versions)
+        } else if (known_dbsnp_tbi && known_dbsnp) {
+            ch_dbsnp_vcf = file(known_dbsnp)
+            ch_dbsnp_tbi = file(known_dbsnp_tbi)
+        }
 
         // Gnomad vcf
         ch_gnomad_vcf = Channel.empty()
@@ -70,6 +86,8 @@ workflow PREPARE_REFERENCES {
         sequence_dict     = ch_genome.sequence_dict
         variant_catalog   = ch_genome.variant_catalog
         vcfanno_resources = ch_genome.vcfanno_resources
+        known_dbsnp       = ch_dbsnp_vcf
+        known_dbsnp_tbi   = ch_dbsnp_tbi
         gnomad_vcf        = ch_gnomad_vcf
         gnomad_idx        = ch_gnomad_idx
         target_bed        = ch_target_bed

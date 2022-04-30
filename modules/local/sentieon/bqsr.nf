@@ -4,18 +4,19 @@ process SENTIEON_BQSR {
     label 'sentieon'
 
     input:
-    tuple val(meta), path(bam), path(bai), path(score), path(score_idx)
+    tuple val(meta), path(bam), path(bai)
     path fasta
     path fai
     path known_dbsnp
+    path known_dbsnp_tbi
 
     output:
-    tuple val(meta), path('*.recal.bam')            , emit: bam
-    tuple val(meta), path('*.recal.bai')            , emit: bai
-    tuple val(meta), path('*recal_data.table')      , emit: recal_pre
-    tuple val(meta), path('*recal_data.table.post') , emit: recal_post
-    tuple val(meta), path('*recal_result.csv')      , emit: recal_csv
-    path  "versions.yml"                            , emit: versions
+    tuple val(meta), path('*_recal.bam')             , emit: bam
+    tuple val(meta), path('*_recal.bam.bai')         , emit: bai
+    tuple val(meta), path('*_recal_data.table')      , emit: recal_pre
+    tuple val(meta), path('*_recal_data.table_post') , emit: recal_post
+    tuple val(meta), path('*_recal_result.csv')      , emit: recal_csv
+    path  "versions.yml"                             , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -33,25 +34,25 @@ process SENTIEON_BQSR {
         $input \\
         --algo QualCal \\
         $dbsnp \\
-        ${prefix}.recal_table.table
+        ${prefix}_recal_data.table
 
     sentieon driver \\
         -t ${task.cpus} \\
         -r $fasta \\
         $args \\
         $input \\
-        -q ${prefix}.recal_data.table \\
+        -q ${prefix}_recal_data.table \\
         --algo QualCal \\
         $dbsnp \\
-        $prefix.recal_data.table.post \\
-        --algo ReadWriter ${prefix}.recal.bam
+        ${prefix}_recal_data.table_post \\
+        --algo ReadWriter ${prefix}_recal.bam
 
     sentieon driver \\
         -t ${task.cpus} \\
         --algo QualCal \\
         --plot \\
-        --before ${prefix}.recal.table \\
-        --after ${prefix}.table.post \\
+        --before ${prefix}_recal_data.table \\
+        --after ${prefix}_recal_data.table_post \\
         ${prefix}_recal_result.csv
 
     cat <<-END_VERSIONS > versions.yml
@@ -63,10 +64,10 @@ process SENTIEON_BQSR {
     stub:
     def prefix       = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.recal.bam
-    touch ${prefix}.recal.bai
-    touch ${prefix}.recal_data.table
-    touch ${prefix}.recal_data.table.post
+    touch ${prefix}_recal.bam
+    touch ${prefix}_recal.bam.bai
+    touch ${prefix}_recal_data.table
+    touch ${prefix}_recal_data.table_post
     touch ${prefix}_recal_result.csv
 
     cat <<-END_VERSIONS > versions.yml
