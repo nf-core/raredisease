@@ -23,7 +23,6 @@ process SENTIEON_DATAMETRICS {
     script:
     def args   = task.ext.args ?: ''
     def input  = bam.sort().collect{"-i $it"}.join(' ')
-    def ref    = fasta ? "-r $fasta" : ''
     def prefix       = task.ext.prefix ?: "${meta.id}"
     """
     sentieon \\

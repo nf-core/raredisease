@@ -30,7 +30,7 @@ process SENTIEON_DEDUP {
         --algo Dedup \\
         --score_info $score \\
         --metrics ${prefix}_dedup_metrics.txt \\
-        ${prefix}.dedup.bam
+        ${prefix}_dedup.bam
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -39,10 +39,10 @@ process SENTIEON_DEDUP {
     """
 
     stub:
-    def prefix       = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.dedup.bam
-    touch ${prefix}.dedup.bam.bai
+    touch ${prefix}_dedup.bam
+    touch ${prefix}_dedup.bam.bai
     touch ${prefix}_dedup_metrics.txt
 
     cat <<-END_VERSIONS > versions.yml

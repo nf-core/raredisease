@@ -34,8 +34,8 @@ process SENTIEON_LOCUSCOLLECTOR {
     stub:
     def prefix = task.ext.prefix ? "${task.ext.prefix}_score.gz" : "${meta.id}_score.gz"
     """
-    touch ${prefix}.score.txt.gz
-    touch ${prefix}.score.txt.gz.tbi
+    touch ${prefix}_score.txt.gz
+    touch ${prefix}_score.txt.gz.tbi
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

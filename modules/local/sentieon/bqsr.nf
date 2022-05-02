@@ -23,6 +23,8 @@ process SENTIEON_BQSR {
 
     script:
     def args   = task.ext.args ?: ''
+    def args2  = task.ext.args2 ?: ''
+    def args3  = task.ext.args3 ?: ''
     def input  = bam.sort().collect{"-i $it"}.join(' ')
     def dbsnp  = known_dbsnp  ? "-k $known_dbsnp" : ''
     def prefix = task.ext.prefix ?: "${meta.id}"
@@ -39,7 +41,7 @@ process SENTIEON_BQSR {
     sentieon driver \\
         -t ${task.cpus} \\
         -r $fasta \\
-        $args \\
+        $args2 \\
         $input \\
         -q ${prefix}_recal_data.table \\
         --algo QualCal \\
@@ -49,6 +51,7 @@ process SENTIEON_BQSR {
 
     sentieon driver \\
         -t ${task.cpus} \\
+        $args3
         --algo QualCal \\
         --plot \\
         --before ${prefix}_recal_data.table \\
