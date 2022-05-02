@@ -68,7 +68,8 @@
                     "format": "file-path",
                     "help_text": "If none provided, will be generated automatically from the FASTA reference",
                     "description": "Path to FASTA genome index file.",
-                    "fa_icon": "far fa-file-code"
+                    "fa_icon": "far fa-file-code",
+                    "hidden": true
                 },
                 "igenomes_base": {
                     "type": "string",
@@ -97,38 +98,51 @@
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-bezier-curve",
-                    "description": "Path to directory for gnomad vcf."
+                    "description": "Path to directory for gnomad vcf.",
+                    "help_text": "Path to the gnomad vcf file. If you don't provide one, gnomad annotations will not be used."
                 },
                 "target_bed": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-bezier-curve",
-                    "description": "Path to directory for target bed file."
+                    "description": "Path to directory for target bed file.",
+                    "help_text": "If you would like to limit your analysis to specific regions of the genome, you can pass those regions in a bed file using this option",
+                    "hidden": true
                 },
                 "svdb_query_dbs": {
                     "type": "string",
                     "format": "file-path",
-                    "description": "Path to comma-separated file containing information about the databases used for structural variant annotation.",
-                    "fa_icon": "far fa-file-code"
+                    "description": "Databases used for structural variant annotation.",
+                    "fa_icon": "far fa-file-code",
+                    "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation."
                 },
                 "variant_catalog": {
                     "type": "string",
                     "format": "file-path",
                     "description": "Path to variant catalog file",
-                    "help_text": "This parameter is mandatory for use with ExpansionHunter",
-                    "fa_icon": "far fa-file-code"
+                    "help_text": "Used with ExpansionHunter and if no catalogue is passed, then a default will be used.",
+                    "fa_icon": "far fa-file-code",
+                    "hidden": true
                 },
                 "vcfanno_resources": {
                     "type": "string",
                     "description": "Directory path or tar.gz archive that holds resources defined within the vcfanno toml file.",
                     "help_text": "If no directory path is passed, default configurations will be used according to genome build within the context of the pipeline.",
-                    "fa_icon": "fas fa-folder-open"
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
                 },
                 "vcfanno_toml": {
                     "type": "string",
                     "description": "Path to the vcfanno toml file.",
-                    "help_text": "If toml is passed, default configurations will be used according to genome build within the context of the pipeline.",
-                    "fa_icon": "fas fa-file-csv"
+                    "help_text": "If no toml is passed, default configurations will be used according to genome build within the context of the pipeline.",
+                    "fa_icon": "fas fa-file-csv",
+                    "hidden": true
+                },
+                "vep_cache": {
+                    "type": "string",
+                    "description": "Path to vep's cache directory.",
+                    "help_text": "If no directory path is passed, vcf files will not be annotated by vep.",
+                    "fa_icon": "fas fa-folder-open"
                 },
                 "save_reference": {
                     "type": "boolean",
@@ -192,6 +206,21 @@
                     "default": null,
                     "description": "Chromosome names must be specified the same way as they are described in the sam/bam/cram header, e.g., chrX or X. One can specify multiple chromosomes separated by space.",
                     "fa_icon": "fas fa-map-signs"
+                }
+            }
+        },
+        "annotation_options": {
+            "title": "Annotation options",
+            "type": "object",
+            "fa_icon": "fas fa-user-cog",
+            "description": "Options used to facilitate the annotation of the variants.",
+            "properties": {
+                "vep_cache_version": {
+                    "type": "string",
+                    "default": "104",
+                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
+                    "fa_icon": "fas fa-book",
+                    "enum": ["104", "105"]
                 }
             }
         },
@@ -384,6 +413,9 @@
         },
         {
             "$ref": "#/definitions/sv_caller_options"
+        },
+        {
+            "$ref": "#/definitions/annotation_options"
         },
         {
             "$ref": "#/definitions/institutional_config_options"
