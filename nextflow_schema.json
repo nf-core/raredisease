@@ -251,6 +251,12 @@
                     "description": "Specifies the variant caller to use - available options are 'deepvariant' and 'sentieon'.",
                     "fa_icon": "fas fa-map-signs",
                     "enum": ["deepvariant", "sentieon"]
+                },
+		"pcrfree": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "indicates whether the sample is PCR Free or not. Set to true for PCR Free samples.",
+                    "fa_icon": "fas fa-map-signs"
                 }
             }
         },
