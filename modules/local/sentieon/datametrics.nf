@@ -3,6 +3,8 @@ process SENTIEON_DATAMETRICS {
     label 'process_high'
     label 'sentieon'
 
+    secret 'SENTIEON_LICENSE_BASE64'
+
     input:
     tuple val(meta), path(bam), path(bai)
     path fasta
@@ -25,6 +27,11 @@ process SENTIEON_DATAMETRICS {
     def input  = bam.sort().collect{"-i $it"}.join(' ')
     def prefix       = task.ext.prefix ?: "${meta.id}"
     """
+    if [ ! -n \${SENTIEON_LICENSE_BASE64+x} ]; then
+        echo "Initializing SENTIEON_LICENSE env variable"
+        source sentieon_init.sh \${SENTIEON_LICENSE_BASE64}
+    fi
+
     sentieon \\
         driver \\
         -t $task.cpus \\
