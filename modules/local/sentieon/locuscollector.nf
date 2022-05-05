@@ -20,9 +20,9 @@ process SENTIEON_LOCUSCOLLECTOR {
     def input = bam.sort().collect{"-i $it"}.join(' ')
     def prefix = task.ext.prefix ? "${task.ext.prefix}_score.txt.gz" : "${meta.id}_score.txt.gz"
     """
-    if [ ! -n \${SENTIEON_LICENSE_BASE64+x} ]; then
+    if [ \${SENTIEON_LICENSE_BASE64:-"unset"} != "unset" ]; then
         echo "Initializing SENTIEON_LICENSE env variable"
-        source sentieon_init.sh \${SENTIEON_LICENSE_BASE64}
+        source sentieon_init.sh SENTIEON_LICENSE_BASE64
     fi
 
     sentieon \\
