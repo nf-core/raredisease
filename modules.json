@@ -16,16 +16,19 @@
                 "git_sha": "eeda4136c096688d04cc40bb3c70d948213ed641"
             },
             "cnvpytor/callcnvs": {
-                "git_sha": "67c1bc9568cfc40cf7038c7be13b976fe76d76a1"
+                "git_sha": "26311aba2ace0eda4201651abe9276dbd8c2aef0"
             },
             "cnvpytor/histogram": {
-                "git_sha": "cb54d1ebd77de5b482cae89ed9e51fa6ef97d3ee"
+                "git_sha": "19cfb4e95196d0e8cc14a67ecb8f1ed0b0fcc3a7"
             },
             "cnvpytor/importreaddepth": {
-                "git_sha": "67c1bc9568cfc40cf7038c7be13b976fe76d76a1"
+                "git_sha": "19cfb4e95196d0e8cc14a67ecb8f1ed0b0fcc3a7"
             },
             "cnvpytor/partition": {
-                "git_sha": "cb54d1ebd77de5b482cae89ed9e51fa6ef97d3ee"
+                "git_sha": "19cfb4e95196d0e8cc14a67ecb8f1ed0b0fcc3a7"
+            },
+            "cnvpytor/view": {
+                "git_sha": "ea1f5daf449190dd3b8550c1307f14aa3371413d"
             },
             "custom/dumpsoftwareversions": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
