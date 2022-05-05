@@ -37,22 +37,22 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
         //cnvpytor
         CALL_CNV_CNVPYTOR ( bam, bai, case_info, cnvpytor_bins, fasta, fai)
-            .candidate_cnvs_tsv
+            .candidate_cnvs_vcf
             .collect{it[1]}
-            .set {cnvpytor_tsv }
+            .set {cnvpytor_vcf }
         ch_versions = ch_versions.mix(CALL_CNV_CNVPYTOR.out.versions)
 
         //merge
         tiddit_vcf
             .combine(manta_vcf)
-            .combine(manta_vcf)
+            .combine(cnvpytor_vcf)
             .toList()
             .set { vcf_list }
 
         case_info.combine(vcf_list)
             .set { merge_input_vcfs }
 
-        SVDB_MERGE ( merge_input_vcfs, ["tiddit","manta"] )
+        SVDB_MERGE ( merge_input_vcfs, ["tiddit","manta","cnvpytor"] )
 
 
     emit:

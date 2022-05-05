@@ -29,7 +29,7 @@ workflow CALL_CNV_CNVPYTOR {
         ch_versions = ch_versions.mix(CALL_CNVS.out.versions)
 
     emit:
-        candidate_cnvs_tsv              = VIEW.out.vcf              // channel: [ val(meta), path(*.tsv) ]
+        candidate_cnvs_vcf              = VIEW.out.vcf              // channel: [ val(meta), path(*.tsv) ]
         versions                        = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
 
