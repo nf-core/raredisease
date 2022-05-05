@@ -11,7 +11,6 @@ workflow PREPARE_MT_ALIGNMENT {
         bam_cram  // id: and file: bam index: bam.bai
 
     main:
-
         ch_versions = Channel.empty()
 
         // Outputs bam containing only MT
