@@ -3,6 +3,8 @@ process SENTIEON_DEDUP {
     label 'process_high'
     label 'sentieon'
 
+    secret 'SENTIEON_LICENSE_BASE64'
+
     input:
     tuple val(meta), path(bam), path(bai), path(score), path(score_idx)
     path fasta
@@ -22,6 +24,11 @@ process SENTIEON_DEDUP {
     def input = bam.sort().collect{"-i $it"}.join(' ')
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
+    if [ \${SENTIEON_LICENSE_BASE64:-"unset"} != "unset" ]; then
+        echo "Initializing SENTIEON_LICENSE env variable"
+        source sentieon_init.sh SENTIEON_LICENSE_BASE64
+    fi
+
     sentieon \\
         driver \\
         -t $task.cpus \\
