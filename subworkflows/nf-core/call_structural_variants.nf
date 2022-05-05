@@ -10,12 +10,13 @@ include { CALL_CNV_CNVPYTOR } from './call_cnv_cnvpytor'
 workflow CALL_STRUCTURAL_VARIANTS {
 
     take:
-        bam         // channel: [ val(meta), path(bam) ]
-        bai         // channel: [ val(meta), path(bai) ]
-        fasta       // channel: [ path(genome.fasta) ]
-        fai         // channel: [ path(genome.fai) ]
-        case_info   // channel: [ val(case_info) ]
-        target_bed  // channel: [ path(target.bed) ]
+        bam           // channel: [ val(meta), path(bam) ]
+        bai           // channel: [ val(meta), path(bai) ]
+        fasta         // channel: [ path(genome.fasta) ]
+        fai           // channel: [ path(genome.fai) ]
+        case_info     // channel: [ val(case_info) ]
+        target_bed    // channel: [ path(target.bed) ]
+        cnvpytor_bins // channel: [ val("binsizes") ]
 
     main:
         ch_versions = Channel.empty()
@@ -35,7 +36,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_versions = ch_versions.mix(CALL_SV_TIDDIT.out.versions)
 
         //cnvpytor
-        CALL_CNV_CNVPYTOR ( bam, bai, case_info )
+        CALL_CNV_CNVPYTOR ( bam, bai, case_info, cnvpytor_bins, fasta, fai)
             .candidate_cnvs_tsv
             .collect{it[1]}
             .set {cnvpytor_tsv }

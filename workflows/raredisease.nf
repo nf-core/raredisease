@@ -172,7 +172,8 @@ workflow RAREDISEASE {
         ch_references.genome_fasta,
         ch_references.genome_fai,
         CHECK_INPUT.out.case_info,
-        ch_references.target_bed
+        ch_references.target_bed,
+        params.cnvpytor_binsizes
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
