@@ -3,6 +3,8 @@ process SENTIEON_BWAMEM {
     label 'process_high'
     label 'sentieon'
 
+    secret 'SENTIEON_LICENSE_BASE64'
+
     input:
     tuple val(meta), path(reads)
     path fasta
@@ -23,6 +25,11 @@ process SENTIEON_BWAMEM {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     INDEX=`find -L ./ -name "*.amb" | sed 's/.amb//'`
+
+    if [ \${SENTIEON_LICENSE_BASE64:-"unset"} != "unset" ]; then
+        echo "Initializing SENTIEON_LICENSE env variable"
+        source sentieon_init.sh SENTIEON_LICENSE_BASE64
+    fi
 
     sentieon bwa mem \\
         -t $task.cpus \\
