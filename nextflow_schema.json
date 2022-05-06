@@ -101,12 +101,49 @@
                     "description": "Path to directory for gnomad vcf.",
                     "help_text": "Path to the gnomad vcf file. If you don't provide one, gnomad annotations will not be used."
                 },
+                "known_dbsnp": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Path to known dbSNP file.",
+                    "hidden": true
+                },
+                "known_dbsnp_tbi": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Path to known dbSNP file index.",
+                    "hidden": true
+                },
+                "known_indels": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Path to known indels file.",
+                    "hidden": true
+                },
+                "known_mills": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Path to known Mills file.",
+                    "hidden": true
+                },
                 "target_bed": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-bezier-curve",
                     "description": "Path to directory for target bed file.",
                     "help_text": "If you would like to limit your analysis to specific regions of the genome, you can pass those regions in a bed file using this option",
+                    "hidden": true
+                },
+                "sentieonbwa_index": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "default": null,
+                    "description": "Directory for pre-built sentieon index.",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
                 "svdb_query_dbs": {
@@ -189,9 +226,31 @@
                 "aligner": {
                     "type": "string",
                     "default": "bwamem2",
-                    "description": "Specifies the alignment algorithm to use - available options are 'bwamem2'.",
+                    "description": "Specifies the alignment algorithm to use - available options are 'bwamem2' and 'sentieon'.",
                     "fa_icon": "fas fa-map-signs",
-                    "enum": ["bwamem2"]
+                    "enum": ["bwamem2", "sentieon"]
+                },
+                "rmdup": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies whether duplicates reads should be removed prior to variant calling.",
+                    "fa_icon": "fas fa-map-signs",
+                    "hidden": true
+                }
+            }
+        },
+        "variant_calling_options": {
+            "title": "Variant calling options",
+            "type": "object",
+            "fa_icon": "fas fa-map-signs",
+            "description": "Options to adjust parameters and filtering criteria for variant calling.",
+            "properties": {
+                "variant_caller": {
+                    "type": "string",
+                    "default": "deepvariant",
+                    "description": "Specifies the variant caller to use - available options are 'deepvariant' and 'sentieon'.",
+                    "fa_icon": "fas fa-map-signs",
+                    "enum": ["deepvariant", "sentieon"]
                 }
             }
         },
@@ -396,6 +455,9 @@
         },
         {
             "$ref": "#/definitions/alignment_options"
+        },
+        {
+            "$ref": "#/definitions/variant_calling_options"
         },
         {
             "$ref": "#/definitions/annotation_options"

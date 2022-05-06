@@ -1,4 +1,4 @@
-process GATK4_BEDTOINTERVALLIST {
+process GATK4_SAMTOFASTQ {
     tag "$meta.id"
     label 'process_medium'
 
@@ -8,12 +8,11 @@ process GATK4_BEDTOINTERVALLIST {
         'quay.io/biocontainers/gatk4:4.2.5.0--hdfd78af_0' }"
 
     input:
-    tuple val(meta), path(bed)
-    path  dict
+    tuple val(meta), path(bam)
 
     output:
-    tuple val(meta), path('*.interval_list'), emit: interval_list
-    path  "versions.yml"                    , emit: versions
+    tuple val(meta), path('*.fastq.gz'), emit: fastq
+    path  "versions.yml"               , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -21,18 +20,18 @@ process GATK4_BEDTOINTERVALLIST {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+    def output = meta.single_end ? "--FASTQ ${prefix}.fastq.gz" : "--FASTQ ${prefix}_1.fastq.gz --SECOND_END_FASTQ ${prefix}_2.fastq.gz"
 
     def avail_mem = 3
     if (!task.memory) {
-        log.info '[GATK BedToIntervalList] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
+        log.info '[GATK SamToFastq] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
         avail_mem = task.memory.giga
     }
     """
-    gatk --java-options "-Xmx${avail_mem}g" BedToIntervalList \\
-        --INPUT $bed \\
-        --OUTPUT ${prefix}.interval_list \\
-        --SEQUENCE_DICTIONARY $dict \\
+    gatk --java-options "-Xmx${avail_mem}g" SamToFastq \\
+        --INPUT $bam \\
+        $output \\
         --TMP_DIR . \\
         $args
 
@@ -45,7 +44,9 @@ process GATK4_BEDTOINTERVALLIST {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.interval_list
+    touch ${prefix}.fastq.gz
+    touch ${prefix}_1.fastq.gz
+    touch ${prefix}_2.fastq.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

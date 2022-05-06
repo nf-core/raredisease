@@ -1,4 +1,4 @@
-process GATK4_BEDTOINTERVALLIST {
+process GATK4_REVERTSAM {
     tag "$meta.id"
     label 'process_medium'
 
@@ -8,12 +8,11 @@ process GATK4_BEDTOINTERVALLIST {
         'quay.io/biocontainers/gatk4:4.2.5.0--hdfd78af_0' }"
 
     input:
-    tuple val(meta), path(bed)
-    path  dict
+    tuple val(meta), path(bam)
 
     output:
-    tuple val(meta), path('*.interval_list'), emit: interval_list
-    path  "versions.yml"                    , emit: versions
+    tuple val(meta), path('*.bam'), emit: bam
+    path  "versions.yml"          , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -24,15 +23,14 @@ process GATK4_BEDTOINTERVALLIST {
 
     def avail_mem = 3
     if (!task.memory) {
-        log.info '[GATK BedToIntervalList] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
+        log.info '[GATK RevertSam] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
         avail_mem = task.memory.giga
     }
     """
-    gatk --java-options "-Xmx${avail_mem}g" BedToIntervalList \\
-        --INPUT $bed \\
-        --OUTPUT ${prefix}.interval_list \\
-        --SEQUENCE_DICTIONARY $dict \\
+    gatk --java-options "-Xmx${avail_mem}g" RevertSam \\
+        --INPUT $bam \\
+        --OUTPUT ${prefix}.reverted.bam \\
         --TMP_DIR . \\
         $args
 
@@ -45,7 +43,7 @@ process GATK4_BEDTOINTERVALLIST {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.interval_list
+    touch ${prefix}.reverted.bam
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

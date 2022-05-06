@@ -5,7 +5,6 @@
 include { PICARD_COLLECTMULTIPLEMETRICS } from '../../modules/nf-core/modules/picard/collectmultiplemetrics/main'
 include { PICARD_COLLECTHSMETRICS       } from '../../modules/nf-core/modules/picard/collecthsmetrics/main'
 include { QUALIMAP_BAMQC                } from '../../modules/nf-core/modules/qualimap/bamqc/main'
-include { CAT_CAT as CAT_CAT_BAIT       } from '../../modules/nf-core/modules/cat/cat/main'
 include { TIDDIT_COV                    } from '../../modules/nf-core/modules/tiddit/cov/main'
 include { MOSDEPTH                      } from '../../modules/nf-core/modules/mosdepth/main'
 include { UCSC_WIGTOBIGWIG              } from '../../modules/nf-core/modules/ucsc/wigtobigwig/main'
@@ -29,30 +28,7 @@ workflow QC_BAM {
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions)
 
         // COLLECT HS METRICS
-        bait_intervals
-            .collect { it[0]
-                .toString()
-                .split("_split")[0]
-                .split("/")[-1] + "_bait.intervals_list"
-            }
-            .flatten()
-            .concat(bait_intervals)
-            .toList()
-            .map {
-                id, bait ->
-                    return [['id':id], bait]
-            }
-            .set { bait_intervals_cat_in }
-
-        CAT_CAT_BAIT ( bait_intervals_cat_in )
-            .file_out
-            .map {
-                id, file ->
-                    return [file]
-            }
-            .set { bait_intervals_cat_out }
-
-        PICARD_COLLECTHSMETRICS ( bam, fasta, fai, bait_intervals_cat_out, target_intervals )
+        PICARD_COLLECTHSMETRICS ( bam, fasta, fai, bait_intervals, target_intervals )
         ch_versions = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions)
 
         // QUALIMAP BAMQC
@@ -72,7 +48,7 @@ workflow QC_BAM {
 
     emit:
         multiple_metrics        = PICARD_COLLECTMULTIPLEMETRICS.out.metrics     // channel: [ val(meta), path(metrics) ]
-        hs_metrics              = PICARD_COLLECTHSMETRICS.out.hs_metrics        // channel: [ val(meta), path(metrics) ]
+        hs_metrics              = PICARD_COLLECTHSMETRICS.out.metrics           // channel: [ val(meta), path(metrics) ]
         qualimap_results        = QUALIMAP_BAMQC.out.results                    // channel: [ val(meta), path(qualimap files) ]
         tiddit_wig              = TIDDIT_COV.out.wig                            // channel: [ val(meta), path(*.wig) ]
         bigwig                  = UCSC_WIGTOBIGWIG.out.bw                       // channel: [ val(meta), path(*.bw) ]
