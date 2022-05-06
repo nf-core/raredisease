@@ -78,6 +78,7 @@ include { CALL_SNV_DEEPVARIANT         } from '../subworkflows/nf-core/call_snv_
 include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
 include { ANNOTATE_VCFANNO             } from '../subworkflows/nf-core/annotate_vcfanno'
 include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
+include { PREPARE_MT_ALIGNMENT         } from '../subworkflows/local/prepare_MT_alignment'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -190,6 +191,13 @@ workflow RAREDISEASE {
 
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
     }
+    
+    // STEP 2.1: MT CALLING
+    
+    PREPARE_MT_ALIGNMENT (
+        ch_mapped.bam_bai
+    )
+    ch_versions = ch_versions.mix(PREPARE_MT_ALIGNMENT.out.versions)
 
     // STEP 3: VARIANT ANNOTATION
     ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
