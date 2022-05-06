@@ -91,10 +91,10 @@
                 "git_sha": "c7329a3a5730872dea512921217993cfa7acd959"
             },
             "svdb/merge": {
-                "git_sha": "a973b68200da801be1c2e27b8fd72d7256f5db6b"
+                "git_sha": "313d76e00525c8e975dabce0c34973fd53c3f4dd"
             },
             "svdb/query": {
-                "git_sha": "a973b68200da801be1c2e27b8fd72d7256f5db6b"
+                "git_sha": "313d76e00525c8e975dabce0c34973fd53c3f4dd"
             },
             "tabix/bgziptabix": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
