@@ -268,7 +268,7 @@
                 },
                 "cnvpytor_binsizes": {
                     "type": "string",
-                    "default": "10000",
+                    "default": "1000",
                     "description": "List of binsizes separated by space e.g. '1000 10000' and '1000'",
                     "fa_icon": "fas fa-map-signs"
                 }
