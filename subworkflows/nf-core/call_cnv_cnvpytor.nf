@@ -22,11 +22,29 @@ workflow CALL_CNV_CNVPYTOR {
         ch_versions = Channel.empty()
 
         GENERATE_PYTOR(bam.join(bai, by: [0]), fasta, fai)
+        ch_versions = ch_versions.mix(GENERATE_PYTOR.out.versions.first())
+
         HISTOGRAMS(GENERATE_PYTOR.out.pytor, binsizes)
+        ch_versions = ch_versions.mix(HISTOGRAMS.out.versions.first())
+
         PARTITIONS(HISTOGRAMS.out.pytor, binsizes)
+        ch_versions = ch_versions.mix(PARTITIONS.out.versions.first())
+
         CALL_CNVS(PARTITIONS.out.pytor, binsizes)
-        VIEW(CALL_CNVS.out.pytor, binsizes, "vcf")
-        ch_versions = ch_versions.mix(CALL_CNVS.out.versions)
+        ch_versions = ch_versions.mix(CALL_CNVS.out.versions.first())
+
+        CALL_CNVS.out
+            .pytor
+            .collect{it[1]}
+            .toList()
+            .set { file_list }
+
+        case_info
+            .combine(file_list)
+            .set { ch_pytor }
+
+        VIEW(ch_pytor, binsizes, "vcf")
+        ch_versions = ch_versions.mix(VIEW.out.versions.first())
 
     emit:
         candidate_cnvs_vcf              = VIEW.out.vcf              // channel: [ val(meta), path(*.tsv) ]
