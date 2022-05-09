@@ -1,5 +1,5 @@
 process GATK4_COLLECTREADCOUNTS {
-    tag "wutface"
+    tag "$meta.id"
     label 'process_medium'
 
     conda (params.enable_conda ? "bioconda::gatk4=4.2.4.1" : null)
