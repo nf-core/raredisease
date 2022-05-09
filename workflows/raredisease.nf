@@ -17,7 +17,9 @@ def checkPathParamList = [
     params.gnomad,
     params.input,
     params.multiqc_config,
-    params.vcfanno_resources
+    params.svdb_query_dbs,
+    params.vcfanno_resources,
+    params.vep_cache
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
@@ -31,7 +33,7 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yaml", checkIfExists: true)
+ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
 ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : Channel.empty()
 
 /*
@@ -43,9 +45,10 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { CHECK_INPUT        } from '../subworkflows/local/check_input'
-include { PREPARE_REFERENCES } from '../subworkflows/local/prepare_references'
-include { GENS               } from '../subworkflows/local/gens'
+include { CHECK_INPUT                  } from '../subworkflows/local/check_input'
+include { PREPARE_REFERENCES           } from '../subworkflows/local/prepare_references'
+include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_structural_variants'
+include { GENS                         } from '../subworkflows/local/gens'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,13 +68,12 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { ALIGN_BWAMEM2               } from  '../subworkflows/nf-core/align_bwamem2'
-include { CALL_REPEAT_EXPANSIONS      } from '../subworkflows/nf-core/call_repeat_expansions'
-include { CALL_SNV_DEEPVARIANT        } from '../subworkflows/nf-core/call_snv_deepvariant'
-include { QC_BAM                      } from '../subworkflows/nf-core/qc_bam'
-include { ANNOTATE_VCFANNO            } from '../subworkflows/nf-core/annotate_vcfanno'
-include { CALL_STRUCTURAL_VARIANTS    } from '../subworkflows/nf-core/call_structural_variants'
-
+include { ALIGN                        } from '../subworkflows/nf-core/align'
+include { CALL_REPEAT_EXPANSIONS       } from '../subworkflows/nf-core/call_repeat_expansions'
+include { CALL_SNV_DEEPVARIANT         } from '../subworkflows/nf-core/call_snv_deepvariant'
+include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
+include { ANNOTATE_VCFANNO             } from '../subworkflows/nf-core/annotate_vcfanno'
+include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,25 +103,31 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
-    PREPARE_REFERENCES ().set { ch_references }
+    PREPARE_REFERENCES (
+        params.bwamem2_index,
+        params.gnomad,
+        params.fasta,
+        params.fasta_fai,
+        params.target_bed,
+        params.variant_catalog,
+        params.vcfanno_resources
+    )
+    .set { ch_references }
     ch_versions = ch_versions.mix(ch_references.versions)
 
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
-    if (params.aligner == 'bwamem2') {
-        ALIGN_BWAMEM2 (
-            CHECK_INPUT.out.reads,
-            ch_references.bwamem2_index
-        )
-
-        ch_marked_bam = ALIGN_BWAMEM2.out.marked_bam
-        ch_marked_bai = ALIGN_BWAMEM2.out.marked_bai
-        ch_versions   = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
-    }
+    ALIGN (
+        params.aligner,
+        CHECK_INPUT.out.reads,
+        ch_references.bwamem2_index
+    )
+    .set { ch_mapped }
+    ch_versions   = ch_versions.mix(ALIGN.out.versions)
 
     // STEP 1.5: BAM QUALITY CHECK
     QC_BAM (
-        ch_marked_bam,
-        ch_marked_bai,
+        ch_mapped.marked_bam,
+        ch_mapped.marked_bai,
         ch_references.genome_fasta,
         ch_references.genome_fai,
         ch_references.bait_intervals,
@@ -130,7 +138,7 @@ workflow RAREDISEASE {
 
     // STEP 1.6: EXPANSIONHUNTER
     CALL_REPEAT_EXPANSIONS (
-        ch_marked_bam.join(ch_marked_bai, by: [0]),
+        ch_mapped.bam_bai,
         ch_references.genome_fasta,
         ch_references.variant_catalog
     )
@@ -139,7 +147,7 @@ workflow RAREDISEASE {
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
     CALL_SNV_DEEPVARIANT (
-        ch_marked_bam.join(ch_marked_bai, by: [0]),
+        ch_mapped.bam_bai,
         ch_references.genome_fasta,
         ch_references.genome_fai,
         CHECK_INPUT.out.case_info
@@ -147,8 +155,8 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
 
     CALL_STRUCTURAL_VARIANTS (
-        ch_marked_bam,
-        ch_marked_bai,
+        ch_mapped.marked_bam,
+        ch_mapped.marked_bai,
         ch_references.genome_fasta,
         ch_references.genome_fai,
         CHECK_INPUT.out.case_info,
@@ -170,6 +178,21 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
     
+    ch_sv_annotate = Channel.empty()
+    if (params.annotate_sv_switch) {
+        ANNOTATE_STRUCTURAL_VARIANTS (
+            CALL_STRUCTURAL_VARIANTS.out.vcf,
+            params.svdb_query_dbs,
+            params.genome,
+            params.vep_cache_version,
+            params.vep_cache,
+            ch_references.genome_fasta,
+            ch_references.sequence_dict
+        ).set {ch_sv_annotate}
+
+        ch_versions = ch_versions.mix(ch_sv_annotate.versions)
+    }
+
     // STEP 3: VARIANT ANNOTATION
     ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
 

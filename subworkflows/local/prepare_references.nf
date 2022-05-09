@@ -9,27 +9,33 @@ include { PREPARE_GENOME } from './prepare_genome'
 
 workflow PREPARE_REFERENCES {
     take:
+        bwamem2_index       // [mandatory] bwamem2_index
+        gnomad
+        fasta               // [mandatory] genome.fasta
+        fai                 // [mandatory] genome.fai
+        target_bed
+        variant_catalog     // [optional] variant_catalog.json
+        vcfanno_resources   // [mandatory] vcfanno resource file
 
     main:
-        //
         // Prepare genome
-        //
         ch_versions = Channel.empty()
         PREPARE_GENOME (
-            params.fasta,
-            params.variant_catalog
+            bwamem2_index,
+            fasta,
+            fai,
+            variant_catalog,
+            vcfanno_resources
         )
         .set { ch_genome }
         ch_versions = ch_versions.mix(ch_genome.versions)
 
-        //
         // Gnomad vcf
-        //
         ch_gnomad_vcf = Channel.empty()
         ch_gnomad_idx = Channel.empty()
-        if (params.gnomad) {
+        if (gnomad) {
             CHECK_VCF(
-                params.gnomad,
+                gnomad,
                 ch_genome.fasta
             )
             ch_gnomad_vcf = CHECK_VCF.out.vcf
@@ -37,15 +43,13 @@ workflow PREPARE_REFERENCES {
             ch_versions   = ch_versions.mix(CHECK_VCF.out.versions)
         }
 
-        //
         // Target bed
-        //
         ch_target_bed       = Channel.empty()
         ch_target_intervals = Channel.empty()
         ch_bait_intervals   = Channel.empty()
-        if (params.target_bed) {
+        if (target_bed) {
             CHECK_BED(
-                params.target_bed,
+                target_bed,
                 ch_genome.sequence_dict
             )
             ch_target_bed       = CHECK_BED.out.bed
