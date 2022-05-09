@@ -167,7 +167,7 @@ workflow RAREDISEASE {
     // STEP 2.1: GENS
     if (params.gens_switch) {
         GENS (
-            ch_marked_bam.join(ch_marked_bai, by: [0]),
+            ch_mapped.bam_bai,
             CALL_SNV_DEEPVARIANT.out.vcf,
             ch_references.genome_fasta,
             ch_references.genome_fai,
