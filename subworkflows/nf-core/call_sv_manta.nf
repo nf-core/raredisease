@@ -22,21 +22,23 @@ workflow CALL_SV_MANTA {
             .toList()
             .set { bai_file_list }
 
-        case_info.combine(bam_file_list)
-            .combine(bai_file_list)
-            .set { manta_input_bams }
-
-        bed
-            .map {
+        bed.map {
                 id, bed_file, index ->
                     return [bed_file, index]}
             .set { bed_input }
 
         if (params.analysis_type == "WGS") {
-            MANTA ( manta_input_bams, fasta, fai, [[],[]] )
+            case_info.combine(bam_file_list)
+                .combine(bai_file_list)
+                .map { it -> it + [ [], [] ] }
+                .set { manta_input }
+            MANTA ( manta_input, fasta, fai )
         } else {
-            ch_target_bed = bed.ifEmpty([[],[]])
-            MANTA ( manta_input_bams, fasta, fai, bed_input )
+            case_info.combine(bam_file_list)
+                .combine(bai_file_list)
+                .combine(bed_input)
+                .set { manta_input }
+            MANTA ( manta_input, fasta, fai )
         }
         ch_versions = MANTA.out.versions
 

@@ -17,6 +17,7 @@ def checkPathParamList = [
     params.gnomad,
     params.input,
     params.multiqc_config,
+    params.sentieonbwa_index,
     params.svdb_query_dbs,
     params.vcfanno_resources,
     params.vep_cache
@@ -26,6 +27,10 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
+ch_known_dbsnp     = params.known_dbsnp     ? file(params.known_dbsnp)     : []
+ch_known_dbsnp_tbi = params.known_dbsnp_tbi ? file(params.known_dbsnp_tbi) : []
+ch_known_mills     = params.known_mills     ? file(params.known_mills)     : []
+ch_known_indels    = params.known_indels    ? file(params.known_indels)    : []
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -49,6 +54,7 @@ include { CHECK_INPUT                  } from '../subworkflows/local/check_input
 include { PREPARE_REFERENCES           } from '../subworkflows/local/prepare_references'
 include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_structural_variants'
 include { GENS                         } from '../subworkflows/local/gens'
+include { ALIGN                        } from '../subworkflows/local/align'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,12 +74,12 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { ALIGN                        } from '../subworkflows/nf-core/align'
 include { CALL_REPEAT_EXPANSIONS       } from '../subworkflows/nf-core/call_repeat_expansions'
 include { CALL_SNV_DEEPVARIANT         } from '../subworkflows/nf-core/call_snv_deepvariant'
 include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
 include { ANNOTATE_VCFANNO             } from '../subworkflows/nf-core/annotate_vcfanno'
 include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
+include { PREPARE_MT_ALIGNMENT         } from '../subworkflows/local/prepare_MT_alignment'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -104,10 +110,14 @@ workflow RAREDISEASE {
 
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
     PREPARE_REFERENCES (
+        params.aligner,
         params.bwamem2_index,
-        params.gnomad,
         params.fasta,
         params.fasta_fai,
+        params.gnomad,
+        params.known_dbsnp,
+        params.known_dbsnp_tbi,
+        params.sentieonbwa_index,
         params.target_bed,
         params.variant_catalog,
         params.vcfanno_resources
@@ -119,7 +129,11 @@ workflow RAREDISEASE {
     ALIGN (
         params.aligner,
         CHECK_INPUT.out.reads,
-        ch_references.bwamem2_index
+        ch_references.genome_fasta,
+        ch_references.genome_fai,
+        ch_references.aligner_index,
+        ch_references.known_dbsnp,
+        ch_references.known_dbsnp_tbi
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
@@ -136,7 +150,7 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
 
-    // STEP 1.6: EXPANSIONHUNTER
+    // STEP 1.6: EXPANSIONHUNTER AND STRANGER
     CALL_REPEAT_EXPANSIONS (
         ch_mapped.bam_bai,
         ch_references.genome_fasta,
@@ -160,7 +174,8 @@ workflow RAREDISEASE {
         ch_references.genome_fasta,
         ch_references.genome_fai,
         CHECK_INPUT.out.case_info,
-        ch_references.target_bed
+        ch_references.target_bed,
+        params.cnvpytor_binsizes
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
@@ -194,6 +209,13 @@ workflow RAREDISEASE {
 
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
     }
+    
+    // STEP 2.1: MT CALLING
+    
+    PREPARE_MT_ALIGNMENT (
+        ch_mapped.bam_bai
+    )
+    ch_versions = ch_versions.mix(PREPARE_MT_ALIGNMENT.out.versions)
 
     // STEP 3: VARIANT ANNOTATION
     ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])

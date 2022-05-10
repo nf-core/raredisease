@@ -4,6 +4,7 @@
 
 include { GATK4_BEDTOINTERVALLIST as GATK_BILT } from '../../modules/nf-core/modules/gatk4/bedtointervallist/main'
 include { GATK4_INTERVALLISTTOOLS as GATK_ILT  } from '../../modules/nf-core/modules/gatk4/intervallisttools/main'
+include { CAT_CAT as CAT_CAT_BAIT              } from '../../modules/nf-core/modules/cat/cat/main'
 include { TABIX_TABIX as TABIX_PT              } from '../../modules/nf-core/modules/tabix/tabix/main'
 include { TABIX_BGZIPTABIX as TABIX_PBT        } from '../../modules/nf-core/modules/tabix/bgziptabix/main'
 
@@ -35,11 +36,40 @@ workflow CHECK_BED {
 
             GATK_ILT(interval_list)
             ch_versions   = ch_versions.mix(GATK_ILT.out.versions)
+
+            GATK_ILT.out
+                .interval_list
+                .collect{ it[1] }
+                .set { ch_bait_intervals_split }
+
+            ch_bait_intervals_split
+                .map { it -> it[0]
+                    .toString()
+                    .split("_split")[0]
+                    .split("/")[-1] + "_bait.intervals_list"
+                }
+                .flatten()
+                .concat(ch_bait_intervals_split)
+                .toList()
+                .map {
+                    id, bait ->
+                        return [['id':id], bait]
+                }
+                .set { ch_bait_intervals_cat_in }
+
+            CAT_CAT_BAIT ( ch_bait_intervals_cat_in )
+                .file_out
+                .map {
+                    id, file ->
+                        return [file]
+                }
+                .set { ch_bait_intervals_cat_out }
+
         }
 
     emit:
         bed              = tab_out
         target_intervals = interval_list.collect{it[1]}
-        bait_intervals   = GATK_ILT.out.interval_list.collect{it[1]}
+        bait_intervals   = ch_bait_intervals_cat_out
         versions         = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
