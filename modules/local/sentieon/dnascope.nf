@@ -10,7 +10,7 @@ process SENTIEON_DNASCOPE {
     path known_dbsnp
     path known_dbsnp_tbi
     path ml_model
-    val pcrfree
+    
 
     output:
     tuple val(meta), path("*_dnascope.vcf"), path("*_dnascope.vcf.idx") , emit: vcf
