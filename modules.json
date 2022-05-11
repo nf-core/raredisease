@@ -15,6 +15,21 @@
             "cat/cat": {
                 "git_sha": "eeda4136c096688d04cc40bb3c70d948213ed641"
             },
+            "cnvpytor/callcnvs": {
+                "git_sha": "1ccea5ff4d3dffbf9a8e53032481cc9246d4e23d"
+            },
+            "cnvpytor/histogram": {
+                "git_sha": "19cfb4e95196d0e8cc14a67ecb8f1ed0b0fcc3a7"
+            },
+            "cnvpytor/importreaddepth": {
+                "git_sha": "19cfb4e95196d0e8cc14a67ecb8f1ed0b0fcc3a7"
+            },
+            "cnvpytor/partition": {
+                "git_sha": "19cfb4e95196d0e8cc14a67ecb8f1ed0b0fcc3a7"
+            },
+            "cnvpytor/view": {
+                "git_sha": "af73544010cc9563ec7d7160aeb825ae28ec217f"
+            },
             "custom/dumpsoftwareversions": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
             },
@@ -35,6 +50,12 @@
             },
             "gatk4/intervallisttools": {
                 "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+            },
+            "gatk4/revertsam": {
+                "git_sha": "f231291e7730654158cbd3f10b82c292e27fa273"
+            },
+            "gatk4/samtofastq": {
+                "git_sha": "6b64f9cb6c3dd3577931cc3cd032d6fb730000ce"
             },
             "glnexus": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
@@ -76,16 +97,16 @@
                 "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
             },
             "samtools/view": {
-                "git_sha": "12afb6b0faf3cabf769c9a2a7dd477e3f066eac0"
+                "git_sha": "6b64f9cb6c3dd3577931cc3cd032d6fb730000ce"
             },
             "stranger": {
                 "git_sha": "c7329a3a5730872dea512921217993cfa7acd959"
             },
             "svdb/merge": {
-                "git_sha": "a973b68200da801be1c2e27b8fd72d7256f5db6b"
+                "git_sha": "313d76e00525c8e975dabce0c34973fd53c3f4dd"
             },
             "svdb/query": {
-                "git_sha": "a973b68200da801be1c2e27b8fd72d7256f5db6b"
+                "git_sha": "313d76e00525c8e975dabce0c34973fd53c3f4dd"
             },
             "tabix/bgziptabix": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"

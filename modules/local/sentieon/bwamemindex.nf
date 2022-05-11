@@ -3,6 +3,8 @@ process SENTIEON_BWAINDEX {
     label 'process_high'
     label 'sentieon'
 
+    secret 'SENTIEON_LICENSE_BASE64'
+
     input:
     path fasta
 
@@ -18,6 +20,11 @@ process SENTIEON_BWAINDEX {
     def prefix = task.ext.prefix ? "bwa/${task.ext.prefix}" : "bwa/${fasta.baseName}"
     """
     mkdir bwa
+
+    if [ \${SENTIEON_LICENSE_BASE64:-"unset"} != "unset" ]; then
+        echo "Initializing SENTIEON_LICENSE env variable"
+        source sentieon_init.sh SENTIEON_LICENSE_BASE64
+    fi
 
     sentieon bwa index \\
         $args \\

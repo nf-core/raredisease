@@ -260,6 +260,26 @@
                 }
             }
         },
+        "sv_caller_options": {
+            "title": "Structural variant calling options",
+            "type": "object",
+            "fa_icon": "fas fa-map-signs",
+            "description": "Options to adjust parameters and filtering criteria for structural variant callers.",
+            "properties": {
+                "cnvpytor_chr": {
+                    "type": "string",
+                    "default": null,
+                    "description": "Chromosome names must be specified the same way as they are described in the sam/bam/cram header, e.g., chrX or X. One can specify multiple chromosomes separated by space.",
+                    "fa_icon": "fas fa-map-signs"
+                },
+                "cnvpytor_binsizes": {
+                    "type": "string",
+                    "default": "1000",
+                    "description": "List of binsizes separated by space e.g. '1000 10000' and '1000'",
+                    "fa_icon": "fas fa-map-signs"
+                }
+            }
+        },
         "annotation_options": {
             "title": "Annotation options",
             "type": "object",
@@ -461,6 +481,9 @@
         },
         {
             "$ref": "#/definitions/alignment_options"
+        },
+        {
+            "$ref": "#/definitions/sv_caller_options"
         },
         {
             "$ref": "#/definitions/variant_calling_options"
