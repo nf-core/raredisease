@@ -7,14 +7,14 @@ include { CALL_SNV_SENTIEON } from './calling_sentieon'
     
 workflow CALL_SNV {
     take:
-	     variant_caller      // string:  params.variant_caller
-	    input                // channel: [ val(meta), path(bam), path(bai) ]
-	    fasta                // channel: [genome.fasta]
-	    fai                  // channel: [genome.fai]
-	    known_dbsnp          // channel: [ /path/to/known_dbsnp ]
-	    known_dbsnp_tbi      // channel: [ /path/to/known_dbsnp_tbi ]
-	    ml_model             // channel: [ /path/to/ml_model ]
-	    case_info            // channel: [ case_id ]
+          variant_caller      // string:  params.variant_caller
+          input                // channel: [ val(meta), path(bam), path(bai) ]
+          fasta                // channel: [genome.fasta]
+          fai                  // channel: [genome.fai]
+          known_dbsnp          // channel: [ /path/to/known_dbsnp ]
+          known_dbsnp_tbi      // channel: [ /path/to/known_dbsnp_tbi ]
+          ml_model             // channel: [ /path/to/ml_model ]
+          case_info            // channel: [ case_id ]
   
     main:
        ch_versions   = Channel.empty()
@@ -33,9 +33,9 @@ workflow CALL_SNV {
        } else {
             exit 1, 'Please provide a valid variant caller!'
        }
-   
-    emit:
-     vcf            = ch_vcf          
-	vcf_index      = ch_vcf_index            
-     versions       = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+       
+     emit:
+          vcf            = ch_vcf          
+          vcf_index      = ch_vcf_index            
+          versions       = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }
