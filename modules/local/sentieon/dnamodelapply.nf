@@ -10,8 +10,9 @@ process SENTIEON_DNAMODELAPPLY {
     path ml_model
 
     output:
-    tuple val(meta), path("*_dnascope_ml.vcf") , emit: vcf
-    path "versions.yml"                        , emit: versions
+    tuple val(meta), path("*_dnascope_ml.vcf")     , emit: vcf
+    tuple val(meta), path("*_dnascope_ml.vcf.idx") , emit: vcf_index
+    path "versions.yml"                            , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -38,6 +39,7 @@ process SENTIEON_DNAMODELAPPLY {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}_dnascope_ml.vcf
+    touch ${prefix}_dnascope_ml.vcf.idx
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

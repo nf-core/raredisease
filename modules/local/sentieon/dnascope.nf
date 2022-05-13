@@ -11,10 +11,10 @@ process SENTIEON_DNASCOPE {
     path known_dbsnp_tbi
     path ml_model
     
-
     output:
-    tuple val(meta), path("*_dnascope.vcf"), path("*_dnascope.vcf.idx") , emit: vcf
-    path "versions.yml"                                                 , emit: versions
+    tuple val(meta), path("*_dnascope.vcf")     , emit: vcf
+    tuple val(meta), path("*_dnascope.vcf.idx") , emit: vcf_index
+    path "versions.yml"                         , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
