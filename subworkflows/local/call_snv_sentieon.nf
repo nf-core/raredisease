@@ -5,7 +5,7 @@
 include { SENTIEON_DNASCOPE        }   from '../../modules/local/sentieon/dnascope'
 include { SENTIEON_DNAMODELAPPLY   }   from '../../modules/local/sentieon/dnamodelapply'
 
-workflow calling_sentieon {
+workflow CALL_SNV_SENTIEON {
 	take:
 		input           // channel: [ val(meta), bam, bai ]
 		fasta           // path: genome.fasta
