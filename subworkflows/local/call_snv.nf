@@ -35,7 +35,7 @@ workflow CALL_SNV {
        }
 
     emit:
-    vcf      = ch_vcf
-	tabix    = ch_tabix
-    versions = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+        vcf      = ch_vcf
+        tabix    = ch_tabix
+        versions = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }

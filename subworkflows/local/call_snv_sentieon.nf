@@ -2,8 +2,9 @@
 // A subworkflow to call SNVs by sentieon dnascope with a machine learning model.
 //
 
-include { SENTIEON_DNASCOPE        }   from '../../modules/local/sentieon/dnascope'
-include { SENTIEON_DNAMODELAPPLY   }   from '../../modules/local/sentieon/dnamodelapply'
+include { SENTIEON_DNASCOPE             } from '../../modules/local/sentieon/dnascope'
+include { SENTIEON_DNAMODELAPPLY        } from '../../modules/local/sentieon/dnamodelapply'
+include { TABIX_TABIX as TABIX_SENTIEON } from '../../modules/nf-core/modules/tabix/tabix/main'
 
 workflow CALL_SNV_SENTIEON {
 	take:
@@ -32,8 +33,10 @@ workflow CALL_SNV_SENTIEON {
             ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions)
         }
 
+        TABIX_SENTIEON (ch_vcf)
+
 	emit:
 		vcf		 = ch_vcf
-        tabix    = ch_index
+        tabix    = TABIX_SENTIEON.out.tbi
         versions = ch_versions.ifEmpty(null)     // channel: [ versions.yml ]
 }
