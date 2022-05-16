@@ -3,12 +3,12 @@
 
 <svg
    width="109.21862mm"
-   height="174.90628mm"
-   viewBox="0 0 109.21862 174.90628"
+   height="175.96461mm"
+   viewBox="0 0 109.21862 175.96461"
    version="1.1"
    id="svg1159"
    inkscape:version="1.1.2 (b8e25be8, 2022-02-05)"
-   sodipodi:docname="raredisease_workflow_v0.svg"
+   sodipodi:docname="raredisease_workflow.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -25,10 +25,10 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="1"
-     inkscape:cx="4.5"
-     inkscape:cy="346.5"
+     inkscape:cx="-10.5"
+     inkscape:cy="350.5"
      inkscape:window-width="1792"
-     inkscape:window-height="991"
+     inkscape:window-height="989"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="0"
@@ -37,8 +37,8 @@
     <inkscape:grid
        type="xygrid"
        id="grid100524"
-       originx="5.8501522"
-       originy="11.532745" />
+       originx="5.8501525"
+       originy="12.591079" />
   </sodipodi:namedview>
   <defs
      id="defs1156">
@@ -112,10 +112,10 @@
        hide_knots="false" />
     <inkscape:perspective
        sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 84.717292 : 1"
-       inkscape:vp_y="0 : 999.99997 : 0"
-       inkscape:vp_z="109.21864 : 84.717292 : 1"
-       inkscape:persp3d-origin="54.609318 : 54.654296 : 1"
+       inkscape:vp_x="0 : 85.775625 : 1"
+       inkscape:vp_y="0 : 999.99995 : 0"
+       inkscape:vp_z="109.21865 : 85.775625 : 1"
+       inkscape:persp3d-origin="54.609322 : 55.712629 : 1"
        id="perspective112837" />
     <inkscape:path-effect
        effect="fillet_chamfer"
@@ -370,7 +370,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(5.8501515,11.532745)">
+     transform="translate(5.8501515,12.591079)">
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro';fill:#000000;stroke-width:0.264583"
@@ -393,10 +393,10 @@
        id="text29451"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro Bold';white-space:pre;shape-inside:url(#rect29453);fill:#000000" />
     <g
-       id="g8880"
-       inkscape:export-filename="/Users/gwennabreton/Documents/GMS-RD-DNA/nf-core_raredisease/pipeline-flowcharts/nf-core-raredisease/g8880.png"
-       inkscape:export-xdpi="200"
-       inkscape:export-ydpi="200">
+       id="g1311"
+       inkscape:export-filename="/Users/gwennabreton/Documents/GMS-RD-DNA/nf-core_raredisease/pipeline-flowcharts/nf-core-raredisease/raredisease_workflow_v0.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
       <path
          id="path2601"
          style="fill:#b3deb2;fill-opacity:1;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -404,7 +404,7 @@
          inkscape:path-effect="#path-effect2760"
          inkscape:original-d="M 16.267538,-7.0878949 V 115.51257 L 48.667882,164.55226 81.06823,115.51257 V -7.0878949 Z" />
       <g
-         transform="matrix(0.10034304,0,0,-0.10034304,-7.349248,210.46588)"
+         transform="matrix(0.13938222,0,0,-0.13938222,-28.942071,272.78665)"
          id="g6348-4">
         <path
            sodipodi:nodetypes="scsccccccccssscsssscsssscsscsccsscccccccccc"
@@ -435,7 +435,7 @@
       </g>
       <g
          id="g102520"
-         transform="translate(0,0.4142461)">
+         transform="translate(0,0.41424555)">
         <path
            style="opacity:1;fill:#ffffff;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
            id="rect100673"
@@ -457,23 +457,23 @@
            y="0"><tspan
              x="106.0918"
              y="138.47636"
-             id="tspan9316"><tspan
+             id="tspan1510"><tspan
                style="font-size:16px"
-               id="tspan9312">Preprocessing, mapping etc</tspan><tspan
+               id="tspan1506">Preprocessing, mapping etc</tspan><tspan
                style="font-size:16px"
-               id="tspan9314">
+               id="tspan1508">
 </tspan></tspan><tspan
              x="138.42773"
              y="154.69126"
-             id="tspan9320"><tspan
+             id="tspan1514"><tspan
                style="font-weight:normal;-inkscape-font-specification:'Maven Pro'"
-               id="tspan9318">bwamem2, MarkDuplicates
+               id="tspan1512">bwamem2, MarkDuplicates
 </tspan></tspan><tspan
              x="95.970703"
              y="169.69126"
-             id="tspan9324"><tspan
+             id="tspan1518"><tspan
                style="font-weight:normal;-inkscape-font-specification:'Maven Pro'"
-               id="tspan9322">Sentieon: bwamem, Locuscollector, Dedup</tspan></tspan></text>
+               id="tspan1516">Sentieon: bwamem, Locuscollector, Dedup</tspan></tspan></text>
       </g>
       <g
          id="g102556"
@@ -499,21 +499,21 @@
            y="0"><tspan
              x="187.50977"
              y="336.75175"
-             id="tspan9330"><tspan
+             id="tspan1524"><tspan
                style="font-weight:bold;font-size:16px;-inkscape-font-specification:'Maven Pro Bold';text-align:center;text-anchor:middle"
-               id="tspan9326">Reports</tspan><tspan
+               id="tspan1520">Reports</tspan><tspan
                style="text-align:center;text-anchor:middle"
-               id="tspan9328">
+               id="tspan1522">
 </tspan></tspan><tspan
              x="137.79883"
              y="352.96665"
-             id="tspan9334"><tspan
+             id="tspan1528"><tspan
                style="text-align:center;text-anchor:middle"
-               id="tspan9332">MultiQC, Peddy, plink, rhocall</tspan></tspan></text>
+               id="tspan1526">MultiQC, Peddy, plink, rhocall</tspan></tspan></text>
       </g>
       <g
          id="g102534"
-         transform="translate(0,0.81806911)">
+         transform="translate(0,0.81806251)">
         <path
            style="fill:#ffffff;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
            id="rect100673-8"
@@ -536,9 +536,9 @@
              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro';white-space:pre;shape-inside:url(#rect14174);fill:#000000"><tspan
                x="60.888672"
                y="219.65996"
-               id="tspan9338"><tspan
+               id="tspan1532"><tspan
                  style="font-weight:bold;-inkscape-font-specification:'Maven Pro Bold'"
-                 id="tspan9336">Variant calling</tspan></tspan></text>
+                 id="tspan1530">Variant calling</tspan></tspan></text>
           <g
              id="g87717"
              transform="translate(-16.201196)">
@@ -549,19 +549,19 @@
                style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro';white-space:pre;shape-inside:url(#rect17389);fill:#000000"><tspan
                  x="259.16406"
                  y="253.34555"
-                 id="tspan9342"><tspan
+                 id="tspan1536"><tspan
    style="font-weight:bold;-inkscape-font-specification:'Maven Pro Bold'"
-   id="tspan9340">SV</tspan>
+   id="tspan1534">SV</tspan>
 </tspan><tspan
                  x="259.16406"
                  y="268.34555"
-                 id="tspan9344">ExpansionHunter, </tspan><tspan
+                 id="tspan1538">ExpansionHunter, </tspan><tspan
                  x="259.16406"
                  y="283.34555"
-                 id="tspan9346">CNVpytor, Manta, </tspan><tspan
+                 id="tspan1540">CNVpytor, Manta, </tspan><tspan
                  x="259.16406"
                  y="298.34555"
-                 id="tspan9348">tiddit/sv</tspan></text>
+                 id="tspan1542">tiddit/sv</tspan></text>
             <text
                xml:space="preserve"
                transform="matrix(0.26458333,0,0,0.26458333,-35.390686,-2.26695)"
@@ -569,26 +569,26 @@
                style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro Bold';white-space:pre;shape-inside:url(#rect24030);fill:#000000"><tspan
                  x="473.05078"
                  y="248.66196"
-                 id="tspan9352">Mitochondria<tspan
+                 id="tspan1546">Mitochondria<tspan
    style="font-weight:normal;-inkscape-font-specification:'Maven Pro'"
-   id="tspan9350">
+   id="tspan1544">
 </tspan></tspan><tspan
                  x="473.05078"
                  y="263.66196"
-                 id="tspan9356"><tspan
+                 id="tspan1550"><tspan
                    style="font-weight:normal;-inkscape-font-specification:'Maven Pro'"
-                   id="tspan9354">According to GATK </tspan></tspan><tspan
+                   id="tspan1548">According to GATK </tspan></tspan><tspan
                  x="473.05078"
                  y="278.66196"
-                 id="tspan9360"><tspan
+                 id="tspan1554"><tspan
                    style="font-weight:normal;-inkscape-font-specification:'Maven Pro'"
-                   id="tspan9358">Best Practices
+                   id="tspan1552">Best Practices
 </tspan></tspan><tspan
                  x="473.05078"
                  y="293.66196"
-                 id="tspan9364"><tspan
+                 id="tspan1558"><tspan
                    style="font-weight:normal;-inkscape-font-specification:'Maven Pro'"
-                   id="tspan9362">Mutect2, eKLIPse</tspan></tspan></text>
+                   id="tspan1556">Mutect2, eKLIPse</tspan></tspan></text>
             <text
                xml:space="preserve"
                transform="matrix(0.26458333,0,0,0.26458333,0.1524,-2.26695)"
@@ -596,32 +596,32 @@
                style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro Bold';white-space:pre;shape-inside:url(#rect15038);fill:#000000"><tspan
                  x="48.398438"
                  y="248.66196"
-                 id="tspan9368">SNV + short indels<tspan
+                 id="tspan1562">SNV + short indels<tspan
    style="font-weight:normal;-inkscape-font-specification:'Maven Pro'"
-   id="tspan9366">
+   id="tspan1560">
 </tspan></tspan><tspan
                  x="48.398438"
                  y="263.66196"
-                 id="tspan9372"><tspan
+                 id="tspan1566"><tspan
                    style="font-weight:normal;-inkscape-font-specification:'Maven Pro'"
-                   id="tspan9370">Deepvariant
+                   id="tspan1564">Deepvariant
 </tspan></tspan><tspan
                  x="48.398438"
                  y="278.66196"
-                 id="tspan9376"><tspan
+                 id="tspan1570"><tspan
                    style="font-weight:normal;-inkscape-font-specification:'Maven Pro'"
-                   id="tspan9374">Sentieon: DNAscope, </tspan></tspan><tspan
+                   id="tspan1568">Sentieon: DNAscope, </tspan></tspan><tspan
                  x="48.398438"
                  y="293.66196"
-                 id="tspan9380"><tspan
+                 id="tspan1574"><tspan
                    style="font-weight:normal;-inkscape-font-specification:'Maven Pro'"
-                   id="tspan9378">DNAModelApply</tspan></tspan></text>
+                   id="tspan1572">DNAModelApply</tspan></tspan></text>
           </g>
         </g>
       </g>
       <g
          id="g102550"
-         transform="translate(0,2.582693)">
+         transform="translate(0,2.5826905)">
         <path
            style="fill:#ffffff;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
            id="rect100673-8-8"
@@ -644,9 +644,9 @@
              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro';white-space:pre;shape-inside:url(#rect27379);fill:#000000"><tspan
                x="54.642578"
                y="336.75175"
-               id="tspan9384"><tspan
+               id="tspan1578"><tspan
                  style="font-weight:bold;-inkscape-font-specification:'Maven Pro Bold'"
-                 id="tspan9382">Variant annotation and prioritization</tspan></tspan></text>
+                 id="tspan1576">Variant annotation and prioritization</tspan></tspan></text>
           <g
              id="g87708"
              transform="translate(-18.048103,12.170835)">
@@ -657,13 +657,13 @@
                style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro';white-space:pre;shape-inside:url(#rect17389-8);fill:#000000"><tspan
                  x="259.16406"
                  y="253.34555"
-                 id="tspan9388"><tspan
+                 id="tspan1582"><tspan
                    style="font-weight:bold;-inkscape-font-specification:'Maven Pro Bold'"
-                   id="tspan9386">SV
+                   id="tspan1580">SV
 </tspan></tspan><tspan
                  x="259.16406"
                  y="268.34555"
-                 id="tspan9390">VCFanno, VEP, Gens</tspan></text>
+                 id="tspan1584">VCFanno, VEP, Gens</tspan></text>
             <text
                xml:space="preserve"
                transform="matrix(0.26458333,0,0,0.26458333,-37.869088,-5.7252771)"
@@ -671,16 +671,16 @@
                style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro';white-space:pre;shape-inside:url(#rect31933);fill:#000000"><tspan
                  x="482.41797"
                  y="368.87485"
-                 id="tspan9394"><tspan
+                 id="tspan1588"><tspan
    style="font-weight:bold;-inkscape-font-specification:'Maven Pro Bold'"
-   id="tspan9392">Mitochondria</tspan>
+   id="tspan1586">Mitochondria</tspan>
 </tspan><tspan
                  x="482.41797"
                  y="383.87485"
-                 id="tspan9396">Haplogrep, HmtNote, </tspan><tspan
+                 id="tspan1590">Haplogrep, HmtNote, </tspan><tspan
                  x="482.41797"
                  y="398.87485"
-                 id="tspan9398">gnomAD_mt</tspan></text>
+                 id="tspan1592">gnomAD_mt</tspan></text>
             <text
                xml:space="preserve"
                transform="matrix(0.26458333,0,0,0.26458333,-1.5942634,-4.0003178)"
@@ -688,13 +688,13 @@
                style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro';white-space:pre;shape-inside:url(#rect43013);fill:#000000"><tspan
                  x="55"
                  y="362.35532"
-                 id="tspan9402"><tspan
+                 id="tspan1596"><tspan
    style="font-weight:bold;-inkscape-font-specification:'Maven Pro Bold'"
-   id="tspan9400">SNV + short indels</tspan>
+   id="tspan1594">SNV + short indels</tspan>
 </tspan><tspan
                  x="55"
                  y="377.35532"
-                 id="tspan9404">VCFanno, CADD, VEP</tspan></text>
+                 id="tspan1598">VCFanno, CADD, VEP</tspan></text>
           </g>
         </g>
       </g>
@@ -721,21 +721,21 @@
            y="0"><tspan
              x="102.71875"
              y="466.14043"
-             id="tspan9410"><tspan
+             id="tspan1604"><tspan
                style="font-size:16px;text-align:center;text-anchor:middle"
-               id="tspan9406">Outputs</tspan><tspan
+               id="tspan1600">Outputs</tspan><tspan
                style="text-align:center;text-anchor:middle"
-               id="tspan9408">
+               id="tspan1602">
 </tspan></tspan><tspan
              x="56.742188"
              y="482.35532"
-             id="tspan9414"><tspan
+             id="tspan1608"><tspan
                style="font-weight:normal;-inkscape-font-specification:'Maven Pro';text-align:center;text-anchor:middle"
-               id="tspan9412">VCFs, inputs for scout, Gens</tspan></tspan></text>
+               id="tspan1606">VCFs, inputs for scout, Gens</tspan></tspan></text>
       </g>
       <g
          id="g7296"
-         transform="matrix(0.12542881,0,0,-0.12542881,-28.253011,256.19617)"
+         transform="matrix(0.1742278,0,0,-0.1742278,-57.9786,319.24512)"
          inkscape:export-filename="g6237.png"
          inkscape:export-xdpi="89"
          inkscape:export-ydpi="89">
@@ -838,12 +838,12 @@
       </g>
       <path
          id="path2601-9"
-         style="fill:#ffffff;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="M 16.205895,-8.1394307 V 4.3717912 a 3.2891556,3.2891556 51.186415 0 0 2.584381,3.2127617 l 27.293225,5.9872381 a 12.061209,12.061209 7.3881774e-7 0 0 5.168762,0 L 78.545492,7.5845528 A 3.2891556,3.2891556 128.81359 0 0 81.129873,4.3717912 V -8.1394307 A 2.6458333,2.6458333 45 0 0 78.48404,-10.785264 H 18.851728 a 2.6458333,2.6458333 135 0 0 -2.645833,2.6458333 z"
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.468694;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 16.205895,-8.4011937 V 1.9504925 a 3.2045424,3.2045424 50.455185 0 0 2.598008,3.1466186 l 27.265971,5.2557169 a 13.726238,13.726238 6.5606163e-7 0 0 5.196016,0 L 78.531865,5.097111 A 3.2045423,3.2045423 129.54482 0 0 81.129873,1.9504925 V -8.4011937 A 2.6458333,2.6458333 45 0 0 78.48404,-11.047027 H 18.851728 a 2.6458333,2.6458333 135 0 0 -2.645833,2.6458333 z"
          inkscape:path-effect="#path-effect2868"
-         inkscape:original-d="M 16.205895,-10.785264 V 7.0176245 L 48.667882,14.138719 81.129873,7.0176245 V -10.785264 Z" />
+         inkscape:original-d="M 16.205895,-11.047027 V 4.5963258 L 48.667882,10.853613 81.129873,4.5963258 V -11.047027 Z" />
       <g
-         transform="matrix(0.1003418,0,0,-0.1003418,-7.3485557,204.24051)"
+         transform="matrix(0.1393805,0,0,-0.1393805,-28.94111,279.01578)"
          id="g6322-4">
         <path
            id="path5862-6"
@@ -874,7 +874,7 @@
       </g>
       <g
          id="g100547"
-         transform="translate(0.77458502,10.583334)">
+         transform="translate(0.77458502,9.5250003)">
         <text
            xml:space="preserve"
            transform="matrix(0.26458333,0,0,0.26458333,50.69795,-26.102348)"
@@ -882,9 +882,9 @@
            style="font-size:21.3333px;white-space:pre;shape-inside:url(#rect1583);fill:#ff0000"><tspan
              x="62.449219"
              y="79.513374"
-             id="tspan9418"><tspan
+             id="tspan1612"><tspan
                style="font-weight:bold;font-family:'Maven Pro';-inkscape-font-specification:'Maven Pro Bold';fill:#000000"
-               id="tspan9416">dev</tspan></tspan></text>
+               id="tspan1610">dev</tspan></tspan></text>
         <image
            width="48.050831"
            height="19.782146"
