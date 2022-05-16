@@ -10,21 +10,20 @@ process SENTIEON_DNASCOPE {
     path known_dbsnp
     path known_dbsnp_tbi
     path ml_model
-    
+
     output:
     tuple val(meta), path("*_dnascope.vcf")     , emit: vcf
     tuple val(meta), path("*_dnascope.vcf.idx") , emit: vcf_index
-    path "versions.yml"                         , emit: versions
+    path "versions.yml"                            , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
-    def args2 = task.ext.args2 ?: ''
-    def args3 = task.ext.args3 ?: ''
-    def dbsnp = known_dbsnp ? "-d ${known_dbsnp}" : ''
-    def model = ml_model ? "--model ${ml_model}" : ''
+    def args   = task.ext.args ?: ''
+    def args2   = task.ext.args2 ?: ''
+    def dbsnp  = known_dbsnp ? "-d ${known_dbsnp}" : ''
+    def model  = ml_model ? "--model ${ml_model}" : ''
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
@@ -36,7 +35,6 @@ process SENTIEON_DNASCOPE {
         --algo DNAscope \\
         $dbsnp \\
         $args2 \\
-        $args3 \\
         $model \\
         ${prefix}_dnascope.vcf
 

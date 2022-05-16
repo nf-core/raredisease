@@ -27,10 +27,7 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-ch_known_dbsnp     = params.known_dbsnp     ? file(params.known_dbsnp)     : []
-ch_known_dbsnp_tbi = params.known_dbsnp_tbi ? file(params.known_dbsnp_tbi) : []
-ch_known_mills     = params.known_mills     ? file(params.known_mills)     : []
-ch_known_indels    = params.known_indels    ? file(params.known_indels)    : []
+ch_ml_model        = params.ml_model        ? file(params.ml_model)                    : []
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,6 +51,7 @@ include { CHECK_INPUT                  } from '../subworkflows/local/check_input
 include { PREPARE_REFERENCES           } from '../subworkflows/local/prepare_references'
 include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_structural_variants'
 include { ALIGN                        } from '../subworkflows/local/align'
+include { CALL_SNV                     } from '../subworkflows/local/call_snv'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -74,7 +72,6 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 //
 
 include { CALL_REPEAT_EXPANSIONS       } from '../subworkflows/nf-core/call_repeat_expansions'
-include { CALL_SNV_DEEPVARIANT         } from '../subworkflows/nf-core/call_snv_deepvariant'
 include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
 include { ANNOTATE_VCFANNO             } from '../subworkflows/nf-core/annotate_vcfanno'
 include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
@@ -159,13 +156,17 @@ workflow RAREDISEASE {
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
-    CALL_SNV_DEEPVARIANT (
+    CALL_SNV (
+        params.variant_caller,
         ch_mapped.bam_bai,
         ch_references.genome_fasta,
         ch_references.genome_fai,
+        ch_references.known_dbsnp,
+        ch_references.known_dbsnp_tbi,
+        ch_ml_model,
         CHECK_INPUT.out.case_info
     )
-    ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
+    ch_versions = ch_versions.mix(CALL_SNV.out.versions)
 
     CALL_STRUCTURAL_VARIANTS (
         ch_mapped.marked_bam,
@@ -192,16 +193,16 @@ workflow RAREDISEASE {
 
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
     }
-    
+
     // STEP 2.1: MT CALLING
-    
+
     PREPARE_MT_ALIGNMENT (
         ch_mapped.bam_bai
     )
     ch_versions = ch_versions.mix(PREPARE_MT_ALIGNMENT.out.versions)
 
     // STEP 3: VARIANT ANNOTATION
-    ch_dv_vcf = CALL_SNV_DEEPVARIANT.out.vcf.join(CALL_SNV_DEEPVARIANT.out.tabix, by: [0])
+    ch_dv_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
 
     ANNOTATE_VCFANNO (
         params.vcfanno_toml,
