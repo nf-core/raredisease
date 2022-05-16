@@ -40,7 +40,10 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 > Databases: [`gnomAD`](https://gnomad.broadinstitute.org/)
 
-![nf-core/raredisease Workflow](docs/images/raredisease_workflow_v0.png)
+<!-- prettier-ignore -->
+<p align="center">
+    <img title="nf-core/raredisease workflow" src="docs/images/raredisease_workflow_v0.png" width=40%>
+</p>
 
 Note that it is possible to include/exclude certain tools or steps.
 
