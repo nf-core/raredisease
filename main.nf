@@ -25,6 +25,7 @@ params.known_dbsnp          = WorkflowMain.getGenomeAttribute(params, 'known_dbs
 params.known_dbsnp_tbi      = WorkflowMain.getGenomeAttribute(params, 'known_dbsnp_tbi')
 params.known_indels         = WorkflowMain.getGenomeAttribute(params, 'known_indels')
 params.known_mills          = WorkflowMain.getGenomeAttribute(params, 'known_mills')
+params.ml_model             = WorkflowMain.getGenomeAttribute(params, 'ml_model')
 params.target_bed           = WorkflowMain.getGenomeAttribute(params, 'target_bed')
 params.sentieonbwa_index    = WorkflowMain.getGenomeAttribute(params, 'bwa')
 params.svdb_query_dbs       = WorkflowMain.getGenomeAttribute(params, 'svdb_query_dbs')
