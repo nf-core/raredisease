@@ -3,7 +3,7 @@
 //
 
 include { CALL_SNV_DEEPVARIANT } from '../nf-core/call_snv_deepvariant'
-include { CALL_SNV_SENTIEON } from './calling_sentieon'
+include { CALL_SNV_SENTIEON } from './call_snv_sentieon'
     
 workflow CALL_SNV {
     take:
