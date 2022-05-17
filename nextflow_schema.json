@@ -252,6 +252,13 @@
             "fa_icon": "fas fa-map-signs",
             "description": "Options to adjust parameters and filtering criteria for variant calling.",
             "properties": {
+                "call_interval": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Interval in the reference that will be used in the software",
+                    "hidden": true
+                },
                 "pcrfree": {
                     "type": "boolean",
                     "default": true,
