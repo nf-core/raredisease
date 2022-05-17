@@ -63,6 +63,14 @@
                     "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
                     "fa_icon": "far fa-file-code"
                 },
+                "fasta_fai": {
+                    "type": "string",
+                    "format": "file-path",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference",
+                    "description": "Path to FASTA genome index file.",
+                    "fa_icon": "far fa-file-code",
+                    "hidden": true
+                },
                 "igenomes_base": {
                     "type": "string",
                     "format": "directory-path",
@@ -77,6 +85,207 @@
                     "fa_icon": "fas fa-ban",
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
+                },
+                "bwamem2_index": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Directory for pre-built bwamem2 index.",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
+                },
+                "gnomad": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-bezier-curve",
+                    "description": "Path to directory for gnomad vcf.",
+                    "help_text": "Path to the gnomad vcf file. If you don't provide one, gnomad annotations will not be used."
+                },
+                "known_dbsnp": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Path to known dbSNP file.",
+                    "hidden": true
+                },
+                "known_dbsnp_tbi": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Path to known dbSNP file index.",
+                    "hidden": true
+                },
+                "known_indels": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Path to known indels file.",
+                    "hidden": true
+                },
+                "known_mills": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Path to known Mills file.",
+                    "hidden": true
+                },
+                "target_bed": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-bezier-curve",
+                    "description": "Path to directory for target bed file.",
+                    "help_text": "If you would like to limit your analysis to specific regions of the genome, you can pass those regions in a bed file using this option",
+                    "hidden": true
+                },
+                "sentieonbwa_index": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "default": null,
+                    "description": "Directory for pre-built sentieon index.",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
+                },
+                "svdb_query_dbs": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Databases used for structural variant annotation.",
+                    "fa_icon": "far fa-file-code",
+                    "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation."
+                },
+                "variant_catalog": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to variant catalog file",
+                    "help_text": "Used with ExpansionHunter and if no catalogue is passed, then a default will be used.",
+                    "fa_icon": "far fa-file-code",
+                    "hidden": true
+                },
+                "vcfanno_resources": {
+                    "type": "string",
+                    "description": "Directory path or tar.gz archive that holds resources defined within the vcfanno toml file.",
+                    "help_text": "If no directory path is passed, default configurations will be used according to genome build within the context of the pipeline.",
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
+                },
+                "vcfanno_toml": {
+                    "type": "string",
+                    "description": "Path to the vcfanno toml file.",
+                    "help_text": "If no toml is passed, default configurations will be used according to genome build within the context of the pipeline.",
+                    "fa_icon": "fas fa-file-csv",
+                    "hidden": true
+                },
+                "vep_cache": {
+                    "type": "string",
+                    "description": "Path to vep's cache directory.",
+                    "help_text": "If no directory path is passed, vcf files will not be annotated by vep.",
+                    "fa_icon": "fas fa-folder-open"
+                },
+                "save_reference": {
+                    "type": "boolean",
+                    "description": "If generated by the pipeline save the required indices/references in the results directory.",
+                    "help_text": "The saved references can be used for future pipeline runs, reducing processing times.",
+                    "fa_icon": "fas fa-save"
+                },
+                "local_genomes": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-map-marker-alt",
+                    "description": "Local directory base for genome references that map to the config.",
+                    "help_text": "This folder is a flat structure with file names that map to the config."
+                }
+            }
+        },
+        "analysis_options": {
+            "title": "Analysis options",
+            "type": "object",
+            "fa_icon": "fas fa-user-cog",
+            "description": "Options used to steer the direction of the pipeline.",
+            "properties": {
+                "analysis_type": {
+                    "type": "string",
+                    "default": "wgs",
+                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
+                    "fa_icon": "fas fa-book",
+                    "enum": ["wgs", "wes", "mito"]
+                },
+                "annotate_sv_switch": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies whether or not to run annotate structural variant subworkflow.",
+                    "fa_icon": "fas fa-book"
+                }
+            }
+        },
+        "alignment_options": {
+            "title": "Alignment options",
+            "type": "object",
+            "fa_icon": "fas fa-map-signs",
+            "description": "Options to adjust parameters and filtering criteria for read alignments.",
+            "properties": {
+                "aligner": {
+                    "type": "string",
+                    "default": "bwamem2",
+                    "description": "Specifies the alignment algorithm to use - available options are 'bwamem2' and 'sentieon'.",
+                    "fa_icon": "fas fa-map-signs",
+                    "enum": ["bwamem2", "sentieon"]
+                },
+                "rmdup": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies whether duplicates reads should be removed prior to variant calling.",
+                    "fa_icon": "fas fa-map-signs",
+                    "hidden": true
+                }
+            }
+        },
+        "variant_calling_options": {
+            "title": "Variant calling options",
+            "type": "object",
+            "fa_icon": "fas fa-map-signs",
+            "description": "Options to adjust parameters and filtering criteria for variant calling.",
+            "properties": {
+                "variant_caller": {
+                    "type": "string",
+                    "default": "deepvariant",
+                    "description": "Specifies the variant caller to use - available options are 'deepvariant' and 'sentieon'.",
+                    "fa_icon": "fas fa-map-signs",
+                    "enum": ["deepvariant", "sentieon"]
+                }
+            }
+        },
+        "sv_caller_options": {
+            "title": "Structural variant calling options",
+            "type": "object",
+            "fa_icon": "fas fa-map-signs",
+            "description": "Options to adjust parameters and filtering criteria for structural variant callers.",
+            "properties": {
+                "cnvpytor_chr": {
+                    "type": "string",
+                    "default": null,
+                    "description": "Chromosome names must be specified the same way as they are described in the sam/bam/cram header, e.g., chrX or X. One can specify multiple chromosomes separated by space.",
+                    "fa_icon": "fas fa-map-signs"
+                },
+                "cnvpytor_binsizes": {
+                    "type": "string",
+                    "default": "1000",
+                    "description": "List of binsizes separated by space e.g. '1000 10000' and '1000'",
+                    "fa_icon": "fas fa-map-signs"
+                }
+            }
+        },
+        "annotation_options": {
+            "title": "Annotation options",
+            "type": "object",
+            "fa_icon": "fas fa-user-cog",
+            "description": "Options used to facilitate the annotation of the variants.",
+            "properties": {
+                "vep_cache_version": {
+                    "type": "string",
+                    "default": "104",
+                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
+                    "fa_icon": "fas fa-book",
+                    "enum": ["104", "105"]
                 }
             }
         },
@@ -124,6 +333,11 @@
                     "type": "string",
                     "description": "Institutional config URL link.",
                     "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "local_config_path": {
+                    "type": "string",
+                    "description": "Path to local config",
                     "fa_icon": "fas fa-users-cog"
                 }
             }
@@ -255,6 +469,21 @@
         },
         {
             "$ref": "#/definitions/reference_genome_options"
+        },
+        {
+            "$ref": "#/definitions/analysis_options"
+        },
+        {
+            "$ref": "#/definitions/alignment_options"
+        },
+        {
+            "$ref": "#/definitions/sv_caller_options"
+        },
+        {
+            "$ref": "#/definitions/variant_calling_options"
+        },
+        {
+            "$ref": "#/definitions/annotation_options"
         },
         {
             "$ref": "#/definitions/institutional_config_options"

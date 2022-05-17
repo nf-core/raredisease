@@ -17,7 +17,21 @@ nextflow.enable.dsl = 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-params.fasta = WorkflowMain.getGenomeAttribute(params, 'fasta')
+params.fasta                = WorkflowMain.getGenomeAttribute(params, 'fasta')
+params.fasta_fai            = WorkflowMain.getGenomeAttribute(params, 'fai')
+params.bwamem2_index        = WorkflowMain.getGenomeAttribute(params, 'bwamem2')
+params.gnomad               = WorkflowMain.getGenomeAttribute(params, 'gnomad')
+params.known_dbsnp          = WorkflowMain.getGenomeAttribute(params, 'known_dbsnp')
+params.known_dbsnp_tbi      = WorkflowMain.getGenomeAttribute(params, 'known_dbsnp_tbi')
+params.known_indels         = WorkflowMain.getGenomeAttribute(params, 'known_indels')
+params.known_mills          = WorkflowMain.getGenomeAttribute(params, 'known_mills')
+params.target_bed           = WorkflowMain.getGenomeAttribute(params, 'target_bed')
+params.sentieonbwa_index    = WorkflowMain.getGenomeAttribute(params, 'bwa')
+params.svdb_query_dbs       = WorkflowMain.getGenomeAttribute(params, 'svdb_query_dbs')
+params.variant_catalog      = WorkflowMain.getGenomeAttribute(params, 'variant_catalog')
+params.vcfanno_resources    = WorkflowMain.getGenomeAttribute(params, 'vcfanno_resources')
+params.vcfanno_toml         = WorkflowMain.getGenomeAttribute(params, 'vcfanno_toml')
+params.vep_cache            = WorkflowMain.getGenomeAttribute(params, 'vep_cache')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
