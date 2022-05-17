@@ -1,46 +1,6 @@
 {
     "name": "nf-core/raredisease",
-    "homePage": "https://github.com/nf-core/raredisease",
-    "repos": {
-        "nf-core/modules": {
-            "bcftools/norm": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
-            },
-            "bwamem2/index": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
-            },
-            "bwamem2/mem": {
-                "git_sha": "4f5274c3de0c9521f5033893ff61057a74c45ba9"
-            },
-            "cat/cat": {
-                "git_sha": "eeda4136c096688d04cc40bb3c70d948213ed641"
-            },
-            "cnvpytor/callcnvs": {
-                "git_sha": "1ccea5ff4d3dffbf9a8e53032481cc9246d4e23d"
-            },
-            "cnvpytor/histogram": {
-                "git_sha": "19cfb4e95196d0e8cc14a67ecb8f1ed0b0fcc3a7"
-            },
-            "cnvpytor/importreaddepth": {
-                "git_sha": "19cfb4e95196d0e8cc14a67ecb8f1ed0b0fcc3a7"
-            },
-            "cnvpytor/partition": {
-                "git_sha": "19cfb4e95196d0e8cc14a67ecb8f1ed0b0fcc3a7"
-            },
-            "cnvpytor/view": {
-                "git_sha": "af73544010cc9563ec7d7160aeb825ae28ec217f"
-            },
-            "custom/dumpsoftwareversions": {
-                "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
-            },
-            "deepvariant": {
-                "git_sha": "fd5f6f5f4ffef4ab5a4e809bd3211bbc71c38d30"
-            },
-            "expansionhunter": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
-            },
-            "fastqc": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+
             },
             "gatk4/bedtointervallist": {
                 "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
