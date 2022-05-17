@@ -260,7 +260,7 @@
                 },
                 "variant_type": {
                     "type": "string",
-                    "default": "SNP",
+                    "default": "snp",
                     "description": "Specifies the variant types for sentieon variant caller.",
                     "fa_icon": "fas fa-map-signs",
                     "enum": ["snp", "indel", "snp,indel"]
