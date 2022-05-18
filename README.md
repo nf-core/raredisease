@@ -42,7 +42,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 <!-- prettier-ignore -->
 <p align="center">
-    <img title="nf-core/raredisease workflow" src="docs/images/raredisease_workflow_v0.png" width=40%>
+    <img title="nf-core/raredisease workflow" src="docs/images/raredisease_workflow.png" width=40%>
 </p>
 
 Note that it is possible to include/exclude certain tools or steps.
