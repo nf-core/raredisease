@@ -27,7 +27,8 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-ch_ml_model        = params.ml_model        ? file(params.ml_model)                    : []
+ch_ml_model        = params.ml_model      ? file(params.ml_model)      : []
+ch_call_interval   = params.call_interval ? file(params.call_interval) : []
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

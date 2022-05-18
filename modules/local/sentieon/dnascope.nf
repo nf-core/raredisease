@@ -9,22 +9,24 @@ process SENTIEON_DNASCOPE {
     path fai
     path known_dbsnp
     path known_dbsnp_tbi
+    path call_interval
     path ml_model
 
     output:
-    tuple val(meta), path("*_dnascope.vcf")     , emit: vcf
-    tuple val(meta), path("*_dnascope.vcf.idx") , emit: vcf_index
+    tuple val(meta), path("*_dnascope.vcf.gz")     , emit: vcf
+    tuple val(meta), path("*_dnascope.vcf.gz.tbi") , emit: vcf_index
     path "versions.yml"                            , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
-    def args   = task.ext.args ?: ''
-    def args2   = task.ext.args2 ?: ''
-    def dbsnp  = known_dbsnp ? "-d ${known_dbsnp}" : ''
-    def model  = ml_model ? "--model ${ml_model}" : ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def args     = task.ext.args ?: ''
+    def args2    = task.ext.args2 ?: ''
+    def interval = call_interval ? "--interval ${call_interval}" : ''
+    def dbsnp    = known_dbsnp ? "-d ${known_dbsnp}" : ''
+    def model    = ml_model ? "--model ${ml_model}" : ''
+    def prefix   = task.ext.prefix ?: "${meta.id}"
 
     """
     sentieon driver \\
@@ -34,9 +36,10 @@ process SENTIEON_DNASCOPE {
         -i $bam \\
         --algo DNAscope \\
         $dbsnp \\
+        $interval \\
         $args2 \\
         $model \\
-        ${prefix}_dnascope.vcf
+        ${prefix}_dnascope.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -47,8 +50,8 @@ process SENTIEON_DNASCOPE {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}_dnascope.vcf
-    touch ${prefix}_dnascope.vcf.idx
+    touch ${prefix}_dnascope.vcf.gz
+    touch ${prefix}_dnascope.vcf.gz.tbi
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
