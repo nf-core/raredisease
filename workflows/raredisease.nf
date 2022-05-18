@@ -164,6 +164,7 @@ workflow RAREDISEASE {
         ch_references.genome_fai,
         ch_references.known_dbsnp,
         ch_references.known_dbsnp_tbi,
+        ch_call_interval,
         ch_ml_model,
         CHECK_INPUT.out.case_info
     )
