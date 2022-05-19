@@ -2,10 +2,11 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SVDB_QUERY                  } from '../../modules/nf-core/modules/svdb/query/main'
-include { PICARD_SORTVCF              } from '../../modules/nf-core/modules/picard/sortvcf/main'
-include { BCFTOOLS_VIEW               } from '../../modules/nf-core/modules/bcftools/view/main'
-include { ENSEMBLVEP as ENSEMBLVEP_SV } from '../../modules/local/ensemblvep/main'
+include { SVDB_QUERY                    } from '../../modules/nf-core/modules/svdb/query/main'
+include { PICARD_SORTVCF                } from '../../modules/nf-core/modules/picard/sortvcf/main'
+include { BCFTOOLS_VIEW                 } from '../../modules/nf-core/modules/bcftools/view/main'
+include { TABIX_TABIX as TABIX_SV_ANNO  } from '../../modules/nf-core/modules/tabix/tabix/main'
+include { ENSEMBLVEP as ENSEMBLVEP_SV   } from '../../modules/local/ensemblvep/main'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
@@ -55,8 +56,17 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
 
         BCFTOOLS_VIEW(ch_sortvcf,[],[],[])
+        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
 
-        ENSEMBLVEP_SV(BCFTOOLS_VIEW.out.vcf,
+        TABIX_SV_ANNO (BCFTOOLS_VIEW.out.vcf)
+        ch_versions = ch_versions.mix(TABIX_SV_ANNO.out.versions)
+
+        BCFTOOLS_VIEW.out
+            .vcf
+            .join(TABIX_SV_ANNO.out.tbi)
+            .set { ch_vep_in }
+
+        ENSEMBLVEP_SV(ch_vep_in,
             vep_genome,
             "homo_sapiens",
             vep_cache_version,
