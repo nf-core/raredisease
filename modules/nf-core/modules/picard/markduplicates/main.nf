@@ -29,8 +29,6 @@ process PICARD_MARKDUPLICATES {
         avail_mem = task.memory.giga
     }
     """
-    mkdir tmp
-    export _JAVA_OPTIONS=-Djava.io.tmpdir=./tmp
     picard \\
         -Xmx${avail_mem}g \\
         MarkDuplicates \\
