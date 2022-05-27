@@ -129,6 +129,13 @@
                     "description": "Path to known Mills file.",
                     "hidden": true
                 },
+                "ml_model": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Path to sentieon machine learning model file.",
+                    "hidden": true
+                },
                 "target_bed": {
                     "type": "string",
                     "format": "path",
@@ -251,6 +258,26 @@
             "fa_icon": "fas fa-map-signs",
             "description": "Options to adjust parameters and filtering criteria for variant calling.",
             "properties": {
+                "call_interval": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Interval in the reference that will be used in the software",
+                    "hidden": true
+                },
+                "pcrfree": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "indicates whether the sample is PCR Free or not. Set to true for PCR Free samples.",
+                    "fa_icon": "fas fa-map-signs"
+                },
+                "variant_type": {
+                    "type": "string",
+                    "default": "snp",
+                    "description": "Specifies the variant types for sentieon variant caller.",
+                    "fa_icon": "fas fa-map-signs",
+                    "enum": ["snp", "indel", "snp,indel"]
+                },
                 "variant_caller": {
                     "type": "string",
                     "default": "deepvariant",
