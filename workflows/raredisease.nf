@@ -186,7 +186,7 @@ workflow RAREDISEASE {
     if (params.gens_switch) {
         GENS (
             ch_mapped.bam_bai,
-            CALL_SNV_DEEPVARIANT.out.vcf,
+            CALL_SNV.out.vcf,
             ch_references.genome_fasta,
             ch_references.genome_fai,
             file(params.gens_interval_list),
