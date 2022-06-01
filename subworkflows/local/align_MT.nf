@@ -11,16 +11,19 @@ include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                     } from '../../mo
 workflow ALIGN_MT {
     take:
         fastq  // TO DO d: and file: bam index: bam.bai
+        fasta
+        fai
+        dict
 
     main:
         ch_versions = Channel.empty()
 
         // Outputs bam files
-        BWAMEM2_MEM_MT ( fastq )
+        BWAMEM2_MEM_MT ( fastq , fasta, true)
         ch_versions = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
 
         // Merges bam files
-        GATK4_MERGEBAMALIGNMENT_MT ( BWAMEM2_MEM_MT.out.bam )
+        GATK4_MERGEBAMALIGNMENT_MT ( BWAMEM2_MEM_MT.out.bam, fasta, dict )
         ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions.first())
 
         // Marks duplicates
@@ -28,7 +31,7 @@ workflow ALIGN_MT {
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
         
         // Calls variants with Mutect2
-        GATK4_MUTECT2_MT ( PICARD_MARKDUPLICATES_MT.out.bam )
+        GATK4_MUTECT2_MT ( PICARD_MARKDUPLICATES_MT.out.bam, fasta, fai, dict, [], [], [], [] )
         ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions.first())
 
         // Haplocheck
