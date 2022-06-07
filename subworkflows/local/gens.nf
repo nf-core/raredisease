@@ -24,9 +24,6 @@ workflow GENS {
                 [meta, bam, bai, []]
             }.set { ch_bam }
 
-        bam.view()
-        ch_bam.view()
-
         COLLECTREADCOUNTS ( bam, fasta, fai, seq_dict, interval_list )
         ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions)
 
