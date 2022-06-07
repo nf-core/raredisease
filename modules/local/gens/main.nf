@@ -2,10 +2,7 @@ process GENS {
     tag "$meta.id"
     label 'process_medium'
 
-    //conda (params.enable_conda ? "bioconda::gatk4=4.2.4.1" : null)
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'raysloks/gens_preproc:1.0.1' :
-        'raysloks/gens_preproc:1.0.1' }"
+    container 'raysloks/gens_preproc:1.0.1'
 
     input:
     tuple val(meta), path(read_counts)
