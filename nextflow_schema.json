@@ -207,6 +207,7 @@
                 "gens_interval_list": {
                     "type": "string",
                     "format": "file-path",
+                    "default": null,
                     "fa_icon": "fas fa-bezier-curve",
                     "description": "Path to interval list for Gens.",
                     "help_text": "This file contains the binning intervals used for CollectReadCounts.",
@@ -215,6 +216,7 @@
                 "gens_pon": {
                     "type": "string",
                     "format": "file-path",
+                    "default": null,
                     "fa_icon": "far fa-file-code",
                     "description": "Path to panel of normals for Gens.",
                     "help_text": "The panel used to run DenoiseReadCounts.",
@@ -223,6 +225,7 @@
                 "gens_gnomad_pos": {
                     "type": "string",
                     "format": "file-path",
+                    "default": null,
                     "fa_icon": "far fa-bezier-curve",
                     "description": "Path to a list of common SNP locations for Gens.",
                     "help_text": "Locations of gnomad SNPs with a high enough BAF.",
