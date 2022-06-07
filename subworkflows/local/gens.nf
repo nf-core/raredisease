@@ -20,9 +20,6 @@ workflow GENS {
 
     main:
         ch_versions = Channel.empty()
-        bam.map { meta, bam, bai ->
-                [meta, bam, bai, []]
-            }.set { ch_bam }
 
         COLLECTREADCOUNTS ( bam, fasta, fai, seq_dict, interval_list )
         ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions)
