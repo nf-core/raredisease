@@ -6,6 +6,9 @@
             "bcftools/norm": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
+            "bcftools/roh": {
+                "git_sha": "b0dba3ee7543dc89a00575fb619408de97cd889d"
+            },
             "bcftools/view": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
