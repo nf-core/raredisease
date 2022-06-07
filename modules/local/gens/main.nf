@@ -34,4 +34,18 @@ process GENS {
         generate_gens_data.pl: \$(echo \$(generate_gens_data.pl --version 2>&1))
     END_VERSIONS
     """
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}.baf.bed.gz
+    touch ${prefix}.baf.bed.gz.tbi
+    touch ${prefix}.cov.bed.gz
+    touch ${prefix}.cov.bed.gz.tbi
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        generate_gens_data.pl: \$(echo \$(generate_gens_data.pl --version 2>&1))
+    END_VERSIONS
+    """
 }
