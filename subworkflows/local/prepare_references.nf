@@ -72,10 +72,10 @@ workflow PREPARE_REFERENCES {
             ch_gnomad_tab = [[id:'gnomad'], file(gnomad_af)]
             TABIX_GNOMAD_AF(ch_gnomad_tab)
             ch_gnomad_tbi = TABIX_GNOMAD_AF.out.tbi
-            ch_gnomad_af = ch_gnomad_tab.join(ch_gnomad_tbi)
+            ch_gnomad_af = ch_gnomad_tab.join(ch_gnomad_tbi).collect{ it -> return [it[1], it[2]]}
             ch_versions   = ch_versions.mix(CHECK_VCF.out.versions)
-        } else if (!gnomad_af_tbi && gnomad_af) {
-            ch_gnomad_af = [[id:'gnomad'], file(gnomad_af), file(gnomad_af_tbi)]
+        } else if (gnomad_af_tbi && gnomad_af) {
+            ch_gnomad_af = [file(gnomad_af), file(gnomad_af_tbi)]
         }
 
         // Target bed
