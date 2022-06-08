@@ -112,6 +112,8 @@ workflow RAREDISEASE {
         params.fasta,
         params.fasta_fai,
         params.gnomad,
+        params.gnomad_af,
+        params.gnomad_af_tbi,
         params.known_dbsnp,
         params.known_dbsnp_tbi,
         params.sentieonbwa_index,
@@ -214,7 +216,7 @@ workflow RAREDISEASE {
         params.vep_cache_version,
         params.vep_cache,
         ch_references.genome_fasta,
-        ch_references.gnomad_vcf,
+        ch_references.gnomad_af,
         CHECK_INPUT.out.samples
     )
     ch_versions = ch_versions.mix(ANNOTATE_SNVS.out.versions)
