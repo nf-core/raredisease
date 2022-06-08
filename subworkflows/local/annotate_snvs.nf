@@ -46,7 +46,7 @@ workflow ANNOTATE_SNVS {
             .combine(ch_roh_vcfs)
             .set { ch_roh_input }
 
-        BCFTOOLS_ROH (ch_roh_input, gnomad_af.collect{it[1]}, [], [], [], [])
+        BCFTOOLS_ROH (ch_roh_input, gnomad_af, [], [], [], [])
 
     emit:
         vcf_ann                = VCFANNO.out.vcf
