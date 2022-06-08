@@ -23,6 +23,9 @@ workflow ANNOTATE_SNVS {
         ch_versions = Channel.empty()
         ch_toml     = file(vcfanno_toml)
 
+        //
+        // annotate vcfanno
+        //
         vcf.map { meta, vcf, idx ->
                     return [meta, []]
             }
@@ -31,6 +34,9 @@ workflow ANNOTATE_SNVS {
         VCFANNO (vcf, ch_placeholder, ch_toml, vcfanno_resource_dir)
         ch_versions = ch_versions.mix(VCFANNO.out.versions)
 
+        //
+        // annotate rhocall
+        //
         vcf.map { meta, vcf, idx ->
                 return [ vcf, idx ]
             }
@@ -41,7 +47,7 @@ workflow ANNOTATE_SNVS {
             .set { ch_roh_input }
 
         ch_roh_input.view()
-        BCFTOOLS_ROH (ch_roh_input, gnomad_af, [], [], [], [])
+        BCFTOOLS_ROH (ch_roh_input, gnomad_af.collect{it[1]}, [], [], [], [])
 
     emit:
         vcf_ann                = VCFANNO.out.vcf
