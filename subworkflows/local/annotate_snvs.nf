@@ -67,6 +67,6 @@ workflow ANNOTATE_SNVS {
         RHOCALL_ANNOTATE (vcf, ch_roh_rhocall, [])
 
     emit:
-        vcf_ann                = VCFANNO.out.vcf
+        vcf_ann                = RHOCALL_ANNOTATE.out.vcf
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }
