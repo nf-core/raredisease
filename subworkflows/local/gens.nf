@@ -27,7 +27,7 @@ workflow GENS {
         DENOISEREADCOUNTS ( COLLECTREADCOUNTS.out.read_counts, pon )
         ch_versions = ch_versions.mix(DENOISEREADCOUNTS.out.versions)
 
-        GENS_GENERATE ( DENOISEREADCOUNTS.out.standardized_read_counts, vcf, gnomad_pos )
+        GENS_GENERATE ( DENOISEREADCOUNTS.out.standardized_read_counts, vcf.map { meta, vcf -> vcf }, gnomad_pos )
         ch_versions = ch_versions.mix(GENS_GENERATE.out.versions)
 
     emit:

@@ -6,12 +6,12 @@ process GENS {
 
     input:
     tuple val(meta), path(read_counts)
-    tuple val(meta_vcf), path(vcf)
-    path gnomad_positions
+    tuple path(vcf)
+    path  gnomad_positions
 
     output:
     tuple val(meta), path('*.cov.bed.gz'), emit: cov
-    tuple val(meta_vcf), path('*.baf.bed.gz'), emit: baf
+    tuple val(meta), path('*.baf.bed.gz'), emit: baf
     path  "versions.yml"                 , emit: versions
 
     script:
