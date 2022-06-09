@@ -2,8 +2,9 @@
 // A subworkflow to annotate snvs
 //
 
-include { VCFANNO      } from '../../modules/nf-core/modules/vcfanno/main'
-include { BCFTOOLS_ROH } from '../../modules/nf-core/modules/bcftools/roh/main'
+include { VCFANNO          } from '../../modules/nf-core/modules/vcfanno/main'
+include { BCFTOOLS_ROH     } from '../../modules/nf-core/modules/bcftools/roh/main'
+include { RHOCALL_ANNOTATE } from '../../modules/nf-core/modules/rhocall/annotate/main'
 
 
 workflow ANNOTATE_SNVS {
@@ -43,10 +44,27 @@ workflow ANNOTATE_SNVS {
             .set { ch_roh_vcfs}
 
         samples
+            .branch { it ->
+                affected: it.phenotype == "2"
+                unaffected: it.phenotype == "1"
+            }
+            .set {ch_phenotype}
+
+        ch_phenotype.affected
             .combine(ch_roh_vcfs)
             .set { ch_roh_input }
 
         BCFTOOLS_ROH (ch_roh_input, gnomad_af, [], [], [], [])
+
+        BCFTOOLS_ROH.out.roh
+            .map { meta, roh ->
+                new_meta = [:]
+                new_meta.id = meta.case_id
+                return [new_meta, roh]
+            }
+            .set { ch_roh_rhocall}
+
+        RHOCALL_ANNOTATE (vcf, ch_roh_rhocall, [])
 
     emit:
         vcf_ann                = VCFANNO.out.vcf
