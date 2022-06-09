@@ -17,6 +17,14 @@
 
 ## Introduction
 
+> NOTE
+>
+> This pipeline is under development and no stable release has been made yet.
+>
+> You can follow the work in the [dev](https://github.com/nf-core/raredisease/tree/dev) branch.
+
+<!-- TODO nf-core: Write a 1-2 sentence summary of what data the pipeline is for and what it does -->
+
 **nf-core/raredisease** is a bioinformatics best-practice analysis pipeline for call and score variants from WGS/WES of rare disease patients.
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
