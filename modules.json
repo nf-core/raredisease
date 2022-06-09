@@ -90,6 +90,9 @@
             "qualimap/bamqc": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
+            "rhocall/annotate": {
+                "git_sha": "17a4e931427b5b144c0d0227a3ea49347ba7457a"
+            },
             "samtools/faidx": {
                 "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
             },
