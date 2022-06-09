@@ -6,7 +6,7 @@ process GENS {
 
     input:
     tuple val(meta), path(read_counts)
-    tuple path(vcf)
+    path  vcf
     path  gnomad_positions
 
     output:
