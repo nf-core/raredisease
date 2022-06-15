@@ -99,14 +99,14 @@
                     "format": "path",
                     "fa_icon": "fas fa-bezier-curve",
                     "description": "Path to directory for gnomad vcf.",
-                    "help_text": "Path to the gnomad vcf file. If you don't provide one, gnomad annotations will not be used."
+                    "help_text": "Path to the gnomad annotations vcf file. If you don't provide one, gnomad annotations will not be used."
                 },
                 "gnomad_af": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-bezier-curve",
                     "description": "Path to the gnomad tab file with allele frequencies.",
-                    "help_text": "Path to the gnomad tab file with CHR/START/REF,ALT/AF. Can be generated from gnomad annoations vcf"
+                    "help_text": "Path to the gnomad tab file with CHR/START/REF,ALT/AF. Can be generated from the gnomad annotations vcf."
                 },
                 "gnomad_af_tbi": {
                     "type": "string",
