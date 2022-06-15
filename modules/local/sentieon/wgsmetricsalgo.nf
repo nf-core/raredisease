@@ -11,8 +11,8 @@ process SENTIEON_DATAMETRICS {
     path fai
 
     output:
-    tuple val(meta), path('*wgs_metrics.txt')  , emit: wgs_metrics
-    path  "versions.yml"                       , emit: versions
+    tuple val(meta), path('*wgs_metrics.txt'), emit: wgs_metrics
+    path  "versions.yml"                     , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
