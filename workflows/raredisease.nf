@@ -208,9 +208,11 @@ workflow RAREDISEASE {
 
     ALIGN_MT (
         PREPARE_MT_ALIGNMENT.out.fastq,
-        ch_references.genome_fasta,
-        ch_references.genome_fai,
-        ch_references.sequence_dict
+        PREPARE_MT_ALIGNMENT.out.bam,
+        ch_references.aligner_index,
+        ch_references.genome_fasta,        
+        ch_references.sequence_dict,
+        ch_references.genome_fai
     )
     ch_versions = ch_versions.mix(ALIGN_MT.out.versions)
 

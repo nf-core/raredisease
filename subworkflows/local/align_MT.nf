@@ -10,20 +10,24 @@ include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                     } from '../../mo
 
 workflow ALIGN_MT {
     take:
-        fastq  // TO DO d: and file: bam index: bam.bai
-        fasta
-        fai
-        dict
+        fastq  // Fastq
+        ubam   // unmapped bam
+        index  // channel: [ /path/to/bwamem2/index/  ]
+        fasta  // channel: [genome.fasta]
+        dict   // channel: [genome.dict]
+        fai    // channel: [genome.fai]
 
     main:
         ch_versions = Channel.empty()
 
         // Outputs bam files
-        BWAMEM2_MEM_MT ( fastq , fasta, true)
-        ch_versions = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
+        BWAMEM2_MEM_MT ( fastq , index, true)
+        ch_versions    = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
+        ch_mt_bam      =  BWAMEM2_MEM_MT.out.bam
+        ch_fastq_ubam  = ch_mt_bam.join(ubam, by: [0])
 
         // Merges bam files
-        GATK4_MERGEBAMALIGNMENT_MT ( BWAMEM2_MEM_MT.out.bam, fasta, dict )
+        GATK4_MERGEBAMALIGNMENT_MT ( ch_fastq_ubam, fasta, dict )
         ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions.first())
 
         // Marks duplicates

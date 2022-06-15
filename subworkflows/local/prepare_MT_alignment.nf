@@ -27,5 +27,6 @@ workflow PREPARE_MT_ALIGNMENT {
 
     emit:
         fastq    = GATK4_SAMTOFASTQ_MT.out.fastq
+        bam      = GATK4_REVERTSAM_MT.out.bam
         versions = ch_versions // channel: [ versions.yml ]
 }
