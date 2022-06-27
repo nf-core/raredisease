@@ -16,6 +16,7 @@ def checkPathParamList = [
     params.fasta_fai,
     params.gnomad,
     params.input,
+    params.intervals_mt,
     params.multiqc_config,
     params.sentieonbwa_index,
     params.svdb_query_dbs,
@@ -205,14 +206,15 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(PREPARE_MT_ALIGNMENT.out.versions)
 
     // STEP 2.2: MT ALLIGNMENT
-
+    ch_int = Channel.fromPath(params.intervals_mt)
     ALIGN_MT (
         PREPARE_MT_ALIGNMENT.out.fastq,
         PREPARE_MT_ALIGNMENT.out.bam,
         ch_references.aligner_index,
         ch_references.genome_fasta,        
         ch_references.sequence_dict,
-        ch_references.genome_fai
+        ch_references.genome_fai,
+        ch_int
     )
     ch_versions = ch_versions.mix(ALIGN_MT.out.versions)
 
