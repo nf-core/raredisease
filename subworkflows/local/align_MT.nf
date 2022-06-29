@@ -6,6 +6,7 @@ include { BWAMEM2_MEM as BWAMEM2_MEM_MT                         } from '../../mo
 include { GATK4_MERGEBAMALIGNMENT as GATK4_MERGEBAMALIGNMENT_MT } from '../../modules/nf-core/modules/gatk4/mergebamalignment/main'
 include { PICARD_MARKDUPLICATES as PICARD_MARKDUPLICATES_MT     } from '../../modules/nf-core/modules/picard/markduplicates/main'
 include { SAMTOOLS_INDEX as SMATOOLS_INDEX_MT                   } from '../../modules/nf-core/modules/samtools/index/main'
+include { SAMTOOLS_SORT as SMATOOLS_SORT_MT                     } from '../../modules/nf-core/modules/samtools/sort/main'
 include { HAPLOCHECK as HAPLOCHECK_MT                           } from '../../modules/nf-core/modules/haplocheck/main'
 include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                     } from '../../modules/nf-core/modules/gatk4/mutect2/main'
 
@@ -34,40 +35,31 @@ workflow ALIGN_MT {
 
         // Marks duplicates
         PICARD_MARKDUPLICATES_MT ( GATK4_MERGEBAMALIGNMENT_MT.out.bam )
-        
-
-        ch_bam_markdup = PICARD_MARKDUPLICATES_MT.out.bam
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
         
+        // Sort bam file
+        SMATOOLS_SORT_MT (PICARD_MARKDUPLICATES_MT.out.bam)
+        ch_versions = ch_versions.mix(SMATOOLS_SORT_MT.out.versions.first())
+
         // Index bam file
-        SMATOOLS_INDEX_MT(PICARD_MARKDUPLICATES_MT.out.bam)
-        ch_bai = Channel.fromPath(SMATOOLS_INDEX_MT.out.bai)
-        ch2=PICARD_MARKDUPLICATES_MT.out.bam.join(ch_bai, by: [0])
-        //ch3=ch2.join([], by:[0])
-
-
+        SMATOOLS_INDEX_MT(SMATOOLS_SORT_MT.out.bam)
+        ch2=SMATOOLS_SORT_MT.out.bam.join(SMATOOLS_INDEX_MT.out.bai, by: [0])
+        ch3=ch2.combine(intervals_mt)
         ch_versions = ch_versions.mix(SMATOOLS_INDEX_MT.out.versions.first())
-        
-        
-        //PICARD_MARKDUPLICATES_MT.out.bam
-        //.map {meta, bam -> 
-		//	return[meta,bam,SMATOOLS_INDEX_MT.out.bai, intervals_mt]
-        //    }.set {ch3}
-
-
+     
         // Calls variants with Mutect2
-        GATK4_MUTECT2_MT ( [ch2, intervals_mt ], fasta, fai, dict, [], [], [], [] )
+        GATK4_MUTECT2_MT ( ch3, fasta, fai, dict, [], [], [], [] )
         ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions.first())
 
         // Haplocheck
-        HAPLOCHECK_MT ( GATK4_MUTECT2_MT.out.vcf )
-        ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions.first())
+     //   HAPLOCHECK_MT ( GATK4_MUTECT2_MT.out.vcf )
+     //   ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions.first())
 
 
     emit:
         vcf      = GATK4_MUTECT2_MT.out.vcf
         tbi      = GATK4_MUTECT2_MT.out.tbi
-        txt      = HAPLOCHECK_MT.out.txt
-        html     = HAPLOCHECK_MT.out.html
+   //     txt      = HAPLOCHECK_MT.out.txt
+   //     html     = HAPLOCHECK_MT.out.html
         versions = ch_versions // channel: [ versions.yml ]
 }
