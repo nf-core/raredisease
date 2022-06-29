@@ -104,14 +104,14 @@
                 "gnomad_af": {
                     "type": "string",
                     "format": "path",
-                    "fa_icon": "fas fa-bezier-curve",
+                    "fa_icon": "fas fa-file",
                     "description": "Path to the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the gnomad tab file with CHR/START/REF,ALT/AF. Can be generated from gnomad annoations vcf"
                 },
                 "gnomad_af_tbi": {
                     "type": "string",
                     "format": "path",
-                    "fa_icon": "fas fa-bezier-curve",
+                    "fa_icon": "fas fa-file",
                     "description": "Path to the index file for the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
                 },
