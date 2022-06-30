@@ -81,6 +81,9 @@
             "multiqc": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
+            "picard/addorreplacereadgroups": {
+                "git_sha": "63db63757cab03cfa7a02c0d0f134b66fbfadea6"
+            },
             "picard/collecthsmetrics": {
                 "git_sha": "35231d394940dca2291ac2321c8f9b2e3b039905"
             },
