@@ -2,10 +2,11 @@
 // Prepare reference files
 //
 
-include { CHECK_BED                  } from './prepare_bed'
-include { CHECK_VCF                  } from './prepare_vcf'
-include { PREPARE_GENOME             } from './prepare_genome'
-include { TABIX_TABIX as TABIX_DBSNP } from '../../modules/nf-core/modules/tabix/tabix/main'
+include { CHECK_BED                      } from './prepare_bed'
+include { CHECK_VCF                      } from './prepare_vcf'
+include { PREPARE_GENOME                 } from './prepare_genome'
+include { TABIX_TABIX as TABIX_DBSNP     } from '../../modules/nf-core/modules/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_GNOMAD_AF } from '../../modules/nf-core/modules/tabix/tabix/main'
 
 
 workflow PREPARE_REFERENCES {
@@ -15,6 +16,8 @@ workflow PREPARE_REFERENCES {
         fasta               // [mandatory] genome.fasta
         fai                 // [mandatory] genome.fai
         gnomad
+        gnomad_af
+        gnomad_af_tbi
         known_dbsnp
         known_dbsnp_tbi
         sentieonbwa_index
@@ -63,6 +66,18 @@ workflow PREPARE_REFERENCES {
             ch_versions   = ch_versions.mix(CHECK_VCF.out.versions)
         }
 
+        // Gnomad tab
+        ch_gnomad_af = Channel.empty()
+        if (!gnomad_af_tbi && gnomad_af) {
+            ch_gnomad_tab = [[id:'gnomad'], file(gnomad_af)]
+            TABIX_GNOMAD_AF(ch_gnomad_tab)
+            ch_gnomad_tbi = TABIX_GNOMAD_AF.out.tbi
+            ch_gnomad_af = ch_gnomad_tab.join(ch_gnomad_tbi).collect{ it -> return [it[1], it[2]]}
+            ch_versions   = ch_versions.mix(CHECK_VCF.out.versions)
+        } else if (gnomad_af_tbi && gnomad_af) {
+            ch_gnomad_af = [file(gnomad_af), file(gnomad_af_tbi)]
+        }
+
         // Target bed
         ch_target_bed       = Channel.empty()
         ch_target_intervals = Channel.empty()
@@ -90,6 +105,7 @@ workflow PREPARE_REFERENCES {
         known_dbsnp_tbi   = ch_dbsnp_tbi
         gnomad_vcf        = ch_gnomad_vcf
         gnomad_idx        = ch_gnomad_idx
+        gnomad_af         = ch_gnomad_af
         target_bed        = ch_target_bed
         target_intervals  = ch_target_intervals
         bait_intervals    = ch_bait_intervals

@@ -50,10 +50,12 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 //
 include { CHECK_INPUT                  } from '../subworkflows/local/check_input'
 include { PREPARE_REFERENCES           } from '../subworkflows/local/prepare_references'
+include { ANNOTATE_SNVS                } from '../subworkflows/local/annotate_snvs'
 include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_structural_variants'
 include { GENS                         } from '../subworkflows/local/gens'
 include { ALIGN                        } from '../subworkflows/local/align'
 include { CALL_SNV                     } from '../subworkflows/local/call_snv'
+include { PREPARE_MT_ALIGNMENT         } from '../subworkflows/local/prepare_MT_alignment'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -75,9 +77,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 
 include { CALL_REPEAT_EXPANSIONS       } from '../subworkflows/nf-core/call_repeat_expansions'
 include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
-include { ANNOTATE_VCFANNO             } from '../subworkflows/nf-core/annotate_vcfanno'
 include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
-include { PREPARE_MT_ALIGNMENT         } from '../subworkflows/local/prepare_MT_alignment'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -113,6 +113,8 @@ workflow RAREDISEASE {
         params.fasta,
         params.fasta_fai,
         params.gnomad,
+        params.gnomad_af,
+        params.gnomad_af_tbi,
         params.known_dbsnp,
         params.known_dbsnp_tbi,
         params.sentieonbwa_index,
@@ -221,14 +223,20 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(PREPARE_MT_ALIGNMENT.out.versions)
 
     // STEP 3: VARIANT ANNOTATION
-    ch_dv_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
+    ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
 
-    ANNOTATE_VCFANNO (
+    ANNOTATE_SNVS (
+        ch_vcf,
+        ch_references.vcfanno_resources,
         params.vcfanno_toml,
-        ch_dv_vcf,
-        ch_references.vcfanno_resources
+        params.genome,
+        params.vep_cache_version,
+        params.vep_cache,
+        ch_references.genome_fasta,
+        ch_references.gnomad_af,
+        CHECK_INPUT.out.samples
     )
-    ch_versions = ch_versions.mix(ANNOTATE_VCFANNO.out.versions)
+    ch_versions = ch_versions.mix(ANNOTATE_SNVS.out.versions)
 
     //
     // MODULE: Pipeline reporting
