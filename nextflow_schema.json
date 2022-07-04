@@ -200,6 +200,33 @@
                     "fa_icon": "fas fa-map-marker-alt",
                     "description": "Local directory base for genome references that map to the config.",
                     "help_text": "This folder is a flat structure with file names that map to the config."
+                },
+                "gens_interval_list": {
+                    "type": "string",
+                    "format": "file-path",
+                    "default": null,
+                    "fa_icon": "fas fa-bezier-curve",
+                    "description": "Path to interval list for Gens.",
+                    "help_text": "This file contains the binning intervals used for CollectReadCounts.",
+                    "hidden": true
+                },
+                "gens_pon": {
+                    "type": "string",
+                    "format": "file-path",
+                    "default": null,
+                    "fa_icon": "far fa-file-code",
+                    "description": "Path to panel of normals for Gens.",
+                    "help_text": "The panel used to run DenoiseReadCounts.",
+                    "hidden": true
+                },
+                "gens_gnomad_pos": {
+                    "type": "string",
+                    "format": "file-path",
+                    "default": null,
+                    "fa_icon": "far fa-bezier-curve",
+                    "description": "Path to a list of common SNP locations for Gens.",
+                    "help_text": "Locations of gnomad SNPs with a high enough BAF.",
+                    "hidden": true
                 }
             }
         },
@@ -220,6 +247,12 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Specifies whether or not to run annotate structural variant subworkflow.",
+                    "fa_icon": "fas fa-book"
+                },
+                "gens_switch": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies whether or not to run gens preprocessing subworkflow.",
                     "fa_icon": "fas fa-book"
                 }
             }

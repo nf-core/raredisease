@@ -51,6 +51,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 include { CHECK_INPUT                  } from '../subworkflows/local/check_input'
 include { PREPARE_REFERENCES           } from '../subworkflows/local/prepare_references'
 include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_structural_variants'
+include { GENS                         } from '../subworkflows/local/gens'
 include { ALIGN                        } from '../subworkflows/local/align'
 include { CALL_SNV                     } from '../subworkflows/local/call_snv'
 
@@ -181,6 +182,22 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
+    // STEP 2.1: GENS
+    if (params.gens_switch) {
+        GENS (
+            ch_mapped.bam_bai,
+            CALL_SNV.out.vcf,
+            ch_references.genome_fasta,
+            ch_references.genome_fai,
+            file(params.gens_interval_list),
+            file(params.gens_pon),
+            file(params.gens_gnomad_pos),
+            CHECK_INPUT.out.case_info,
+            ch_references.sequence_dict
+        )
+        ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
+    }
+    
     ch_sv_annotate = Channel.empty()
     if (params.annotate_sv_switch) {
         ANNOTATE_STRUCTURAL_VARIANTS (
