@@ -26,10 +26,10 @@ process SENTIEON_TNSCOPE {
         -t $task.cpus \\
         -r $fasta \\
         -i $bam \\
-	$interval \\
+	    $interval \\
         --algo TNscope \\
         --tumor_sample ${meta.id} \\
-	$call_settings \\
+	    $call_settings \\
         ${prefix}_TNscope_MTcalls_unfiltered.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
