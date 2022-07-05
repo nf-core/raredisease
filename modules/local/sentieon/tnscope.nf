@@ -9,17 +9,17 @@ process SENTIEON_TNSCOPE {
     path fai
 
     output:
-    tuple val(meta), path("*_TNscope_MTcalls_unfiltered.vcf.gz")     , emit: vcf
-    tuple val(meta), path("*_TNscope_MTcalls_unfiltered.vcf.gz.tbi") , emit: vcf_index
-    path "versions.yml"                                              , emit: versions
+    tuple val(meta), path("*_TNscope_MTcalls_unfiltered.vcf.gz")        , emit: vcf
+    tuple val(meta), path("*_TNscope_MTcalls_unfiltered.vcf.gz.tbi")    , emit: vcf_index
+    path "versions.yml"                                                 , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
-    def interval       = task.ext.args ?: ''
-    def call_settings  = task.ext.args2 ?: ''
-    def prefix         = task.ext.prefix ?: "${meta.id}"
+    def interval      = task.ext.args ?: ''
+    def call_settings = task.ext.args2 ?: ''
+    def prefix        = task.ext.prefix ?: "${meta.id}"
 
     """
     sentieon driver \\
