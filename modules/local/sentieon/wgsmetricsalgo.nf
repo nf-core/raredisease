@@ -42,7 +42,7 @@ process SENTIEON_DATAMETRICS {
     """
 
     stub:
-    def prefix       = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}_wgs_metrics.txt
 
