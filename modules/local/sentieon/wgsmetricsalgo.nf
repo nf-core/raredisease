@@ -20,7 +20,7 @@ process SENTIEON_DATAMETRICS {
     script:
     def args   = task.ext.args ?: ''
     def input  = bam.sort().collect{"-i $it"}.join(' ')
-    def prefix       = task.ext.prefix ?: "${meta.id}"
+    def prefix  = task.ext.prefix ?: "${meta.id}"
     """
     if [ \${SENTIEON_LICENSE_BASE64:-"unset"} != "unset" ]; then
         echo "Initializing SENTIEON_LICENSE env variable"
