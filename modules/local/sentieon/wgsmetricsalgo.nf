@@ -33,7 +33,7 @@ process SENTIEON_DATAMETRICS {
         -r $fasta \\
         $input \\
         $args \\
-        --algo WgsMetricsAlgo ${prefix}_wgs_metrics.txt \\
+        --algo WgsMetricsAlgo ${prefix}_wgs_metrics.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
