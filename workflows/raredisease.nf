@@ -16,6 +16,7 @@ def checkPathParamList = [
     params.fasta_fai,
     params.gnomad,
     params.input,
+    params.intervals_mt,
     params.multiqc_config,
     params.sentieonbwa_index,
     params.svdb_query_dbs,
@@ -78,6 +79,7 @@ include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
 include { ANNOTATE_VCFANNO             } from '../subworkflows/nf-core/annotate_vcfanno'
 include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
 include { PREPARE_MT_ALIGNMENT         } from '../subworkflows/local/prepare_MT_alignment'
+include { ALIGN_MT                     } from '../subworkflows/local/align_MT'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -213,12 +215,25 @@ workflow RAREDISEASE {
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
     }
 
-    // STEP 2.1: MT CALLING
+    // STEP 2.1: PREPARING MT ALIGNMENT
 
     PREPARE_MT_ALIGNMENT (
         ch_mapped.bam_bai
     )
     ch_versions = ch_versions.mix(PREPARE_MT_ALIGNMENT.out.versions)
+
+    // STEP 2.2: MT ALLIGNMENT
+    ch_int = Channel.fromPath(params.intervals_mt)
+    ALIGN_MT (
+        PREPARE_MT_ALIGNMENT.out.fastq,
+        PREPARE_MT_ALIGNMENT.out.bam,
+        ch_references.aligner_index,
+        ch_references.genome_fasta,        
+        ch_references.sequence_dict,
+        ch_references.genome_fai,
+        ch_int
+    )
+    ch_versions = ch_versions.mix(ALIGN_MT.out.versions)
 
     // STEP 3: VARIANT ANNOTATION
     ch_dv_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
