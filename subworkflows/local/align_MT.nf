@@ -57,6 +57,8 @@ workflow ALIGN_MT {
         ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions.first())
 
         // Haplocheck
+        // TODO: probably it will be outside this subworkflow as we want to run
+        // with the VCF with the variants from the shifted alignment (to solve the mt circularity issue)
         HAPLOCHECK_MT ( GATK4_MUTECT2_MT.out.vcf )
         ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions.first())
 
