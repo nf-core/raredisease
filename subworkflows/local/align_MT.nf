@@ -57,14 +57,14 @@ workflow ALIGN_MT {
         ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions.first())
 
         // Haplocheck
-     //   HAPLOCHECK_MT ( GATK4_MUTECT2_MT.out.vcf )
-     //   ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions.first())
+        HAPLOCHECK_MT ( GATK4_MUTECT2_MT.out.vcf )
+        ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions.first())
 
 
     emit:
         vcf      = GATK4_MUTECT2_MT.out.vcf
         tbi      = GATK4_MUTECT2_MT.out.tbi
-   //     txt      = HAPLOCHECK_MT.out.txt
-   //     html     = HAPLOCHECK_MT.out.html
+        txt      = HAPLOCHECK_MT.out.txt
+        html     = HAPLOCHECK_MT.out.html
         versions = ch_versions // channel: [ versions.yml ]
 }
