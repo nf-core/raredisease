@@ -13,13 +13,13 @@ include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } fr
 
 workflow ALIGN_MT {
     take:
-        fastq  // Fastq
-        ubam   // unmapped bam
-        index  // channel: [ /path/to/bwamem2/index/  ]
-        fasta  // channel: [genome.fasta]
-        dict   // channel: [genome.dict]
-        fai    // channel: [genome.fai]
-        intervals_mt //intervals of MT
+        fastq         // channel: [ val(meta), path('*.fastq.gz') ]
+        ubam          // channel: [ val(meta), path('*.bam') ]
+        index         // channel: [ /path/to/bwamem2/index/ ]
+        fasta         // channel: [ genome.fasta ]
+        dict          // channel: [ genome.dict ]
+        fai           // channel: [ genome.fai ]
+        intervals_mt  // channel: [ file(non_control_region.chrM.interval_list) ]
 
     main:
         ch_versions = Channel.empty()
@@ -41,7 +41,7 @@ workflow ALIGN_MT {
         // Marks duplicates
         PICARD_MARKDUPLICATES_MT ( PICARD_ADDORREPLACEREADGROUPS_MT.out.bam )
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
-        
+
         // Sort bam file
         SMATOOLS_SORT_MT (PICARD_MARKDUPLICATES_MT.out.bam)
         ch_versions = ch_versions.mix(SMATOOLS_SORT_MT.out.versions.first())
@@ -51,7 +51,7 @@ workflow ALIGN_MT {
         ch2=SMATOOLS_SORT_MT.out.bam.join(SMATOOLS_INDEX_MT.out.bai, by: [0])
         ch3=ch2.combine(intervals_mt)
         ch_versions = ch_versions.mix(SMATOOLS_INDEX_MT.out.versions.first())
-     
+
         // Calls variants with Mutect2
         GATK4_MUTECT2_MT ( ch3, fasta, fai, dict, [], [], [], [] )
         ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions.first())

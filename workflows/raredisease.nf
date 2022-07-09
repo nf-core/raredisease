@@ -199,10 +199,7 @@ workflow RAREDISEASE {
     }
 
     // STEP 2.1: PREPARING MT ALIGNMENT
-
-    PREPARE_MT_ALIGNMENT (
-        ch_mapped.bam_bai
-    )
+    PREPARE_MT_ALIGNMENT ( ch_mapped.bam_bai )
     ch_versions = ch_versions.mix(PREPARE_MT_ALIGNMENT.out.versions)
 
     // STEP 2.2: MT ALLIGNMENT
@@ -211,7 +208,7 @@ workflow RAREDISEASE {
         PREPARE_MT_ALIGNMENT.out.fastq,
         PREPARE_MT_ALIGNMENT.out.bam,
         ch_references.aligner_index,
-        ch_references.genome_fasta,        
+        ch_references.genome_fasta,
         ch_references.sequence_dict,
         ch_references.genome_fai,
         ch_int

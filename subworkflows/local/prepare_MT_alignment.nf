@@ -8,7 +8,7 @@ include { GATK4_SAMTOFASTQ as GATK4_SAMTOFASTQ_MT } from '../../modules/nf-core/
 
 workflow PREPARE_MT_ALIGNMENT {
     take:
-        bam_cram  // id: and file: bam index: bam.bai
+        bam  // channel: [ val(meta), file(bam), file(bai) ]
 
     main:
         ch_versions = Channel.empty()
