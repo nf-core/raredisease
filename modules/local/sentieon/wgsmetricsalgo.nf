@@ -1,4 +1,4 @@
-process SENTIEON_DATAMETRICS {
+process SENTIEON_WGSMETRICSALGO {
     tag "$meta.id"
     label 'process_medium'
     label 'sentieon'
