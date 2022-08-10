@@ -218,6 +218,7 @@ workflow RAREDISEASE {
     ch_sv_annotate = Channel.empty()
     if (params.annotate_sv_switch) {
         ANNOTATE_STRUCTURAL_VARIANTS (
+            params.vep_filters,
             CALL_STRUCTURAL_VARIANTS.out.vcf,
             params.svdb_query_dbs,
             params.genome,

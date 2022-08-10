@@ -7,10 +7,12 @@ include { PICARD_SORTVCF                } from '../../modules/nf-core/modules/pi
 include { BCFTOOLS_VIEW                 } from '../../modules/nf-core/modules/bcftools/view/main'
 include { TABIX_TABIX as TABIX_SV_ANNO  } from '../../modules/nf-core/modules/tabix/tabix/main'
 include { ENSEMBLVEP as ENSEMBLVEP_SV   } from '../../modules/local/ensemblvep/main'
+include { FILTER_VEP                    } from '../../modules/local/filter_vep'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
     take:
+        feature_file
         vcf               // channel: [ val(meta), path(vcf) ]
         sv_dbs            // file: dbs.csv
         vep_genome
@@ -74,7 +76,9 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             )
         ch_versions = ch_versions.mix(ENSEMBLVEP_SV.out.versions)
 
+        FILTER_VEP(ENSEMBLVEP_SV.out.vcf, feature_file)
+
     emit:
-        vcf_ann                = ENSEMBLVEP_SV.out.vcf
+        vcf_ann                = FILTER_VEP.out.vcf
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }

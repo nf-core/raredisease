@@ -164,6 +164,13 @@
                     "description": "Rank model config file for genmod.",
                     "hidden": true
                 },
+                "vep_filters": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Gene panel file to be used with filter_vep to separate clinical and research variants.",
+                    "hidden": true
+                },
                 "target_bed": {
                     "type": "string",
                     "format": "path",
