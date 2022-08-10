@@ -84,11 +84,11 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { CALL_REPEAT_EXPANSIONS            } from '../subworkflows/nf-core/call_repeat_expansions'
-include { QC_BAM                            } from '../subworkflows/nf-core/qc_bam'
-include { ANNOTATE_VCFANNO                  } from '../subworkflows/nf-core/annotate_vcfanno'
-include { CALL_STRUCTURAL_VARIANTS          } from '../subworkflows/nf-core/call_structural_variants'
-include { RANK_VARIANTS as RANK_VARIANTS_SV } from '../subworkflows/local/prepare_MT_alignment'
+include { CALL_REPEAT_EXPANSIONS             } from '../subworkflows/nf-core/call_repeat_expansions'
+include { QC_BAM                             } from '../subworkflows/nf-core/qc_bam'
+include { CALL_STRUCTURAL_VARIANTS           } from '../subworkflows/nf-core/call_structural_variants'
+include { RANK_VARIANTS as RANK_VARIANTS_SNV } from '../subworkflows/nf-core/genmod'
+include { RANK_VARIANTS as RANK_VARIANTS_SV  } from '../subworkflows/nf-core/genmod'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -227,7 +227,7 @@ workflow RAREDISEASE {
             ch_references.sequence_dict
         ).set {ch_sv_annotate}
 
-        RANK_VARIANTS (
+        RANK_VARIANTS_SV (
             ch_sv_annotate.vcf_ann,
             MAKE_PED.out.ped,
             ch_reduced_penetrance,
@@ -259,6 +259,13 @@ workflow RAREDISEASE {
         CHECK_INPUT.out.samples
     )
     ch_versions = ch_versions.mix(ANNOTATE_SNVS.out.versions)
+
+    RANK_VARIANTS_SNV (
+        ANNOTATE_SNVS.out.vcf_ann,
+        MAKE_PED.out.ped,
+        ch_reduced_penetrance,
+        ch_score_config
+    )
 
     //
     // MODULE: Pipeline reporting
