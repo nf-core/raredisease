@@ -31,6 +31,7 @@ ch_ml_model           = params.ml_model           ? file(params.ml_model)       
 ch_call_interval      = params.call_interval      ? file(params.call_interval)      : []
 ch_reduced_penetrance = params.reduced_penetrance ? file(params.reduced_penetrance) : []
 ch_score_config       = params.score_config       ? file(params.score_config)       : []
+ch_vep_filters        = params.vep_filters        ? file(params.vep_filters)        : []
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -218,7 +219,7 @@ workflow RAREDISEASE {
     ch_sv_annotate = Channel.empty()
     if (params.annotate_sv_switch) {
         ANNOTATE_STRUCTURAL_VARIANTS (
-            params.vep_filters,
+            ch_vep_filters,
             CALL_STRUCTURAL_VARIANTS.out.vcf,
             params.svdb_query_dbs,
             params.genome,

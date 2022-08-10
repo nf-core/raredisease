@@ -51,4 +51,15 @@ process FILTER_VEP {
         ensemblvep: \$( echo \$(vep --help 2>&1) | sed 's/^.*Versions:.*ensembl-vep : //;s/ .*\$//')
     END_VERSIONS
     """
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}.ann_filter.vcf.gz
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        ensemblvep: \$( echo \$(vep --help 2>&1) | sed 's/^.*Versions:.*ensembl-vep : //;s/ .*\$//')
+    END_VERSIONS
+    """
 }
