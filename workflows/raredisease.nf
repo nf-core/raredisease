@@ -27,8 +27,10 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-ch_ml_model        = params.ml_model      ? file(params.ml_model)      : []
-ch_call_interval   = params.call_interval ? file(params.call_interval) : []
+ch_ml_model           = params.ml_model           ? file(params.ml_model)           : []
+ch_call_interval      = params.call_interval      ? file(params.call_interval)      : []
+ch_reduced_penetrance = params.reduced_penetrance ? file(params.reduced_penetrance) : []
+ch_score_config       = params.score_config       ? file(params.score_config)       : []
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -46,8 +48,15 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 */
 
 //
+// MODULE: local modules
+//
+
+include { MAKE_PED                    } from '../modules/local/create_pedfile'
+
+//
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
+
 include { CHECK_INPUT                  } from '../subworkflows/local/check_input'
 include { PREPARE_REFERENCES           } from '../subworkflows/local/prepare_references'
 include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_structural_variants'
@@ -78,6 +87,7 @@ include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
 include { ANNOTATE_VCFANNO             } from '../subworkflows/nf-core/annotate_vcfanno'
 include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
 include { PREPARE_MT_ALIGNMENT         } from '../subworkflows/local/prepare_MT_alignment'
+include { RANK_VARIANTS                } from '../subworkflows/local/genmod'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -99,6 +109,10 @@ workflow RAREDISEASE {
         ch_input
     )
     ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
+
+    MAKE_PED (
+        ch_input
+    )
 
     // STEP 0: QUALITY CHECK.
     FASTQC (
@@ -197,7 +211,7 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
     }
-    
+
     ch_sv_annotate = Channel.empty()
     if (params.annotate_sv_switch) {
         ANNOTATE_STRUCTURAL_VARIANTS (
@@ -209,6 +223,13 @@ workflow RAREDISEASE {
             ch_references.genome_fasta,
             ch_references.sequence_dict
         ).set {ch_sv_annotate}
+
+        RANK_VARIANTS (
+            ch_sv_annotate.vcf_ann,
+            MAKE_PED.out.ped,
+            ch_reduced_penetrance,
+            ch_score_config
+        )
 
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
     }

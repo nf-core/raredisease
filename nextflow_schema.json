@@ -136,6 +136,20 @@
                     "description": "Path to sentieon machine learning model file.",
                     "hidden": true
                 },
+                "reduced_penetrance": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "File with gene ids that have reduced penetrance. For use with genmod",
+                    "hidden": true
+                },
+                "score_config": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Rank model config file for genmod.",
+                    "hidden": true
+                },
                 "target_bed": {
                     "type": "string",
                     "format": "path",
