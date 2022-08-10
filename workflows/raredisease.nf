@@ -82,12 +82,12 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { CALL_REPEAT_EXPANSIONS       } from '../subworkflows/nf-core/call_repeat_expansions'
-include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
-include { ANNOTATE_VCFANNO             } from '../subworkflows/nf-core/annotate_vcfanno'
-include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
-include { PREPARE_MT_ALIGNMENT         } from '../subworkflows/local/prepare_MT_alignment'
-include { RANK_VARIANTS                } from '../subworkflows/local/genmod'
+include { CALL_REPEAT_EXPANSIONS            } from '../subworkflows/nf-core/call_repeat_expansions'
+include { QC_BAM                            } from '../subworkflows/nf-core/qc_bam'
+include { ANNOTATE_VCFANNO                  } from '../subworkflows/nf-core/annotate_vcfanno'
+include { CALL_STRUCTURAL_VARIANTS          } from '../subworkflows/nf-core/call_structural_variants'
+include { PREPARE_MT_ALIGNMENT              } from '../subworkflows/local/prepare_MT_alignment'
+include { RANK_VARIANTS as RANK_VARIANTS_SV } from '../subworkflows/nf-core/genmod'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
