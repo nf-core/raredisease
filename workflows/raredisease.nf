@@ -17,6 +17,8 @@ def checkPathParamList = [
     params.gnomad,
     params.input,
     params.multiqc_config,
+    params.reduced_penetrance,
+    params.score_config,
     params.sentieonbwa_index,
     params.svdb_query_dbs,
     params.vcfanno_resources,
