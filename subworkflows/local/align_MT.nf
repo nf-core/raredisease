@@ -6,8 +6,8 @@ include { BWAMEM2_MEM as BWAMEM2_MEM_MT                                     } fr
 include { GATK4_MERGEBAMALIGNMENT as GATK4_MERGEBAMALIGNMENT_MT             } from '../../modules/nf-core/modules/gatk4/mergebamalignment/main'
 include { PICARD_ADDORREPLACEREADGROUPS as PICARD_ADDORREPLACEREADGROUPS_MT } from '../../modules/nf-core/modules/picard/addorreplacereadgroups/main'
 include { PICARD_MARKDUPLICATES as PICARD_MARKDUPLICATES_MT                 } from '../../modules/nf-core/modules/picard/markduplicates/main'
-include { SAMTOOLS_INDEX as SMATOOLS_INDEX_MT                               } from '../../modules/nf-core/modules/samtools/index/main'
-include { SAMTOOLS_SORT as SMATOOLS_SORT_MT                                 } from '../../modules/nf-core/modules/samtools/sort/main'
+include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MT                               } from '../../modules/nf-core/modules/samtools/index/main'
+include { SAMTOOLS_SORT as SAMTOOLS_SORT_MT                                 } from '../../modules/nf-core/modules/samtools/sort/main'
 include { HAPLOCHECK as HAPLOCHECK_MT                                       } from '../../modules/nf-core/modules/haplocheck/main'
 include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } from '../../modules/nf-core/modules/gatk4/mutect2/main'
 
@@ -43,14 +43,14 @@ workflow ALIGN_MT {
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
 
         // Sort bam file
-        SMATOOLS_SORT_MT (PICARD_MARKDUPLICATES_MT.out.bam)
-        ch_versions = ch_versions.mix(SMATOOLS_SORT_MT.out.versions.first())
+        SAMTOOLS_SORT_MT (PICARD_MARKDUPLICATES_MT.out.bam)
+        ch_versions = ch_versions.mix(SAMTOOLS_SORT_MT.out.versions.first())
 
         // Index bam file
-        SMATOOLS_INDEX_MT(SMATOOLS_SORT_MT.out.bam)
-        ch2=SMATOOLS_SORT_MT.out.bam.join(SMATOOLS_INDEX_MT.out.bai, by: [0])
+        SAMTOOLS_INDEX_MT(SAMTOOLS_SORT_MT.out.bam)
+        ch2=SAMTOOLS_SORT_MT.out.bam.join(SAMTOOLS_SORT_MT.out.bai, by: [0])
         ch3=ch2.combine(intervals_mt)
-        ch_versions = ch_versions.mix(SMATOOLS_INDEX_MT.out.versions.first())
+        ch_versions = ch_versions.mix(SAMTOOLS_SORT_MT.out.versions.first())
 
         // Calls variants with Mutect2
         GATK4_MUTECT2_MT ( ch3, fasta, fai, dict, [], [], [], [] )
