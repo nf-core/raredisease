@@ -48,7 +48,7 @@ workflow ALIGN_MT {
 
         // Index bam file
         SAMTOOLS_INDEX_MT(SAMTOOLS_SORT_MT.out.bam)
-        ch2=SAMTOOLS_INDEX_MT.out.bam.join(SAMTOOLS_SORT_MT.out.bai, by: [0])
+        ch2=SAMTOOLS_SORT_MT.out.bam.join(SAMTOOLS_INDEX_MT.out.bai, by: [0])
         ch3=ch2.combine(intervals_mt)
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MT.out.versions.first())
 
