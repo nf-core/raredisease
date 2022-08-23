@@ -14,7 +14,7 @@ workflow PREPARE_MT_ALIGNMENT {
         ch_versions = Channel.empty()
 
         // Outputs bam containing only MT
-        SAMTOOLS_VIEW_MT ( bam, [] )
+        SAMTOOLS_VIEW_MT ( bam_cram, [] )
         ch_versions = ch_versions.mix(SAMTOOLS_VIEW_MT.out.versions.first())
 
         // Removes alignment information
