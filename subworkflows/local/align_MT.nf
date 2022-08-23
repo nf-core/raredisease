@@ -4,7 +4,6 @@
 
 include { BWAMEM2_MEM as BWAMEM2_MEM_MT                                     } from '../../modules/nf-core/modules/bwamem2/mem/main'
 include { GATK4_MERGEBAMALIGNMENT as GATK4_MERGEBAMALIGNMENT_MT             } from '../../modules/nf-core/modules/gatk4/mergebamalignment/main'
-include { PICARD_ADDORREPLACEREADGROUPS as PICARD_ADDORREPLACEREADGROUPS_MT } from '../../modules/nf-core/modules/picard/addorreplacereadgroups/main'
 include { PICARD_MARKDUPLICATES as PICARD_MARKDUPLICATES_MT                 } from '../../modules/nf-core/modules/picard/markduplicates/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MT                               } from '../../modules/nf-core/modules/samtools/index/main'
 include { SAMTOOLS_SORT as SAMTOOLS_SORT_MT                                 } from '../../modules/nf-core/modules/samtools/sort/main'
@@ -34,12 +33,8 @@ workflow ALIGN_MT {
         GATK4_MERGEBAMALIGNMENT_MT ( ch_fastq_ubam, fasta, dict )
         ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions.first())
 
-        // Add read group to merged bam file
-        PICARD_ADDORREPLACEREADGROUPS_MT ( GATK4_MERGEBAMALIGNMENT_MT.out.bam )
-        ch_versions = ch_versions.mix(PICARD_ADDORREPLACEREADGROUPS_MT.out.versions.first())
-
         // Marks duplicates
-        PICARD_MARKDUPLICATES_MT ( PICARD_ADDORREPLACEREADGROUPS_MT.out.bam )
+        PICARD_MARKDUPLICATES_MT ( GATK4_MERGEBAMALIGNMENT_MT.out.bam )
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
 
         // Sort bam file
