@@ -1,5 +1,5 @@
 //
-// A subworkflow to score, rank and filter variants.
+// A subworkflow to score and rank variants.
 //
 
 include { GENMOD_ANNOTATE  } from '../../modules/nf-core/modules/genmod/annotate/main'

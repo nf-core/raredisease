@@ -157,11 +157,18 @@
                     "description": "File with gene ids that have reduced penetrance. For use with genmod",
                     "hidden": true
                 },
-                "score_config": {
+                "score_config_snv": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-chart-bar",
-                    "description": "Rank model config file for genmod.",
+                    "description": "SNV rank model config file for genmod.",
+                    "hidden": true
+                },
+                "score_config_sv": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "SV rank model config file for genmod.",
                     "hidden": true
                 },
                 "target_bed": {

@@ -23,7 +23,7 @@ workflow CHECK_INPUT {
         case_info       // channel: [ case_id ]
         reads           // channel: [ val(meta), [ reads ] ]
         samples         // channel: [ sample_id, sex, phenotype, paternal_id, maternal_id, case_id ]
-        versions = SAMPLESHEET_CHECK.out.versions // channel: [ versions.yml ]
+        versions  = SAMPLESHEET_CHECK.out.versions // channel: [ versions.yml ]
 }
 
 // Function to get list of [ meta, [ fastq_1, fastq_2 ] ]
