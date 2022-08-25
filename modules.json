@@ -6,6 +6,9 @@
             "bcftools/norm": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
+            "bcftools/roh": {
+                "git_sha": "c079ee20250f5676c53b145fdd00f9defe91f112"
+            },
             "bcftools/view": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
@@ -19,19 +22,19 @@
                 "git_sha": "eeda4136c096688d04cc40bb3c70d948213ed641"
             },
             "cnvpytor/callcnvs": {
-                "git_sha": "1ccea5ff4d3dffbf9a8e53032481cc9246d4e23d"
+                "git_sha": "16536b69368595f7e5934fcbaef5033522d49518"
             },
             "cnvpytor/histogram": {
-                "git_sha": "19cfb4e95196d0e8cc14a67ecb8f1ed0b0fcc3a7"
+                "git_sha": "16536b69368595f7e5934fcbaef5033522d49518"
             },
             "cnvpytor/importreaddepth": {
-                "git_sha": "19cfb4e95196d0e8cc14a67ecb8f1ed0b0fcc3a7"
+                "git_sha": "16536b69368595f7e5934fcbaef5033522d49518"
             },
             "cnvpytor/partition": {
-                "git_sha": "19cfb4e95196d0e8cc14a67ecb8f1ed0b0fcc3a7"
+                "git_sha": "16536b69368595f7e5934fcbaef5033522d49518"
             },
             "cnvpytor/view": {
-                "git_sha": "af73544010cc9563ec7d7160aeb825ae28ec217f"
+                "git_sha": "16536b69368595f7e5934fcbaef5033522d49518"
             },
             "custom/dumpsoftwareversions": {
                 "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
@@ -98,6 +101,9 @@
             },
             "qualimap/bamqc": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+            },
+            "rhocall/annotate": {
+                "git_sha": "17a4e931427b5b144c0d0227a3ea49347ba7457a"
             },
             "samtools/faidx": {
                 "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"

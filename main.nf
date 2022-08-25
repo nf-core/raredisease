@@ -22,6 +22,8 @@ params.fasta_fai            = WorkflowMain.getGenomeAttribute(params, 'fai')
 params.bwamem2_index        = WorkflowMain.getGenomeAttribute(params, 'bwamem2')
 params.call_interval        = WorkflowMain.getGenomeAttribute(params, 'call_interval')
 params.gnomad               = WorkflowMain.getGenomeAttribute(params, 'gnomad')
+params.gnomad_af            = WorkflowMain.getGenomeAttribute(params, 'gnomad_af')
+params.gnomad_af_tbi        = WorkflowMain.getGenomeAttribute(params, 'gnomad_af_tbi')
 params.intervals_mt         = WorkflowMain.getGenomeAttribute(params, 'intervals_mt')
 params.known_dbsnp          = WorkflowMain.getGenomeAttribute(params, 'known_dbsnp')
 params.known_dbsnp_tbi      = WorkflowMain.getGenomeAttribute(params, 'known_dbsnp_tbi')
@@ -35,6 +37,9 @@ params.variant_catalog      = WorkflowMain.getGenomeAttribute(params, 'variant_c
 params.vcfanno_resources    = WorkflowMain.getGenomeAttribute(params, 'vcfanno_resources')
 params.vcfanno_toml         = WorkflowMain.getGenomeAttribute(params, 'vcfanno_toml')
 params.vep_cache            = WorkflowMain.getGenomeAttribute(params, 'vep_cache')
+params.gens_interval_list   = WorkflowMain.getGenomeAttribute(params, 'gens_interval_list')
+params.gens_pon             = WorkflowMain.getGenomeAttribute(params, 'gens_pon')
+params.gens_gnomad_pos      = WorkflowMain.getGenomeAttribute(params, 'gens_gnomad_pos')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
