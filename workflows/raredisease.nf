@@ -19,16 +19,18 @@ def checkPathParamList = [
     params.multiqc_config,
     params.sentieonbwa_index,
     params.svdb_query_dbs,
-    params.vcfanno_resources,
-    params.vep_cache
+    params.vcfanno_resources
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-ch_ml_model        = params.ml_model      ? file(params.ml_model)      : []
-ch_call_interval   = params.call_interval ? file(params.call_interval) : []
+ch_ml_model           = params.ml_model           ? file(params.ml_model)           : []
+ch_call_interval      = params.call_interval      ? file(params.call_interval)      : []
+ch_reduced_penetrance = params.reduced_penetrance ? file(params.reduced_penetrance) : []
+ch_score_config_snv   = params.score_config_snv   ? file(params.score_config_snv)   : []
+ch_score_config_sv    = params.score_config_sv    ? file(params.score_config_sv)    : []
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -199,7 +201,7 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
     }
-    
+
     ch_sv_annotate = Channel.empty()
     if (params.annotate_sv_switch) {
         ANNOTATE_STRUCTURAL_VARIANTS (
@@ -207,7 +209,7 @@ workflow RAREDISEASE {
             params.svdb_query_dbs,
             params.genome,
             params.vep_cache_version,
-            params.vep_cache,
+            ch_vep_cache,
             ch_references.genome_fasta,
             ch_references.sequence_dict
         ).set {ch_sv_annotate}
@@ -231,7 +233,7 @@ workflow RAREDISEASE {
         params.vcfanno_toml,
         params.genome,
         params.vep_cache_version,
-        params.vep_cache,
+        ch_vep_cache,
         ch_references.genome_fasta,
         ch_references.gnomad_af,
         CHECK_INPUT.out.samples
