@@ -1,5 +1,5 @@
 //
-// A subworkflow to score, rank and filter variants.
+// A subworkflow to score and rank variants.
 //
 
 include { GENMOD_ANNOTATE  } from '../../modules/nf-core/modules/genmod/annotate/main'
@@ -22,7 +22,7 @@ workflow RANK_VARIANTS {
         ch_versions = ch_versions.mix(GENMOD_ANNOTATE.out.versions)
         GENMOD_MODELS(GENMOD_ANNOTATE.out.vcf, ped, reduced_penetrance)
         ch_versions = ch_versions.mix(GENMOD_MODELS.out.versions)
-        GENMOD_SCORE(GENMOD_MODELS.out.vcf, ped, reduced_penetrance, score_config)
+        GENMOD_SCORE(GENMOD_MODELS.out.vcf, ped, score_config)
         ch_versions = ch_versions.mix(GENMOD_SCORE.out.versions)
         GENMOD_COMPOUND(GENMOD_SCORE.out.vcf)
         ch_versions = ch_versions.mix(GENMOD_COMPOUND.out.versions)
