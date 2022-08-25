@@ -70,7 +70,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             vep_genome,
             "homo_sapiens",
             vep_cache_version,
-            file(vep_cache)
+            vep_cache
             )
         ch_versions = ch_versions.mix(ENSEMBLVEP_SV.out.versions)
 
