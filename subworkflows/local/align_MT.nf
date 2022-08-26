@@ -1,5 +1,5 @@
 //
-// Prepare bam files for MT allignment
+// Allign MT
 //
 
 include { BWAMEM2_MEM as BWAMEM2_MEM_MT                                     } from '../../modules/nf-core/modules/bwamem2/mem/main'

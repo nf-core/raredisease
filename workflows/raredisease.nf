@@ -56,8 +56,9 @@ include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_st
 include { GENS                         } from '../subworkflows/local/gens'
 include { ALIGN                        } from '../subworkflows/local/align'
 include { CALL_SNV                     } from '../subworkflows/local/call_snv'
-include { PREPARE_MT_ALIGNMENT         } from '../subworkflows/local/prepare_MT_alignment'
-include { ALIGN_MT                     } from '../subworkflows/local/align_MT'
+include { ANALYSE_MT                   } from '../subworkflows/local/analyse_MT'
+//include { PREPARE_MT_ALIGNMENT         } from '../subworkflows/local/prepare_MT_alignment'
+//include { ALIGN_MT                     } from '../subworkflows/local/align_MT'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -217,22 +218,34 @@ workflow RAREDISEASE {
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
     }
 
-    // STEP 2.1: PREPARING MT ALIGNMENT
-    PREPARE_MT_ALIGNMENT ( ch_mapped.bam_bai )
-    ch_versions = ch_versions.mix(PREPARE_MT_ALIGNMENT.out.versions)
 
-    // STEP 2.2: MT ALLIGNMENT
+    // STEP 2.1: PREPARING MT ALIGNMENT
     ch_intervals_mt = Channel.fromPath(params.intervals_mt)
-    ALIGN_MT (
-        PREPARE_MT_ALIGNMENT.out.fastq,
-        PREPARE_MT_ALIGNMENT.out.bam,
+    ANALYSE_MT ( 
+        ch_mapped.bam_bai,
         ch_references.aligner_index,
         ch_references.genome_fasta,
         ch_references.sequence_dict,
         ch_references.genome_fai,
-        ch_int
+        ch_intervals_mt
     )
-    ch_versions = ch_versions.mix(ALIGN_MT.out.versions)
+    ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
+    // STEP 2.1: PREPARING MT ALIGNMENT
+    //PREPARE_MT_ALIGNMENT ( ch_mapped.bam_bai )
+    //ch_versions = ch_versions.mix(PREPARE_MT_ALIGNMENT.out.versions)
+
+    // STEP 2.2: MT ALLIGNMENT
+    //ch_intervals_mt = Channel.fromPath(params.intervals_mt)
+    //ALIGN_MT (
+    //    PREPARE_MT_ALIGNMENT.out.fastq,
+    //    PREPARE_MT_ALIGNMENT.out.bam,
+    //    ch_references.aligner_index,
+    //    ch_references.genome_fasta,
+    //    ch_references.sequence_dict,
+    //    ch_references.genome_fai,
+    //    ch_int
+    //)
+    //ch_versions = ch_versions.mix(ALIGN_MT.out.versions)
 
     // STEP 3: VARIANT ANNOTATION
     ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
