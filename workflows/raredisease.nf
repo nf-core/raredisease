@@ -17,6 +17,9 @@ def checkPathParamList = [
     params.gnomad,
     params.input,
     params.multiqc_config,
+    params.reduced_penetrance,
+    params.score_config_snv,
+    params.score_config_sv,
     params.sentieonbwa_index,
     params.svdb_query_dbs,
     params.vcfanno_resources
@@ -48,8 +51,15 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 */
 
 //
+// MODULE: local modules
+//
+
+include { MAKE_PED                    } from '../modules/local/create_pedfile'
+
+//
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
+
 include { CHECK_INPUT                  } from '../subworkflows/local/check_input'
 include { PREPARE_REFERENCES           } from '../subworkflows/local/prepare_references'
 include { ANNOTATE_SNVS                } from '../subworkflows/local/annotate_snvs'
@@ -77,9 +87,11 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { CALL_REPEAT_EXPANSIONS       } from '../subworkflows/nf-core/call_repeat_expansions'
-include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
-include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
+include { CALL_REPEAT_EXPANSIONS             } from '../subworkflows/nf-core/call_repeat_expansions'
+include { QC_BAM                             } from '../subworkflows/nf-core/qc_bam'
+include { CALL_STRUCTURAL_VARIANTS           } from '../subworkflows/nf-core/call_structural_variants'
+include { RANK_VARIANTS as RANK_VARIANTS_SNV } from '../subworkflows/nf-core/genmod'
+include { RANK_VARIANTS as RANK_VARIANTS_SV  } from '../subworkflows/nf-core/genmod'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,6 +113,8 @@ workflow RAREDISEASE {
         ch_input
     )
     ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
+
+    MAKE_PED (CHECK_INPUT.out.samples.toList())
 
     // STEP 0: QUALITY CHECK.
     FASTQC (
@@ -213,8 +227,15 @@ workflow RAREDISEASE {
             ch_references.genome_fasta,
             ch_references.sequence_dict
         ).set {ch_sv_annotate}
-
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
+
+        RANK_VARIANTS_SV (
+            ch_sv_annotate.vcf_ann,
+            MAKE_PED.out.ped,
+            ch_reduced_penetrance,
+            ch_score_config_sv
+        )
+        ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
     }
 
     // STEP 2.1: MT CALLING
@@ -239,6 +260,14 @@ workflow RAREDISEASE {
         CHECK_INPUT.out.samples
     )
     ch_versions = ch_versions.mix(ANNOTATE_SNVS.out.versions)
+
+    RANK_VARIANTS_SNV (
+        ANNOTATE_SNVS.out.vcf_ann,
+        MAKE_PED.out.ped,
+        ch_reduced_penetrance,
+        ch_score_config_snv
+    )
+    ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
 
     //
     // MODULE: Pipeline reporting
