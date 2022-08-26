@@ -34,6 +34,7 @@ ch_call_interval      = params.call_interval      ? file(params.call_interval)  
 ch_reduced_penetrance = params.reduced_penetrance ? file(params.reduced_penetrance) : []
 ch_score_config_snv   = params.score_config_snv   ? file(params.score_config_snv)   : []
 ch_score_config_sv    = params.score_config_sv    ? file(params.score_config_sv)    : []
+ch_vep_cache          = params.vep_cache          ? file(params.vep_cache)          : []
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
