@@ -57,6 +57,7 @@ include { GENS                         } from '../subworkflows/local/gens'
 include { ALIGN                        } from '../subworkflows/local/align'
 include { CALL_SNV                     } from '../subworkflows/local/call_snv'
 include { PREPARE_MT_ALIGNMENT         } from '../subworkflows/local/prepare_MT_alignment'
+include { ALIGN_MT                     } from '../subworkflows/local/align_MT'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -79,8 +80,6 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 include { CALL_REPEAT_EXPANSIONS       } from '../subworkflows/nf-core/call_repeat_expansions'
 include { QC_BAM                       } from '../subworkflows/nf-core/qc_bam'
 include { CALL_STRUCTURAL_VARIANTS     } from '../subworkflows/nf-core/call_structural_variants'
-include { PREPARE_MT_ALIGNMENT         } from '../subworkflows/local/prepare_MT_alignment'
-include { ALIGN_MT                     } from '../subworkflows/local/align_MT'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
