@@ -222,7 +222,7 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(PREPARE_MT_ALIGNMENT.out.versions)
 
     // STEP 2.2: MT ALLIGNMENT
-    ch_int = Channel.fromPath(params.intervals_mt)
+    ch_intervals_mt = Channel.fromPath(params.intervals_mt)
     ALIGN_MT (
         PREPARE_MT_ALIGNMENT.out.fastq,
         PREPARE_MT_ALIGNMENT.out.bam,
