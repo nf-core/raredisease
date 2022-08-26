@@ -63,6 +63,18 @@
             "gatk4/samtofastq": {
                 "git_sha": "6b64f9cb6c3dd3577931cc3cd032d6fb730000ce"
             },
+            "genmod/annotate": {
+                "git_sha": "94619a3faf6918030ff948f0bce36812a339f4b5"
+            },
+            "genmod/compound": {
+                "git_sha": "a8e6a88163eb1fe650cf57b5f7c067a4a10bbc99"
+            },
+            "genmod/models": {
+                "git_sha": "a8e6a88163eb1fe650cf57b5f7c067a4a10bbc99"
+            },
+            "genmod/score": {
+                "git_sha": "a8e6a88163eb1fe650cf57b5f7c067a4a10bbc99"
+            },
             "glnexus": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
