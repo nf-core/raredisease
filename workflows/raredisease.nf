@@ -22,8 +22,7 @@ def checkPathParamList = [
     params.score_config_sv,
     params.sentieonbwa_index,
     params.svdb_query_dbs,
-    params.vcfanno_resources,
-    params.vep_cache
+    params.vcfanno_resources
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
@@ -35,6 +34,7 @@ ch_call_interval      = params.call_interval      ? file(params.call_interval)  
 ch_reduced_penetrance = params.reduced_penetrance ? file(params.reduced_penetrance) : []
 ch_score_config_snv   = params.score_config_snv   ? file(params.score_config_snv)   : []
 ch_score_config_sv    = params.score_config_sv    ? file(params.score_config_sv)    : []
+ch_vep_cache          = params.vep_cache          ? file(params.vep_cache)          : []
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -224,7 +224,7 @@ workflow RAREDISEASE {
             params.svdb_query_dbs,
             params.genome,
             params.vep_cache_version,
-            params.vep_cache,
+            ch_vep_cache,
             ch_references.genome_fasta,
             ch_references.sequence_dict
         ).set {ch_sv_annotate}
@@ -255,7 +255,7 @@ workflow RAREDISEASE {
         params.vcfanno_toml,
         params.genome,
         params.vep_cache_version,
-        params.vep_cache,
+        ch_vep_cache,
         ch_references.genome_fasta,
         ch_references.gnomad_af,
         CHECK_INPUT.out.samples
