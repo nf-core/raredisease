@@ -116,6 +116,7 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
 
     MAKE_PED (CHECK_INPUT.out.samples.toList())
+
     // STEP 0: QUALITY CHECK.
     FASTQC (
         CHECK_INPUT.out.reads
@@ -227,6 +228,7 @@ workflow RAREDISEASE {
             ch_references.genome_fasta,
             ch_references.sequence_dict
         ).set {ch_sv_annotate}
+        ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
         RANK_VARIANTS_SV (
             ch_sv_annotate.vcf_ann,
@@ -234,8 +236,7 @@ workflow RAREDISEASE {
             ch_reduced_penetrance,
             ch_score_config_sv
         )
-
-        ch_versions = ch_versions.mix(ch_sv_annotate.versions)
+        ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
     }
 
     // STEP 2.1: MT CALLING
@@ -267,6 +268,7 @@ workflow RAREDISEASE {
         ch_reduced_penetrance,
         ch_score_config_snv
     )
+    ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
 
     //
     // MODULE: Pipeline reporting

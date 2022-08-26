@@ -15,13 +15,13 @@ process MAKE_PED {
     when:
     task.ext.when == null || task.ext.when
 
-    script: // This script is bundled with the pipeline, in nf-core/raredisease/bin/
-    def pedinfo = ""
+    script:
+    def pedinfo = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\t')
     for(int i = 0; i<samples.size(); i++) {
-        pedinfo += samples[i].case_id + '\t' + samples[i].id + '\t' + samples[i].paternal + '\t' + samples[i].maternal + '\t' + samples[i].gender + '\t' + samples[i].phenotype + '\n';
+        pedinfo += '\n'
+        pedinfo += [samples[i].case_id, samples[i].id, samples[i].paternal, samples[i].maternal, samples[i].gender, samples[i].phenotype].join('\t');
     }
     """
-    echo "#family_id\tsample_id\tfather\tmother\tsex\tphenotype" >family.ped
-    echo "$pedinfo" >>family.ped
+    echo "$pedinfo" > family.ped
     """
 }
