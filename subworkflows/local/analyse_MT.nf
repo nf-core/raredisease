@@ -3,7 +3,7 @@
 //
 
 include { PREPARE_MT_ALIGNMENT } from './prepare_MT_alignment'
-include { ALIGN_MT             } from './align_MT'
+include { ALIGN_AND_CALL_MT    } from './align_and_call_MT'
 
 
 
@@ -26,7 +26,7 @@ workflow ANALYSE_MT {
         // STEP 2.1: MT ALLIGNMENT
         
         ch_intervals_mt = Channel.fromPath(params.intervals_mt)
-        ALIGN_MT (
+        ALIGN_AND_CALL_MT (
             PREPARE_MT_ALIGNMENT.out.fastq,
             PREPARE_MT_ALIGNMENT.out.bam,
             index,
@@ -35,13 +35,13 @@ workflow ANALYSE_MT {
             fai,
             ch_intervals_mt
             )
-        ch_versions = ch_versions.mix(ALIGN_MT.out.versions)
+        ch_versions = ch_versions.mix(ALIGN_AND_CALL_MT.out.versions)
     
 
     emit:
-        vcf      = ALIGN_MT.out.vcf
-        tbi      = ALIGN_MT.out.tbi
-        txt      = ALIGN_MT.out.txt
-        html     = ALIGN_MT.out.html
+        vcf      = ALIGN_AND_CALL_MT.out.vcf
+        tbi      = ALIGN_AND_CALL_MT.out.tbi
+        txt      = ALIGN_AND_CALL_MT.out.txt
+        html     = ALIGN_AND_CALL_MT.out.html
         versions = ch_versions // channel: [ versions.yml ]
 }
