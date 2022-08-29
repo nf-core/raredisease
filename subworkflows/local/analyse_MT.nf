@@ -23,8 +23,7 @@ workflow ANALYSE_MT {
         PREPARE_MT_ALIGNMENT ( bam )
         ch_versions = ch_versions.mix(PREPARE_MT_ALIGNMENT.out.versions)// Outputs bam files
         
-        // STEP 2.1: MT ALLIGNMENT
-        
+        // STEP 2.1: MT ALLIGNMENT AND VARIANT CALLING
         ch_intervals_mt = Channel.fromPath(params.intervals_mt)
         ALIGN_AND_CALL_MT (
             PREPARE_MT_ALIGNMENT.out.fastq,
