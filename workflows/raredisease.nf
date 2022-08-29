@@ -17,10 +17,12 @@ def checkPathParamList = [
     params.gnomad,
     params.input,
     params.multiqc_config,
+    params.reduced_penetrance,
+    params.score_config_snv,
+    params.score_config_sv,
     params.sentieonbwa_index,
     params.svdb_query_dbs,
-    params.vcfanno_resources,
-    params.vep_cache
+    params.vcfanno_resources
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
@@ -30,7 +32,9 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 ch_ml_model           = params.ml_model           ? file(params.ml_model)           : []
 ch_call_interval      = params.call_interval      ? file(params.call_interval)      : []
 ch_reduced_penetrance = params.reduced_penetrance ? file(params.reduced_penetrance) : []
-ch_score_config       = params.score_config       ? file(params.score_config)       : []
+ch_score_config_snv   = params.score_config_snv   ? file(params.score_config_snv)   : []
+ch_score_config_sv    = params.score_config_sv    ? file(params.score_config_sv)    : []
+ch_vep_cache          = params.vep_cache          ? file(params.vep_cache)          : []
 ch_vep_filters        = params.vep_filters        ? file(params.vep_filters)        : []
 
 /*
@@ -112,9 +116,7 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
 
-    MAKE_PED (
-        ch_input
-    )
+    MAKE_PED (CHECK_INPUT.out.samples.toList())
 
     // STEP 0: QUALITY CHECK.
     FASTQC (
@@ -224,19 +226,19 @@ workflow RAREDISEASE {
             params.svdb_query_dbs,
             params.genome,
             params.vep_cache_version,
-            params.vep_cache,
+            ch_vep_cache,
             ch_references.genome_fasta,
             ch_references.sequence_dict
         ).set {ch_sv_annotate}
+        ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
         RANK_VARIANTS_SV (
             ch_sv_annotate.vcf_ann,
             MAKE_PED.out.ped,
             ch_reduced_penetrance,
-            ch_score_config
+            ch_score_config_sv
         )
-
-        ch_versions = ch_versions.mix(ch_sv_annotate.versions)
+        ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
     }
 
     // STEP 2.1: MT CALLING
@@ -255,7 +257,7 @@ workflow RAREDISEASE {
         params.vcfanno_toml,
         params.genome,
         params.vep_cache_version,
-        params.vep_cache,
+        ch_vep_cache,
         ch_references.genome_fasta,
         ch_references.gnomad_af,
         CHECK_INPUT.out.samples
@@ -266,8 +268,9 @@ workflow RAREDISEASE {
         ANNOTATE_SNVS.out.vcf_ann,
         MAKE_PED.out.ped,
         ch_reduced_penetrance,
-        ch_score_config
+        ch_score_config_snv
     )
+    ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
 
     //
     // MODULE: Pipeline reporting

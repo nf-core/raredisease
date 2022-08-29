@@ -7,7 +7,7 @@ process MAKE_PED {
         'quay.io/biocontainers/python:3.9--1' }"
 
     input:
-    path samplesheet
+    val(samples)
 
     output:
     path '*.ped'       , emit: ped
@@ -15,24 +15,13 @@ process MAKE_PED {
     when:
     task.ext.when == null || task.ext.when
 
-    script: // This script is bundled with the pipeline, in nf-core/raredisease/bin/
+    script:
+    def pedinfo = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\t')
+    for(int i = 0; i<samples.size(); i++) {
+        pedinfo += '\n'
+        pedinfo += [samples[i].case_id, samples[i].id, samples[i].paternal, samples[i].maternal, samples[i].gender, samples[i].phenotype].join('\t');
+    }
     """
-    export INPUT_FILE=${samplesheet}
-    export OUTPUT_FILE="familyinfo.ped"
-
-    python3 <<CODE
-    import os
-    file_in  = os.environ.get('INPUT_FILE')
-    file_out = os.environ.get('OUTPUT_FILE')
-    sample_dict = {}
-    with open(file_out,'w') as out:
-        out.write("#family_id\\tsample_id\\tfather\\tmother\\tsex\\tphenotype\\n")
-        infile = open(file_in).readlines()[1:]
-        for line in infile:
-            columns = line.strip().split(",")
-            sample_dict[columns[0]] = columns[8] + "\\t" + columns[0] + "\\t" + columns[6] + "\\t" + columns[7] + "\\t" + columns[4] + "\\t" + columns[5]
-        for i in sample_dict:
-            out.write(sample_dict[i] + "\\n")
-    CODE
+    echo "$pedinfo" > family.ped
     """
 }
