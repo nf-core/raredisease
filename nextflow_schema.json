@@ -115,6 +115,13 @@
                     "description": "Path to the index file for the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
                 },
+                "intervals_mt": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to the interval list of the non control mitochondral region.",
+                    "help_text": "Path to the interval list of the non control mitochondral regions for Mutect2"
+                },
                 "known_dbsnp": {
                     "type": "string",
                     "format": "path",

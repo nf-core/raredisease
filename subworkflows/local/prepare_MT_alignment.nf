@@ -8,13 +8,13 @@ include { GATK4_SAMTOFASTQ as GATK4_SAMTOFASTQ_MT } from '../../modules/nf-core/
 
 workflow PREPARE_MT_ALIGNMENT {
     take:
-        bam_cram  // id: and file: bam index: bam.bai
+        bam  // channel: [ val(meta), file(bam), file(bai) ]
 
     main:
         ch_versions = Channel.empty()
 
         // Outputs bam containing only MT
-        SAMTOOLS_VIEW_MT ( bam_cram, [] )
+        SAMTOOLS_VIEW_MT ( bam, [] )
         ch_versions = ch_versions.mix(SAMTOOLS_VIEW_MT.out.versions.first())
 
         // Removes alignment information
@@ -27,5 +27,6 @@ workflow PREPARE_MT_ALIGNMENT {
 
     emit:
         fastq    = GATK4_SAMTOFASTQ_MT.out.fastq
+        bam      = GATK4_REVERTSAM_MT.out.bam
         versions = ch_versions // channel: [ versions.yml ]
 }

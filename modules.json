@@ -57,6 +57,12 @@
             "gatk4/intervallisttools": {
                 "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
             },
+            "gatk4/mergebamalignment": {
+                "git_sha": "169b2b96c1167f89ab07127b7057c1d90a6996c7"
+            },
+            "gatk4/mutect2": {
+                "git_sha": "169b2b96c1167f89ab07127b7057c1d90a6996c7"
+            },
             "gatk4/revertsam": {
                 "git_sha": "f231291e7730654158cbd3f10b82c292e27fa273"
             },
@@ -78,6 +84,9 @@
             "glnexus": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
+            "haplocheck": {
+                "git_sha": "f5615c3db63a2bda7a1dbfaeae447cac3161d7b9"
+            },
             "manta/germline": {
                 "git_sha": "ffedf09b6e84b479c9c901274f74bb33f3777243"
             },
@@ -87,6 +96,9 @@
             "multiqc": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
+            "picard/addorreplacereadgroups": {
+                "git_sha": "baa2845d2818066bcbd8b91e6ce77d71e36ecf45"
+            },
             "picard/collecthsmetrics": {
                 "git_sha": "35231d394940dca2291ac2321c8f9b2e3b039905"
             },
@@ -94,7 +106,7 @@
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
             },
             "picard/markduplicates": {
-                "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                "git_sha": "63db63757cab03cfa7a02c0d0f134b66fbfadea6"
             },
             "picard/sortvcf": {
                 "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
@@ -112,6 +124,9 @@
                 "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
             },
             "samtools/merge": {
+                "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
+            },
+            "samtools/sort": {
                 "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
             },
             "samtools/stats": {
