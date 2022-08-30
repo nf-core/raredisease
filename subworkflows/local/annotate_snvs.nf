@@ -84,7 +84,10 @@ workflow ANNOTATE_SNVS {
             )
         ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions)
 
+        FILTER_VEP(ENSEMBLVEP_SNV.out.vcf, feature_file)
+
     emit:
-        vcf_ann                = ENSEMBLVEP_SNV.out.vcf
+        vcf_ann_clinical       = FILTER_VEP.out.vcf
+        vcf_ann_research       = ENSEMBLVEP_SNV.out.vcf
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }

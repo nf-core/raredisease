@@ -79,6 +79,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         FILTER_VEP(ENSEMBLVEP_SV.out.vcf, feature_file)
 
     emit:
-        vcf_ann                = FILTER_VEP.out.vcf
+        vcf_ann_clinical       = FILTER_VEP.out.vcf
+        vcf_ann_research       = ENSEMBLVEP_SV.out.vcf
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }

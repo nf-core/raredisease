@@ -43,8 +43,8 @@ process FILTER_VEP {
         --format vcf \\
         --input_file $vcf \\
         --output_file ${prefix}.ann_filter.vcf.gz \\
-        --filter \"SYMBOL in feature.list\" \\
-        --soft_filter
+        --only_matched \\
+        --filter \"SYMBOL in feature.list\"
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
