@@ -98,7 +98,10 @@ class RowChecker:
         """Assert that read pairs have the same file extension. Report pair status."""
         if row[self._first_col] and row[self._second_col]:
             row[self._single_col] = False
-            if Path(row[self._first_col]).suffixes[-2:] != Path(row[self._second_col]).suffixes[-2:]:
+            if (
+                Path(row[self._first_col]).suffixes[-2:]
+                != Path(row[self._second_col]).suffixes[-2:]
+            ):
                 raise AssertionError("FASTQ pairs must have the same file extensions.")
         else:
             row[self._single_col] = True
@@ -189,13 +192,25 @@ def check_samplesheet(file_in, file_out):
         https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv
 
     """
-    required_columns = {"sample", "lane", "fastq_1", "fastq_2", "gender", "phenotype", "paternal_id", "maternal_id", "case_id"}
+    required_columns = {
+        "sample",
+        "lane",
+        "fastq_1",
+        "fastq_2",
+        "gender",
+        "phenotype",
+        "paternal_id",
+        "maternal_id",
+        "case_id",
+    }
     # See https://docs.python.org/3.9/library/csv.html#id3 to read up on `newline=""`.
     with file_in.open(newline="") as in_handle:
         reader = csv.DictReader(in_handle, dialect=sniff_format(in_handle))
         # Validate the existence of the expected header columns.
         if not required_columns.issubset(reader.fieldnames):
-            logger.critical(f"The sample sheet **must** contain the column headers: {', '.join(required_columns)}.")
+            logger.critical(
+                f"The sample sheet **must** contain the column headers: {', '.join(required_columns)}."
+            )
             sys.exit(1)
         # Validate each row.
         checker = RowChecker()
