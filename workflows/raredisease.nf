@@ -272,7 +272,7 @@ workflow RAREDISEASE {
         ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 
         RANK_VARIANTS_SNV (
-            ANNOTATE_SNVS.out.vcf_ann,
+            ch_snv_annotate.vcf_ann,
             MAKE_PED.out.ped,
             ch_reduced_penetrance,
             ch_score_config_snv
