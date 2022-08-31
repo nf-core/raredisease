@@ -243,7 +243,7 @@ workflow RAREDISEASE {
 
     // STEP 2.1: ANALYSE MT
     ch_intervals_mt = Channel.fromPath(params.intervals_mt)
-    ANALYSE_MT ( 
+    ANALYSE_MT (
         ch_mapped.bam_bai,
         ch_references.aligner_index,
         ch_references.genome_fasta,
@@ -256,26 +256,29 @@ workflow RAREDISEASE {
     // STEP 3: VARIANT ANNOTATION
     ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
 
-    ANNOTATE_SNVS (
-        ch_vcf,
-        ch_references.vcfanno_resources,
-        params.vcfanno_toml,
-        params.genome,
-        params.vep_cache_version,
-        ch_vep_cache,
-        ch_references.genome_fasta,
-        ch_references.gnomad_af,
-        CHECK_INPUT.out.samples
-    )
-    ch_versions = ch_versions.mix(ANNOTATE_SNVS.out.versions)
+    ch_snv_annotate = Channel.empty()
+    if (params.annotate_snv_switch) {
+        ANNOTATE_SNVS (
+            ch_vcf,
+            ch_references.vcfanno_resources,
+            params.vcfanno_toml,
+            params.genome,
+            params.vep_cache_version,
+            ch_vep_cache,
+            ch_references.genome_fasta,
+            ch_references.gnomad_af,
+            CHECK_INPUT.out.samples
+        ).set {ch_snv_annotate}
+        ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 
-    RANK_VARIANTS_SNV (
-        ANNOTATE_SNVS.out.vcf_ann,
-        MAKE_PED.out.ped,
-        ch_reduced_penetrance,
-        ch_score_config_snv
-    )
-    ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
+        RANK_VARIANTS_SNV (
+            ANNOTATE_SNVS.out.vcf_ann,
+            MAKE_PED.out.ped,
+            ch_reduced_penetrance,
+            ch_score_config_snv
+        )
+        ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
+    }
 
     //
     // MODULE: Pipeline reporting
