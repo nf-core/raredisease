@@ -287,7 +287,7 @@
                 },
                 "annotate_snv_switch": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "Specifies whether or not to run annotate SNV subworkflow.",
                     "fa_icon": "fas fa-book"
                 },
