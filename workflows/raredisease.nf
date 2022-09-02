@@ -218,7 +218,6 @@ workflow RAREDISEASE {
         ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
     }
 
-    ch_sv_annotate = Channel.empty()
     if (params.annotate_sv_switch) {
         ANNOTATE_STRUCTURAL_VARIANTS (
             CALL_STRUCTURAL_VARIANTS.out.vcf,
@@ -256,7 +255,6 @@ workflow RAREDISEASE {
     // STEP 3: VARIANT ANNOTATION
     ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
 
-    ch_snv_annotate = Channel.empty()
     if (params.annotate_snv_switch) {
         ANNOTATE_SNVS (
             ch_vcf,
