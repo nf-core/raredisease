@@ -115,6 +115,13 @@
                     "description": "Path to the index file for the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
                 },
+                "intervals_mt": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to the interval list of the non control mitochondral region.",
+                    "help_text": "Path to the interval list of the non control mitochondral regions for Mutect2"
+                },
                 "known_dbsnp": {
                     "type": "string",
                     "format": "path",
@@ -284,6 +291,12 @@
                     "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-book",
                     "enum": ["wgs", "wes", "mito"]
+                },
+                "annotate_snv_switch": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Specifies whether or not to run annotate SNV subworkflow.",
+                    "fa_icon": "fas fa-book"
                 },
                 "annotate_sv_switch": {
                     "type": "boolean",

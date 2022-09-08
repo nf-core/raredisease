@@ -4,7 +4,7 @@
     nf-core/raredisease
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Github : https://github.com/nf-core/raredisease
-    Website: https://nf-co.re/raredisease
+Website: https://nf-co.re/raredisease
     Slack  : https://nfcore.slack.com/channels/raredisease
 ----------------------------------------------------------------------------------------
 */
@@ -24,6 +24,7 @@ params.call_interval        = WorkflowMain.getGenomeAttribute(params, 'call_inte
 params.gnomad               = WorkflowMain.getGenomeAttribute(params, 'gnomad')
 params.gnomad_af            = WorkflowMain.getGenomeAttribute(params, 'gnomad_af')
 params.gnomad_af_tbi        = WorkflowMain.getGenomeAttribute(params, 'gnomad_af_tbi')
+params.intervals_mt         = WorkflowMain.getGenomeAttribute(params, 'intervals_mt')
 params.known_dbsnp          = WorkflowMain.getGenomeAttribute(params, 'known_dbsnp')
 params.known_dbsnp_tbi      = WorkflowMain.getGenomeAttribute(params, 'known_dbsnp_tbi')
 params.known_indels         = WorkflowMain.getGenomeAttribute(params, 'known_indels')
