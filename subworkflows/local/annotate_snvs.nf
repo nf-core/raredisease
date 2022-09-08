@@ -7,11 +7,13 @@ include { BCFTOOLS_ROH                   } from '../../modules/nf-core/modules/b
 include { RHOCALL_ANNOTATE               } from '../../modules/nf-core/modules/rhocall/annotate/main'
 include { ENSEMBLVEP as ENSEMBLVEP_SNV   } from '../../modules/local/ensemblvep/main'
 include { TABIX_TABIX as TABIX_SNV_ANNO  } from '../../modules/nf-core/modules/tabix/tabix/main'
+include { FILTER_VEP                     } from '../../modules/local/filter_vep'
 
 
 workflow ANNOTATE_SNVS {
 
     take:
+        feature_file
         vcf
         vcfanno_resource_dir
         vcfanno_toml

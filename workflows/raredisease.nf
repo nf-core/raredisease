@@ -259,6 +259,7 @@ workflow RAREDISEASE {
 
     if (params.annotate_snv_switch) {
         ANNOTATE_SNVS (
+            ch_vep_filters,
             ch_vcf,
             ch_references.vcfanno_resources,
             params.vcfanno_toml,
