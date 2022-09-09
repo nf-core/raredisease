@@ -22,23 +22,6 @@ process FILTER_VEP {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    export INPUT_FILE=${select_feature_file_bed}
-    export OUTPUT_FILE="feature.list"
-
-    python3 <<CODE
-    import os
-    file_in  = os.environ.get('INPUT_FILE')
-    file_out = os.environ.get('OUTPUT_FILE')
-    with open(file_out,'w') as out:
-        with open(file_in,'rt') as bed:
-            for line in bed:
-                if line.startswith("#"):
-                    pass
-                else:
-                    columns = line.strip().split(",")
-                    out.write(columns[3] + "\\n")
-    CODE
-
     filter_vep \\
         --format vcf \\
         --input_file $vcf \\
