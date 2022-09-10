@@ -4,6 +4,7 @@ import sys
 from collections import Counter
 from pathlib import Path
 
+
 def parse_vep_csq_transcripts(transcripts, allele_ind, csq_ind, hgnc_ind, var_csq):
     """
     Parse conseqences for each transcript and return HGNC IDs, alleles, and their severity rank

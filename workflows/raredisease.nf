@@ -30,13 +30,14 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-ch_ml_model           = params.ml_model           ? file(params.ml_model)           : []
-ch_call_interval      = params.call_interval      ? file(params.call_interval)      : []
-ch_reduced_penetrance = params.reduced_penetrance ? file(params.reduced_penetrance) : []
-ch_score_config_snv   = params.score_config_snv   ? file(params.score_config_snv)   : []
-ch_score_config_sv    = params.score_config_sv    ? file(params.score_config_sv)    : []
-ch_vep_cache          = params.vep_cache          ? file(params.vep_cache)          : []
-ch_vep_filters        = params.vep_filters        ? file(params.vep_filters)        : []
+ch_ml_model             = params.ml_model           ? file(params.ml_model)           : []
+ch_call_interval        = params.call_interval      ? file(params.call_interval)      : []
+ch_reduced_penetrance   = params.reduced_penetrance ? file(params.reduced_penetrance) : []
+ch_score_config_snv     = params.score_config_snv   ? file(params.score_config_snv)   : []
+ch_score_config_sv      = params.score_config_sv    ? file(params.score_config_sv)    : []
+ch_variant_consequences = file("$projectDir/assets/variant_consequences_v1.txt", checkIfExists: true)
+ch_vep_cache            = params.vep_cache          ? file(params.vep_cache)          : []
+ch_vep_filters          = params.vep_filters        ? file(params.vep_filters)        : []
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,6 +59,8 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 //
 
 include { MAKE_PED                    } from '../modules/local/create_pedfile'
+include { VCFPARSER as VCFPARSER_SNV  } from '../modules/local/vcfparser'
+include { VCFPARSER as VCFPARSER_SV   } from '../modules/local/vcfparser'
 
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
@@ -239,6 +242,11 @@ workflow RAREDISEASE {
             ch_score_config_sv
         )
         ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
+
+        VCFPARSER_SV (
+            RANK_VARIANTS_SV.out.vcf,
+            ch_variant_consequences
+        )
     }
 
 
@@ -279,6 +287,11 @@ workflow RAREDISEASE {
             ch_score_config_snv
         )
         ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
+
+        VCFPARSER_SNV (
+            RANK_VARIANTS_SNV.out.vcf,
+            ch_variant_consequences
+        )
     }
 
     //
