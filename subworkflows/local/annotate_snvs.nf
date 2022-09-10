@@ -7,7 +7,6 @@ include { BCFTOOLS_ROH                   } from '../../modules/nf-core/modules/b
 include { RHOCALL_ANNOTATE               } from '../../modules/nf-core/modules/rhocall/annotate/main'
 include { ENSEMBLVEP as ENSEMBLVEP_SNV   } from '../../modules/local/ensemblvep/main'
 include { TABIX_TABIX as TABIX_SNV_ANNO  } from '../../modules/nf-core/modules/tabix/tabix/main'
-include { FILTER_VEP                     } from '../../modules/local/filter_vep'
 
 
 workflow ANNOTATE_SNVS {
@@ -86,10 +85,7 @@ workflow ANNOTATE_SNVS {
             )
         ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions)
 
-        FILTER_VEP(ENSEMBLVEP_SNV.out.vcf, feature_file)
-
     emit:
-        vcf_ann_clinical       = FILTER_VEP.out.vcf
-        vcf_ann_research       = ENSEMBLVEP_SNV.out.vcf
-        versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
+        vcf_ann       = ENSEMBLVEP_SNV.out.vcf
+        versions      = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }

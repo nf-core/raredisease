@@ -9,7 +9,7 @@ process FILTER_VEP {
 
     input:
     tuple val(meta), path(vcf)
-    path (select_feature_file_bed)
+    path (select_feature_file)
 
     output:
     tuple val(meta), path("*.ann_filter.vcf.gz"), emit: vcf
@@ -27,7 +27,7 @@ process FILTER_VEP {
         --input_file $vcf \\
         --output_file ${prefix}.ann_filter.vcf.gz \\
         --only_matched \\
-        --filter \"SYMBOL in feature.list\"
+        --filter \"HGNC_ID in ${select_feature_file}\"
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

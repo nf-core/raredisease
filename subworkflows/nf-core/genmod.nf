@@ -28,6 +28,6 @@ workflow RANK_VARIANTS {
         ch_versions = ch_versions.mix(GENMOD_COMPOUND.out.versions)
 
     emit:
-        vcf_ann                = GENMOD_COMPOUND.out.vcf
+        vcf                    = GENMOD_COMPOUND.out.vcf
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }

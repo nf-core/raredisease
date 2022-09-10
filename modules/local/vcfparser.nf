@@ -12,7 +12,7 @@ process VCFPARSER {
     path (variant_consequences)
 
     output:
-    tuple val(meta), path("*.vcfparser.vcf"), emit: vcf
+    tuple val(meta), path("*.vcfparser.vcf")    , emit: vcf
     path "versions.yml"                         , emit: versions
 
     when:
