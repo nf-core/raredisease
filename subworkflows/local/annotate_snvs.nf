@@ -12,7 +12,6 @@ include { TABIX_TABIX as TABIX_SNV_ANNO  } from '../../modules/nf-core/modules/t
 workflow ANNOTATE_SNVS {
 
     take:
-        feature_file
         vcf
         vcfanno_resource_dir
         vcfanno_toml

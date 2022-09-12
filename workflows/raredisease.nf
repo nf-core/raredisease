@@ -33,7 +33,6 @@ if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input sample
 ch_ml_model             = params.ml_model            ? file(params.ml_model)           : []
 ch_call_interval        = params.call_interval       ? file(params.call_interval)      : []
 ch_reduced_penetrance   = params.reduced_penetrance  ? file(params.reduced_penetrance) : []
-ch_select_feature_file  = params.select_feature_file ? file(params.select_feature_file): []
 ch_score_config_snv     = params.score_config_snv    ? file(params.score_config_snv)   : []
 ch_score_config_sv      = params.score_config_sv     ? file(params.score_config_sv)    : []
 ch_variant_consequences = file("$projectDir/assets/variant_consequences_v1.txt", checkIfExists: true)
@@ -227,7 +226,6 @@ workflow RAREDISEASE {
 
     if (params.annotate_sv_switch) {
         ANNOTATE_STRUCTURAL_VARIANTS (
-            ch_vep_filters,
             CALL_STRUCTURAL_VARIANTS.out.vcf,
             params.svdb_query_dbs,
             params.genome,
@@ -253,7 +251,7 @@ workflow RAREDISEASE {
 
         FILTER_VEP_SV(
             VCFPARSER_SV.out.vcf,
-            ch_select_feature_file
+            ch_vep_filters
         )
     }
 
@@ -275,7 +273,6 @@ workflow RAREDISEASE {
 
     if (params.annotate_snv_switch) {
         ANNOTATE_SNVS (
-            ch_vep_filters,
             ch_vcf,
             ch_references.vcfanno_resources,
             params.vcfanno_toml,
@@ -303,7 +300,7 @@ workflow RAREDISEASE {
 
         FILTER_VEP_SNV(
             VCFPARSER_SNV.out.vcf,
-            ch_select_feature_file
+            ch_vep_filters
         )
     }
 

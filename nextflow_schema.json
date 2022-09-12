@@ -178,18 +178,11 @@
                     "description": "SV rank model config file for genmod.",
                     "hidden": true
                 },
-                "select_feature_file": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-chart-bar",
-                    "description": "File containing HGNC_IDs of interest on separate lines.",
-                    "hidden": true
-                },
                 "vep_filters": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-chart-bar",
-                    "description": "Gene panel file to be used with filter_vep to separate clinical and research variants.",
+                    "description": "File containing HGNC_IDs of interest on separate lines.",
                     "hidden": true
                 },
                 "target_bed": {

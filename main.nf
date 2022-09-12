@@ -33,7 +33,6 @@ params.ml_model             = WorkflowMain.getGenomeAttribute(params, 'ml_model'
 params.reduced_penetrance   = WorkflowMain.getGenomeAttribute(params, 'reduced_penetrance')
 params.score_config_snv     = WorkflowMain.getGenomeAttribute(params, 'score_config_snv')
 params.score_config_sv      = WorkflowMain.getGenomeAttribute(params, 'score_config_sv')
-params.select_feature_file  = WorkflowMain.getGenomeAttribute(params, 'select_feature_file')
 params.target_bed           = WorkflowMain.getGenomeAttribute(params, 'target_bed')
 params.sentieonbwa_index    = WorkflowMain.getGenomeAttribute(params, 'bwa')
 params.svdb_query_dbs       = WorkflowMain.getGenomeAttribute(params, 'svdb_query_dbs')

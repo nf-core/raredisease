@@ -11,7 +11,6 @@ include { ENSEMBLVEP as ENSEMBLVEP_SV   } from '../../modules/local/ensemblvep/m
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
     take:
-        feature_file
         vcf               // channel: [ val(meta), path(vcf) ]
         sv_dbs            // file: dbs.csv
         vep_genome
