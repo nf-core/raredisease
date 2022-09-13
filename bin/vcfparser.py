@@ -168,6 +168,9 @@ def main(argv=None):
     if not args.file_in.is_file():
         print(f"The given input file {args.file_in} was not found!")
         sys.exit(2)
+    if not args.variant_csq.is_file():
+        print(f"The given variant consequence file {args.variant_csq} was not found!")
+        sys.exit(2)
     args.file_out.parent.mkdir(parents=True, exist_ok=True)
     with open(args.variant_csq) as f:
         var_csq = [line.strip() for line in f]
