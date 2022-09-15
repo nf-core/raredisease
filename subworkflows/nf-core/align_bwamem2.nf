@@ -14,6 +14,8 @@ workflow ALIGN_BWAMEM2 {
     take:
         reads_input // channel: [ val(meta), reads_input ]
         index       // channel: [ /path/to/bwamem2/index/ ]
+        fasta       // channel: [genome.fasta]
+        fai         // channel: [genome.fai]
 
     main:
         ch_versions = Channel.empty()
@@ -44,7 +46,7 @@ workflow ALIGN_BWAMEM2 {
         .set{ bams }                                // create a new multi-channel named bams
 
         // TODO: If there are no samples to merge, skip the process
-        SAMTOOLS_MERGE ( bams.multiple, [] )
+        SAMTOOLS_MERGE ( bams.multiple, fasta, fai )
         prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
         ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions)
 

@@ -37,8 +37,16 @@ workflow CALL_SNV_DEEPVARIANT {
         GLNEXUS ( ch_gvcfs )
         ch_versions = ch_versions.mix(GLNEXUS.out.versions)
 
-        SPLIT_MULTIALLELICS_GL (GLNEXUS.out.bcf, fasta)
-        REMOVE_DUPLICATES_GL (SPLIT_MULTIALLELICS_GL.out.vcf, fasta)
+        ch_split_multi_in = GLNEXUS.out.bcf
+                            .map{meta, bcf ->
+                                    return [meta, bcf, []]}
+        SPLIT_MULTIALLELICS_GL (ch_split_multi_in, fasta)
+        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_GL.out.versions)
+
+        ch_remove_dup_in = SPLIT_MULTIALLELICS_GL.out.vcf
+                            .map{meta, vcf ->
+                                    return [meta, vcf, []]}
+        REMOVE_DUPLICATES_GL (ch_remove_dup_in, fasta)
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_GL.out.versions)
 
         TABIX_GL (REMOVE_DUPLICATES_GL.out.vcf)

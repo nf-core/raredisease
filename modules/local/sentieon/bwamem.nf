@@ -9,7 +9,7 @@ process SENTIEON_BWAMEM {
     tuple val(meta), path(reads)
     path fasta
     path fai
-    path index
+    tuple val(meta2), path(index)
 
     output:
     tuple val(meta), path('*.bam'), emit: bam

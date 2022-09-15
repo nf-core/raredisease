@@ -127,7 +127,7 @@
                 },
                 "multiqc": {
                     "branch": "master",
-                    "git_sha": "5587389874dac9c9953a2ab6f01d49af81969492"
+                    "git_sha": "4b1d4bf401d4cf65ebc4f604bc8c8e7551109db3"
                 },
                 "picard/addorreplacereadgroups": {
                     "branch": "master",
@@ -187,7 +187,7 @@
                 },
                 "svdb/merge": {
                     "branch": "master",
-                    "git_sha": "6b011dd14821385c282e030c6d993d2116aed23f"
+                    "git_sha": "513b5fcab92243bb6e227cd36ac779796d304f4a"
                 },
                 "svdb/query": {
                     "branch": "master",
@@ -211,11 +211,11 @@
                 },
                 "ucsc/wigtobigwig": {
                     "branch": "master",
-                    "git_sha": "233fa70811a03a4cecb2ece483b5c8396e2cee1d"
+                    "git_sha": "8572bc8865d166edf2d8efeb97e77bfc53d0866b"
                 },
                 "untar": {
                     "branch": "master",
-                    "git_sha": "393dbd6ddafe3f18eac02893dd4a21e4d45de679"
+                    "git_sha": "b63b9f752dc8e43fc70b0491aad5e0a270ab0e10"
                 },
                 "vcfanno": {
                     "branch": "master",
