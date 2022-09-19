@@ -7,7 +7,7 @@
             "modules": {
                 "bcftools/norm": {
                     "branch": "master",
-                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                    "git_sha": "682f789f93070bd047868300dd018faf3d434e7c"
                 },
                 "bcftools/roh": {
                     "branch": "master",
@@ -15,15 +15,15 @@
                 },
                 "bcftools/view": {
                     "branch": "master",
-                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                    "git_sha": "682f789f93070bd047868300dd018faf3d434e7c"
                 },
                 "bwamem2/index": {
                     "branch": "master",
-                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                    "git_sha": "d0ff29fca32ba795177584ebfd51dcd6b0d5f890"
                 },
                 "bwamem2/mem": {
                     "branch": "master",
-                    "git_sha": "4f5274c3de0c9521f5033893ff61057a74c45ba9"
+                    "git_sha": "30b04859129f5f4235accdea9fdea8f1feb23809"
                 },
                 "cat/cat": {
                     "branch": "master",
@@ -51,7 +51,7 @@
                 },
                 "custom/dumpsoftwareversions": {
                     "branch": "master",
-                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                    "git_sha": "5e7b1ef9a5a2d9258635bcbf70fcf37dacd1b247"
                 },
                 "deepvariant": {
                     "branch": "master",
@@ -59,7 +59,7 @@
                 },
                 "expansionhunter": {
                     "branch": "master",
-                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                    "git_sha": "848ee9a215d02d80be033bfa60881700f2bd914c"
                 },
                 "fastqc": {
                     "branch": "master",
@@ -67,15 +67,15 @@
                 },
                 "gatk4/bedtointervallist": {
                     "branch": "master",
-                    "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+                    "git_sha": "169b2b96c1167f89ab07127b7057c1d90a6996c7"
                 },
                 "gatk4/createsequencedictionary": {
                     "branch": "master",
-                    "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+                    "git_sha": "169b2b96c1167f89ab07127b7057c1d90a6996c7"
                 },
                 "gatk4/intervallisttools": {
                     "branch": "master",
-                    "git_sha": "409af2f27cbe45109acc7fee70718d2bf20aa449"
+                    "git_sha": "169b2b96c1167f89ab07127b7057c1d90a6996c7"
                 },
                 "gatk4/mergebamalignment": {
                     "branch": "master",
@@ -87,11 +87,11 @@
                 },
                 "gatk4/revertsam": {
                     "branch": "master",
-                    "git_sha": "f231291e7730654158cbd3f10b82c292e27fa273"
+                    "git_sha": "169b2b96c1167f89ab07127b7057c1d90a6996c7"
                 },
                 "gatk4/samtofastq": {
                     "branch": "master",
-                    "git_sha": "6b64f9cb6c3dd3577931cc3cd032d6fb730000ce"
+                    "git_sha": "169b2b96c1167f89ab07127b7057c1d90a6996c7"
                 },
                 "genmod/annotate": {
                     "branch": "master",
@@ -119,35 +119,35 @@
                 },
                 "manta/germline": {
                     "branch": "master",
-                    "git_sha": "ffedf09b6e84b479c9c901274f74bb33f3777243"
+                    "git_sha": "5e7b1ef9a5a2d9258635bcbf70fcf37dacd1b247"
                 },
                 "mosdepth": {
                     "branch": "master",
-                    "git_sha": "e745e167c1020928ef20ea1397b6b4d230681b4d"
+                    "git_sha": "72a31b76eb1b58879e0d91fb1d992e0118693098"
                 },
                 "multiqc": {
                     "branch": "master",
-                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                    "git_sha": "4b1d4bf401d4cf65ebc4f604bc8c8e7551109db3"
                 },
                 "picard/addorreplacereadgroups": {
                     "branch": "master",
-                    "git_sha": "baa2845d2818066bcbd8b91e6ce77d71e36ecf45"
+                    "git_sha": "67652c7c4dda138c9e71f093b1aea91f29f87c50"
                 },
                 "picard/collecthsmetrics": {
                     "branch": "master",
-                    "git_sha": "35231d394940dca2291ac2321c8f9b2e3b039905"
+                    "git_sha": "682f789f93070bd047868300dd018faf3d434e7c"
                 },
                 "picard/collectmultiplemetrics": {
                     "branch": "master",
-                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                    "git_sha": "682f789f93070bd047868300dd018faf3d434e7c"
                 },
                 "picard/markduplicates": {
                     "branch": "master",
-                    "git_sha": "63db63757cab03cfa7a02c0d0f134b66fbfadea6"
+                    "git_sha": "682f789f93070bd047868300dd018faf3d434e7c"
                 },
                 "picard/sortvcf": {
                     "branch": "master",
-                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                    "git_sha": "682f789f93070bd047868300dd018faf3d434e7c"
                 },
                 "qualimap/bamqc": {
                     "branch": "master",
@@ -159,7 +159,7 @@
                 },
                 "samtools/faidx": {
                     "branch": "master",
-                    "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
+                    "git_sha": "3eb99152cedbb7280258858e5df08478a4670696"
                 },
                 "samtools/index": {
                     "branch": "master",
@@ -167,7 +167,7 @@
                 },
                 "samtools/merge": {
                     "branch": "master",
-                    "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
+                    "git_sha": "720027275ccdc1363bb2a19c6412da148e31d94b"
                 },
                 "samtools/sort": {
                     "branch": "master",
@@ -175,11 +175,11 @@
                 },
                 "samtools/stats": {
                     "branch": "master",
-                    "git_sha": "897c33d5da084b61109500ee44c01da2d3e4e773"
+                    "git_sha": "f4eab7945952dc4934224309701a49913ea05ae6"
                 },
                 "samtools/view": {
                     "branch": "master",
-                    "git_sha": "6b64f9cb6c3dd3577931cc3cd032d6fb730000ce"
+                    "git_sha": "5e7b1ef9a5a2d9258635bcbf70fcf37dacd1b247"
                 },
                 "stranger": {
                     "branch": "master",
@@ -187,7 +187,7 @@
                 },
                 "svdb/merge": {
                     "branch": "master",
-                    "git_sha": "313d76e00525c8e975dabce0c34973fd53c3f4dd"
+                    "git_sha": "513b5fcab92243bb6e227cd36ac779796d304f4a"
                 },
                 "svdb/query": {
                     "branch": "master",
@@ -195,31 +195,31 @@
                 },
                 "tabix/bgziptabix": {
                     "branch": "master",
-                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                    "git_sha": "5e7b1ef9a5a2d9258635bcbf70fcf37dacd1b247"
                 },
                 "tabix/tabix": {
                     "branch": "master",
-                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                    "git_sha": "5e7b1ef9a5a2d9258635bcbf70fcf37dacd1b247"
                 },
                 "tiddit/cov": {
                     "branch": "master",
-                    "git_sha": "fd5f6f5f4ffef4ab5a4e809bd3211bbc71c38d30"
+                    "git_sha": "40996cdbe1874f9c2ba693fee76d2b4f316f95f2"
                 },
                 "tiddit/sv": {
                     "branch": "master",
-                    "git_sha": "fd5f6f5f4ffef4ab5a4e809bd3211bbc71c38d30"
+                    "git_sha": "b689b8ed88a9f89eb2f7c75d3eb0bace77ade109"
                 },
                 "ucsc/wigtobigwig": {
                     "branch": "master",
-                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                    "git_sha": "8572bc8865d166edf2d8efeb97e77bfc53d0866b"
                 },
                 "untar": {
                     "branch": "master",
-                    "git_sha": "9aadd9a6d3f5964476582319b3a1c54a3e3fe7c9"
+                    "git_sha": "b63b9f752dc8e43fc70b0491aad5e0a270ab0e10"
                 },
                 "vcfanno": {
                     "branch": "master",
-                    "git_sha": "49b18b1639f4f7104187058866a8fab33332bdfe"
+                    "git_sha": "13631304102ca3d99def3578611b79332f6fd175"
                 }
             }
         }

@@ -6,11 +6,11 @@ process SENTIEON_BWAINDEX {
     secret 'SENTIEON_LICENSE_BASE64'
 
     input:
-    path fasta
+    tuple val(meta), path(fasta)
 
     output:
-    path "bwa"          , emit: index
-    path "versions.yml" , emit: versions
+    tuple val(meta), path("bwa"), emit: index
+    path "versions.yml"         , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
