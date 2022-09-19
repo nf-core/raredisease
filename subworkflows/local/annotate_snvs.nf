@@ -29,12 +29,8 @@ workflow ANNOTATE_SNVS {
         //
         // annotate vcfanno
         //
-        vcf.map { meta, vcf, idx ->
-                    return [meta, []]
-            }
-            .set { ch_placeholder }
 
-        VCFANNO (vcf, ch_placeholder, ch_toml, vcfanno_resource_dir)
+        VCFANNO (vcf, ch_toml, vcfanno_resource_dir)
         ch_versions = ch_versions.mix(VCFANNO.out.versions)
 
         //

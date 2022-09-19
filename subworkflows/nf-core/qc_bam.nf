@@ -24,7 +24,7 @@ workflow QC_BAM {
         ch_versions = Channel.empty()
 
         // COLLECT MULTIPLE METRICS
-        PICARD_COLLECTMULTIPLEMETRICS ( bam, fasta )
+        PICARD_COLLECTMULTIPLEMETRICS ( bam, fasta, fai )
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions)
 
         // COLLECT HS METRICS
@@ -52,7 +52,7 @@ workflow QC_BAM {
         qualimap_results        = QUALIMAP_BAMQC.out.results                    // channel: [ val(meta), path(qualimap files) ]
         tiddit_wig              = TIDDIT_COV.out.wig                            // channel: [ val(meta), path(*.wig) ]
         bigwig                  = UCSC_WIGTOBIGWIG.out.bw                       // channel: [ val(meta), path(*.bw) ]
-        d4                      = MOSDEPTH.out.d4                               // channel: [ val(meta), path(*.d4) ]
+        d4                      = MOSDEPTH.out.per_base_d4                      // channel: [ val(meta), path(*.d4) ]
 
         versions                = ch_versions.ifEmpty(null)                     // channel: [ versions.yml ]
 }

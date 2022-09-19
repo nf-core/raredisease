@@ -9,7 +9,7 @@ process SENTIEON_BWAMEM {
     tuple val(meta), path(reads)
     path fasta
     path fai
-    path index
+    tuple val(meta2), path(index) // meta2 has same purpose as meta, and holds information about the genome/index
 
     output:
     tuple val(meta), path('*.bam'), emit: bam

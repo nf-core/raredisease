@@ -29,7 +29,8 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
 
         //tiddit
-        CALL_SV_TIDDIT ( bam, fasta, fai, case_info )
+        ch_tiddit_bam = bam.join(bai)
+        CALL_SV_TIDDIT ( ch_tiddit_bam, fasta, fai, case_info )
             .vcf
             .collect{it[1]}
             .set { tiddit_vcf }
