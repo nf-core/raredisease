@@ -1,4 +1,4 @@
-process VCFPARSER {
+process ADD_MOST_SEVERE_CSQ {
     tag "$meta.id"
     label 'process_low'
 
@@ -22,7 +22,7 @@ process VCFPARSER {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    python3 vcfparser.py ${vcf} ${prefix}.vcfparser.vcf ${variant_consequences}
+    python3 add_most_severe_consequence.py ${vcf} ${prefix}.vcfparser.vcf ${variant_consequences}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

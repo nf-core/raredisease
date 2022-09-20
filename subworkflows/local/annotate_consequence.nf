@@ -2,9 +2,9 @@
 // A subworkflow to call SNVs by sentieon dnascope with a machine learning model.
 //
 
-include { VCFPARSER } from '../../modules/local/vcfparser'
+include { ADD_MOST_SEVERE_CSQ } from '../../modules/local/add_most_severe_consequence'
 
-workflow VCFPARSER_CSQ {
+workflow ANNOTATE_CSQ {
 	take:
 		clinical              // channel: [ val(meta), vcf ]
 		research              // channel: [ val(meta), vcf ]

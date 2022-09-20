@@ -74,8 +74,8 @@ include { GENS                         } from '../subworkflows/local/gens'
 include { ALIGN                        } from '../subworkflows/local/align'
 include { CALL_SNV                     } from '../subworkflows/local/call_snv'
 include { ANALYSE_MT                   } from '../subworkflows/local/analyse_MT'
-include { VCFPARSER_CSQ as ANN_CSQ_SNV } from '../subworkflows/local/vcfparser'
-include { VCFPARSER_CSQ as ANN_CSQ_SV  } from '../subworkflows/local/vcfparser'
+include { ANNOTATE_CSQ as ANN_CSQ_SNV  } from '../subworkflows/local/annotate_consequence'
+include { ANNOTATE_CSQ as ANN_CSQ_SV   } from '../subworkflows/local/annotate_consequence'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

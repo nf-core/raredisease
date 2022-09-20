@@ -62,7 +62,10 @@ def construct_most_severe_consequence_info(
     """
 
     columns = line.strip().split()
-    transcripts = columns[7].split("CSQ=")[1].split(",")
+    info_fields = columns[7].split(";")
+    for field in info_fields:
+        if field.startswith("CSQ="):
+            transcripts = field.split("CSQ=")[1].split(",")
     hgnc_ids, alleles, consequences, severity = parse_vep_csq_transcripts(
         transcripts, allele_ind, csq_ind, hgnc_ind, var_csq
     )
