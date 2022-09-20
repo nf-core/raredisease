@@ -15,12 +15,12 @@ workflow ANNOTATE_CSQ {
 
         ch_input = clinical.join(research)
 
-        VCFPARSER (
+        ADD_MOST_SEVERE_CSQ (
             ch_input,
             variant_consequences
         )
 
 	emit:
-		vcf		 = VCFPARSER.out.vcf
+		vcf		 = ADD_MOST_SEVERE_CSQ.out.vcf
         versions = ch_versions.ifEmpty(null)     // channel: [ versions.yml ]
 }
