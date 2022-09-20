@@ -178,6 +178,13 @@
                     "description": "SV rank model config file for genmod.",
                     "hidden": true
                 },
+                "vep_filters": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "File containing HGNC_IDs of interest on separate lines.",
+                    "hidden": true
+                },
                 "target_bed": {
                     "type": "string",
                     "format": "path",

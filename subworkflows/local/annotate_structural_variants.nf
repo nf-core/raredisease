@@ -74,7 +74,8 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             )
         ch_versions = ch_versions.mix(ENSEMBLVEP_SV.out.versions)
 
+
     emit:
-        vcf_ann                = ENSEMBLVEP_SV.out.vcf
-        versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
+        vcf_ann       = ENSEMBLVEP_SV.out.vcf
+        versions      = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }

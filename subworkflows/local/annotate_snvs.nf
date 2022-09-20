@@ -81,6 +81,6 @@ workflow ANNOTATE_SNVS {
         ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions)
 
     emit:
-        vcf_ann                = ENSEMBLVEP_SNV.out.vcf
-        versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
+        vcf_ann       = ENSEMBLVEP_SNV.out.vcf
+        versions      = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }

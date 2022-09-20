@@ -30,12 +30,14 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-ch_ml_model           = params.ml_model           ? file(params.ml_model)           : []
-ch_call_interval      = params.call_interval      ? file(params.call_interval)      : []
-ch_reduced_penetrance = params.reduced_penetrance ? file(params.reduced_penetrance) : []
-ch_score_config_snv   = params.score_config_snv   ? file(params.score_config_snv)   : []
-ch_score_config_sv    = params.score_config_sv    ? file(params.score_config_sv)    : []
-ch_vep_cache          = params.vep_cache          ? file(params.vep_cache)          : []
+ch_ml_model             = params.ml_model            ? file(params.ml_model)           : []
+ch_call_interval        = params.call_interval       ? file(params.call_interval)      : []
+ch_reduced_penetrance   = params.reduced_penetrance  ? file(params.reduced_penetrance) : []
+ch_score_config_snv     = params.score_config_snv    ? file(params.score_config_snv)   : []
+ch_score_config_sv      = params.score_config_sv     ? file(params.score_config_sv)    : []
+ch_variant_consequences = file("$projectDir/assets/variant_consequences_v1.txt", checkIfExists: true)
+ch_vep_cache            = params.vep_cache           ? file(params.vep_cache)          : []
+ch_vep_filters          = params.vep_filters         ? file(params.vep_filters)        : []
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -56,7 +58,9 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 // MODULE: local modules
 //
 
-include { MAKE_PED                    } from '../modules/local/create_pedfile'
+include { MAKE_PED                     } from '../modules/local/create_pedfile'
+include { FILTER_VEP as FILTER_VEP_SNV } from '../modules/local/filter_vep'
+include { FILTER_VEP as FILTER_VEP_SV  } from '../modules/local/filter_vep'
 
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
@@ -70,6 +74,8 @@ include { GENS                         } from '../subworkflows/local/gens'
 include { ALIGN                        } from '../subworkflows/local/align'
 include { CALL_SNV                     } from '../subworkflows/local/call_snv'
 include { ANALYSE_MT                   } from '../subworkflows/local/analyse_MT'
+include { ANNOTATE_CSQ as ANN_CSQ_SNV  } from '../subworkflows/local/annotate_consequence'
+include { ANNOTATE_CSQ as ANN_CSQ_SV   } from '../subworkflows/local/annotate_consequence'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -237,6 +243,17 @@ workflow RAREDISEASE {
             ch_score_config_sv
         )
         ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
+
+        FILTER_VEP_SV(
+            RANK_VARIANTS_SV.out.vcf,
+            ch_vep_filters
+        )
+
+        ANN_CSQ_SV (
+            FILTER_VEP_SV.out.vcf,
+            RANK_VARIANTS_SV.out.vcf,
+            ch_variant_consequences
+        )
     }
 
 
@@ -276,6 +293,17 @@ workflow RAREDISEASE {
             ch_score_config_snv
         )
         ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
+
+        FILTER_VEP_SNV(
+            RANK_VARIANTS_SNV.out.vcf,
+            ch_vep_filters
+        )
+
+        ANN_CSQ_SNV (
+            FILTER_VEP_SNV.out.vcf,
+            RANK_VARIANTS_SNV.out.vcf,
+            ch_variant_consequences
+        )
     }
 
     //
