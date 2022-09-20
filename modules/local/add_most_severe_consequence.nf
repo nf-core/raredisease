@@ -26,7 +26,7 @@ process ADD_MOST_SEVERE_CSQ {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        vcfparser: v1.0
+        add_most_severe_consequence: v1.0
     END_VERSIONS
     """
 
@@ -37,7 +37,7 @@ process ADD_MOST_SEVERE_CSQ {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        vcfparser: v1.0
+        add_most_severe_consequence: v1.0
     END_VERSIONS
     """
 }
