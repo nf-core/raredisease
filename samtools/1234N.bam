@@ -1,0 +1,34 @@
+@HD	VN:1.6	SO:coordinate
+@SQ	SN:chr20	LN:64444167
+@SQ	SN:chrM	LN:16569
+@RG	ID:tiny_n_L004_R1_xxx.fastq.gz	PL:ILLUMINA	SM:1234N
+@RG	ID:tiny_n_L002_R1_xxx.fastq.gz	PL:ILLUMINA	SM:1234N
+@RG	ID:tiny_n_L001_R1_xxx.fastq.gz	PL:ILLUMINA	SM:1234N
+@RG	ID:tiny_n_L008_R1_xxx.fastq.gz	PL:ILLUMINA	SM:1234N
+@RG	ID:tiny_n_L007_R1_xxx.fastq.gz	PL:ILLUMINA	SM:1234N
+@RG	ID:NA12878_mito_1.fq.gz	PL:ILLUMINA	SM:1234N
+@PG	ID:bwa-mem2	PN:bwa-mem2	VN:2.2.1	CL:bwa-mem2 mem -M -K 100000000 -R @RG\tID:tiny_n_L004_R1_xxx.fastq.gz\tPL:ILLUMINA\tSM:1234N -t 2 ./bwamem2/Homo_sapiens_assembly38_chr20_chrM.fasta tiny_n_L004_R1_xxx.fastq.gz tiny_n_L004_R2_xxx.fastq.gz
+@PG	ID:samtools	PN:samtools	PP:bwa-mem2	VN:1.15.1	CL:samtools sort -@ 2 -o 1234N_T2.bam -
+@PG	ID:bwa-mem2-4A161D5E	PN:bwa-mem2	VN:2.2.1	CL:bwa-mem2 mem -M -K 100000000 -R @RG\tID:tiny_n_L002_R1_xxx.fastq.gz\tPL:ILLUMINA\tSM:1234N -t 2 ./bwamem2/Homo_sapiens_assembly38_chr20_chrM.fasta tiny_n_L002_R1_xxx.fastq.gz tiny_n_L002_R2_xxx.fastq.gz
+@PG	ID:samtools-6E3C5EF0	PN:samtools	PP:bwa-mem2-4A161D5E	VN:1.15.1	CL:samtools sort -@ 2 -o 1234N_T3.bam -
+@PG	ID:bwa-mem2-65B18D7A	PN:bwa-mem2	VN:2.2.1	CL:bwa-mem2 mem -M -K 100000000 -R @RG\tID:tiny_n_L001_R1_xxx.fastq.gz\tPL:ILLUMINA\tSM:1234N -t 2 ./bwamem2/Homo_sapiens_assembly38_chr20_chrM.fasta tiny_n_L001_R1_xxx.fastq.gz tiny_n_L001_R2_xxx.fastq.gz
+@PG	ID:samtools-75537841	PN:samtools	PP:bwa-mem2-65B18D7A	VN:1.15.1	CL:samtools sort -@ 2 -o 1234N_T1.bam -
+@PG	ID:bwa-mem2-4EF24FC0	PN:bwa-mem2	VN:2.2.1	CL:bwa-mem2 mem -M -K 100000000 -R @RG\tID:tiny_n_L008_R1_xxx.fastq.gz\tPL:ILLUMINA\tSM:1234N -t 2 ./bwamem2/Homo_sapiens_assembly38_chr20_chrM.fasta tiny_n_L008_R1_xxx.fastq.gz tiny_n_L008_R2_xxx.fastq.gz
+@PG	ID:samtools-636ACA22	PN:samtools	PP:bwa-mem2-4EF24FC0	VN:1.15.1	CL:samtools sort -@ 2 -o 1234N_T5.bam -
+@PG	ID:bwa-mem2-49545DD9	PN:bwa-mem2	VN:2.2.1	CL:bwa-mem2 mem -M -K 100000000 -R @RG\tID:tiny_n_L007_R1_xxx.fastq.gz\tPL:ILLUMINA\tSM:1234N -t 2 ./bwamem2/Homo_sapiens_assembly38_chr20_chrM.fasta tiny_n_L007_R1_xxx.fastq.gz tiny_n_L007_R2_xxx.fastq.gz
+@PG	ID:samtools-600E275E	PN:samtools	PP:bwa-mem2-49545DD9	VN:1.15.1	CL:samtools sort -@ 2 -o 1234N_T4.bam -
+@PG	ID:bwa-mem2-5FDC10AA	PN:bwa-mem2	VN:2.2.1	CL:bwa-mem2 mem -M -K 100000000 -R @RG\tID:NA12878_mito_1.fq.gz\tPL:ILLUMINA\tSM:1234N -t 2 ./bwamem2/Homo_sapiens_assembly38_chr20_chrM.fasta NA12878_mito_1.fq.gz NA12878_mito_2.fq.gz
+@PG	ID:samtools-132A51E4	PN:samtools	PP:bwa-mem2-5FDC10AA	VN:1.15.1	CL:samtools sort -@ 2 -o 1234N_T6.bam -
+@PG	ID:samtools.1	PN:samtools	PP:samtools	VN:1.15.1	CL:samtools merge --threads 1 1234N.bam 1234N_T2.bam 1234N_T3.bam 1234N_T1.bam 1234N_T5.bam 1234N_T4.bam 1234N_T6.bam
+@PG	ID:samtools.2	PN:samtools	PP:samtools-6E3C5EF0	VN:1.15.1	CL:samtools merge --threads 1 1234N.bam 1234N_T2.bam 1234N_T3.bam 1234N_T1.bam 1234N_T5.bam 1234N_T4.bam 1234N_T6.bam
+@PG	ID:samtools.3	PN:samtools	PP:samtools-75537841	VN:1.15.1	CL:samtools merge --threads 1 1234N.bam 1234N_T2.bam 1234N_T3.bam 1234N_T1.bam 1234N_T5.bam 1234N_T4.bam 1234N_T6.bam
+@PG	ID:samtools.4	PN:samtools	PP:samtools-636ACA22	VN:1.15.1	CL:samtools merge --threads 1 1234N.bam 1234N_T2.bam 1234N_T3.bam 1234N_T1.bam 1234N_T5.bam 1234N_T4.bam 1234N_T6.bam
+@PG	ID:samtools.5	PN:samtools	PP:samtools-600E275E	VN:1.15.1	CL:samtools merge --threads 1 1234N.bam 1234N_T2.bam 1234N_T3.bam 1234N_T1.bam 1234N_T5.bam 1234N_T4.bam 1234N_T6.bam
+@PG	ID:samtools.6	PN:samtools	PP:samtools-132A51E4	VN:1.15.1	CL:samtools merge --threads 1 1234N.bam 1234N_T2.bam 1234N_T3.bam 1234N_T1.bam 1234N_T5.bam 1234N_T4.bam 1234N_T6.bam
+@PG	ID:MarkDuplicates	VN:Version:2.27.2	CL:MarkDuplicates --INPUT 1234N.bam --OUTPUT 1234N_sorted_md.bam --METRICS_FILE 1234N_sorted_md.MarkDuplicates.metrics.txt --MAX_SEQUENCES_FOR_DISK_READ_ENDS_MAP 50000 --MAX_FILE_HANDLES_FOR_READ_ENDS_MAP 8000 --SORTING_COLLECTION_SIZE_RATIO 0.25 --TAG_DUPLICATE_SET_MEMBERS false --REMOVE_SEQUENCING_DUPLICATES false --TAGGING_POLICY DontTag --CLEAR_DT true --DUPLEX_UMI false --ADD_PG_TAG_TO_READS true --REMOVE_DUPLICATES false --ASSUME_SORTED false --DUPLICATE_SCORING_STRATEGY SUM_OF_BASE_QUALITIES --PROGRAM_RECORD_ID MarkDuplicates --PROGRAM_GROUP_NAME MarkDuplicates --READ_NAME_REGEX <optimized capture of last three ':' separated fields as numeric values> --OPTICAL_DUPLICATE_PIXEL_DISTANCE 100 --MAX_OPTICAL_DUPLICATE_SET_SIZE 300000 --VERBOSITY INFO --QUIET false --VALIDATION_STRINGENCY STRICT --COMPRESSION_LEVEL 5 --MAX_RECORDS_IN_RAM 500000 --CREATE_INDEX false --CREATE_MD5_FILE false --GA4GH_CLIENT_SECRETS client_secrets.json --help false --version false --showHidden false --USE_JDK_DEFLATER false --USE_JDK_INFLATER false	PN:MarkDuplicates
+@PG	ID:samtools.7	PN:samtools	PP:samtools.1	VN:1.15.1	CL:samtools view --threads 1 -h 1234N_sorted_md.bam MT
+@PG	ID:samtools.8	PN:samtools	PP:samtools.2	VN:1.15.1	CL:samtools view --threads 1 -h 1234N_sorted_md.bam MT
+@PG	ID:samtools.9	PN:samtools	PP:samtools.3	VN:1.15.1	CL:samtools view --threads 1 -h 1234N_sorted_md.bam MT
+@PG	ID:samtools.10	PN:samtools	PP:samtools.4	VN:1.15.1	CL:samtools view --threads 1 -h 1234N_sorted_md.bam MT
+@PG	ID:samtools.11	PN:samtools	PP:samtools.5	VN:1.15.1	CL:samtools view --threads 1 -h 1234N_sorted_md.bam MT
+@PG	ID:samtools.12	PN:samtools	PP:samtools.6	VN:1.15.1	CL:samtools view --threads 1 -h 1234N_sorted_md.bam MT

@@ -259,13 +259,20 @@ workflow RAREDISEASE {
 
     // STEP 2.1: ANALYSE MT
     ch_intervals_mt = Channel.fromPath(params.intervals_mt)
+    ch_intervals_mt_shift= Channel.fromPath(params.intervals_mt_shift)
     ANALYSE_MT (
         ch_mapped.bam_bai,
         ch_references.aligner_index,
         ch_references.genome_fasta,
         ch_references.sequence_dict,
         ch_references.genome_fai,
-        ch_intervals_mt
+        ch_intervals_mt,
+        ch_references.aligner_index,
+        ch_references.genome_fasta,
+        ch_references.sequence_dict,
+        ch_references.genome_fai,
+        ch_intervals_mt_shift
+
     )
     ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
 
