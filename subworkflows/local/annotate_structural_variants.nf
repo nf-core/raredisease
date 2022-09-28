@@ -6,7 +6,7 @@ include { SVDB_QUERY                    } from '../../modules/nf-core/modules/sv
 include { PICARD_SORTVCF                } from '../../modules/nf-core/modules/picard/sortvcf/main'
 include { BCFTOOLS_VIEW                 } from '../../modules/nf-core/modules/bcftools/view/main'
 include { TABIX_TABIX as TABIX_SV_ANNO  } from '../../modules/nf-core/modules/tabix/tabix/main'
-include { ENSEMBLVEP as ENSEMBLVEP_SV   } from '../../modules/local/ensemblvep/main'
+include { ENSEMBLVEP as ENSEMBLVEP_SV   } from '../../modules/nf-core/modules/ensemblvep/main'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
@@ -61,16 +61,13 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         TABIX_SV_ANNO (BCFTOOLS_VIEW.out.vcf)
         ch_versions = ch_versions.mix(TABIX_SV_ANNO.out.versions)
 
-        BCFTOOLS_VIEW.out
-            .vcf
-            .join(TABIX_SV_ANNO.out.tbi)
-            .set { ch_vep_in }
-
-        ENSEMBLVEP_SV(ch_vep_in,
+        ENSEMBLVEP_SV(BCFTOOLS_VIEW.out.vcf,
             vep_genome,
             "homo_sapiens",
             vep_cache_version,
-            vep_cache
+            vep_cache,
+            fasta,
+            []
             )
         ch_versions = ch_versions.mix(ENSEMBLVEP_SV.out.versions)
 

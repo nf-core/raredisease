@@ -5,7 +5,7 @@
 include { VCFANNO                        } from '../../modules/nf-core/modules/vcfanno/main'
 include { BCFTOOLS_ROH                   } from '../../modules/nf-core/modules/bcftools/roh/main'
 include { RHOCALL_ANNOTATE               } from '../../modules/nf-core/modules/rhocall/annotate/main'
-include { ENSEMBLVEP as ENSEMBLVEP_SNV   } from '../../modules/local/ensemblvep/main'
+include { ENSEMBLVEP as ENSEMBLVEP_SNV   } from '../../modules/nf-core/modules/ensemblvep/main'
 include { TABIX_TABIX as TABIX_SNV_ANNO  } from '../../modules/nf-core/modules/tabix/tabix/main'
 
 
@@ -67,16 +67,13 @@ workflow ANNOTATE_SNVS {
         TABIX_SNV_ANNO (RHOCALL_ANNOTATE.out.vcf)
         ch_versions = ch_versions.mix(TABIX_SNV_ANNO.out.versions)
 
-        RHOCALL_ANNOTATE.out
-            .vcf
-            .join(TABIX_SNV_ANNO.out.tbi)
-            .set { ch_vep_in }
-
-        ENSEMBLVEP_SNV(ch_vep_in,
+        ENSEMBLVEP_SNV(RHOCALL_ANNOTATE.out.vcf,
             vep_genome,
             "homo_sapiens",
             vep_cache_version,
-            vep_cache
+            vep_cache,
+            fasta,
+            []
             )
         ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions)
 
