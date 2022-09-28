@@ -59,7 +59,7 @@
                 },
                 "ensemblvep": {
                     "branch": "master",
-                    "git_sha": "973151e9eab9bac400aa99f099075a10cdd8e84c"
+                    "git_sha": "3d7ce9363079da9a79def248218dcc56efcd5410"
                 },
                 "expansionhunter": {
                     "branch": "master",
