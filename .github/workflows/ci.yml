@@ -21,7 +21,7 @@ jobs:
       matrix:
         NXF_VER:
           - "21.10.3"
-          - "latest-everything"
+          - "latest-stable"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v2
