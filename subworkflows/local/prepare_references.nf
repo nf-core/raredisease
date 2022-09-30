@@ -5,6 +5,7 @@
 include { CHECK_BED                      } from './prepare_bed'
 include { CHECK_VCF                      } from './prepare_vcf'
 include { PREPARE_GENOME                 } from './prepare_genome'
+include { PREPARE_INTERVAL               } from './prepare_interval_files'
 include { TABIX_TABIX as TABIX_DBSNP     } from '../../modules/nf-core/modules/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_GNOMAD_AF } from '../../modules/nf-core/modules/tabix/tabix/main'
 
@@ -12,6 +13,8 @@ include { TABIX_TABIX as TABIX_GNOMAD_AF } from '../../modules/nf-core/modules/t
 workflow PREPARE_REFERENCES {
     take:
         aligner             // [mandatory] params.aligner
+        bed_wg              // [optional]  if aligner is bwamem2
+        bed_y               // [optional]  if aligner is bwamem2
         bwamem2_index       // [mandatory] bwamem2_index
         fasta               // [mandatory] genome.fasta
         fai                 // [mandatory] genome.fai
@@ -22,7 +25,7 @@ workflow PREPARE_REFERENCES {
         known_dbsnp_tbi
         sentieonbwa_index
         target_bed
-        variant_catalog     // [optional] variant_catalog.json
+        variant_catalog     // [optional]  variant_catalog.json
         vcfanno_resources   // [mandatory] vcfanno resource file
 
     main:
@@ -93,6 +96,22 @@ workflow PREPARE_REFERENCES {
             ch_versions         = ch_versions.mix(CHECK_BED.out.versions)
         }
 
+        // Prepare interval list files for Picard's CollectWgsMetrics
+        ch_interval_wg = Channel.empty()
+        ch_interval_y  = Channel.empty()
+        ch_bed_wg_gz   = Channel.empty()
+        ch_bed_y_gz    = Channel.empty()
+        PREPARE_INTERVAL(
+            aligner,
+            bed_wg,
+            bed_y,
+            ch_genome.sequence_dict
+        )
+        ch_interval_wg = PREPARE_INTERVAL.out.intervals_wg
+        ch_interval_y  = PREPARE_INTERVAL.out.intervals_y
+        ch_bed_wg_gz   = PREPARE_INTERVAL.out.bed_wg_gz
+        ch_bed_y_gz    = PREPARE_INTERVAL.out.bed_y_gz
+
     emit:
         aligner_index     = ch_genome.aligner_index
         chrom_sizes       = ch_genome.chrom_sizes
@@ -109,6 +128,10 @@ workflow PREPARE_REFERENCES {
         target_bed        = ch_target_bed
         target_intervals  = ch_target_intervals
         bait_intervals    = ch_bait_intervals
+        interval_wg       = ch_interval_wg
+        interval_y        = ch_interval_y
+        bed_wg_gz         = ch_bed_wg_gz
+        bed_y_gz          = ch_bed_y_gz
         versions          = ch_versions
 }
 
