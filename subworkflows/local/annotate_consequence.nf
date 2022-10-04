@@ -2,7 +2,8 @@
 // A subworkflow to call SNVs by sentieon dnascope with a machine learning model.
 //
 
-include { ADD_MOST_SEVERE_CSQ } from '../../modules/local/add_most_severe_consequence'
+include { ADD_MOST_SEVERE_CSQ as ADD_MOST_SEVERE_CSQ_CLIN } from '../../modules/local/add_most_severe_consequence'
+include { ADD_MOST_SEVERE_CSQ as ADD_MOST_SEVERE_CSQ_RES  } from '../../modules/local/add_most_severe_consequence'
 
 workflow ANNOTATE_CSQ {
 	take:
@@ -13,14 +14,17 @@ workflow ANNOTATE_CSQ {
 	main:
 		ch_versions = Channel.empty()
 
-        ch_input = clinical.join(research)
-
-        ADD_MOST_SEVERE_CSQ (
-            ch_input,
+        ADD_MOST_SEVERE_CSQ_CLIN (
+            clinical,
+            variant_consequences
+        )
+        ADD_MOST_SEVERE_CSQ_RES (
+            research,
             variant_consequences
         )
 
 	emit:
-		vcf		 = ADD_MOST_SEVERE_CSQ.out.vcf
-        versions = ch_versions.ifEmpty(null)     // channel: [ versions.yml ]
+		clinical_vcf  = ADD_MOST_SEVERE_CSQ_CLIN.out.vcf
+		research_vcf  = ADD_MOST_SEVERE_CSQ_RES.out.vcf
+        versions      = ch_versions.ifEmpty(null)     // channel: [ versions.yml ]
 }
