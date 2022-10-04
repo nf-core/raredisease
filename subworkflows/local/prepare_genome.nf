@@ -29,7 +29,7 @@ workflow PREPARE_GENOME {
             ch_aligner_index  = !bwamem2_index ? BWAMEM2_INDEX.out.index : [[],file(bwamem2_index)]
             ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
         } else if (aligner == "sentieon") {
-            SENTIEON_BWAINDEX ( ch_fasta )
+            SENTIEON_BWAINDEX ( [[], ch_fasta] )
             ch_aligner_index = !sentieon_index ? SENTIEON_BWAINDEX.out.index : [[],file(sentieon_index)]
             ch_versions = ch_versions.mix(SENTIEON_BWAINDEX.out.versions)
         } else {
