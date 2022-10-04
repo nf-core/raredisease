@@ -11,13 +11,15 @@ include { SAMTOOLS_SORT as SAMTOOLS_SORT_MT                                 } fr
 include { HAPLOCHECK as HAPLOCHECK_MT                                       } from '../../modules/nf-core/modules/haplocheck/main'
 include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } from '../../modules/nf-core/modules/gatk4/mutect2/main'
 
+
+
 workflow ALIGN_AND_CALL_MT {
     take:
         fastq         // channel: [ val(meta), path('*.fastq.gz') ]
         ubam          // channel: [ val(meta), path('*.bam') ]
         index         // channel: [ /path/to/bwamem2/index/ ]
         fasta         // channel: [ genome.fasta ]
-        dict          // channel: [ genome.dict ]
+        sequence_dict          // channel: [ genome.dict ]
         fai           // channel: [ genome.fai ]
         intervals_mt  // channel: [ file(non_control_region.chrM.interval_list) ]
 
@@ -31,15 +33,16 @@ workflow ALIGN_AND_CALL_MT {
         ch_fastq_ubam  = ch_mt_bam.join(ubam, by: [0])
 
         // Merges bam files
-        GATK4_MERGEBAMALIGNMENT_MT ( ch_fastq_ubam, fasta, dict )
+        GATK4_MERGEBAMALIGNMENT_MT (ch_fastq_ubam, fasta, sequence_dict )
         ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions.first())
 
+       
         // Add read group to merged bam file
         PICARD_ADDORREPLACEREADGROUPS_MT ( GATK4_MERGEBAMALIGNMENT_MT.out.bam )
         ch_versions = ch_versions.mix(PICARD_ADDORREPLACEREADGROUPS_MT.out.versions.first())
 
         // Marks duplicates
-        PICARD_MARKDUPLICATES_MT ( PICARD_ADDORREPLACEREADGROUPS_MT.out.bam )
+        PICARD_MARKDUPLICATES_MT (PICARD_ADDORREPLACEREADGROUPS_MT.out.bam )
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
 
         // Sort bam file
@@ -53,7 +56,7 @@ workflow ALIGN_AND_CALL_MT {
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MT.out.versions.first())
 
         // Calls variants with Mutect2
-        GATK4_MUTECT2_MT ( ch_sort_index_bam_intervals_mt, fasta, fai, dict, [], [], [], [] )
+        GATK4_MUTECT2_MT (ch_sort_index_bam_intervals_mt, fasta, fai, sequence_dict, [], [], [],[])
         ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions.first())
 
         // Haplocheck
