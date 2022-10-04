@@ -73,7 +73,7 @@ include { PREPARE_REFERENCES           } from '../subworkflows/local/prepare_ref
 
 include { ANNOTATE_SNVS                } from '../subworkflows/local/annotate_snvs'
 include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_structural_variants'
-//include { GENS                         } from '../subworkflows/local/gens'
+include { GENS                         } from '../subworkflows/local/gens'
 include { ALIGN                        } from '../subworkflows/local/align'
 include { CALL_SNV                     } from '../subworkflows/local/call_snv'
 include { ANALYSE_MT                   } from '../subworkflows/local/analyse_MT'
@@ -100,10 +100,10 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 //
 
 include { CALL_REPEAT_EXPANSIONS             } from '../subworkflows/nf-core/call_repeat_expansions'
-//include { QC_BAM                             } from '../subworkflows/nf-core/qc_bam'
-//include { CALL_STRUCTURAL_VARIANTS           } from '../subworkflows/nf-core/call_structural_variants'
+include { QC_BAM                             } from '../subworkflows/nf-core/qc_bam'
+include { CALL_STRUCTURAL_VARIANTS           } from '../subworkflows/nf-core/call_structural_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SNV } from '../subworkflows/nf-core/genmod'
-//include { RANK_VARIANTS as RANK_VARIANTS_SV  } from '../subworkflows/nf-core/genmod'
+include { RANK_VARIANTS as RANK_VARIANTS_SV  } from '../subworkflows/nf-core/genmod'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -165,7 +165,7 @@ workflow RAREDISEASE {
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
-    /*
+    
     // STEP 1.5: BAM QUALITY CHECK
     QC_BAM (
         ch_mapped.marked_bam,
@@ -200,7 +200,7 @@ workflow RAREDISEASE {
         CHECK_INPUT.out.case_info
     )
     ch_versions = ch_versions.mix(CALL_SNV.out.versions)
-    /*
+    
     CALL_STRUCTURAL_VARIANTS (
         ch_mapped.marked_bam,
         ch_mapped.marked_bai,
@@ -259,7 +259,7 @@ workflow RAREDISEASE {
             ch_variant_consequences
         )
     }
-    */
+    
     
      // STEP 2.1: ANALYSE MT
     ch_intervals_mt = Channel.fromPath(params.intervals_mt)
@@ -278,7 +278,7 @@ workflow RAREDISEASE {
 
     )
     ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
-    /*
+    
     // STEP 3: VARIANT ANNOTATION
     ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
 
@@ -315,7 +315,7 @@ workflow RAREDISEASE {
             ch_variant_consequences
         )
     }
-    */
+    
     //
     // MODULE: Pipeline reporting
     //
