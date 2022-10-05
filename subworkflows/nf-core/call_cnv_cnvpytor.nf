@@ -2,11 +2,11 @@
 // CNVpytor workflow - Calling CNVs
 //
 
-include { CNVPYTOR_IMPORTREADDEPTH as GENERATE_PYTOR } from '../../modules/nf-core/modules/cnvpytor/importreaddepth/main'
-include { CNVPYTOR_HISTOGRAM as HISTOGRAMS           } from '../../modules/nf-core/modules/cnvpytor/histogram/main'
-include { CNVPYTOR_PARTITION as PARTITIONS           } from '../../modules/nf-core/modules/cnvpytor/partition/main'
-include { CNVPYTOR_CALLCNVS as CALL_CNVS             } from '../../modules/nf-core/modules/cnvpytor/callcnvs/main'
-include { CNVPYTOR_VIEW as VIEW                      } from '../../modules/nf-core/modules/cnvpytor/view/main'
+include { CNVPYTOR_IMPORTREADDEPTH as GENERATE_PYTOR } from '../../modules/nf-core/cnvpytor/importreaddepth/main'
+include { CNVPYTOR_HISTOGRAM as HISTOGRAMS           } from '../../modules/nf-core/cnvpytor/histogram/main'
+include { CNVPYTOR_PARTITION as PARTITIONS           } from '../../modules/nf-core/cnvpytor/partition/main'
+include { CNVPYTOR_CALLCNVS as CALL_CNVS             } from '../../modules/nf-core/cnvpytor/callcnvs/main'
+include { CNVPYTOR_VIEW as VIEW                      } from '../../modules/nf-core/cnvpytor/view/main'
 
 workflow CALL_CNV_CNVPYTOR {
     take:

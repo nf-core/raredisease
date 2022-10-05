@@ -2,11 +2,11 @@
 // Prepare reference bed files
 //
 
-include { GATK4_BEDTOINTERVALLIST as GATK_BILT } from '../../modules/nf-core/modules/gatk4/bedtointervallist/main'
-include { GATK4_INTERVALLISTTOOLS as GATK_ILT  } from '../../modules/nf-core/modules/gatk4/intervallisttools/main'
-include { CAT_CAT as CAT_CAT_BAIT              } from '../../modules/nf-core/modules/cat/cat/main'
-include { TABIX_TABIX as TABIX_PT              } from '../../modules/nf-core/modules/tabix/tabix/main'
-include { TABIX_BGZIPTABIX as TABIX_PBT        } from '../../modules/nf-core/modules/tabix/bgziptabix/main'
+include { GATK4_BEDTOINTERVALLIST as GATK_BILT } from '../../modules/nf-core/gatk4/bedtointervallist/main'
+include { GATK4_INTERVALLISTTOOLS as GATK_ILT  } from '../../modules/nf-core/gatk4/intervallisttools/main'
+include { CAT_CAT as CAT_CAT_BAIT              } from '../../modules/nf-core/cat/cat/main'
+include { TABIX_TABIX as TABIX_PT              } from '../../modules/nf-core/tabix/tabix/main'
+include { TABIX_BGZIPTABIX as TABIX_PBT        } from '../../modules/nf-core/tabix/bgziptabix/main'
 
 workflow CHECK_BED {
     take:

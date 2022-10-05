@@ -2,8 +2,8 @@
 // Run ExpansionHunter and Stranger
 //
 
-include { EXPANSIONHUNTER } from '../../modules/nf-core/modules/expansionhunter/main'
-include { STRANGER } from '../../modules/nf-core/modules/stranger/main'
+include { EXPANSIONHUNTER } from '../../modules/nf-core/expansionhunter/main'
+include { STRANGER } from '../../modules/nf-core/stranger/main'
 
 workflow CALL_REPEAT_EXPANSIONS {
     take:

@@ -5,8 +5,8 @@
 include { CHECK_BED                      } from './prepare_bed'
 include { CHECK_VCF                      } from './prepare_vcf'
 include { PREPARE_GENOME                 } from './prepare_genome'
-include { TABIX_TABIX as TABIX_DBSNP     } from '../../modules/nf-core/modules/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_GNOMAD_AF } from '../../modules/nf-core/modules/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_DBSNP     } from '../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_GNOMAD_AF } from '../../modules/nf-core/tabix/tabix/main'
 
 
 workflow PREPARE_REFERENCES {

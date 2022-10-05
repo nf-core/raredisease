@@ -2,10 +2,10 @@
 // Prepare reference genome files
 //
 
-include { UNTAR as UNTAR_VCFANNO                    } from '../../modules/nf-core/modules/untar/main'
-include { BWAMEM2_INDEX                             } from '../../modules/nf-core/modules/bwamem2/index/main'
-include { SAMTOOLS_FAIDX                            } from '../../modules/nf-core/modules/samtools/faidx/main'
-include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD } from '../../modules/nf-core/modules/gatk4/createsequencedictionary/main'
+include { UNTAR as UNTAR_VCFANNO                    } from '../../modules/nf-core/untar/main'
+include { BWAMEM2_INDEX                             } from '../../modules/nf-core/bwamem2/index/main'
+include { SAMTOOLS_FAIDX                            } from '../../modules/nf-core/samtools/faidx/main'
+include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD } from '../../modules/nf-core/gatk4/createsequencedictionary/main'
 include { GET_CHROM_SIZES                           } from '../../modules/local/get_chrom_sizes'
 include { SENTIEON_BWAINDEX                         } from '../../modules/local/sentieon/bwamemindex'
 
