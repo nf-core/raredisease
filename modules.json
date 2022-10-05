@@ -133,6 +133,10 @@
                     "branch": "master",
                     "git_sha": "4b1d4bf401d4cf65ebc4f604bc8c8e7551109db3"
                 },
+                "nf-core/picard/liftovervcf": {
+                    "branch": "master",
+                    "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                },
                 "picard/addorreplacereadgroups": {
                     "branch": "master",
                     "git_sha": "67652c7c4dda138c9e71f093b1aea91f29f87c50"
