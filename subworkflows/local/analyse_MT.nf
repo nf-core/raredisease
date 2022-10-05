@@ -25,7 +25,6 @@ workflow ANALYSE_MT {
 
         // STEP 1: PREPARING MT ALIGNMENT
         PREPARE_MT_ALIGNMENT ( bam )
-        
         ch_versions = ch_versions.mix(PREPARE_MT_ALIGNMENT.out.versions)// Outputs bam files
 
     
