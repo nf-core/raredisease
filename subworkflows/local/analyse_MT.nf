@@ -39,7 +39,6 @@ workflow ANALYSE_MT {
             dict,
             fai,
             ch_intervals_mt
-
             )
         ch_versions = ch_versions.mix(ALIGN_AND_CALL_MT.out.versions)
 
