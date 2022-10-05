@@ -70,7 +70,6 @@ include { FILTER_VEP as FILTER_VEP_SV  } from '../modules/local/filter_vep'
 
 include { CHECK_INPUT                  } from '../subworkflows/local/check_input'
 include { PREPARE_REFERENCES           } from '../subworkflows/local/prepare_references'
-
 include { ANNOTATE_SNVS                } from '../subworkflows/local/annotate_snvs'
 include { ANNOTATE_STRUCTURAL_VARIANTS } from '../subworkflows/local/annotate_structural_variants'
 include { GENS                         } from '../subworkflows/local/gens'
@@ -92,7 +91,6 @@ include { ANNOTATE_CSQ as ANN_CSQ_SV   } from '../subworkflows/local/annotate_co
 
 include { FASTQC                      } from '../modules/nf-core/modules/fastqc/main'
 include { MULTIQC                     } from '../modules/nf-core/modules/multiqc/main'
-
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
 
 //
@@ -276,8 +274,6 @@ workflow RAREDISEASE {
         params.fasta_shift,
         params.intervals_mt_shift,
         params.shift_chain
-        
-
     )
     ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
     
