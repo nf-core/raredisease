@@ -41,7 +41,7 @@ workflow ANALYSE_MT {
 
         // STEP 2.2: MT ALLIGNMENT SHIFT AND VARIANT CALLING
         ch_intervals_mt_shift = Channel.fromPath(params.intervals_mt_shift)
-        PREPARE_GENOME_MT(aligner,[],[],fasta_shift ,[],[],[]).set { ch_genome }
+        PREPARE_GENOME_MT("bwamem2",[],[],fasta_shift ,[],[],[]).set { ch_genome }
         ch_versions = ch_versions.mix(ch_genome.versions)
         ch_dict_shift = ch_genome.sequence_dict
         ch_fai_shift = ch_genome.fai
