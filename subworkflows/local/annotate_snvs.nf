@@ -2,11 +2,11 @@
 // A subworkflow to annotate snvs
 //
 
-include { VCFANNO                        } from '../../modules/nf-core/modules/vcfanno/main'
-include { BCFTOOLS_ROH                   } from '../../modules/nf-core/modules/bcftools/roh/main'
-include { RHOCALL_ANNOTATE               } from '../../modules/nf-core/modules/rhocall/annotate/main'
-include { ENSEMBLVEP as ENSEMBLVEP_SNV   } from '../../modules/nf-core/modules/ensemblvep/main'
-include { TABIX_TABIX as TABIX_SNV_ANNO  } from '../../modules/nf-core/modules/tabix/tabix/main'
+include { VCFANNO                        } from '../../modules/nf-core/vcfanno/main'
+include { BCFTOOLS_ROH                   } from '../../modules/nf-core/bcftools/roh/main'
+include { RHOCALL_ANNOTATE               } from '../../modules/nf-core/rhocall/annotate/main'
+include { ENSEMBLVEP as ENSEMBLVEP_SNV   } from '../../modules/nf-core/ensemblvep/main'
+include { TABIX_TABIX as TABIX_SNV_ANNO  } from '../../modules/nf-core/tabix/tabix/main'
 
 
 workflow ANNOTATE_SNVS {
