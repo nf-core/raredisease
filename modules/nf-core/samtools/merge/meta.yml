@@ -1,7 +1,7 @@
-name: samtools_view
-description: filter/convert SAM/BAM/CRAM file
+name: samtools_merge
+description: Merge BAM or CRAM file
 keywords:
-  - view
+  - merge
   - bam
   - sam
   - cram
@@ -21,18 +21,18 @@ input:
       description: |
         Groovy Map containing sample information
         e.g. [ id:'test', single_end:false ]
-  - input:
+  - input_files:
       type: file
-      description: BAM/CRAM/SAM file
+      description: BAM/CRAM file
       pattern: "*.{bam,cram,sam}"
-  - index:
-      type: optional file
-      description: BAM.BAI/CRAM.CRAI file
-      pattern: "*.{.bai,.crai}"
   - fasta:
       type: optional file
       description: Reference file the CRAM was created with
       pattern: "*.{fasta,fa}"
+  - fai:
+      type: optional file
+      description: Index of the reference file the CRAM was created with
+      pattern: "*.fai"
 output:
   - meta:
       type: map
@@ -41,17 +41,22 @@ output:
         e.g. [ id:'test', single_end:false ]
   - bam:
       type: file
-      description: filtered/converted BAM/SAM file
-      pattern: "*.{bam,sam}"
+      description: BAM file
+      pattern: "*.{bam}"
   - cram:
       type: file
-      description: filtered/converted CRAM file
-      pattern: "*.cram"
+      description: CRAM file
+      pattern: "*.{cram}"
   - versions:
       type: file
       description: File containing software versions
       pattern: "versions.yml"
+  - csi:
+      type: file
+      description: BAM index file (optional)
+      pattern: "*.csi"
 authors:
   - "@drpatelh"
-  - "@joseespinosa"
+  - "@yuukiiwa "
+  - "@maxulysse"
   - "@FriederikeHanssen"

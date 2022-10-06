@@ -2,11 +2,11 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SVDB_QUERY                    } from '../../modules/nf-core/modules/svdb/query/main'
-include { PICARD_SORTVCF                } from '../../modules/nf-core/modules/picard/sortvcf/main'
-include { BCFTOOLS_VIEW                 } from '../../modules/nf-core/modules/bcftools/view/main'
-include { TABIX_TABIX as TABIX_SV_ANNO  } from '../../modules/nf-core/modules/tabix/tabix/main'
-include { ENSEMBLVEP as ENSEMBLVEP_SV   } from '../../modules/nf-core/modules/ensemblvep/main'
+include { SVDB_QUERY                    } from '../../modules/nf-core/svdb/query/main'
+include { PICARD_SORTVCF                } from '../../modules/nf-core/picard/sortvcf/main'
+include { BCFTOOLS_VIEW                 } from '../../modules/nf-core/bcftools/view/main'
+include { TABIX_TABIX as TABIX_SV_ANNO  } from '../../modules/nf-core/tabix/tabix/main'
+include { ENSEMBLVEP as ENSEMBLVEP_SV   } from '../../modules/nf-core/ensemblvep/main'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 

@@ -2,12 +2,12 @@
 // A quality check subworkflow for processed bams.
 //
 
-include { PICARD_COLLECTMULTIPLEMETRICS } from '../../modules/nf-core/modules/picard/collectmultiplemetrics/main'
-include { PICARD_COLLECTHSMETRICS       } from '../../modules/nf-core/modules/picard/collecthsmetrics/main'
-include { QUALIMAP_BAMQC                } from '../../modules/nf-core/modules/qualimap/bamqc/main'
-include { TIDDIT_COV                    } from '../../modules/nf-core/modules/tiddit/cov/main'
-include { MOSDEPTH                      } from '../../modules/nf-core/modules/mosdepth/main'
-include { UCSC_WIGTOBIGWIG              } from '../../modules/nf-core/modules/ucsc/wigtobigwig/main'
+include { PICARD_COLLECTMULTIPLEMETRICS } from '../../modules/nf-core/picard/collectmultiplemetrics/main'
+include { PICARD_COLLECTHSMETRICS       } from '../../modules/nf-core/picard/collecthsmetrics/main'
+include { QUALIMAP_BAMQC                } from '../../modules/nf-core/qualimap/bamqc/main'
+include { TIDDIT_COV                    } from '../../modules/nf-core/tiddit/cov/main'
+include { MOSDEPTH                      } from '../../modules/nf-core/mosdepth/main'
+include { UCSC_WIGTOBIGWIG              } from '../../modules/nf-core/ucsc/wigtobigwig/main'
 
 workflow QC_BAM {
 

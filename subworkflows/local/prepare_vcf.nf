@@ -2,9 +2,9 @@
 // Prepare reference vcf files
 //
 
-include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_PV } from '../../modules/nf-core/modules/bcftools/norm/main'
-include { BCFTOOLS_NORM as REMOVE_DUPLICATES_PV   } from '../../modules/nf-core/modules/bcftools/norm/main'
-include { TABIX_TABIX as TABIX_PV                 } from '../../modules/nf-core/modules/tabix/tabix/main'
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_PV } from '../../modules/nf-core/bcftools/norm/main'
+include { BCFTOOLS_NORM as REMOVE_DUPLICATES_PV   } from '../../modules/nf-core/bcftools/norm/main'
+include { TABIX_TABIX as TABIX_PV                 } from '../../modules/nf-core/tabix/tabix/main'
 include { CHECK_INPUT_VCF                         } from '../../modules/local/check_input_vcf'
 
 workflow CHECK_VCF {
