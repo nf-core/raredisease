@@ -12,6 +12,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
     take:
         bam           // channel: [ val(meta), path(bam) ]
         bai           // channel: [ val(meta), path(bai) ]
+        bwa_index     // channel: [ val(meta), path(bwa_index)]
         fasta         // channel: [ path(genome.fasta) ]
         fai           // channel: [ path(genome.fai) ]
         case_info     // channel: [ val(case_info) ]
@@ -30,7 +31,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
         //tiddit
         ch_tiddit_bam = bam.join(bai)
-        CALL_SV_TIDDIT ( ch_tiddit_bam, fasta, fai, case_info )
+        CALL_SV_TIDDIT ( ch_tiddit_bam, fasta, bwa_index, case_info )
             .vcf
             .collect{it[1]}
             .set { tiddit_vcf }

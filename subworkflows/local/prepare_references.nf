@@ -12,6 +12,7 @@ include { TABIX_TABIX as TABIX_GNOMAD_AF } from '../../modules/nf-core/tabix/tab
 workflow PREPARE_REFERENCES {
     take:
         aligner             // [mandatory] params.aligner
+        bwa_index
         bwamem2_index       // [mandatory] bwamem2_index
         fasta               // [mandatory] genome.fasta
         fai                 // [mandatory] genome.fai
@@ -20,7 +21,6 @@ workflow PREPARE_REFERENCES {
         gnomad_af_tbi
         known_dbsnp
         known_dbsnp_tbi
-        sentieonbwa_index
         target_bed
         variant_catalog     // [optional] variant_catalog.json
         vcfanno_resources   // [mandatory] vcfanno resource file
@@ -30,8 +30,8 @@ workflow PREPARE_REFERENCES {
         ch_versions = Channel.empty()
         PREPARE_GENOME (
             aligner,
+            bwa_index,
             bwamem2_index,
-            sentieonbwa_index,
             fasta,
             fai,
             variant_catalog,
@@ -94,7 +94,8 @@ workflow PREPARE_REFERENCES {
         }
 
     emit:
-        aligner_index     = ch_genome.aligner_index
+        bwa_index         = ch_genome.bwa_index
+        bwamem2_index     = ch_genome.bwamem2_index
         chrom_sizes       = ch_genome.chrom_sizes
         genome_fasta      = ch_genome.fasta
         genome_fai        = ch_genome.fai

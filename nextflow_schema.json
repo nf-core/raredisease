@@ -86,6 +86,14 @@
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
                 },
+                "bwa_index": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Directory for pre-built bwa index.",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
+                },
                 "bwamem2_index": {
                     "type": "string",
                     "format": "directory-path",
@@ -191,15 +199,6 @@
                     "fa_icon": "fas fa-bezier-curve",
                     "description": "Path to directory for target bed file.",
                     "help_text": "If you would like to limit your analysis to specific regions of the genome, you can pass those regions in a bed file using this option",
-                    "hidden": true
-                },
-                "sentieonbwa_index": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "default": null,
-                    "description": "Directory for pre-built sentieon index.",
-                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
-                    "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
                 "svdb_query_dbs": {
