@@ -5,7 +5,7 @@ include { PREPARE_MT_ALIGNMENT                           } from './prepare_MT_al
 include { ALIGN_AND_CALL_MT                              } from './align_and_call_MT'
 include { ALIGN_AND_CALL_MT as ALIGN_AND_CALL_MT_SHIFT   } from './align_and_call_MT'
 include { PREPARE_GENOME as PREPARE_GENOME_MT            } from './prepare_genome'
-include { PICARD_LIFTOVERVCF                             } from '../../modules/nf-core/modules/picard/liftovervcf/main'
+include { PICARD_LIFTOVERVCF                             } from '../../modules/nf-core/picard/liftovervcf/main'
 
 workflow ANALYSE_MT {
     take:
@@ -46,7 +46,6 @@ workflow ANALYSE_MT {
         ch_dict_shift = ch_genome.sequence_dict
         ch_fai_shift = ch_genome.fai
         ch_index_shift =ch_genome.aligner_index
-
 
         ALIGN_AND_CALL_MT_SHIFT (
             PREPARE_MT_ALIGNMENT.out.fastq,
