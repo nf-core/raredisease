@@ -259,8 +259,8 @@ workflow RAREDISEASE {
             ch_variant_consequences
         )
     }
-    
-    
+
+
      // STEP 2.1: ANALYSE MT
     ch_intervals_mt = Channel.fromPath(params.intervals_mt)
     ch_fasta_shift=Channel.fromPath(params.fasta_shift)
