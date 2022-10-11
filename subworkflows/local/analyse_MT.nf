@@ -6,6 +6,7 @@ include { ALIGN_AND_CALL_MT                              } from './align_and_cal
 include { ALIGN_AND_CALL_MT as ALIGN_AND_CALL_MT_SHIFT   } from './align_and_call_MT'
 include { PREPARE_GENOME as PREPARE_GENOME_MT            } from './prepare_genome'
 include { PICARD_LIFTOVERVCF                             } from '../../modules/nf-core/picard/liftovervcf/main'
+include { MERGE_ANNOTATE_MT    } from './merge_annotate_MT'
 
 workflow ANALYSE_MT {
     take:
@@ -18,6 +19,10 @@ workflow ANALYSE_MT {
         fasta_shift         // channel: [ genome.fasta ]
         intervals_mt_shift  // channel: [ file(control_region_shifted.chrM.interval_list) ]
         shift_chain
+        vep_genome
+        vep_cache_version
+        vep_cache
+        case_info     // channel: [ val(case_info) ]
 
     main:
         ch_versions = Channel.empty()
