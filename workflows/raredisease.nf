@@ -328,7 +328,7 @@ workflow RAREDISEASE {
     //
     workflow_summary    = WorkflowRaredisease.paramsSummaryMultiqc(workflow, summary_params)
     ch_workflow_summary = Channel.value(workflow_summary)
-     methods_description    = WorkflowRaredisease.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description)
+    methods_description    = WorkflowRaredisease.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description)
     ch_methods_description = Channel.value(methods_description)
     ch_multiqc_files = Channel.empty()
     ch_multiqc_files = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
