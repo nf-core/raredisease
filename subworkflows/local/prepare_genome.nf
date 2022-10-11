@@ -36,7 +36,7 @@ workflow PREPARE_GENOME {
         if (!bwa_index) {
             if (aligner == "sentieon") {
                 SENTIEON_BWAINDEX ( [[], ch_fasta] )
-                ch_bwa_index = !bwa_index ? SENTIEON_BWAINDEX.out.index : [[],file(sentieon_index)]
+                ch_bwa_index = SENTIEON_BWAINDEX.out.index
                 ch_versions = ch_versions.mix(SENTIEON_BWAINDEX.out.versions)
             } else {
                 BWA_INDEX ( [[], ch_fasta] )
