@@ -45,7 +45,7 @@ workflow ANALYSE_MT {
         ch_versions = ch_versions.mix(ch_genome.versions)
         ch_dict_shift = ch_genome.sequence_dict
         ch_fai_shift = ch_genome.fai
-        ch_index_shift =ch_genome.aligner_index
+        ch_index_shift =ch_genome.bwamem2_index
 
         ALIGN_AND_CALL_MT_SHIFT (
             PREPARE_MT_ALIGNMENT.out.fastq,
@@ -78,6 +78,6 @@ workflow ANALYSE_MT {
         html_shift  = ALIGN_AND_CALL_MT_SHIFT.out.html
         vcf_lift    = PICARD_LIFTOVERVCF.out.vcf_lifted
         vcf_unlift  = PICARD_LIFTOVERVCF.out.vcf_unlifted
-        versions    = ch_versions // channel: [ versions.yml ] 
+        versions    = ch_versions // channel: [ versions.yml ]
 
 }
