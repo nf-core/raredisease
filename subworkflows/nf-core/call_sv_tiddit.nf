@@ -10,11 +10,12 @@ workflow CALL_SV_TIDDIT {
     take:
     bam            // channel: [ val(meta), path(bam) ]
     fasta          // path(fasta)
-    fai            // path(fai)
-    case_info   // channel: [ case_id ]
+    index          // [ val(meta), path(bwa_index)]
+    case_info      // channel: [ case_id ]
 
     main:
-        TIDDIT_SV ( bam, fasta, fai )
+        index_for_tiddit = index.map { meta, ind -> ind }
+        TIDDIT_SV ( bam, fasta, index_for_tiddit )
         ch_versions = TIDDIT_SV.out.versions
 
         TIDDIT_SV.out

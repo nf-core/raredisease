@@ -11,6 +11,7 @@ WorkflowRaredisease.initialise(params, log)
 
 // Check input path parameters to see if they exist
 def checkPathParamList = [
+    params.bwa_index,
     params.bwamem2_index,
     params.fasta,
     params.fasta_shift,
@@ -23,7 +24,6 @@ def checkPathParamList = [
     params.reduced_penetrance,
     params.score_config_snv,
     params.score_config_sv,
-    params.sentieonbwa_index,
     params.svdb_query_dbs,
     params.vcfanno_resources
 ]
@@ -137,6 +137,7 @@ workflow RAREDISEASE {
     // STEP 0: PREPARE GENOME REFERENCES AND INDICES.
     PREPARE_REFERENCES (
         params.aligner,
+        params.bwa_index,
         params.bwamem2_index,
         params.fasta,
         params.fasta_fai,
@@ -145,7 +146,6 @@ workflow RAREDISEASE {
         params.gnomad_af_tbi,
         params.known_dbsnp,
         params.known_dbsnp_tbi,
-        params.sentieonbwa_index,
         params.target_bed,
         params.variant_catalog,
         params.vcfanno_resources
@@ -159,7 +159,8 @@ workflow RAREDISEASE {
         CHECK_INPUT.out.reads,
         ch_references.genome_fasta,
         ch_references.genome_fai,
-        ch_references.aligner_index,
+        ch_references.bwa_index,
+        ch_references.bwamem2_index,
         ch_references.known_dbsnp,
         ch_references.known_dbsnp_tbi
     )
@@ -204,6 +205,7 @@ workflow RAREDISEASE {
     CALL_STRUCTURAL_VARIANTS (
         ch_mapped.marked_bam,
         ch_mapped.marked_bai,
+        ch_references.bwa_index,
         ch_references.genome_fasta,
         ch_references.genome_fai,
         CHECK_INPUT.out.case_info,
@@ -268,7 +270,7 @@ workflow RAREDISEASE {
 
     ANALYSE_MT (
         ch_mapped.bam_bai,
-        ch_references.aligner_index,
+        ch_references.bwamem2_index,
         ch_references.genome_fasta,
         ch_references.sequence_dict,
         ch_references.genome_fai,
