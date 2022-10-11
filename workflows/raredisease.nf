@@ -14,10 +14,12 @@ def checkPathParamList = [
     params.bwa_index,
     params.bwamem2_index,
     params.fasta,
+    params.fasta_shift,
     params.fasta_fai,
     params.gnomad,
     params.input,
     params.intervals_mt,
+    params.intervals_mt_shift,
     params.multiqc_config,
     params.reduced_penetrance,
     params.score_config_snv,
@@ -45,8 +47,10 @@ ch_vep_filters          = params.vep_filters         ? file(params.vep_filters) 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
-ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : Channel.empty()
+ch_multiqc_config          = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
+ch_multiqc_custom_config   = params.multiqc_config ? Channel.fromPath( params.multiqc_config, checkIfExists: true ) : Channel.empty()
+ch_multiqc_logo            = params.multiqc_logo   ? Channel.fromPath( params.multiqc_logo, checkIfExists: true ) : Channel.empty()
+ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -162,7 +166,7 @@ workflow RAREDISEASE {
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
-
+    
     // STEP 1.5: BAM QUALITY CHECK
     QC_BAM (
         ch_mapped.marked_bam,
@@ -174,7 +178,7 @@ workflow RAREDISEASE {
         ch_references.chrom_sizes
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
-
+    
     // STEP 1.6: EXPANSIONHUNTER AND STRANGER
     CALL_REPEAT_EXPANSIONS (
         ch_mapped.bam_bai,
@@ -182,7 +186,7 @@ workflow RAREDISEASE {
         ch_references.variant_catalog
     )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
-
+    
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
     CALL_SNV (
@@ -197,7 +201,7 @@ workflow RAREDISEASE {
         CHECK_INPUT.out.case_info
     )
     ch_versions = ch_versions.mix(CALL_SNV.out.versions)
-
+    
     CALL_STRUCTURAL_VARIANTS (
         ch_mapped.marked_bam,
         ch_mapped.marked_bai,
@@ -225,7 +229,7 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
     }
-
+    
     if (params.annotate_sv_switch) {
         ANNOTATE_STRUCTURAL_VARIANTS (
             CALL_STRUCTURAL_VARIANTS.out.vcf,
@@ -261,16 +265,22 @@ workflow RAREDISEASE {
 
     // STEP 2.1: ANALYSE MT
     ch_intervals_mt = Channel.fromPath(params.intervals_mt)
+    ch_fasta_shift=Channel.fromPath(params.fasta_shift)
+    ch_intervals_mt_shift = Channel.fromPath(params.intervals_mt_shift)
+
     ANALYSE_MT (
         ch_mapped.bam_bai,
         ch_references.bwamem2_index,
         ch_references.genome_fasta,
         ch_references.sequence_dict,
         ch_references.genome_fai,
-        ch_intervals_mt
+        ch_intervals_mt,
+        params.fasta_shift,
+        params.intervals_mt_shift,
+        params.shift_chain
     )
     ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
-
+    
     // STEP 3: VARIANT ANNOTATION
     ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
 
@@ -307,32 +317,32 @@ workflow RAREDISEASE {
             ch_variant_consequences
         )
     }
-
+    
     //
     // MODULE: Pipeline reporting
     //
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
-
+    
     //
     // MODULE: MultiQC
     //
     workflow_summary    = WorkflowRaredisease.paramsSummaryMultiqc(workflow, summary_params)
     ch_workflow_summary = Channel.value(workflow_summary)
-
+    methods_description    = WorkflowRaredisease.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description)
+    ch_methods_description = Channel.value(methods_description)
     ch_multiqc_files = Channel.empty()
-    ch_multiqc_files = ch_multiqc_files.mix(Channel.from(ch_multiqc_config))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_multiqc_custom_config.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
 
     MULTIQC (
         ch_multiqc_files.collect(),
-        [],
-        [],
-        []
+        ch_multiqc_config.collect().ifEmpty([]),
+        ch_multiqc_custom_config.collect().ifEmpty([]),
+        ch_multiqc_logo.collect().ifEmpty([])
     )
     multiqc_report = MULTIQC.out.report.toList()
     ch_versions    = ch_versions.mix(MULTIQC.out.versions)
@@ -349,6 +359,9 @@ workflow.onComplete {
         NfcoreTemplate.email(workflow, params, summary_params, projectDir, log, multiqc_report)
     }
     NfcoreTemplate.summary(workflow, params, log)
+    if (params.hook_url) {
+        NfcoreTemplate.adaptivecard(workflow, params, summary_params, projectDir, log)
+    }
 }
 
 /*
