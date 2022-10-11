@@ -35,7 +35,8 @@ workflow PREPARE_REFERENCES {
             fasta,
             fai,
             variant_catalog,
-            vcfanno_resources
+            vcfanno_resources,
+            true
         )
         .set { ch_genome }
         ch_versions = ch_versions.mix(ch_genome.versions)

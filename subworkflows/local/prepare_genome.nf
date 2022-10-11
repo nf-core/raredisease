@@ -19,6 +19,7 @@ workflow PREPARE_GENOME {
         fai                 // [mandatory] genome.fai
         variant_catalog     // [optional] variant_catalog.json
         vcfanno_resources   // [mandatory] vcfanno resource file
+        bwa_index_switch    // boolean val
 
     main:
         ch_fasta         = file(fasta)
@@ -33,7 +34,7 @@ workflow PREPARE_GENOME {
             ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
         }
 
-        if (!bwa_index) {
+        if ( bwa_index_switch && !bwa_index) {
             if (aligner == "sentieon") {
                 SENTIEON_BWAINDEX ( [[], ch_fasta] )
                 ch_bwa_index = SENTIEON_BWAINDEX.out.index
