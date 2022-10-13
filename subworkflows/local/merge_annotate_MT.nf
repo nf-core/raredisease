@@ -2,17 +2,14 @@
 // Merge and annotate MT
 //
 
-include { GATK4_MERGEVCFS as GATK4_MERGEVCFS_LIFT_UNLIFT_MT      } from '../../modules/nf-core/bcftools/concat/main'
+include { GATK4_MERGEVCFS as GATK4_MERGEVCFS_LIFT_UNLIFT_MT      } from '../../modules/nf-core/gatk4/mergevcfs/main'
 include { GATK4_FILTERMUTECTCALLS as  GATK4_FILTERMUTECTCALLS_MT } from '../../modules/nf-core/gatk4/filtermutectcalls/main'
 include { GATK4_VARIANTFILTRATION as GATK4_VARIANTFILTRATION_MT  } from '../../modules/nf-core/gatk4/variantfiltration/main'
-
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_MT                } from '../../modules/nf-core/bcftools/norm/main'
 include { TABIX_TABIX as TABIX_TABIX_MT                          } from '../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_MT                  } from '../../modules/nf-core/bcftools/norm/main'
 include { TABIX_TABIX as TABIX_TABIX_MT2                         } from '../../modules/nf-core/tabix/tabix/main'
-
 include { GATK4_MERGEVCFS as GATK4_MERGEVCFS_MT                  } from '../../modules/nf-core/gatk4/mergevcfs/main'
-
 include { HMTNOTE as HMTNOTE_MT                                  } from '../../modules/nf-core/hmtnote/main'
 include { TABIX_TABIX as TABIX_TABIX_MT3                         } from '../../modules/nf-core/tabix/tabix/main'
 include { ENSEMBLVEP as ENSEMBLVEP_MT                            } from '../../modules/nf-core/ensemblvep/main'
@@ -69,7 +66,7 @@ workflow MERGE_ANNOTATE_MT {
         REMOVE_DUPLICATES_MT(ch_in_remdup, fasta)
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions)
 
-        TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
+        //TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
         
         // Merging vcfs of different family members
         REMOVE_DUPLICATES_MT.out
