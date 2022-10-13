@@ -37,7 +37,7 @@ workflow MERGE_ANNOTATE_MT {
         // Merging lifted and unlifted vcfs
         ch_merg_lift_unlif = vcf1.join(vcf2, by:[0])
         
-        GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_merg_lift_unlif)
+        GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_merg_lift_unlif, dict)
         ch_versions = ch_versions.mix(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.versions.first())
         
         // Filtering Mutect calls

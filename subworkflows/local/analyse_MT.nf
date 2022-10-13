@@ -73,8 +73,8 @@ workflow ANALYSE_MT {
 
         // STEP 3: MT MERGE AND ANNOTATE VARIANTS
         MERGE_ANNOTATE_MT( 
-            ALIGN_AND_CALL_MT.out.vcf 
-            PICARD_LIFTOVERVCF.out.vcf,
+            ALIGN_AND_CALL_MT.out.vcf, 
+            PICARD_LIFTOVERVCF.out.vcf_lifted,
             fasta,
             dict,
             fai,
@@ -89,7 +89,7 @@ workflow ANALYSE_MT {
         vcf         = MERGE_ANNOTATE_MT.out.vcf
         tbi         = MERGE_ANNOTATE_MT.out.tbi
         stats       = MERGE_ANNOTATE_MT.out.stats
-        haplog      = MERGE_ANNOTATE_MT.out.txt
+        haplog      = MERGE_ANNOTATE_MT.out.haplog
         report      = MERGE_ANNOTATE_MT.out.report
         txt         = ALIGN_AND_CALL_MT.out.txt
         html        = ALIGN_AND_CALL_MT.out.html
