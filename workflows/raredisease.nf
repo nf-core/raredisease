@@ -278,10 +278,10 @@ workflow RAREDISEASE {
         params.fasta_shift,
         params.intervals_mt_shift,
         params.shift_chain,
-        vep_genome,
-        vep_cache_version,
-        vep_cache,
-        case_info
+        params.genome,
+        params.vep_cache_version,
+        ch_vep_cache,
+        CHECK_INPUT.out.case_info
     )
     ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
     
