@@ -6,18 +6,23 @@ include { ALIGN_AND_CALL_MT                              } from './align_and_cal
 include { ALIGN_AND_CALL_MT as ALIGN_AND_CALL_MT_SHIFT   } from './align_and_call_MT'
 include { PREPARE_GENOME as PREPARE_GENOME_MT            } from './prepare_genome'
 include { PICARD_LIFTOVERVCF                             } from '../../modules/nf-core/picard/liftovervcf/main'
+include { MERGE_ANNOTATE_MT    } from './merge_annotate_MT'
 
 workflow ANALYSE_MT {
     take:
-        bam           // channel: [ val(meta), file(bam), file(bai) ]
-        index         // channel: [ /path/to/bwamem2/index/ ]
-        fasta         // channel: [ genome.fasta ]
-        dict          // channel: [ genome.dict ]
-        fai           // channel: [ genome.fai ]
-        intervals_mt  // channel: [ file(non_control_region.chrM.interval_list) ]
+        bam                 // channel: [ val(meta), file(bam), file(bai) ]
+        index               // channel: [ /path/to/bwamem2/index/ ]
+        fasta               // channel: [ genome.fasta ]
+        dict                // channel: [ genome.dict ]
+        fai                 // channel: [ genome.fai ]
+        intervals_mt        // channel: [ file(non_control_region.chrM.interval_list) ]
         fasta_shift         // channel: [ genome.fasta ]
         intervals_mt_shift  // channel: [ file(control_region_shifted.chrM.interval_list) ]
         shift_chain
+        vep_genome
+        vep_cache_version
+        vep_cache
+        case_info           // channel: [ val(case_info) ]
 
     main:
         ch_versions = Channel.empty()
@@ -66,18 +71,34 @@ workflow ANALYSE_MT {
               fasta)
         ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions)
 
+        // STEP 3: MT MERGE AND ANNOTATE VARIANTS
+        MERGE_ANNOTATE_MT( 
+            ALIGN_AND_CALL_MT.out.vcf 
+            PICARD_LIFTOVERVCF.out.vcf,
+            fasta,
+            dict,
+            fai,
+            vep_genome,
+            vep_cache_version,
+            vep_cache,
+            case_info
+        )
+        ch_versions = ch_versions.mix(MERGE_ANNOTATE_MT.out.versions)
 
     emit:
-        vcf         = ALIGN_AND_CALL_MT.out.vcf
-        tbi         = ALIGN_AND_CALL_MT.out.tbi
+        vcf         = MERGE_ANNOTATE_MT.out.vcf
+        tbi         = MERGE_ANNOTATE_MT.out.tbi
+        stats       = MERGE_ANNOTATE_MT.out.stats
+        haplog      = MERGE_ANNOTATE_MT.out.txt
+        report      = MERGE_ANNOTATE_MT.out.report
         txt         = ALIGN_AND_CALL_MT.out.txt
         html        = ALIGN_AND_CALL_MT.out.html
-        vcf_shift   = ALIGN_AND_CALL_MT_SHIFT.out.vcf
-        tbi_shift   = ALIGN_AND_CALL_MT_SHIFT.out.tbi
+//        vcf_shift   = ALIGN_AND_CALL_MT_SHIFT.out.vcf
+//        tbi_shift   = ALIGN_AND_CALL_MT_SHIFT.out.tbi
         txt_shift   = ALIGN_AND_CALL_MT_SHIFT.out.txt
         html_shift  = ALIGN_AND_CALL_MT_SHIFT.out.html
-        vcf_lift    = PICARD_LIFTOVERVCF.out.vcf_lifted
-        vcf_unlift  = PICARD_LIFTOVERVCF.out.vcf_unlifted
+//       vcf_lift    = PICARD_LIFTOVERVCF.out.vcf_lifted
+//      vcf_unlift  = PICARD_LIFTOVERVCF.out.vcf_unlifted
         versions    = ch_versions // channel: [ versions.yml ]
 
 }
