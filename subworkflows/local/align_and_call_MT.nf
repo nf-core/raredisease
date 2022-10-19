@@ -1,5 +1,5 @@
 //
-// Allign and call MT
+// Align and call MT
 //
 
 include { BWAMEM2_MEM as BWAMEM2_MEM_MT                                     } from '../../modules/nf-core/bwamem2/mem/main'
@@ -10,8 +10,6 @@ include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MT                               } fr
 include { SAMTOOLS_SORT as SAMTOOLS_SORT_MT                                 } from '../../modules/nf-core/samtools/sort/main'
 include { HAPLOCHECK as HAPLOCHECK_MT                                       } from '../../modules/nf-core/haplocheck/main'
 include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } from '../../modules/nf-core/gatk4/mutect2/main'
-
-
 
 workflow ALIGN_AND_CALL_MT {
     take:

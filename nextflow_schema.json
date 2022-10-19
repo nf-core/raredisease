@@ -130,6 +130,13 @@
                     "description": "Path to the interval list of the non control mitochondral region.",
                     "help_text": "Path to the interval list of the non control mitochondral regions for Mutect2"
                 },
+                "intervals_mt_shift": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to the interval list of the non control mitochondral region in shifted fasta.",
+                    "help_text": "Path to the interval list of the non control mitochondral regions in shifted fasta for Mutect2"
+                },
                 "known_dbsnp": {
                     "type": "string",
                     "format": "path",
@@ -163,6 +170,29 @@
                     "format": "path",
                     "fa_icon": "fas fa-chart-bar",
                     "description": "Path to sentieon machine learning model file.",
+                    "hidden": true
+                },
+                "mt_shift_fasta": {
+                    "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/plain",
+                    "description": "Path to mitochondrial FASTA genome file.",
+                    "fa_icon": "far fa-file-code"
+                },
+                "mt_shift_fasta_index": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Directory for pre-built bwamem2 index for shifted mitochondrial fasta.",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
+                },
+                "mt_shift_fasta_chain": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Chain file describing the alignment between the mitochondrial shifted fasta and typical mitochondrial fasta",
+                    "help_text": "For more information, check https://genome.ucsc.edu/goldenPath/help/chain.html",
+                    "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
                 "reduced_penetrance": {

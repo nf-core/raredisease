@@ -14,7 +14,8 @@ def checkPathParamList = [
     params.bwa_index,
     params.bwamem2_index,
     params.fasta,
-    params.fasta_shift,
+    params.mt_shift_fasta,
+    params.mt_shift_fasta_chain,
     params.fasta_fai,
     params.gnomad,
     params.input,
@@ -32,14 +33,18 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 // Check mandatory parameters
 if (params.input) { ch_input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-ch_ml_model             = params.ml_model            ? file(params.ml_model)           : []
-ch_call_interval        = params.call_interval       ? file(params.call_interval)      : []
-ch_reduced_penetrance   = params.reduced_penetrance  ? file(params.reduced_penetrance) : []
-ch_score_config_snv     = params.score_config_snv    ? file(params.score_config_snv)   : []
-ch_score_config_sv      = params.score_config_sv     ? file(params.score_config_sv)    : []
+ch_ml_model             = params.ml_model            ? file(params.ml_model)            : []
+ch_call_interval        = params.call_interval       ? file(params.call_interval)       : []
+ch_intervals_mt         = params.intervals_mt        ? file(params.intervals_mt)        : []
+ch_intervals_mt_shift   = params.intervals_mt_shift  ? file(params.intervals_mt_shift)  : []
+ch_mt_shift_fasta       = params.mt_shift_fasta      ? file(params.mt_shift_fasta)      : []
+ch_reduced_penetrance   = params.reduced_penetrance  ? file(params.reduced_penetrance)  : []
+ch_score_config_snv     = params.score_config_snv    ? file(params.score_config_snv)    : []
+ch_score_config_sv      = params.score_config_sv     ? file(params.score_config_sv)     : []
+ch_shift_fasta_chain    = params.mt_shift_fasta_chain? file(params.mt_shift_fasta_chain): []
 ch_variant_consequences = file("$projectDir/assets/variant_consequences_v1.txt", checkIfExists: true)
-ch_vep_cache            = params.vep_cache           ? file(params.vep_cache)          : []
-ch_vep_filters          = params.vep_filters         ? file(params.vep_filters)        : []
+ch_vep_cache            = params.vep_cache           ? file(params.vep_cache)           : []
+ch_vep_filters          = params.vep_filters         ? file(params.vep_filters)         : []
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -166,7 +171,7 @@ workflow RAREDISEASE {
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
-    
+
     // STEP 1.5: BAM QUALITY CHECK
     QC_BAM (
         ch_mapped.marked_bam,
@@ -178,7 +183,7 @@ workflow RAREDISEASE {
         ch_references.chrom_sizes
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
-    
+
     // STEP 1.6: EXPANSIONHUNTER AND STRANGER
     CALL_REPEAT_EXPANSIONS (
         ch_mapped.bam_bai,
@@ -186,7 +191,7 @@ workflow RAREDISEASE {
         ch_references.variant_catalog
     )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
-    
+
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
     CALL_SNV (
@@ -201,7 +206,7 @@ workflow RAREDISEASE {
         CHECK_INPUT.out.case_info
     )
     ch_versions = ch_versions.mix(CALL_SNV.out.versions)
-    
+
     CALL_STRUCTURAL_VARIANTS (
         ch_mapped.marked_bam,
         ch_mapped.marked_bai,
@@ -229,7 +234,7 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
     }
-    
+
     if (params.annotate_sv_switch) {
         ANNOTATE_STRUCTURAL_VARIANTS (
             CALL_STRUCTURAL_VARIANTS.out.vcf,
@@ -262,12 +267,7 @@ workflow RAREDISEASE {
         )
     }
 
-
     // STEP 2.1: ANALYSE MT
-    ch_intervals_mt = Channel.fromPath(params.intervals_mt)
-    ch_fasta_shift=Channel.fromPath(params.fasta_shift)
-    ch_intervals_mt_shift = Channel.fromPath(params.intervals_mt_shift)
-
     ANALYSE_MT (
         ch_mapped.bam_bai,
         ch_references.bwamem2_index,
@@ -275,12 +275,12 @@ workflow RAREDISEASE {
         ch_references.sequence_dict,
         ch_references.genome_fai,
         ch_intervals_mt,
-        params.fasta_shift,
-        params.intervals_mt_shift,
-        params.shift_chain
+        ch_mt_shift_fasta,
+        ch_intervals_mt_shift,
+        ch_shift_fasta_chain
     )
     ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
-    
+
     // STEP 3: VARIANT ANNOTATION
     ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
 
@@ -317,14 +317,14 @@ workflow RAREDISEASE {
             ch_variant_consequences
         )
     }
-    
+
     //
     // MODULE: Pipeline reporting
     //
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
-    
+
     //
     // MODULE: MultiQC
     //

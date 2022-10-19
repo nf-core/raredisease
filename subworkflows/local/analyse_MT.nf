@@ -4,7 +4,7 @@
 include { PREPARE_MT_ALIGNMENT                           } from './prepare_MT_alignment'
 include { ALIGN_AND_CALL_MT                              } from './align_and_call_MT'
 include { ALIGN_AND_CALL_MT as ALIGN_AND_CALL_MT_SHIFT   } from './align_and_call_MT'
-include { PREPARE_GENOME as PREPARE_GENOME_MT            } from './prepare_genome'
+include { PREPARE_GENOME as PREPARE_GENOME_SHIFTED_MT    } from './prepare_genome'
 include { PICARD_LIFTOVERVCF                             } from '../../modules/nf-core/picard/liftovervcf/main'
 
 workflow ANALYSE_MT {
@@ -39,21 +39,18 @@ workflow ANALYSE_MT {
             )
         ch_versions = ch_versions.mix(ALIGN_AND_CALL_MT.out.versions)
 
-        // STEP 2.2: MT ALLIGNMENT SHIFT AND VARIANT CALLING
+        // STEP 2.2: MT ALIGNMENT SHIFT AND VARIANT CALLING
         ch_intervals_mt_shift = Channel.fromPath(params.intervals_mt_shift)
-        PREPARE_GENOME_MT("bwamem2",[],[],fasta_shift ,[],[],[],false).set { ch_genome }
-        ch_versions = ch_versions.mix(ch_genome.versions)
-        ch_dict_shift = ch_genome.sequence_dict
-        ch_fai_shift = ch_genome.fai
-        ch_index_shift =ch_genome.bwamem2_index
+        PREPARE_GENOME_SHIFTED_MT("bwamem2",[],[],fasta_shift ,[],[],[],false).set { ch_mt_shifted_genome }
+        ch_versions = ch_versions.mix(ch_mt_shifted_genome.versions)
 
         ALIGN_AND_CALL_MT_SHIFT (
             PREPARE_MT_ALIGNMENT.out.fastq,
             PREPARE_MT_ALIGNMENT.out.bam,
-            ch_index_shift,
+            ch_mt_shifted_genome.bwamem2_index,
             fasta_shift,
-            ch_dict_shift,
-            ch_fai_shift,
+            ch_mt_shifted_genome.sequence_dict,
+            ch_mt_shifted_genome.fai,
             ch_intervals_mt_shift
             )
         ch_versions = ch_versions.mix(ALIGN_AND_CALL_MT_SHIFT.out.versions)
