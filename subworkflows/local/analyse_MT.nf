@@ -86,17 +86,20 @@ workflow ANALYSE_MT {
         ch_versions = ch_versions.mix(MERGE_ANNOTATE_MT.out.versions)
 
     emit:
-        vcf         = MERGE_ANNOTATE_MT.out.vcf
-        tbi         = MERGE_ANNOTATE_MT.out.tbi
-        stats       = MERGE_ANNOTATE_MT.out.stats
-        haplog      = MERGE_ANNOTATE_MT.out.haplog
-        report      = MERGE_ANNOTATE_MT.out.report
-        txt         = ALIGN_AND_CALL_MT.out.txt
-        html        = ALIGN_AND_CALL_MT.out.html
+        vcf          = MERGE_ANNOTATE_MT.out.vcf
+        tbi          = MERGE_ANNOTATE_MT.out.tbi
+        stats        = ALIGN_AND_CALL_MT.out.stats
+        filt_sats    = ALIGN_AND_CALL_MT.out.filt_sats
+        stats_sh     = ALIGN_AND_CALL_MT_SHIFT.out.stats
+        filt_sats_sh = ALIGN_AND_CALL_MT_SHIFT.out.filt_sats
+        haplog       = MERGE_ANNOTATE_MT.out.haplog
+        report       = MERGE_ANNOTATE_MT.out.report
+        txt          = ALIGN_AND_CALL_MT.out.txt
+        html         = ALIGN_AND_CALL_MT.out.html
 //        vcf_shift   = ALIGN_AND_CALL_MT_SHIFT.out.vcf
 //        tbi_shift   = ALIGN_AND_CALL_MT_SHIFT.out.tbi
-        txt_shift   = ALIGN_AND_CALL_MT_SHIFT.out.txt
-        html_shift  = ALIGN_AND_CALL_MT_SHIFT.out.html
+        txt_sh       = ALIGN_AND_CALL_MT_SHIFT.out.txt
+        html_sh      = ALIGN_AND_CALL_MT_SHIFT.out.html
 //       vcf_lift    = PICARD_LIFTOVERVCF.out.vcf_lifted
 //      vcf_unlift  = PICARD_LIFTOVERVCF.out.vcf_unlifted
         versions    = ch_versions // channel: [ versions.yml ]

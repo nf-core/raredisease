@@ -3,7 +3,6 @@
 //
 
 include { GATK4_MERGEVCFS as GATK4_MERGEVCFS_LIFT_UNLIFT_MT      } from '../../modules/nf-core/gatk4/mergevcfs/main'
-include { GATK4_FILTERMUTECTCALLS as  GATK4_FILTERMUTECTCALLS_MT } from '../../modules/nf-core/gatk4/filtermutectcalls/main'
 include { GATK4_VARIANTFILTRATION as GATK4_VARIANTFILTRATION_MT  } from '../../modules/nf-core/gatk4/variantfiltration/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_MT                } from '../../modules/nf-core/bcftools/norm/main'
 include { TABIX_TABIX as TABIX_TABIX_MT                          } from '../../modules/nf-core/tabix/tabix/main'
@@ -35,20 +34,50 @@ workflow MERGE_ANNOTATE_MT {
        
         
         // Merging lifted and unlifted vcfs
-        ch_merg_lift_unlif = vcf1.join(vcf2, by:[0])
+        //vcfs=vcf1.buffer( size:1, skip:1 ).mix(vcf2.buffer( size:1, skip:1 ))
+        // vcf1.map{ meta, vcf ->
+        //     return [meta]}.set{ch_meta}
+        // //ch_meta.view() 
         
-        GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_merg_lift_unlif, dict)
+        // vcf1.map{ meta, vcf ->
+        //     return [vcf]}.set{ch_vcf1}
+        // //ch_vcf1.view() 
+        
+        // vcf2.map{ meta, vcf ->
+        //     return [vcf]}.set{ch_vcf2}
+        // //ch_vcf2.view() 
+        
+        // ch_vcfs=ch_vcf1.concat(ch_vcf2).flatten().toList()
+        //ch_vcfs=Channel.of(vcf1,vcf2).gtoupTuple().toList()
+        //ch_vcfs.view()
+
+        ch_merg_lift_unlif = vcf1.join(vcf2, by:[0])
+
+        //ch_vcfs = ch_merg_lift_unlif.map{meta, vcf -> [[it[0]], [it[1].concat(it[2]).toList().flatten()]]}.groupTuple()
+        //ch_vcfs = Channel.of(vcf1,vcf2).groupTuple().groupKey(meta)
+        vcf1.view()
+        ch_vcfs =Channel.empty().mix(vcf1,vcf2).map{meta, vcf -> [meta, groupKey(vcf,2)]}.groupTuple()
+        //ch_vcfs =Channel.of(vcf1,vcf2).map{meta, vcf -> [meta, groupKey(vcf,2)]}.groupTuple()
+        ch_vcfs.view()
+
+        GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_vcfs, dict)
         ch_versions = ch_versions.mix(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.versions.first())
         
         // Filtering Mutect calls
-        GATK4_FILTERMUTECTCALLS_MT( GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf, 
-            fasta, 
-            fai, 
-            dict )
-        ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
+
+        // ch_lift_unlift = GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf.join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi)
+        // ch_to_filt = ch_lift_unlift.map {
+        //     meta, vcf, tbi ->
+        //         return [meta, vcf, tbi, [], [], [], [], []]}
+
+        // GATK4_FILTERMUTECTCALLS_MT( ch_to_filt, 
+        //     fasta, 
+        //     fai, 
+        //     dict )
+        // ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
         
         // Filtering Variants
-        ch_filt_vcf = GATK4_FILTERMUTECTCALLS_MT.out.vcf.join(GATK4_FILTERMUTECTCALLS_MT.out.tbi, by:[0])
+        ch_filt_vcf = GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf.join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, by:[0])
         GATK4_VARIANTFILTRATION_MT(ch_filt_vcf, 
             fasta, 
             fai, 
@@ -106,7 +135,6 @@ workflow MERGE_ANNOTATE_MT {
 
 
     emit:
-        stats    = GATK4_FILTERMUTECTCALLS_MT.out.stats
         haplog   = HAPLOGREP2_CLASSIFY_MT.out.txt
         vcf      = ENSEMBLVEP_MT.out.vcf_gz
         tbi      = TABIX_TABIX_MT3.out.tbi
