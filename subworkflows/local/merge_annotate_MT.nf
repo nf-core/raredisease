@@ -128,7 +128,7 @@ workflow MERGE_ANNOTATE_MT {
         //ch_vep_in_mt=HMTNOTE_MT.out.vcf.join( TABIX_TABIX_MT2.out.tbi, by:[0])
         
         // Annotating with ensembl Vep
-        ENSEMBLVEP_MT( BCFTOOLS_MERGE_MT.out.vcf,
+        ENSEMBLVEP_MT( BCFTOOLS_MERGE_MT.out.merged_variants,
             vep_genome,
             "homo_sapiens",
             vep_cache_version,
@@ -138,8 +138,8 @@ workflow MERGE_ANNOTATE_MT {
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions.first())
         
         // Running haplogrep2
-        TABIX_TABIX_MT3(ENSEMBLVEP_MT.out.vcf_gz)
-        HAPLOGREP2_CLASSIFY_MT(ENSEMBLVEP_MT.out.vcf_gz, "vcf.gz")
+        TABIX_TABIX_MT3(BCFTOOLS_MERGE_MT.out.merged_variants)
+        HAPLOGREP2_CLASSIFY_MT(BCFTOOLS_MERGE_MT.out.merged_variants, "vcf.gz")
         ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions.first())
 
 
