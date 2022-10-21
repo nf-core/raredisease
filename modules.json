@@ -5,6 +5,10 @@
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
+                    "bcftools/merge": {
+                        "branch": "master",
+                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                    },
                     "bcftools/norm": {
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
@@ -168,6 +172,10 @@
                     "picard/collectmultiplemetrics": {
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                    },
+                    "picard/liftovervcf": {
+                        "branch": "master",
+                        "git_sha": "3d5d18db1b39e1133505ae2fa2a062b0073c8a6a"
                     },
                     "picard/markduplicates": {
                         "branch": "master",
