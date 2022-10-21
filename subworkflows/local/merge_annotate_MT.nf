@@ -8,7 +8,7 @@ include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_MT                } from '../../m
 include { TABIX_TABIX as TABIX_TABIX_MT                          } from '../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_MT                  } from '../../modules/nf-core/bcftools/norm/main'
 include { TABIX_TABIX as TABIX_TABIX_MT2                         } from '../../modules/nf-core/tabix/tabix/main'
-include { GATK4_MERGEVCFS as GATK4_MERGEVCFS_MT                  } from '../../modules/nf-core/gatk4/mergevcfs/main'
+include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                    } from '../../modules/nf-core/bcftools/merge/main'
 include { HMTNOTE as HMTNOTE_MT                                  } from '../../modules/nf-core/hmtnote/main'
 include { TABIX_TABIX as TABIX_TABIX_MT3                         } from '../../modules/nf-core/tabix/tabix/main'
 include { ENSEMBLVEP as ENSEMBLVEP_MT                            } from '../../modules/nf-core/ensemblvep/main'
@@ -76,17 +76,17 @@ workflow MERGE_ANNOTATE_MT {
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions)
 
         TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
-        ch_remdup_tbi=REMOVE_DUPLICATES_MT.out.vcf.join(TABIX_TABIX_MT2.out.tbi)
-        file_list = ch_remdup_tbi
-            .collect()
-            .map{ meta, vcf, tbi ->
-            [[vcf], [tbi]]
-        }
-        file_list.view()
-        case_info
-            .combine(file_list)
-            .set { ch_mergvcf }
-        ch_mergvcf.view()
+        // ch_remdup_tbi=REMOVE_DUPLICATES_MT.out.vcf.join(TABIX_TABIX_MT2.out.tbi)
+        // file_list = ch_remdup_tbi
+        //     .collect()
+        //     .map{ meta, vcf, tbi ->
+        //     [[vcf], [tbi]]
+        // }
+        // file_list.view()
+        // case_info
+        //     .combine(file_list)
+        //     .set { ch_mergvcf }
+        // ch_mergvcf.view()
 
         // REMOVE_DUPLICATES_MT.out
         //     .vcf
@@ -96,8 +96,27 @@ workflow MERGE_ANNOTATE_MT {
         // case_info
         //     .combine(file_list)
         //     .set { ch_mergvcf }
-        GATK4_MERGEVCFS_MT( ch_mergvcf, dict)
-        ch_versions = ch_versions.mix(GATK4_MERGEVCFS_MT.out.versions.first())
+
+        ch_remdup_tbi=REMOVE_DUPLICATES_MT.out.vcf.join(TABIX_TABIX_MT2.out.tbi)
+        REMOVE_DUPLICATES_MT.out
+            .vcf
+            .collect{it[1]}
+            .toList()
+            .set { file_list }
+
+        TABIX_TABIX_MT2.out
+            .tbi
+            .collect{it[1]}
+            .toList()
+            .set { file_list2 }
+
+        case_info
+            .combine(file_list)
+            .combine(file_list2)
+            .set { ch_mergvcf }
+        ch_mergvcf.view()
+        BCFTOOLS_MERGE_MT( ch_mergvcf, [], fasta, fai)
+        ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
         
         
         // Annotating with Hmtnote
@@ -109,7 +128,7 @@ workflow MERGE_ANNOTATE_MT {
         //ch_vep_in_mt=HMTNOTE_MT.out.vcf.join( TABIX_TABIX_MT2.out.tbi, by:[0])
         
         // Annotating with ensembl Vep
-        ENSEMBLVEP_MT( GATK4_MERGEVCFS_MT.out.vcf,
+        ENSEMBLVEP_MT( BCFTOOLS_MERGE_MT.out.vcf,
             vep_genome,
             "homo_sapiens",
             vep_cache_version,
