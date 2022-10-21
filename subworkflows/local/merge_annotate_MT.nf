@@ -40,22 +40,7 @@ workflow MERGE_ANNOTATE_MT {
 
         GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_vcfs, dict)
         ch_versions = ch_versions.mix(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.versions.first())
-        
-        // Filtering Mutect calls I have moved this part to right after the calling
 
-        // ch_lift_unlift = GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf.join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi)
-        // ch_to_filt = ch_lift_unlift.map {
-        //     meta, vcf, tbi ->
-        //         return [meta, vcf, tbi, [], [], [], [], []]}
-
-        // GATK4_FILTERMUTECTCALLS_MT( ch_to_filt, 
-        //     fasta, 
-        //     fai, 
-        //     dict )
-        // ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
-        
-
-        
         // Filtering Variants
         ch_filt_vcf = GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf.join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, by:[0])
         GATK4_VARIANTFILTRATION_MT(ch_filt_vcf, 
@@ -76,27 +61,6 @@ workflow MERGE_ANNOTATE_MT {
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions)
 
         TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
-        // ch_remdup_tbi=REMOVE_DUPLICATES_MT.out.vcf.join(TABIX_TABIX_MT2.out.tbi)
-        // file_list = ch_remdup_tbi
-        //     .collect()
-        //     .map{ meta, vcf, tbi ->
-        //     [[vcf], [tbi]]
-        // }
-        // file_list.view()
-        // case_info
-        //     .combine(file_list)
-        //     .set { ch_mergvcf }
-        // ch_mergvcf.view()
-
-        // REMOVE_DUPLICATES_MT.out
-        //     .vcf
-        //     .collect{it[1]}
-        //     .toList()
-        //     .set { file_list }
-        // case_info
-        //     .combine(file_list)
-        //     .set { ch_mergvcf }
-
         ch_remdup_tbi=REMOVE_DUPLICATES_MT.out.vcf.join(TABIX_TABIX_MT2.out.tbi)
         REMOVE_DUPLICATES_MT.out
             .vcf
@@ -114,10 +78,9 @@ workflow MERGE_ANNOTATE_MT {
             .combine(file_list)
             .combine(file_list2)
             .set { ch_mergvcf }
-        ch_mergvcf.view()
+
         BCFTOOLS_MERGE_MT( ch_mergvcf, [], fasta, fai)
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
-        
         
         // Annotating with Hmtnote
         //HMTNOTE_MT(GATK4_VARIANTFILTRATION_MT.out.vcf)
