@@ -32,38 +32,16 @@ workflow MERGE_ANNOTATE_MT {
     main:
        ch_versions = Channel.empty()
        
-        
-        // Merging lifted and unlifted vcfs
-        //vcfs=vcf1.buffer( size:1, skip:1 ).mix(vcf2.buffer( size:1, skip:1 ))
-        // vcf1.map{ meta, vcf ->
-        //     return [meta]}.set{ch_meta}
-        // //ch_meta.view() 
-        
-        // vcf1.map{ meta, vcf ->
-        //     return [vcf]}.set{ch_vcf1}
-        // //ch_vcf1.view() 
-        
-        // vcf2.map{ meta, vcf ->
-        //     return [vcf]}.set{ch_vcf2}
-        // //ch_vcf2.view() 
-        
-        // ch_vcfs=ch_vcf1.concat(ch_vcf2).flatten().toList()
-        //ch_vcfs=Channel.of(vcf1,vcf2).gtoupTuple().toList()
-        //ch_vcfs.view()
-
-        ch_merg_lift_unlif = vcf1.join(vcf2, by:[0])
-
-        //ch_vcfs = ch_merg_lift_unlif.map{meta, vcf -> [[it[0]], [it[1].concat(it[2]).toList().flatten()]]}.groupTuple()
-        //ch_vcfs = Channel.of(vcf1,vcf2).groupTuple().groupKey(meta)
-        vcf1.view()
-        ch_vcfs =Channel.empty().mix(vcf1,vcf2).map{meta, vcf -> [meta, groupKey(vcf,2)]}.groupTuple()
-        //ch_vcfs =Channel.of(vcf1,vcf2).map{meta, vcf -> [meta, groupKey(vcf,2)]}.groupTuple()
-        ch_vcfs.view()
+        ch_vcfs = vcf1
+            .join(vcf2, remainder: true)
+            .map{ meta, vcf1, vcf2 ->
+            [meta, [vcf1, vcf2]]
+        }
 
         GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_vcfs, dict)
         ch_versions = ch_versions.mix(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.versions.first())
         
-        // Filtering Mutect calls
+        // Filtering Mutect calls I have moved this part to right after the calling
 
         // ch_lift_unlift = GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf.join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi)
         // ch_to_filt = ch_lift_unlift.map {
@@ -75,6 +53,8 @@ workflow MERGE_ANNOTATE_MT {
         //     fai, 
         //     dict )
         // ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
+        
+
         
         // Filtering Variants
         ch_filt_vcf = GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf.join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, by:[0])
@@ -95,17 +75,27 @@ workflow MERGE_ANNOTATE_MT {
         REMOVE_DUPLICATES_MT(ch_in_remdup, fasta)
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions)
 
-        //TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
-        
-        // Merging vcfs of different family members
-        REMOVE_DUPLICATES_MT.out
-            .vcf
-            .collect{it[1]}
-            .toList()
-            .set { file_list }
+        TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
+        ch_remdup_tbi=REMOVE_DUPLICATES_MT.out.vcf.join(TABIX_TABIX_MT2.out.tbi)
+        file_list = ch_remdup_tbi
+            .collect()
+            .map{ meta, vcf, tbi ->
+            [[vcf], [tbi]]
+        }
+        file_list.view()
         case_info
             .combine(file_list)
             .set { ch_mergvcf }
+        ch_mergvcf.view()
+
+        // REMOVE_DUPLICATES_MT.out
+        //     .vcf
+        //     .collect{it[1]}
+        //     .toList()
+        //     .set { file_list }
+        // case_info
+        //     .combine(file_list)
+        //     .set { ch_mergvcf }
         GATK4_MERGEVCFS_MT( ch_mergvcf, dict)
         ch_versions = ch_versions.mix(GATK4_MERGEVCFS_MT.out.versions.first())
         
