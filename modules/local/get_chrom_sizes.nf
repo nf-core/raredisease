@@ -7,7 +7,7 @@ process GET_CHROM_SIZES {
         'quay.io/biocontainers/gnu-wget:1.18--0' }"
 
     input:
-    path fai
+    tuple val(meta), path(fai)
 
     output:
     path '*.sizes'     , emit: sizes

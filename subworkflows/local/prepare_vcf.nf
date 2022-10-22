@@ -9,11 +9,10 @@ include { CHECK_INPUT_VCF                         } from '../../modules/local/ch
 
 workflow CHECK_VCF {
     take:
-        vcf    // file: vcf file
+        vcf_file    // file: vcf file
         fasta  // path(fasta)
 
     main:
-        vcf_file = file(vcf)
         ch_versions = Channel.empty()
 
         CHECK_INPUT_VCF( vcf_file )
@@ -46,6 +45,6 @@ workflow CHECK_VCF {
 
     emit:
         vcf      =  vcf_out        // path: normalized_vcf
-        idx      =  TABIX_PV.out.tbi
+        index    =  TABIX_PV.out.tbi
         versions =  ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }

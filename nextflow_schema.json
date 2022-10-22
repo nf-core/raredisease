@@ -102,7 +102,7 @@
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
-                "gnomad": {
+                "gnomad_vcf": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-bezier-curve",
@@ -116,7 +116,7 @@
                     "description": "Path to the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the gnomad tab file with CHR/START/REF,ALT/AF. Can be generated from the gnomad annotations vcf."
                 },
-                "gnomad_af_tbi": {
+                "gnomad_af_idx": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-file",
@@ -214,6 +214,13 @@
                     "format": "path",
                     "fa_icon": "fas fa-chart-bar",
                     "description": "SV rank model config file for genmod.",
+                    "hidden": true
+                },
+                "sequence_dictionary": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Genome dictionary file",
                     "hidden": true
                 },
                 "vep_filters": {
