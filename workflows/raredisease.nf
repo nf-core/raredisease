@@ -70,40 +70,40 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 // MODULE: local modules
 //
 
-include { MAKE_PED                              } from '../modules/local/create_pedfile'
 include { FILTER_VEP as FILTER_VEP_SNV          } from '../modules/local/filter_vep'
 include { FILTER_VEP as FILTER_VEP_SV           } from '../modules/local/filter_vep'
+include { MAKE_PED                              } from '../modules/local/create_pedfile'
 
 //
 // MODULE: Installed directly from nf-core/modules
 //
 
+include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { FASTQC                                } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
-include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
 
-include { CHECK_INPUT                           } from '../subworkflows/local/check_input'
-include { PREPARE_REFERENCES                    } from '../subworkflows/local/prepare_references'
-include { ANNOTATE_SNVS                         } from '../subworkflows/local/annotate_snvs'
-include { ANNOTATE_STRUCTURAL_VARIANTS          } from '../subworkflows/local/annotate_structural_variants'
-include { GENS                                  } from '../subworkflows/local/gens'
 include { ALIGN                                 } from '../subworkflows/local/align'
-include { CALL_SNV                              } from '../subworkflows/local/call_snv'
 include { ANALYSE_MT                            } from '../subworkflows/local/analyse_MT'
 include { ANNOTATE_CSQ as ANN_CSQ_SNV           } from '../subworkflows/local/annotate_consequence'
 include { ANNOTATE_CSQ as ANN_CSQ_SV            } from '../subworkflows/local/annotate_consequence'
+include { ANNOTATE_SNVS                         } from '../subworkflows/local/annotate_snvs'
+include { ANNOTATE_STRUCTURAL_VARIANTS          } from '../subworkflows/local/annotate_structural_variants'
+include { CALL_SNV                              } from '../subworkflows/local/call_snv'
+include { CHECK_INPUT                           } from '../subworkflows/local/check_input'
+include { GENS                                  } from '../subworkflows/local/gens'
+include { PREPARE_REFERENCES                    } from '../subworkflows/local/prepare_references'
 
 //
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
 include { CALL_REPEAT_EXPANSIONS                } from '../subworkflows/nf-core/call_repeat_expansions'
-include { QC_BAM                                } from '../subworkflows/nf-core/qc_bam'
 include { CALL_STRUCTURAL_VARIANTS              } from '../subworkflows/nf-core/call_structural_variants'
+include { QC_BAM                                } from '../subworkflows/nf-core/qc_bam'
 include { RANK_VARIANTS as RANK_VARIANTS_SNV    } from '../subworkflows/nf-core/genmod'
 include { RANK_VARIANTS as RANK_VARIANTS_SV     } from '../subworkflows/nf-core/genmod'
 
@@ -128,7 +128,7 @@ workflow RAREDISEASE {
         exit 1, 'Input samplesheet not specified!'
     }
 
-    // Initialize file channels
+    // Initialize all file channels including unprocessed vcf, bed and tab files
     ch_call_interval                  = params.call_interval          ? Channel.fromPath(params.call_interval).collect()                                   : Channel.value([])
     ch_genome_fasta_no_meta           = params.fasta                  ? Channel.fromPath(params.fasta).collect()                                           : ( exit 1, 'Genome fasta not specified!' )
     ch_genome_fasta_meta              = ch_genome_fasta_no_meta.map { it -> [[id:it.baseName], it] }
@@ -297,6 +297,18 @@ workflow RAREDISEASE {
         )
     }
 
+    ANALYSE_MT (
+        ch_mapped.bam_bai,
+        ch_bwamem2_index,
+        ch_genome_fasta_no_meta,
+        ch_sequence_dictionary,
+        ch_references.genome_fai,
+        ch_intervals_mt,
+        params.fasta_shift,
+        params.intervals_mt_shift,
+        params.shift_chain
+    )
+    ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
 
     // STEP 3: VARIANT ANNOTATION
     ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
