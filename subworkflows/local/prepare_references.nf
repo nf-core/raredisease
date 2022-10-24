@@ -55,20 +55,8 @@ workflow PREPARE_REFERENCES {
                 return [[id:meta], it]
             }
             .set { ch_bait_intervals_cat_in }
-
         CAT_CAT_BAIT ( ch_bait_intervals_cat_in )
-
-        // Uncompress vcfanno resources if nothing else given
-        if ( params.vcfanno_resources.endsWith('.tar.gz') ) {
-            ch_vcfanno_resources = UNTAR_VCFANNO ( [[],params.vcfanno_resources] ).untar
-                                    .map {
-                                        id, resources ->
-                                            return [resources]
-                                    }
-            ch_versions          = ch_versions.mix(UNTAR_VCFANNO.out.versions)
-        } else {
-            ch_vcfanno_resources = Channel.fromPath(vcfanno_resources)
-        }
+        UNTAR_VCFANNO ( vcfanno_resources )
 
         // Gather versions
         ch_versions = ch_versions.mix(BWA_INDEX.out.versions)
@@ -84,13 +72,14 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(TABIX_PBT.out.versions)
         ch_versions = ch_versions.mix(GATK_BILT.out.versions)
         ch_versions = ch_versions.mix(GATK_ILT.out.versions)
+        ch_versions = ch_versions.mix(UNTAR_VCFANNO.out.versions)
 
     emit:
-        bait_intervals    = CAT_CAT_BAIT.out.file_out.map { id, it -> [it] }.collect()
+        bait_intervals    = CAT_CAT_BAIT.out.file_out.map { id, it -> [it] }
         bwa_index         = BWA_INDEX.out.index ?: SENTIEON_BWAINDEX.out.index
         bwamem2_index     = BWAMEM2_INDEX.out.index
         chrom_sizes       = GET_CHROM_SIZES.out.sizes
-        fasta_fai         = SAMTOOLS_FAIDX.out.fai.map{ meta, fai -> [fai] }.collect()
+        fasta_fai         = SAMTOOLS_FAIDX.out.fai.map{ meta, fai -> [fai] }
         gnomad_af_idx     = TABIX_GNOMAD_AF.out.tbi
         gnomad_tbi        = CHECK_VCF.out.index
         gnomad_vcf        = CHECK_VCF.out.vcf
@@ -98,7 +87,7 @@ workflow PREPARE_REFERENCES {
         sequence_dict     = GATK_SD.out.dict
         target_bed        = Channel.empty().mix(ch_tbi, ch_bgzip_tbi)
         target_intervals  = GATK_BILT.out.interval_list.collect{it[1]}
-        vcfanno_resources = ch_vcfanno_resources
+        vcfanno_resources = UNTAR_VCFANNO.out.untar.map { id, resources -> [resources] }
         versions          = ch_versions
 
 }
