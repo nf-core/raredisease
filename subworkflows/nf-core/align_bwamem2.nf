@@ -45,7 +45,6 @@ workflow ALIGN_BWAMEM2 {
             }
         .set{ bams }                                // create a new multi-channel named bams
 
-        bams.multiple.view()
         // If there are no samples to merge, skip the process
         SAMTOOLS_MERGE ( bams.multiple, fasta, fai )
         prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
