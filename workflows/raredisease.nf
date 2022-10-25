@@ -23,16 +23,18 @@ def checkPathParamList = [
     params.gnomad_af_idx,
     params.gnomad_vcf,
     params.input,
-    params.intervals_mt,
-    params.intervals_mt_shift,
     params.known_dbsnp,
     params.known_dbsnp_tbi,
     params.known_indels,
     params.known_mills,
     params.ml_model,
-    params.mt_shift_fasta,
-    params.mt_shift_fasta_index,
-    params.mt_shift_fasta_chain,
+    params.mt_backchain_shift,
+    params.mt_bwamem2_index_shift,
+    params.mt_fasta_shift,
+    params.mt_fai_shift,
+    params.mt_intervals,
+    params.mt_intervals_shift,
+    params.mt_sequence_dictionary_shift,
     params.multiqc_config,
     params.reduced_penetrance,
     params.score_config_snv,
@@ -131,24 +133,25 @@ workflow RAREDISEASE {
     // Initialize all file channels including unprocessed vcf, bed and tab files
     ch_call_interval                  = params.call_interval          ? Channel.fromPath(params.call_interval)                                                 : Channel.value([])
     ch_genome_fasta_no_meta           = params.fasta                  ? Channel.fromPath(params.fasta)                                                         : ( exit 1, 'Genome fasta not specified!' )
-    ch_genome_fasta_meta              = ch_genome_fasta_no_meta.map { it -> [[id:it.baseName], it] }
-    ch_gnomad_vcf_unprocessed         = params.gnomad_vcf             ? Channel.fromPath(params.gnomad_vcf)                                                    : Channel.empty()
+    ch_genome_fasta_meta              = ch_genome_fasta_no_meta.map { it -> [[id:it[0].simpleName], it] }
     ch_gnomad_af_tab                  = params.gnomad_af              ? Channel.fromPath(params.gnomad_af).map{ it -> [[id:it[0].simpleName], it] }            : Channel.value([[],[]])
-    ch_intervals_mt                   = params.intervals_mt           ? Channel.fromPath(params.intervals_mt)                                                  : Channel.value([])
-    ch_intervals_mt_shift             = params.intervals_mt_shift     ? Channel.fromPath(params.intervals_mt_shift)                                            : Channel.value([])
+    ch_gnomad_vcf_unprocessed         = params.gnomad_vcf             ? Channel.fromPath(params.gnomad_vcf)                                                    : Channel.empty()
     ch_known_dbsnp                    = params.known_dbsnp            ? Channel.fromPath(params.known_dbsnp).map{ it -> [[id:it[0].simpleName], it] }          : Channel.value([[],[]])
     ch_ml_model                       = params.ml_model               ? Channel.fromPath(params.ml_model)                                                      : Channel.value([])
-    ch_mt_shift_fasta                 = params.mt_shift_fasta         ? Channel.fromPath(params.mt_shift_fasta)                                                : Channel.value([])
+    ch_mt_backchain_shift             = params.mt_backchain_shift     ? Channel.fromPath(params.mt_backchain_shift)                                            : Channel.value([])
+    ch_mt_fasta_shift_no_meta         = params.mt_fasta_shift         ? Channel.fromPath(params.mt_fasta_shift)                                                : Channel.value([])
+    ch_mt_fasta_shift_meta            = params.mt_fasta_shift         ? ch_mt_fasta_shift_no_meta.map { it -> [[id:it[0].simpleName], it] }                    : Channel.value([])
+    ch_mt_intervals                   = params.mt_intervals           ? Channel.fromPath(params.mt_intervals)                                                  : Channel.value([])
+    ch_mt_intervals_shift             = params.mt_intervals_shift     ? Channel.fromPath(params.mt_intervals_shift)                                            : Channel.value([])
     ch_reduced_penetrance             = params.reduced_penetrance     ? Channel.fromPath(params.reduced_penetrance)                                            : Channel.value([])
     ch_score_config_snv               = params.score_config_snv       ? Channel.fromPath(params.score_config_snv)                                              : Channel.value([])
     ch_score_config_sv                = params.score_config_sv        ? Channel.fromPath(params.score_config_sv)                                               : Channel.value([])
-    ch_shift_fasta_chain              = params.mt_shift_fasta_chain   ? Channel.fromPath(params.mt_shift_fasta_chain)                                          : Channel.value([])
     ch_target_bed_unprocessed         = params.target_bed             ? Channel.fromPath(params.target_bed).map{ it -> [[id:it[0].simpleName], it] }           : Channel.value([])
     ch_variant_catalog                = params.variant_catalog        ? Channel.fromPath(params.variant_catalog)                                               : Channel.value([])
     ch_variant_consequences           = Channel.fromPath("$projectDir/assets/variant_consequences_v1.txt", checkIfExists: true)
+    ch_vcfanno_resources_unprocessed  = params.vcfanno_resources      ? Channel.fromPath(params.vcfanno_resources).map{ it -> [[id:it[0].simpleName], it] }    : Channel.value([])
     ch_vep_cache                      = params.vep_cache              ? Channel.fromPath(params.vep_cache)                                                     : Channel.value([])
     ch_vep_filters                    = params.vep_filters            ? Channel.fromPath(params.vep_filters)                                                   : Channel.value([])
-    ch_vcfanno_resources_unprocessed  = params.vcfanno_resources      ? Channel.fromPath(params.vcfanno_resources).map{ it -> [[id:it[0].simpleName], it] }    : Channel.value([])
 
     // Generate pedigree file
     MAKE_PED (CHECK_INPUT.out.samples.toList())
@@ -163,6 +166,8 @@ workflow RAREDISEASE {
         ch_genome_fasta_no_meta,
         ch_genome_fasta_meta,
         params.fasta_fai,
+        ch_mt_fasta_shift_no_meta,
+        ch_mt_fasta_shift_meta,
         ch_gnomad_af_tab,
         ch_gnomad_vcf_unprocessed,
         ch_known_dbsnp,
@@ -172,20 +177,23 @@ workflow RAREDISEASE {
     .set { ch_references }
 
     // Gather built indices or get them from the params
-    ch_bait_intervals      = ch_references.bait_intervals
-    ch_bwa_index           = params.bwa_index                ? Channel.fromPath(params.bwa_index)           : ( ch_references.bwa_index       ?: Channel.empty() )
-    ch_bwamem2_index       = params.bwamem2_index            ? Channel.fromPath(params.bwamem2_index)       : ( ch_references.bwamem2_index   ?: Channel.empty() )
-    ch_chrom_sizes         = ch_references.chrom_sizes
-    ch_gnomad_af           = params.gnomad_af                ? ch_gnomad_af_tab.join(ch_genome_af_idx).map {meta, tab, idx -> [tab,idx]}       : Channel.empty()
-    ch_genome_fai          = params.fasta_fai                ? Channel.fromPath(params.fasta_fai)           : ( ch_references.fasta_fai       ?: Channel.empty() )
-    ch_gnomad_af_idx       = params.gnomad_af_idx            ? Channel.fromPath(params.gnomad_af_idx)       : ( ch_references.gnomad_af_idx   ?: Channel.empty() )
-    ch_gnomad_vcf          = params.gnomad_vcf               ? ch_references.gnomad_vcf                     : Channel.value([])
-    ch_known_dbsnp_tbi     = params.known_dbsnp_tbi          ? Channel.fromPath(params.known_dbsnp_tbi)     : ( ch_references.known_dbsnp_tbi ?: Channel.empty() )
-    ch_sequence_dictionary = params.sequence_dictionary      ? Channel.fromPath(params.sequence_dictionary) : ( ch_references.sequence_dict   ?: Channel.empty() )
-    ch_target_bed          = ch_references.target_bed
-    ch_target_intervals    = ch_references.target_intervals
-    ch_vcfanno_resources   = params.vcfanno_resources.endsWith('.tar.gz') ? ch_references.vcfanno_resources : Channel.fromPath(params.vcfanno_resources)
-    ch_versions            = ch_versions.mix(ch_references.versions)
+    ch_bait_intervals               = ch_references.bait_intervals
+    ch_bwa_index                    = params.bwa_index                     ? Channel.fromPath(params.bwa_index)                                         : ( ch_references.bwa_index                ?: Channel.empty() )
+    ch_bwamem2_index                = params.bwamem2_index                 ? Channel.fromPath(params.bwamem2_index)                                     : ( ch_references.bwamem2_index            ?: Channel.empty() )
+    ch_bwamem2_index_mt_shift       = params.mt_bwamem2_index_shift        ? Channel.fromPath(params.mt_bwamem2_index_shift)                            : ( ch_references.bwamem2_index_mt_shift   ?: Channel.empty() )
+    ch_chrom_sizes                  = ch_references.chrom_sizes
+    ch_gnomad_af                    = params.gnomad_af                     ? ch_gnomad_af_tab.join(ch_genome_af_idx).map {meta, tab, idx -> [tab,idx]}  : Channel.empty()
+    ch_genome_fai                   = params.fasta_fai                     ? Channel.fromPath(params.fasta_fai)                                         : ( ch_references.fasta_fai                ?: Channel.empty() )
+    ch_mt_shift_fai                 = params.mt_fai_shift                  ? Channel.fromPath(params.mt_fai_shift)                                      : ( ch_references.fasta_fai_mt_shift       ?: Channel.empty() )
+    ch_gnomad_af_idx                = params.gnomad_af_idx                 ? Channel.fromPath(params.gnomad_af_idx)                                     : ( ch_references.gnomad_af_idx            ?: Channel.empty() )
+    ch_gnomad_vcf                   = params.gnomad_vcf                    ? ch_references.gnomad_vcf                                                   : Channel.value([])
+    ch_known_dbsnp_tbi              = params.known_dbsnp_tbi               ? Channel.fromPath(params.known_dbsnp_tbi)                                   : ( ch_references.known_dbsnp_tbi          ?: Channel.empty() )
+    ch_sequence_dictionary          = params.sequence_dictionary           ? Channel.fromPath(params.sequence_dictionary)                               : ( ch_references.sequence_dict            ?: Channel.empty() )
+    ch_sequence_dictionary_mt_shift = params.mt_sequence_dictionary_shift  ? Channel.fromPath(params.mt_sequence_dictionary_shift)                      : ( ch_references.sequence_dict_mt_shift   ?: Channel.empty() )
+    ch_target_bed                   = ch_references.target_bed
+    ch_target_intervals             = ch_references.target_intervals
+    ch_vcfanno_resources            = params.vcfanno_resources.endsWith('.tar.gz') ? ch_references.vcfanno_resources           : Channel.fromPath(params.vcfanno_resources)
+    ch_versions                     = ch_versions.mix(ch_references.versions)
 
     // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
     ALIGN (
@@ -301,11 +309,14 @@ workflow RAREDISEASE {
         ch_bwamem2_index,
         ch_genome_fasta_no_meta,
         ch_sequence_dictionary,
-        ch_references.genome_fai,
-        ch_intervals_mt,
-        params.fasta_shift,
-        params.intervals_mt_shift,
-        params.shift_chain
+        ch_genome_fai,
+        ch_mt_intervals,
+        ch_bwamem2_index_mt_shift,
+        ch_mt_fasta_shift_no_meta,
+        ch_sequence_dictionary_mt_shift,
+        ch_mt_shift_fai,
+        ch_mt_intervals_shift,
+        ch_mt_backchain_shift
     )
     ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
 

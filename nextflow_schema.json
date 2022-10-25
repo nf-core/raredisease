@@ -123,14 +123,14 @@
                     "description": "Path to the index file for the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
                 },
-                "intervals_mt": {
+                "mt_intervals": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-file",
                     "description": "Path to the interval list of the non control mitochondral region.",
                     "help_text": "Path to the interval list of the non control mitochondral regions for Mutect2"
                 },
-                "intervals_mt_shift": {
+                "mt_intervals_shift": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-file",
@@ -172,14 +172,21 @@
                     "description": "Path to sentieon machine learning model file.",
                     "hidden": true
                 },
-                "mt_shift_fasta": {
+                "mt_fasta_shift": {
                     "type": "string",
                     "format": "file-path",
                     "mimetype": "text/plain",
                     "description": "Path to mitochondrial FASTA genome file.",
                     "fa_icon": "far fa-file-code"
                 },
-                "mt_shift_fasta_index": {
+                "mt_fai_shift": {
+                    "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/plain",
+                    "description": "Path to mitochondrial FASTA genome index file.",
+                    "fa_icon": "far fa-file-code"
+                },
+                "mt_bwamem2_index_shift": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "Directory for pre-built bwamem2 index for shifted mitochondrial fasta.",
@@ -187,7 +194,7 @@
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
-                "mt_shift_fasta_chain": {
+                "mt_backchain_shift": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "Chain file describing the alignment between the mitochondrial shifted fasta and typical mitochondrial fasta",
@@ -221,6 +228,13 @@
                     "format": "path",
                     "fa_icon": "fas fa-chart-bar",
                     "description": "Genome dictionary file",
+                    "hidden": true
+                },
+                "mt_sequence_dictionary_shift": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "description": "Shifted mitochondrial genome dictionary file",
                     "hidden": true
                 },
                 "vep_filters": {
