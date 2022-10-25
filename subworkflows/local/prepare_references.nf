@@ -40,6 +40,7 @@ workflow PREPARE_REFERENCES {
         ch_tbi        = Channel.empty()
         ch_bgzip_tbi  = Channel.empty()
 
+        // Genome indices
         BWA_INDEX(fasta_meta)
         BWAMEM2_INDEX(fasta_meta)
         BWAMEM2_INDEX_SHIFT_MT(mt_fasta_shift_meta)
@@ -49,11 +50,18 @@ workflow PREPARE_REFERENCES {
         GATK_SD(fasta_no_meta)
         GATK_SD_SHIFT_MT(mt_fasta_shift_no_meta)
         GET_CHROM_SIZES( SAMTOOLS_FAIDX.out.fai )
+
+        // Vcf, tab and bed indices
         TABIX_DBSNP(known_dbsnp)
         TABIX_GNOMAD_AF(gnomad_af_tab)
         CHECK_VCF(gnomad_vcf_in, fasta_no_meta)
         TABIX_PT(target_bed).tbi.set { ch_tbi }
         TABIX_PBT(target_bed).gz_tbi.set { ch_bgzip_tbi }
+
+        // Check if a vcf file is normalized and create index
+        CHECK_VCF(gnomad_vcf_in, fasta_no_meta)
+
+        // Generate bait and target intervals
         GATK_BILT(target_bed, GATK_SD.out.dict).interval_list
         GATK_ILT(GATK_BILT.out.interval_list)
         GATK_ILT.out.interval_list
@@ -64,6 +72,8 @@ workflow PREPARE_REFERENCES {
             }
             .set { ch_bait_intervals_cat_in }
         CAT_CAT_BAIT ( ch_bait_intervals_cat_in )
+
+        // Untar vcfanno
         UNTAR_VCFANNO ( vcfanno_resources )
 
         // Gather versions
