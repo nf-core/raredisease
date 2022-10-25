@@ -54,7 +54,6 @@ workflow PREPARE_REFERENCES {
         // Vcf, tab and bed indices
         TABIX_DBSNP(known_dbsnp)
         TABIX_GNOMAD_AF(gnomad_af_tab)
-        CHECK_VCF(gnomad_vcf_in, fasta_no_meta)
         TABIX_PT(target_bed).tbi.set { ch_tbi }
         TABIX_PBT(target_bed).gz_tbi.set { ch_bgzip_tbi }
 
@@ -98,7 +97,7 @@ workflow PREPARE_REFERENCES {
     emit:
         bait_intervals            = CAT_CAT_BAIT.out.file_out.map { id, it -> [it] }
         bwa_index                 = BWA_INDEX.out.index ?: SENTIEON_BWAINDEX.out.index
-        bwamem2_index             = BWAMEM2_INDEX.out.index
+        bwamem2_index             = BWAMEM2_INDEX.out.index.collect()
         bwamem2_index_mt_shift    = BWAMEM2_INDEX_SHIFT_MT.out.index
         chrom_sizes               = GET_CHROM_SIZES.out.sizes
         fasta_fai                 = SAMTOOLS_FAIDX.out.fai.map{ meta, fai -> [fai] }
