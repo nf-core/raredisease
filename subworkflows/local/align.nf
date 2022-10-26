@@ -29,7 +29,7 @@ workflow ALIGN {
 
 
     emit:
-        marked_bam             = ch_marked_bam             // channel: [ val(meta), [ marked_bai ] ]
+        marked_bam             = ch_marked_bam             // channel: [ val(meta), [ marked_bam ] ]
         marked_bai             = ch_marked_bai             // channel: [ val(meta), [ marked_bai ] ]
         bam_bai                = ch_bam_bai                // channel: [ val(meta), [ marked_bam, marked_bai ] ]
         versions               = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
