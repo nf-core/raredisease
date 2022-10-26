@@ -17,9 +17,15 @@ process MAKE_PED {
 
     script:
     def pedinfo = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\t')
+    def samples_list = []
     for(int i = 0; i<samples.size(); i++) {
-        pedinfo += '\n'
-        pedinfo += [samples[i].case_id, samples[i].id, samples[i].paternal, samples[i].maternal, samples[i].gender, samples[i].phenotype].join('\t');
+        sample_tokenized   =  samples[i].id.tokenize("_")
+        sample_tokenized.removeLast()
+        sample_name        =  sample_tokenized.join("_")
+        if (!samples_list.contains(sample_name)) {
+            pedinfo += '\n' + [samples[i].case_id, sample_name, samples[i].paternal, samples[i].maternal, samples[i].gender, samples[i].phenotype].join('\t');
+            samples_list.add(sample_name)
+        }
     }
     """
     echo "$pedinfo" > family.ped
