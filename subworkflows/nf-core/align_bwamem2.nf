@@ -51,7 +51,7 @@ workflow ALIGN_BWAMEM2 {
         ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions)
 
         // Marking duplicates
-        MARKDUPLICATES ( prepared_bam )
+        MARKDUPLICATES ( prepared_bam , fasta, fai )
         SAMTOOLS_INDEX_MD ( MARKDUPLICATES.out.bam )
         ch_versions = ch_versions.mix(MARKDUPLICATES.out.versions)
 

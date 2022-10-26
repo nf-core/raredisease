@@ -19,7 +19,7 @@
                     },
                     "bwa/index": {
                         "branch": "master",
-                        "git_sha": "8ddc73f0a37e6be2e852fd828d3effe9734ffa62"
+                        "git_sha": "9518fa4f65f3fb8cde24fde7d40333b39ec8fd65"
                     },
                     "bwamem2/index": {
                         "branch": "master",
@@ -71,35 +71,35 @@
                     },
                     "fastqc": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "f6a11408536fbee6cbea1f5977605011873de3ca"
                     },
                     "gatk4/bedtointervallist": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
                     },
                     "gatk4/createsequencedictionary": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
                     },
                     "gatk4/intervallisttools": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
                     },
                     "gatk4/mergebamalignment": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
                     },
                     "gatk4/mutect2": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
                     },
                     "gatk4/revertsam": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
                     },
                     "gatk4/samtofastq": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
                     },
                     "genmod/annotate": {
                         "branch": "master",
@@ -151,7 +151,7 @@
                     },
                     "picard/markduplicates": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "eca65aa4a5e2e192ac44d6962c8f9260f314ffb8"
                     },
                     "picard/sortvcf": {
                         "branch": "master",
@@ -187,7 +187,7 @@
                     },
                     "samtools/view": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "202683bfc98ddecdd456ea73268e330bca2e5c5a"
                     },
                     "stranger": {
                         "branch": "master",
