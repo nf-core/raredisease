@@ -24,7 +24,7 @@ workflow ANNOTATE_SNVS {
 
     main:
         ch_versions = Channel.empty()
-        ch_toml     = file(vcfanno_toml)
+        ch_toml     = Channel.fromPath(vcfanno_toml)
 
         //
         // annotate vcfanno

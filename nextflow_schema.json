@@ -68,6 +68,7 @@
                     "format": "file-path",
                     "help_text": "If none provided, will be generated automatically from the FASTA reference",
                     "description": "Path to FASTA genome index file.",
+                    "pattern": "^\\S+\\.fn?a(sta)?\\.fai$",
                     "fa_icon": "far fa-file-code",
                     "hidden": true
                 },
@@ -102,10 +103,11 @@
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
-                "gnomad": {
+                "gnomad_vcf": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-bezier-curve",
+                    "pattern": "^\\S+\\.vcf(\\.gz)?$",
                     "description": "Path to directory for gnomad vcf.",
                     "help_text": "Path to the gnomad annotations vcf file. If you don't provide one, gnomad annotations will not be used."
                 },
@@ -113,27 +115,39 @@
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.tab(\\.gz)?$",
                     "description": "Path to the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the gnomad tab file with CHR/START/REF,ALT/AF. Can be generated from the gnomad annotations vcf."
                 },
-                "gnomad_af_tbi": {
+                "gnomad_af_idx": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.bed(\\.gz)?\\.idx$",
                     "description": "Path to the index file for the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
                 },
-                "intervals_mt": {
+                "mt_intervals": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.intervals?(_list)?$",
                     "description": "Path to the interval list of the non control mitochondral region.",
                     "help_text": "Path to the interval list of the non control mitochondral regions for Mutect2"
+                },
+                "mt_intervals_shift": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.intervals?(\\_list)?$",
+                    "description": "Path to the interval list of the non control mitochondral region in shifted fasta.",
+                    "help_text": "Path to the interval list of the non control mitochondral regions in shifted fasta for Mutect2"
                 },
                 "known_dbsnp": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-chart-bar",
+                    "pattern": "^\\S+\\.vcf(\\.gz)?$",
                     "description": "Path to known dbSNP file.",
                     "hidden": true
                 },
@@ -141,6 +155,7 @@
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-chart-bar",
+                    "pattern": "^\\S+\\.vcf(\\.gz)?\\.tbi$",
                     "description": "Path to known dbSNP file index.",
                     "hidden": true
                 },
@@ -148,6 +163,7 @@
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-chart-bar",
+                    "pattern": "^\\S+\\.vcf(\\.gz)?$",
                     "description": "Path to known indels file.",
                     "hidden": true
                 },
@@ -155,6 +171,7 @@
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-chart-bar",
+                    "pattern": "^\\S+\\.vcf(\\.gz)?$",
                     "description": "Path to known Mills file.",
                     "hidden": true
                 },
@@ -163,6 +180,38 @@
                     "format": "path",
                     "fa_icon": "fas fa-chart-bar",
                     "description": "Path to sentieon machine learning model file.",
+                    "hidden": true
+                },
+                "mt_fasta_shift": {
+                    "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/plain",
+                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
+                    "description": "Path to mitochondrial FASTA genome file.",
+                    "fa_icon": "far fa-file-code"
+                },
+                "mt_fai_shift": {
+                    "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/plain",
+                    "pattern": "^\\S+\\.fn?a(sta)?\\.fai?$",
+                    "description": "Path to mitochondrial FASTA genome index file.",
+                    "fa_icon": "far fa-file-code"
+                },
+                "mt_bwamem2_index_shift": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Directory for pre-built bwamem2 index for shifted mitochondrial fasta.",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
+                },
+                "mt_backchain_shift": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Chain file describing the alignment between the mitochondrial shifted fasta and typical mitochondrial fasta",
+                    "help_text": "For more information, check https://genome.ucsc.edu/goldenPath/help/chain.html",
+                    "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
                 "reduced_penetrance": {
@@ -186,6 +235,22 @@
                     "description": "SV rank model config file for genmod.",
                     "hidden": true
                 },
+                "sequence_dictionary": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "pattern": "^\\S+\\.dict$",
+                    "description": "Genome dictionary file",
+                    "hidden": true
+                },
+                "mt_sequence_dictionary_shift": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-chart-bar",
+                    "pattern": "^\\S+\\.dict$",
+                    "description": "Shifted mitochondrial genome dictionary file",
+                    "hidden": true
+                },
                 "vep_filters": {
                     "type": "string",
                     "format": "path",
@@ -197,6 +262,7 @@
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-bezier-curve",
+                    "pattern": "^\\S+\\.bed(\\.gz)?$",
                     "description": "Path to directory for target bed file.",
                     "help_text": "If you would like to limit your analysis to specific regions of the genome, you can pass those regions in a bed file using this option",
                     "hidden": true
@@ -226,6 +292,7 @@
                 "vcfanno_toml": {
                     "type": "string",
                     "description": "Path to the vcfanno toml file.",
+                    "pattern": "^\\S+\\.toml$",
                     "help_text": "If no toml is passed, default configurations will be used according to genome build within the context of the pipeline.",
                     "fa_icon": "fas fa-file-csv",
                     "hidden": true
