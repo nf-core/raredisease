@@ -321,7 +321,6 @@
                     "format": "file-path",
                     "default": null,
                     "fa_icon": "fas fa-bezier-curve",
-                    "pattern": "^\\S+\\.interval_list?$",
                     "description": "Path to interval list for Gens.",
                     "help_text": "This file contains the binning intervals used for CollectReadCounts.",
                     "hidden": true
