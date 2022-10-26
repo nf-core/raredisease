@@ -16,10 +16,10 @@ workflow ANALYSE_MT {
         mt_intervals           // channel: [ file(non_control_region.chrM.interval_list) ]
         shift_mt_bwamem2_index // channel: [ /path/to/bwamem2/index/ ]
         shift_mt_fasta         // channel: [ genome.fasta ]
-        shift_mt_dict                // channel: [ genome.dict ]
-        shift_mt_fai             // channel: [ genome.fai ]
+        shift_mt_dict          // channel: [ genome.dict ]
+        shift_mt_fai           // channel: [ genome.fai ]
         shift_mt_intervals     // channel: [ file(control_region_shifted.chrM.interval_list) ]
-        shift_mt_backchain
+        shift_mt_backchain     // channel: [ file(shift.back_chain) ]
 
     main:
         ch_versions = Channel.empty()
