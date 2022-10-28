@@ -95,22 +95,22 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(UNTAR_VCFANNO.out.versions)
 
     emit:
-        bait_intervals            = CAT_CAT_BAIT.out.file_out.map { id, it -> [it] }
-        bwa_index                 = BWA_INDEX.out.index ?: SENTIEON_BWAINDEX.out.index
+        bait_intervals            = CAT_CAT_BAIT.out.file_out.map { id, it -> [it] }.collect()
+        bwa_index                 = BWA_INDEX.out.index.collect() ?: SENTIEON_BWAINDEX.out.index.collect()
         bwamem2_index             = BWAMEM2_INDEX.out.index.collect()
-        bwamem2_index_mt_shift    = BWAMEM2_INDEX_SHIFT_MT.out.index
-        chrom_sizes               = GET_CHROM_SIZES.out.sizes
-        fasta_fai                 = SAMTOOLS_FAIDX.out.fai.map{ meta, fai -> [fai] }
-        fasta_fai_mt_shift        = SAMTOOLS_FAIDX_SHIFT_MT.out.fai.map{ meta, fai -> [fai] }
-        gnomad_af_idx             = TABIX_GNOMAD_AF.out.tbi
-        gnomad_tbi                = CHECK_VCF.out.index
-        gnomad_vcf                = CHECK_VCF.out.vcf
-        known_dbsnp_tbi           = TABIX_DBSNP.out.tbi
-        sequence_dict             = GATK_SD.out.dict
-        sequence_dict_mt_shift    = GATK_SD_SHIFT_MT.out.dict
-        target_bed                = Channel.empty().mix(ch_tbi, ch_bgzip_tbi)
-        target_intervals          = GATK_BILT.out.interval_list.collect{it[1]}
-        vcfanno_resources         = UNTAR_VCFANNO.out.untar.map { id, resources -> [resources] }
+        bwamem2_index_mt_shift    = BWAMEM2_INDEX_SHIFT_MT.out.index.collect()
+        chrom_sizes               = GET_CHROM_SIZES.out.sizes.collect()
+        fasta_fai                 = SAMTOOLS_FAIDX.out.fai.map{ meta, fai -> [fai] }.collect()
+        fasta_fai_mt_shift        = SAMTOOLS_FAIDX_SHIFT_MT.out.fai.map{ meta, fai -> [fai] }.collect()
+        gnomad_af_idx             = TABIX_GNOMAD_AF.out.tbi.collect()
+        gnomad_tbi                = CHECK_VCF.out.index.collect()
+        gnomad_vcf                = CHECK_VCF.out.vcf.collect()
+        known_dbsnp_tbi           = TABIX_DBSNP.out.tbi.collect()
+        sequence_dict             = GATK_SD.out.dict.collect()
+        sequence_dict_mt_shift    = GATK_SD_SHIFT_MT.out.dict.collect()
+        target_bed                = Channel.empty().mix(ch_tbi, ch_bgzip_tbi).collect()
+        target_intervals          = GATK_BILT.out.interval_list.collect{it[1]}.collect()
+        vcfanno_resources         = UNTAR_VCFANNO.out.untar.map { id, resources -> [resources] }.collect()
         versions                  = ch_versions
 
 }
