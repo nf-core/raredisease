@@ -147,9 +147,9 @@ workflow RAREDISEASE {
     ch_mt_backchain_shift             = params.mt_backchain_shift     ? Channel.fromPath(params.mt_backchain_shift).collect()
                                                                       : Channel.value([])
     ch_mt_fasta_shift_no_meta         = params.mt_fasta_shift         ? Channel.fromPath(params.mt_fasta_shift).collect()
-                                                                      : Channel.value([])
+                                                                      : Channel.empty()
     ch_mt_fasta_shift_meta            = params.mt_fasta_shift         ? ch_mt_fasta_shift_no_meta.map { it -> [[id:it[0].simpleName], it] }.collect()
-                                                                      : Channel.value([])
+                                                                      : Channel.empty()
     ch_mt_intervals                   = params.mt_intervals           ? Channel.fromPath(params.mt_intervals).collect()
                                                                       : Channel.value([])
     ch_mt_intervals_shift             = params.mt_intervals_shift     ? Channel.fromPath(params.mt_intervals_shift).collect()
@@ -198,21 +198,21 @@ workflow RAREDISEASE {
 
     // Gather built indices or get them from the params
     ch_bait_intervals               = ch_references.bait_intervals
-    ch_bwa_index                    = params.bwa_index                     ? Channel.fromPath(params.bwa_index).collect()
+    ch_bwa_index                    = params.bwa_index                     ? Channel.fromPath(params.bwa_index).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ( ch_references.bwa_index                ?: Channel.empty() )
-    ch_bwamem2_index                = params.bwamem2_index                 ? Channel.fromPath(params.bwamem2_index).collect()
+    ch_bwamem2_index                = params.bwamem2_index                 ? Channel.fromPath(params.bwamem2_index).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ( ch_references.bwamem2_index            ?: Channel.empty() )
     ch_bwamem2_index_mt_shift       = params.mt_bwamem2_index_shift        ? Channel.fromPath(params.mt_bwamem2_index_shift).collect()
                                                                            : ( ch_references.bwamem2_index_mt_shift   ?: Channel.empty() )
     ch_chrom_sizes                  = ch_references.chrom_sizes
-    ch_gnomad_af                    = params.gnomad_af                     ? ch_gnomad_af_tab.join(ch_genome_af_idx).map {meta, tab, idx -> [tab,idx]}
-                                                                           : Channel.empty()
     ch_genome_fai                   = params.fasta_fai                     ? Channel.fromPath(params.fasta_fai).collect()
                                                                            : ( ch_references.fasta_fai                ?: Channel.empty() )
     ch_mt_shift_fai                 = params.mt_fai_shift                  ? Channel.fromPath(params.mt_fai_shift).collect()
                                                                            : ( ch_references.fasta_fai_mt_shift       ?: Channel.empty() )
     ch_gnomad_af_idx                = params.gnomad_af_idx                 ? Channel.fromPath(params.gnomad_af_idx).collect()
                                                                            : ( ch_references.gnomad_af_idx            ?: Channel.empty() )
+    ch_gnomad_af                    = params.gnomad_af                     ? ch_gnomad_af_tab.join(ch_gnomad_af_idx).map {meta, tab, idx -> [tab,idx]}.collect()
+                                                                           : Channel.empty()
     ch_gnomad_vcf                   = params.gnomad_vcf                    ? ch_references.gnomad_vcf
                                                                            : Channel.value([])
     ch_known_dbsnp_tbi              = params.known_dbsnp_tbi               ? Channel.fromPath(params.known_dbsnp_tbi).collect()
