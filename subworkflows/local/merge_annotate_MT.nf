@@ -8,6 +8,7 @@ include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_MT                } from '../../m
 include { TABIX_TABIX as TABIX_TABIX_MT                          } from '../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_MT                  } from '../../modules/nf-core/bcftools/norm/main'
 include { TABIX_TABIX as TABIX_TABIX_MT2                         } from '../../modules/nf-core/tabix/tabix/main'
+include { CHANGE_NAME as CHANGE_NAME_VCF_MT                      } from '../../modules/local/change_name_vcf'
 include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                    } from '../../modules/nf-core/bcftools/merge/main'
 include { HMTNOTE as HMTNOTE_MT                                  } from '../../modules/nf-core/hmtnote/main'
 include { TABIX_TABIX as TABIX_TABIX_MT3                         } from '../../modules/nf-core/tabix/tabix/main'
@@ -54,22 +55,20 @@ workflow MERGE_ANNOTATE_MT {
         SPLIT_MULTIALLELICS_MT (ch_in_split, fasta)
         ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_MT.out.versions)
         
-        // Removing duplicates
         TABIX_TABIX_MT(SPLIT_MULTIALLELICS_MT.out.vcf)
         ch_in_remdup = SPLIT_MULTIALLELICS_MT.out.vcf.join(TABIX_TABIX_MT.out.tbi)
+       
+        // Removing duplicates and merging if there is more than one sample
         REMOVE_DUPLICATES_MT(ch_in_remdup, fasta)
+        TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions)
 
-        TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
-        ch_remdup_tbi=REMOVE_DUPLICATES_MT.out.vcf.join(TABIX_TABIX_MT2.out.tbi)
-        REMOVE_DUPLICATES_MT.out
-            .vcf
+        REMOVE_DUPLICATES_MT.out.vcf
             .collect{it[1]}
             .toList()
             .set { file_list }
 
-        TABIX_TABIX_MT2.out
-            .tbi
+        TABIX_TABIX_MT2.out.tbi
             .collect{it[1]}
             .toList()
             .set { file_list2 }
@@ -77,34 +76,41 @@ workflow MERGE_ANNOTATE_MT {
         case_info
             .combine(file_list)
             .combine(file_list2)
-            .set { ch_mergvcf }
+            .set { ch_br }
 
-        BCFTOOLS_MERGE_MT( ch_mergvcf, [], fasta, fai)
+        ch_br.branch {
+            meta, vcf, tbi ->
+                single: vcf.size() == 1
+                    return [meta, vcf]
+                multiple: vcf.size() > 1
+                    return [meta, vcf, tbi]
+            }.set { ch_dedup_vcf }
+        
+        BCFTOOLS_MERGE_MT( ch_dedup_vcf.multiple, [], fasta, fai)
+        ch_mer_vcf=BCFTOOLS_MERGE_MT.out.merged_variants
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
         
+        ch_ch_n=CHANGE_NAME_VCF_MT(ch_dedup_vcf.single)
+        ch_in_vep=ch_mer_vcf.mix(ch_dedup_vcf.single)
+        
         // Annotating with Hmtnote
-        //HMTNOTE_MT(GATK4_VARIANTFILTRATION_MT.out.vcf)
+        //HMTNOTE_MT(ch_in_vep)
         //ch_versions = ch_versions.mix(HMTNOTE_MT.out.versions.first())
 
-        //TABIX_TABIX_MT2(HMTNOTE_MT.out.vcf)
-        //ch_versions = ch_versions.mix(TABIX_TABIX_MT2.out.versions.first())
-        //ch_vep_in_mt=HMTNOTE_MT.out.vcf.join( TABIX_TABIX_MT2.out.tbi, by:[0])
-        
         // Annotating with ensembl Vep
-        ENSEMBLVEP_MT( BCFTOOLS_MERGE_MT.out.merged_variants,
+        ENSEMBLVEP_MT( ch_in_vep,
             vep_genome,
             "homo_sapiens",
             vep_cache_version,
             vep_cache,
             fasta,
             [])
-        ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions.first())
-        
-        // Running haplogrep2
-        TABIX_TABIX_MT3(BCFTOOLS_MERGE_MT.out.merged_variants)
-        HAPLOGREP2_CLASSIFY_MT(BCFTOOLS_MERGE_MT.out.merged_variants, "vcf.gz")
-        ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions.first())
+        ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
 
+        // Running haplogrep2
+        TABIX_TABIX_MT3(ENSEMBLVEP_MT.out.vcf)
+        HAPLOGREP2_CLASSIFY_MT(ch_in_vep, "vcf.gz")
+        ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions)
 
     emit:
         haplog   = HAPLOGREP2_CLASSIFY_MT.out.txt
