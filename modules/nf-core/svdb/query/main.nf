@@ -9,39 +9,30 @@ process SVDB_QUERY {
 
     input:
     tuple val(meta), path(vcf)
-    val(in_occs)
-    val(in_frqs)
-    val(out_occs)
-    val(out_frqs)
-    path (vcf_dbs)
+    tuple val(in_occs), val(in_frqs), val(out_occs), val(out_frqs), path (vcf_dbs)
+    val(placeholder)
 
     output:
-    tuple val(meta), path("*_query.vcf"), emit: vcf
-    path "versions.yml"                     , emit: versions
+    tuple val(meta), path("*_query.vcf")                                                               ,    emit: vcf
+    tuple val(in_occs_rem), val(in_frqs_rem), val(out_occs_rem), val(out_frqs_rem), path (vcf_dbs_rem) ,    emit: vals
+    path "versions.yml"                                                                                ,    emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
-    def args    = task.ext.args ?: ''
-    def prefix  = task.ext.prefix ?: "${meta.id}"
-    def in_occ  = ""
-    def in_frq  = ""
-    def out_occ = ""
-    def out_frq = ""
-    if (in_occs) {
-        in_occ  = "--in_occ ${in_occs.join(',')}"
-    }
-    if (in_frqs) {
-        in_frq  = "--in_frq ${in_frqs.join(',')}"
-    }
-    if (out_occs) {
-        out_occ = "--out_occ ${out_occs.join(',')}"
-    }
-    if (out_frqs) {
-        out_frq = "--out_frq ${out_frqs.join(',')}"
-    }
-
+    def args          = task.ext.args ?: ''
+    def prefix        = task.ext.prefix ?: "${meta.id}"
+    def in_occ        = "--in_occ "  + in_occs.head()
+    in_occs_rem   = in_occs.tail()
+    def in_frq        = "--in_frq "  + in_frqs.head()
+    in_frqs_rem   = in_frqs.tail()
+    def out_occ       = "--out_occ " + out_occs.head()
+    out_occs_rem  = out_occs.tail()
+    def out_frq       = "--out_frq " + out_frqs.head()
+    out_frqs_rem  = out_frqs.tail()
+    def vcf_db        = vcf_dbs.head()
+    vcf_dbs_rem   = vcf_dbs.tail()
     """
     svdb \\
         --query \\
@@ -50,9 +41,9 @@ process SVDB_QUERY {
         $out_occ \\
         $out_frq \\
         $args \\
-        --db ${vcf_dbs.join(',')} \\
+        --db $vcf_db \\
         --query_vcf $vcf \\
-        --prefix ${prefix}
+        --prefix ${prefix}_${task.index}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

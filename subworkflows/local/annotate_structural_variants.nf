@@ -3,6 +3,7 @@
 //
 
 include { SVDB_QUERY                    } from '../../modules/nf-core/svdb/query/main'
+include { SVDB_MERGE                    } from '../../modules/nf-core/svdb/merge/main'
 include { PICARD_SORTVCF                } from '../../modules/nf-core/picard/sortvcf/main'
 include { BCFTOOLS_VIEW                 } from '../../modules/nf-core/bcftools/view/main'
 include { TABIX_TABIX as TABIX_SV_ANNO  } from '../../modules/nf-core/tabix/tabix/main'
@@ -33,27 +34,36 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             }
             .set { ch_svdb_dbs }
 
-        SVDB_QUERY(vcf,
-            ch_svdb_dbs.in_occs.toList(),
-            ch_svdb_dbs.in_frqs.toList(),
-            ch_svdb_dbs.out_occs.toList(),
-            ch_svdb_dbs.out_frqs.toList(),
-            ch_svdb_dbs.vcf_dbs.toList()
-            )
+        ch_svdb_dbs.in_occs.toList()
+            .concat(ch_svdb_dbs.in_frqs.toList(),
+                    ch_svdb_dbs.out_occs.toList(),
+                    ch_svdb_dbs.out_frqs.toList(),
+                    ch_svdb_dbs.vcf_dbs.toList())
+            .toList()
+            .set  { ch_dbs_in }
+
+        vcf.collect().set {ch_vcf_in}
+        SVDB_QUERY
+            .recurse(ch_vcf_in, ch_dbs_in,[] )
+            .until{ it -> it[1][1] == [] }
+
+        SVDB_QUERY.out.vcf.groupTuple().set { ch_merge_in }
+
         ch_versions = ch_versions.mix(SVDB_QUERY.out.versions)
+        SVDB_MERGE(ch_merge_in, [])
 
-        PICARD_SORTVCF(SVDB_QUERY.out.vcf,
-            fasta,
-            seq_dict
-        )
+        // PICARD_SORTVCF(SVDB_MERGE.out.vcf,
+            // fasta,
+            // seq_dict
+        // )
 
-        PICARD_SORTVCF.out.vcf
-            .map {
-                meta, vcf ->
+        // PICARD_SORTVCF.out.vcf
+        SVDB_MERGE.out.vcf
+            .map { meta, vcf ->
                     return [meta,vcf,[]]
             }
             .set { ch_sortvcf }
-        ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
+        // ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
 
         BCFTOOLS_VIEW(ch_sortvcf,[],[],[])
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)

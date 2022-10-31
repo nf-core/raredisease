@@ -311,7 +311,7 @@ workflow RAREDISEASE {
             params.genome,
             params.vep_cache_version,
             ch_vep_cache,
-            ch_genome_fasta_meta,
+            ch_genome_fasta_no_meta,
             ch_sequence_dictionary
         ).set {ch_sv_annotate}
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
