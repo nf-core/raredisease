@@ -19,7 +19,7 @@ process CHANGE_NAME {
     def args = task.ext.args ?: ''
     file_type = task.ext.file_type ?: input_file.getExtension()
     def prefix = task.ext.prefix ?: "${meta.id}"
-    
+
     """
     mv \\
         $input_file \\
