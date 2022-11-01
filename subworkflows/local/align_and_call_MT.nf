@@ -18,23 +18,23 @@ workflow ALIGN_AND_CALL_MT {
     take:
         fastq         // channel: [ val(meta), path('*.fastq.gz') ]
         ubam          // channel: [ val(meta), path('*.bam') ]
-        index         // channel: [ /path/to/bwamem2/index/ ]
-        fasta         // channel: [ genome.fasta ]
-        dict          // channel: [ genome.dict ]
-        fai           // channel: [ genome.fai ]
+        genome_index  // channel: [ /path/to/bwamem2/index/ ]
+        genome_fasta  // channel: [ genome.fasta ]
+        genome_dict   // channel: [ genome.dict ]
+        genome_fai    // channel: [ genome.fai ]
         intervals_mt  // channel: [ file(non_control_region.chrM.interval_list) ]
 
     main:
         ch_versions = Channel.empty()
 
         // Outputs bam files
-        BWAMEM2_MEM_MT ( fastq , index, true)
+        BWAMEM2_MEM_MT ( fastq , genome_index, true)
         ch_versions    = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
         ch_mt_bam      =  BWAMEM2_MEM_MT.out.bam
         ch_fastq_ubam  = ch_mt_bam.join(ubam, by: [0])
 
         // Merges bam files
-        GATK4_MERGEBAMALIGNMENT_MT (ch_fastq_ubam, fasta, dict )
+        GATK4_MERGEBAMALIGNMENT_MT (ch_fastq_ubam, genome_fasta, genome_dict )
         ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions.first())
 
         // Add read group to merged bam file
@@ -42,7 +42,7 @@ workflow ALIGN_AND_CALL_MT {
         ch_versions = ch_versions.mix(PICARD_ADDORREPLACEREADGROUPS_MT.out.versions.first())
 
         // Marks duplicates
-        PICARD_MARKDUPLICATES_MT (PICARD_ADDORREPLACEREADGROUPS_MT.out.bam, fasta, fai )
+        PICARD_MARKDUPLICATES_MT (PICARD_ADDORREPLACEREADGROUPS_MT.out.bam, genome_fasta, genome_fai )
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
 
         // Sort bam file
@@ -56,7 +56,7 @@ workflow ALIGN_AND_CALL_MT {
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MT.out.versions.first())
 
         // Calls variants with Mutect2
-        GATK4_MUTECT2_MT (ch_sort_index_bam_intervals_mt, fasta, fai, dict, [], [], [],[])
+        GATK4_MUTECT2_MT (ch_sort_index_bam_intervals_mt, genome_fasta, genome_fai, genome_dict, [], [], [],[])
         ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions.first())
 
         // Haplocheck
@@ -72,9 +72,9 @@ workflow ALIGN_AND_CALL_MT {
             meta, vcf, tbi, stats ->
                 return [meta, vcf, tbi, stats, [], [], [], []]}
         GATK4_FILTERMUTECTCALLS_MT( ch_to_filt, 
-            fasta, 
-            fai, 
-            dict )
+            genome_fasta, 
+            genome_fai, 
+            genome_dict )
         ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
 
         // Replace within the vcf sample as a sample name with meta.id
