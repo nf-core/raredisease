@@ -8,7 +8,7 @@ include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_MT                } from '../../m
 include { TABIX_TABIX as TABIX_TABIX_MT                          } from '../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_MT                  } from '../../modules/nf-core/bcftools/norm/main'
 include { TABIX_TABIX as TABIX_TABIX_MT2                         } from '../../modules/nf-core/tabix/tabix/main'
-include { CHANGE_NAME as CHANGE_NAME_VCF_MT                      } from '../../modules/local/change_name_vcf'
+include { CHANGE_NAME as CHANGE_NAME_VCF_MT                      } from '../../modules/local/change_name'
 include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                    } from '../../modules/nf-core/bcftools/merge/main'
 include { HMTNOTE as HMTNOTE_MT                                  } from '../../modules/nf-core/hmtnote/main'
 include { TABIX_TABIX as TABIX_TABIX_MT3                         } from '../../modules/nf-core/tabix/tabix/main'
