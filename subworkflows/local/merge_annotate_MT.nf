@@ -26,9 +26,6 @@ workflow MERGE_ANNOTATE_MT {
        vep_cache_version
        vep_cache
        case_info      // channel: [ val(case_info) ]
-       vep_genome
-       vep_cache_version
-       vep_cache
 
     main:
        ch_versions = Channel.empty()
@@ -47,7 +44,7 @@ workflow MERGE_ANNOTATE_MT {
         GATK4_VARIANTFILTRATION_MT(ch_filt_vcf, 
             genome_fasta, 
             genome_fai, 
-            genome_dict)
+            genome_dict )
         ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION_MT.out.versions.first())
         
         // Spliting multiallelic calls
