@@ -281,6 +281,7 @@ workflow RAREDISEASE {
         ch_mapped.marked_bai,
         ch_bwa_index,
         ch_genome_fasta_no_meta,
+        ch_genome_fasta_meta,
         ch_genome_fai,
         CHECK_INPUT.out.case_info,
         ch_target_bed,
