@@ -10,10 +10,12 @@ process ADD_MOST_SEVERE_CSQ {
     input:
     tuple val(meta), path(vcf)
     path (variant_consequences)
+    path (pli_gene)
 
     output:
-    tuple val(meta), path("*.vcfparser.vcf")    , emit: vcf
-    path "versions.yml"                         , emit: versions
+    tuple val(meta), path("*.csq_pli.vcf")    , emit: csq_pli_vcf
+    tuple val(meta), path("*.csq.vcf")        , emit: csq_vcf
+    path "versions.yml"                       , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -22,22 +24,23 @@ process ADD_MOST_SEVERE_CSQ {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    python3 add_most_severe_consequence.py ${vcf} ${prefix}.vcfparser.vcf ${variant_consequences}
+    python3 add_most_severe_consequence.py --file_in ${vcf} --file_out ${prefix}.csq.vcf --variant_csq ${variant_consequences}
+    python3 add_most_severe_pli.py --file_in ${prefix}.csq.vcf --file_out ${prefix}.csq_pli.vcf --pli ${pli}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        add_most_severe_consequence: v1.0
+        add_most_severe_consequence_pli: v1.0
     END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.vcfparser.vcf
+    touch ${prefix}.csq_pli.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        add_most_severe_consequence: v1.0
+        add_most_severe_consequence_pli: v1.0
     END_VERSIONS
     """
 }
