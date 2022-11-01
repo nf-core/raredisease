@@ -243,11 +243,11 @@
                     },
                     "tiddit/cov": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "3a54013f0790674624b77e9a074ce8d22400d4fa"
                     },
                     "tiddit/sv": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "89f98091ac9e1653657b9e324e394b158d723a4f"
                     },
                     "ucsc/wigtobigwig": {
                         "branch": "master",

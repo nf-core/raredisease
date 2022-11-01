@@ -2,11 +2,11 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SENTIEON_BWAMEM         } from '../../modules/local/sentieon/bwamem'
-include { SENTIEON_DATAMETRICS    } from '../../modules/local/sentieon/datametrics'
-include { SENTIEON_LOCUSCOLLECTOR } from '../../modules/local/sentieon/locuscollector'
-include { SENTIEON_DEDUP          } from '../../modules/local/sentieon/dedup'
-include { SENTIEON_BQSR           } from '../../modules/local/sentieon/bqsr'
+include { SENTIEON_BWAMEM         } from '../../../modules/local/sentieon/bwamem'
+include { SENTIEON_DATAMETRICS    } from '../../../modules/local/sentieon/datametrics'
+include { SENTIEON_LOCUSCOLLECTOR } from '../../../modules/local/sentieon/locuscollector'
+include { SENTIEON_DEDUP          } from '../../../modules/local/sentieon/dedup'
+include { SENTIEON_BQSR           } from '../../../modules/local/sentieon/bqsr'
 
 workflow ALIGN_SENTIEON {
     take:

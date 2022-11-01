@@ -13,7 +13,8 @@ workflow CALL_STRUCTURAL_VARIANTS {
         bam           // channel: [ val(meta), path(bam) ]
         bai           // channel: [ val(meta), path(bai) ]
         bwa_index     // channel: [ val(meta), path(bwa_index)]
-        fasta         // channel: [ path(genome.fasta) ]
+        fasta_no_meta // channel: [ path(genome.fasta) ]
+        fasta_meta    // channel: [ val(meta), path(genome.fasta) ]
         fai           // channel: [ path(genome.fai) ]
         case_info     // channel: [ val(case_info) ]
         target_bed    // channel: [ path(target.bed) ]
@@ -23,7 +24,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_versions = Channel.empty()
 
         //manta
-        CALL_SV_MANTA ( bam, bai, fasta, fai, case_info, target_bed )
+        CALL_SV_MANTA ( bam, bai, fasta_no_meta, fai, case_info, target_bed )
             .diploid_sv_vcf
             .collect{it[1]}
             .set{ manta_vcf }
@@ -31,14 +32,14 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
         //tiddit
         ch_tiddit_bam = bam.join(bai)
-        CALL_SV_TIDDIT ( ch_tiddit_bam, fasta, bwa_index, case_info )
+        CALL_SV_TIDDIT ( ch_tiddit_bam, fasta_meta, bwa_index, case_info )
             .vcf
             .collect{it[1]}
             .set { tiddit_vcf }
         ch_versions = ch_versions.mix(CALL_SV_TIDDIT.out.versions)
 
         //cnvpytor
-        CALL_CNV_CNVPYTOR ( bam, bai, case_info, cnvpytor_bins, fasta, fai)
+        CALL_CNV_CNVPYTOR ( bam, bai, case_info, cnvpytor_bins, fasta_no_meta, fai)
             .candidate_cnvs_vcf
             .collect{it[1]}
             .set {cnvpytor_vcf }
