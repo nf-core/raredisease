@@ -227,7 +227,7 @@ workflow RAREDISEASE {
                                                                            : Channel.fromPath(params.vcfanno_resources).collect()
     ch_versions                     = ch_versions.mix(ch_references.versions)
 
-    // STEP 1: ALIGNING READS, FETCH STATS, AND MERGE.
+    // ALIGNING READS, FETCH STATS, AND MERGE.
     ALIGN (
         params.aligner,
         CHECK_INPUT.out.reads,
@@ -281,6 +281,7 @@ workflow RAREDISEASE {
         ch_mapped.marked_bai,
         ch_bwa_index,
         ch_genome_fasta_no_meta,
+        ch_genome_fasta_meta,
         ch_genome_fai,
         CHECK_INPUT.out.case_info,
         ch_target_bed,

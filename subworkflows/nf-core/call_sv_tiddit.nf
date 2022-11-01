@@ -9,13 +9,12 @@ include { SVDB_MERGE as SVDB_MERGE_TIDDIT } from '../../modules/nf-core/svdb/mer
 workflow CALL_SV_TIDDIT {
     take:
     bam            // channel: [ val(meta), path(bam) ]
-    fasta          // path(fasta)
+    fasta          // channel: [ val(meta), path(fasta) ]
     index          // [ val(meta), path(bwa_index)]
     case_info      // channel: [ case_id ]
 
     main:
-        index_for_tiddit = index.map { meta, ind -> ind }
-        TIDDIT_SV ( bam, fasta, index_for_tiddit )
+        TIDDIT_SV ( bam, fasta, index )
         ch_versions = TIDDIT_SV.out.versions
 
         TIDDIT_SV.out
