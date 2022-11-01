@@ -10,6 +10,9 @@ include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MT                               } fr
 include { SAMTOOLS_SORT as SAMTOOLS_SORT_MT                                 } from '../../modules/nf-core/samtools/sort/main'
 include { HAPLOCHECK as HAPLOCHECK_MT                                       } from '../../modules/nf-core/haplocheck/main'
 include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } from '../../modules/nf-core/gatk4/mutect2/main'
+include { GATK4_FILTERMUTECTCALLS as  GATK4_FILTERMUTECTCALLS_MT            } from '../../modules/nf-core/gatk4/filtermutectcalls/main'
+include { PICARD_RENAMESAMPLEINVCF as PICARD_RENAMESAMPLEINVCF_MT           } from '../../modules/nf-core/picard/renamesampleinvcf/main'
+include { TABIX_TABIX as TABIX_TABIX_MT                                     } from '../../modules/nf-core/tabix/tabix/main'
 
 workflow ALIGN_AND_CALL_MT {
     take:
@@ -62,11 +65,32 @@ workflow ALIGN_AND_CALL_MT {
         HAPLOCHECK_MT ( GATK4_MUTECT2_MT.out.vcf )
         ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions.first())
 
+        // Filter Mutect2 calls
+        ch_mutect_tbi = GATK4_MUTECT2_MT.out.vcf.join(GATK4_MUTECT2_MT.out.tbi, by: [0])
+        ch_mutect_out = ch_mutect_tbi.join(GATK4_MUTECT2_MT.out.stats, by: [0])
+        ch_to_filt = ch_mutect_out.map {
+            meta, vcf, tbi, stats ->
+                return [meta, vcf, tbi, stats, [], [], [], []]}
+        GATK4_FILTERMUTECTCALLS_MT( ch_to_filt, 
+            fasta, 
+            fai, 
+            dict )
+        ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
+
+        // Replace within the vcf sample as a sample name with meta.id
+        PICARD_RENAMESAMPLEINVCF_MT(GATK4_FILTERMUTECTCALLS_MT.out.vcf)
+        ch_versions = ch_versions.mix(PICARD_RENAMESAMPLEINVCF_MT.out.versions.first())
+
+        TABIX_TABIX_MT(PICARD_RENAMESAMPLEINVCF_MT.out.vcf)
+        ch_versions = ch_versions.mix(TABIX_TABIX_MT.out.versions.first())
+
 
     emit:
-        vcf      = GATK4_MUTECT2_MT.out.vcf
-        tbi      = GATK4_MUTECT2_MT.out.tbi
-        txt      = HAPLOCHECK_MT.out.txt
-        html     = HAPLOCHECK_MT.out.html
-        versions = ch_versions // channel: [ versions.yml ]
+        vcf       = PICARD_RENAMESAMPLEINVCF_MT.out.vcf
+        tbi       = TABIX_TABIX_MT.out.tbi
+        stats     = GATK4_MUTECT2_MT.out.stats
+        filt_sats = GATK4_FILTERMUTECTCALLS_MT.out.stats
+        txt       = HAPLOCHECK_MT.out.txt
+        html      = HAPLOCHECK_MT.out.html
+        versions  = ch_versions
 }
