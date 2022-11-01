@@ -5,6 +5,7 @@ include { CONVERT_MT_BAM_TO_FASTQ                        } from './convert_mt_ba
 include { ALIGN_AND_CALL_MT                              } from './align_and_call_MT'
 include { ALIGN_AND_CALL_MT as ALIGN_AND_CALL_MT_SHIFT   } from './align_and_call_MT'
 include { PICARD_LIFTOVERVCF                             } from '../../modules/nf-core/picard/liftovervcf/main'
+include { MERGE_ANNOTATE_MT                              } from './merge_annotate_MT'
 
 workflow ANALYSE_MT {
     take:
@@ -20,6 +21,10 @@ workflow ANALYSE_MT {
         shift_mt_fai           // channel: [ genome.fai ]
         shift_mt_intervals     // channel: [ file(control_region_shifted.chrM.interval_list) ]
         shift_mt_backchain     // channel: [ file(shift.back_chain) ]
+        vep_genome
+        vep_cache_version
+        vep_cache
+        case_info              // channel: [ val(case_info) ]  
 
     main:
         ch_versions = Channel.empty()
@@ -59,18 +64,36 @@ workflow ANALYSE_MT {
               genome_fasta)
         ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions)
 
+        // STEP 3: MT MERGE AND ANNOTATE VARIANTS
+        MERGE_ANNOTATE_MT( 
+            ALIGN_AND_CALL_MT.out.vcf, 
+            PICARD_LIFTOVERVCF.out.vcf_lifted,
+            genome_fasta,
+            genome_dict,
+            genome_fai,
+            vep_genome,
+            vep_cache_version,
+            vep_cache,
+            case_info
+         )
+        ch_versions = ch_versions.mix(MERGE_ANNOTATE_MT.out.versions)
 
     emit:
-        vcf         = ALIGN_AND_CALL_MT.out.vcf
-        tbi         = ALIGN_AND_CALL_MT.out.tbi
-        txt         = ALIGN_AND_CALL_MT.out.txt
-        html        = ALIGN_AND_CALL_MT.out.html
-        vcf_shift   = ALIGN_AND_CALL_MT_SHIFT.out.vcf
-        tbi_shift   = ALIGN_AND_CALL_MT_SHIFT.out.tbi
-        txt_shift   = ALIGN_AND_CALL_MT_SHIFT.out.txt
-        html_shift  = ALIGN_AND_CALL_MT_SHIFT.out.html
-        vcf_lift    = PICARD_LIFTOVERVCF.out.vcf_lifted
-        vcf_unlift  = PICARD_LIFTOVERVCF.out.vcf_unlifted
+        vcf          = MERGE_ANNOTATE_MT.out.vcf
+        tbi          = MERGE_ANNOTATE_MT.out.tbi
+        stats        = ALIGN_AND_CALL_MT.out.stats
+        filt_sats    = ALIGN_AND_CALL_MT.out.filt_sats
+        stats_sh     = ALIGN_AND_CALL_MT_SHIFT.out.stats
+        filt_sats_sh = ALIGN_AND_CALL_MT_SHIFT.out.filt_sats
+        haplog       = MERGE_ANNOTATE_MT.out.haplog
+        report       = MERGE_ANNOTATE_MT.out.report
+        txt          = ALIGN_AND_CALL_MT.out.txt
+        html         = ALIGN_AND_CALL_MT.out.html
+//        vcf_shift   = ALIGN_AND_CALL_MT_SHIFT.out.vcf
+//        tbi_shift   = ALIGN_AND_CALL_MT_SHIFT.out.tbi
+        txt_sh       = ALIGN_AND_CALL_MT_SHIFT.out.txt
+        html_sh      = ALIGN_AND_CALL_MT_SHIFT.out.html
+//       vcf_lift    = PICARD_LIFTOVERVCF.out.vcf_lifted
+//      vcf_unlift  = PICARD_LIFTOVERVCF.out.vcf_unlifted
         versions    = ch_versions // channel: [ versions.yml ]
-
 }
