@@ -32,7 +32,6 @@ process GATK4_VARIANTFILTRATION {
         avail_mem = task.memory.toGiga()
     }
     """
-    "ls -l".execute().text > /dev/stderr
     gatk --java-options "-Xmx${avail_mem}G" VariantFiltration \\
         --variant $vcf \\
         --output ${prefix}.vcf.gz \\
