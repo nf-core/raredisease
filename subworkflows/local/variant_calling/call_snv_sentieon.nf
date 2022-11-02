@@ -2,8 +2,8 @@
 // A subworkflow to call SNVs by sentieon dnascope with a machine learning model.
 //
 
-include { SENTIEON_DNASCOPE             } from '../../modules/local/sentieon/dnascope'
-include { SENTIEON_DNAMODELAPPLY        } from '../../modules/local/sentieon/dnamodelapply'
+include { SENTIEON_DNASCOPE             } from '../../../modules/local/sentieon/dnascope'
+include { SENTIEON_DNAMODELAPPLY        } from '../../../modules/local/sentieon/dnamodelapply'
 
 workflow CALL_SNV_SENTIEON {
 	take:

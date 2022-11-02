@@ -2,14 +2,14 @@
 // Align and call MT
 //
 
-include { BWAMEM2_MEM as BWAMEM2_MEM_MT                                     } from '../../modules/nf-core/bwamem2/mem/main'
-include { GATK4_MERGEBAMALIGNMENT as GATK4_MERGEBAMALIGNMENT_MT             } from '../../modules/nf-core/gatk4/mergebamalignment/main'
-include { PICARD_ADDORREPLACEREADGROUPS as PICARD_ADDORREPLACEREADGROUPS_MT } from '../../modules/nf-core/picard/addorreplacereadgroups/main'
-include { PICARD_MARKDUPLICATES as PICARD_MARKDUPLICATES_MT                 } from '../../modules/nf-core/picard/markduplicates/main'
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MT                               } from '../../modules/nf-core/samtools/index/main'
-include { SAMTOOLS_SORT as SAMTOOLS_SORT_MT                                 } from '../../modules/nf-core/samtools/sort/main'
-include { HAPLOCHECK as HAPLOCHECK_MT                                       } from '../../modules/nf-core/haplocheck/main'
-include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } from '../../modules/nf-core/gatk4/mutect2/main'
+include { BWAMEM2_MEM as BWAMEM2_MEM_MT                                     } from '../../../modules/nf-core/bwamem2/mem/main'
+include { GATK4_MERGEBAMALIGNMENT as GATK4_MERGEBAMALIGNMENT_MT             } from '../../../modules/nf-core/gatk4/mergebamalignment/main'
+include { PICARD_ADDORREPLACEREADGROUPS as PICARD_ADDORREPLACEREADGROUPS_MT } from '../../../modules/nf-core/picard/addorreplacereadgroups/main'
+include { PICARD_MARKDUPLICATES as PICARD_MARKDUPLICATES_MT                 } from '../../../modules/nf-core/picard/markduplicates/main'
+include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MT                               } from '../../../modules/nf-core/samtools/index/main'
+include { SAMTOOLS_SORT as SAMTOOLS_SORT_MT                                 } from '../../../modules/nf-core/samtools/sort/main'
+include { HAPLOCHECK as HAPLOCHECK_MT                                       } from '../../../modules/nf-core/haplocheck/main'
+include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } from '../../../modules/nf-core/gatk4/mutect2/main'
 
 workflow ALIGN_AND_CALL_MT {
     take:

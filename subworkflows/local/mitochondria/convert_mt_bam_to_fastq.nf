@@ -2,9 +2,9 @@
 // Prepare bam files for MT allignment
 //
 
-include { SAMTOOLS_VIEW as SAMTOOLS_VIEW_MT       } from '../../modules/nf-core/samtools/view/main'
-include { GATK4_REVERTSAM as GATK4_REVERTSAM_MT   } from '../../modules/nf-core/gatk4/revertsam/main'
-include { GATK4_SAMTOFASTQ as GATK4_SAMTOFASTQ_MT } from '../../modules/nf-core/gatk4/samtofastq/main'
+include { SAMTOOLS_VIEW as SAMTOOLS_VIEW_MT       } from '../../../modules/nf-core/samtools/view/main'
+include { GATK4_REVERTSAM as GATK4_REVERTSAM_MT   } from '../../../modules/nf-core/gatk4/revertsam/main'
+include { GATK4_SAMTOFASTQ as GATK4_SAMTOFASTQ_MT } from '../../../modules/nf-core/gatk4/samtofastq/main'
 
 workflow CONVERT_MT_BAM_TO_FASTQ {
     take:
