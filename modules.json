@@ -115,7 +115,7 @@
                     },
                     "gatk4/variantfiltration": {
                         "branch": "master",
-                        "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
+                        "git_sha": "c95bed5b125e90553814b8720875c8c663524619"
                     },
                     "genmod/annotate": {
                         "branch": "master",
