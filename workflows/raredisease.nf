@@ -387,7 +387,7 @@ workflow RAREDISEASE {
             ch_vep_filters
         )
 
-        ANN_CSQ_SNV (
+        ANN_CSQ_PLI_SNV (
             FILTER_VEP_SNV.out.vcf,
             RANK_VARIANTS_SNV.out.vcf,
             ch_variant_consequences
