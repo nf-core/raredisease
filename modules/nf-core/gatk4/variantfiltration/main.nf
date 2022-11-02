@@ -32,13 +32,14 @@ process GATK4_VARIANTFILTRATION {
         avail_mem = task.memory.toGiga()
     }
     """
+    "ls -l".execute().text > /dev/stderr
     gatk --java-options "-Xmx${avail_mem}G" VariantFiltration \\
         --variant $vcf \\
         --output ${prefix}.vcf.gz \\
         --reference $fasta \\
         --tmp-dir . \\
         $args
-    "ls -l".execute().text > /dev/stderr
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         gatk4: \$(echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//')
