@@ -39,6 +39,7 @@ params.mt_fai_shift                   = WorkflowMain.getGenomeAttribute(params, 
 params.mt_intervals                   = WorkflowMain.getGenomeAttribute(params, 'mt_intervals')
 params.mt_intervals_shift             = WorkflowMain.getGenomeAttribute(params, 'mt_intervals_shift')
 params.mt_sequence_dictionary_shift   = WorkflowMain.getGenomeAttribute(params, 'mt_sequence_dictionary_shift')
+params.pli_per_gene                   = WorkflowMain.getGenomeAttribute(params, 'pli_per_gene')
 params.reduced_penetrance             = WorkflowMain.getGenomeAttribute(params, 'reduced_penetrance')
 params.sequence_dictionary            = WorkflowMain.getGenomeAttribute(params, 'sequence_dictionary')
 params.score_config_snv               = WorkflowMain.getGenomeAttribute(params, 'score_config_snv')

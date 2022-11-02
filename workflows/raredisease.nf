@@ -36,6 +36,7 @@ def checkPathParamList = [
     params.mt_intervals_shift,
     params.mt_sequence_dictionary_shift,
     params.multiqc_config,
+    params.pli_per_gene,
     params.reduced_penetrance,
     params.score_config_snv,
     params.score_config_sv,
@@ -90,8 +91,8 @@ include { MULTIQC                               } from '../modules/nf-core/multi
 
 include { ALIGN                                 } from '../subworkflows/local/align'
 include { ANALYSE_MT                            } from '../subworkflows/local/analyse_MT'
-include { ANNOTATE_CSQ as ANN_CSQ_SNV           } from '../subworkflows/local/annotate_consequence'
-include { ANNOTATE_CSQ as ANN_CSQ_SV            } from '../subworkflows/local/annotate_consequence'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV   } from '../subworkflows/local/annotate_consequence_pli'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV    } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_SNVS                         } from '../subworkflows/local/annotate_snvs'
 include { ANNOTATE_STRUCTURAL_VARIANTS          } from '../subworkflows/local/annotate_structural_variants'
 include { CALL_SNV                              } from '../subworkflows/local/call_snv'
@@ -153,6 +154,8 @@ workflow RAREDISEASE {
     ch_mt_intervals                   = params.mt_intervals           ? Channel.fromPath(params.mt_intervals).collect()
                                                                       : Channel.value([])
     ch_mt_intervals_shift             = params.mt_intervals_shift     ? Channel.fromPath(params.mt_intervals_shift).collect()
+                                                                      : Channel.value([])
+    ch_pli_per_gene                   = params.pli_per_gene           ? Channel.fromPath(params.pli_per_gene).collect()
                                                                       : Channel.value([])
     ch_reduced_penetrance             = params.reduced_penetrance     ? Channel.fromPath(params.reduced_penetrance).collect()
                                                                       : Channel.value([])
@@ -317,8 +320,14 @@ workflow RAREDISEASE {
         ).set {ch_sv_annotate}
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
-        RANK_VARIANTS_SV (
+        ANN_CSQ_PLI_SV (
             ch_sv_annotate.vcf_ann,
+            ch_variant_consequences,
+            ch_pli_per_gene
+        )
+
+        RANK_VARIANTS_SV (
+            ANN_CSQ_PLI_SV.out.vcf_ann,
             MAKE_PED.out.ped,
             ch_reduced_penetrance,
             ch_score_config_sv
@@ -330,11 +339,6 @@ workflow RAREDISEASE {
             ch_vep_filters
         )
 
-        ANN_CSQ_SV (
-            FILTER_VEP_SV.out.vcf,
-            RANK_VARIANTS_SV.out.vcf,
-            ch_variant_consequences
-        )
     }
 
     ANALYSE_MT (
