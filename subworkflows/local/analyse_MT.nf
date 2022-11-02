@@ -24,7 +24,7 @@ workflow ANALYSE_MT {
         vep_genome
         vep_cache_version
         vep_cache
-        case_info              // channel: [ val(case_info) ]  
+        case_info              // channel: [ val(case_info) ]
 
     main:
         ch_versions = Channel.empty()
@@ -58,10 +58,10 @@ workflow ANALYSE_MT {
 
         // STEP 2.3: PICARD_LIFTOVERVCF
         PICARD_LIFTOVERVCF (
-              ALIGN_AND_CALL_MT_SHIFT.out.vcf,
-              genome_dict,
-              shift_mt_backchain,
-              genome_fasta)
+            ALIGN_AND_CALL_MT_SHIFT.out.vcf,
+            genome_dict,
+            shift_mt_backchain,
+            genome_fasta)
         ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions)
 
         // STEP 3: MT MERGE AND ANNOTATE VARIANTS
@@ -74,8 +74,7 @@ workflow ANALYSE_MT {
             vep_genome,
             vep_cache_version,
             vep_cache,
-            case_info
-         )
+            case_info)
         ch_versions = ch_versions.mix(MERGE_ANNOTATE_MT.out.versions)
 
     emit:

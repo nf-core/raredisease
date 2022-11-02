@@ -17,18 +17,18 @@ include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT          } from '../../m
 
 workflow MERGE_ANNOTATE_MT {
     take:
-       vcf1          // channel: [ val(meta), path('*.vcf.gz') ]
-       vcf2          // channel: [ val(meta), path('*.vcf.gz') ]
-       genome_fasta  // channel: [ genome.fasta ]
-       genome_dict   // channel: [ genome.dict ]
-       genome_fai    // channel: [ genome.fai ]
-       vep_genome
-       vep_cache_version
-       vep_cache
-       case_info      // channel: [ val(case_info) ]
+        vcf1          // channel: [ val(meta), path('*.vcf.gz') ]
+        vcf2          // channel: [ val(meta), path('*.vcf.gz') ]
+        genome_fasta  // channel: [ genome.fasta ]
+        genome_dict   // channel: [ genome.dict ]
+        genome_fai    // channel: [ genome.fai ]
+        vep_genome
+        vep_cache_version
+        vep_cache
+        case_info      // channel: [ val(case_info) ]
 
     main:
-       ch_versions = Channel.empty()
+        ch_versions = Channel.empty()
        
         ch_vcfs = vcf1
             .join(vcf2, remainder: true)
@@ -51,10 +51,10 @@ workflow MERGE_ANNOTATE_MT {
         ch_in_split=GATK4_VARIANTFILTRATION_MT.out.vcf.join( GATK4_VARIANTFILTRATION_MT.out.tbi, by:[0])
         SPLIT_MULTIALLELICS_MT (ch_in_split, genome_fasta)
         ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_MT.out.versions)
-        
+
         TABIX_TABIX_MT(SPLIT_MULTIALLELICS_MT.out.vcf)
         ch_in_remdup = SPLIT_MULTIALLELICS_MT.out.vcf.join(TABIX_TABIX_MT.out.tbi)
-       
+
         // Removing duplicates and merging if there is more than one sample
         REMOVE_DUPLICATES_MT(ch_in_remdup, genome_fasta)
         TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
@@ -82,17 +82,17 @@ workflow MERGE_ANNOTATE_MT {
                 multiple: vcf.size() > 1
                     return [meta, vcf, tbi]
             }.set { ch_dedup_vcf }
-        
+
         BCFTOOLS_MERGE_MT( ch_dedup_vcf.multiple, 
             [], 
             genome_fasta, 
             genome_fai)
         ch_mer_vcf=BCFTOOLS_MERGE_MT.out.merged_variants
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
-        
+
         ch_ch_n=CHANGE_NAME_VCF_MT(ch_dedup_vcf.single)
         ch_in_vep=ch_mer_vcf.mix(ch_dedup_vcf.single)
-        
+
         // Annotating with Hmtnote
         //HMTNOTE_MT(ch_in_vep)
         //ch_versions = ch_versions.mix(HMTNOTE_MT.out.versions.first())
