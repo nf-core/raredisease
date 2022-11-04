@@ -2,10 +2,10 @@ process FILTER_VEP {
     tag "$meta.id"
     label 'process_low'
 
-    conda (params.enable_conda ? "bioconda::ensembl-vep=105.0" : null)
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/ensembl-vep:105.0--pl5321h4a94de4_1' :
-        'quay.io/biocontainers/ensembl-vep:105.0--pl5321h4a94de4_1' }"
+    if (params.enable_conda) {
+        exit 1, "Conda environments cannot be used with vep at the moment. Please use Docker or Singularity containers."
+    }
+    container "ensemblorg/ensembl-vep:release_107.0"
 
     input:
     tuple val(meta), path(vcf)

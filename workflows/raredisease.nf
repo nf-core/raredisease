@@ -368,14 +368,20 @@ workflow RAREDISEASE {
             params.genome,
             params.vep_cache_version,
             ch_vep_cache,
-            ch_genome_fasta_meta,
+            ch_genome_fasta_no_meta,
             ch_gnomad_af,
             CHECK_INPUT.out.samples
         ).set {ch_snv_annotate}
         ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 
-        RANK_VARIANTS_SNV (
+        ANN_CSQ_PLI_SNV (
             ch_snv_annotate.vcf_ann,
+            ch_variant_consequences,
+            ch_pli_per_gene
+        )
+
+        RANK_VARIANTS_SNV (
+            ANN_CSQ_PLI_SNV.out.vcf_ann,
             MAKE_PED.out.ped,
             ch_reduced_penetrance,
             ch_score_config_snv
@@ -387,11 +393,6 @@ workflow RAREDISEASE {
             ch_vep_filters
         )
 
-        ANN_CSQ_PLI_SNV (
-            FILTER_VEP_SNV.out.vcf,
-            RANK_VARIANTS_SNV.out.vcf,
-            ch_variant_consequences
-        )
     }
 
     //
