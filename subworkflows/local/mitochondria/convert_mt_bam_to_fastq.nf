@@ -2,23 +2,26 @@
 // Prepare bam files for MT allignment
 //
 
-include { SAMTOOLS_VIEW as SAMTOOLS_VIEW_MT       } from '../../../modules/nf-core/samtools/view/main'
+include { GATK4_PRINTREADS as GATK4_PRINTREADS_MT } from '../../../modules/local/gatk4/printreads/main'
 include { GATK4_REVERTSAM as GATK4_REVERTSAM_MT   } from '../../../modules/nf-core/gatk4/revertsam/main'
 include { GATK4_SAMTOFASTQ as GATK4_SAMTOFASTQ_MT } from '../../../modules/nf-core/gatk4/samtofastq/main'
 
 workflow CONVERT_MT_BAM_TO_FASTQ {
     take:
-        bam  // channel: [ val(meta), file(bam), file(bai) ]
+        bam                    // channel: [ val(meta), file(bam), file(bai) ]
+        genome_fasta_meta      // channel: [ [], genome.fasta ]
+        genome_fai             // channel: [ genome.fai ]
+        genome_dict            // channel: [ genome.dict ]
 
     main:
         ch_versions = Channel.empty()
 
         // Outputs bam containing only MT
-        SAMTOOLS_VIEW_MT ( bam, [], [] )
-        ch_versions = ch_versions.mix(SAMTOOLS_VIEW_MT.out.versions.first())
+        GATK4_PRINTREADS_MT ( bam, genome_fasta_meta, genome_fai, genome_dict )
+        ch_versions = ch_versions.mix(GATK4_PRINTREADS_MT.out.versions.first())
 
         // Removes alignment information
-        GATK4_REVERTSAM_MT ( SAMTOOLS_VIEW_MT.out.bam )
+        GATK4_REVERTSAM_MT ( GATK4_PRINTREADS_MT.out.bam )
         ch_versions = ch_versions.mix(GATK4_REVERTSAM_MT.out.versions.first())
 
         // Outputs fastq files
