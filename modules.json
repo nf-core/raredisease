@@ -97,6 +97,10 @@
                         "branch": "master",
                         "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
                     },
+                    "gatk4/selectvariants": {
+                        "branch": "master",
+                        "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
+                    },
                     "gatk4/splitintervals": {
                         "branch": "master",
                         "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
