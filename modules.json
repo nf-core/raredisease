@@ -97,6 +97,10 @@
                         "branch": "master",
                         "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
                     },
+                    "gatk4/splitintervals": {
+                        "branch": "master",
+                        "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
+                    },
                     "genmod/annotate": {
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
