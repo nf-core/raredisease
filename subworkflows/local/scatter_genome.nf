@@ -19,6 +19,7 @@ workflow SCATTER_GENOME {
         ch_versions = ch_versions.mix(GATK4_SPLITINTERVALS.out.versions)
 
     emit:
-        bed        = BUILD_BED.out.bed
-        versions   = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
+        bed             = BUILD_BED.out.bed
+        split_intervals = GATK4_SPLITINTERVALS.out.split_intervals
+        versions        = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }
