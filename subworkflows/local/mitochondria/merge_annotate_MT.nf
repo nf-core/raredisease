@@ -12,7 +12,7 @@ include { CHANGE_NAME as CHANGE_NAME_VCF_MT                      } from '../../m
 include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                    } from '../../modules/nf-core/bcftools/merge/main'
 include { HMTNOTE as HMTNOTE_MT                                  } from '../../modules/nf-core/hmtnote/main'
 include { TABIX_TABIX as TABIX_TABIX_MT3                         } from '../../modules/nf-core/tabix/tabix/main'
-include { ENSEMBLVEP as ENSEMBLVEP_MT                            } from '../../modules/nf-core/ensemblvep/main'
+include { ENSEMBLVEP as ENSEMBLVEP_MT                            } from '../../modules/local/ensemblvep/main'
 include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT          } from '../../modules/nf-core/haplogrep2/classify/main'
 
 workflow MERGE_ANNOTATE_MT {
@@ -29,7 +29,7 @@ workflow MERGE_ANNOTATE_MT {
 
     main:
         ch_versions = Channel.empty()
-       
+
         ch_vcfs = vcf1
             .join(vcf2, remainder: true)
             .map{ meta, vcf1, vcf2 ->
@@ -41,12 +41,12 @@ workflow MERGE_ANNOTATE_MT {
 
         // Filtering Variants
         ch_filt_vcf = GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf.join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, by:[0])
-        GATK4_VARIANTFILTRATION_MT(ch_filt_vcf, 
-            genome_fasta, 
-            genome_fai, 
+        GATK4_VARIANTFILTRATION_MT(ch_filt_vcf,
+            genome_fasta,
+            genome_fai,
             genome_dict )
         ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION_MT.out.versions.first())
-        
+
         // Spliting multiallelic calls
         ch_in_split = GATK4_VARIANTFILTRATION_MT.out.vcf.join(GATK4_VARIANTFILTRATION_MT.out.tbi, by:[0])
         SPLIT_MULTIALLELICS_MT (ch_in_split, genome_fasta)
@@ -83,9 +83,9 @@ workflow MERGE_ANNOTATE_MT {
                     return [meta, vcf, tbi]
             }.set { ch_case_vcf }
 
-        BCFTOOLS_MERGE_MT( ch_case_vcf.multiple, 
-            [], 
-            genome_fasta, 
+        BCFTOOLS_MERGE_MT( ch_case_vcf.multiple,
+            [],
+            genome_fasta,
             genome_fai)
         ch_merged_vcf = BCFTOOLS_MERGE_MT.out.merged_variants
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
