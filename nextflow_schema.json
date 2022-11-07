@@ -214,13 +214,6 @@
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
-                "pli_per_gene": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-chart-bar",
-                    "description": "File with gene ids and their corresponding pli values",
-                    "hidden": true
-                },
                 "reduced_penetrance": {
                     "type": "string",
                     "format": "path",

@@ -36,7 +36,6 @@ def checkPathParamList = [
     params.mt_intervals_shift,
     params.mt_sequence_dictionary_shift,
     params.multiqc_config,
-    params.pli_per_gene,
     params.reduced_penetrance,
     params.score_config_snv,
     params.score_config_sv,
@@ -154,8 +153,6 @@ workflow RAREDISEASE {
     ch_mt_intervals                   = params.mt_intervals           ? Channel.fromPath(params.mt_intervals).collect()
                                                                       : Channel.value([])
     ch_mt_intervals_shift             = params.mt_intervals_shift     ? Channel.fromPath(params.mt_intervals_shift).collect()
-                                                                      : Channel.value([])
-    ch_pli_per_gene                   = params.pli_per_gene           ? Channel.fromPath(params.pli_per_gene).collect()
                                                                       : Channel.value([])
     ch_reduced_penetrance             = params.reduced_penetrance     ? Channel.fromPath(params.reduced_penetrance).collect()
                                                                       : Channel.value([])
