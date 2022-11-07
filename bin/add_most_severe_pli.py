@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+import gzip
 import sys
 from pathlib import Path
 from typing import TextIO
@@ -130,8 +131,9 @@ def main(argv=None):
             cols = line.strip().split()
             if cols[0] != "gene":
                 pli_gene[cols[0]] = float(cols[1])
+    opener = gzip.open if (args.file_in.suffix == ".gz") else open
     with open(args.file_out, "w") as out_vcf:
-        with open(args.file_in) as in_vcf:
+        with opener(args.file_in, "rt") as in_vcf:
             write_pli_annotated_vcf(in_vcf, out_vcf, pli_gene)
 
 

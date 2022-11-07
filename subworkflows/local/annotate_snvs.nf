@@ -3,6 +3,7 @@
 //
 
 include { VCFANNO                             } from '../../modules/nf-core/vcfanno/main'
+include { BCFTOOLS_CONCAT                     } from '../../modules/nf-core/bcftools/concat/main'
 include { BCFTOOLS_ROH                        } from '../../modules/nf-core/bcftools/roh/main'
 include { BCFTOOLS_VIEW                       } from '../../modules/nf-core/bcftools/view/main'
 include { RHOCALL_ANNOTATE                    } from '../../modules/nf-core/rhocall/annotate/main'
@@ -111,10 +112,10 @@ workflow ANNOTATE_SNVS {
             }
             .set { ch_vep_ann }
 
-        ch_vep_ann.view()
-
+        BCFTOOLS_CONCAT (ch_vep_ann)
+        ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
 
     emit:
-        vcf_ann       = BCFTOOLS_VIEW.out.vcf
+        vcf_ann       = BCFTOOLS_CONCAT.out.vcf
         versions      = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }
