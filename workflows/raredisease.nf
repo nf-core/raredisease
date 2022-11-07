@@ -322,8 +322,7 @@ workflow RAREDISEASE {
 
         ANN_CSQ_PLI_SV (
             ch_sv_annotate.vcf_ann,
-            ch_variant_consequences,
-            ch_pli_per_gene
+            ch_variant_consequences
         )
 
         RANK_VARIANTS_SV (
