@@ -7,7 +7,7 @@
                 "nf-core": {
                     "bcftools/merge": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "d1147c1baa105d01e5e39bd668a101bb213f1c37"
                     },
                     "bcftools/norm": {
                         "branch": "master",
