@@ -7,7 +7,7 @@ from typing import TextIO
 
 def parse_vep_transcripts(transcripts: list, pli_ind: int) -> list:
     """
-    Parse each transcript and return a list of gene symbols.
+    Parse each transcript and return a list of pli values.
 
     Args:
         transcripts (list): A list of vep transcript annotation
