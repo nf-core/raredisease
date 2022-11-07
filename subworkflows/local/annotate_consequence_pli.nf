@@ -9,7 +9,6 @@ workflow ANNOTATE_CSQ_PLI {
 	take:
 		vcf                   // channel: [ val(meta), vcf ]
 		variant_consequences  // path: consequences.txt
-        pli_gene              // path: pli_per_gene.txt
 
 	main:
 		ch_versions = Channel.empty()
@@ -20,7 +19,6 @@ workflow ANNOTATE_CSQ_PLI {
         )
         ADD_MOST_SEVERE_PLI (
             ADD_MOST_SEVERE_CSQ.out.vcf,
-            pli_gene
         )
 
 	emit:

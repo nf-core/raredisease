@@ -9,7 +9,6 @@ process ADD_MOST_SEVERE_PLI {
 
     input:
     tuple val(meta), path(vcf)
-    path (pli_gene)
 
     output:
     tuple val(meta), path("*_pli.vcf")  , emit: vcf
@@ -22,7 +21,7 @@ process ADD_MOST_SEVERE_PLI {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    add_most_severe_pli.py --file_in ${vcf} --file_out ${prefix}_pli.vcf --pli ${pli_gene}
+    add_most_severe_pli.py --file_in ${vcf} --file_out ${prefix}_pli.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
