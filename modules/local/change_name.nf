@@ -24,7 +24,7 @@ process CHANGE_NAME {
     """
     mv \\
         $input_file \\
-        ${meta.id}.${file_type}
+        ${prefix}.${file_type}
     """
 
     stub:
