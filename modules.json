@@ -5,6 +5,10 @@
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
+                    "bcftools/merge": {
+                        "branch": "master",
+                        "git_sha": "d1147c1baa105d01e5e39bd668a101bb213f1c37"
+                    },
                     "bcftools/norm": {
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
@@ -77,11 +81,19 @@
                         "branch": "master",
                         "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
                     },
+                    "gatk4/filtermutectcalls": {
+                        "branch": "master",
+                        "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
+                    },
                     "gatk4/intervallisttools": {
                         "branch": "master",
                         "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
                     },
                     "gatk4/mergebamalignment": {
+                        "branch": "master",
+                        "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
+                    },
+                    "gatk4/mergevcfs": {
                         "branch": "master",
                         "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
                     },
@@ -96,6 +108,10 @@
                     "gatk4/samtofastq": {
                         "branch": "master",
                         "git_sha": "7578005a576f3ac1b0d4f10c037dde34cdedfb67"
+                    },
+                    "gatk4/variantfiltration": {
+                        "branch": "master",
+                        "git_sha": "c95bed5b125e90553814b8720875c8c663524619"
                     },
                     "genmod/annotate": {
                         "branch": "master",
@@ -118,6 +134,14 @@
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
                     "haplocheck": {
+                        "branch": "master",
+                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                    },
+                    "haplogrep2/classify": {
+                        "branch": "master",
+                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                    },
+                    "hmtnote": {
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
@@ -145,9 +169,17 @@
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
+                    "picard/liftovervcf": {
+                        "branch": "master",
+                        "git_sha": "3d5d18db1b39e1133505ae2fa2a062b0073c8a6a"
+                    },
                     "picard/markduplicates": {
                         "branch": "master",
                         "git_sha": "eca65aa4a5e2e192ac44d6962c8f9260f314ffb8"
+                    },
+                    "picard/renamesampleinvcf": {
+                        "branch": "master",
+                        "git_sha": "af53d9fcbc10982ff8fd1b87f9fec60b19eaba3d"
                     },
                     "picard/sortvcf": {
                         "branch": "master",

@@ -1,4 +1,4 @@
-process ADD_MOST_SEVERE_PLI {
+process CHANGE_NAME {
     tag "$meta.id"
     label 'process_low'
 
@@ -8,35 +8,30 @@ process ADD_MOST_SEVERE_PLI {
         'quay.io/biocontainers/python:3.9--1' }"
 
     input:
-    tuple val(meta), path(vcf)
+    tuple val(meta), path(input_file)
 
     output:
-    tuple val(meta), path("*_pli.vcf")  , emit: vcf
-    path "versions.yml"                 , emit: versions
+    tuple val(meta), path( "*.${file_type}"), emit: file
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
     def args = task.ext.args ?: ''
+    file_type = task.ext.file_type ?: input_file.getExtension()
     def prefix = task.ext.prefix ?: "${meta.id}"
-    """
-    add_most_severe_pli.py --file_in ${vcf} --file_out ${prefix}_pli.vcf
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        add_most_severe_pli: v1.0
-    END_VERSIONS
+    """
+    mv \\
+        $input_file \\
+        ${prefix}.${file_type}
     """
 
     stub:
+    def args = task.ext.args ?: ''
+    file_type = task.ext.file_type ?: input_file.getExtension()
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}_pli.vcf
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        add_most_severe_pli: v1.0
-    END_VERSIONS
+    touch ${prefix}.${file_type}
     """
 }
