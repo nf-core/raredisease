@@ -66,8 +66,8 @@ workflow ALIGN_AND_CALL_MT {
         ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions.first())
 
         // Filter Mutect2 calls
-        ch_mutect_tbi = GATK4_MUTECT2_MT.out.vcf.join(GATK4_MUTECT2_MT.out.tbi, by: [0])
-        ch_mutect_out = ch_mutect_tbi.join(GATK4_MUTECT2_MT.out.stats, by: [0])
+        ch_mutect_vcf = GATK4_MUTECT2_MT.out.vcf.join(GATK4_MUTECT2_MT.out.tbi, by: [0])
+        ch_mutect_out = ch_mutect_vcf.join(GATK4_MUTECT2_MT.out.stats, by: [0])
         ch_to_filt = ch_mutect_out.map {
             meta, vcf, tbi, stats ->
                 return [meta, vcf, tbi, stats, [], [], [], []]}
