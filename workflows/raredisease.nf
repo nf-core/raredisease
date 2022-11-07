@@ -238,7 +238,10 @@ workflow RAREDISEASE {
         ch_genome_fai_meta,
         ch_genome_fai_no_meta,
         ch_genome_fasta_no_meta
-        )
+    )
+    .set { ch_scatter }
+
+    ch_scatter_split_intervals  = ch_scatter.split_intervals  ?: Channel.empty()
 
     // ALIGNING READS, FETCH STATS, AND MERGE.
     ALIGN (
@@ -381,6 +384,7 @@ workflow RAREDISEASE {
             ch_vep_cache,
             ch_genome_fasta_no_meta,
             ch_gnomad_af,
+            ch_scatter_split_intervals,
             CHECK_INPUT.out.samples
         ).set {ch_snv_annotate}
         ch_versions = ch_versions.mix(ch_snv_annotate.versions)

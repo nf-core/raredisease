@@ -9,7 +9,8 @@ include { RHOCALL_ANNOTATE                    } from '../../modules/nf-core/rhoc
 include { ENSEMBLVEP as ENSEMBLVEP_SNV        } from '../../modules/local/ensemblvep/main'
 include { TABIX_BGZIPTABIX as TABIX_ROHCALL   } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as TABIX_VCFANNO   } from '../../modules/nf-core/tabix/bgziptabix/main'
-
+include { TABIX_TABIX as TABIX_BCFTOOLS       } from '../../modules/nf-core/tabix/tabix/main'
+include { GATK4_SELECTVARIANTS                } from '../../modules/local/gatk4/selectvariants/main'
 
 workflow ANNOTATE_SNVS {
 
@@ -22,11 +23,13 @@ workflow ANNOTATE_SNVS {
         vep_cache
         fasta
         gnomad_af
+        split_intervals
         samples
 
     main:
-        ch_versions = Channel.empty()
-        ch_toml     = Channel.fromPath(vcfanno_toml)
+        ch_versions       = Channel.empty()
+        ch_toml           = Channel.fromPath(vcfanno_toml)
+        ch_vcf_scatter_in = Channel.empty()
 
         //
         // annotate rhocall
@@ -74,10 +77,18 @@ workflow ANNOTATE_SNVS {
         BCFTOOLS_VIEW(TABIX_VCFANNO.out.gz_tbi,[],[],[])
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
 
+        TABIX_BCFTOOLS (BCFTOOLS_VIEW.out.vcf)
+        ch_versions = ch_versions.mix(TABIX_BCFTOOLS.out.versions)
+
+        BCFTOOLS_VIEW.out.vcf.join(TABIX_BCFTOOLS.out.tbi).collect().set { ch_vcf_scatter_in }
+
+        GATK4_SELECTVARIANTS (ch_vcf_scatter_in, split_intervals)
+        ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
+
         //
         // annotate vep
         //
-        ENSEMBLVEP_SNV(BCFTOOLS_VIEW.out.vcf,
+        ENSEMBLVEP_SNV(GATK4_SELECTVARIANTS.out.vcf,
             vep_genome,
             "homo_sapiens",
             vep_cache_version,
@@ -88,6 +99,6 @@ workflow ANNOTATE_SNVS {
         ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions)
 
     emit:
-        vcf_ann       = ENSEMBLVEP_SNV.out.vcf
+        vcf_ann       = BCFTOOLS_VIEW.out.vcf
         versions      = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }
