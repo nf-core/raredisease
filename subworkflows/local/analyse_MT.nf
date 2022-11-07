@@ -30,7 +30,7 @@ workflow ANALYSE_MT {
         ch_versions = Channel.empty()
 
         // STEP 1: PREPARING MT ALIGNMENT
-        CONVERT_MT_BAM_TO_FASTQ ( bam )
+        CONVERT_MT_BAM_TO_FASTQ(bam)
         ch_versions = ch_versions.mix(CONVERT_MT_BAM_TO_FASTQ.out.versions)// Outputs bam files
 
         //STEP 2.1: MT ALLIGNMENT  AND VARIANT CALLING
@@ -90,5 +90,5 @@ workflow ANALYSE_MT {
         html         = ALIGN_AND_CALL_MT.out.html
         txt_sh       = ALIGN_AND_CALL_MT_SHIFT.out.txt
         html_sh      = ALIGN_AND_CALL_MT_SHIFT.out.html
-        versions    = ch_versions // channel: [ versions.yml ]
+        versions     = ch_versions // channel: [ versions.yml ]
 }

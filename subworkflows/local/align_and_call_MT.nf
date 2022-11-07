@@ -51,8 +51,8 @@ workflow ALIGN_AND_CALL_MT {
 
         // Index bam file
         SAMTOOLS_INDEX_MT(SAMTOOLS_SORT_MT.out.bam)
-        ch_sort_index_bam=SAMTOOLS_SORT_MT.out.bam.join(SAMTOOLS_INDEX_MT.out.bai, by: [0])
-        ch_sort_index_bam_intervals_mt=ch_sort_index_bam.combine(intervals_mt)
+        ch_sort_index_bam = SAMTOOLS_SORT_MT.out.bam.join(SAMTOOLS_INDEX_MT.out.bai, by: [0])
+        ch_sort_index_bam_intervals_mt = ch_sort_index_bam.combine(intervals_mt)
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MT.out.versions.first())
 
         // Calls variants with Mutect2
