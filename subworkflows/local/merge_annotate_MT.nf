@@ -48,7 +48,7 @@ workflow MERGE_ANNOTATE_MT {
         ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION_MT.out.versions.first())
         
         // Spliting multiallelic calls
-        ch_in_split=GATK4_VARIANTFILTRATION_MT.out.vcf.join( GATK4_VARIANTFILTRATION_MT.out.tbi, by:[0])
+        ch_in_split = GATK4_VARIANTFILTRATION_MT.out.vcf.join( GATK4_VARIANTFILTRATION_MT.out.tbi, by:[0])
         SPLIT_MULTIALLELICS_MT (ch_in_split, genome_fasta)
         ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_MT.out.versions)
 

@@ -12,6 +12,7 @@ process CHANGE_NAME {
 
     output:
     tuple val(meta), path( "*.${file_type}"), emit: file
+
     when:
     task.ext.when == null || task.ext.when
 
