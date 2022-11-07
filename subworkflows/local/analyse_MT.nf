@@ -88,11 +88,7 @@ workflow ANALYSE_MT {
         report       = MERGE_ANNOTATE_MT.out.report
         txt          = ALIGN_AND_CALL_MT.out.txt
         html         = ALIGN_AND_CALL_MT.out.html
-//        vcf_shift   = ALIGN_AND_CALL_MT_SHIFT.out.vcf
-//        tbi_shift   = ALIGN_AND_CALL_MT_SHIFT.out.tbi
         txt_sh       = ALIGN_AND_CALL_MT_SHIFT.out.txt
         html_sh      = ALIGN_AND_CALL_MT_SHIFT.out.html
-//       vcf_lift    = PICARD_LIFTOVERVCF.out.vcf_lifted
-//      vcf_unlift  = PICARD_LIFTOVERVCF.out.vcf_unlifted
         versions    = ch_versions // channel: [ versions.yml ]
 }
