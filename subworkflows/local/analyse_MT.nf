@@ -1,9 +1,9 @@
 //
 // Analyse MT
 //
-include { CONVERT_MT_BAM_TO_FASTQ                        } from './convert_mt_bam_to_fastq'
-include { ALIGN_AND_CALL_MT                              } from './align_and_call_MT'
-include { ALIGN_AND_CALL_MT as ALIGN_AND_CALL_MT_SHIFT   } from './align_and_call_MT'
+include { CONVERT_MT_BAM_TO_FASTQ                        } from './mitochondria/convert_mt_bam_to_fastq'
+include { ALIGN_AND_CALL_MT                              } from './mitochondria/align_and_call_MT'
+include { ALIGN_AND_CALL_MT as ALIGN_AND_CALL_MT_SHIFT   } from './mitochondria/align_and_call_MT'
 include { PICARD_LIFTOVERVCF                             } from '../../modules/nf-core/picard/liftovervcf/main'
 include { MERGE_ANNOTATE_MT                              } from './merge_annotate_MT'
 

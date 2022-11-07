@@ -3,16 +3,16 @@
 //
 
 include { BWA_INDEX                                          } from '../../modules/nf-core/bwa/index/main'
-include { BWAMEM2_INDEX                                      } from '../../modules/nf-core/bwamem2/index/main'
+include { BWAMEM2_INDEX as BWAMEM2_INDEX_GENOME              } from '../../modules/nf-core/bwamem2/index/main'
 include { BWAMEM2_INDEX as BWAMEM2_INDEX_SHIFT_MT            } from '../../modules/nf-core/bwamem2/index/main'
 include { CAT_CAT as CAT_CAT_BAIT                            } from '../../modules/nf-core/cat/cat/main'
-include { CHECK_VCF                                          } from './prepare_vcf'
+include { CHECK_VCF                                          } from './preprocessing/prepare_vcf'
 include { GATK4_BEDTOINTERVALLIST as GATK_BILT               } from '../../modules/nf-core/gatk4/bedtointervallist/main'
 include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD          } from '../../modules/nf-core/gatk4/createsequencedictionary/main'
 include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD_SHIFT_MT } from '../../modules/nf-core/gatk4/createsequencedictionary/main'
 include { GATK4_INTERVALLISTTOOLS as GATK_ILT                } from '../../modules/nf-core/gatk4/intervallisttools/main'
 include { GET_CHROM_SIZES                                    } from '../../modules/local/get_chrom_sizes'
-include { SAMTOOLS_FAIDX                                     } from '../../modules/nf-core/samtools/faidx/main'
+include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME            } from '../../modules/nf-core/samtools/faidx/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_SHIFT_MT          } from '../../modules/nf-core/samtools/faidx/main'
 include { SENTIEON_BWAINDEX                                  } from '../../modules/local/sentieon/bwamemindex'
 include { TABIX_BGZIPTABIX as TABIX_PBT                      } from '../../modules/nf-core/tabix/bgziptabix/main'
@@ -42,14 +42,14 @@ workflow PREPARE_REFERENCES {
 
         // Genome indices
         BWA_INDEX(fasta_meta)
-        BWAMEM2_INDEX(fasta_meta)
+        BWAMEM2_INDEX_GENOME(fasta_meta)
         BWAMEM2_INDEX_SHIFT_MT(mt_fasta_shift_meta)
         SENTIEON_BWAINDEX(fasta_meta)
-        SAMTOOLS_FAIDX(fasta_meta)
+        SAMTOOLS_FAIDX_GENOME(fasta_meta)
         SAMTOOLS_FAIDX_SHIFT_MT(mt_fasta_shift_meta)
         GATK_SD(fasta_no_meta)
         GATK_SD_SHIFT_MT(mt_fasta_shift_no_meta)
-        GET_CHROM_SIZES( SAMTOOLS_FAIDX.out.fai )
+        GET_CHROM_SIZES( SAMTOOLS_FAIDX_GENOME.out.fai )
 
         // Vcf, tab and bed indices
         TABIX_DBSNP(known_dbsnp)
@@ -77,10 +77,10 @@ workflow PREPARE_REFERENCES {
 
         // Gather versions
         ch_versions = ch_versions.mix(BWA_INDEX.out.versions)
-        ch_versions = ch_versions.mix(BWAMEM2_INDEX.out.versions)
+        ch_versions = ch_versions.mix(BWAMEM2_INDEX_GENOME.out.versions)
         ch_versions = ch_versions.mix(BWAMEM2_INDEX_SHIFT_MT.out.versions)
         ch_versions = ch_versions.mix(SENTIEON_BWAINDEX.out.versions)
-        ch_versions = ch_versions.mix(SAMTOOLS_FAIDX.out.versions)
+        ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_SHIFT_MT.out.versions)
         ch_versions = ch_versions.mix(GATK_SD.out.versions)
         ch_versions = ch_versions.mix(GATK_SD_SHIFT_MT.out.versions)
@@ -97,10 +97,10 @@ workflow PREPARE_REFERENCES {
     emit:
         bait_intervals            = CAT_CAT_BAIT.out.file_out.map { id, it -> [it] }.collect()
         bwa_index                 = BWA_INDEX.out.index.collect() ?: SENTIEON_BWAINDEX.out.index.collect()
-        bwamem2_index             = BWAMEM2_INDEX.out.index.collect()
+        bwamem2_index             = BWAMEM2_INDEX_GENOME.out.index.collect()
         bwamem2_index_mt_shift    = BWAMEM2_INDEX_SHIFT_MT.out.index.collect()
         chrom_sizes               = GET_CHROM_SIZES.out.sizes.collect()
-        fasta_fai                 = SAMTOOLS_FAIDX.out.fai.map{ meta, fai -> [fai] }.collect()
+        fasta_fai                 = SAMTOOLS_FAIDX_GENOME.out.fai.map{ meta, fai -> [fai] }.collect()
         fasta_fai_mt_shift        = SAMTOOLS_FAIDX_SHIFT_MT.out.fai.map{ meta, fai -> [fai] }.collect()
         gnomad_af_idx             = TABIX_GNOMAD_AF.out.tbi.collect()
         gnomad_tbi                = CHECK_VCF.out.index.collect()

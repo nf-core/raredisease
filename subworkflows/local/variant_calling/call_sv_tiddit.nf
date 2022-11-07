@@ -2,9 +2,8 @@
 // A structural variant caller workflow for tiddit
 //
 
-include { TIDDIT_SV } from '../../modules/nf-core/tiddit/sv/main'
-
-include { SVDB_MERGE as SVDB_MERGE_TIDDIT } from '../../modules/nf-core/svdb/merge/main'
+include { TIDDIT_SV                       } from '../../../modules/nf-core/tiddit/sv/main'
+include { SVDB_MERGE as SVDB_MERGE_TIDDIT } from '../../../modules/nf-core/svdb/merge/main'
 
 workflow CALL_SV_TIDDIT {
     take:

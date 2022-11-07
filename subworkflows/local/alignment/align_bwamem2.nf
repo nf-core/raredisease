@@ -2,12 +2,12 @@
 // Map to reference, fetch stats for each demultiplexed read pair, merge, mark duplicates, and index.
 //
 
-include { BWAMEM2_MEM                             } from '../../../modules/nf-core/bwamem2/mem/main'
-include { SAMTOOLS_INDEX                          } from '../../../modules/nf-core/samtools/index/main'
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MD     } from '../../../modules/nf-core/samtools/index/main'
-include { SAMTOOLS_STATS                          } from '../../../modules/nf-core/samtools/stats/main'
-include { SAMTOOLS_MERGE                          } from '../../../modules/nf-core/samtools/merge/main'
-include { PICARD_MARKDUPLICATES as MARKDUPLICATES } from '../../../modules/nf-core/picard/markduplicates/main'
+include { BWAMEM2_MEM                              } from '../../../modules/nf-core/bwamem2/mem/main'
+include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_ALIGN   } from '../../../modules/nf-core/samtools/index/main'
+include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MARKDUP } from '../../../modules/nf-core/samtools/index/main'
+include { SAMTOOLS_STATS                           } from '../../../modules/nf-core/samtools/stats/main'
+include { SAMTOOLS_MERGE                           } from '../../../modules/nf-core/samtools/merge/main'
+include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-core/picard/markduplicates/main'
 
 
 workflow ALIGN_BWAMEM2 {
@@ -24,11 +24,11 @@ workflow ALIGN_BWAMEM2 {
         BWAMEM2_MEM ( reads_input, index, true )
         ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions)
 
-        SAMTOOLS_INDEX ( BWAMEM2_MEM.out.bam )
+        SAMTOOLS_INDEX_ALIGN ( BWAMEM2_MEM.out.bam )
 
         // Join the mapped bam + bai paths by their keys for stats
         // Get stats for each demultiplexed read pair.
-        bam_sorted_indexed = BWAMEM2_MEM.out.bam.join(SAMTOOLS_INDEX.out.bai)
+        bam_sorted_indexed = BWAMEM2_MEM.out.bam.join(SAMTOOLS_INDEX_ALIGN.out.bai)
         SAMTOOLS_STATS ( bam_sorted_indexed, [] )
 
         // Merge multiple lane samples and index
@@ -52,14 +52,14 @@ workflow ALIGN_BWAMEM2 {
 
         // Marking duplicates
         MARKDUPLICATES ( prepared_bam , fasta, fai )
-        SAMTOOLS_INDEX_MD ( MARKDUPLICATES.out.bam )
+        SAMTOOLS_INDEX_MARKDUP ( MARKDUPLICATES.out.bam )
         ch_versions = ch_versions.mix(MARKDUPLICATES.out.versions)
 
     emit:
         stats                  = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), [ stats ] ]
         metrics                = MARKDUPLICATES.out.metrics     // channel: [ val(meta), [ metrics ] ]
         marked_bam             = MARKDUPLICATES.out.bam         // channel: [ val(meta), [ marked_bam ] ]
-        marked_bai             = SAMTOOLS_INDEX_MD.out.bai      // channel: [ val(meta), [ marked_bai ] ]
+        marked_bai             = SAMTOOLS_INDEX_MARKDUP.out.bai      // channel: [ val(meta), [ marked_bai ] ]
 
         versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }

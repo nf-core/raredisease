@@ -85,7 +85,7 @@ include { FASTQC                                } from '../modules/nf-core/fastq
 include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
 
 //
-// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
+// SUBWORKFLOWS
 //
 
 include { ALIGN                                 } from '../subworkflows/local/align'
@@ -94,20 +94,20 @@ include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV   } from '../subworkflows/local/an
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV    } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_SNVS                         } from '../subworkflows/local/annotate_snvs'
 include { ANNOTATE_STRUCTURAL_VARIANTS          } from '../subworkflows/local/annotate_structural_variants'
+include { CALL_REPEAT_EXPANSIONS                } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                              } from '../subworkflows/local/call_snv'
+include { CALL_STRUCTURAL_VARIANTS              } from '../subworkflows/local/call_structural_variants'
 include { CHECK_INPUT                           } from '../subworkflows/local/check_input'
 include { GENS                                  } from '../subworkflows/local/gens'
 include { PREPARE_REFERENCES                    } from '../subworkflows/local/prepare_references'
+include { QC_BAM                                } from '../subworkflows/local/qc_bam'
+include { RANK_VARIANTS as RANK_VARIANTS_SNV    } from '../subworkflows/local/rank_variants'
+include { RANK_VARIANTS as RANK_VARIANTS_SV     } from '../subworkflows/local/rank_variants'
 
 //
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
 
-include { CALL_REPEAT_EXPANSIONS                } from '../subworkflows/nf-core/call_repeat_expansions'
-include { CALL_STRUCTURAL_VARIANTS              } from '../subworkflows/nf-core/call_structural_variants'
-include { QC_BAM                                } from '../subworkflows/nf-core/qc_bam'
-include { RANK_VARIANTS as RANK_VARIANTS_SNV    } from '../subworkflows/nf-core/genmod'
-include { RANK_VARIANTS as RANK_VARIANTS_SV     } from '../subworkflows/nf-core/genmod'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
