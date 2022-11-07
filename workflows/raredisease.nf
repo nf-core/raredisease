@@ -352,7 +352,11 @@ workflow RAREDISEASE {
         ch_sequence_dictionary_mt_shift,
         ch_mt_shift_fai,
         ch_mt_intervals_shift,
-        ch_mt_backchain_shift
+        ch_mt_backchain_shift,
+        params.genome,
+        params.vep_cache_version,
+        ch_vep_cache,
+        CHECK_INPUT.out.case_info
     )
     ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
 
