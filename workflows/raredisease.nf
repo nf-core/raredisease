@@ -90,8 +90,8 @@ include { MULTIQC                               } from '../modules/nf-core/multi
 
 include { ALIGN                                 } from '../subworkflows/local/align'
 include { ANALYSE_MT                            } from '../subworkflows/local/analyse_MT'
-include { ANNOTATE_CSQ as ANN_CSQ_SNV           } from '../subworkflows/local/annotate_consequence'
-include { ANNOTATE_CSQ as ANN_CSQ_SV            } from '../subworkflows/local/annotate_consequence'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV   } from '../subworkflows/local/annotate_consequence_pli'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV    } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_SNVS                         } from '../subworkflows/local/annotate_snvs'
 include { ANNOTATE_STRUCTURAL_VARIANTS          } from '../subworkflows/local/annotate_structural_variants'
 include { CALL_SNV                              } from '../subworkflows/local/call_snv'
@@ -312,13 +312,18 @@ workflow RAREDISEASE {
             params.genome,
             params.vep_cache_version,
             ch_vep_cache,
-            ch_genome_fasta_meta,
+            ch_genome_fasta_no_meta,
             ch_sequence_dictionary
         ).set {ch_sv_annotate}
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
-        RANK_VARIANTS_SV (
+        ANN_CSQ_PLI_SV (
             ch_sv_annotate.vcf_ann,
+            ch_variant_consequences
+        )
+
+        RANK_VARIANTS_SV (
+            ANN_CSQ_PLI_SV.out.vcf_ann,
             MAKE_PED.out.ped,
             ch_reduced_penetrance,
             ch_score_config_sv
@@ -330,11 +335,6 @@ workflow RAREDISEASE {
             ch_vep_filters
         )
 
-        ANN_CSQ_SV (
-            FILTER_VEP_SV.out.vcf,
-            RANK_VARIANTS_SV.out.vcf,
-            ch_variant_consequences
-        )
     }
 
     ANALYSE_MT (
@@ -387,9 +387,8 @@ workflow RAREDISEASE {
             ch_vep_filters
         )
 
-        ANN_CSQ_SNV (
+        ANN_CSQ_PLI_SNV (
             FILTER_VEP_SNV.out.vcf,
-            RANK_VARIANTS_SNV.out.vcf,
             ch_variant_consequences
         )
     }

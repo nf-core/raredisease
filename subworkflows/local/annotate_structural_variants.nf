@@ -46,14 +46,13 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             fasta,
             seq_dict
         )
+        ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
 
         PICARD_SORTVCF.out.vcf
-            .map {
-                meta, vcf ->
+            .map { meta, vcf ->
                     return [meta,vcf,[]]
             }
             .set { ch_sortvcf }
-        ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
 
         BCFTOOLS_VIEW(ch_sortvcf,[],[],[])
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
