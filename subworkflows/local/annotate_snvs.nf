@@ -9,6 +9,7 @@ include { RHOCALL_ANNOTATE                    } from '../../modules/nf-core/rhoc
 include { ENSEMBLVEP as ENSEMBLVEP_SNV        } from '../../modules/local/ensemblvep/main'
 include { TABIX_BGZIPTABIX as TABIX_ROHCALL   } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as TABIX_VCFANNO   } from '../../modules/nf-core/tabix/bgziptabix/main'
+include { TABIX_BGZIPTABIX as TABIX_VEP       } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_TABIX as TABIX_BCFTOOLS       } from '../../modules/nf-core/tabix/tabix/main'
 include { GATK4_SELECTVARIANTS                } from '../../modules/local/gatk4/selectvariants/main'
 
@@ -97,6 +98,21 @@ workflow ANNOTATE_SNVS {
             []
             )
         ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions)
+
+        TABIX_VEP (ENSEMBLVEP_SNV.out.vcf)
+        ch_versions = ch_versions.mix(TABIX_VEP.out.versions)
+
+        TABIX_VEP.out.gz_tbi
+            .groupTuple()
+            .map { meta, vcfs, tbis ->
+                def sortedvcfs = vcfs.sort()
+                def sortedtbis = tbis.sort()
+            return [ meta, sortedvcfs, sortedtbis ]
+            }
+            .set { ch_vep_ann }
+
+        ch_vep_ann.view()
+
 
     emit:
         vcf_ann       = BCFTOOLS_VIEW.out.vcf
