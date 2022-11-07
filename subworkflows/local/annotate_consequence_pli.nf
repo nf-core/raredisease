@@ -1,5 +1,5 @@
 //
-// A subworkflow to call SNVs by sentieon dnascope with a machine learning model.
+// A subworkflow to add most severe consequence and pli to a vep annotated vcf
 //
 
 include { ADD_MOST_SEVERE_CSQ } from '../../modules/local/add_most_severe_consequence'
