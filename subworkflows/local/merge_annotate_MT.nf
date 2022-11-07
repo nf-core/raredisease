@@ -87,7 +87,7 @@ workflow MERGE_ANNOTATE_MT {
             [], 
             genome_fasta, 
             genome_fai)
-        ch_mer_vcf=BCFTOOLS_MERGE_MT.out.merged_variants
+        ch_merged_vcf = BCFTOOLS_MERGE_MT.out.merged_variants
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
 
         ch_ch_n=CHANGE_NAME_VCF_MT(ch_dedup_vcf.single)
