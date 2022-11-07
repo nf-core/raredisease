@@ -2,18 +2,18 @@
 // Merge and annotate MT
 //
 
-include { GATK4_MERGEVCFS as GATK4_MERGEVCFS_LIFT_UNLIFT_MT      } from '../../modules/nf-core/gatk4/mergevcfs/main'
-include { GATK4_VARIANTFILTRATION as GATK4_VARIANTFILTRATION_MT  } from '../../modules/nf-core/gatk4/variantfiltration/main'
-include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_MT                } from '../../modules/nf-core/bcftools/norm/main'
-include { TABIX_TABIX as TABIX_TABIX_MT                          } from '../../modules/nf-core/tabix/tabix/main'
-include { BCFTOOLS_NORM as REMOVE_DUPLICATES_MT                  } from '../../modules/nf-core/bcftools/norm/main'
-include { TABIX_TABIX as TABIX_TABIX_MT2                         } from '../../modules/nf-core/tabix/tabix/main'
-include { CHANGE_NAME as CHANGE_NAME_VCF_MT                      } from '../../modules/local/change_name'
-include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                    } from '../../modules/nf-core/bcftools/merge/main'
-include { HMTNOTE as HMTNOTE_MT                                  } from '../../modules/nf-core/hmtnote/main'
-include { TABIX_TABIX as TABIX_TABIX_MT3                         } from '../../modules/nf-core/tabix/tabix/main'
-include { ENSEMBLVEP as ENSEMBLVEP_MT                            } from '../../modules/local/ensemblvep/main'
-include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT          } from '../../modules/nf-core/haplogrep2/classify/main'
+include { GATK4_MERGEVCFS as GATK4_MERGEVCFS_LIFT_UNLIFT_MT      } from '../../../modules/nf-core/gatk4/mergevcfs/main'
+include { GATK4_VARIANTFILTRATION as GATK4_VARIANTFILTRATION_MT  } from '../../../modules/nf-core/gatk4/variantfiltration/main'
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_MT                } from '../../../modules/nf-core/bcftools/norm/main'
+include { TABIX_TABIX as TABIX_TABIX_MT                          } from '../../../modules/nf-core/tabix/tabix/main'
+include { BCFTOOLS_NORM as REMOVE_DUPLICATES_MT                  } from '../../../modules/nf-core/bcftools/norm/main'
+include { TABIX_TABIX as TABIX_TABIX_MT2                         } from '../../../modules/nf-core/tabix/tabix/main'
+include { CHANGE_NAME as CHANGE_NAME_VCF_MT                      } from '../../../modules/local/change_name'
+include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                    } from '../../../modules/nf-core/bcftools/merge/main'
+include { HMTNOTE as HMTNOTE_MT                                  } from '../../../modules/nf-core/hmtnote/main'
+include { TABIX_TABIX as TABIX_TABIX_MT3                         } from '../../../modules/nf-core/tabix/tabix/main'
+include { ENSEMBLVEP as ENSEMBLVEP_MT                            } from '../../../modules/local/ensemblvep/main'
+include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT          } from '../../../modules/nf-core/haplogrep2/classify/main'
 
 workflow MERGE_ANNOTATE_MT {
     take:
