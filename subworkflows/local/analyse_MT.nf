@@ -59,17 +59,17 @@ workflow ANALYSE_MT {
 
         // STEP 2.3: PICARD_LIFTOVERVCF
         PICARD_LIFTOVERVCF (
-              ALIGN_AND_CALL_MT_SHIFT.out.vcf,
-              genome_dict,
-              shift_mt_backchain,
-              genome_fasta_no_meta)
+            ALIGN_AND_CALL_MT_SHIFT.out.vcf,
+            genome_dict,
+            shift_mt_backchain,
+            genome_fasta_no_meta)
         ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions)
 
         // STEP 3: MT MERGE AND ANNOTATE VARIANTS
         MERGE_ANNOTATE_MT(
             ALIGN_AND_CALL_MT.out.vcf,
             PICARD_LIFTOVERVCF.out.vcf_lifted,
-            genome_fasta,
+            genome_fasta_no_meta,
             genome_dict,
             genome_fai,
             vep_genome,
