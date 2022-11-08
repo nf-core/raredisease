@@ -466,7 +466,7 @@
                     "default": "104",
                     "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-book",
-                    "enum": ["104", "105", "106"]
+                    "enum": ["104", "105", "106", "107"]
                 }
             }
         },
