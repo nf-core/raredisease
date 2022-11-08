@@ -5,7 +5,7 @@ include { CONVERT_MT_BAM_TO_FASTQ                        } from './mitochondria/
 include { ALIGN_AND_CALL_MT                              } from './mitochondria/align_and_call_MT'
 include { ALIGN_AND_CALL_MT as ALIGN_AND_CALL_MT_SHIFT   } from './mitochondria/align_and_call_MT'
 include { PICARD_LIFTOVERVCF                             } from '../../modules/nf-core/picard/liftovervcf/main'
-include { MERGE_ANNOTATE_MT                              } from './merge_annotate_MT'
+include { MERGE_ANNOTATE_MT                              } from './mitochondria/merge_annotate_MT'
 
 workflow ANALYSE_MT {
     take:
