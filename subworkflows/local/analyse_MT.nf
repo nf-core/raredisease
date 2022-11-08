@@ -5,7 +5,7 @@ include { CONVERT_MT_BAM_TO_FASTQ                        } from './mitochondria/
 include { ALIGN_AND_CALL_MT                              } from './mitochondria/align_and_call_MT'
 include { ALIGN_AND_CALL_MT as ALIGN_AND_CALL_MT_SHIFT   } from './mitochondria/align_and_call_MT'
 include { PICARD_LIFTOVERVCF                             } from '../../modules/nf-core/picard/liftovervcf/main'
-include { MERGE_ANNOTATE_MT                              } from './merge_annotate_MT'
+include { MERGE_ANNOTATE_MT                              } from './mitochondria/merge_annotate_MT'
 
 workflow ANALYSE_MT {
     take:
@@ -62,7 +62,7 @@ workflow ANALYSE_MT {
             ALIGN_AND_CALL_MT_SHIFT.out.vcf,
             genome_dict,
             shift_mt_backchain,
-            genome_fasta)
+            genome_fasta_no_meta)
         ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions)
 
         // STEP 3: MT MERGE AND ANNOTATE VARIANTS
