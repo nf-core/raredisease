@@ -341,6 +341,7 @@ workflow RAREDISEASE {
         ch_mapped.bam_bai,
         ch_bwamem2_index,
         ch_genome_fasta_no_meta,
+        ch_genome_fasta_meta,
         ch_sequence_dictionary,
         ch_genome_fai,
         ch_mt_intervals,

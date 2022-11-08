@@ -11,7 +11,8 @@ workflow ANALYSE_MT {
     take:
         bam                    // channel: [ val(meta), file(bam), file(bai) ]
         genome_bwamem2_index   // channel: [ /path/to/bwamem2/index/ ]
-        genome_fasta           // channel: [ genome.fasta ]
+        genome_fasta_no_meta   // channel: [ genome.fasta ]
+        genome_fasta_meta      // channel: [ [], genome.fasta ]
         genome_dict            // channel: [ genome.dict ]
         genome_fai             // channel: [ genome.fai ]
         mt_intervals           // channel: [ file(non_control_region.chrM.interval_list) ]
@@ -30,15 +31,15 @@ workflow ANALYSE_MT {
         ch_versions = Channel.empty()
 
         // STEP 1: PREPARING MT ALIGNMENT
-        CONVERT_MT_BAM_TO_FASTQ(bam)
+        CONVERT_MT_BAM_TO_FASTQ ( bam , genome_fasta_meta, genome_fai, genome_dict, )
         ch_versions = ch_versions.mix(CONVERT_MT_BAM_TO_FASTQ.out.versions)// Outputs bam files
 
-        //STEP 2.1: MT ALLIGNMENT  AND VARIANT CALLING
+        //STEP 2.1: MT ALIGNMENT  AND VARIANT CALLING
         ALIGN_AND_CALL_MT (
             CONVERT_MT_BAM_TO_FASTQ.out.fastq,
             CONVERT_MT_BAM_TO_FASTQ.out.bam,
             genome_bwamem2_index,
-            genome_fasta,
+            genome_fasta_no_meta,
             genome_dict,
             genome_fai,
             mt_intervals
@@ -61,14 +62,14 @@ workflow ANALYSE_MT {
             ALIGN_AND_CALL_MT_SHIFT.out.vcf,
             genome_dict,
             shift_mt_backchain,
-            genome_fasta)
+            genome_fasta_no_meta)
         ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions)
 
         // STEP 3: MT MERGE AND ANNOTATE VARIANTS
         MERGE_ANNOTATE_MT(
             ALIGN_AND_CALL_MT.out.vcf,
             PICARD_LIFTOVERVCF.out.vcf_lifted,
-            genome_fasta,
+            genome_fasta_no_meta,
             genome_dict,
             genome_fai,
             vep_genome,
