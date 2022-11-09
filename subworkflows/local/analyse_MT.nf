@@ -69,7 +69,7 @@ workflow ANALYSE_MT {
         MERGE_ANNOTATE_MT(
             ALIGN_AND_CALL_MT.out.vcf,
             PICARD_LIFTOVERVCF.out.vcf_lifted,
-            genome_fasta_no_meta,
+            genome_fasta,
             genome_dict,
             genome_fai,
             vep_genome,
