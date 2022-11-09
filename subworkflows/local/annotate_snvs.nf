@@ -84,7 +84,7 @@ workflow ANNOTATE_SNVS {
 
         BCFTOOLS_VIEW.out.vcf.join(TABIX_BCFTOOLS.out.tbi).collect().set { ch_vcf_scatter_in }
 
-        GATK4_SELECTVARIANTS (ch_vcf_scatter_in, split_intervals)
+        GATK4_SELECTVARIANTS (ch_vcf_scatter_in.combine(split_intervals))
         ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
 
         //
