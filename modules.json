@@ -175,7 +175,7 @@
                     },
                     "picard/addorreplacereadgroups": {
                         "branch": "master",
-                        "git_sha": "a50554f372baf3e079425e5d3ac4d09dc5ff8bc5"
+                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
                     "picard/collecthsmetrics": {
                         "branch": "master",
