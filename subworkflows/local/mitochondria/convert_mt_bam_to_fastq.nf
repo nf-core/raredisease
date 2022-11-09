@@ -2,7 +2,7 @@
 // Prepare bam files for MT allignment
 //
 
-include { GATK4_PRINTREADS as GATK4_PRINTREADS_MT } from '../../../modules/local/gatk4/printreads/main'
+include { GATK4_PRINTREADS as GATK4_PRINTREADS_MT } from '../../../modules/nf-core/gatk4/printreads/main'
 include { GATK4_REVERTSAM as GATK4_REVERTSAM_MT   } from '../../../modules/nf-core/gatk4/revertsam/main'
 include { GATK4_SAMTOFASTQ as GATK4_SAMTOFASTQ_MT } from '../../../modules/nf-core/gatk4/samtofastq/main'
 

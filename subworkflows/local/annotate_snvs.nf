@@ -12,7 +12,7 @@ include { TABIX_BGZIPTABIX as TABIX_ROHCALL   } from '../../modules/nf-core/tabi
 include { TABIX_BGZIPTABIX as TABIX_VCFANNO   } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as TABIX_VEP       } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_TABIX as TABIX_BCFTOOLS       } from '../../modules/nf-core/tabix/tabix/main'
-include { GATK4_SELECTVARIANTS                } from '../../modules/local/gatk4/selectvariants/main'
+include { GATK4_SELECTVARIANTS                } from '../../modules/nf-core/gatk4/selectvariants/main'
 
 workflow ANNOTATE_SNVS {
 
