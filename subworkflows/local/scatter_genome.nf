@@ -1,5 +1,10 @@
+//
+// A subworkflow to create genome interval files necessary for bam/vcf scatter operations.
+//
+
 include { BUILD_BED            } from '../../modules/local/create_bed_from_fai'
 include { GATK4_SPLITINTERVALS } from '../../modules/nf-core/gatk4/splitintervals/main'
+
 workflow SCATTER_GENOME {
 
     take:

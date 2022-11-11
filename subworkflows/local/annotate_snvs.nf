@@ -32,6 +32,7 @@ workflow ANNOTATE_SNVS {
         ch_versions       = Channel.empty()
         ch_toml           = Channel.fromPath(vcfanno_toml)
         ch_vcf_scatter_in = Channel.empty()
+        ch_vep_in         = Channel.empty()
 
         //
         // annotate rhocall
@@ -76,7 +77,7 @@ workflow ANNOTATE_SNVS {
         ZIP_TABIX_VCFANNO (VCFANNO.out.vcf)
         ch_versions = ch_versions.mix(ZIP_TABIX_VCFANNO.out.versions)
 
-        BCFTOOLS_VIEW(ZIP_TABIX_VCFANNO.out.gz_tbi,[],[],[])
+        BCFTOOLS_VIEW(ZIP_TABIX_VCFANNO.out.gz_tbi,[],[],[]).vcf.set { ch_vep_in }
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
 
         TABIX_BCFTOOLS (BCFTOOLS_VIEW.out.vcf)
@@ -84,13 +85,13 @@ workflow ANNOTATE_SNVS {
 
         BCFTOOLS_VIEW.out.vcf.join(TABIX_BCFTOOLS.out.tbi).collect().set { ch_vcf_scatter_in }
 
-        GATK4_SELECTVARIANTS (ch_vcf_scatter_in.combine(split_intervals))
+        GATK4_SELECTVARIANTS (ch_vcf_scatter_in.combine(split_intervals)).vcf.set { ch_vep_in }
         ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
 
         //
         // annotate vep
         //
-        ENSEMBLVEP_SNV(GATK4_SELECTVARIANTS.out.vcf,
+        ENSEMBLVEP_SNV(ch_vep_in,
             vep_genome,
             "homo_sapiens",
             vep_cache_version,
