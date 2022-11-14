@@ -1,5 +1,6 @@
 process GET_CHROM_SIZES {
     tag "$fai"
+    label 'process_single'
 
     conda (params.enable_conda ? "conda-forge::coreutils=8.31" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?

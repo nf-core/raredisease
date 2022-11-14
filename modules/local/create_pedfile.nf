@@ -1,5 +1,6 @@
 process MAKE_PED {
     tag "make_ped"
+    label 'process_single'
 
     conda (params.enable_conda ? "conda-forge::python=3.9.5" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -10,7 +11,8 @@ process MAKE_PED {
     val(samples)
 
     output:
-    path '*.ped'       , emit: ped
+    path '*.ped'          , emit: ped
+    path "versions.yml"   , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -29,5 +31,20 @@ process MAKE_PED {
     }
     """
     echo "$pedinfo" > family.ped
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        create_pedfile: v1.0
+    END_VERSIONS
+    """
+
+    stub:
+    """
+    touch family.ped
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        check_pedfile: v1.0
+    END_VERSIONS
     """
 }
