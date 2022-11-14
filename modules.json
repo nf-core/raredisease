@@ -7,23 +7,23 @@
                 "nf-core": {
                     "bcftools/concat": {
                         "branch": "master",
-                        "git_sha": "f60fe628e71a25cbbe303f02a01eff706f4bd87d"
+                        "git_sha": "78cf39939fbe160a1410c44a6c5946f9a4c56e7e"
                     },
                     "bcftools/merge": {
                         "branch": "master",
-                        "git_sha": "d1147c1baa105d01e5e39bd668a101bb213f1c37"
+                        "git_sha": "78cf39939fbe160a1410c44a6c5946f9a4c56e7e"
                     },
                     "bcftools/norm": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "78cf39939fbe160a1410c44a6c5946f9a4c56e7e"
                     },
                     "bcftools/roh": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "78cf39939fbe160a1410c44a6c5946f9a4c56e7e"
                     },
                     "bcftools/view": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "78cf39939fbe160a1410c44a6c5946f9a4c56e7e"
                     },
                     "bwa/index": {
                         "branch": "master",
@@ -35,7 +35,7 @@
                     },
                     "bwamem2/mem": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "cf5b9c30a2adacc581793afb79fae5f5b50bed01"
                     },
                     "cat/cat": {
                         "branch": "master",
@@ -67,7 +67,7 @@
                     },
                     "deepvariant": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "6e58487f28429876b7cad237afbf4685e90c7bd4"
                     },
                     "expansionhunter": {
                         "branch": "master",
@@ -75,7 +75,7 @@
                     },
                     "fastqc": {
                         "branch": "master",
-                        "git_sha": "f6a11408536fbee6cbea1f5977605011873de3ca"
+                        "git_sha": "3dd73937b084b547f9272bc901e0f120a7913fd8"
                     },
                     "gatk4/bedtointervallist": {
                         "branch": "master",
@@ -175,7 +175,7 @@
                     },
                     "picard/addorreplacereadgroups": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "a50554f372baf3e079425e5d3ac4d09dc5ff8bc5"
                     },
                     "picard/collecthsmetrics": {
                         "branch": "master",
