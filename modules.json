@@ -193,10 +193,6 @@
                         "branch": "master",
                         "git_sha": "eca65aa4a5e2e192ac44d6962c8f9260f314ffb8"
                     },
-                    "picard/renamesampleinvcf": {
-                        "branch": "master",
-                        "git_sha": "af53d9fcbc10982ff8fd1b87f9fec60b19eaba3d"
-                    },
                     "picard/sortvcf": {
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
@@ -211,23 +207,23 @@
                     },
                     "samtools/faidx": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "cf5b9c30a2adacc581793afb79fae5f5b50bed01"
                     },
                     "samtools/index": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "cf5b9c30a2adacc581793afb79fae5f5b50bed01"
                     },
                     "samtools/merge": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "cf5b9c30a2adacc581793afb79fae5f5b50bed01"
                     },
                     "samtools/sort": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "cf5b9c30a2adacc581793afb79fae5f5b50bed01"
                     },
                     "samtools/stats": {
                         "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                        "git_sha": "cf5b9c30a2adacc581793afb79fae5f5b50bed01"
                     },
                     "stranger": {
                         "branch": "master",
