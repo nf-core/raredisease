@@ -62,11 +62,13 @@ workflow MERGE_ANNOTATE_MT {
 
         REMOVE_DUPLICATES_MT.out.vcf
             .collect{it[1]}
+            .ifEmpty([])
             .toList()
             .set { file_list_vcf }
 
         TABIX_TABIX_MT2.out.tbi
             .collect{it[1]}
+            .ifEmpty([])
             .toList()
             .set { file_list_tbi }
 
