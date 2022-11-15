@@ -92,7 +92,10 @@ workflow MERGE_ANNOTATE_MT {
         ch_merged_vcf = BCFTOOLS_MERGE_MT.out.merged_variants
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
 
-        ch_vcf_changed_name = CHANGE_NAME_VCF_MT(ch_case_vcf.single)
+        CHANGE_NAME_VCF_MT(ch_case_vcf.single)
+        ch_vcf_changed_name = CHANGE_NAME_VCF_MT.out.file
+        ch_versions = ch_versions.mix(CHANGE_NAME_VCF_MT.out.versions)
+
         ch_in_vep = ch_merged_vcf.mix(ch_vcf_changed_name)
 
         // Annotating with Hmtnote

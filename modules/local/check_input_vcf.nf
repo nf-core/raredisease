@@ -11,7 +11,7 @@ process CHECK_INPUT_VCF {
     path vcf
 
     output:
-    path '*.txt'         , emit: txt
+    path '*.csv'         , emit: csv
     path "versions.yml"  , emit: versions
 
     when:
@@ -20,7 +20,7 @@ process CHECK_INPUT_VCF {
     script: // This script is bundled with the pipeline, in nf-core/raredisease/bin/
     """
     export INPUT_FILE=${vcf}
-    export OUTPUT_FILE="checked_vcfs.txt"
+    export OUTPUT_FILE="checked_vcfs.csv"
 
     python3 <<CODE
     import os, gzip

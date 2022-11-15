@@ -175,6 +175,7 @@ workflow RAREDISEASE {
 
     // Generate pedigree file
     MAKE_PED (CHECK_INPUT.out.samples.toList())
+    ch_versions = ch_versions.mix(MAKE_PED.out.versions)
 
     // Input QC
     FASTQC (CHECK_INPUT.out.reads)
