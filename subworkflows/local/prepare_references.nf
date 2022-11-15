@@ -101,6 +101,7 @@ workflow PREPARE_REFERENCES {
         bwamem2_index_mt_shift    = BWAMEM2_INDEX_SHIFT_MT.out.index.collect()
         chrom_sizes               = GET_CHROM_SIZES.out.sizes.collect()
         fasta_fai                 = SAMTOOLS_FAIDX_GENOME.out.fai.map{ meta, fai -> [fai] }.collect()
+        fasta_fai_meta            = SAMTOOLS_FAIDX_GENOME.out.fai.collect()
         fasta_fai_mt_shift        = SAMTOOLS_FAIDX_SHIFT_MT.out.fai.map{ meta, fai -> [fai] }.collect()
         gnomad_af_idx             = TABIX_GNOMAD_AF.out.tbi.collect()
         gnomad_tbi                = CHECK_VCF.out.index.collect()

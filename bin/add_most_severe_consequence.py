@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+import gzip
 import sys
 from pathlib import Path
 from typing import Tuple, TextIO
@@ -177,8 +178,9 @@ def main(argv=None):
     args.file_out.parent.mkdir(parents=True, exist_ok=True)
     with open(args.variant_csq) as f:
         var_csq = [line.strip() for line in f]
+    opener = gzip.open if (args.file_in.suffix == ".gz") else open
     with open(args.file_out, "w") as out_vcf:
-        with open(args.file_in) as in_vcf:
+        with opener(args.file_in, "rt") as in_vcf:
             write_csq_annotated_vcf(in_vcf, out_vcf, var_csq)
 
 

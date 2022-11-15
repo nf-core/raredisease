@@ -1,4 +1,4 @@
-process GATK4_PRINTREADS {
+process GATK4_SPLITINTERVALS {
     tag "$meta.id"
     label 'process_low'
 
@@ -8,14 +8,14 @@ process GATK4_PRINTREADS {
         'quay.io/biocontainers/gatk4:4.3.0.0--py36hdfd78af_0' }"
 
     input:
-    tuple val(meta), path(bam), path(bai)
-    tuple val(meta2), path(fasta)
-    path (fai)
-    path (dict)
+    tuple val(meta), path(intervals)
+    path(fasta)
+    path(fasta_fai)
+    path(dict)
 
     output:
-    tuple val(meta), path("*.reads.bam"), emit: bam
-    path "versions.yml"           , emit: versions
+    tuple val(meta), path("**.interval_list"), emit: split_intervals
+    path "versions.yml"                      , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -23,19 +23,22 @@ process GATK4_PRINTREADS {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+    def reference = fasta ? "--reference $fasta" : ""
+
     def avail_mem = 3
     if (!task.memory) {
-        log.info '[GATK PrintReads] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
+        log.info '[GATK SplitIntervals] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
         avail_mem = task.memory.giga
     }
+
     """
-    gatk --java-options "-Xmx${avail_mem}g" PrintReads \\
-        $args \\
-        --reference $fasta \\
-        --input $bam \\
-        --read-index $bai \\
-        --output ${prefix}.reads.bam
+    gatk --java-options "-Xmx${avail_mem}g" SplitIntervals \\
+        --output ${prefix} \\
+        --intervals $intervals \\
+        $reference \\
+        --tmp-dir . \\
+        $args
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -46,7 +49,9 @@ process GATK4_PRINTREADS {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.reads.bam
+    mkdir ${prefix}
+    touch ${prefix}/0000-scattered.interval_list
+    touch ${prefix}/0001-scattered.interval_list
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
