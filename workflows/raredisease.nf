@@ -250,7 +250,8 @@ workflow RAREDISEASE {
         ch_bwa_index,
         ch_bwamem2_index,
         ch_known_dbsnp,
-        ch_known_dbsnp_tbi
+        ch_known_dbsnp_tbi,
+        params.platform
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)

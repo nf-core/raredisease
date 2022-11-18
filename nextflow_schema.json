@@ -375,6 +375,13 @@
                     "default": false,
                     "description": "Specifies whether or not to run gens preprocessing subworkflow.",
                     "fa_icon": "fas fa-book"
+                },
+                "platform": {
+                    "type": "string",
+                    "default": "illumina",
+                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
+                    "fa_icon": "fas fa-book",
+                    "enum": ["illumina"]
                 }
             }
         },
