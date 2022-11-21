@@ -1,6 +1,7 @@
 process CHANGE_NAME {
     tag "$meta.id"
     label 'process_low'
+    label 'process_single'
 
     conda (params.enable_conda ? "conda-forge::python=3.9.5" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -12,6 +13,7 @@ process CHANGE_NAME {
 
     output:
     tuple val(meta), path( "*.${file_type}"), emit: file
+    path "versions.yml"                     , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -25,6 +27,11 @@ process CHANGE_NAME {
     mv \\
         $input_file \\
         ${prefix}.${file_type}
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        change_name: v1.0
+    END_VERSIONS
     """
 
     stub:
@@ -33,5 +40,10 @@ process CHANGE_NAME {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}.${file_type}
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        change_name: v1.0
+    END_VERSIONS
     """
 }

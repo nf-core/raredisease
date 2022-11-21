@@ -375,6 +375,13 @@
                     "default": false,
                     "description": "Specifies whether or not to run gens preprocessing subworkflow.",
                     "fa_icon": "fas fa-book"
+                },
+                "platform": {
+                    "type": "string",
+                    "default": "illumina",
+                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
+                    "fa_icon": "fas fa-book",
+                    "enum": ["illumina"]
                 }
             }
         },
@@ -462,11 +469,11 @@
             "description": "Options used to facilitate the annotation of the variants.",
             "properties": {
                 "vep_cache_version": {
-                    "type": "string",
-                    "default": "104",
+                    "type": "integer",
+                    "default": "107",
                     "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-book",
-                    "enum": ["104", "105", "106", "107"]
+                    "enum": [107]
                 }
             }
         },

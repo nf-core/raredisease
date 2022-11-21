@@ -175,6 +175,7 @@ workflow RAREDISEASE {
 
     // Generate pedigree file
     MAKE_PED (CHECK_INPUT.out.samples.toList())
+    ch_versions = ch_versions.mix(MAKE_PED.out.versions)
 
     // Input QC
     FASTQC (CHECK_INPUT.out.reads)
@@ -249,7 +250,8 @@ workflow RAREDISEASE {
         ch_bwa_index,
         ch_bwamem2_index,
         ch_known_dbsnp,
-        ch_known_dbsnp_tbi
+        ch_known_dbsnp_tbi,
+        params.platform
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
@@ -334,6 +336,7 @@ workflow RAREDISEASE {
             ch_sv_annotate.vcf_ann,
             ch_variant_consequences
         )
+        ch_versions = ch_versions.mix(ANN_CSQ_PLI_SV.out.versions)
 
         RANK_VARIANTS_SV (
             ANN_CSQ_PLI_SV.out.vcf_ann,
@@ -347,6 +350,7 @@ workflow RAREDISEASE {
             RANK_VARIANTS_SV.out.vcf,
             ch_vep_filters
         )
+        ch_versions = ch_versions.mix(FILTER_VEP_SV.out.versions)
 
     }
 
@@ -393,6 +397,7 @@ workflow RAREDISEASE {
             ch_snv_annotate.vcf_ann,
             ch_variant_consequences
         )
+        ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)
 
         RANK_VARIANTS_SNV (
             ANN_CSQ_PLI_SNV.out.vcf_ann,
@@ -406,6 +411,7 @@ workflow RAREDISEASE {
             RANK_VARIANTS_SNV.out.vcf,
             ch_vep_filters
         )
+        ch_versions = ch_versions.mix(FILTER_VEP_SNV.out.versions)
 
     }
 

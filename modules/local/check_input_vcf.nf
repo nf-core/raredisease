@@ -1,5 +1,6 @@
 process CHECK_INPUT_VCF {
     tag "check_vcf"
+    label 'process_single'
 
     conda (params.enable_conda ? "conda-forge::python=3.9.5" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -10,7 +11,8 @@ process CHECK_INPUT_VCF {
     path vcf
 
     output:
-    path '*.txt'       , emit: txt
+    path '*.csv'         , emit: csv
+    path "versions.yml"  , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -18,7 +20,7 @@ process CHECK_INPUT_VCF {
     script: // This script is bundled with the pipeline, in nf-core/raredisease/bin/
     """
     export INPUT_FILE=${vcf}
-    export OUTPUT_FILE="checked_vcfs.txt"
+    export OUTPUT_FILE="checked_vcfs.csv"
 
     python3 <<CODE
     import os, gzip
@@ -39,5 +41,20 @@ process CHECK_INPUT_VCF {
     else:
         print("Please compress %s using bgzip" %file_in)
     CODE
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        change_input_vcf: v1.0
+    END_VERSIONS
+    """
+
+    stub:
+    """
+    touch checked_vcfs.txt
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        check_input_vcf: v1.0
+    END_VERSIONS
     """
 }

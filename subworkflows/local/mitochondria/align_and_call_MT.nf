@@ -11,7 +11,6 @@ include { SAMTOOLS_SORT as SAMTOOLS_SORT_MT                                 } fr
 include { HAPLOCHECK as HAPLOCHECK_MT                                       } from '../../../modules/nf-core/haplocheck/main'
 include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } from '../../../modules/nf-core/gatk4/mutect2/main'
 include { GATK4_FILTERMUTECTCALLS as  GATK4_FILTERMUTECTCALLS_MT            } from '../../../modules/nf-core/gatk4/filtermutectcalls/main'
-include { PICARD_RENAMESAMPLEINVCF as PICARD_RENAMESAMPLEINVCF_MT           } from '../../../modules/nf-core/picard/renamesampleinvcf/main'
 include { TABIX_TABIX as TABIX_TABIX_MT                                     } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow ALIGN_AND_CALL_MT {
@@ -77,17 +76,10 @@ workflow ALIGN_AND_CALL_MT {
             genome_dict )
         ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
 
-        // Replace within the vcf sample as a sample name with meta.id
-        PICARD_RENAMESAMPLEINVCF_MT(GATK4_FILTERMUTECTCALLS_MT.out.vcf)
-        ch_versions = ch_versions.mix(PICARD_RENAMESAMPLEINVCF_MT.out.versions.first())
-
-        TABIX_TABIX_MT(PICARD_RENAMESAMPLEINVCF_MT.out.vcf)
-        ch_versions = ch_versions.mix(TABIX_TABIX_MT.out.versions.first())
-
 
     emit:
-        vcf       = PICARD_RENAMESAMPLEINVCF_MT.out.vcf
-        tbi       = TABIX_TABIX_MT.out.tbi
+        vcf       = GATK4_FILTERMUTECTCALLS_MT.out.vcf
+        tbi       = GATK4_FILTERMUTECTCALLS_MT.out.tbi
         stats     = GATK4_MUTECT2_MT.out.stats
         filt_sats = GATK4_FILTERMUTECTCALLS_MT.out.stats
         txt       = HAPLOCHECK_MT.out.txt

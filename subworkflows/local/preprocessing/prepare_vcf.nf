@@ -15,7 +15,7 @@ workflow CHECK_VCF {
     main:
         ch_versions = Channel.empty()
 
-        CHECK_INPUT_VCF( vcf_file )
+        CHECK_INPUT_VCF( vcf_file ).csv
             .splitCsv( header:true )
             .map { row ->
                 def id        = "${row.id}"
@@ -30,6 +30,7 @@ workflow CHECK_VCF {
                     return [['id':id],filepath]
             }
             .set { ch_vcfs_norm }
+        ch_versions = ch_versions.mix(CHECK_INPUT_VCF.out.versions)
 
         SPLIT_MULTIALLELICS_PV (ch_vcfs_norm.unprocessed, fasta)
         ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_PV.out.versions)
