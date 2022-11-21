@@ -31,5 +31,5 @@ process MAKE_PED {
         }
     }
     def versionfile = task.workDir.resolve('versions.yml')
-    versionfile.text = '"' + task.process + '"' + '\n    create_pedfile: 1.0\n'
+    versionfile.text = '"' + task.process + '":' + '\n    create_pedfile: 1.0\n'
 }
