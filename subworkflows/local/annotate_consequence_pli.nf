@@ -20,6 +20,8 @@ workflow ANNOTATE_CSQ_PLI {
         ADD_MOST_SEVERE_PLI (
             ADD_MOST_SEVERE_CSQ.out.vcf,
         )
+        ch_versions = ch_versions.mix(ADD_MOST_SEVERE_CSQ.out.versions)
+        ch_versions = ch_versions.mix(ADD_MOST_SEVERE_PLI.out.versions)
 
 	emit:
 		vcf_ann  = ADD_MOST_SEVERE_PLI.out.vcf

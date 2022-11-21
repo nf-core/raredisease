@@ -113,7 +113,7 @@ workflow MERGE_ANNOTATE_MT {
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
 
         // Running haplogrep2
-        TABIX_TABIX_MT3(ENSEMBLVEP_MT.out.vcf)
+        TABIX_TABIX_MT3(ENSEMBLVEP_MT.out.vcf_gz)
         HAPLOGREP2_CLASSIFY_MT(ch_in_vep, "vcf.gz")
         ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions)
 
