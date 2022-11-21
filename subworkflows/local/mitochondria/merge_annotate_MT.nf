@@ -50,7 +50,7 @@ workflow MERGE_ANNOTATE_MT {
         // Spliting multiallelic calls
         ch_in_split = GATK4_VARIANTFILTRATION_MT.out.vcf.join(GATK4_VARIANTFILTRATION_MT.out.tbi, by:[0])
         SPLIT_MULTIALLELICS_MT (ch_in_split, genome_fasta)
-        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_MT.out.versions)
+        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_MT.out.versions.first())
 
         TABIX_TABIX_MT(SPLIT_MULTIALLELICS_MT.out.vcf)
         ch_in_remdup = SPLIT_MULTIALLELICS_MT.out.vcf.join(TABIX_TABIX_MT.out.tbi)
@@ -58,7 +58,7 @@ workflow MERGE_ANNOTATE_MT {
         // Removing duplicates and merging if there is more than one sample
         REMOVE_DUPLICATES_MT(ch_in_remdup, genome_fasta)
         TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
-        ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions)
+        ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions.first())
 
         REMOVE_DUPLICATES_MT.out.vcf
             .collect{it[1]}
