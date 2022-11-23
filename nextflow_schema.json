@@ -127,6 +127,12 @@
                     "description": "Path to the index file for the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
                 },
+                "mt_contig_name": {
+                    "type": "string",
+                    "format": "path",
+                    "description": "Name of the mitochondrial contig in the reference fasta file",
+                    "help_text": "Used to extract relevant information from the references to analyse mitochondria"
+                },
                 "mt_intervals": {
                     "type": "string",
                     "format": "path",
