@@ -7,6 +7,7 @@ include { SENTIEON_DATAMETRICS    } from '../../../modules/local/sentieon/datame
 include { SENTIEON_LOCUSCOLLECTOR } from '../../../modules/local/sentieon/locuscollector'
 include { SENTIEON_DEDUP          } from '../../../modules/local/sentieon/dedup'
 include { SENTIEON_BQSR           } from '../../../modules/local/sentieon/bqsr'
+include { SENTIEON_READWRITER     } from '../../../modules/local/sentieon/readwriter'
 
 workflow ALIGN_SENTIEON {
     take:
@@ -16,6 +17,7 @@ workflow ALIGN_SENTIEON {
         index           // channel: [ /path/to/bwamem2/index/ ]
         known_dbsnp     // path: params.known_dbsnp
         known_dbsnp_tbi // path: params.known_dbsnp
+        platform        // value: params.platform
 
     main:
         ch_versions = Channel.empty()
@@ -29,8 +31,20 @@ workflow ALIGN_SENTIEON {
         SENTIEON_BWAMEM.out
             .bam
             .join(SENTIEON_BWAMEM.out.bai)
-            .set { ch_bam_bai }
+            .map{ meta, bam, bai ->
+                new_meta = meta.clone()                                                                                 // clone to avoid overriding the global meta
+                new_meta.id = new_meta.id.split('_')[0]                                                                 // access the .id attribute of meta to split samplename_lane into samplename
+                new_meta.read_group = "\'@RG\\tID:" + new_meta.id + "\\tPL:" + platform + "\\tSM:" + new_meta.id + "\'"
+                [new_meta, bam, bai]}                                                                                   // end the closure to return newly modified channel
+            .groupTuple(by: 0)                                                                                          // group them bam paths with the same [ [samplename], [bam path, bam path, ..] ]
+            .branch{                                                                                                    // branch the channel into multiple channels (single, multiple) depending on size of list
+                single: it[1].size() == 1
+                multiple: it[1].size() > 1
+                }
+            .set{ merge_bams_in }
 
+        SENTIEON_READWRITER (merge_bams_in.multiple)
+        ch_bam_bai = merge_bams_in.single.mix(SENTIEON_READWRITER.out.bam_bai)
         SENTIEON_DATAMETRICS (ch_bam_bai, fasta, fai )
         ch_versions = ch_versions.mix(SENTIEON_DATAMETRICS.out.versions)
 

@@ -13,7 +13,7 @@ workflow CALL_SNV {
 	    fai                  // channel: [genome.fai]
 	    known_dbsnp          // channel: [ /path/to/known_dbsnp ]
 	    known_dbsnp_tbi      // channel: [ /path/to/known_dbsnp_tbi ]
-         call_interval        // channel: [ /path/to/call_intervals ]
+        call_interval        // channel: [ /path/to/call_intervals ]
 	    ml_model             // channel: [ /path/to/ml_model ]
 	    case_info            // channel: [ case_id ]
 
