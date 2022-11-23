@@ -4,7 +4,7 @@
 
 include { SENTIEON_DNASCOPE                        } from '../../../modules/local/sentieon/dnascope'
 include { SENTIEON_DNAMODELAPPLY                   } from '../../../modules/local/sentieon/dnamodelapply'
-include { BCFTOOLS_MERGE                           } from '../../../modules/nf-core/bcftools/merge'
+include { BCFTOOLS_MERGE                           } from '../../../modules/nf-core/bcftools/merge/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_SEN } from '../../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_SEN   } from '../../../modules/nf-core/bcftools/norm/main'
 include { TABIX_TABIX as TABIX_SEN                 } from '../../../modules/nf-core/tabix/tabix/main'
