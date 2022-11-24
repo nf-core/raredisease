@@ -9,8 +9,8 @@ process SENTIEON_BQSR {
     tuple val(meta), path(bam), path(bai)
     path fasta
     path fai
-    path known_dbsnp
-    path known_dbsnp_tbi
+    tuple val(meta2), path(known_dbsnp)
+    tuple val(meta3), path(known_dbsnp_tbi)
 
     output:
     tuple val(meta), path('*_recal.bam')             , emit: bam
