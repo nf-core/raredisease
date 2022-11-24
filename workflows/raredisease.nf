@@ -80,6 +80,7 @@ include { MAKE_PED                              } from '../modules/local/create_
 // MODULE: Installed directly from nf-core/modules
 //
 
+include { BCFTOOLS_CONCAT                       } from '../modules/nf-core/bcftools/concat/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { FASTQC                                } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
@@ -393,8 +394,19 @@ workflow RAREDISEASE {
         ).set {ch_snv_annotate}
         ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 
+        ch_snv_annotate.tbi
+            .concat(ANALYSE_MT.out.tbi)
+            .groupTuple()
+            .set { ch_merged_tbi }
+        ch_snv_annotate.vcf_ann
+            .concat(ANALYSE_MT.out.vcf)
+            .groupTuple()
+            .set { ch_merged_vcf }
+
+        ch_merged_vcf.join(ch_merged_tbi).set {ch_concat_in}
+        BCFTOOLS_CONCAT (ch_concat_in)
         ANN_CSQ_PLI_SNV (
-            ch_snv_annotate.vcf_ann,
+            BCFTOOLS_CONCAT.out.vcf,
             ch_variant_consequences
         )
         ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)

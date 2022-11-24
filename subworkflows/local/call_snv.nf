@@ -39,11 +39,11 @@ workflow CALL_SNV {
 
         ch_vcf.join(ch_tabix)
             .map { meta, vcf, tbi -> return [meta, vcf, tbi, []]}
-            .set { ch_selvar_in}
+            .set { ch_selvar_in }
         GATK4_SELECTVARIANTS(ch_selvar_in)
 
     emit:
-        vcf      = ch_vcf
-        tabix    = ch_tabix
+        vcf      = GATK4_SELECTVARIANTS.out.vcf
+        tabix    = GATK4_SELECTVARIANTS.out.tbi
         versions = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
 }

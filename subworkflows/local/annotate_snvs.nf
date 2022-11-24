@@ -11,7 +11,8 @@ include { ENSEMBLVEP as ENSEMBLVEP_SNV            } from '../../modules/local/en
 include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL   } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO   } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_VEP       } from '../../modules/nf-core/tabix/bgziptabix/main'
-include { TABIX_TABIX as TABIX_BCFTOOLS           } from '../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_BCFTOOLS_CONCAT    } from '../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_BCFTOOLS_VIEW      } from '../../modules/nf-core/tabix/tabix/main'
 include { GATK4_SELECTVARIANTS                    } from '../../modules/nf-core/gatk4/selectvariants/main'
 
 workflow ANNOTATE_SNVS {
@@ -80,10 +81,10 @@ workflow ANNOTATE_SNVS {
         BCFTOOLS_VIEW(ZIP_TABIX_VCFANNO.out.gz_tbi,[],[],[]).vcf.set { ch_vep_in }
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
 
-        TABIX_BCFTOOLS (BCFTOOLS_VIEW.out.vcf)
-        ch_versions = ch_versions.mix(TABIX_BCFTOOLS.out.versions)
+        TABIX_BCFTOOLS_VIEW (BCFTOOLS_VIEW.out.vcf)
+        ch_versions = ch_versions.mix(TABIX_BCFTOOLS_VIEW.out.versions)
 
-        BCFTOOLS_VIEW.out.vcf.join(TABIX_BCFTOOLS.out.tbi).collect().set { ch_vcf_scatter_in }
+        BCFTOOLS_VIEW.out.vcf.join(TABIX_BCFTOOLS_VIEW.out.tbi).collect().set { ch_vcf_scatter_in }
 
         GATK4_SELECTVARIANTS (ch_vcf_scatter_in.combine(split_intervals)).vcf.set { ch_vep_in }
         ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
@@ -116,7 +117,11 @@ workflow ANNOTATE_SNVS {
         BCFTOOLS_CONCAT (ch_vep_ann)
         ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
 
+        TABIX_BCFTOOLS_CONCAT (BCFTOOLS_CONCAT.out.vcf)
+        ch_versions = ch_versions.mix(TABIX_BCFTOOLS_CONCAT.out.versions)
+
     emit:
         vcf_ann       = BCFTOOLS_CONCAT.out.vcf
+        tbi           = TABIX_BCFTOOLS_CONCAT.out.tbi
         versions      = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
 }
