@@ -27,7 +27,7 @@ workflow CALL_SV_MANTA {
                     return [bed_file, index]}
             .set { bed_input }
 
-        if (params.analysis_type == "WGS") {
+        if (params.analysis_type.toUpperCase() == "WGS" ) {
             case_info.combine(bam_file_list)
                 .combine(bai_file_list)
                 .map { it -> it + [ [], [] ] }
