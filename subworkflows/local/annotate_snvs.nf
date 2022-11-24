@@ -86,7 +86,7 @@ workflow ANNOTATE_SNVS {
         BCFTOOLS_VIEW.out.vcf.join(TABIX_BCFTOOLS.out.tbi).collect().set { ch_vcf_scatter_in }
 
         GATK4_SELECTVARIANTS (ch_vcf_scatter_in.combine(split_intervals)).vcf.set { ch_vep_in }
-        ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
+        ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions.first())
 
         //
         // annotate vep
@@ -99,10 +99,10 @@ workflow ANNOTATE_SNVS {
             fasta,
             []
             )
-        ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions)
+        ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions.first())
 
         ZIP_TABIX_VEP (ENSEMBLVEP_SNV.out.vcf)
-        ch_versions = ch_versions.mix(ZIP_TABIX_VEP.out.versions)
+        ch_versions = ch_versions.mix(ZIP_TABIX_VEP.out.versions.first())
 
         ZIP_TABIX_VEP.out.gz_tbi
             .groupTuple()

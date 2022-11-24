@@ -24,7 +24,7 @@ workflow ALIGN_SENTIEON {
         ch_bqsr_csv = Channel.empty()
 
         SENTIEON_BWAMEM ( reads_input, fasta, fai, index )
-        ch_versions = ch_versions.mix(SENTIEON_BWAMEM.out.versions)
+        ch_versions = ch_versions.mix(SENTIEON_BWAMEM.out.versions.first())
 
         SENTIEON_BWAMEM.out
             .bam
@@ -32,9 +32,10 @@ workflow ALIGN_SENTIEON {
             .set { ch_bam_bai }
 
         SENTIEON_DATAMETRICS (ch_bam_bai, fasta, fai )
-        ch_versions = ch_versions.mix(SENTIEON_DATAMETRICS.out.versions)
+        ch_versions = ch_versions.mix(SENTIEON_DATAMETRICS.out.versions.first())
 
         SENTIEON_LOCUSCOLLECTOR ( ch_bam_bai )
+        ch_versions = ch_versions.mix(SENTIEON_LOCUSCOLLECTOR.out.versions.first())
 
         ch_bam_bai
             .join(SENTIEON_LOCUSCOLLECTOR.out.score)
@@ -42,6 +43,7 @@ workflow ALIGN_SENTIEON {
             .set { ch_bam_bai_score }
 
         SENTIEON_DEDUP ( ch_bam_bai_score, fasta, fai )
+        ch_versions = ch_versions.mix(SENTIEON_DEDUP.out.versions.first())
 
         if (params.variant_caller == "sentieon") {
             SENTIEON_DEDUP.out.bam
@@ -51,6 +53,7 @@ workflow ALIGN_SENTIEON {
             ch_bqsr_bam = SENTIEON_BQSR.out.bam
             ch_bqsr_bai = SENTIEON_BQSR.out.bai
             ch_bqsr_csv = SENTIEON_BQSR.out.recal_csv
+            ch_versions = ch_versions.mix(SENTIEON_BQSR.out.versions.first())
         }
 
     emit:
