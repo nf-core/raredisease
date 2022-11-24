@@ -15,10 +15,10 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_versions = Channel.empty()
 
         EXPANSIONHUNTER( bam, fasta, variant_catalog )
-        ch_versions = ch_versions.mix(EXPANSIONHUNTER.out.versions)
+        ch_versions = ch_versions.mix(EXPANSIONHUNTER.out.versions.first())
 
         STRANGER ( EXPANSIONHUNTER.out.vcf, variant_catalog )
-        ch_versions = ch_versions.mix(STRANGER.out.versions)
+        ch_versions = ch_versions.mix(STRANGER.out.versions.first())
 
     emit:
         vcf         = STRANGER.out.vcf                    // channel: [ val(meta), path(*.vcf.gz) ]

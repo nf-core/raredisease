@@ -28,7 +28,7 @@ workflow CALL_SNV_DEEPVARIANT {
             .collect{it[1]}
             .toList()
             .set { file_list }
-        ch_versions = ch_versions.mix(DEEPVARIANT.out.versions)
+        ch_versions = ch_versions.mix(DEEPVARIANT.out.versions.first())
 
         case_info
             .combine(file_list)

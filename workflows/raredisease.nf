@@ -127,6 +127,7 @@ workflow RAREDISEASE {
     if (params.input) {
         ch_input = Channel.fromPath(params.input)
         CHECK_INPUT (ch_input)
+        ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
     } else {
         exit 1, 'Input samplesheet not specified!'
     }
@@ -180,7 +181,6 @@ workflow RAREDISEASE {
 
     // Input QC
     FASTQC (CHECK_INPUT.out.reads)
-    ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     // Prepare references and indices.
