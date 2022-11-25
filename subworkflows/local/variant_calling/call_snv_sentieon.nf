@@ -4,6 +4,7 @@
 
 include { SENTIEON_DNASCOPE             } from '../../../modules/local/sentieon/dnascope'
 include { SENTIEON_DNAMODELAPPLY        } from '../../../modules/local/sentieon/dnamodelapply'
+include { BCFTOOLS_FILTER               } from '../../../modules/nf-core/bcftools/filter/main'
 
 workflow CALL_SNV_SENTIEON {
 	take:
@@ -32,6 +33,7 @@ workflow CALL_SNV_SENTIEON {
             ch_index    = SENTIEON_DNAMODELAPPLY.out.vcf_index
             ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions.first())
         }
+        BCFTOOLS_FILTER (   )
 
 	emit:
 		vcf		 = ch_vcf
