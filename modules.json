@@ -185,6 +185,10 @@
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
+                    "picard/collectwgsmetrics": {
+                        "branch": "master",
+                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
+                    },
                     "picard/liftovervcf": {
                         "branch": "master",
                         "git_sha": "3d5d18db1b39e1133505ae2fa2a062b0073c8a6a"
