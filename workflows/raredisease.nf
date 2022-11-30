@@ -233,7 +233,6 @@ workflow RAREDISEASE {
                                                                            : Channel.fromPath(params.vcfanno_resources).collect()
     ch_versions                     = ch_versions.mix(ch_references.versions)
 
-    ch_sequence_dictionary_meta.view()
     // CREATE CHROMOSOME BED AND INTERVALS
     SCATTER_GENOME (
         ch_sequence_dictionary_no_meta,
