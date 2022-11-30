@@ -7,8 +7,8 @@ process SENTIEON_DNASCOPE {
     tuple val(meta), path(bam), path(bai)
     path fasta
     path fai
-    path known_dbsnp
-    path known_dbsnp_tbi
+    tuple val(meta2), path(known_dbsnp)
+    tuple val(meta3), path(known_dbsnp_tbi)
     path call_interval
     path ml_model
 
