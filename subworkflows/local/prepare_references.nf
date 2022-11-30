@@ -108,6 +108,7 @@ workflow PREPARE_REFERENCES {
         gnomad_vcf                = CHECK_VCF.out.vcf.collect()
         known_dbsnp_tbi           = TABIX_DBSNP.out.tbi.collect()
         sequence_dict             = GATK_SD.out.dict.collect()
+        sequence_dict_meta        = GATK_SD.out.dict.map {it -> [[id:it[0].simpleName], it]}.collect()
         sequence_dict_mt_shift    = GATK_SD_SHIFT_MT.out.dict.collect()
         target_bed                = Channel.empty().mix(ch_tbi, ch_bgzip_tbi).collect()
         target_intervals          = GATK_BILT.out.interval_list.collect{it[1]}.collect()

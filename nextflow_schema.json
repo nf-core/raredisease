@@ -297,6 +297,14 @@
                     "fa_icon": "fas fa-file-csv",
                     "hidden": true
                 },
+                "vcfanno_lua": {
+                    "type": "string",
+                    "description": "Path to the vcfanno lua file.",
+                    "pattern": "^\\S+\\.lua$",
+                    "help_text": "Custom operations file (lua). For use when the built-in ops don't supply the needed reduction.",
+                    "fa_icon": "fas fa-file-code",
+                    "hidden": true
+                },
                 "vep_cache": {
                     "type": "string",
                     "description": "Path to vep's cache directory.",

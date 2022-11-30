@@ -14,6 +14,7 @@ workflow QC_BAM {
     take:
         bam              // channel: [ val(meta), path(bam) ]
         bai              // channel: [ val(meta), path(bai) ]
+        bam_bai
         fasta            // path: genome.fasta
         fai              // path: genome.fasta.fai
         bait_intervals   // path: bait.intervals_list
@@ -24,11 +25,11 @@ workflow QC_BAM {
         ch_versions = Channel.empty()
 
         // COLLECT MULTIPLE METRICS
-        PICARD_COLLECTMULTIPLEMETRICS ( bam, fasta, fai )
+        PICARD_COLLECTMULTIPLEMETRICS ( bam_bai, fasta, fai )
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions.first())
 
         // COLLECT HS METRICS
-        PICARD_COLLECTHSMETRICS ( bam, fasta, fai, bait_intervals, target_intervals )
+        PICARD_COLLECTHSMETRICS ( bam_bai, fasta, fai, bait_intervals, target_intervals )
         ch_versions = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions.first())
 
         // QUALIMAP BAMQC

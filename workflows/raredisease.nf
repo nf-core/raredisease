@@ -44,6 +44,7 @@ def checkPathParamList = [
     params.svdb_query_dbs,
     params.variant_catalog,
     params.vep_filters,
+    params.vcfanno_lua,
     params.vcfanno_resources,
     params.vcfanno_toml,
     params.vep_cache
@@ -209,7 +210,7 @@ workflow RAREDISEASE {
     ch_genome_fai_no_meta           = params.fasta_fai                     ? Channel.fromPath(params.fasta_fai).collect()
                                                                            : ( ch_references.fasta_fai                ?: Channel.empty() )
     ch_genome_fai_meta              = params.fasta_fai                     ? Channel.fromPath(params.fasta_fai).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                                           : ( ch_references.fasta_fai_meta                ?: Channel.empty() )
+                                                                           : ( ch_references.fasta_fai_meta            ?: Channel.empty() )
     ch_mt_shift_fai                 = params.mt_fai_shift                  ? Channel.fromPath(params.mt_fai_shift).collect()
                                                                            : ( ch_references.fasta_fai_mt_shift       ?: Channel.empty() )
     ch_gnomad_af_idx                = params.gnomad_af_idx                 ? Channel.fromPath(params.gnomad_af_idx).collect()
@@ -220,8 +221,10 @@ workflow RAREDISEASE {
                                                                            : Channel.value([])
     ch_known_dbsnp_tbi              = params.known_dbsnp_tbi               ? Channel.fromPath(params.known_dbsnp_tbi).collect()
                                                                            : ( ch_references.known_dbsnp_tbi          ?: Channel.empty() )
-    ch_sequence_dictionary          = params.sequence_dictionary           ? Channel.fromPath(params.sequence_dictionary).collect()
+    ch_sequence_dictionary_no_meta  = params.sequence_dictionary           ? Channel.fromPath(params.sequence_dictionary).collect()
                                                                            : ( ch_references.sequence_dict            ?: Channel.empty() )
+    ch_sequence_dictionary_meta     = params.sequence_dictionary           ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                           : ( ch_references.sequence_dict_meta       ?: Channel.empty() )
     ch_sequence_dictionary_mt_shift = params.mt_sequence_dictionary_shift  ? Channel.fromPath(params.mt_sequence_dictionary_shift).collect()
                                                                            : ( ch_references.sequence_dict_mt_shift   ?: Channel.empty() )
     ch_target_bed                   = ch_references.target_bed
@@ -230,9 +233,10 @@ workflow RAREDISEASE {
                                                                            : Channel.fromPath(params.vcfanno_resources).collect()
     ch_versions                     = ch_versions.mix(ch_references.versions)
 
+    ch_sequence_dictionary_meta.view()
     // CREATE CHROMOSOME BED AND INTERVALS
     SCATTER_GENOME (
-        ch_sequence_dictionary,
+        ch_sequence_dictionary_no_meta,
         ch_genome_fai_meta,
         ch_genome_fai_no_meta,
         ch_genome_fasta_no_meta
@@ -260,8 +264,9 @@ workflow RAREDISEASE {
     QC_BAM (
         ch_mapped.marked_bam,
         ch_mapped.marked_bai,
-        ch_genome_fasta_no_meta,
-        ch_genome_fai_no_meta,
+        ch_mapped.bam_bai,
+        ch_genome_fasta_meta,
+        ch_genome_fai_meta,
         ch_bait_intervals,
         ch_target_intervals,
         ch_chrom_sizes
@@ -315,7 +320,7 @@ workflow RAREDISEASE {
             file(params.gens_pon),
             file(params.gens_gnomad_pos),
             CHECK_INPUT.out.case_info,
-            ch_sequence_dictionary
+            ch_sequence_dictionary_no_meta
         )
         ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
     }
@@ -328,7 +333,7 @@ workflow RAREDISEASE {
             params.vep_cache_version,
             ch_vep_cache,
             ch_genome_fasta_no_meta,
-            ch_sequence_dictionary
+            ch_sequence_dictionary_no_meta
         ).set {ch_sv_annotate}
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
@@ -357,9 +362,10 @@ workflow RAREDISEASE {
     ANALYSE_MT (
         ch_mapped.bam_bai,
         ch_bwamem2_index,
-        ch_genome_fasta_no_meta,
         ch_genome_fasta_meta,
-        ch_sequence_dictionary,
+        ch_genome_fasta_no_meta,
+        ch_sequence_dictionary_meta,
+        ch_sequence_dictionary_no_meta,
         ch_genome_fai_no_meta,
         ch_mt_intervals,
         ch_bwamem2_index_mt_shift,
@@ -382,6 +388,7 @@ workflow RAREDISEASE {
         ANNOTATE_SNVS (
             ch_vcf,
             ch_vcfanno_resources,
+            params.vcfanno_lua,
             params.vcfanno_toml,
             params.genome,
             params.vep_cache_version,
