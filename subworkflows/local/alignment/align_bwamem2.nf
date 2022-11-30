@@ -23,14 +23,16 @@ workflow ALIGN_BWAMEM2 {
 
         // Map, sort, and index
         BWAMEM2_MEM ( reads_input, index, true )
-        ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions)
+        ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions.first())
 
         SAMTOOLS_INDEX_ALIGN ( BWAMEM2_MEM.out.bam )
+        ch_versions = ch_versions.mix(SAMTOOLS_INDEX_ALIGN.out.versions.first())
 
         // Join the mapped bam + bai paths by their keys for stats
         // Get stats for each demultiplexed read pair.
         bam_sorted_indexed = BWAMEM2_MEM.out.bam.join(SAMTOOLS_INDEX_ALIGN.out.bai)
         SAMTOOLS_STATS ( bam_sorted_indexed, [] )
+        ch_versions = ch_versions.mix(SAMTOOLS_STATS.out.versions.first())
 
         // Merge multiple lane samples and index
         BWAMEM2_MEM.out.bam
@@ -49,12 +51,13 @@ workflow ALIGN_BWAMEM2 {
         // If there are no samples to merge, skip the process
         SAMTOOLS_MERGE ( bams.multiple, fasta, fai )
         prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
-        ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions)
+        ch_versions = ch_versions.mix(SAMTOOLS_MERGE.out.versions.first())
 
         // Marking duplicates
         MARKDUPLICATES ( prepared_bam , fasta, fai )
         SAMTOOLS_INDEX_MARKDUP ( MARKDUPLICATES.out.bam )
-        ch_versions = ch_versions.mix(MARKDUPLICATES.out.versions)
+        ch_versions = ch_versions.mix(MARKDUPLICATES.out.versions.first())
+        ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MARKDUP.out.versions.first())
 
     emit:
         stats                  = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), [ stats ] ]

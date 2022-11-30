@@ -14,7 +14,7 @@ workflow CALL_SV_TIDDIT {
 
     main:
         TIDDIT_SV ( bam, fasta, index )
-        ch_versions = TIDDIT_SV.out.versions
+        ch_versions = TIDDIT_SV.out.versions.first()
 
         TIDDIT_SV.out
             .vcf

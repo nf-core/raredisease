@@ -63,7 +63,7 @@ workflow ANALYSE_MT {
             genome_dict,
             shift_mt_backchain,
             genome_fasta_no_meta)
-        ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions)
+        ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions.first())
 
         // STEP 3: MT MERGE AND ANNOTATE VARIANTS
         MERGE_ANNOTATE_MT(

@@ -26,7 +26,7 @@ workflow CALL_SNV_SENTIEON {
         SENTIEON_DNASCOPE ( input, fasta, fai, dbsnp, dbsnp_index, call_interval, ml_model )
         ch_vcf      = SENTIEON_DNASCOPE.out.vcf
         ch_index    = SENTIEON_DNASCOPE.out.vcf_index
-		ch_versions = ch_versions.mix(SENTIEON_DNASCOPE.out.versions)
+		ch_versions = ch_versions.mix(SENTIEON_DNASCOPE.out.versions.first())
 
         if ( ml_model ) {
 
@@ -35,7 +35,7 @@ workflow CALL_SNV_SENTIEON {
             SENTIEON_DNAMODELAPPLY ( ch_vcf_idx, fasta, fai, ml_model )
             ch_vcf      = SENTIEON_DNAMODELAPPLY.out.vcf
             ch_index    = SENTIEON_DNAMODELAPPLY.out.vcf_index
-            ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions)
+            ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions.first())
         }
 
         ch_vcf.join(ch_index)
