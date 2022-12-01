@@ -257,10 +257,6 @@
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
                     },
-                    "untar": {
-                        "branch": "master",
-                        "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
-                    },
                     "vcfanno": {
                         "branch": "master",
                         "git_sha": "2edbd10f12f7d3d681d2196707f15140d0e4d463"
