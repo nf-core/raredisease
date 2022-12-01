@@ -168,7 +168,7 @@ workflow RAREDISEASE {
                                                                       : Channel.value([])
     ch_variant_consequences           = Channel.fromPath("$projectDir/assets/variant_consequences_v1.txt", checkIfExists: true).collect()
 
-    ch_vcfanno_resources_unprocessed  = params.vcfanno_resources      ? Channel.fromPath(params.vcfanno_resources).map{ it -> [[id:it[0].simpleName], it] }.collect()
+    ch_vcfanno_resources              = params.vcfanno_resources      ? Channel.fromPath(params.vcfanno_resources+'/*').collect()
                                                                       : Channel.value([])
     ch_vep_cache                      = params.vep_cache              ? Channel.fromPath(params.vep_cache).collect()
                                                                       : Channel.value([])
@@ -193,8 +193,7 @@ workflow RAREDISEASE {
         ch_gnomad_af_tab,
         ch_gnomad_vcf_unprocessed,
         ch_known_dbsnp,
-        ch_target_bed_unprocessed,
-        ch_vcfanno_resources_unprocessed
+        ch_target_bed_unprocessed
     )
     .set { ch_references }
 
@@ -229,8 +228,6 @@ workflow RAREDISEASE {
                                                                            : ( ch_references.sequence_dict_mt_shift   ?: Channel.empty() )
     ch_target_bed                   = ch_references.target_bed
     ch_target_intervals             = ch_references.target_intervals
-    ch_vcfanno_resources            = params.vcfanno_resources.endsWith('.tar.gz') ? ch_references.vcfanno_resources
-                                                                           : Channel.fromPath(params.vcfanno_resources).collect()
     ch_versions                     = ch_versions.mix(ch_references.versions)
 
     // CREATE CHROMOSOME BED AND INTERVALS

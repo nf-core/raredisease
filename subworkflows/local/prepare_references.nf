@@ -19,7 +19,6 @@ include { TABIX_BGZIPTABIX as TABIX_PBT                      } from '../../modul
 include { TABIX_TABIX as TABIX_DBSNP                         } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_GNOMAD_AF                     } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_PT                            } from '../../modules/nf-core/tabix/tabix/main'
-include { UNTAR as UNTAR_VCFANNO                             } from '../../modules/nf-core/untar/main'
 
 
 workflow PREPARE_REFERENCES {
@@ -33,7 +32,6 @@ workflow PREPARE_REFERENCES {
         gnomad_vcf_in
         known_dbsnp
         target_bed
-        vcfanno_resources   // [mandatory] vcfanno resource file
 
     main:
         ch_versions   = Channel.empty()
@@ -72,9 +70,6 @@ workflow PREPARE_REFERENCES {
             .set { ch_bait_intervals_cat_in }
         CAT_CAT_BAIT ( ch_bait_intervals_cat_in )
 
-        // Untar vcfanno
-        UNTAR_VCFANNO ( vcfanno_resources )
-
         // Gather versions
         ch_versions = ch_versions.mix(BWA_INDEX.out.versions)
         ch_versions = ch_versions.mix(BWAMEM2_INDEX_GENOME.out.versions)
@@ -92,7 +87,6 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(TABIX_PBT.out.versions)
         ch_versions = ch_versions.mix(GATK_BILT.out.versions)
         ch_versions = ch_versions.mix(GATK_ILT.out.versions)
-        ch_versions = ch_versions.mix(UNTAR_VCFANNO.out.versions)
 
     emit:
         bait_intervals            = CAT_CAT_BAIT.out.file_out.map { id, it -> [it] }.collect()
@@ -112,7 +106,6 @@ workflow PREPARE_REFERENCES {
         sequence_dict_mt_shift    = GATK_SD_SHIFT_MT.out.dict.collect()
         target_bed                = Channel.empty().mix(ch_tbi, ch_bgzip_tbi).collect()
         target_intervals          = GATK_BILT.out.interval_list.collect{it[1]}.collect()
-        vcfanno_resources         = UNTAR_VCFANNO.out.untar.map { id, resources -> [resources] }.collect()
         versions                  = ch_versions
 
 }
