@@ -170,9 +170,9 @@ workflow RAREDISEASE {
 
     ch_vcfanno_resources              = params.vcfanno_resources      ? Channel.fromPath(params.vcfanno_resources+'/*').collect()
                                                                       : Channel.value([])
-    ch_vcfanno_lua                    = params.vcfanno_lua            ? Channel.fromPath(vcfanno_lua).collect()
+    ch_vcfanno_lua                    = params.vcfanno_lua            ? Channel.fromPath(params.vcfanno_lua).collect()
                                                                       : Channel.value([])
-    ch_vcfanno_toml                   = params.vcfanno_toml           ? Channel.fromPath(vcfanno_toml).collect()
+    ch_vcfanno_toml                   = params.vcfanno_toml           ? Channel.fromPath(params.vcfanno_toml).collect()
                                                                       : Channel.value([])
     ch_vep_cache                      = params.vep_cache              ? Channel.fromPath(params.vep_cache).collect()
                                                                       : Channel.value([])
