@@ -168,7 +168,7 @@ workflow RAREDISEASE {
                                                                       : Channel.value([])
     ch_variant_consequences           = Channel.fromPath("$projectDir/assets/variant_consequences_v1.txt", checkIfExists: true).collect()
 
-    ch_vcfanno_resources              = params.vcfanno_resources      ? Channel.fromPath(params.vcfanno_resources+'/*').collect()
+    ch_vcfanno_resources              = params.vcfanno_resources      ? Channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
                                                                       : Channel.value([])
     ch_vcfanno_lua                    = params.vcfanno_lua            ? Channel.fromPath(params.vcfanno_lua).collect()
                                                                       : Channel.value([])
