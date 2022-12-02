@@ -284,8 +284,8 @@
                 },
                 "vcfanno_resources": {
                     "type": "string",
-                    "description": "Directory path or tar.gz archive that holds resources defined within the vcfanno toml file.",
-                    "help_text": "If no directory path is passed, default configurations will be used according to genome build within the context of the pipeline.",
+                    "description": "Text file containing the absolute paths to resources defined within the vcfanno toml file. One line per resource.",
+                    "help_text": "If no file is passed, default configurations will be used according to genome build within the context of the pipeline.",
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
@@ -295,6 +295,14 @@
                     "pattern": "^\\S+\\.toml$",
                     "help_text": "If no toml is passed, default configurations will be used according to genome build within the context of the pipeline.",
                     "fa_icon": "fas fa-file-csv",
+                    "hidden": true
+                },
+                "vcfanno_lua": {
+                    "type": "string",
+                    "description": "Path to the vcfanno lua file.",
+                    "pattern": "^\\S+\\.lua$",
+                    "help_text": "Custom operations file (lua). For use when the built-in ops don't supply the needed reduction.",
+                    "fa_icon": "fas fa-file-code",
                     "hidden": true
                 },
                 "vep_cache": {

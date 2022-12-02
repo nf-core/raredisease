@@ -11,9 +11,10 @@ workflow ANALYSE_MT {
     take:
         bam                    // channel: [ val(meta), file(bam), file(bai) ]
         genome_bwamem2_index   // channel: [ /path/to/bwamem2/index/ ]
-        genome_fasta_no_meta   // channel: [ genome.fasta ]
         genome_fasta_meta      // channel: [ [], genome.fasta ]
-        genome_dict            // channel: [ genome.dict ]
+        genome_fasta_no_meta   // channel: [ genome.fasta ]
+        genome_dict_meta       // channel: [ genome.dict ]
+        genome_dict_no_meta    // channel: [ genome.dict ]
         genome_fai             // channel: [ genome.fai ]
         mt_intervals           // channel: [ file(non_control_region.chrM.interval_list) ]
         shift_mt_bwamem2_index // channel: [ /path/to/bwamem2/index/ ]
@@ -31,7 +32,7 @@ workflow ANALYSE_MT {
         ch_versions = Channel.empty()
 
         // STEP 1: PREPARING MT ALIGNMENT
-        CONVERT_MT_BAM_TO_FASTQ ( bam , genome_fasta_meta, genome_fai, genome_dict, )
+        CONVERT_MT_BAM_TO_FASTQ ( bam, genome_fasta_meta, genome_fai, genome_dict_no_meta )
         ch_versions = ch_versions.mix(CONVERT_MT_BAM_TO_FASTQ.out.versions)// Outputs bam files
 
         //STEP 2.1: MT ALIGNMENT  AND VARIANT CALLING
@@ -40,7 +41,7 @@ workflow ANALYSE_MT {
             CONVERT_MT_BAM_TO_FASTQ.out.bam,
             genome_bwamem2_index,
             genome_fasta_no_meta,
-            genome_dict,
+            genome_dict_no_meta,
             genome_fai,
             mt_intervals
             )
@@ -60,7 +61,7 @@ workflow ANALYSE_MT {
         // STEP 2.3: PICARD_LIFTOVERVCF
         PICARD_LIFTOVERVCF (
             ALIGN_AND_CALL_MT_SHIFT.out.vcf,
-            genome_dict,
+            genome_dict_no_meta,
             shift_mt_backchain,
             genome_fasta_no_meta)
         ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions.first())
@@ -70,7 +71,8 @@ workflow ANALYSE_MT {
             ALIGN_AND_CALL_MT.out.vcf,
             PICARD_LIFTOVERVCF.out.vcf_lifted,
             genome_fasta_no_meta,
-            genome_dict,
+            genome_dict_meta,
+            genome_dict_no_meta,
             genome_fai,
             vep_genome,
             vep_cache_version,

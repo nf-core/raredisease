@@ -17,15 +17,16 @@ include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT          } from '../../.
 
 workflow MERGE_ANNOTATE_MT {
     take:
-        vcf1          // channel: [ val(meta), path('*.vcf.gz') ]
-        vcf2          // channel: [ val(meta), path('*.vcf.gz') ]
-        genome_fasta  // channel: [ genome.fasta ]
-        genome_dict   // channel: [ genome.dict ]
-        genome_fai    // channel: [ genome.fai ]
+        vcf1                // channel: [ val(meta), path('*.vcf.gz') ]
+        vcf2                // channel: [ val(meta), path('*.vcf.gz') ]
+        genome_fasta        // channel: [ genome.fasta ]
+        genome_dict_meta    // channel: [ genome.dict ]
+        genome_dict_no_meta // channel: [ genome.dict ]
+        genome_fai          // channel: [ genome.fai ]
         vep_genome
         vep_cache_version
         vep_cache
-        case_info      // channel: [ val(case_info) ]
+        case_info           // channel: [ val(case_info) ]
 
     main:
         ch_versions = Channel.empty()
@@ -36,7 +37,7 @@ workflow MERGE_ANNOTATE_MT {
             [meta, [vcf1, vcf2]]
         }
 
-        GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_vcfs, genome_dict)
+        GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_vcfs, genome_dict_meta)
         ch_versions = ch_versions.mix(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.versions.first())
 
         // Filtering Variants
@@ -44,7 +45,7 @@ workflow MERGE_ANNOTATE_MT {
         GATK4_VARIANTFILTRATION_MT(ch_filt_vcf,
             genome_fasta,
             genome_fai,
-            genome_dict )
+            genome_dict_no_meta )
         ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION_MT.out.versions.first())
 
         // Spliting multiallelic calls
