@@ -38,7 +38,7 @@ jobs:
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile test,docker -stub --outdir ./results
 
-      - name: Run pipeline with test data
+      - name: Run pipeline with test data 2 samples
         # TODO nf-core: You can customise CI pipeline run tests as required
         # For example: adding multiple test runs with different parameters
         # Remember that you can parallelise this by using strategy.matrix
