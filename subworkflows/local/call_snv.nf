@@ -27,8 +27,7 @@ workflow CALL_SNV {
             ch_vcf      = CALL_SNV_DEEPVARIANT.out.vcf
             ch_tabix    = CALL_SNV_DEEPVARIANT.out.tabix
             ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
-
-       } else if ( variant_caller == "sentieon" ) {
+        } else if ( variant_caller == "sentieon" ) {
             CALL_SNV_SENTIEON( input, fasta, fai, known_dbsnp, known_dbsnp_tbi, call_interval, ml_model, case_info )
             ch_vcf      = CALL_SNV_SENTIEON.out.vcf
             ch_tabix    = CALL_SNV_SENTIEON.out.tabix
