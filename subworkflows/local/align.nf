@@ -21,7 +21,7 @@ workflow ALIGN {
         ch_versions   = Channel.empty()
 
         ALIGN_BWAMEM2 ( reads_input, index_bwamem2, fasta, fai, platform )
-        ALIGN_SENTIEON ( reads_input, fasta, fai, index_bwa, known_dbsnp, known_dbsnp_tbi )
+        ALIGN_SENTIEON ( reads_input, fasta, fai, index_bwa, known_dbsnp, known_dbsnp_tbi, platform )
 
         ch_marked_bam = Channel.empty().mix(ALIGN_BWAMEM2.out.marked_bam, ALIGN_SENTIEON.out.marked_bam)
         ch_marked_bai = Channel.empty().mix(ALIGN_BWAMEM2.out.marked_bai, ALIGN_SENTIEON.out.marked_bai)
