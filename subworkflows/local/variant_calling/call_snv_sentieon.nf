@@ -8,6 +8,7 @@ include { BCFTOOLS_MERGE                           } from '../../../modules/nf-c
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_SEN } from '../../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_SEN   } from '../../../modules/nf-core/bcftools/norm/main'
 include { TABIX_TABIX as TABIX_SEN                 } from '../../../modules/nf-core/tabix/tabix/main'
+include { BCFTOOLS_FILTER                          } from '../../../modules/nf-core/bcftools/filter/main'
 
 workflow CALL_SNV_SENTIEON {
 	take:
@@ -37,6 +38,9 @@ workflow CALL_SNV_SENTIEON {
             ch_index    = SENTIEON_DNAMODELAPPLY.out.vcf_index
             ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions.first())
         }
+
+        BCFTOOLS_FILTER ( ch_vcf  )
+        ch_vcf   = BCFTOOLS_FILTER.out.vcf
 
         ch_vcf.join(ch_index)
             .map { meta,vcf,tbi -> return [vcf,tbi] }
