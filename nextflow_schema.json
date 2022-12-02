@@ -126,7 +126,7 @@
                     "pattern": "^\\S+\\.bed(\\.gz)?\\.idx$",
                     "description": "Path to the index file for the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
-                }
+                },
                 "intervals_wgs": {
                     "type": "string",
                     "format": "path",
