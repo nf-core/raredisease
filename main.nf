@@ -48,6 +48,7 @@ params.variant_catalog                = WorkflowMain.getGenomeAttribute(params, 
 params.vep_filters                    = WorkflowMain.getGenomeAttribute(params, 'vep_filters')
 params.vcfanno_resources              = WorkflowMain.getGenomeAttribute(params, 'vcfanno_resources')
 params.vcfanno_toml                   = WorkflowMain.getGenomeAttribute(params, 'vcfanno_toml')
+params.vcfanno_lua                    = WorkflowMain.getGenomeAttribute(params, 'vcfanno_lua')
 params.vep_cache                      = WorkflowMain.getGenomeAttribute(params, 'vep_cache')
 params.vep_cache_version              = WorkflowMain.getGenomeAttribute(params, 'vep_cache_version')
 params.gens_interval_list             = WorkflowMain.getGenomeAttribute(params, 'gens_interval_list')

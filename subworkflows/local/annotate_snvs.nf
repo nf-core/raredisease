@@ -19,7 +19,8 @@ workflow ANNOTATE_SNVS {
 
     take:
         vcf
-        vcfanno_resource_dir
+        vcfanno_resources
+        vcfanno_lua
         vcfanno_toml
         vep_genome
         vep_cache_version
@@ -31,7 +32,6 @@ workflow ANNOTATE_SNVS {
 
     main:
         ch_versions       = Channel.empty()
-        ch_toml           = Channel.fromPath(vcfanno_toml)
         ch_vcf_scatter_in = Channel.empty()
         ch_vep_in         = Channel.empty()
 
@@ -72,7 +72,7 @@ workflow ANNOTATE_SNVS {
         //
         // annotate vcfanno
         //
-        VCFANNO (ZIP_TABIX_ROHCALL.out.gz_tbi, ch_toml, vcfanno_resource_dir)
+        VCFANNO (ZIP_TABIX_ROHCALL.out.gz_tbi, vcfanno_toml, vcfanno_lua, vcfanno_resources)
         ch_versions = ch_versions.mix(VCFANNO.out.versions)
 
         ZIP_TABIX_VCFANNO (VCFANNO.out.vcf)
