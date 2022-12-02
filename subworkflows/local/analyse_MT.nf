@@ -32,7 +32,7 @@ workflow ANALYSE_MT {
         ch_versions = Channel.empty()
 
         // STEP 1: PREPARING MT ALIGNMENT
-        CONVERT_MT_BAM_TO_FASTQ ( bam , genome_fasta_meta, genome_fai, genome_dict_no_meta, )
+        CONVERT_MT_BAM_TO_FASTQ ( bam, genome_fasta_meta, genome_fai, genome_dict_no_meta )
         ch_versions = ch_versions.mix(CONVERT_MT_BAM_TO_FASTQ.out.versions)// Outputs bam files
 
         //STEP 2.1: MT ALIGNMENT  AND VARIANT CALLING
