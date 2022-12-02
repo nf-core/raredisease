@@ -8,7 +8,7 @@ include { QUALIMAP_BAMQC                                         } from '../../m
 include { TIDDIT_COV                                             } from '../../modules/nf-core/tiddit/cov/main'
 include { MOSDEPTH                                               } from '../../modules/nf-core/mosdepth/main'
 include { UCSC_WIGTOBIGWIG                                       } from '../../modules/nf-core/ucsc/wigtobigwig/main'
-include { PICARD_COLLECTWGSMETRICS                               } from '../../modules/nf-core/picard/collectwgsmetrics/main'
+include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS   } from '../../modules/nf-core/picard/collectwgsmetrics/main'
 include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y } from '../../modules/nf-core/picard/collectwgsmetrics/main'
 include { SENTIEON_WGSMETRICSALGO as SENTIEON_WGSMETRICS         } from '../../modules/local/sentieon/wgsmetricsalgo'
 include { SENTIEON_WGSMETRICSALGO as SENTIEON_WGSMETRICS_Y       } from '../../modules/local/sentieon/wgsmetricsalgo'
