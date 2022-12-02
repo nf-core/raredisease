@@ -37,12 +37,14 @@ workflow PREPARE_REFERENCES {
         ch_versions   = Channel.empty()
         ch_tbi        = Channel.empty()
         ch_bgzip_tbi  = Channel.empty()
+        ch_bwa        = Channel.empty()
+        ch_sentieonbwa= Channel.empty()
 
         // Genome indices
-        BWA_INDEX(fasta_meta)
+        BWA_INDEX(fasta_meta).index.set{ch_bwa}
         BWAMEM2_INDEX_GENOME(fasta_meta)
         BWAMEM2_INDEX_SHIFT_MT(mt_fasta_shift_meta)
-        SENTIEON_BWAINDEX(fasta_meta)
+        SENTIEON_BWAINDEX(fasta_meta).index.set{ch_sentieonbwa}
         SAMTOOLS_FAIDX_GENOME(fasta_meta)
         SAMTOOLS_FAIDX_SHIFT_MT(mt_fasta_shift_meta)
         GATK_SD(fasta_no_meta)
@@ -90,7 +92,7 @@ workflow PREPARE_REFERENCES {
 
     emit:
         bait_intervals            = CAT_CAT_BAIT.out.file_out.map { id, it -> [it] }.collect()
-        bwa_index                 = BWA_INDEX.out.index.collect() ?: SENTIEON_BWAINDEX.out.index.collect()
+        bwa_index               = Channel.empty().mix(ch_bwa, ch_sentieonbwa).collect()
         bwamem2_index             = BWAMEM2_INDEX_GENOME.out.index.collect()
         bwamem2_index_mt_shift    = BWAMEM2_INDEX_SHIFT_MT.out.index.collect()
         chrom_sizes               = GET_CHROM_SIZES.out.sizes.collect()
