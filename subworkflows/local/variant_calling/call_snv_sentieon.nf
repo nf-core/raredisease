@@ -33,7 +33,8 @@ workflow CALL_SNV_SENTIEON {
             ch_index    = SENTIEON_DNAMODELAPPLY.out.vcf_index
             ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions.first())
         }
-        BCFTOOLS_FILTER (   )
+        BCFTOOLS_FILTER ( ch_vcf  )
+        ch_vcf = BCFTOOLS_FILTER.out.vcf
 
 	emit:
 		vcf		 = ch_vcf
