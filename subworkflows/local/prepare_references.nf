@@ -92,7 +92,7 @@ workflow PREPARE_REFERENCES {
 
     emit:
         bait_intervals            = CAT_CAT_BAIT.out.file_out.map { id, it -> [it] }.collect()
-        bwa_index               = Channel.empty().mix(ch_bwa, ch_sentieonbwa).collect()
+        bwa_index                 = Channel.empty().mix(ch_bwa, ch_sentieonbwa).collect()
         bwamem2_index             = BWAMEM2_INDEX_GENOME.out.index.collect()
         bwamem2_index_mt_shift    = BWAMEM2_INDEX_SHIFT_MT.out.index.collect()
         chrom_sizes               = GET_CHROM_SIZES.out.sizes.collect()
