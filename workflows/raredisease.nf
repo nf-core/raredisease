@@ -106,9 +106,6 @@ include { QC_BAM                                } from '../subworkflows/local/qc
 include { RANK_VARIANTS as RANK_VARIANTS_SNV    } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SV     } from '../subworkflows/local/rank_variants'
 include { SCATTER_GENOME                        } from '../subworkflows/local/scatter_genome'
-//
-// SUBWORKFLOW: Consists entirely of nf-core/modules
-//
 
 
 /*
@@ -261,7 +258,7 @@ workflow RAREDISEASE {
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
 
-    // STEP 1.5: BAM QUALITY CHECK
+    // BAM QUALITY CHECK
     QC_BAM (
         ch_mapped.marked_bam,
         ch_mapped.marked_bai,
@@ -274,7 +271,7 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
 
-    // STEP 1.6: EXPANSIONHUNTER AND STRANGER
+    // EXPANSIONHUNTER AND STRANGER
     CALL_REPEAT_EXPANSIONS (
         ch_mapped.bam_bai,
         ch_genome_fasta_no_meta,
@@ -283,7 +280,6 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
 
     // STEP 2: VARIANT CALLING
-    // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
     CALL_SNV (
         params.variant_caller,
         ch_mapped.bam_bai,
@@ -300,6 +296,7 @@ workflow RAREDISEASE {
     CALL_STRUCTURAL_VARIANTS (
         ch_mapped.marked_bam,
         ch_mapped.marked_bai,
+        ch_mapped.bam_bai,
         ch_bwa_index,
         ch_genome_fasta_no_meta,
         ch_genome_fasta_meta,
@@ -310,7 +307,7 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
-    // STEP 2.1: GENS
+    // GENS
     if (params.gens_switch) {
         GENS (
             ch_mapped.bam_bai,
@@ -382,7 +379,7 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
 
-    // STEP 3: VARIANT ANNOTATION
+    // VARIANT ANNOTATION
     ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
 
     if (params.annotate_snv_switch) {
@@ -409,8 +406,8 @@ workflow RAREDISEASE {
             .concat(ANALYSE_MT.out.vcf)
             .groupTuple()
             .set { ch_merged_vcf }
-
         ch_merged_vcf.join(ch_merged_tbi).set {ch_concat_in}
+
         BCFTOOLS_CONCAT (ch_concat_in)
         ANN_CSQ_PLI_SNV (
             BCFTOOLS_CONCAT.out.vcf,

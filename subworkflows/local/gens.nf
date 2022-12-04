@@ -21,13 +21,14 @@ workflow GENS {
     main:
         ch_versions = Channel.empty()
 
-        COLLECTREADCOUNTS ( bam, fasta, fai, seq_dict, interval_list )
+        COLLECTREADCOUNTS (bam, fasta, fai, seq_dict, interval_list)
+
+        DENOISEREADCOUNTS (COLLECTREADCOUNTS.out.read_counts, pon)
+
+        GENS_GENERATE (DENOISEREADCOUNTS.out.standardized_read_counts, vcf.map { meta, vcf -> vcf }, gnomad_pos)
+
         ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions.first())
-
-        DENOISEREADCOUNTS ( COLLECTREADCOUNTS.out.read_counts, pon )
         ch_versions = ch_versions.mix(DENOISEREADCOUNTS.out.versions.first())
-
-        GENS_GENERATE ( DENOISEREADCOUNTS.out.standardized_read_counts, vcf.map { meta, vcf -> vcf }, gnomad_pos )
         ch_versions = ch_versions.mix(GENS_GENERATE.out.versions.first())
 
     emit:

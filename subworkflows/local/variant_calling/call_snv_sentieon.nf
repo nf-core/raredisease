@@ -26,7 +26,6 @@ workflow CALL_SNV_SENTIEON {
         SENTIEON_DNASCOPE ( input, fasta, fai, dbsnp, dbsnp_index, call_interval, ml_model )
         ch_vcf      = SENTIEON_DNASCOPE.out.vcf
         ch_index    = SENTIEON_DNASCOPE.out.vcf_index
-		ch_versions = ch_versions.mix(SENTIEON_DNASCOPE.out.versions.first())
 
         if ( ml_model ) {
 
@@ -59,6 +58,12 @@ workflow CALL_SNV_SENTIEON {
                                     return [meta, vcf, []]}
         REMOVE_DUPLICATES_SEN(ch_remove_dup_in, fasta)
         TABIX_SEN(REMOVE_DUPLICATES_SEN.out.vcf)
+
+		ch_versions = ch_versions.mix(SENTIEON_DNASCOPE.out.versions.first())
+		ch_versions = ch_versions.mix(BCFTOOLS_MERGE.out.versions.first())
+		ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_SEN.out.versions.first())
+		ch_versions = ch_versions.mix(REMOVE_DUPLICATES_SEN.out.versions.first())
+		ch_versions = ch_versions.mix(TABIX_SEN.out.versions.first())
 
 	emit:
 		vcf		 = REMOVE_DUPLICATES_SEN.out.vcf

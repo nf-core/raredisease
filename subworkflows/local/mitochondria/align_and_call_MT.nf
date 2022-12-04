@@ -27,55 +27,48 @@ workflow ALIGN_AND_CALL_MT {
         ch_versions = Channel.empty()
 
         // Outputs bam files
-        BWAMEM2_MEM_MT ( fastq , genome_index, true)
-        ch_versions    = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
-        ch_mt_bam      =  BWAMEM2_MEM_MT.out.bam
+        BWAMEM2_MEM_MT (fastq , genome_index, true)
+        ch_mt_bam      = BWAMEM2_MEM_MT.out.bam
         ch_fastq_ubam  = ch_mt_bam.join(ubam, by: [0])
 
-        // Merges bam files
-        GATK4_MERGEBAMALIGNMENT_MT (ch_fastq_ubam, genome_fasta, genome_dict )
-        ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions.first())
+        GATK4_MERGEBAMALIGNMENT_MT (ch_fastq_ubam, genome_fasta, genome_dict)
 
-        // Add read group to merged bam file
-        PICARD_ADDORREPLACEREADGROUPS_MT ( GATK4_MERGEBAMALIGNMENT_MT.out.bam )
-        ch_versions = ch_versions.mix(PICARD_ADDORREPLACEREADGROUPS_MT.out.versions.first())
+        PICARD_ADDORREPLACEREADGROUPS_MT (GATK4_MERGEBAMALIGNMENT_MT.out.bam)
 
-        // Marks duplicates
-        PICARD_MARKDUPLICATES_MT (PICARD_ADDORREPLACEREADGROUPS_MT.out.bam, genome_fasta, genome_fai )
-        ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
+        PICARD_MARKDUPLICATES_MT (PICARD_ADDORREPLACEREADGROUPS_MT.out.bam, genome_fasta, genome_fai)
 
-        // Sort bam file
         SAMTOOLS_SORT_MT (PICARD_MARKDUPLICATES_MT.out.bam)
-        ch_versions = ch_versions.mix(SAMTOOLS_SORT_MT.out.versions.first())
 
-        // Index bam file
         SAMTOOLS_INDEX_MT(SAMTOOLS_SORT_MT.out.bam)
-        ch_sort_index_bam = SAMTOOLS_SORT_MT.out.bam.join(SAMTOOLS_INDEX_MT.out.bai, by: [0])
-        ch_sort_index_bam_intervals_mt = ch_sort_index_bam.combine(intervals_mt)
-        ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MT.out.versions.first())
+        ch_sort_index_bam        = SAMTOOLS_SORT_MT.out.bam.join(SAMTOOLS_INDEX_MT.out.bai, by: [0])
+        ch_sort_index_bam_int_mt = ch_sort_index_bam.combine(intervals_mt)
 
-        // Calls variants with Mutect2
-        GATK4_MUTECT2_MT (ch_sort_index_bam_intervals_mt, genome_fasta, genome_fai, genome_dict, [], [], [],[])
-        ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions.first())
+        GATK4_MUTECT2_MT (ch_sort_index_bam_int_mt, genome_fasta, genome_fai, genome_dict, [], [], [],[])
 
         // Haplocheck
         // TODO: probably it will be outside this subworkflow as we want to run
         // with the VCF with the variants from the shifted alignment (to solve the mt circularity issue)
-        HAPLOCHECK_MT ( GATK4_MUTECT2_MT.out.vcf )
-        ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions.first())
+        HAPLOCHECK_MT (GATK4_MUTECT2_MT.out.vcf)
 
         // Filter Mutect2 calls
         ch_mutect_vcf = GATK4_MUTECT2_MT.out.vcf.join(GATK4_MUTECT2_MT.out.tbi, by: [0])
         ch_mutect_out = ch_mutect_vcf.join(GATK4_MUTECT2_MT.out.stats, by: [0])
-        ch_to_filt = ch_mutect_out.map {
-            meta, vcf, tbi, stats ->
-                return [meta, vcf, tbi, stats, [], [], [], []]}
-        GATK4_FILTERMUTECTCALLS_MT( ch_to_filt,
-            genome_fasta,
-            genome_fai,
-            genome_dict )
-        ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
+        ch_to_filt    = ch_mutect_out.map {
+                            meta, vcf, tbi, stats ->
+                            return [meta, vcf, tbi, stats, [], [], [], []]
+                        }
 
+        GATK4_FILTERMUTECTCALLS_MT (ch_to_filt, genome_fasta, genome_fai, genome_dict)
+
+        ch_versions = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
+        ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions.first())
+        ch_versions = ch_versions.mix(PICARD_ADDORREPLACEREADGROUPS_MT.out.versions.first())
+        ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
+        ch_versions = ch_versions.mix(SAMTOOLS_SORT_MT.out.versions.first())
+        ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MT.out.versions.first())
+        ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions.first())
+        ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions.first())
+        ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
 
     emit:
         vcf       = GATK4_FILTERMUTECTCALLS_MT.out.vcf
@@ -84,5 +77,5 @@ workflow ALIGN_AND_CALL_MT {
         filt_sats = GATK4_FILTERMUTECTCALLS_MT.out.stats
         txt       = HAPLOCHECK_MT.out.txt
         html      = HAPLOCHECK_MT.out.html
-        versions  = ch_versions
+        versions  = ch_versions.ifEmpty(null)
 }
