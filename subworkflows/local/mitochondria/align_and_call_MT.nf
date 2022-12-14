@@ -3,8 +3,6 @@
 //
 
 include { BWAMEM2_MEM as BWAMEM2_MEM_MT                                     } from '../../../modules/nf-core/bwamem2/mem/main'
-include { GATK4_MERGEBAMALIGNMENT as GATK4_MERGEBAMALIGNMENT_MT             } from '../../../modules/nf-core/gatk4/mergebamalignment/main'
-include { PICARD_ADDORREPLACEREADGROUPS as PICARD_ADDORREPLACEREADGROUPS_MT } from '../../../modules/nf-core/picard/addorreplacereadgroups/main'
 include { PICARD_MARKDUPLICATES as PICARD_MARKDUPLICATES_MT                 } from '../../../modules/nf-core/picard/markduplicates/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MT                               } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_SORT as SAMTOOLS_SORT_MT                                 } from '../../../modules/nf-core/samtools/sort/main'
@@ -16,7 +14,6 @@ include { TABIX_TABIX as TABIX_TABIX_MT                                     } fr
 workflow ALIGN_AND_CALL_MT {
     take:
         fastq         // channel: [ val(meta), path('*.fastq.gz') ]
-        ubam          // channel: [ val(meta), path('*.bam') ]
         genome_index  // channel: [ /path/to/bwamem2/index/ ]
         genome_fasta  // channel: [ genome.fasta ]
         genome_dict   // channel: [ genome.dict ]
@@ -30,18 +27,9 @@ workflow ALIGN_AND_CALL_MT {
         BWAMEM2_MEM_MT ( fastq , genome_index, true)
         ch_versions    = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
         ch_mt_bam      =  BWAMEM2_MEM_MT.out.bam
-        ch_fastq_ubam  = ch_mt_bam.join(ubam, by: [0])
-
-        // Merges bam files
-        GATK4_MERGEBAMALIGNMENT_MT (ch_fastq_ubam, genome_fasta, genome_dict )
-        ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions.first())
-
-        // Add read group to merged bam file
-        PICARD_ADDORREPLACEREADGROUPS_MT ( GATK4_MERGEBAMALIGNMENT_MT.out.bam )
-        ch_versions = ch_versions.mix(PICARD_ADDORREPLACEREADGROUPS_MT.out.versions.first())
 
         // Marks duplicates
-        PICARD_MARKDUPLICATES_MT (PICARD_ADDORREPLACEREADGROUPS_MT.out.bam, genome_fasta, genome_fai )
+        PICARD_MARKDUPLICATES_MT (ch_mt_bam, genome_fasta, genome_fai )
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
 
         // Sort bam file

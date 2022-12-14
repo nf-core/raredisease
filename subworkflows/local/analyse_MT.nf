@@ -33,12 +33,11 @@ workflow ANALYSE_MT {
 
         // STEP 1: PREPARING MT ALIGNMENT
         CONVERT_MT_BAM_TO_FASTQ ( bam, genome_fasta_meta, genome_fai, genome_dict_no_meta )
-        ch_versions = ch_versions.mix(CONVERT_MT_BAM_TO_FASTQ.out.versions)// Outputs bam files
+        ch_versions = ch_versions.mix(CONVERT_MT_BAM_TO_FASTQ.out.versions)// Outputs fastq files
 
         //STEP 2.1: MT ALIGNMENT  AND VARIANT CALLING
         ALIGN_AND_CALL_MT (
             CONVERT_MT_BAM_TO_FASTQ.out.fastq,
-            CONVERT_MT_BAM_TO_FASTQ.out.bam,
             genome_bwamem2_index,
             genome_fasta_no_meta,
             genome_dict_no_meta,
@@ -49,7 +48,6 @@ workflow ANALYSE_MT {
 
         ALIGN_AND_CALL_MT_SHIFT (
             CONVERT_MT_BAM_TO_FASTQ.out.fastq,
-            CONVERT_MT_BAM_TO_FASTQ.out.bam,
             shift_mt_bwamem2_index,
             shift_mt_fasta,
             shift_mt_dict,

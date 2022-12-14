@@ -30,6 +30,6 @@ workflow CONVERT_MT_BAM_TO_FASTQ {
 
     emit:
         fastq    = GATK4_SAMTOFASTQ_MT.out.fastq
-        bam      = GATK4_REVERTSAM_MT.out.bam
+        //bam      = GATK4_REVERTSAM_MT.out.bam
         versions = ch_versions // channel: [ versions.yml ]
 }
