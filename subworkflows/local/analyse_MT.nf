@@ -27,6 +27,7 @@ workflow ANALYSE_MT {
         vep_cache_version
         vep_cache
         case_info              // channel: [ val(case_info) ]
+        vep_gnomad_mt
 
     main:
         ch_versions = Channel.empty()
@@ -77,7 +78,9 @@ workflow ANALYSE_MT {
             vep_genome,
             vep_cache_version,
             vep_cache,
-            case_info)
+            vep_gnomad_mt,
+            case_info
+            )
         ch_versions = ch_versions.mix(MERGE_ANNOTATE_MT.out.versions)
 
     emit:

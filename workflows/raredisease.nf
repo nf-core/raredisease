@@ -179,6 +179,8 @@ workflow RAREDISEASE {
                                                                       : Channel.value([])
     ch_vep_filters                    = params.vep_filters            ? Channel.fromPath(params.vep_filters).collect()
                                                                       : Channel.value([])
+    ch_vep_gnomad_mt                  = params.vep_gnomad_mt          ? Channel.fromPath(params.vep_gnomad_mt).collect()
+                                                                      : Channel.value([])
 
     // Generate pedigree file
     MAKE_PED (CHECK_INPUT.out.samples.toList())
@@ -378,7 +380,8 @@ workflow RAREDISEASE {
         params.genome,
         params.vep_cache_version,
         ch_vep_cache,
-        CHECK_INPUT.out.case_info
+        CHECK_INPUT.out.case_info,
+        ch_vep_gnomad_mt
     )
     ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
 

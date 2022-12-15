@@ -26,6 +26,7 @@ workflow MERGE_ANNOTATE_MT {
         vep_genome
         vep_cache_version
         vep_cache
+        vep_gnomad_mt
         case_info           // channel: [ val(case_info) ]
 
     main:
@@ -110,7 +111,7 @@ workflow MERGE_ANNOTATE_MT {
             vep_cache_version,
             vep_cache,
             genome_fasta,
-            [])
+            vep_gnomad_mt)
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
 
         // Running haplogrep2
