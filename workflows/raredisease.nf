@@ -437,8 +437,11 @@ workflow RAREDISEASE {
     //
     // MODULE: Pipeline reporting
     //
+
+    // TODO The template v2.7.1 template update introduced: ch_versions.unique{ it.text }.collectFile(name: 'collated_versions.yml')
+    // This caused the pipeline to stall
     CUSTOM_DUMPSOFTWAREVERSIONS (
-        ch_versions.unique{ it.text }.collectFile(name: 'collated_versions.yml')
+        ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
 
     //
