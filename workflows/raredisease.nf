@@ -85,6 +85,7 @@ include { BCFTOOLS_CONCAT                       } from '../modules/nf-core/bcfto
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { FASTQC                                } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
+include { SMNCOPYNUMBERCALLER                   } from '../modules/nf-core/smncopynumbercaller/main'
 
 //
 // SUBWORKFLOWS
@@ -281,6 +282,12 @@ workflow RAREDISEASE {
         ch_variant_catalog
     )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
+
+    // STEP 1.7: SMNCOPYNUMBERCALLER
+    CALL_SMNCOPYNUMBERCALLER (
+        ch_mapped.bam_bai
+    )
+    ch_versions = ch_versions.mix(SMNCOPYNUMBERCALLER.out.versions)
 
     // STEP 2: VARIANT CALLING
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.

@@ -225,6 +225,10 @@
                         "branch": "master",
                         "git_sha": "cf5b9c30a2adacc581793afb79fae5f5b50bed01"
                     },
+                    "smncopynumbercaller": {
+                        "branch": "master",
+                        "git_sha": "2bb1f6515962a1559e79544112394d2db03a4302"
+                    },
                     "stranger": {
                         "branch": "master",
                         "git_sha": "5e34754d42cd2d5d248ca8673c0a53cdf5624905"
