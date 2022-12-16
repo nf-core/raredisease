@@ -1,6 +1,6 @@
 name: nf-core AWS test 2 samples
 # This workflow can be triggered manually with the GitHub actions workflow dispatch button.
-# It runs the -profile 'test2' on AWS batch
+# It runs the -profile 'test2samples' on AWS batch
 
 on:
   workflow_dispatch:
@@ -20,9 +20,9 @@ jobs:
           workdir: s3://${{ secrets.AWS_S3_BUCKET }}/work/raredisease/work-${{ github.sha }}
           parameters: |
             {
-              "outdir": "s3://${{ secrets.AWS_S3_BUCKET }}/raredisease/results-test2-${{ github.sha }}"
+              "outdir": "s3://${{ secrets.AWS_S3_BUCKET }}/raredisease/results-test2samples-${{ github.sha }}"
             }
-          profiles: test2,aws_tower
+          profiles: test2samples,aws_tower
       - uses: actions/upload-artifact@v3
         with:
           name: Tower debug log file
