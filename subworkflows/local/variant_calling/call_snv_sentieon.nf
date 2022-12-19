@@ -8,7 +8,8 @@ include { BCFTOOLS_MERGE                           } from '../../../modules/nf-c
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_SEN } from '../../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_SEN   } from '../../../modules/nf-core/bcftools/norm/main'
 include { TABIX_TABIX as TABIX_SEN                 } from '../../../modules/nf-core/tabix/tabix/main'
-include { BCFTOOLS_FILTER                          } from '../../../modules/nf-core/bcftools/filter/main'
+include { BCFTOOLS_FILTER as BCF_FILTER_ONE        } from '../../../modules/nf-core/bcftools/filter/main'
+include { BCFTOOLS_FILTER as BCF_FILTER_TWO        } from '../../../modules/nf-core/bcftools/filter/main'
 
 workflow CALL_SNV_SENTIEON {
 	take:
