@@ -40,8 +40,8 @@ workflow CALL_SNV_SENTIEON {
             ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions.first())
         }
 
-        BCFTOOLS_FILTER ( ch_vcf )
-        ch_vcf   = BCFTOOLS_FILTER.out.vcf
+        BCFTOOLS_FILTER_ONE ( ch_vcf )
+        ch_vcf   = BCFTOOLS_FILTER_ONE.out.vcf
 
         ch_vcf.join(ch_index)
             .map { meta,vcf,tbi -> return [vcf,tbi] }
@@ -51,6 +51,9 @@ workflow CALL_SNV_SENTIEON {
             .combine(ch_vcf_idx)
             .groupTuple()
             .set{ ch_vcf_idx_case }
+
+        BCFTOOLS_FILTER_TWO ( ch_vcf )
+        ch_vcf = BCFTOOLS_FILTER_TWO.out.vcf
 
         BCFTOOLS_MERGE(ch_vcf_idx_case,[],fasta,fai)
 
