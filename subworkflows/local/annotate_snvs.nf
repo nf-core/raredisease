@@ -36,7 +36,11 @@ workflow ANNOTATE_SNVS {
         ch_vep_in         = Channel.empty()
 
         vcf.map { meta, vcf, idx -> return [vcf, idx] }.set { ch_roh_vcfs }
-        samples.map { it -> it.phenotype == "2" ?: it }.set { ch_phenotype }
+        samples
+            .branch { it ->
+                affected: it.phenotype == "2"
+                unaffected: it.phenotype == "1"
+            }.set { ch_phenotype }
         ch_phenotype.affected.combine(ch_roh_vcfs).set { ch_roh_input }
 
         BCFTOOLS_ROH (ch_roh_input, gnomad_af, [], [], [], [])
@@ -90,7 +94,7 @@ workflow ANNOTATE_SNVS {
 
         TABIX_BCFTOOLS_CONCAT (BCFTOOLS_CONCAT.out.vcf)
 
-        ch_versions = ch_versions.mix(BCFTOOLS_RHO.out.versions)
+        ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions)
         ch_versions = ch_versions.mix(RHOCALL_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_ROHCALL.out.versions)
         ch_versions = ch_versions.mix(VCFANNO.out.versions)
