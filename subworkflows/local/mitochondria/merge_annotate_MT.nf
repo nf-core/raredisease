@@ -12,7 +12,7 @@ include { CHANGE_NAME as CHANGE_NAME_VCF_MT                      } from '../../.
 include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                    } from '../../../modules/nf-core/bcftools/merge/main'
 include { HMTNOTE as HMTNOTE_MT                                  } from '../../../modules/nf-core/hmtnote/main'
 include { TABIX_TABIX as TABIX_TABIX_MT3                         } from '../../../modules/nf-core/tabix/tabix/main'
-include { VCFANNO as VCFANNO_MT                                  } from '../../modules/nf-core/vcfanno/main'
+include { VCFANNO as VCFANNO_MT                                  } from '../../../modules/nf-core/vcfanno/main'
 include { TABIX_TABIX as TABIX_TABIX_MT4                         } from '../../../modules/nf-core/tabix/tabix/main'
 include { ENSEMBLVEP as ENSEMBLVEP_MT                            } from '../../../modules/local/ensemblvep/main'
 include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT          } from '../../../modules/nf-core/haplogrep2/classify/main'
