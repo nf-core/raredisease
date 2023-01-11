@@ -83,6 +83,7 @@ include { MAKE_PED                              } from '../modules/local/create_
 // MODULE: Installed directly from nf-core/modules
 //
 
+include { BCFTOOLS_CONCAT                       } from '../modules/nf-core/bcftools/concat/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { FASTQC                                } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
@@ -409,8 +410,19 @@ workflow RAREDISEASE {
         ).set {ch_snv_annotate}
         ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 
+        ch_snv_annotate.tbi
+            .concat(ANALYSE_MT.out.tbi)
+            .groupTuple()
+            .set { ch_merged_tbi }
+        ch_snv_annotate.vcf_ann
+            .concat(ANALYSE_MT.out.vcf)
+            .groupTuple()
+            .set { ch_merged_vcf }
+
+        ch_merged_vcf.join(ch_merged_tbi).set {ch_concat_in}
+        BCFTOOLS_CONCAT (ch_concat_in)
         ANN_CSQ_PLI_SNV (
-            ch_snv_annotate.vcf_ann,
+            BCFTOOLS_CONCAT.out.vcf,
             ch_variant_consequences
         )
         ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)
@@ -434,6 +446,9 @@ workflow RAREDISEASE {
     //
     // MODULE: Pipeline reporting
     //
+
+    // TODO The template v2.7.1 template update introduced: ch_versions.unique{ it.text }.collectFile(name: 'collated_versions.yml')
+    // This caused the pipeline to stall
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
@@ -453,13 +468,11 @@ workflow RAREDISEASE {
 
     MULTIQC (
         ch_multiqc_files.collect(),
-        ch_multiqc_config.collect().ifEmpty([]),
-        ch_multiqc_custom_config.collect().ifEmpty([]),
-        ch_multiqc_logo.collect().ifEmpty([])
+        ch_multiqc_config.toList(),
+        ch_multiqc_custom_config.toList(),
+        ch_multiqc_logo.toList()
     )
     multiqc_report = MULTIQC.out.report.toList()
-    ch_versions    = ch_versions.mix(MULTIQC.out.versions)
-
 }
 
 /*
@@ -474,7 +487,7 @@ workflow.onComplete {
     }
     NfcoreTemplate.summary(workflow, params, log)
     if (params.hook_url) {
-        NfcoreTemplate.adaptivecard(workflow, params, summary_params, projectDir, log)
+        NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
     }
 }
 
