@@ -286,7 +286,7 @@ workflow RAREDISEASE {
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
     CALL_SNV (
         params.variant_caller,
-        ALIGN.out.bam_bai,
+        ch_mapped.bam_bai,
         ch_genome_fasta_no_meta,
         ch_genome_fai_no_meta,
         ch_known_dbsnp,
@@ -359,7 +359,7 @@ workflow RAREDISEASE {
         ch_versions = ch_versions.mix(FILTER_VEP_SV.out.versions)
 
     }
-/*
+
     ANALYSE_MT (
         ch_mapped.bam_bai,
         ch_bwamem2_index,
@@ -433,7 +433,7 @@ workflow RAREDISEASE {
         ch_versions = ch_versions.mix(FILTER_VEP_SNV.out.versions)
 
     }
-*/
+
     //
     // MODULE: Pipeline reporting
     //
@@ -482,7 +482,6 @@ workflow.onComplete {
         NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
     }
 }
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     THE END
