@@ -223,7 +223,7 @@ workflow RAREDISEASE {
                                                                            : Channel.empty()
     ch_gnomad_vcf                   = params.gnomad_vcf                    ? ch_references.gnomad_vcf
                                                                            : Channel.value([])
-    ch_known_dbsnp_tbi              = params.known_dbsnp_tbi               ? Channel.fromPath(params.known_dbsnp_tbi).collect()
+    ch_known_dbsnp_tbi              = params.known_dbsnp_tbi               ? Channel.fromPath(params.known_dbsnp_tbi).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ( ch_references.known_dbsnp_tbi          ?: Channel.empty() )
     ch_sequence_dictionary_no_meta  = params.sequence_dictionary           ? Channel.fromPath(params.sequence_dictionary).collect()
                                                                            : ( ch_references.sequence_dict            ?: Channel.empty() )
@@ -260,7 +260,7 @@ workflow RAREDISEASE {
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
-
+    
     // STEP 1.5: BAM QUALITY CHECK
     QC_BAM (
         ch_mapped.marked_bam,
@@ -286,7 +286,7 @@ workflow RAREDISEASE {
     // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
     CALL_SNV (
         params.variant_caller,
-        ch_mapped.bam_bai,
+        ALIGN.out.bam_bai,
         ch_genome_fasta_no_meta,
         ch_genome_fai_no_meta,
         ch_known_dbsnp,
@@ -359,7 +359,7 @@ workflow RAREDISEASE {
         ch_versions = ch_versions.mix(FILTER_VEP_SV.out.versions)
 
     }
-
+/*
     ANALYSE_MT (
         ch_mapped.bam_bai,
         ch_bwamem2_index,
@@ -433,7 +433,7 @@ workflow RAREDISEASE {
         ch_versions = ch_versions.mix(FILTER_VEP_SNV.out.versions)
 
     }
-
+*/
     //
     // MODULE: Pipeline reporting
     //
@@ -464,6 +464,7 @@ workflow RAREDISEASE {
         ch_multiqc_logo.toList()
     )
     multiqc_report = MULTIQC.out.report.toList()
+
 }
 
 /*
