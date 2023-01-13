@@ -260,7 +260,7 @@ workflow RAREDISEASE {
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
-    
+
     // STEP 1.5: BAM QUALITY CHECK
     QC_BAM (
         ch_mapped.marked_bam,
@@ -464,7 +464,6 @@ workflow RAREDISEASE {
         ch_multiqc_logo.toList()
     )
     multiqc_report = MULTIQC.out.report.toList()
-
 }
 
 /*
@@ -482,6 +481,7 @@ workflow.onComplete {
         NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
     }
 }
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     THE END
