@@ -57,10 +57,10 @@ workflow QC_BAM {
 
         // COLLECT WGS METRICS
         if ( aligner == "bwamem2" ) {
-            PICARD_COLLECTWGSMETRICS ( bam, fasta, intervals_wgs )
+            PICARD_COLLECTWGSMETRICS ( bam_bai, fasta, intervals_wgs )
             ch_cov = PICARD_COLLECTWGSMETRICS.out.metrics
             ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS.out.versions)
-            PICARD_COLLECTWGSMETRICS_Y ( bam, fasta, intervals_y )
+            PICARD_COLLECTWGSMETRICS_Y ( bam_bai, fasta, intervals_y )
             ch_cov_y = PICARD_COLLECTWGSMETRICS_Y.out.metrics
             ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_Y.out.versions)
         } else if ( aligner == "sentieon" ) {
