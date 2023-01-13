@@ -232,7 +232,8 @@
                     },
                     "picard/collectwgsmetrics": {
                         "branch": "master",
-                        "git_sha": "9c92f40092d7a9112953b7571f7021f65740bf7f"
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
                     },
                     "picard/liftovervcf": {
                         "branch": "master",
