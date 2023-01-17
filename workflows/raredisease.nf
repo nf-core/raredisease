@@ -223,7 +223,7 @@ workflow RAREDISEASE {
                                                                            : Channel.empty()
     ch_gnomad_vcf                   = params.gnomad_vcf                    ? ch_references.gnomad_vcf
                                                                            : Channel.value([])
-    ch_known_dbsnp_tbi              = params.known_dbsnp_tbi               ? Channel.fromPath(params.known_dbsnp_tbi).collect()
+    ch_known_dbsnp_tbi              = params.known_dbsnp_tbi               ? Channel.fromPath(params.known_dbsnp_tbi).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ( ch_references.known_dbsnp_tbi          ?: Channel.empty() )
     ch_sequence_dictionary_no_meta  = params.sequence_dictionary           ? Channel.fromPath(params.sequence_dictionary).collect()
                                                                            : ( ch_references.sequence_dict            ?: Channel.empty() )
