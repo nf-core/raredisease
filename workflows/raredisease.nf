@@ -311,6 +311,15 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
+    // ped correspondence, sex check, ancestry check
+    ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
+
+    PEDDY_CHECK (
+        ch_vcf,
+        MAKE_PED.out.ped
+    )
+    ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
+
     // STEP 2.1: GENS
     if (params.gens_switch) {
         GENS (
@@ -361,12 +370,6 @@ workflow RAREDISEASE {
 
     }
 
-    PEDDY_CHECK (
-        CALL_SNV.out.vcf,
-        MAKE_PED.out.ped
-    )
-    ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
-
     ANALYSE_MT (
         ch_mapped.bam_bai,
         ch_bwamem2_index,
@@ -390,8 +393,6 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
 
     // STEP 3: VARIANT ANNOTATION
-    ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
-
     if (params.annotate_snv_switch) {
         ANNOTATE_SNVS (
             ch_vcf,
