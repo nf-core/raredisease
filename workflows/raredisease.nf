@@ -106,6 +106,7 @@ include { QC_BAM                                } from '../subworkflows/local/qc
 include { RANK_VARIANTS as RANK_VARIANTS_SNV    } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SV     } from '../subworkflows/local/rank_variants'
 include { SCATTER_GENOME                        } from '../subworkflows/local/scatter_genome'
+include { PEDDY_CHECK                           } from '../subworkflows/local/peddy_check'
 //
 // SUBWORKFLOW: Consists entirely of nf-core/modules
 //
@@ -359,6 +360,12 @@ workflow RAREDISEASE {
         ch_versions = ch_versions.mix(FILTER_VEP_SV.out.versions)
 
     }
+
+    PEDDY_CHECK (
+        CALL_SNV.out.vcf,
+        MAKE_PED.out.ped
+    )
+    ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
 
     ANALYSE_MT (
         ch_mapped.bam_bai,
