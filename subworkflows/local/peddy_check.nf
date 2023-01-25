@@ -2,7 +2,7 @@
 // Peddy subworkflow to check sex and relatedness.
 //
 
-include { PEDDY } from '../modules/nf-core/peddy/main'
+include { PEDDY } from '../../modules/nf-core/peddy/main'
 
 workflow PEDDY_CHECK {
     take:
