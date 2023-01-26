@@ -64,10 +64,10 @@ workflow QC_BAM {
             ch_cov_y = PICARD_COLLECTWGSMETRICS_Y.out.metrics
             ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_Y.out.versions)
         } else if ( aligner == "sentieon" ) {
-            SENTIEON_WGSMETRICS ( bam, fasta, fai)
+            SENTIEON_WGSMETRICS ( bam_bai, fasta, fai)
             ch_cov = SENTIEON_WGSMETRICS.out.wgs_metrics
             ch_versions = ch_versions.mix(SENTIEON_WGSMETRICS.out.versions)
-            SENTIEON_WGSMETRICS_Y ( bam, fasta, fai)
+            SENTIEON_WGSMETRICS_Y ( bam_bai, fasta, fai)
             ch_cov_y = SENTIEON_WGSMETRICS_Y.out.wgs_metrics
             ch_versions = ch_versions.mix(SENTIEON_WGSMETRICS_Y.out.versions)
         } else {
