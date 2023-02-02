@@ -40,6 +40,7 @@ workflow CALL_SV_MANTA {
                 .set { manta_input }
             MANTA ( manta_input, fasta, fai )
         }
+
         ch_versions = MANTA.out.versions
 
     emit:
