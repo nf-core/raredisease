@@ -31,28 +31,23 @@ workflow QC_BAM {
     main:
         ch_versions = Channel.empty()
 
-        // COLLECT MULTIPLE METRICS
-        PICARD_COLLECTMULTIPLEMETRICS ( bam_bai, fasta, fai )
+        PICARD_COLLECTMULTIPLEMETRICS (bam_bai, fasta, fai)
+
+        PICARD_COLLECTHSMETRICS (bam_bai, fasta, fai, bait_intervals, target_intervals)
+
+        QUALIMAP_BAMQC (bam, [])
+
+        TIDDIT_COV (bam, []) // 2nd pos. arg is req. only for cram input
+
+        UCSC_WIGTOBIGWIG (TIDDIT_COV.out.wig, chrom_sizes)
+
+        MOSDEPTH (bam_bai, [], [])
+
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions.first())
-
-        // COLLECT HS METRICS
-        PICARD_COLLECTHSMETRICS ( bam_bai, fasta, fai, bait_intervals, target_intervals )
         ch_versions = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions.first())
-
-        // QUALIMAP BAMQC
-        gff = []
-        QUALIMAP_BAMQC ( bam, gff )
         ch_versions = ch_versions.mix(QUALIMAP_BAMQC.out.versions.first())
-
-        // TIDDIT COVERAGE
-        TIDDIT_COV ( bam, [] ) // 2nd pos. arg is req. only for cram input
-        UCSC_WIGTOBIGWIG ( TIDDIT_COV.out.wig, chrom_sizes )
         ch_versions = ch_versions.mix(TIDDIT_COV.out.versions.first())
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions.first())
-
-        // MOSDEPTH
-        mosdepth_input_bams = bam.join(bai, by: [0])
-        MOSDEPTH (mosdepth_input_bams,[],[])
         ch_versions = ch_versions.mix(MOSDEPTH.out.versions.first())
 
         // COLLECT WGS METRICS

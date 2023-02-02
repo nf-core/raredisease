@@ -36,30 +36,21 @@ workflow MERGE_ANNOTATE_MT {
             .map{ meta, vcf1, vcf2 ->
             [meta, [vcf1, vcf2]]
         }
-
         GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_vcfs, genome_dict_meta)
-        ch_versions = ch_versions.mix(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.versions.first())
 
         // Filtering Variants
-        ch_filt_vcf = GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf.join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, by:[0])
-        GATK4_VARIANTFILTRATION_MT(ch_filt_vcf,
-            genome_fasta,
-            genome_fai,
-            genome_dict_no_meta )
-        ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION_MT.out.versions.first())
+        GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf.join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, by:[0]).set { ch_filt_vcf }
+        GATK4_VARIANTFILTRATION_MT (ch_filt_vcf, genome_fasta, genome_fai, genome_dict_no_meta)
 
         // Spliting multiallelic calls
-        ch_in_split = GATK4_VARIANTFILTRATION_MT.out.vcf.join(GATK4_VARIANTFILTRATION_MT.out.tbi, by:[0])
+        GATK4_VARIANTFILTRATION_MT.out.vcf.join(GATK4_VARIANTFILTRATION_MT.out.tbi, by:[0]).set { ch_in_split }
         SPLIT_MULTIALLELICS_MT (ch_in_split, genome_fasta)
-        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_MT.out.versions.first())
-
         TABIX_TABIX_MT(SPLIT_MULTIALLELICS_MT.out.vcf)
-        ch_in_remdup = SPLIT_MULTIALLELICS_MT.out.vcf.join(TABIX_TABIX_MT.out.tbi)
 
         // Removing duplicates and merging if there is more than one sample
+        SPLIT_MULTIALLELICS_MT.out.vcf.join(TABIX_TABIX_MT.out.tbi).set { ch_in_remdup }
         REMOVE_DUPLICATES_MT(ch_in_remdup, genome_fasta)
         TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
-        ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions.first())
 
         REMOVE_DUPLICATES_MT.out.vcf
             .collect{it[1]}
@@ -91,11 +82,9 @@ workflow MERGE_ANNOTATE_MT {
             genome_fasta,
             genome_fai)
         ch_merged_vcf = BCFTOOLS_MERGE_MT.out.merged_variants
-        ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
 
         CHANGE_NAME_VCF_MT(ch_case_vcf.single)
         ch_vcf_changed_name = CHANGE_NAME_VCF_MT.out.file
-        ch_versions = ch_versions.mix(CHANGE_NAME_VCF_MT.out.versions)
 
         ch_in_vep = ch_merged_vcf.mix(ch_vcf_changed_name)
 
@@ -111,11 +100,18 @@ workflow MERGE_ANNOTATE_MT {
             vep_cache,
             genome_fasta,
             [])
-        ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
 
         // Running haplogrep2
         TABIX_TABIX_MT3(ENSEMBLVEP_MT.out.vcf_gz)
         HAPLOGREP2_CLASSIFY_MT(ch_in_vep, "vcf.gz")
+
+        ch_versions = ch_versions.mix(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.versions.first())
+        ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION_MT.out.versions.first())
+        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_MT.out.versions.first())
+        ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions.first())
+        ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
+        ch_versions = ch_versions.mix(CHANGE_NAME_VCF_MT.out.versions)
+        ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
         ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions)
 
     emit:

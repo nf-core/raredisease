@@ -31,11 +31,15 @@ workflow ANALYSE_MT {
     main:
         ch_versions = Channel.empty()
 
-        // STEP 1: PREPARING MT ALIGNMENT
-        CONVERT_MT_BAM_TO_FASTQ ( bam, genome_fasta_meta, genome_fai, genome_dict_no_meta )
-        ch_versions = ch_versions.mix(CONVERT_MT_BAM_TO_FASTQ.out.versions)// Outputs bam files
+        // PREPARING READS FOR MT ALIGNMENT
+        CONVERT_MT_BAM_TO_FASTQ (
+            bam,
+            genome_fasta_meta,
+            genome_fai,
+            genome_dict_no_meta
+        )
 
-        //STEP 2.1: MT ALIGNMENT  AND VARIANT CALLING
+        // MT ALIGNMENT  AND VARIANT CALLING
         ALIGN_AND_CALL_MT (
             CONVERT_MT_BAM_TO_FASTQ.out.fastq,
             CONVERT_MT_BAM_TO_FASTQ.out.bam,
@@ -44,8 +48,7 @@ workflow ANALYSE_MT {
             genome_dict_no_meta,
             genome_fai,
             mt_intervals
-            )
-        ch_versions = ch_versions.mix(ALIGN_AND_CALL_MT.out.versions)
+        )
 
         ALIGN_AND_CALL_MT_SHIFT (
             CONVERT_MT_BAM_TO_FASTQ.out.fastq,
@@ -55,18 +58,17 @@ workflow ANALYSE_MT {
             shift_mt_dict,
             shift_mt_fai,
             shift_mt_intervals
-            )
-        ch_versions = ch_versions.mix(ALIGN_AND_CALL_MT_SHIFT.out.versions)
+        )
 
-        // STEP 2.3: PICARD_LIFTOVERVCF
+        // LIFTOVER VCF FROM REFERENCE MT TO SHIFTED MT
         PICARD_LIFTOVERVCF (
             ALIGN_AND_CALL_MT_SHIFT.out.vcf,
             genome_dict_no_meta,
             shift_mt_backchain,
-            genome_fasta_no_meta)
-        ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions.first())
+            genome_fasta_no_meta
+        )
 
-        // STEP 3: MT MERGE AND ANNOTATE VARIANTS
+        // MT MERGE AND ANNOTATE VARIANTS
         MERGE_ANNOTATE_MT(
             ALIGN_AND_CALL_MT.out.vcf,
             PICARD_LIFTOVERVCF.out.vcf_lifted,
@@ -77,7 +79,13 @@ workflow ANALYSE_MT {
             vep_genome,
             vep_cache_version,
             vep_cache,
-            case_info)
+            case_info
+        )
+
+        ch_versions = ch_versions.mix(CONVERT_MT_BAM_TO_FASTQ.out.versions)
+        ch_versions = ch_versions.mix(ALIGN_AND_CALL_MT.out.versions)
+        ch_versions = ch_versions.mix(ALIGN_AND_CALL_MT_SHIFT.out.versions)
+        ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions.first())
         ch_versions = ch_versions.mix(MERGE_ANNOTATE_MT.out.versions)
 
     emit:
@@ -93,5 +101,5 @@ workflow ANALYSE_MT {
         html         = ALIGN_AND_CALL_MT.out.html
         txt_sh       = ALIGN_AND_CALL_MT_SHIFT.out.txt
         html_sh      = ALIGN_AND_CALL_MT_SHIFT.out.html
-        versions     = ch_versions // channel: [ versions.yml ]
+        versions     = ch_versions.ifEmpty(null)
 }
