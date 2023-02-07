@@ -17,17 +17,18 @@ workflow CALL_SNV_DEEPVARIANT {
 
     main:
         ch_versions = Channel.empty()
+
         bam.map { meta, bam, bai ->
                         return [meta, bam, bai, []]
             }
             .set { ch_bam }
 
         DEEPVARIANT ( ch_bam, fasta, fai )
-        DEEPVARIANT.out
-            .gvcf
+        DEEPVARIANT.out.gvcf
             .collect{it[1]}
             .toList()
-            .set { file_list }
+            .collect()
+            .set { ch_file_list }
 
         case_info
             .combine(file_list)
@@ -36,13 +37,13 @@ workflow CALL_SNV_DEEPVARIANT {
         GLNEXUS ( ch_gvcfs )
 
         ch_split_multi_in = GLNEXUS.out.bcf
-                            .map{meta, bcf ->
-                                    return [meta, bcf, []]}
+                            .map{ meta, bcf ->
+                                    return [meta, bcf, []] }
         SPLIT_MULTIALLELICS_GL (ch_split_multi_in, fasta)
 
         ch_remove_dup_in = SPLIT_MULTIALLELICS_GL.out.vcf
-                            .map{meta, vcf ->
-                                    return [meta, vcf, []]}
+                            .map{ meta, vcf ->
+                                    return [meta, vcf, []] }
         REMOVE_DUPLICATES_GL (ch_remove_dup_in, fasta)
 
         TABIX_GL (REMOVE_DUPLICATES_GL.out.vcf)

@@ -47,14 +47,14 @@ workflow CALL_SNV_SENTIEON {
             .branch{                                                                                                    // branch the channel into multiple channels (single, multiple) depending on size of list
                 single: it[1].size() == 1
                 multiple: it[1].size() > 1
-                }
+            }
             .set{ ch_vcf_idx_merge_in }
 
         BCFTOOLS_MERGE(ch_vcf_idx_merge_in.multiple,[],fasta,fai)
         ch_split_multi_in = BCFTOOLS_MERGE.out.merged_variants
                     .map{meta, bcf ->
                         return [meta, bcf, []]}
-        ch_vcf_idx_case =  ch_vcf_idx_merge_in.single.mix(ch_split_multi_in)              
+        ch_vcf_idx_case =  ch_vcf_idx_merge_in.single.mix(ch_split_multi_in)
         SPLIT_MULTIALLELICS_SEN(ch_vcf_idx_case, fasta)
 
         ch_remove_dup_in = SPLIT_MULTIALLELICS_SEN.out.vcf
