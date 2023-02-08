@@ -63,7 +63,7 @@ workflow CALL_SNV_SENTIEON {
         TABIX_SEN(REMOVE_DUPLICATES_SEN.out.vcf)
 
 		ch_versions = ch_versions.mix(SENTIEON_DNASCOPE.out.versions.first())
-        // ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions.first())
+        ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions.first())
 		ch_versions = ch_versions.mix(BCFTOOLS_MERGE.out.versions.first())
 		ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_SEN.out.versions.first())
 		ch_versions = ch_versions.mix(REMOVE_DUPLICATES_SEN.out.versions.first())
