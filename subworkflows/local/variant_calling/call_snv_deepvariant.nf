@@ -31,7 +31,7 @@ workflow CALL_SNV_DEEPVARIANT {
             .set { ch_file_list }
 
         case_info
-            .combine(file_list)
+            .combine(ch_file_list)
             .set { ch_gvcfs }
 
         GLNEXUS ( ch_gvcfs )
