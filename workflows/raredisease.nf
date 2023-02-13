@@ -29,6 +29,7 @@ def checkPathParamList = [
     params.known_mills,
     params.ml_model,
     params.mt_backchain_shift,
+    params.mt_bwa_index_shift,
     params.mt_bwamem2_index_shift,
     params.mt_fasta_shift,
     params.mt_fai_shift,
@@ -203,6 +204,8 @@ workflow RAREDISEASE {
     ch_bait_intervals               = ch_references.bait_intervals
     ch_bwa_index                    = params.bwa_index                     ? Channel.fromPath(params.bwa_index).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ( ch_references.bwa_index                ?: Channel.empty() )
+    ch_bwa_index_mt_shift           = params.mt_bwa_index_shift            ? Channel.fromPath(params.mt_bwa_index_shift).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                           : ( ch_references.bwa_index_mt_shift       ?: Channel.empty() )
     ch_bwamem2_index                = params.bwamem2_index                 ? Channel.fromPath(params.bwamem2_index).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ( ch_references.bwamem2_index            ?: Channel.empty() )
     ch_bwamem2_index_mt_shift       = params.mt_bwamem2_index_shift        ? Channel.fromPath(params.mt_bwamem2_index_shift).collect()
@@ -359,6 +362,7 @@ workflow RAREDISEASE {
 
     ANALYSE_MT (
         ch_mapped.bam_bai,
+        ch_bwa_index,
         ch_bwamem2_index,
         ch_genome_fasta_meta,
         ch_genome_fasta_no_meta,
@@ -366,6 +370,7 @@ workflow RAREDISEASE {
         ch_sequence_dictionary_no_meta,
         ch_genome_fai_no_meta,
         ch_mt_intervals,
+        ch_bwa_index_mt_shift,
         ch_bwamem2_index_mt_shift,
         ch_mt_fasta_shift_no_meta,
         ch_sequence_dictionary_mt_shift,
