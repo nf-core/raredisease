@@ -10,6 +10,7 @@ include { MERGE_ANNOTATE_MT                              } from './mitochondria/
 workflow ANALYSE_MT {
     take:
         bam                    // channel: [ val(meta), file(bam), file(bai) ]
+        genome_bwa_index       // channel: [ /path/to/bwa/index/ ]
         genome_bwamem2_index   // channel: [ /path/to/bwamem2/index/ ]
         genome_fasta_meta      // channel: [ [], genome.fasta ]
         genome_fasta_no_meta   // channel: [ genome.fasta ]
@@ -17,6 +18,7 @@ workflow ANALYSE_MT {
         genome_dict_no_meta    // channel: [ genome.dict ]
         genome_fai             // channel: [ genome.fai ]
         mt_intervals           // channel: [ file(non_control_region.chrM.interval_list) ]
+        shift_mt_bwa_index     // channel: [ /path/to/bwa/index/ ]
         shift_mt_bwamem2_index // channel: [ /path/to/bwamem2/index/ ]
         shift_mt_fasta         // channel: [ genome.fasta ]
         shift_mt_dict          // channel: [ genome.dict ]
@@ -43,6 +45,7 @@ workflow ANALYSE_MT {
         ALIGN_AND_CALL_MT (
             CONVERT_MT_BAM_TO_FASTQ.out.fastq,
             CONVERT_MT_BAM_TO_FASTQ.out.bam,
+            genome_bwa_index,
             genome_bwamem2_index,
             genome_fasta_no_meta,
             genome_dict_no_meta,
@@ -53,6 +56,7 @@ workflow ANALYSE_MT {
         ALIGN_AND_CALL_MT_SHIFT (
             CONVERT_MT_BAM_TO_FASTQ.out.fastq,
             CONVERT_MT_BAM_TO_FASTQ.out.bam,
+            shift_mt_bwa_index,
             shift_mt_bwamem2_index,
             shift_mt_fasta,
             shift_mt_dict,

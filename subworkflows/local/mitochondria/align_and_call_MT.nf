@@ -2,6 +2,7 @@
 // Align and call MT
 //
 
+include { SENTIEON_BWAMEM as SENTIEON_BWAMEM_MT                                                  } from '../../../modules/local/sentieon/bwamem'
 include { BWAMEM2_MEM as BWAMEM2_MEM_MT                                     } from '../../../modules/nf-core/bwamem2/mem/main'
 include { GATK4_MERGEBAMALIGNMENT as GATK4_MERGEBAMALIGNMENT_MT             } from '../../../modules/nf-core/gatk4/mergebamalignment/main'
 include { PICARD_ADDORREPLACEREADGROUPS as PICARD_ADDORREPLACEREADGROUPS_MT } from '../../../modules/nf-core/picard/addorreplacereadgroups/main'
@@ -15,27 +16,30 @@ include { TABIX_TABIX as TABIX_TABIX_MT                                     } fr
 
 workflow ALIGN_AND_CALL_MT {
     take:
-        fastq         // channel: [ val(meta), path('*.fastq.gz') ]
-        ubam          // channel: [ val(meta), path('*.bam') ]
-        genome_index  // channel: [ /path/to/bwamem2/index/ ]
-        genome_fasta  // channel: [ genome.fasta ]
-        genome_dict   // channel: [ genome.dict ]
-        genome_fai    // channel: [ genome.fai ]
-        intervals_mt  // channel: [ file(non_control_region.chrM.interval_list) ]
+        fastq          // channel: [ val(meta), path('*.fastq.gz') ]
+        ubam           // channel: [ val(meta), path('*.bam') ]
+        index_bwa      // channel: [ /path/to/bwamem2/index/ ]
+        index_bwamem2  // channel: [ /path/to/bwamem2/index/ ]
+        fasta          // channel: [ genome.fasta ]
+        dict           // channel: [ genome.dict ]
+        fai            // channel: [ genome.fai ]
+        intervals_mt   // channel: [ file(non_control_region.chrM.interval_list) ]
 
     main:
         ch_versions = Channel.empty()
 
-        // Outputs bam files
-        BWAMEM2_MEM_MT (fastq , genome_index, true)
-        ch_mt_bam      = BWAMEM2_MEM_MT.out.bam
+        BWAMEM2_MEM_MT (fastq , index_bwamem2, true)
+
+        SENTIEON_BWAMEM_MT ( fastq, fasta, fai, index_bwa )
+
+        ch_mt_bam      = Channel.empty().mix(BWAMEM2_MEM_MT.out.bam, SENTIEON_BWAMEM_MT.out.bam)
         ch_fastq_ubam  = ch_mt_bam.join(ubam, by: [0])
 
-        GATK4_MERGEBAMALIGNMENT_MT (ch_fastq_ubam, genome_fasta, genome_dict)
+        GATK4_MERGEBAMALIGNMENT_MT (ch_fastq_ubam, fasta, dict)
 
         PICARD_ADDORREPLACEREADGROUPS_MT (GATK4_MERGEBAMALIGNMENT_MT.out.bam)
 
-        PICARD_MARKDUPLICATES_MT (PICARD_ADDORREPLACEREADGROUPS_MT.out.bam, genome_fasta, genome_fai)
+        PICARD_MARKDUPLICATES_MT (PICARD_ADDORREPLACEREADGROUPS_MT.out.bam, fasta, fai)
 
         SAMTOOLS_SORT_MT (PICARD_MARKDUPLICATES_MT.out.bam)
 
@@ -43,7 +47,7 @@ workflow ALIGN_AND_CALL_MT {
         ch_sort_index_bam        = SAMTOOLS_SORT_MT.out.bam.join(SAMTOOLS_INDEX_MT.out.bai, by: [0])
         ch_sort_index_bam_int_mt = ch_sort_index_bam.combine(intervals_mt)
 
-        GATK4_MUTECT2_MT (ch_sort_index_bam_int_mt, genome_fasta, genome_fai, genome_dict, [], [], [],[])
+        GATK4_MUTECT2_MT (ch_sort_index_bam_int_mt, fasta, fai, dict, [], [], [],[])
 
         // Haplocheck
         // TODO: probably it will be outside this subworkflow as we want to run
@@ -58,7 +62,7 @@ workflow ALIGN_AND_CALL_MT {
                             return [meta, vcf, tbi, stats, [], [], [], []]
                         }
 
-        GATK4_FILTERMUTECTCALLS_MT (ch_to_filt, genome_fasta, genome_fai, genome_dict)
+        GATK4_FILTERMUTECTCALLS_MT (ch_to_filt, fasta, fai, dict)
 
         ch_versions = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions.first())
