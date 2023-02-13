@@ -16,19 +16,18 @@ include { TABIX_TABIX as TABIX_TABIX_MT                                     } fr
 
 workflow ALIGN_AND_CALL_MT {
     take:
-        fastq                 // channel: [ val(meta), path('*.fastq.gz') ]
-        ubam                  // channel: [ val(meta), path('*.bam') ]
+        fastq          // channel: [ val(meta), path('*.fastq.gz') ]
+        ubam           // channel: [ val(meta), path('*.bam') ]
         index_bwa      // channel: [ /path/to/bwamem2/index/ ]
         index_bwamem2  // channel: [ /path/to/bwamem2/index/ ]
         fasta          // channel: [ genome.fasta ]
         dict           // channel: [ genome.dict ]
         fai            // channel: [ genome.fai ]
-        intervals_mt          // channel: [ file(non_control_region.chrM.interval_list) ]
+        intervals_mt   // channel: [ file(non_control_region.chrM.interval_list) ]
 
     main:
         ch_versions = Channel.empty()
 
-        // Outputs bam files
         BWAMEM2_MEM_MT (fastq , index_bwamem2, true)
 
         SENTIEON_BWAMEM_MT ( fastq, fasta, fai, index_bwa )
