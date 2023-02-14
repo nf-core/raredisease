@@ -85,6 +85,7 @@ include { MAKE_PED                              } from '../modules/local/create_
 include { BCFTOOLS_CONCAT                       } from '../modules/nf-core/bcftools/concat/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { FASTQC                                } from '../modules/nf-core/fastqc/main'
+include { GATK4_SELECTVARIANTS                  } from '../modules/nf-core/gatk4/selectvariants/main'
 include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
 
 //
@@ -360,34 +361,51 @@ workflow RAREDISEASE {
 
     }
 
-    ANALYSE_MT (
-        ch_mapped.bam_bai,
-        ch_bwa_index,
-        ch_bwamem2_index,
-        ch_genome_fasta_meta,
-        ch_genome_fasta_no_meta,
-        ch_sequence_dictionary_meta,
-        ch_sequence_dictionary_no_meta,
-        ch_genome_fai_no_meta,
-        ch_mt_intervals,
-        ch_bwa_index_mt_shift,
-        ch_bwamem2_index_mt_shift,
-        ch_mt_fasta_shift_no_meta,
-        ch_sequence_dictionary_mt_shift,
-        ch_mt_shift_fai,
-        ch_mt_intervals_shift,
-        ch_mt_backchain_shift,
-        params.genome,
-        params.vep_cache_version,
-        ch_vep_cache,
-        CHECK_INPUT.out.case_info
-    )
-    ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
+    if (params.dedicated_mt_analysis) {
+        ANALYSE_MT (
+            ch_mapped.bam_bai,
+            ch_bwa_index,
+            ch_bwamem2_index,
+            ch_genome_fasta_meta,
+            ch_genome_fasta_no_meta,
+            ch_sequence_dictionary_meta,
+            ch_sequence_dictionary_no_meta,
+            ch_genome_fai_no_meta,
+            ch_mt_intervals,
+            ch_bwa_index_mt_shift,
+            ch_bwamem2_index_mt_shift,
+            ch_mt_fasta_shift_no_meta,
+            ch_sequence_dictionary_mt_shift,
+            ch_mt_shift_fai,
+            ch_mt_intervals_shift,
+            ch_mt_backchain_shift,
+            params.genome,
+            params.vep_cache_version,
+            ch_vep_cache,
+            CHECK_INPUT.out.case_info
+        )
+
+        ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
+
+    }
 
     // VARIANT ANNOTATION
-    ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
 
     if (params.annotate_snv_switch) {
+
+        ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
+
+        if (params.dedicated_mt_analysis) {
+            ch_vcf
+                .map { meta, vcf, tbi -> return [meta, vcf, tbi, []]}
+                .set { ch_selvar_in }
+
+            GATK4_SELECTVARIANTS(ch_selvar_in) // remove mitochondrial variants
+
+            ch_vcf = GATK4_SELECTVARIANTS.out.vcf.join(GATK4_SELECTVARIANTS.out.tbi, by: [0])
+            ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
+        }
+
         ANNOTATE_SNVS (
             ch_vcf,
             ch_vcfanno_resources,
@@ -403,19 +421,29 @@ workflow RAREDISEASE {
         ).set {ch_snv_annotate}
         ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 
-        ch_snv_annotate.tbi
-            .concat(ANALYSE_MT.out.tbi)
-            .groupTuple()
-            .set { ch_merged_tbi }
-        ch_snv_annotate.vcf_ann
-            .concat(ANALYSE_MT.out.vcf)
-            .groupTuple()
-            .set { ch_merged_vcf }
-        ch_merged_vcf.join(ch_merged_tbi).set {ch_concat_in}
+        ch_snv_annotate = ANNOTATE_SNVS.out.vcf_ann
 
-        BCFTOOLS_CONCAT (ch_concat_in)
+        if (params.dedicated_mt_analysis) {
+
+            ANNOTATE_SNVS.out.vcf_ann
+                .concat(ANALYSE_MT.out.vcf)
+                .groupTuple()
+                .set { ch_merged_vcf }
+
+            ANNOTATE_SNVS.out.tbi
+                .concat(ANALYSE_MT.out.tbi)
+                .groupTuple()
+                .set { ch_merged_tbi }
+
+            ch_merged_vcf.join(ch_merged_tbi).set {ch_concat_in}
+
+            BCFTOOLS_CONCAT (ch_concat_in)
+            ch_snv_annotate = BCFTOOLS_CONCAT.out.vcf
+            ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
+        }
+
         ANN_CSQ_PLI_SNV (
-            BCFTOOLS_CONCAT.out.vcf,
+            ch_snv_annotate,
             ch_variant_consequences
         )
         ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)
