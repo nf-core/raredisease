@@ -2,7 +2,7 @@
 // Align and call MT
 //
 
-include { SENTIEON_BWAMEM as SENTIEON_BWAMEM_MT                                                  } from '../../../modules/local/sentieon/bwamem'
+include { SENTIEON_BWAMEM as SENTIEON_BWAMEM_MT                             } from '../../../modules/local/sentieon/bwamem'
 include { BWAMEM2_MEM as BWAMEM2_MEM_MT                                     } from '../../../modules/nf-core/bwamem2/mem/main'
 include { GATK4_MERGEBAMALIGNMENT as GATK4_MERGEBAMALIGNMENT_MT             } from '../../../modules/nf-core/gatk4/mergebamalignment/main'
 include { PICARD_ADDORREPLACEREADGROUPS as PICARD_ADDORREPLACEREADGROUPS_MT } from '../../../modules/nf-core/picard/addorreplacereadgroups/main'
