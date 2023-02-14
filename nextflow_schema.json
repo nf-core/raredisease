@@ -372,12 +372,6 @@
                     "fa_icon": "fas fa-book",
                     "enum": ["wgs", "wes", "mito"]
                 },
-                "annotate_mt_switch": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Specifies whether or not to run a separate subworkflow for mitochondria.",
-                    "fa_icon": "fas fa-book"
-                },
                 "annotate_snv_switch": {
                     "type": "boolean",
                     "default": true,
@@ -388,6 +382,12 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Specifies whether or not to run annotate structural variant subworkflow.",
+                    "fa_icon": "fas fa-book"
+                },
+                "dedicated_mt_analysis": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Specifies whether or not to run a separate subworkflow for mitochondrial analysis.",
                     "fa_icon": "fas fa-book"
                 },
                 "gens_switch": {

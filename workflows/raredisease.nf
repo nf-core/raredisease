@@ -84,6 +84,7 @@ include { MAKE_PED                              } from '../modules/local/create_
 include { BCFTOOLS_CONCAT                       } from '../modules/nf-core/bcftools/concat/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { FASTQC                                } from '../modules/nf-core/fastqc/main'
+include { GATK4_SELECTVARIANTS                  } from '../modules/nf-core/gatk4/selectvariants/main'
 include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
 
 //
@@ -357,7 +358,7 @@ workflow RAREDISEASE {
 
     }
 
-    if (params.annotate_mt_switch) {
+    if (params.dedicated_mt_analysis) {
         ANALYSE_MT (
             ch_mapped.bam_bai,
             ch_bwamem2_index,
@@ -383,9 +384,22 @@ workflow RAREDISEASE {
     }
 
     // VARIANT ANNOTATION
-    ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
 
     if (params.annotate_snv_switch) {
+
+        ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
+
+        if (params.dedicated_mt_analysis) {
+            ch_vcf
+                .map { meta, vcf, tbi -> return [meta, vcf, tbi, []]}
+                .set { ch_selvar_in }
+
+            GATK4_SELECTVARIANTS(ch_selvar_in) // remove mitochondrial variants
+
+            ch_vcf = GATK4_SELECTVARIANTS.out.vcf.join(GATK4_SELECTVARIANTS.out.tbi, by: [0])
+            ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
+        }
+
         ANNOTATE_SNVS (
             ch_vcf,
             ch_vcfanno_resources,
@@ -403,7 +417,7 @@ workflow RAREDISEASE {
 
         ch_snv_annotate = ANNOTATE_SNVS.out.vcf_ann
 
-        if (params.annotate_mt_switch) {
+        if (params.dedicated_mt_analysis) {
 
             ANNOTATE_SNVS.out.tbi
                 .concat(ANALYSE_MT.out.tbi)
@@ -419,6 +433,7 @@ workflow RAREDISEASE {
 
             BCFTOOLS_CONCAT (ch_concat_in)
             ch_snv_annotate = BCFTOOLS_CONCAT.out.vcf
+            ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
         }
 
         ANN_CSQ_PLI_SNV (
