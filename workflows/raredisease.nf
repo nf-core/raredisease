@@ -425,15 +425,15 @@ workflow RAREDISEASE {
 
         if (params.dedicated_mt_analysis) {
 
-            ANNOTATE_SNVS.out.tbi
-                .concat(ANALYSE_MT.out.tbi)
-                .groupTuple()
-                .set { ch_merged_tbi }
-
             ANNOTATE_SNVS.out.vcf_ann
                 .concat(ANALYSE_MT.out.vcf)
                 .groupTuple()
                 .set { ch_merged_vcf }
+
+            ANNOTATE_SNVS.out.tbi
+                .concat(ANALYSE_MT.out.tbi)
+                .groupTuple()
+                .set { ch_merged_tbi }
 
             ch_merged_vcf.join(ch_merged_tbi).set {ch_concat_in}
 
