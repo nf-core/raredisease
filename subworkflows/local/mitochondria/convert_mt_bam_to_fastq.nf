@@ -18,14 +18,15 @@ workflow CONVERT_MT_BAM_TO_FASTQ {
 
         // Outputs bam containing only MT
         GATK4_PRINTREADS_MT ( bam, genome_fasta_meta, genome_fai, genome_dict )
-        ch_versions = ch_versions.mix(GATK4_PRINTREADS_MT.out.versions.first())
 
         // Removes alignment information
         GATK4_REVERTSAM_MT ( GATK4_PRINTREADS_MT.out.bam )
-        ch_versions = ch_versions.mix(GATK4_REVERTSAM_MT.out.versions.first())
 
         // Outputs fastq files
         GATK4_SAMTOFASTQ_MT ( GATK4_REVERTSAM_MT.out.bam )
+
+        ch_versions = ch_versions.mix(GATK4_PRINTREADS_MT.out.versions.first())
+        ch_versions = ch_versions.mix(GATK4_REVERTSAM_MT.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_SAMTOFASTQ_MT.out.versions.first())
 
     emit:

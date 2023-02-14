@@ -35,24 +35,13 @@ workflow ANNOTATE_SNVS {
         ch_vcf_scatter_in = Channel.empty()
         ch_vep_in         = Channel.empty()
 
-        //
-        // annotate rhocall
-        //
-        vcf.map { meta, vcf, idx ->
-                return [ vcf, idx ]
-            }
-            .set { ch_roh_vcfs}
-
+        vcf.map { meta, vcf, idx -> return [vcf, idx] }.set { ch_roh_vcfs }
         samples
             .branch { it ->
                 affected: it.phenotype == "2"
                 unaffected: it.phenotype == "1"
-            }
-            .set {ch_phenotype}
-
-        ch_phenotype.affected
-            .combine(ch_roh_vcfs)
-            .set { ch_roh_input }
+            }.set { ch_phenotype }
+        ch_phenotype.affected.combine(ch_roh_vcfs).set { ch_roh_input }
 
         BCFTOOLS_ROH (ch_roh_input, gnomad_af, [], [], [], [])
 
@@ -62,62 +51,60 @@ workflow ANNOTATE_SNVS {
                 new_meta.id = meta.case_id
                 return [new_meta, roh]
             }
-            .set { ch_roh_rhocall}
+            .set { ch_roh_rhocall }
 
         RHOCALL_ANNOTATE (vcf, ch_roh_rhocall, [])
 
         ZIP_TABIX_ROHCALL (RHOCALL_ANNOTATE.out.vcf)
-        ch_versions = ch_versions.mix(ZIP_TABIX_ROHCALL.out.versions)
 
-        //
-        // annotate vcfanno
-        //
         VCFANNO (ZIP_TABIX_ROHCALL.out.gz_tbi, vcfanno_toml, vcfanno_lua, vcfanno_resources)
-        ch_versions = ch_versions.mix(VCFANNO.out.versions)
 
         ZIP_TABIX_VCFANNO (VCFANNO.out.vcf)
-        ch_versions = ch_versions.mix(ZIP_TABIX_VCFANNO.out.versions)
 
-        BCFTOOLS_VIEW(ZIP_TABIX_VCFANNO.out.gz_tbi,[],[],[]).vcf.set { ch_vep_in }
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
+        BCFTOOLS_VIEW(ZIP_TABIX_VCFANNO.out.gz_tbi, [], [], [])  // filter on frequencies
 
         TABIX_BCFTOOLS_VIEW (BCFTOOLS_VIEW.out.vcf)
-        ch_versions = ch_versions.mix(TABIX_BCFTOOLS_VIEW.out.versions)
 
         BCFTOOLS_VIEW.out.vcf.join(TABIX_BCFTOOLS_VIEW.out.tbi).collect().set { ch_vcf_scatter_in }
 
         GATK4_SELECTVARIANTS (ch_vcf_scatter_in.combine(split_intervals)).vcf.set { ch_vep_in }
-        ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions.first())
 
-        //
-        // annotate vep
-        //
-        ENSEMBLVEP_SNV(ch_vep_in,
+        ENSEMBLVEP_SNV(
+            ch_vep_in,
             vep_genome,
             "homo_sapiens",
             vep_cache_version,
             vep_cache,
             fasta,
             []
-            )
-        ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions.first())
+        )
 
         ZIP_TABIX_VEP (ENSEMBLVEP_SNV.out.vcf)
-        ch_versions = ch_versions.mix(ZIP_TABIX_VEP.out.versions.first())
 
         ZIP_TABIX_VEP.out.gz_tbi
             .groupTuple()
             .map { meta, vcfs, tbis ->
                 def sortedvcfs = vcfs.sort()
                 def sortedtbis = tbis.sort()
-            return [ meta, sortedvcfs, sortedtbis ]
+                return [ meta, sortedvcfs, sortedtbis ]
             }
             .set { ch_vep_ann }
 
         BCFTOOLS_CONCAT (ch_vep_ann)
-        ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
 
         TABIX_BCFTOOLS_CONCAT (BCFTOOLS_CONCAT.out.vcf)
+
+        ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions)
+        ch_versions = ch_versions.mix(RHOCALL_ANNOTATE.out.versions)
+        ch_versions = ch_versions.mix(ZIP_TABIX_ROHCALL.out.versions)
+        ch_versions = ch_versions.mix(VCFANNO.out.versions)
+        ch_versions = ch_versions.mix(ZIP_TABIX_VCFANNO.out.versions)
+        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
+        ch_versions = ch_versions.mix(TABIX_BCFTOOLS_VIEW.out.versions)
+        ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions.first())
+        ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions.first())
+        ch_versions = ch_versions.mix(ZIP_TABIX_VEP.out.versions.first())
+        ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
         ch_versions = ch_versions.mix(TABIX_BCFTOOLS_CONCAT.out.versions)
 
     emit:

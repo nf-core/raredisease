@@ -26,16 +26,14 @@ workflow CALL_SNV_SENTIEON {
         SENTIEON_DNASCOPE ( input, fasta, fai, dbsnp, dbsnp_index, call_interval, ml_model )
         ch_vcf      = SENTIEON_DNASCOPE.out.vcf
         ch_index    = SENTIEON_DNASCOPE.out.vcf_index
-		ch_versions = ch_versions.mix(SENTIEON_DNASCOPE.out.versions.first())
 
-        if ( ml_model ) {
+        ch_vcf_idx  = ch_vcf.join( ch_index )
 
-            ch_vcf_idx = ch_vcf.join( ch_index )
+        SENTIEON_DNAMODELAPPLY ( ch_vcf_idx, fasta, fai, ml_model )
 
-            SENTIEON_DNAMODELAPPLY ( ch_vcf_idx, fasta, fai, ml_model )
+        if (params.ml_model) {
             ch_vcf      = SENTIEON_DNAMODELAPPLY.out.vcf
             ch_index    = SENTIEON_DNAMODELAPPLY.out.vcf_index
-            ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions.first())
         }
 
         ch_vcf.join(ch_index)
@@ -45,20 +43,31 @@ workflow CALL_SNV_SENTIEON {
         case_info
             .combine(ch_vcf_idx)
             .groupTuple()
-            .set{ ch_vcf_idx_case }
+            .branch{                                                                                                    // branch the channel into multiple channels (single, multiple) depending on size of list
+                single: it[1].size() == 1
+                multiple: it[1].size() > 1
+            }
+            .set{ ch_vcf_idx_merge_in }
 
-        BCFTOOLS_MERGE(ch_vcf_idx_case,[],fasta,fai)
-
+        BCFTOOLS_MERGE(ch_vcf_idx_merge_in.multiple,[],fasta,fai)
         ch_split_multi_in = BCFTOOLS_MERGE.out.merged_variants
                     .map{meta, bcf ->
-                            return [meta, bcf, []]}
-        SPLIT_MULTIALLELICS_SEN(ch_split_multi_in, fasta)
+                        return [meta, bcf, []]}
+        ch_vcf_idx_case =  ch_vcf_idx_merge_in.single.mix(ch_split_multi_in)
+        SPLIT_MULTIALLELICS_SEN(ch_vcf_idx_case, fasta)
 
         ch_remove_dup_in = SPLIT_MULTIALLELICS_SEN.out.vcf
                             .map{meta, vcf ->
                                     return [meta, vcf, []]}
         REMOVE_DUPLICATES_SEN(ch_remove_dup_in, fasta)
         TABIX_SEN(REMOVE_DUPLICATES_SEN.out.vcf)
+
+		ch_versions = ch_versions.mix(SENTIEON_DNASCOPE.out.versions.first())
+        ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions.first())
+		ch_versions = ch_versions.mix(BCFTOOLS_MERGE.out.versions.first())
+		ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_SEN.out.versions.first())
+		ch_versions = ch_versions.mix(REMOVE_DUPLICATES_SEN.out.versions.first())
+		ch_versions = ch_versions.mix(TABIX_SEN.out.versions.first())
 
 	emit:
 		vcf		 = REMOVE_DUPLICATES_SEN.out.vcf

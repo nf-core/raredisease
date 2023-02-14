@@ -204,6 +204,14 @@
                     "description": "Path to mitochondrial FASTA genome index file.",
                     "fa_icon": "far fa-file-code"
                 },
+                "mt_bwa_index_shift": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Directory for pre-built bwa index for shifted mitochondrial fasta (used for alignment with sentioen)",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
+                },
                 "mt_bwamem2_index_shift": {
                     "type": "string",
                     "format": "directory-path",

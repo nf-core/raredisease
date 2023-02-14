@@ -26,18 +26,18 @@ workflow ALIGN_SENTIEON {
         ch_bqsr_csv = Channel.empty()
 
         SENTIEON_BWAMEM ( reads_input, fasta, fai, index )
-        ch_versions = ch_versions.mix(SENTIEON_BWAMEM.out.versions.first())
 
         SENTIEON_BWAMEM.out
             .bam
             .join(SENTIEON_BWAMEM.out.bai)
             .map{ meta, bam, bai ->
-                new_meta = meta.clone()                                                                                 // clone to avoid overriding the global meta
-                new_meta.id = new_meta.id.split('_')[0]                                                                 // access the .id attribute of meta to split samplename_lane into samplename
+                new_meta            = meta.clone()
+                new_meta.id         = new_meta.id.split('_')[0]
                 new_meta.read_group = "\'@RG\\tID:" + new_meta.id + "\\tPL:" + platform + "\\tSM:" + new_meta.id + "\'"
-                [new_meta, bam, bai]}                                                                                   // end the closure to return newly modified channel
-            .groupTuple(by: 0)                                                                                          // group them bam paths with the same [ [samplename], [bam path, bam path, ..] ]
-            .branch{                                                                                                    // branch the channel into multiple channels (single, multiple) depending on size of list
+                [new_meta, bam, bai]
+                }
+            .groupTuple(by: 0)   // group them bam paths with the same [ [samplename], [bam path, bam path, ..] ]
+            .branch{
                 single: it[1].size() == 1
                 multiple: it[1].size() > 1
                 }
@@ -45,11 +45,10 @@ workflow ALIGN_SENTIEON {
 
         SENTIEON_READWRITER (merge_bams_in.multiple)
         ch_bam_bai = merge_bams_in.single.mix(SENTIEON_READWRITER.out.bam_bai)
+
         SENTIEON_DATAMETRICS (ch_bam_bai, fasta, fai )
-        ch_versions = ch_versions.mix(SENTIEON_DATAMETRICS.out.versions.first())
 
         SENTIEON_LOCUSCOLLECTOR ( ch_bam_bai )
-        ch_versions = ch_versions.mix(SENTIEON_LOCUSCOLLECTOR.out.versions.first())
 
         ch_bam_bai
             .join(SENTIEON_LOCUSCOLLECTOR.out.score)
@@ -57,7 +56,6 @@ workflow ALIGN_SENTIEON {
             .set { ch_bam_bai_score }
 
         SENTIEON_DEDUP ( ch_bam_bai_score, fasta, fai )
-        ch_versions = ch_versions.mix(SENTIEON_DEDUP.out.versions.first())
 
         if (params.variant_caller == "sentieon") {
             SENTIEON_DEDUP.out.bam
@@ -69,6 +67,11 @@ workflow ALIGN_SENTIEON {
             ch_bqsr_csv = SENTIEON_BQSR.out.recal_csv
             ch_versions = ch_versions.mix(SENTIEON_BQSR.out.versions.first())
         }
+
+        ch_versions = ch_versions.mix(SENTIEON_BWAMEM.out.versions.first())
+        ch_versions = ch_versions.mix(SENTIEON_DATAMETRICS.out.versions.first())
+        ch_versions = ch_versions.mix(SENTIEON_LOCUSCOLLECTOR.out.versions.first())
+        ch_versions = ch_versions.mix(SENTIEON_DEDUP.out.versions.first())
 
     emit:
         marked_bam             = SENTIEON_DEDUP.out.bam
@@ -82,5 +85,5 @@ workflow ALIGN_SENTIEON {
         gc_summary             = SENTIEON_DATAMETRICS.out.gc_summary.ifEmpty(null)
         aln_metrics            = SENTIEON_DATAMETRICS.out.aln_metrics.ifEmpty(null)
         is_metrics             = SENTIEON_DATAMETRICS.out.is_metrics.ifEmpty(null)
-        versions               = ch_versions.ifEmpty(null)                           // channel: [ versions.yml ]
+        versions               = ch_versions.ifEmpty(null)
 }

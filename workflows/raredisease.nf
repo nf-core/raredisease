@@ -29,6 +29,7 @@ def checkPathParamList = [
     params.known_mills,
     params.ml_model,
     params.mt_backchain_shift,
+    params.mt_bwa_index_shift,
     params.mt_bwamem2_index_shift,
     params.mt_fasta_shift,
     params.mt_fai_shift,
@@ -107,9 +108,6 @@ include { QC_BAM                                } from '../subworkflows/local/qc
 include { RANK_VARIANTS as RANK_VARIANTS_SNV    } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SV     } from '../subworkflows/local/rank_variants'
 include { SCATTER_GENOME                        } from '../subworkflows/local/scatter_genome'
-//
-// SUBWORKFLOW: Consists entirely of nf-core/modules
-//
 
 
 /*
@@ -207,6 +205,8 @@ workflow RAREDISEASE {
     ch_bait_intervals               = ch_references.bait_intervals
     ch_bwa_index                    = params.bwa_index                     ? Channel.fromPath(params.bwa_index).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ( ch_references.bwa_index                ?: Channel.empty() )
+    ch_bwa_index_mt_shift           = params.mt_bwa_index_shift            ? Channel.fromPath(params.mt_bwa_index_shift).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                           : ( ch_references.bwa_index_mt_shift       ?: Channel.empty() )
     ch_bwamem2_index                = params.bwamem2_index                 ? Channel.fromPath(params.bwamem2_index).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ( ch_references.bwamem2_index            ?: Channel.empty() )
     ch_bwamem2_index_mt_shift       = params.mt_bwamem2_index_shift        ? Channel.fromPath(params.mt_bwamem2_index_shift).collect()
@@ -224,7 +224,7 @@ workflow RAREDISEASE {
                                                                            : Channel.empty()
     ch_gnomad_vcf                   = params.gnomad_vcf                    ? ch_references.gnomad_vcf
                                                                            : Channel.value([])
-    ch_known_dbsnp_tbi              = params.known_dbsnp_tbi               ? Channel.fromPath(params.known_dbsnp_tbi).collect()
+    ch_known_dbsnp_tbi              = params.known_dbsnp_tbi               ? Channel.fromPath(params.known_dbsnp_tbi).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ( ch_references.known_dbsnp_tbi          ?: Channel.empty() )
     ch_sequence_dictionary_no_meta  = params.sequence_dictionary           ? Channel.fromPath(params.sequence_dictionary).collect()
                                                                            : ( ch_references.sequence_dict            ?: Channel.empty() )
@@ -262,7 +262,7 @@ workflow RAREDISEASE {
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
 
-    // STEP 1.5: BAM QUALITY CHECK
+    // BAM QUALITY CHECK
     QC_BAM (
         ch_mapped.marked_bam,
         ch_mapped.marked_bai,
@@ -275,7 +275,7 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
 
-    // STEP 1.6: EXPANSIONHUNTER AND STRANGER
+    // EXPANSIONHUNTER AND STRANGER
     CALL_REPEAT_EXPANSIONS (
         ch_mapped.bam_bai,
         ch_genome_fasta_no_meta,
@@ -290,7 +290,6 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(SMNCOPYNUMBERCALLER.out.versions)
 
     // STEP 2: VARIANT CALLING
-    // TODO: There should be a conditional to execute certain variant callers (e.g. sentieon, gatk, deepvariant) defined by the user and we need to think of a default caller.
     CALL_SNV (
         params.variant_caller,
         ch_mapped.bam_bai,
@@ -307,6 +306,7 @@ workflow RAREDISEASE {
     CALL_STRUCTURAL_VARIANTS (
         ch_mapped.marked_bam,
         ch_mapped.marked_bai,
+        ch_mapped.bam_bai,
         ch_bwa_index,
         ch_genome_fasta_no_meta,
         ch_genome_fasta_meta,
@@ -317,7 +317,7 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
-    // STEP 2.1: GENS
+    // GENS
     if (params.gens_switch) {
         GENS (
             ch_mapped.bam_bai,
@@ -369,6 +369,7 @@ workflow RAREDISEASE {
 
     ANALYSE_MT (
         ch_mapped.bam_bai,
+        ch_bwa_index,
         ch_bwamem2_index,
         ch_genome_fasta_meta,
         ch_genome_fasta_no_meta,
@@ -376,6 +377,7 @@ workflow RAREDISEASE {
         ch_sequence_dictionary_no_meta,
         ch_genome_fai_no_meta,
         ch_mt_intervals,
+        ch_bwa_index_mt_shift,
         ch_bwamem2_index_mt_shift,
         ch_mt_fasta_shift_no_meta,
         ch_sequence_dictionary_mt_shift,
@@ -389,7 +391,7 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
 
-    // STEP 3: VARIANT ANNOTATION
+    // VARIANT ANNOTATION
     ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
 
     if (params.annotate_snv_switch) {
@@ -416,8 +418,8 @@ workflow RAREDISEASE {
             .concat(ANALYSE_MT.out.vcf)
             .groupTuple()
             .set { ch_merged_vcf }
-
         ch_merged_vcf.join(ch_merged_tbi).set {ch_concat_in}
+
         BCFTOOLS_CONCAT (ch_concat_in)
         ANN_CSQ_PLI_SNV (
             BCFTOOLS_CONCAT.out.vcf,
