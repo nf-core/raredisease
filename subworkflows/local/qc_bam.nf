@@ -34,7 +34,7 @@ workflow QC_BAM {
 
         UCSC_WIGTOBIGWIG (TIDDIT_COV.out.wig, chrom_sizes)
 
-        MOSDEPTH (bam_bai, [], [])
+        MOSDEPTH (bam_bai, Channel.value([[],[]]) , Channel.value([[],[]]) )
 
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions.first())
