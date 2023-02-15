@@ -2,8 +2,9 @@ process FILTER_VEP {
     tag "$meta.id"
     label 'process_low'
 
-    if (params.enable_conda) {
-        exit 1, "Conda environments cannot be used with vep at the moment. Please use Docker or Singularity containers."
+    // Exit if running this module with -profile conda / -profile mamba
+    if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
+        exit 1, "Local VEP module does not support Conda. Please use Docker / Singularity / Podman instead."
     }
     container "ensemblorg/ensembl-vep:release_107.0"
 
