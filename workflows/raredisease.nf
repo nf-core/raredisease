@@ -284,13 +284,13 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
 
     // STEP 1.7: SMNCOPYNUMBERCALLER
-    ALIGN.out.bam
+    ALIGN.out.bam_bai
         .collect{it[1]}
         .toList()
         .set { ch_bam_list }
 
-    ALIGN.out.bai
-        .collect{it[1]}
+    ALIGN.out.bam_bai
+        .collect{it[2]}
         .toList()
         .set { ch_bai_list }
 
@@ -298,7 +298,7 @@ workflow RAREDISEASE {
         .combine(ch_bam_list)
         .combine(ch_bai_list)
         .set { ch_bams_bais }
-        
+
     SMNCOPYNUMBERCALLER (
         ch_bams_bais
     )
