@@ -220,6 +220,14 @@
                     "description": "Path to mitochondrial FASTA genome index file.",
                     "fa_icon": "far fa-file-code"
                 },
+                "mt_bwa_index_shift": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Directory for pre-built bwa index for shifted mitochondrial fasta (used for alignment with sentioen)",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
+                },
                 "mt_bwamem2_index_shift": {
                     "type": "string",
                     "format": "directory-path",
@@ -398,6 +406,12 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Specifies whether or not to run annotate structural variant subworkflow.",
+                    "fa_icon": "fas fa-book"
+                },
+                "dedicated_mt_analysis": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Specifies whether or not to run a separate subworkflow for mitochondrial analysis.",
                     "fa_icon": "fas fa-book"
                 },
                 "gens_switch": {

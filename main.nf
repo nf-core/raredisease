@@ -34,6 +34,7 @@ params.known_indels                   = WorkflowMain.getGenomeAttribute(params, 
 params.known_mills                    = WorkflowMain.getGenomeAttribute(params, 'known_mills')
 params.ml_model                       = WorkflowMain.getGenomeAttribute(params, 'ml_model')
 params.mt_backchain_shift             = WorkflowMain.getGenomeAttribute(params, 'mt_backchain_shift')
+params.mt_bwa_index_shift             = WorkflowMain.getGenomeAttribute(params, 'mt_bwa_index_shift')
 params.mt_bwamem2_index_shift         = WorkflowMain.getGenomeAttribute(params, 'mt_bwamem2_index_shift')
 params.mt_fasta_shift                 = WorkflowMain.getGenomeAttribute(params, 'mt_fasta_shift')
 params.mt_fai_shift                   = WorkflowMain.getGenomeAttribute(params, 'mt_fai_shift')
