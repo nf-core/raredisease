@@ -110,6 +110,7 @@ include { QC_BAM                                } from '../subworkflows/local/qc
 include { RANK_VARIANTS as RANK_VARIANTS_SNV    } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SV     } from '../subworkflows/local/rank_variants'
 include { SCATTER_GENOME                        } from '../subworkflows/local/scatter_genome'
+include { PEDDY_CHECK                           } from '../subworkflows/local/peddy_check'
 
 
 /*
@@ -319,6 +320,15 @@ workflow RAREDISEASE {
         params.cnvpytor_binsizes
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
+
+    // ped correspondence, sex check, ancestry check
+    ch_vcf_peddy = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
+
+    PEDDY_CHECK (
+        ch_vcf_peddy,
+        MAKE_PED.out.ped
+    )
+    ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
 
     // GENS
     if (params.gens_switch) {
