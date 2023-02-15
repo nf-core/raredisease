@@ -235,6 +235,11 @@
                         "git_sha": "f24b0232ef276882e61edbacd4e3f2f687031ef2",
                         "installed_by": ["modules"]
                     },
+                    "picard/collectwgsmetrics": {
+                        "branch": "master",
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
+                    },
                     "picard/liftovervcf": {
                         "branch": "master",
                         "git_sha": "3d5d18db1b39e1133505ae2fa2a062b0073c8a6a",
