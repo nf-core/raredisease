@@ -23,6 +23,8 @@ workflow MERGE_ANNOTATE_MT {
         genome_dict_meta    // channel: [ genome.dict ]
         genome_dict_no_meta // channel: [ genome.dict ]
         genome_fai          // channel: [ genome.fai ]
+        ch_vcfanno_resources
+        ch_vcfanno_toml
         vep_genome
         vep_cache_version
         vep_cache

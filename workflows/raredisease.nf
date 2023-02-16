@@ -379,6 +379,8 @@ workflow RAREDISEASE {
             ch_mt_shift_fai,
             ch_mt_intervals_shift,
             ch_mt_backchain_shift,
+            ch_vcfanno_resources,
+            ch_vcfanno_toml,
             params.genome,
             params.vep_cache_version,
             ch_vep_cache,
