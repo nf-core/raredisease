@@ -91,8 +91,8 @@ workflow MERGE_ANNOTATE_MT {
         ch_in_vep = ch_merged_vcf.mix(ch_vcf_changed_name)
 
         // Annotating with Hmtnote
-        //HMTNOTE_MT(ch_in_vep)
-        //ch_versions = ch_versions.mix(HMTNOTE_MT.out.versions.first())
+        /HMTNOTE_MT(ch_in_vep)
+        /ch_versions = ch_versions.mix(HMTNOTE_MT.out.versions.first())
 
         // Annotating with ensembl Vep
         ENSEMBLVEP_MT( ch_in_vep,
