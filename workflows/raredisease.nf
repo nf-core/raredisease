@@ -23,6 +23,8 @@ def checkPathParamList = [
     params.gnomad_af_idx,
     params.gnomad_vcf,
     params.input,
+    params.intervals_wgs,
+    params.intervals_y,
     params.known_dbsnp,
     params.known_dbsnp_tbi,
     params.known_indels,
@@ -141,6 +143,10 @@ workflow RAREDISEASE {
     ch_gnomad_af_tab                  = params.gnomad_af              ? Channel.fromPath(params.gnomad_af).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                       : Channel.value([[],[]])
     ch_gnomad_vcf_unprocessed         = params.gnomad_vcf             ? Channel.fromPath(params.gnomad_vcf).collect()
+                                                                      : Channel.empty()
+    ch_intervals_wgs                  = params.intervals_wgs          ? Channel.fromPath(params.intervals_wgs).collect()
+                                                                      : Channel.empty()
+    ch_intervals_y                    = params.intervals_y            ? Channel.fromPath(params.intervals_y).collect()
                                                                       : Channel.empty()
     ch_known_dbsnp                    = params.known_dbsnp            ? Channel.fromPath(params.known_dbsnp).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                       : Channel.value([[],[]])
@@ -271,7 +277,10 @@ workflow RAREDISEASE {
         ch_genome_fai_meta,
         ch_bait_intervals,
         ch_target_intervals,
-        ch_chrom_sizes
+        ch_chrom_sizes,
+        ch_intervals_wgs,
+        ch_intervals_y,
+        params.aligner
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
 

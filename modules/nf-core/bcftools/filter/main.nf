@@ -1,4 +1,4 @@
-process BCFTOOLS_VIEW {
+process BCFTOOLS_FILTER {
     tag "$meta.id"
     label 'process_medium'
 
@@ -8,14 +8,11 @@ process BCFTOOLS_VIEW {
         'quay.io/biocontainers/bcftools:1.16--hfe4b78e_1' }"
 
     input:
-    tuple val(meta), path(vcf), path(index)
-    path(regions)
-    path(targets)
-    path(samples)
+    tuple val(meta), path(vcf)
 
     output:
-    tuple val(meta), path("*.gz") , emit: vcf
-    path "versions.yml"           , emit: versions
+    tuple val(meta), path("*.gz"), emit: vcf
+    path  "versions.yml"         , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -23,18 +20,11 @@ process BCFTOOLS_VIEW {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def regions_file  = regions ? "--regions-file ${regions}" : ""
-    def targets_file = targets ? "--targets-file ${targets}" : ""
-    def samples_file =  samples ? "--samples-file ${samples}" : ""
     """
-    bcftools view \\
+    bcftools filter \\
         --output ${prefix}.vcf.gz \\
-        ${regions_file} \\
-        ${targets_file} \\
-        ${samples_file} \\
         $args \\
-        --threads $task.cpus \\
-        ${vcf}
+        $vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -44,6 +34,7 @@ process BCFTOOLS_VIEW {
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
+
     """
     touch ${prefix}.vcf.gz
 
