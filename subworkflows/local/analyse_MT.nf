@@ -83,7 +83,7 @@ workflow ANALYSE_MT {
             genome_dict_no_meta,
             genome_fai,
             vcfanno_resources,
-            vcfanno_tomlvep_genome,
+            vcfanno_toml,
             vep_genome,
             vep_cache_version,
             vep_cache,
