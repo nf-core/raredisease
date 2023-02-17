@@ -11,6 +11,7 @@ include { TABIX_TABIX as TABIX_TABIX_MT2                         } from '../../.
 include { CHANGE_NAME as CHANGE_NAME_VCF_MT                      } from '../../../modules/local/change_name'
 include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                    } from '../../../modules/nf-core/bcftools/merge/main'
 include { HMTNOTE as HMTNOTE_MT                                  } from '../../../modules/nf-core/hmtnote/main'
+include { VCFANNO                                                } from '../../../modules/nf-core/vcfanno/main'
 include { TABIX_TABIX as TABIX_TABIX_MT3                         } from '../../../modules/nf-core/tabix/tabix/main'
 include { ENSEMBLVEP as ENSEMBLVEP_MT                            } from '../../../modules/local/ensemblvep/main'
 include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT          } from '../../../modules/nf-core/haplogrep2/classify/main'
@@ -23,8 +24,8 @@ workflow MERGE_ANNOTATE_MT {
         genome_dict_meta    // channel: [ genome.dict ]
         genome_dict_no_meta // channel: [ genome.dict ]
         genome_fai          // channel: [ genome.fai ]
-        ch_vcfanno_resources
-        ch_vcfanno_toml
+        vcfanno_resources
+        vcfanno_toml
         vep_genome
         vep_cache_version
         vep_cache
@@ -52,9 +53,12 @@ workflow MERGE_ANNOTATE_MT {
         // Removing duplicates and merging if there is more than one sample
         SPLIT_MULTIALLELICS_MT.out.vcf.join(TABIX_TABIX_MT.out.tbi).set { ch_in_remdup }
         REMOVE_DUPLICATES_MT(ch_in_remdup, genome_fasta)
-        TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
 
-        REMOVE_DUPLICATES_MT.out.vcf
+        VCFANNO(REMOVE_DUPLICATES_MT.out.vcf, vcfanno_toml, [], vcfanno_resources)
+
+        TABIX_TABIX_MT2(VCFANNO.out.vcf)
+
+        VCFANNO.out.vcf
             .collect{it[1]}
             .ifEmpty([])
             .toList()
@@ -91,8 +95,8 @@ workflow MERGE_ANNOTATE_MT {
         ch_in_vep = ch_merged_vcf.mix(ch_vcf_changed_name)
 
         // Annotating with Hmtnote
-        /HMTNOTE_MT(ch_in_vep)
-        /ch_versions = ch_versions.mix(HMTNOTE_MT.out.versions.first())
+        //HMTNOTE_MT(ch_in_vep)
+        //ch_versions = ch_versions.mix(HMTNOTE_MT.out.versions.first())
 
         // Annotating with ensembl Vep
         ENSEMBLVEP_MT( ch_in_vep,
@@ -119,6 +123,7 @@ workflow MERGE_ANNOTATE_MT {
     emit:
         haplog   = HAPLOGREP2_CLASSIFY_MT.out.txt
         vcf      = ENSEMBLVEP_MT.out.vcf_gz
+        vcfanno  = VCFANNO.out.vcf
         tbi      = TABIX_TABIX_MT3.out.tbi
         report   = ENSEMBLVEP_MT.out.report
         versions = ch_versions // channel: [ versions.yml ]

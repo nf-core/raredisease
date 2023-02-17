@@ -98,6 +98,7 @@ workflow ANALYSE_MT {
 
     emit:
         vcf          = MERGE_ANNOTATE_MT.out.vcf
+        vcfanno      = MERGE_ANNOTATE_MT.out.vcfanno
         tbi          = MERGE_ANNOTATE_MT.out.tbi
         stats        = ALIGN_AND_CALL_MT.out.stats
         filt_sats    = ALIGN_AND_CALL_MT.out.filt_sats
