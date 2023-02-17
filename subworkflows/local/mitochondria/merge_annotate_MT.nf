@@ -109,7 +109,7 @@ workflow MERGE_ANNOTATE_MT {
         TABIX_TABIX_MT3(ENSEMBLVEP_MT.out.vcf_gz)
         ch_in_vcfanno = ENSEMBLVEP_MT.out.vcf_gz.join(TABIX_TABIX_MT3.out.tbi, by: [0])
         VCFANNO(ch_in_vcfanno, vcfanno_toml, [], vcfanno_resources)
-        TABIX_TABIX_MT4(VCFANNO.out.vcf_gz)
+        TABIX_TABIX_MT4(VCFANNO.out.vcf)
 
         // Running haplogrep2
         HAPLOGREP2_CLASSIFY_MT(ch_in_vep, "vcf.gz")
@@ -126,7 +126,7 @@ workflow MERGE_ANNOTATE_MT {
 
     emit:
         haplog   = HAPLOGREP2_CLASSIFY_MT.out.txt
-        vcf      = VCFANNO.out.vcf_gz
+        vcf      = VCFANNO.out.vcf
         tbi      = TABIX_TABIX_MT4.out.tbi
         report   = ENSEMBLVEP_MT.out.report
         versions = ch_versions // channel: [ versions.yml ]
