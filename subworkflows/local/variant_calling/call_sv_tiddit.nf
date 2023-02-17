@@ -32,5 +32,5 @@ workflow CALL_SV_TIDDIT {
 
     emit:
         vcf          = SVDB_MERGE_TIDDIT.out.vcf
-        versions     = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+        versions     = ch_versions
 }
