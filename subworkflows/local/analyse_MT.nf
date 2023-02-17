@@ -105,5 +105,5 @@ workflow ANALYSE_MT {
         html         = ALIGN_AND_CALL_MT.out.html
         txt_sh       = ALIGN_AND_CALL_MT_SHIFT.out.txt
         html_sh      = ALIGN_AND_CALL_MT_SHIFT.out.html
-        versions     = ch_versions.ifEmpty(null)
+        versions     = ch_versions
 }

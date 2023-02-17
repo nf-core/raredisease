@@ -48,5 +48,5 @@ workflow CHECK_VCF {
     emit:
         vcf      =  vcf_out        // path: normalized_vcf
         index    =  TABIX_PV.out.tbi
-        versions =  ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+        versions =  ch_versions    // channel: [ versions.yml ]
 }

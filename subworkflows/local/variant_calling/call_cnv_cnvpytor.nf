@@ -49,6 +49,6 @@ workflow CALL_CNV_CNVPYTOR {
 
     emit:
         candidate_cnvs_vcf              = VIEW.out.vcf              // channel: [ val(meta), path(*.tsv) ]
-        versions                        = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+        versions                        = ch_versions               // channel: [ versions.yml ]
 }
 
