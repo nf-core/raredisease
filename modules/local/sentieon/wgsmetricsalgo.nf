@@ -7,8 +7,8 @@ process SENTIEON_WGSMETRICSALGO {
 
     input:
     tuple val(meta), path(bam), path(bai)
-    path fasta
-    path fai
+    tuple val(meta2), path(fasta)
+    tuple val(meta2), path(fai)
 
     output:
     tuple val(meta), path('*wgs_metrics.txt'), emit: wgs_metrics
