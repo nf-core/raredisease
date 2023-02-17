@@ -25,7 +25,8 @@ workflow ANALYSE_MT {
         shift_mt_fai           // channel: [ genome.fai ]
         shift_mt_intervals     // channel: [ file(control_region_shifted.chrM.interval_list) ]
         shift_mt_backchain     // channel: [ file(shift.back_chain) ]
-        vep_genome
+        vcfanno_resources
+        vcfanno_tomlvep_genome
         vep_cache_version
         vep_cache
         case_info              // channel: [ val(case_info) ]
@@ -80,6 +81,8 @@ workflow ANALYSE_MT {
             genome_dict_meta,
             genome_dict_no_meta,
             genome_fai,
+            vcfanno_resources,
+            vcfanno_tomlvep_genome,
             vep_genome,
             vep_cache_version,
             vep_cache,
