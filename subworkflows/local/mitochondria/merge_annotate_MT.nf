@@ -121,6 +121,7 @@ workflow MERGE_ANNOTATE_MT {
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
         ch_versions = ch_versions.mix(CHANGE_NAME_VCF_MT.out.versions)
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
+        ch_versions = ch_versions.mix(VCFANNO.out.versions)
         ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions)
 
     emit:

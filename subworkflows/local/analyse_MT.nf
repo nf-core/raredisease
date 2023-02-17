@@ -26,7 +26,8 @@ workflow ANALYSE_MT {
         shift_mt_intervals     // channel: [ file(control_region_shifted.chrM.interval_list) ]
         shift_mt_backchain     // channel: [ file(shift.back_chain) ]
         vcfanno_resources
-        vcfanno_tomlvep_genome
+        vcfanno_toml
+        vep_genome
         vep_cache_version
         vep_cache
         case_info              // channel: [ val(case_info) ]
