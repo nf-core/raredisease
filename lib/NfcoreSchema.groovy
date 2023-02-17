@@ -46,6 +46,7 @@ class NfcoreSchema {
             'quiet',
             'syslog',
             'v',
+            'version',
 
             // Options for `nextflow run` command
             'ansi',
