@@ -53,13 +53,13 @@ workflow QC_BAM {
         // COLLECT WGS METRICS
         PICARD_COLLECTWGSMETRICS ( bam_bai, fasta, fai, intervals_wgs )
         PICARD_COLLECTWGSMETRICS_Y ( bam_bai, fasta, fai, intervals_y )
-        
+
         SENTIEON_WGSMETRICS ( bam_bai, fasta, fai)
         SENTIEON_WGSMETRICS_Y ( bam_bai, fasta, fai)
 
         ch_cov   = Channel.empty().mix(PICARD_COLLECTWGSMETRICS.out.metrics, SENTIEON_WGSMETRICS.out.wgs_metrics)
         ch_cov_y = Channel.empty().mix(PICARD_COLLECTWGSMETRICS_Y.out.metrics, SENTIEON_WGSMETRICS_Y.out.wgs_metrics)
-        
+
         ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS.out.versions, SENTIEON_WGSMETRICS.out.versions)
         ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_Y.out.versions, SENTIEON_WGSMETRICS_Y.out.versions)
 
@@ -72,6 +72,5 @@ workflow QC_BAM {
         d4                      = MOSDEPTH.out.per_base_d4                      // channel: [ val(meta), path(*.d4) ]
         cov                     = ch_cov                                        // channel: [ val(meta), path(metrics) ]
         cov_y                   = ch_cov_y                                      // channel: [ val(meta), path(metrics) ]
-
-        versions                = ch_versions.ifEmpty(null)                     // channel: [ versions.yml ]
+        versions                = ch_versions                                   // channel: [ versions.yml ]
 }

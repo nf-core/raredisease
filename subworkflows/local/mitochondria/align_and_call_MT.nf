@@ -81,5 +81,5 @@ workflow ALIGN_AND_CALL_MT {
         filt_sats = GATK4_FILTERMUTECTCALLS_MT.out.stats
         txt       = HAPLOCHECK_MT.out.txt
         html      = HAPLOCHECK_MT.out.html
-        versions  = ch_versions.ifEmpty(null)
+        versions  = ch_versions
 }

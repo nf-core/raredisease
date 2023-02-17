@@ -47,5 +47,5 @@ workflow ALIGN {
         marked_bam    = ch_marked_bam
         marked_bai    = ch_marked_bai
         bam_bai       = ch_bam_bai
-        versions      = ch_versions.ifEmpty(null)
+        versions      = ch_versions
 }
