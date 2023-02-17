@@ -15,7 +15,7 @@ include { TABIX_TABIX as TABIX_TABIX_MT3                         } from '../../.
 include { ENSEMBLVEP as ENSEMBLVEP_MT                            } from '../../../modules/local/ensemblvep/main'
 include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT          } from '../../../modules/nf-core/haplogrep2/classify/main'
 include { VCFANNO                                                } from '../../../modules/nf-core/vcfanno/main'
-include { TABIX_TABIX as TABIX_TABIX_MT4                         } from '../../../modules/nf-core/tabix/tabix/main'
+include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO                  } from '../../../modules/nf-core/tabix/bgziptabix/main'
 
 workflow MERGE_ANNOTATE_MT {
     take:
@@ -109,7 +109,7 @@ workflow MERGE_ANNOTATE_MT {
         TABIX_TABIX_MT3(ENSEMBLVEP_MT.out.vcf_gz)
         ch_in_vcfanno = ENSEMBLVEP_MT.out.vcf_gz.join(TABIX_TABIX_MT3.out.tbi, by: [0])
         VCFANNO(ch_in_vcfanno, vcfanno_toml, [], vcfanno_resources)
-        TABIX_TABIX_MT4(VCFANNO.out.vcf)
+        ZIP_TABIX_VCFANNO(VCFANNO.out.vcf)
 
         // Running haplogrep2
         HAPLOGREP2_CLASSIFY_MT(ch_in_vep, "vcf.gz")
@@ -125,9 +125,8 @@ workflow MERGE_ANNOTATE_MT {
         ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions)
 
     emit:
-        haplog   = HAPLOGREP2_CLASSIFY_MT.out.txt
-        vcf      = VCFANNO.out.vcf
-        tbi      = TABIX_TABIX_MT4.out.tbi
-        report   = ENSEMBLVEP_MT.out.report
-        versions = ch_versions // channel: [ versions.yml ]
+        haplog     = HAPLOGREP2_CLASSIFY_MT.out.txt
+        vcf_gz_tbi = ZIP_TABIX_VCFANNO.out.gz_tbi
+        report     = ENSEMBLVEP_MT.out.report
+        versions   = ch_versions // channel: [ versions.yml ]
 }
