@@ -110,5 +110,5 @@ workflow ANNOTATE_SNVS {
     emit:
         vcf_ann       = BCFTOOLS_CONCAT.out.vcf
         tbi           = TABIX_BCFTOOLS_CONCAT.out.tbi
-        versions      = ch_verions
+        versions      = ch_versions
 }
