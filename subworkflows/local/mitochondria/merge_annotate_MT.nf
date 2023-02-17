@@ -54,11 +54,9 @@ workflow MERGE_ANNOTATE_MT {
         SPLIT_MULTIALLELICS_MT.out.vcf.join(TABIX_TABIX_MT.out.tbi).set { ch_in_remdup }
         REMOVE_DUPLICATES_MT(ch_in_remdup, genome_fasta)
 
-        VCFANNO(REMOVE_DUPLICATES_MT.out.vcf, vcfanno_toml, [], vcfanno_resources)
+        TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
 
-        TABIX_TABIX_MT2(VCFANNO.out.vcf)
-
-        VCFANNO.out.vcf
+        REMOVE_DUPLICATES_MT.out.vcf
             .collect{it[1]}
             .ifEmpty([])
             .toList()
@@ -109,6 +107,12 @@ workflow MERGE_ANNOTATE_MT {
 
         // Running haplogrep2
         TABIX_TABIX_MT3(ENSEMBLVEP_MT.out.vcf_gz)
+
+        ch_in_vcfanno = ENSEMBLVEP_MT.out.vcf_gz.join(TABIX_TABIX_MT3.out.tbi, by: [0])
+        ch_in_vcfanno.view()
+        VCFANNO(ch_in_vcfanno, vcfanno_toml, [], vcfanno_resources)
+
+
         HAPLOGREP2_CLASSIFY_MT(ch_in_vep, "vcf.gz")
 
         ch_versions = ch_versions.mix(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.versions.first())
