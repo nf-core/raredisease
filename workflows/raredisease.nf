@@ -285,7 +285,7 @@ workflow RAREDISEASE {
         ch_intervals_y,
         params.aligner
     )
-    ch_versions = ch_versions.mix(QC_BAM.out.versions.ifEmpty(null))
+    ch_versions = ch_versions.mix(QC_BAM.out.versions)
 
     // EXPANSIONHUNTER AND STRANGER
     CALL_REPEAT_EXPANSIONS (
@@ -293,7 +293,7 @@ workflow RAREDISEASE {
         ch_genome_fasta_no_meta,
         ch_variant_catalog
     )
-    ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions.ifEmpty(null))
+    ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
 
     // STEP 2: VARIANT CALLING
     CALL_SNV (
@@ -336,7 +336,7 @@ workflow RAREDISEASE {
             CHECK_INPUT.out.case_info,
             ch_sequence_dictionary_no_meta
         )
-        ch_versions = ch_versions.mix(GENS.out.versions.ifEmpty(null))
+        ch_versions = ch_versions.mix(GENS.out.versions)
     }
 
     if (params.annotate_sv_switch) {

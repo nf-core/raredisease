@@ -85,5 +85,5 @@ workflow ALIGN_SENTIEON {
         gc_summary             = SENTIEON_DATAMETRICS.out.gc_summary.ifEmpty(null)
         aln_metrics            = SENTIEON_DATAMETRICS.out.aln_metrics.ifEmpty(null)
         is_metrics             = SENTIEON_DATAMETRICS.out.is_metrics.ifEmpty(null)
-        versions               = ch_versions.ifEmpty(null)
+        versions               = ch_versions
 }
