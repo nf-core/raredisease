@@ -22,5 +22,5 @@ workflow ANNOTATE_CSQ_PLI {
 
 	emit:
 		vcf_ann  = ADD_MOST_SEVERE_PLI.out.vcf
-        versions = ch_versions.ifEmpty(null)     // channel: [ versions.yml ]
+        versions = ch_versions
 }

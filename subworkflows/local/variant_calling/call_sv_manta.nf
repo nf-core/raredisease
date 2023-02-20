@@ -50,5 +50,5 @@ workflow CALL_SV_MANTA {
         candidate_sv_vcf_tbi            = MANTA.out.candidate_sv_vcf_tbi
         diploid_sv_vcf                  = MANTA.out.diploid_sv_vcf
         diploid_sv_vcf_tbi              = MANTA.out.diploid_sv_vcf_tbi
-        versions                        = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+        versions                        = ch_versions
 }
