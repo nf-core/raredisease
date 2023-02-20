@@ -129,9 +129,9 @@ workflow MERGE_ANNOTATE_MT {
         ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions)
 
     emit:
-        haplog     = HAPLOGREP2_CLASSIFY_MT.out.txt
-        vcf        = ch_vcf_out
-        tbi        = ch_tbi_out
-        report     = ENSEMBLVEP_MT.out.report
-        versions   = ch_versions // channel: [ versions.yml ]
+        haplog    = HAPLOGREP2_CLASSIFY_MT.out.txt
+        vcf       = ch_vcf_out
+        tbi       = ch_tbi_out
+        report    = ENSEMBLVEP_MT.out.report
+        versions  = ch_versions // channel: [ versions.yml ]
 }
