@@ -57,5 +57,5 @@ workflow CALL_SNV_DEEPVARIANT {
     emit:
         vcf         = REMOVE_DUPLICATES_GL.out.vcf
         tabix       = TABIX_GL.out.tbi
-        versions    = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+        versions    = ch_versions
 }

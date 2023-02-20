@@ -33,5 +33,5 @@ workflow RANK_VARIANTS {
 
     emit:
         vcf         = GENMOD_COMPOUND.out.vcf
-        versions    = ch_versions.ifEmpty(null)
+        versions    = ch_versions
 }

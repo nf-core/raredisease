@@ -82,5 +82,5 @@ workflow CALL_SNV_SENTIEON {
 	emit:
 		vcf		 = REMOVE_DUPLICATES_SEN.out.vcf
         tabix    = TABIX_SEN.out.tbi
-        versions = ch_versions.ifEmpty(null)     // channel: [ versions.yml ]
+        versions = ch_versions
 }
