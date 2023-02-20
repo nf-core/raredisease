@@ -113,9 +113,8 @@ workflow MERGE_ANNOTATE_MT {
 
         // Prepare output
         ch_vcf_out = ZIP_TABIX_VCFANNO.out.gz_tbi.map{meta, vcf, tbi -> return [meta, vcf] }
-        ch_vcf_out.view()
         ch_tbi_out = ZIP_TABIX_VCFANNO.out.gz_tbi.map{meta, vcf, tbi -> return [meta, tbi] }
-        ch_tbi_out.view()
+        
         // Running haplogrep2
         HAPLOGREP2_CLASSIFY_MT(ch_in_vep, "vcf.gz")
 
