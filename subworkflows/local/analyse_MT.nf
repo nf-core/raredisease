@@ -97,7 +97,8 @@ workflow ANALYSE_MT {
         ch_versions = ch_versions.mix(MERGE_ANNOTATE_MT.out.versions)
 
     emit:
-        vcf          = MERGE_ANNOTATE_MT.out.vcf_gz_tbi
+        vcf          = MERGE_ANNOTATE_MT.out.vcf
+        tbi          = MERGE_ANNOTATE_MT.out.tbi
         stats        = ALIGN_AND_CALL_MT.out.stats
         filt_sats    = ALIGN_AND_CALL_MT.out.filt_sats
         stats_sh     = ALIGN_AND_CALL_MT_SHIFT.out.stats
