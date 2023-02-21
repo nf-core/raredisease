@@ -41,8 +41,8 @@ process SMNCOPYNUMBERCALLER {
     stub:
     """
     mkdir out
-    touch out/$prefix.tsv
-    touch out/$prefix.json
+    touch out/smnstub.tsv
+    touch out/smnstub.json
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
