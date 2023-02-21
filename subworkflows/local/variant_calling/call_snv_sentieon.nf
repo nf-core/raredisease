@@ -27,25 +27,16 @@ workflow CALL_SNV_SENTIEON {
 		ch_versions = Channel.empty()
 
         SENTIEON_DNASCOPE ( input, fasta, fai, dbsnp, dbsnp_index, call_interval, ml_model )
-        ch_vcf      = SENTIEON_DNASCOPE.out.vcf
-        ch_index    = SENTIEON_DNASCOPE.out.vcf_index
 
-        ch_vcf_idx  = ch_vcf.join( ch_index )
+        SENTIEON_DNAMODELAPPLY ( SENTIEON_DNASCOPE.out.vcf_index, fasta, fai, ml_model )
 
-        SENTIEON_DNAMODELAPPLY ( ch_vcf_idx, fasta, fai, ml_model )
+        BCF_FILTER_ONE (SENTIEON_DNAMODELAPPLY.out.vcf )
 
-        if (params.ml_model) {
-            ch_vcf      = SENTIEON_DNAMODELAPPLY.out.vcf
-            ch_index    = SENTIEON_DNAMODELAPPLY.out.vcf_index
-        }
-
-        BCF_FILTER_ONE (ch_vcf )
         BCF_FILTER_TWO ( BCF_FILTER_ONE.out.vcf )
-        ch_vcf = BCF_FILTER_TWO.out.vcf
-        TABIX_BCFTOOLS ( ch_vcf )
-        ch_index = TABIX_BCFTOOLS.out.tbi
 
-        ch_vcf.join(ch_index)
+        TABIX_BCFTOOLS ( BCF_FILTER_TWO.out.vcf )
+
+        BCF_FILTER_TWO.out.vcf.join(TABIX_BCFTOOLS.out.tbi)
             .map { meta,vcf,tbi -> return [vcf,tbi] }
             .set { ch_vcf_idx }
 
@@ -59,16 +50,21 @@ workflow CALL_SNV_SENTIEON {
             .set{ ch_vcf_idx_merge_in }
 
         BCFTOOLS_MERGE(ch_vcf_idx_merge_in.multiple,[],fasta,fai)
+
         ch_split_multi_in = BCFTOOLS_MERGE.out.merged_variants
                     .map{meta, bcf ->
                         return [meta, bcf, []]}
+
         ch_vcf_idx_case =  ch_vcf_idx_merge_in.single.mix(ch_split_multi_in)
+
         SPLIT_MULTIALLELICS_SEN(ch_vcf_idx_case, fasta)
 
         ch_remove_dup_in = SPLIT_MULTIALLELICS_SEN.out.vcf
                             .map{meta, vcf ->
                                     return [meta, vcf, []]}
+
         REMOVE_DUPLICATES_SEN(ch_remove_dup_in, fasta)
+
         TABIX_SEN(REMOVE_DUPLICATES_SEN.out.vcf)
 
 		ch_versions = ch_versions.mix(SENTIEON_DNASCOPE.out.versions.first())

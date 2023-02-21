@@ -10,9 +10,10 @@ process SENTIEON_DNAMODELAPPLY {
     path ml_model
 
     output:
-    tuple val(meta), path("*_dnascope_ml.vcf.gz")     , emit: vcf
-    tuple val(meta), path("*_dnascope_ml.vcf.gz.tbi") , emit: vcf_index
-    path "versions.yml"                               , emit: versions
+    tuple val(meta), path("*.vcf.gz")                       , emit: vcf
+    tuple val(meta), path("*.vcf.gz.tbi")                   , emit: index
+    tuple val(meta), path("*.vcf.gz"), path("*.vcf.gz.tbi") , emit: vcf_index
+    path "versions.yml"                                     , emit: versions
 
     when:
     task.ext.when == null || task.ext.when

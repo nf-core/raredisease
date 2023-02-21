@@ -134,6 +134,10 @@ workflow RAREDISEASE {
         exit 1, 'Input samplesheet not specified!'
     }
 
+    if (params.variant_caller.equals("sentieon") && !params.ml_model) {
+        exit 1, 'Machine learning model not specified!'
+    }
+
     // Initialize all file channels including unprocessed vcf, bed and tab files
     ch_call_interval                  = params.call_interval                  ? Channel.fromPath(params.call_interval).collect()
                                                                               : Channel.value([])
