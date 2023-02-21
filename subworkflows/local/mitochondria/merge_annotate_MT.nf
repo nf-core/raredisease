@@ -8,7 +8,6 @@ include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_MT                } from '../../.
 include { TABIX_TABIX as TABIX_TABIX_MT                          } from '../../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_MT                  } from '../../../modules/nf-core/bcftools/norm/main'
 include { TABIX_TABIX as TABIX_TABIX_MT2                         } from '../../../modules/nf-core/tabix/tabix/main'
-include { CHANGE_NAME as CHANGE_NAME_VCF_MT                      } from '../../../modules/local/change_name'
 include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                    } from '../../../modules/nf-core/bcftools/merge/main'
 include { HMTNOTE as HMTNOTE_MT                                  } from '../../../modules/nf-core/hmtnote/main'
 include { TABIX_TABIX as TABIX_TABIX_MT3                         } from '../../../modules/nf-core/tabix/tabix/main'
@@ -87,10 +86,7 @@ workflow MERGE_ANNOTATE_MT {
             genome_fai)
         ch_merged_vcf = BCFTOOLS_MERGE_MT.out.merged_variants
 
-        CHANGE_NAME_VCF_MT(ch_case_vcf.single)
-        ch_vcf_changed_name = CHANGE_NAME_VCF_MT.out.file
-
-        ch_in_vep = ch_merged_vcf.mix(ch_vcf_changed_name)
+        ch_in_vep = ch_merged_vcf.mix(ch_case_vcf.single)
 
         // Annotating with Hmtnote
         //HMTNOTE_MT(ch_in_vep)
@@ -123,7 +119,6 @@ workflow MERGE_ANNOTATE_MT {
         ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_MT.out.versions.first())
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
-        ch_versions = ch_versions.mix(CHANGE_NAME_VCF_MT.out.versions)
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
         ch_versions = ch_versions.mix(VCFANNO_MT.out.versions)
         ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions)
