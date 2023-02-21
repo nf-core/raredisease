@@ -90,7 +90,7 @@ def parse_args(argv=None):
     """Define and immediately parse command line arguments."""
     parser = argparse.ArgumentParser(
         description="Annotate vcf with the most severe pli field.",
-        epilog="Example: python vcfparser.py --file_in vep.vcf --file_out vep.most_severe_pli.vcf --pli pli_per_gene.txt",
+        epilog="Example: python vcfparser.py --file_in vep.vcf --file_out vep.most_severe_pli.vcf",
     )
     parser.add_argument(
         "--file_in",
