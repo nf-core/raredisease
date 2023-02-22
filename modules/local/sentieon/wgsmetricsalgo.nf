@@ -9,7 +9,6 @@ process SENTIEON_WGSMETRICSALGO {
     tuple val(meta), path(bam), path(bai)
     tuple val(meta2), path(fasta)
     tuple val(meta2), path(fai)
-    path intervals_list
 
     output:
     tuple val(meta), path('*wgs_metrics.txt'), emit: wgs_metrics
