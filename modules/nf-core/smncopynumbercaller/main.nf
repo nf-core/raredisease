@@ -46,7 +46,7 @@ process SMNCOPYNUMBERCALLER {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        SMNCopyNumberCaller: $"1.1.2"
+        SMNCopyNumberCaller: "1.1.2"
     END_VERSIONS
     """
 }
