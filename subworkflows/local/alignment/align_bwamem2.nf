@@ -65,5 +65,5 @@ workflow ALIGN_BWAMEM2 {
         metrics                = MARKDUPLICATES.out.metrics
         marked_bam             = MARKDUPLICATES.out.bam
         marked_bai             = SAMTOOLS_INDEX_MARKDUP.out.bai
-        versions               = ch_versions.ifEmpty(null)
+        versions               = ch_versions
 }

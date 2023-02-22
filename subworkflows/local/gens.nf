@@ -34,5 +34,5 @@ workflow GENS {
     emit:
         gens_cov_bed_gz = GENS_GENERATE.out.cov
         gens_baf_bed_gz = GENS_GENERATE.out.baf
-        versions        = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+        versions        = ch_versions
 }

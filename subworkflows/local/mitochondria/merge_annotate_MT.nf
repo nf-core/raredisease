@@ -8,12 +8,13 @@ include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_MT                } from '../../.
 include { TABIX_TABIX as TABIX_TABIX_MT                          } from '../../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_MT                  } from '../../../modules/nf-core/bcftools/norm/main'
 include { TABIX_TABIX as TABIX_TABIX_MT2                         } from '../../../modules/nf-core/tabix/tabix/main'
-include { CHANGE_NAME as CHANGE_NAME_VCF_MT                      } from '../../../modules/local/change_name'
 include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                    } from '../../../modules/nf-core/bcftools/merge/main'
 include { HMTNOTE as HMTNOTE_MT                                  } from '../../../modules/nf-core/hmtnote/main'
 include { TABIX_TABIX as TABIX_TABIX_MT3                         } from '../../../modules/nf-core/tabix/tabix/main'
 include { ENSEMBLVEP as ENSEMBLVEP_MT                            } from '../../../modules/local/ensemblvep/main'
 include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT          } from '../../../modules/nf-core/haplogrep2/classify/main'
+include { VCFANNO as VCFANNO_MT                                  } from '../../../modules/nf-core/vcfanno/main'
+include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO                  } from '../../../modules/nf-core/tabix/bgziptabix/main'
 
 workflow MERGE_ANNOTATE_MT {
     take:
@@ -23,6 +24,8 @@ workflow MERGE_ANNOTATE_MT {
         genome_dict_meta    // channel: [ genome.dict ]
         genome_dict_no_meta // channel: [ genome.dict ]
         genome_fai          // channel: [ genome.fai ]
+        vcfanno_resources
+        vcfanno_toml
         vep_genome
         vep_cache_version
         vep_cache
@@ -83,10 +86,7 @@ workflow MERGE_ANNOTATE_MT {
             genome_fai)
         ch_merged_vcf = BCFTOOLS_MERGE_MT.out.merged_variants
 
-        CHANGE_NAME_VCF_MT(ch_case_vcf.single)
-        ch_vcf_changed_name = CHANGE_NAME_VCF_MT.out.file
-
-        ch_in_vep = ch_merged_vcf.mix(ch_vcf_changed_name)
+        ch_in_vep = ch_merged_vcf.mix(ch_case_vcf.single)
 
         // Annotating with Hmtnote
         //HMTNOTE_MT(ch_in_vep)
@@ -101,8 +101,17 @@ workflow MERGE_ANNOTATE_MT {
             genome_fasta,
             [])
 
-        // Running haplogrep2
+        // Running vcfanno
         TABIX_TABIX_MT3(ENSEMBLVEP_MT.out.vcf_gz)
+        ch_in_vcfanno = ENSEMBLVEP_MT.out.vcf_gz.join(TABIX_TABIX_MT3.out.tbi, by: [0])
+        VCFANNO_MT(ch_in_vcfanno, vcfanno_toml, [], vcfanno_resources)
+        ZIP_TABIX_VCFANNO(VCFANNO_MT.out.vcf)
+
+        // Prepare output
+        ch_vcf_out = ZIP_TABIX_VCFANNO.out.gz_tbi.map{meta, vcf, tbi -> return [meta, vcf] }
+        ch_tbi_out = ZIP_TABIX_VCFANNO.out.gz_tbi.map{meta, vcf, tbi -> return [meta, tbi] }
+        
+        // Running haplogrep2
         HAPLOGREP2_CLASSIFY_MT(ch_in_vep, "vcf.gz")
 
         ch_versions = ch_versions.mix(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.versions.first())
@@ -110,14 +119,14 @@ workflow MERGE_ANNOTATE_MT {
         ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_MT.out.versions.first())
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
-        ch_versions = ch_versions.mix(CHANGE_NAME_VCF_MT.out.versions)
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
+        ch_versions = ch_versions.mix(VCFANNO_MT.out.versions)
         ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions)
 
     emit:
-        haplog   = HAPLOGREP2_CLASSIFY_MT.out.txt
-        vcf      = ENSEMBLVEP_MT.out.vcf_gz
-        tbi      = TABIX_TABIX_MT3.out.tbi
-        report   = ENSEMBLVEP_MT.out.report
-        versions = ch_versions // channel: [ versions.yml ]
+        haplog    = HAPLOGREP2_CLASSIFY_MT.out.txt
+        vcf       = ch_vcf_out
+        tbi       = ch_tbi_out
+        report    = ENSEMBLVEP_MT.out.report
+        versions  = ch_versions // channel: [ versions.yml ]
 }

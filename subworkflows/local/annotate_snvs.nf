@@ -10,7 +10,7 @@ include { RHOCALL_ANNOTATE                        } from '../../modules/nf-core/
 include { ENSEMBLVEP as ENSEMBLVEP_SNV            } from '../../modules/local/ensemblvep/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL   } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO   } from '../../modules/nf-core/tabix/bgziptabix/main'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_VEP       } from '../../modules/nf-core/tabix/bgziptabix/main'
+include { TABIX_TABIX as TABIX_VEP                } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_BCFTOOLS_CONCAT    } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_BCFTOOLS_VIEW      } from '../../modules/nf-core/tabix/tabix/main'
 include { GATK4_SELECTVARIANTS                    } from '../../modules/nf-core/gatk4/selectvariants/main'
@@ -79,13 +79,14 @@ workflow ANNOTATE_SNVS {
             []
         )
 
-        ZIP_TABIX_VEP (ENSEMBLVEP_SNV.out.vcf)
+        TABIX_VEP (ENSEMBLVEP_SNV.out.vcf_gz)
 
-        ZIP_TABIX_VEP.out.gz_tbi
+        ENSEMBLVEP_SNV.out.vcf_gz
+            .join(TABIX_VEP.out.tbi)
             .groupTuple()
             .map { meta, vcfs, tbis ->
-                def sortedvcfs = vcfs.sort()
-                def sortedtbis = tbis.sort()
+                def sortedvcfs = vcfs.sort { it.baseName }
+                def sortedtbis = tbis.sort { it.baseName }
                 return [ meta, sortedvcfs, sortedtbis ]
             }
             .set { ch_vep_ann }
@@ -103,12 +104,12 @@ workflow ANNOTATE_SNVS {
         ch_versions = ch_versions.mix(TABIX_BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions.first())
         ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions.first())
-        ch_versions = ch_versions.mix(ZIP_TABIX_VEP.out.versions.first())
+        ch_versions = ch_versions.mix(TABIX_VEP.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
         ch_versions = ch_versions.mix(TABIX_BCFTOOLS_CONCAT.out.versions)
 
     emit:
         vcf_ann       = BCFTOOLS_CONCAT.out.vcf
         tbi           = TABIX_BCFTOOLS_CONCAT.out.tbi
-        versions      = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
+        versions      = ch_versions
 }
