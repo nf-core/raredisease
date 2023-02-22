@@ -18,10 +18,9 @@ process SENTIEON_WGSMETRICSALGO {
     task.ext.when == null || task.ext.when
 
     script:
-    def args     = task.ext.args ?: ''
-    def input    = bam.sort().collect{"-i $it"}.join(' ')
-    def prefix   = task.ext.prefix ?: "${meta.id}"
-    def interval = intervals_list ? "--interval ${intervals_list}" : ""
+    def args   = task.ext.args ?: ''
+    def input  = bam.sort().collect{"-i $it"}.join(' ')
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
     if [ \${SENTIEON_LICENSE_BASE64:-"unset"} != "unset" ]; then
         echo "Initializing SENTIEON_LICENSE env variable"
@@ -33,7 +32,6 @@ process SENTIEON_WGSMETRICSALGO {
         -t $task.cpus \\
         -r $fasta \\
         $input \\
-        $interval \\
         $args \\
         --algo WgsMetricsAlgo ${prefix}_wgs_metrics.txt
 
