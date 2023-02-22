@@ -54,8 +54,8 @@ workflow QC_BAM {
         PICARD_COLLECTWGSMETRICS ( bam_bai, fasta, fai, intervals_wgs )
         PICARD_COLLECTWGSMETRICS_Y ( bam_bai, fasta, fai, intervals_y )
 
-        SENTIEON_WGSMETRICS ( bam_bai, fasta, fai, intervals_wgs )
-        SENTIEON_WGSMETRICS_Y ( bam_bai, fasta, fai, intervals_y )
+        SENTIEON_WGSMETRICS ( bam_bai, fasta, fai)
+        SENTIEON_WGSMETRICS_Y ( bam_bai, fasta, fai)
 
         ch_cov   = Channel.empty().mix(PICARD_COLLECTWGSMETRICS.out.metrics, SENTIEON_WGSMETRICS.out.wgs_metrics)
         ch_cov_y = Channel.empty().mix(PICARD_COLLECTWGSMETRICS_Y.out.metrics, SENTIEON_WGSMETRICS_Y.out.wgs_metrics)
