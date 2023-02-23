@@ -89,6 +89,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custo
 include { FASTQC                                } from '../modules/nf-core/fastqc/main'
 include { GATK4_SELECTVARIANTS                  } from '../modules/nf-core/gatk4/selectvariants/main'
 include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
+include { SMNCOPYNUMBERCALLER                   } from '../modules/nf-core/smncopynumbercaller/main'
 
 //
 // SUBWORKFLOWS
@@ -294,6 +295,27 @@ workflow RAREDISEASE {
         ch_variant_catalog
     )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
+
+    // STEP 1.7: SMNCOPYNUMBERCALLER
+    ch_mapped.bam_bai
+        .collect{it[1]}
+        .toList()
+        .set { ch_bam_list }
+
+    ch_mapped.bam_bai
+        .collect{it[2]}
+        .toList()
+        .set { ch_bai_list }
+
+    CHECK_INPUT.out.case_info
+        .combine(ch_bam_list)
+        .combine(ch_bai_list)
+        .set { ch_bams_bais }
+
+    SMNCOPYNUMBERCALLER (
+        ch_bams_bais
+    )
+    ch_versions = ch_versions.mix(SMNCOPYNUMBERCALLER.out.versions)
 
     // STEP 2: VARIANT CALLING
     CALL_SNV (

@@ -290,6 +290,11 @@
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
                         "installed_by": ["modules"]
                     },
+                    "smncopynumbercaller": {
+                        "branch": "master",
+                        "git_sha": "e70433b04bef836b22bbed5a1e6e4e95aeec09fe",
+                        "installed_by": ["modules"]
+                    },
                     "stranger": {
                         "branch": "master",
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
