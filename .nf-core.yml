@@ -1,4 +1,6 @@
 lint:
+  files_exist:
+    - conf/modules.config
   files_unchanged:
     - .github/CONTRIBUTING.md
     - .github/ISSUE_TEMPLATE/bug_report.yml
