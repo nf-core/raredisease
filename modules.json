@@ -292,7 +292,8 @@
                     },
                     "smncopynumbercaller": {
                         "branch": "master",
-                        "git_sha": "e70433b04bef836b22bbed5a1e6e4e95aeec09fe"
+                        "git_sha": "e70433b04bef836b22bbed5a1e6e4e95aeec09fe",
+                        "installed_by": ["modules"]
                     },
                     "stranger": {
                         "branch": "master",
