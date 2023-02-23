@@ -19,9 +19,9 @@ process SENTIEON_WGSMETRICSALGO {
     task.ext.when == null || task.ext.when
 
     script:
-    def args   = task.ext.args ?: ''
-    def input  = bam.sort().collect{"-i $it"}.join(' ')
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def args     = task.ext.args ?: ''
+    def input    = bam.sort().collect{"-i $it"}.join(' ')
+    def prefix   = task.ext.prefix ?: "${meta.id}"
     def interval = intervals_list ? "--interval ${intervals_list}" : ""
     """
     if [ \${SENTIEON_LICENSE_BASE64:-"unset"} != "unset" ]; then
