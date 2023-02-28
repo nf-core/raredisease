@@ -17,6 +17,7 @@
   > Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016 Oct 1;32(19):3047-8. doi: 10.1093/bioinformatics/btw354. Epub 2016 Jun 16. PubMed PMID: 27312411; PubMed Central PMCID: PMC5039924.
 
 - [SMNCopyNumberCaller](https://www.nature.com/articles/s41436-020-0754-0)
+
   > Chen X, Sanchis-Juan A, French CE, Connel AJ, Delon I, Kingsbury Z, Chawla A, Halpern AL, Taft RJ, NIHR BioResource, Bentley DR, Butchbach MER, Raymond FL, Eberle MA. Spinal muscular atrophy diagnosis and carrier screening from genome sequencing data. Genet Med. February 2020:1-9. doi:10.1038/s41436-020-0754-0
 
 - [ExpansionHunter](https://academic.oup.com/bioinformatics/article/doi/10.1093/bioinformatics/btz431/5499079)
