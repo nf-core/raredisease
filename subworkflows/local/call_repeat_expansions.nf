@@ -43,7 +43,6 @@ workflow CALL_REPEAT_EXPANSIONS {
             RENAMESAMPLE_EXP.out.vcf.join(TABIX_EXP_RENAME.out.tbi),
             fasta
         )
-        //TABIX_EXP_SPLIT ( SPLIT_MULTIALLELICS_EXP.out.vcf )
 
         // Merge indiviual repeat expansions
         SPLIT_MULTIALLELICS_EXP.out.vcf
