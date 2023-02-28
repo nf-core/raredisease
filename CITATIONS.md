@@ -19,6 +19,9 @@
 - [SMNCopyNumberCaller](https://www.nature.com/articles/s41436-020-0754-0)
   > Chen X, Sanchis-Juan A, French CE, Connel AJ, Delon I, Kingsbury Z, Chawla A, Halpern AL, Taft RJ, NIHR BioResource, Bentley DR, Butchbach MER, Raymond FL, Eberle MA. Spinal muscular atrophy diagnosis and carrier screening from genome sequencing data. Genet Med. February 2020:1-9. doi:10.1038/s41436-020-0754-0
 
+- [ExpansionHunter](https://academic.oup.com/bioinformatics/article/doi/10.1093/bioinformatics/btz431/5499079)
+  > Egor Dolzhenko, Viraj Deshpande, Felix Schlesinger, Peter Krusche, Roman Petrovski, Sai Chen, Dorothea Emig-Agius, Andrew Gross, Giuseppe Narzisi, Brett Bowman, Konrad Scheffler, Joke J F A van Vugt, Courtney French, Alba Sanchis-Juan, Kristina Ibáñez, Arianna Tucci, Bryan R Lajoie, Jan H Veldink, F Lucy Raymond, Ryan J Taft, David R Bentley, Michael A Eberle, ExpansionHunter: a sequence-graph-based tool to analyze variation in short tandem repeat regions, Bioinformatics, Volume 35, Issue 22, November 2019, Pages 4754–4756, https://doi.org/10.1093/bioinformatics/btz431
+
 ## Software packaging/containerisation tools
 
 - [Anaconda](https://anaconda.com)

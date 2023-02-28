@@ -25,6 +25,11 @@
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
                         "installed_by": ["modules"]
                     },
+                    "bcftools/reheader": {
+                        "branch": "master",
+                        "git_sha": "bd4b60c7f9358c7146ac198fd0c4ae6355ddd086",
+                        "installed_by": ["modules"]
+                    },
                     "bcftools/roh": {
                         "branch": "master",
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
@@ -246,6 +251,11 @@
                         "installed_by": ["modules"]
                     },
                     "picard/markduplicates": {
+                        "branch": "master",
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
+                    },
+                    "picard/renamesampleinvcf": {
                         "branch": "master",
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
                         "installed_by": ["modules"]
