@@ -295,8 +295,10 @@ workflow RAREDISEASE {
     // EXPANSIONHUNTER AND STRANGER
     CALL_REPEAT_EXPANSIONS (
         ch_mapped.bam_bai,
+        ch_variant_catalog,
+        CHECK_INPUT.out.case_info,
         ch_genome_fasta_no_meta,
-        ch_variant_catalog
+        ch_genome_fai_no_meta
     )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
 
