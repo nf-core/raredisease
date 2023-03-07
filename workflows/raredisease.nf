@@ -528,14 +528,15 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(PICARD_COLLECTMULTIPLEMETRICS.out.metrics.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(PICARD_COLLECTHSMETRICS.out.metrics.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QUALIMAP_BAMQC.out.results.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(MOSDEPTH.out.per_base_d4.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(TIDDIT_COV.out.wig.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(UCSC_WIGTOBIGWIG.out.bw.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_cov.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_cov_y.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.multiple_metrics.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.hs_metrics.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.results.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.tiddit_wig.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.bigwig.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.bw.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.d4.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov_y.collect().ifEmpty([]))
 
 
     MULTIQC (
