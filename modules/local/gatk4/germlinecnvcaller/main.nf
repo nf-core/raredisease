@@ -3,9 +3,9 @@ process GATK4_GERMLINECNVCALLER {
     label 'process_medium'
 
     if(params.enable_conda){
-        error "Conda environments cannot be used for GATK4/DetermineGermlineContigPloidy at the moment. Please use docker or singularity containers."
+        error "Conda environments cannot be used for GATK4/GermlineCNVCaller at the moment. Please use docker or singularity containers."
     }
-    container "broadinstitute/gatk:4.3.0.0"
+    container "broadinstitute/gatk-nightly:2023-03-08-4.3.0.0-47-g4ba4ab590-NIGHTLY-SNAPSHOT"
 
     input:
     tuple val(meta), path(tsv)
@@ -42,7 +42,18 @@ process GATK4_GERMLINECNVCALLER {
         $args \\
         $intervals_command \\
         $model_command
-    tar -czvf cnv_calls.tar.gz cnv_calls
+    tar -czvf ${prefix}.tar.gz cnv_calls
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        gatk4: \$(echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//')
+    END_VERSIONS
+    """
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}.tar.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
