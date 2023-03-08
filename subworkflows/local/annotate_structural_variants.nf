@@ -32,42 +32,37 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             }
             .set { ch_svdb_dbs }
 
-        SVDB_QUERY(vcf,
+        SVDB_QUERY(
+            vcf,
             ch_svdb_dbs.in_occs.toList(),
             ch_svdb_dbs.in_frqs.toList(),
             ch_svdb_dbs.out_occs.toList(),
             ch_svdb_dbs.out_frqs.toList(),
             ch_svdb_dbs.vcf_dbs.toList()
-            )
-        ch_versions = ch_versions.mix(SVDB_QUERY.out.versions)
-
-        PICARD_SORTVCF(SVDB_QUERY.out.vcf,
-            fasta,
-            seq_dict
         )
-        ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
 
-        PICARD_SORTVCF.out.vcf
-            .map { meta, vcf ->
-                    return [meta,vcf,[]]
-            }
-            .set { ch_sortvcf }
+        PICARD_SORTVCF(SVDB_QUERY.out.vcf, fasta, seq_dict)
 
-        BCFTOOLS_VIEW(ch_sortvcf,[],[],[])
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
+        PICARD_SORTVCF.out.vcf.map { meta, vcf -> return [meta,vcf,[]] }.set { ch_sortvcf }
 
-        ENSEMBLVEP_SV(BCFTOOLS_VIEW.out.vcf,
+        BCFTOOLS_VIEW(ch_sortvcf, [], [], [])
+
+        ENSEMBLVEP_SV(
+            BCFTOOLS_VIEW.out.vcf,
             vep_genome,
             "homo_sapiens",
             vep_cache_version,
             vep_cache,
             fasta,
             []
-            )
+        )
+
+        ch_versions = ch_versions.mix(SVDB_QUERY.out.versions)
+        ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
+        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(ENSEMBLVEP_SV.out.versions)
 
-
     emit:
-        vcf_ann       = ENSEMBLVEP_SV.out.vcf
-        versions      = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
+        vcf_ann       = ENSEMBLVEP_SV.out.vcf_gz
+        versions      = ch_versions
 }

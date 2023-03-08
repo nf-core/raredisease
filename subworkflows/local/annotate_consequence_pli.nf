@@ -13,15 +13,14 @@ workflow ANNOTATE_CSQ_PLI {
 	main:
 		ch_versions = Channel.empty()
 
-        ADD_MOST_SEVERE_CSQ (
-            vcf,
-            variant_consequences
-        )
-        ADD_MOST_SEVERE_PLI (
-            ADD_MOST_SEVERE_CSQ.out.vcf,
-        )
+        ADD_MOST_SEVERE_CSQ (vcf, variant_consequences)
+
+        ADD_MOST_SEVERE_PLI (ADD_MOST_SEVERE_CSQ.out.vcf)
+
+        ch_versions = ch_versions.mix(ADD_MOST_SEVERE_CSQ.out.versions)
+        ch_versions = ch_versions.mix(ADD_MOST_SEVERE_PLI.out.versions)
 
 	emit:
 		vcf_ann  = ADD_MOST_SEVERE_PLI.out.vcf
-        versions = ch_versions.ifEmpty(null)     // channel: [ versions.yml ]
+        versions = ch_versions
 }

@@ -21,17 +21,18 @@ workflow GENS {
     main:
         ch_versions = Channel.empty()
 
-        COLLECTREADCOUNTS ( bam, fasta, fai, seq_dict, interval_list )
-        ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions)
+        COLLECTREADCOUNTS (bam, fasta, fai, seq_dict, interval_list)
 
-        DENOISEREADCOUNTS ( COLLECTREADCOUNTS.out.read_counts, pon )
-        ch_versions = ch_versions.mix(DENOISEREADCOUNTS.out.versions)
+        DENOISEREADCOUNTS (COLLECTREADCOUNTS.out.read_counts, pon)
 
-        GENS_GENERATE ( DENOISEREADCOUNTS.out.standardized_read_counts, vcf.map { meta, vcf -> vcf }, gnomad_pos )
-        ch_versions = ch_versions.mix(GENS_GENERATE.out.versions)
+        GENS_GENERATE (DENOISEREADCOUNTS.out.standardized_read_counts, vcf.map { meta, vcf -> vcf }, gnomad_pos)
+
+        ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions.first())
+        ch_versions = ch_versions.mix(DENOISEREADCOUNTS.out.versions.first())
+        ch_versions = ch_versions.mix(GENS_GENERATE.out.versions.first())
 
     emit:
         gens_cov_bed_gz = GENS_GENERATE.out.cov
         gens_baf_bed_gz = GENS_GENERATE.out.baf
-        versions        = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+        versions        = ch_versions
 }
