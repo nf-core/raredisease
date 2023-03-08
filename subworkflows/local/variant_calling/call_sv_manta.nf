@@ -27,7 +27,7 @@ workflow CALL_SV_MANTA {
                     return [bed_file, index]}
             .set { bed_input }
 
-        if (params.analysis_type == "WGS") {
+        if (params.analysis_type.toUpperCase() == "WGS" ) {
             case_info.combine(bam_file_list)
                 .combine(bai_file_list)
                 .map { it -> it + [ [], [] ] }
@@ -40,6 +40,7 @@ workflow CALL_SV_MANTA {
                 .set { manta_input }
             MANTA ( manta_input, fasta, fai )
         }
+
         ch_versions = MANTA.out.versions
 
     emit:
@@ -49,5 +50,5 @@ workflow CALL_SV_MANTA {
         candidate_sv_vcf_tbi            = MANTA.out.candidate_sv_vcf_tbi
         diploid_sv_vcf                  = MANTA.out.diploid_sv_vcf
         diploid_sv_vcf_tbi              = MANTA.out.diploid_sv_vcf_tbi
-        versions                        = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+        versions                        = ch_versions
 }

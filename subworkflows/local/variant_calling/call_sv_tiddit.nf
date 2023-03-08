@@ -14,7 +14,6 @@ workflow CALL_SV_TIDDIT {
 
     main:
         TIDDIT_SV ( bam, fasta, index )
-        ch_versions = TIDDIT_SV.out.versions
 
         TIDDIT_SV.out
             .vcf
@@ -27,9 +26,11 @@ workflow CALL_SV_TIDDIT {
             .set { merge_input_vcfs }
 
         SVDB_MERGE_TIDDIT ( merge_input_vcfs, [] )
+
+        ch_versions = TIDDIT_SV.out.versions.first()
         ch_versions = ch_versions.mix(SVDB_MERGE_TIDDIT.out.versions)
 
     emit:
         vcf          = SVDB_MERGE_TIDDIT.out.vcf
-        versions     = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+        versions     = ch_versions
 }

@@ -127,6 +127,28 @@
                     "description": "Path to the index file for the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
                 },
+                "intervals_wgs": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.intervals?(_list)?$",
+                    "description": "Path to the interval list of the genome (autosomes, sex chromosomes, and mitochondria).",
+                    "help_text": "Path to the interval list of the genome. This is used to calculate genome-wide coverage statistics."
+                },
+                "intervals_y": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.intervals?(_list)?$",
+                    "description": "Path to the interval list of the Y chromosome.",
+                    "help_text": "Path to the interval list of the Y chromosome. This is used to calculate coverage statistics for the Y chromosome."
+                },
+                "mt_contig_name": {
+                    "type": "string",
+                    "format": "path",
+                    "description": "Name of the mitochondrial contig in the reference fasta file",
+                    "help_text": "Used to extract relevant information from the references to analyse mitochondria"
+                },
                 "mt_intervals": {
                     "type": "string",
                     "format": "path",
@@ -197,6 +219,14 @@
                     "pattern": "^\\S+\\.fn?a(sta)?\\.fai?$",
                     "description": "Path to mitochondrial FASTA genome index file.",
                     "fa_icon": "far fa-file-code"
+                },
+                "mt_bwa_index_shift": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Directory for pre-built bwa index for shifted mitochondrial fasta (used for alignment with sentioen)",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open",
+                    "hidden": true
                 },
                 "mt_bwamem2_index_shift": {
                     "type": "string",
@@ -284,8 +314,8 @@
                 },
                 "vcfanno_resources": {
                     "type": "string",
-                    "description": "Directory path or tar.gz archive that holds resources defined within the vcfanno toml file.",
-                    "help_text": "If no directory path is passed, default configurations will be used according to genome build within the context of the pipeline.",
+                    "description": "Text file containing the absolute paths to resources defined within the vcfanno toml file. One line per resource.",
+                    "help_text": "If no file is passed, default configurations will be used according to genome build within the context of the pipeline.",
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
@@ -295,6 +325,14 @@
                     "pattern": "^\\S+\\.toml$",
                     "help_text": "If no toml is passed, default configurations will be used according to genome build within the context of the pipeline.",
                     "fa_icon": "fas fa-file-csv",
+                    "hidden": true
+                },
+                "vcfanno_lua": {
+                    "type": "string",
+                    "description": "Path to the vcfanno lua file.",
+                    "pattern": "^\\S+\\.lua$",
+                    "help_text": "Custom operations file (lua). For use when the built-in ops don't supply the needed reduction.",
+                    "fa_icon": "fas fa-file-code",
                     "hidden": true
                 },
                 "vep_cache": {
@@ -366,8 +404,14 @@
                 },
                 "annotate_sv_switch": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "Specifies whether or not to run annotate structural variant subworkflow.",
+                    "fa_icon": "fas fa-book"
+                },
+                "dedicated_mt_analysis": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Specifies whether or not to run a separate subworkflow for mitochondrial analysis.",
                     "fa_icon": "fas fa-book"
                 },
                 "gens_switch": {
@@ -375,6 +419,13 @@
                     "default": false,
                     "description": "Specifies whether or not to run gens preprocessing subworkflow.",
                     "fa_icon": "fas fa-book"
+                },
+                "platform": {
+                    "type": "string",
+                    "default": "illumina",
+                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
+                    "fa_icon": "fas fa-book",
+                    "enum": ["illumina"]
                 }
             }
         },
@@ -462,11 +513,11 @@
             "description": "Options used to facilitate the annotation of the variants.",
             "properties": {
                 "vep_cache_version": {
-                    "type": "string",
-                    "default": "104",
+                    "type": "integer",
+                    "default": "107",
                     "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-book",
-                    "enum": ["104", "105", "106", "107"]
+                    "enum": [107]
                 }
             }
         },
@@ -571,6 +622,12 @@
                     "fa_icon": "fas fa-question-circle",
                     "hidden": true
                 },
+                "version": {
+                    "type": "boolean",
+                    "description": "Display version and exit.",
+                    "fa_icon": "fas fa-question-circle",
+                    "hidden": true
+                },
                 "publish_dir_mode": {
                     "type": "string",
                     "default": "copy",
@@ -612,7 +669,7 @@
                     "type": "string",
                     "description": "Incoming hook URL for messaging service",
                     "fa_icon": "fas fa-people-group",
-                    "help_text": "Incoming hook URL for messaging service. Currently, only MS Teams is supported.",
+                    "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
                     "hidden": true
                 },
                 "multiqc_config": {
@@ -652,12 +709,6 @@
                     "description": "Show all params when using `--help`",
                     "hidden": true,
                     "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
-                },
-                "enable_conda": {
-                    "type": "boolean",
-                    "description": "Run this workflow with Conda. You can also use '-profile conda' instead of providing this parameter.",
-                    "hidden": true,
-                    "fa_icon": "fas fa-bacon"
                 }
             }
         }

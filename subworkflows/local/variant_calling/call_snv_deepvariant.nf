@@ -17,43 +17,45 @@ workflow CALL_SNV_DEEPVARIANT {
 
     main:
         ch_versions = Channel.empty()
+
         bam.map { meta, bam, bai ->
                         return [meta, bam, bai, []]
             }
             .set { ch_bam }
 
         DEEPVARIANT ( ch_bam, fasta, fai )
-        DEEPVARIANT.out
-            .gvcf
+        DEEPVARIANT.out.gvcf
             .collect{it[1]}
             .toList()
-            .set { file_list }
-        ch_versions = ch_versions.mix(DEEPVARIANT.out.versions)
+            .collect()
+            .set { ch_file_list }
 
         case_info
-            .combine(file_list)
+            .combine(ch_file_list)
             .set { ch_gvcfs }
 
         GLNEXUS ( ch_gvcfs )
-        ch_versions = ch_versions.mix(GLNEXUS.out.versions)
 
         ch_split_multi_in = GLNEXUS.out.bcf
-                            .map{meta, bcf ->
-                                    return [meta, bcf, []]}
+                            .map{ meta, bcf ->
+                                    return [meta, bcf, []] }
         SPLIT_MULTIALLELICS_GL (ch_split_multi_in, fasta)
-        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_GL.out.versions)
 
         ch_remove_dup_in = SPLIT_MULTIALLELICS_GL.out.vcf
-                            .map{meta, vcf ->
-                                    return [meta, vcf, []]}
+                            .map{ meta, vcf ->
+                                    return [meta, vcf, []] }
         REMOVE_DUPLICATES_GL (ch_remove_dup_in, fasta)
-        ch_versions = ch_versions.mix(REMOVE_DUPLICATES_GL.out.versions)
 
         TABIX_GL (REMOVE_DUPLICATES_GL.out.vcf)
+
+        ch_versions = ch_versions.mix(DEEPVARIANT.out.versions.first())
+        ch_versions = ch_versions.mix(GLNEXUS.out.versions)
+        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_GL.out.versions)
+        ch_versions = ch_versions.mix(REMOVE_DUPLICATES_GL.out.versions)
         ch_versions = ch_versions.mix(TABIX_GL.out.versions)
 
     emit:
         vcf         = REMOVE_DUPLICATES_GL.out.vcf
         tabix       = TABIX_GL.out.tbi
-        versions    = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+        versions    = ch_versions
 }

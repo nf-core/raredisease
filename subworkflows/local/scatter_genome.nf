@@ -17,13 +17,14 @@ workflow SCATTER_GENOME {
         ch_versions = Channel.empty()
 
         BUILD_BED (fai_meta)
-        ch_versions = ch_versions.mix(BUILD_BED.out.versions)
 
         GATK4_SPLITINTERVALS(BUILD_BED.out.bed, fasta_no_meta, fai_no_meta, dict)
+
+        ch_versions = ch_versions.mix(BUILD_BED.out.versions)
         ch_versions = ch_versions.mix(GATK4_SPLITINTERVALS.out.versions)
 
     emit:
         bed             = BUILD_BED.out.bed.collect()
         split_intervals = GATK4_SPLITINTERVALS.out.split_intervals.map { meta, it -> it }.flatten().collate(1)
-        versions        = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
+        versions        = ch_versions
 }

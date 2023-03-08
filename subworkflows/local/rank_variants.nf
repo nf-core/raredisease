@@ -19,15 +19,19 @@ workflow RANK_VARIANTS {
         ch_versions = Channel.empty()
 
         GENMOD_ANNOTATE(vcf)
-        ch_versions = ch_versions.mix(GENMOD_ANNOTATE.out.versions)
+
         GENMOD_MODELS(GENMOD_ANNOTATE.out.vcf, ped, reduced_penetrance)
-        ch_versions = ch_versions.mix(GENMOD_MODELS.out.versions)
+
         GENMOD_SCORE(GENMOD_MODELS.out.vcf, ped, score_config)
-        ch_versions = ch_versions.mix(GENMOD_SCORE.out.versions)
+
         GENMOD_COMPOUND(GENMOD_SCORE.out.vcf)
+
+        ch_versions = ch_versions.mix(GENMOD_ANNOTATE.out.versions)
+        ch_versions = ch_versions.mix(GENMOD_MODELS.out.versions)
+        ch_versions = ch_versions.mix(GENMOD_SCORE.out.versions)
         ch_versions = ch_versions.mix(GENMOD_COMPOUND.out.versions)
 
     emit:
-        vcf                    = GENMOD_COMPOUND.out.vcf
-        versions               = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
+        vcf         = GENMOD_COMPOUND.out.vcf
+        versions    = ch_versions
 }
