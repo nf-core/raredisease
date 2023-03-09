@@ -118,7 +118,7 @@ In nf-core/raredisease, references can be supplied using parameters listed [here
 
 Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools (ex: you can align with either bwamem2 or sentieon, call SNVs with deepvariant or sentieon). You also have the option to turn off parts of the pipeline if you do not want to run them (ex: snv annotation can be turned off by setting `--annotate_snv_switch` flag to false). This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters only used by that tool need not be provided. For example, for SNV calling if you decide to use deepvariant as your variant caller, you do not need to provide the parameter `--ml_model`, as it is only used by sentieon.
 
-nf-core/raredisease consists of several tools used for various purposes. For convienience, we have grouped those tools under the following catergories and tabulated the mandatory and optional parameters for each group below.
+nf-core/raredisease consists of several tools used for various purposes. For convenience, we have grouped those tools under the following catergories and tabulated the mandatory and optional parameters for each group below.
 
 1. Alignment (bwamem2/sentieon)
 2. QC stats the alignment files
