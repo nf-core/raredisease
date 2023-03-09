@@ -4,7 +4,6 @@
 
 Table of contents:
 
-- [nf-core/raredisease: Usage](#nf-core-raredisease--usage)
 - [Introduction](#introduction)
 - [Prerequisites](#prerequisites)
 - [Run nf-core/raredisease with test data](#run-nf-core-raredisease-with-test-data--a-id--testdata----)
@@ -119,7 +118,16 @@ In nf-core/raredisease, references can be supplied using parameters listed [here
 
 Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools (ex: you can align with either bwamem2 or sentieon, call SNVs with deepvariant or sentieon). You also have the option to turn off parts of the pipeline if you do not want to run them (ex: snv annotation can be turned off by setting `--annotate_snv_switch` flag to false). This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters only used by that tool need not be provided. For example, for SNV calling if you decide to use deepvariant as your variant caller, you do not need to provide the parameter `--ml_model`, as it is only used by sentieon.
 
-To help you decide which parameters you need to supply, we have tabulated the mandatory and optional inputs for different features that constitute the pipeline.
+nf-core/raredisease consists of several tools used for various purposes. For convienience, we have grouped those tools under the following catergories and tabulated the mandatory and optional parameters for each group below.
+
+1. Alignment (bwamem2/sentieon)
+2. QC stats the alignment files
+3. Repeat expansions (Expansionshunter & Stranger)
+4. Variant calling - SNV (deepvariant/Sentieon-haplotypecaller)
+5. Variant calling - Structural variants (Tiddit & Manta)
+6. Annotation & ranking - SNV (rohcall, vcfanno, ensemblvep, genmod)
+7. Annotation & ranking - SV (svdb query, ensemblvep, genmod)
+8. Mitochondrial analysis workflow
 
 > Of the features listed below alignment, qc stats, repeat expansions, snv & sv variant calling are always run by default so the mandatory parameters used by those features will always have to be supplied to the pipeline.
 
