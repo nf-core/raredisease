@@ -30,7 +30,12 @@ workflow CHECK_INPUT {
 def create_fastq_channel(LinkedHashMap row) {
     // create meta map
     def meta = [:]
-    meta.id           = row.sample
+    meta.case_id   = row.case_id
+    meta.gender    = row.gender
+    meta.id        = row.sample
+    meta.maternal  = row.maternal_id
+    meta.paternal  = row.paternal_id
+    meta.phenotype = row.phenotype
     meta.single_end   = row.single_end.toBoolean()
     //TODO: think about adding LB and PU, make sure only illumina will be used, ID can also contain a flowcell id
     meta.read_group   =     "\'@RG\\tID:"+ row.fastq_1.split('/')[-1] + "\\tPL:ILLUMINA\\tSM:"+row.sample.split('_')[0]+"\'"
