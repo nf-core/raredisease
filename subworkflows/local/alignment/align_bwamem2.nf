@@ -12,17 +12,17 @@ include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-c
 
 workflow ALIGN_BWAMEM2 {
     take:
-        reads_input // channel: [ val(meta), reads_input ]
-        index       // channel: [ /path/to/bwamem2/index/ ]
-        fasta       // channel: [genome.fasta]
-        fai         // channel: [genome.fai]
-        platform    // params.platform
+        ch_reads_input // channel: [mandatory] [ val(meta), path(reads_input) ]
+        ch_index       // channel: [mandatory] [ path(bwamem2_index) ]
+        ch_fasta       // channel: [mandatory] [ path(genome.fasta) ]
+        ch_fai         // channel: [mandatory] [ path(fai) ]
+        val_platform   // string:  [mandatory] val(platform)
 
     main:
         ch_versions = Channel.empty()
 
         // Map, sort, and index
-        BWAMEM2_MEM ( reads_input, index, true )
+        BWAMEM2_MEM ( ch_reads_input, ch_index, true )
 
         SAMTOOLS_INDEX_ALIGN ( BWAMEM2_MEM.out.bam )
 
@@ -35,7 +35,7 @@ workflow ALIGN_BWAMEM2 {
             .map{ meta, bam ->
                     new_meta            = meta.clone()
                     new_meta.id         = new_meta.id.split('_')[0]
-                    new_meta.read_group = "\'@RG\\tID:" + new_meta.id + "\\tPL:" + platform + "\\tSM:" + new_meta.id + "\'"
+                    new_meta.read_group = "\'@RG\\tID:" + new_meta.id + "\\tPL:" + val_platform + "\\tSM:" + new_meta.id + "\'"
                     [new_meta, bam]
                 }
             .groupTuple(by: 0)
@@ -46,11 +46,11 @@ workflow ALIGN_BWAMEM2 {
             .set{ bams }
 
         // If there are no samples to merge, skip the process
-        SAMTOOLS_MERGE ( bams.multiple, fasta, fai )
+        SAMTOOLS_MERGE ( bams.multiple, ch_fasta, ch_fai )
         prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
 
         // Marking duplicates
-        MARKDUPLICATES ( prepared_bam , fasta, fai )
+        MARKDUPLICATES ( prepared_bam , ch_fasta, ch_fai )
         SAMTOOLS_INDEX_MARKDUP ( MARKDUPLICATES.out.bam )
 
         ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions.first())
@@ -61,9 +61,9 @@ workflow ALIGN_BWAMEM2 {
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MARKDUP.out.versions.first())
 
     emit:
-        stats                  = SAMTOOLS_STATS.out.stats
-        metrics                = MARKDUPLICATES.out.metrics
-        marked_bam             = MARKDUPLICATES.out.bam
-        marked_bai             = SAMTOOLS_INDEX_MARKDUP.out.bai
-        versions               = ch_versions
+        stats                  = SAMTOOLS_STATS.out.stats         // channel: [ val(meta), path(stats) ]
+        metrics                = MARKDUPLICATES.out.metrics       // channel: [ val(meta), path(metrics) ]
+        marked_bam             = MARKDUPLICATES.out.bam           // channel: [ val(meta), path(bam) ]
+        marked_bai             = SAMTOOLS_INDEX_MARKDUP.out.bai   // channel: [ val(meta), path(bai) ]
+        versions               = ch_versions                      // channel: [ path(versions.yml) ]
 }
