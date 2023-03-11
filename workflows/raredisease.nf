@@ -263,7 +263,6 @@ workflow RAREDISEASE {
 
     // ALIGNING READS, FETCH STATS, AND MERGE.
     ALIGN (
-        params.aligner,
         CHECK_INPUT.out.reads,
         ch_genome_fasta_no_meta,
         ch_genome_fai_no_meta,
