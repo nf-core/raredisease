@@ -16,38 +16,38 @@ include { TABIX_TABIX as TABIX_TABIX_MT                                     } fr
 
 workflow ALIGN_AND_CALL_MT {
     take:
-        fastq          // channel: [ val(meta), path('*.fastq.gz') ]
-        ubam           // channel: [ val(meta), path('*.bam') ]
-        index_bwa      // channel: [ /path/to/bwamem2/index/ ]
-        index_bwamem2  // channel: [ /path/to/bwamem2/index/ ]
-        fasta          // channel: [ genome.fasta ]
-        dict           // channel: [ genome.dict ]
-        fai            // channel: [ genome.fai ]
-        intervals_mt   // channel: [ file(non_control_region.chrM.interval_list) ]
+        ch_fastq          // channel: [mandatory] [ val(meta), [ path(reads) ] ]
+        ch_ubam           // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_index_bwa      // channel: [mandatory for sentieon] [ path(index) ]
+        ch_index_bwamem2  // channel: [mandatory for bwamem2] [ path(index) ]
+        ch_fasta          // channel: [mandatory] [ path(fasta) ]
+        ch_dict           // channel: [mandatory] [ path(dict) ]
+        ch_fai            // channel: [mandatory] [ path(fai) ]
+        ch_intervals_mt   // channel: [mandatory] [ path(interval_list) ]
 
     main:
         ch_versions = Channel.empty()
 
-        BWAMEM2_MEM_MT (fastq , index_bwamem2, true)
+        BWAMEM2_MEM_MT (ch_fastq , ch_index_bwamem2, true)
 
-        SENTIEON_BWAMEM_MT ( fastq, fasta, fai, index_bwa )
+        SENTIEON_BWAMEM_MT ( ch_fastq, ch_fasta, ch_fai, ch_index_bwa )
 
         ch_mt_bam      = Channel.empty().mix(BWAMEM2_MEM_MT.out.bam, SENTIEON_BWAMEM_MT.out.bam)
-        ch_fastq_ubam  = ch_mt_bam.join(ubam, by: [0])
+        ch_fastq_ubam  = ch_mt_bam.join(ch_ubam, by: [0])
 
-        GATK4_MERGEBAMALIGNMENT_MT (ch_fastq_ubam, fasta, dict)
+        GATK4_MERGEBAMALIGNMENT_MT (ch_fastq_ubam, ch_fasta, ch_dict)
 
         PICARD_ADDORREPLACEREADGROUPS_MT (GATK4_MERGEBAMALIGNMENT_MT.out.bam)
 
-        PICARD_MARKDUPLICATES_MT (PICARD_ADDORREPLACEREADGROUPS_MT.out.bam, fasta, fai)
+        PICARD_MARKDUPLICATES_MT (PICARD_ADDORREPLACEREADGROUPS_MT.out.bam, ch_fasta, ch_fai)
 
         SAMTOOLS_SORT_MT (PICARD_MARKDUPLICATES_MT.out.bam)
 
         SAMTOOLS_INDEX_MT(SAMTOOLS_SORT_MT.out.bam)
         ch_sort_index_bam        = SAMTOOLS_SORT_MT.out.bam.join(SAMTOOLS_INDEX_MT.out.bai, by: [0])
-        ch_sort_index_bam_int_mt = ch_sort_index_bam.combine(intervals_mt)
+        ch_sort_index_bam_int_mt = ch_sort_index_bam.combine(ch_intervals_mt)
 
-        GATK4_MUTECT2_MT (ch_sort_index_bam_int_mt, fasta, fai, dict, [], [], [],[])
+        GATK4_MUTECT2_MT (ch_sort_index_bam_int_mt, ch_fasta, ch_fai, ch_dict, [], [], [],[])
 
         // Haplocheck
         // TODO: probably it will be outside this subworkflow as we want to run
@@ -62,7 +62,7 @@ workflow ALIGN_AND_CALL_MT {
                             return [meta, vcf, tbi, stats, [], [], [], []]
                         }
 
-        GATK4_FILTERMUTECTCALLS_MT (ch_to_filt, fasta, fai, dict)
+        GATK4_FILTERMUTECTCALLS_MT (ch_to_filt, ch_fasta, ch_fai, ch_dict)
 
         ch_versions = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions.first())
@@ -75,11 +75,11 @@ workflow ALIGN_AND_CALL_MT {
         ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
 
     emit:
-        vcf       = GATK4_FILTERMUTECTCALLS_MT.out.vcf
-        tbi       = GATK4_FILTERMUTECTCALLS_MT.out.tbi
-        stats     = GATK4_MUTECT2_MT.out.stats
-        filt_sats = GATK4_FILTERMUTECTCALLS_MT.out.stats
-        txt       = HAPLOCHECK_MT.out.txt
-        html      = HAPLOCHECK_MT.out.html
-        versions  = ch_versions
+        vcf        = GATK4_FILTERMUTECTCALLS_MT.out.vcf    // channel: [ val(meta), path(vcf) ]
+        tbi        = GATK4_FILTERMUTECTCALLS_MT.out.tbi    // channel: [ val(meta), path(tbi) ]
+        stats      = GATK4_MUTECT2_MT.out.stats            // channel: [ val(meta), path(stats) ]
+        filt_stats = GATK4_FILTERMUTECTCALLS_MT.out.stats  // channel: [ val(meta), path(tsv) ]
+        txt        = HAPLOCHECK_MT.out.txt                 // channel: [ val(meta), path(txt) ]
+        html       = HAPLOCHECK_MT.out.html                // channel: [ val(meta), path(html) ]
+        versions   = ch_versions                           // channel: [ path(versions.yml) ]
 }

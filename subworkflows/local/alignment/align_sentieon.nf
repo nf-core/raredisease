@@ -12,7 +12,7 @@ include { SENTIEON_READWRITER     } from '../../../modules/local/sentieon/readwr
 workflow ALIGN_SENTIEON {
     take:
         ch_reads_input     // channel: [mandatory] [ val(meta), path(reads_input) ]
-        ch_fasta           // channel: [mandatory] [ path(genome.fasta) ]
+        ch_fasta           // channel: [mandatory] [ path(fasta) ]
         ch_fai             // channel: [mandatory] [ path(fai) ]
         ch_index           // channel: [mandatory] [ path(bwamem2_index) ]
         ch_known_dbsnp     // channel: [mandatory] [ path(known_dbsnp) ]
