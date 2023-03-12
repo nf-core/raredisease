@@ -14,14 +14,14 @@ include { BCFTOOLS_FILTER as BCF_FILTER_TWO        } from '../../../modules/nf-c
 
 workflow CALL_SNV_SENTIEON {
 	take:
-		input         // channel: [ val(meta), bam, bai ]
-		fasta         // path: genome.fasta
-		fai           // path: genome.fai
-		dbsnp         // path: params.known_dbsnp
-		dbsnp_index   // path: params.known_dbsnp
-        call_interval // path: params.call_interval
-        ml_model      // path: params.ml_model
-        case_info     // channel: [ case_id ]
+		ch_input         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+		ch_fasta         // channel: [mandatory] [ path(fasta) ]
+		ch_fai           // channel: [mandatory] [ path(fai) ]
+		ch_dbsnp         // channel: [mandatory] [ val(meta), path(vcf) ]
+		ch_dbsnp_index   // channel: [mandatory] [ val(meta), path(tbi) ]
+        ch_call_interval // channel: [mandatory] [ path(interval) ]
+        ch_ml_model      // channel: [mandatory] [ path(model) ]
+        ch_case_info     // channel: [mandatory] [ val(case_info) ]
 
 	main:
 		ch_versions = Channel.empty()
@@ -76,7 +76,7 @@ workflow CALL_SNV_SENTIEON {
         ch_versions = ch_versions.mix(BCF_FILTER_ONE.out.versions.first())
 
 	emit:
-		vcf		 = REMOVE_DUPLICATES_SEN.out.vcf
-        tabix    = TABIX_SEN.out.tbi
-        versions = ch_versions
+		vcf		 = REMOVE_DUPLICATES_SEN.out.vcf    // channel: [ val(meta), path(vcf) ]
+        tabix    = TABIX_SEN.out.tbi                // channel: [ val(meta), path(tbi) ]
+        versions = ch_versions                      // channel: [ path(versions.yml) ]
 }
