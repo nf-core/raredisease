@@ -25,11 +25,9 @@ workflow PREPARE_REFERENCES {
     take:
         fasta_no_meta               // [mandatory] genome.fasta
         fasta_meta
-        fai                 // [optional ] genome.fai
         mt_fasta_shift_no_meta
         mt_fasta_shift_meta
         gnomad_af_tab
-        gnomad_vcf_in
         known_dbsnp
         target_bed
         vep_cache
@@ -85,7 +83,6 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
         ch_versions = ch_versions.mix(TABIX_DBSNP.out.versions)
         ch_versions = ch_versions.mix(TABIX_GNOMAD_AF.out.versions)
-        ch_versions = ch_versions.mix(CHECK_VCF.out.versions)
         ch_versions = ch_versions.mix(TABIX_PT.out.versions)
         ch_versions = ch_versions.mix(TABIX_PBT.out.versions)
         ch_versions = ch_versions.mix(GATK_BILT.out.versions)
@@ -103,8 +100,6 @@ workflow PREPARE_REFERENCES {
         fasta_fai_meta            = SAMTOOLS_FAIDX_GENOME.out.fai.collect()
         fasta_fai_mt_shift        = SAMTOOLS_FAIDX_SHIFT_MT.out.fai.map{ meta, fai -> [fai] }.collect()
         gnomad_af_idx             = TABIX_GNOMAD_AF.out.tbi.collect()
-        gnomad_tbi                = CHECK_VCF.out.index.collect()
-        gnomad_vcf                = CHECK_VCF.out.vcf.collect()
         known_dbsnp_tbi           = TABIX_DBSNP.out.tbi.collect()
         sequence_dict             = GATK_SD.out.dict.collect()
         sequence_dict_meta        = GATK_SD.out.dict.map {it -> [[id:it[0].simpleName], it]}.collect()
