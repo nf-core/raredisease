@@ -26,7 +26,6 @@ workflow QC_BAM {
         ch_chrom_sizes      // channel: [mandatory] [ path(sizes) ]
         ch_intervals_wgs    // channel: [mandatory] [ path(intervals) ]
         ch_intervals_y      // channel: [mandatory] [ path(intervals) ]
-        ch_aligner          // string: params.aligner
 
     main:
         ch_versions = Channel.empty()
