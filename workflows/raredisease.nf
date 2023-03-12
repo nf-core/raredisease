@@ -279,8 +279,7 @@ workflow RAREDISEASE {
         ch_target_intervals,
         ch_chrom_sizes,
         ch_intervals_wgs,
-        ch_intervals_y,
-        params.aligner
+        ch_intervals_y
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions)
 
