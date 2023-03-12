@@ -9,7 +9,6 @@ include { GATK4_SELECTVARIANTS } from '../../modules/nf-core/gatk4/selectvariant
 
 workflow CALL_SNV {
     take:
-	    variant_caller       // string:  params.variant_caller
 	    input                // channel: [ val(meta), path(bam), path(bai) ]
 	    fasta                // channel: [genome.fasta]
 	    fai                  // channel: [genome.fai]
