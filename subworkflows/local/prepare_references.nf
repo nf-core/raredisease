@@ -6,7 +6,6 @@ include { BWA_INDEX as BWA_INDEX_GENOME                      } from '../../modul
 include { BWAMEM2_INDEX as BWAMEM2_INDEX_GENOME              } from '../../modules/nf-core/bwamem2/index/main'
 include { BWAMEM2_INDEX as BWAMEM2_INDEX_SHIFT_MT            } from '../../modules/nf-core/bwamem2/index/main'
 include { CAT_CAT as CAT_CAT_BAIT                            } from '../../modules/nf-core/cat/cat/main'
-include { CHECK_VCF                                          } from './preprocessing/prepare_vcf'
 include { GATK4_BEDTOINTERVALLIST as GATK_BILT               } from '../../modules/nf-core/gatk4/bedtointervallist/main'
 include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD          } from '../../modules/nf-core/gatk4/createsequencedictionary/main'
 include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD_SHIFT_MT } from '../../modules/nf-core/gatk4/createsequencedictionary/main'
@@ -59,9 +58,6 @@ workflow PREPARE_REFERENCES {
         TABIX_GNOMAD_AF(gnomad_af_tab)
         TABIX_PT(target_bed).tbi.set { ch_tbi }
         TABIX_PBT(target_bed).gz_tbi.set { ch_bgzip_tbi }
-
-        // Check if a vcf file is normalized and create index
-        CHECK_VCF(gnomad_vcf_in, fasta_no_meta)
 
         // Generate bait and target intervals
         GATK_BILT(target_bed, GATK_SD.out.dict).interval_list

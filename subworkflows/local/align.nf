@@ -7,7 +7,6 @@ include { ALIGN_SENTIEON } from './alignment/align_sentieon'
 
 workflow ALIGN {
     take:
-        aligner         // string:  params.aligner
         reads_input     // channel: [ val(meta), reads_input  ]
         fasta           // channel: [genome.fasta]
         fai             // channel: [genome.fai]
