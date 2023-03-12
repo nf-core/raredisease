@@ -103,14 +103,6 @@
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
-                "gnomad_vcf": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-bezier-curve",
-                    "pattern": "^\\S+\\.vcf(\\.gz)?$",
-                    "description": "Path to directory for gnomad vcf.",
-                    "help_text": "Path to the gnomad annotations vcf file. If you don't provide one, gnomad annotations will not be used."
-                },
                 "gnomad_af": {
                     "type": "string",
                     "format": "path",
