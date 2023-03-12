@@ -30,17 +30,17 @@ workflow QC_BAM {
     main:
         ch_versions = Channel.empty()
 
-        PICARD_COLLECTMULTIPLEMETRICS (bam_bai, fasta, fai)
+        PICARD_COLLECTMULTIPLEMETRICS (ch_bam_bai, ch_fasta, ch_fai)
 
-        PICARD_COLLECTHSMETRICS (bam_bai, fasta, fai, bait_intervals, target_intervals)
+        PICARD_COLLECTHSMETRICS (ch_bam_bai, ch_fasta, ch_fai, ch_bait_intervals, ch_target_intervals)
 
-        QUALIMAP_BAMQC (bam, [])
+        QUALIMAP_BAMQC (ch_bam, [])
 
-        TIDDIT_COV (bam, []) // 2nd pos. arg is req. only for cram input
+        TIDDIT_COV (ch_bam, []) // 2nd pos. arg is req. only for cram input
 
-        UCSC_WIGTOBIGWIG (TIDDIT_COV.out.wig, chrom_sizes)
+        UCSC_WIGTOBIGWIG (TIDDIT_COV.out.wig, ch_chrom_sizes)
 
-        MOSDEPTH (bam_bai, Channel.value([[], []]), Channel.value([[], []]))
+        MOSDEPTH (ch_bam_bai, Channel.value([[], []]), Channel.value([[], []]))
 
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions.first())
@@ -50,11 +50,11 @@ workflow QC_BAM {
         ch_versions = ch_versions.mix(MOSDEPTH.out.versions.first())
 
         // COLLECT WGS METRICS
-        PICARD_COLLECTWGSMETRICS ( bam_bai, fasta, fai, intervals_wgs )
-        PICARD_COLLECTWGSMETRICS_Y ( bam_bai, fasta, fai, intervals_y )
+        PICARD_COLLECTWGSMETRICS ( ch_bam_bai, ch_fasta, ch_fai, ch_intervals_wgs )
+        PICARD_COLLECTWGSMETRICS_Y ( ch_bam_bai, ch_fasta, ch_fai, ch_intervals_y )
 
-        SENTIEON_WGSMETRICS ( bam_bai, fasta, fai, intervals_wgs )
-        SENTIEON_WGSMETRICS_Y ( bam_bai, fasta, fai, intervals_y )
+        SENTIEON_WGSMETRICS ( ch_bam_bai, ch_fasta, ch_fai, ch_intervals_wgs )
+        SENTIEON_WGSMETRICS_Y ( ch_bam_bai, ch_fasta, ch_fai, ch_intervals_y )
 
         ch_cov   = Channel.empty().mix(PICARD_COLLECTWGSMETRICS.out.metrics, SENTIEON_WGSMETRICS.out.wgs_metrics)
         ch_cov_y = Channel.empty().mix(PICARD_COLLECTWGSMETRICS_Y.out.metrics, SENTIEON_WGSMETRICS_Y.out.wgs_metrics)
@@ -65,11 +65,11 @@ workflow QC_BAM {
     emit:
         multiple_metrics        = PICARD_COLLECTMULTIPLEMETRICS.out.metrics     // channel: [ val(meta), path(metrics) ]
         hs_metrics              = PICARD_COLLECTHSMETRICS.out.metrics           // channel: [ val(meta), path(metrics) ]
-        qualimap_results        = QUALIMAP_BAMQC.out.results                    // channel: [ val(meta), path(qualimap files) ]
-        tiddit_wig              = TIDDIT_COV.out.wig                            // channel: [ val(meta), path(*.wig) ]
-        bigwig                  = UCSC_WIGTOBIGWIG.out.bw                       // channel: [ val(meta), path(*.bw) ]
-        d4                      = MOSDEPTH.out.per_base_d4                      // channel: [ val(meta), path(*.d4) ]
+        qualimap_results        = QUALIMAP_BAMQC.out.results                    // channel: [ val(meta), path(qualimap_dir) ]
+        tiddit_wig              = TIDDIT_COV.out.wig                            // channel: [ val(meta), path(wig) ]
+        bigwig                  = UCSC_WIGTOBIGWIG.out.bw                       // channel: [ val(meta), path(bw) ]
+        d4                      = MOSDEPTH.out.per_base_d4                      // channel: [ val(meta), path(d4) ]
         cov                     = ch_cov                                        // channel: [ val(meta), path(metrics) ]
         cov_y                   = ch_cov_y                                      // channel: [ val(meta), path(metrics) ]
-        versions                = ch_versions                                   // channel: [ versions.yml ]
+        versions                = ch_versions                                   // channel: [ path(versions.yml) ]
 }
