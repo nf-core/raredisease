@@ -91,10 +91,10 @@ workflow PREPARE_REFERENCES {
 
     emit:
         bait_intervals            = CAT_CAT_BAIT.out.file_out.map { id, it -> [it] }.collect()           // channel: [ path(intervals) ]
-        bwa_index                 = Channel.empty().mix(ch_bwa, ch_sentieonbwa).collect()                // channel: [ path(index) ]
-        bwa_index_mt_shift        = SENTIEON_BWAINDEX_SHIFT_MT.out.index.collect()                       // channel: [ path(index) ]
-        bwamem2_index             = BWAMEM2_INDEX_GENOME.out.index.collect()                             // channel: [ path(index) ]
-        bwamem2_index_mt_shift    = BWAMEM2_INDEX_SHIFT_MT.out.index.collect()                           // channel: [ path(index) ]
+        bwa_index                 = Channel.empty().mix(ch_bwa, ch_sentieonbwa).collect()                // channel: [ val(meta), path(index) ]
+        bwa_index_mt_shift        = SENTIEON_BWAINDEX_SHIFT_MT.out.index.collect()                       // channel: [ val(meta), path(index) ]
+        bwamem2_index             = BWAMEM2_INDEX_GENOME.out.index.collect()                             // channel: [ val(meta), path(index) ]
+        bwamem2_index_mt_shift    = BWAMEM2_INDEX_SHIFT_MT.out.index.collect()                           // channel: [ val(meta), path(index) ]
         chrom_sizes               = GET_CHROM_SIZES.out.sizes.collect()                                  // channel: [ path(sizes) ]
         fasta_fai                 = SAMTOOLS_FAIDX_GENOME.out.fai.map{ meta, fai -> [fai] }.collect()    // channel: [ path(fai) ]
         fasta_fai_meta            = SAMTOOLS_FAIDX_GENOME.out.fai.collect()                              // channel: [ val(meta), path(fai) ]

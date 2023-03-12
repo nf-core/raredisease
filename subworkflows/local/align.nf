@@ -10,8 +10,8 @@ workflow ALIGN {
         ch_reads_input     // channel: [mandatory] [ val(meta), [path(reads)]  ]
         ch_fasta           // channel: [mandatory] [ path(fasta) ]
         ch_fai             // channel: [mandatory] [ path(fai) ]
-        ch_index_bwa       // channel: [mandatory] [ path(index) ]
-        ch_index_bwamem2   // channel: [mandatory] [ path(index) ]
+        ch_index_bwa       // channel: [mandatory] [ val(meta), path(index) ]
+        ch_index_bwamem2   // channel: [mandatory] [ val(meta), path(index) ]
         ch_known_dbsnp     // channel: [optional; used by sentieon] [ path(known_dbsnp) ]
         ch_known_dbsnp_tbi // channel: [optional; used by sentieon] [ path(known_dbsnp_tbi) ]
         val_platform       // string:  [mandatory] illumina or a different technology

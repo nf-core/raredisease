@@ -13,7 +13,7 @@ include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-c
 workflow ALIGN_BWAMEM2 {
     take:
         ch_reads_input // channel: [mandatory] [ val(meta), path(reads_input) ]
-        ch_index       // channel: [mandatory] [ path(bwamem2_index) ]
+        ch_index       // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
         ch_fasta       // channel: [mandatory] [ path(fasta) ]
         ch_fai         // channel: [mandatory] [ path(fai) ]
         val_platform   // string:  [mandatory] val(platform)
