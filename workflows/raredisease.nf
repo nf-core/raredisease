@@ -317,7 +317,6 @@ workflow RAREDISEASE {
 
     // STEP 2: VARIANT CALLING
     CALL_SNV (
-        params.variant_caller,
         ch_mapped.bam_bai,
         ch_genome_fasta_no_meta,
         ch_genome_fai_no_meta,
