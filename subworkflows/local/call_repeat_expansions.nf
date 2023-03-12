@@ -55,7 +55,7 @@ workflow CALL_REPEAT_EXPANSIONS {
         SVDB_MERGE_REPEATS ( ch_svdb_merge_input, [] )
 
         // Annotate, compress and index
-        STRANGER ( SVDB_MERGE_REPEATS.out.vcf, variant_catalog )
+        STRANGER ( SVDB_MERGE_REPEATS.out.vcf,  ch_variant_catalog )
         COMPRESS_STRANGER (
             STRANGER.out.vcf.map{ meta, vcf -> [meta, vcf, [] ]},
              [], [], []

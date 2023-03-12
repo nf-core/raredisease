@@ -18,32 +18,32 @@ include { GATK4_SELECTVARIANTS                    } from '../../modules/nf-core/
 workflow ANNOTATE_SNVS {
 
     take:
-        vcf
-        vcfanno_resources
-        vcfanno_lua
-        vcfanno_toml
-        vep_genome
-        vep_cache_version
-        vep_cache
-        fasta
-        gnomad_af
-        split_intervals
-        samples
+        ch_vcf                 // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
+        ch_vcfanno_resources   // channel: [mandatory] [ path(resources) ]
+        ch_vcfanno_lua         // channel: [mandatory] [ path(lua) ]
+        ch_vcfanno_toml        // channel: [mandatory] [ path(toml) ]
+        val_vep_genome         // string: [mandatory] GRCh37 or GRCh38
+        val_vep_cache_version  // string: [mandatory] default: 107
+        ch_vep_cache           // channel: [mandatory] [ path(cache) ]
+        ch_fasta               // channel: [mandatory] [ path(fasta) ]
+        ch_gnomad_af           // channel: [optional] [ path(tab), path(tbi) ]
+        ch_split_intervals     // channel: [mandatory] [ path(intervals) ]
+        ch_samples             // channel: [mandatory] [ val(sample_id), val(sex), val(phenotype), val(paternal_id), val(maternal_id), val(case_id) ]
 
     main:
         ch_versions       = Channel.empty()
         ch_vcf_scatter_in = Channel.empty()
         ch_vep_in         = Channel.empty()
 
-        vcf.map { meta, vcf, idx -> return [vcf, idx] }.set { ch_roh_vcfs }
-        samples
+        ch_vcf.map { meta, vcf, idx -> return [vcf, idx] }.set { ch_roh_vcfs }
+        ch_samples
             .branch { it ->
                 affected: it.phenotype == "2"
                 unaffected: it.phenotype == "1"
             }.set { ch_phenotype }
         ch_phenotype.affected.combine(ch_roh_vcfs).set { ch_roh_input }
 
-        BCFTOOLS_ROH (ch_roh_input, gnomad_af, [], [], [], [])
+        BCFTOOLS_ROH (ch_roh_input, ch_gnomad_af, [], [], [], [])
 
         BCFTOOLS_ROH.out.roh
             .map { meta, roh ->
@@ -53,11 +53,11 @@ workflow ANNOTATE_SNVS {
             }
             .set { ch_roh_rhocall }
 
-        RHOCALL_ANNOTATE (vcf, ch_roh_rhocall, [])
+        RHOCALL_ANNOTATE (ch_vcf, ch_roh_rhocall, [])
 
         ZIP_TABIX_ROHCALL (RHOCALL_ANNOTATE.out.vcf)
 
-        VCFANNO (ZIP_TABIX_ROHCALL.out.gz_tbi, vcfanno_toml, vcfanno_lua, vcfanno_resources)
+        VCFANNO (ZIP_TABIX_ROHCALL.out.gz_tbi, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
 
         ZIP_TABIX_VCFANNO (VCFANNO.out.vcf)
 
@@ -67,15 +67,15 @@ workflow ANNOTATE_SNVS {
 
         BCFTOOLS_VIEW.out.vcf.join(TABIX_BCFTOOLS_VIEW.out.tbi).collect().set { ch_vcf_scatter_in }
 
-        GATK4_SELECTVARIANTS (ch_vcf_scatter_in.combine(split_intervals)).vcf.set { ch_vep_in }
+        GATK4_SELECTVARIANTS (ch_vcf_scatter_in.combine(ch_split_intervals)).vcf.set { ch_vep_in }
 
         ENSEMBLVEP_SNV(
             ch_vep_in,
-            vep_genome,
+            val_vep_genome,
             "homo_sapiens",
-            vep_cache_version,
-            vep_cache,
-            fasta,
+            val_vep_cache_version,
+            ch_vep_cache,
+            ch_fasta,
             []
         )
 
@@ -109,7 +109,7 @@ workflow ANNOTATE_SNVS {
         ch_versions = ch_versions.mix(TABIX_BCFTOOLS_CONCAT.out.versions)
 
     emit:
-        vcf_ann       = BCFTOOLS_CONCAT.out.vcf
-        tbi           = TABIX_BCFTOOLS_CONCAT.out.tbi
-        versions      = ch_versions
+        vcf_ann       = BCFTOOLS_CONCAT.out.vcf         // channel: [ val(meta), path(vcf) ]
+        tbi           = TABIX_BCFTOOLS_CONCAT.out.tbi   // channel: [ val(meta), path(tbi) ]
+        versions      = ch_versions                     // channel: [ path(versions.yml) ]
 }
