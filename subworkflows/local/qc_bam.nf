@@ -16,17 +16,17 @@ include { SENTIEON_WGSMETRICSALGO as SENTIEON_WGSMETRICS_Y       } from '../../m
 workflow QC_BAM {
 
     take:
-        bam              // channel: [ val(meta), path(bam) ]
-        bai              // channel: [ val(meta), path(bai) ]
-        bam_bai
-        fasta            // path: genome.fasta
-        fai              // path: genome.fasta.fai
-        bait_intervals   // path: bait.intervals_list
-        target_intervals // path: target.intervals_list
-        chrom_sizes      // path: chrom.sizes
-        intervals_wgs    // path: genome.intervals_wgs
-        intervals_y      // path: genome.intervals_y
-        aligner          // string: params.aligner
+        ch_bam              // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_bai              // channel: [mandatory] [ val(meta), path(bai) ]
+        ch_bam_bai          // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_fasta            // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai              // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_bait_intervals   // channel: [mandatory] [ path(intervals_list) ]
+        ch_target_intervals // channel: [mandatory] [ path(intervals_list) ]
+        ch_chrom_sizes      // channel: [mandatory] [ path(sizes) ]
+        ch_intervals_wgs    // channel: [mandatory] [ path(intervals) ]
+        ch_intervals_y      // channel: [mandatory] [ path(intervals) ]
+        ch_aligner          // string: params.aligner
 
     main:
         ch_versions = Channel.empty()

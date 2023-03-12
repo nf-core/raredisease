@@ -19,7 +19,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_fai            // channel: [mandatory] [ path(fai) ]
         ch_case_info      // channel: [mandatory] [ val(case_info) ]
         ch_target_bed     // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
-        val_cnvpytor_bins // string: [mandatory] binsizes for cnvpytor default: 1000
+        val_cnvpytor_bins // string: [optional] binsizes for cnvpytor default: 1000
 
     main:
         ch_versions = Channel.empty()
