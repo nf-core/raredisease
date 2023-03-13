@@ -26,7 +26,6 @@ workflow QC_BAM {
         chrom_sizes      // path: chrom.sizes
         intervals_wgs    // path: genome.intervals_wgs
         intervals_y      // path: genome.intervals_y
-        aligner          // string: params.aligner
 
     main:
         ch_versions = Channel.empty()
