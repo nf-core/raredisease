@@ -22,7 +22,6 @@ workflow SCATTER_GENOME {
 
         ch_versions = ch_versions.mix(BUILD_BED.out.versions)
         ch_versions = ch_versions.mix(GATK4_SPLITINTERVALS.out.versions)
-        GATK4_SPLITINTERVALS.out.split_intervals.view()
 
     emit:
         bed             = BUILD_BED.out.bed.collect()   // channel: [ val(meta), path(bed) ]
