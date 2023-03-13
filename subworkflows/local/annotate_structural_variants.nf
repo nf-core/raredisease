@@ -20,7 +20,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
     main:
         ch_versions = Channel.empty()
-        ch_vcf.view()
+
         Channel.fromPath(ch_sv_dbs)
             .splitCsv ( header:true )
             .multiMap { row ->
