@@ -16,7 +16,7 @@ workflow ALIGN_BWAMEM2 {
         ch_index       // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
         ch_fasta       // channel: [mandatory] [ path(fasta) ]
         ch_fai         // channel: [mandatory] [ path(fai) ]
-        val_platform   // string:  [mandatory] val(platform)
+        val_platform   // string:  [mandatory] default: illumina
 
     main:
         ch_versions = Channel.empty()

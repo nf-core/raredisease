@@ -12,8 +12,8 @@ workflow CALL_CNV_CNVPYTOR {
     take:
         ch_bam            // channel: [mandatory] [ val(meta), path(bam)]
         ch_bai            // channel: [mandatory] [ val(meta), path(bai) ]
-        ch_case_info      // channel: [mandatory] [ val(case_id) ]
-        val_binsizes      // channel: [optional] [ val(binsize) ]
+        ch_case_info      // channel: [mandatory] [ val(case_info) ]
+        val_binsizes      // string: [optional] binsizes for cnvpytor default: 1000
         ch_fasta          // channel: [mandatory] [ path(fasta) ]
         ch_fai            // channel: [mandatory] [ path(fai) ]
 

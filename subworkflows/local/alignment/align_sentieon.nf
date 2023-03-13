@@ -15,9 +15,9 @@ workflow ALIGN_SENTIEON {
         ch_fasta           // channel: [mandatory] [ path(fasta) ]
         ch_fai             // channel: [mandatory] [ path(fai) ]
         ch_index           // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
-        ch_known_dbsnp     // channel: [mandatory] [ path(known_dbsnp) ]
-        ch_known_dbsnp_tbi // channel: [mandatory] [ path(known_dbsnp_tbi) ]
-        val_platform       // string:  [mandatory] val(platform)
+        ch_known_dbsnp     // channel: [optional] [ path(known_dbsnp) ]
+        ch_known_dbsnp_tbi // channel: [optional] [ path(known_dbsnp_tbi) ]
+        val_platform       // string:  [mandatory] default: illumina
 
     main:
         ch_versions = Channel.empty()
