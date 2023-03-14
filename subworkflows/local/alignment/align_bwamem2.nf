@@ -61,9 +61,9 @@ workflow ALIGN_BWAMEM2 {
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MARKDUP.out.versions.first())
 
     emit:
-        stats                  = SAMTOOLS_STATS.out.stats         // channel: [ val(meta), path(stats) ]
-        metrics                = MARKDUPLICATES.out.metrics       // channel: [ val(meta), path(metrics) ]
-        marked_bam             = MARKDUPLICATES.out.bam           // channel: [ val(meta), path(bam) ]
-        marked_bai             = SAMTOOLS_INDEX_MARKDUP.out.bai   // channel: [ val(meta), path(bai) ]
-        versions               = ch_versions                      // channel: [ path(versions.yml) ]
+        stats       = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), path(stats) ]
+        metrics     = MARKDUPLICATES.out.metrics     // channel: [ val(meta), path(metrics) ]
+        marked_bam  = MARKDUPLICATES.out.bam         // channel: [ val(meta), path(bam) ]
+        marked_bai  = SAMTOOLS_INDEX_MARKDUP.out.bai // channel: [ val(meta), path(bai) ]
+        versions    = ch_versions                    // channel: [ path(versions.yml) ]
 }

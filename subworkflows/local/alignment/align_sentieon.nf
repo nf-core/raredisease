@@ -74,16 +74,16 @@ workflow ALIGN_SENTIEON {
         ch_versions = ch_versions.mix(SENTIEON_DEDUP.out.versions.first())
 
     emit:
-        marked_bam             = SENTIEON_DEDUP.out.bam                             // channel: [ val(meta), path(bam) ]
-        marked_bai             = SENTIEON_DEDUP.out.bai                             // channel: [ val(meta), path(bai) ]
-        recal_bam              = ch_bqsr_bam.ifEmpty(null)                          // channel: [ val(meta), path(bam) ]
-        recal_bai              = ch_bqsr_bai.ifEmpty(null)                          // channel: [ val(meta), path(bai) ]
-        recal_csv              = ch_bqsr_csv.ifEmpty(null)                          // channel: [ val(meta), path(csv) ]
-        mq_metrics             = SENTIEON_DATAMETRICS.out.mq_metrics.ifEmpty(null)  // channel: [ val(meta), path(mq_metrics) ]
-        qd_metrics             = SENTIEON_DATAMETRICS.out.qd_metrics.ifEmpty(null)  // channel: [ val(meta), path(qd_metrics) ]
-        gc_metrics             = SENTIEON_DATAMETRICS.out.gc_metrics.ifEmpty(null)  // channel: [ val(meta), path(gc_metrics) ]
-        gc_summary             = SENTIEON_DATAMETRICS.out.gc_summary.ifEmpty(null)  // channel: [ val(meta), path(gc_summary) ]
-        aln_metrics            = SENTIEON_DATAMETRICS.out.aln_metrics.ifEmpty(null) // channel: [ val(meta), path(aln_metrics) ]
-        is_metrics             = SENTIEON_DATAMETRICS.out.is_metrics.ifEmpty(null)  // channel: [ val(meta), path(is_metrics) ]
-        versions               = ch_versions                                        // channel: [ path(versions.yml) ]
+        marked_bam  = SENTIEON_DEDUP.out.bam                             // channel: [ val(meta), path(bam) ]
+        marked_bai  = SENTIEON_DEDUP.out.bai                             // channel: [ val(meta), path(bai) ]
+        recal_bam   = ch_bqsr_bam.ifEmpty(null)                          // channel: [ val(meta), path(bam) ]
+        recal_bai   = ch_bqsr_bai.ifEmpty(null)                          // channel: [ val(meta), path(bai) ]
+        recal_csv   = ch_bqsr_csv.ifEmpty(null)                          // channel: [ val(meta), path(csv) ]
+        mq_metrics  = SENTIEON_DATAMETRICS.out.mq_metrics.ifEmpty(null)  // channel: [ val(meta), path(mq_metrics) ]
+        qd_metrics  = SENTIEON_DATAMETRICS.out.qd_metrics.ifEmpty(null)  // channel: [ val(meta), path(qd_metrics) ]
+        gc_metrics  = SENTIEON_DATAMETRICS.out.gc_metrics.ifEmpty(null)  // channel: [ val(meta), path(gc_metrics) ]
+        gc_summary  = SENTIEON_DATAMETRICS.out.gc_summary.ifEmpty(null)  // channel: [ val(meta), path(gc_summary) ]
+        aln_metrics = SENTIEON_DATAMETRICS.out.aln_metrics.ifEmpty(null) // channel: [ val(meta), path(aln_metrics) ]
+        is_metrics  = SENTIEON_DATAMETRICS.out.is_metrics.ifEmpty(null)  // channel: [ val(meta), path(is_metrics) ]
+        versions    = ch_versions                                        // channel: [ path(versions.yml) ]
 }

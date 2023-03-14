@@ -6,12 +6,12 @@ include { MANTA_GERMLINE as MANTA } from '../../../modules/nf-core/manta/germlin
 
 workflow CALL_SV_MANTA {
     take:
-    ch_bam            // channel: [mandatory] [ val(meta), path(bam) ]
-    ch_bai            // channel: [mandatory] [ val(meta), path(bai) ]
-    ch_fasta          // channel: [mandatory] [ path(fasta) ]
-    ch_fai            // channel: [mandatory] [ path(fai) ]
-    ch_case_info      // channel: [mandatory] [ val(case_info) ]
-    ch_bed            // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
+        ch_bam       // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_bai       // channel: [mandatory] [ val(meta), path(bai) ]
+        ch_fasta     // channel: [mandatory] [ path(fasta) ]
+        ch_fai       // channel: [mandatory] [ path(fai) ]
+        ch_case_info // channel: [mandatory] [ val(case_info) ]
+        ch_bed       // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
 
     main:
         ch_bam.collect{it[1]}
@@ -44,11 +44,11 @@ workflow CALL_SV_MANTA {
         ch_versions = MANTA.out.versions
 
     emit:
-        candidate_small_indels_vcf      = MANTA.out.candidate_small_indels_vcf      // channel: [ val(meta), path(vcf) ]
-        candidate_small_indels_vcf_tbi  = MANTA.out.candidate_small_indels_vcf_tbi  // channel: [ val(meta), path(tbi) ]
-        candidate_sv_vcf                = MANTA.out.candidate_sv_vcf                // channel: [ val(meta), path(vcf) ]
-        candidate_sv_vcf_tbi            = MANTA.out.candidate_sv_vcf_tbi            // channel: [ val(meta), path(tbi) ]
-        diploid_sv_vcf                  = MANTA.out.diploid_sv_vcf                  // channel: [ val(meta), path(vcf) ]
-        diploid_sv_vcf_tbi              = MANTA.out.diploid_sv_vcf_tbi              // channel: [ val(meta), path(tbi) ]
-        versions                        = ch_versions
+        candidate_small_indels_vcf     = MANTA.out.candidate_small_indels_vcf     // channel: [ val(meta), path(vcf) ]
+        candidate_small_indels_vcf_tbi = MANTA.out.candidate_small_indels_vcf_tbi // channel: [ val(meta), path(tbi) ]
+        candidate_sv_vcf               = MANTA.out.candidate_sv_vcf               // channel: [ val(meta), path(vcf) ]
+        candidate_sv_vcf_tbi           = MANTA.out.candidate_sv_vcf_tbi           // channel: [ val(meta), path(tbi) ]
+        diploid_sv_vcf                 = MANTA.out.diploid_sv_vcf                 // channel: [ val(meta), path(vcf) ]
+        diploid_sv_vcf_tbi             = MANTA.out.diploid_sv_vcf_tbi             // channel: [ val(meta), path(tbi) ]
+        versions                       = ch_versions
 }

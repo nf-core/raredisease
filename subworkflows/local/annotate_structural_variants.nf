@@ -2,10 +2,10 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SVDB_QUERY                    } from '../../modules/nf-core/svdb/query/main'
-include { PICARD_SORTVCF                } from '../../modules/nf-core/picard/sortvcf/main'
-include { BCFTOOLS_VIEW                 } from '../../modules/nf-core/bcftools/view/main'
-include { ENSEMBLVEP as ENSEMBLVEP_SV   } from '../../modules/local/ensemblvep/main'
+include { SVDB_QUERY                  } from '../../modules/nf-core/svdb/query/main'
+include { PICARD_SORTVCF              } from '../../modules/nf-core/picard/sortvcf/main'
+include { BCFTOOLS_VIEW               } from '../../modules/nf-core/bcftools/view/main'
+include { ENSEMBLVEP as ENSEMBLVEP_SV } from '../../modules/local/ensemblvep/main'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
@@ -63,6 +63,6 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         ch_versions = ch_versions.mix(ENSEMBLVEP_SV.out.versions)
 
     emit:
-        vcf_ann       = ENSEMBLVEP_SV.out.vcf_gz // channel: [ val(meta), path(vcf) ]
-        versions      = ch_versions              // channel: [ path(versions.yml) ]
+        vcf_ann  = ENSEMBLVEP_SV.out.vcf_gz // channel: [ val(meta), path(vcf) ]
+        versions = ch_versions              // channel: [ path(versions.yml) ]
 }

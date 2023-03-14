@@ -10,12 +10,12 @@ include { CNVPYTOR_VIEW as VIEW                      } from '../../../modules/nf
 
 workflow CALL_CNV_CNVPYTOR {
     take:
-        ch_bam            // channel: [mandatory] [ val(meta), path(bam)]
-        ch_bai            // channel: [mandatory] [ val(meta), path(bai) ]
-        ch_case_info      // channel: [mandatory] [ val(case_info) ]
-        val_binsizes      // string: [optional] binsizes for cnvpytor default: 1000
-        ch_fasta          // channel: [mandatory] [ path(fasta) ]
-        ch_fai            // channel: [mandatory] [ path(fai) ]
+        ch_bam       // channel: [mandatory] [ val(meta), path(bam)]
+        ch_bai       // channel: [mandatory] [ val(meta), path(bai) ]
+        ch_case_info // channel: [mandatory] [ val(case_info) ]
+        val_binsizes // string: [optional] binsizes for cnvpytor default: 1000
+        ch_fasta     // channel: [mandatory] [ path(fasta) ]
+        ch_fai       // channel: [mandatory] [ path(fai) ]
 
 
     main:
@@ -48,7 +48,7 @@ workflow CALL_CNV_CNVPYTOR {
         ch_versions = ch_versions.mix(VIEW.out.versions.first())
 
     emit:
-        candidate_cnvs_vcf   = VIEW.out.vcf    // channel: [ val(meta), path(vcf) ]
-        versions             = ch_versions     // channel: [ path(versions.yml) ]
+        candidate_cnvs_vcf = VIEW.out.vcf // channel: [ val(meta), path(vcf) ]
+        versions           = ch_versions  // channel: [ path(versions.yml) ]
 }
 

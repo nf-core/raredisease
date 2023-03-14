@@ -2,18 +2,18 @@
 // A subworkflow to annotate snvs
 //
 
-include { VCFANNO                                 } from '../../modules/nf-core/vcfanno/main'
-include { BCFTOOLS_CONCAT                         } from '../../modules/nf-core/bcftools/concat/main'
-include { BCFTOOLS_ROH                            } from '../../modules/nf-core/bcftools/roh/main'
-include { BCFTOOLS_VIEW                           } from '../../modules/nf-core/bcftools/view/main'
-include { RHOCALL_ANNOTATE                        } from '../../modules/nf-core/rhocall/annotate/main'
-include { ENSEMBLVEP as ENSEMBLVEP_SNV            } from '../../modules/local/ensemblvep/main'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL   } from '../../modules/nf-core/tabix/bgziptabix/main'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO   } from '../../modules/nf-core/tabix/bgziptabix/main'
-include { TABIX_TABIX as TABIX_VEP                } from '../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_BCFTOOLS_CONCAT    } from '../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_BCFTOOLS_VIEW      } from '../../modules/nf-core/tabix/tabix/main'
-include { GATK4_SELECTVARIANTS                    } from '../../modules/nf-core/gatk4/selectvariants/main'
+include { VCFANNO                               } from '../../modules/nf-core/vcfanno/main'
+include { BCFTOOLS_CONCAT                       } from '../../modules/nf-core/bcftools/concat/main'
+include { BCFTOOLS_ROH                          } from '../../modules/nf-core/bcftools/roh/main'
+include { BCFTOOLS_VIEW                         } from '../../modules/nf-core/bcftools/view/main'
+include { RHOCALL_ANNOTATE                      } from '../../modules/nf-core/rhocall/annotate/main'
+include { ENSEMBLVEP as ENSEMBLVEP_SNV          } from '../../modules/local/ensemblvep/main'
+include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL } from '../../modules/nf-core/tabix/bgziptabix/main'
+include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO } from '../../modules/nf-core/tabix/bgziptabix/main'
+include { TABIX_TABIX as TABIX_VEP              } from '../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_BCFTOOLS_CONCAT  } from '../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_BCFTOOLS_VIEW    } from '../../modules/nf-core/tabix/tabix/main'
+include { GATK4_SELECTVARIANTS                  } from '../../modules/nf-core/gatk4/selectvariants/main'
 
 workflow ANNOTATE_SNVS {
 
@@ -109,7 +109,7 @@ workflow ANNOTATE_SNVS {
         ch_versions = ch_versions.mix(TABIX_BCFTOOLS_CONCAT.out.versions)
 
     emit:
-        vcf_ann       = BCFTOOLS_CONCAT.out.vcf         // channel: [ val(meta), path(vcf) ]
-        tbi           = TABIX_BCFTOOLS_CONCAT.out.tbi   // channel: [ val(meta), path(tbi) ]
-        versions      = ch_versions                     // channel: [ path(versions.yml) ]
+        vcf_ann  = BCFTOOLS_CONCAT.out.vcf       // channel: [ val(meta), path(vcf) ]
+        tbi      = TABIX_BCFTOOLS_CONCAT.out.tbi // channel: [ val(meta), path(tbi) ]
+        versions = ch_versions                   // channel: [ path(versions.yml) ]
 }

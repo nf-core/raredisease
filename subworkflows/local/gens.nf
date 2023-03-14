@@ -4,19 +4,19 @@
 
 include { GATK4_COLLECTREADCOUNTS as COLLECTREADCOUNTS } from '../../modules/local/gatk4/collectreadcounts/main'
 include { GATK4_DENOISEREADCOUNTS as DENOISEREADCOUNTS } from '../../modules/local/gatk4/denoisereadcounts/main'
-include { GENS as GENS_GENERATE } from '../../modules/local/gens/main'
+include { GENS as GENS_GENERATE                        } from '../../modules/local/gens/main'
 
 workflow GENS {
     take:
-        ch_bam             // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_vcf             // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_fasta           // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_fai             // channel: [mandatory] [ path(fai) ]
-        ch_interval_list   // channel: [mandatory] [ path(interval_list) ]
-        ch_pon             // channel: [mandatory] [ path(pon) ]
-        ch_gnomad_pos      // channel: [mandatory] [ path(gnomad_pos) ]
-        ch_case_info       // channel: [mandatory] [ val(case_info) ]
-        ch_seq_dict        // channel: [mandatory] [ path(dict) ]
+        ch_bam           // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_vcf           // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai           // channel: [mandatory] [ path(fai) ]
+        ch_interval_list // channel: [mandatory] [ path(interval_list) ]
+        ch_pon           // channel: [mandatory] [ path(pon) ]
+        ch_gnomad_pos    // channel: [mandatory] [ path(gnomad_pos) ]
+        ch_case_info     // channel: [mandatory] [ val(case_info) ]
+        ch_seq_dict      // channel: [mandatory] [ path(dict) ]
 
     main:
         ch_versions = Channel.empty()

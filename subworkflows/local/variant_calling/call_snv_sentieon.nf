@@ -13,18 +13,18 @@ include { BCFTOOLS_FILTER as BCF_FILTER_ONE        } from '../../../modules/nf-c
 include { BCFTOOLS_FILTER as BCF_FILTER_TWO        } from '../../../modules/nf-core/bcftools/filter/main'
 
 workflow CALL_SNV_SENTIEON {
-	take:
-		ch_input         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-		ch_fasta         // channel: [mandatory] [ path(fasta) ]
-		ch_fai           // channel: [mandatory] [ path(fai) ]
-		ch_dbsnp         // channel: [mandatory] [ val(meta), path(vcf) ]
-		ch_dbsnp_index   // channel: [mandatory] [ val(meta), path(tbi) ]
+    take:
+        ch_input         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_fasta         // channel: [mandatory] [ path(fasta) ]
+        ch_fai           // channel: [mandatory] [ path(fai) ]
+        ch_dbsnp         // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_dbsnp_index   // channel: [mandatory] [ val(meta), path(tbi) ]
         ch_call_interval // channel: [mandatory] [ path(interval) ]
         ch_ml_model      // channel: [mandatory] [ path(model) ]
         ch_case_info     // channel: [mandatory] [ val(case_info) ]
 
-	main:
-		ch_versions = Channel.empty()
+    main:
+        ch_versions = Channel.empty()
 
         SENTIEON_DNASCOPE ( ch_input, ch_fasta, ch_fai, ch_dbsnp, ch_dbsnp_index, ch_call_interval, ch_ml_model )
 
@@ -67,16 +67,16 @@ workflow CALL_SNV_SENTIEON {
 
         TABIX_SEN(REMOVE_DUPLICATES_SEN.out.vcf)
 
-		ch_versions = ch_versions.mix(SENTIEON_DNASCOPE.out.versions.first())
+        ch_versions = ch_versions.mix(SENTIEON_DNASCOPE.out.versions.first())
         ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions.first())
-		ch_versions = ch_versions.mix(BCFTOOLS_MERGE.out.versions.first())
-		ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_SEN.out.versions.first())
-		ch_versions = ch_versions.mix(REMOVE_DUPLICATES_SEN.out.versions.first())
-		ch_versions = ch_versions.mix(TABIX_SEN.out.versions.first())
+        ch_versions = ch_versions.mix(BCFTOOLS_MERGE.out.versions.first())
+        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_SEN.out.versions.first())
+        ch_versions = ch_versions.mix(REMOVE_DUPLICATES_SEN.out.versions.first())
+        ch_versions = ch_versions.mix(TABIX_SEN.out.versions.first())
         ch_versions = ch_versions.mix(BCF_FILTER_ONE.out.versions.first())
 
-	emit:
-		vcf		 = REMOVE_DUPLICATES_SEN.out.vcf    // channel: [ val(meta), path(vcf) ]
-        tabix    = TABIX_SEN.out.tbi                // channel: [ val(meta), path(tbi) ]
-        versions = ch_versions                      // channel: [ path(versions.yml) ]
+    emit:
+        vcf      = REMOVE_DUPLICATES_SEN.out.vcf // channel: [ val(meta), path(vcf) ]
+        tabix    = TABIX_SEN.out.tbi             // channel: [ val(meta), path(tbi) ]
+        versions = ch_versions                   // channel: [ path(versions.yml) ]
 }

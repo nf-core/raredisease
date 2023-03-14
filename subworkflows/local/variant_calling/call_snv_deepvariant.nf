@@ -10,10 +10,10 @@ include { TABIX_TABIX as TABIX_GL                 } from '../../../modules/nf-co
 
 workflow CALL_SNV_DEEPVARIANT {
     take:
-        ch_bam          // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_fasta        // channel: [mandatory] [ path(fasta) ]
-        ch_fai          // channel: [mandatory] [ path(fai) ]
-        ch_case_info    // channel: [mandatory] [ val(case_info) ]
+        ch_bam       // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_fasta     // channel: [mandatory] [ path(fasta) ]
+        ch_fai       // channel: [mandatory] [ path(fai) ]
+        ch_case_info // channel: [mandatory] [ val(case_info) ]
 
     main:
         ch_versions = Channel.empty()
@@ -55,7 +55,7 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_versions = ch_versions.mix(TABIX_GL.out.versions)
 
     emit:
-        vcf         = REMOVE_DUPLICATES_GL.out.vcf // channel: [ val(meta), path(vcf) ]
-        tabix       = TABIX_GL.out.tbi             // channel: [ val(meta), path(tbi) ]
-        versions    = ch_versions                  // channel: [ path(versions.yml) ]
+        vcf      = REMOVE_DUPLICATES_GL.out.vcf // channel: [ val(meta), path(vcf) ]
+        tabix    = TABIX_GL.out.tbi             // channel: [ val(meta), path(tbi) ]
+        versions = ch_versions                  // channel: [ path(versions.yml) ]
 }

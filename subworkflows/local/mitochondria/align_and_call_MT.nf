@@ -16,14 +16,14 @@ include { TABIX_TABIX as TABIX_TABIX_MT                                     } fr
 
 workflow ALIGN_AND_CALL_MT {
     take:
-        ch_fastq          // channel: [mandatory] [ val(meta), [ path(reads) ] ]
-        ch_ubam           // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_index_bwa      // channel: [mandatory for sentieon] [ val(meta), path(index) ]
-        ch_index_bwamem2  // channel: [mandatory for bwamem2] [ val(meta), path(index) ]
-        ch_fasta          // channel: [mandatory] [ path(fasta) ]
-        ch_dict           // channel: [mandatory] [ path(dict) ]
-        ch_fai            // channel: [mandatory] [ path(fai) ]
-        ch_intervals_mt   // channel: [mandatory] [ path(interval_list) ]
+        ch_fastq         // channel: [mandatory] [ val(meta), [ path(reads) ] ]
+        ch_ubam          // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_index_bwa     // channel: [mandatory for sentieon] [ val(meta), path(index) ]
+        ch_index_bwamem2 // channel: [mandatory for bwamem2] [ val(meta), path(index) ]
+        ch_fasta         // channel: [mandatory] [ path(fasta) ]
+        ch_dict          // channel: [mandatory] [ path(dict) ]
+        ch_fai           // channel: [mandatory] [ path(fai) ]
+        ch_intervals_mt  // channel: [mandatory] [ path(interval_list) ]
 
     main:
         ch_versions = Channel.empty()
@@ -75,11 +75,11 @@ workflow ALIGN_AND_CALL_MT {
         ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
 
     emit:
-        vcf        = GATK4_FILTERMUTECTCALLS_MT.out.vcf    // channel: [ val(meta), path(vcf) ]
-        tbi        = GATK4_FILTERMUTECTCALLS_MT.out.tbi    // channel: [ val(meta), path(tbi) ]
-        stats      = GATK4_MUTECT2_MT.out.stats            // channel: [ val(meta), path(stats) ]
-        filt_stats = GATK4_FILTERMUTECTCALLS_MT.out.stats  // channel: [ val(meta), path(tsv) ]
-        txt        = HAPLOCHECK_MT.out.txt                 // channel: [ val(meta), path(txt) ]
-        html       = HAPLOCHECK_MT.out.html                // channel: [ val(meta), path(html) ]
-        versions   = ch_versions                           // channel: [ path(versions.yml) ]
+        vcf        = GATK4_FILTERMUTECTCALLS_MT.out.vcf   // channel: [ val(meta), path(vcf) ]
+        tbi        = GATK4_FILTERMUTECTCALLS_MT.out.tbi   // channel: [ val(meta), path(tbi) ]
+        stats      = GATK4_MUTECT2_MT.out.stats           // channel: [ val(meta), path(stats) ]
+        filt_stats = GATK4_FILTERMUTECTCALLS_MT.out.stats // channel: [ val(meta), path(tsv) ]
+        txt        = HAPLOCHECK_MT.out.txt                // channel: [ val(meta), path(txt) ]
+        html       = HAPLOCHECK_MT.out.html               // channel: [ val(meta), path(html) ]
+        versions   = ch_versions                          // channel: [ path(versions.yml) ]
 }

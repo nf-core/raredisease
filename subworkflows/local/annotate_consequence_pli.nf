@@ -6,12 +6,12 @@ include { ADD_MOST_SEVERE_CSQ } from '../../modules/local/add_most_severe_conseq
 include { ADD_MOST_SEVERE_PLI } from '../../modules/local/add_most_severe_pli'
 
 workflow ANNOTATE_CSQ_PLI {
-	take:
-		ch_vcf                   // channel: [mandatory] [ val(meta), path(vcf) ]
-		ch_variant_consequences  // channel: [mandatory] [ path(consequences) ]
+    take:
+        ch_vcf                  // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_variant_consequences // channel: [mandatory] [ path(consequences) ]
 
-	main:
-		ch_versions = Channel.empty()
+    main:
+        ch_versions = Channel.empty()
 
         ADD_MOST_SEVERE_CSQ (ch_vcf, ch_variant_consequences)
 
@@ -20,7 +20,7 @@ workflow ANNOTATE_CSQ_PLI {
         ch_versions = ch_versions.mix(ADD_MOST_SEVERE_CSQ.out.versions)
         ch_versions = ch_versions.mix(ADD_MOST_SEVERE_PLI.out.versions)
 
-	emit:
-		vcf_ann  = ADD_MOST_SEVERE_PLI.out.vcf  // channel: [ val(meta), path(vcf) ]
-        versions = ch_versions                  // channel: [ path(versions.yml) ]
+    emit:
+        vcf_ann  = ADD_MOST_SEVERE_PLI.out.vcf // channel: [ val(meta), path(vcf) ]
+        versions = ch_versions                 // channel: [ path(versions.yml) ]
 }

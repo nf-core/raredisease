@@ -8,10 +8,10 @@ include { GATK4_SPLITINTERVALS } from '../../modules/nf-core/gatk4/splitinterval
 workflow SCATTER_GENOME {
 
     take:
-        ch_dict               // channel: [mandatory] [ path(dict) ]
-        ch_fai_meta           // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_fai_no_meta        // channel: [mandatory] [ path(fai) ]
-        ch_fasta_no_meta      // channel: [mandatory] [ path(fasta) ]
+        ch_dict          // channel: [mandatory] [ path(dict) ]
+        ch_fai_meta      // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_fai_no_meta   // channel: [mandatory] [ path(fai) ]
+        ch_fasta_no_meta // channel: [mandatory] [ path(fasta) ]
 
     main:
         ch_versions = Channel.empty()

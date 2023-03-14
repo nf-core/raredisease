@@ -15,11 +15,11 @@ include { TABIX_TABIX as TABIX_EXP_RENAME              } from '../../modules/nf-
 
 workflow CALL_REPEAT_EXPANSIONS {
     take:
-        ch_bam 		     	// channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_variant_catalog	// channel: [mandatory] [ path(variant_catalog.json) ]
-        ch_case_info        // channel: [mandatory] [ val(case_id) ]
-        ch_fasta 			// channel: [mandatory] [ path(fasta) ]
-        ch_fai 			    // channel: [mandatory] [ path(fai) ]
+        ch_bam             // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_variant_catalog // channel: [mandatory] [ path(variant_catalog.json) ]
+        ch_case_info       // channel: [mandatory] [ val(case_id) ]
+        ch_fasta           // channel: [mandatory] [ path(fasta) ]
+        ch_fai             // channel: [mandatory] [ path(fai) ]
 
     main:
         ch_versions = Channel.empty()
@@ -72,7 +72,7 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_versions = ch_versions.mix(COMPRESS_STRANGER.out.versions.first())
         ch_versions = ch_versions.mix(INDEX_STRANGER.out.versions.first())
 
-    emit:
-        vcf         = COMPRESS_STRANGER.out.vcf.join(INDEX_STRANGER.out.tbi) // channel: [ val(meta), path(vcf), path(tbi) ]
-        versions    = ch_versions                                            // channel: [ path(versions.yml) ]
+ emit:
+        vcf      = COMPRESS_STRANGER.out.vcf.join(INDEX_STRANGER.out.tbi) // channel: [ val(meta), path(vcf), path(tbi) ]
+        versions = ch_versions                                            // channel: [ path(versions.yml) ]
 }

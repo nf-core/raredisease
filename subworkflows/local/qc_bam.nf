@@ -63,13 +63,13 @@ workflow QC_BAM {
         ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_Y.out.versions, SENTIEON_WGSMETRICS_Y.out.versions)
 
     emit:
-        multiple_metrics        = PICARD_COLLECTMULTIPLEMETRICS.out.metrics     // channel: [ val(meta), path(metrics) ]
-        hs_metrics              = PICARD_COLLECTHSMETRICS.out.metrics           // channel: [ val(meta), path(metrics) ]
-        qualimap_results        = QUALIMAP_BAMQC.out.results                    // channel: [ val(meta), path(qualimap_dir) ]
-        tiddit_wig              = TIDDIT_COV.out.wig                            // channel: [ val(meta), path(wig) ]
-        bigwig                  = UCSC_WIGTOBIGWIG.out.bw                       // channel: [ val(meta), path(bw) ]
-        d4                      = MOSDEPTH.out.per_base_d4                      // channel: [ val(meta), path(d4) ]
-        cov                     = ch_cov                                        // channel: [ val(meta), path(metrics) ]
-        cov_y                   = ch_cov_y                                      // channel: [ val(meta), path(metrics) ]
-        versions                = ch_versions                                   // channel: [ path(versions.yml) ]
+        multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]
+        hs_metrics       = PICARD_COLLECTHSMETRICS.out.metrics       // channel: [ val(meta), path(metrics) ]
+        qualimap_results = QUALIMAP_BAMQC.out.results                // channel: [ val(meta), path(qualimap_dir) ]
+        tiddit_wig       = TIDDIT_COV.out.wig                        // channel: [ val(meta), path(wig) ]
+        bigwig           = UCSC_WIGTOBIGWIG.out.bw                   // channel: [ val(meta), path(bw) ]
+        d4               = MOSDEPTH.out.per_base_d4                  // channel: [ val(meta), path(d4) ]
+        cov              = ch_cov                                    // channel: [ val(meta), path(metrics) ]
+        cov_y            = ch_cov_y                                  // channel: [ val(meta), path(metrics) ]
+        versions         = ch_versions                               // channel: [ path(versions.yml) ]
 }

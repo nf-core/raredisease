@@ -2,10 +2,10 @@
 // A subworkflow to score and rank variants.
 //
 
-include { GENMOD_ANNOTATE  } from '../../modules/nf-core/genmod/annotate/main'
-include { GENMOD_MODELS    } from '../../modules/nf-core/genmod/models/main'
-include { GENMOD_SCORE     } from '../../modules/nf-core/genmod/score/main'
-include { GENMOD_COMPOUND  } from '../../modules/nf-core/genmod/compound/main'
+include { GENMOD_ANNOTATE } from '../../modules/nf-core/genmod/annotate/main'
+include { GENMOD_MODELS   } from '../../modules/nf-core/genmod/models/main'
+include { GENMOD_SCORE    } from '../../modules/nf-core/genmod/score/main'
+include { GENMOD_COMPOUND } from '../../modules/nf-core/genmod/compound/main'
 
 workflow RANK_VARIANTS {
 
@@ -32,6 +32,6 @@ workflow RANK_VARIANTS {
         ch_versions = ch_versions.mix(GENMOD_COMPOUND.out.versions)
 
     emit:
-        vcf         = GENMOD_COMPOUND.out.vcf  // channel: [ val(meta), path(vcf) ]
-        versions    = ch_versions              // channel: [ path(versions.yml) ]
+        vcf      = GENMOD_COMPOUND.out.vcf // channel: [ val(meta), path(vcf) ]
+        versions = ch_versions             // channel: [ path(versions.yml) ]
 }

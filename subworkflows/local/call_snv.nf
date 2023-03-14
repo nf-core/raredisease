@@ -9,14 +9,14 @@ include { GATK4_SELECTVARIANTS } from '../../modules/nf-core/gatk4/selectvariant
 
 workflow CALL_SNV {
     take:
-	    ch_input                // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-	    ch_fasta                // channel: [mandatory] [ path(fasta) ]
-	    ch_fai                  // channel: [mandatory] [ path(fai) ]
-	    ch_known_dbsnp          // channel: [optional] [ val(meta), path(vcf) ]
-	    ch_known_dbsnp_tbi      // channel: [optional] [ val(meta), path(tbi) ]
-        ch_call_interval        // channel: [mandatory] [ path(intervals) ]
-	    ch_ml_model             // channel: [mandatory] [ path(model) ]
-	    ch_case_info            // channel: [mandatory] [ val(case_info) ]
+        ch_input           // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_fasta           // channel: [mandatory] [ path(fasta) ]
+        ch_fai             // channel: [mandatory] [ path(fai) ]
+        ch_known_dbsnp     // channel: [optional] [ val(meta), path(vcf) ]
+        ch_known_dbsnp_tbi // channel: [optional] [ val(meta), path(tbi) ]
+        ch_call_interval   // channel: [mandatory] [ path(intervals) ]
+        ch_ml_model        // channel: [mandatory] [ path(model) ]
+        ch_case_info       // channel: [mandatory] [ val(case_info) ]
 
     main:
         ch_versions   = Channel.empty()
@@ -48,7 +48,7 @@ workflow CALL_SNV {
         ch_versions = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
 
     emit:
-        vcf      = ch_vcf         // channel: [ val(meta), path(vcf) ]
-        tabix    = ch_tabix       // channel: [ val(meta), path(tbi) ]
-        versions = ch_versions    // channel: [ path(versions.yml) ]
+        vcf      = ch_vcf      // channel: [ val(meta), path(vcf) ]
+        tabix    = ch_tabix    // channel: [ val(meta), path(tbi) ]
+        versions = ch_versions // channel: [ path(versions.yml) ]
 }

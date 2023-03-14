@@ -65,6 +65,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
         // ch_versions = ch_versions.mix(CALL_CNV_CNVPYTOR.out.versions)
 
     emit:
-        vcf        = SVDB_MERGE.out.vcf   // channel: [ val(meta), path(vcf)]
-        versions   = ch_versions          // channel: [ path(versions.yml) ]
+        vcf      = SVDB_MERGE.out.vcf // channel: [ val(meta), path(vcf)]
+        versions = ch_versions        // channel: [ path(versions.yml) ]
 }

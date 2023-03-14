@@ -43,8 +43,8 @@ workflow ALIGN {
         ch_versions   = Channel.empty().mix(ALIGN_BWAMEM2.out.versions, ALIGN_SENTIEON.out.versions)
 
     emit:
-        marked_bam    = ch_marked_bam   // channel: [ val(meta), path(bam) ]
-        marked_bai    = ch_marked_bai   // channel: [ val(meta), path(bai) ]
-        bam_bai       = ch_bam_bai      // channel: [ val(meta), path(bam), path(bai) ]
-        versions      = ch_versions     // channel: [ path(versions.yml) ]
+        marked_bam = ch_marked_bam // channel: [ val(meta), path(bam) ]
+        marked_bai = ch_marked_bai // channel: [ val(meta), path(bai) ]
+        bam_bai    = ch_bam_bai    // channel: [ val(meta), path(bam), path(bai) ]
+        versions   = ch_versions   // channel: [ path(versions.yml) ]
 }
