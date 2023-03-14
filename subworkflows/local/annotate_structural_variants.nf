@@ -6,6 +6,7 @@ include { SVDB_QUERY                  } from '../../modules/nf-core/svdb/query/m
 include { PICARD_SORTVCF              } from '../../modules/nf-core/picard/sortvcf/main'
 include { BCFTOOLS_VIEW               } from '../../modules/nf-core/bcftools/view/main'
 include { ENSEMBLVEP as ENSEMBLVEP_SV } from '../../modules/local/ensemblvep/main'
+include { TABIX_TABIX as TABIX_VEP    } from '../../modules/nf-core/tabix/tabix/main'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
@@ -57,12 +58,16 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             []
         )
 
+        TABIX_VEP (ENSEMBLVEP_SV.out.vcf_gz)
+
         ch_versions = ch_versions.mix(SVDB_QUERY.out.versions)
         ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(ENSEMBLVEP_SV.out.versions)
+        ch_versions = ch_versions.mix(TABIX_VEP.out.versions)
 
     emit:
         vcf_ann  = ENSEMBLVEP_SV.out.vcf_gz // channel: [ val(meta), path(vcf) ]
+        tbi      = TABIX_VEP.out.tbi        // channel: [ val(meta), path(tbi) ]
         versions = ch_versions              // channel: [ path(versions.yml) ]
 }
