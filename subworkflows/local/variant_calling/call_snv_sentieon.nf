@@ -13,22 +13,22 @@ include { BCFTOOLS_FILTER as BCF_FILTER_ONE        } from '../../../modules/nf-c
 include { BCFTOOLS_FILTER as BCF_FILTER_TWO        } from '../../../modules/nf-core/bcftools/filter/main'
 
 workflow CALL_SNV_SENTIEON {
-	take:
-		input         // channel: [ val(meta), bam, bai ]
-		fasta         // path: genome.fasta
-		fai           // path: genome.fai
-		dbsnp         // path: params.known_dbsnp
-		dbsnp_index   // path: params.known_dbsnp
-        call_interval // path: params.call_interval
-        ml_model      // path: params.ml_model
-        case_info     // channel: [ case_id ]
+    take:
+        ch_input         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_fasta         // channel: [mandatory] [ path(fasta) ]
+        ch_fai           // channel: [mandatory] [ path(fai) ]
+        ch_dbsnp         // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_dbsnp_index   // channel: [mandatory] [ val(meta), path(tbi) ]
+        ch_call_interval // channel: [mandatory] [ path(interval) ]
+        ch_ml_model      // channel: [mandatory] [ path(model) ]
+        ch_case_info     // channel: [mandatory] [ val(case_info) ]
 
-	main:
-		ch_versions = Channel.empty()
+    main:
+        ch_versions = Channel.empty()
 
-        SENTIEON_DNASCOPE ( input, fasta, fai, dbsnp, dbsnp_index, call_interval, ml_model )
+        SENTIEON_DNASCOPE ( ch_input, ch_fasta, ch_fai, ch_dbsnp, ch_dbsnp_index, ch_call_interval, ch_ml_model )
 
-        SENTIEON_DNAMODELAPPLY ( SENTIEON_DNASCOPE.out.vcf_index, fasta, fai, ml_model )
+        SENTIEON_DNAMODELAPPLY ( SENTIEON_DNASCOPE.out.vcf_index, ch_fasta, ch_fai, ch_ml_model )
 
         BCF_FILTER_ONE (SENTIEON_DNAMODELAPPLY.out.vcf )
 
@@ -40,7 +40,7 @@ workflow CALL_SNV_SENTIEON {
             .map { meta,vcf,tbi -> return [vcf,tbi] }
             .set { ch_vcf_idx }
 
-        case_info
+        ch_case_info
             .combine(ch_vcf_idx)
             .groupTuple()
             .branch{                                                                                                    // branch the channel into multiple channels (single, multiple) depending on size of list
@@ -49,7 +49,7 @@ workflow CALL_SNV_SENTIEON {
             }
             .set{ ch_vcf_idx_merge_in }
 
-        BCFTOOLS_MERGE(ch_vcf_idx_merge_in.multiple,[],fasta,fai)
+        BCFTOOLS_MERGE(ch_vcf_idx_merge_in.multiple, [], ch_fasta, ch_fai)
 
         ch_split_multi_in = BCFTOOLS_MERGE.out.merged_variants
                     .map{meta, bcf ->
@@ -57,26 +57,26 @@ workflow CALL_SNV_SENTIEON {
 
         ch_vcf_idx_case =  ch_vcf_idx_merge_in.single.mix(ch_split_multi_in)
 
-        SPLIT_MULTIALLELICS_SEN(ch_vcf_idx_case, fasta)
+        SPLIT_MULTIALLELICS_SEN(ch_vcf_idx_case, ch_fasta)
 
         ch_remove_dup_in = SPLIT_MULTIALLELICS_SEN.out.vcf
                             .map{meta, vcf ->
                                     return [meta, vcf, []]}
 
-        REMOVE_DUPLICATES_SEN(ch_remove_dup_in, fasta)
+        REMOVE_DUPLICATES_SEN(ch_remove_dup_in, ch_fasta)
 
         TABIX_SEN(REMOVE_DUPLICATES_SEN.out.vcf)
 
-		ch_versions = ch_versions.mix(SENTIEON_DNASCOPE.out.versions.first())
+        ch_versions = ch_versions.mix(SENTIEON_DNASCOPE.out.versions.first())
         ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions.first())
-		ch_versions = ch_versions.mix(BCFTOOLS_MERGE.out.versions.first())
-		ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_SEN.out.versions.first())
-		ch_versions = ch_versions.mix(REMOVE_DUPLICATES_SEN.out.versions.first())
-		ch_versions = ch_versions.mix(TABIX_SEN.out.versions.first())
+        ch_versions = ch_versions.mix(BCFTOOLS_MERGE.out.versions.first())
+        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_SEN.out.versions.first())
+        ch_versions = ch_versions.mix(REMOVE_DUPLICATES_SEN.out.versions.first())
+        ch_versions = ch_versions.mix(TABIX_SEN.out.versions.first())
         ch_versions = ch_versions.mix(BCF_FILTER_ONE.out.versions.first())
 
-	emit:
-		vcf		 = REMOVE_DUPLICATES_SEN.out.vcf
-        tabix    = TABIX_SEN.out.tbi
-        versions = ch_versions
+    emit:
+        vcf      = REMOVE_DUPLICATES_SEN.out.vcf // channel: [ val(meta), path(vcf) ]
+        tabix    = TABIX_SEN.out.tbi             // channel: [ val(meta), path(tbi) ]
+        versions = ch_versions                   // channel: [ path(versions.yml) ]
 }

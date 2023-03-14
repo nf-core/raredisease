@@ -7,13 +7,13 @@ include { SVDB_MERGE as SVDB_MERGE_TIDDIT } from '../../../modules/nf-core/svdb/
 
 workflow CALL_SV_TIDDIT {
     take:
-    bam            // channel: [ val(meta), path(bam) ]
-    fasta          // channel: [ val(meta), path(fasta) ]
-    index          // [ val(meta), path(bwa_index)]
-    case_info      // channel: [ case_id ]
+        ch_bam_bai   // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_fasta     // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_index     // channel: [mandatory] [ val(meta), path(index)]
+        ch_case_info // channel: [mandatory] [ val(case_info) ]
 
     main:
-        TIDDIT_SV ( bam, fasta, index )
+        TIDDIT_SV ( ch_bam_bai, ch_fasta, ch_index )
 
         TIDDIT_SV.out
             .vcf
@@ -21,7 +21,7 @@ workflow CALL_SV_TIDDIT {
             .toList()
             .set { vcf_file_list }
 
-        case_info
+        ch_case_info
             .combine(vcf_file_list)
             .set { merge_input_vcfs }
 
@@ -31,6 +31,6 @@ workflow CALL_SV_TIDDIT {
         ch_versions = ch_versions.mix(SVDB_MERGE_TIDDIT.out.versions)
 
     emit:
-        vcf          = SVDB_MERGE_TIDDIT.out.vcf
-        versions     = ch_versions
+        vcf      = SVDB_MERGE_TIDDIT.out.vcf // channel: [ val(meta), path(vcf) ]
+        versions = ch_versions               // channel: [ path(versions.yml) ]
 }
