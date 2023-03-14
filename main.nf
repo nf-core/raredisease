@@ -25,7 +25,6 @@ params.bwamem2_index                  = WorkflowMain.getGenomeAttribute(params, 
 params.call_interval                  = WorkflowMain.getGenomeAttribute(params, 'call_interval')
 params.gnomad_af                      = WorkflowMain.getGenomeAttribute(params, 'gnomad_af')
 params.gnomad_af_idx                  = WorkflowMain.getGenomeAttribute(params, 'gnomad_af_idx')
-params.gnomad_vcf                     = WorkflowMain.getGenomeAttribute(params, 'gnomad_vcf')
 params.intervals_wgs                  = WorkflowMain.getGenomeAttribute(params, 'intervals_wgs')
 params.intervals_y                    = WorkflowMain.getGenomeAttribute(params, 'intervals_y')
 params.known_dbsnp                    = WorkflowMain.getGenomeAttribute(params, 'known_dbsnp')
