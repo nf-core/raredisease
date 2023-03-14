@@ -6,49 +6,49 @@ include { MANTA_GERMLINE as MANTA } from '../../../modules/nf-core/manta/germlin
 
 workflow CALL_SV_MANTA {
     take:
-    bam            // channel: [ val(meta), path(bam) ]
-    bai            // channel: [ val(meta), path(bai) ]
-    fasta          // path(fasta)
-    fai            // path(fai)
-    case_info      // channel: [ case_id ]
-    bed            // channel: [ val(meta), path(bed), path(bed_tbi) ]
+        ch_bam       // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_bai       // channel: [mandatory] [ val(meta), path(bai) ]
+        ch_fasta     // channel: [mandatory] [ path(fasta) ]
+        ch_fai       // channel: [mandatory] [ path(fai) ]
+        ch_case_info // channel: [mandatory] [ val(case_info) ]
+        ch_bed       // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
 
     main:
-        bam.collect{it[1]}
+        ch_bam.collect{it[1]}
             .toList()
             .set { bam_file_list }
 
-        bai.collect{it[1]}
+        ch_bai.collect{it[1]}
             .toList()
             .set { bai_file_list }
 
-        bed.map {
+        ch_bed.map {
                 id, bed_file, index ->
                     return [bed_file, index]}
             .set { bed_input }
 
         if (params.analysis_type.toUpperCase() == "WGS" ) {
-            case_info.combine(bam_file_list)
+            ch_case_info.combine(bam_file_list)
                 .combine(bai_file_list)
                 .map { it -> it + [ [], [] ] }
                 .set { manta_input }
-            MANTA ( manta_input, fasta, fai )
+            MANTA ( manta_input, ch_fasta, ch_fai )
         } else {
             case_info.combine(bam_file_list)
                 .combine(bai_file_list)
                 .combine(bed_input)
                 .set { manta_input }
-            MANTA ( manta_input, fasta, fai )
+            MANTA ( manta_input, ch_fasta, ch_fai )
         }
 
         ch_versions = MANTA.out.versions
 
     emit:
-        candidate_small_indels_vcf      = MANTA.out.candidate_small_indels_vcf
-        candidate_small_indels_vcf_tbi  = MANTA.out.candidate_small_indels_vcf_tbi
-        candidate_sv_vcf                = MANTA.out.candidate_sv_vcf
-        candidate_sv_vcf_tbi            = MANTA.out.candidate_sv_vcf_tbi
-        diploid_sv_vcf                  = MANTA.out.diploid_sv_vcf
-        diploid_sv_vcf_tbi              = MANTA.out.diploid_sv_vcf_tbi
-        versions                        = ch_versions
+        candidate_small_indels_vcf     = MANTA.out.candidate_small_indels_vcf     // channel: [ val(meta), path(vcf) ]
+        candidate_small_indels_vcf_tbi = MANTA.out.candidate_small_indels_vcf_tbi // channel: [ val(meta), path(tbi) ]
+        candidate_sv_vcf               = MANTA.out.candidate_sv_vcf               // channel: [ val(meta), path(vcf) ]
+        candidate_sv_vcf_tbi           = MANTA.out.candidate_sv_vcf_tbi           // channel: [ val(meta), path(tbi) ]
+        diploid_sv_vcf                 = MANTA.out.diploid_sv_vcf                 // channel: [ val(meta), path(vcf) ]
+        diploid_sv_vcf_tbi             = MANTA.out.diploid_sv_vcf_tbi             // channel: [ val(meta), path(tbi) ]
+        versions                       = ch_versions
 }
