@@ -12,8 +12,8 @@ process ADD_MOST_SEVERE_CSQ {
     path (variant_consequences)
 
     output:
-    tuple val(meta), path("*_csq.vcf")        , emit: vcf
-    path "versions.yml"                       , emit: versions
+    tuple val(meta), path("*.vcf")        , emit: vcf
+    path "versions.yml"                   , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -22,7 +22,7 @@ process ADD_MOST_SEVERE_CSQ {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    add_most_severe_consequence.py --file_in ${vcf} --file_out ${prefix}_csq.vcf --variant_csq ${variant_consequences}
+    add_most_severe_consequence.py --file_in ${vcf} --file_out ${prefix}.vcf --variant_csq ${variant_consequences}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
