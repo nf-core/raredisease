@@ -18,17 +18,18 @@ include { GATK4_SELECTVARIANTS                  } from '../../modules/nf-core/ga
 workflow ANNOTATE_SNVS {
 
     take:
-        ch_vcf                 // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
-        ch_vcfanno_resources   // channel: [mandatory] [ path(resources) ]
-        ch_vcfanno_lua         // channel: [mandatory] [ path(lua) ]
-        ch_vcfanno_toml        // channel: [mandatory] [ path(toml) ]
-        val_vep_genome         // string: [mandatory] GRCh37 or GRCh38
-        val_vep_cache_version  // string: [mandatory] default: 107
-        ch_vep_cache           // channel: [mandatory] [ path(cache) ]
-        ch_fasta               // channel: [mandatory] [ path(fasta) ]
-        ch_gnomad_af           // channel: [optional] [ path(tab), path(tbi) ]
-        ch_split_intervals     // channel: [mandatory] [ path(intervals) ]
-        ch_samples             // channel: [mandatory] [ val(sample_id), val(sex), val(phenotype), val(paternal_id), val(maternal_id), val(case_id) ]
+        ch_vcf                // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
+        analysis_type         // string: [mandatory] 'wgs' or 'wes'
+        ch_vcfanno_resources  // channel: [mandatory] [ path(resources) ]
+        ch_vcfanno_lua        // channel: [mandatory] [ path(lua) ]
+        ch_vcfanno_toml       // channel: [mandatory] [ path(toml) ]
+        val_vep_genome        // string: [mandatory] GRCh37 or GRCh38
+        val_vep_cache_version // string: [mandatory] default: 107
+        ch_vep_cache          // channel: [mandatory] [ path(cache) ]
+        ch_fasta              // channel: [mandatory] [ path(fasta) ]
+        ch_gnomad_af          // channel: [optional] [ path(tab), path(tbi) ]
+        ch_split_intervals    // channel: [mandatory] [ path(intervals) ]
+        ch_samples            // channel: [mandatory] [ val(sample_id), val(sex), val(phenotype), val(paternal_id), val(maternal_id), val(case_id) ]
 
     main:
         ch_versions       = Channel.empty()
@@ -81,20 +82,28 @@ workflow ANNOTATE_SNVS {
 
         TABIX_VEP (ENSEMBLVEP_SNV.out.vcf_gz)
 
-        ENSEMBLVEP_SNV.out.vcf_gz
-            .join(TABIX_VEP.out.tbi)
-            .groupTuple()
-            .map { meta, vcfs, tbis ->
-                def sortedvcfs = vcfs.sort { it.baseName }
-                def sortedtbis = tbis.sort { it.baseName }
-                return [ meta, sortedvcfs, sortedtbis ]
-            }
-            .set { ch_vep_ann }
+        ch_vep_ann   = ENSEMBLVEP_SNV.out.vcf_gz
+        ch_vep_index = TABIX_VEP.out.tbi
 
-        BCFTOOLS_CONCAT (ch_vep_ann)
+        if (params.analysis_type == 'wgs') {
 
-        TABIX_BCFTOOLS_CONCAT (BCFTOOLS_CONCAT.out.vcf)
+            ENSEMBLVEP_SNV.out.vcf_gz
+                .join(TABIX_VEP.out.tbi)
+                .groupTuple()
+                .map { meta, vcfs, tbis ->
+                    def sortedvcfs = vcfs.sort { it.baseName }
+                    def sortedtbis = tbis.sort { it.baseName }
+                    return [ meta, sortedvcfs, sortedtbis ]
+                }
+                .set { ch_concat_in }
 
+            BCFTOOLS_CONCAT (ch_concat_in)
+
+            TABIX_BCFTOOLS_CONCAT (BCFTOOLS_CONCAT.out.vcf)
+
+            ch_vep_ann   = BCFTOOLS_CONCAT.out.vcf
+            ch_vep_index = TABIX_BCFTOOLS_CONCAT.out.tbi
+        }
         ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions)
         ch_versions = ch_versions.mix(RHOCALL_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_ROHCALL.out.versions)
@@ -109,7 +118,7 @@ workflow ANNOTATE_SNVS {
         ch_versions = ch_versions.mix(TABIX_BCFTOOLS_CONCAT.out.versions)
 
     emit:
-        vcf_ann  = BCFTOOLS_CONCAT.out.vcf       // channel: [ val(meta), path(vcf) ]
-        tbi      = TABIX_BCFTOOLS_CONCAT.out.tbi // channel: [ val(meta), path(tbi) ]
-        versions = ch_versions                   // channel: [ path(versions.yml) ]
+        vcf_ann  = ch_vep_ann   // channel: [ val(meta), path(vcf) ]
+        tbi      = ch_vep_index // channel: [ val(meta), path(tbi) ]
+        versions = ch_versions  // channel: [ path(versions.yml) ]
 }
