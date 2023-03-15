@@ -70,6 +70,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
     emit:
         vcf      = SVDB_MERGE.out.vcf  // channel: [ val(meta), path(vcf)]
-        tbi      = TABIX_TABIX.out.tbi // channel: [ val(meta), path(vcf)]
+        tbi      = TABIX_TABIX.out.tbi // channel: [ val(meta), path(tbi)]
         versions = ch_versions         // channel: [ path(versions.yml) ]
 }
