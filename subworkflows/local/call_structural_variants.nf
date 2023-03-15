@@ -6,6 +6,7 @@ include { CALL_SV_MANTA     } from './variant_calling/call_sv_manta'
 include { CALL_SV_TIDDIT    } from './variant_calling/call_sv_tiddit'
 include { SVDB_MERGE        } from '../../modules/nf-core/svdb/merge/main'
 include { CALL_CNV_CNVPYTOR } from './variant_calling/call_cnv_cnvpytor'
+include { TABIX_TABIX       } from '../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_STRUCTURAL_VARIANTS {
 
@@ -60,11 +61,15 @@ workflow CALL_STRUCTURAL_VARIANTS {
         // SVDB_MERGE ( merge_input_vcfs, ["tiddit","manta","cnvpytor"] )
         SVDB_MERGE (merge_input_vcfs, ["tiddit","manta"])
 
+        TABIX_TABIX (SVDB_MERGE.out.vcf)
+
         ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
         ch_versions = ch_versions.mix(CALL_SV_TIDDIT.out.versions)
+        ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
         // ch_versions = ch_versions.mix(CALL_CNV_CNVPYTOR.out.versions)
 
     emit:
-        vcf      = SVDB_MERGE.out.vcf // channel: [ val(meta), path(vcf)]
-        versions = ch_versions        // channel: [ path(versions.yml) ]
+        vcf      = SVDB_MERGE.out.vcf  // channel: [ val(meta), path(vcf)]
+        tbi      = TABIX_TABIX.out.tbi // channel: [ val(meta), path(tbi)]
+        versions = ch_versions         // channel: [ path(versions.yml) ]
 }

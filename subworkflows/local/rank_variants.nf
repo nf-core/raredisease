@@ -2,10 +2,11 @@
 // A subworkflow to score and rank variants.
 //
 
-include { GENMOD_ANNOTATE } from '../../modules/nf-core/genmod/annotate/main'
-include { GENMOD_MODELS   } from '../../modules/nf-core/genmod/models/main'
-include { GENMOD_SCORE    } from '../../modules/nf-core/genmod/score/main'
-include { GENMOD_COMPOUND } from '../../modules/nf-core/genmod/compound/main'
+include { GENMOD_ANNOTATE  } from '../../modules/nf-core/genmod/annotate/main'
+include { GENMOD_MODELS    } from '../../modules/nf-core/genmod/models/main'
+include { GENMOD_SCORE     } from '../../modules/nf-core/genmod/score/main'
+include { GENMOD_COMPOUND  } from '../../modules/nf-core/genmod/compound/main'
+include { TABIX_BGZIPTABIX } from '../../modules/nf-core/tabix/bgziptabix/main'
 
 workflow RANK_VARIANTS {
 
@@ -26,12 +27,15 @@ workflow RANK_VARIANTS {
 
         GENMOD_COMPOUND(GENMOD_SCORE.out.vcf)
 
+        TABIX_BGZIPTABIX (GENMOD_COMPOUND.out.vcf)
+
         ch_versions = ch_versions.mix(GENMOD_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(GENMOD_MODELS.out.versions)
         ch_versions = ch_versions.mix(GENMOD_SCORE.out.versions)
         ch_versions = ch_versions.mix(GENMOD_COMPOUND.out.versions)
+        ch_versions = ch_versions.mix(TABIX_BGZIPTABIX.out.versions)
 
     emit:
-        vcf      = GENMOD_COMPOUND.out.vcf // channel: [ val(meta), path(vcf) ]
-        versions = ch_versions             // channel: [ path(versions.yml) ]
+        vcf      = TABIX_BGZIPTABIX.out.gz_tbi.map { meta, vcf, tbi -> return [ meta, vcf ] }.collect() // channel: [ val(meta), path(vcf) ]
+        versions = ch_versions                                                                          // channel: [ path(versions.yml) ]
 }
