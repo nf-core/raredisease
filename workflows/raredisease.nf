@@ -440,6 +440,7 @@ workflow RAREDISEASE {
 
         ANNOTATE_SNVS (
             ch_vcf,
+            params.analysis_type,
             ch_vcfanno_resources,
             ch_vcfanno_lua,
             ch_vcfanno_toml,
