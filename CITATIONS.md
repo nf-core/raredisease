@@ -30,6 +30,10 @@
 
   > Poplin R, Chang PC, Alexander D, et al. A universal SNP and small-indel variant caller using deep neural networks. Nat Biotechnol. 2018;36(10):983-987. doi:10.1038/nbt.4235
 
+- [Ensembl VEP](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4)
+
+  > McLaren W, Gil L, Hunt SE, et al. The Ensembl Variant Effect Predictor. Genome Biol. 2016;17(1):122. doi:10.1186/s13059-016-0974-4
+
 - [ExpansionHunter](https://academic.oup.com/bioinformatics/article/doi/10.1093/bioinformatics/btz431/5499079)
 
   > Dolzhenko E, Deshpande V, Schlesinger F, et al. ExpansionHunter: a sequence-graph-based tool to analyze variation in short tandem repeat regions. Birol I, ed. Bioinformatics. 2019;35(22):4754-4756. doi:10.1093/bioinformatics/btz431
@@ -83,6 +87,14 @@
 - [SAMtools](https://academic.oup.com/bioinformatics/article/25/16/2078/204688)
 
   > Li H, Handsaker B, Wysoker A, et al. The Sequence Alignment/Map format and SAMtools. Bioinformatics. 2009;25(16):2078-2079. doi:10.1093/bioinformatics/btp352
+
+- [Sentieon DNAscope](https://www.biorxiv.org/content/10.1101/2022.05.20.492556v1.abstract)
+
+  > Freed D, Pan R, Chen H, Li Z, Hu J, Aldana R. DNAscope: High Accuracy Small Variant Calling Using Machine Learning. Bioinformatics; 2022. doi:10.1101/2022.05.20.492556
+
+- [Sentieon DNASeq](https://www.frontiersin.org/articles/10.3389/fgene.2019.00736/full)
+
+  > Kendig KI, Baheti S, Bockol MA, et al. Sentieon DNASeq Variant Calling Workflow Demonstrates Strong Computational Performance and Accuracy. Front Genet. 2019;10:736. doi:10.3389/fgene.2019.00736
 
 - [SMNCopyNumberCaller](https://www.nature.com/articles/s41436-020-0754-0)
 
