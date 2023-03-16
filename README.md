@@ -10,6 +10,17 @@
 
 [![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23raredisease-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/raredisease)[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
 
+####TOC
+
+- [Introduction](#introduction)
+- [Pipeline summary](#pipeline-summary)
+  - [Work in progress flowchart](#work-in-progress-flowchart)
+- [Quick Start](#quick-start)
+- [Documentation](#documentation)
+- [Credits](#credits)
+- [Contributions and Support](#contributions-and-support)
+- [Citations](#citations)
+
 ## Introduction
 
 > NOTE
@@ -131,9 +142,9 @@ The nf-core/raredisease pipeline comes with documentation about the pipeline [us
 
 ## Credits
 
-nf-core/raredisease was originally written by Clinical Genomics Stockholm.
+nf-core/raredisease was mostly written by [Ramprasad Neethiraj](https://github.com/ramprasadn), [Anders Jemt](https://github.com/jemten), [Lucia Pena Perez](https://github.com/Lucpen), and [Mei Wu](https://github.com/projectoriented) at Clinical Genomics Stockholm.
 
-Big thanks to the contributors for their extensive assistance in the development of this pipeline.
+Big thanks to the [Sima Rahimi](https://github.com/sima-r), [Gwenna Breton](https://github.com/Gwennid), [Lauri Mesilaakso](https://github.com/ljmesi), [Subazini Thankaswamy Kosalai](https://github.com/sysbiocoder), [Annick Renevey](https://github.com/rannick), [Peter Pruisscher](https://github.com/peterpru), [Lucas Taniguti](https://github.com/lmtani), [Ryan Kennedy](https://github.com/ryanjameskennedy), and the nf-core community for their extensive assistance in the development of this pipeline.
 
 ## Contributions and Support
 
