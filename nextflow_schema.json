@@ -456,10 +456,10 @@
                     "description": "Interval in the reference that will be used in the software",
                     "hidden": true
                 },
-                "pcrfree": {
+                "pcr_amplification": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "indicates whether the sample is PCR Free or not. Set to true for PCR Free samples.",
+                    "default": false,
+                    "description": "indicates whether the sample library is amplified using PCR or not. Set to false for PCR Free samples.",
                     "fa_icon": "fas fa-map-signs"
                 },
                 "variant_type": {
