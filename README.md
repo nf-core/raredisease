@@ -35,6 +35,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [MultiQC](http://multiqc.info/)
 - [Picard's CollectMutipleMetrics, CollectHsMetrics, and CollectWgsMetrics](https://broadinstitute.github.io/picard/)
 - [Qualimap](http://qualimap.conesalab.org/)
+- [Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/)
 - [TIDDIT's cov](https://github.com/J35P312/)
 
 **2. Alignment:**
@@ -69,6 +70,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 - [Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline ](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-)
 - Annotation:
+  - [Haplogrep2](https://github.com/seppinho/haplogrep-cmd)
   - [VCFanno](https://github.com/brentp/vcfanno)
   - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
 
