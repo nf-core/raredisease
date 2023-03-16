@@ -1,4 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+# Written by Ramprasad Neethiraj and released under the MIT license.
+# See git repository (https://github.com/nf-core/raredisease) for full license text.
+
 import argparse
 import gzip
 import sys
