@@ -51,7 +51,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 **4. Variant calling - SV:**
 
 - [CNVpytor](https://github.com/abyzovlab/CNVpytor/)
-- [MANTA](https://github.com/Illumina/manta)
+- [Manta](https://github.com/Illumina/manta)
 - [TIDDIT's sv](https://github.com/SciLifeLab/TIDDIT)
 
 **5. Annotation - SNV:**

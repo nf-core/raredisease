@@ -6,15 +6,9 @@ This document describes the output produced by the pipeline. Most of the plots a
 
 The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
 
-<!-- TODO nf-core: Write this documentation describing your workflow's output -->
-
 ## Pipeline overview
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
-
-- [FastQC](#fastqc) - Raw read QC
-- [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
-- [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
 ### Alignment
 
@@ -22,11 +16,11 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ##### Bwa-mem2
 
-[Bwa-mem2](https://github.com/bwa-mem2/bwa-mem2)
+[Bwa-mem2](https://github.com/bwa-mem2/bwa-mem2) used to map the reads to a reference genome. The aligned reads are coordinate sorted with samtools sort. These files are treated as intermediates and are not placed in the output folder by default.
 
 ##### Sentieon
 
-[Sentieon DNAseq](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/)
+[Sentieon's bwa mem](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#map-reads-to-reference) is the software accelerated version of the bwa-mem algorithm. It is used to efficiently perform the alignment using BWA. Aligned reads are then coordinate sorted using Sentieon's [sort](https://support.sentieon.com/manual/usages/general/#util-syntax) utility. It is not the default aligner, but it can be chosen over bwamem2 by setting `--aligner` option to sentieon.
 
 #### Duplicate marking
 
@@ -44,24 +38,122 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - `{outputdir}/alignment/`
   - `*.bam`: FastQC report containing quality metrics.
   - `*.bai`: Zip archive containing the FastQC report, tab-delimited data file and plot images.
-  - `.metrics.txt`: Text file containing the dedup metrics.
+  - `*.txt`: Text file containing the dedup metrics.
   </details>
 
-### Quality control and metrics
+### Quality control and reporting
+
+#### Quality control
+
+##### FastQC
+
+[FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+
+##### Mosdepth
+
+[Mosdepth](https://github.com/brentp/mosdepth)
+
+##### Picardtools
+
+[Picard's CollectMutipleMetrics, CollectHsMetrics, and CollectWgsMetrics](https://broadinstitute.github.io/picard/)
+
+##### Qualimap
+
+[Qualimap](http://qualimap.conesalab.org/)
+
+##### Sention WgsMetricsAlgo
+
+[Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/)
+
+#### TIDDIT cov
+
+[TIDDIT's cov](https://github.com/J35P312/)
+
+#### Reporting
+
+##### MultiQC
+
+[MultiQC](http://multiqc.info/)
 
 ### Variant calling - SNV
 
+#### DeepVariant
+
+[DeepVariant](https://github.com/google/deepvariant)
+
+#### Sentieon DNAscope
+
+[Sentieon DNAscope](https://support.sentieon.com/manual/DNAscope_usage/dnascope/)
+
 ### Variant calling - SV
+
+#### Manta
+
+[Manta](https://github.com/Illumina/manta)
+
+#### TIDDIT sv
+
+[TIDDIT's sv](https://github.com/SciLifeLab/TIDDIT)
 
 ### Variant calling - repeat expansions
 
+#### ExpansionsHunter
+
+[ExpansionHunter](https://github.com/Illumina/ExpansionHunter)
+
+#### stranger
+
+[stranger](https://github.com/Clinical-Genomics/stranger)
+
 ### Annotation - SNV
+
+#### bcftools roh
+
+[bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh)
+
+#### VCFanno
+
+[VCFanno](https://github.com/brentp/vcfanno)
+
+#### VEP
+
+[VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
 
 ### Annotation - SV
 
+#### VCFanno
+
+[VCFanno](https://github.com/brentp/vcfanno)
+
+#### VEP
+
+[VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
+
 ### Mitochondrial analysis
 
+#### Alignment and variant calling
+
+[Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline ](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-)
+
+#### Annotation:
+
+##### Haplogrep2
+
+[Haplogrep2](https://github.com/seppinho/haplogrep-cmd)
+
+##### VCFanno
+
+[VCFanno](https://github.com/brentp/vcfanno)
+
+##### VEP
+
+[VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
+
 ### Rank variants and filtering
+
+#### Genmod
+
+[Genmod](https://github.com/Clinical-Genomics/genmod)
 
 ### FastQC
 
