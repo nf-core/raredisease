@@ -388,22 +388,22 @@
                     "fa_icon": "fas fa-book",
                     "enum": ["wgs", "wes", "mito"]
                 },
-                "annotate_snv_switch": {
+                "skip_snv_annotation": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Specifies whether or not to run annotate SNV subworkflow.",
+                    "default": false,
+                    "description": "Specifies whether or not to skip annotate SNV subworkflow.",
                     "fa_icon": "fas fa-book"
                 },
-                "annotate_sv_switch": {
+                "skip_sv_annotation": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Specifies whether or not to run annotate structural variant subworkflow.",
+                    "default": false,
+                    "description": "Specifies whether or not to skip annotate structural variant subworkflow.",
                     "fa_icon": "fas fa-book"
                 },
-                "dedicated_mt_analysis": {
+                "skip_mt_analysis": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Specifies whether or not to run a separate subworkflow for mitochondrial analysis.",
+                    "default": false,
+                    "description": "Specifies whether or not to skip the subworkflow that analyses mitochondrial genome separate from the nuclear genome.",
                     "fa_icon": "fas fa-book"
                 },
                 "gens_switch": {
@@ -456,10 +456,10 @@
                     "description": "Interval in the reference that will be used in the software",
                     "hidden": true
                 },
-                "pcrfree": {
+                "pcr_amplification": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "indicates whether the sample is PCR Free or not. Set to true for PCR Free samples.",
+                    "default": false,
+                    "description": "indicates whether the sample library is amplified using PCR or not. Set to false for PCR Free samples.",
                     "fa_icon": "fas fa-map-signs"
                 },
                 "variant_type": {
