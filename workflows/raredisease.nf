@@ -357,7 +357,7 @@ workflow RAREDISEASE {
         ch_versions = ch_versions.mix(GENS.out.versions)
     }
 
-    if (params.annotate_sv_switch) {
+    if (!params.skip_sv_annotation) {
         ANNOTATE_STRUCTURAL_VARIANTS (
             CALL_STRUCTURAL_VARIANTS.out.vcf,
             params.svdb_query_dbs,
@@ -391,7 +391,7 @@ workflow RAREDISEASE {
 
     }
 
-    if (params.dedicated_mt_analysis) {
+    if (!params.skip_mt_analysis) {
         ANALYSE_MT (
             ch_mapped.bam_bai,
             ch_bwa_index,
@@ -423,11 +423,11 @@ workflow RAREDISEASE {
 
     // VARIANT ANNOTATION
 
-    if (params.annotate_snv_switch) {
+    if (!params.skip_snv_annotation) {
 
         ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
 
-        if (params.dedicated_mt_analysis) {
+        if (!params.skip_mt_analysis) {
             ch_vcf
                 .map { meta, vcf, tbi -> return [meta, vcf, tbi, []]}
                 .set { ch_selvar_in }
@@ -456,7 +456,7 @@ workflow RAREDISEASE {
 
         ch_snv_annotate = ANNOTATE_SNVS.out.vcf_ann
 
-        if (params.dedicated_mt_analysis) {
+        if (!params.skip_mt_analysis) {
 
             ANNOTATE_SNVS.out.vcf_ann
                 .concat(ANALYSE_MT.out.vcf)
