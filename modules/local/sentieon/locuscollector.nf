@@ -9,16 +9,16 @@ process SENTIEON_LOCUSCOLLECTOR {
     tuple val(meta), path(bam), path(bai)
 
     output:
-    tuple val(meta), path('*score.txt.gz')          , emit: score        , optional: true
-    tuple val(meta), path('*score.txt.gz.tbi')      , emit: score_idx    , optional: true
-    path  "versions.yml"                            , emit: versions
+    tuple val(meta), path('*txt.gz')    , emit: score    , optional: true
+    tuple val(meta), path('*txt.gz.tbi'), emit: score_idx, optional: true
+    path  "versions.yml"                , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
     def input = bam.sort().collect{"-i $it"}.join(' ')
-    def prefix = task.ext.prefix ? "${task.ext.prefix}_score.txt.gz" : "${meta.id}_score.txt.gz"
+    def prefix = task.ext.prefix ? "${task.ext.prefix}.txt.gz" : "${meta.id}.txt.gz"
     """
     if [ \${SENTIEON_LICENSE_BASE64:-"unset"} != "unset" ]; then
         echo "Initializing SENTIEON_LICENSE env variable"
@@ -39,10 +39,10 @@ process SENTIEON_LOCUSCOLLECTOR {
     """
 
     stub:
-    def prefix = task.ext.prefix ? "${task.ext.prefix}_score.gz" : "${meta.id}_score.gz"
+    def prefix = task.ext.prefix ? "${task.ext.prefix}.txt.gz" : "${meta.id}.txt.gz"
     """
-    touch ${prefix}_score.txt.gz
-    touch ${prefix}_score.txt.gz.tbi
+    touch ${prefix}.txt.gz
+    touch ${prefix}.txt.gz.tbi
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
