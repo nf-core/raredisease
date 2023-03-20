@@ -16,6 +16,53 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
+### Alignment
+
+#### Mapping
+
+##### Bwa-mem2
+
+[Bwa-mem2](https://github.com/bwa-mem2/bwa-mem2)
+
+##### Sentieon
+
+[Sentieon DNAseq](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/)
+
+#### Duplicate marking
+
+##### Picard's MarkDuplicates
+
+[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates)
+
+##### Sentieon dedup
+
+[Sentieon dedup](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#remove-or-mark-duplicates)
+
+<details markdown="1">
+<summary>Output files from Alignment</summary>
+
+- `{outputdir}/alignment/`
+  - `*.bam`: FastQC report containing quality metrics.
+  - `*.bai`: Zip archive containing the FastQC report, tab-delimited data file and plot images.
+  - `.metrics.txt`: Text file containing the dedup metrics.
+  </details>
+
+### Quality control and metrics
+
+### Variant calling - SNV
+
+### Variant calling - SV
+
+### Variant calling - repeat expansions
+
+### Annotation - SNV
+
+### Annotation - SV
+
+### Mitochondrial analysis
+
+### Rank variants and filtering
+
 ### FastQC
 
 <details markdown="1">
