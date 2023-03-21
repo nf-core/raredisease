@@ -69,6 +69,7 @@ workflow QC_BAM {
         tiddit_wig       = TIDDIT_COV.out.wig                        // channel: [ val(meta), path(wig) ]
         bigwig           = UCSC_WIGTOBIGWIG.out.bw                   // channel: [ val(meta), path(bw) ]
         d4               = MOSDEPTH.out.per_base_d4                  // channel: [ val(meta), path(d4) ]
+        global_dist      = MOSDEPTH.out.global_txt                   // channel: [ val(meta), path(txt) ]
         cov              = ch_cov                                    // channel: [ val(meta), path(metrics) ]
         cov_y            = ch_cov_y                                  // channel: [ val(meta), path(metrics) ]
         versions         = ch_versions                               // channel: [ path(versions.yml) ]
