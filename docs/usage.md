@@ -173,11 +173,11 @@ The mandatory and optional parameters for each category are tabulated below.
 | -------------------------- | --------------------------- |
 | variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>     |
 | ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup> |
-| analysis_type <sup>3</sup> | call_interval<sup>2</sup>   |
+| analysis_type<sup>3</sup>  | call_interval<sup>2</sup>   |
 |                            | known_dbsnp_tbi<sup>2</sup> |
 
-<sup>1</sup>Default variant caller is DeepVariant, but you have the option to use sentieon as well.<br />
-<sup>2</sup>These parameters are only used by sentieon.<br />
+<sup>1</sup>Default variant caller is DeepVariant, but you have the option to use Sentieon as well.<br />
+<sup>2</sup>These parameters are only used by Sentieon.<br />
 <sup>3</sup>Default is WGS, but you have the option to choose WES as well.<br />
 
 ##### 5. Variant calling - Structural variants
@@ -197,13 +197,13 @@ The mandatory and optional parameters for each category are tabulated below.
 | vep_cache_version             | vep_filters<sup>6</sup>        |
 | vep_cache                     | score_config_snv<sup>7</sup>   |
 
-<sup>1</sup>Genome version is used by vep. You have the option to choose between GRCh37 and GRCh38.<br />
-<sup>2</sup>Path to vcf files and their indices used by vcfanno. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_resources.txt).<br />
-<sup>3</sup>Path to a vcfanno configration file. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_config.toml).<br />
-<sup>4</sup>Gnomad vcf file can be downloaded from [here] (https://gnomad.broadinstitute.org/downloads).<br />
-<sup>5</sup>Used by genmod while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
-<sup>6</sup> This file contains a list of candidate genes(HGNC ids) that is used to split the variants into a canditate variants and research variants. Research variants contain all the variants. While candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt).<br />
-<sup>7</sup>Used by genmod for ranking the variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_snv.ini).<br />
+<sup>1</sup>Genome version is used by VEP. You have the option to choose between GRCh37 and GRCh38.<br />
+<sup>2</sup>Path to VCF files and their indices used by vcfanno. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_resources.txt).<br />
+<sup>3</sup>Path to a vcfanno configuration file. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_config.toml).<br />
+<sup>4</sup>gnomAD VCF file can be downloaded from [here] (https://gnomad.broadinstitute.org/downloads).<br />
+<sup>5</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
+<sup>6</sup>This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into candidate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt).<br />
+<sup>7</sup>Used by GENMOD for ranking the variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_snv.ini).<br />
 
 ##### 7. SV annotation & Ranking
 
@@ -214,14 +214,14 @@ The mandatory and optional parameters for each category are tabulated below.
 | vep_cache_version          | vep_filters        |
 | vep_cache                  |                    |
 
-<sup>1</sup> A csv file that describes the databases(vcfs) used by svdb for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
+<sup>1</sup>A CSV file that describes the databases (VCFs) used by SVDB for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
 
 ##### 8. Mitochondrial analysis
 
 | Mandatory                       | Optional |
 | ------------------------------- | -------- |
 | genome                          |          |
-| mt_backchain_shift <sup>1</sup> |          |
+| mt_backchain_shift<sup>1</sup> |          |
 | mt_contig_name                  |          |
 | mt_fasta_shift                  |          |
 | mt_intervals                    |          |
@@ -231,15 +231,15 @@ The mandatory and optional parameters for each category are tabulated below.
 | vep_cache_version               |          |
 | vep_cache                       |          |
 
-<sup>1</sup> Can be generated by GATK's [ShiftFasta](https://gatk.broadinstitute.org/hc/en-us/articles/9570501436827-ShiftFasta-BETA-). Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/mt_shift8000.back_chain).
+<sup>1</sup>Can be generated by GATK's [ShiftFasta](https://gatk.broadinstitute.org/hc/en-us/articles/9570501436827-ShiftFasta-BETA-). Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/mt_shift8000.back_chain).
 
 #### Run the pipeline
 
-You can directly supply the parameters in the command line (cli) or use a config file from which the pipeline can import the parameters.
+You can directly supply the parameters in the command line (CLI) or use a config file from which the pipeline can import the parameters.
 
-##### Direct input in cli
+##### Direct input in CLI
 
-All of the pipeline parameters listed [here](https://nf-co.re/raredisease/dev/parameters) can be passed using the cli. For example, you can provide the samplesheet, reference fasta, and turn off annotations for SNVs and SVs by running,
+All of the pipeline parameters listed [here](https://nf-co.re/raredisease/dev/parameters) can be passed using the CLI. For example, you can provide the samplesheet, reference FASTA, and turn off annotations for SNVs and SVs by running,
 
 ```
 nextflow run nf-core/raredisease \
@@ -270,7 +270,7 @@ A sample config file can be found [here](https://github.com/nf-core/raredisease/
 
 - **Singularity cache:** If you are using singularity, use the nf-core download command to download images first, before running the pipeline. Define [NXF_SINGULARITY_CACHEDIR](https://nextflow.io/docs/latest/config.html?highlight=nxf_singularity_cachedir#environment-variables) or singularity.cacheDir Nextflow options to store and re-use the images from a central location for future pipeline runs.
 
-- **Save references:** While the pipeline can generate indices for the fasta and some vcf files when they are not provided, it can be benficial to supply them to the pipeline as it saves computing resources. You can use the `--save_reference` parameter to publish those files, and then update your config file with the paths to these files for your subsequent runs.
+- **Save references:** While the pipeline can generate indices for the reference FASTQ and some VCF files when they are not provided, it can be benficial to supply them to the pipeline as it saves computing resources. You can use the `--save_reference` parameter to publish those files, and then update your config file with the paths to these files for your subsequent runs.
 
 - **Update pipeline:** If you would like to update the pipeline code stored in cache, in addition to running the command with `-latest` option, you can also run the command below:
 
@@ -278,7 +278,7 @@ A sample config file can be found [here](https://github.com/nf-core/raredisease/
 nextflow pull nf-core/raredisease
 ```
 
-- **Reproducibility:** Specify a pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since. First, go to the [nf-core/raredisease releases page](https://github.com/nf-core/raredisease/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r`, for example, `-r 1.3.1`. You can switch to another version by changing the number after the `-r` flag. This version number will be logged in reports when you run the pipeline. For example, you can view the version number at the bottom of the MultiQC reports.
+- **Reproducibility:** Specify a pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since. First, go to the [nf-core/raredisease releases page](https://github.com/nf-core/raredisease/releases) and find the latest pipeline version - numeric only (e.g. `1.3.1`). Then specify this when running the pipeline with `-r`, for example, `-r 1.3.1`. You can switch to another version by changing the number after the `-r` flag. The version number will be logged in reports when you run the pipeline. For example, you can view the version number at the bottom of the MultiQC reports.
 
 - **Restart a previous run:** Add `-resume` to your command when restarting a pipeline. Nextflow will use cached results from any pipeline steps where inputs are the same, and resume the run from where it terminated previously. For input to be considered the same, names and the files' contents must be identical. For more info about `-resume`, see [this blog post](https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html). You can also supply a run name to resume a specific run: `-resume [run-name]`. Use the `nextflow log` command to show previous run names.
 
