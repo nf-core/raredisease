@@ -37,7 +37,7 @@ Table of contents:
 
 ## Introduction
 
-nf-core/raredisease is a bioinformatics best-practice analysis pipeline to call, annotate and score variants from WGS/WES of rare disease patients. The pipeline is built using nextflow.
+nf-core/raredisease is a bioinformatics best-practice analysis pipeline to call, annotate and score variants from WGS/WES of rare disease patients. The pipeline is built using Nextflow.
 
 ## Prerequisites
 
@@ -59,10 +59,10 @@ nextflow run nf-core/raredisease \
     --outdir <OUTDIR>
 ```
 
-> Check [nf-core/configs](https://github.com/nf-core/configs/tree/master/conf) to see if a custom config file to run nf-core pipelines already exists for your institute. If so, you can simply use `-profile test,<institute>` in your command. This enables the appropirate package manager and sets the appropriate execution settings for your machine.
+> Check [nf-core/configs](https://github.com/nf-core/configs/tree/master/conf) to see if a custom config file to run nf-core pipelines already exists for your institute. If so, you can simply use `-profile test,<institute>` in your command. This enables the appropriate package manager and sets the appropriate execution settings for your machine.
 > NB: The order of profiles is important! They are loaded in sequence, so later profiles can overwrite earlier profiles.
 
-The above command downloads the pipeline from github, caches it, and tests it on the test dataset.
+The above command downloads the pipeline from GitHub, caches it, and tests it on the test dataset.
 
 > When you run the command again, it will fetch the pipeline from cache even if a more recent version of the pipeline is available. To make sure that you're running the latest version of the pipeline, update the cached version of the pipeline by including `-latest` in the command.
 
@@ -71,10 +71,10 @@ Test profile runs the pipeline with a proband containing three samples, but if y
 Running the command creates the following files in your working directory:
 
 ```
-work                # Directory containing the nextflow working files
+work                # Directory containing the Nextflow working files
 <OUTDIR>            # Finished results in specified location (defined with --outdir)
 .nextflow_log       # Log file from Nextflow
-# Other nextflow hidden files, like history of pipeline logs.
+# Other Nextflow hidden files, like history of pipeline logs.
 ```
 
 ## Run nf-core/raredisease with your data
@@ -87,7 +87,7 @@ Running the pipeline involves three steps:
 
 #### Samplesheet
 
-A samplesheet is used to pass the information about the sample(s), such as the path to the fastq files and other meta data (gender, phenotype, etc.,) to the pipeline in csv format.
+A samplesheet is used to pass the information about the sample(s), such as the path to the fastq files and other meta data (sex, phenotype, etc.,) to the pipeline in csv format.
 
 nf-core/raredisease will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The pedigree information in the samplesheet (sex/gender and phenotype) should be provided as they would be for a [ped file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format) (i.e. 1 for male, 2 for female, other for unknown).
 
@@ -97,7 +97,7 @@ nf-core/raredisease will auto-detect whether a sample is single- or paired-end u
 | `lane`        | Used to generate seperate channels during the alignment step                                                                                                                           |
 | `fastq_1`     | Absolute path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
 | `fastq_2`     | Absolute path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
-| `gender`      | Sex (1=male; 2=female; other=unknown)                                                                                                                                                  |
+| `sex`         | Sex (1=male; 2=female; other=unknown)                                                                                                                                                  |
 | `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected)                                                                                                                     |
 | `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                  |
 | `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                  |
