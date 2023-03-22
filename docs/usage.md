@@ -118,17 +118,17 @@ If you would like to see more examples of what a typical samplesheet looks like 
 
 In nf-core/raredisease, references can be supplied using parameters listed [here](https://nf-co.re/raredisease/dev/parameters).
 
-Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools (example, you can align with either bwamem2 or sentieon, call SNVs with DeepVariant or sentieon). You also have the option to turn off sections of the pipeline if you do not want to run them (example, snv annotation can be turned off by adding `--skip_snv_annotation` flag in the command line, or by setting it to true in a parameter file). This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, for SNV calling if you use DeepVariant as your variant caller, you need not provide the parameter `--ml_model`, which is only used by sentieon.
+Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can align with either bwamem2 or Sentieon BWA mem and call SNVs with DeepVariant or Sentieon DNAscope. You also have the option to turn off sections of the pipeline. For example, SNV annotation can be turned off by adding the `--skip_snv_annotation` flag in the command line, or by setting it to true in a parameter file. This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, for SNV calling if you use DeepVariant as your variant caller, you need not provide the parameter `--ml_model`, which is only used by Sentieon DNAscope.
 
-nf-core/raredisease consists of several tools used for various purposes. For convenience, we have grouped those tools under the following catergories:
+nf-core/raredisease consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
 
-1. Alignment (bwamem2/sentieon)
+1. Alignment (bwamem2/Sentieon BWA mem)
 2. QC stats from the alignment files
-3. Repeat expansions (Expansionshunter & Stranger)
-4. Variant calling - SNV (DeepVariant/Sentieon-haplotypecaller)
+3. Repeat expansions (Expansion Hunter & Stranger)
+4. Variant calling - SNV (DeepVariant/Sentieon DNAscope)
 5. Variant calling - Structural variants (Tiddit & Manta)
-6. SNV annotation & ranking (rohcall, vcfanno, ensemblvep, genmod)
-7. SV annotation & ranking (svdb query, ensemblvep, genmod)
+6. SNV annotation & ranking (rohcall, vcfanno, ensembl VEP, GENMOD)
+7. SV annotation & ranking (SVDB query, ensembl VEP, GENMOD)
 8. Mitochondrial analysis
 
 > We have only listed the groups that require at least one input from the user. For example, the pipeline also runs smncopynumbercaller, but it does not require any input other than the bam files passed by the pipeline. Hence, it is not mentioned in the list above. To know more about the tools used in the pipeline check [README](../README.md).
