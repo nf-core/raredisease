@@ -94,16 +94,16 @@ nf-core/raredisease will auto-detect whether a sample is single- or paired-end u
 | Fields        | Description                                                                                                                                                                            |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `lane`        | Used to generate seperate channels during the alignment step                                                                                                                           |
+| `lane`        | Used to generate separate channels during the alignment step.                                                                                                                           |
 | `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
 | `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
-| `sex`         | Sex (1=male; 2=female; other=unknown)                                                                                                                                                  |
-| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected)                                                                                                                     |
+| `sex`         | Sex (1=male; 2=female; other=unknown).                                                                                                                                                  |
+| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                     |
 | `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                  |
 | `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                  |
-| `case_id`     | Case ID, for the analysis used when generating a family VCF                                                                                                                            |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                                                                            |
 
-It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across 2 lanes:
+It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
 | sample   | lane | fastq_1                          | fastq_2                          | gender | phenotype | paternal_id | maternal_id | case_id |
 | -------- | ---- | -------------------------------- | -------------------------------- | ------ | --------- | ----------- | ----------- | ------- |
