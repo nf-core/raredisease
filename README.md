@@ -68,7 +68,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 **5. Annotation - SNV:**
 
 - [bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh)
-- [VCFanno](https://github.com/brentp/vcfanno)
+- [vcfanno](https://github.com/brentp/vcfanno)
 - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
 
 **6. Annotation - SV:**
@@ -80,18 +80,18 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 - [Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline ](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-)
 - Annotation:
-  - [Haplogrep2](https://github.com/seppinho/haplogrep-cmd)
-  - [VCFanno](https://github.com/brentp/vcfanno)
+  - [HaploGrep2](https://github.com/seppinho/haplogrep-cmd)
+  - [vcfanno](https://github.com/brentp/vcfanno)
   - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
 
 **8. Variant calling - repeat expansions:**
 
-- [ExpansionHunter](https://github.com/Illumina/ExpansionHunter)
-- [stranger](https://github.com/Clinical-Genomics/stranger)
+- [Expansion Hunter](https://github.com/Illumina/ExpansionHunter)
+- [Stranger](https://github.com/Clinical-Genomics/stranger)
 
 **9. Rank variants - SV and SNV:**
 
-- [Genmod](https://github.com/Clinical-Genomics/genmod)
+- [GENMOD](https://github.com/Clinical-Genomics/genmod)
 
 <!-- prettier-ignore -->
 <p align="center">
