@@ -13,7 +13,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Alignment](#alignment)
   - [Mapping](#mapping)
     - [Bwa-mem2](#bwa-mem2)
-    - [Sentieon bwa mem](#sentieon)
+    - [Sentieon bwa mem](#sentieon-bwa-mem)
   - [Duplicate marking](#duplicate-marking)
     - [Picard's MarkDuplicates](#picard-s-markduplicates)
     - [Sentieon dedup](#sentieon-dedup)
@@ -21,10 +21,10 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [Quality control](#quality-control)
     - [FastQC](#fastqc)
     - [Mosdepth](#mosdepth)
-    - [Picard tools](#picardtools)
+    - [Picard tools](#picard-tools)
     - [Qualimap](#qualimap)
     - [Sentieon WgsMetricsAlgo](#sention-wgsmetricsalgo)
-    - [TIDDIT's cov and UCSC WigToBigWig](#tiddit-s-cov-and-ucsc-wigtobigwig)
+    - [TIDDIT's cov and UCSC WigToBigWig](#tiddits-cov-and-ucsc-wigtobigwig)
   - [Reporting](#reporting)
     - [MultiQC](#multiqc)
 - [Variant calling - SNV](#variant-calling---snv)
@@ -35,7 +35,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [TIDDIT sv](#tiddit-sv)
   - [SVDB merge](#svdb-merge)
 - [Variant calling - repeat expansions](#variant-calling---repeat-expansions)
-  - [Expansion Hunter](#expansionshunter)
+  - [Expansion Hunter](#expansion-hunter)
   - [Stranger](#stranger)
 - [Annotation - SNV](#annotation---snv)
   - [bcftools roh](#bcftools-roh)
@@ -262,9 +262,9 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 ### Variant calling - repeat expansions
 
-#### ExpansionsHunter
+#### Expansion Hunter
 
-[ExpansionHunter](https://github.com/Illumina/ExpansionHunter) aims to estimate sizes of repeat sequences by performing a targeted search through alignments that span, flank, and are fully contained in each repeat.
+[Expansion Hunter](https://github.com/Illumina/ExpansionHunter) aims to estimate sizes of repeat sequences by performing a targeted search through alignments that span, flank, and are fully contained in each repeat.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -275,9 +275,9 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 </details>
 
-#### stranger
+#### Stranger
 
-[stranger](https://github.com/Clinical-Genomics/stranger) annotates output files from ExpansionHunter with the pathologic implications of the repeat sizes.
+[Stranger](https://github.com/Clinical-Genomics/stranger) annotates output files from Expansion Hunter with the pathologic implications of the repeat sizes.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -294,9 +294,9 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 [bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh) is a program for detecting runs of homo/autozygosity.from only bi-allelic sites. The output files are not published in the output folder by default, and is passed to vcfanno for further annotation.
 
-#### VCFanno
+#### vcfanno
 
-[VCFanno](https://github.com/brentp/vcfanno) allows you to quickly annotate your VCF with any number of INFO fields from any number of VCFs. It uses a simple conf file to allow the user to specify the source annotation files and fields and how they will be added to the info of the query VCF. Values are pulled by name from the INFO field with special-cases of ID and FILTER to pull from those VCF columns. The output files are not published in the output folder by default, and is passed to vep for further annotation.
+[vcfanno](https://github.com/brentp/vcfanno) allows you to quickly annotate your VCF with any number of INFO fields from any number of VCFs. It uses a simple conf file to allow the user to specify the source annotation files and fields and how they will be added to the info of the query VCF. Values are pulled by name from the INFO field with special-cases of ID and FILTER to pull from those VCF columns. The output files are not published in the output folder by default, and is passed to vep for further annotation.
 
 #### VEP
 
@@ -355,9 +355,9 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 
 #### Annotation:
 
-##### Haplogrep2
+##### HaploGrep2
 
-[Haplogrep2](https://github.com/seppinho/haplogrep-cmd) allows detecting artificial recombinants and missing variants as well as annotating rare and phantom mutations in mitochondria. Haplogrep generates a text report, which is published by default.
+[HaploGrep2](https://github.com/seppinho/haplogrep-cmd) allows detecting artificial recombinants and missing variants as well as annotating rare and phantom mutations in mitochondria. Haplogrep generates a text report, which is published by default.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -367,9 +367,9 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 
 </details>
 
-##### VCFanno
+##### vcfanno
 
-[VCFanno](https://github.com/brentp/vcfanno) allows you to quickly annotate your VCF with any number of INFO fields from any number of VCFs. It uses a simple conf file to allow the user to specify the source annotation files and fields and how they will be added to the info of the query VCF. Values are pulled by name from the INFO field with special-cases of ID and FILTER to pull from those VCF columns. The output files are not published in the output folder by default, and is passed to vep for further annotation.
+[vcfanno](https://github.com/brentp/vcfanno) allows you to quickly annotate your VCF with any number of INFO fields from any number of VCFs. It uses a simple conf file to allow the user to specify the source annotation files and fields and how they will be added to the info of the query VCF. Values are pulled by name from the INFO field with special-cases of ID and FILTER to pull from those VCF columns. The output files are not published in the output folder by default, and is passed to vep for further annotation.
 
 ##### VEP
 
