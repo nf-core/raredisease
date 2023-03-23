@@ -73,7 +73,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 **6. Annotation - SV:**
 
-- [VCFanno](https://github.com/brentp/vcfanno)
+- [SVDB query](https://github.com/J35P312/SVDB#Query)
 - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
 
 **7. Mitochondrial analysis:**
