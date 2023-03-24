@@ -51,8 +51,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 **2. Alignment:**
 
-- [bwa](https://github.com/lh3/bwa)
-- [bwamem2](http://bio-bwa.sourceforge.net/bwa.shtml)
+- [Bwa-mem2](https://github.com/bwa-mem2/bwa-mem2)
 - [Sentieon DNAseq](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/)
 
 **3. Variant calling - SNV:**
@@ -63,36 +62,36 @@ On release, automated continuous integration tests run the pipeline on a full-si
 **4. Variant calling - SV:**
 
 - [CNVpytor](https://github.com/abyzovlab/CNVpytor/)
-- [MANTA](https://github.com/Illumina/manta)
+- [Manta](https://github.com/Illumina/manta)
 - [TIDDIT's sv](https://github.com/SciLifeLab/TIDDIT)
 
 **5. Annotation - SNV:**
 
 - [bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh)
-- [VCFanno](https://github.com/brentp/vcfanno)
+- [vcfanno](https://github.com/brentp/vcfanno)
 - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
 
 **6. Annotation - SV:**
 
-- [VCFanno](https://github.com/brentp/vcfanno)
+- [SVDB query](https://github.com/J35P312/SVDB#Query)
 - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
 
 **7. Mitochondrial analysis:**
 
 - [Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline ](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-)
 - Annotation:
-  - [Haplogrep2](https://github.com/seppinho/haplogrep-cmd)
-  - [VCFanno](https://github.com/brentp/vcfanno)
+  - [HaploGrep2](https://github.com/seppinho/haplogrep-cmd)
+  - [vcfanno](https://github.com/brentp/vcfanno)
   - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
 
 **8. Variant calling - repeat expansions:**
 
-- [ExpansionHunter](https://github.com/Illumina/ExpansionHunter)
-- [stranger](https://github.com/Clinical-Genomics/stranger)
+- [Expansion Hunter](https://github.com/Illumina/ExpansionHunter)
+- [Stranger](https://github.com/Clinical-Genomics/stranger)
 
 **9. Rank variants - SV and SNV:**
 
-- [Genmod](https://github.com/Clinical-Genomics/genmod)
+- [GENMOD](https://github.com/Clinical-Genomics/genmod)
 
 <!-- prettier-ignore -->
 <p align="center">
