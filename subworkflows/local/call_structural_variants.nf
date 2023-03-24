@@ -5,7 +5,6 @@
 include { CALL_SV_MANTA     } from './variant_calling/call_sv_manta'
 include { CALL_SV_TIDDIT    } from './variant_calling/call_sv_tiddit'
 include { SVDB_MERGE        } from '../../modules/nf-core/svdb/merge/main'
-include { CALL_CNV_CNVPYTOR } from './variant_calling/call_cnv_cnvpytor'
 include { TABIX_TABIX       } from '../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_STRUCTURAL_VARIANTS {
@@ -20,7 +19,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_fai            // channel: [mandatory] [ path(fai) ]
         ch_case_info      // channel: [mandatory] [ val(case_info) ]
         ch_target_bed     // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
-        val_cnvpytor_bins // string: [optional] binsizes for cnvpytor default: 1000
 
     main:
         ch_versions = Channel.empty()
@@ -35,19 +33,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
             .collect{it[1]}
             .set { tiddit_vcf }
 
-        //cnvpytor
-        // CALL_CNV_CNVPYTOR ( bam, bai, case_info, cnvpytor_bins, fasta_no_meta, fai)
-        //     .candidate_cnvs_vcf
-        //     .collect{it[1]}
-        //     .set {cnvpytor_vcf }
-
-        // //merge
-        // tiddit_vcf
-        //     .combine(manta_vcf)
-        //     .combine(cnvpytor_vcf)
-        //     .toList()
-        //     .set { vcf_list }
-
         //merge
         tiddit_vcf
             .combine(manta_vcf)
@@ -58,7 +43,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
             .combine(vcf_list)
             .set { merge_input_vcfs }
 
-        // SVDB_MERGE ( merge_input_vcfs, ["tiddit","manta","cnvpytor"] )
         SVDB_MERGE (merge_input_vcfs, ["tiddit","manta"])
 
         TABIX_TABIX (SVDB_MERGE.out.vcf)
@@ -66,7 +50,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
         ch_versions = ch_versions.mix(CALL_SV_TIDDIT.out.versions)
         ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
-        // ch_versions = ch_versions.mix(CALL_CNV_CNVPYTOR.out.versions)
 
     emit:
         vcf      = SVDB_MERGE.out.vcf  // channel: [ val(meta), path(vcf)]
