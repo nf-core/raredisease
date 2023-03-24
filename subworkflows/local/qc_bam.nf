@@ -40,14 +40,8 @@ workflow QC_BAM {
 
         UCSC_WIGTOBIGWIG (TIDDIT_COV.out.wig, ch_chrom_sizes)
 
-        MOSDEPTH (ch_bam_bai, Channel.value([[], []]), Channel.value([[], []]))
-
-        ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions.first())
-        ch_versions = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions.first())
-        ch_versions = ch_versions.mix(QUALIMAP_BAMQC.out.versions.first())
-        ch_versions = ch_versions.mix(TIDDIT_COV.out.versions.first())
-        ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions.first())
-        ch_versions = ch_versions.mix(MOSDEPTH.out.versions.first())
+        ch_bam_bai.map{ meta, bam, bai -> [meta, bam, bai, []]}.set{ch_mosdepth_in}
+        MOSDEPTH (ch_mosdepth_in, ch_fasta)
 
         // COLLECT WGS METRICS
         PICARD_COLLECTWGSMETRICS ( ch_bam_bai, ch_fasta, ch_fai, ch_intervals_wgs )
@@ -59,8 +53,14 @@ workflow QC_BAM {
         ch_cov   = Channel.empty().mix(PICARD_COLLECTWGSMETRICS.out.metrics, SENTIEON_WGSMETRICS.out.wgs_metrics)
         ch_cov_y = Channel.empty().mix(PICARD_COLLECTWGSMETRICS_Y.out.metrics, SENTIEON_WGSMETRICS_Y.out.wgs_metrics)
 
-        ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS.out.versions, SENTIEON_WGSMETRICS.out.versions)
-        ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_Y.out.versions, SENTIEON_WGSMETRICS_Y.out.versions)
+        ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions.first())
+        ch_versions = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions.first())
+        ch_versions = ch_versions.mix(QUALIMAP_BAMQC.out.versions.first())
+        ch_versions = ch_versions.mix(TIDDIT_COV.out.versions.first())
+        ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions.first())
+        ch_versions = ch_versions.mix(MOSDEPTH.out.versions.first())
+        ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS.out.versions.first(), SENTIEON_WGSMETRICS.out.versions.first())
+        ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_Y.out.versions.first(), SENTIEON_WGSMETRICS_Y.out.versions.first())
 
     emit:
         multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]
