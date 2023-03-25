@@ -37,7 +37,6 @@ def create_fastq_channel(LinkedHashMap row) {
     meta.paternal  = row.paternal_id
     meta.phenotype = row.phenotype
     meta.single_end   = row.single_end.toBoolean()
-    //TODO: think about adding LB and PU, make sure only illumina will be used, ID can also contain a flowcell id
     meta.read_group   =     "\'@RG\\tID:"+ row.fastq_1.split('/')[-1] + "\\tPL:ILLUMINA\\tSM:"+row.sample.split('_')[0]+"\'"
 
 
