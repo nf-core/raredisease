@@ -14,7 +14,6 @@
 
 - [Introduction](#introduction)
 - [Pipeline summary](#pipeline-summary)
-  - [Work in progress flowchart](#work-in-progress-flowchart)
 - [Quick Start](#quick-start)
 - [Documentation](#documentation)
 - [Credits](#credits)
@@ -91,12 +90,6 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 Note that it is possible to include/exclude certain tools or steps.
 
-### Work in progress flowchart
-
-![nf-core/raredisease work in progress](https://docs.google.com/drawings/d/e/2PACX-1vTam7xjHBQTo1QsOpMUpd5F2vUZK5aXuf51OpSBaaV_2xMwfS1oN6GgVeQEJHjNNXRtCVHdGjCVFyzO/pub?w=2268&h=2268)
-
-Note that this chart is meant as a tool to help with coordination during pipeline development and hence is modified regularly. Some tools might be added or removed as suitable. If you would like to modify the flowchart, please contact us on the slack channel (see "Contributions and Support" further down).
-
 ## Quick Start
 
 1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=22.10.1`)
@@ -144,7 +137,7 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 ## Citations
 
-<!-- nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
+<!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
 <!-- If you use  nf-core/raredisease for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
