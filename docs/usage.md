@@ -66,7 +66,7 @@ The above command downloads the pipeline from github, caches it, and tests it on
 
 > When you run the command again, it will fetch the pipeline from cache even if a more recent version of the pipeline is available. To make sure that you're running the latest version of the pipeline, update the cached version of the pipeline by including `-latest` in the command.
 
-Test profile runs the pipeline with a proband containing three samples, but if you would like to test the pipeline with one sample, use `-profile test_one_sample,<YOURPROFILE>`.
+Test profile runs the pipeline with a case containing three samples, but if you would like to test the pipeline with one sample, use `-profile test_one_sample,<YOURPROFILE>`.
 
 Running the command creates the following files in your working directory:
 
