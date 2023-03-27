@@ -324,7 +324,7 @@ Tip: you can replicate the issue by changing to the process work dir and enterin
 
 ##### For beginners
 
-nf-core/raredisease provides you with options to increase the amount of CPUs(`--max_cpus`), memory(`--max_memory`), and time (`--max_time`) for the whole pipeline. Based on the error above, you have to increase the amount of memory. Therefore you can go to the [parameter documentation of raredisease](https://nf-co.re/raredisease/dev/parameters) and click `show hidden params` button in the right panel to get the default value for `--max_memory`. Run the pipeline with updated max_memory value `--max_memory xxxGB -resume` to skip all process, that were already calculated. If you can not increase the resource of the complete pipeline, you can try to adapt the resource for a single process as mentioned below.
+nf-core/raredisease provides you with options to increase the amount of CPUs (`--max_cpus`), memory (`--max_memory`), and time (`--max_time`) for the whole pipeline. Based on the error above, you have to increase the amount of memory. Therefore you can go to the [parameter documentation of raredisease](https://nf-co.re/raredisease/dev/parameters) and click `show hidden params` button in the right panel to get the default value for `--max_memory`. Run the pipeline with updated max_memory value `--max_memory xxxGB` and `-resume` to skip all processes that were already calculated. If you cannot increase the resource of the complete pipeline, you can try to adapt the resource for a single process as mentioned below.
 
 ##### Advanced option on process level
 
@@ -397,21 +397,21 @@ See the main [Nextflow documentation](https://www.nextflow.io/docs/latest/config
 
 If you have any questions or issues please send us a message on [Slack](https://nf-co.re/join/slack) on the [`#configs` channel](https://nfcore.slack.com/channels/configs).
 
-### Run sentieon
+### Run Sentieon
 
-To use sentieon you have to:
+To use Sentieon you have to:
 
-1. Ensure that sentieon executable is in path.
-2. If necessary, store license information as a secret in nextflow's local store.
+1. Ensure that Sentieon executable is in path.
+2. If necessary, store license information as a secret in Nextflow's local store.
 3. Set environmental variable `NXF_ENABLE_SECRETS` to an appropriate value.
 
-To elaborate more on item #2 in the list above, if you are running nf-core/raredisease with sentieon on AWS or on a local machine where do not want other users to know your license details, we recommend that you use [nextflow's secrets feature](https://www.nextflow.io/docs/latest/secrets.html) to pass the that information. To do that run the command below after replacing LICENSE with the value corresponding to your license server (ex:1.1.1.1:4000)
+To elaborate more on item #2 in the list above, if you are running nf-core/raredisease with Sentieon on AWS or on a local machine and you do not want other users to know your license details, we recommend that you use [Nextflow's secrets feature](https://www.nextflow.io/docs/latest/secrets.html) to pass the information. To do that run the command below after replacing LICENSE with the value corresponding to your license server (ex: 1.1.1.1:4000)
 
 ```
 nextflow secrets set SENTIEON_LICENSE_BASE64 <LICENSE>
 ```
 
-If you are using nextflow secrets, you have to set the environment variable `NXF_ENABLE_SECRETS` to true. This will see to it that the pipeline can retrieve the secret from nextflow's secrets store during the pipeline execution. Keep in mind that versions of nextflow Version 22.09.2-edge and onwards have NXF_ENABLE_SECRETS to true by default. If you are not using secrets set `NXF_ENABLE_SECRETS` to false, but make sure that the environmental variable [`SENTIEON_LICENSE`](`NXF_ENABLE_SECRETS`) is set to reflect the value of your license server on your machine.
+If you are using Nextflow secrets, you have to set the environment variable `NXF_ENABLE_SECRETS` to true. This will see to it that the pipeline can retrieve the secret from Nextflow's secrets store during the pipeline execution. Keep in mind that versions of Nextflow Version 22.09.2-edge and onwards have NXF_ENABLE_SECRETS to true by default. If you are not using secrets set `NXF_ENABLE_SECRETS` to false, but make sure that the environment variable [`SENTIEON_LICENSE`](`NXF_ENABLE_SECRETS`) is set to reflect the value of your license server on your machine.
 
 ### Azure Resource Requests
 
@@ -428,7 +428,7 @@ Nextflow handles job submissions and supervises the running jobs. The Nextflow p
 The Nextflow `-bg` flag launches Nextflow in the background, detached from your terminal so that the workflow does not stop if you log out of your session. The logs are saved to a file.
 
 Alternatively, you can use `screen` / `tmux` or similar tool to create a detached session which you can log back into at a later time.
-Some HPC setups also allow you to run nextflow within a cluster job submitted your job scheduler (from where it submits more jobs).
+Some HPC setups also allow you to run Nextflow within a cluster job submitted to your job scheduler (from where it submits more jobs).
 
 ### Nextflow memory requirements
 
