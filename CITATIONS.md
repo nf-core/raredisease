@@ -56,10 +56,6 @@
 
   > Weissensteiner H, Pacher D, Kloss-Brandstätter A, et al. HaploGrep 2: mitochondrial haplogroup classification in the era of high-throughput sequencing. Nucleic Acids Res. 2016;44(W1):W58-W63. doi:10.1093/nar/gkw233
 
-- [Hmtnote](https://www.biorxiv.org/content/10.1101/600619v1)
-
-  > Preste R, Clima R, Attimonelli M. Human Mitochondrial Variant Annotation with HmtNote. Bioinformatics; 2019. doi:10.1101/600619
-
 - [Manta](https://academic.oup.com/bioinformatics/article/32/8/1220/1743909?login=true)
 
   > Chen X, Schulz-Trieglaff O, Shaw R, et al. Manta: rapid detection of structural variants and indels for germline and cancer sequencing applications. Bioinformatics. 2016;32(8):1220-1222. doi:10.1093/bioinformatics/btv710

@@ -9,7 +9,6 @@ include { TABIX_TABIX as TABIX_TABIX_MT                         } from '../../..
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_MT                 } from '../../../modules/nf-core/bcftools/norm/main'
 include { TABIX_TABIX as TABIX_TABIX_MT2                        } from '../../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                   } from '../../../modules/nf-core/bcftools/merge/main'
-include { HMTNOTE as HMTNOTE_MT                                 } from '../../../modules/nf-core/hmtnote/main'
 include { TABIX_TABIX as TABIX_TABIX_MT3                        } from '../../../modules/nf-core/tabix/tabix/main'
 include { ENSEMBLVEP as ENSEMBLVEP_MT                           } from '../../../modules/local/ensemblvep/main'
 include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT         } from '../../../modules/nf-core/haplogrep2/classify/main'
@@ -87,10 +86,6 @@ workflow MERGE_ANNOTATE_MT {
         ch_merged_vcf = BCFTOOLS_MERGE_MT.out.merged_variants
 
         ch_in_vep = ch_merged_vcf.mix(ch_case_vcf.single)
-
-        // Annotating with Hmtnote
-        //HMTNOTE_MT(ch_in_vep)
-        //ch_versions = ch_versions.mix(HMTNOTE_MT.out.versions.first())
 
         // Annotating with ensembl Vep
         ENSEMBLVEP_MT( ch_in_vep,
