@@ -10,27 +10,27 @@ include { TABIX_TABIX as TABIX_GL                 } from '../../../modules/nf-co
 
 workflow CALL_SNV_DEEPVARIANT {
     take:
-        bam          // channel: [ val(meta), path(bam), path(bai) ]
-        fasta        // path(fasta)
-        fai          // path(fai)
-        case_info    // channel: [ case_id ]
+        ch_bam       // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_fasta     // channel: [mandatory] [ path(fasta) ]
+        ch_fai       // channel: [mandatory] [ path(fai) ]
+        ch_case_info // channel: [mandatory] [ val(case_info) ]
 
     main:
         ch_versions = Channel.empty()
 
-        bam.map { meta, bam, bai ->
+        ch_bam.map { meta, bam, bai ->
                         return [meta, bam, bai, []]
             }
-            .set { ch_bam }
+            .set { ch_deepvar_in }
 
-        DEEPVARIANT ( ch_bam, fasta, fai )
+        DEEPVARIANT ( ch_deepvar_in, ch_fasta, ch_fai )
         DEEPVARIANT.out.gvcf
             .collect{it[1]}
             .toList()
             .collect()
             .set { ch_file_list }
 
-        case_info
+        ch_case_info
             .combine(ch_file_list)
             .set { ch_gvcfs }
 
@@ -39,12 +39,12 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_split_multi_in = GLNEXUS.out.bcf
                             .map{ meta, bcf ->
                                     return [meta, bcf, []] }
-        SPLIT_MULTIALLELICS_GL (ch_split_multi_in, fasta)
+        SPLIT_MULTIALLELICS_GL (ch_split_multi_in, ch_fasta)
 
         ch_remove_dup_in = SPLIT_MULTIALLELICS_GL.out.vcf
                             .map{ meta, vcf ->
                                     return [meta, vcf, []] }
-        REMOVE_DUPLICATES_GL (ch_remove_dup_in, fasta)
+        REMOVE_DUPLICATES_GL (ch_remove_dup_in, ch_fasta)
 
         TABIX_GL (REMOVE_DUPLICATES_GL.out.vcf)
 
@@ -55,7 +55,7 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_versions = ch_versions.mix(TABIX_GL.out.versions)
 
     emit:
-        vcf         = REMOVE_DUPLICATES_GL.out.vcf
-        tabix       = TABIX_GL.out.tbi
-        versions    = ch_versions
+        vcf      = REMOVE_DUPLICATES_GL.out.vcf // channel: [ val(meta), path(vcf) ]
+        tabix    = TABIX_GL.out.tbi             // channel: [ val(meta), path(tbi) ]
+        versions = ch_versions                  // channel: [ path(versions.yml) ]
 }

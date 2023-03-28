@@ -1,5 +1,8 @@
 #!/bin/bash
-#
+
+# Written by Ramprasad Neethiraj and released under the MIT license.
+# See git repository (https://github.com/nf-core/raredisease) for full license text.
+
 # Sentieon initialization script
 # This script takes as input the name of a environment
 # variable holding the Sentieon license encoded as Base64 text

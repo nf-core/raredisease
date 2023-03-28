@@ -10,6 +10,17 @@
 
 [![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23raredisease-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/raredisease)[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
 
+#### TOC
+
+- [Introduction](#introduction)
+- [Pipeline summary](#pipeline-summary)
+  - [Work in progress flowchart](#work-in-progress-flowchart)
+- [Quick Start](#quick-start)
+- [Documentation](#documentation)
+- [Credits](#credits)
+- [Contributions and Support](#contributions-and-support)
+- [Citations](#citations)
+
 ## Introduction
 
 > NOTE
@@ -28,19 +39,59 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 ## Pipeline summary
 
-1. Metrics: [`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [`MultiQC`](http://multiqc.info/)
-2. Data preprocessing: [`bwamem2`](http://bio-bwa.sourceforge.net/bwa.shtml) (can [`merge`](http://www.htslib.org/doc/samtools-merge.html)), [`MarkDuplicates`](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates)
-3. Variant calling + multiple calls are aggregated:
-   1. SNVs + short indels: [`DeepVariant`](https://github.com/google/deepvariant), [`DNAscope`](https://support.sentieon.com/manual/DNAscope_usage/dnascope/)
-   2. SVs: [`CNVpytor`](https://github.com/abyzovlab/CNVpytor/), [`ExpansionHunter`](https://github.com/Illumina/ExpansionHunter), [`MANTA`](https://github.com/Illumina/manta), [`tiddit/sv`](https://github.com/SciLifeLab/TIDDIT),
-   3. Mitochondria: [`eKLIPse`](https://github.com/dooguypapua/eKLIPse), [`Mutect2`](https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2)
-4. Annotation: [`VCFanno`](https://github.com/brentp/vcfanno),[`VEP`](https://www.ensembl.org/info/docs/tools/vep/index.html)
-   1. SNVs: [`CADD`](https://cadd.gs.washington.edu/)
-   2. SVs:
-   3. Mitochondria: [`gnomAD_mt`](https://gnomad.broadinstitute.org/downloads#v3-mitochondrial-dna), [`Haplogrep`](https://github.com/seppinho/haplogrep-cmd/tree/v2.1.21), [`HmtNote`](https://github.com/robertopreste/HmtNote)
-5. Variant ranking: something will be here
+**1. Metrics:**
 
-> Databases: [`gnomAD`](https://gnomad.broadinstitute.org/)
+- [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+- [Mosdepth](https://github.com/brentp/mosdepth)
+- [MultiQC](http://multiqc.info/)
+- [Picard's CollectMutipleMetrics, CollectHsMetrics, and CollectWgsMetrics](https://broadinstitute.github.io/picard/)
+- [Qualimap](http://qualimap.conesalab.org/)
+- [Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/)
+- [TIDDIT's cov](https://github.com/J35P312/)
+
+**2. Alignment:**
+
+- [Bwa-mem2](https://github.com/bwa-mem2/bwa-mem2)
+- [Sentieon DNAseq](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/)
+
+**3. Variant calling - SNV:**
+
+- [DeepVariant](https://github.com/google/deepvariant)
+- [Sentieon DNAscope](https://support.sentieon.com/manual/DNAscope_usage/dnascope/)
+
+**4. Variant calling - SV:**
+
+- [CNVpytor](https://github.com/abyzovlab/CNVpytor/)
+- [Manta](https://github.com/Illumina/manta)
+- [TIDDIT's sv](https://github.com/SciLifeLab/TIDDIT)
+
+**5. Annotation - SNV:**
+
+- [bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh)
+- [vcfanno](https://github.com/brentp/vcfanno)
+- [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
+
+**6. Annotation - SV:**
+
+- [SVDB query](https://github.com/J35P312/SVDB#Query)
+- [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
+
+**7. Mitochondrial analysis:**
+
+- [Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline ](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-)
+- Annotation:
+  - [HaploGrep2](https://github.com/seppinho/haplogrep-cmd)
+  - [vcfanno](https://github.com/brentp/vcfanno)
+  - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
+
+**8. Variant calling - repeat expansions:**
+
+- [Expansion Hunter](https://github.com/Illumina/ExpansionHunter)
+- [Stranger](https://github.com/Clinical-Genomics/stranger)
+
+**9. Rank variants - SV and SNV:**
+
+- [GENMOD](https://github.com/Clinical-Genomics/genmod)
 
 <!-- prettier-ignore -->
 <p align="center">
@@ -79,7 +130,7 @@ Note that some form of configuration will be needed so that Nextflow knows how t
    ```bash
    nextflow run nf-core/raredisease \
        --input samplesheet.csv --outdir <OUTDIR> --genome GRCh38 \
-       --analysis_type <wgs|wes|mito> \
+       --analysis_type <wgs|wes> \
        -revision dev \
        -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
    ```
@@ -90,9 +141,9 @@ The nf-core/raredisease pipeline comes with documentation about the pipeline [us
 
 ## Credits
 
-nf-core/raredisease was originally written by Clinical Genomics Stockholm.
+nf-core/raredisease was mostly written by [Ramprasad Neethiraj](https://github.com/ramprasadn), [Anders Jemt](https://github.com/jemten), [Lucia Pena Perez](https://github.com/Lucpen), and [Mei Wu](https://github.com/projectoriented) at Clinical Genomics Stockholm.
 
-Big thanks to the contributors for their extensive assistance in the development of this pipeline.
+Big thanks to the [Sima Rahimi](https://github.com/sima-r), [Gwenna Breton](https://github.com/Gwennid), [Lauri Mesilaakso](https://github.com/ljmesi), [Subazini Thankaswamy Kosalai](https://github.com/sysbiocoder), [Annick Renevey](https://github.com/rannick), [Peter Pruisscher](https://github.com/peterpru), [Lucas Taniguti](https://github.com/lmtani), [Ryan Kennedy](https://github.com/ryanjameskennedy), and the nf-core community for their extensive assistance in the development of this pipeline.
 
 ## Contributions and Support
 
@@ -104,8 +155,6 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
 <!-- If you use  nf-core/raredisease for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
-
-<!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
