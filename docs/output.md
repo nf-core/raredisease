@@ -164,7 +164,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ##### Sention WgsMetricsAlgo
 
-[Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/) is the sentieon's equivalent of Picard's CollectWgsMetrics.
+[Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/) is the Sentieon's equivalent of Picard's CollectWgsMetrics.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -394,8 +394,8 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 <summary>Output files</summary>
 
 - `rank_and_filter/`
-  - `<case_id>_clinical_snv.ann_filter.vcf.gz`: file containing clincally relevant SNVs.
-  - `<case_id>_clinical_sv.ann_filter.vcf.gz`: file containing clincally relevant SVs.
+  - `<case_id>_clinical_snv.ann_filter.vcf.gz`: file containing clinically relevant SNVs.
+  - `<case_id>_clinical_sv.ann_filter.vcf.gz`: file containing clinically relevant SVs.
   - `<case_id>_ranked_snv.vcf.gz`: file containing SNV annotations with their rank scores.
   - `<case_id>_ranked_snv.vcf.gz.tbi`: file containing SNV annotations with their rank scores.
   - `<case_id>_ranked_sv.ann_filter.vcf.gz`: file containing SV annotations with their rank scores.
