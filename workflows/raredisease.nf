@@ -343,10 +343,8 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
     // ped correspondence, sex check, ancestry check
-    ch_vcf_peddy = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
-
     PEDDY_CHECK (
-        ch_vcf_peddy,
+        CALL_SNV.out.vcf.join(CALL_SNV.out.tabix),
         MAKE_PED.out.ped
     )
     ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
@@ -534,6 +532,8 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{it[1]}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(PEDDY_CHECK.out.ped.map{it[1]}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(PEDDY_CHECK.out.csv.map{it[1]}.collect().ifEmpty([]))
 
 
     MULTIQC (
