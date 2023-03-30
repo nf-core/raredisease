@@ -195,6 +195,11 @@
                         "git_sha": "ee80d14721e76e2e079103b8dcd5d57129e584ba",
                         "installed_by": ["modules"]
                     },
+                    "peddy": {
+                        "branch": "master",
+                        "git_sha": "21e6e085967902fb393b27b2e7590ac4c85fab8e",
+                        "installed_by": ["modules"]
+                    },
                     "picard/addorreplacereadgroups": {
                         "branch": "master",
                         "git_sha": "28995552268a117551ded48dadcf42b0caf0e834",

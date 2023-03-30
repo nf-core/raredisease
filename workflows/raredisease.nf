@@ -110,6 +110,7 @@ include { QC_BAM                                } from '../subworkflows/local/qc
 include { RANK_VARIANTS as RANK_VARIANTS_SNV    } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SV     } from '../subworkflows/local/rank_variants'
 include { SCATTER_GENOME                        } from '../subworkflows/local/scatter_genome'
+include { PEDDY_CHECK                           } from '../subworkflows/local/peddy_check'
 
 
 /*
@@ -340,6 +341,13 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
+    // ped correspondence, sex check, ancestry check
+    PEDDY_CHECK (
+        CALL_SNV.out.vcf.join(CALL_SNV.out.tabix),
+        MAKE_PED.out.ped
+    )
+    ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
+
     // GENS
     if (params.gens_switch) {
         GENS (
@@ -523,6 +531,8 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{it[1]}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(PEDDY_CHECK.out.ped.map{it[1]}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(PEDDY_CHECK.out.csv.map{it[1]}.collect().ifEmpty([]))
 
 
     MULTIQC (
