@@ -76,7 +76,7 @@
 
   > Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016;32(19):3047-3048. doi:10.1093/bioinformatics/btw354
 
-- [Peddy](https://www.cell.com/action/showFullTextImages?pii=S0002-9297(17)30017-4)
+- [Peddy](<https://www.cell.com/action/showFullTextImages?pii=S0002-9297(17)30017-4>)
 
   > Pedersen, B. S. and Quinlan, A. R. (2017) ‘Who’s Who? Detecting and Resolving Sample Anomalies in Human DNA Sequencing Studies with Peddy’, The American Journal of Human Genetics, 100(3), pp. 406–413. doi: https://doi.org/10.1016/j.ajhg.2017.01.017.
 
