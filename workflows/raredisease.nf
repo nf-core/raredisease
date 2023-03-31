@@ -11,8 +11,8 @@ WorkflowRaredisease.initialise(params, log)
 
 // Check input path parameters to see if they exist
 def checkPathParamList = [
-    params.bwa_index,
-    params.bwamem2_index,
+    params.bwa,
+    params.bwamem2,
     params.call_interval,
     params.fasta,
     params.fasta_fai,
@@ -183,7 +183,7 @@ workflow RAREDISEASE {
                                                                               : Channel.value([])
     ch_vcfanno_toml                   = params.vcfanno_toml                   ? Channel.fromPath(params.vcfanno_toml).collect()
                                                                               : Channel.value([])
-    ch_vep_cache_unprocessed          = params.vep_cache.endsWith("tar.gz")   ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
+    ch_vep_cache_unprocessed          = params.vep_cache                      ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
                                                                               : Channel.value([[],[]])
     ch_vep_filters                    = params.vep_filters                    ? Channel.fromPath(params.vep_filters).collect()
                                                                               : Channel.value([])
@@ -211,11 +211,11 @@ workflow RAREDISEASE {
 
     // Gather built indices or get them from the params
     ch_bait_intervals               = ch_references.bait_intervals
-    ch_bwa_index                    = params.bwa_index                     ? Channel.fromPath(params.bwa_index).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_bwa_index                    = params.bwa                           ? Channel.fromPath(params.bwa).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.bwa_index
     ch_bwa_index_mt_shift           = params.mt_bwa_index_shift            ? Channel.fromPath(params.mt_bwa_index_shift).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.bwa_index_mt_shift
-    ch_bwamem2_index                = params.bwamem2_index                 ? Channel.fromPath(params.bwamem2_index).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_bwamem2_index                = params.bwamem2                       ? Channel.fromPath(params.bwamem2).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.bwamem2_index
     ch_bwamem2_index_mt_shift       = params.mt_bwamem2_index_shift        ? Channel.fromPath(params.mt_bwamem2_index_shift).collect()
                                                                            : ch_references.bwamem2_index_mt_shift
@@ -240,7 +240,7 @@ workflow RAREDISEASE {
                                                                            : ch_references.sequence_dict_mt_shift
     ch_target_bed                   = ch_references.target_bed
     ch_target_intervals             = ch_references.target_intervals
-    ch_vep_cache                    = params.vep_cache.endsWith("tar.gz")  ? ch_references.vep_resources
+    ch_vep_cache                    = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") )  ? ch_references.vep_resources
                                                                            : ( params.vep_cache  ? Channel.fromPath(params.vep_cache).collect() : Channel.value([]) )
     ch_versions                     = ch_versions.mix(ch_references.versions)
 

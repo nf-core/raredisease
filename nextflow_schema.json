@@ -87,7 +87,7 @@
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
                 },
-                "bwa_index": {
+                "bwa": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "Directory for pre-built bwa index.",
@@ -95,7 +95,7 @@
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
-                "bwamem2_index": {
+                "bwamem2": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "Directory for pre-built bwamem2 index.",
