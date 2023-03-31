@@ -49,9 +49,6 @@ workflow ALIGN_AND_CALL_MT {
 
         GATK4_MUTECT2_MT (ch_sort_index_bam_int_mt, ch_fasta, ch_fai, ch_dict, [], [], [],[])
 
-        // Haplocheck
-        // TODO: probably it will be outside this subworkflow as we want to run
-        // with the VCF with the variants from the shifted alignment (to solve the mt circularity issue)
         HAPLOCHECK_MT (GATK4_MUTECT2_MT.out.vcf)
 
         // Filter Mutect2 calls

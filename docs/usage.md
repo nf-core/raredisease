@@ -37,7 +37,7 @@ Table of contents:
 
 ## Introduction
 
-nf-core/raredisease is a bioinformatics best-practice analysis pipeline to call, annotate and score variants from WGS/WES of rare disease patients. The pipeline is built using nextflow.
+nf-core/raredisease is a bioinformatics best-practice analysis pipeline to call, annotate and score variants from WGS/WES of rare disease patients. The pipeline is built using Nextflow.
 
 ## Prerequisites
 
@@ -59,22 +59,22 @@ nextflow run nf-core/raredisease \
     --outdir <OUTDIR>
 ```
 
-> Check [nf-core/configs](https://github.com/nf-core/configs/tree/master/conf) to see if a custom config file to run nf-core pipelines already exists for your institute. If so, you can simply use `-profile test,<institute>` in your command. This enables the appropirate package manager and sets the appropriate execution settings for your machine.
+> Check [nf-core/configs](https://github.com/nf-core/configs/tree/master/conf) to see if a custom config file to run nf-core pipelines already exists for your institute. If so, you can simply use `-profile test,<institute>` in your command. This enables the appropriate package manager and sets the appropriate execution settings for your machine.
 > NB: The order of profiles is important! They are loaded in sequence, so later profiles can overwrite earlier profiles.
 
-The above command downloads the pipeline from github, caches it, and tests it on the test dataset.
+The above command downloads the pipeline from GitHub, caches it, and tests it on the test dataset.
 
 > When you run the command again, it will fetch the pipeline from cache even if a more recent version of the pipeline is available. To make sure that you're running the latest version of the pipeline, update the cached version of the pipeline by including `-latest` in the command.
 
-Test profile runs the pipeline with a proband containing three samples, but if you would like to test the pipeline with one sample, use `-profile test_one_sample,<YOURPROFILE>`.
+Test profile runs the pipeline with a case containing three samples, but if you would like to test the pipeline with one sample, use `-profile test_one_sample,<YOURPROFILE>`.
 
 Running the command creates the following files in your working directory:
 
 ```
-work                # Directory containing the nextflow working files
+work                # Directory containing the Nextflow working files
 <OUTDIR>            # Finished results in specified location (defined with --outdir)
 .nextflow_log       # Log file from Nextflow
-# Other nextflow hidden files, like history of pipeline logs.
+# Other Nextflow hidden files, like history of pipeline logs.
 ```
 
 ## Run nf-core/raredisease with your data
@@ -87,23 +87,23 @@ Running the pipeline involves three steps:
 
 #### Samplesheet
 
-A samplesheet is used to pass the information about the sample(s), such as the path to the fastq files and other meta data (gender, phenotype, etc.,) to the pipeline in csv format.
+A samplesheet is used to pass the information about the sample(s), such as the path to the FASTQ files and other meta data (gender, phenotype, etc.,) to the pipeline in csv format.
 
 nf-core/raredisease will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The pedigree information in the samplesheet (sex/gender and phenotype) should be provided as they would be for a [ped file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format) (i.e. 1 for male, 2 for female, other for unknown).
 
 | Fields        | Description                                                                                                                                                                            |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `lane`        | Used to generate seperate channels during the alignment step                                                                                                                           |
-| `fastq_1`     | Absolute path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
-| `fastq_2`     | Absolute path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
-| `gender`      | Sex (1=male; 2=female; other=unknown)                                                                                                                                                  |
-| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected)                                                                                                                     |
+| `lane`        | Used to generate separate channels during the alignment step.                                                                                                                          |
+| `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
+| `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
+| `gender`      | Sex (1=male; 2=female; other=unknown).                                                                                                                                                 |
+| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                    |
 | `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                  |
 | `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                  |
-| `case_id`     | Case ID, for the analysis used when generating a family VCF                                                                                                                            |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                                                                           |
 
-It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across 2 lanes:
+It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
 | sample   | lane | fastq_1                          | fastq_2                          | gender | phenotype | paternal_id | maternal_id | case_id |
 | -------- | ---- | -------------------------------- | -------------------------------- | ------ | --------- | ----------- | ----------- | ------- |
@@ -118,47 +118,48 @@ If you would like to see more examples of what a typical samplesheet looks like 
 
 In nf-core/raredisease, references can be supplied using parameters listed [here](https://nf-co.re/raredisease/dev/parameters).
 
-Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools (example, you can align with either bwamem2 or sentieon, call SNVs with DeepVariant or sentieon). You also have the option to turn off sections of the pipeline if you do not want to run them (example, snv annotation can be turned off by adding `--skip_snv_annotation` flag in the command line, or by setting it to true in a parameter file). This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, for SNV calling if you use DeepVariant as your variant caller, you need not provide the parameter `--ml_model`, which is only used by sentieon.
+Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can align with either bwamem2 or Sentieon BWA mem and call SNVs with either DeepVariant or Sentieon DNAscope. You also have the option to turn off sections of the pipeline if you do not want to run the. For example, snv annotation can be turned off by adding `--skip_snv_annotation` flag in the command line, or by setting it to true in a parameter file. This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, for SNV calling if you use DeepVariant as your variant caller, you need not provide the parameter `--ml_model`, which is only used by Sentieon DNAscope.
 
-nf-core/raredisease consists of several tools used for various purposes. For convenience, we have grouped those tools under the following catergories:
+nf-core/raredisease consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
 
-1. Alignment (bwamem2/sentieon)
+1. Alignment (bwamem2/Sentieon BWA mem)
 2. QC stats from the alignment files
-3. Repeat expansions (Expansionshunter & Stranger)
-4. Variant calling - SNV (DeepVariant/Sentieon-haplotypecaller)
-5. Variant calling - Structural variants (Tiddit & Manta)
-6. SNV annotation & ranking (rohcall, vcfanno, ensemblvep, genmod)
-7. SV annotation & ranking (svdb query, ensemblvep, genmod)
+3. Repeat expansions (ExpansionsHunter & Stranger)
+4. Variant calling - SNV (DeepVariant/Sentieon DNAscope)
+5. Variant calling - Structural variants (SV) (Tiddit & Manta)
+6. SNV annotation & ranking (rohcall, vcfanno, ensembl VEP, GENMOD)
+7. SV annotation & ranking (SVDB query, ensembl VEP, GENMOD)
 8. Mitochondrial analysis
 
-> We have only listed the groups that require at least one input from the user. For example, the pipeline also runs smncopynumbercaller, but it does not require any input other than the bam files passed by the pipeline. Hence, it is not mentioned in the list above. To know more about the tools used in the pipeline check [README](../README.md).
+> We have only listed the groups that require at least one input from the user. For example, the pipeline also runs SMNCopyNumberCaller, but it does not require any input other than the bam files passed by the pipeline. Hence, it is not mentioned in the list above. To know more about the tools used in the pipeline check the [README](../README.md).
 
 The mandatory and optional parameters for each category are tabulated below.
 
-> Alignment, qc stats, repeat expansions, snv & sv variant calling are run by default. Hence, the mandatory parameters used by those features will always have to be provided to the pipeline.
+> Alignment, QC stats, repeat expansions, SNV & SV variant calling are run by default. Hence, the mandatory parameters used by those features will always have to be provided to the pipeline.
 
 ##### 1. Alignment
 
 | Mandatory           | Optional                    |
 | ------------------- | --------------------------- |
 | aligner<sup>1</sup> | fasta_fai<sup>2</sup>       |
-| fasta               | bwamem2_index<sup>2</sup>   |
+| fasta               | bwamem2<sup>2</sup>         |
 | platform            | known_dbsnp<sup>3</sup>     |
 |                     | known_dbsnp_tbi<sup>3</sup> |
 
-<sup>1</sup>Default value is bwamem2, but if you have a valid license for sentieon, you have the option to use sentieon as well.<br />
-<sup>2</sup>fasta_fai and bwamem2_index, if not provided by the user, will be generated by the pipeline when necessary.<br />
-<sup>3</sup>Used only by sentieon.<br />
+<sup>1</sup>Default value is bwamem2, but if you have a valid license for Sentieon, you have the option to use Sentieon as well.<br />
+<sup>2</sup>fasta_fai and bwamem2, if not provided by the user, will be generated by the pipeline when necessary.<br />
+<sup>3</sup>Used only by Sentieon.<br />
 
 ##### 2. QC stats from the alignment files
 
 | Mandatory                                                    | Optional |
 | ------------------------------------------------------------ | -------- |
-| intervals_wgs                                                |          |
-| intervals_y                                                  |          |
-| target_bed / (bait_intervals & target_intervals)<sup>1</sup> |          |
+| intervals_wgs<sup>1</sup>                                    |          |
+| intervals_y<sup>1</sup>                                      |          |
+| target_bed / (bait_intervals & target_intervals)<sup>2</sup> |          |
 
-<sup>1</sup> If a target_bed file is provided, bait_intervals and target_intervals can be generated by the pipeline.
+<sup>1</sup>These files are Picard's style interval list files, comprising the entire genome or only the chromosome Y. A version of these files for GRCh37 and for GRCh38 is supplied in the pipeline assets. These files are not necessary if you are using Sentieon.
+<sup>2</sup> If a target_bed file is provided, bait_intervals and target_intervals can be generated by the pipeline.
 
 ##### 3. Repeat expansions
 
@@ -172,11 +173,11 @@ The mandatory and optional parameters for each category are tabulated below.
 | -------------------------- | --------------------------- |
 | variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>     |
 | ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup> |
-| analysis_type <sup>3</sup> | call_interval<sup>2</sup>   |
+| analysis_type<sup>3</sup>  | call_interval<sup>2</sup>   |
 |                            | known_dbsnp_tbi<sup>2</sup> |
 
-<sup>1</sup>Default variant caller is DeepVariant, but you have the option to use sentieon as well.<br />
-<sup>2</sup>These parameters are only used by sentieon.<br />
+<sup>1</sup>Default variant caller is DeepVariant, but you have the option to use Sentieon as well.<br />
+<sup>2</sup>These parameters are only used by Sentieon.<br />
 <sup>3</sup>Default is WGS, but you have the option to choose WES as well.<br />
 
 ##### 5. Variant calling - Structural variants
@@ -184,7 +185,7 @@ The mandatory and optional parameters for each category are tabulated below.
 | Mandatory | Optional   |
 | --------- | ---------- |
 |           | target_bed |
-|           | bwa_index  |
+|           | bwa        |
 
 ##### 6. SNV annotation & Ranking
 
@@ -196,13 +197,13 @@ The mandatory and optional parameters for each category are tabulated below.
 | vep_cache_version             | vep_filters<sup>6</sup>        |
 | vep_cache                     | score_config_snv<sup>7</sup>   |
 
-<sup>1</sup>Genome version is used by vep. You have the option to choose between GRCh37 and GRCh38.<br />
-<sup>2</sup>Path to vcf files and their indices used by vcfanno. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_resources.txt).<br />
-<sup>3</sup>Path to a vcfanno configration file. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_config.toml).<br />
-<sup>4</sup>Gnomad vcf file can be downloaded from [here] (https://gnomad.broadinstitute.org/downloads).<br />
-<sup>5</sup>Used by genmod while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
-<sup>6</sup> This file contains a list of candidate genes(HGNC ids) that is used to split the variants into a canditate variants and research variants. Research variants contain all the variants. While candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt).<br />
-<sup>7</sup>Used by genmod for ranking the variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_snv.ini).<br />
+<sup>1</sup>Genome version is used by VEP. You have the option to choose between GRCh37 and GRCh38.<br />
+<sup>2</sup>Path to VCF files and their indices used by vcfanno. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_resources.txt).<br />
+<sup>3</sup>Path to a vcfanno configuration file. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_config.toml).<br />
+<sup>4</sup>GnomAD VCF file can be downloaded from [here] (https://gnomad.broadinstitute.org/downloads).<br />
+<sup>5</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
+<sup>6</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into canditate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt).<br />
+<sup>7</sup>Used by GENMOD for ranking the variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_snv.ini).<br />
 
 ##### 7. SV annotation & Ranking
 
@@ -213,32 +214,32 @@ The mandatory and optional parameters for each category are tabulated below.
 | vep_cache_version          | vep_filters        |
 | vep_cache                  |                    |
 
-<sup>1</sup> A csv file that describes the databases(vcfs) used by svdb for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
+<sup>1</sup> A CSV file that describes the databases (VCFs) used by SVDB for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
 
 ##### 8. Mitochondrial analysis
 
-| Mandatory                       | Optional |
-| ------------------------------- | -------- |
-| genome                          |          |
-| mt_backchain_shift <sup>1</sup> |          |
-| mt_contig_name                  |          |
-| mt_fasta_shift                  |          |
-| mt_intervals                    |          |
-| mt_intervals_shift              |          |
-| vcfanno_resources               |          |
-| vcfanno_toml                    |          |
-| vep_cache_version               |          |
-| vep_cache                       |          |
+| Mandatory                      | Optional |
+| ------------------------------ | -------- |
+| genome                         |          |
+| mt_backchain_shift<sup>1</sup> |          |
+| mt_contig_name                 |          |
+| mt_fasta_shift                 |          |
+| mt_intervals                   |          |
+| mt_intervals_shift             |          |
+| vcfanno_resources              |          |
+| vcfanno_toml                   |          |
+| vep_cache_version              |          |
+| vep_cache                      |          |
 
-<sup>1</sup> Can be generated by GATK's [ShiftFasta](https://gatk.broadinstitute.org/hc/en-us/articles/9570501436827-ShiftFasta-BETA-). Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/mt_shift8000.back_chain).
+<sup>1</sup>Can be generated by GATK's [ShiftFasta](https://gatk.broadinstitute.org/hc/en-us/articles/9570501436827-ShiftFasta-BETA-). Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/mt_shift8000.back_chain).
 
 #### Run the pipeline
 
-You can directly supply the parameters in the command line (cli) or use a config file from which the pipeline can import the parameters.
+You can directly supply the parameters in the command line (CLI) or use a config file from which the pipeline can import the parameters.
 
-##### Direct input in cli
+##### Direct input in CLI
 
-All of the pipeline parameters listed [here](https://nf-co.re/raredisease/dev/parameters) can be passed using the cli. For example, you can provide the samplesheet, reference fasta, and turn off annotations for SNVs and SVs by running,
+All of the pipeline parameters listed [here](https://nf-co.re/raredisease/dev/parameters) can be passed using the CLI. For example, you can provide the samplesheet, reference FASTA, and turn off annotations for SNVs and SVs by running,
 
 ```
 nextflow run nf-core/raredisease \
@@ -269,7 +270,7 @@ A sample config file can be found [here](https://github.com/nf-core/raredisease/
 
 - **Singularity cache:** If you are using singularity, use the nf-core download command to download images first, before running the pipeline. Define [NXF_SINGULARITY_CACHEDIR](https://nextflow.io/docs/latest/config.html?highlight=nxf_singularity_cachedir#environment-variables) or singularity.cacheDir Nextflow options to store and re-use the images from a central location for future pipeline runs.
 
-- **Save references:** While the pipeline can generate indices for the fasta and some vcf files when they are not provided, it can be benficial to supply them to the pipeline as it saves computing resources. You can use the `--save_reference` parameter to publish those files, and then update your config file with the paths to these files for your subsequent runs.
+- **Save references:** While the pipeline can generate indices for the FASTA and some VCF files when they are not provided, it can be benficial to supply them to the pipeline as it saves computing resources. You can use the `--save_reference` parameter to publish those files, and then update your config file with the paths to these files for your subsequent runs.
 
 - **Update pipeline:** If you would like to update the pipeline code stored in cache, in addition to running the command with `-latest` option, you can also run the command below:
 
@@ -277,7 +278,7 @@ A sample config file can be found [here](https://github.com/nf-core/raredisease/
 nextflow pull nf-core/raredisease
 ```
 
-- **Reproducibility:** Specify a pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since. First, go to the [nf-core/raredisease releases page](https://github.com/nf-core/raredisease/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r`, for example, `-r 1.3.1`. You can switch to another version by changing the number after the `-r` flag. This version number will be logged in reports when you run the pipeline. For example, you can view the version number at the bottom of the MultiQC reports.
+- **Reproducibility:** Specify a pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since. First, go to the [nf-core/raredisease releases page](https://github.com/nf-core/raredisease/releases) and find the latest pipeline version - numeric only (e.g. `1.3.1`). Then specify this when running the pipeline with `-r`, for example, `-r 1.3.1`. You can switch to another version by changing the number after the `-r` flag. The version number will be logged in reports when you run the pipeline. For example, you can view the version number at the bottom of the MultiQC reports.
 
 - **Restart a previous run:** Add `-resume` to your command when restarting a pipeline. Nextflow will use cached results from any pipeline steps where inputs are the same, and resume the run from where it terminated previously. For input to be considered the same, names and the files' contents must be identical. For more info about `-resume`, see [this blog post](https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html). You can also supply a run name to resume a specific run: `-resume [run-name]`. Use the `nextflow log` command to show previous run names.
 
@@ -323,7 +324,7 @@ Tip: you can replicate the issue by changing to the process work dir and enterin
 
 ##### For beginners
 
-nf-core/raredisease provides you with options to increase the amount of CPUs(`--max_cpus`), memory(`--max_memory`), and time (`--max_time`) for the whole pipeline. Based on the error above, you have to increase the amount of memory. Therefore you can go to the [parameter documentation of raredisease](https://nf-co.re/raredisease/dev/parameters) and click `show hidden params` button in the right panel to get the default value for `--max_memory`. Run the pipeline with updated max_memory value `--max_memory xxxGB -resume` to skip all process, that were already calculated. If you can not increase the resource of the complete pipeline, you can try to adapt the resource for a single process as mentioned below.
+nf-core/raredisease provides you with options to increase the amount of CPUs (`--max_cpus`), memory (`--max_memory`), and time (`--max_time`) for the whole pipeline. Based on the error above, you have to increase the amount of memory. Therefore you can go to the [parameter documentation of raredisease](https://nf-co.re/raredisease/dev/parameters) and click `show hidden params` button in the right panel to get the default value for `--max_memory`. Run the pipeline with updated max_memory value `--max_memory xxxGB` and `-resume` to skip all processes that were already calculated. If you cannot increase the resource of the complete pipeline, you can try to adapt the resource for a single process as mentioned below.
 
 ##### Advanced option on process level
 
@@ -396,21 +397,21 @@ See the main [Nextflow documentation](https://www.nextflow.io/docs/latest/config
 
 If you have any questions or issues please send us a message on [Slack](https://nf-co.re/join/slack) on the [`#configs` channel](https://nfcore.slack.com/channels/configs).
 
-### Run sentieon
+### Run Sentieon
 
-To use sentieon you have to:
+To use Sentieon you have to:
 
-1. Ensure that sentieon executable is in path.
-2. If necessary, store license information as a secret in nextflow's local store.
+1. Ensure that Sentieon executable is in path.
+2. If necessary, store license information as a secret in Nextflow's local store.
 3. Set environmental variable `NXF_ENABLE_SECRETS` to an appropriate value.
 
-To elaborate more on item #2 in the list above, if you are running nf-core/raredisease with sentieon on AWS or on a local machine where do not want other users to know your license details, we recommend that you use [nextflow's secrets feature](https://www.nextflow.io/docs/latest/secrets.html) to pass the that information. To do that run the command below after replacing LICENSE with the value corresponding to your license server (ex:1.1.1.1:4000)
+To elaborate more on item #2 in the list above, if you are running nf-core/raredisease with Sentieon on AWS or on a local machine and you do not want other users to know your license details, we recommend that you use [Nextflow's secrets feature](https://www.nextflow.io/docs/latest/secrets.html) to pass the that information. To do that run the command below after replacing LICENSE with the value corresponding to your license server (for example, 1.1.1.1:4000)
 
 ```
 nextflow secrets set SENTIEON_LICENSE_BASE64 <LICENSE>
 ```
 
-If you are using nextflow secrets, you have to set the environment variable `NXF_ENABLE_SECRETS` to true. This will see to it that the pipeline can retrieve the secret from nextflow's secrets store during the pipeline execution. Keep in mind that versions of nextflow Version 22.09.2-edge and onwards have NXF_ENABLE_SECRETS to true by default. If you are not using secrets set `NXF_ENABLE_SECRETS` to false, but make sure that the environmental variable [`SENTIEON_LICENSE`](`NXF_ENABLE_SECRETS`) is set to reflect the value of your license server on your machine.
+If you are using Nextflow secrets, you have to set the environment variable `NXF_ENABLE_SECRETS` to true. This will see to it that the pipeline can retrieve the secret from Nextflow's secrets store during the pipeline execution. Keep in mind that versions of Nextflow Version 22.09.2-edge and onwards have NXF_ENABLE_SECRETS to true by default. If you are not using secrets set `NXF_ENABLE_SECRETS` to false, but make sure that the environment variable [`SENTIEON_LICENSE`](`NXF_ENABLE_SECRETS`) is set to reflect the value of your license server on your machine.
 
 ### Azure Resource Requests
 
@@ -427,7 +428,7 @@ Nextflow handles job submissions and supervises the running jobs. The Nextflow p
 The Nextflow `-bg` flag launches Nextflow in the background, detached from your terminal so that the workflow does not stop if you log out of your session. The logs are saved to a file.
 
 Alternatively, you can use `screen` / `tmux` or similar tool to create a detached session which you can log back into at a later time.
-Some HPC setups also allow you to run nextflow within a cluster job submitted your job scheduler (from where it submits more jobs).
+Some HPC setups also allow you to run Nextflow within a cluster job submitted to your job scheduler (from where it submits more jobs).
 
 ### Nextflow memory requirements
 

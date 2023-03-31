@@ -22,10 +22,6 @@
 
   > Vasimuddin Md, Misra S, Li H, Aluru S. Efficient Architecture-Aware Acceleration of BWA-MEM for Multicore Systems. In: 2019 IEEE International Parallel and Distributed Processing Symposium (IPDPS). IEEE; 2019:314-324. doi:10.1109/IPDPS.2019.00041
 
-- [CNVpytor](https://academic.oup.com/gigascience/article/10/11/giab074/6431715?login=true)
-
-  > Suvakov M, Panda A, Diesh C, Holmes I, Abyzov A. CNVpytor: a tool for copy number variation detection and analysis from read depth and allele imbalance in whole-genome sequencing. GigaScience. 2021;10(11):giab074. doi:10.1093/gigascience/giab074
-
 - [DeepVariant](https://www.nature.com/articles/nbt.4235)
 
   > Poplin R, Chang PC, Alexander D, et al. A universal SNP and small-indel variant caller using deep neural networks. Nat Biotechnol. 2018;36(10):983-987. doi:10.1038/nbt.4235
@@ -59,10 +55,6 @@
 - [HaploGrep 2](https://academic.oup.com/nar/article/44/W1/W58/2499296)
 
   > Weissensteiner H, Pacher D, Kloss-Brandstätter A, et al. HaploGrep 2: mitochondrial haplogroup classification in the era of high-throughput sequencing. Nucleic Acids Res. 2016;44(W1):W58-W63. doi:10.1093/nar/gkw233
-
-- [Hmtnote](https://www.biorxiv.org/content/10.1101/600619v1)
-
-  > Preste R, Clima R, Attimonelli M. Human Mitochondrial Variant Annotation with HmtNote. Bioinformatics; 2019. doi:10.1101/600619
 
 - [Manta](https://academic.oup.com/bioinformatics/article/32/8/1220/1743909?login=true)
 
