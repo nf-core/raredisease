@@ -85,7 +85,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 <!-- prettier-ignore -->
 <p align="center">
-    <img title="nf-core/raredisease workflow" src="docs/images/raredisease_workflow_v1.0.0dev.png" width=40%>
+    <img title="nf-core/raredisease workflow" src="docs/images/raredisease_workflow_v1.0.0.png" width=40%>
 </p>
 
 Note that it is possible to include/exclude certain tools or steps.
@@ -127,7 +127,7 @@ The nf-core/raredisease pipeline comes with documentation about the pipeline [us
 
 nf-core/raredisease was mostly written by [Ramprasad Neethiraj](https://github.com/ramprasadn), [Anders Jemt](https://github.com/jemten), [Lucia Pena Perez](https://github.com/Lucpen), and [Mei Wu](https://github.com/projectoriented) at Clinical Genomics Stockholm.
 
-Big thanks to the [Sima Rahimi](https://github.com/sima-r), [Gwenna Breton](https://github.com/Gwennid), [Lauri Mesilaakso](https://github.com/ljmesi), [Subazini Thankaswamy Kosalai](https://github.com/sysbiocoder), [Annick Renevey](https://github.com/rannick), [Peter Pruisscher](https://github.com/peterpru), [Lucas Taniguti](https://github.com/lmtani), [Ryan Kennedy](https://github.com/ryanjameskennedy), and the nf-core community for their extensive assistance in the development of this pipeline.
+Big thanks to [Sima Rahimi](https://github.com/sima-r), [Gwenna Breton](https://github.com/Gwennid), [Lauri Mesilaakso](https://github.com/ljmesi), [Subazini Thankaswamy Kosalai](https://github.com/sysbiocoder), [Annick Renevey](https://github.com/rannick), [Peter Pruisscher](https://github.com/peterpru), [Lucas Taniguti](https://github.com/lmtani), [Ryan Kennedy](https://github.com/ryanjameskennedy), and the nf-core community for their extensive assistance in the development of this pipeline.
 
 ## Contributions and Support
 
