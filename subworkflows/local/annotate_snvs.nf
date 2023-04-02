@@ -21,6 +21,7 @@ workflow ANNOTATE_SNVS {
     take:
         ch_vcf                // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
         analysis_type         // string: [mandatory] 'wgs' or 'wes'
+        ch_cadd_header        // channel: [mandatory] [ path(txt) ]
         ch_cadd_scores        // channel: [mandatory] [ path(annotation) ]
         ch_vcfanno_resources  // channel: [mandatory] [ path(resources) ]
         ch_vcfanno_lua        // channel: [mandatory] [ path(lua) ]
@@ -68,18 +69,26 @@ workflow ANNOTATE_SNVS {
 
         TABIX_BCFTOOLS_VIEW (BCFTOOLS_VIEW.out.vcf)
 
-        BCFTOOLS_VIEW.out.vcf.join(TABIX_BCFTOOLS_VIEW.out.tbi).collect().set { ch_vcf_scatter_in }
+        BCFTOOLS_VIEW.out.vcf.join(TABIX_BCFTOOLS_VIEW.out.tbi)
+            .collect()
+            .combine(ch_split_intervals)
+            .map {
+                meta, vcf, tbi, interval ->
+                return [meta + [scatterid:interval.baseName], vcf, tbi, interval]
+            }
+            .set { ch_vcf_scatter_in }
 
-        GATK4_SELECTVARIANTS (ch_vcf_scatter_in.combine(ch_split_intervals))
+        GATK4_SELECTVARIANTS (ch_vcf_scatter_in)
 
         ANNOTATE_CADD (
             GATK4_SELECTVARIANTS.out.vcf,
             GATK4_SELECTVARIANTS.out.tbi,
+            ch_cadd_header,
             ch_cadd_scores
         )
 
         ENSEMBLVEP_SNV(
-            GATK4_SELECTVARIANTS.out.vcf,
+            ANNOTATE_CADD.out.vcf,
             val_vep_genome,
             "homo_sapiens",
             val_vep_cache_version,
@@ -88,30 +97,29 @@ workflow ANNOTATE_SNVS {
             []
         )
 
-        TABIX_VEP (ENSEMBLVEP_SNV.out.vcf_gz)
+        ENSEMBLVEP_SNV.out.vcf_gz
+            .map { meta, vcf -> [meta - meta.subMap('scatterid'), vcf] }
+            .set { ch_vep_out }
 
-        ch_vep_ann       = ENSEMBLVEP_SNV.out.vcf_gz
-        ch_vep_index     = TABIX_VEP.out.tbi
+        TABIX_VEP (ch_vep_out)
 
-        if (params.analysis_type == 'wgs') {
+        ch_vep_out
+            .join(TABIX_VEP.out.tbi)
+            .groupTuple()
+            .map { meta, vcfs, tbis ->
+                def sortedvcfs = vcfs.sort { it.baseName }
+                def sortedtbis = tbis.sort { it.baseName }
+                return [ meta, sortedvcfs, sortedtbis ]
+            }
+            .set { ch_concat_in }
 
-            ch_vep_ann
-                .join(ch_vep_index)
-                .groupTuple()
-                .map { meta, vcfs, tbis ->
-                    def sortedvcfs = vcfs.sort { it.baseName }
-                    def sortedtbis = tbis.sort { it.baseName }
-                    return [ meta, sortedvcfs, sortedtbis ]
-                }
-                .set { ch_concat_in }
+        BCFTOOLS_CONCAT (ch_concat_in)
 
-            BCFTOOLS_CONCAT (ch_concat_in)
+        TABIX_BCFTOOLS_CONCAT (BCFTOOLS_CONCAT.out.vcf)
 
-            TABIX_BCFTOOLS_CONCAT (BCFTOOLS_CONCAT.out.vcf)
+        ch_vep_ann   = BCFTOOLS_CONCAT.out.vcf
+        ch_vep_index = TABIX_BCFTOOLS_CONCAT.out.tbi
 
-            ch_vep_ann   = BCFTOOLS_CONCAT.out.vcf
-            ch_vep_index = TABIX_BCFTOOLS_CONCAT.out.tbi
-        }
         ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions)
         ch_versions = ch_versions.mix(RHOCALL_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_ROHCALL.out.versions)

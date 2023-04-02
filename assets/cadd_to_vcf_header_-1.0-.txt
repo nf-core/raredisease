@@ -1,0 +1,1 @@
+##INFO=<ID=CADD,Number=1,Type=Float,Description="The CADD relative score for this alternative.">

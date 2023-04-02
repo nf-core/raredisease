@@ -141,6 +141,7 @@ workflow RAREDISEASE {
     }
 
     // Initialize all file channels including unprocessed vcf, bed and tab files
+    ch_cadd_header                    = Channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_cadd_scores                    = params.cadd_annotation                ? Channel.fromPath(params.cadd_annotation).collect()
                                                                               : Channel.value([])
     ch_call_interval                  = params.call_interval                  ? Channel.fromPath(params.call_interval).collect()
@@ -451,6 +452,7 @@ workflow RAREDISEASE {
         ANNOTATE_SNVS (
             ch_vcf,
             params.analysis_type,
+            ch_cadd_header,
             ch_cadd_scores,
             ch_vcfanno_resources,
             ch_vcfanno_lua,
