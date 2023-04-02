@@ -23,6 +23,7 @@ params.fasta_fai                      = WorkflowMain.getGenomeAttribute(params, 
 params.bwa                            = WorkflowMain.getGenomeAttribute(params, 'bwa')
 params.bwamem2                        = WorkflowMain.getGenomeAttribute(params, 'bwamem2')
 params.call_interval                  = WorkflowMain.getGenomeAttribute(params, 'call_interval')
+params.cadd_annotation                = WorkflowMain.getGenomeAttribute(params, 'cadd_annotation')
 params.gnomad_af                      = WorkflowMain.getGenomeAttribute(params, 'gnomad_af')
 params.gnomad_af_idx                  = WorkflowMain.getGenomeAttribute(params, 'gnomad_af_idx')
 params.intervals_wgs                  = WorkflowMain.getGenomeAttribute(params, 'intervals_wgs')

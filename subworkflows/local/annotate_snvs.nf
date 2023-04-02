@@ -14,12 +14,14 @@ include { TABIX_TABIX as TABIX_VEP              } from '../../modules/nf-core/ta
 include { TABIX_TABIX as TABIX_BCFTOOLS_CONCAT  } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_BCFTOOLS_VIEW    } from '../../modules/nf-core/tabix/tabix/main'
 include { GATK4_SELECTVARIANTS                  } from '../../modules/nf-core/gatk4/selectvariants/main'
+include { ANNOTATE_CADD                         } from '../../subworkflows/local/annotate_cadd'
 
 workflow ANNOTATE_SNVS {
 
     take:
         ch_vcf                // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
         analysis_type         // string: [mandatory] 'wgs' or 'wes'
+        ch_cadd_scores        // channel: [mandatory] [ path(annotation) ]
         ch_vcfanno_resources  // channel: [mandatory] [ path(resources) ]
         ch_vcfanno_lua        // channel: [mandatory] [ path(lua) ]
         ch_vcfanno_toml       // channel: [mandatory] [ path(toml) ]
@@ -68,10 +70,16 @@ workflow ANNOTATE_SNVS {
 
         BCFTOOLS_VIEW.out.vcf.join(TABIX_BCFTOOLS_VIEW.out.tbi).collect().set { ch_vcf_scatter_in }
 
-        GATK4_SELECTVARIANTS (ch_vcf_scatter_in.combine(ch_split_intervals)).vcf.set { ch_vep_in }
+        GATK4_SELECTVARIANTS (ch_vcf_scatter_in.combine(ch_split_intervals))
+
+        ANNOTATE_CADD (
+            GATK4_SELECTVARIANTS.out.vcf,
+            GATK4_SELECTVARIANTS.out.tbi,
+            ch_cadd_scores
+        )
 
         ENSEMBLVEP_SNV(
-            ch_vep_in,
+            GATK4_SELECTVARIANTS.out.vcf,
             val_vep_genome,
             "homo_sapiens",
             val_vep_cache_version,
@@ -82,13 +90,13 @@ workflow ANNOTATE_SNVS {
 
         TABIX_VEP (ENSEMBLVEP_SNV.out.vcf_gz)
 
-        ch_vep_ann   = ENSEMBLVEP_SNV.out.vcf_gz
-        ch_vep_index = TABIX_VEP.out.tbi
+        ch_vep_ann       = ENSEMBLVEP_SNV.out.vcf_gz
+        ch_vep_index     = TABIX_VEP.out.tbi
 
         if (params.analysis_type == 'wgs') {
 
-            ENSEMBLVEP_SNV.out.vcf_gz
-                .join(TABIX_VEP.out.tbi)
+            ch_vep_ann
+                .join(ch_vep_index)
                 .groupTuple()
                 .map { meta, vcfs, tbis ->
                     def sortedvcfs = vcfs.sort { it.baseName }

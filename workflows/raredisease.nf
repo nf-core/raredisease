@@ -14,6 +14,7 @@ def checkPathParamList = [
     params.bwa,
     params.bwamem2,
     params.call_interval,
+    params.cadd_annotation,
     params.fasta,
     params.fasta_fai,
     params.gens_gnomad_pos,
@@ -140,6 +141,8 @@ workflow RAREDISEASE {
     }
 
     // Initialize all file channels including unprocessed vcf, bed and tab files
+    ch_cadd_scores                    = params.cadd_annotation                ? Channel.fromPath(params.cadd_annotation).collect()
+                                                                              : Channel.value([])
     ch_call_interval                  = params.call_interval                  ? Channel.fromPath(params.call_interval).collect()
                                                                               : Channel.value([])
     ch_genome_fasta_no_meta           = params.fasta                          ? Channel.fromPath(params.fasta).collect()
@@ -448,6 +451,7 @@ workflow RAREDISEASE {
         ANNOTATE_SNVS (
             ch_vcf,
             params.analysis_type,
+            ch_cadd_scores,
             ch_vcfanno_resources,
             ch_vcfanno_lua,
             ch_vcfanno_toml,

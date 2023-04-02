@@ -103,6 +103,13 @@
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
+                "cadd_annotation": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to the directory containing cadd annotations.",
+                    "help_text": "This folder contains the uncompressed files that would otherwise be in data/annotation folder as described in https://github.com/kircherlab/CADD-scripts/#manual-installation."
+                },
                 "gnomad_af": {
                     "type": "string",
                     "format": "path",
