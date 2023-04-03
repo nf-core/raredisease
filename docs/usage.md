@@ -222,7 +222,7 @@ The mandatory and optional parameters for each category are tabulated below.
 | ------------------------------ | -------- |
 | genome                         |          |
 | mt_backchain_shift<sup>1</sup> |          |
-| mt_contig_name                 |          |
+| mito_name                      |          |
 | mt_fasta_shift                 |          |
 | mt_intervals                   |          |
 | mt_intervals_shift             |          |
