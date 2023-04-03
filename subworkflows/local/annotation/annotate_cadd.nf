@@ -2,12 +2,12 @@
 // A subworkflow to annotate snvs
 //
 
-include { BCFTOOLS_ANNOTATE             } from '../../modules/nf-core/bcftools/annotate/main'
-include { BCFTOOLS_VIEW                 } from '../../modules/nf-core/bcftools/view/main'
-include { CADD                          } from '../../modules/local/cadd'
-include { TABIX_TABIX as TABIX_ANNOTATE } from '../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_CADD     } from '../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_VIEW     } from '../../modules/nf-core/tabix/tabix/main'
+include { BCFTOOLS_ANNOTATE             } from '../../../modules/nf-core/bcftools/annotate/main'
+include { BCFTOOLS_VIEW                 } from '../../../modules/nf-core/bcftools/view/main'
+include { CADD                          } from '../../../modules/local/cadd'
+include { TABIX_TABIX as TABIX_ANNOTATE } from '../../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_CADD     } from '../../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_VIEW     } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow ANNOTATE_CADD {
 

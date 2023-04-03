@@ -14,7 +14,7 @@ include { TABIX_TABIX as TABIX_VEP              } from '../../modules/nf-core/ta
 include { TABIX_TABIX as TABIX_BCFTOOLS_CONCAT  } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_BCFTOOLS_VIEW    } from '../../modules/nf-core/tabix/tabix/main'
 include { GATK4_SELECTVARIANTS                  } from '../../modules/nf-core/gatk4/selectvariants/main'
-include { ANNOTATE_CADD                         } from '../../subworkflows/local/annotate_cadd'
+include { ANNOTATE_CADD                         } from './annotation/annotate_cadd'
 
 workflow ANNOTATE_SNVS {
 
