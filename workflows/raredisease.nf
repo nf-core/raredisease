@@ -405,6 +405,8 @@ workflow RAREDISEASE {
     if (!params.skip_mt_analysis) {
         ANALYSE_MT (
             ch_mapped.bam_bai,
+            ch_cadd_header,
+            ch_cadd_scores,
             ch_bwa_index,
             ch_bwamem2_index,
             ch_genome_fasta_meta,

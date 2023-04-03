@@ -80,6 +80,7 @@ workflow ANNOTATE_SNVS {
 
         GATK4_SELECTVARIANTS (ch_vcf_scatter_in)
 
+        // Annotating with CADD
         ANNOTATE_CADD (
             GATK4_SELECTVARIANTS.out.vcf,
             GATK4_SELECTVARIANTS.out.tbi,
@@ -87,8 +88,22 @@ workflow ANNOTATE_SNVS {
             ch_cadd_scores
         )
 
+        // Pick input for VEP
+        GATK4_SELECTVARIANTS.out.vcf
+            .combine(ANNOTATE_CADD.out.vcf.ifEmpty("null"))
+            .branch { it  ->
+                selvar: it[2].equals("null")
+                    return [it[0], it[1]]
+                cadd: !(it[2].equals("null"))
+                    return [it[2], it[3]]
+            }
+            .set { ch_for_mix }
+
+        ch_vep_in = ch_for_mix.selvar.mix(ch_for_mix.cadd)
+
+        // Annotating with ensembl Vep
         ENSEMBLVEP_SNV(
-            ANNOTATE_CADD.out.vcf,
+            ch_vep_in,
             val_vep_genome,
             "homo_sapiens",
             val_vep_cache_version,
@@ -128,6 +143,7 @@ workflow ANNOTATE_SNVS {
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(TABIX_BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions.first())
+        ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
         ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions.first())
         ch_versions = ch_versions.mix(TABIX_VEP.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
