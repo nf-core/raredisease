@@ -60,6 +60,11 @@
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
                         "installed_by": ["modules"]
                     },
+                    "cadd": {
+                        "branch": "master",
+                        "git_sha": "2e2f8581f4d2ab4729c2b7bd5da8400b54fb8fdf",
+                        "installed_by": ["modules"]
+                    },
                     "cat/cat": {
                         "branch": "master",
                         "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
