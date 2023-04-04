@@ -142,7 +142,7 @@
                     "description": "Path to the interval list of the Y chromosome.",
                     "help_text": "Path to the interval list of the Y chromosome. This is used to calculate coverage statistics for the Y chromosome."
                 },
-                "mt_contig_name": {
+                "mito_name": {
                     "type": "string",
                     "format": "path",
                     "description": "Name of the mitochondrial contig in the reference fasta file",
