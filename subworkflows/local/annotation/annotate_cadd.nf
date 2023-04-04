@@ -28,8 +28,8 @@ workflow ANNOTATE_CADD {
 
         TABIX_CADD(CADD.out.tsv)
 
-        BCFTOOLS_VIEW.out.vcf
-            .join(TABIX_VIEW.out.tbi)
+        ch_vcf
+            .join(ch_index)
             .join(CADD.out.tsv)
             .join(TABIX_CADD.out.tbi)
             .groupTuple()
