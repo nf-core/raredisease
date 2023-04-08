@@ -34,7 +34,7 @@ workflow CALL_SV_MANTA {
                 .set { manta_input }
             MANTA ( manta_input, ch_fasta, ch_fai )
         } else {
-            case_info.combine(bam_file_list)
+            ch_case_info.combine(bam_file_list)
                 .combine(bai_file_list)
                 .combine(bed_input)
                 .set { manta_input }
