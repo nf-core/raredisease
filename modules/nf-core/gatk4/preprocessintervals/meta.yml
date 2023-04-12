@@ -1,8 +1,10 @@
-name: "gatk4_germlinecnvcaller"
-description: Calls copy-number variants in germline samples given their counts and the output of DetermineGermlineContigPloidy.
+name: "gatk4_preprocessintervals"
+description: Prepares bins for coverage collection.
 keywords:
-  - gatk
-  - gatk4_germlinecnvcaller
+  - gatk4
+  - preprocessintervals
+  - interval
+  - bed
 tools:
   - "gatk4":
       description:
@@ -20,17 +22,22 @@ input:
       description: |
         Groovy Map containing sample information
         e.g. [ id:'test', single_end:false ]
-  - tsv:
+  - exclude_intervals:
       type: file
-      description: TSV file
-      pattern: "*.tsv"
-  - model:
-      type: directory
-      description: model directory
-  - tar:
+      description: Interval file (bed or interval_list) with the genomic regions to be excluded from the analysis (optional)
+      pattern: "*.{bed,interval_list}"
+  - fasta:
       type: file
-      description: TAR file
-      pattern: "*.tar"
+      description: The reference fasta file
+      pattern: "*.fasta"
+  - fai:
+      type: file
+      description: Index of reference fasta file
+      pattern: "*.fasta.fai"
+  - dict:
+      type: file
+      description: GATK sequence dictionary
+      pattern: "*.dict"
 
 output:
   - meta:
@@ -42,10 +49,10 @@ output:
       type: file
       description: File containing software versions
       pattern: "versions.yml"
-  - tar:
+  - interval_list:
       type: file
-      description: TAR file
-      pattern: "*.tar"
+      description: Processed interval list file
+      pattern: "*.{bed,interval_list}"
 
 authors:
   - "@ryanjameskennedy"
