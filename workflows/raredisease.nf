@@ -219,6 +219,16 @@ workflow RAREDISEASE {
                                                                            : ch_references.bwamem2_index
     ch_bwamem2_index_mt_shift       = params.mt_bwamem2_index_shift        ? Channel.fromPath(params.mt_bwamem2_index_shift).collect()
                                                                            : ch_references.bwamem2_index_mt_shift
+    ch_fasta_dict                   = params.dict                          ? Channel.fromPath(params.dict).collect()
+                                                                           : ( ch_references.fasta_dict               ?: Channel.empty() )
+    ch_blacklist_bed                = params.blacklist_bed                 ? Channel.fromPath(params.blacklist_bed).collect()
+                                                                           : ( ch_references.blacklist_bed            ?: Channel.empty() )
+    ch_ploidy_priors                = params.ploidy_priors                 ? Channel.fromPath(params.ploidy_priors).collect()
+                                                                           : ( ch_references.ploidy_priors            ?: Channel.empty() )
+    ch_plodiy_model                 = params.plodiy_model                  ? Channel.fromPath(params.plodiy_model).collect()
+                                                                           : ( ch_references.plodiy_model             ?: Channel.empty() )
+    ch_cnv_model                    = params.cnv_model                     ? Channel.fromPath(params.cnv_model).collect()
+                                                                           : ( ch_references.cnv_model                ?: Channel.empty() )
     ch_chrom_sizes                  = ch_references.chrom_sizes
     ch_genome_fai_no_meta           = params.fasta_fai                     ? Channel.fromPath(params.fasta_fai).collect()
                                                                            : ch_references.fasta_fai
@@ -337,7 +347,11 @@ workflow RAREDISEASE {
         ch_genome_fasta_meta,
         ch_genome_fai_no_meta,
         CHECK_INPUT.out.case_info,
-        ch_target_bed
+        ch_target_bed,
+        ch_fasta_dict,
+        ch_blacklist_bed,
+        ch_plodiy_model,
+        ch_ploidy_priors
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 

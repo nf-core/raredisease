@@ -80,14 +80,34 @@
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
                         "installed_by": ["modules"]
                     },
+                    "gatk4/annotateintervals": {
+                        "branch": "master",
+                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
+                        "installed_by": ["modules"]
+                    },
                     "gatk4/bedtointervallist": {
                         "branch": "master",
                         "git_sha": "643756685546fa61f5c8fba439af746c090b9180",
                         "installed_by": ["modules"]
                     },
+                    "gatk4/collectreadcounts": {
+                        "branch": "master",
+                        "git_sha": "1fccb96ee4fc3efcdb7ed257f016a59cecb83dec",
+                        "installed_by": ["modules"]
+                    },
                     "gatk4/createsequencedictionary": {
                         "branch": "master",
                         "git_sha": "643756685546fa61f5c8fba439af746c090b9180",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/determinegermlinecontigploidy": {
+                        "branch": "master",
+                        "git_sha": "14c2bbc2def3313b9f1d17fd6194f7c596b40887",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/filterintervals": {
+                        "branch": "master",
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
                         "installed_by": ["modules"]
                     },
                     "gatk4/filtermutectcalls": {
@@ -113,6 +133,11 @@
                     "gatk4/mutect2": {
                         "branch": "master",
                         "git_sha": "643756685546fa61f5c8fba439af746c090b9180",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/preprocessintervals": {
+                        "branch": "master",
+                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
                         "installed_by": ["modules"]
                     },
                     "gatk4/printreads": {
