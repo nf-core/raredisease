@@ -6,10 +6,10 @@ include { SAMPLESHEET_CHECK } from '../../modules/local/samplesheet_check'
 
 workflow CHECK_INPUT {
     take:
-        samplesheet // file: /path/to/samplesheet.csv
+        ch_samplesheet // channel: [mandatory] [ path(csv) ]
 
     main:
-        SAMPLESHEET_CHECK ( samplesheet )
+        SAMPLESHEET_CHECK ( ch_samplesheet )
             .csv
             .splitCsv ( header:true, sep:',' )
             .set { sheet }
@@ -20,10 +20,10 @@ workflow CHECK_INPUT {
         samples      = sheet.map { create_samples_channel(it) }
 
     emit:
-        case_info       // channel: [ case_id ]
-        reads           // channel: [ val(meta), [ reads ] ]
-        samples         // channel: [ sample_id, sex, phenotype, paternal_id, maternal_id, case_id ]
-        versions  = SAMPLESHEET_CHECK.out.versions // channel: [ versions.yml ]
+        case_info       // channel: [ val(case_info) ]
+        reads           // channel: [ val(meta), [ path(reads) ] ]
+        samples         // channel: [ val(sample_id), val(sex), val(phenotype), val(paternal_id), val(maternal_id), val(case_id) ]
+        versions  = SAMPLESHEET_CHECK.out.versions  // channel: [ path(versions.yml) ]
 }
 
 // Function to get list of [ meta, [ fastq_1, fastq_2 ] ]
@@ -37,7 +37,6 @@ def create_fastq_channel(LinkedHashMap row) {
     meta.paternal  = row.paternal_id
     meta.phenotype = row.phenotype
     meta.single_end   = row.single_end.toBoolean()
-    //TODO: think about adding LB and PU, make sure only illumina will be used, ID can also contain a flowcell id
     meta.read_group   =     "\'@RG\\tID:"+ row.fastq_1.split('/')[-1] + "\\tPL:ILLUMINA\\tSM:"+row.sample.split('_')[0]+"\'"
 
 

@@ -15,25 +15,25 @@ include { TABIX_TABIX as TABIX_EXP_RENAME              } from '../../modules/nf-
 
 workflow CALL_REPEAT_EXPANSIONS {
     take:
-        bam 			// channel: [ val(meta), path(bam), path(bai) ]
-        variant_catalog	// channel: /path/to/variant_catalog.json
-        case_info       // channel: [ case_id ]
-        fasta 			// channel: /path/to/genome.fasta
-        fai 			// channel: /path/to/genome.fasta.fai
+        ch_bam             // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_variant_catalog // channel: [mandatory] [ path(variant_catalog.json) ]
+        ch_case_info       // channel: [mandatory] [ val(case_id) ]
+        ch_fasta           // channel: [mandatory] [ path(fasta) ]
+        ch_fai             // channel: [mandatory] [ path(fai) ]
 
     main:
         ch_versions = Channel.empty()
 
         EXPANSIONHUNTER (
-            bam,
-            fasta,
-            variant_catalog
+            ch_bam,
+            ch_fasta,
+            ch_variant_catalog
         )
 
         // Fix header and rename sample
         BCFTOOLS_REHEADER_EXP (
             EXPANSIONHUNTER.out.vcf.map{ meta, vcf -> [ meta, vcf, [] ]},
-            fai
+            ch_fai
         )
         RENAMESAMPLE_EXP ( BCFTOOLS_REHEADER_EXP.out.vcf )
         TABIX_EXP_RENAME ( RENAMESAMPLE_EXP.out.vcf )
@@ -41,7 +41,7 @@ workflow CALL_REPEAT_EXPANSIONS {
         // Split multi allelelic
         SPLIT_MULTIALLELICS_EXP (
             RENAMESAMPLE_EXP.out.vcf.join(TABIX_EXP_RENAME.out.tbi),
-            fasta
+            ch_fasta
         )
 
         // Merge indiviual repeat expansions
@@ -49,13 +49,13 @@ workflow CALL_REPEAT_EXPANSIONS {
             .collect{it[1]}
             .toList()
             .set {ch_exp_vcfs}
-        case_info
+        ch_case_info
             .combine(ch_exp_vcfs)
             .set {ch_svdb_merge_input}
         SVDB_MERGE_REPEATS ( ch_svdb_merge_input, [] )
 
         // Annotate, compress and index
-        STRANGER ( SVDB_MERGE_REPEATS.out.vcf, variant_catalog )
+        STRANGER ( SVDB_MERGE_REPEATS.out.vcf,  ch_variant_catalog )
         COMPRESS_STRANGER (
             STRANGER.out.vcf.map{ meta, vcf -> [meta, vcf, [] ]},
              [], [], []
@@ -72,7 +72,7 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_versions = ch_versions.mix(COMPRESS_STRANGER.out.versions.first())
         ch_versions = ch_versions.mix(INDEX_STRANGER.out.versions.first())
 
-    emit:
-        vcf         = COMPRESS_STRANGER.out.vcf.join(INDEX_STRANGER.out.tbi) // channel: [ val(meta), path(*.vcf.gz), path(*.vcf.gz.tbi) ]
-        versions    = ch_versions                                            // channel: [ versions.yml ]
+ emit:
+        vcf      = COMPRESS_STRANGER.out.vcf.join(INDEX_STRANGER.out.tbi) // channel: [ val(meta), path(vcf), path(tbi) ]
+        versions = ch_versions                                            // channel: [ path(versions.yml) ]
 }

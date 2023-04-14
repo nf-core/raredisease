@@ -87,7 +87,7 @@
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
                 },
-                "bwa_index": {
+                "bwa": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "Directory for pre-built bwa index.",
@@ -95,21 +95,13 @@
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
-                "bwamem2_index": {
+                "bwamem2": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "Directory for pre-built bwamem2 index.",
                     "help_text": "If none provided, will be generated automatically from the FASTA reference.",
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
-                },
-                "gnomad_vcf": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-bezier-curve",
-                    "pattern": "^\\S+\\.vcf(\\.gz)?$",
-                    "description": "Path to directory for gnomad vcf.",
-                    "help_text": "Path to the gnomad annotations vcf file. If you don't provide one, gnomad annotations will not be used."
                 },
                 "gnomad_af": {
                     "type": "string",
@@ -143,7 +135,7 @@
                     "description": "Path to the interval list of the Y chromosome.",
                     "help_text": "Path to the interval list of the Y chromosome. This is used to calculate coverage statistics for the Y chromosome."
                 },
-                "mt_contig_name": {
+                "mito_name": {
                     "type": "string",
                     "format": "path",
                     "description": "Name of the mitochondrial contig in the reference fasta file",
@@ -396,22 +388,22 @@
                     "fa_icon": "fas fa-book",
                     "enum": ["wgs", "wes", "mito"]
                 },
-                "annotate_snv_switch": {
+                "skip_snv_annotation": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Specifies whether or not to run annotate SNV subworkflow.",
+                    "default": false,
+                    "description": "Specifies whether or not to skip annotate SNV subworkflow.",
                     "fa_icon": "fas fa-book"
                 },
-                "annotate_sv_switch": {
+                "skip_sv_annotation": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Specifies whether or not to run annotate structural variant subworkflow.",
+                    "default": false,
+                    "description": "Specifies whether or not to skip annotate structural variant subworkflow.",
                     "fa_icon": "fas fa-book"
                 },
-                "dedicated_mt_analysis": {
+                "skip_mt_analysis": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Specifies whether or not to run a separate subworkflow for mitochondrial analysis.",
+                    "default": false,
+                    "description": "Specifies whether or not to skip the subworkflow that analyses mitochondrial genome separate from the nuclear genome.",
                     "fa_icon": "fas fa-book"
                 },
                 "gens_switch": {
@@ -464,10 +456,10 @@
                     "description": "Interval in the reference that will be used in the software",
                     "hidden": true
                 },
-                "pcrfree": {
+                "pcr_amplification": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "indicates whether the sample is PCR Free or not. Set to true for PCR Free samples.",
+                    "default": false,
+                    "description": "indicates whether the sample library is amplified using PCR or not. Set to false for PCR Free samples.",
                     "fa_icon": "fas fa-map-signs"
                 },
                 "variant_type": {
@@ -483,26 +475,6 @@
                     "description": "Specifies the variant caller to use - available options are 'deepvariant' and 'sentieon'.",
                     "fa_icon": "fas fa-map-signs",
                     "enum": ["deepvariant", "sentieon"]
-                }
-            }
-        },
-        "sv_caller_options": {
-            "title": "Structural variant calling options",
-            "type": "object",
-            "fa_icon": "fas fa-map-signs",
-            "description": "Options to adjust parameters and filtering criteria for structural variant callers.",
-            "properties": {
-                "cnvpytor_chr": {
-                    "type": "string",
-                    "default": null,
-                    "description": "Chromosome names must be specified the same way as they are described in the sam/bam/cram header, e.g., chrX or X. One can specify multiple chromosomes separated by space.",
-                    "fa_icon": "fas fa-map-signs"
-                },
-                "cnvpytor_binsizes": {
-                    "type": "string",
-                    "default": "1000",
-                    "description": "List of binsizes separated by space e.g. '1000 10000' and '1000'",
-                    "fa_icon": "fas fa-map-signs"
                 }
             }
         },
@@ -725,9 +697,6 @@
         },
         {
             "$ref": "#/definitions/alignment_options"
-        },
-        {
-            "$ref": "#/definitions/sv_caller_options"
         },
         {
             "$ref": "#/definitions/variant_calling_options"

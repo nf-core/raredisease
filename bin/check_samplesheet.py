@@ -1,4 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+# Released under the MIT license.
+# See git repository (https://github.com/nf-core/raredisease) for full license text.
 
 
 """Provide a command line tool to validate and transform tabular samplesheets."""

@@ -12,8 +12,8 @@ process SENTIEON_WGSMETRICSALGO {
     path intervals_list
 
     output:
-    tuple val(meta), path('*wgs_metrics.txt'), emit: wgs_metrics
-    path  "versions.yml"                     , emit: versions
+    tuple val(meta), path('*.txt'), emit: wgs_metrics
+    path  "versions.yml"          , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -36,7 +36,7 @@ process SENTIEON_WGSMETRICSALGO {
         $input \\
         $interval \\
         $args \\
-        --algo WgsMetricsAlgo ${prefix}_wgs_metrics.txt
+        --algo WgsMetricsAlgo ${prefix}.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

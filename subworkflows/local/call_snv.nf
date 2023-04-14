@@ -9,15 +9,14 @@ include { GATK4_SELECTVARIANTS } from '../../modules/nf-core/gatk4/selectvariant
 
 workflow CALL_SNV {
     take:
-	    variant_caller       // string:  params.variant_caller
-	    input                // channel: [ val(meta), path(bam), path(bai) ]
-	    fasta                // channel: [genome.fasta]
-	    fai                  // channel: [genome.fai]
-	    known_dbsnp          // channel: [ /path/to/known_dbsnp ]
-	    known_dbsnp_tbi      // channel: [ /path/to/known_dbsnp_tbi ]
-        call_interval        // channel: [ /path/to/call_intervals ]
-	    ml_model             // channel: [ /path/to/ml_model ]
-	    case_info            // channel: [ case_id ]
+        ch_input           // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_fasta           // channel: [mandatory] [ path(fasta) ]
+        ch_fai             // channel: [mandatory] [ path(fai) ]
+        ch_known_dbsnp     // channel: [optional] [ val(meta), path(vcf) ]
+        ch_known_dbsnp_tbi // channel: [optional] [ val(meta), path(tbi) ]
+        ch_call_interval   // channel: [mandatory] [ path(intervals) ]
+        ch_ml_model        // channel: [mandatory] [ path(model) ]
+        ch_case_info       // channel: [mandatory] [ val(case_info) ]
 
     main:
         ch_versions   = Channel.empty()
@@ -25,21 +24,21 @@ workflow CALL_SNV {
         ch_tabix      = Channel.empty()
 
         CALL_SNV_DEEPVARIANT (
-            input,
-            fasta,
-            fai,
-            case_info
+            ch_input,
+            ch_fasta,
+            ch_fai,
+            ch_case_info
         )
 
         CALL_SNV_SENTIEON(
-            input,
-            fasta,
-            fai,
-            known_dbsnp,
-            known_dbsnp_tbi,
-            call_interval,
-            ml_model,
-            case_info
+            ch_input,
+            ch_fasta,
+            ch_fai,
+            ch_known_dbsnp,
+            ch_known_dbsnp_tbi,
+            ch_call_interval,
+            ch_ml_model,
+            ch_case_info
         )
 
         ch_vcf      = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.vcf, CALL_SNV_SENTIEON.out.vcf)
@@ -49,7 +48,7 @@ workflow CALL_SNV {
         ch_versions = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
 
     emit:
-        vcf      = ch_vcf
-        tabix    = ch_tabix
-        versions = ch_versions
+        vcf      = ch_vcf      // channel: [ val(meta), path(vcf) ]
+        tabix    = ch_tabix    // channel: [ val(meta), path(tbi) ]
+        versions = ch_versions // channel: [ path(versions.yml) ]
 }
