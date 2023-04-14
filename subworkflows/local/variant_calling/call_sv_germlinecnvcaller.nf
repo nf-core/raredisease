@@ -11,45 +11,46 @@ include { GATK4_DETERMINEGERMLINECONTIGPLOIDY } from '../../../modules/nf-core/g
 include { GATK4_GERMLINECNVCALLER             } from '../../../modules/nf-core/gatk4/germlinecnvcaller/main.nf'
 include { GATK4_POSTPROCESSGERMLINECNVCALLS   } from '../../../modules/nf-core/gatk4/postprocessgermlinecnvcalls/main.nf'
 
-workflow CALL_CNV_GERMLINECNVCALLER {
+workflow CALL_SV_GERMLINECNVCALLER {
     take:
-        bam_bai        // channel: [ val(meta), path(bam), path(bai) ]
-        bam_bai_2      // channel: [ val(meta), path(bam), path(bai) ]
-        fasta_no_meta  // channel: [ path(fasta_no_meta) ]
-        fai            // channel: [ path(fai) ]
-        target_bed     // channel: [ path(target_bed) ]
-        blacklist_bed  // channel: [ val(meta), path(blacklist_bed) ]
-        dict           // channel: [ path(dict) ]
-        priors         // [ path(priors) ]
-        ploidy_model   // channel: [ path(ploidy_model) ]
-        cnv_model      // channel: [ path(cnv_model) ]
+        ch_bam_bai        // channel: [ val(meta), path(bam), path(bai) ]
+        ch_fasta_no_meta  // channel: [ path(ch_fasta_no_meta) ]
+        ch_fai            // channel: [ path(ch_fai) ]
+        ch_target_bed     // channel: [ path(ch_target_bed) ]
+        ch_blacklist_bed  // channel: [ val(meta), path(ch_blacklist_bed) ]
+        ch_dict           // channel: [ path(ch_dict) ]
+        ch_priors         // [ path(ch_priors) ]
+        ch_ploidy_model   // channel: [ path(ch_ploidy_model) ]
+        ch_cnv_model      // channel: [ path(ch_cnv_model) ]
 
     main:
         ch_versions = Channel.empty()
 
-        GATK4_PREPROCESSINTERVALS ( blacklist_bed, fasta_no_meta, fai, dict )
+        GATK4_PREPROCESSINTERVALS ( ch_blacklist_bed, ch_fasta_no_meta, ch_fai, ch_dict )
 
-        GATK4_ANNOTATEINTERVALS ( GATK4_PREPROCESSINTERVALS.out.interval_list, fasta_no_meta, fai, dict, [], [], [], [])
+        GATK4_ANNOTATEINTERVALS ( GATK4_PREPROCESSINTERVALS.out.interval_list, ch_fasta_no_meta, ch_fai, ch_dict, [], [], [], [])
 
-        inputs = bam_bai.combine( GATK4_PREPROCESSINTERVALS.out.interval_list ).mix( bam_bai_2.combine( GATK4_PREPROCESSINTERVALS.out.interval_list ) )
+        input = ch_bam_bai.combine( GATK4_PREPROCESSINTERVALS.out.interval_list )
 
-        GATK4_COLLECTREADCOUNTS ( inputs, fasta_no_meta, fai, dict )
+        GATK4_COLLECTREADCOUNTS ( input, ch_fasta_no_meta, ch_fai, ch_dict )
 
         GATK4_FILTERINTERVALS ( GATK4_PREPROCESSINTERVALS.out.interval_list, GATK4_COLLECTREADCOUNTS.out.tsv.collect{ it[1] }, GATK4_ANNOTATEINTERVALS.out.annotated_intervals )
 
         GATK4_INTERVALLISTTOOLS ( GATK4_FILTERINTERVALS.out.interval_list )
 
         dgcp_case_input = GATK4_COLLECTREADCOUNTS.out.tsv
-                .map({ meta, tsv -> [ [id:'test'], tsv, [], [] ] })
+                .map({ meta, tsv -> [ [id:'test'], tsv ] })
                 .groupTuple()
-        GATK4_DETERMINEGERMLINECONTIGPLOIDY ( dgcp_case_input, [], ploidy_model )
+                .map({ meta, tsv -> return [meta, tsv, [], [] ]})
+        GATK4_DETERMINEGERMLINECONTIGPLOIDY ( dgcp_case_input, [], ch_ploidy_model )
 
         gcnvc_case_input = GATK4_COLLECTREADCOUNTS.out.tsv
-                .map({ meta, tsv -> return [[id:"test"], tsv, [] ]})
+                .map({ meta, tsv -> return [[id:"test"], tsv ]})
                 .groupTuple()
-        GATK4_GERMLINECNVCALLER ( gcnvc_case_input, cnv_model, GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls.collect{ it[1] } )
+                .map({ meta, tsv -> return [meta, tsv, [] ]})
+        GATK4_GERMLINECNVCALLER ( gcnvc_case_input, ch_cnv_model, GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls.collect{ it[1] } )
 
-        GATK4_POSTPROCESSGERMLINECNVCALLS ( GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls, cnv_model, GATK4_GERMLINECNVCALLER.out.calls.collect{ it[1] } )
+        GATK4_POSTPROCESSGERMLINECNVCALLS ( GATK4_GERMLINECNVCALLER.out.calls, ch_cnv_model, GATK4_GERMLINECNVCALLER.out.calls.collect{ it[1] } )
 
         ch_versions = ch_versions.mix(GATK4_PREPROCESSINTERVALS.out.versions)
         ch_versions = ch_versions.mix(GATK4_ANNOTATEINTERVALS.out.versions)
@@ -61,6 +62,8 @@ workflow CALL_CNV_GERMLINECNVCALLER {
         ch_versions = ch_versions.mix(GATK4_POSTPROCESSGERMLINECNVCALLS.out.versions)
 
     emit:
-        candidate_cnvs_vcf_tar_gz       = GATK4_GERMLINECNVCALLER.out.tar_gz  // channel: [ val(meta), path(*.tar_gz) ]
-        versions                        = ch_versions                         // channel: [ versions.yml ]
+        genotyped_intervals_vcf = GATK4_POSTPROCESSGERMLINECNVCALLS.out.intervals  // channel: [ val(meta), path(*.tar.gz) ]
+        genotyped_segments_vcf  = GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments   // channel: [ val(meta), path(*.tar.gz) ]
+        denoised_vcf            = GATK4_POSTPROCESSGERMLINECNVCALLS.out.denoised   // channel: [ val(meta), path(*.tar.gz) ]
+        versions                            = ch_versions                                      // channel: [ versions.yml ]
 }

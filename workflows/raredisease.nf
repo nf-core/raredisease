@@ -350,8 +350,9 @@ workflow RAREDISEASE {
         ch_target_bed,
         ch_fasta_dict,
         ch_blacklist_bed,
+        ch_ploidy_priors,
         ch_plodiy_model,
-        ch_ploidy_priors
+        ch_cnv_model
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
