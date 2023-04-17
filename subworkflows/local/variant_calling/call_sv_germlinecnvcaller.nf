@@ -31,13 +31,11 @@ workflow CALL_SV_GERMLINECNVCALLER {
         GATK4_COLLECTREADCOUNTS ( input, ch_fasta_no_meta, ch_fai, ch_dict )
 
         dgcp_case_input = GATK4_COLLECTREADCOUNTS.out.tsv
-                .map({ meta, tsv -> [ [id:'test'], tsv ] })
                 .groupTuple()
                 .map({ meta, tsv -> return [meta, tsv, [], [] ]})
         GATK4_DETERMINEGERMLINECONTIGPLOIDY ( dgcp_case_input, [], ch_ploidy_model )
 
         gcnvc_case_input = GATK4_COLLECTREADCOUNTS.out.tsv
-                .map({ meta, tsv -> return [[id:"test"], tsv ]})
                 .groupTuple()
                 .map({ meta, tsv -> return [meta, tsv, [] ]})
         GATK4_GERMLINECNVCALLER ( gcnvc_case_input, ch_cnv_model, GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls.collect{ it[1] } )

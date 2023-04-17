@@ -39,7 +39,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
             .collect{it[1]}
             .set { tiddit_vcf }
 
-        CALL_SV_GERMLINECNVCALLER (ch_bam_bai, ch_fasta_no_meta, ch_fai, ch_target_bed, ch_blacklist_bed, ch_dict, ch_priors, ch_ploidy_model, ch_cnv_model )
+        CALL_SV_GERMLINECNVCALLER (ch_bam_bai, ch_fasta_no_meta, ch_fai, ch_target_bed, ch_blacklist_bed, ch_dict, ch_priors, ch_ploidy_model, ch_cnv_model)
             .genotyped_intervals_vcf
             .collect{it[1]}
             .set { gcnvcaller_vcf }
@@ -55,7 +55,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
             .combine(vcf_list)
             .set { merge_input_vcfs }
 
-        SVDB_MERGE (merge_input_vcfs, ["tiddit","manta", "gcnvcaller"])
+        SVDB_MERGE (merge_input_vcfs, ["tiddit","manta","gcnvcaller"])
 
         TABIX_TABIX (SVDB_MERGE.out.vcf)
 
