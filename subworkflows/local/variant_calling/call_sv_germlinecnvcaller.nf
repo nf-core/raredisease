@@ -16,7 +16,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
         ch_bam_bai        // channel: [ val(meta), path(bam), path(bai) ]
         ch_fasta_no_meta  // channel: [ path(ch_fasta_no_meta) ]
         ch_fai            // channel: [ path(ch_fai) ]
-        ch_target_bed     // channel: [ path(ch_target_bed) ]
+        ch_target_bed     // channel: [ val(meta), path(bed), path(tbi) ]
         ch_blacklist_bed  // channel: [ val(meta), path(ch_blacklist_bed) ]
         ch_dict           // channel: [ path(ch_dict) ]
         ch_priors         // channel: [ path(ch_priors) ]
@@ -30,11 +30,11 @@ workflow CALL_SV_GERMLINECNVCALLER {
 
         GATK4_ANNOTATEINTERVALS ( GATK4_PREPROCESSINTERVALS.out.interval_list, ch_fasta_no_meta, ch_fai, ch_dict, [], [], [], [])
 
-        input = ch_bam_bai.combine( GATK4_PREPROCESSINTERVALS.out.interval_list )
+        input = ch_bam_bai.combine( GATK4_PREPROCESSINTERVALS.out.interval_list.collect{ it[1] } )
 
         GATK4_COLLECTREADCOUNTS ( input, ch_fasta_no_meta, ch_fai, ch_dict )
 
-        GATK4_FILTERINTERVALS ( GATK4_PREPROCESSINTERVALS.out.interval_list, GATK4_COLLECTREADCOUNTS.out.tsv.collect{ it[1] }, GATK4_ANNOTATEINTERVALS.out.annotated_intervals )
+        GATK4_FILTERINTERVALS ( GATK4_PREPROCESSINTERVALS.out.interval_list, GATK4_COLLECTREADCOUNTS.out.tsv.collect{ it[1] }, GATK4_ANNOTATEINTERVALS.out.annotated_intervals.collect{ it[1] } )
 
         GATK4_INTERVALLISTTOOLS ( GATK4_FILTERINTERVALS.out.interval_list )
 
