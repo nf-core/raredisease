@@ -221,7 +221,7 @@ workflow RAREDISEASE {
                                                                            : ch_references.bwamem2_index_mt_shift
     ch_fasta_dict                   = params.dict                          ? Channel.fromPath(params.dict).collect()
                                                                            : ( ch_references.fasta_dict               ?: Channel.empty() )
-    ch_blacklist_bed                = params.blacklist_bed                 ? Channel.fromPath(params.blacklist_bed).collect()
+    ch_blacklist_bed                = params.blacklist_bed                 ? Channel.fromPath(params.blacklist_bed).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                            : ( ch_references.blacklist_bed            ?: Channel.empty() )
     ch_ploidy_priors                = params.ploidy_priors                 ? Channel.fromPath(params.ploidy_priors).collect()
                                                                            : ( ch_references.ploidy_priors            ?: Channel.empty() )

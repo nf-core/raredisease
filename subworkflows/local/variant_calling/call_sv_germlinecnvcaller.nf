@@ -19,7 +19,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
         ch_target_bed     // channel: [ path(ch_target_bed) ]
         ch_blacklist_bed  // channel: [ val(meta), path(ch_blacklist_bed) ]
         ch_dict           // channel: [ path(ch_dict) ]
-        ch_priors         // [ path(ch_priors) ]
+        ch_priors         // channel: [ path(ch_priors) ]
         ch_ploidy_model   // channel: [ path(ch_ploidy_model) ]
         ch_cnv_model      // channel: [ path(ch_cnv_model) ]
 
