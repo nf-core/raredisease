@@ -44,11 +44,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
 
         GATK4_POSTPROCESSGERMLINECNVCALLS ( GATK4_GERMLINECNVCALLER.out.calls, ch_cnv_model, GATK4_GERMLINECNVCALLER.out.calls.collect{ it[1] } )
 
-        ch_versions = ch_versions.mix(GATK4_PREPROCESSINTERVALS.out.versions)
-        ch_versions = ch_versions.mix(GATK4_ANNOTATEINTERVALS.out.versions)
         ch_versions = ch_versions.mix(GATK4_COLLECTREADCOUNTS.out.versions)
-        ch_versions = ch_versions.mix(GATK4_FILTERINTERVALS.out.versions)
-        ch_versions = ch_versions.mix(GATK4_INTERVALLISTTOOLS.out.versions)
         ch_versions = ch_versions.mix(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.versions)
         ch_versions = ch_versions.mix(GATK4_GERMLINECNVCALLER.out.versions)
         ch_versions = ch_versions.mix(GATK4_POSTPROCESSGERMLINECNVCALLS.out.versions)
@@ -57,5 +53,5 @@ workflow CALL_SV_GERMLINECNVCALLER {
         genotyped_intervals_vcf = GATK4_POSTPROCESSGERMLINECNVCALLS.out.intervals  // channel: [ val(meta), path(*.tar.gz) ]
         genotyped_segments_vcf  = GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments   // channel: [ val(meta), path(*.tar.gz) ]
         denoised_vcf            = GATK4_POSTPROCESSGERMLINECNVCALLS.out.denoised   // channel: [ val(meta), path(*.tar.gz) ]
-        versions                            = ch_versions                                      // channel: [ versions.yml ]
+        versions                = ch_versions                                      // channel: [ versions.yml ]
 }
