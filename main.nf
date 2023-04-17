@@ -20,6 +20,7 @@ nextflow.enable.dsl = 2
 
 params.fasta                          = WorkflowMain.getGenomeAttribute(params, 'fasta')
 params.fasta_fai                      = WorkflowMain.getGenomeAttribute(params, 'fai')
+params.dict                           = WorkflowMain.getGenomeAttribute(params, 'dict')
 params.bwa                            = WorkflowMain.getGenomeAttribute(params, 'bwa')
 params.bwamem2                        = WorkflowMain.getGenomeAttribute(params, 'bwamem2')
 params.call_interval                  = WorkflowMain.getGenomeAttribute(params, 'call_interval')
@@ -45,6 +46,7 @@ params.sequence_dictionary            = WorkflowMain.getGenomeAttribute(params, 
 params.score_config_snv               = WorkflowMain.getGenomeAttribute(params, 'score_config_snv')
 params.score_config_sv                = WorkflowMain.getGenomeAttribute(params, 'score_config_sv')
 params.target_bed                     = WorkflowMain.getGenomeAttribute(params, 'target_bed')
+params.blacklist_bed                  = WorkflowMain.getGenomeAttribute(params, 'blacklist_bed')
 params.svdb_query_dbs                 = WorkflowMain.getGenomeAttribute(params, 'svdb_query_dbs')
 params.variant_catalog                = WorkflowMain.getGenomeAttribute(params, 'variant_catalog')
 params.vep_filters                    = WorkflowMain.getGenomeAttribute(params, 'vep_filters')
@@ -56,6 +58,9 @@ params.vep_cache_version              = WorkflowMain.getGenomeAttribute(params, 
 params.gens_interval_list             = WorkflowMain.getGenomeAttribute(params, 'gens_interval_list')
 params.gens_pon                       = WorkflowMain.getGenomeAttribute(params, 'gens_pon')
 params.gens_gnomad_pos                = WorkflowMain.getGenomeAttribute(params, 'gens_gnomad_pos')
+params.ploidy_priors                  = WorkflowMain.getGenomeAttribute(params, 'ploidy_priors')
+params.plodiy_model                   = WorkflowMain.getGenomeAttribute(params, 'plodiy_model')
+params.cnv_model                      = WorkflowMain.getGenomeAttribute(params, 'cnv_model')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
