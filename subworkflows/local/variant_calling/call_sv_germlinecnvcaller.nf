@@ -26,17 +26,9 @@ workflow CALL_SV_GERMLINECNVCALLER {
     main:
         ch_versions = Channel.empty()
 
-        GATK4_PREPROCESSINTERVALS ( ch_blacklist_bed, ch_fasta_no_meta, ch_fai, ch_dict )
-
-        GATK4_ANNOTATEINTERVALS ( GATK4_PREPROCESSINTERVALS.out.interval_list, ch_fasta_no_meta, ch_fai, ch_dict, [], [], [], [])
-
-        input = ch_bam_bai.combine( GATK4_PREPROCESSINTERVALS.out.interval_list.collect{ it[1] } )
+        input = ch_bam_bai.combine( ch_target_bed.collect{ it[1] } )
 
         GATK4_COLLECTREADCOUNTS ( input, ch_fasta_no_meta, ch_fai, ch_dict )
-
-        GATK4_FILTERINTERVALS ( GATK4_PREPROCESSINTERVALS.out.interval_list, GATK4_COLLECTREADCOUNTS.out.tsv.collect{ it[1] }, GATK4_ANNOTATEINTERVALS.out.annotated_intervals.collect{ it[1] } )
-
-        GATK4_INTERVALLISTTOOLS ( GATK4_FILTERINTERVALS.out.interval_list )
 
         dgcp_case_input = GATK4_COLLECTREADCOUNTS.out.tsv
                 .map({ meta, tsv -> [ [id:'test'], tsv ] })
