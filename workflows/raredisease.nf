@@ -77,7 +77,6 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 
 include { FILTER_VEP as FILTER_VEP_SNV          } from '../modules/local/filter_vep'
 include { FILTER_VEP as FILTER_VEP_SV           } from '../modules/local/filter_vep'
-include { MAKE_PED                              } from '../modules/local/create_pedfile'
 
 //
 // MODULE: Installed directly from nf-core/modules
@@ -189,8 +188,7 @@ workflow RAREDISEASE {
                                                                               : Channel.value([])
 
     // Generate pedigree file
-    MAKE_PED (CHECK_INPUT.out.samples.toList())
-    ch_versions = ch_versions.mix(MAKE_PED.out.versions)
+    pedfile = CHECK_INPUT.out.samples.toList().map { make_ped(it) }
 
     // Input QC
     FASTQC (CHECK_INPUT.out.reads)
@@ -344,7 +342,7 @@ workflow RAREDISEASE {
     // ped correspondence, sex check, ancestry check
     PEDDY_CHECK (
         CALL_SNV.out.vcf.join(CALL_SNV.out.tabix),
-        MAKE_PED.out.ped
+        pedfile
     )
     ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
 
@@ -384,7 +382,7 @@ workflow RAREDISEASE {
 
         RANK_VARIANTS_SV (
             ANN_CSQ_PLI_SV.out.vcf_ann,
-            MAKE_PED.out.ped,
+            pedfile,
             ch_reduced_penetrance,
             ch_score_config_sv
         )
@@ -490,7 +488,7 @@ workflow RAREDISEASE {
 
         RANK_VARIANTS_SNV (
             ANN_CSQ_PLI_SNV.out.vcf_ann,
-            MAKE_PED.out.ped,
+            pedfile,
             ch_reduced_penetrance,
             ch_score_config_snv
         )
@@ -559,6 +557,32 @@ workflow.onComplete {
         NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
     }
 }
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    FUNCTIONS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+def make_ped(samples) {
+
+    def case_name  = samples[0].case_id
+
+    def outfile  = workDir.resolve("$case_name" + '.ped')
+    outfile.text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\t')
+    def samples_list = []
+    for(int i = 0; i<samples.size(); i++) {
+        sample_tokenized   =  samples[i].id.tokenize("_")
+        sample_tokenized.removeLast()
+        sample_name        =  sample_tokenized.join("_")
+        if (!samples_list.contains(sample_name)) {
+            outfile.append('\n' + [samples[i].case_id, sample_name, samples[i].paternal, samples[i].maternal, samples[i].gender, samples[i].phenotype].join('\t'));
+            samples_list.add(sample_name)
+        }
+    }
+    return outfile
+}
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
