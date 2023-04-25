@@ -22,6 +22,12 @@
 
   > Vasimuddin Md, Misra S, Li H, Aluru S. Efficient Architecture-Aware Acceleration of BWA-MEM for Multicore Systems. In: 2019 IEEE International Parallel and Distributed Processing Symposium (IPDPS). IEEE; 2019:314-324. doi:10.1109/IPDPS.2019.00041
 
+- [CADD<sup>1</sup>](https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-021-00835-9)<sup>,</sup> [<sup>2</sup>](https://academic.oup.com/nar/article/47/D1/D886/5146191)
+
+  > Rentzsch P, Schubach M, Shendure J, Kircher M. CADD-Splice—improving genome-wide variant effect prediction using deep learning-derived splice scores. Genome Med. 2021;13(1):31. doi:10.1186/s13073-021-00835-9
+
+  > Rentzsch P, Witten D, Cooper GM, Shendure J, Kircher M. CADD: predicting the deleteriousness of variants throughout the human genome. Nucleic Acids Research. 2019;47(D1):D886-D894. doi:10.1093/nar/gky1016
+
 - [DeepVariant](https://www.nature.com/articles/nbt.4235)
 
   > Poplin R, Chang PC, Alexander D, et al. A universal SNP and small-indel variant caller using deep neural networks. Nat Biotechnol. 2018;36(10):983-987. doi:10.1038/nbt.4235

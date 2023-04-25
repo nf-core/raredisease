@@ -10,6 +10,8 @@ include { MERGE_ANNOTATE_MT                            } from './mitochondria/me
 workflow ANALYSE_MT {
     take:
         ch_bam                    // channel: [mandatory] [ val(meta), file(bam), file(bai) ]
+        ch_cadd_header            // channel: [mandatory] [ path(txt) ]
+        ch_cadd_resources         // channel: [mandatory] [ path(annotation) ]
         ch_genome_bwa_index       // channel: [mandatory] [ path(index) ]
         ch_genome_bwamem2_index   // channel: [mandatory] [ path(index) ]
         ch_genome_fasta_meta      // channel: [mandatory] [ val(meta), path(fasta) ]
@@ -78,6 +80,8 @@ workflow ANALYSE_MT {
         MERGE_ANNOTATE_MT(
             ALIGN_AND_CALL_MT.out.vcf,
             PICARD_LIFTOVERVCF.out.vcf_lifted,
+            ch_cadd_header,
+            ch_cadd_resources,
             ch_genome_fasta_no_meta,
             ch_genome_dict_meta,
             ch_genome_dict_no_meta,
