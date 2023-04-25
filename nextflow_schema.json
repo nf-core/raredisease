@@ -103,7 +103,7 @@
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
-                "cadd_annotation": {
+                "cadd_resources": {
                     "type": "string",
                     "format": "directory-path",
                     "fa_icon": "fas fa-file",

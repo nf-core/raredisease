@@ -196,7 +196,7 @@ The mandatory and optional parameters for each category are tabulated below.
 | vcfanno_toml<sup>3</sup>      | vcfanno_lua                    |
 | vep_cache_version             | vep_filters<sup>6</sup>        |
 | vep_cache                     | score_config_snv<sup>7</sup>   |
-|                               | cadd_annotation<sup>8</sup>    |
+|                               | cadd_resources<sup>8</sup>     |
 
 <sup>1</sup>Genome version is used by VEP. You have the option to choose between GRCh37 and GRCh38.<br />
 <sup>2</sup>Path to VCF files and their indices used by vcfanno. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_resources.txt).<br />

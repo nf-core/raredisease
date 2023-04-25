@@ -14,7 +14,7 @@ def checkPathParamList = [
     params.bwa,
     params.bwamem2,
     params.call_interval,
-    params.cadd_annotation,
+    params.cadd_resources,
     params.fasta,
     params.fasta_fai,
     params.gens_gnomad_pos,
@@ -142,7 +142,7 @@ workflow RAREDISEASE {
 
     // Initialize all file channels including unprocessed vcf, bed and tab files
     ch_cadd_header                    = Channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
-    ch_cadd_resources                 = params.cadd_annotation                ? Channel.fromPath(params.cadd_annotation).collect()
+    ch_cadd_resources                 = params.cadd_resources                 ? Channel.fromPath(params.cadd_resources).collect()
                                                                               : Channel.value([])
     ch_call_interval                  = params.call_interval                  ? Channel.fromPath(params.call_interval).collect()
                                                                               : Channel.value([])
