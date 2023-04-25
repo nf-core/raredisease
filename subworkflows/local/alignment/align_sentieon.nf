@@ -33,9 +33,9 @@ workflow ALIGN_SENTIEON {
             .map{ meta, bam, bai ->
                 new_id   = meta.id.split('_')[0]
                 new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"]
-                [new_meta, bam, bai]
+                [groupKey(new_meta, new_meta.num_lanes), bam, bai]
                 }
-            .groupTuple(by: 0)   // group them bam paths with the same [ [samplename], [bam path, bam path, ..] ]
+            .groupTuple()
             .branch{
                 single: it[1].size() == 1
                 multiple: it[1].size() > 1
