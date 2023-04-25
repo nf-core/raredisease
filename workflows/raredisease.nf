@@ -567,7 +567,6 @@ workflow.onComplete {
 def make_ped(samples) {
 
     def case_name  = samples[0].case_id
-
     def outfile  = workDir.resolve("$case_name" + '.ped')
     outfile.text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\t')
     def samples_list = []
