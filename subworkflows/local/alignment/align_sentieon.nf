@@ -31,9 +31,8 @@ workflow ALIGN_SENTIEON {
             .bam
             .join(SENTIEON_BWAMEM.out.bai)
             .map{ meta, bam, bai ->
-                new_meta            = meta.clone()
-                new_meta.id         = new_meta.id.split('_')[0]
-                new_meta.read_group = "\'@RG\\tID:" + new_meta.id + "\\tPL:" + val_platform + "\\tSM:" + new_meta.id + "\'"
+                new_id   = meta.id.split('_')[0]
+                new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"]
                 [new_meta, bam, bai]
                 }
             .groupTuple(by: 0)   // group them bam paths with the same [ [samplename], [bam path, bam path, ..] ]
