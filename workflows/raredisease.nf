@@ -142,7 +142,7 @@ workflow RAREDISEASE {
 
     // Initialize all file channels including unprocessed vcf, bed and tab files
     ch_cadd_header                    = Channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
-    ch_cadd_scores                    = params.cadd_annotation                ? Channel.fromPath(params.cadd_annotation).collect()
+    ch_cadd_resources                 = params.cadd_annotation                ? Channel.fromPath(params.cadd_annotation).collect()
                                                                               : Channel.value([])
     ch_call_interval                  = params.call_interval                  ? Channel.fromPath(params.call_interval).collect()
                                                                               : Channel.value([])
@@ -406,7 +406,7 @@ workflow RAREDISEASE {
         ANALYSE_MT (
             ch_mapped.bam_bai,
             ch_cadd_header,
-            ch_cadd_scores,
+            ch_cadd_resources,
             ch_bwa_index,
             ch_bwamem2_index,
             ch_genome_fasta_meta,
@@ -455,7 +455,7 @@ workflow RAREDISEASE {
             ch_vcf,
             params.analysis_type,
             ch_cadd_header,
-            ch_cadd_scores,
+            ch_cadd_resources,
             ch_vcfanno_resources,
             ch_vcfanno_lua,
             ch_vcfanno_toml,

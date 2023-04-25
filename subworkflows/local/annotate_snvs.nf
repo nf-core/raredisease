@@ -22,7 +22,7 @@ workflow ANNOTATE_SNVS {
         ch_vcf                // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
         analysis_type         // string: [mandatory] 'wgs' or 'wes'
         ch_cadd_header        // channel: [mandatory] [ path(txt) ]
-        ch_cadd_scores        // channel: [mandatory] [ path(annotation) ]
+        ch_cadd_resources     // channel: [mandatory] [ path(annotation) ]
         ch_vcfanno_resources  // channel: [mandatory] [ path(resources) ]
         ch_vcfanno_lua        // channel: [mandatory] [ path(lua) ]
         ch_vcfanno_toml       // channel: [mandatory] [ path(toml) ]
@@ -85,13 +85,13 @@ workflow ANNOTATE_SNVS {
             GATK4_SELECTVARIANTS.out.vcf,
             GATK4_SELECTVARIANTS.out.tbi,
             ch_cadd_header,
-            ch_cadd_scores
+            ch_cadd_resources
         )
 
-        // Pick input for VEP
+        // If CADD is run, pick CADD output as input for VEP else pass selectvariants output to VEP.
         GATK4_SELECTVARIANTS.out.vcf
-            .combine(ANNOTATE_CADD.out.vcf.ifEmpty("null"))
-            .branch { it  ->
+            .combine(ANNOTATE_CADD.out.vcf.ifEmpty("null")) // If CADD is not run then this channel will be empty, so assign a default value to allow filtering with branch operator
+            .branch { it  ->                                // If CADD is run, then "it" will be [[meta],selvar.vcf,[meta],cadd.vcf], else [[meta],selvar.vcf,null]
                 selvar: it[2].equals("null")
                     return [it[0], it[1]]
                 cadd: !(it[2].equals("null"))

@@ -22,7 +22,7 @@ workflow MERGE_ANNOTATE_MT {
         ch_vcf1                // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_vcf2                // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_cadd_header         // channel: [mandatory] [ path(txt) ]
-        ch_cadd_scores         // channel: [mandatory] [ path(annotation) ]
+        ch_cadd_resources      // channel: [mandatory] [ path(annotation) ]
         ch_genome_fasta        // channel: [mandatory] [ path(fasta) ]
         ch_genome_dict_meta    // channel: [mandatory] [ val(meta), path(dict) ]
         ch_genome_dict_no_meta // channel: [mandatory] [ path(dict) ]
@@ -99,7 +99,7 @@ workflow MERGE_ANNOTATE_MT {
             ch_annotation_in,
             TABIX_TABIX_MERGE.out.tbi,
             ch_cadd_header,
-            ch_cadd_scores
+            ch_cadd_resources
         )
 
         // Pick input for vep

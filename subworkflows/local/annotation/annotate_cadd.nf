@@ -12,10 +12,10 @@ include { TABIX_TABIX as TABIX_VIEW     } from '../../../modules/nf-core/tabix/t
 workflow ANNOTATE_CADD {
 
     take:
-        ch_vcf         // channel: [mandatory] [ val(meta), path(vcfs) ]
-        ch_index       // channel: [mandatory] [ val(meta), path(tbis) ]
-        ch_header      // channel: [mandatory] [ path(txt) ]
-        ch_cadd_scores // channel: [mandatory] [ path(dir) ]
+        ch_vcf            // channel: [mandatory] [ val(meta), path(vcfs) ]
+        ch_index          // channel: [mandatory] [ val(meta), path(tbis) ]
+        ch_header         // channel: [mandatory] [ path(txt) ]
+        ch_cadd_resources // channel: [mandatory] [ path(dir) ]
 
     main:
         ch_versions       = Channel.empty()
@@ -24,7 +24,7 @@ workflow ANNOTATE_CADD {
 
         TABIX_VIEW(BCFTOOLS_VIEW.out.vcf)
 
-        CADD(BCFTOOLS_VIEW.out.vcf, ch_cadd_scores)
+        CADD(BCFTOOLS_VIEW.out.vcf, ch_cadd_resources)
 
         TABIX_CADD(CADD.out.tsv)
 
