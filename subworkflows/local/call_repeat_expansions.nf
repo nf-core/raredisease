@@ -40,7 +40,7 @@ workflow CALL_REPEAT_EXPANSIONS {
 
         // Split multi allelelic
         SPLIT_MULTIALLELICS_EXP (
-            RENAMESAMPLE_EXP.out.vcf.join(TABIX_EXP_RENAME.out.tbi),
+            RENAMESAMPLE_EXP.out.vcf.join(TABIX_EXP_RENAME.out.tbi, failOnMismatch:true, failOnDuplicate:true),
             ch_fasta
         )
 
@@ -62,6 +62,8 @@ workflow CALL_REPEAT_EXPANSIONS {
         )
         INDEX_STRANGER ( COMPRESS_STRANGER.out.vcf )
 
+        ch_vcf_idx = COMPRESS_STRANGER.out.vcf.join(INDEX_STRANGER.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+
         ch_versions = ch_versions.mix(EXPANSIONHUNTER.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_EXP.out.versions.first())
         ch_versions = ch_versions.mix(RENAMESAMPLE_EXP.out.versions.first()    )
@@ -73,6 +75,6 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_versions = ch_versions.mix(INDEX_STRANGER.out.versions.first())
 
  emit:
-        vcf      = COMPRESS_STRANGER.out.vcf.join(INDEX_STRANGER.out.tbi) // channel: [ val(meta), path(vcf), path(tbi) ]
-        versions = ch_versions                                            // channel: [ path(versions.yml) ]
+        vcf      = ch_vcf_idx  // channel: [ val(meta), path(vcf), path(tbi) ]
+        versions = ch_versions  // channel: [ path(versions.yml) ]
 }

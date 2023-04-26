@@ -343,7 +343,7 @@ workflow RAREDISEASE {
 
     // ped correspondence, sex check, ancestry check
     PEDDY_CHECK (
-        CALL_SNV.out.vcf.join(CALL_SNV.out.tabix),
+        CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, failOnMismatch:true, failOnDuplicate:true),
         MAKE_PED.out.ped
     )
     ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
@@ -432,7 +432,7 @@ workflow RAREDISEASE {
 
     if (!params.skip_snv_annotation) {
 
-        ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
+        ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, failOnMismatch:true, failOnDuplicate:true)
 
         if (!params.skip_mt_analysis) {
             ch_vcf
@@ -441,7 +441,7 @@ workflow RAREDISEASE {
 
             GATK4_SELECTVARIANTS(ch_selvar_in) // remove mitochondrial variants
 
-            ch_vcf = GATK4_SELECTVARIANTS.out.vcf.join(GATK4_SELECTVARIANTS.out.tbi, by: [0])
+            ch_vcf = GATK4_SELECTVARIANTS.out.vcf.join(GATK4_SELECTVARIANTS.out.tbi, failOnMismatch:true, failOnDuplicate:true)
             ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
         }
 
@@ -475,7 +475,7 @@ workflow RAREDISEASE {
                 .groupTuple()
                 .set { ch_merged_tbi }
 
-            ch_merged_vcf.join(ch_merged_tbi).set {ch_concat_in}
+            ch_merged_vcf.join(ch_merged_tbi, failOnMismatch:true, failOnDuplicate:true).set {ch_concat_in}
 
             BCFTOOLS_CONCAT (ch_concat_in)
             ch_snv_annotate = BCFTOOLS_CONCAT.out.vcf

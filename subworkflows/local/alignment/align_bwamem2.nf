@@ -27,7 +27,7 @@ workflow ALIGN_BWAMEM2 {
         SAMTOOLS_INDEX_ALIGN ( BWAMEM2_MEM.out.bam )
 
         // Get stats for each demultiplexed read pair.
-        bam_sorted_indexed = BWAMEM2_MEM.out.bam.join(SAMTOOLS_INDEX_ALIGN.out.bai)
+        bam_sorted_indexed = BWAMEM2_MEM.out.bam.join(SAMTOOLS_INDEX_ALIGN.out.bai, failOnMismatch:true, failOnDuplicate:true)
         SAMTOOLS_STATS ( bam_sorted_indexed, [] )
 
         // Merge multiple lane samples and index

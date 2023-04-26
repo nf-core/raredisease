@@ -29,7 +29,7 @@ workflow ALIGN_SENTIEON {
 
         SENTIEON_BWAMEM.out
             .bam
-            .join(SENTIEON_BWAMEM.out.bai)
+            .join(SENTIEON_BWAMEM.out.bai, failOnMismatch:true, failOnDuplicate:true)
             .map{ meta, bam, bai ->
                 new_id   = meta.id.split('_')[0]
                 new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"]
@@ -50,15 +50,15 @@ workflow ALIGN_SENTIEON {
         SENTIEON_LOCUSCOLLECTOR ( ch_bam_bai )
 
         ch_bam_bai
-            .join(SENTIEON_LOCUSCOLLECTOR.out.score)
-            .join(SENTIEON_LOCUSCOLLECTOR.out.score_idx)
+            .join(SENTIEON_LOCUSCOLLECTOR.out.score, failOnMismatch:true, failOnDuplicate:true)
+            .join(SENTIEON_LOCUSCOLLECTOR.out.score_idx, failOnMismatch:true, failOnDuplicate:true)
             .set { ch_bam_bai_score }
 
         SENTIEON_DEDUP ( ch_bam_bai_score, ch_fasta, ch_fai )
 
         if (params.variant_caller == "sentieon") {
             SENTIEON_DEDUP.out.bam
-                .join(SENTIEON_DEDUP.out.bai)
+                .join(SENTIEON_DEDUP.out.bai, failOnMismatch:true, failOnDuplicate:true)
                 .set { ch_dedup_bam_bai }
             SENTIEON_BQSR ( ch_dedup_bam_bai, ch_fasta, ch_fai, ch_known_dbsnp, ch_known_dbsnp_tbi )
             ch_bqsr_bam = SENTIEON_BQSR.out.bam

@@ -66,7 +66,10 @@ workflow ANNOTATE_SNVS {
 
         TABIX_BCFTOOLS_VIEW (BCFTOOLS_VIEW.out.vcf)
 
-        BCFTOOLS_VIEW.out.vcf.join(TABIX_BCFTOOLS_VIEW.out.tbi).collect().set { ch_vcf_scatter_in }
+        BCFTOOLS_VIEW.out.vcf
+            .join(TABIX_BCFTOOLS_VIEW.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .collect()
+            .set { ch_vcf_scatter_in }
 
         GATK4_SELECTVARIANTS (ch_vcf_scatter_in.combine(ch_split_intervals)).vcf.set { ch_vep_in }
 
@@ -88,7 +91,7 @@ workflow ANNOTATE_SNVS {
         if (params.analysis_type == 'wgs') {
 
             ENSEMBLVEP_SNV.out.vcf_gz
-                .join(TABIX_VEP.out.tbi)
+                .join(TABIX_VEP.out.tbi, failOnMismatch:true, failOnDuplicate:true)
                 .groupTuple()
                 .map { meta, vcfs, tbis ->
                     def sortedvcfs = vcfs.sort { it.baseName }
@@ -104,6 +107,7 @@ workflow ANNOTATE_SNVS {
             ch_vep_ann   = BCFTOOLS_CONCAT.out.vcf
             ch_vep_index = TABIX_BCFTOOLS_CONCAT.out.tbi
         }
+
         ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions)
         ch_versions = ch_versions.mix(RHOCALL_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_ROHCALL.out.versions)

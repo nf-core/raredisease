@@ -41,16 +41,22 @@ workflow MERGE_ANNOTATE_MT {
         GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_vcfs, ch_genome_dict_meta)
 
         // Filtering Variants
-        GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf.join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, by:[0]).set { ch_filt_vcf }
+        GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf
+            .join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .set { ch_filt_vcf }
         GATK4_VARIANTFILTRATION_MT (ch_filt_vcf, ch_genome_fasta, ch_genome_fai, ch_genome_dict_no_meta)
 
         // Spliting multiallelic calls
-        GATK4_VARIANTFILTRATION_MT.out.vcf.join(GATK4_VARIANTFILTRATION_MT.out.tbi, by:[0]).set { ch_in_split }
+        GATK4_VARIANTFILTRATION_MT.out.vcf
+            .join(GATK4_VARIANTFILTRATION_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .set { ch_in_split }
         SPLIT_MULTIALLELICS_MT (ch_in_split, ch_genome_fasta)
         TABIX_TABIX_MT(SPLIT_MULTIALLELICS_MT.out.vcf)
 
         // Removing duplicates and merging if there is more than one sample
-        SPLIT_MULTIALLELICS_MT.out.vcf.join(TABIX_TABIX_MT.out.tbi).set { ch_in_remdup }
+        SPLIT_MULTIALLELICS_MT.out.vcf
+            .join(TABIX_TABIX_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .set { ch_in_remdup }
         REMOVE_DUPLICATES_MT(ch_in_remdup, ch_genome_fasta)
         TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
 
@@ -98,7 +104,7 @@ workflow MERGE_ANNOTATE_MT {
 
         // Running vcfanno
         TABIX_TABIX_MT3(ENSEMBLVEP_MT.out.vcf_gz)
-        ch_in_vcfanno = ENSEMBLVEP_MT.out.vcf_gz.join(TABIX_TABIX_MT3.out.tbi, by: [0])
+        ch_in_vcfanno = ENSEMBLVEP_MT.out.vcf_gz.join(TABIX_TABIX_MT3.out.tbi, failOnMismatch:true, failOnDuplicate:true)
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, [], ch_vcfanno_resources)
         ZIP_TABIX_VCFANNO(VCFANNO_MT.out.vcf)
 

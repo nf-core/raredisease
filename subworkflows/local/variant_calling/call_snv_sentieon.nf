@@ -36,7 +36,7 @@ workflow CALL_SNV_SENTIEON {
 
         TABIX_BCFTOOLS ( BCF_FILTER_TWO.out.vcf )
 
-        BCF_FILTER_TWO.out.vcf.join(TABIX_BCFTOOLS.out.tbi)
+        BCF_FILTER_TWO.out.vcf.join(TABIX_BCFTOOLS.out.tbi, failOnMismatch:true, failOnDuplicate:true)
             .map { meta,vcf,tbi -> return [vcf,tbi] }
             .set { ch_vcf_idx }
 
