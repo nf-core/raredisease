@@ -29,8 +29,49 @@
                         "maxLength": 0
                     }
                 ]
+            },
+            "gender": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Gender must be provided and cannot contain spaces"
+            },
+            "phenotype": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Phenotype must be provided and cannot contain spaces"
+            },
+            "paternal_id": {
+                "errorMessage": "Paternal ID cannot contain spaces",
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0
+                    }
+                ]
+            },
+            "maternal_id": {
+                "errorMessage": "Maternal ID cannot contain spaces",
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0
+                    }
+                ]
+            },
+            "case_id": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Case name must be provided and cannot contain spaces"
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["sample", "fastq_1", "gender", "phenotype", "case_id"]
     }
 }
