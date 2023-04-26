@@ -91,7 +91,7 @@ workflow ANNOTATE_SNVS {
         if (params.analysis_type == 'wgs') {
 
             ENSEMBLVEP_SNV.out.vcf_gz
-                .join(TABIX_VEP.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+                .join(TABIX_VEP.out.tbi, failOnMismatch:true)
                 .groupTuple()
                 .map { meta, vcfs, tbis ->
                     def sortedvcfs = vcfs.sort { it.baseName }
