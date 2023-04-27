@@ -94,18 +94,6 @@ Please use the following naming schemes, to make it easy to understand what is g
 - initial process channel: `ch_output_from_<process>`
 - intermediate and terminal channels: `ch_<previousprocess>_for_<nextprocess>`
 
-* subworkflows: `verb_noun` or `verb_variant_noun`
-  - `verb_noun` : `align_bwamem2.nf`
-  - `verb_variant_noun` : `call_snv_deepvariant.nf`
-
-### Reusing modules in the workflow
-
-Occasionally, you might find yourself wanting to reuse a module with options that are different from what has already been defined in [conf/modules.config](../conf/modules.config). In that case, we recommend importing the module using an unique alias within the subworkflow, and then defining the options for the alias in [conf/modules.config](../conf/modules.config).
-
-For a working example, please have a look at how we have reused `bcftools norm` in both [subworkflows/local/call_snv_deepvariant.nf](../subworkflows/local/call_snv_deepvariant.nf) and [subworkflows/local/prepare_vcf.nf](../subworkflows/local/prepare_vcf.nf), and defined its subworkflow-specific options in [conf/modules.config](../conf/modules.config).
-
-You can find more information about aliases in the nextflow documentation [here](https://www.nextflow.io/docs/edge/dsl2.html#module-aliases).
-
 ### Nextflow version bumping
 
 If you are using a new feature from core Nextflow, you may bump the minimum required version of nextflow in the pipeline with: `nf-core bump-version --nextflow . [min-nf-version]`
