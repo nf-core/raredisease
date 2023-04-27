@@ -188,7 +188,7 @@ workflow RAREDISEASE {
                                                                               : Channel.value([])
 
     // Generate pedigree file
-    pedfile = CHECK_INPUT.out.samples.toList().map { make_ped(it) }
+    pedfile = CHECK_INPUT.out.samples.toList().map { makePed(it) }
 
     // Input QC
     FASTQC (CHECK_INPUT.out.reads)
@@ -564,7 +564,7 @@ workflow.onComplete {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-def make_ped(samples) {
+def makePed(samples) {
 
     def case_name  = samples[0].case_id
     def outfile  = workDir.resolve("$case_name" + '.ped')
