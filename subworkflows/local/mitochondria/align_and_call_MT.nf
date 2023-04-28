@@ -33,7 +33,7 @@ workflow ALIGN_AND_CALL_MT {
         SENTIEON_BWAMEM_MT ( ch_fastq, ch_fasta, ch_fai, ch_index_bwa )
 
         ch_mt_bam      = Channel.empty().mix(BWAMEM2_MEM_MT.out.bam, SENTIEON_BWAMEM_MT.out.bam)
-        ch_fastq_ubam  = ch_mt_bam.join(ch_ubam, by: [0])
+        ch_fastq_ubam  = ch_mt_bam.join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)
 
         GATK4_MERGEBAMALIGNMENT_MT (ch_fastq_ubam, ch_fasta, ch_dict)
 
@@ -44,7 +44,7 @@ workflow ALIGN_AND_CALL_MT {
         SAMTOOLS_SORT_MT (PICARD_MARKDUPLICATES_MT.out.bam)
 
         SAMTOOLS_INDEX_MT(SAMTOOLS_SORT_MT.out.bam)
-        ch_sort_index_bam        = SAMTOOLS_SORT_MT.out.bam.join(SAMTOOLS_INDEX_MT.out.bai, by: [0])
+        ch_sort_index_bam        = SAMTOOLS_SORT_MT.out.bam.join(SAMTOOLS_INDEX_MT.out.bai, failOnMismatch:true, failOnDuplicate:true)
         ch_sort_index_bam_int_mt = ch_sort_index_bam.combine(ch_intervals_mt)
 
         GATK4_MUTECT2_MT (ch_sort_index_bam_int_mt, ch_fasta, ch_fai, ch_dict, [], [], [],[])
@@ -52,8 +52,8 @@ workflow ALIGN_AND_CALL_MT {
         HAPLOCHECK_MT (GATK4_MUTECT2_MT.out.vcf)
 
         // Filter Mutect2 calls
-        ch_mutect_vcf = GATK4_MUTECT2_MT.out.vcf.join(GATK4_MUTECT2_MT.out.tbi, by: [0])
-        ch_mutect_out = ch_mutect_vcf.join(GATK4_MUTECT2_MT.out.stats, by: [0])
+        ch_mutect_vcf = GATK4_MUTECT2_MT.out.vcf.join(GATK4_MUTECT2_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+        ch_mutect_out = ch_mutect_vcf.join(GATK4_MUTECT2_MT.out.stats, failOnMismatch:true, failOnDuplicate:true)
         ch_to_filt    = ch_mutect_out.map {
                             meta, vcf, tbi, stats ->
                             return [meta, vcf, tbi, stats, [], [], [], []]

@@ -27,18 +27,17 @@ workflow ALIGN_BWAMEM2 {
         SAMTOOLS_INDEX_ALIGN ( BWAMEM2_MEM.out.bam )
 
         // Get stats for each demultiplexed read pair.
-        bam_sorted_indexed = BWAMEM2_MEM.out.bam.join(SAMTOOLS_INDEX_ALIGN.out.bai)
+        bam_sorted_indexed = BWAMEM2_MEM.out.bam.join(SAMTOOLS_INDEX_ALIGN.out.bai, failOnMismatch:true, failOnDuplicate:true)
         SAMTOOLS_STATS ( bam_sorted_indexed, [] )
 
         // Merge multiple lane samples and index
         BWAMEM2_MEM.out.bam
             .map{ meta, bam ->
-                    new_meta            = meta.clone()
-                    new_meta.id         = new_meta.id.split('_')[0]
-                    new_meta.read_group = "\'@RG\\tID:" + new_meta.id + "\\tPL:" + val_platform + "\\tSM:" + new_meta.id + "\'"
-                    [new_meta, bam]
+                    new_id   = meta.id.split('_')[0]
+                    new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"]
+                    [groupKey(new_meta, new_meta.num_lanes), bam]
                 }
-            .groupTuple(by: 0)
+            .groupTuple()
             .branch{
                 single: it[1].size() == 1
                 multiple: it[1].size() > 1
