@@ -1,4 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+# Released under the MIT license.
+# See git repository (https://github.com/nf-core/raredisease) for full license text.
 
 
 """Provide a command line tool to validate and transform tabular samplesheets."""
@@ -188,7 +191,17 @@ def check_samplesheet(file_in, file_out):
         https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv
 
     """
-    required_columns = {"sample", "fastq_1", "fastq_2"}
+    required_columns = {
+        "sample",
+        "lane",
+        "fastq_1",
+        "fastq_2",
+        "gender",
+        "phenotype",
+        "paternal_id",
+        "maternal_id",
+        "case_id",
+    }
     # See https://docs.python.org/3.9/library/csv.html#id3 to read up on `newline=""`.
     with file_in.open(newline="") as in_handle:
         reader = csv.DictReader(in_handle, dialect=sniff_format(in_handle))

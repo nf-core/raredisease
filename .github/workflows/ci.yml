@@ -26,6 +26,9 @@ jobs:
         NXF_VER:
           - "22.10.1"
           - "latest-everything"
+        parameters:
+          - "-profile test,docker"
+          - "-profile test_one_sample,docker"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v3
@@ -36,8 +39,5 @@ jobs:
           version: "${{ matrix.NXF_VER }}"
 
       - name: Run pipeline with test data
-        # TODO nf-core: You can customise CI pipeline run tests as required
-        # For example: adding multiple test runs with different parameters
-        # Remember that you can parallelise this by using strategy.matrix
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
+          nextflow run ${GITHUB_WORKSPACE} ${{ matrix.parameters }} -stub --outdir ./results

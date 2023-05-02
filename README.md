@@ -91,6 +91,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 Note that it is possible to include/exclude certain tools or steps.
 
 ## Usage
+=======
 
 > **Note**
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how
@@ -114,7 +115,7 @@ Now, you can run the pipeline using:
 
 ```bash
 nextflow run nf-core/raredisease \
-   -profile <docker/singularity/.../institute> \
+   -profile <docker/singularity/podman/shifter/charliecloud/conda/institute> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
 ```
