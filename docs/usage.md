@@ -4,11 +4,12 @@
 
 Table of contents:
 
-- [nf-core/raredisease: Usage](#nf-core-raredisease--usage)
+- [nf-core/raredisease: Usage](#nf-coreraredisease-usage)
   - [Introduction](#introduction)
   - [Prerequisites](#prerequisites)
-  - [Run nf-core/raredisease with test data](#run-nf-core-raredisease-with-test-data)
-  - [Run nf-core/raredisease with your data](#run-nf-core-raredisease-with-your-data)
+  - [Run nf-core/raredisease with test data](#run-nf-coreraredisease-with-test-data)
+    - [Updating the pipeline](#updating-the-pipeline)
+  - [Run nf-core/raredisease with your data](#run-nf-coreraredisease-with-your-data)
     - [Samplesheet](#samplesheet)
     - [Reference files and parameters](#reference-files-and-parameters)
       - [1. Alignment](#1-alignment)
@@ -16,21 +17,19 @@ Table of contents:
       - [3. Repeat expansions](#3-repeat-expansions)
       - [4. Variant calling - SNV](#4-variant-calling---snv)
       - [5. Variant calling - Structural variants](#5-variant-calling---structural-variants)
-      - [6. SNV annotation & Ranking](#6-snv-annotation---ranking)
-      - [7. SV annotation & Ranking](#7-sv-annotation---ranking)
+      - [6. SNV annotation & Ranking](#6-snv-annotation--ranking)
+      - [7. SV annotation & Ranking](#7-sv-annotation--ranking)
       - [8. Mitochondrial analysis](#8-mitochondrial-analysis)
     - [Run the pipeline](#run-the-pipeline)
-      - [Direct input in cli](#direct-input-in-cli)
-      - [Import from a config file (recommended)](#import-from-a-config-file--recommended-)
+      - [Direct input in CLI](#direct-input-in-cli)
+      - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
   - [Best practices](#best-practices)
-  - [Troubleshooting](#troubleshooting)
-    - [Resource errors](#resource-errors)
-      - [For beginners](#for-beginners)
-      - [Advanced option on process level](#advanced-option-on-process-level)
   - [Custom configuration](#custom-configuration)
-    - [Updating containers (advanced users)](#updating-containers--advanced-users-)
-    - [nf-core/configs](#nf-core-configs)
-    - [Run sentieon](#run-sentieon)
+    - [Changing resources](#changing-resources)
+    - [Custom Containers](#custom-containers)
+    - [Custom Tool Arguments](#custom-tool-arguments)
+      - [nf-core/configs](#nf-coreconfigs)
+    - [Run Sentieon](#run-sentieon)
     - [Azure Resource Requests](#azure-resource-requests)
     - [Running in the background](#running-in-the-background)
     - [Nextflow memory requirements](#nextflow-memory-requirements)
@@ -47,9 +46,7 @@ nf-core/raredisease is a bioinformatics best-practice analysis pipeline to call,
 
 ## Run nf-core/raredisease with test data
 
-Before running the pipeline with your data, we recommend running it with the test dataset available [here](https://github.com/nf-core/test-datasets/tree/raredisease).
-
-> You do not need to download the data as the pipeline is configured to fetch that data automatically for you when you use the test profile.
+Before running the pipeline with your data, we recommend running it with the test dataset available [here](https://github.com/nf-core/test-datasets/tree/raredisease). You do not need to download the data as the pipeline is configured to fetch that data automatically for you when you use the test profile.
 
 Run the following command, where YOURPROFILE is the package manager you installed on your machine. For example, `-profile test,docker` or `-profile test,singularity`:
 
@@ -62,12 +59,6 @@ nextflow run nf-core/raredisease \
 > Check [nf-core/configs](https://github.com/nf-core/configs/tree/master/conf) to see if a custom config file to run nf-core pipelines already exists for your institute. If so, you can simply use `-profile test,<institute>` in your command. This enables the appropriate package manager and sets the appropriate execution settings for your machine.
 > NB: The order of profiles is important! They are loaded in sequence, so later profiles can overwrite earlier profiles.
 
-The above command downloads the pipeline from GitHub, caches it, and tests it on the test dataset.
-
-> When you run the command again, it will fetch the pipeline from cache even if a more recent version of the pipeline is available. To make sure that you're running the latest version of the pipeline, update the cached version of the pipeline by including `-latest` in the command.
-
-Test profile runs the pipeline with a case containing three samples, but if you would like to test the pipeline with one sample, use `-profile test_one_sample,<YOURPROFILE>`.
-
 Running the command creates the following files in your working directory:
 
 ```
@@ -76,6 +67,12 @@ work                # Directory containing the Nextflow working files
 .nextflow_log       # Log file from Nextflow
 # Other Nextflow hidden files, like history of pipeline logs.
 ```
+
+Test profile runs the pipeline with a case containing three samples, but if you would like to test the pipeline with one sample, use `-profile test_one_sample,<YOURPROFILE>`.
+
+### Updating the pipeline
+
+The above command downloads the pipeline from GitHub, caches it, and tests it on the test dataset. When you run the command again, it will fetch the pipeline from cache even if a more recent version of the pipeline is available. To make sure that you're running the latest version of the pipeline, update the cached version of the pipeline by including `-latest` in the command.
 
 ## Run nf-core/raredisease with your data
 
@@ -158,8 +155,8 @@ The mandatory and optional parameters for each category are tabulated below.
 | intervals_y<sup>1</sup>                                      |          |
 | target_bed / (bait_intervals & target_intervals)<sup>2</sup> |          |
 
-<sup>1</sup>These files are Picard's style interval list files, comprising the entire genome or only the chromosome Y. A version of these files for GRCh37 and for GRCh38 is supplied in the pipeline assets. These files are not necessary if you are using Sentieon.
-<sup>2</sup> If a target_bed file is provided, bait_intervals and target_intervals can be generated by the pipeline.
+<sup>1</sup>These files are Picard's style interval list files, comprising the entire genome or only the chromosome Y. A version of these files for GRCh37 and for GRCh38 is supplied in the pipeline assets. These files are not necessary if you are using Sentieon.<br />
+<sup>2</sup> If a target_bed file is provided, bait_intervals and target_intervals can be generated by the pipeline.<br />
 
 ##### 3. Repeat expansions
 
@@ -280,114 +277,52 @@ nextflow pull nf-core/raredisease
 
 - **Reproducibility:** Specify a pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since. First, go to the [nf-core/raredisease releases page](https://github.com/nf-core/raredisease/releases) and find the latest pipeline version - numeric only (e.g. `1.3.1`). Then specify this when running the pipeline with `-r`, for example, `-r 1.3.1`. You can switch to another version by changing the number after the `-r` flag. The version number will be logged in reports when you run the pipeline. For example, you can view the version number at the bottom of the MultiQC reports.
 
+To further assist in reproducbility, you can use share and re-use [parameter files](#running-the-pipeline) to repeat pipeline runs with the same settings without having to write out a command with every single parameter.
+
+> 💡 If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
+
 - **Restart a previous run:** Add `-resume` to your command when restarting a pipeline. Nextflow will use cached results from any pipeline steps where inputs are the same, and resume the run from where it terminated previously. For input to be considered the same, names and the files' contents must be identical. For more info about `-resume`, see [this blog post](https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html). You can also supply a run name to resume a specific run: `-resume [run-name]`. Use the `nextflow log` command to show previous run names.
 
-## Troubleshooting
+- **Reusing parameters:** If you wish to repeatedly use the same parameters for multiple runs, rather than specifying each flag in the command, you can specify these in a params file.
 
-#### Resource errors
+Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <file>`.
 
-Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the steps in the pipeline, if the job exits with any of the error codes specified [here](https://github.com/nf-core/raredisease/blob/dev/conf/base.config#L18) it will automatically be resubmitted with higher requests (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
+> ⚠️ Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
+> The above pipeline run specified with a params file in yaml format:
 
-For example, if the nf-core/raredisease pipeline is failing after multiple re-submissions of the `DEEPVARIANT` process due to an exit code of `137` this would indicate that there is an out of memory issue:
-
-```console
-[62/149eb0] NOTE: Process `NFCORE_RAREDISEASE:RAREDISEASE:CALL_SNV:CALL_SNV_DEEPVARIANT:DEEPVARIANT (earlycasualcaiman)` terminated with an error exit status (137) -- Execution is retried (1)
-Error executing process > 'NFCORE_RAREDISEASE:RAREDISEASE:CALL_SNV:CALL_SNV_DEEPVARIANT:DEEPVARIANT (earlycasualcaiman)'
-
-Caused by:
-    Process `NFCORE_RAREDISEASE:RAREDISEASE:CALL_SNV:CALL_SNV_DEEPVARIANT:DEEPVARIANT (earlycasualcaiman)` terminated with an error exit status (137)
-
-Command executed:
-    /opt/deepvariant/bin/run_deepvariant \
-        --ref=reference.fasta \
-        --reads=earlycasualcaiman_sorted_md.bam \
-        --output_vcf=earlycasualcaiman_deepvar.vcf.gz \
-        --output_gvcf=earlycasualcaiman_deepvar.g.vcf.gz \
-        --model_type=WGS \
-         \
-        --num_shards=2
-
-Command exit status:
-    137
-
-Command output:
-    (empty)
-
-Command error:
-    .command.sh: line 9:  30 Killed        /opt/deepvariant/bin/run_deepvariant --ref=reference.fasta     --reads=earlycasualcaiman_sorted_md.bam --output_vcf=earlycasualcaiman_deepvar.vcf.gz --output_gvcf=earlycasualcaiman_deepvar.g.vcf.gz --model_type=WGS --num_shards=2
-
-Work dir:
-    /home/pipelinetest/work/9d/172ca5881234073e8d76f2a19c88fb
-
-Tip: you can replicate the issue by changing to the process work dir and entering the command `bash .command.run`
+```bash
+nextflow run nf-core/raredisease -profile docker -params-file params.yaml
 ```
 
-##### For beginners
+with `params.yaml` containing:
 
-nf-core/raredisease provides you with options to increase the amount of CPUs (`--max_cpus`), memory (`--max_memory`), and time (`--max_time`) for the whole pipeline. Based on the error above, you have to increase the amount of memory. Therefore you can go to the [parameter documentation of raredisease](https://nf-co.re/raredisease/dev/parameters) and click `show hidden params` button in the right panel to get the default value for `--max_memory`. Run the pipeline with updated max_memory value `--max_memory xxxGB` and `-resume` to skip all processes that were already calculated. If you cannot increase the resource of the complete pipeline, you can try to adapt the resource for a single process as mentioned below.
-
-##### Advanced option on process level
-
-To bypass this error you would need to find exactly which resources are set by the `DEEPVARIANT` process. The quickest way is to search for `process DEEPAVARIANT` in the [nf-core/raredisease Github repo](https://github.com/nf-core/raredisease/search?q=process+DEEPVARIANT).
-We have standardised the structure of Nextflow DSL2 pipelines such that all module files will be present in the `modules/` directory and so, based on the search results, the file we want is `modules/nf-core/deepvariant/main.nf`.
-If you click on the link to that file you will notice that there is a `label` directive at the top of the module that is set to [`label process_medium`](https://github.com/nf-core/raredisease/blob/7a0d47aca1d5b59771af2ce49c320249e379fc23/modules/nf-core/deepvariant/main.nf#L3).
-The [Nextflow `label`](https://www.nextflow.io/docs/latest/process.html#label) directive allows us to organise workflow processes in separate groups which can be referenced in a configuration file to select and configure subset of processes having similar computing requirements.
-The default memory value for the `process_medium` label is set in the pipeline's [`base.config`](https://github.com/nf-core/raredisease/blob/7a0d47aca1d5b59771af2ce49c320249e379fc23/conf/base.config#L39-L43), which in this case is 36GB.
-We can try and bypass the `DEEPVARIANT` process failure by creating a custom config file that increases the memory limit from 36GB to 72GB (NB: verify that the value set by --max_memory is above 72GB). The custom config below can then be provided to the pipeline via the `-c` parameter as highlighted in previous sections.
-
-```nextflow
-process {
-    withName: 'NFCORE_RAREDISEASE:RAREDISEASE:CALL_SNV:CALL_SNV_DEEPVARIANT:DEEPVARIANT' {
-        memory = 72.GB
-    }
-}
+```yaml
+input: './samplesheet.csv'
+outdir: './results/'
+genome: 'GRCh37'
+input: 'data'
+<...>
 ```
 
-> **NB:** We specify the full process name i.e. `NFCORE_RAREDISEASE:RAREDISEASE:CALL_SNV:CALL_SNV_DEEPVARIANT:DEEPVARIANT` in the config file because this takes priority over the short name (`DEEPVARIANT`) and allows existing configuration using the full process name to be correctly overridden.
->
-> If you get a warning suggesting that the process selector isn't recognised check that the process name has been specified correctly.
+You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
 
 ## Custom configuration
 
-#### Updating containers (advanced users)
+### Changing resources
 
-The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. If for some reason you need to use a different version of a particular tool with the pipeline then you just need to identify the `process` name and override the Nextflow `container` definition for that process using the `withName` declaration. For example, in the [nf-core/viralrecon](https://nf-co.re/viralrecon) pipeline a tool called [Pangolin](https://github.com/cov-lineages/pangolin) has been used during the COVID-19 pandemic to assign lineages to SARS-CoV-2 genome sequenced samples. Given that the lineage assignments change quite frequently it doesn't make sense to re-release the nf-core/viralrecon everytime a new version of Pangolin has been released. However, you can override the default container used by the pipeline by creating a custom config file and passing it as a command-line argument via `-c custom.config`.
+To change the resource requests, please see the [max resources](https://nf-co.re/docs/usage/configuration#max-resources) and [tuning workflow resources](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) section of the nf-core website.
 
-1. Check the default version used by the pipeline in the module file for [Pangolin](https://github.com/nf-core/viralrecon/blob/a85d5969f9025409e3618d6c280ef15ce417df65/modules/nf-core/software/pangolin/main.nf#L14-L19)
-2. Find the latest version of the Biocontainer available on [Quay.io](https://quay.io/repository/biocontainers/pangolin?tag=latest&tab=tags)
-3. Create the custom config accordingly:
+### Custom Containers
 
-   - For Docker:
+In some cases you may wish to change which container or conda environment a step of the pipeline uses for a particular tool. By default nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However in some cases the pipeline specified version maybe out of date.
 
-     ```nextflow
-     process {
-         withName: PANGOLIN {
-             container = 'quay.io/biocontainers/pangolin:3.0.5--pyhdfd78af_0'
-         }
-     }
-     ```
+To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/usage/configuration#updating-tool-versions) section of the nf-core website.
 
-   - For Singularity:
+### Custom Tool Arguments
 
-     ```nextflow
-     process {
-         withName: PANGOLIN {
-             container = 'https://depot.galaxyproject.org/singularity/pangolin:3.0.5--pyhdfd78af_0'
-         }
-     }
-     ```
+A pipeline might not always support every possible argument or option of a particular tool used in pipeline. Fortunately, nf-core pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default.
 
-   - For Conda:
-
-     ```nextflow
-     process {
-         withName: PANGOLIN {
-             conda = 'bioconda::pangolin=3.0.5'
-         }
-     }
-     ```
-
-> **NB:** If you wish to periodically update individual tool-specific results (e.g. Pangolin) generated by the pipeline then you must ensure to keep the `work/` directory otherwise the `-resume` ability of the pipeline will be compromised and it will restart from scratch.
+To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/usage/configuration#customising-tool-arguments) section of the nf-core website.
 
 #### nf-core/configs
 
