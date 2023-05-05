@@ -2,7 +2,7 @@ process GENS {
     tag "$meta.id"
     label 'process_medium'
 
-    container 'raysloks/gens_preproc:1.0.1'
+    container 'docker.io/raysloks/gens_preproc:1.0.1'
 
     input:
     tuple val(meta), path(read_counts)

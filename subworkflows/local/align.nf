@@ -39,7 +39,7 @@ workflow ALIGN {
 
         ch_marked_bam = Channel.empty().mix(ALIGN_BWAMEM2.out.marked_bam, ALIGN_SENTIEON.out.marked_bam)
         ch_marked_bai = Channel.empty().mix(ALIGN_BWAMEM2.out.marked_bai, ALIGN_SENTIEON.out.marked_bai)
-        ch_bam_bai    = ch_marked_bam.join(ch_marked_bai, by: [0])
+        ch_bam_bai    = ch_marked_bam.join(ch_marked_bai, failOnMismatch:true, failOnDuplicate:true)
         ch_versions   = Channel.empty().mix(ALIGN_BWAMEM2.out.versions, ALIGN_SENTIEON.out.versions)
 
     emit:

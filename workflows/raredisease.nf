@@ -78,7 +78,6 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 
 include { FILTER_VEP as FILTER_VEP_SNV          } from '../modules/local/filter_vep'
 include { FILTER_VEP as FILTER_VEP_SV           } from '../modules/local/filter_vep'
-include { MAKE_PED                              } from '../modules/local/create_pedfile'
 
 //
 // MODULE: Installed directly from nf-core/modules
@@ -193,8 +192,7 @@ workflow RAREDISEASE {
                                                                               : Channel.value([])
 
     // Generate pedigree file
-    MAKE_PED (CHECK_INPUT.out.samples.toList())
-    ch_versions = ch_versions.mix(MAKE_PED.out.versions)
+    pedfile = CHECK_INPUT.out.samples.toList().map { makePed(it) }
 
     // Input QC
     FASTQC (CHECK_INPUT.out.reads)
@@ -347,8 +345,8 @@ workflow RAREDISEASE {
 
     // ped correspondence, sex check, ancestry check
     PEDDY_CHECK (
-        CALL_SNV.out.vcf.join(CALL_SNV.out.tabix),
-        MAKE_PED.out.ped
+        CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, failOnMismatch:true, failOnDuplicate:true),
+        pedfile
     )
     ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
 
@@ -388,7 +386,7 @@ workflow RAREDISEASE {
 
         RANK_VARIANTS_SV (
             ANN_CSQ_PLI_SV.out.vcf_ann,
-            MAKE_PED.out.ped,
+            pedfile,
             ch_reduced_penetrance,
             ch_score_config_sv
         )
@@ -438,7 +436,7 @@ workflow RAREDISEASE {
 
     if (!params.skip_snv_annotation) {
 
-        ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
+        ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, failOnMismatch:true, failOnDuplicate:true)
 
         if (!params.skip_mt_analysis) {
             ch_vcf
@@ -447,7 +445,7 @@ workflow RAREDISEASE {
 
             GATK4_SELECTVARIANTS(ch_selvar_in) // remove mitochondrial variants
 
-            ch_vcf = GATK4_SELECTVARIANTS.out.vcf.join(GATK4_SELECTVARIANTS.out.tbi, by: [0])
+            ch_vcf = GATK4_SELECTVARIANTS.out.vcf.join(GATK4_SELECTVARIANTS.out.tbi, failOnMismatch:true, failOnDuplicate:true)
             ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
         }
 
@@ -483,7 +481,7 @@ workflow RAREDISEASE {
                 .groupTuple()
                 .set { ch_merged_tbi }
 
-            ch_merged_vcf.join(ch_merged_tbi).set {ch_concat_in}
+            ch_merged_vcf.join(ch_merged_tbi, failOnMismatch:true, failOnDuplicate:true).set {ch_concat_in}
 
             BCFTOOLS_CONCAT (ch_concat_in)
             ch_snv_annotate = BCFTOOLS_CONCAT.out.vcf
@@ -498,7 +496,7 @@ workflow RAREDISEASE {
 
         RANK_VARIANTS_SNV (
             ANN_CSQ_PLI_SNV.out.vcf_ann,
-            MAKE_PED.out.ped,
+            pedfile,
             ch_reduced_penetrance,
             ch_score_config_snv
         )
@@ -567,6 +565,31 @@ workflow.onComplete {
         NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
     }
 }
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    FUNCTIONS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+def makePed(samples) {
+
+    def case_name  = samples[0].case_id
+    def outfile  = workDir.resolve("$case_name" + '.ped')
+    outfile.text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\t')
+    def samples_list = []
+    for(int i = 0; i<samples.size(); i++) {
+        sample_tokenized   =  samples[i].id.tokenize("_")
+        sample_tokenized.removeLast()
+        sample_name        =  sample_tokenized.join("_")
+        if (!samples_list.contains(sample_name)) {
+            outfile.append('\n' + [samples[i].case_id, sample_name, samples[i].paternal, samples[i].maternal, samples[i].gender, samples[i].phenotype].join('\t'));
+            samples_list.add(sample_name)
+        }
+    }
+    return outfile
+}
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

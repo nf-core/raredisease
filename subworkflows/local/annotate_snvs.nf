@@ -69,7 +69,8 @@ workflow ANNOTATE_SNVS {
 
         TABIX_BCFTOOLS_VIEW (BCFTOOLS_VIEW.out.vcf)
 
-        BCFTOOLS_VIEW.out.vcf.join(TABIX_BCFTOOLS_VIEW.out.tbi)
+        BCFTOOLS_VIEW.out.vcf
+            .join(TABIX_BCFTOOLS_VIEW.out.tbi, failOnMismatch:true, failOnDuplicate:true)
             .collect()
             .combine(ch_split_intervals)
             .map {
@@ -129,7 +130,6 @@ workflow ANNOTATE_SNVS {
             .set { ch_concat_in }
 
         BCFTOOLS_CONCAT (ch_concat_in)
-
         TABIX_BCFTOOLS_CONCAT (BCFTOOLS_CONCAT.out.vcf)
 
         ch_vep_ann   = BCFTOOLS_CONCAT.out.vcf
