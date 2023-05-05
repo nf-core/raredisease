@@ -395,6 +395,12 @@
                     "fa_icon": "fas fa-book",
                     "enum": ["wgs", "wes", "mito"]
                 },
+                "save_mapped_as_cram": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
+                    "fa_icon": "fas fa-book"
+                },
                 "skip_snv_annotation": {
                     "type": "boolean",
                     "default": false,
