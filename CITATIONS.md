@@ -10,7 +10,7 @@
 
 ## Pipeline tools
 
-- [BCFtools](https://academic.oup.com/gigascience/article/10/2/giab008/6137722)
+- [BCFtools](https://academic.oup.com/gigascience/article/10/2/giab008/6137722) & [SAMtools](https://academic.oup.com/bioinformatics/article/25/16/2078/204688)
 
   > Danecek P, Bonfield JK, Liddle J, et al. Twelve years of SAMtools and BCFtools. GigaScience. 2021;10(2):giab008. doi:10.1093/gigascience/giab008
 
@@ -85,10 +85,6 @@
   > Okonechnikov K, Conesa A, García-Alcalde F. Qualimap 2: advanced multi-sample quality control for high-throughput sequencing data. Bioinformatics. 2016;32(2):292-294. doi:10.1093/bioinformatics/btv566
 
 - [rhocall](https://github.com/dnil/rhocall)
-
-- [SAMtools](https://academic.oup.com/bioinformatics/article/25/16/2078/204688)
-
-  > Li H, Handsaker B, Wysoker A, et al. The Sequence Alignment/Map format and SAMtools. Bioinformatics. 2009;25(16):2078-2079. doi:10.1093/bioinformatics/btp352
 
 - [Sentieon DNAscope](https://www.biorxiv.org/content/10.1101/2022.05.20.492556v1.abstract)
 
