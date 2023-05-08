@@ -15,7 +15,7 @@ def checkPathParamList = [
     params.bwamem2,
     params.call_interval,
     params.fasta,
-    params.fasta_fai,
+    params.fai,
     params.gens_gnomad_pos,
     params.gens_interval_list,
     params.gens_pon,
@@ -53,6 +53,43 @@ def checkPathParamList = [
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    CHECK MANDATORY PARAMETERS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+def mandatoryParams = [
+    "aligner",
+    "analysis_type",
+    "fasta",
+    "input",
+    "intervals_wgs",
+    "intervals_y",
+    "platform",
+    "variant_catalog",
+    "variant_caller"
+]
+
+if (!params.skip_snv_annotation) {
+    mandatoryParams += ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version"]
+}
+
+if (!params.skip_sv_annotation) {
+    mandatoryParams += ["genome", "svdb_query_dbs", "vep_cache", "vep_cache_version"]
+}
+
+if (!params.skip_mt_analysis) {
+    mandatoryParams += ["genome", "mt_backchain_shift", "mito_name", "mt_fasta_shift", "mt_intervals",
+    "mt_intervals_shift", "vcfanno_resources", "vcfanno_toml", "vep_cache_version", "vep_cache"]
+}
+
+if (params.analysis_type.equals("wes")) {
+    mandatoryParams += ["target_bed"]
+}
+
+for (param in mandatoryParams.unique()) { if (params[param] == null) { exit 1, "params." + param + " not set." } }
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -218,9 +255,9 @@ workflow RAREDISEASE {
     ch_bwamem2_index_mt_shift       = params.mt_bwamem2_index_shift        ? Channel.fromPath(params.mt_bwamem2_index_shift).collect()
                                                                            : ch_references.bwamem2_index_mt_shift
     ch_chrom_sizes                  = ch_references.chrom_sizes
-    ch_genome_fai_no_meta           = params.fasta_fai                     ? Channel.fromPath(params.fasta_fai).collect()
+    ch_genome_fai_no_meta           = params.fai                           ? Channel.fromPath(params.fai).collect()
                                                                            : ch_references.fasta_fai
-    ch_genome_fai_meta              = params.fasta_fai                     ? Channel.fromPath(params.fasta_fai).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_genome_fai_meta              = params.fai                           ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.fasta_fai_meta
     ch_mt_shift_fai                 = params.mt_fai_shift                  ? Channel.fromPath(params.mt_fai_shift).collect()
                                                                            : ch_references.fasta_fai_mt_shift
