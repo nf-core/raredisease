@@ -85,28 +85,22 @@ workflow ANNOTATE_SNVS {
 
         TABIX_VEP (ENSEMBLVEP_SNV.out.vcf_gz)
 
-        ch_vep_ann   = ENSEMBLVEP_SNV.out.vcf_gz
-        ch_vep_index = TABIX_VEP.out.tbi
+        ENSEMBLVEP_SNV.out.vcf_gz
+            .join(TABIX_VEP.out.tbi, failOnMismatch:true)
+            .groupTuple()
+            .map { meta, vcfs, tbis ->
+                def sortedvcfs = vcfs.sort { it.baseName }
+                def sortedtbis = tbis.sort { it.baseName }
+                return [ meta, sortedvcfs, sortedtbis ]
+            }
+            .set { ch_concat_in }
 
-        if (params.analysis_type == 'wgs') {
+        BCFTOOLS_CONCAT (ch_concat_in)
 
-            ENSEMBLVEP_SNV.out.vcf_gz
-                .join(TABIX_VEP.out.tbi, failOnMismatch:true)
-                .groupTuple()
-                .map { meta, vcfs, tbis ->
-                    def sortedvcfs = vcfs.sort { it.baseName }
-                    def sortedtbis = tbis.sort { it.baseName }
-                    return [ meta, sortedvcfs, sortedtbis ]
-                }
-                .set { ch_concat_in }
+        TABIX_BCFTOOLS_CONCAT (BCFTOOLS_CONCAT.out.vcf)
 
-            BCFTOOLS_CONCAT (ch_concat_in)
-
-            TABIX_BCFTOOLS_CONCAT (BCFTOOLS_CONCAT.out.vcf)
-
-            ch_vep_ann   = BCFTOOLS_CONCAT.out.vcf
-            ch_vep_index = TABIX_BCFTOOLS_CONCAT.out.tbi
-        }
+        ch_vep_ann   = BCFTOOLS_CONCAT.out.vcf
+        ch_vep_index = TABIX_BCFTOOLS_CONCAT.out.tbi
 
         ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions)
         ch_versions = ch_versions.mix(RHOCALL_ANNOTATE.out.versions)
