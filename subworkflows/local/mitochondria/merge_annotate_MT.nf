@@ -133,7 +133,11 @@ workflow MERGE_ANNOTATE_MT {
 
         // Running vcfanno
         TABIX_TABIX_MT3(ENSEMBLVEP_MT.out.vcf_gz)
-        ch_in_vcfanno = ENSEMBLVEP_MT.out.vcf_gz.join(TABIX_TABIX_MT3.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+        ENSEMBLVEP_MT.out.vcf_gz
+            .join(TABIX_TABIX_MT3.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .map { meta, vcf, tbi -> return [meta, vcf, tbi, []]}
+            .set { ch_in_vcfanno }
+
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, [], ch_vcfanno_resources)
         ZIP_TABIX_VCFANNO(VCFANNO_MT.out.vcf)
 
