@@ -12,37 +12,37 @@
                     },
                     "bcftools/concat": {
                         "branch": "master",
-                        "git_sha": "582ff1755bdd205c65e2ba4c31e0a008dae299ec",
+                        "git_sha": "fa12afdf5874c1d11e4a20efe81c97935e8eea24",
                         "installed_by": ["modules"]
                     },
                     "bcftools/filter": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "fa12afdf5874c1d11e4a20efe81c97935e8eea24",
                         "installed_by": ["modules"]
                     },
                     "bcftools/merge": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "fa12afdf5874c1d11e4a20efe81c97935e8eea24",
                         "installed_by": ["modules"]
                     },
                     "bcftools/norm": {
                         "branch": "master",
-                        "git_sha": "bcad95fb35e567ad25840d3297c3e17eff211a3a",
+                        "git_sha": "fa12afdf5874c1d11e4a20efe81c97935e8eea24",
                         "installed_by": ["modules"]
                     },
                     "bcftools/reheader": {
                         "branch": "master",
-                        "git_sha": "bd4b60c7f9358c7146ac198fd0c4ae6355ddd086",
+                        "git_sha": "fa12afdf5874c1d11e4a20efe81c97935e8eea24",
                         "installed_by": ["modules"]
                     },
                     "bcftools/roh": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "fa12afdf5874c1d11e4a20efe81c97935e8eea24",
                         "installed_by": ["modules"]
                     },
                     "bcftools/view": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "fa12afdf5874c1d11e4a20efe81c97935e8eea24",
                         "installed_by": ["modules"]
                     },
                     "bwa/index": {
@@ -252,7 +252,7 @@
                     },
                     "qualimap/bamqc": {
                         "branch": "master",
-                        "git_sha": "75027bf77472b1f4fd2cdd7e46f83119dfb0f2c6",
+                        "git_sha": "0a9c4eb264cce197707491861ce058a4c79d9c4f",
                         "installed_by": ["modules"]
                     },
                     "rhocall/annotate": {
@@ -262,27 +262,27 @@
                     },
                     "samtools/faidx": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "371eff7748d769c2ddc8bd593773523a364a52fe",
                         "installed_by": ["modules"]
                     },
                     "samtools/index": {
                         "branch": "master",
-                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
+                        "git_sha": "371eff7748d769c2ddc8bd593773523a364a52fe",
                         "installed_by": ["modules"]
                     },
                     "samtools/merge": {
                         "branch": "master",
-                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
+                        "git_sha": "371eff7748d769c2ddc8bd593773523a364a52fe",
                         "installed_by": ["modules"]
                     },
                     "samtools/sort": {
                         "branch": "master",
-                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
+                        "git_sha": "371eff7748d769c2ddc8bd593773523a364a52fe",
                         "installed_by": ["modules"]
                     },
                     "samtools/stats": {
                         "branch": "master",
-                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
+                        "git_sha": "371eff7748d769c2ddc8bd593773523a364a52fe",
                         "installed_by": ["modules"]
                     },
                     "samtools/view": {
@@ -312,7 +312,7 @@
                     },
                     "tabix/bgziptabix": {
                         "branch": "master",
-                        "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "git_sha": "da53f7da4ff34b920bb3f186d151184bd440e3b5",
                         "installed_by": ["modules"]
                     },
                     "tabix/tabix": {
@@ -342,7 +342,7 @@
                     },
                     "vcfanno": {
                         "branch": "master",
-                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
+                        "git_sha": "8b97329e850add26d11d822209cc6712f829e12a",
                         "installed_by": ["modules"]
                     }
                 }
