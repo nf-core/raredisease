@@ -61,7 +61,11 @@ workflow ANNOTATE_SNVS {
 
         ZIP_TABIX_ROHCALL (RHOCALL_ANNOTATE.out.vcf)
 
-        VCFANNO (ZIP_TABIX_ROHCALL.out.gz_tbi, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
+        ZIP_TABIX_ROHCALL.out.gz_tbi
+            .map { meta, vcf, tbi -> return [meta, vcf, tbi, []]}
+            .set { ch_vcf_in }
+
+        VCFANNO (ch_vcf_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
 
         ZIP_TABIX_VCFANNO (VCFANNO.out.vcf)
 
