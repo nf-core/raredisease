@@ -14,6 +14,7 @@ def checkPathParamList = [
     params.bwa,
     params.bwamem2,
     params.call_interval,
+    params.cadd_resources,
     params.fasta,
     params.fai,
     params.gens_gnomad_pos,
@@ -176,6 +177,9 @@ workflow RAREDISEASE {
     }
 
     // Initialize all file channels including unprocessed vcf, bed and tab files
+    ch_cadd_header                    = Channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
+    ch_cadd_resources                 = params.cadd_resources                 ? Channel.fromPath(params.cadd_resources).collect()
+                                                                              : Channel.value([])
     ch_call_interval                  = params.call_interval                  ? Channel.fromPath(params.call_interval).collect()
                                                                               : Channel.value([])
     ch_genome_fasta_no_meta           = params.fasta                          ? Channel.fromPath(params.fasta).collect()
@@ -436,6 +440,8 @@ workflow RAREDISEASE {
     if (!params.skip_mt_analysis) {
         ANALYSE_MT (
             ch_mapped.bam_bai,
+            ch_cadd_header,
+            ch_cadd_resources,
             ch_bwa_index,
             ch_bwamem2_index,
             ch_genome_fasta_meta,
@@ -483,6 +489,8 @@ workflow RAREDISEASE {
         ANNOTATE_SNVS (
             ch_vcf,
             params.analysis_type,
+            ch_cadd_header,
+            ch_cadd_resources,
             ch_vcfanno_resources,
             ch_vcfanno_lua,
             ch_vcfanno_toml,

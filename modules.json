@@ -5,6 +5,11 @@
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
+                    "bcftools/annotate": {
+                        "branch": "master",
+                        "git_sha": "00567d35852dfde7e30a707b8d2e415dfa9d5970",
+                        "installed_by": ["modules"]
+                    },
                     "bcftools/concat": {
                         "branch": "master",
                         "git_sha": "582ff1755bdd205c65e2ba4c31e0a008dae299ec",
@@ -53,6 +58,11 @@
                     "bwamem2/mem": {
                         "branch": "master",
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
+                        "installed_by": ["modules"]
+                    },
+                    "cadd": {
+                        "branch": "master",
+                        "git_sha": "2e2f8581f4d2ab4729c2b7bd5da8400b54fb8fdf",
                         "installed_by": ["modules"]
                     },
                     "cat/cat": {
@@ -273,6 +283,11 @@
                     "samtools/stats": {
                         "branch": "master",
                         "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
+                        "installed_by": ["modules"]
+                    },
+                    "samtools/view": {
+                        "branch": "master",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
                     },
                     "smncopynumbercaller": {
