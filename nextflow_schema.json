@@ -63,7 +63,7 @@
                     "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
                     "fa_icon": "far fa-file-code"
                 },
-                "fasta_fai": {
+                "fai": {
                     "type": "string",
                     "format": "file-path",
                     "help_text": "If none provided, will be generated automatically from the FASTA reference",
@@ -102,6 +102,13 @@
                     "help_text": "If none provided, will be generated automatically from the FASTA reference.",
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
+                },
+                "cadd_resources": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to the directory containing cadd annotations.",
+                    "help_text": "This folder contains the uncompressed files that would otherwise be in data/annotation folder as described in https://github.com/kircherlab/CADD-scripts/#manual-installation."
                 },
                 "gnomad_af": {
                     "type": "string",
@@ -387,6 +394,12 @@
                     "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-book",
                     "enum": ["wgs", "wes", "mito"]
+                },
+                "save_mapped_as_cram": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
+                    "fa_icon": "fas fa-book"
                 },
                 "skip_snv_annotation": {
                     "type": "boolean",

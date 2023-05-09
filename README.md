@@ -8,14 +8,14 @@
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
 [![Launch on Nextflow Tower](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Nextflow%20Tower-%234256e7)](https://tower.nf/launch?pipeline=https://github.com/nf-core/raredisease)
 
-[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23raredisease-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/raredisease)[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
+[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23raredisease-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/raredisease)[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
 
 #### TOC
 
 - [Introduction](#introduction)
 - [Pipeline summary](#pipeline-summary)
-- [Quick Start](#quick-start)
-- [Documentation](#documentation)
+- [Usage](#usage)
+- [Pipeline output](#pipeline-output)
 - [Credits](#credits)
 - [Contributions and Support](#contributions-and-support)
 - [Citations](#citations)
@@ -59,6 +59,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 - [bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh)
 - [vcfanno](https://github.com/brentp/vcfanno)
+- [CADD](https://cadd.gs.washington.edu/)
 - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
 
 **6. Annotation - SV:**
@@ -72,6 +73,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - Annotation:
   - [HaploGrep2](https://github.com/seppinho/haplogrep-cmd)
   - [vcfanno](https://github.com/brentp/vcfanno)
+  - [CADD](https://cadd.gs.washington.edu/)
   - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
 
 **8. Variant calling - repeat expansions:**
@@ -90,38 +92,46 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 Note that it is possible to include/exclude certain tools or steps.
 
-## Quick Start
+## Usage
 
-1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=22.10.1`)
+> **Note**
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how
+> to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline)
+> with `-profile test` before running the workflow on actual data.
 
-2. Install any of [`Docker`](https://docs.docker.com/engine/installation/), [`Singularity`](https://www.sylabs.io/guides/3.0/user-guide/) (you can follow [this tutorial](https://singularity-tutorial.github.io/01-installation/)), [`Podman`](https://podman.io/), [`Shifter`](https://nersc.gitlab.io/development/shifter/how-to-use/) or [`Charliecloud`](https://hpc.github.io/charliecloud/) for full pipeline reproducibility _(you can use [`Conda`](https://conda.io/miniconda.html) both to install Nextflow itself and also to manage software within pipelines. Please only use it within pipelines as a last resort; see [docs](https://nf-co.re/usage/configuration#basic-configuration-profiles))_.
+First, prepare a samplesheet with your input data that looks as follows:
 
-3. Download the pipeline and test it on a minimal dataset with a single command:
+`samplesheet.csv`:
 
-   ```bash
-   nextflow run nf-core/raredisease -revision dev -profile test,YOURPROFILE --outdir <OUTDIR>
-   ```
+```csv
+sample,lane,fastq_1,fastq_2,gender,phenotype,paternal_id,maternal_id,case_id
+hugelymodelbat,1,reads_1.fastq.gz,reads_2.fastq.gz,1,2,,,justhusky
+```
 
-Note that some form of configuration will be needed so that Nextflow knows how to fetch the required software. This is usually done in the form of a config profile (`YOURPROFILE` in the example command above). You can chain multiple config profiles in a comma-separated string.
+Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
 
-> - The pipeline comes with config profiles called `docker`, `singularity`, `podman`, `shifter`, `charliecloud` and `conda` which instruct the pipeline to use the named tool for software management. For example, `-profile test,docker`.
-> - Please check [nf-core/configs](https://github.com/nf-core/configs#documentation) to see if a custom config file to run nf-core pipelines already exists for your Institute. If so, you can simply use `-profile <institute>` in your command. This will enable either `docker` or `singularity` and set the appropriate execution settings for your local compute environment.
-> - If you are using `singularity`, please use the [`nf-core download`](https://nf-co.re/tools/#downloading-pipelines-for-offline-use) command to download images first, before running the pipeline. Setting the [`NXF_SINGULARITY_CACHEDIR` or `singularity.cacheDir`](https://www.nextflow.io/docs/latest/singularity.html?#singularity-docker-hub) Nextflow options enables you to store and re-use the images from a central location for future pipeline runs.
-> - If you are using `conda`, it is highly recommended to use the [`NXF_CONDA_CACHEDIR` or `conda.cacheDir`](https://www.nextflow.io/docs/latest/conda.html) settings to store the environments in a central location for future pipeline runs.
+Second, ensure that you have defined the path to reference files and parameters required for the type of analysis that you want to perform. More information about this can be found [here](https://github.com/nf-core/raredisease/blob/dev/docs/usage.md).
 
-4. Start running your own analysis!
+Now, you can run the pipeline using:
 
-   ```bash
-   nextflow run nf-core/raredisease \
-       --input samplesheet.csv --outdir <OUTDIR> --genome GRCh38 \
-       --analysis_type <wgs|wes> \
-       -revision dev \
-       -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
-   ```
+```bash
+nextflow run nf-core/raredisease \
+   -profile <docker/singularity/podman/shifter/charliecloud/conda/institute> \
+   --input samplesheet.csv \
+   --outdir <OUTDIR>
+```
 
-## Documentation
+> **Warning:**
+> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those
+> provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
+> see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
 
-The nf-core/raredisease pipeline comes with documentation about the pipeline [usage](https://nf-co.re/raredisease/usage), [parameters](https://nf-co.re/raredisease/parameters) and [output](https://nf-co.re/raredisease/output).
+For more details, please refer to the [usage documentation](https://nf-co.re/raredisease/usage) and the [parameter documentation](https://nf-co.re/raredisease/parameters).
+
+## Pipeline output
+
+For more details about the output files and reports, please refer to the
+[output documentation](https://nf-co.re/raredisease/output).
 
 ## Credits
 

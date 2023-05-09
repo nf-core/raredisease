@@ -7,7 +7,7 @@ process ENSEMBLVEP {
         exit 1, "Local VEP module does not support Conda. Please use Docker / Singularity / Podman instead."
     }
 
-    container "ensemblorg/ensembl-vep:release_107.0"
+    container "docker.io/ensemblorg/ensembl-vep:release_107.0"
 
     input:
     tuple val(meta), path(vcf)

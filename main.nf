@@ -4,7 +4,6 @@
     nf-core/raredisease
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Github : https://github.com/nf-core/raredisease
-
     Website: https://nf-co.re/raredisease
     Slack  : https://nfcore.slack.com/channels/raredisease
 ----------------------------------------------------------------------------------------
@@ -19,10 +18,11 @@ nextflow.enable.dsl = 2
 */
 
 params.fasta                          = WorkflowMain.getGenomeAttribute(params, 'fasta')
-params.fasta_fai                      = WorkflowMain.getGenomeAttribute(params, 'fai')
+params.fai                            = WorkflowMain.getGenomeAttribute(params, 'fai')
 params.bwa                            = WorkflowMain.getGenomeAttribute(params, 'bwa')
 params.bwamem2                        = WorkflowMain.getGenomeAttribute(params, 'bwamem2')
 params.call_interval                  = WorkflowMain.getGenomeAttribute(params, 'call_interval')
+params.cadd_resources                 = WorkflowMain.getGenomeAttribute(params, 'cadd_resources')
 params.gnomad_af                      = WorkflowMain.getGenomeAttribute(params, 'gnomad_af')
 params.gnomad_af_idx                  = WorkflowMain.getGenomeAttribute(params, 'gnomad_af_idx')
 params.intervals_wgs                  = WorkflowMain.getGenomeAttribute(params, 'intervals_wgs')
