@@ -48,10 +48,13 @@ workflow CALL_REPEAT_EXPANSIONS {
         SPLIT_MULTIALLELICS_EXP.out.vcf
             .collect{it[1]}
             .toList()
+            .collect()
             .set {ch_exp_vcfs}
+
         ch_case_info
             .combine(ch_exp_vcfs)
             .set {ch_svdb_merge_input}
+
         SVDB_MERGE_REPEATS ( ch_svdb_merge_input, [] )
 
         // Annotate, compress and index

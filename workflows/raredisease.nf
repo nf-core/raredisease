@@ -212,7 +212,7 @@ workflow RAREDISEASE {
     ch_score_config_sv                = params.score_config_sv                ? Channel.fromPath(params.score_config_sv).collect()
                                                                               : Channel.value([])
     ch_target_bed_unprocessed         = params.target_bed                     ? Channel.fromPath(params.target_bed).map{ it -> [[id:it[0].simpleName], it] }.collect()
-                                                                              : Channel.value([])
+                                                                              : Channel.value([[],[]])
     ch_variant_catalog                = params.variant_catalog                ? Channel.fromPath(params.variant_catalog).collect()
                                                                               : Channel.value([])
     ch_variant_consequences           = Channel.fromPath("$projectDir/assets/variant_consequences_v1.txt", checkIfExists: true).collect()
