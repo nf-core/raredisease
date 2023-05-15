@@ -39,7 +39,7 @@ def create_fastq_channel(LinkedHashMap row) {
     // create meta map
     def meta        = [:]
     meta.case_id    = row.case_id
-    meta.gender     = row.gender
+    meta.sex        = row.sex
     meta.id         = row.sample
     meta.maternal   = row.maternal_id
     meta.paternal   = row.paternal_id
@@ -69,7 +69,7 @@ def create_fastq_channel(LinkedHashMap row) {
 def create_samples_channel(LinkedHashMap row) {
     def sample       = [:]
     sample.id        = row.sample
-    sample.gender    = row.gender
+    sample.sex       = row.sex
     sample.phenotype = row.phenotype
     sample.maternal  = row.maternal_id
     sample.paternal  = row.paternal_id

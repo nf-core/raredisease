@@ -325,7 +325,9 @@ workflow RAREDISEASE {
         ch_variant_catalog,
         CHECK_INPUT.out.case_info,
         ch_genome_fasta_no_meta,
-        ch_genome_fai_no_meta
+        ch_genome_fai_no_meta,
+        ch_genome_fasta_meta,
+        ch_genome_fai_meta
     )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
 
@@ -612,7 +614,7 @@ def makePed(samples) {
         sample_tokenized.removeLast()
         sample_name        =  sample_tokenized.join("_")
         if (!samples_list.contains(sample_name)) {
-            outfile.append('\n' + [samples[i].case_id, sample_name, samples[i].paternal, samples[i].maternal, samples[i].gender, samples[i].phenotype].join('\t'));
+            outfile.append('\n' + [samples[i].case_id, sample_name, samples[i].paternal, samples[i].maternal, samples[i].sex, samples[i].phenotype].join('\t'));
             samples_list.add(sample_name)
         }
     }

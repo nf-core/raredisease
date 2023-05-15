@@ -84,9 +84,9 @@ Running the pipeline involves three steps:
 
 #### Samplesheet
 
-A samplesheet is used to pass the information about the sample(s), such as the path to the FASTQ files and other meta data (gender, phenotype, etc.,) to the pipeline in csv format.
+A samplesheet is used to pass the information about the sample(s), such as the path to the FASTQ files and other meta data (sex, phenotype, etc.,) to the pipeline in csv format.
 
-nf-core/raredisease will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The pedigree information in the samplesheet (sex/gender and phenotype) should be provided as they would be for a [ped file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format) (i.e. 1 for male, 2 for female, other for unknown).
+nf-core/raredisease will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The pedigree information in the samplesheet (sex and phenotype) should be provided as they would be for a [ped file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format) (i.e. 1 for male, 2 for female, other for unknown).
 
 | Fields        | Description                                                                                                                                                                            |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -94,7 +94,7 @@ nf-core/raredisease will auto-detect whether a sample is single- or paired-end u
 | `lane`        | Used to generate separate channels during the alignment step.                                                                                                                          |
 | `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
 | `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
-| `gender`      | Sex (1=male; 2=female; other=unknown).                                                                                                                                                 |
+| `sex`         | Sex (1=male; 2=female; other=unknown).                                                                                                                                                 |
 | `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                    |
 | `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                  |
 | `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                  |
@@ -102,12 +102,12 @@ nf-core/raredisease will auto-detect whether a sample is single- or paired-end u
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
-| sample   | lane | fastq_1                          | fastq_2                          | gender | phenotype | paternal_id | maternal_id | case_id |
-| -------- | ---- | -------------------------------- | -------------------------------- | ------ | --------- | ----------- | ----------- | ------- |
-| AEG588A1 | 2    | AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz | 1      | 2         | AEG588A3    | AEG588A2    | fam_1   |
-| AEG588A1 | 3    | AEG588A1_S1_L003_R1_001.fastq.gz | AEG588A1_S1_L003_R2_001.fastq.gz | 1      | 2         | AEG588A3    | AEG588A2    | fam_1   |
-| AEG588A2 | 4    | AEG588A2_S1_L004_R1_001.fastq.gz | AEG588A2_S1_L004_R2_001.fastq.gz | 2      | 1         |             |             | fam_1   |
-| AEG588A3 | 4    | AEG588A3_S1_L004_R1_001.fastq.gz | AEG588A3_S1_L004_R2_001.fastq.gz | 1      | 1         |             |             | fam_1   |
+| sample   | lane | fastq_1                          | fastq_2                          | sex | phenotype | paternal_id | maternal_id | case_id |
+| -------- | ---- | -------------------------------- | -------------------------------- | --- | --------- | ----------- | ----------- | ------- |
+| AEG588A1 | 2    | AEG588A1_S1_L002_R1_001.fastq.gz | AEG588A1_S1_L002_R2_001.fastq.gz | 1   | 2         | AEG588A3    | AEG588A2    | fam_1   |
+| AEG588A1 | 3    | AEG588A1_S1_L003_R1_001.fastq.gz | AEG588A1_S1_L003_R2_001.fastq.gz | 1   | 2         | AEG588A3    | AEG588A2    | fam_1   |
+| AEG588A2 | 4    | AEG588A2_S1_L004_R1_001.fastq.gz | AEG588A2_S1_L004_R2_001.fastq.gz | 2   | 1         |             |             | fam_1   |
+| AEG588A3 | 4    | AEG588A3_S1_L004_R1_001.fastq.gz | AEG588A3_S1_L004_R2_001.fastq.gz | 1   | 1         |             |             | fam_1   |
 
 If you would like to see more examples of what a typical samplesheet looks like for a singleton and a trio, follow these links, [singleton](https://github.com/nf-core/test-datasets/blob/raredisease/testdata/samplesheet_single.csv) and [trio](https://github.com/nf-core/test-datasets/blob/raredisease/testdata/samplesheet_trio.csv).
 
