@@ -468,7 +468,7 @@
                 "pcr_amplification": {
                     "type": "boolean",
                     "default": false,
-                    "description": "indicates whether the sample library is amplified using PCR or not. Set to false for PCR Free samples.",
+                    "description": "Indicates whether the sample library is amplified using PCR or not. Set to false for PCR Free samples.",
                     "fa_icon": "fas fa-map-signs"
                 },
                 "variant_type": {
