@@ -89,8 +89,21 @@ if (params.analysis_type.equals("wes")) {
     mandatoryParams += ["target_bed"]
 }
 
-for (param in mandatoryParams.unique()) { if (params[param] == null) { exit 1, "params." + param + " not set." } }
+if (params.variant_caller.equals("sentieon")) {
+    mandatoryParams += ["ml_model"]
+}
 
+def missingParamsCount = 0
+for (param in mandatoryParams.unique()) {
+    if (params[param] == null) {
+        println("params." + param + " not set.")
+        missingParamsCount += 1
+    }
+}
+
+if (missingParamsCount>0) {
+    error("\nSet missing parameters and restart the run.")
+}
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CONFIG FILES
@@ -163,23 +176,15 @@ workflow RAREDISEASE {
     ch_versions = Channel.empty()
 
     // Initialize input channels
-    if (params.input) {
-        ch_input = Channel.fromPath(params.input)
-        CHECK_INPUT (ch_input)
-        ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
-    } else {
-        exit 1, 'Input samplesheet not specified!'
-    }
-
-    if (params.variant_caller.equals("sentieon") && !params.ml_model) {
-        exit 1, 'Machine learning model not specified!'
-    }
+    ch_input = Channel.fromPath(params.input)
+    CHECK_INPUT (ch_input)
+    ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
 
     // Initialize all file channels including unprocessed vcf, bed and tab files
     ch_call_interval                  = params.call_interval                  ? Channel.fromPath(params.call_interval).collect()
                                                                               : Channel.value([])
     ch_genome_fasta_no_meta           = params.fasta                          ? Channel.fromPath(params.fasta).collect()
-                                                                              : ( exit 1, 'Genome fasta not specified!' )
+                                                                              : ( error('Genome fasta not specified!') )
     ch_genome_fasta_meta              = ch_genome_fasta_no_meta.map { it -> [[id:it[0].simpleName], it] }
     ch_gnomad_af_tab                  = params.gnomad_af                      ? Channel.fromPath(params.gnomad_af).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                               : Channel.value([[],[]])
@@ -189,7 +194,7 @@ workflow RAREDISEASE {
                                                                               : Channel.empty()
     ch_known_dbsnp                    = params.known_dbsnp                    ? Channel.fromPath(params.known_dbsnp).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                               : Channel.value([[],[]])
-    ch_ml_model                       = params.ml_model                       ? Channel.fromPath(params.ml_model).collect()
+    ch_ml_model                       = (params.variant_caller.equals("sentieon") && params.ml_model)      ? Channel.fromPath(params.ml_model).collect()
                                                                               : Channel.value([])
     ch_mt_backchain_shift             = params.mt_backchain_shift             ? Channel.fromPath(params.mt_backchain_shift).collect()
                                                                               : Channel.value([])
@@ -325,7 +330,9 @@ workflow RAREDISEASE {
         ch_variant_catalog,
         CHECK_INPUT.out.case_info,
         ch_genome_fasta_no_meta,
-        ch_genome_fai_no_meta
+        ch_genome_fai_no_meta,
+        ch_genome_fasta_meta,
+        ch_genome_fai_meta
     )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
 
@@ -612,7 +619,7 @@ def makePed(samples) {
         sample_tokenized.removeLast()
         sample_name        =  sample_tokenized.join("_")
         if (!samples_list.contains(sample_name)) {
-            outfile.append('\n' + [samples[i].case_id, sample_name, samples[i].paternal, samples[i].maternal, samples[i].gender, samples[i].phenotype].join('\t'));
+            outfile.append('\n' + [samples[i].case_id, sample_name, samples[i].paternal, samples[i].maternal, samples[i].sex, samples[i].phenotype].join('\t'));
             samples_list.add(sample_name)
         }
     }

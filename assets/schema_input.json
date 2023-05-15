@@ -30,10 +30,10 @@
                     }
                 ]
             },
-            "gender": {
+            "sex": {
                 "type": "string",
                 "pattern": "^\\S+$",
-                "errorMessage": "Gender must be provided and cannot contain spaces"
+                "errorMessage": "Sex must be provided and cannot contain spaces"
             },
             "phenotype": {
                 "type": "string",
@@ -72,6 +72,6 @@
                 "errorMessage": "Case name must be provided and cannot contain spaces"
             }
         },
-        "required": ["sample", "fastq_1", "gender", "phenotype", "case_id"]
+        "required": ["sample", "fastq_1", "sex", "phenotype", "case_id"]
     }
 }

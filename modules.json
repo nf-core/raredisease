@@ -72,7 +72,7 @@
                     },
                     "expansionhunter": {
                         "branch": "master",
-                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
+                        "git_sha": "5e4835b5798eaef33d23d9a2939f2ca9d3a07d4d",
                         "installed_by": ["modules"]
                     },
                     "fastqc": {

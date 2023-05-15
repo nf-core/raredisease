@@ -102,7 +102,7 @@ First, prepare a samplesheet with your input data that looks as follows:
 `samplesheet.csv`:
 
 ```csv
-sample,lane,fastq_1,fastq_2,gender,phenotype,paternal_id,maternal_id,case_id
+sample,lane,fastq_1,fastq_2,sex,phenotype,paternal_id,maternal_id,case_id
 hugelymodelbat,1,reads_1.fastq.gz,reads_2.fastq.gz,1,2,,,justhusky
 ```
 

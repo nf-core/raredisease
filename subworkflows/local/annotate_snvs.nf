@@ -106,6 +106,8 @@ workflow ANNOTATE_SNVS {
 
             ch_vep_ann   = BCFTOOLS_CONCAT.out.vcf
             ch_vep_index = TABIX_BCFTOOLS_CONCAT.out.tbi
+            ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
+            ch_versions = ch_versions.mix(TABIX_BCFTOOLS_CONCAT.out.versions)
         }
 
         ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions)
@@ -118,8 +120,6 @@ workflow ANNOTATE_SNVS {
         ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions.first())
         ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions.first())
         ch_versions = ch_versions.mix(TABIX_VEP.out.versions.first())
-        ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
-        ch_versions = ch_versions.mix(TABIX_BCFTOOLS_CONCAT.out.versions)
 
     emit:
         vcf_ann  = ch_vep_ann   // channel: [ val(meta), path(vcf) ]
