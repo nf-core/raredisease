@@ -202,7 +202,7 @@ workflow RAREDISEASE {
                                                                               : Channel.empty()
     ch_known_dbsnp                    = params.known_dbsnp                    ? Channel.fromPath(params.known_dbsnp).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                               : Channel.value([[],[]])
-    ch_ml_model                       = (params.variant_caller.equals("sentieon") && !params.ml_model)      ? Channel.fromPath(params.ml_model).collect()
+    ch_ml_model                       = (params.variant_caller.equals("sentieon") && params.ml_model)      ? Channel.fromPath(params.ml_model).collect()
                                                                               : Channel.value([])
     ch_mt_backchain_shift             = params.mt_backchain_shift             ? Channel.fromPath(params.mt_backchain_shift).collect()
                                                                               : Channel.value([])
