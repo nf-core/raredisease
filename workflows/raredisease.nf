@@ -102,7 +102,7 @@ for (param in mandatoryParams.unique()) {
 }
 
 if (missingParamsCount>0) {
-    error("\nSet the missing parameters.")
+    error("\nSet missing parameters and restart the run.")
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -176,17 +176,9 @@ workflow RAREDISEASE {
     ch_versions = Channel.empty()
 
     // Initialize input channels
-    if (params.input) {
-        ch_input = Channel.fromPath(params.input)
-        CHECK_INPUT (ch_input)
-        ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
-    } else {
-        error('Input samplesheet not specified!')
-    }
-
-    if (params.variant_caller.equals("sentieon") && !params.ml_model) {
-        error('Machine learning model not specified!')
-    }
+    ch_input = Channel.fromPath(params.input)
+    CHECK_INPUT (ch_input)
+    ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
 
     // Initialize all file channels including unprocessed vcf, bed and tab files
     ch_call_interval                  = params.call_interval                  ? Channel.fromPath(params.call_interval).collect()
