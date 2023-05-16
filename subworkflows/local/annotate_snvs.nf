@@ -124,7 +124,7 @@ workflow ANNOTATE_SNVS {
         TABIX_VEP (ch_vep_out)
 
         ch_vep_out
-            .join(TABIX_VEP.out.tbi)
+            .join(TABIX_VEP.out.tbi, failOnMismatch:true)
             .groupTuple()
             .map { meta, vcfs, tbis ->
                 def sortedvcfs = vcfs.sort { it.baseName }
