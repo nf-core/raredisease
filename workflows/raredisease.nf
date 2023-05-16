@@ -611,7 +611,7 @@ workflow.onComplete {
 def makePed(samples) {
 
     def case_name  = samples[0].case_id
-    def outfile  = workDir.resolve("$case_name" + '.ped')
+    def outfile  = file("${params.outdir}/pipeline_info/${case_name}" + '.ped')
     outfile.text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\t')
     def samples_list = []
     for(int i = 0; i<samples.size(); i++) {
@@ -625,7 +625,6 @@ def makePed(samples) {
     }
     return outfile
 }
-
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
