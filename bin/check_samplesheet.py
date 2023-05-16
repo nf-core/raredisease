@@ -196,7 +196,7 @@ def check_samplesheet(file_in, file_out):
         "lane",
         "fastq_1",
         "fastq_2",
-        "gender",
+        "sex",
         "phenotype",
         "paternal_id",
         "maternal_id",

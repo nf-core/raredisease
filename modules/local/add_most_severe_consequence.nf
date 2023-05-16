@@ -2,10 +2,10 @@ process ADD_MOST_SEVERE_CSQ {
     tag "$meta.id"
     label 'process_low'
 
-    conda "conda-forge::python=3.9.5"
+    conda "conda-forge::python=3.8.3"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/python:3.9--1' :
-        'quay.io/biocontainers/python:3.9--1' }"
+        'https://depot.galaxyproject.org/singularity/python:3.8.3' :
+        'biocontainers/python:3.8.3' }"
 
     input:
     tuple val(meta), path(vcf)
@@ -27,6 +27,7 @@ process ADD_MOST_SEVERE_CSQ {
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         add_most_severe_consequence: v1.0
+        python: \$(python --version | sed 's/Python //g')
     END_VERSIONS
     """
 
@@ -38,6 +39,7 @@ process ADD_MOST_SEVERE_CSQ {
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         add_most_severe_consequence: v1.0
+        python: \$(python --version | sed 's/Python //g')
     END_VERSIONS
     """
 }

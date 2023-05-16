@@ -48,6 +48,14 @@
             "fa_icon": "fas fa-dna",
             "description": "Reference genome related files and options required for the workflow.",
             "properties": {
+                "bait_padding": {
+                    "type": "number",
+                    "default": 100,
+                    "fa_icon": "fas fa-greater-than",
+                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "description": "The amount to pad each end of the target intervals to create bait intervals.",
+                    "hidden": true
+                },
                 "genome": {
                     "type": "string",
                     "description": "Name of iGenomes reference.",
@@ -472,7 +480,7 @@
                 "pcr_amplification": {
                     "type": "boolean",
                     "default": false,
-                    "description": "indicates whether the sample library is amplified using PCR or not. Set to false for PCR Free samples.",
+                    "description": "Indicates whether the sample library is amplified using PCR or not. Set to false for PCR Free samples.",
                     "fa_icon": "fas fa-map-signs"
                 },
                 "variant_type": {

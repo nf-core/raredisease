@@ -20,14 +20,17 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_case_info       // channel: [mandatory] [ val(case_id) ]
         ch_fasta           // channel: [mandatory] [ path(fasta) ]
         ch_fai             // channel: [mandatory] [ path(fai) ]
+        ch_fasta_meta      // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai_meta        // channel: [mandatory] [ val(meta), path(fai) ]
 
     main:
         ch_versions = Channel.empty()
 
         EXPANSIONHUNTER (
             ch_bam,
-            ch_fasta,
-            ch_variant_catalog
+            ch_fasta_meta,
+            ch_fai_meta,
+            ch_variant_catalog.map { it -> [[id:it[0].simpleName],it]}
         )
 
         // Fix header and rename sample
@@ -48,10 +51,13 @@ workflow CALL_REPEAT_EXPANSIONS {
         SPLIT_MULTIALLELICS_EXP.out.vcf
             .collect{it[1]}
             .toList()
+            .collect()
             .set {ch_exp_vcfs}
+
         ch_case_info
             .combine(ch_exp_vcfs)
             .set {ch_svdb_merge_input}
+
         SVDB_MERGE_REPEATS ( ch_svdb_merge_input, [] )
 
         // Annotate, compress and index
