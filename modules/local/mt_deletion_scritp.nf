@@ -11,8 +11,8 @@ process MT_DELETION {
     tuple val(meta), path(stats)
 
     output:
-    path '*.txt'       , emit: mt_del_script
-    path "versions.yml", emit: versions
+    tuple val(meta), path('*.txt'), emit: mt_del_script
+    path "versions.yml"           , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
