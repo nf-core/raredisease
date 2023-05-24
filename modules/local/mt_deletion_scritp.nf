@@ -22,7 +22,7 @@ process MT_DELETION {
 
     """
     grep -E ^IS $stats | awk 'BEGIN {sum=0} (\$2>=1200 && \$2<=15000) {sum=sum+\$3} (\$2<1200 || \$2>15000) {sum_norm=sum_norm+\$3} END \\
-    {print "intermediate discordant ", sum, "normal ", sum_norm, "ratio ppk", sum*1000/(sum_norm+sum)}' 1> ${prefix}_mt_del.txt
+    {print "intermediate discordant ", sum, "normal ", sum_norm, "ratio ppk", sum*1000/(sum_norm+sum)}' 1> ${prefix}.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

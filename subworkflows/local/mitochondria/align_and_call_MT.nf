@@ -80,12 +80,12 @@ workflow ALIGN_AND_CALL_MT {
         ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
 
     emit:
-        vcf        = GATK4_FILTERMUTECTCALLS_MT.out.vcf   // channel: [ val(meta), path(vcf) ]
-        tbi        = GATK4_FILTERMUTECTCALLS_MT.out.tbi   // channel: [ val(meta), path(tbi) ]
-        stats      = GATK4_MUTECT2_MT.out.stats           // channel: [ val(meta), path(stats) ]
-        filt_stats = GATK4_FILTERMUTECTCALLS_MT.out.stats // channel: [ val(meta), path(tsv) ]
-        txt        = HAPLOCHECK_MT.out.txt                // channel: [ val(meta), path(txt) ]
-        html       = HAPLOCHECK_MT.out.html               // channel: [ val(meta), path(html) ]
-        mt_del_script = MT_DELETION.out.mt_del_script        // channel: [ val(meta), path(txt) ]
-        versions   = ch_versions                          // channel: [ path(versions.yml) ]
+        vcf           = GATK4_FILTERMUTECTCALLS_MT.out.vcf   // channel: [ val(meta), path(vcf) ]
+        tbi           = GATK4_FILTERMUTECTCALLS_MT.out.tbi   // channel: [ val(meta), path(tbi) ]
+        stats         = GATK4_MUTECT2_MT.out.stats           // channel: [ val(meta), path(stats) ]
+        filt_stats    = GATK4_FILTERMUTECTCALLS_MT.out.stats // channel: [ val(meta), path(tsv) ]
+        txt           = HAPLOCHECK_MT.out.txt                // channel: [ val(meta), path(txt) ]
+        html          = HAPLOCHECK_MT.out.html               // channel: [ val(meta), path(html) ]
+        mt_del_result = MT_DELETION.out.mt_del_script        // channel: [ val(meta), path(txt) ]
+        versions      = ch_versions                          // channel: [ path(versions.yml) ]
 }
