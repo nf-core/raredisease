@@ -111,6 +111,13 @@
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
+                "cadd_resources": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to the directory containing cadd annotations.",
+                    "help_text": "This folder contains the uncompressed files that would otherwise be in data/annotation folder as described in https://github.com/kircherlab/CADD-scripts/#manual-installation."
+                },
                 "gnomad_af": {
                     "type": "string",
                     "format": "path",
@@ -395,6 +402,12 @@
                     "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-book",
                     "enum": ["wgs", "wes", "mito"]
+                },
+                "save_mapped_as_cram": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
+                    "fa_icon": "fas fa-book"
                 },
                 "skip_snv_annotation": {
                     "type": "boolean",

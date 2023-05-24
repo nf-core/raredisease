@@ -14,6 +14,7 @@ def checkPathParamList = [
     params.bwa,
     params.bwamem2,
     params.call_interval,
+    params.cadd_resources,
     params.fasta,
     params.fai,
     params.gens_gnomad_pos,
@@ -181,53 +182,52 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
 
     // Initialize all file channels including unprocessed vcf, bed and tab files
-    ch_call_interval                  = params.call_interval                  ? Channel.fromPath(params.call_interval).collect()
-                                                                              : Channel.value([])
-    ch_genome_fasta_no_meta           = params.fasta                          ? Channel.fromPath(params.fasta).collect()
-                                                                              : ( error('Genome fasta not specified!') )
-    ch_genome_fasta_meta              = ch_genome_fasta_no_meta.map { it -> [[id:it[0].simpleName], it] }
-    ch_gnomad_af_tab                  = params.gnomad_af                      ? Channel.fromPath(params.gnomad_af).map{ it -> [[id:it[0].simpleName], it] }.collect()
-                                                                              : Channel.value([[],[]])
-    ch_intervals_wgs                  = params.intervals_wgs                  ? Channel.fromPath(params.intervals_wgs).collect()
-                                                                              : Channel.empty()
-    ch_intervals_y                    = params.intervals_y                    ? Channel.fromPath(params.intervals_y).collect()
-                                                                              : Channel.empty()
-    ch_known_dbsnp                    = params.known_dbsnp                    ? Channel.fromPath(params.known_dbsnp).map{ it -> [[id:it[0].simpleName], it] }.collect()
-                                                                              : Channel.value([[],[]])
-    ch_ml_model                       = (params.variant_caller.equals("sentieon") && params.ml_model)      ? Channel.fromPath(params.ml_model).collect()
-                                                                              : Channel.value([])
-    ch_mt_backchain_shift             = params.mt_backchain_shift             ? Channel.fromPath(params.mt_backchain_shift).collect()
-                                                                              : Channel.value([])
-    ch_mt_fasta_shift_no_meta         = params.mt_fasta_shift                 ? Channel.fromPath(params.mt_fasta_shift).collect()
-                                                                              : Channel.empty()
-    ch_mt_fasta_shift_meta            = params.mt_fasta_shift                 ? ch_mt_fasta_shift_no_meta.map { it -> [[id:it[0].simpleName], it] }.collect()
-                                                                              : Channel.empty()
-    ch_mt_intervals                   = params.mt_intervals                   ? Channel.fromPath(params.mt_intervals).collect()
-                                                                              : Channel.value([])
-    ch_mt_intervals_shift             = params.mt_intervals_shift             ? Channel.fromPath(params.mt_intervals_shift).collect()
-                                                                              : Channel.value([])
-    ch_reduced_penetrance             = params.reduced_penetrance             ? Channel.fromPath(params.reduced_penetrance).collect()
-                                                                              : Channel.value([])
-    ch_score_config_snv               = params.score_config_snv               ? Channel.fromPath(params.score_config_snv).collect()
-                                                                              : Channel.value([])
-    ch_score_config_sv                = params.score_config_sv                ? Channel.fromPath(params.score_config_sv).collect()
-                                                                              : Channel.value([])
-    ch_target_bed_unprocessed         = params.target_bed                     ? Channel.fromPath(params.target_bed).map{ it -> [[id:it[0].simpleName], it] }.collect()
-                                                                              : Channel.value([])
-    ch_variant_catalog                = params.variant_catalog                ? Channel.fromPath(params.variant_catalog).collect()
-                                                                              : Channel.value([])
-    ch_variant_consequences           = Channel.fromPath("$projectDir/assets/variant_consequences_v1.txt", checkIfExists: true).collect()
+    ch_cadd_header              = Channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
+    ch_genome_fasta             = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
+    ch_variant_consequences     = Channel.fromPath("$projectDir/assets/variant_consequences_v1.txt", checkIfExists: true).collect()
 
-    ch_vcfanno_resources              = params.vcfanno_resources              ? Channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
-                                                                              : Channel.value([])
-    ch_vcfanno_lua                    = params.vcfanno_lua                    ? Channel.fromPath(params.vcfanno_lua).collect()
-                                                                              : Channel.value([])
-    ch_vcfanno_toml                   = params.vcfanno_toml                   ? Channel.fromPath(params.vcfanno_toml).collect()
-                                                                              : Channel.value([])
-    ch_vep_cache_unprocessed          = params.vep_cache                      ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
-                                                                              : Channel.value([[],[]])
-    ch_vep_filters                    = params.vep_filters                    ? Channel.fromPath(params.vep_filters).collect()
-                                                                              : Channel.value([])
+    ch_cadd_resources           = params.cadd_resources                    ? Channel.fromPath(params.cadd_resources).collect()
+                                                                           : Channel.value([])
+    ch_call_interval            = params.call_interval                     ? Channel.fromPath(params.call_interval).collect()
+                                                                           : Channel.value([])
+    ch_gnomad_af_tab            = params.gnomad_af                         ? Channel.fromPath(params.gnomad_af).map{ it -> [[id:it[0].simpleName], it] }.collect()
+                                                                           : Channel.value([[],[]])
+    ch_intervals_wgs            = params.intervals_wgs                     ? Channel.fromPath(params.intervals_wgs).collect()
+                                                                           : Channel.empty()
+    ch_intervals_y              = params.intervals_y                       ? Channel.fromPath(params.intervals_y).collect()
+                                                                           : Channel.empty()
+    ch_known_dbsnp              = params.known_dbsnp                       ? Channel.fromPath(params.known_dbsnp).map{ it -> [[id:it[0].simpleName], it] }.collect()
+                                                                           : Channel.value([[],[]])
+    ch_ml_model                 = params.variant_caller.equals("sentieon") ? Channel.fromPath(params.ml_model).collect()
+                                                                           : Channel.value([])
+    ch_mt_backchain_shift       = params.mt_backchain_shift                ? Channel.fromPath(params.mt_backchain_shift).map{ it -> [[id:it[0].simpleName], it] }.collect()
+                                                                           : Channel.value([])
+    ch_mt_fasta_shift           = params.mt_fasta_shift                    ? Channel.fromPath(params.mt_fasta_shift).map { it -> [[id:it[0].simpleName], it] }.collect()
+                                                                           : Channel.empty()
+    ch_mt_intervals             = params.mt_intervals                      ? Channel.fromPath(params.mt_intervals).collect()
+                                                                           : Channel.value([])
+    ch_mt_intervals_shift       = params.mt_intervals_shift                ? Channel.fromPath(params.mt_intervals_shift).collect()
+                                                                           : Channel.value([])
+    ch_reduced_penetrance       = params.reduced_penetrance                ? Channel.fromPath(params.reduced_penetrance).collect()
+                                                                           : Channel.value([])
+    ch_score_config_snv         = params.score_config_snv                  ? Channel.fromPath(params.score_config_snv).collect()
+                                                                           : Channel.value([])
+    ch_score_config_sv          = params.score_config_sv                   ? Channel.fromPath(params.score_config_sv).collect()
+                                                                           : Channel.value([])
+    ch_target_bed_unprocessed   = params.target_bed                        ? Channel.fromPath(params.target_bed).map{ it -> [[id:it[0].simpleName], it] }.collect()
+                                                                           : Channel.value([[],[]])
+    ch_variant_catalog          = params.variant_catalog                   ? Channel.fromPath(params.variant_catalog).map { it -> [[id:it[0].simpleName],it]}.collect()
+                                                                           : Channel.value([[],[]])
+    ch_vcfanno_resources        = params.vcfanno_resources                 ? Channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
+                                                                           : Channel.value([])
+    ch_vcfanno_lua              = params.vcfanno_lua                       ? Channel.fromPath(params.vcfanno_lua).collect()
+                                                                           : Channel.value([])
+    ch_vcfanno_toml             = params.vcfanno_toml                      ? Channel.fromPath(params.vcfanno_toml).collect()
+                                                                           : Channel.value([])
+    ch_vep_cache_unprocessed    = params.vep_cache                         ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
+                                                                           : Channel.value([[],[]])
+    ch_vep_filters              = params.vep_filters                       ? Channel.fromPath(params.vep_filters).collect()
+                                                                           : Channel.value([])
 
     // Generate pedigree file
     pedfile = CHECK_INPUT.out.samples.toList().map { makePed(it) }
@@ -238,10 +238,8 @@ workflow RAREDISEASE {
 
     // Prepare references and indices.
     PREPARE_REFERENCES (
-        ch_genome_fasta_no_meta,
-        ch_genome_fasta_meta,
-        ch_mt_fasta_shift_no_meta,
-        ch_mt_fasta_shift_meta,
+        ch_genome_fasta,
+        ch_mt_fasta_shift,
         ch_gnomad_af_tab,
         ch_known_dbsnp,
         ch_target_bed_unprocessed,
@@ -257,39 +255,34 @@ workflow RAREDISEASE {
                                                                            : ch_references.bwa_index_mt_shift
     ch_bwamem2_index                = params.bwamem2                       ? Channel.fromPath(params.bwamem2).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.bwamem2_index
-    ch_bwamem2_index_mt_shift       = params.mt_bwamem2_index_shift        ? Channel.fromPath(params.mt_bwamem2_index_shift).collect()
+    ch_bwamem2_index_mt_shift       = params.mt_bwamem2_index_shift        ? Channel.fromPath(params.mt_bwamem2_index_shift).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.bwamem2_index_mt_shift
     ch_chrom_sizes                  = ch_references.chrom_sizes
-    ch_genome_fai_no_meta           = params.fai                           ? Channel.fromPath(params.fai).collect()
-                                                                           : ch_references.fasta_fai
-    ch_genome_fai_meta              = params.fai                           ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                                           : ch_references.fasta_fai_meta
-    ch_mt_shift_fai                 = params.mt_fai_shift                  ? Channel.fromPath(params.mt_fai_shift).collect()
-                                                                           : ch_references.fasta_fai_mt_shift
+    ch_genome_fai                   = params.fai                           ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                           : ch_references.fai
+    ch_mt_shift_fai                 = params.mt_fai_shift                  ? Channel.fromPath(params.mt_fai_shift).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                           : ch_references.fai_mt_shift
     ch_gnomad_af_idx                = params.gnomad_af_idx                 ? Channel.fromPath(params.gnomad_af_idx).collect()
                                                                            : ch_references.gnomad_af_idx
     ch_gnomad_af                    = params.gnomad_af                     ? ch_gnomad_af_tab.join(ch_gnomad_af_idx).map {meta, tab, idx -> [tab,idx]}.collect()
                                                                            : Channel.empty()
     ch_known_dbsnp_tbi              = params.known_dbsnp_tbi               ? Channel.fromPath(params.known_dbsnp_tbi).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.known_dbsnp_tbi.ifEmpty([[],[]])
-    ch_sequence_dictionary_no_meta  = params.sequence_dictionary           ? Channel.fromPath(params.sequence_dictionary).collect()
+    ch_sequence_dictionary          = params.sequence_dictionary           ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.sequence_dict
-    ch_sequence_dictionary_meta     = params.sequence_dictionary           ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                                           : ch_references.sequence_dict_meta
-    ch_sequence_dictionary_mt_shift = params.mt_sequence_dictionary_shift  ? Channel.fromPath(params.mt_sequence_dictionary_shift).collect()
+    ch_sequence_dictionary_mt_shift = params.mt_sequence_dictionary_shift  ? Channel.fromPath(params.mt_sequence_dictionary_shift).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.sequence_dict_mt_shift
     ch_target_bed                   = ch_references.target_bed
     ch_target_intervals             = ch_references.target_intervals
     ch_vep_cache                    = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") )  ? ch_references.vep_resources
-                                                                           : ( params.vep_cache  ? Channel.fromPath(params.vep_cache).collect() : Channel.value([]) )
+                                                                           : ( params.vep_cache    ? Channel.fromPath(params.vep_cache).collect() : Channel.value([]) )
     ch_versions                     = ch_versions.mix(ch_references.versions)
 
     // CREATE CHROMOSOME BED AND INTERVALS
     SCATTER_GENOME (
-        ch_sequence_dictionary_no_meta,
-        ch_genome_fai_meta,
-        ch_genome_fai_no_meta,
-        ch_genome_fasta_no_meta
+        ch_sequence_dictionary,
+        ch_genome_fai,
+        ch_genome_fasta
     )
     .set { ch_scatter }
 
@@ -298,8 +291,8 @@ workflow RAREDISEASE {
     // ALIGNING READS, FETCH STATS, AND MERGE.
     ALIGN (
         CHECK_INPUT.out.reads,
-        ch_genome_fasta_no_meta,
-        ch_genome_fai_no_meta,
+        ch_genome_fasta,
+        ch_genome_fai,
         ch_bwa_index,
         ch_bwamem2_index,
         ch_known_dbsnp,
@@ -314,8 +307,8 @@ workflow RAREDISEASE {
         ch_mapped.marked_bam,
         ch_mapped.marked_bai,
         ch_mapped.bam_bai,
-        ch_genome_fasta_meta,
-        ch_genome_fai_meta,
+        ch_genome_fasta,
+        ch_genome_fai,
         ch_bait_intervals,
         ch_target_intervals,
         ch_chrom_sizes,
@@ -329,10 +322,8 @@ workflow RAREDISEASE {
         ch_mapped.bam_bai,
         ch_variant_catalog,
         CHECK_INPUT.out.case_info,
-        ch_genome_fasta_no_meta,
-        ch_genome_fai_no_meta,
-        ch_genome_fasta_meta,
-        ch_genome_fai_meta
+        ch_genome_fasta,
+        ch_genome_fai
     )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
 
@@ -360,8 +351,8 @@ workflow RAREDISEASE {
     // STEP 2: VARIANT CALLING
     CALL_SNV (
         ch_mapped.bam_bai,
-        ch_genome_fasta_no_meta,
-        ch_genome_fai_no_meta,
+        ch_genome_fasta,
+        ch_genome_fai,
         ch_known_dbsnp,
         ch_known_dbsnp_tbi,
         ch_call_interval,
@@ -375,9 +366,8 @@ workflow RAREDISEASE {
         ch_mapped.marked_bai,
         ch_mapped.bam_bai,
         ch_bwa_index,
-        ch_genome_fasta_no_meta,
-        ch_genome_fasta_meta,
-        ch_genome_fai_no_meta,
+        ch_genome_fasta,
+        ch_genome_fai,
         CHECK_INPUT.out.case_info,
         ch_target_bed
     )
@@ -413,8 +403,8 @@ workflow RAREDISEASE {
             params.genome,
             params.vep_cache_version,
             ch_vep_cache,
-            ch_genome_fasta_no_meta,
-            ch_sequence_dictionary_no_meta
+            ch_genome_fasta,
+            ch_sequence_dictionary
         ).set {ch_sv_annotate}
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
@@ -443,17 +433,17 @@ workflow RAREDISEASE {
     if (!params.skip_mt_analysis) {
         ANALYSE_MT (
             ch_mapped.bam_bai,
+            ch_cadd_header,
+            ch_cadd_resources,
             ch_bwa_index,
             ch_bwamem2_index,
-            ch_genome_fasta_meta,
-            ch_genome_fasta_no_meta,
-            ch_sequence_dictionary_meta,
-            ch_sequence_dictionary_no_meta,
-            ch_genome_fai_no_meta,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_sequence_dictionary,
             ch_mt_intervals,
             ch_bwa_index_mt_shift,
             ch_bwamem2_index_mt_shift,
-            ch_mt_fasta_shift_no_meta,
+            ch_mt_fasta_shift,
             ch_sequence_dictionary_mt_shift,
             ch_mt_shift_fai,
             ch_mt_intervals_shift,
@@ -490,13 +480,15 @@ workflow RAREDISEASE {
         ANNOTATE_SNVS (
             ch_vcf,
             params.analysis_type,
+            ch_cadd_header,
+            ch_cadd_resources,
             ch_vcfanno_resources,
             ch_vcfanno_lua,
             ch_vcfanno_toml,
             params.genome,
             params.vep_cache_version,
             ch_vep_cache,
-            ch_genome_fasta_no_meta,
+            ch_genome_fasta,
             ch_gnomad_af,
             ch_scatter_split_intervals,
             CHECK_INPUT.out.samples

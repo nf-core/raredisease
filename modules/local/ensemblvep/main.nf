@@ -11,11 +11,11 @@ process ENSEMBLVEP {
 
     input:
     tuple val(meta), path(vcf)
+    tuple val(meta2), path(fasta)
     val   genome
     val   species
     val   cache_version
     path  cache
-    path  fasta
     path  extra_files
 
     output:

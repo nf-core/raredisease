@@ -32,11 +32,16 @@ workflow QC_BAM {
 
         PICARD_COLLECTMULTIPLEMETRICS (ch_bam_bai, ch_fasta, ch_fai)
 
-        PICARD_COLLECTHSMETRICS (ch_bam_bai, ch_fasta, ch_fai, ch_bait_intervals, ch_target_intervals)
+        ch_bam_bai
+            .combine(ch_bait_intervals)
+            .combine(ch_target_intervals)
+            .set { ch_hsmetrics_in}
+
+        PICARD_COLLECTHSMETRICS (ch_hsmetrics_in, ch_fasta, ch_fai, [[],[]])
 
         QUALIMAP_BAMQC (ch_bam, [])
 
-        TIDDIT_COV (ch_bam, []) // 2nd pos. arg is req. only for cram input
+        TIDDIT_COV (ch_bam, [[],[]]) // 2nd pos. arg is req. only for cram input
 
         UCSC_WIGTOBIGWIG (TIDDIT_COV.out.wig, ch_chrom_sizes)
 

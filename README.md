@@ -59,6 +59,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 - [bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh)
 - [vcfanno](https://github.com/brentp/vcfanno)
+- [CADD](https://cadd.gs.washington.edu/)
 - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
 
 **6. Annotation - SV:**
@@ -72,6 +73,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - Annotation:
   - [HaploGrep2](https://github.com/seppinho/haplogrep-cmd)
   - [vcfanno](https://github.com/brentp/vcfanno)
+  - [CADD](https://cadd.gs.washington.edu/)
   - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
 
 **8. Variant calling - repeat expansions:**

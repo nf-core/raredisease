@@ -10,7 +10,7 @@
 
 ## Pipeline tools
 
-- [BCFtools](https://academic.oup.com/gigascience/article/10/2/giab008/6137722)
+- [BCFtools](https://academic.oup.com/gigascience/article/10/2/giab008/6137722) & [SAMtools](https://academic.oup.com/bioinformatics/article/25/16/2078/204688)
 
   > Danecek P, Bonfield JK, Liddle J, et al. Twelve years of SAMtools and BCFtools. GigaScience. 2021;10(2):giab008. doi:10.1093/gigascience/giab008
 
@@ -21,6 +21,12 @@
 - [BWA-MEM2](https://ieeexplore.ieee.org/abstract/document/8820962)
 
   > Vasimuddin Md, Misra S, Li H, Aluru S. Efficient Architecture-Aware Acceleration of BWA-MEM for Multicore Systems. In: 2019 IEEE International Parallel and Distributed Processing Symposium (IPDPS). IEEE; 2019:314-324. doi:10.1109/IPDPS.2019.00041
+
+- [CADD<sup>1</sup>](https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-021-00835-9)<sup>,</sup> [<sup>2</sup>](https://academic.oup.com/nar/article/47/D1/D886/5146191)
+
+  > Rentzsch P, Schubach M, Shendure J, Kircher M. CADD-Splice—improving genome-wide variant effect prediction using deep learning-derived splice scores. Genome Med. 2021;13(1):31. doi:10.1186/s13073-021-00835-9
+
+  > Rentzsch P, Witten D, Cooper GM, Shendure J, Kircher M. CADD: predicting the deleteriousness of variants throughout the human genome. Nucleic Acids Research. 2019;47(D1):D886-D894. doi:10.1093/nar/gky1016
 
 - [DeepVariant](https://www.nature.com/articles/nbt.4235)
 
@@ -79,10 +85,6 @@
   > Okonechnikov K, Conesa A, García-Alcalde F. Qualimap 2: advanced multi-sample quality control for high-throughput sequencing data. Bioinformatics. 2016;32(2):292-294. doi:10.1093/bioinformatics/btv566
 
 - [rhocall](https://github.com/dnil/rhocall)
-
-- [SAMtools](https://academic.oup.com/bioinformatics/article/25/16/2078/204688)
-
-  > Li H, Handsaker B, Wysoker A, et al. The Sequence Alignment/Map format and SAMtools. Bioinformatics. 2009;25(16):2078-2079. doi:10.1093/bioinformatics/btp352
 
 - [Sentieon DNAscope](https://www.biorxiv.org/content/10.1101/2022.05.20.492556v1.abstract)
 
