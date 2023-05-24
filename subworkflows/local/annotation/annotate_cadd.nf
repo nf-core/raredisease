@@ -32,10 +32,10 @@ workflow ANNOTATE_CADD {
             .join(ch_index)
             .join(CADD.out.tsv)
             .join(TABIX_CADD.out.tbi)
-            .groupTuple()
+            .combine(ch_header)
             .set { ch_annotate_in }
 
-        BCFTOOLS_ANNOTATE(ch_annotate_in, ch_header)
+        BCFTOOLS_ANNOTATE(ch_annotate_in)
 
         TABIX_ANNOTATE (BCFTOOLS_ANNOTATE.out.vcf)
 

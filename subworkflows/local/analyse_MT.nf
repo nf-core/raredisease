@@ -14,11 +14,9 @@ workflow ANALYSE_MT {
         ch_cadd_resources         // channel: [mandatory] [ path(annotation) ]
         ch_genome_bwa_index       // channel: [mandatory] [ path(index) ]
         ch_genome_bwamem2_index   // channel: [mandatory] [ path(index) ]
-        ch_genome_fasta_meta      // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fasta_no_meta   // channel: [mandatory] [ path(fasta) ]
-        ch_genome_dict_meta       // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_genome_dict_no_meta    // channel: [mandatory] [ path(dict) ]
+        ch_genome_fasta           // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai             // channel: [mandatory] [ path(fai) ]
+        ch_genome_dict            // channel: [mandatory] [ val(meta), path(dict) ]
         ch_mt_intervals           // channel: [mandatory] [ path(interval_list) ]
         ch_shift_mt_bwa_index     // channel: [mandatory] [ path(index) ]
         ch_shift_mt_bwamem2_index // channel: [mandatory] [ path(index) ]
@@ -40,9 +38,9 @@ workflow ANALYSE_MT {
         // PREPARING READS FOR MT ALIGNMENT
         CONVERT_MT_BAM_TO_FASTQ (
             ch_bam,
-            ch_genome_fasta_meta,
+            ch_genome_fasta,
             ch_genome_fai,
-            ch_genome_dict_no_meta
+            ch_genome_dict
         )
 
         // MT ALIGNMENT  AND VARIANT CALLING
@@ -51,8 +49,8 @@ workflow ANALYSE_MT {
             CONVERT_MT_BAM_TO_FASTQ.out.bam,
             ch_genome_bwa_index,
             ch_genome_bwamem2_index,
-            ch_genome_fasta_no_meta,
-            ch_genome_dict_no_meta,
+            ch_genome_fasta,
+            ch_genome_dict,
             ch_genome_fai,
             ch_mt_intervals
         )
@@ -71,9 +69,9 @@ workflow ANALYSE_MT {
         // LIFTOVER VCF FROM REFERENCE MT TO SHIFTED MT
         PICARD_LIFTOVERVCF (
             ALIGN_AND_CALL_MT_SHIFT.out.vcf,
-            ch_genome_dict_no_meta,
+            ch_genome_dict,
             ch_shift_mt_backchain,
-            ch_genome_fasta_no_meta
+            ch_genome_fasta
         )
 
         // MT MERGE AND ANNOTATE VARIANTS
@@ -82,9 +80,8 @@ workflow ANALYSE_MT {
             PICARD_LIFTOVERVCF.out.vcf_lifted,
             ch_cadd_header,
             ch_cadd_resources,
-            ch_genome_fasta_no_meta,
-            ch_genome_dict_meta,
-            ch_genome_dict_no_meta,
+            ch_genome_fasta,
+            ch_genome_dict,
             ch_genome_fai,
             ch_vcfanno_resources,
             ch_vcfanno_toml,

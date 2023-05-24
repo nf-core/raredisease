@@ -18,19 +18,17 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_bam             // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_variant_catalog // channel: [mandatory] [ path(variant_catalog.json) ]
         ch_case_info       // channel: [mandatory] [ val(case_id) ]
-        ch_fasta           // channel: [mandatory] [ path(fasta) ]
-        ch_fai             // channel: [mandatory] [ path(fai) ]
-        ch_fasta_meta      // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_fai_meta        // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_fasta           // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai             // channel: [mandatory] [ val(meta), path(fai) ]
 
     main:
         ch_versions = Channel.empty()
 
         EXPANSIONHUNTER (
             ch_bam,
-            ch_fasta_meta,
-            ch_fai_meta,
-            ch_variant_catalog.map { it -> [[id:it[0].simpleName],it]}
+            ch_fasta,
+            ch_fai,
+            ch_variant_catalog
         )
 
         // Fix header and rename sample

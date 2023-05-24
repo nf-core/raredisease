@@ -29,7 +29,7 @@ workflow ANNOTATE_SNVS {
         val_vep_genome        // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version // string: [mandatory] default: 107
         ch_vep_cache          // channel: [mandatory] [ path(cache) ]
-        ch_fasta              // channel: [mandatory] [ path(fasta) ]
+        ch_fasta              // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_gnomad_af          // channel: [optional] [ path(tab), path(tbi) ]
         ch_split_intervals    // channel: [mandatory] [ path(intervals) ]
         ch_samples            // channel: [mandatory] [ val(sample_id), val(sex), val(phenotype), val(paternal_id), val(maternal_id), val(case_id) ]
@@ -109,11 +109,11 @@ workflow ANNOTATE_SNVS {
         // Annotating with ensembl Vep
         ENSEMBLVEP_SNV(
             ch_vep_in,
+            ch_fasta,
             val_vep_genome,
             "homo_sapiens",
             val_vep_cache_version,
             ch_vep_cache,
-            ch_fasta,
             []
         )
 
