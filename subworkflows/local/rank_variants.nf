@@ -12,7 +12,7 @@ workflow RANK_VARIANTS {
 
     take:
         ch_vcf                // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_ped                // channel: [mandatory] [ path(ped) ]
+        ch_pedfile            // channel: [mandatory] [ path(ped) ]
         ch_reduced_penetrance // channel: [mandatory] [ path(pentrance) ]
         ch_score_config       // channel: [mandatory] [ path(ini) ]
 
@@ -21,9 +21,9 @@ workflow RANK_VARIANTS {
 
         GENMOD_ANNOTATE(ch_vcf)
 
-        GENMOD_MODELS(GENMOD_ANNOTATE.out.vcf, ch_ped, ch_reduced_penetrance)
+        GENMOD_MODELS(GENMOD_ANNOTATE.out.vcf, ch_pedfile, ch_reduced_penetrance)
 
-        GENMOD_SCORE(GENMOD_MODELS.out.vcf, ch_ped, ch_score_config)
+        GENMOD_SCORE(GENMOD_MODELS.out.vcf, ch_pedfile, ch_score_config)
 
         GENMOD_COMPOUND(GENMOD_SCORE.out.vcf)
 

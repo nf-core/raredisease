@@ -14,9 +14,9 @@ include { BCFTOOLS_FILTER as BCF_FILTER_TWO        } from '../../../modules/nf-c
 
 workflow CALL_SNV_SENTIEON {
     take:
-        ch_input         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_fasta         // channel: [mandatory] [ path(fasta) ]
-        ch_fai           // channel: [mandatory] [ path(fai) ]
+        ch_bam_bai       // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_fasta  // channel: [mandatory] [ path(fasta) ]
+        ch_genome_fai    // channel: [mandatory] [ path(fai) ]
         ch_dbsnp         // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_dbsnp_index   // channel: [mandatory] [ val(meta), path(tbi) ]
         ch_call_interval // channel: [mandatory] [ path(interval) ]
@@ -26,9 +26,9 @@ workflow CALL_SNV_SENTIEON {
     main:
         ch_versions = Channel.empty()
 
-        SENTIEON_DNASCOPE ( ch_input, ch_fasta, ch_fai, ch_dbsnp, ch_dbsnp_index, ch_call_interval, ch_ml_model )
+        SENTIEON_DNASCOPE ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_dbsnp, ch_dbsnp_index, ch_call_interval, ch_ml_model )
 
-        SENTIEON_DNAMODELAPPLY ( SENTIEON_DNASCOPE.out.vcf_index, ch_fasta, ch_fai, ch_ml_model )
+        SENTIEON_DNAMODELAPPLY ( SENTIEON_DNASCOPE.out.vcf_index, ch_genome_fasta, ch_genome_fai, ch_ml_model )
 
         BCF_FILTER_ONE (SENTIEON_DNAMODELAPPLY.out.vcf )
 
@@ -49,7 +49,7 @@ workflow CALL_SNV_SENTIEON {
             }
             .set{ ch_vcf_idx_merge_in }
 
-        BCFTOOLS_MERGE(ch_vcf_idx_merge_in.multiple, [], ch_fasta, ch_fai)
+        BCFTOOLS_MERGE(ch_vcf_idx_merge_in.multiple, ch_genome_fasta, ch_genome_fai, [])
 
         ch_split_multi_in = BCFTOOLS_MERGE.out.merged_variants
                     .map{meta, bcf ->
@@ -57,13 +57,13 @@ workflow CALL_SNV_SENTIEON {
 
         ch_vcf_idx_case =  ch_vcf_idx_merge_in.single.mix(ch_split_multi_in)
 
-        SPLIT_MULTIALLELICS_SEN(ch_vcf_idx_case, ch_fasta)
+        SPLIT_MULTIALLELICS_SEN(ch_vcf_idx_case, ch_genome_fasta)
 
         ch_remove_dup_in = SPLIT_MULTIALLELICS_SEN.out.vcf
                             .map{meta, vcf ->
                                     return [meta, vcf, []]}
 
-        REMOVE_DUPLICATES_SEN(ch_remove_dup_in, ch_fasta)
+        REMOVE_DUPLICATES_SEN(ch_remove_dup_in, ch_genome_fasta)
 
         TABIX_SEN(REMOVE_DUPLICATES_SEN.out.vcf)
 

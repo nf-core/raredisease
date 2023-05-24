@@ -8,20 +8,20 @@ include { GENS as GENS_GENERATE                        } from '../../modules/loc
 
 workflow GENS {
     take:
-        ch_bam           // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_vcf           // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_fai           // channel: [mandatory] [ path(fai) ]
-        ch_interval_list // channel: [mandatory] [ path(interval_list) ]
-        ch_pon           // channel: [mandatory] [ path(pon) ]
-        ch_gnomad_pos    // channel: [mandatory] [ path(gnomad_pos) ]
-        ch_case_info     // channel: [mandatory] [ val(case_info) ]
-        ch_seq_dict      // channel: [mandatory] [ path(dict) ]
+        ch_bam_bai            // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_vcf                // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai         // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_interval_list      // channel: [mandatory] [ path(interval_list) ]
+        ch_pon                // channel: [mandatory] [ path(pon) ]
+        ch_gnomad_pos         // channel: [mandatory] [ path(gnomad_pos) ]
+        ch_case_info          // channel: [mandatory] [ val(case_info) ]
+        ch_genome_dictionary  // channel: [mandatory] [ val(meta), path(dict) ]
 
     main:
         ch_versions = Channel.empty()
 
-        COLLECTREADCOUNTS (ch_bam, ch_fasta, ch_fai, ch_seq_dict, ch_interval_list)
+        COLLECTREADCOUNTS (ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_sequence_dictionary, ch_interval_list)
 
         DENOISEREADCOUNTS (COLLECTREADCOUNTS.out.read_counts, ch_pon)
 
