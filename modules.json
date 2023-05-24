@@ -82,7 +82,7 @@
                     },
                     "expansionhunter": {
                         "branch": "master",
-                        "git_sha": "5e4835b5798eaef33d23d9a2939f2ca9d3a07d4d",
+                        "git_sha": "0260e5d22372eae434816d6970dedf3f5adc0053",
                         "installed_by": ["modules"]
                     },
                     "fastqc": {
@@ -287,7 +287,7 @@
                     },
                     "samtools/view": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "3ffae3598260a99e8db3207dead9f73f87f90d1f",
                         "installed_by": ["modules"]
                     },
                     "smncopynumbercaller": {
@@ -297,7 +297,7 @@
                     },
                     "stranger": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "0260e5d22372eae434816d6970dedf3f5adc0053",
                         "installed_by": ["modules"]
                     },
                     "svdb/merge": {

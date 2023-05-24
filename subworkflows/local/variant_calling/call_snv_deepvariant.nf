@@ -11,8 +11,8 @@ include { TABIX_TABIX as TABIX_GL                 } from '../../../modules/nf-co
 workflow CALL_SNV_DEEPVARIANT {
     take:
         ch_bam       // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_fasta     // channel: [mandatory] [ path(fasta) ]
-        ch_fai       // channel: [mandatory] [ path(fai) ]
+        ch_fasta     // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai       // channel: [mandatory] [ val(meta), path(fai) ]
         ch_case_info // channel: [mandatory] [ val(case_info) ]
 
     main:
@@ -23,7 +23,7 @@ workflow CALL_SNV_DEEPVARIANT {
             }
             .set { ch_deepvar_in }
 
-        DEEPVARIANT ( ch_deepvar_in, ch_fasta, ch_fai, [] )
+        DEEPVARIANT ( ch_deepvar_in, ch_fasta, ch_fai, [[],[]] )
         DEEPVARIANT.out.gvcf
             .collect{it[1]}
             .toList()

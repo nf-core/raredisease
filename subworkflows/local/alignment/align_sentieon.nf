@@ -12,8 +12,8 @@ include { SENTIEON_READWRITER     } from '../../../modules/local/sentieon/readwr
 workflow ALIGN_SENTIEON {
     take:
         ch_reads_input     // channel: [mandatory] [ val(meta), path(reads_input) ]
-        ch_fasta           // channel: [mandatory] [ path(fasta) ]
-        ch_fai             // channel: [mandatory] [ path(fai) ]
+        ch_fasta           // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai             // channel: [mandatory] [ val(meta), path(fai) ]
         ch_index           // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
         ch_known_dbsnp     // channel: [optional] [ path(known_dbsnp) ]
         ch_known_dbsnp_tbi // channel: [optional] [ path(known_dbsnp_tbi) ]

@@ -24,8 +24,7 @@ workflow MERGE_ANNOTATE_MT {
         ch_cadd_header         // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources      // channel: [mandatory] [ path(annotation) ]
         ch_genome_fasta        // channel: [mandatory] [ path(fasta) ]
-        ch_genome_dict_meta    // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_genome_dict_no_meta // channel: [mandatory] [ path(dict) ]
+        ch_genome_dict         // channel: [mandatory] [ val(meta), path(dict) ]
         ch_genome_fai          // channel: [mandatory] [ path(fai) ]
         ch_vcfanno_resources   // channel: [mandatory] [ path(resources) ]
         ch_vcfanno_toml        // channel: [mandatory] [ path(toml) ]
@@ -42,13 +41,13 @@ workflow MERGE_ANNOTATE_MT {
             .map{ meta, vcf1, vcf2 ->
             [meta, [vcf1, vcf2]]
         }
-        GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_vcfs, ch_genome_dict_meta)
+        GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_vcfs, ch_genome_dict)
 
         // Filtering Variants
         GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf
             .join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
             .set { ch_filt_vcf }
-        GATK4_VARIANTFILTRATION_MT (ch_filt_vcf, ch_genome_fasta, ch_genome_fai, ch_genome_dict_no_meta)
+        GATK4_VARIANTFILTRATION_MT (ch_filt_vcf, ch_genome_fasta, ch_genome_fai, ch_genome_dict)
 
         // Spliting multiallelic calls
         GATK4_VARIANTFILTRATION_MT.out.vcf
@@ -90,9 +89,10 @@ workflow MERGE_ANNOTATE_MT {
             }.set { ch_case_vcf }
 
         BCFTOOLS_MERGE_MT( ch_case_vcf.multiple,
-            [],
             ch_genome_fasta,
-            ch_genome_fai)
+            ch_genome_fai,
+            []
+        )
 
         BCFTOOLS_MERGE_MT.out.merged_variants
             .mix(ch_case_vcf.single)
@@ -123,11 +123,11 @@ workflow MERGE_ANNOTATE_MT {
         // Annotating with ensembl Vep
         ENSEMBLVEP_MT(
             ch_vep_in,
+            ch_genome_fasta,
             val_vep_genome,
             "homo_sapiens",
             val_vep_cache_version,
             ch_vep_cache,
-            ch_genome_fasta,
             []
         )
 

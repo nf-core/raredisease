@@ -20,9 +20,9 @@ workflow ALIGN_AND_CALL_MT {
         ch_ubam          // channel: [mandatory] [ val(meta), path(bam) ]
         ch_index_bwa     // channel: [mandatory for sentieon] [ val(meta), path(index) ]
         ch_index_bwamem2 // channel: [mandatory for bwamem2] [ val(meta), path(index) ]
-        ch_fasta         // channel: [mandatory] [ path(fasta) ]
-        ch_dict          // channel: [mandatory] [ path(dict) ]
-        ch_fai           // channel: [mandatory] [ path(fai) ]
+        ch_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_dict          // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_fai           // channel: [mandatory] [ val(meta), path(fai) ]
         ch_intervals_mt  // channel: [mandatory] [ path(interval_list) ]
 
     main:

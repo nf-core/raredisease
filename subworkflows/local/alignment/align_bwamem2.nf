@@ -14,8 +14,8 @@ workflow ALIGN_BWAMEM2 {
     take:
         ch_reads_input // channel: [mandatory] [ val(meta), path(reads_input) ]
         ch_index       // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
-        ch_fasta       // channel: [mandatory] [ path(fasta) ]
-        ch_fai         // channel: [mandatory] [ path(fai) ]
+        ch_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai         // channel: [mandatory] [ val(meta), path(fai) ]
         val_platform   // string:  [mandatory] default: illumina
 
     main:
@@ -28,7 +28,7 @@ workflow ALIGN_BWAMEM2 {
 
         // Get stats for each demultiplexed read pair.
         bam_sorted_indexed = BWAMEM2_MEM.out.bam.join(SAMTOOLS_INDEX_ALIGN.out.bai, failOnMismatch:true, failOnDuplicate:true)
-        SAMTOOLS_STATS ( bam_sorted_indexed, [] )
+        SAMTOOLS_STATS ( bam_sorted_indexed, [[],[]] )
 
         // Merge multiple lane samples and index
         BWAMEM2_MEM.out.bam

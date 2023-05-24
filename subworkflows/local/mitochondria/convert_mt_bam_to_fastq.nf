@@ -10,8 +10,8 @@ workflow CONVERT_MT_BAM_TO_FASTQ {
     take:
         ch_bam               // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_genome_fasta_meta // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai        // channel: [mandatory] [ path(fai) ]
-        ch_genome_dict       // channel: [mandatory] [ path(dict) ]
+        ch_genome_fai        // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_dict       // channel: [mandatory] [ val(meta), path(dict) ]
 
     main:
         ch_versions = Channel.empty()

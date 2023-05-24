@@ -5,10 +5,10 @@ process SENTIEON_DNASCOPE {
 
     input:
     tuple val(meta), path(bam), path(bai)
-    path fasta
-    path fai
-    tuple val(meta2), path(known_dbsnp)
-    tuple val(meta3), path(known_dbsnp_tbi)
+    tuple val(meta2), path(fasta)
+    tuple val(meta3), path(fai)
+    tuple val(meta4), path(known_dbsnp)
+    tuple val(meta5), path(known_dbsnp_tbi)
     path call_interval
     path ml_model
 
@@ -22,11 +22,11 @@ process SENTIEON_DNASCOPE {
     task.ext.when == null || task.ext.when
 
     script:
-    def args     = task.ext.args ?: ''
-    def args2    = task.ext.args2 ?: ''
-    def interval = call_interval ? "--interval ${call_interval}" : ''
-    def dbsnp    = known_dbsnp ? "-d ${known_dbsnp}" : ''
-    def model    = ml_model ? "--model ${ml_model}" : ''
+    def args     = task.ext.args   ?: ''
+    def args2    = task.ext.args2  ?: ''
+    def interval = call_interval   ? "--interval ${call_interval}" : ''
+    def dbsnp    = known_dbsnp     ? "-d ${known_dbsnp}"           : ''
+    def model    = ml_model        ? "--model ${ml_model}"         : ''
     def prefix   = task.ext.prefix ?: "${meta.id}"
 
     """

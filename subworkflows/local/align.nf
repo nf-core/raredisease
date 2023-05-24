@@ -9,8 +9,8 @@ include { SAMTOOLS_VIEW  } from '../../modules/nf-core/samtools/view/main'
 workflow ALIGN {
     take:
         ch_reads_input     // channel: [mandatory] [ val(meta), [path(reads)]  ]
-        ch_fasta           // channel: [mandatory] [ path(fasta) ]
-        ch_fai             // channel: [mandatory] [ path(fai) ]
+        ch_fasta           // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai             // channel: [mandatory] [ val(meta), path(fai) ]
         ch_index_bwa       // channel: [mandatory] [ val(meta), path(index) ]
         ch_index_bwamem2   // channel: [mandatory] [ val(meta), path(index) ]
         ch_known_dbsnp     // channel: [optional; used by sentieon] [ path(known_dbsnp) ]
