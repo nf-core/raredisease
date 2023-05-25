@@ -188,19 +188,22 @@ The mandatory and optional parameters for each category are tabulated below.
 
 | Mandatory                     | Optional                       |
 | ----------------------------- | ------------------------------ |
-| genome<sup>1</sup>            | gnomad_af<sup>4</sup>          |
-| vcfanno_resources<sup>2</sup> | reduced_penetrance<sup>5</sup> |
-| vcfanno_toml<sup>3</sup>      | vcfanno_lua                    |
-| vep_cache_version             | vep_filters<sup>6</sup>        |
-| vep_cache                     | score_config_snv<sup>7</sup>   |
+| genome<sup>1</sup>            | reduced_penetrance<sup>6</sup> |
+| vcfanno_resources<sup>2</sup> | vcfanno_lua                    |
+| vcfanno_toml<sup>3</sup>      | vep_filters<sup>7</sup>        |
+| vep_cache_version             |                                |
+| vep_cache                     |                                |
+| gnomad_af<sup>4</sup>         |                                |
+| score_config_snv<sup>5</sup>  |                                |
 
 <sup>1</sup>Genome version is used by VEP. You have the option to choose between GRCh37 and GRCh38.<br />
 <sup>2</sup>Path to VCF files and their indices used by vcfanno. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_resources.txt).<br />
 <sup>3</sup>Path to a vcfanno configuration file. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_config.toml).<br />
-<sup>4</sup>GnomAD VCF file can be downloaded from [here] (https://gnomad.broadinstitute.org/downloads).<br />
-<sup>5</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
-<sup>6</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into canditate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt).<br />
-<sup>7</sup>Used by GENMOD for ranking the variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_snv.ini).<br />
+<sup>4</sup> GnomAD VCF files can be downloaded from [here](https://gnomad.broadinstitute.org/downloads). The option `gnomad_af` expects a tab-delimited file with
+no header and the following columns: `CHROM POS REF_ALLELE ALT_ALLELE AF`. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/gnomad_reformated.tab.gz).<br />
+<sup>5</sup>Used by GENMOD for ranking the variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_snv.ini).<br />
+<sup>6</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
+<sup>7</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into canditate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt).<br />
 
 ##### 7. SV annotation & Ranking
 
