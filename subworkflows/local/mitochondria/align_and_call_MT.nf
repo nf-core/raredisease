@@ -14,7 +14,7 @@ include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } fr
 include { GATK4_FILTERMUTECTCALLS as  GATK4_FILTERMUTECTCALLS_MT            } from '../../../modules/nf-core/gatk4/filtermutectcalls/main'
 include { TABIX_TABIX as TABIX_TABIX_MT                                     } from '../../../modules/nf-core/tabix/tabix/main'
 include { SAMTOOLS_STATS as SAMTOOLS_STATS_MT                               } from '../../../modules/nf-core/samtools/stats/main'
-include { MT_DELETION                                                       } from '../../../modules/local/mt_deletion_scritp'
+include { MT_DELETION                                                       } from '../../../modules/local/mt_deletion_script'
 
 workflow ALIGN_AND_CALL_MT {
     take:
