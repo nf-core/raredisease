@@ -86,6 +86,6 @@ workflow ALIGN_AND_CALL_MT {
         filt_stats    = GATK4_FILTERMUTECTCALLS_MT.out.stats // channel: [ val(meta), path(tsv) ]
         txt           = HAPLOCHECK_MT.out.txt                // channel: [ val(meta), path(txt) ]
         html          = HAPLOCHECK_MT.out.html               // channel: [ val(meta), path(html) ]
-        mt_del_result = MT_DELETION.out.mt_del_script        // channel: [ val(meta), path(txt) ]
+        mt_del_result = MT_DELETION.out.mt_del_result        // channel: [ val(meta), path(txt) ]
         versions      = ch_versions                          // channel: [ path(versions.yml) ]
 }
