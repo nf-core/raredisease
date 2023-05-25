@@ -16,8 +16,8 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         val_vep_genome        // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version // string: [mandatory] default: 107
         ch_vep_cache          // channel: [mandatory] [ path(cache) ]
-        ch_fasta              // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_seq_dict           // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_dictionary  // channel: [mandatory] [ val(meta), path(dict) ]
 
     main:
         ch_versions = Channel.empty()
@@ -42,7 +42,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             ch_svdb_dbs.vcf_dbs.toList()
         )
 
-        PICARD_SORTVCF(SVDB_QUERY.out.vcf, ch_fasta, ch_seq_dict)
+        PICARD_SORTVCF(SVDB_QUERY.out.vcf, ch_genome_fasta, ch_genome_dictionary)
 
         PICARD_SORTVCF.out.vcf.map { meta, vcf -> return [meta,vcf,[]] }.set { ch_sortvcf }
 
@@ -50,7 +50,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
         ENSEMBLVEP_SV(
             BCFTOOLS_VIEW.out.vcf,
-            ch_fasta,
+            ch_genome_fasta,
             val_vep_genome,
             "homo_sapiens",
             val_vep_cache_version,

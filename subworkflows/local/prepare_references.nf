@@ -23,8 +23,8 @@ include { UNTAR as UNTAR_VEP_CACHE                           } from '../../modul
 
 workflow PREPARE_REFERENCES {
     take:
-        ch_fasta           // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_fasta_mt        // channel: [mandatory for dedicated mt analysis] [ val(meta), path(fasta) ]
+        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_mt_fasta        // channel: [mandatory for dedicated mt analysis] [ val(meta), path(fasta) ]
         ch_gnomad_af_tab   // channel: [optional; used in for snv annotation] [ val(meta), path(tab) ]
         ch_known_dbsnp     // channel: [optional; used only by sentieon] [ val(meta), path(vcf) ]
         ch_target_bed      // channel: [mandatory for WES] [ path(bed) ]
@@ -38,15 +38,15 @@ workflow PREPARE_REFERENCES {
         ch_sentieonbwa = Channel.empty()
 
         // Genome indices
-        BWA_INDEX_GENOME(ch_fasta).index.set{ch_bwa}
-        BWAMEM2_INDEX_GENOME(ch_fasta)
-        BWAMEM2_INDEX_SHIFT_MT(ch_fasta_mt)
-        SENTIEON_BWAINDEX_GENOME(ch_fasta).index.set{ch_sentieonbwa}
-        SENTIEON_BWAINDEX_SHIFT_MT(ch_fasta_mt)
-        SAMTOOLS_FAIDX_GENOME(ch_fasta)
-        SAMTOOLS_FAIDX_SHIFT_MT(ch_fasta_mt)
-        GATK_SD(ch_fasta)
-        GATK_SD_SHIFT_MT(ch_fasta_mt)
+        BWA_INDEX_GENOME(ch_genome_fasta).index.set{ch_bwa}
+        BWAMEM2_INDEX_GENOME(ch_genome_fasta)
+        BWAMEM2_INDEX_SHIFT_MT(ch_mt_fasta)
+        SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.set{ch_sentieonbwa}
+        SENTIEON_BWAINDEX_SHIFT_MT(ch_mt_fasta)
+        SAMTOOLS_FAIDX_GENOME(ch_genome_fasta)
+        SAMTOOLS_FAIDX_SHIFT_MT(ch_mt_fasta)
+        GATK_SD(ch_genome_fasta)
+        GATK_SD_SHIFT_MT(ch_mt_fasta)
         GET_CHROM_SIZES( SAMTOOLS_FAIDX_GENOME.out.fai )
 
         // Vcf, tab and bed indices
