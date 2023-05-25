@@ -10,9 +10,12 @@ include { GATK4_BEDTOINTERVALLIST as GATK_BILT               } from '../../modul
 include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD          } from '../../modules/nf-core/gatk4/createsequencedictionary/main'
 include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD_SHIFT_MT } from '../../modules/nf-core/gatk4/createsequencedictionary/main'
 include { GATK4_INTERVALLISTTOOLS as GATK_ILT                } from '../../modules/nf-core/gatk4/intervallisttools/main'
+include { GATK4_SHIFTFASTA as GATK_SHIFTFASTA                } from '../../modules/nf-core/gatk4/shiftfasta/main'
 include { GET_CHROM_SIZES                                    } from '../../modules/local/get_chrom_sizes'
+include { SAMTOOLS_FAIDX as SAMTOOLS_EXTRACT_MT              } from '../../modules/nf-core/samtools/faidx/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME            } from '../../modules/nf-core/samtools/faidx/main'
-include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_SHIFT_MT          } from '../../modules/nf-core/samtools/faidx/main'
+include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_MT                } from '../../modules/nf-core/samtools/faidx/main'
+include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_MT_SHIFT          } from '../../modules/nf-core/samtools/faidx/main'
 include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_GENOME      } from '../../modules/local/sentieon/bwamemindex'
 include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_SHIFT_MT    } from '../../modules/local/sentieon/bwamemindex'
 include { TABIX_BGZIPTABIX as TABIX_PBT                      } from '../../modules/nf-core/tabix/bgziptabix/main'
@@ -24,7 +27,8 @@ include { UNTAR as UNTAR_VEP_CACHE                           } from '../../modul
 workflow PREPARE_REFERENCES {
     take:
         ch_fasta           // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_fasta_mt        // channel: [mandatory for dedicated mt analysis] [ val(meta), path(fasta) ]
+        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_fasta_mt        // channel: [optional for dedicated mt analysis] [ val(meta), path(fasta) ]
         ch_gnomad_af_tab   // channel: [optional; used in for snv annotation] [ val(meta), path(tab) ]
         ch_known_dbsnp     // channel: [optional; used only by sentieon] [ val(meta), path(vcf) ]
         ch_target_bed      // channel: [mandatory for WES] [ path(bed) ]
@@ -40,14 +44,20 @@ workflow PREPARE_REFERENCES {
         // Genome indices
         BWA_INDEX_GENOME(ch_fasta).index.set{ch_bwa}
         BWAMEM2_INDEX_GENOME(ch_fasta)
-        BWAMEM2_INDEX_SHIFT_MT(ch_fasta_mt)
         SENTIEON_BWAINDEX_GENOME(ch_fasta).index.set{ch_sentieonbwa}
-        SENTIEON_BWAINDEX_SHIFT_MT(ch_fasta_mt)
-        SAMTOOLS_FAIDX_GENOME(ch_fasta)
-        SAMTOOLS_FAIDX_SHIFT_MT(ch_fasta_mt)
+        SAMTOOLS_FAIDX_GENOME(ch_fasta, [[],[]])
         GATK_SD(ch_fasta)
-        GATK_SD_SHIFT_MT(ch_fasta_mt)
         GET_CHROM_SIZES( SAMTOOLS_FAIDX_GENOME.out.fai )
+
+        // MT indices
+        BWAMEM2_INDEX_SHIFT_MT(ch_fasta_mt)
+        SENTIEON_BWAINDEX_SHIFT_MT(ch_fasta_mt)
+        ch_fai = Channel.empty().mix(ch_genome_fai, SAMTOOLS_FAIDX_GENOME.out.fai).collect()
+        SAMTOOLS_EXTRACT_MT(ch_fasta, ch_fai)
+        ch_mt_fasta = Channel.empty().mix(ch_genome_fai, SAMTOOLS_FAIDX_GENOME.out.fai).collect()
+        GATK_SD_SHIFT_MT(SAMTOOLS_EXTRACT_MT.out.fa)
+        SAMTOOLS_FAIDX_MT_SHIFT(SAMTOOLS_EXTRACT_MT.out.fa, [[],[]])
+        GATK_SHIFTFASTA(SAMTOOLS_EXTRACT_MT.out.fa,SAMTOOLS_FAIDX_MT_SHIFT.out.fai, GATK_SD_SHIFT_MT.out.dict)
 
         // Vcf, tab and bed indices
         TABIX_DBSNP(ch_known_dbsnp)
@@ -75,7 +85,7 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(SENTIEON_BWAINDEX_GENOME.out.versions)
         ch_versions = ch_versions.mix(SENTIEON_BWAINDEX_SHIFT_MT.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
-        ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_SHIFT_MT.out.versions)
+        ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_MT_SHIFT.out.versions)
         ch_versions = ch_versions.mix(GATK_SD.out.versions)
         ch_versions = ch_versions.mix(GATK_SD_SHIFT_MT.out.versions)
         ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
@@ -94,8 +104,8 @@ workflow PREPARE_REFERENCES {
         bwamem2_index          = BWAMEM2_INDEX_GENOME.out.index.collect()                         // channel: [ val(meta), path(index) ]
         bwamem2_index_mt_shift = BWAMEM2_INDEX_SHIFT_MT.out.index.collect()                       // channel: [ val(meta), path(index) ]
         chrom_sizes            = GET_CHROM_SIZES.out.sizes.collect()                              // channel: [ path(sizes) ]
-        fai                    = SAMTOOLS_FAIDX_GENOME.out.fai.collect()                          // channel: [ val(meta), path(fai) ]
-        fai_mt_shift           = SAMTOOLS_FAIDX_SHIFT_MT.out.fai.collect()                        // channel: [ val(meta), path(fai) ]
+        fai                    = ch_fai                                                           // channel: [ val(meta), path(fai) ]
+        fai_mt_shift           = SAMTOOLS_FAIDX_MT_SHIFT.out.fai.collect()                        // channel: [ val(meta), path(fai) ]
         gnomad_af_idx          = TABIX_GNOMAD_AF.out.tbi.collect()                                // channel: [ val(meta), path(fasta) ]
         known_dbsnp_tbi        = TABIX_DBSNP.out.tbi.collect()                                    // channel: [ val(meta), path(fasta) ]
         sequence_dict          = GATK_SD.out.dict.collect()                                       // channel: [ path(dict) ]
