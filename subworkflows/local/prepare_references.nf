@@ -101,28 +101,28 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
 
     emit:
-        genome_bwa_index       = Channel.empty().mix(ch_bwa, ch_sentieonbwa).collect()            // channel: [ val(meta), path(index) ]
-        genome_bwamem2_index   = BWAMEM2_INDEX_GENOME.out.index.collect()                         // channel: [ val(meta), path(index) ]
-        genome_chrom_sizes     = GET_CHROM_SIZES.out.sizes.collect()                              // channel: [ path(sizes) ]
-        genome_fai             = ch_fai                                                           // channel: [ val(meta), path(fai) ]
-        genome_dict            = GATK_SD.out.dict.collect()                                       // channel: [ path(dict) ]
+        genome_bwa_index      = Channel.empty().mix(ch_bwa, ch_sentieonbwa).collect()              // channel: [ val(meta), path(index) ]
+        genome_bwamem2_index  = BWAMEM2_INDEX_GENOME.out.index.collect()                           // channel: [ val(meta), path(index) ]
+        genome_chrom_sizes    = GET_CHROM_SIZES.out.sizes.collect()                                // channel: [ path(sizes) ]
+        genome_fai            = ch_fai                                                             // channel: [ val(meta), path(fai) ]
+        genome_dict           = GATK_SD.out.dict.collect()                                         // channel: [ path(dict) ]
 
-        mt_intervals           = GATK_SHIFTFASTA.out.intervals.collect()
-        mtshift_intervals      = GATK_SHIFTFASTA.out.shift_intervals.collect()
-        mtshift_backchain      = GATK_SHIFTFASTA.out.shift_back_chain.collect()
-        mtshift_fai            = GATK_SHIFTFASTA.out.shift_fai.collect()                          // channel: [ val(meta), path(fai) ]
-        mtshift_fasta          = GATK_SHIFTFASTA.out.shift_fa.collect()                          // channel: [ val(meta), path(fai) ]
-        mtshift_dict           = GATK_SHIFTFASTA.out.dict.collect()                               // channel: [ path(dict) ]
-        mtshift_bwa_index      = SENTIEON_BWAINDEX_MT_SHIFT.out.index.collect()                   // channel: [ val(meta), path(index) ]
-        mtshift_bwamem2_index  = BWAMEM2_INDEX_MT_SHIFT.out.index.collect()                       // channel: [ val(meta), path(index) ]
+        mt_intervals          = GATK_SHIFTFASTA.out.intervals.map{ meta, it -> it}.collect()       // channel: [ path(intervals) ]
+        mtshift_intervals     = GATK_SHIFTFASTA.out.shift_intervals.map{ meta, it -> it}.collect() // channel: [ path(intervals) ]
+        mtshift_backchain     = GATK_SHIFTFASTA.out.shift_back_chain.collect()
+        mtshift_fai           = GATK_SHIFTFASTA.out.shift_fai.collect()                            // channel: [ val(meta), path(fai) ]
+        mtshift_fasta         = GATK_SHIFTFASTA.out.shift_fa.collect()                             // channel: [ val(meta), path(fai) ]
+        mtshift_dict          = GATK_SHIFTFASTA.out.dict.collect()                                 // channel: [ path(dict) ]
+        mtshift_bwa_index     = SENTIEON_BWAINDEX_MT_SHIFT.out.index.collect()                     // channel: [ val(meta), path(index) ]
+        mtshift_bwamem2_index = BWAMEM2_INDEX_MT_SHIFT.out.index.collect()                         // channel: [ val(meta), path(index) ]
 
-        gnomad_af_idx          = TABIX_GNOMAD_AF.out.tbi.collect()                                // channel: [ val(meta), path(fasta) ]
-        known_dbsnp_tbi        = TABIX_DBSNP.out.tbi.collect()                                    // channel: [ val(meta), path(fasta) ]
-        target_bed             = Channel.empty().mix(ch_tbi, ch_bgzip_tbi).collect()              // channel: [ val(meta), path(bed), path(tbi) ]
-        bait_intervals         = CAT_CAT_BAIT.out.file_out.map{ meta, inter -> inter}.collect()   // channel: [ path(intervals) ]
-        target_intervals       = GATK_BILT.out.interval_list.map{ meta, inter -> inter}.collect() // channel: [ path(interval_list) ]
-        vep_resources          = UNTAR_VEP_CACHE.out.untar.map{meta, files -> [files]}.collect()  // channel: [ path(cache) ]
-        versions               = ch_versions                                                      // channel: [ path(versions.yml) ]
+        gnomad_af_idx         = TABIX_GNOMAD_AF.out.tbi.collect()                                  // channel: [ val(meta), path(fasta) ]
+        known_dbsnp_tbi       = TABIX_DBSNP.out.tbi.collect()                                      // channel: [ val(meta), path(fasta) ]
+        target_bed            = Channel.empty().mix(ch_tbi, ch_bgzip_tbi).collect()                // channel: [ val(meta), path(bed), path(tbi) ]
+        bait_intervals        = CAT_CAT_BAIT.out.file_out.map{ meta, inter -> inter}.collect()     // channel: [ path(intervals) ]
+        target_intervals      = GATK_BILT.out.interval_list.map{ meta, inter -> inter}.collect()   // channel: [ path(interval_list) ]
+        vep_resources         = UNTAR_VEP_CACHE.out.untar.map{meta, files -> [files]}.collect()    // channel: [ path(cache) ]
+        versions              = ch_versions                                                        // channel: [ path(versions.yml) ]
 
 }
 

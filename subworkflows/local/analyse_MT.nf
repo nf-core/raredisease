@@ -9,35 +9,35 @@ include { MERGE_ANNOTATE_MT                            } from './mitochondria/me
 
 workflow ANALYSE_MT {
     take:
-        ch_bam                    // channel: [mandatory] [ val(meta), file(bam), file(bai) ]
-        ch_cadd_header            // channel: [mandatory] [ path(txt) ]
-        ch_cadd_resources         // channel: [mandatory] [ path(annotation) ]
-        ch_genome_bwa_index       // channel: [mandatory] [ path(index) ]
-        ch_genome_bwamem2_index   // channel: [mandatory] [ path(index) ]
-        ch_genome_fasta           // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai             // channel: [mandatory] [ path(fai) ]
-        ch_genome_dict            // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_mt_intervals           // channel: [mandatory] [ path(interval_list) ]
-        ch_shift_mt_bwa_index     // channel: [mandatory] [ path(index) ]
-        ch_shift_mt_bwamem2_index // channel: [mandatory] [ path(index) ]
-        ch_shift_mt_fasta         // channel: [mandatory] [ path(fasta) ]
-        ch_shift_mt_dict          // channel: [mandatory] [ path(dict) ]
-        ch_shift_mt_fai           // channel: [mandatory] [ path(fai) ]
-        ch_shift_mt_intervals     // channel: [mandatory] [ path(interval_list) ]
-        ch_shift_mt_backchain     // channel: [mandatory] [ path(back_chain) ]
-        ch_vcfanno_resources      // channel: [mandatory] [ path(resources) ]
-        ch_vcfanno_toml           // channel: [mandatory] [ path(toml) ]
-        val_vep_genome            // string:  [mandatory] GRCh37 or GRCh38
-        val_vep_cache_version     // string:  [mandatory] 107
-        ch_vep_cache              // channel: [mandatory] [ path(cache) ]
-        ch_case_info              // channel: [mandatory] [ val(case_info) ]
+        ch_bam_bai               // channel: [mandatory] [ val(meta), file(bam), file(bai) ]
+        ch_cadd_header           // channel: [mandatory] [ path(txt) ]
+        ch_cadd_resources        // channel: [mandatory] [ path(annotation) ]
+        ch_genome_bwa_index      // channel: [mandatory] [ val(meta), path(index) ]
+        ch_genome_bwamem2_index  // channel: [mandatory] [ val(meta), path(index) ]
+        ch_genome_fasta          // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai            // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_dict           // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_mt_intervals          // channel: [mandatory] [ path(interval_list) ]
+        ch_mtshift_bwaindex      // channel: [mandatory] [ val(meta), path(index) ]
+        ch_mtshift_bwamem2index  // channel: [mandatory] [ val(meta), path(index) ]
+        ch_mtshift_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_mtshift_dict          // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_mtshift_fai           // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_mtshift_intervals     // channel: [mandatory] [ path(interval_list) ]
+        ch_mtshift_backchain     // channel: [mandatory] [ val(meta), path(back_chain) ]
+        ch_vcfanno_resources     // channel: [mandatory] [ path(resources) ]
+        ch_vcfanno_toml          // channel: [mandatory] [ path(toml) ]
+        val_vep_genome           // string:  [mandatory] GRCh37 or GRCh38
+        val_vep_cache_version    // string:  [mandatory] 107
+        ch_vep_cache             // channel: [mandatory] [ path(cache) ]
+        ch_case_info             // channel: [mandatory] [ val(case_info) ]
 
     main:
         ch_versions = Channel.empty()
 
         // PREPARING READS FOR MT ALIGNMENT
         CONVERT_MT_BAM_TO_FASTQ (
-            ch_bam,
+            ch_bam_bai,
             ch_genome_fasta,
             ch_genome_fai,
             ch_genome_dict
@@ -58,20 +58,20 @@ workflow ANALYSE_MT {
         ALIGN_AND_CALL_MT_SHIFT (
             CONVERT_MT_BAM_TO_FASTQ.out.fastq,
             CONVERT_MT_BAM_TO_FASTQ.out.bam,
-            ch_shift_mt_bwa_index,
-            ch_shift_mt_bwamem2_index,
-            ch_shift_mt_fasta,
-            ch_shift_mt_dict,
-            ch_shift_mt_fai,
-            ch_shift_mt_intervals
+            ch_mtshift_bwaindex,
+            ch_mtshift_bwamem2index,
+            ch_mtshift_fasta,
+            ch_mtshift_dict,
+            ch_mtshift_fai,
+            ch_mtshift_intervals
         )
 
         // LIFTOVER VCF FROM REFERENCE MT TO SHIFTED MT
         PICARD_LIFTOVERVCF (
             ALIGN_AND_CALL_MT_SHIFT.out.vcf,
             ch_genome_dict,
-            ch_shift_mt_backchain,
-            ch_genome_fasta
+            ch_genome_fasta,
+            ch_mtshift_backchain,
         )
 
         // MT MERGE AND ANNOTATE VARIANTS
