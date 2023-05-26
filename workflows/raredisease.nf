@@ -218,7 +218,7 @@ workflow RAREDISEASE {
                                                                            : Channel.value([])
 
     // Generate pedigree file
-    pedfile = CHECK_INPUT.out.samples.toList().map { makePed(it) }
+    ch_pedfile = CHECK_INPUT.out.samples.toList().map { makePed(it) }
 
     // Input QC
     FASTQC (CHECK_INPUT.out.reads)
@@ -264,7 +264,7 @@ workflow RAREDISEASE {
                                                                            : Channel.empty()
     ch_known_dbsnp_tbi              = params.known_dbsnp_tbi               ? Channel.fromPath(params.known_dbsnp_tbi).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.known_dbsnp_tbi.ifEmpty([[],[]])
-    ch_sequence_dictionary          = params.sequence_dictionary           ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_genome_dictionary          = params.sequence_dictionary           ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.sequence_dict
     ch_sequence_dictionary_mt_shift = params.mt_sequence_dictionary_shift  ? Channel.fromPath(params.mt_sequence_dictionary_shift).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.sequence_dict_mt_shift
@@ -276,7 +276,7 @@ workflow RAREDISEASE {
 
     // CREATE CHROMOSOME BED AND INTERVALS
     SCATTER_GENOME (
-        ch_sequence_dictionary,
+        ch_genome_dictionary,
         ch_genome_fai,
         ch_genome_fasta
     )
@@ -372,7 +372,7 @@ workflow RAREDISEASE {
     // ped correspondence, sex check, ancestry check
     PEDDY_CHECK (
         CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, failOnMismatch:true, failOnDuplicate:true),
-        pedfile
+        ch_pedfile
     )
     ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
 
@@ -381,13 +381,13 @@ workflow RAREDISEASE {
         GENS (
             ch_mapped.bam_bai,
             CALL_SNV.out.vcf,
-            ch_genome_fasta_meta,
-            ch_genome_fai_no_meta,
+            ch_genome_fasta,
+            ch_genome_fai,
             file(params.gens_interval_list),
             file(params.gens_pon),
             file(params.gens_gnomad_pos),
             CHECK_INPUT.out.case_info,
-            ch_sequence_dictionary_no_meta
+            ch_genome_dictionary
         )
         ch_versions = ch_versions.mix(GENS.out.versions)
     }
@@ -400,7 +400,7 @@ workflow RAREDISEASE {
             params.vep_cache_version,
             ch_vep_cache,
             ch_genome_fasta,
-            ch_sequence_dictionary
+            ch_genome_dictionary
         ).set {ch_sv_annotate}
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
@@ -412,7 +412,7 @@ workflow RAREDISEASE {
 
         RANK_VARIANTS_SV (
             ANN_CSQ_PLI_SV.out.vcf_ann,
-            pedfile,
+            ch_pedfile,
             ch_reduced_penetrance,
             ch_score_config_sv
         )
@@ -435,7 +435,7 @@ workflow RAREDISEASE {
             ch_bwamem2_index,
             ch_genome_fasta,
             ch_genome_fai,
-            ch_sequence_dictionary,
+            ch_genome_dictionary,
             ch_mt_intervals,
             ch_bwa_index_mt_shift,
             ch_bwamem2_index_mt_shift,
@@ -520,7 +520,7 @@ workflow RAREDISEASE {
 
         RANK_VARIANTS_SNV (
             ANN_CSQ_PLI_SNV.out.vcf_ann,
-            pedfile,
+            ch_pedfile,
             ch_reduced_penetrance,
             ch_score_config_snv
         )
