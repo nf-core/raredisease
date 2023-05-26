@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- GATK's ShiftFasta to generate all the files required for mitochondrial variant calling
+- GATK's ShiftFasta to generate all the files required for mitochondrial analysis
 - Feature to calculate CADD scores for indels
 
 ## v1.0.0 - [2023-03-31]
