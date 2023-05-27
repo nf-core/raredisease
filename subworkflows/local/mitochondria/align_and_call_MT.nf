@@ -28,14 +28,16 @@ workflow ALIGN_AND_CALL_MT {
     main:
         ch_versions = Channel.empty()
 
-        BWAMEM2_MEM_MT (ch_fastq , ch_bwamem2index, true)
+        BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, true)
 
         SENTIEON_BWAMEM_MT ( ch_fastq, ch_fasta, ch_fai, ch_bwaindex )
 
-        ch_mt_bam      = Channel.empty().mix(BWAMEM2_MEM_MT.out.bam, SENTIEON_BWAMEM_MT.out.bam)
-        ch_fastq_ubam  = ch_mt_bam.join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)
+        Channel.empty()
+            .mix(BWAMEM2_MEM_MT.out.bam, SENTIEON_BWAMEM_MT.out.bam)
+            .join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)
+            .set {ch_bam_ubam}
 
-        GATK4_MERGEBAMALIGNMENT_MT (ch_fastq_ubam, ch_fasta, ch_dict)
+        GATK4_MERGEBAMALIGNMENT_MT (ch_bam_ubam, ch_fasta, ch_dict)
 
         PICARD_ADDORREPLACEREADGROUPS_MT (GATK4_MERGEBAMALIGNMENT_MT.out.bam)
 
