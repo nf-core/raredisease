@@ -8,7 +8,8 @@ process MT_DELETION {
         'quay.io/biocontainers/samtools:1.16.1--h6899075_1' }"
 
     input:
-    tuple val(meta), path(stats)
+    tuple val(meta), path(input), path(input_index)
+    tuple val(meta2), path(fasta)
 
     output:
     tuple val(meta), path('*.txt'), emit: mt_del_result
@@ -18,15 +19,19 @@ process MT_DELETION {
     task.ext.when == null || task.ext.when
 
     script:
+    def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+    def reference = fasta ? "--reference ${fasta}" : ""
 
     """
-    grep -E ^IS $stats | awk 'BEGIN {sum=0} (\$2>=1200 && \$2<=15000) {sum=sum+\$3} (\$2<1200 || \$2>15000) {sum_norm=sum_norm+\$3} END \\
+    samtools stats --threads ${task.cpus} $args ${reference} ${input} | \\
+    grep -E ^IS | \\
+    awk 'BEGIN {sum=0} (\$2>=1200 && \$2<=15000) {sum=sum+\$3} (\$2<1200 || \$2>15000) {sum_norm=sum_norm+\$3} END \\
     {print "intermediate discordant ", sum, "normal ", sum_norm, "ratio ppk", sum*1000/(sum_norm+sum)}' 1> ${prefix}.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        mt_del: v1.0
+        samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
     END_VERSIONS
     """
 
@@ -37,7 +42,7 @@ process MT_DELETION {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        mt_del: v1.0
+        samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
     END_VERSIONS
     """
 }

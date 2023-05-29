@@ -13,7 +13,6 @@ include { HAPLOCHECK as HAPLOCHECK_MT                                       } fr
 include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } from '../../../modules/nf-core/gatk4/mutect2/main'
 include { GATK4_FILTERMUTECTCALLS as  GATK4_FILTERMUTECTCALLS_MT            } from '../../../modules/nf-core/gatk4/filtermutectcalls/main'
 include { TABIX_TABIX as TABIX_TABIX_MT                                     } from '../../../modules/nf-core/tabix/tabix/main'
-include { SAMTOOLS_STATS as SAMTOOLS_STATS_MT                               } from '../../../modules/nf-core/samtools/stats/main'
 include { MT_DELETION                                                       } from '../../../modules/local/mt_deletion_script'
 
 workflow ALIGN_AND_CALL_MT {
@@ -51,9 +50,7 @@ workflow ALIGN_AND_CALL_MT {
         ch_sort_index_bam        = SAMTOOLS_SORT_MT.out.bam.join(SAMTOOLS_INDEX_MT.out.bai, failOnMismatch:true, failOnDuplicate:true)
         ch_sort_index_bam_int_mt = ch_sort_index_bam.combine(ch_intervals)
 
-        SAMTOOLS_STATS_MT(ch_sort_index_bam, ch_fasta)
-
-        MT_DELETION(SAMTOOLS_STATS_MT.out.stats)
+        MT_DELETION(ch_sort_index_bam, ch_fasta)
 
         GATK4_MUTECT2_MT (ch_sort_index_bam_int_mt, ch_fasta, ch_fai, ch_dict, [], [], [],[])
 
@@ -75,7 +72,6 @@ workflow ALIGN_AND_CALL_MT {
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_SORT_MT.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MT.out.versions.first())
-        ch_versions = ch_versions.mix(SAMTOOLS_STATS_MT.out.versions.first())
         ch_versions = ch_versions.mix(MT_DELETION.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions.first())
         ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions.first())
