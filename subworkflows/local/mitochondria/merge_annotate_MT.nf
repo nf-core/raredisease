@@ -14,6 +14,7 @@ include { ENSEMBLVEP as ENSEMBLVEP_MT                           } from '../../..
 include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT         } from '../../../modules/nf-core/haplogrep2/classify/main'
 include { VCFANNO as VCFANNO_MT                                 } from '../../../modules/nf-core/vcfanno/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO                 } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { HMTNOTE_ANNOTATE as HMTNOTE_ANNOTATE                  } from '../../../modules/nf-core/hmtnote/annotate/main'
 
 workflow MERGE_ANNOTATE_MT {
     take:
@@ -106,7 +107,10 @@ workflow MERGE_ANNOTATE_MT {
         TABIX_TABIX_MT3(ENSEMBLVEP_MT.out.vcf_gz)
         ch_in_vcfanno = ENSEMBLVEP_MT.out.vcf_gz.join(TABIX_TABIX_MT3.out.tbi, failOnMismatch:true, failOnDuplicate:true)
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, [], ch_vcfanno_resources)
-        ZIP_TABIX_VCFANNO(VCFANNO_MT.out.vcf)
+
+        // HMTNOTE ANNOTATE
+        HMTNOTE_ANNOTATE(VCFANNO_MT.out.vcf)
+        ZIP_TABIX_VCFANNO(HMTNOTE_ANNOTATE.out.vcf)
 
         // Prepare output
         ch_vcf_out = ZIP_TABIX_VCFANNO.out.gz_tbi.map{meta, vcf, tbi -> return [meta, vcf] }
@@ -122,6 +126,7 @@ workflow MERGE_ANNOTATE_MT {
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
         ch_versions = ch_versions.mix(VCFANNO_MT.out.versions)
+        ch_versions = ch_versions.mix(HMTNOTE_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions)
 
     emit:
