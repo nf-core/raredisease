@@ -190,6 +190,11 @@
                         "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
                     },
+                    "hmtnote/annotate": {
+                        "branch": "master",
+                        "git_sha": "a746b933e61f43f8932aa2f867d5ec7f0ded352b",
+                        "installed_by": ["modules"]
+                    },
                     "manta/germline": {
                         "branch": "master",
                         "git_sha": "0460d316170f75f323111b4a2c0a2989f0c32013",

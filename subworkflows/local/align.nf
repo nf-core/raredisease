@@ -20,7 +20,7 @@ workflow ALIGN {
     main:
         ch_versions   = Channel.empty()
 
-        ALIGN_BWAMEM2 (
+        ALIGN_BWAMEM2 (             // Triggered when params.aligner is set as bwamem2
             ch_reads_input,
             ch_index_bwamem2,
             ch_fasta,
@@ -28,7 +28,7 @@ workflow ALIGN {
             val_platform
         )
 
-        ALIGN_SENTIEON (
+        ALIGN_SENTIEON (            // Triggered when params.aligner is set as sentieon
             ch_reads_input,
             ch_fasta,
             ch_fai,
