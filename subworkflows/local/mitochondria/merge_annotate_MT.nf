@@ -110,7 +110,7 @@ workflow MERGE_ANNOTATE_MT {
 
         // HMTNOTE ANNOTATE
         HMTNOTE_ANNOTATE(VCFANNO_MT.out.vcf)
-        ZIP_TABIX_VCFANNO(HMTNOTE_ANNOTATE.out.vcf)
+        ZIP_TABIX_HMTNOTE(HMTNOTE_ANNOTATE.out.vcf)
 
         // Prepare output
         ch_vcf_out = ZIP_TABIX_VCFANNO.out.gz_tbi.map{meta, vcf, tbi -> return [meta, vcf] }
