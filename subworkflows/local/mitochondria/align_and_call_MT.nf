@@ -18,26 +18,28 @@ include { MT_DELETION                                                       } fr
 
 workflow ALIGN_AND_CALL_MT {
     take:
-        ch_fastq         // channel: [mandatory] [ val(meta), [ path(reads) ] ]
-        ch_ubam          // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_index_bwa     // channel: [mandatory for sentieon] [ val(meta), path(index) ]
-        ch_index_bwamem2 // channel: [mandatory for bwamem2] [ val(meta), path(index) ]
-        ch_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_dict          // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_fai           // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_intervals_mt  // channel: [mandatory] [ path(interval_list) ]
+        ch_fastq        // channel: [mandatory] [ val(meta), [ path(reads) ] ]
+        ch_ubam         // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_bwaindex     // channel: [mandatory for sentieon] [ val(meta), path(index) ]
+        ch_bwamem2index // channel: [mandatory for bwamem2] [ val(meta), path(index) ]
+        ch_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_dict         // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_fai          // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_intervals    // channel: [mandatory] [ path(interval_list) ]
 
     main:
         ch_versions = Channel.empty()
 
-        BWAMEM2_MEM_MT (ch_fastq , ch_index_bwamem2, true)
+        BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, true)
 
-        SENTIEON_BWAMEM_MT ( ch_fastq, ch_fasta, ch_fai, ch_index_bwa )
+        SENTIEON_BWAMEM_MT ( ch_fastq, ch_fasta, ch_fai, ch_bwaindex )
 
-        ch_mt_bam      = Channel.empty().mix(BWAMEM2_MEM_MT.out.bam, SENTIEON_BWAMEM_MT.out.bam)
-        ch_fastq_ubam  = ch_mt_bam.join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)
+        Channel.empty()
+            .mix(BWAMEM2_MEM_MT.out.bam, SENTIEON_BWAMEM_MT.out.bam)
+            .join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)
+            .set {ch_bam_ubam}
 
-        GATK4_MERGEBAMALIGNMENT_MT (ch_fastq_ubam, ch_fasta, ch_dict)
+        GATK4_MERGEBAMALIGNMENT_MT (ch_bam_ubam, ch_fasta, ch_dict)
 
         PICARD_ADDORREPLACEREADGROUPS_MT (GATK4_MERGEBAMALIGNMENT_MT.out.bam)
 
@@ -47,7 +49,7 @@ workflow ALIGN_AND_CALL_MT {
 
         SAMTOOLS_INDEX_MT(SAMTOOLS_SORT_MT.out.bam)
         ch_sort_index_bam        = SAMTOOLS_SORT_MT.out.bam.join(SAMTOOLS_INDEX_MT.out.bai, failOnMismatch:true, failOnDuplicate:true)
-        ch_sort_index_bam_int_mt = ch_sort_index_bam.combine(ch_intervals_mt)
+        ch_sort_index_bam_int_mt = ch_sort_index_bam.combine(ch_intervals)
 
         SAMTOOLS_STATS_MT(ch_sort_index_bam, ch_fasta)
 
