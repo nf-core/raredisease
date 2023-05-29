@@ -213,9 +213,10 @@ no header and the following columns: `CHROM POS REF_ALLELE ALT_ALLELE AF`. Sampl
 | Mandatory                  | Optional           |
 | -------------------------- | ------------------ |
 | genome                     | reduced_penetrance |
-| svdb_query_dbs<sup>1</sup> | score_config_sv    |
+| svdb_query_dbs<sup>1</sup> |                    |
 | vep_cache_version          | vep_filters        |
 | vep_cache                  |                    |
+| score_config_sv            |                    |
 
 <sup>1</sup> A CSV file that describes the databases (VCFs) used by SVDB for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
 
