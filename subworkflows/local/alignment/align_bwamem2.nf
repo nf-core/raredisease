@@ -12,17 +12,17 @@ include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-c
 
 workflow ALIGN_BWAMEM2 {
     take:
-        ch_reads_input // channel: [mandatory] [ val(meta), path(reads_input) ]
-        ch_index       // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
-        ch_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_fai         // channel: [mandatory] [ val(meta), path(fai) ]
-        val_platform   // string:  [mandatory] default: illumina
+        ch_reads_input   // channel: [mandatory] [ val(meta), path(reads_input) ]
+        ch_bwamem2_index // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
+        ch_genome_fasta  // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai    // channel: [mandatory] [ val(meta), path(fai) ]
+        val_platform     // string:  [mandatory] default: illumina
 
     main:
         ch_versions = Channel.empty()
 
         // Map, sort, and index
-        BWAMEM2_MEM ( ch_reads_input, ch_index, true )
+        BWAMEM2_MEM ( ch_reads_input, ch_bwamem2_index, true )
 
         SAMTOOLS_INDEX_ALIGN ( BWAMEM2_MEM.out.bam )
 
@@ -45,11 +45,11 @@ workflow ALIGN_BWAMEM2 {
             .set{ bams }
 
         // If there are no samples to merge, skip the process
-        SAMTOOLS_MERGE ( bams.multiple, ch_fasta, ch_fai )
+        SAMTOOLS_MERGE ( bams.multiple, ch_genome_fasta, ch_genome_fai )
         prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
 
         // Marking duplicates
-        MARKDUPLICATES ( prepared_bam , ch_fasta, ch_fai )
+        MARKDUPLICATES ( prepared_bam , ch_genome_fasta, ch_genome_fai )
         SAMTOOLS_INDEX_MARKDUP ( MARKDUPLICATES.out.bam )
 
         ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions.first())
