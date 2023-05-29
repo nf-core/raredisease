@@ -73,11 +73,12 @@ def mandatoryParams = [
 ]
 
 if (!params.skip_snv_annotation) {
-    mandatoryParams += ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version"]
+    mandatoryParams += ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
+    "gnomad_af", "score_config_snv"]
 }
 
 if (!params.skip_sv_annotation) {
-    mandatoryParams += ["genome", "svdb_query_dbs", "vep_cache", "vep_cache_version"]
+    mandatoryParams += ["genome", "svdb_query_dbs", "vep_cache", "vep_cache_version", "score_config_sv"]
 }
 
 if (!params.skip_mt_analysis) {
