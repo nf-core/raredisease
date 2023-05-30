@@ -88,12 +88,16 @@ A samplesheet is used to pass the information about the sample(s), such as the p
 
 nf-core/raredisease will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The pedigree information in the samplesheet (sex and phenotype) should be provided as they would be for a [ped file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format) (i.e. 1 for male, 2 for female, other for unknown).
 
+The pipeline can also analyse BAM files with marked duplcates, if `--input_type` is set to `alignments`.
+In that case, `fastq_1` and `fastq_2` need not be provided, but instead the bam files should be provided in the `bam` column.
+
 | Fields        | Description                                                                                                                                                                            |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
 | `lane`        | Used to generate separate channels during the alignment step.                                                                                                                          |
 | `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
 | `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
+| `bam`         | Absolute path to BAM file with marked duplicates. This column should not be used if FASTQ files are provided. An index file with the same name as the BAM file with an extension .bai should also exist.                                           |
 | `sex`         | Sex (1=male; 2=female; other=unknown).                                                                                                                                                 |
 | `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                    |
 | `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                  |

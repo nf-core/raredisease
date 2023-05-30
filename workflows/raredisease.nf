@@ -234,8 +234,10 @@ workflow RAREDISEASE {
     pedfile = CHECK_INPUT.out.samples.toList().map { makePed(it) }
 
     // Input QC
-    FASTQC (CHECK_INPUT.out.reads)
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    if (params.input_type == "reads") {
+        FASTQC (CHECK_INPUT.out.reads)
+        ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    }
 
     // Prepare references and indices.
     PREPARE_REFERENCES (
@@ -297,18 +299,23 @@ workflow RAREDISEASE {
     ch_scatter_split_intervals  = ch_scatter.split_intervals  ?: Channel.empty()
 
     // ALIGNING READS, FETCH STATS, AND MERGE.
-    ALIGN (
-        CHECK_INPUT.out.reads,
-        ch_genome_fasta_no_meta,
-        ch_genome_fai_no_meta,
-        ch_bwa_index,
-        ch_bwamem2_index,
-        ch_known_dbsnp,
-        ch_known_dbsnp_tbi,
-        params.platform
-    )
-    .set { ch_mapped }
-    ch_versions   = ch_versions.mix(ALIGN.out.versions)
+    if (params.input_type == "reads") {
+        ALIGN (
+            CHECK_INPUT.out.reads,
+            ch_genome_fasta_no_meta,
+            ch_genome_fai_no_meta,
+            ch_bwa_index,
+            ch_bwamem2_index,
+            ch_known_dbsnp,
+            ch_known_dbsnp_tbi,
+            params.platform
+        )
+        .set { ch_mapped }
+        ch_versions   = ch_versions.mix(ALIGN.out.versions)
+    }
+    else if (params.input_type == "alignments") {
+        ch_mapped = CHECK_INPUT.out
+    }
 
     // BAM QUALITY CHECK
     QC_BAM (
@@ -336,6 +343,7 @@ workflow RAREDISEASE {
         ch_genome_fai_meta
     )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
+
 
     // STEP 1.7: SMNCOPYNUMBERCALLER
     ch_mapped.bam_bai
@@ -568,7 +576,9 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    if (params.input_type == "reads") {
+        ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    }
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.multiple_metrics.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.hs_metrics.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{it[1]}.collect().ifEmpty([]))

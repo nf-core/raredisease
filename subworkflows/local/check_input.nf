@@ -9,29 +9,61 @@ workflow CHECK_INPUT {
         ch_samplesheet // channel: [mandatory] [ path(csv) ]
 
     main:
-        SAMPLESHEET_CHECK ( ch_samplesheet )
-            .csv
-            .splitCsv ( header:true, sep:',' )
-            .set { sheet }
+        if (params.input_type == "reads") {
+            // TODO -- Checking is disabled for bam input, for testing
+            SAMPLESHEET_CHECK ( ch_samplesheet )
+                .csv
+                .splitCsv ( header:true, sep:',' )
+                .set { sheet }
+        }
+        else {
+            // TODO fix
+            sheet = ch_samplesheet.splitCsv ( header:true, sep:',' )
+        }
 
         case_info = sheet.first()
                         .map { create_case_channel(it) }
-        reads     = sheet.map { row -> [[row.sample.split('_')[0]], row] }
-                        .groupTuple()
-                        .map { meta, rows ->
-                            [rows, rows.size()]
-                        }
-                        .transpose()
-                        .map { row, numLanes ->
-                            create_fastq_channel(row + [num_lanes:numLanes])
-                        }
-        samples   = sheet.map { create_samples_channel(it) }
+
+
+        if (params.input_type == "reads") {
+            // Perform alignment
+            reads    = sheet.map { row -> [[row.sample.split('_')[0]], row] }
+                            .groupTuple()
+                            .map { meta, rows ->
+                                [rows, rows.size()]
+                            }
+                            .transpose()
+                            .map { row, numLanes ->
+                                create_fastq_channel(row + [num_lanes:numLanes])
+                            }
+            bam_bai   = Channel.empty()
+        }
+        else if (params.input_type == "alignments") {
+            // Input is bam files
+            reads          = Channel.empty()
+            bam_bai = sheet.map { row -> [[row.sample.split('_')[0]], row] }
+                            .groupTuple()
+                            .map { meta, rows ->
+                                [rows, rows.size()]
+                            }
+                            .transpose()
+                            .map { row, numLanes ->
+                                create_bam_bai_channel(row + [num_lanes:numLanes])
+                            }
+        }
+        samples     = sheet.map { create_samples_channel(it) }
+        // Create channels with either bam or bai, to mimic output of ALIGN subworkflow
+        marked_bam  = bam_bai.map { meta, bam, bai -> [meta, bam] }
+        marked_bai  = bam_bai.map { meta, bam, bai -> [meta, bai] }
 
     emit:
         case_info       // channel: [ val(case_info) ]
         reads           // channel: [ val(meta), [ path(reads) ] ]
+        marked_bam      // channel: [ val(meta), path(bam) ]
+        marked_bai      // channel: [ val(meta), path(bai) ]
+        bam_bai         // channel: [ val(meta), path(bam), path(bai) ]
         samples         // channel: [ val(sample_id), val(sex), val(phenotype), val(paternal_id), val(maternal_id), val(case_id) ]
-        versions  = SAMPLESHEET_CHECK.out.versions  // channel: [ path(versions.yml) ]
+        versions  = Channel.empty() //TODO!!!! SAMPLESHEET_CHECK.out.versions  // channel: [ path(versions.yml) ]
 }
 
 // Function to get list of [ meta, [ fastq_1, fastq_2 ] ]
@@ -63,6 +95,56 @@ def create_fastq_channel(LinkedHashMap row) {
         fastq_meta = [ meta, [ file(row.fastq_1), file(row.fastq_2) ] ]
     }
     return fastq_meta
+}
+
+// Function to get a tuple (meta, bam, bai)
+def create_bam_bai_channel(LinkedHashMap row) {
+    // create meta map
+    def meta        = [:]
+    meta.case_id    = row.case_id
+    meta.sex        = row.sex
+    meta.id         = row.sample
+    meta.maternal   = row.maternal_id
+    meta.paternal   = row.paternal_id
+    meta.phenotype  = row.phenotype
+
+    // add path(s) of the fastq file(s) to the meta map
+    def bam_meta = []
+    if (row.num_lanes != 1) {
+        error("ERROR: Only one BAM file per sample is allowed.\nFound ${row.num_lanes} files for sample ${row.sample}}")
+    }
+    if (!file(row.bam).exists()) {
+        error("ERROR: Please check input samplesheet -> BAM file does not exist!\n${row.bam}")
+    }
+    def bai_name = "${row.bam}.bai"
+    if (!file(row.bam).exists()) {
+        error("ERROR: BAM index file ${bai_name} not found for sample ${row.sample}.\n")
+    }
+    bam_meta = tuple(meta, file(row.bam), file(bai_name))
+    return bam_meta
+}
+
+// Function to get a tuple (meta, vcf)
+def create_vcf_channel(LinkedHashMap row) {
+    // create meta map
+    def meta        = [:]
+    meta.case_id    = row.case_id
+    meta.sex        = row.sex
+    meta.id         = row.sample
+    meta.maternal   = row.maternal_id
+    meta.paternal   = row.paternal_id
+    meta.phenotype  = row.phenotype
+
+    // add path(s) of the fastq file(s) to the meta map
+    def vcf_meta = []
+    if (row.num_lanes != 1) {
+        error("ERROR: Only one VCF file per sample is allowed.\nFound ${row.num_lanes} VCF files for sample ${row.sample}}")
+    }
+    if (!file(row.vcf).exists()) {
+        error("ERROR: Please check input samplesheet -> BAM file does not exist!\n${row.vcf}")
+    }
+    vcf_meta = [ meta, [ file(row.vcf) ] ]
+    return vcf_meta
 }
 
 // Function to get a list of metadata (e.g. pedigree, case id) from the sample; [ meta ]
