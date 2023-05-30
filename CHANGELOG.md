@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - GATK's ShiftFasta to generate all the files required for mitochondrial analysis
 - Feature to calculate CADD scores for indels
+- HmtNote to annotate mitochondria
+- MT del script to detect mitochondrial deltions
 
 ## v1.0.0 - [2023-03-31]
 
@@ -26,5 +28,3 @@ Initial release of nf-core/raredisease, created with the [nf-core](https://nf-co
 - SV annotation with SVDB query and vep
 - Separate workflow for analysing and annotating mitochondrial variants
 - Call copy number variants in the SMN gene using SMNCopyNumberCaller
-- HmtNote to annotate mitochondria
-- MT del script to detect mitochondrial deltions
