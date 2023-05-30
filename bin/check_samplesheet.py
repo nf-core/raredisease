@@ -35,6 +35,7 @@ class RowChecker:
         first_col="fastq_1",
         second_col="fastq_2",
         single_col="single_end",
+        case_id_col="case_id"
         **kwargs,
     ):
         """
@@ -50,6 +51,8 @@ class RowChecker:
             single_col (str): The name of the new column that will be inserted and
                 records whether the sample contains single- or paired-end sequencing
                 reads (default "single_end").
+            case_id_col (str): The name of the column that contains the case_id
+                (default "case_id").
 
         """
         super().__init__(**kwargs)
@@ -57,6 +60,7 @@ class RowChecker:
         self._first_col = first_col
         self._second_col = second_col
         self._single_col = single_col
+        self._case_id_col = case_id_col
         self._seen = set()
         self.modified = []
 
@@ -73,6 +77,7 @@ class RowChecker:
         self._validate_first(row)
         self._validate_second(row)
         self._validate_pair(row)
+        self._validate_case_id(row)
         self._seen.add((row[self._sample_col], row[self._first_col]))
         self.modified.append(row)
 
@@ -104,6 +109,13 @@ class RowChecker:
                 raise AssertionError("FASTQ pairs must have the same file extensions.")
         else:
             row[self._single_col] = True
+
+    def _validate_case_id(self, row):
+        """Assert that the case id exists and convert spaces to underscores."""
+        if len(row[self._case_id_col]) <= 0:
+            raise AssertionError("Case ID input is required.")
+        # Sanitize id slightly.
+        row[self._case_id_col] = row[self._case_id_col].replace(" ", "_")
 
     def _validate_fastq_format(self, filename):
         """Assert that a given filename has one of the expected FASTQ extensions."""
