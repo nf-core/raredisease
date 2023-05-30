@@ -102,6 +102,7 @@ workflow ANALYSE_MT {
         tbi           = MERGE_ANNOTATE_MT.out.tbi              // channel: [ val(meta), path(tbi) ]
         stats         = ALIGN_AND_CALL_MT.out.stats            // channel: [ val(meta), path(stats) ]
         filt_stats    = ALIGN_AND_CALL_MT.out.filt_stats       // channel: [ val(meta), path(tsv) ]
+        mt_del_result = ALIGN_AND_CALL_MT.out.mt_del_result    // channel: [ val(meta), path(txt) ]
         stats_sh      = ALIGN_AND_CALL_MT_SHIFT.out.stats      // channel: [ val(meta), path(stats) ]
         filt_stats_sh = ALIGN_AND_CALL_MT_SHIFT.out.filt_stats // channel: [ val(meta), path(tsv) ]
         haplog        = MERGE_ANNOTATE_MT.out.haplog           // channel: [ val(meta), path(txt) ]

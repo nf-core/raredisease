@@ -13,6 +13,7 @@ include { HAPLOCHECK as HAPLOCHECK_MT                                       } fr
 include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } from '../../../modules/nf-core/gatk4/mutect2/main'
 include { GATK4_FILTERMUTECTCALLS as  GATK4_FILTERMUTECTCALLS_MT            } from '../../../modules/nf-core/gatk4/filtermutectcalls/main'
 include { TABIX_TABIX as TABIX_TABIX_MT                                     } from '../../../modules/nf-core/tabix/tabix/main'
+include { MT_DELETION                                                       } from '../../../modules/local/mt_deletion_script'
 
 workflow ALIGN_AND_CALL_MT {
     take:
@@ -49,6 +50,8 @@ workflow ALIGN_AND_CALL_MT {
         ch_sort_index_bam        = SAMTOOLS_SORT_MT.out.bam.join(SAMTOOLS_INDEX_MT.out.bai, failOnMismatch:true, failOnDuplicate:true)
         ch_sort_index_bam_int_mt = ch_sort_index_bam.combine(ch_intervals)
 
+        MT_DELETION(ch_sort_index_bam, ch_fasta)
+
         GATK4_MUTECT2_MT (ch_sort_index_bam_int_mt, ch_fasta, ch_fai, ch_dict, [], [], [],[])
 
         HAPLOCHECK_MT (GATK4_MUTECT2_MT.out.vcf)
@@ -69,16 +72,18 @@ workflow ALIGN_AND_CALL_MT {
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_SORT_MT.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MT.out.versions.first())
+        ch_versions = ch_versions.mix(MT_DELETION.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions.first())
         ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
 
     emit:
-        vcf        = GATK4_FILTERMUTECTCALLS_MT.out.vcf   // channel: [ val(meta), path(vcf) ]
-        tbi        = GATK4_FILTERMUTECTCALLS_MT.out.tbi   // channel: [ val(meta), path(tbi) ]
-        stats      = GATK4_MUTECT2_MT.out.stats           // channel: [ val(meta), path(stats) ]
-        filt_stats = GATK4_FILTERMUTECTCALLS_MT.out.stats // channel: [ val(meta), path(tsv) ]
-        txt        = HAPLOCHECK_MT.out.txt                // channel: [ val(meta), path(txt) ]
-        html       = HAPLOCHECK_MT.out.html               // channel: [ val(meta), path(html) ]
-        versions   = ch_versions                          // channel: [ path(versions.yml) ]
+        vcf           = GATK4_FILTERMUTECTCALLS_MT.out.vcf   // channel: [ val(meta), path(vcf) ]
+        tbi           = GATK4_FILTERMUTECTCALLS_MT.out.tbi   // channel: [ val(meta), path(tbi) ]
+        stats         = GATK4_MUTECT2_MT.out.stats           // channel: [ val(meta), path(stats) ]
+        filt_stats    = GATK4_FILTERMUTECTCALLS_MT.out.stats // channel: [ val(meta), path(tsv) ]
+        txt           = HAPLOCHECK_MT.out.txt                // channel: [ val(meta), path(txt) ]
+        html          = HAPLOCHECK_MT.out.html               // channel: [ val(meta), path(html) ]
+        mt_del_result = MT_DELETION.out.mt_del_result        // channel: [ val(meta), path(txt) ]
+        versions      = ch_versions                          // channel: [ path(versions.yml) ]
 }
