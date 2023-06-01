@@ -8,36 +8,36 @@ on:
   release:
     types: [published]
 
-# Uncomment if we need an edge release of Nextflow again
-# env: NXF_EDGE: 1
+env:
+  NXF_ANSI_LOG: false
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}"
+  cancel-in-progress: true
 
 jobs:
   test:
-    name: Run workflow tests
+    name: Run pipeline with test data
     # Only run on push if this is the nf-core dev branch (merged PRs)
-    if: ${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'nf-core/raredisease') }}
+    if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'nf-core/raredisease') }}"
     runs-on: ubuntu-latest
-    env:
-      NXF_VER: ${{ matrix.nxf_ver }}
-      NXF_ANSI_LOG: false
     strategy:
       matrix:
-        # Nextflow versions: check pipeline minimum and current latest
-        nxf_ver: ['21.04.0', '']
+        NXF_VER:
+          - "22.10.1"
+          - "latest-everything"
+        parameters:
+          - "-profile test,docker"
+          - "-profile test_one_sample,docker"
     steps:
       - name: Check out pipeline code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Nextflow
-        env:
-          CAPSULE_LOG: none
-        run: |
-          wget -qO- get.nextflow.io | bash
-          sudo mv nextflow /usr/local/bin/
+        uses: nf-core/setup-nextflow@v1
+        with:
+          version: "${{ matrix.NXF_VER }}"
 
       - name: Run pipeline with test data
-        # TODO nf-core: You can customise CI pipeline run tests as required
-        # For example: adding multiple test runs with different parameters
-        # Remember that you can parallelise this by using strategy.matrix
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile test,docker
+          nextflow run ${GITHUB_WORKSPACE} ${{ matrix.parameters }} -stub --outdir ./results
