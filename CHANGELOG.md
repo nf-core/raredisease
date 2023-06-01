@@ -20,4 +20,4 @@ Initial release of nf-core/raredisease, created with the [nf-core](https://nf-co
 - SNV annotation with bcftools roh, vcfanno, and vep
 - SV annotation with SVDB query and vep
 - Separate workflow for analysing and annotating mitochondrial variants
-- Call copy number variants in the SMN gene using SMNCopyNumberCallerx
+- Call copy number variants in the SMN gene using SMNCopyNumberCaller
