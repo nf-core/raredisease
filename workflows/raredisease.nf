@@ -266,8 +266,8 @@ workflow RAREDISEASE {
                                                                            : ( ch_references.blacklist_bed            ?: Channel.empty() )
     ch_ploidy_priors                = params.ploidy_priors                 ? Channel.fromPath(params.ploidy_priors).collect()
                                                                            : ( ch_references.ploidy_priors            ?: Channel.empty() )
-    ch_plodiy_model                 = params.plodiy_model                  ? Channel.fromPath(params.plodiy_model).collect()
-                                                                           : ( ch_references.plodiy_model             ?: Channel.empty() )
+    ch_ploidy_model                 = params.ploidy_model                  ? Channel.fromPath(params.ploidy_model).collect()
+                                                                           : ( ch_references.ploidy_model             ?: Channel.empty() )
     ch_cnv_model                    = params.cnv_model                     ? Channel.fromPath(params.cnv_model).collect()
                                                                            : ( ch_references.cnv_model                ?: Channel.empty() )
     ch_chrom_sizes                  = ch_references.chrom_sizes
@@ -394,7 +394,7 @@ workflow RAREDISEASE {
         ch_fasta_dict,
         ch_blacklist_bed,
         ch_ploidy_priors,
-        ch_plodiy_model,
+        ch_ploidy_model,
         ch_cnv_model
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)

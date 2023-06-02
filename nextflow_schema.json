@@ -406,7 +406,7 @@
                     "default": "None",
                     "help_text": "When you are generating a ploidy model using GATK4 DetermineGermlineContigPloidy cohort, this path is required."
                 },
-                "plodiy_model": {
+                "ploidy_model": {
                     "type": "string",
                     "fa_icon": "fas fa-folder-open",
                     "description": "Tar gzipped directory containing the ploidy model files",

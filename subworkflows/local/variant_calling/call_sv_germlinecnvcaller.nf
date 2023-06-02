@@ -28,7 +28,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
 
         input = ch_bam_bai.combine( ch_target_bed.collect{ it[1] } )
 
-        GATK4_COLLECTREADCOUNTS ( input, ch_fasta_no_meta, ch_fai, ch_dict )
+        GATK4_COLLECTREADCOUNTS ( input, ch_fasta_no_meta, ch_fai, ch_dict, [] )
 
         dgcp_case_input = GATK4_COLLECTREADCOUNTS.out.tsv
                 .groupTuple()
