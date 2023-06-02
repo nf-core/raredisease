@@ -153,7 +153,7 @@ include { ANNOTATE_STRUCTURAL_VARIANTS          } from '../subworkflows/local/an
 include { CALL_REPEAT_EXPANSIONS                } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                              } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS              } from '../subworkflows/local/call_structural_variants'
-include { CHECK_INPUT                           } from '../subworkflows/local/check_input'
+include { CHECK_INPUT_FASTQ; CHECK_INPUT_BAM    } from '../subworkflows/local/check_input'
 include { GENS                                  } from '../subworkflows/local/gens'
 include { PREPARE_REFERENCES                    } from '../subworkflows/local/prepare_references'
 include { QC_BAM                                } from '../subworkflows/local/qc_bam'
@@ -178,8 +178,24 @@ workflow RAREDISEASE {
 
     // Initialize input channels
     ch_input = Channel.fromPath(params.input)
-    CHECK_INPUT (ch_input)
-    ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
+    
+    if (params.input_type == "reads") {
+        CHECK_INPUT_FASTQ (ch_input)
+        ch_versions = ch_versions.mix(CHECK_INPUT_FASTQ.out.versions)
+
+        ch_samples = CHECK_INPUT_FASTQ.out.samples
+        ch_case_info = CHECK_INPUT_FASTQ.out.case_info
+    }
+    else if (params.input_type == "alignments") {
+        CHECK_INPUT_BAM (ch_input)
+        ch_versions = ch_versions.mix(CHECK_INPUT_BAM.out.versions)
+
+        ch_samples = CHECK_INPUT_BAM.out.samples
+        ch_case_info = CHECK_INPUT_BAM.out.case_info
+    }
+    else {
+        error("Input type not recognised. Please specify either 'reads' or 'alignments'.")
+    }
 
     // Initialize all file channels including unprocessed vcf, bed and tab files
     ch_call_interval                  = params.call_interval                  ? Channel.fromPath(params.call_interval).collect()
@@ -229,13 +245,13 @@ workflow RAREDISEASE {
                                                                               : Channel.value([[],[]])
     ch_vep_filters                    = params.vep_filters                    ? Channel.fromPath(params.vep_filters).collect()
                                                                               : Channel.value([])
-
+                                                                              
     // Generate pedigree file
-    pedfile = CHECK_INPUT.out.samples.toList().map { makePed(it) }
+    pedfile = ch_samples.toList().map { makePed(it) }
 
     // Input QC
     if (params.input_type == "reads") {
-        FASTQC (CHECK_INPUT.out.reads)
+        FASTQC (CHECK_INPUT_FASTQ.out.reads)
         ch_versions = ch_versions.mix(FASTQC.out.versions.first())
     }
 
@@ -301,7 +317,7 @@ workflow RAREDISEASE {
     // ALIGNING READS, FETCH STATS, AND MERGE.
     if (params.input_type == "reads") {
         ALIGN (
-            CHECK_INPUT.out.reads,
+            CHECK_INPUT_FASTQ.out.reads,
             ch_genome_fasta_no_meta,
             ch_genome_fai_no_meta,
             ch_bwa_index,
@@ -314,7 +330,7 @@ workflow RAREDISEASE {
         ch_versions   = ch_versions.mix(ALIGN.out.versions)
     }
     else if (params.input_type == "alignments") {
-        ch_mapped = CHECK_INPUT.out
+        ch_mapped = CHECK_INPUT_BAM.out
     }
 
     // BAM QUALITY CHECK
@@ -336,7 +352,7 @@ workflow RAREDISEASE {
     CALL_REPEAT_EXPANSIONS (
         ch_mapped.bam_bai,
         ch_variant_catalog,
-        CHECK_INPUT.out.case_info,
+        ch_case_info,
         ch_genome_fasta_no_meta,
         ch_genome_fai_no_meta,
         ch_genome_fasta_meta,
@@ -356,7 +372,7 @@ workflow RAREDISEASE {
         .toList()
         .set { ch_bai_list }
 
-    CHECK_INPUT.out.case_info
+    ch_case_info
         .combine(ch_bam_list)
         .combine(ch_bai_list)
         .set { ch_bams_bais }
@@ -375,7 +391,7 @@ workflow RAREDISEASE {
         ch_known_dbsnp_tbi,
         ch_call_interval,
         ch_ml_model,
-        CHECK_INPUT.out.case_info
+        ch_case_info
     )
     ch_versions = ch_versions.mix(CALL_SNV.out.versions)
 
@@ -387,7 +403,7 @@ workflow RAREDISEASE {
         ch_genome_fasta_no_meta,
         ch_genome_fasta_meta,
         ch_genome_fai_no_meta,
-        CHECK_INPUT.out.case_info,
+        ch_case_info,
         ch_target_bed
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
@@ -409,7 +425,7 @@ workflow RAREDISEASE {
             file(params.gens_interval_list),
             file(params.gens_pon),
             file(params.gens_gnomad_pos),
-            CHECK_INPUT.out.case_info,
+            ch_case_info,
             ch_sequence_dictionary_no_meta
         )
         ch_versions = ch_versions.mix(GENS.out.versions)
@@ -472,7 +488,7 @@ workflow RAREDISEASE {
             params.genome,
             params.vep_cache_version,
             ch_vep_cache,
-            CHECK_INPUT.out.case_info
+            ch_case_info
         )
 
         ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
@@ -508,7 +524,7 @@ workflow RAREDISEASE {
             ch_genome_fasta_no_meta,
             ch_gnomad_af,
             ch_scatter_split_intervals,
-            CHECK_INPUT.out.samples
+            ch_samples
         ).set {ch_snv_annotate}
         ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 

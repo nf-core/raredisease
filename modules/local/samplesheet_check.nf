@@ -20,6 +20,7 @@ process SAMPLESHEET_CHECK {
     script: // This script is bundled with the pipeline, in nf-core/raredisease/bin/
     """
     check_samplesheet.py \\
+        --input-type $params.input_type \\
         $samplesheet \\
         samplesheet.valid.csv
 

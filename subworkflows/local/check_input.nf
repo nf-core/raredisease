@@ -4,53 +4,61 @@
 
 include { SAMPLESHEET_CHECK } from '../../modules/local/samplesheet_check'
 
-workflow CHECK_INPUT {
+workflow CHECK_INPUT_FASTQ {
     take:
         ch_samplesheet // channel: [mandatory] [ path(csv) ]
 
     main:
-        if (params.input_type == "reads") {
-            // TODO -- Checking is disabled for bam input, for testing
-            SAMPLESHEET_CHECK ( ch_samplesheet )
-                .csv
-                .splitCsv ( header:true, sep:',' )
-                .set { sheet }
-        }
-        else {
-            // TODO fix
-            sheet = ch_samplesheet.splitCsv ( header:true, sep:',' )
-        }
+        SAMPLESHEET_CHECK ( ch_samplesheet )
+            .csv
+            .splitCsv ( header:true, sep:',' )
+            .set { sheet }
 
         case_info = sheet.first()
                         .map { create_case_channel(it) }
+        reads     = sheet.map { row -> [[row.sample.split('_')[0]], row] }
+                        .groupTuple()
+                        .map { meta, rows ->
+                            [rows, rows.size()]
+                        }
+                        .transpose()
+                        .map { row, numLanes ->
+                            create_fastq_channel(row + [num_lanes:numLanes])
+                        }
+        samples   = sheet.map { create_samples_channel(it) }
+
+    emit:
+        case_info       // channel: [ val(case_info) ]
+        reads           // channel: [ val(meta), [ path(reads) ] ]
+        samples         // channel: [ val(sample_id), val(sex), val(phenotype), val(paternal_id), val(maternal_id), val(case_id) ]
+        versions  = SAMPLESHEET_CHECK.out.versions  // channel: [ path(versions.yml) ]
+}
 
 
-        if (params.input_type == "reads") {
-            // Perform alignment
-            reads    = sheet.map { row -> [[row.sample.split('_')[0]], row] }
-                            .groupTuple()
-                            .map { meta, rows ->
-                                [rows, rows.size()]
-                            }
-                            .transpose()
-                            .map { row, numLanes ->
-                                create_fastq_channel(row + [num_lanes:numLanes])
-                            }
-            bam_bai   = Channel.empty()
-        }
-        else if (params.input_type == "alignments") {
-            // Input is bam files
-            reads          = Channel.empty()
-            bam_bai = sheet.map { row -> [[row.sample.split('_')[0]], row] }
-                            .groupTuple()
-                            .map { meta, rows ->
-                                [rows, rows.size()]
-                            }
-                            .transpose()
-                            .map { row, numLanes ->
-                                create_bam_bai_channel(row + [num_lanes:numLanes])
-                            }
-        }
+workflow CHECK_INPUT_BAM {
+    take:
+        ch_samplesheet // channel: [mandatory] [ path(csv) ]
+
+    main:
+        SAMPLESHEET_CHECK ( ch_samplesheet )
+            .csv
+            .splitCsv ( header:true, sep:',' )
+            .set { sheet }
+                    
+        case_info = sheet.first()
+                        .map { create_case_channel(it) }
+
+        // Input is bam files
+        bam_bai = sheet.map { row -> [[row.sample.split('_')[0]], row] }
+                        .groupTuple()
+                        .map { meta, rows ->
+                            [rows, rows.size()]
+                        }
+                        .transpose()
+                        .map { row, numLanes ->
+                            create_bam_bai_channel(row + [num_lanes:numLanes])
+                        }
+
         samples     = sheet.map { create_samples_channel(it) }
         // Create channels with either bam or bai, to mimic output of ALIGN subworkflow
         marked_bam  = bam_bai.map { meta, bam, bai -> [meta, bam] }
@@ -58,7 +66,6 @@ workflow CHECK_INPUT {
 
     emit:
         case_info       // channel: [ val(case_info) ]
-        reads           // channel: [ val(meta), [ path(reads) ] ]
         marked_bam      // channel: [ val(meta), path(bam) ]
         marked_bai      // channel: [ val(meta), path(bai) ]
         bam_bai         // channel: [ val(meta), path(bam), path(bai) ]
@@ -103,10 +110,12 @@ def create_bam_bai_channel(LinkedHashMap row) {
     def meta        = [:]
     meta.case_id    = row.case_id
     meta.sex        = row.sex
-    meta.id         = row.sample
+    meta.id         = row.sample.split("_")[0]
     meta.maternal   = row.maternal_id
     meta.paternal   = row.paternal_id
     meta.phenotype  = row.phenotype
+    // Read group is not used for short variant calling & SV calling when input is BAM, but is required for MT analysis
+    meta.read_group = "\'@RG\\tID:"+ row.bam.split('/')[-1].replaceAll(/\.bam$/, "") + "\\tPL:ILLUMINA\\tSM:"+row.sample.split('_')[0]+"\'"
 
     // add path(s) of the fastq file(s) to the meta map
     def bam_meta = []
@@ -122,29 +131,6 @@ def create_bam_bai_channel(LinkedHashMap row) {
     }
     bam_meta = tuple(meta, file(row.bam), file(bai_name))
     return bam_meta
-}
-
-// Function to get a tuple (meta, vcf)
-def create_vcf_channel(LinkedHashMap row) {
-    // create meta map
-    def meta        = [:]
-    meta.case_id    = row.case_id
-    meta.sex        = row.sex
-    meta.id         = row.sample
-    meta.maternal   = row.maternal_id
-    meta.paternal   = row.paternal_id
-    meta.phenotype  = row.phenotype
-
-    // add path(s) of the fastq file(s) to the meta map
-    def vcf_meta = []
-    if (row.num_lanes != 1) {
-        error("ERROR: Only one VCF file per sample is allowed.\nFound ${row.num_lanes} VCF files for sample ${row.sample}}")
-    }
-    if (!file(row.vcf).exists()) {
-        error("ERROR: Please check input samplesheet -> BAM file does not exist!\n${row.vcf}")
-    }
-    vcf_meta = [ meta, [ file(row.vcf) ] ]
-    return vcf_meta
 }
 
 // Function to get a list of metadata (e.g. pedigree, case id) from the sample; [ meta ]
