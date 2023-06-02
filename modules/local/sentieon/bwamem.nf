@@ -7,9 +7,9 @@ process SENTIEON_BWAMEM {
 
     input:
     tuple val(meta), path(reads)
-    path fasta
-    path fai
-    tuple val(meta2), path(index) // meta2 has same purpose as meta, and holds information about the genome/index
+    tuple val(meta2), path(fasta)
+    tuple val(meta3), path(fai)
+    tuple val(meta4), path(index) // meta2 has same purpose as meta, and holds information about the genome/index
 
     output:
     tuple val(meta), path('*.bam'), emit: bam
@@ -20,8 +20,8 @@ process SENTIEON_BWAMEM {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
-    def args2 = task.ext.args2 ?: ''
+    def args   = task.ext.args   ?: ''
+    def args2  = task.ext.args2  ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     INDEX=`find -L ./ -name "*.amb" | sed 's/.amb//'`

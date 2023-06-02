@@ -7,8 +7,8 @@ process SENTIEON_DATAMETRICS {
 
     input:
     tuple val(meta), path(bam), path(bai)
-    path fasta
-    path fai
+    tuple val(meta2), path(fasta)
+    tuple val(meta3), path(fai)
 
     output:
     tuple val(meta), path('*mq_metrics.txt') , emit: mq_metrics
@@ -23,9 +23,9 @@ process SENTIEON_DATAMETRICS {
     task.ext.when == null || task.ext.when
 
     script:
-    def args   = task.ext.args ?: ''
+    def args   = task.ext.args   ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
     def input  = bam.sort().collect{"-i $it"}.join(' ')
-    def prefix       = task.ext.prefix ?: "${meta.id}"
     """
     if [ \${SENTIEON_LICENSE_BASE64:-"unset"} != "unset" ]; then
         echo "Initializing SENTIEON_LICENSE env variable"

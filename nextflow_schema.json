@@ -118,6 +118,13 @@
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
+                "cadd_resources": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to the directory containing cadd annotations.",
+                    "help_text": "This folder contains the uncompressed files that would otherwise be in data/annotation folder as described in https://github.com/kircherlab/CADD-scripts/#manual-installation."
+                },
                 "gnomad_af": {
                     "type": "string",
                     "format": "path",
@@ -155,22 +162,6 @@
                     "format": "path",
                     "description": "Name of the mitochondrial contig in the reference fasta file",
                     "help_text": "Used to extract relevant information from the references to analyse mitochondria"
-                },
-                "mt_intervals": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.intervals?(_list)?$",
-                    "description": "Path to the interval list of the non control mitochondral region.",
-                    "help_text": "Path to the interval list of the non control mitochondral regions for Mutect2"
-                },
-                "mt_intervals_shift": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.intervals?(\\_list)?$",
-                    "description": "Path to the interval list of the non control mitochondral region in shifted fasta.",
-                    "help_text": "Path to the interval list of the non control mitochondral regions in shifted fasta for Mutect2"
                 },
                 "known_dbsnp": {
                     "type": "string",
@@ -211,45 +202,13 @@
                     "description": "Path to sentieon machine learning model file.",
                     "hidden": true
                 },
-                "mt_fasta_shift": {
+                "mt_fasta": {
                     "type": "string",
                     "format": "file-path",
                     "mimetype": "text/plain",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to mitochondrial FASTA genome file.",
                     "fa_icon": "far fa-file-code"
-                },
-                "mt_fai_shift": {
-                    "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/plain",
-                    "pattern": "^\\S+\\.fn?a(sta)?\\.fai?$",
-                    "description": "Path to mitochondrial FASTA genome index file.",
-                    "fa_icon": "far fa-file-code"
-                },
-                "mt_bwa_index_shift": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "Directory for pre-built bwa index for shifted mitochondrial fasta (used for alignment with sentioen)",
-                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
-                    "fa_icon": "fas fa-folder-open",
-                    "hidden": true
-                },
-                "mt_bwamem2_index_shift": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "Directory for pre-built bwamem2 index for shifted mitochondrial fasta.",
-                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
-                    "fa_icon": "fas fa-folder-open",
-                    "hidden": true
-                },
-                "mt_backchain_shift": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "Chain file describing the alignment between the mitochondrial shifted fasta and typical mitochondrial fasta",
-                    "help_text": "For more information, check https://genome.ucsc.edu/goldenPath/help/chain.html",
-                    "fa_icon": "fas fa-folder-open",
-                    "hidden": true
                 },
                 "reduced_penetrance": {
                     "type": "string",
@@ -278,14 +237,6 @@
                     "fa_icon": "fas fa-chart-bar",
                     "pattern": "^\\S+\\.dict$",
                     "description": "Genome dictionary file",
-                    "hidden": true
-                },
-                "mt_sequence_dictionary_shift": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-chart-bar",
-                    "pattern": "^\\S+\\.dict$",
-                    "description": "Shifted mitochondrial genome dictionary file",
                     "hidden": true
                 },
                 "vep_filters": {
@@ -438,6 +389,12 @@
                     "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-book",
                     "enum": ["wgs", "wes", "mito"]
+                },
+                "save_mapped_as_cram": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
+                    "fa_icon": "fas fa-book"
                 },
                 "skip_snv_annotation": {
                     "type": "boolean",
