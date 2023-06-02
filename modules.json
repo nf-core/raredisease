@@ -62,17 +62,17 @@
                     },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
-                        "git_sha": "7101db4432d3268b7fcb5b8f75fa0a022dc5561b",
+                        "git_sha": "76cc4938c1f6ea5c7d83fed1eeffc146787f9543",
                         "installed_by": ["modules"]
                     },
                     "deepvariant": {
                         "branch": "master",
-                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
+                        "git_sha": "b9829e1064382745d8dff7f1d74d2138d2864f71",
                         "installed_by": ["modules"]
                     },
                     "expansionhunter": {
                         "branch": "master",
-                        "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
+                        "git_sha": "5e4835b5798eaef33d23d9a2939f2ca9d3a07d4d",
                         "installed_by": ["modules"]
                     },
                     "fastqc": {
@@ -215,6 +215,11 @@
                         "git_sha": "0f8a77ff00e65eaeebc509b8156eaa983192474b",
                         "installed_by": ["modules"]
                     },
+                    "hmtnote/annotate": {
+                        "branch": "master",
+                        "git_sha": "a746b933e61f43f8932aa2f867d5ec7f0ded352b",
+                        "installed_by": ["modules"]
+                    },
                     "manta/germline": {
                         "branch": "master",
                         "git_sha": "c8e35eb2055c099720a75538d1b8adb3fb5a464c",
@@ -227,7 +232,7 @@
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "ee80d14721e76e2e079103b8dcd5d57129e584ba",
+                        "git_sha": "f2d63bd5b68925f98f572eed70993d205cc694b7",
                         "installed_by": ["modules"]
                     },
                     "peddy": {
@@ -357,7 +362,7 @@
                     },
                     "untar": {
                         "branch": "master",
-                        "git_sha": "cc1f997fab6d8fde5dc0e6e2a310814df5b53ce7",
+                        "git_sha": "b9829e1064382745d8dff7f1d74d2138d2864f71",
                         "installed_by": ["modules"]
                     },
                     "vcfanno": {

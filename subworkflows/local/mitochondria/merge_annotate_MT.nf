@@ -13,7 +13,8 @@ include { TABIX_TABIX as TABIX_TABIX_MT3                        } from '../../..
 include { ENSEMBLVEP as ENSEMBLVEP_MT                           } from '../../../modules/local/ensemblvep/main'
 include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT         } from '../../../modules/nf-core/haplogrep2/classify/main'
 include { VCFANNO as VCFANNO_MT                                 } from '../../../modules/nf-core/vcfanno/main'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO                 } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { TABIX_BGZIPTABIX as ZIP_TABIX_HMTNOTE                 } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { HMTNOTE_ANNOTATE as HMTNOTE_ANNOTATE                  } from '../../../modules/nf-core/hmtnote/annotate/main'
 
 workflow MERGE_ANNOTATE_MT {
     take:
@@ -41,16 +42,22 @@ workflow MERGE_ANNOTATE_MT {
         GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_vcfs, ch_genome_dict_meta)
 
         // Filtering Variants
-        GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf.join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, by:[0]).set { ch_filt_vcf }
+        GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf
+            .join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .set { ch_filt_vcf }
         GATK4_VARIANTFILTRATION_MT (ch_filt_vcf, ch_genome_fasta, ch_genome_fai, ch_genome_dict_no_meta)
 
         // Spliting multiallelic calls
-        GATK4_VARIANTFILTRATION_MT.out.vcf.join(GATK4_VARIANTFILTRATION_MT.out.tbi, by:[0]).set { ch_in_split }
+        GATK4_VARIANTFILTRATION_MT.out.vcf
+            .join(GATK4_VARIANTFILTRATION_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .set { ch_in_split }
         SPLIT_MULTIALLELICS_MT (ch_in_split, ch_genome_fasta)
         TABIX_TABIX_MT(SPLIT_MULTIALLELICS_MT.out.vcf)
 
         // Removing duplicates and merging if there is more than one sample
-        SPLIT_MULTIALLELICS_MT.out.vcf.join(TABIX_TABIX_MT.out.tbi).set { ch_in_remdup }
+        SPLIT_MULTIALLELICS_MT.out.vcf
+            .join(TABIX_TABIX_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .set { ch_in_remdup }
         REMOVE_DUPLICATES_MT(ch_in_remdup, ch_genome_fasta)
         TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
 
@@ -98,13 +105,16 @@ workflow MERGE_ANNOTATE_MT {
 
         // Running vcfanno
         TABIX_TABIX_MT3(ENSEMBLVEP_MT.out.vcf_gz)
-        ch_in_vcfanno = ENSEMBLVEP_MT.out.vcf_gz.join(TABIX_TABIX_MT3.out.tbi, by: [0])
+        ch_in_vcfanno = ENSEMBLVEP_MT.out.vcf_gz.join(TABIX_TABIX_MT3.out.tbi, failOnMismatch:true, failOnDuplicate:true)
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, [], ch_vcfanno_resources)
-        ZIP_TABIX_VCFANNO(VCFANNO_MT.out.vcf)
+
+        // HMTNOTE ANNOTATE
+        HMTNOTE_ANNOTATE(VCFANNO_MT.out.vcf)
+        ZIP_TABIX_HMTNOTE(HMTNOTE_ANNOTATE.out.vcf)
 
         // Prepare output
-        ch_vcf_out = ZIP_TABIX_VCFANNO.out.gz_tbi.map{meta, vcf, tbi -> return [meta, vcf] }
-        ch_tbi_out = ZIP_TABIX_VCFANNO.out.gz_tbi.map{meta, vcf, tbi -> return [meta, tbi] }
+        ch_vcf_out = ZIP_TABIX_HMTNOTE.out.gz_tbi.map{meta, vcf, tbi -> return [meta, vcf] }
+        ch_tbi_out = ZIP_TABIX_HMTNOTE.out.gz_tbi.map{meta, vcf, tbi -> return [meta, tbi] }
 
         // Running haplogrep2
         HAPLOGREP2_CLASSIFY_MT(ch_in_vep, "vcf.gz")
@@ -116,6 +126,7 @@ workflow MERGE_ANNOTATE_MT {
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
         ch_versions = ch_versions.mix(VCFANNO_MT.out.versions)
+        ch_versions = ch_versions.mix(HMTNOTE_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions)
 
     emit:

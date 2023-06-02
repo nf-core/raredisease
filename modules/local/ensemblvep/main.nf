@@ -4,10 +4,10 @@ process ENSEMBLVEP {
 
     // Exit if running this module with -profile conda / -profile mamba
     if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
-        exit 1, "Local VEP module does not support Conda. Please use Docker / Singularity / Podman instead."
+        error("Local VEP module does not support Conda. Please use Docker / Singularity / Podman instead.")
     }
 
-    container "ensemblorg/ensembl-vep:release_107.0"
+    container "docker.io/ensemblorg/ensembl-vep:release_107.0"
 
     input:
     tuple val(meta), path(vcf)

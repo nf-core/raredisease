@@ -23,7 +23,7 @@ workflow CALL_SNV_DEEPVARIANT {
             }
             .set { ch_deepvar_in }
 
-        DEEPVARIANT ( ch_deepvar_in, ch_fasta, ch_fai )
+        DEEPVARIANT ( ch_deepvar_in, ch_fasta, ch_fai, [] )
         DEEPVARIANT.out.gvcf
             .collect{it[1]}
             .toList()

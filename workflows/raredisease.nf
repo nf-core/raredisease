@@ -15,7 +15,7 @@ def checkPathParamList = [
     params.bwamem2,
     params.call_interval,
     params.fasta,
-    params.fasta_fai,
+    params.fai,
     params.gens_gnomad_pos,
     params.gens_interval_list,
     params.gens_pon,
@@ -56,6 +56,57 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    CHECK MANDATORY PARAMETERS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+def mandatoryParams = [
+    "aligner",
+    "analysis_type",
+    "fasta",
+    "input",
+    "intervals_wgs",
+    "intervals_y",
+    "platform",
+    "variant_catalog",
+    "variant_caller"
+]
+
+if (!params.skip_snv_annotation) {
+    mandatoryParams += ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
+    "gnomad_af", "score_config_snv"]
+}
+
+if (!params.skip_sv_annotation) {
+    mandatoryParams += ["genome", "svdb_query_dbs", "vep_cache", "vep_cache_version", "score_config_sv"]
+}
+
+if (!params.skip_mt_analysis) {
+    mandatoryParams += ["genome", "mt_backchain_shift", "mito_name", "mt_fasta_shift", "mt_intervals",
+    "mt_intervals_shift", "vcfanno_resources", "vcfanno_toml", "vep_cache_version", "vep_cache"]
+}
+
+if (params.analysis_type.equals("wes")) {
+    mandatoryParams += ["target_bed"]
+}
+
+if (params.variant_caller.equals("sentieon")) {
+    mandatoryParams += ["ml_model"]
+}
+
+def missingParamsCount = 0
+for (param in mandatoryParams.unique()) {
+    if (params[param] == null) {
+        println("params." + param + " not set.")
+        missingParamsCount += 1
+    }
+}
+
+if (missingParamsCount>0) {
+    error("\nSet missing parameters and restart the run.")
+}
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CONFIG FILES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -77,7 +128,6 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 
 include { FILTER_VEP as FILTER_VEP_SNV          } from '../modules/local/filter_vep'
 include { FILTER_VEP as FILTER_VEP_SV           } from '../modules/local/filter_vep'
-include { MAKE_PED                              } from '../modules/local/create_pedfile'
 
 //
 // MODULE: Installed directly from nf-core/modules
@@ -127,23 +177,15 @@ workflow RAREDISEASE {
     ch_versions = Channel.empty()
 
     // Initialize input channels
-    if (params.input) {
-        ch_input = Channel.fromPath(params.input)
-        CHECK_INPUT (ch_input)
-        ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
-    } else {
-        exit 1, 'Input samplesheet not specified!'
-    }
-
-    if (params.variant_caller.equals("sentieon") && !params.ml_model) {
-        exit 1, 'Machine learning model not specified!'
-    }
+    ch_input = Channel.fromPath(params.input)
+    CHECK_INPUT (ch_input)
+    ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
 
     // Initialize all file channels including unprocessed vcf, bed and tab files
     ch_call_interval                  = params.call_interval                  ? Channel.fromPath(params.call_interval).collect()
                                                                               : Channel.value([])
     ch_genome_fasta_no_meta           = params.fasta                          ? Channel.fromPath(params.fasta).collect()
-                                                                              : ( exit 1, 'Genome fasta not specified!' )
+                                                                              : ( error('Genome fasta not specified!') )
     ch_genome_fasta_meta              = ch_genome_fasta_no_meta.map { it -> [[id:it[0].simpleName], it] }
     ch_gnomad_af_tab                  = params.gnomad_af                      ? Channel.fromPath(params.gnomad_af).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                               : Channel.value([[],[]])
@@ -153,7 +195,7 @@ workflow RAREDISEASE {
                                                                               : Channel.empty()
     ch_known_dbsnp                    = params.known_dbsnp                    ? Channel.fromPath(params.known_dbsnp).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                               : Channel.value([[],[]])
-    ch_ml_model                       = params.ml_model                       ? Channel.fromPath(params.ml_model).collect()
+    ch_ml_model                       = (params.variant_caller.equals("sentieon") && params.ml_model)      ? Channel.fromPath(params.ml_model).collect()
                                                                               : Channel.value([])
     ch_mt_backchain_shift             = params.mt_backchain_shift             ? Channel.fromPath(params.mt_backchain_shift).collect()
                                                                               : Channel.value([])
@@ -189,8 +231,7 @@ workflow RAREDISEASE {
                                                                               : Channel.value([])
 
     // Generate pedigree file
-    MAKE_PED (CHECK_INPUT.out.samples.toList())
-    ch_versions = ch_versions.mix(MAKE_PED.out.versions)
+    pedfile = CHECK_INPUT.out.samples.toList().map { makePed(it) }
 
     // Input QC
     FASTQC (CHECK_INPUT.out.reads)
@@ -230,9 +271,9 @@ workflow RAREDISEASE {
     ch_cnv_model                    = params.cnv_model                     ? Channel.fromPath(params.cnv_model).collect()
                                                                            : ( ch_references.cnv_model                ?: Channel.empty() )
     ch_chrom_sizes                  = ch_references.chrom_sizes
-    ch_genome_fai_no_meta           = params.fasta_fai                     ? Channel.fromPath(params.fasta_fai).collect()
+    ch_genome_fai_no_meta           = params.fai                           ? Channel.fromPath(params.fai).collect()
                                                                            : ch_references.fasta_fai
-    ch_genome_fai_meta              = params.fasta_fai                     ? Channel.fromPath(params.fasta_fai).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_genome_fai_meta              = params.fai                           ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.fasta_fai_meta
     ch_mt_shift_fai                 = params.mt_fai_shift                  ? Channel.fromPath(params.mt_fai_shift).collect()
                                                                            : ch_references.fasta_fai_mt_shift
@@ -300,7 +341,9 @@ workflow RAREDISEASE {
         ch_variant_catalog,
         CHECK_INPUT.out.case_info,
         ch_genome_fasta_no_meta,
-        ch_genome_fai_no_meta
+        ch_genome_fai_no_meta,
+        ch_genome_fasta_meta,
+        ch_genome_fai_meta
     )
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
 
@@ -358,8 +401,8 @@ workflow RAREDISEASE {
 
     // ped correspondence, sex check, ancestry check
     PEDDY_CHECK (
-        CALL_SNV.out.vcf.join(CALL_SNV.out.tabix),
-        MAKE_PED.out.ped
+        CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, failOnMismatch:true, failOnDuplicate:true),
+        pedfile
     )
     ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
 
@@ -399,7 +442,7 @@ workflow RAREDISEASE {
 
         RANK_VARIANTS_SV (
             ANN_CSQ_PLI_SV.out.vcf_ann,
-            MAKE_PED.out.ped,
+            pedfile,
             ch_reduced_penetrance,
             ch_score_config_sv
         )
@@ -447,7 +490,7 @@ workflow RAREDISEASE {
 
     if (!params.skip_snv_annotation) {
 
-        ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, by: [0])
+        ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, failOnMismatch:true, failOnDuplicate:true)
 
         if (!params.skip_mt_analysis) {
             ch_vcf
@@ -456,7 +499,7 @@ workflow RAREDISEASE {
 
             GATK4_SELECTVARIANTS(ch_selvar_in) // remove mitochondrial variants
 
-            ch_vcf = GATK4_SELECTVARIANTS.out.vcf.join(GATK4_SELECTVARIANTS.out.tbi, by: [0])
+            ch_vcf = GATK4_SELECTVARIANTS.out.vcf.join(GATK4_SELECTVARIANTS.out.tbi, failOnMismatch:true, failOnDuplicate:true)
             ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
         }
 
@@ -490,7 +533,7 @@ workflow RAREDISEASE {
                 .groupTuple()
                 .set { ch_merged_tbi }
 
-            ch_merged_vcf.join(ch_merged_tbi).set {ch_concat_in}
+            ch_merged_vcf.join(ch_merged_tbi, failOnMismatch:true, failOnDuplicate:true).set {ch_concat_in}
 
             BCFTOOLS_CONCAT (ch_concat_in)
             ch_snv_annotate = BCFTOOLS_CONCAT.out.vcf
@@ -505,7 +548,7 @@ workflow RAREDISEASE {
 
         RANK_VARIANTS_SNV (
             ANN_CSQ_PLI_SNV.out.vcf_ann,
-            MAKE_PED.out.ped,
+            pedfile,
             ch_reduced_penetrance,
             ch_score_config_snv
         )
@@ -573,6 +616,30 @@ workflow.onComplete {
     if (params.hook_url) {
         NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
     }
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    FUNCTIONS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+def makePed(samples) {
+
+    def case_name  = samples[0].case_id
+    def outfile  = file("${params.outdir}/pipeline_info/${case_name}" + '.ped')
+    outfile.text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\t')
+    def samples_list = []
+    for(int i = 0; i<samples.size(); i++) {
+        sample_tokenized   =  samples[i].id.tokenize("_")
+        sample_tokenized.removeLast()
+        sample_name        =  sample_tokenized.join("_")
+        if (!samples_list.contains(sample_name)) {
+            outfile.append('\n' + [samples[i].case_id, sample_name, samples[i].paternal, samples[i].maternal, samples[i].sex, samples[i].phenotype].join('\t'));
+            samples_list.add(sample_name)
+        }
+    }
+    return outfile
 }
 
 /*

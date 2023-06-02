@@ -14,10 +14,18 @@ workflow CHECK_INPUT {
             .splitCsv ( header:true, sep:',' )
             .set { sheet }
 
-        case_info    = sheet.first()
-                            .map { create_case_channel(it) }
-        reads        = sheet.map { create_fastq_channel(it) }
-        samples      = sheet.map { create_samples_channel(it) }
+        case_info = sheet.first()
+                        .map { create_case_channel(it) }
+        reads     = sheet.map { row -> [[row.sample.split('_')[0]], row] }
+                        .groupTuple()
+                        .map { meta, rows ->
+                            [rows, rows.size()]
+                        }
+                        .transpose()
+                        .map { row, numLanes ->
+                            create_fastq_channel(row + [num_lanes:numLanes])
+                        }
+        samples   = sheet.map { create_samples_channel(it) }
 
     emit:
         case_info       // channel: [ val(case_info) ]
@@ -29,27 +37,28 @@ workflow CHECK_INPUT {
 // Function to get list of [ meta, [ fastq_1, fastq_2 ] ]
 def create_fastq_channel(LinkedHashMap row) {
     // create meta map
-    def meta = [:]
-    meta.case_id   = row.case_id
-    meta.gender    = row.gender
-    meta.id        = row.sample
-    meta.maternal  = row.maternal_id
-    meta.paternal  = row.paternal_id
-    meta.phenotype = row.phenotype
-    meta.single_end   = row.single_end.toBoolean()
-    meta.read_group   =     "\'@RG\\tID:"+ row.fastq_1.split('/')[-1] + "\\tPL:ILLUMINA\\tSM:"+row.sample.split('_')[0]+"\'"
+    def meta        = [:]
+    meta.case_id    = row.case_id
+    meta.sex        = row.sex
+    meta.id         = row.sample
+    meta.maternal   = row.maternal_id
+    meta.paternal   = row.paternal_id
+    meta.phenotype  = row.phenotype
+    meta.single_end = row.single_end.toBoolean()
+    meta.num_lanes  = row.num_lanes
+    meta.read_group = "\'@RG\\tID:"+ row.fastq_1.split('/')[-1] + "\\tPL:ILLUMINA\\tSM:"+row.sample.split('_')[0]+"\'"
 
 
     // add path(s) of the fastq file(s) to the meta map
     def fastq_meta = []
     if (!file(row.fastq_1).exists()) {
-        exit 1, "ERROR: Please check input samplesheet -> Read 1 FastQ file does not exist!\n${row.fastq_1}"
+        error("ERROR: Please check input samplesheet -> Read 1 FastQ file does not exist!\n${row.fastq_1}")
     }
     if (meta.single_end) {
         fastq_meta = [ meta, [ file(row.fastq_1) ] ]
     } else {
         if (!file(row.fastq_2).exists()) {
-            exit 1, "ERROR: Please check input samplesheet -> Read 2 FastQ file does not exist!\n${row.fastq_2}"
+            error("ERROR: Please check input samplesheet -> Read 2 FastQ file does not exist!\n${row.fastq_2}")
         }
         fastq_meta = [ meta, [ file(row.fastq_1), file(row.fastq_2) ] ]
     }
@@ -60,7 +69,7 @@ def create_fastq_channel(LinkedHashMap row) {
 def create_samples_channel(LinkedHashMap row) {
     def sample       = [:]
     sample.id        = row.sample
-    sample.gender    = row.gender
+    sample.sex       = row.sex
     sample.phenotype = row.phenotype
     sample.maternal  = row.maternal_id
     sample.paternal  = row.paternal_id

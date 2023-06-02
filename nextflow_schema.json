@@ -48,6 +48,14 @@
             "fa_icon": "fas fa-dna",
             "description": "Reference genome related files and options required for the workflow.",
             "properties": {
+                "bait_padding": {
+                    "type": "number",
+                    "default": 100,
+                    "fa_icon": "fas fa-greater-than",
+                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "description": "The amount to pad each end of the target intervals to create bait intervals.",
+                    "hidden": true
+                },
                 "genome": {
                     "type": "string",
                     "description": "Name of iGenomes reference.",
@@ -63,7 +71,7 @@
                     "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
                     "fa_icon": "far fa-file-code"
                 },
-                "fasta_fai": {
+                "fai": {
                     "type": "string",
                     "format": "file-path",
                     "help_text": "If none provided, will be generated automatically from the FASTA reference",
@@ -496,7 +504,8 @@
                 },
                 "pcr_amplification": {
                     "type": "boolean",
-                    "description": "indicates whether the sample library is amplified using PCR or not. Set to false for PCR Free samples.",
+                    "default": false,
+                    "description": "Indicates whether the sample library is amplified using PCR or not. Set to false for PCR Free samples.",
                     "fa_icon": "fas fa-map-signs"
                 },
                 "variant_type": {
@@ -523,8 +532,8 @@
             "properties": {
                 "vep_cache_version": {
                     "type": "integer",
-                    "default": 107,
-                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
+                    "default": "107",
+                    "description": "Specify the version of the VEP cache provided to the `--vep_cache` option.",
                     "fa_icon": "fas fa-book",
                     "enum": [107]
                 }

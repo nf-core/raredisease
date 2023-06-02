@@ -2,7 +2,7 @@ process GENS {
     tag "$meta.id"
     label 'process_medium'
 
-    container 'raysloks/gens_preproc:1.0.1'
+    container 'docker.io/raysloks/gens_preproc:1.0.1'
 
     input:
     tuple val(meta), path(read_counts)
@@ -16,12 +16,6 @@ process GENS {
 
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def avail_mem = 6
-    if (!task.memory) {
-        log.info '[Gens] Available memory not known - defaulting to 6GB. Specify process memory requirements to change this.'
-    } else {
-        avail_mem = task.memory.giga
-    }
     """
     generate_gens_data.pl \\
         $read_counts \\

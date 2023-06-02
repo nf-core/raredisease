@@ -1,0 +1,8 @@
+reports:
+  multiqc_report.html:
+    display: "MultiQC HTML report"
+  samplesheet.valid.csv:
+    display: "Auto-created samplesheet with collated metadata and FASTQ paths"
+  "*.ped":
+    display: "Auto-created pedigree file"
+    mimeType: "text"

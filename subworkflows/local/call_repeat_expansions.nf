@@ -20,14 +20,17 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_case_info       // channel: [mandatory] [ val(case_id) ]
         ch_fasta           // channel: [mandatory] [ path(fasta) ]
         ch_fai             // channel: [mandatory] [ path(fai) ]
+        ch_fasta_meta      // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai_meta        // channel: [mandatory] [ val(meta), path(fai) ]
 
     main:
         ch_versions = Channel.empty()
 
         EXPANSIONHUNTER (
             ch_bam,
-            ch_fasta,
-            ch_variant_catalog
+            ch_fasta_meta,
+            ch_fai_meta,
+            ch_variant_catalog.map { it -> [[id:it[0].simpleName],it]}
         )
 
         // Fix header and rename sample
@@ -40,7 +43,7 @@ workflow CALL_REPEAT_EXPANSIONS {
 
         // Split multi allelelic
         SPLIT_MULTIALLELICS_EXP (
-            RENAMESAMPLE_EXP.out.vcf.join(TABIX_EXP_RENAME.out.tbi),
+            RENAMESAMPLE_EXP.out.vcf.join(TABIX_EXP_RENAME.out.tbi, failOnMismatch:true, failOnDuplicate:true),
             ch_fasta
         )
 
@@ -48,10 +51,13 @@ workflow CALL_REPEAT_EXPANSIONS {
         SPLIT_MULTIALLELICS_EXP.out.vcf
             .collect{it[1]}
             .toList()
+            .collect()
             .set {ch_exp_vcfs}
+
         ch_case_info
             .combine(ch_exp_vcfs)
             .set {ch_svdb_merge_input}
+
         SVDB_MERGE_REPEATS ( ch_svdb_merge_input, [] )
 
         // Annotate, compress and index
@@ -61,6 +67,8 @@ workflow CALL_REPEAT_EXPANSIONS {
              [], [], []
         )
         INDEX_STRANGER ( COMPRESS_STRANGER.out.vcf )
+
+        ch_vcf_idx = COMPRESS_STRANGER.out.vcf.join(INDEX_STRANGER.out.tbi, failOnMismatch:true, failOnDuplicate:true)
 
         ch_versions = ch_versions.mix(EXPANSIONHUNTER.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_EXP.out.versions.first())
@@ -73,6 +81,6 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_versions = ch_versions.mix(INDEX_STRANGER.out.versions.first())
 
  emit:
-        vcf      = COMPRESS_STRANGER.out.vcf.join(INDEX_STRANGER.out.tbi) // channel: [ val(meta), path(vcf), path(tbi) ]
-        versions = ch_versions                                            // channel: [ path(versions.yml) ]
+        vcf      = ch_vcf_idx  // channel: [ val(meta), path(vcf), path(tbi) ]
+        versions = ch_versions  // channel: [ path(versions.yml) ]
 }
