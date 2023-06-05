@@ -24,9 +24,9 @@ workflow MERGE_ANNOTATE_MT {
         ch_vcf2                // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_cadd_header         // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources      // channel: [mandatory] [ path(annotation) ]
-        ch_genome_fasta        // channel: [mandatory] [ path(fasta) ]
+        ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_dict         // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_genome_fai          // channel: [mandatory] [ path(fai) ]
+        ch_genome_fai          // channel: [mandatory] [ val(meta), path(fai) ]
         ch_vcfanno_resources   // channel: [mandatory] [ path(resources) ]
         ch_vcfanno_toml        // channel: [mandatory] [ path(toml) ]
         val_vep_genome         // string:  [mandatory] GRCh37 or GRCh38
