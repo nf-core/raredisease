@@ -157,7 +157,7 @@
                     },
                     "gatk4/preprocessintervals": {
                         "branch": "master",
-                        "git_sha": "643756685546fa61f5c8fba439af746c090b9180",
+                        "git_sha": "1226419498a14d17f98d12d6488d333b0dbd0418",
                         "installed_by": ["modules"]
                     },
                     "gatk4/printreads": {
