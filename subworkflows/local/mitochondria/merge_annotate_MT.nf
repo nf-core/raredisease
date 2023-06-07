@@ -14,9 +14,9 @@ include { TABIX_TABIX as TABIX_TABIX_MT3                        } from '../../..
 include { ENSEMBLVEP as ENSEMBLVEP_MT                           } from '../../../modules/local/ensemblvep/main'
 include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT         } from '../../../modules/nf-core/haplogrep2/classify/main'
 include { VCFANNO as VCFANNO_MT                                 } from '../../../modules/nf-core/vcfanno/main'
+include { ANNOTATE_CADD                                         } from '../annotation/annotate_cadd'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_HMTNOTE                 } from '../../../modules/nf-core/tabix/bgziptabix/main'
 include { HMTNOTE_ANNOTATE as HMTNOTE_ANNOTATE                  } from '../../../modules/nf-core/hmtnote/annotate/main'
-include { ANNOTATE_CADD                                         } from '../annotation/annotate_cadd'
 
 workflow MERGE_ANNOTATE_MT {
     take:

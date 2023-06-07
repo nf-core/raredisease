@@ -23,7 +23,7 @@ workflow CALL_SNV {
         ch_vcf        = Channel.empty()
         ch_tabix      = Channel.empty()
 
-        CALL_SNV_DEEPVARIANT (     // triggered only when params.variant_caller is set as deepvariant
+        CALL_SNV_DEEPVARIANT (      // triggered only when params.variant_caller is set as deepvariant
             ch_bam_bai,
             ch_genome_fasta,
             ch_genome_fai,
