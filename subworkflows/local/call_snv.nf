@@ -9,9 +9,9 @@ include { GATK4_SELECTVARIANTS } from '../../modules/nf-core/gatk4/selectvariant
 
 workflow CALL_SNV {
     take:
-        ch_input           // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_fasta           // channel: [mandatory] [ path(fasta) ]
-        ch_fai             // channel: [mandatory] [ path(fai) ]
+        ch_bam_bai           // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
         ch_known_dbsnp     // channel: [optional] [ val(meta), path(vcf) ]
         ch_known_dbsnp_tbi // channel: [optional] [ val(meta), path(tbi) ]
         ch_call_interval   // channel: [mandatory] [ path(intervals) ]
@@ -24,16 +24,16 @@ workflow CALL_SNV {
         ch_tabix      = Channel.empty()
 
         CALL_SNV_DEEPVARIANT (      // triggered only when params.variant_caller is set as deepvariant
-            ch_input,
-            ch_fasta,
-            ch_fai,
+            ch_bam_bai,
+            ch_genome_fasta,
+            ch_genome_fai,
             ch_case_info
         )
 
-        CALL_SNV_SENTIEON(          // triggered only when params.variant_caller is set as sentieon
-            ch_input,
-            ch_fasta,
-            ch_fai,
+        CALL_SNV_SENTIEON(         // triggered only when params.variant_caller is set as sentieon
+            ch_bam_bai,
+            ch_genome_fasta,
+            ch_genome_fai,
             ch_known_dbsnp,
             ch_known_dbsnp_tbi,
             ch_call_interval,

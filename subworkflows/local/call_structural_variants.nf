@@ -10,25 +10,24 @@ include { TABIX_TABIX       } from '../../modules/nf-core/tabix/tabix/main'
 workflow CALL_STRUCTURAL_VARIANTS {
 
     take:
-        ch_bam            // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_bai            // channel: [mandatory] [ val(meta), path(bai) ]
-        ch_bam_bai        // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_bwa_index      // channel: [mandatory] [ val(meta), path(index)]
-        ch_fasta_no_meta  // channel: [mandatory] [ path(fasta) ]
-        ch_fasta_meta     // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_fai            // channel: [mandatory] [ path(fai) ]
-        ch_case_info      // channel: [mandatory] [ val(case_info) ]
-        ch_target_bed     // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
+        ch_bam          // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_bai          // channel: [mandatory] [ val(meta), path(bai) ]
+        ch_bam_bai      // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_bwa_index    // channel: [mandatory] [ val(meta), path(index)]
+        ch_genome_fasta // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai   // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_case_info    // channel: [mandatory] [ val(case_info) ]
+        ch_target_bed   // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
 
     main:
         ch_versions = Channel.empty()
 
-        CALL_SV_MANTA (ch_bam, ch_bai, ch_fasta_no_meta, ch_fai, ch_case_info, ch_target_bed)
+        CALL_SV_MANTA (ch_bam, ch_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_target_bed)
             .diploid_sv_vcf
             .collect{it[1]}
             .set{ manta_vcf }
 
-        CALL_SV_TIDDIT (ch_bam_bai, ch_fasta_meta, ch_bwa_index, ch_case_info)
+        CALL_SV_TIDDIT (ch_bam_bai, ch_genome_fasta, ch_bwa_index, ch_case_info)
             .vcf
             .collect{it[1]}
             .set { tiddit_vcf }

@@ -10,20 +10,20 @@ include { TABIX_TABIX as TABIX_GL                 } from '../../../modules/nf-co
 
 workflow CALL_SNV_DEEPVARIANT {
     take:
-        ch_bam       // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_fasta     // channel: [mandatory] [ path(fasta) ]
-        ch_fai       // channel: [mandatory] [ path(fai) ]
-        ch_case_info // channel: [mandatory] [ val(case_info) ]
+        ch_bam_bai      // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_fasta // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai   // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_case_info    // channel: [mandatory] [ val(case_info) ]
 
     main:
         ch_versions = Channel.empty()
 
-        ch_bam.map { meta, bam, bai ->
+        ch_bam_bai.map { meta, bam, bai ->
                         return [meta, bam, bai, []]
             }
             .set { ch_deepvar_in }
 
-        DEEPVARIANT ( ch_deepvar_in, ch_fasta, ch_fai, [] )
+        DEEPVARIANT ( ch_deepvar_in, ch_genome_fasta, ch_genome_fai, [[],[]] )
         DEEPVARIANT.out.gvcf
             .collect{it[1]}
             .toList()
@@ -39,12 +39,12 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_split_multi_in = GLNEXUS.out.bcf
                             .map{ meta, bcf ->
                                     return [meta, bcf, []] }
-        SPLIT_MULTIALLELICS_GL (ch_split_multi_in, ch_fasta)
+        SPLIT_MULTIALLELICS_GL (ch_split_multi_in, ch_genome_fasta)
 
         ch_remove_dup_in = SPLIT_MULTIALLELICS_GL.out.vcf
                             .map{ meta, vcf ->
                                     return [meta, vcf, []] }
-        REMOVE_DUPLICATES_GL (ch_remove_dup_in, ch_fasta)
+        REMOVE_DUPLICATES_GL (ch_remove_dup_in, ch_genome_fasta)
 
         TABIX_GL (REMOVE_DUPLICATES_GL.out.vcf)
 

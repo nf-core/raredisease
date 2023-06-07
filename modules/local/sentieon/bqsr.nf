@@ -7,10 +7,10 @@ process SENTIEON_BQSR {
 
     input:
     tuple val(meta), path(bam), path(bai)
-    path fasta
-    path fai
-    tuple val(meta2), path(known_dbsnp)
-    tuple val(meta3), path(known_dbsnp_tbi)
+    tuple val(meta2), path(fasta)
+    tuple val(meta3), path(fai)
+    tuple val(meta4), path(known_dbsnp)
+    tuple val(meta5), path(known_dbsnp_tbi)
 
     output:
     tuple val(meta), path('*.bam')       , emit: bam
@@ -24,12 +24,12 @@ process SENTIEON_BQSR {
     task.ext.when == null || task.ext.when
 
     script:
-    def args   = task.ext.args  ?: ''
-    def args2  = task.ext.args2 ?: ''
-    def args3  = task.ext.args3 ?: ''
-    def input  = bam.sort().collect{"-i $it"}.join(' ')
-    def dbsnp  = known_dbsnp  ? "-k $known_dbsnp" : ''
+    def args   = task.ext.args   ?: ''
+    def args2  = task.ext.args2  ?: ''
+    def args3  = task.ext.args3  ?: ''
+    def dbsnp  = known_dbsnp     ? "-k $known_dbsnp" : ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+    def input  = bam.sort().collect{"-i $it"}.join(' ')
     """
     if [ \${SENTIEON_LICENSE_BASE64:-"unset"} != "unset" ]; then
         echo "Initializing SENTIEON_LICENSE env variable"

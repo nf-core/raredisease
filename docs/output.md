@@ -40,16 +40,19 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Annotation - SNV](#annotation---snv)
   - [bcftools roh](#bcftools-roh)
   - [vcfanno](#vcfanno)
+  - [CADD](#cadd)
   - [VEP](#vep)
 - [Annotation - SV](#annotation---sv)
   - [SVDB query](#svdb-query)
   - [VEP](#vep-1)
 - [Mitochondrial analysis](#mitochondrial-analysis)
   - [Alignment and variant calling](#alignment-and-variant-calling)
+    - [MT deletion script](#mt-deletion-script)
   - [Annotation:](#annotation-)
     - [HaploGrep2](#haplogrep2)
     - [vcfanno](#vcfanno-1)
     - [VEP](#vep-2)
+    - [HmtNote](#hmtnote)
 - [Rank variants and filtering](#rank-variants-and-filtering)
   - [GENMOD](#genmod)
 - [Pipeline information](#pipeline-information)
@@ -296,7 +299,13 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 #### vcfanno
 
-[vcfanno](https://github.com/brentp/vcfanno) allows you to quickly annotate your VCF with any number of INFO fields from any number of VCFs. It uses a simple conf file to allow the user to specify the source annotation files and fields and how they will be added to the info of the query VCF. Values are pulled by name from the INFO field with special-cases of ID and FILTER to pull from those VCF columns. The output files are not published in the output folder by default, and is passed to vep for further annotation.
+[vcfanno](https://github.com/brentp/vcfanno) allows you to quickly annotate your VCF with any number of INFO fields from any number of VCFs. It uses a simple conf file to allow the user to specify the source annotation files and fields and how they will be added to the info of the query VCF. Values are pulled by name from the INFO field with special-cases of ID and FILTER to pull from those VCF columns. The output files are not published in the output folder by default, and is passed to CADD and/or VEP for further annotation.
+
+We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files can be downloaded from [here](https://cadd.gs.washington.edu/download)).
+
+#### CADD
+
+[CADD](https://cadd.gs.washington.edu/) is a tool for scoring the deleteriousness of single nucleotide variants as well as insertion/deletions variants in the human genome. In nf-core/raredisease, SNVs can be annotated with precomputed CADD scores using vcfanno. However, for small indels they will be calculated on the fly by CADD. The output files are not published in the output folder by default, and is passed to VEP for further annotation.
 
 #### VEP
 
@@ -353,6 +362,10 @@ Mitochondrial analysis is run by default, to turn it off set `--skip_mt_analysis
 
 The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sensitivity to low AF and separate alignments using opposite genome breakpoints to allow for the tracing of lineages of rare mitochondrial variants.
 
+##### MT deletion script
+
+[MT deletion script](https://github.com/dnil/mitosign/blob/master/run_mt_del_check.sh) lists the fraction of mitochondrially aligning read pairs (per 1000) that appear discordant, as defined by an insert size of more than 1.2 kb (and less than 15 kb due to the circular nature of the genome) using samtools.
+
 #### Annotation:
 
 ##### HaploGrep2
@@ -370,6 +383,16 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 ##### vcfanno
 
 [vcfanno](https://github.com/brentp/vcfanno) allows you to quickly annotate your VCF with any number of INFO fields from any number of VCFs. It uses a simple conf file to allow the user to specify the source annotation files and fields and how they will be added to the info of the query VCF. Values are pulled by name from the INFO field with special-cases of ID and FILTER to pull from those VCF columns. The output files are not published in the output folder by default, and is passed to vep for further annotation.
+
+We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files can be downloaded from [here](https://cadd.gs.washington.edu/download)).
+
+#### CADD
+
+[CADD](https://cadd.gs.washington.edu/) is a tool for scoring the deleteriousness of single nucleotide variants as well as insertion/deletions variants in the human genome. In nf-core/raredisease, SNVs can be annotated with precomputed CADD scores using vcfanno. However, for small indels they will be calculated on the fly by CADD. The output files are not published in the output folder by default, and is passed to VEP for further annotation.
+
+##### Hmtnote
+
+[HmtNote](https://github.com/robertopreste/HmtNote) annotates vcf containing human mitochondrial variants with HmtVar. It will run offline by default wiht a database within the container.
 
 ##### VEP
 

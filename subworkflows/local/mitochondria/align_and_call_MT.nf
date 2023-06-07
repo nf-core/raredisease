@@ -13,29 +13,32 @@ include { HAPLOCHECK as HAPLOCHECK_MT                                       } fr
 include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } from '../../../modules/nf-core/gatk4/mutect2/main'
 include { GATK4_FILTERMUTECTCALLS as  GATK4_FILTERMUTECTCALLS_MT            } from '../../../modules/nf-core/gatk4/filtermutectcalls/main'
 include { TABIX_TABIX as TABIX_TABIX_MT                                     } from '../../../modules/nf-core/tabix/tabix/main'
+include { MT_DELETION                                                       } from '../../../modules/local/mt_deletion_script'
 
 workflow ALIGN_AND_CALL_MT {
     take:
-        ch_fastq         // channel: [mandatory] [ val(meta), [ path(reads) ] ]
-        ch_ubam          // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_index_bwa     // channel: [mandatory for sentieon] [ val(meta), path(index) ]
-        ch_index_bwamem2 // channel: [mandatory for bwamem2] [ val(meta), path(index) ]
-        ch_fasta         // channel: [mandatory] [ path(fasta) ]
-        ch_dict          // channel: [mandatory] [ path(dict) ]
-        ch_fai           // channel: [mandatory] [ path(fai) ]
-        ch_intervals_mt  // channel: [mandatory] [ path(interval_list) ]
+        ch_fastq        // channel: [mandatory] [ val(meta), [ path(reads) ] ]
+        ch_ubam         // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_bwaindex     // channel: [mandatory for sentieon] [ val(meta), path(index) ]
+        ch_bwamem2index // channel: [mandatory for bwamem2] [ val(meta), path(index) ]
+        ch_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_dict         // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_fai          // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_intervals    // channel: [mandatory] [ path(interval_list) ]
 
     main:
         ch_versions = Channel.empty()
 
-        BWAMEM2_MEM_MT (ch_fastq , ch_index_bwamem2, true)
+        BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, true)
 
-        SENTIEON_BWAMEM_MT ( ch_fastq, ch_fasta, ch_fai, ch_index_bwa )
+        SENTIEON_BWAMEM_MT ( ch_fastq, ch_fasta, ch_fai, ch_bwaindex )
 
-        ch_mt_bam      = Channel.empty().mix(BWAMEM2_MEM_MT.out.bam, SENTIEON_BWAMEM_MT.out.bam)
-        ch_fastq_ubam  = ch_mt_bam.join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)
+        Channel.empty()
+            .mix(BWAMEM2_MEM_MT.out.bam, SENTIEON_BWAMEM_MT.out.bam)
+            .join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)
+            .set {ch_bam_ubam}
 
-        GATK4_MERGEBAMALIGNMENT_MT (ch_fastq_ubam, ch_fasta, ch_dict)
+        GATK4_MERGEBAMALIGNMENT_MT (ch_bam_ubam, ch_fasta, ch_dict)
 
         PICARD_ADDORREPLACEREADGROUPS_MT (GATK4_MERGEBAMALIGNMENT_MT.out.bam)
 
@@ -45,7 +48,9 @@ workflow ALIGN_AND_CALL_MT {
 
         SAMTOOLS_INDEX_MT(SAMTOOLS_SORT_MT.out.bam)
         ch_sort_index_bam        = SAMTOOLS_SORT_MT.out.bam.join(SAMTOOLS_INDEX_MT.out.bai, failOnMismatch:true, failOnDuplicate:true)
-        ch_sort_index_bam_int_mt = ch_sort_index_bam.combine(ch_intervals_mt)
+        ch_sort_index_bam_int_mt = ch_sort_index_bam.combine(ch_intervals)
+
+        MT_DELETION(ch_sort_index_bam, ch_fasta)
 
         GATK4_MUTECT2_MT (ch_sort_index_bam_int_mt, ch_fasta, ch_fai, ch_dict, [], [], [],[])
 
@@ -67,16 +72,18 @@ workflow ALIGN_AND_CALL_MT {
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_SORT_MT.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MT.out.versions.first())
+        ch_versions = ch_versions.mix(MT_DELETION.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions.first())
         ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
 
     emit:
-        vcf        = GATK4_FILTERMUTECTCALLS_MT.out.vcf   // channel: [ val(meta), path(vcf) ]
-        tbi        = GATK4_FILTERMUTECTCALLS_MT.out.tbi   // channel: [ val(meta), path(tbi) ]
-        stats      = GATK4_MUTECT2_MT.out.stats           // channel: [ val(meta), path(stats) ]
-        filt_stats = GATK4_FILTERMUTECTCALLS_MT.out.stats // channel: [ val(meta), path(tsv) ]
-        txt        = HAPLOCHECK_MT.out.txt                // channel: [ val(meta), path(txt) ]
-        html       = HAPLOCHECK_MT.out.html               // channel: [ val(meta), path(html) ]
-        versions   = ch_versions                          // channel: [ path(versions.yml) ]
+        vcf           = GATK4_FILTERMUTECTCALLS_MT.out.vcf   // channel: [ val(meta), path(vcf) ]
+        tbi           = GATK4_FILTERMUTECTCALLS_MT.out.tbi   // channel: [ val(meta), path(tbi) ]
+        stats         = GATK4_MUTECT2_MT.out.stats           // channel: [ val(meta), path(stats) ]
+        filt_stats    = GATK4_FILTERMUTECTCALLS_MT.out.stats // channel: [ val(meta), path(tsv) ]
+        txt           = HAPLOCHECK_MT.out.txt                // channel: [ val(meta), path(txt) ]
+        html          = HAPLOCHECK_MT.out.html               // channel: [ val(meta), path(html) ]
+        mt_del_result = MT_DELETION.out.mt_del_result        // channel: [ val(meta), path(txt) ]
+        versions      = ch_versions                          // channel: [ path(versions.yml) ]
 }

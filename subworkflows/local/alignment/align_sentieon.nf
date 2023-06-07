@@ -12,9 +12,9 @@ include { SENTIEON_READWRITER     } from '../../../modules/local/sentieon/readwr
 workflow ALIGN_SENTIEON {
     take:
         ch_reads_input     // channel: [mandatory] [ val(meta), path(reads_input) ]
-        ch_fasta           // channel: [mandatory] [ path(fasta) ]
-        ch_fai             // channel: [mandatory] [ path(fai) ]
-        ch_index           // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
+        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_bwa_index       // channel: [mandatory] [ val(meta), path(bwa_index) ]
         ch_known_dbsnp     // channel: [optional] [ path(known_dbsnp) ]
         ch_known_dbsnp_tbi // channel: [optional] [ path(known_dbsnp_tbi) ]
         val_platform       // string:  [mandatory] default: illumina
@@ -25,7 +25,7 @@ workflow ALIGN_SENTIEON {
         ch_bqsr_bai = Channel.empty()
         ch_bqsr_csv = Channel.empty()
 
-        SENTIEON_BWAMEM ( ch_reads_input, ch_fasta, ch_fai, ch_index )
+        SENTIEON_BWAMEM ( ch_reads_input, ch_genome_fasta, ch_genome_fai, ch_bwa_index )
 
         SENTIEON_BWAMEM.out
             .bam
@@ -45,7 +45,7 @@ workflow ALIGN_SENTIEON {
         SENTIEON_READWRITER (merge_bams_in.multiple)
         ch_bam_bai = merge_bams_in.single.mix(SENTIEON_READWRITER.out.bam_bai)
 
-        SENTIEON_DATAMETRICS (ch_bam_bai, ch_fasta, ch_fai )
+        SENTIEON_DATAMETRICS (ch_bam_bai, ch_genome_fasta, ch_genome_fai )
 
         SENTIEON_LOCUSCOLLECTOR ( ch_bam_bai )
 
@@ -54,13 +54,13 @@ workflow ALIGN_SENTIEON {
             .join(SENTIEON_LOCUSCOLLECTOR.out.score_idx, failOnMismatch:true, failOnDuplicate:true)
             .set { ch_bam_bai_score }
 
-        SENTIEON_DEDUP ( ch_bam_bai_score, ch_fasta, ch_fai )
+        SENTIEON_DEDUP ( ch_bam_bai_score, ch_genome_fasta, ch_genome_fai )
 
         if (params.variant_caller == "sentieon") {
             SENTIEON_DEDUP.out.bam
                 .join(SENTIEON_DEDUP.out.bai, failOnMismatch:true, failOnDuplicate:true)
                 .set { ch_dedup_bam_bai }
-            SENTIEON_BQSR ( ch_dedup_bam_bai, ch_fasta, ch_fai, ch_known_dbsnp, ch_known_dbsnp_tbi )
+            SENTIEON_BQSR ( ch_dedup_bam_bai, ch_genome_fasta, ch_genome_fai, ch_known_dbsnp, ch_known_dbsnp_tbi )
             ch_bqsr_bam = SENTIEON_BQSR.out.bam
             ch_bqsr_bai = SENTIEON_BQSR.out.bai
             ch_bqsr_csv = SENTIEON_BQSR.out.recal_csv
