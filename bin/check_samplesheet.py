@@ -35,7 +35,7 @@ class RowChecker:
         first_col="fastq_1",
         second_col="fastq_2",
         single_col="single_end",
-        case_id_col="case_id"
+        case_id_col="case_id",
         **kwargs,
     ):
         """
