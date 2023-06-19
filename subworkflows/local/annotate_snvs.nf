@@ -7,6 +7,7 @@ include { BCFTOOLS_CONCAT                       } from '../../modules/nf-core/bc
 include { BCFTOOLS_ROH                          } from '../../modules/nf-core/bcftools/roh/main'
 include { BCFTOOLS_VIEW                         } from '../../modules/nf-core/bcftools/view/main'
 include { RHOCALL_ANNOTATE                      } from '../../modules/nf-core/rhocall/annotate/main'
+include { UPD                                   } from '../../modules/nf-core/upd/main'
 include { ENSEMBLVEP as ENSEMBLVEP_SNV          } from '../../modules/local/ensemblvep/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO } from '../../modules/nf-core/tabix/bgziptabix/main'
@@ -59,6 +60,7 @@ workflow ANNOTATE_SNVS {
 
         RHOCALL_ANNOTATE (ch_vcf, ch_roh_rhocall, [])
 
+
         ZIP_TABIX_ROHCALL (RHOCALL_ANNOTATE.out.vcf)
 
         ZIP_TABIX_ROHCALL.out.gz_tbi
@@ -66,6 +68,8 @@ workflow ANNOTATE_SNVS {
             .set { ch_vcf_in }
 
         VCFANNO (ch_vcf_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
+
+        UPD(VCFANNO.out.vcf)
 
         ZIP_TABIX_VCFANNO (VCFANNO.out.vcf)
 

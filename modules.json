@@ -350,6 +350,11 @@
                         "git_sha": "5c460c5a4736974abde2843294f35307ee2b0e5e",
                         "installed_by": ["modules"]
                     },
+                    "upd": {
+                        "branch": "master",
+                        "git_sha": "215397fb5d5d6613e7b2cf6541756a7f8c4d05f6",
+                        "installed_by": ["modules"]
+                    },
                     "vcfanno": {
                         "branch": "master",
                         "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
