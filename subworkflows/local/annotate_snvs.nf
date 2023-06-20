@@ -32,7 +32,6 @@ workflow ANNOTATE_SNVS {
         ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_gnomad_af          // channel: [optional] [ path(tab), path(tbi) ]
         ch_split_intervals    // channel: [mandatory] [ path(intervals) ]
-        ch_samples            // channel: [mandatory] [ val(sample_id), val(sex), val(phenotype), val(paternal_id), val(maternal_id), val(case_id) ]
 
     main:
         ch_versions       = Channel.empty()
