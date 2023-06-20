@@ -39,25 +39,9 @@ workflow ANNOTATE_SNVS {
         ch_vcf_scatter_in = Channel.empty()
         ch_vep_in         = Channel.empty()
 
-        ch_vcf.map { meta, vcf, idx -> return [vcf, idx] }.set { ch_roh_vcfs }
-        ch_samples
-            .branch { it ->
-                affected: it.phenotype == "2"
-                unaffected: it.phenotype == "1"
-            }.set { ch_phenotype }
-        ch_phenotype.affected.combine(ch_roh_vcfs).set { ch_roh_input }
+        BCFTOOLS_ROH (ch_vcf, ch_gnomad_af, [], [], [], [])
 
-        BCFTOOLS_ROH (ch_roh_input, ch_gnomad_af, [], [], [], [])
-
-        BCFTOOLS_ROH.out.roh
-            .map { meta, roh ->
-                new_meta = [:]
-                new_meta.id = meta.case_id
-                return [new_meta, roh]
-            }
-            .set { ch_roh_rhocall }
-
-        RHOCALL_ANNOTATE (ch_vcf, ch_roh_rhocall, [])
+        RHOCALL_ANNOTATE (ch_vcf, BCFTOOLS_ROH.out.roh, [])
 
         ZIP_TABIX_ROHCALL (RHOCALL_ANNOTATE.out.vcf)
 
@@ -153,6 +137,8 @@ workflow ANNOTATE_SNVS {
         ch_versions = ch_versions.mix(TABIX_VEP.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
         ch_versions = ch_versions.mix(TABIX_BCFTOOLS_CONCAT.out.versions)
+        ch_versions = ch_versions.mix(UPD_REGIONS.out.versions)
+        ch_versions = ch_versions.mix(UPD_SITES.out.versions)
 
     emit:
         vcf_ann  = ch_vep_ann   // channel: [ val(meta), path(vcf) ]

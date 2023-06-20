@@ -14,8 +14,15 @@ workflow CHECK_INPUT {
             .splitCsv ( header:true, sep:',' )
             .set { sheet }
 
-        case_info = sheet.first()
-                        .map { create_case_channel(it) }
+        case_info = sheet
+                        .branch { row ->
+                            affected: row.phenotype == "2"
+                            unaffected: row.phenotype == "1"
+                        }
+                        .affected
+                        .toList()
+                        .map {create_case_channel(it)}
+
         reads     = sheet.map { row -> [[row.sample.split('_')[0]], row] }
                         .groupTuple()
                         .map { meta, rows ->
@@ -25,6 +32,7 @@ workflow CHECK_INPUT {
                         .map { row, numLanes ->
                             create_fastq_channel(row + [num_lanes:numLanes])
                         }
+
         samples   = sheet.map { create_samples_channel(it) }
 
     emit:
@@ -79,9 +87,18 @@ def create_samples_channel(LinkedHashMap row) {
 }
 
 // Function to get a list of metadata (e.g. case id) for the case [ meta ]
-def create_case_channel(LinkedHashMap row) {
-    def case_info   = [:]
-    case_info.id    = row.case_id
+def create_case_channel(List rows) {
+    def case_info     = [:]
+    def renamed_items = []
+
+    for (item in rows.sample) {
+        renamed_items.add(item.split("_T")[0])
+    }
+
+    case_info.father   = rows[0].paternal_id
+    case_info.mother   = rows[0].maternal_id
+    case_info.probands = renamed_items
+    case_info.id       = rows[0].case_id
 
     return case_info
 }
