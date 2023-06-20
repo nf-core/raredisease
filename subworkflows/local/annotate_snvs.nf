@@ -136,8 +136,6 @@ workflow ANNOTATE_SNVS {
         ch_versions = ch_versions.mix(TABIX_VEP.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
         ch_versions = ch_versions.mix(TABIX_BCFTOOLS_CONCAT.out.versions)
-        ch_versions = ch_versions.mix(UPD_REGIONS.out.versions)
-        ch_versions = ch_versions.mix(UPD_SITES.out.versions)
 
     emit:
         vcf_ann  = ch_vep_ann   // channel: [ val(meta), path(vcf) ]
