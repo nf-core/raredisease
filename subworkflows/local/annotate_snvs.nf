@@ -33,32 +33,15 @@ workflow ANNOTATE_SNVS {
         ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_gnomad_af          // channel: [optional] [ path(tab), path(tbi) ]
         ch_split_intervals    // channel: [mandatory] [ path(intervals) ]
-        ch_samples            // channel: [mandatory] [ val(sample_id), val(sex), val(phenotype), val(paternal_id), val(maternal_id), val(case_id) ]
 
     main:
         ch_versions       = Channel.empty()
         ch_vcf_scatter_in = Channel.empty()
         ch_vep_in         = Channel.empty()
 
-        ch_vcf.map { meta, vcf, idx -> return [vcf, idx] }.set { ch_roh_vcfs }
-        ch_samples
-            .branch { it ->
-                affected: it.phenotype == "2"
-                unaffected: it.phenotype == "1"
-            }.set { ch_phenotype }
-        ch_phenotype.affected.combine(ch_roh_vcfs).set { ch_roh_input }
+        BCFTOOLS_ROH (ch_vcf, ch_gnomad_af, [], [], [], [])
 
-        BCFTOOLS_ROH (ch_roh_input, ch_gnomad_af, [], [], [], [])
-
-        BCFTOOLS_ROH.out.roh
-            .map { meta, roh ->
-                new_meta = [:]
-                new_meta.id = meta.case_id
-                return [new_meta, roh]
-            }
-            .set { ch_roh_rhocall }
-
-        RHOCALL_ANNOTATE (ch_vcf, ch_roh_rhocall, [])
+        RHOCALL_ANNOTATE (ch_vcf, BCFTOOLS_ROH.out.roh, [])
 
 
         ZIP_TABIX_ROHCALL (RHOCALL_ANNOTATE.out.vcf)

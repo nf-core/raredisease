@@ -267,7 +267,7 @@
                     },
                     "rhocall/annotate": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "d73505dd68b27b53b4002e84eea21a2819907562",
                         "installed_by": ["modules"]
                     },
                     "samtools/faidx": {
