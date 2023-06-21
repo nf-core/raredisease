@@ -7,7 +7,8 @@ include { BCFTOOLS_CONCAT                       } from '../../modules/nf-core/bc
 include { BCFTOOLS_ROH                          } from '../../modules/nf-core/bcftools/roh/main'
 include { BCFTOOLS_VIEW                         } from '../../modules/nf-core/bcftools/view/main'
 include { RHOCALL_ANNOTATE                      } from '../../modules/nf-core/rhocall/annotate/main'
-include { UPD                                   } from '../../modules/nf-core/upd/main'
+include { UPD as UPD_SITES                      } from '../../modules/nf-core/upd/main'
+include { UPD as UPD_REGIONS                    } from '../../modules/nf-core/upd/main'
 include { ENSEMBLVEP as ENSEMBLVEP_SNV          } from '../../modules/local/ensemblvep/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO } from '../../modules/nf-core/tabix/bgziptabix/main'
@@ -52,7 +53,23 @@ workflow ANNOTATE_SNVS {
 
         VCFANNO (ch_vcf_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
 
-        UPD(VCFANNO.out.vcf)
+        VCFANNO.out.vcf
+            .map {meta, vcf ->
+                def splitchannels = []
+                for (int i=0; i< meta.upd_children.size(); i++) {
+                    upd_sample  = meta.upd_children[i]
+                    new_meta = meta + [upd_child:upd_sample]
+                    splitchannels.add([new_meta,vcf])
+                    }
+                return splitchannels
+            }
+            .flatten()
+            .buffer (size: 2)
+            .set { ch_upd_in }
+        
+        UPD_SITES(ch_upd_in)
+
+        UPD_REGIONS(ch_upd_in)
 
         ZIP_TABIX_VCFANNO (VCFANNO.out.vcf)
 
@@ -131,6 +148,8 @@ workflow ANNOTATE_SNVS {
         ch_versions = ch_versions.mix(RHOCALL_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_ROHCALL.out.versions)
         ch_versions = ch_versions.mix(VCFANNO.out.versions)
+        ch_versions = ch_versions.mix(UPD_SITES.out.versions)
+        ch_versions = ch_versions.mix(UPD_REGIONS.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_VCFANNO.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(TABIX_BCFTOOLS_VIEW.out.versions)
