@@ -409,15 +409,7 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 
 ### Call UPD regions
 
-[UPD](https://github.com/bjhall/upd) calls regions of uniparental disomy from germline exome/wgs trios.
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `out.bed`:  file of all called regions fulfilling the --min-sites and --min-size filter criteria, including some annotation.
-
-
-</details>
+[UPD](https://github.com/bjhall/upd) calls regions of uniparental disomy from germline exome/wgs trios. Output from UPD is passed to chromograph for making plots.
 
 ### Rank variants and filtering
 
