@@ -42,6 +42,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - [vcfanno](#vcfanno)
   - [CADD](#cadd)
   - [VEP](#vep)
+  - [UPD](#upd)
+  - [Chromograph](#chromograph)
 - [Annotation - SV](#annotation---sv)
   - [SVDB query](#svdb-query)
   - [VEP](#vep-1)
@@ -331,6 +333,24 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 
 </details>
 
+#### UPD
+
+[UPD](https://github.com/bjhall/upd) calls regions of uniparental disomy from germline exome/wgs trios. Output from UPD is passed to chromograph for making plots.
+
+#### Chromograph
+
+[Chromograph](https://github.com/Clinical-Genomics/chromograph) is a python package to create PNG images from genetics data such as BED and WIG files.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `annotate_snv/*sites_chromograph`
+  - `<case_id>_rohann_vcfanno_upd_sites_<chr#>.png`: file containing a plot showing upd sites across chromosomes.
+- `annotate_snv/*regions_chromograph`
+  - `<case_id>_rohann_vcfanno_upd_regions_<chr#>.png`: file containing a plot showing upd regions across chromosomes.
+
+</details>
+
 ### Annotation - SV
 
 #### SVDB query
@@ -406,10 +426,6 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
   - `<case_id>_vep_vcfanno_mt.vcf.gz.tbi`: index of the file containing mitochondrial annotations.
 
 </details>
-
-### Call UPD regions
-
-[UPD](https://github.com/bjhall/upd) calls regions of uniparental disomy from germline exome/wgs trios. Output from UPD is passed to chromograph for making plots.
 
 ### Rank variants and filtering
 
