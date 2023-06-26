@@ -32,6 +32,10 @@
 
   > Poplin R, Chang PC, Alexander D, et al. A universal SNP and small-indel variant caller using deep neural networks. Nat Biotechnol. 2018;36(10):983-987. doi:10.1038/nbt.4235
 
+- [eKLIPse](https://www.nature.com/articles/s41436-018-0350-8)
+
+  > Goudenège D, Bris C, Hoffmann V, et al. eKLIPse: a sensitive tool for the detection and quantification of mitochondrial DNA deletions from next-generation sequencing data. Genet Med 21, 1407–1416 (2019). doi:10.1038/s41436-018-0350-8
+
 - [Ensembl VEP](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4)
 
   > McLaren W, Gil L, Hunt SE, et al. The Ensembl Variant Effect Predictor. Genome Biol. 2016;17(1):122. doi:10.1186/s13059-016-0974-4

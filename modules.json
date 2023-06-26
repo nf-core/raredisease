@@ -85,6 +85,11 @@
                         "git_sha": "0460d316170f75f323111b4a2c0a2989f0c32013",
                         "installed_by": ["modules"]
                     },
+                    "eklipse": {
+                        "branch": "master",
+                        "git_sha": "99d437bd91f8509d0460b7abbde47fa430055ecb",
+                        "installed_by": ["modules"]
+                    },
                     "expansionhunter": {
                         "branch": "master",
                         "git_sha": "0260e5d22372eae434816d6970dedf3f5adc0053",
