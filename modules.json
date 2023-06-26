@@ -72,7 +72,7 @@
                     },
                     "chromograph": {
                         "branch": "master",
-                        "git_sha": "2513c3ee7bbab3c283050068f3118dfed2bbbd12",
+                        "git_sha": "aad210ba51500be029740d088b4b4827f6f41509",
                         "installed_by": ["modules"]
                     },
                     "custom/dumpsoftwareversions": {
