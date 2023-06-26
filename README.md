@@ -70,8 +70,10 @@ On release, automated continuous integration tests run the pipeline on a full-si
 **7. Mitochondrial analysis:**
 
 - [Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline ](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-)
+- [eKLIPse](https://github.com/dooguypapua/eKLIPse/tree/master)
 - Annotation:
   - [HaploGrep2](https://github.com/seppinho/haplogrep-cmd)
+  - [Hmtnote](https://github.com/robertopreste/HmtNote)
   - [vcfanno](https://github.com/brentp/vcfanno)
   - [CADD](https://cadd.gs.washington.edu/)
   - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
