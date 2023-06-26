@@ -14,7 +14,7 @@ include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } fr
 include { GATK4_FILTERMUTECTCALLS as  GATK4_FILTERMUTECTCALLS_MT            } from '../../../modules/nf-core/gatk4/filtermutectcalls/main'
 include { TABIX_TABIX as TABIX_TABIX_MT                                     } from '../../../modules/nf-core/tabix/tabix/main'
 include { MT_DELETION                                                       } from '../../../modules/local/mt_deletion_script'
-include { EKLIPSE as EKLIPSE_MT                                             } from '../../../modules/nf-core/tabix/tabix/main'
+include { EKLIPSE as EKLIPSE_MT                                             } from '../../../modules/nf-core/eklipse/main'
 
 workflow ALIGN_AND_CALL_MT {
     take:
