@@ -9,6 +9,8 @@ include { BCFTOOLS_VIEW                         } from '../../modules/nf-core/bc
 include { RHOCALL_ANNOTATE                      } from '../../modules/nf-core/rhocall/annotate/main'
 include { UPD as UPD_SITES                      } from '../../modules/nf-core/upd/main'
 include { UPD as UPD_REGIONS                    } from '../../modules/nf-core/upd/main'
+include { CHROMOGRAPH as CHROMOGRAPH_SITES      } from '../../modules/nf-core/chromograph/main'
+include { CHROMOGRAPH as CHROMOGRAPH_REGIONS    } from '../../modules/nf-core/chromograph/main'
 include { ENSEMBLVEP as ENSEMBLVEP_SNV          } from '../../modules/local/ensemblvep/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO } from '../../modules/nf-core/tabix/bgziptabix/main'
@@ -66,10 +68,11 @@ workflow ANNOTATE_SNVS {
             .flatten()
             .buffer (size: 2)
             .set { ch_upd_in }
-        
-        UPD_SITES(ch_upd_in)
 
+        UPD_SITES(ch_upd_in)
         UPD_REGIONS(ch_upd_in)
+        CHROMOGRAPH_SITES([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_SITES.out.bed)
+        CHROMOGRAPH_REGIONS([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_REGIONS.out.bed, [[],[]])
 
         ZIP_TABIX_VCFANNO (VCFANNO.out.vcf)
 
@@ -150,6 +153,8 @@ workflow ANNOTATE_SNVS {
         ch_versions = ch_versions.mix(VCFANNO.out.versions)
         ch_versions = ch_versions.mix(UPD_SITES.out.versions)
         ch_versions = ch_versions.mix(UPD_REGIONS.out.versions)
+        ch_versions = ch_versions.mix(CHROMOGRAPH_SITES.out.versions)
+        ch_versions = ch_versions.mix(CHROMOGRAPH_REGIONS.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_VCFANNO.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(TABIX_BCFTOOLS_VIEW.out.versions)
