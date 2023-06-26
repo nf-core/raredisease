@@ -57,7 +57,7 @@ workflow ANNOTATE_SNVS {
             .map {meta, vcf ->
                 def splitchannels = []
                 for (int i=0; i< meta.upd_children.size(); i++) {
-                    upd_sample  = meta.upd_children[i]
+                    upd_sample = meta.upd_children[i]
                     new_meta = meta + [upd_child:upd_sample]
                     splitchannels.add([new_meta,vcf])
                     }
