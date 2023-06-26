@@ -73,7 +73,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [eKLIPse](https://github.com/dooguypapua/eKLIPse/tree/master)
 - Annotation:
   - [HaploGrep2](https://github.com/seppinho/haplogrep-cmd)
-  - [Hmtnote](https://github.com/robertopreste/HmtNote) 
+  - [Hmtnote](https://github.com/robertopreste/HmtNote)
   - [vcfanno](https://github.com/brentp/vcfanno)
   - [CADD](https://cadd.gs.washington.edu/)
   - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
