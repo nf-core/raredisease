@@ -407,6 +407,10 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 
 </details>
 
+### Call UPD regions
+
+[UPD](https://github.com/bjhall/upd) calls regions of uniparental disomy from germline exome/wgs trios. Output from UPD is passed to chromograph for making plots.
+
 ### Rank variants and filtering
 
 #### GENMOD
