@@ -7,6 +7,10 @@ include { BCFTOOLS_CONCAT                       } from '../../modules/nf-core/bc
 include { BCFTOOLS_ROH                          } from '../../modules/nf-core/bcftools/roh/main'
 include { BCFTOOLS_VIEW                         } from '../../modules/nf-core/bcftools/view/main'
 include { RHOCALL_ANNOTATE                      } from '../../modules/nf-core/rhocall/annotate/main'
+include { UPD as UPD_SITES                      } from '../../modules/nf-core/upd/main'
+include { UPD as UPD_REGIONS                    } from '../../modules/nf-core/upd/main'
+include { CHROMOGRAPH as CHROMOGRAPH_SITES      } from '../../modules/nf-core/chromograph/main'
+include { CHROMOGRAPH as CHROMOGRAPH_REGIONS    } from '../../modules/nf-core/chromograph/main'
 include { ENSEMBLVEP as ENSEMBLVEP_SNV          } from '../../modules/local/ensemblvep/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO } from '../../modules/nf-core/tabix/bgziptabix/main'
@@ -32,32 +36,16 @@ workflow ANNOTATE_SNVS {
         ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_gnomad_af          // channel: [optional] [ path(tab), path(tbi) ]
         ch_split_intervals    // channel: [mandatory] [ path(intervals) ]
-        ch_samples            // channel: [mandatory] [ val(sample_id), val(sex), val(phenotype), val(paternal_id), val(maternal_id), val(case_id) ]
 
     main:
         ch_versions       = Channel.empty()
         ch_vcf_scatter_in = Channel.empty()
         ch_vep_in         = Channel.empty()
 
-        ch_vcf.map { meta, vcf, idx -> return [vcf, idx] }.set { ch_roh_vcfs }
-        ch_samples
-            .branch { it ->
-                affected: it.phenotype == "2"
-                unaffected: it.phenotype == "1"
-            }.set { ch_phenotype }
-        ch_phenotype.affected.combine(ch_roh_vcfs).set { ch_roh_input }
+        BCFTOOLS_ROH (ch_vcf, ch_gnomad_af, [], [], [], [])
 
-        BCFTOOLS_ROH (ch_roh_input, ch_gnomad_af, [], [], [], [])
+        RHOCALL_ANNOTATE (ch_vcf, BCFTOOLS_ROH.out.roh, [])
 
-        BCFTOOLS_ROH.out.roh
-            .map { meta, roh ->
-                new_meta = [:]
-                new_meta.id = meta.case_id
-                return [new_meta, roh]
-            }
-            .set { ch_roh_rhocall }
-
-        RHOCALL_ANNOTATE (ch_vcf, ch_roh_rhocall, [])
 
         ZIP_TABIX_ROHCALL (RHOCALL_ANNOTATE.out.vcf)
 
@@ -66,6 +54,25 @@ workflow ANNOTATE_SNVS {
             .set { ch_vcf_in }
 
         VCFANNO (ch_vcf_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
+
+        VCFANNO.out.vcf
+            .map {meta, vcf ->
+                def splitchannels = []
+                for (int i=0; i< meta.upd_children.size(); i++) {
+                    upd_sample = meta.upd_children[i]
+                    new_meta = meta + [upd_child:upd_sample]
+                    splitchannels.add([new_meta,vcf])
+                    }
+                return splitchannels
+            }
+            .flatten()
+            .buffer (size: 2)
+            .set { ch_upd_in }
+
+        UPD_SITES(ch_upd_in)
+        UPD_REGIONS(ch_upd_in)
+        CHROMOGRAPH_SITES([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_SITES.out.bed)
+        CHROMOGRAPH_REGIONS([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_REGIONS.out.bed, [[],[]])
 
         ZIP_TABIX_VCFANNO (VCFANNO.out.vcf)
 
@@ -144,6 +151,10 @@ workflow ANNOTATE_SNVS {
         ch_versions = ch_versions.mix(RHOCALL_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_ROHCALL.out.versions)
         ch_versions = ch_versions.mix(VCFANNO.out.versions)
+        ch_versions = ch_versions.mix(UPD_SITES.out.versions)
+        ch_versions = ch_versions.mix(UPD_REGIONS.out.versions)
+        ch_versions = ch_versions.mix(CHROMOGRAPH_SITES.out.versions)
+        ch_versions = ch_versions.mix(CHROMOGRAPH_REGIONS.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_VCFANNO.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(TABIX_BCFTOOLS_VIEW.out.versions)

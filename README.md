@@ -61,6 +61,8 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [vcfanno](https://github.com/brentp/vcfanno)
 - [CADD](https://cadd.gs.washington.edu/)
 - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
+- [UPD](https://github.com/bjhall/upd)
+- [Chromograph](https://github.com/Clinical-Genomics/chromograph)
 
 **6. Annotation - SV:**
 
@@ -70,8 +72,10 @@ On release, automated continuous integration tests run the pipeline on a full-si
 **7. Mitochondrial analysis:**
 
 - [Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline ](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-)
+- [eKLIPse](https://github.com/dooguypapua/eKLIPse/tree/master)
 - Annotation:
   - [HaploGrep2](https://github.com/seppinho/haplogrep-cmd)
+  - [Hmtnote](https://github.com/robertopreste/HmtNote)
   - [vcfanno](https://github.com/brentp/vcfanno)
   - [CADD](https://cadd.gs.washington.edu/)
   - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
@@ -137,7 +141,7 @@ For more details about the output files and reports, please refer to the
 
 nf-core/raredisease was written in a collaboration between the Clinical Genomics nodes in Sweden, with major contributions from [Ramprasad Neethiraj](https://github.com/ramprasadn), [Anders Jemt](https://github.com/jemten), [Lucia Pena Perez](https://github.com/Lucpen), and [Mei Wu](https://github.com/projectoriented) at Clinical Genomics Stockholm.
 
-Additional contributors were [Sima Rahimi](https://github.com/sima-r), [Gwenna Breton](https://github.com/Gwennid) and [Emma Västerviga](https://github.com/EmmaCAndersson) (Clinical Genomics Gothenburg); [Lauri Mesilaakso](https://github.com/ljmesi) (Clinical Genomics Linköping); [Subazini Thankaswamy Kosalai](https://github.com/sysbiocoder) (Clinical Genomics Örebro); [Annick Renevey](https://github.com/rannick) and [Peter Pruisscher](https://github.com/peterpru) (Clinical Genomics Stockholm); [Ryan Kennedy](https://github.com/ryanjameskennedy) (Clinical Genomics Lund); and [Lucas Taniguti](https://github.com/lmtani).
+Additional contributors were [Sima Rahimi](https://github.com/sima-r), [Gwenna Breton](https://github.com/Gwennid) and [Emma Västerviga](https://github.com/EmmaCAndersson) (Clinical Genomics Gothenburg); [Halfdan Rydbeck](https://github.com/hrydbeck) and [Lauri Mesilaakso](https://github.com/ljmesi) (Clinical Genomics Linköping); [Subazini Thankaswamy Kosalai](https://github.com/sysbiocoder) (Clinical Genomics Örebro); [Annick Renevey](https://github.com/rannick) and [Peter Pruisscher](https://github.com/peterpru) (Clinical Genomics Stockholm); [Ryan Kennedy](https://github.com/ryanjameskennedy) (Clinical Genomics Lund); and [Lucas Taniguti](https://github.com/lmtani).
 
 We thank the nf-core community for their extensive assistance in the development of this pipeline.
 
