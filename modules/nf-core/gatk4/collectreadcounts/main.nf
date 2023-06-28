@@ -5,14 +5,13 @@ process GATK4_COLLECTREADCOUNTS {
     conda "bioconda::gatk4=4.4.0.0"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/gatk4:4.4.0.0--py36hdfd78af_0':
-        'quay.io/biocontainers/gatk4:4.4.0.0--py36hdfd78af_0' }"
+        'biocontainers/gatk4:4.4.0.0--py36hdfd78af_0' }"
 
     input:
     tuple val(meta), path(input), path(input_index), path(intervals)
-    tuple val(meta), path(fasta)
-    tuple val(meta), path(fai)
-    tuple val(meta), path(sequence_dict)
-    path interval_list
+    tuple val(meta2), path(fasta)
+    tuple val(meta3), path(fai)
+    tuple val(meta4), path(dict)
 
     output:
     tuple val(meta), path("*.hdf5"), optional: true, emit: hdf5

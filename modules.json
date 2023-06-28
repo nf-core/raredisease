@@ -17,12 +17,12 @@
                     },
                     "bcftools/filter": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "bd4e0df3319c171072d09dade42e3c06fa373779",
                         "installed_by": ["modules"]
                     },
                     "bcftools/merge": {
                         "branch": "master",
-                        "git_sha": "0435e4eebc94e53721c194b2d5d06f455a79e407",
+                        "git_sha": "f7219b428dc69f93aa19f219fb7ce8eae8720400",
                         "installed_by": ["modules"]
                     },
                     "bcftools/norm": {
@@ -77,7 +77,7 @@
                     },
                     "deepvariant": {
                         "branch": "master",
-                        "git_sha": "0460d316170f75f323111b4a2c0a2989f0c32013",
+                        "git_sha": "4b7d4863a5883b76e6bff13b6e52468fab090c5b",
                         "installed_by": ["modules"]
                     },
                     "expansionhunter": {
@@ -92,7 +92,7 @@
                     },
                     "gatk4/annotateintervals": {
                         "branch": "master",
-                        "git_sha": "643756685546fa61f5c8fba439af746c090b9180",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
                     },
                     "gatk4/bedtointervallist": {
@@ -102,22 +102,22 @@
                     },
                     "gatk4/collectreadcounts": {
                         "branch": "master",
-                        "git_sha": "643756685546fa61f5c8fba439af746c090b9180",
+                        "git_sha": "d25bf48327e86a7f737047a57ec264b90e22ce3d",
                         "installed_by": ["modules"]
                     },
                     "gatk4/createsequencedictionary": {
                         "branch": "master",
-                        "git_sha": "2df2a11d5b12f2a73bca74f103691bc35d83c5fd",
+                        "git_sha": "541811d779026c5d395925895fa5ed35e7216cc0",
                         "installed_by": ["modules"]
                     },
                     "gatk4/determinegermlinecontigploidy": {
                         "branch": "master",
-                        "git_sha": "14c2bbc2def3313b9f1d17fd6194f7c596b40887",
+                        "git_sha": "d25bf48327e86a7f737047a57ec264b90e22ce3d",
                         "installed_by": ["modules"]
                     },
                     "gatk4/filterintervals": {
                         "branch": "master",
-                        "git_sha": "643756685546fa61f5c8fba439af746c090b9180",
+                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
                     },
                     "gatk4/filtermutectcalls": {
@@ -127,7 +127,7 @@
                     },
                     "gatk4/germlinecnvcaller": {
                         "branch": "master",
-                        "git_sha": "ba1ad555be19cb6cedb52c49b21e267b0b7110b7",
+                        "git_sha": "d25bf48327e86a7f737047a57ec264b90e22ce3d",
                         "installed_by": ["modules"]
                     },
                     "gatk4/intervallisttools": {
@@ -152,12 +152,12 @@
                     },
                     "gatk4/postprocessgermlinecnvcalls": {
                         "branch": "master",
-                        "git_sha": "ba1ad555be19cb6cedb52c49b21e267b0b7110b7",
+                        "git_sha": "d25bf48327e86a7f737047a57ec264b90e22ce3d",
                         "installed_by": ["modules"]
                     },
                     "gatk4/preprocessintervals": {
                         "branch": "master",
-                        "git_sha": "643756685546fa61f5c8fba439af746c090b9180",
+                        "git_sha": "1226419498a14d17f98d12d6488d333b0dbd0418",
                         "installed_by": ["modules"]
                     },
                     "gatk4/printreads": {
