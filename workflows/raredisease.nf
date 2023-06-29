@@ -203,16 +203,12 @@ workflow RAREDISEASE {
 
 
     // Gather built indices or get them from the params
-    ch_blacklist_bed                = params.blacklist_bed                 ? Channel.fromPath(params.blacklist_bed).map{ it -> [[id:it[0].simpleName], it] }.collect()
+    ch_blacklist_bed            = params.blacklist_bed                     ? Channel.fromPath(params.blacklist_bed).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                            : ( ch_references.blacklist_bed            ?: Channel.empty() )
-    ch_ploidy_priors                = params.ploidy_priors                 ? Channel.fromPath(params.ploidy_priors).collect()
-                                                                           : ( ch_references.ploidy_priors            ?: Channel.empty() )
-    ch_ploidy_model                 = params.ploidy_model                  ? Channel.fromPath(params.ploidy_model).collect()
+    ch_ploidy_model             = params.ploidy_model                      ? Channel.fromPath(params.ploidy_model).collect()
                                                                            : ( ch_references.ploidy_model             ?: Channel.empty() )
-    ch_cnv_model                    = params.cnv_model                     ? Channel.fromPath(params.cnv_model).collect()
-                                                                           : ( ch_references.cnv_model                ?: Channel.empty() )
-
-
+    ch_gcnvcaller_model         = params.gcnvcaller_model                  ? Channel.fromPath(params.gcnvcaller_model).collect()
+                                                                           : ( ch_references.gcnvcaller_model         ?: Channel.empty() )
     ch_bait_intervals           = ch_references.bait_intervals
     ch_cadd_header              = Channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_cadd_resources           = params.cadd_resources                    ? Channel.fromPath(params.cadd_resources).collect()
@@ -372,9 +368,8 @@ workflow RAREDISEASE {
         ch_target_bed,
         ch_genome_dictionary,
         ch_blacklist_bed,
-        ch_ploidy_priors,
         ch_ploidy_model,
-        ch_cnv_model
+        ch_gcnvcaller_model
     )
     ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 

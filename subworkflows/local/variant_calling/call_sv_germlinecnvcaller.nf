@@ -14,21 +14,20 @@ include { GATK4_POSTPROCESSGERMLINECNVCALLS   } from '../../../modules/nf-core/g
 workflow CALL_SV_GERMLINECNVCALLER {
     take:
         ch_bam_bai        // channel: [ val(meta), path(bam), path(bai) ]
-        ch_fasta_no_meta  // channel: [ path(ch_fasta_no_meta) ]
-        ch_fai            // channel: [ path(ch_fai) ]
+        ch_fasta          // channel: [ val(meta), path(ch_fasta_no_meta) ]
+        ch_fai            // channel: [ val(meta), path(ch_fai) ]
         ch_target_bed     // channel: [ val(meta), path(bed), path(tbi) ]
         ch_blacklist_bed  // channel: [ val(meta), path(ch_blacklist_bed) ]
-        ch_dict           // channel: [ path(ch_dict) ]
-        ch_priors         // channel: [ path(ch_priors) ]
+        ch_dict           // channel: [ val(meta), path(ch_dict) ]
         ch_ploidy_model   // channel: [ path(ch_ploidy_model) ]
-        ch_cnv_model      // channel: [ path(ch_cnv_model) ]
+        ch_gcnvcaller_model      // channel: [ path(ch_gcnvcaller_model) ]
 
     main:
         ch_versions = Channel.empty()
 
         input = ch_bam_bai.combine( ch_target_bed.collect{ it[1] } )
 
-        GATK4_COLLECTREADCOUNTS ( input, ch_fasta_no_meta, ch_fai, ch_dict, [] )
+        GATK4_COLLECTREADCOUNTS ( input, ch_fasta, ch_fai, ch_dict )
 
         dgcp_case_input = GATK4_COLLECTREADCOUNTS.out.tsv
                 .groupTuple()
@@ -38,9 +37,9 @@ workflow CALL_SV_GERMLINECNVCALLER {
         gcnvc_case_input = GATK4_COLLECTREADCOUNTS.out.tsv
                 .groupTuple()
                 .map({ meta, tsv -> return [meta, tsv, [] ]})
-        GATK4_GERMLINECNVCALLER ( gcnvc_case_input, ch_cnv_model, GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls.collect{ it[1] } )
+        GATK4_GERMLINECNVCALLER ( gcnvc_case_input, ch_gcnvcaller_model, GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls.collect{ it[1] } )
 
-        GATK4_POSTPROCESSGERMLINECNVCALLS ( GATK4_GERMLINECNVCALLER.out.calls, ch_cnv_model, GATK4_GERMLINECNVCALLER.out.calls.collect{ it[1] } )
+        GATK4_POSTPROCESSGERMLINECNVCALLS ( GATK4_GERMLINECNVCALLER.out.calls, ch_gcnvcaller_model, GATK4_GERMLINECNVCALLER.out.calls.collect{ it[1] } )
 
         ch_versions = ch_versions.mix(GATK4_COLLECTREADCOUNTS.out.versions)
         ch_versions = ch_versions.mix(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.versions)

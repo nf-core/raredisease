@@ -50,9 +50,8 @@ params.vep_cache_version              = WorkflowMain.getGenomeAttribute(params, 
 params.gens_interval_list             = WorkflowMain.getGenomeAttribute(params, 'gens_interval_list')
 params.gens_pon                       = WorkflowMain.getGenomeAttribute(params, 'gens_pon')
 params.gens_gnomad_pos                = WorkflowMain.getGenomeAttribute(params, 'gens_gnomad_pos')
-params.ploidy_priors                  = WorkflowMain.getGenomeAttribute(params, 'ploidy_priors')
 params.ploidy_model                   = WorkflowMain.getGenomeAttribute(params, 'ploidy_model')
-params.cnv_model                      = WorkflowMain.getGenomeAttribute(params, 'cnv_model')
+params.gcnvcaller_model               = WorkflowMain.getGenomeAttribute(params, 'gcnvcaller_model')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

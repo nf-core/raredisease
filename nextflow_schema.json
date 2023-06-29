@@ -348,15 +348,6 @@
                     "help_text": "Locations of gnomad SNPs with a high enough BAF.",
                     "hidden": true
                 },
-                "ploidy_priors": {
-                    "type": "string",
-                    "fa_icon": "far fa-file-code",
-                    "description": "Contains contig ploidy priors for gatk4's DetermineGermlineContigPloidy",
-                    "hidden": true,
-                    "format": "path",
-                    "default": "None",
-                    "help_text": "When you are generating a ploidy model using GATK4 DetermineGermlineContigPloidy cohort, this path is required."
-                },
                 "ploidy_model": {
                     "type": "string",
                     "fa_icon": "fas fa-folder-open",
@@ -366,7 +357,7 @@
                     "default": "None",
                     "help_text": "Produced in GATK4 DetermineGermlineContigPloidy cohort, this model is required for generating a cnv model when using GermlineCNVCaller."
                 },
-                "cnv_model": {
+                "gcnvcaller_model": {
                     "type": "string",
                     "fa_icon": "fas fa-folder-open",
                     "description": "Tar gzipped directory containing the cnv model files",

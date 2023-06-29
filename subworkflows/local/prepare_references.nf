@@ -10,6 +10,8 @@ include { GATK4_BEDTOINTERVALLIST as GATK_BILT               } from '../../modul
 include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD          } from '../../modules/nf-core/gatk4/createsequencedictionary/main'
 include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD_MT_SHIFT } from '../../modules/nf-core/gatk4/createsequencedictionary/main'
 include { GATK4_INTERVALLISTTOOLS as GATK_ILT                } from '../../modules/nf-core/gatk4/intervallisttools/main'
+include { GATK4_PREPROCESSINTERVALS as GATK_PREPROCESS_WGS   } from '../../modules/nf-core/gatk4/preprocessintervals/main.nf'
+include { GATK4_PREPROCESSINTERVALS as GATK_PREPROCESS_WES   } from '../../modules/nf-core/gatk4/preprocessintervals/main.nf'
 include { GATK4_SHIFTFASTA as GATK_SHIFTFASTA                } from '../../modules/nf-core/gatk4/shiftfasta/main'
 include { GET_CHROM_SIZES                                    } from '../../modules/local/get_chrom_sizes'
 include { SAMTOOLS_FAIDX as SAMTOOLS_EXTRACT_MT              } from '../../modules/nf-core/samtools/faidx/main'
@@ -88,6 +90,9 @@ workflow PREPARE_REFERENCES {
         CAT_CAT_BAIT ( ch_bait_intervals_cat_in )
         UNTAR_VEP_CACHE (ch_vep_cache)
 
+        //cnvcalling intervals
+        GATK_PREPROCESS_WGS (ch_genome_fasta, ch_fai, GATK_SD.out.dict, [[],[]], [[],[]])
+        GATK_PREPROCESS_WES (ch_genome_fasta, ch_fai, GATK_SD.out.dict, GATK_BILT.out.interval_list, [[],[]])
         // Gather versions
         ch_versions = ch_versions.mix(BWA_INDEX_GENOME.out.versions)
         ch_versions = ch_versions.mix(BWAMEM2_INDEX_GENOME.out.versions)
@@ -108,6 +113,8 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(GATK_ILT.out.versions)
         ch_versions = ch_versions.mix(CAT_CAT_BAIT.out.versions)
         ch_versions = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
+        ch_versions = ch_versions.mix(GATK_PREPROCESS_WGS.out.versions)
+        ch_versions = ch_versions.mix(GATK_PREPROCESS_WES.out.versions)
 
     emit:
         genome_bwa_index      = Channel.empty().mix(ch_bwa, ch_sentieonbwa).collect()            // channel: [ val(meta), path(index) ]

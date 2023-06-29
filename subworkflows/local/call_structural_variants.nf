@@ -21,9 +21,8 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_target_bed   // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
         ch_dict           // channel: [ path(dict) ]
         ch_blacklist_bed  // channel: [ path(blacklist_bed) ]
-        ch_priors         // channel: [ path(priors) ]
         ch_ploidy_model   // channel: [ path(ploidy_model) ]
-        ch_cnv_model      // channel: [ path(cnv_model) ]
+        ch_gcnvcaller_model      // channel: [ path(gcnvcaller_model) ]
 
     main:
         ch_versions = Channel.empty()
@@ -38,7 +37,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
             .collect{it[1]}
             .set { tiddit_vcf }
 
-        CALL_SV_GERMLINECNVCALLER (ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_target_bed, ch_blacklist_bed, ch_dict, ch_priors, ch_ploidy_model, ch_cnv_model)
+        CALL_SV_GERMLINECNVCALLER (ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_target_bed, ch_blacklist_bed, ch_dict, ch_ploidy_model, ch_gcnvcaller_model)
             .genotyped_intervals_vcf
             .collect{it[1]}
             .set { gcnvcaller_vcf }
