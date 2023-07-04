@@ -162,7 +162,7 @@
                     },
                     "gatk4/postprocessgermlinecnvcalls": {
                         "branch": "master",
-                        "git_sha": "d25bf48327e86a7f737047a57ec264b90e22ce3d",
+                        "git_sha": "39ca55cc30514169f8420162bafe4ecf673f4b9a",
                         "installed_by": ["modules"]
                     },
                     "gatk4/preprocessintervals": {
