@@ -201,15 +201,12 @@ workflow RAREDISEASE {
     )
     .set { ch_references }
 
-
     // Gather built indices or get them from the params
+    ch_readcount_intervals      = params.readcount_intervals               ? Channel.fromPath(params.readcount_intervals).collect()
+                                                                           : ( ch_references.readcount_intervals      ?: Channel.empty() )
+    ch_bait_intervals           = ch_references.bait_intervals
     ch_blacklist_bed            = params.blacklist_bed                     ? Channel.fromPath(params.blacklist_bed).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                            : ( ch_references.blacklist_bed            ?: Channel.empty() )
-    ch_ploidy_model             = params.ploidy_model                      ? Channel.fromPath(params.ploidy_model).collect()
-                                                                           : ( ch_references.ploidy_model             ?: Channel.empty() )
-    ch_gcnvcaller_model         = params.gcnvcaller_model                  ? Channel.fromPath(params.gcnvcaller_model).collect()
-                                                                           : ( ch_references.gcnvcaller_model         ?: Channel.empty() )
-    ch_bait_intervals           = ch_references.bait_intervals
     ch_cadd_header              = Channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_cadd_resources           = params.cadd_resources                    ? Channel.fromPath(params.cadd_resources).collect()
                                                                            : Channel.value([])
@@ -217,6 +214,11 @@ workflow RAREDISEASE {
                                                                            : Channel.value([])
     ch_dbsnp_tbi                = params.known_dbsnp_tbi                   ? Channel.fromPath(params.known_dbsnp_tbi).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.known_dbsnp_tbi.ifEmpty([[],[]])
+    ch_gcnvcaller_model         = params.gcnvcaller_model                  ? Channel.fromPath(params.gcnvcaller_model).splitCsv ( header:true )
+                                                                            .map { row ->
+                                                                                return [[id:file(row.models).simpleName], row.models]
+                                                                            }
+                                                                           : Channel.empty()
     ch_genome_bwaindex          = params.bwa                               ? Channel.fromPath(params.bwa).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.genome_bwa_index
     ch_genome_bwamem2index      = params.bwamem2                           ? Channel.fromPath(params.bwamem2).map {it -> [[id:it[0].simpleName], it]}.collect()
@@ -243,6 +245,8 @@ workflow RAREDISEASE {
     ch_mtshift_fai              = ch_references.mtshift_fai
     ch_mtshift_fasta            = ch_references.mtshift_fasta
     ch_mtshift_intervals        = ch_references.mtshift_intervals
+    ch_ploidy_model             = params.ploidy_model                      ? Channel.fromPath(params.ploidy_model).map{ it -> [[id:it[0].simpleName], it] }.collect()
+                                                                           : ( ch_references.ploidy_model             ?: Channel.empty() )
     ch_reduced_penetrance       = params.reduced_penetrance                ? Channel.fromPath(params.reduced_penetrance).collect()
                                                                            : Channel.value([])
     ch_score_config_snv         = params.score_config_snv                  ? Channel.fromPath(params.score_config_snv).collect()
@@ -265,7 +269,6 @@ workflow RAREDISEASE {
     ch_vep_filters              = params.vep_filters                       ? Channel.fromPath(params.vep_filters).collect()
                                                                            : Channel.value([])
     ch_versions                 = ch_versions.mix(ch_references.versions)
-
 
     // Generate pedigree file
     ch_pedfile = CHECK_INPUT.out.samples.toList().map { makePed(it) }
@@ -368,6 +371,7 @@ workflow RAREDISEASE {
         ch_target_bed,
         ch_genome_dictionary,
         ch_blacklist_bed,
+        ch_readcount_intervals,
         ch_ploidy_model,
         ch_gcnvcaller_model
     )

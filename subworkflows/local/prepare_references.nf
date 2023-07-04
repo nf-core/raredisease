@@ -91,8 +91,9 @@ workflow PREPARE_REFERENCES {
         UNTAR_VEP_CACHE (ch_vep_cache)
 
         //cnvcalling intervals
-        GATK_PREPROCESS_WGS (ch_genome_fasta, ch_fai, GATK_SD.out.dict, [[],[]], [[],[]])
-        GATK_PREPROCESS_WES (ch_genome_fasta, ch_fai, GATK_SD.out.dict, GATK_BILT.out.interval_list, [[],[]])
+        GATK_PREPROCESS_WGS (ch_genome_fasta, ch_fai, GATK_SD.out.dict, [[],[]], [[],[]]).set {ch_preprocwgs}
+        GATK_PREPROCESS_WES (ch_genome_fasta, ch_fai, GATK_SD.out.dict, GATK_BILT.out.interval_list, [[],[]]).set {ch_preprocwes}
+
         // Gather versions
         ch_versions = ch_versions.mix(BWA_INDEX_GENOME.out.versions)
         ch_versions = ch_versions.mix(BWAMEM2_INDEX_GENOME.out.versions)
@@ -122,6 +123,8 @@ workflow PREPARE_REFERENCES {
         genome_chrom_sizes    = GET_CHROM_SIZES.out.sizes.collect()                              // channel: [ path(sizes) ]
         genome_fai            = ch_fai                                                           // channel: [ val(meta), path(fai) ]
         genome_dict           = GATK_SD.out.dict.collect()                                       // channel: [ path(dict) ]
+        readcount_intervals   = Channel.empty()
+                                    .mix(ch_preprocwgs.interval_list,ch_preprocwes.interval_list)// channel: [ path(intervals) ]
 
         mt_intervals          = ch_shiftfasta_mtintervals.intervals.collect()                    // channel: [ path(intervals) ]
         mtshift_intervals     = ch_shiftfasta_mtintervals.shift_intervals.collect()              // channel: [ path(intervals) ]

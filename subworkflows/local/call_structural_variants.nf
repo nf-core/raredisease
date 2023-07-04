@@ -11,18 +11,19 @@ include { TABIX_TABIX                } from '../../modules/nf-core/tabix/tabix/m
 workflow CALL_STRUCTURAL_VARIANTS {
 
     take:
-        ch_bam               // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_bai               // channel: [mandatory] [ val(meta), path(bai) ]
-        ch_bam_bai           // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_bwa_index         // channel: [mandatory] [ val(meta), path(index)]
-        ch_genome_fasta      // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai        // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_case_info         // channel: [mandatory] [ val(case_info) ]
-        ch_target_bed        // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
-        ch_genome_dictionary // channel: [optional; used by mandatory for GATK's cnvcaller][ val(meta), path(dict) ]
-        ch_blacklist_bed     // channel: [optional; used by mandatory for GATK's cnvcaller][ path(blacklist_bed) ]
-        ch_ploidy_model      // channel: [optional; used by mandatory for GATK's cnvcaller][ path(ploidy_model) ]
-        ch_gcnvcaller_model  // channel: [optional; used by mandatory for GATK's cnvcaller][ path(gcnvcaller_model) ]
+        ch_bam                 // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_bai                 // channel: [mandatory] [ val(meta), path(bai) ]
+        ch_bam_bai             // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_bwa_index           // channel: [mandatory] [ val(meta), path(index)]
+        ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai          // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_case_info           // channel: [mandatory] [ val(case_info) ]
+        ch_target_bed          // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
+        ch_genome_dictionary   // channel: [optional; used by mandatory for GATK's cnvcaller][ val(meta), path(dict) ]
+        ch_blacklist_bed       // channel: [optional; used by mandatory for GATK's cnvcaller][ path(blacklist_bed) ]
+        ch_readcount_intervals // channel: [optional; used by mandatory for GATK's cnvcaller][ path(intervals) ]
+        ch_ploidy_model        // channel: [optional; used by mandatory for GATK's cnvcaller][ path(ploidy_model) ]
+        ch_gcnvcaller_model    // channel: [optional; used by mandatory for GATK's cnvcaller][ path(gcnvcaller_model) ]
 
     main:
         ch_versions = Channel.empty()
@@ -37,7 +38,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
             .collect{it[1]}
             .set { tiddit_vcf }
 
-        CALL_SV_GERMLINECNVCALLER (ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_target_bed, ch_blacklist_bed, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model)
+        CALL_SV_GERMLINECNVCALLER (ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_blacklist_bed, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model)
             .genotyped_intervals_vcf
             .collect{it[1]}
             .set { gcnvcaller_vcf }
