@@ -100,11 +100,6 @@
                         "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
                     },
-                    "gatk4/annotateintervals": {
-                        "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
-                        "installed_by": ["modules"]
-                    },
                     "gatk4/bedtointervallist": {
                         "branch": "master",
                         "git_sha": "2df2a11d5b12f2a73bca74f103691bc35d83c5fd",
@@ -123,11 +118,6 @@
                     "gatk4/determinegermlinecontigploidy": {
                         "branch": "master",
                         "git_sha": "d25bf48327e86a7f737047a57ec264b90e22ce3d",
-                        "installed_by": ["modules"]
-                    },
-                    "gatk4/filterintervals": {
-                        "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
                         "installed_by": ["modules"]
                     },
                     "gatk4/filtermutectcalls": {
