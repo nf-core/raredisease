@@ -504,11 +504,6 @@
                     "description": "Institutional config URL link.",
                     "hidden": true,
                     "fa_icon": "fas fa-users-cog"
-                },
-                "local_config_path": {
-                    "type": "string",
-                    "description": "Path to local config",
-                    "fa_icon": "fas fa-users-cog"
                 }
             }
         },
