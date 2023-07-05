@@ -92,6 +92,10 @@ if (params.variant_caller.equals("sentieon")) {
     mandatoryParams += ["ml_model"]
 }
 
+if (!params.skip_cnv_calling) {
+    mandatoryParams += ["ploidy_model", "gcnvcaller_model"]
+}
+
 def missingParamsCount = 0
 for (param in mandatoryParams.unique()) {
     if (params[param] == null) {
@@ -101,7 +105,7 @@ for (param in mandatoryParams.unique()) {
 }
 
 if (missingParamsCount>0) {
-    error("\nSet missing parameters and restart the run.")
+    error("\nSet missing parameters and restart the run. For more information please check usage documentation on github.")
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -207,11 +211,7 @@ workflow RAREDISEASE {
     .set { ch_references }
 
     // Gather built indices or get them from the params
-    ch_readcount_intervals      = params.readcount_intervals               ? Channel.fromPath(params.readcount_intervals).collect()
-                                                                           : ( ch_references.readcount_intervals      ?: Channel.empty() )
     ch_bait_intervals           = ch_references.bait_intervals
-    ch_blacklist_bed            = params.blacklist_bed                     ? Channel.fromPath(params.blacklist_bed).map{ it -> [[id:it[0].simpleName], it] }.collect()
-                                                                           : ( ch_references.blacklist_bed            ?: Channel.empty() )
     ch_cadd_header              = Channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_cadd_resources           = params.cadd_resources                    ? Channel.fromPath(params.cadd_resources).collect()
                                                                            : Channel.value([])
@@ -251,7 +251,9 @@ workflow RAREDISEASE {
     ch_mtshift_fasta            = ch_references.mtshift_fasta
     ch_mtshift_intervals        = ch_references.mtshift_intervals
     ch_ploidy_model             = params.ploidy_model                      ? Channel.fromPath(params.ploidy_model).map{ it -> [[id:it[0].simpleName], it] }.collect()
-                                                                           : ( ch_references.ploidy_model             ?: Channel.empty() )
+                                                                           : Channel.empty()
+    ch_readcount_intervals      = params.readcount_intervals               ? Channel.fromPath(params.readcount_intervals).collect()
+                                                                           : ( ch_references.readcount_intervals      ?: Channel.empty() )
     ch_reduced_penetrance       = params.reduced_penetrance                ? Channel.fromPath(params.reduced_penetrance).collect()
                                                                            : Channel.value([])
     ch_score_config_snv         = params.score_config_snv                  ? Channel.fromPath(params.score_config_snv).collect()
@@ -277,6 +279,13 @@ workflow RAREDISEASE {
 
     // Generate pedigree file
     ch_pedfile = CHECK_INPUT.out.samples.toList().map { makePed(it) }
+
+    // SV caller priority
+    if (params.skip_cnv_calling) {
+        ch_svcaller_priority = Channel.value(["tiddit", "manta"])
+    } else {
+        ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller"])
+    }
 
     // Input QC
     FASTQC (CHECK_INPUT.out.reads)
@@ -375,7 +384,7 @@ workflow RAREDISEASE {
         CHECK_INPUT.out.case_info,
         ch_target_bed,
         ch_genome_dictionary,
-        ch_blacklist_bed,
+        ch_svcaller_priority,
         ch_readcount_intervals,
         ch_ploidy_model,
         ch_gcnvcaller_model

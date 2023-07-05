@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add GATK's cnv calling pipeline [#362](https://github.com/nf-core/raredisease/pull/362)
 - Add `public_aws_ecr` profile for using AWS ECR public gallery images [#360](https://github.com/nf-core/raredisease/pull/360)
 - GATK's ShiftFasta to generate all the files required for mitochondrial analysis [#354](https://github.com/nf-core/raredisease/pull/354)
 - Feature to calculate CADD scores for indels [#325](https://github.com/nf-core/raredisease/pull/325)

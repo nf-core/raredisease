@@ -20,7 +20,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_case_info           // channel: [mandatory] [ val(case_info) ]
         ch_target_bed          // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
         ch_genome_dictionary   // channel: [optional; used by mandatory for GATK's cnvcaller][ val(meta), path(dict) ]
-        ch_blacklist_bed       // channel: [optional; used by mandatory for GATK's cnvcaller][ path(blacklist_bed) ]
+        ch_svcaller_priority   // channel: [mandatory] [ val(["var caller tag 1", ...]) ]
         ch_readcount_intervals // channel: [optional; used by mandatory for GATK's cnvcaller][ path(intervals) ]
         ch_ploidy_model        // channel: [optional; used by mandatory for GATK's cnvcaller][ path(ploidy_model) ]
         ch_gcnvcaller_model    // channel: [optional; used by mandatory for GATK's cnvcaller][ path(gcnvcaller_model) ]
@@ -38,23 +38,30 @@ workflow CALL_STRUCTURAL_VARIANTS {
             .collect{it[1]}
             .set { tiddit_vcf }
 
-        CALL_SV_GERMLINECNVCALLER (ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_blacklist_bed, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model)
+        CALL_SV_GERMLINECNVCALLER (ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model)
             .genotyped_intervals_vcf
             .collect{it[1]}
             .set { gcnvcaller_vcf }
 
         //merge
-        tiddit_vcf
-            .combine(manta_vcf)
-            .combine(gcnvcaller_vcf)
-            .toList()
-            .set { vcf_list }
+        if (params.skip_cnv_calling) {
+            tiddit_vcf
+                .combine(manta_vcf)
+                .toList()
+                .set { vcf_list }
+        } else {
+            tiddit_vcf
+                .combine(manta_vcf)
+                .combine(gcnvcaller_vcf)
+                .toList()
+                .set { vcf_list }
+        }
 
         ch_case_info
             .combine(vcf_list)
             .set { merge_input_vcfs }
 
-        SVDB_MERGE (merge_input_vcfs, ["tiddit","manta","gcnvcaller"])
+        SVDB_MERGE (merge_input_vcfs, ch_svcaller_priority)
 
         TABIX_TABIX (SVDB_MERGE.out.vcf)
 

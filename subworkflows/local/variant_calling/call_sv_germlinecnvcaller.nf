@@ -13,7 +13,6 @@ workflow CALL_SV_GERMLINECNVCALLER {
         ch_fasta               // channel: [mandatory][ val(meta), path(ch_fasta_no_meta) ]
         ch_fai                 // channel: [mandatory][ val(meta), path(ch_fai) ]
         ch_readcount_intervals // channel: [mandatory][ val(meta), path(bed), path(tbi) ]
-        ch_blacklist_bed       // channel: [mandatory][ val(meta), path(ch_blacklist_bed) ]
         ch_genome_dictionary   // channel: [mandatory][ val(meta), path(ch_dict) ]
         ch_ploidy_model        // channel: [mandatory][ path(ch_ploidy_model) ]
         ch_gcnvcaller_model    // channel: [mandatory][ path(ch_gcnvcaller_model) ]
@@ -60,6 +59,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
         versions                = ch_versions                                      // channel: [ versions.yml ]
 }
 
+// This function groups calls with same meta for postprocessing.
 def reduce_input (List gcnvoutput) {
     def dictionary  = [:]
     def reducedList = []
