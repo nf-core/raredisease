@@ -2,10 +2,10 @@ process GATK4_COLLECTREADCOUNTS {
     tag "$meta.id"
     label 'process_medium'
 
-    conda (params.enable_conda ? "bioconda::gatk4=4.2.4.1" : null)
+    conda "bioconda::gatk4=4.4.0.0"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/gatk4:4.2.4.1--hdfd78af_0' :
-        'quay.io/biocontainers/gatk4:4.2.4.1--hdfd78af_0' }"
+        'https://depot.galaxyproject.org/singularity/gatk4:4.4.0.0--py36hdfd78af_0':
+        'quay.io/biocontainers/gatk4:4.4.0.0--py36hdfd78af_0' }"
 
     input:
     tuple val(meta), path(bam), path(bai)
@@ -21,14 +21,14 @@ process GATK4_COLLECTREADCOUNTS {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def avail_mem = 12
+    def avail_mem = 12288
     if (!task.memory) {
         log.info '[GATK CollectReadCounts] Available memory not known - defaulting to 12GB. Specify process memory requirements to change this.'
     } else {
-        avail_mem = task.memory.giga
+        avail_mem = (task.memory.mega*0.8).intValue()
     }
     """
-    gatk --java-options "-Xmx${avail_mem}g" CollectReadCounts \\
+    gatk --java-options "-Xmx${avail_mem}M" CollectReadCounts \\
         -I $bam \\
         --read-index $bai \\
         -R $fasta \\

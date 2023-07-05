@@ -7,25 +7,25 @@ process SENTIEON_DATAMETRICS {
 
     input:
     tuple val(meta), path(bam), path(bai)
-    path fasta
-    path fai
+    tuple val(meta2), path(fasta)
+    tuple val(meta3), path(fai)
 
     output:
-    tuple val(meta), path('*mq_metrics.txt')   , emit: mq_metrics
-    tuple val(meta), path('*qd_metrics.txt')   , emit: qd_metrics
-    tuple val(meta), path('*gc_summary.txt')   , emit: gc_summary
-    tuple val(meta), path('*gc_metrics.txt')   , emit: gc_metrics
-    tuple val(meta), path('*aln_metrics.txt')  , emit: aln_metrics
-    tuple val(meta), path('*is_metrics.txt')   , emit: is_metrics
-    path  "versions.yml"                       , emit: versions
+    tuple val(meta), path('*mq_metrics.txt') , emit: mq_metrics
+    tuple val(meta), path('*qd_metrics.txt') , emit: qd_metrics
+    tuple val(meta), path('*gc_summary.txt') , emit: gc_summary
+    tuple val(meta), path('*gc_metrics.txt') , emit: gc_metrics
+    tuple val(meta), path('*aln_metrics.txt'), emit: aln_metrics
+    tuple val(meta), path('*is_metrics.txt') , emit: is_metrics
+    path  "versions.yml"                     , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
-    def args   = task.ext.args ?: ''
+    def args   = task.ext.args   ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
     def input  = bam.sort().collect{"-i $it"}.join(' ')
-    def prefix       = task.ext.prefix ?: "${meta.id}"
     """
     if [ \${SENTIEON_LICENSE_BASE64:-"unset"} != "unset" ]; then
         echo "Initializing SENTIEON_LICENSE env variable"

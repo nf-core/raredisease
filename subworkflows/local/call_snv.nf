@@ -9,40 +9,46 @@ include { GATK4_SELECTVARIANTS } from '../../modules/nf-core/gatk4/selectvariant
 
 workflow CALL_SNV {
     take:
-	    variant_caller       // string:  params.variant_caller
-	    input                // channel: [ val(meta), path(bam), path(bai) ]
-	    fasta                // channel: [genome.fasta]
-	    fai                  // channel: [genome.fai]
-	    known_dbsnp          // channel: [ /path/to/known_dbsnp ]
-	    known_dbsnp_tbi      // channel: [ /path/to/known_dbsnp_tbi ]
-        call_interval        // channel: [ /path/to/call_intervals ]
-	    ml_model             // channel: [ /path/to/ml_model ]
-	    case_info            // channel: [ case_id ]
+        ch_bam_bai           // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_known_dbsnp     // channel: [optional] [ val(meta), path(vcf) ]
+        ch_known_dbsnp_tbi // channel: [optional] [ val(meta), path(tbi) ]
+        ch_call_interval   // channel: [mandatory] [ path(intervals) ]
+        ch_ml_model        // channel: [mandatory] [ path(model) ]
+        ch_case_info       // channel: [mandatory] [ val(case_info) ]
 
     main:
         ch_versions   = Channel.empty()
+        ch_vcf        = Channel.empty()
+        ch_tabix      = Channel.empty()
 
-        if (variant_caller == "deepvariant") {
-            CALL_SNV_DEEPVARIANT ( input, fasta, fai, case_info )
-            ch_vcf      = CALL_SNV_DEEPVARIANT.out.vcf
-            ch_tabix    = CALL_SNV_DEEPVARIANT.out.tabix
-            ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
-        } else if ( variant_caller == "sentieon" ) {
-            CALL_SNV_SENTIEON( input, fasta, fai, known_dbsnp, known_dbsnp_tbi, call_interval, ml_model, case_info )
-            ch_vcf      = CALL_SNV_SENTIEON.out.vcf
-            ch_tabix    = CALL_SNV_SENTIEON.out.tabix
-            ch_versions = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
-        } else {
-           exit 1, 'Please provide a valid variant caller!'
-        }
+        CALL_SNV_DEEPVARIANT (      // triggered only when params.variant_caller is set as deepvariant
+            ch_bam_bai,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_case_info
+        )
 
-        ch_vcf.join(ch_tabix)
-            .map { meta, vcf, tbi -> return [meta, vcf, tbi, []]}
-            .set { ch_selvar_in }
-        GATK4_SELECTVARIANTS(ch_selvar_in)
+        CALL_SNV_SENTIEON(         // triggered only when params.variant_caller is set as sentieon
+            ch_bam_bai,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_known_dbsnp,
+            ch_known_dbsnp_tbi,
+            ch_call_interval,
+            ch_ml_model,
+            ch_case_info
+        )
+
+        ch_vcf      = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.vcf, CALL_SNV_SENTIEON.out.vcf)
+        ch_tabix    = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.tabix, CALL_SNV_SENTIEON.out.tabix)
+
+        ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
+        ch_versions = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
 
     emit:
-        vcf      = GATK4_SELECTVARIANTS.out.vcf
-        tabix    = GATK4_SELECTVARIANTS.out.tbi
-        versions = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+        vcf      = ch_vcf      // channel: [ val(meta), path(vcf) ]
+        tabix    = ch_tabix    // channel: [ val(meta), path(tbi) ]
+        versions = ch_versions // channel: [ path(versions.yml) ]
 }

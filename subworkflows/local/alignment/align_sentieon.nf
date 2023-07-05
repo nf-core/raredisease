@@ -11,13 +11,13 @@ include { SENTIEON_READWRITER     } from '../../../modules/local/sentieon/readwr
 
 workflow ALIGN_SENTIEON {
     take:
-        reads_input     // channel: [ val(meta), reads_input ]
-        fasta           // path: genome.fasta
-        fai             // path: genome.fai
-        index           // channel: [ /path/to/bwamem2/index/ ]
-        known_dbsnp     // path: params.known_dbsnp
-        known_dbsnp_tbi // path: params.known_dbsnp
-        platform        // value: params.platform
+        ch_reads_input     // channel: [mandatory] [ val(meta), path(reads_input) ]
+        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_bwa_index       // channel: [mandatory] [ val(meta), path(bwa_index) ]
+        ch_known_dbsnp     // channel: [optional] [ path(known_dbsnp) ]
+        ch_known_dbsnp_tbi // channel: [optional] [ path(known_dbsnp_tbi) ]
+        val_platform       // string:  [mandatory] default: illumina
 
     main:
         ch_versions = Channel.empty()
@@ -25,19 +25,18 @@ workflow ALIGN_SENTIEON {
         ch_bqsr_bai = Channel.empty()
         ch_bqsr_csv = Channel.empty()
 
-        SENTIEON_BWAMEM ( reads_input, fasta, fai, index )
-        ch_versions = ch_versions.mix(SENTIEON_BWAMEM.out.versions.first())
+        SENTIEON_BWAMEM ( ch_reads_input, ch_genome_fasta, ch_genome_fai, ch_bwa_index )
 
         SENTIEON_BWAMEM.out
             .bam
-            .join(SENTIEON_BWAMEM.out.bai)
+            .join(SENTIEON_BWAMEM.out.bai, failOnMismatch:true, failOnDuplicate:true)
             .map{ meta, bam, bai ->
-                new_meta = meta.clone()                                                                                 // clone to avoid overriding the global meta
-                new_meta.id = new_meta.id.split('_')[0]                                                                 // access the .id attribute of meta to split samplename_lane into samplename
-                new_meta.read_group = "\'@RG\\tID:" + new_meta.id + "\\tPL:" + platform + "\\tSM:" + new_meta.id + "\'"
-                [new_meta, bam, bai]}                                                                                   // end the closure to return newly modified channel
-            .groupTuple(by: 0)                                                                                          // group them bam paths with the same [ [samplename], [bam path, bam path, ..] ]
-            .branch{                                                                                                    // branch the channel into multiple channels (single, multiple) depending on size of list
+                new_id   = meta.id.split('_')[0]
+                new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"]
+                [groupKey(new_meta, new_meta.num_lanes), bam, bai]
+                }
+            .groupTuple()
+            .branch{
                 single: it[1].size() == 1
                 multiple: it[1].size() > 1
                 }
@@ -45,42 +44,45 @@ workflow ALIGN_SENTIEON {
 
         SENTIEON_READWRITER (merge_bams_in.multiple)
         ch_bam_bai = merge_bams_in.single.mix(SENTIEON_READWRITER.out.bam_bai)
-        SENTIEON_DATAMETRICS (ch_bam_bai, fasta, fai )
-        ch_versions = ch_versions.mix(SENTIEON_DATAMETRICS.out.versions.first())
+
+        SENTIEON_DATAMETRICS (ch_bam_bai, ch_genome_fasta, ch_genome_fai )
 
         SENTIEON_LOCUSCOLLECTOR ( ch_bam_bai )
-        ch_versions = ch_versions.mix(SENTIEON_LOCUSCOLLECTOR.out.versions.first())
 
         ch_bam_bai
-            .join(SENTIEON_LOCUSCOLLECTOR.out.score)
-            .join(SENTIEON_LOCUSCOLLECTOR.out.score_idx)
+            .join(SENTIEON_LOCUSCOLLECTOR.out.score, failOnMismatch:true, failOnDuplicate:true)
+            .join(SENTIEON_LOCUSCOLLECTOR.out.score_idx, failOnMismatch:true, failOnDuplicate:true)
             .set { ch_bam_bai_score }
 
-        SENTIEON_DEDUP ( ch_bam_bai_score, fasta, fai )
-        ch_versions = ch_versions.mix(SENTIEON_DEDUP.out.versions.first())
+        SENTIEON_DEDUP ( ch_bam_bai_score, ch_genome_fasta, ch_genome_fai )
 
         if (params.variant_caller == "sentieon") {
             SENTIEON_DEDUP.out.bam
-                .join(SENTIEON_DEDUP.out.bai)
+                .join(SENTIEON_DEDUP.out.bai, failOnMismatch:true, failOnDuplicate:true)
                 .set { ch_dedup_bam_bai }
-            SENTIEON_BQSR ( ch_dedup_bam_bai, fasta, fai, known_dbsnp, known_dbsnp_tbi )
+            SENTIEON_BQSR ( ch_dedup_bam_bai, ch_genome_fasta, ch_genome_fai, ch_known_dbsnp, ch_known_dbsnp_tbi )
             ch_bqsr_bam = SENTIEON_BQSR.out.bam
             ch_bqsr_bai = SENTIEON_BQSR.out.bai
             ch_bqsr_csv = SENTIEON_BQSR.out.recal_csv
             ch_versions = ch_versions.mix(SENTIEON_BQSR.out.versions.first())
         }
 
+        ch_versions = ch_versions.mix(SENTIEON_BWAMEM.out.versions.first())
+        ch_versions = ch_versions.mix(SENTIEON_DATAMETRICS.out.versions.first())
+        ch_versions = ch_versions.mix(SENTIEON_LOCUSCOLLECTOR.out.versions.first())
+        ch_versions = ch_versions.mix(SENTIEON_DEDUP.out.versions.first())
+
     emit:
-        marked_bam             = SENTIEON_DEDUP.out.bam
-        marked_bai             = SENTIEON_DEDUP.out.bai
-        recal_bam              = ch_bqsr_bam.ifEmpty(null)
-        recal_bai              = ch_bqsr_bai.ifEmpty(null)
-        recal_csv              = ch_bqsr_csv.ifEmpty(null)
-        mq_metrics             = SENTIEON_DATAMETRICS.out.mq_metrics.ifEmpty(null)
-        qd_metrics             = SENTIEON_DATAMETRICS.out.qd_metrics.ifEmpty(null)
-        gc_metrics             = SENTIEON_DATAMETRICS.out.gc_metrics.ifEmpty(null)
-        gc_summary             = SENTIEON_DATAMETRICS.out.gc_summary.ifEmpty(null)
-        aln_metrics            = SENTIEON_DATAMETRICS.out.aln_metrics.ifEmpty(null)
-        is_metrics             = SENTIEON_DATAMETRICS.out.is_metrics.ifEmpty(null)
-        versions               = ch_versions.ifEmpty(null)                           // channel: [ versions.yml ]
+        marked_bam  = SENTIEON_DEDUP.out.bam                             // channel: [ val(meta), path(bam) ]
+        marked_bai  = SENTIEON_DEDUP.out.bai                             // channel: [ val(meta), path(bai) ]
+        recal_bam   = ch_bqsr_bam.ifEmpty(null)                          // channel: [ val(meta), path(bam) ]
+        recal_bai   = ch_bqsr_bai.ifEmpty(null)                          // channel: [ val(meta), path(bai) ]
+        recal_csv   = ch_bqsr_csv.ifEmpty(null)                          // channel: [ val(meta), path(csv) ]
+        mq_metrics  = SENTIEON_DATAMETRICS.out.mq_metrics.ifEmpty(null)  // channel: [ val(meta), path(mq_metrics) ]
+        qd_metrics  = SENTIEON_DATAMETRICS.out.qd_metrics.ifEmpty(null)  // channel: [ val(meta), path(qd_metrics) ]
+        gc_metrics  = SENTIEON_DATAMETRICS.out.gc_metrics.ifEmpty(null)  // channel: [ val(meta), path(gc_metrics) ]
+        gc_summary  = SENTIEON_DATAMETRICS.out.gc_summary.ifEmpty(null)  // channel: [ val(meta), path(gc_summary) ]
+        aln_metrics = SENTIEON_DATAMETRICS.out.aln_metrics.ifEmpty(null) // channel: [ val(meta), path(aln_metrics) ]
+        is_metrics  = SENTIEON_DATAMETRICS.out.is_metrics.ifEmpty(null)  // channel: [ val(meta), path(is_metrics) ]
+        versions    = ch_versions                                        // channel: [ path(versions.yml) ]
 }

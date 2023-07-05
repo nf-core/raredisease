@@ -4,7 +4,6 @@
     nf-core/raredisease
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Github : https://github.com/nf-core/raredisease
-
     Website: https://nf-co.re/raredisease
     Slack  : https://nfcore.slack.com/channels/raredisease
 ----------------------------------------------------------------------------------------
@@ -19,25 +18,21 @@ nextflow.enable.dsl = 2
 */
 
 params.fasta                          = WorkflowMain.getGenomeAttribute(params, 'fasta')
-params.fasta_fai                      = WorkflowMain.getGenomeAttribute(params, 'fai')
-params.bwa_index                      = WorkflowMain.getGenomeAttribute(params, 'bwa_index')
-params.bwamem2_index                  = WorkflowMain.getGenomeAttribute(params, 'bwamem2')
+params.fai                            = WorkflowMain.getGenomeAttribute(params, 'fai')
+params.bwa                            = WorkflowMain.getGenomeAttribute(params, 'bwa')
+params.bwamem2                        = WorkflowMain.getGenomeAttribute(params, 'bwamem2')
 params.call_interval                  = WorkflowMain.getGenomeAttribute(params, 'call_interval')
+params.cadd_resources                 = WorkflowMain.getGenomeAttribute(params, 'cadd_resources')
 params.gnomad_af                      = WorkflowMain.getGenomeAttribute(params, 'gnomad_af')
 params.gnomad_af_idx                  = WorkflowMain.getGenomeAttribute(params, 'gnomad_af_idx')
-params.gnomad_vcf                     = WorkflowMain.getGenomeAttribute(params, 'gnomad_vcf')
+params.intervals_wgs                  = WorkflowMain.getGenomeAttribute(params, 'intervals_wgs')
+params.intervals_y                    = WorkflowMain.getGenomeAttribute(params, 'intervals_y')
 params.known_dbsnp                    = WorkflowMain.getGenomeAttribute(params, 'known_dbsnp')
 params.known_dbsnp_tbi                = WorkflowMain.getGenomeAttribute(params, 'known_dbsnp_tbi')
 params.known_indels                   = WorkflowMain.getGenomeAttribute(params, 'known_indels')
 params.known_mills                    = WorkflowMain.getGenomeAttribute(params, 'known_mills')
 params.ml_model                       = WorkflowMain.getGenomeAttribute(params, 'ml_model')
-params.mt_backchain_shift             = WorkflowMain.getGenomeAttribute(params, 'mt_backchain_shift')
-params.mt_bwamem2_index_shift         = WorkflowMain.getGenomeAttribute(params, 'mt_bwamem2_index_shift')
-params.mt_fasta_shift                 = WorkflowMain.getGenomeAttribute(params, 'mt_fasta_shift')
-params.mt_fai_shift                   = WorkflowMain.getGenomeAttribute(params, 'mt_fai_shift')
-params.mt_intervals                   = WorkflowMain.getGenomeAttribute(params, 'mt_intervals')
-params.mt_intervals_shift             = WorkflowMain.getGenomeAttribute(params, 'mt_intervals_shift')
-params.mt_sequence_dictionary_shift   = WorkflowMain.getGenomeAttribute(params, 'mt_sequence_dictionary_shift')
+params.mt_fasta                       = WorkflowMain.getGenomeAttribute(params, 'mt_fasta')
 params.reduced_penetrance             = WorkflowMain.getGenomeAttribute(params, 'reduced_penetrance')
 params.sequence_dictionary            = WorkflowMain.getGenomeAttribute(params, 'sequence_dictionary')
 params.score_config_snv               = WorkflowMain.getGenomeAttribute(params, 'score_config_snv')
@@ -60,6 +55,22 @@ params.gens_gnomad_pos                = WorkflowMain.getGenomeAttribute(params, 
     VALIDATE & PRINT PARAMETER SUMMARY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+include { validateParameters; paramsHelp } from 'plugin/nf-validation'
+
+// Print help message if needed
+if (params.help) {
+    def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
+    def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
+    def String command = "nextflow run ${workflow.manifest.name} --input samplesheet.csv --genome GRCh37 -profile docker"
+    log.info logo + paramsHelp(command) + citation + NfcoreTemplate.dashedLine(params.monochrome_logs)
+    System.exit(0)
+}
+
+// Validate input parameters
+if (params.validate_params) {
+    validateParameters()
+}
 
 WorkflowMain.initialise(workflow, params, log)
 

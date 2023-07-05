@@ -8,22 +8,22 @@ include { GATK4_SPLITINTERVALS } from '../../modules/nf-core/gatk4/splitinterval
 workflow SCATTER_GENOME {
 
     take:
-        dict
-        fai_meta           // channel: [ val(meta), path(vcf) ]
-        fai_no_meta
-        fasta_no_meta
+        ch_genome_dictionary   // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_genome_fai    // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_fasta  // channel: [mandatory] [ val(meta), path(fasta) ]
 
     main:
         ch_versions = Channel.empty()
 
-        BUILD_BED (fai_meta)
-        ch_versions = ch_versions.mix(BUILD_BED.out.versions)
+        BUILD_BED (ch_genome_fai)
 
-        GATK4_SPLITINTERVALS(BUILD_BED.out.bed, fasta_no_meta, fai_no_meta, dict)
+        GATK4_SPLITINTERVALS(BUILD_BED.out.bed, ch_genome_fasta, ch_genome_fai, ch_genome_dictionary)
+
+        ch_versions = ch_versions.mix(BUILD_BED.out.versions)
         ch_versions = ch_versions.mix(GATK4_SPLITINTERVALS.out.versions)
 
     emit:
-        bed             = BUILD_BED.out.bed.collect()
-        split_intervals = GATK4_SPLITINTERVALS.out.split_intervals.map { meta, it -> it }.flatten().collate(1)
-        versions        = ch_versions.ifEmpty(null)      // channel: [ versions.yml ]
+        bed             = BUILD_BED.out.bed.collect()   // channel: [ val(meta), path(bed) ]
+        split_intervals = GATK4_SPLITINTERVALS.out.split_intervals.map { meta, it -> it }.flatten().collate(1) // channel: [ val(meta), [ path(interval_lists) ] ]
+        versions        = ch_versions                   // channel: [ path(versions.yml) ]
 }

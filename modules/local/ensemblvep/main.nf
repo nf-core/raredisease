@@ -2,30 +2,31 @@ process ENSEMBLVEP {
     tag "$meta.id"
     label 'process_medium'
 
-    if (params.enable_conda) {
-        exit 1, "Conda environments cannot be used with vep at the moment. Please use Docker or Singularity containers."
+    // Exit if running this module with -profile conda / -profile mamba
+    if (workflow.profile.tokenize(',').intersect(['conda', 'mamba']).size() >= 1) {
+        error("Local VEP module does not support Conda. Please use Docker / Singularity / Podman instead.")
     }
 
-    container "ensemblorg/ensembl-vep:release_107.0"
+    container "docker.io/ensemblorg/ensembl-vep:release_107.0"
 
     input:
     tuple val(meta), path(vcf)
+    tuple val(meta2), path(fasta)
     val   genome
     val   species
     val   cache_version
     path  cache
-    path  fasta
     path  extra_files
 
     output:
-    tuple val(meta), path("*.ann.vcf")     , optional:true, emit: vcf
-    tuple val(meta), path("*.ann.tab")     , optional:true, emit: tab
-    tuple val(meta), path("*.ann.json")    , optional:true, emit: json
-    tuple val(meta), path("*.ann.vcf.gz")  , optional:true, emit: vcf_gz
-    tuple val(meta), path("*.ann.tab.gz")  , optional:true, emit: tab_gz
-    tuple val(meta), path("*.ann.json.gz") , optional:true, emit: json_gz
-    path "*.summary.html"                  , optional:true, emit: report
-    path "versions.yml"                    , emit: versions
+    tuple val(meta), path("*.vcf")    , optional:true, emit: vcf
+    tuple val(meta), path("*.tab")    , optional:true, emit: tab
+    tuple val(meta), path("*.json")   , optional:true, emit: json
+    tuple val(meta), path("*.vcf.gz") , optional:true, emit: vcf_gz
+    tuple val(meta), path("*.tab.gz") , optional:true, emit: tab_gz
+    tuple val(meta), path("*.json.gz"), optional:true, emit: json_gz
+    path "*.summary.html"             , optional:true, emit: report
+    path "versions.yml"               , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -42,7 +43,7 @@ process ENSEMBLVEP {
     """
     vep \\
         -i $vcf \\
-        -o ${prefix}.ann.${file_extension}${compress_out} \\
+        -o ${prefix}.${file_extension}${compress_out} \\
         $args \\
         $reference \\
         --assembly $genome \\
@@ -63,12 +64,12 @@ process ENSEMBLVEP {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.ann.vcf
-    touch ${prefix}.ann.tab
-    touch ${prefix}.ann.json
-    touch ${prefix}.ann.vcf.gz
-    touch ${prefix}.ann.tab.gz
-    touch ${prefix}.ann.json.gz
+    touch ${prefix}.vcf
+    touch ${prefix}.tab
+    touch ${prefix}.json
+    touch ${prefix}.vcf.gz
+    touch ${prefix}.tab.gz
+    touch ${prefix}.json.gz
     touch ${prefix}.summary.html
 
     cat <<-END_VERSIONS > versions.yml

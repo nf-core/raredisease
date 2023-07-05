@@ -15,9 +15,9 @@
                 "input": {
                     "type": "string",
                     "format": "file-path",
+                    "exists": true,
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.csv$",
-                    "schema": "assets/schema_input.json",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
                     "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/raredisease/usage#samplesheet-input).",
                     "fa_icon": "fas fa-file-csv"
@@ -48,6 +48,14 @@
             "fa_icon": "fas fa-dna",
             "description": "Reference genome related files and options required for the workflow.",
             "properties": {
+                "bait_padding": {
+                    "type": "number",
+                    "default": 100,
+                    "fa_icon": "fas fa-greater-than",
+                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "description": "The amount to pad each end of the target intervals to create bait intervals.",
+                    "hidden": true
+                },
                 "genome": {
                     "type": "string",
                     "description": "Name of iGenomes reference.",
@@ -57,13 +65,14 @@
                 "fasta": {
                     "type": "string",
                     "format": "file-path",
+                    "exists": true,
                     "mimetype": "text/plain",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to FASTA genome file.",
                     "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
                     "fa_icon": "far fa-file-code"
                 },
-                "fasta_fai": {
+                "fai": {
                     "type": "string",
                     "format": "file-path",
                     "help_text": "If none provided, will be generated automatically from the FASTA reference",
@@ -87,7 +96,7 @@
                     "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
                 },
-                "bwa_index": {
+                "bwa": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "Directory for pre-built bwa index.",
@@ -95,7 +104,7 @@
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
-                "bwamem2_index": {
+                "bwamem2": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "Directory for pre-built bwamem2 index.",
@@ -103,13 +112,12 @@
                     "fa_icon": "fas fa-folder-open",
                     "hidden": true
                 },
-                "gnomad_vcf": {
+                "cadd_resources": {
                     "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-bezier-curve",
-                    "pattern": "^\\S+\\.vcf(\\.gz)?$",
-                    "description": "Path to directory for gnomad vcf.",
-                    "help_text": "Path to the gnomad annotations vcf file. If you don't provide one, gnomad annotations will not be used."
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to the directory containing cadd annotations.",
+                    "help_text": "This folder contains the uncompressed files that would otherwise be in data/annotation folder as described in https://github.com/kircherlab/CADD-scripts/#manual-installation."
                 },
                 "gnomad_af": {
                     "type": "string",
@@ -127,27 +135,27 @@
                     "description": "Path to the index file for the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
                 },
-                "mt_contig_name": {
-                    "type": "string",
-                    "format": "path",
-                    "description": "Name of the mitochondrial contig in the reference fasta file",
-                    "help_text": "Used to extract relevant information from the references to analyse mitochondria"
-                },
-                "mt_intervals": {
+                "intervals_wgs": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-file",
                     "pattern": "^\\S+\\.intervals?(_list)?$",
-                    "description": "Path to the interval list of the non control mitochondral region.",
-                    "help_text": "Path to the interval list of the non control mitochondral regions for Mutect2"
+                    "description": "Path to the interval list of the genome (autosomes, sex chromosomes, and mitochondria).",
+                    "help_text": "Path to the interval list of the genome. This is used to calculate genome-wide coverage statistics."
                 },
-                "mt_intervals_shift": {
+                "intervals_y": {
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.intervals?(\\_list)?$",
-                    "description": "Path to the interval list of the non control mitochondral region in shifted fasta.",
-                    "help_text": "Path to the interval list of the non control mitochondral regions in shifted fasta for Mutect2"
+                    "pattern": "^\\S+\\.intervals?(_list)?$",
+                    "description": "Path to the interval list of the Y chromosome.",
+                    "help_text": "Path to the interval list of the Y chromosome. This is used to calculate coverage statistics for the Y chromosome."
+                },
+                "mito_name": {
+                    "type": "string",
+                    "format": "path",
+                    "description": "Name of the mitochondrial contig in the reference fasta file",
+                    "help_text": "Used to extract relevant information from the references to analyse mitochondria"
                 },
                 "known_dbsnp": {
                     "type": "string",
@@ -188,37 +196,13 @@
                     "description": "Path to sentieon machine learning model file.",
                     "hidden": true
                 },
-                "mt_fasta_shift": {
+                "mt_fasta": {
                     "type": "string",
                     "format": "file-path",
                     "mimetype": "text/plain",
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to mitochondrial FASTA genome file.",
                     "fa_icon": "far fa-file-code"
-                },
-                "mt_fai_shift": {
-                    "type": "string",
-                    "format": "file-path",
-                    "mimetype": "text/plain",
-                    "pattern": "^\\S+\\.fn?a(sta)?\\.fai?$",
-                    "description": "Path to mitochondrial FASTA genome index file.",
-                    "fa_icon": "far fa-file-code"
-                },
-                "mt_bwamem2_index_shift": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "Directory for pre-built bwamem2 index for shifted mitochondrial fasta.",
-                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
-                    "fa_icon": "fas fa-folder-open",
-                    "hidden": true
-                },
-                "mt_backchain_shift": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "Chain file describing the alignment between the mitochondrial shifted fasta and typical mitochondrial fasta",
-                    "help_text": "For more information, check https://genome.ucsc.edu/goldenPath/help/chain.html",
-                    "fa_icon": "fas fa-folder-open",
-                    "hidden": true
                 },
                 "reduced_penetrance": {
                     "type": "string",
@@ -247,14 +231,6 @@
                     "fa_icon": "fas fa-chart-bar",
                     "pattern": "^\\S+\\.dict$",
                     "description": "Genome dictionary file",
-                    "hidden": true
-                },
-                "mt_sequence_dictionary_shift": {
-                    "type": "string",
-                    "format": "path",
-                    "fa_icon": "fas fa-chart-bar",
-                    "pattern": "^\\S+\\.dict$",
-                    "description": "Shifted mitochondrial genome dictionary file",
                     "hidden": true
                 },
                 "vep_filters": {
@@ -372,16 +348,28 @@
                     "fa_icon": "fas fa-book",
                     "enum": ["wgs", "wes", "mito"]
                 },
-                "annotate_snv_switch": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Specifies whether or not to run annotate SNV subworkflow.",
-                    "fa_icon": "fas fa-book"
-                },
-                "annotate_sv_switch": {
+                "save_mapped_as_cram": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Specifies whether or not to run annotate structural variant subworkflow.",
+                    "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
+                    "fa_icon": "fas fa-book"
+                },
+                "skip_snv_annotation": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies whether or not to skip annotate SNV subworkflow.",
+                    "fa_icon": "fas fa-book"
+                },
+                "skip_sv_annotation": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies whether or not to skip annotate structural variant subworkflow.",
+                    "fa_icon": "fas fa-book"
+                },
+                "skip_mt_analysis": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies whether or not to skip the subworkflow that analyses mitochondrial genome separate from the nuclear genome.",
                     "fa_icon": "fas fa-book"
                 },
                 "gens_switch": {
@@ -434,10 +422,10 @@
                     "description": "Interval in the reference that will be used in the software",
                     "hidden": true
                 },
-                "pcrfree": {
+                "pcr_amplification": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "indicates whether the sample is PCR Free or not. Set to true for PCR Free samples.",
+                    "default": false,
+                    "description": "Indicates whether the sample library is amplified using PCR or not. Set to false for PCR Free samples.",
                     "fa_icon": "fas fa-map-signs"
                 },
                 "variant_type": {
@@ -456,26 +444,6 @@
                 }
             }
         },
-        "sv_caller_options": {
-            "title": "Structural variant calling options",
-            "type": "object",
-            "fa_icon": "fas fa-map-signs",
-            "description": "Options to adjust parameters and filtering criteria for structural variant callers.",
-            "properties": {
-                "cnvpytor_chr": {
-                    "type": "string",
-                    "default": null,
-                    "description": "Chromosome names must be specified the same way as they are described in the sam/bam/cram header, e.g., chrX or X. One can specify multiple chromosomes separated by space.",
-                    "fa_icon": "fas fa-map-signs"
-                },
-                "cnvpytor_binsizes": {
-                    "type": "string",
-                    "default": "1000",
-                    "description": "List of binsizes separated by space e.g. '1000 10000' and '1000'",
-                    "fa_icon": "fas fa-map-signs"
-                }
-            }
-        },
         "annotation_options": {
             "title": "Annotation options",
             "type": "object",
@@ -485,7 +453,7 @@
                 "vep_cache_version": {
                     "type": "integer",
                     "default": "107",
-                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
+                    "description": "Specify the version of the VEP cache provided to the `--vep_cache` option.",
                     "fa_icon": "fas fa-book",
                     "enum": [107]
                 }
@@ -536,11 +504,6 @@
                     "description": "Institutional config URL link.",
                     "hidden": true,
                     "fa_icon": "fas fa-users-cog"
-                },
-                "local_config_path": {
-                    "type": "string",
-                    "description": "Path to local config",
-                    "fa_icon": "fas fa-users-cog"
                 }
             }
         },
@@ -573,7 +536,7 @@
                     "description": "Maximum amount of time that can be requested for any single job.",
                     "default": "240.h",
                     "fa_icon": "far fa-clock",
-                    "pattern": "^(\\d+\\.?\\s*(s|m|h|day)\\s*)+$",
+                    "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
                     "hidden": true,
                     "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
                 }
@@ -590,12 +553,14 @@
                     "type": "boolean",
                     "description": "Display help text.",
                     "fa_icon": "fas fa-question-circle",
+                    "default": false,
                     "hidden": true
                 },
                 "version": {
                     "type": "boolean",
                     "description": "Display version and exit.",
                     "fa_icon": "fas fa-question-circle",
+                    "default": false,
                     "hidden": true
                 },
                 "publish_dir_mode": {
@@ -619,6 +584,7 @@
                     "type": "boolean",
                     "description": "Send plain-text email instead of HTML.",
                     "fa_icon": "fas fa-remove-format",
+                    "default": false,
                     "hidden": true
                 },
                 "max_multiqc_email_size": {
@@ -633,6 +599,7 @@
                     "type": "boolean",
                     "description": "Do not use coloured log outputs.",
                     "fa_icon": "fas fa-palette",
+                    "default": false,
                     "hidden": true
                 },
                 "hook_url": {
@@ -644,6 +611,7 @@
                 },
                 "multiqc_config": {
                     "type": "string",
+                    "format": "file-path",
                     "description": "Custom config file to supply to MultiQC.",
                     "fa_icon": "fas fa-cog",
                     "hidden": true
@@ -659,13 +627,6 @@
                     "description": "Custom MultiQC yaml file containing HTML including a methods description.",
                     "fa_icon": "fas fa-cog"
                 },
-                "tracedir": {
-                    "type": "string",
-                    "description": "Directory to keep pipeline Nextflow logs and reports.",
-                    "default": "${params.outdir}/pipeline_info",
-                    "fa_icon": "fas fa-cogs",
-                    "hidden": true
-                },
                 "validate_params": {
                     "type": "boolean",
                     "description": "Boolean whether to validate parameters against the schema at runtime",
@@ -673,12 +634,29 @@
                     "fa_icon": "fas fa-check-square",
                     "hidden": true
                 },
-                "show_hidden_params": {
+                "validationShowHiddenParams": {
                     "type": "boolean",
                     "fa_icon": "far fa-eye-slash",
                     "description": "Show all params when using `--help`",
+                    "default": false,
                     "hidden": true,
                     "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
+                },
+                "validationFailUnrecognisedParams": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-check-circle",
+                    "description": "Validation of parameters fails when an unrecognised parameter is found.",
+                    "default": false,
+                    "hidden": true,
+                    "help_text": "By default, when an unrecognised parameter is found, it returns a warinig."
+                },
+                "validationLenientMode": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-check-circle",
+                    "description": "Validation of parameters in lenient more.",
+                    "default": false,
+                    "hidden": true,
+                    "help_text": "Allows string values that are parseable as numbers or booleans. For further information see [JSONSchema docs](https://github.com/everit-org/json-schema#lenient-mode)."
                 }
             }
         }
@@ -695,9 +673,6 @@
         },
         {
             "$ref": "#/definitions/alignment_options"
-        },
-        {
-            "$ref": "#/definitions/sv_caller_options"
         },
         {
             "$ref": "#/definitions/variant_calling_options"

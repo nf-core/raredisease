@@ -1,4 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+# Written by Ramprasad Neethiraj and released under the MIT license.
+# See git repository (https://github.com/nf-core/raredisease) for full license text.
+
 import argparse
 import gzip
 import sys
@@ -90,7 +94,7 @@ def parse_args(argv=None):
     """Define and immediately parse command line arguments."""
     parser = argparse.ArgumentParser(
         description="Annotate vcf with the most severe pli field.",
-        epilog="Example: python vcfparser.py --file_in vep.vcf --file_out vep.most_severe_pli.vcf --pli pli_per_gene.txt",
+        epilog="Example: python vcfparser.py --file_in vep.vcf --file_out vep.most_severe_pli.vcf",
     )
     parser.add_argument(
         "--file_in",

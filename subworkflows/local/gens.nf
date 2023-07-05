@@ -4,34 +4,35 @@
 
 include { GATK4_COLLECTREADCOUNTS as COLLECTREADCOUNTS } from '../../modules/local/gatk4/collectreadcounts/main'
 include { GATK4_DENOISEREADCOUNTS as DENOISEREADCOUNTS } from '../../modules/local/gatk4/denoisereadcounts/main'
-include { GENS as GENS_GENERATE } from '../../modules/local/gens/main'
+include { GENS as GENS_GENERATE                        } from '../../modules/local/gens/main'
 
 workflow GENS {
     take:
-        bam             // channel: [ val(meta), path(bam), path(bai) ]
-        vcf             // channel: [ val(meta), path(vcf) ]
-        fasta           // path(fasta)
-        fai             // path(fai)
-        interval_list   // path(interval_list)
-        pon             // path(pon)
-        gnomad_pos      // path(gnomad_pos)
-        case_info       // channel: [ val(case_info) ]
-        seq_dict        // path: seq_dict
+        ch_bam_bai            // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_vcf                // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai         // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_interval_list      // channel: [mandatory] [ path(interval_list) ]
+        ch_pon                // channel: [mandatory] [ path(pon) ]
+        ch_gnomad_pos         // channel: [mandatory] [ path(gnomad_pos) ]
+        ch_case_info          // channel: [mandatory] [ val(case_info) ]
+        ch_genome_dictionary  // channel: [mandatory] [ val(meta), path(dict) ]
 
     main:
         ch_versions = Channel.empty()
 
-        COLLECTREADCOUNTS ( bam, fasta, fai, seq_dict, interval_list )
+        COLLECTREADCOUNTS (ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_sequence_dictionary, ch_interval_list)
+
+        DENOISEREADCOUNTS (COLLECTREADCOUNTS.out.read_counts, ch_pon)
+
+        GENS_GENERATE (DENOISEREADCOUNTS.out.standardized_read_counts, ch_vcf.map { meta, vcf -> vcf }, ch_gnomad_pos)
+
         ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions.first())
-
-        DENOISEREADCOUNTS ( COLLECTREADCOUNTS.out.read_counts, pon )
         ch_versions = ch_versions.mix(DENOISEREADCOUNTS.out.versions.first())
-
-        GENS_GENERATE ( DENOISEREADCOUNTS.out.standardized_read_counts, vcf.map { meta, vcf -> vcf }, gnomad_pos )
         ch_versions = ch_versions.mix(GENS_GENERATE.out.versions.first())
 
     emit:
-        gens_cov_bed_gz = GENS_GENERATE.out.cov
-        gens_baf_bed_gz = GENS_GENERATE.out.baf
-        versions        = ch_versions.ifEmpty(null) // channel: [ versions.yml ]
+        gens_cov_bed_gz = GENS_GENERATE.out.cov // channel: [ val(meta), path(bed) ]
+        gens_baf_bed_gz = GENS_GENERATE.out.baf // channel: [ val(meta), path(bed) ]
+        versions        = ch_versions           // channel: [ path(versions.yml) ]
 }

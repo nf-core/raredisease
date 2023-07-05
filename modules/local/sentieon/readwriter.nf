@@ -9,16 +9,16 @@ process SENTIEON_READWRITER {
     tuple val(meta), path(bam), path(bai)
 
     output:
-    tuple val(meta), path('*merged.bam')                          , emit: bam
-    tuple val(meta), path('*merged.bam.bai')                      , emit: bai
-    tuple val(meta), path('*merged.bam'), path('*merged.bam.bai') , emit: bam_bai
-    path  "versions.yml"                                          , emit: versions
+    tuple val(meta), path('*.bam')                   , emit: bam
+    tuple val(meta), path('*.bam.bai')               , emit: bai
+    tuple val(meta), path('*.bam'), path('*.bam.bai'), emit: bam_bai
+    path  "versions.yml"                             , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
-    def args   = task.ext.args ?: ''
+    def args   = task.ext.args   ?: ''
     def input  = bam.sort().collect{"-i $it"}.join(' ')
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
@@ -32,7 +32,7 @@ process SENTIEON_READWRITER {
         -t $task.cpus \\
         $input \\
         --algo ReadWriter \\
-        ${prefix}_merged.bam
+        ${prefix}.bam
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -43,8 +43,8 @@ process SENTIEON_READWRITER {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}_merged.bam
-    touch ${prefix}_merged.bam.bai
+    touch ${prefix}.bam
+    touch ${prefix}.bam.bai
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

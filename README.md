@@ -1,98 +1,149 @@
 # ![nf-core/raredisease](docs/images/nf-core-raredisease_logo_light.png#gh-light-mode-only) ![nf-core/raredisease](docs/images/nf-core-raredisease_logo_dark.png#gh-dark-mode-only)
 
-[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/raredisease/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/raredisease/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.7995798-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.7995798)
 
-[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A522.10.1-23aa62.svg)](https://www.nextflow.io/)
+[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A523.04.0-23aa62.svg)](https://www.nextflow.io/)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
 [![Launch on Nextflow Tower](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Nextflow%20Tower-%234256e7)](https://tower.nf/launch?pipeline=https://github.com/nf-core/raredisease)
 
-[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23raredisease-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/raredisease)[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
+[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23raredisease-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/raredisease)[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
+
+#### TOC
+
+- [Introduction](#introduction)
+- [Pipeline summary](#pipeline-summary)
+- [Usage](#usage)
+- [Pipeline output](#pipeline-output)
+- [Credits](#credits)
+- [Contributions and Support](#contributions-and-support)
+- [Citations](#citations)
 
 ## Introduction
 
-> NOTE
->
-> This pipeline is under development and no stable release has been made yet.
->
-> You can follow the work in the [dev](https://github.com/nf-core/raredisease/tree/dev) branch.
-
-**nf-core/raredisease** is a bioinformatics best-practice analysis pipeline for call and score variants from WGS/WES of rare disease patients.
+**nf-core/raredisease** is a best-practice bioinformatic pipeline for calling and scoring variants from WGS/WES data from rare disease patients. This pipeline is heavily inspired by [MIP](https://github.com/Clinical-Genomics/MIP).
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
 
-<!-- TODO nf-core: Add full-sized test dataset and amend the paragraph below if applicable -->
-
-On release, automated continuous integration tests run the pipeline on a full-sized dataset on the AWS cloud infrastructure. This ensures that the pipeline runs on AWS, has sensible resource allocation defaults set to run on real-world datasets, and permits the persistent storage of results to benchmark between pipeline releases and other analysis sources.The results obtained from the full-sized test can be viewed on the [nf-core website](https://nf-co.re/raredisease/results).
+On release, automated continuous integration tests run the pipeline on a full-sized dataset on the AWS cloud infrastructure. This ensures that the pipeline runs on AWS, has sensible resource allocation defaults set to run on real-world datasets, and permits the persistent storage of results to benchmark between pipeline releases and other analysis sources. The results obtained from the full-sized test can be viewed on the [nf-core website](https://nf-co.re/raredisease/results).
 
 ## Pipeline summary
 
-1. Metrics: [`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [`MultiQC`](http://multiqc.info/)
-2. Data preprocessing: [`bwamem2`](http://bio-bwa.sourceforge.net/bwa.shtml) (can [`merge`](http://www.htslib.org/doc/samtools-merge.html)), [`MarkDuplicates`](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates)
-3. Variant calling + multiple calls are aggregated:
-   1. SNVs + short indels: [`DeepVariant`](https://github.com/google/deepvariant), [`DNAscope`](https://support.sentieon.com/manual/DNAscope_usage/dnascope/)
-   2. SVs: [`CNVpytor`](https://github.com/abyzovlab/CNVpytor/), [`ExpansionHunter`](https://github.com/Illumina/ExpansionHunter), [`MANTA`](https://github.com/Illumina/manta), [`tiddit/sv`](https://github.com/SciLifeLab/TIDDIT),
-   3. Mitochondria: [`eKLIPse`](https://github.com/dooguypapua/eKLIPse), [`Mutect2`](https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2)
-4. Annotation: [`VCFanno`](https://github.com/brentp/vcfanno),[`VEP`](https://www.ensembl.org/info/docs/tools/vep/index.html)
-   1. SNVs: [`CADD`](https://cadd.gs.washington.edu/)
-   2. SVs:
-   3. Mitochondria: [`gnomAD_mt`](https://gnomad.broadinstitute.org/downloads#v3-mitochondrial-dna), [`Haplogrep`](https://github.com/seppinho/haplogrep-cmd/tree/v2.1.21), [`HmtNote`](https://github.com/robertopreste/HmtNote)
-5. Variant ranking: something will be here
+**1. Metrics:**
 
-> Databases: [`gnomAD`](https://gnomad.broadinstitute.org/)
+- [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+- [Mosdepth](https://github.com/brentp/mosdepth)
+- [MultiQC](http://multiqc.info/)
+- [Picard's CollectMutipleMetrics, CollectHsMetrics, and CollectWgsMetrics](https://broadinstitute.github.io/picard/)
+- [Qualimap](http://qualimap.conesalab.org/)
+- [Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/)
+- [TIDDIT's cov](https://github.com/J35P312/)
+
+**2. Alignment:**
+
+- [Bwa-mem2](https://github.com/bwa-mem2/bwa-mem2)
+- [Sentieon DNAseq](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/)
+
+**3. Variant calling - SNV:**
+
+- [DeepVariant](https://github.com/google/deepvariant)
+- [Sentieon DNAscope](https://support.sentieon.com/manual/DNAscope_usage/dnascope/)
+
+**4. Variant calling - SV:**
+
+- [Manta](https://github.com/Illumina/manta)
+- [TIDDIT's sv](https://github.com/SciLifeLab/TIDDIT)
+
+**5. Annotation - SNV:**
+
+- [bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh)
+- [vcfanno](https://github.com/brentp/vcfanno)
+- [CADD](https://cadd.gs.washington.edu/)
+- [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
+- [UPD](https://github.com/bjhall/upd)
+- [Chromograph](https://github.com/Clinical-Genomics/chromograph)
+
+**6. Annotation - SV:**
+
+- [SVDB query](https://github.com/J35P312/SVDB#Query)
+- [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
+
+**7. Mitochondrial analysis:**
+
+- [Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline ](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-)
+- [eKLIPse](https://github.com/dooguypapua/eKLIPse/tree/master)
+- Annotation:
+  - [HaploGrep2](https://github.com/seppinho/haplogrep-cmd)
+  - [Hmtnote](https://github.com/robertopreste/HmtNote)
+  - [vcfanno](https://github.com/brentp/vcfanno)
+  - [CADD](https://cadd.gs.washington.edu/)
+  - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
+
+**8. Variant calling - repeat expansions:**
+
+- [Expansion Hunter](https://github.com/Illumina/ExpansionHunter)
+- [Stranger](https://github.com/Clinical-Genomics/stranger)
+
+**9. Rank variants - SV and SNV:**
+
+- [GENMOD](https://github.com/Clinical-Genomics/genmod)
 
 <!-- prettier-ignore -->
 <p align="center">
-    <img title="nf-core/raredisease workflow" src="docs/images/raredisease_workflow.png" width=40%>
+    <img title="nf-core/raredisease workflow" src="docs/images/raredisease_workflow_v1.0.0.png" width=40%>
 </p>
 
 Note that it is possible to include/exclude certain tools or steps.
 
-### Work in progress flowchart
+## Usage
 
-![nf-core/raredisease work in progress](https://docs.google.com/drawings/d/e/2PACX-1vTam7xjHBQTo1QsOpMUpd5F2vUZK5aXuf51OpSBaaV_2xMwfS1oN6GgVeQEJHjNNXRtCVHdGjCVFyzO/pub?w=2268&h=2268)
+> **Note**
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how
+> to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline)
+> with `-profile test` before running the workflow on actual data.
 
-Note that this chart is meant as a tool to help with coordination during pipeline development and hence is modified regularly. Some tools might be added or removed as suitable. If you would like to modify the flowchart, please contact us on the slack channel (see "Contributions and Support" further down).
+First, prepare a samplesheet with your input data that looks as follows:
 
-## Quick Start
+`samplesheet.csv`:
 
-1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=22.10.1`)
+```csv
+sample,lane,fastq_1,fastq_2,sex,phenotype,paternal_id,maternal_id,case_id
+hugelymodelbat,1,reads_1.fastq.gz,reads_2.fastq.gz,1,2,,,justhusky
+```
 
-2. Install any of [`Docker`](https://docs.docker.com/engine/installation/), [`Singularity`](https://www.sylabs.io/guides/3.0/user-guide/) (you can follow [this tutorial](https://singularity-tutorial.github.io/01-installation/)), [`Podman`](https://podman.io/), [`Shifter`](https://nersc.gitlab.io/development/shifter/how-to-use/) or [`Charliecloud`](https://hpc.github.io/charliecloud/) for full pipeline reproducibility _(you can use [`Conda`](https://conda.io/miniconda.html) both to install Nextflow itself and also to manage software within pipelines. Please only use it within pipelines as a last resort; see [docs](https://nf-co.re/usage/configuration#basic-configuration-profiles))_.
+Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
 
-3. Download the pipeline and test it on a minimal dataset with a single command:
+Second, ensure that you have defined the path to reference files and parameters required for the type of analysis that you want to perform. More information about this can be found [here](https://github.com/nf-core/raredisease/blob/dev/docs/usage.md).
 
-   ```bash
-   nextflow run nf-core/raredisease -revision dev -profile test,YOURPROFILE --outdir <OUTDIR>
-   ```
+Now, you can run the pipeline using:
 
-Note that some form of configuration will be needed so that Nextflow knows how to fetch the required software. This is usually done in the form of a config profile (`YOURPROFILE` in the example command above). You can chain multiple config profiles in a comma-separated string.
+```bash
+nextflow run nf-core/raredisease \
+   -profile <docker/singularity/podman/shifter/charliecloud/conda/institute> \
+   --input samplesheet.csv \
+   --outdir <OUTDIR>
+```
 
-> - The pipeline comes with config profiles called `docker`, `singularity`, `podman`, `shifter`, `charliecloud` and `conda` which instruct the pipeline to use the named tool for software management. For example, `-profile test,docker`.
-> - Please check [nf-core/configs](https://github.com/nf-core/configs#documentation) to see if a custom config file to run nf-core pipelines already exists for your Institute. If so, you can simply use `-profile <institute>` in your command. This will enable either `docker` or `singularity` and set the appropriate execution settings for your local compute environment.
-> - If you are using `singularity`, please use the [`nf-core download`](https://nf-co.re/tools/#downloading-pipelines-for-offline-use) command to download images first, before running the pipeline. Setting the [`NXF_SINGULARITY_CACHEDIR` or `singularity.cacheDir`](https://www.nextflow.io/docs/latest/singularity.html?#singularity-docker-hub) Nextflow options enables you to store and re-use the images from a central location for future pipeline runs.
-> - If you are using `conda`, it is highly recommended to use the [`NXF_CONDA_CACHEDIR` or `conda.cacheDir`](https://www.nextflow.io/docs/latest/conda.html) settings to store the environments in a central location for future pipeline runs.
+> **Warning:**
+> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those
+> provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
+> see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
 
-4. Start running your own analysis!
+For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/raredisease/usage) and the [parameter documentation](https://nf-co.re/raredisease/parameters).
 
-   ```bash
-   nextflow run nf-core/raredisease \
-       --input samplesheet.csv --outdir <OUTDIR> --genome GRCh38 \
-       --analysis_type <wgs|wes|mito> \
-       -revision dev \
-       -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
-   ```
+## Pipeline output
 
-## Documentation
-
-The nf-core/raredisease pipeline comes with documentation about the pipeline [usage](https://nf-co.re/raredisease/usage), [parameters](https://nf-co.re/raredisease/parameters) and [output](https://nf-co.re/raredisease/output).
+For more details about the output files and reports, please refer to the
+[output documentation](https://nf-co.re/raredisease/output).
 
 ## Credits
 
-nf-core/raredisease was originally written by Clinical Genomics Stockholm.
+nf-core/raredisease was written in a collaboration between the Clinical Genomics nodes in Sweden, with major contributions from [Ramprasad Neethiraj](https://github.com/ramprasadn), [Anders Jemt](https://github.com/jemten), [Lucia Pena Perez](https://github.com/Lucpen), and [Mei Wu](https://github.com/projectoriented) at Clinical Genomics Stockholm.
 
-Big thanks to the contributors for their extensive assistance in the development of this pipeline.
+Additional contributors were [Sima Rahimi](https://github.com/sima-r), [Gwenna Breton](https://github.com/Gwennid) and [Emma Västerviga](https://github.com/EmmaCAndersson) (Clinical Genomics Gothenburg); [Halfdan Rydbeck](https://github.com/hrydbeck) and [Lauri Mesilaakso](https://github.com/ljmesi) (Clinical Genomics Linköping); [Subazini Thankaswamy Kosalai](https://github.com/sysbiocoder) (Clinical Genomics Örebro); [Annick Renevey](https://github.com/rannick) and [Peter Pruisscher](https://github.com/peterpru) (Clinical Genomics Stockholm); [Ryan Kennedy](https://github.com/ryanjameskennedy) (Clinical Genomics Lund); and [Lucas Taniguti](https://github.com/lmtani).
+
+We thank the nf-core community for their extensive assistance in the development of this pipeline.
 
 ## Contributions and Support
 
@@ -103,9 +154,8 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 ## Citations
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
-<!-- If you use  nf-core/raredisease for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
 
-<!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
+If you use nf-core/raredisease for your analysis, please cite it using the following doi: [10.5281/zenodo.7995798](https://doi.org/10.5281/zenodo.7995798)
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
@@ -116,3 +166,7 @@ You can cite the `nf-core` publication as follows:
 > Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.
 >
 > _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).
+
+You can read more about MIP's use in healthcare in,
+
+> Stranneheim H, Lagerstedt-Robinson K, Magnusson M, et al. Integration of whole genome sequencing into a healthcare setting: high diagnostic rates across multiple clinical entities in 3219 rare disease patients. Genome Med. 2021;13(1):40. doi:10.1186/s13073-021-00855-5

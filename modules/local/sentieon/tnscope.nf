@@ -5,13 +5,13 @@ process SENTIEON_TNSCOPE {
 
     input:
     tuple val(meta), path(bam), path(bai)
-    path fasta
-    path fai
+    tuple val(meta2), path(fasta)
+    tuple val(meta3), path(fai)
 
     output:
-    tuple val(meta), path("*_TNscope_MTcalls_unfiltered.vcf.gz")        , emit: vcf
-    tuple val(meta), path("*_TNscope_MTcalls_unfiltered.vcf.gz.tbi")    , emit: vcf_index
-    path "versions.yml"                                                 , emit: versions
+    tuple val(meta), path("*vcf.gz")    , emit: vcf
+    tuple val(meta), path("*vcf.gz.tbi"), emit: vcf_index
+    path "versions.yml"                 , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -30,7 +30,7 @@ process SENTIEON_TNSCOPE {
         --algo TNscope \\
         --tumor_sample ${meta.id} \\
         $call_settings \\
-        ${prefix}_TNscope_MTcalls_unfiltered.vcf.gz
+        ${prefix}.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -41,8 +41,8 @@ process SENTIEON_TNSCOPE {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}_TNscope_MTcalls_unfiltered.vcf.gz
-    touch ${prefix}_TNscope_MTcalls_unfiltered.vcf.gz.tbi
+    touch ${prefix}.vcf.gz
+    touch ${prefix}.vcf.gz.tbi
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
