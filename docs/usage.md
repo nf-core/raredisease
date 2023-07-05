@@ -197,7 +197,7 @@ The mandatory and optional parameters for each category are tabulated below.
 | gcnvcaller_model<sup>1</sup> |                                 |
 
 <sup>1</sup> Output from steps 3 & 4 of GATK's CNV calling pipeline run in cohort mode as described [here](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants).
-<sup>2</sup> Output from either step 1 or 2 of GATK's CNV calling pipeline as described [here](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants).
+<sup>2</sup> Output from step 1 of GATK's CNV calling pipeline as described [here](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants).
 
 ##### 7. SNV annotation & Ranking
 
