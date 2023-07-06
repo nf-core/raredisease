@@ -197,7 +197,7 @@ The mandatory and optional parameters for each category are tabulated below.
 | gcnvcaller_model<sup>1,2</sup> |                                 |
 
 <sup>1</sup> Output from steps 3 & 4 of GATK's CNV calling pipeline run in cohort mode as described [here](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants).<br />
-<sup>2</sup> Sample file can be found [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/gcnvmodels.tsv). Note the header.<br />
+<sup>2</sup> Sample file can be found [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/gcnvmodels.tsv) (Note the header 'models' in the sample file).<br />
 <sup>3</sup> Output from step 1 of GATK's CNV calling pipeline as described [here](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants).<br />
 
 ##### 7. SNV annotation & Ranking
