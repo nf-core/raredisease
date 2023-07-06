@@ -346,7 +346,6 @@
                     "type": "string",
                     "fa_icon": "fas fa-folder-open",
                     "description": "Directory containing the ploidy model files",
-                    "hidden": true,
                     "format": "directory-path",
                     "default": null,
                     "help_text": "Produced in GATK4 DetermineGermlineContigPloidy cohort, this model is required for generating a cnv model when using GermlineCNVCaller."
@@ -355,7 +354,6 @@
                     "type": "string",
                     "fa_icon": "fas fa-folder-open",
                     "description": "A file containing the path to models produced by GATK4 GermlineCNVCaller cohort.",
-                    "hidden": true,
                     "format": "file-path",
                     "default": null,
                     "help_text": "This model is required for generating a cnv calls when using GermlineCNVCaller."
