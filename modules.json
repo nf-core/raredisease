@@ -87,7 +87,7 @@
                     },
                     "eklipse": {
                         "branch": "master",
-                        "git_sha": "99d437bd91f8509d0460b7abbde47fa430055ecb",
+                        "git_sha": "39656f68219340420f03bd54a68e111c86e107e6",
                         "installed_by": ["modules"]
                     },
                     "expansionhunter": {
