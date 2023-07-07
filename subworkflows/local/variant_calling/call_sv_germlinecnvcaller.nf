@@ -1,6 +1,6 @@
-#!/usr/bin/env nextflow
-
-nextflow.enable.dsl = 2
+//
+// A variant caller workflow for GATK's GermlinceCNVCaller
+//
 
 include { GATK4_COLLECTREADCOUNTS             } from '../../../modules/nf-core/gatk4/collectreadcounts/main.nf'
 include { GATK4_DETERMINEGERMLINECONTIGPLOIDY } from '../../../modules/nf-core/gatk4/determinegermlinecontigploidy/main.nf'
@@ -25,9 +25,9 @@ workflow CALL_SV_GERMLINECNVCALLER {
         GATK4_COLLECTREADCOUNTS ( input, ch_fasta, ch_fai, ch_genome_dictionary )
 
         GATK4_COLLECTREADCOUNTS.out.tsv
-                .groupTuple()
                 .map({ meta, tsv -> return [meta, tsv, [], [] ]})
                 .set{ch_dgcp_in}
+
         GATK4_DETERMINEGERMLINECONTIGPLOIDY ( ch_dgcp_in, ch_ploidy_model, [] )
 
         GATK4_COLLECTREADCOUNTS.out.tsv

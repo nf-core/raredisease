@@ -10,8 +10,6 @@ The directories listed below will be created in the results directory after the 
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
-#### GATK GermlineCNVCaller (CNV calling)
-
 - [Alignment](#alignment)
   - [Mapping](#mapping)
     - [Bwa-mem2](#bwa-mem2)
