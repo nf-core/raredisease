@@ -336,31 +336,6 @@
                     "fa_icon": "fas fa-align-center",
                     "enum": ["wgs", "wes", "mito"]
                 },
-                "save_mapped_as_cram": {
-                    "type": "boolean",
-                    "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_cnv_calling": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip CNV calling.",
-                    "fa_icon": "fas fa-book"
-                },
-                "skip_snv_annotation": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip annotate SNV subworkflow.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_sv_annotation": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip annotate structural variant subworkflow.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_mt_analysis": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip the subworkflow that analyses mitochondrial genome separate from the nuclear genome.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "gens_switch": {
                     "type": "boolean",
                     "description": "Specifies whether or not to run gens preprocessing subworkflow.",
@@ -372,6 +347,31 @@
                     "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-align-center",
                     "enum": ["illumina"]
+                },
+                "save_mapped_as_cram": {
+                    "type": "boolean",
+                    "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_cnv_calling": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip CNV calling.",
+                    "fa_icon": "fas fa-book"
+                },
+                "skip_mt_analysis": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip the subworkflow that analyses mitochondrial genome separate from the nuclear genome.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_snv_annotation": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip annotate SNV subworkflow.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_sv_annotation": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip annotate structural variant subworkflow.",
+                    "fa_icon": "fas fa-toggle-on"
                 }
             }
         },
@@ -412,19 +412,19 @@
                     "description": "Indicates whether the sample library is amplified using PCR or not. Set to false for PCR Free samples.",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "variant_type": {
-                    "type": "string",
-                    "default": "snp",
-                    "description": "Specifies the variant types for sentieon variant caller.",
-                    "fa_icon": "fas fa-align-center",
-                    "enum": ["snp", "indel", "snp,indel"]
-                },
                 "variant_caller": {
                     "type": "string",
                     "default": "deepvariant",
                     "description": "Specifies the variant caller to use - available options are 'deepvariant' and 'sentieon'.",
                     "fa_icon": "fas fa-random",
                     "enum": ["deepvariant", "sentieon"]
+                },
+                "variant_type": {
+                    "type": "string",
+                    "default": "snp",
+                    "description": "Specifies the variant types for sentieon variant caller.",
+                    "fa_icon": "fas fa-align-center",
+                    "enum": ["snp", "indel", "snp,indel"]
                 }
             }
         },
