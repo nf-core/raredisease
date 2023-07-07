@@ -33,6 +33,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Variant calling - SV](#variant-calling---sv)
   - [Manta](#manta)
   - [TIDDIT sv](#tiddit-sv)
+  - [GATK GermlineCNVCaller - CNV calling](#gatk-germlinecnvcaller---cnv-calling)
   - [SVDB merge](#svdb-merge)
 - [Variant calling - repeat expansions](#variant-calling---repeat-expansions)
   - [Expansion Hunter](#expansion-hunter)
@@ -252,9 +253,13 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 [TIDDIT's sv](https://github.com/SciLifeLab/TIDDIT) is used to identify chromosomal rearrangements using sequencing data. TIDDIT identifies intra and inter-chromosomal translocations, deletions, tandem-duplications and inversions, using supplementary alignments as well as discordant pairs. TIDDIT searches for discordant reads and split reads (supplementary alignments). Output vcf files are treated as intermediates and are not placed in the output folder by default.
 
+#### GATK GermlineCNVCaller - CNV calling
+
+[GATK GermlineCNVCaller](https://github.com/broadinstitute/gatk) is used to identify copy number variants in germline samples given their read counts and a model describing a sample's ploidy. Output vcf files are treated as intermediates and are not placed in the output folder by default.
+
 #### SVDB merge
 
-[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from both Manta and TIDDIT. Output files are published in the output folder.
+[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if skip_cnv_calling is set to false), Manta, and TIDDIT. Output files are published in the output folder.
 
 <details markdown="1">
 <summary>Output files</summary>
