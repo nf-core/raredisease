@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add GATK's cnv calling pipeline [#362](https://github.com/nf-core/raredisease/pull/362)
 - Add `public_aws_ecr` profile for using AWS ECR public gallery images [#360](https://github.com/nf-core/raredisease/pull/360)
 - GATK's ShiftFasta to generate all the files required for mitochondrial analysis [#354](https://github.com/nf-core/raredisease/pull/354)
 - Feature to calculate CADD scores for indels [#325](https://github.com/nf-core/raredisease/pull/325)
@@ -14,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MT del script to detect mitochondrial deletions [#349](https://github.com/nf-core/raredisease/pull/349)
 - eKLIPse to identify large mitochondrial deletions [#365](https://github.com/nf-core/raredisease/pull/365)
 - UPD+Chromograph to identify and visualize UPD sites and regions in the chromosomes [#364](https://github.com/nf-core/raredisease/pull/364) and [#366](https://github.com/nf-core/raredisease/pull/366)
+- Added check for presence of case id for each sample in samplesheet [#357](https://github.com/nf-core/raredisease/pull/357)
 
 ### Fixed
 

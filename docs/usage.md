@@ -17,9 +17,10 @@ Table of contents:
       - [3. Repeat expansions](#3-repeat-expansions)
       - [4. Variant calling - SNV](#4-variant-calling---snv)
       - [5. Variant calling - Structural variants](#5-variant-calling---structural-variants)
-      - [6. SNV annotation & Ranking](#6-snv-annotation--ranking)
-      - [7. SV annotation & Ranking](#7-sv-annotation--ranking)
-      - [8. Mitochondrial analysis](#8-mitochondrial-analysis)
+      - [6. Copy number variant calling](#6-copy-number-variant-calling)
+      - [7. SNV annotation & Ranking](#7-snv-annotation--ranking)
+      - [8. SV annotation & Ranking](#8-sv-annotation--ranking)
+      - [9. Mitochondrial analysis](#9-mitochondrial-analysis)
     - [Run the pipeline](#run-the-pipeline)
       - [Direct input in CLI](#direct-input-in-cli)
       - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
@@ -188,7 +189,18 @@ The mandatory and optional parameters for each category are tabulated below.
 |           | target_bed |
 |           | bwa        |
 
-##### 6. SNV annotation & Ranking
+##### 6. Copy number variant calling
+
+| Mandatory                      | Optional                        |
+| ------------------------------ | ------------------------------- |
+| ploidy_model<sup>1</sup>       | readcount_intervals<sup>3</sup> |
+| gcnvcaller_model<sup>1,2</sup> |                                 |
+
+<sup>1</sup> Output from steps 3 & 4 of GATK's CNV calling pipeline run in cohort mode as described [here](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants).<br />
+<sup>2</sup> Sample file can be found [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/gcnvmodels.tsv) (Note the header 'models' in the sample file).<br />
+<sup>3</sup> Output from step 1 of GATK's CNV calling pipeline as described [here](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants).<br />
+
+##### 7. SNV annotation & Ranking
 
 | Mandatory                     | Optional                       |
 | ----------------------------- | ------------------------------ |
@@ -215,7 +227,7 @@ no header and the following columns: `CHROM POS REF_ALLELE ALT_ALLELE AF`. Sampl
 
 > NB: We use CADD only to annotate small indels. To annotate SNVs with precomputed CADD scores, pass the file containing CADD scores as a resource to vcfanno instead. Files containing the precomputed CADD scores for SNVs can be downloaded from [here](https://cadd.gs.washington.edu/download) (description: "All possible SNVs of GRCh3<7/8>/hg3<7/8>")
 
-##### 7. SV annotation & Ranking
+##### 8. SV annotation & Ranking
 
 | Mandatory                  | Optional           |
 | -------------------------- | ------------------ |
@@ -227,7 +239,7 @@ no header and the following columns: `CHROM POS REF_ALLELE ALT_ALLELE AF`. Sampl
 
 <sup>1</sup> A CSV file that describes the databases (VCFs) used by SVDB for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
 
-##### 8. Mitochondrial analysis
+##### 9. Mitochondrial analysis
 
 | Mandatory         | Optional |
 | ----------------- | -------- |
