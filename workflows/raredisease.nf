@@ -28,8 +28,6 @@ def checkPathParamList = [
     params.intervals_y,
     params.known_dbsnp,
     params.known_dbsnp_tbi,
-    params.known_indels,
-    params.known_mills,
     params.ml_model,
     params.mt_fasta,
     params.multiqc_config,
@@ -37,14 +35,14 @@ def checkPathParamList = [
     params.score_config_snv,
     params.score_config_sv,
     params.sequence_dictionary,
-    params.target_bed,
     params.svdb_query_dbs,
+    params.target_bed,
     params.variant_catalog,
-    params.vep_filters,
     params.vcfanno_lua,
     params.vcfanno_resources,
     params.vcfanno_toml,
-    params.vep_cache
+    params.vep_cache,
+    params.vep_filters
 ]
 
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
