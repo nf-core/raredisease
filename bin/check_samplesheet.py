@@ -289,7 +289,7 @@ def check_samplesheet(file_in, file_out, input_type):
 
             sample,bam
             SAMPLE_PE,SAMPLE_PE_RUN1_1.bam
-            SAMPLE_SE,SAMPLE_SE_RUN1_1bam
+            SAMPLE_SE,SAMPLE_SE_RUN1_1.bam
 
     .. _viral recon samplesheet:
         https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv
