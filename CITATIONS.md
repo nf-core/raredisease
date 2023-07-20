@@ -10,7 +10,7 @@
 
 ## Pipeline tools
 
-- [BCFtools](https://academic.oup.com/gigascience/article/10/2/giab008/6137722)
+- [BCFtools](https://academic.oup.com/gigascience/article/10/2/giab008/6137722) & [SAMtools](https://academic.oup.com/bioinformatics/article/25/16/2078/204688)
 
   > Danecek P, Bonfield JK, Liddle J, et al. Twelve years of SAMtools and BCFtools. GigaScience. 2021;10(2):giab008. doi:10.1093/gigascience/giab008
 
@@ -22,9 +22,19 @@
 
   > Vasimuddin Md, Misra S, Li H, Aluru S. Efficient Architecture-Aware Acceleration of BWA-MEM for Multicore Systems. In: 2019 IEEE International Parallel and Distributed Processing Symposium (IPDPS). IEEE; 2019:314-324. doi:10.1109/IPDPS.2019.00041
 
+- [CADD<sup>1</sup>](https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-021-00835-9)<sup>,</sup> [<sup>2</sup>](https://academic.oup.com/nar/article/47/D1/D886/5146191)
+
+  > Rentzsch P, Schubach M, Shendure J, Kircher M. CADD-Splice—improving genome-wide variant effect prediction using deep learning-derived splice scores. Genome Med. 2021;13(1):31. doi:10.1186/s13073-021-00835-9
+
+  > Rentzsch P, Witten D, Cooper GM, Shendure J, Kircher M. CADD: predicting the deleteriousness of variants throughout the human genome. Nucleic Acids Research. 2019;47(D1):D886-D894. doi:10.1093/nar/gky1016
+
 - [DeepVariant](https://www.nature.com/articles/nbt.4235)
 
   > Poplin R, Chang PC, Alexander D, et al. A universal SNP and small-indel variant caller using deep neural networks. Nat Biotechnol. 2018;36(10):983-987. doi:10.1038/nbt.4235
+
+- [eKLIPse](https://www.nature.com/articles/s41436-018-0350-8)
+
+  > Goudenège D, Bris C, Hoffmann V, et al. eKLIPse: a sensitive tool for the detection and quantification of mitochondrial DNA deletions from next-generation sequencing data. Genet Med 21, 1407–1416 (2019). doi:10.1038/s41436-018-0350-8
 
 - [Ensembl VEP](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4)
 
@@ -35,6 +45,8 @@
   > Dolzhenko E, Deshpande V, Schlesinger F, et al. ExpansionHunter: a sequence-graph-based tool to analyze variation in short tandem repeat regions. Birol I, ed. Bioinformatics. 2019;35(22):4754-4756. doi:10.1093/bioinformatics/btz431
 
 - [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+
+  > Andrews, S. (2010). FastQC: A Quality Control Tool for High Throughput Sequence Data [Online]. Available online https://www.bioinformatics.babraham.ac.uk/projects/fastqc/.
 
 - [GATK](https://genome.cshlp.org/content/20/9/1297)
 
@@ -68,9 +80,9 @@
 
   > Pedersen BS, Quinlan AR. Mosdepth: quick coverage calculation for genomes and exomes. Hancock J, ed. Bioinformatics. 2018;34(5):867-868. doi:10.1093/bioinformatics/btx699
 
-- [MultiQC](https://academic.oup.com/bioinformatics/article/32/19/3047/2196507)
+- [MultiQC](https://pubmed.ncbi.nlm.nih.gov/27312411/)
 
-  > Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016;32(19):3047-3048. doi:10.1093/bioinformatics/btw354
+  > Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016 Oct 1;32(19):3047-8. doi: 10.1093/bioinformatics/btw354. Epub 2016 Jun 16. PubMed PMID: 27312411; PubMed Central PMCID: PMC5039924.
 
 - [Peddy](<https://www.cell.com/action/showFullTextImages?pii=S0002-9297(17)30017-4>)
 
@@ -83,10 +95,6 @@
   > Okonechnikov K, Conesa A, García-Alcalde F. Qualimap 2: advanced multi-sample quality control for high-throughput sequencing data. Bioinformatics. 2016;32(2):292-294. doi:10.1093/bioinformatics/btv566
 
 - [rhocall](https://github.com/dnil/rhocall)
-
-- [SAMtools](https://academic.oup.com/bioinformatics/article/25/16/2078/204688)
-
-  > Li H, Handsaker B, Wysoker A, et al. The Sequence Alignment/Map format and SAMtools. Bioinformatics. 2009;25(16):2078-2079. doi:10.1093/bioinformatics/btp352
 
 - [Sentieon DNAscope](https://www.biorxiv.org/content/10.1101/2022.05.20.492556v1.abstract)
 
@@ -140,5 +148,8 @@
 
 - [Docker](https://dl.acm.org/doi/10.5555/2600239.2600241)
 
+  > Merkel, D. (2014). Docker: lightweight linux containers for consistent development and deployment. Linux Journal, 2014(239), 2. doi: 10.5555/2600239.2600241.
+
 - [Singularity](https://pubmed.ncbi.nlm.nih.gov/28494014/)
+
   > Kurtzer GM, Sochat V, Bauer MW. Singularity: Scientific containers for mobility of compute. PLoS One. 2017 May 11;12(5):e0177459. doi: 10.1371/journal.pone.0177459. eCollection 2017. PubMed PMID: 28494014; PubMed Central PMCID: PMC5426675.

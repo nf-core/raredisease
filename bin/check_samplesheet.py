@@ -33,6 +33,7 @@ class BaseRowChecker:
         self,
         sample_col,
         first_col,
+        case_id_col,
         **kwargs,
     ):
         """
@@ -47,6 +48,7 @@ class BaseRowChecker:
         """
         super().__init__(**kwargs)
         self._sample_col = sample_col
+        self._case_id_col = case_id_col
         self._first_col = first_col
         self._seen = set()
         self.modified = []
@@ -61,6 +63,7 @@ class BaseRowChecker:
 
         """
         self._validate_sample(row)
+        self._validate_case_id(row)
         self._seen.add((row[self._sample_col], row[self._first_col]))
         self.modified.append(row)
 
@@ -70,6 +73,13 @@ class BaseRowChecker:
             raise AssertionError("Sample input is required.")
         # Sanitize samples slightly.
         row[self._sample_col] = row[self._sample_col].replace(" ", "_")
+
+    def _validate_case_id(self, row):
+        """Assert that the case id exists and convert spaces to underscores."""
+        if len(row[self._case_id_col]) <= 0:
+            raise AssertionError("Case ID input is required.")
+        # Sanitize id slightly.
+        row[self._case_id_col] = row[self._case_id_col].replace(" ", "_")
 
     def validate_unique_samples(self):
         """
@@ -99,6 +109,7 @@ class FastqRowChecker(BaseRowChecker):
         first_col="fastq_1",
         second_col="fastq_2",
         single_col="single_end",
+        case_id_col="case_id",
         **kwargs,
     ):
         """
@@ -114,10 +125,12 @@ class FastqRowChecker(BaseRowChecker):
             single_col (str): The name of the new column that will be inserted and
                 records whether the sample contains single- or paired-end sequencing
                 reads (default "single_end").
+            case_id_col (str): The name of the column that contains the case_id
+                (default "case_id").
 
         """
         self._valid_formats = (".fq.gz", ".fastq.gz",)
-        super().__init__(sample_col, first_col, **kwargs)
+        super().__init__(sample_col, first_col, case_id_col, **kwargs)
         self._second_col = second_col
         self._single_col = single_col
 
@@ -175,6 +188,7 @@ class BamRowChecker(BaseRowChecker):
         self,
         sample_col="sample",
         first_col="bam",
+        case_id_col="case_id",
         **kwargs,
     ):
         """
@@ -184,10 +198,12 @@ class BamRowChecker(BaseRowChecker):
             sample_col (str): The name of the column that contains the sample name
                 (default "sample").
             first_col (str): The name of the column that contains the BAM file path.
+            case_id_col (str): The name of the column that contains the case_id
+                (default "case_id").
 
         """
         self._valid_formats = (".bam",)
-        super().__init__(sample_col, first_col, **kwargs)
+        super().__init__(sample_col, first_col, case_id_col, **kwargs)
 
     def validate_and_transform(self, row):
         """

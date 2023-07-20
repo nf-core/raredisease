@@ -5,8 +5,8 @@ process SENTIEON_TNSCOPE {
 
     input:
     tuple val(meta), path(bam), path(bai)
-    path fasta
-    path fai
+    tuple val(meta2), path(fasta)
+    tuple val(meta3), path(fai)
 
     output:
     tuple val(meta), path("*vcf.gz")    , emit: vcf
