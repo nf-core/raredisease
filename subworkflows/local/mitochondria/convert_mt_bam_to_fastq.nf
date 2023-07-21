@@ -8,16 +8,16 @@ include { GATK4_SAMTOFASTQ as GATK4_SAMTOFASTQ_MT } from '../../../modules/nf-co
 
 workflow CONVERT_MT_BAM_TO_FASTQ {
     take:
-        ch_bam               // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_genome_fasta_meta // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai        // channel: [mandatory] [ path(fai) ]
-        ch_genome_dict       // channel: [mandatory] [ path(dict) ]
+        ch_bam_bai      // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_fasta // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai   // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_dict  // channel: [mandatory] [ val(meta), path(dict) ]
 
     main:
         ch_versions = Channel.empty()
 
         // Outputs bam containing only MT
-        GATK4_PRINTREADS_MT ( ch_bam, ch_genome_fasta_meta, ch_genome_fai, ch_genome_dict )
+        GATK4_PRINTREADS_MT ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_genome_dict )
 
         // Removes alignment information
         GATK4_REVERTSAM_MT ( GATK4_PRINTREADS_MT.out.bam )

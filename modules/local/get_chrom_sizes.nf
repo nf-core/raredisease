@@ -5,7 +5,7 @@ process GET_CHROM_SIZES {
     conda "conda-forge::coreutils=8.31"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/gnu-wget:1.18--0' :
-        'quay.io/biocontainers/gnu-wget:1.18--0' }"
+        'biocontainers/gnu-wget:1.18--0' }"
 
     input:
     tuple val(meta), path(fai)

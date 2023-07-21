@@ -8,7 +8,7 @@ process SENTIEON_WGSMETRICSALGO {
     input:
     tuple val(meta), path(bam), path(bai)
     tuple val(meta2), path(fasta)
-    tuple val(meta2), path(fai)
+    tuple val(meta3), path(fai)
     path intervals_list
 
     output:

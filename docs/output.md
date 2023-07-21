@@ -33,6 +33,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Variant calling - SV](#variant-calling---sv)
   - [Manta](#manta)
   - [TIDDIT sv](#tiddit-sv)
+  - [GATK GermlineCNVCaller - CNV calling](#gatk-germlinecnvcaller---cnv-calling)
   - [SVDB merge](#svdb-merge)
 - [Variant calling - repeat expansions](#variant-calling---repeat-expansions)
   - [Expansion Hunter](#expansion-hunter)
@@ -40,16 +41,22 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Annotation - SNV](#annotation---snv)
   - [bcftools roh](#bcftools-roh)
   - [vcfanno](#vcfanno)
+  - [CADD](#cadd)
   - [VEP](#vep)
+  - [UPD](#upd)
+  - [Chromograph](#chromograph)
 - [Annotation - SV](#annotation---sv)
   - [SVDB query](#svdb-query)
   - [VEP](#vep-1)
 - [Mitochondrial analysis](#mitochondrial-analysis)
   - [Alignment and variant calling](#alignment-and-variant-calling)
+    - [MT deletion script](#mt-deletion-script)
   - [Annotation:](#annotation-)
     - [HaploGrep2](#haplogrep2)
     - [vcfanno](#vcfanno-1)
+    - [CADD](#cadd-1)
     - [VEP](#vep-2)
+    - [HmtNote](#hmtnote)
 - [Rank variants and filtering](#rank-variants-and-filtering)
   - [GENMOD](#genmod)
 - [Pipeline information](#pipeline-information)
@@ -70,27 +77,27 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ##### Picard's MarkDuplicates
 
-[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2 are processed by this tool.
+[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2 are processed by this tool. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
 
 <details markdown="1">
 <summary>Output files from Alignment</summary>
 
 - `{outputdir}/alignment/`
-  - `*.bam`: Bam file containing report containing quality metrics.
-  - `*.bai`: Zip archive containing the FastQC report, tab-delimited data file and plot images.
+  - `*.bam|*.cram`: Alignment file in bam/cram format.
+  - `*.bai|*.crai`: Index of the corresponding bam/cram file.
   - `*.txt`: Text file containing the dedup metrics.
   </details>
 
 ##### Sentieon Dedup
 
-[Sentieon Dedup](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#remove-or-mark-duplicates) is the algorithm used by Sentieon's driver to remove duplicate reads. Only reads aligned by Sentieon's implementation of bwa are processed by this algorithm.
+[Sentieon Dedup](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#remove-or-mark-duplicates) is the algorithm used by Sentieon's driver to remove duplicate reads. Only reads aligned by Sentieon's implementation of bwa are processed by this algorithm. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
 
 <details markdown="1">
 <summary>Output files from Alignment</summary>
 
 - `{outputdir}/alignment/`
-  - `*.bam`: Bam file containing report containing quality metrics.
-  - `*.bai`: Zip archive containing the FastQC report, tab-delimited data file and plot images.
+  - `*.bam|*.cram`: Alignment file in bam/cram format.
+  - `*.bai|*.crai`: Index of the corresponding bam/cram file.
   - `*.txt`: Text file containing the dedup metrics.
   </details>
 
@@ -241,15 +248,19 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 #### Manta
 
-[Manta](https://github.com/Illumina/manta) calls structural variants (SVs) and indels from mapped paired-end sequencing reads. It combines paired and split-read evidence during SV discovery and scoring to improve accuracy, but does not require split-reads or successful breakpoint assemblies to report a variant in cases where there is strong evidence otherwise. Output vcf files are treated as intermediates and are not placed in the output folder by default.
+[Manta](https://github.com/Illumina/manta) calls structural variants (SVs) and indels from mapped paired-end sequencing reads. It combines paired and split-read evidence during SV discovery and scoring to improve accuracy, but does not require split-reads or successful breakpoint assemblies to report a variant in cases where there is strong evidence otherwise. Output vcf files are treated as intermediates and are not placed in the output folder.
 
 #### TIDDIT sv
 
-[TIDDIT's sv](https://github.com/SciLifeLab/TIDDIT) is used to identify chromosomal rearrangements using sequencing data. TIDDIT identifies intra and inter-chromosomal translocations, deletions, tandem-duplications and inversions, using supplementary alignments as well as discordant pairs. TIDDIT searches for discordant reads and split reads (supplementary alignments). Output vcf files are treated as intermediates and are not placed in the output folder by default.
+[TIDDIT's sv](https://github.com/SciLifeLab/TIDDIT) is used to identify chromosomal rearrangements using sequencing data. TIDDIT identifies intra and inter-chromosomal translocations, deletions, tandem-duplications and inversions, using supplementary alignments as well as discordant pairs. TIDDIT searches for discordant reads and split reads (supplementary alignments). Output vcf files are treated as intermediates and are not placed in the output folder.
+
+#### GATK GermlineCNVCaller - CNV calling
+
+[GATK GermlineCNVCaller](https://github.com/broadinstitute/gatk) is used to identify copy number variants in germline samples given their read counts and a model describing a sample's ploidy. Output vcf files are treated as intermediates and are not placed in the output folder.
 
 #### SVDB merge
 
-[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from both Manta and TIDDIT. Output files are published in the output folder.
+[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if skip_cnv_calling is set to false), Manta, and TIDDIT. Output files are published in the output folder.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -292,11 +303,17 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 #### bcftools roh
 
-[bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh) is a program for detecting runs of homo/autozygosity.from only bi-allelic sites. The output files are not published in the output folder by default, and is passed to vcfanno for further annotation.
+[bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh) is a program for detecting runs of homo/autozygosity.from only bi-allelic sites. The output files are not published in the output folder, and is passed to vcfanno for further annotation.
 
 #### vcfanno
 
-[vcfanno](https://github.com/brentp/vcfanno) allows you to quickly annotate your VCF with any number of INFO fields from any number of VCFs. It uses a simple conf file to allow the user to specify the source annotation files and fields and how they will be added to the info of the query VCF. Values are pulled by name from the INFO field with special-cases of ID and FILTER to pull from those VCF columns. The output files are not published in the output folder by default, and is passed to vep for further annotation.
+[vcfanno](https://github.com/brentp/vcfanno) allows you to quickly annotate your VCF with any number of INFO fields from any number of VCFs. It uses a simple configuration file to allow the user to specify the source annotation files and fields and how they will be added to the info of the query VCF. Values are pulled by name from the INFO field with special-cases of ID and FILTER to pull from those VCF columns. The output files are not published in the output folder, and is passed to CADD and/or VEP for further annotation.
+
+We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files can be downloaded from [here](https://cadd.gs.washington.edu/download)).
+
+#### CADD
+
+[CADD](https://cadd.gs.washington.edu/) is a tool for scoring the deleteriousness of single nucleotide variants as well as insertion/deletions variants in the human genome. In nf-core/raredisease, SNVs can be annotated with precomputed CADD scores using vcfanno. However, for small indels they will be calculated on the fly by CADD. The output files are not published in the output folder, and is passed to VEP for further annotation.
 
 #### VEP
 
@@ -322,11 +339,29 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 
 </details>
 
+#### UPD
+
+[UPD](https://github.com/bjhall/upd) calls regions of uniparental disomy from germline exome/wgs trios. Output from UPD is passed to chromograph for making plots.
+
+#### Chromograph
+
+[Chromograph](https://github.com/Clinical-Genomics/chromograph) is a python package to create PNG images from genetics data such as BED and WIG files.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `annotate_snv/*sites_chromograph`
+  - `<case_id>_rohann_vcfanno_upd_sites_<chr#>.png`: file containing a plot showing upd sites across chromosomes.
+- `annotate_snv/*regions_chromograph`
+  - `<case_id>_rohann_vcfanno_upd_regions_<chr#>.png`: file containing a plot showing upd regions across chromosomes.
+
+</details>
+
 ### Annotation - SV
 
 #### SVDB query
 
-[SVDB query](https://github.com/J35P312/SVDB#Query) allows you to quickly annotate your VCF with data from one or more structural variant databases. The output files are not published in the output folder by default, and is passed to vep for further annotation.
+[SVDB query](https://github.com/J35P312/SVDB#Query) allows you to quickly annotate your VCF with data from one or more structural variant databases. The output files are not published in the output folder, and is passed to vep for further annotation.
 
 #### VEP
 
@@ -353,6 +388,10 @@ Mitochondrial analysis is run by default, to turn it off set `--skip_mt_analysis
 
 The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sensitivity to low AF and separate alignments using opposite genome breakpoints to allow for the tracing of lineages of rare mitochondrial variants.
 
+##### MT deletion script
+
+[MT deletion script](https://github.com/dnil/mitosign/blob/master/run_mt_del_check.sh) lists the fraction of mitochondrially aligning read pairs (per 1000) that appear discordant, as defined by an insert size of more than 1.2 kb (and less than 15 kb due to the circular nature of the genome) using samtools.
+
 #### Annotation:
 
 ##### HaploGrep2
@@ -369,7 +408,17 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 
 ##### vcfanno
 
-[vcfanno](https://github.com/brentp/vcfanno) allows you to quickly annotate your VCF with any number of INFO fields from any number of VCFs. It uses a simple conf file to allow the user to specify the source annotation files and fields and how they will be added to the info of the query VCF. Values are pulled by name from the INFO field with special-cases of ID and FILTER to pull from those VCF columns. The output files are not published in the output folder by default, and is passed to vep for further annotation.
+[vcfanno](https://github.com/brentp/vcfanno) allows you to quickly annotate your VCF with any number of INFO fields from any number of VCFs. It uses a simple conf file to allow the user to specify the source annotation files and fields and how they will be added to the info of the query VCF. Values are pulled by name from the INFO field with special-cases of ID and FILTER to pull from those VCF columns. The output files are not published in the output folder, and is passed to vep for further annotation.
+
+We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files can be downloaded from [here](https://cadd.gs.washington.edu/download)).
+
+##### CADD
+
+[CADD](https://cadd.gs.washington.edu/) is a tool for scoring the deleteriousness of single nucleotide variants as well as insertion/deletions variants in the human genome. In nf-core/raredisease, SNVs can be annotated with precomputed CADD scores using vcfanno. However, for small indels they will be calculated on the fly by CADD. The output files are not published in the output folder, and is passed to VEP for further annotation.
+
+##### Hmtnote
+
+[HmtNote](https://github.com/robertopreste/HmtNote) annotates vcf containing human mitochondrial variants with HmtVar. It will run offline by default with a database within the container.
 
 ##### VEP
 
