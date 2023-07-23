@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - UPD+Chromograph to identify and visualize UPD sites and regions in the chromosomes [#364](https://github.com/nf-core/raredisease/pull/364) and [#366](https://github.com/nf-core/raredisease/pull/366)
 - Added check for presence of case id for each sample in samplesheet [#357](https://github.com/nf-core/raredisease/pull/357)
 
+### Changed
+
+- [#385](https://github.com/nf-core/sarek/pull/385) - Updating tiddit to v3.6.1
+
 ### Fixed
 
 - Avoiding publishing uncompressed VCF-file from `HMTNOTE_ANNOTATE`. (The corresponding compressed VCF-file still gets published.) [#368](https://github.com/nf-core/raredisease/pull/368)
