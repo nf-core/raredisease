@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+### `Changed`
+
+- Tiddit updated to v3.6.1 [#385](https://github.com/nf-core/sarek/pull/385)
+
 ### `Fixed`
 
 ## v1.1.0 - Abu [2023-07-21]
