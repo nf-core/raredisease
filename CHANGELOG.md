@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v1.2.0dev
+
+### Changed
+
+- Tiddit updated to v3.6.1 [#385](https://github.com/nf-core/sarek/pull/385)
+
 ## v1.1.0 - Abu [2023-07-21]
 
 ### `Added`
@@ -15,10 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - eKLIPse to identify large mitochondrial deletions [#365](https://github.com/nf-core/raredisease/pull/365)
 - UPD+Chromograph to identify and visualize UPD sites and regions in the chromosomes [#364](https://github.com/nf-core/raredisease/pull/364) and [#366](https://github.com/nf-core/raredisease/pull/366)
 - Added check for presence of case id for each sample in samplesheet [#357](https://github.com/nf-core/raredisease/pull/357)
-
-### Changed
-
-- [#385](https://github.com/nf-core/sarek/pull/385) - Updating tiddit to v3.6.1
 
 ### Fixed
 
