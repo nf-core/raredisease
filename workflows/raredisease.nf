@@ -10,42 +10,6 @@ def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
 def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
 def summary_params = paramsSummaryMap(workflow)
 
-// Check input path parameters to see if they exist
-def checkPathParamList = [
-    params.bwa,
-    params.bwamem2,
-    params.call_interval,
-    params.cadd_resources,
-    params.fasta,
-    params.fai,
-    params.gens_gnomad_pos,
-    params.gens_interval_list,
-    params.gens_pon,
-    params.gnomad_af,
-    params.gnomad_af_idx,
-    params.input,
-    params.intervals_wgs,
-    params.intervals_y,
-    params.known_dbsnp,
-    params.known_dbsnp_tbi,
-    params.ml_model,
-    params.mt_fasta,
-    params.multiqc_config,
-    params.reduced_penetrance,
-    params.score_config_snv,
-    params.score_config_sv,
-    params.sequence_dictionary,
-    params.svdb_query_dbs,
-    params.target_bed,
-    params.variant_catalog,
-    params.vcfanno_lua,
-    params.vcfanno_resources,
-    params.vcfanno_toml,
-    params.vep_cache,
-    params.vep_filters
-]
-
-for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 // Print parameter summary log to screen
 log.info logo + paramsSummaryLog(workflow) + citation
 
