@@ -3,11 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v1.2.0dev
+## v1.2.0 - Genie [xxxx-xx-xx]
 
-### Changed
+### `Added`
+
+### `Changed`
 
 - Tiddit updated to v3.6.1 [#385](https://github.com/nf-core/sarek/pull/385)
+
+### `Fixed`
 
 ## v1.1.0 - Abu [2023-07-21]
 
