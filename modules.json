@@ -367,12 +367,12 @@
                     },
                     "tiddit/cov": {
                         "branch": "master",
-                        "git_sha": "0460d316170f75f323111b4a2c0a2989f0c32013",
+                        "git_sha": "1c90a501d102b800c27697f5ef39a6e217ab1915",
                         "installed_by": ["modules"]
                     },
                     "tiddit/sv": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "1c90a501d102b800c27697f5ef39a6e217ab1915",
                         "installed_by": ["modules"]
                     },
                     "ucsc/wigtobigwig": {
