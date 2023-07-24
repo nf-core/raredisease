@@ -5,4 +5,5 @@ lint:
     - .github/PULL_REQUEST_TEMPLATE.md
     - assets/multiqc_config.yaml
     - .github/workflows/linting.yml
+    - pyproject.toml
 repository_type: pipeline
