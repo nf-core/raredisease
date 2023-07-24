@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Use `nf-validation` plugin for parameter and samplesheet validation [#386](https://github.com/nf-core/raredisease/pull/386)
+
 ### `Changed`
 
-- Tiddit updated to v3.6.1 [#385](https://github.com/nf-core/sarek/pull/385)
+- Tiddit updated to v3.6.1 [#385](https://github.com/nf-core/raredisease/pull/385)
 
 ### `Fixed`
 
