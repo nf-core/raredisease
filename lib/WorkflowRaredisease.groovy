@@ -17,6 +17,25 @@ class WorkflowRaredisease {
     }
 
     //
+    // Replace spaces in vcf INFO fields with underscore
+    //
+    public static String replaceSpacesInInfoColumn(vcf_file, parent_dir, base_name) {
+        def outfile = new File(parent_dir + '/' + base_name + '_formatted.vcf')
+        def writer  = outfile.newWriter()
+        vcf_file.eachLine { line ->
+            if (line.startsWith("#")) {
+                writer << line + "\n"
+            } else {
+                def split_str = line.tokenize("\t")
+                split_str[7] = split_str.getAt(7).replaceAll(" ","_")
+                writer << split_str.join("\t") + "\n"
+            }
+        }
+        writer.close()
+        return outfile
+    }
+
+    //
     // Get workflow summary for MultiQC
     //
     public static String paramsSummaryMultiqc(workflow, summary) {
