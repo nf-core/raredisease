@@ -401,7 +401,7 @@ Here is an example command to download pipeline version 1.1.0 with singularity i
 
 ```
 nf-core download \
-    --container singularity \
+    --container-system singularity \
     --compress none \
     --revision 1.1.0 \
     raredisease
