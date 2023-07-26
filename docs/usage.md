@@ -412,4 +412,5 @@ plugins {
         id 'nf-validation@0.3.1'
 }
 ```
+
 This should go in your Nextflow confgiguration file, specified with `-c <YOURCONFIG>` when running the pipeline.
