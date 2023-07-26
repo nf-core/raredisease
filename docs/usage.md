@@ -408,7 +408,7 @@ nf-core download \
 ```
 For running offline, you of course have to make all the reference data available locally, and specify `--fasta`, etc., see [above](#reference-files-and-parameters).
 
-Contrary to the paragraph about Nextflow on the nf-core tools page, it is not possible to use the "-all" packaged version of Nextflow. The online version of nextflow is necessary to support the nextflow plugins used for this pipeline. Download instead the file called just `nextflow`. Nextflow will download its dependencies when it is run. Additionally, you need to download the nf-validation plugin explicitly:
+Contrary to the paragraph about [Nextflow](https://nf-co.re/docs/usage/offline#nextflow) on the page linked above, it is not possible to use the "-all" packaged version of Nextflow. The online version of nextflow is necessary to support the nextflow plugins used for this pipeline. Download instead the file called just `nextflow`. Nextflow will download its dependencies when it is run. Additionally, you need to download the nf-validation plugin explicitly:
 
 ```
 ./nextflow plugin install nf-validation
