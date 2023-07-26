@@ -143,7 +143,11 @@ workflow MERGE_ANNOTATE_MT {
 
         // HMTNOTE ANNOTATE
         HMTNOTE_ANNOTATE(VCFANNO_MT.out.vcf)
-        ZIP_TABIX_HMTNOTE(HMTNOTE_ANNOTATE.out.vcf)
+        HMTNOTE_ANNOTATE.out.vcf.map{meta, vcf ->
+            return [meta, WorkflowRaredisease.replaceSpacesInInfoColumn(vcf, vcf.parent.toString(), vcf.baseName)]
+            }
+            .set { ch_hmtnote_reformatted }
+        ZIP_TABIX_HMTNOTE(ch_hmtnote_reformatted)
 
         // Prepare output
         ch_vcf_out = ZIP_TABIX_HMTNOTE.out.gz_tbi.map{meta, vcf, tbi -> return [meta, vcf] }

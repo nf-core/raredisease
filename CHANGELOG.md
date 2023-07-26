@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+## v1.1.1 - Abu (Patch) [2023-07-26]
+
+### `Fixed`
+
+- Avoids errors thrown by bcftools concat due to sample names in input vcf files not being in same order [#388](https://github.com/nf-core/raredisease/pull/388)
+
 ## v1.1.0 - Abu [2023-07-21]
 
 ### `Added`

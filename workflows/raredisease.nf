@@ -97,7 +97,7 @@ include { FILTER_VEP as FILTER_VEP_SV           } from '../modules/local/filter_
 // MODULE: Installed directly from nf-core/modules
 //
 
-include { BCFTOOLS_CONCAT                       } from '../modules/nf-core/bcftools/concat/main'
+include { GATK4_MERGEVCFS                       } from '../modules/nf-core/gatk4/mergevcfs/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { FASTQC                                } from '../modules/nf-core/fastqc/main'
 include { GATK4_SELECTVARIANTS                  } from '../modules/nf-core/gatk4/selectvariants/main'
@@ -511,16 +511,9 @@ workflow RAREDISEASE {
                 .groupTuple()
                 .set { ch_merged_vcf }
 
-            ANNOTATE_SNVS.out.tbi
-                .concat(ANALYSE_MT.out.tbi)
-                .groupTuple()
-                .set { ch_merged_tbi }
-
-            ch_merged_vcf.join(ch_merged_tbi, failOnMismatch:true, failOnDuplicate:true).set {ch_concat_in}
-
-            BCFTOOLS_CONCAT (ch_concat_in)
-            ch_snv_annotate = BCFTOOLS_CONCAT.out.vcf
-            ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
+            GATK4_MERGEVCFS (ch_merged_vcf, ch_genome_dictionary)
+            ch_snv_annotate = GATK4_MERGEVCFS.out.vcf
+            ch_versions = ch_versions.mix(GATK4_MERGEVCFS.out.versions)
         }
 
         ANN_CSQ_PLI_SNV (
