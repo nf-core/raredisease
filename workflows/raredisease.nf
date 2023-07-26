@@ -483,7 +483,7 @@ workflow RAREDISEASE {
                 .groupTuple()
                 .set { ch_merged_vcf }
 
-            GATK4_MERGEVCFS (ch_merged_vcf, [[],[]])
+            GATK4_MERGEVCFS (ch_merged_vcf, ch_genome_dictionary)
             ch_snv_annotate = GATK4_MERGEVCFS.out.vcf
             ch_versions = ch_versions.mix(GATK4_MERGEVCFS.out.versions)
         }
