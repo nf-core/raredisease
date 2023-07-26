@@ -396,19 +396,9 @@ NXF_OPTS='-Xms1g -Xmx4g'
 
 ### Running the pipeline without Internet access
 
-The pipeline and container images can be downloaded using [nf-core tools](https://nf-co.re/docs/usage/offline).
-Here is an example command to download pipeline version 1.1.0 with singularity images:
+The pipeline and container images can be downloaded using [nf-core tools](https://nf-co.re/docs/usage/offline). For running offline, you of course have to make all the reference data available locally, and specify `--fasta`, etc., see [above](#reference-files-and-parameters).
 
-```
-nf-core download \
-    --container-system singularity \
-    --compress none \
-    --revision 1.1.0 \
-    raredisease
-```
-For running offline, you of course have to make all the reference data available locally, and specify `--fasta`, etc., see [above](#reference-files-and-parameters).
-
-Contrary to the paragraph about [Nextflow](https://nf-co.re/docs/usage/offline#nextflow) on the page linked above, it is not possible to use the "-all" packaged version of Nextflow. The online version of nextflow is necessary to support the nextflow plugins used for this pipeline. Download instead the file called just `nextflow`. Nextflow will download its dependencies when it is run. Additionally, you need to download the nf-validation plugin explicitly:
+Contrary to the paragraph about [Nextflow](https://nf-co.re/docs/usage/offline#nextflow) on the page linked above, it is not possible to use the "-all" packaged version of Nextflow for this pipeline. The online version of Nextflow is necessary to support the necessary nextflow plugins. Download instead the file called just `nextflow`. Nextflow will download its dependencies when it is run. Additionally, you need to download the nf-validation plugin explicitly:
 
 ```
 ./nextflow plugin install nf-validation
