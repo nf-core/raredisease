@@ -9,11 +9,19 @@
         "properties": {
             "sample": {
                 "type": "string",
+                "exists": true,
+                "meta": ["id"],
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces"
             },
+            "lane": {
+                "type": "number",
+                "meta": ["lane"]
+            },
             "fastq_1": {
                 "type": "string",
+                "format": "file-path",
+                "exists": true,
                 "pattern": "^\\S+\\.f(ast)?q\\.gz$",
                 "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
             },
@@ -32,16 +40,19 @@
             },
             "sex": {
                 "type": "string",
+                "meta": ["sex"],
                 "pattern": "^\\S+$",
                 "errorMessage": "Sex must be provided and cannot contain spaces"
             },
             "phenotype": {
                 "type": "string",
+                "meta": ["phenotype"],
                 "pattern": "^\\S+$",
                 "errorMessage": "Phenotype must be provided and cannot contain spaces"
             },
             "paternal_id": {
                 "errorMessage": "Paternal ID cannot contain spaces",
+                "meta": ["paternal"],
                 "anyOf": [
                     {
                         "type": "string",
@@ -55,6 +66,7 @@
             },
             "maternal_id": {
                 "errorMessage": "Maternal ID cannot contain spaces",
+                "meta": ["maternal"],
                 "anyOf": [
                     {
                         "type": "string",
@@ -68,6 +80,7 @@
             },
             "case_id": {
                 "type": "string",
+                "meta": ["case_id"],
                 "pattern": "^\\S+$",
                 "errorMessage": "Case name must be provided and cannot contain spaces"
             }
