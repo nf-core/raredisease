@@ -8,6 +8,7 @@ include { GENMOD_SCORE     } from '../../modules/nf-core/genmod/score/main'
 include { GENMOD_COMPOUND  } from '../../modules/nf-core/genmod/compound/main'
 include { BCFTOOLS_SORT    } from '../../modules/nf-core/bcftools/sort/main'
 include { TABIX_BGZIP      } from '../../modules/nf-core/tabix/bgzip/main'
+include { TABIX_TABIX      } from '../../modules/nf-core/tabix/tabix/main'
 
 workflow RANK_VARIANTS {
 
@@ -34,12 +35,15 @@ workflow RANK_VARIANTS {
 
         ch_vcf = TABIX_BGZIP.out.output.mix(BCFTOOLS_SORT.out.vcf)
 
+        TABIX_TABIX (ch_vcf)
+
         ch_versions = ch_versions.mix(GENMOD_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(GENMOD_MODELS.out.versions)
         ch_versions = ch_versions.mix(GENMOD_SCORE.out.versions)
         ch_versions = ch_versions.mix(GENMOD_COMPOUND.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_SORT.out.versions)
         ch_versions = ch_versions.mix(TABIX_BGZIP.out.versions)
+        ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
 
     emit:
         vcf      = ch_vcf       // channel: [ val(meta), path(vcf) ]
