@@ -28,7 +28,7 @@ process SENTIEON_BWAINDEX {
     sentieon \\
         bwa index \\
         $args \\
-        -p bwa/${fasta.baseName} \\
+        -p $prefix \\
         $fasta
 
     cat <<-END_VERSIONS > versions.yml
