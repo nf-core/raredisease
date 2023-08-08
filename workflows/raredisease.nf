@@ -4,7 +4,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryLog; paramsSummaryMap } from 'plugin/nf-validation'
+include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet } from 'plugin/nf-validation'
 
 def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
 def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
@@ -76,9 +76,9 @@ if (missingParamsCount>0) {
 */
 
 ch_multiqc_config                     = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
-ch_multiqc_custom_config              = params.multiqc_config              ? Channel.fromPath( params.multiqc_config, checkIfExists: true ) : Channel.empty()
-ch_multiqc_logo                       = params.multiqc_logo                ? Channel.fromPath( params.multiqc_logo, checkIfExists: true )   : Channel.empty()
-ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true)  : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
+ch_multiqc_custom_config              = params.multiqc_config              ? Channel.fromPath( params.multiqc_config )  : Channel.empty()
+ch_multiqc_logo                       = params.multiqc_logo                ? Channel.fromPath( params.multiqc_logo )    : Channel.empty()
+ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description )  : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,7 +97,7 @@ include { FILTER_VEP as FILTER_VEP_SV           } from '../modules/local/filter_
 // MODULE: Installed directly from nf-core/modules
 //
 
-include { BCFTOOLS_CONCAT                       } from '../modules/nf-core/bcftools/concat/main'
+include { GATK4_MERGEVCFS                       } from '../modules/nf-core/gatk4/mergevcfs/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { FASTQC                                } from '../modules/nf-core/fastqc/main'
 include { GATK4_SELECTVARIANTS                  } from '../modules/nf-core/gatk4/selectvariants/main'
@@ -117,7 +117,6 @@ include { ANNOTATE_STRUCTURAL_VARIANTS          } from '../subworkflows/local/an
 include { CALL_REPEAT_EXPANSIONS                } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                              } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS              } from '../subworkflows/local/call_structural_variants'
-include { CHECK_INPUT                           } from '../subworkflows/local/check_input'
 include { GENS                                  } from '../subworkflows/local/gens'
 include { PREPARE_REFERENCES                    } from '../subworkflows/local/prepare_references'
 include { QC_BAM                                } from '../subworkflows/local/qc_bam'
@@ -140,10 +139,41 @@ workflow RAREDISEASE {
 
     ch_versions = Channel.empty()
 
-    // Initialize input channels
+    // Initialize read, sample, and case_info channels
     ch_input = Channel.fromPath(params.input)
-    CHECK_INPUT (ch_input)
-    ch_versions = ch_versions.mix(CHECK_INPUT.out.versions)
+    Channel.fromSamplesheet("input")
+        .tap { ch_original_input }
+        .map { meta, fastq1, fastq2 -> meta.id }
+        .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
+            counts[sample] = (counts[sample] ?: 0) + 1
+            counts
+        }
+        .combine( ch_original_input )
+        .map { counts, meta, fastq1, fastq2 ->
+            new_meta = meta + [num_lanes:counts[meta.id],
+                        read_group:"\'@RG\\tID:"+ fastq1.toString().split('/')[-1] + "\\tPL:ILLUMINA\\tSM:"+meta.id+"\'"]
+            if (!fastq2) {
+                return [ new_meta + [ single_end:true ], [ fastq1 ] ]
+            } else {
+                return [ new_meta + [ single_end:false ], [ fastq1, fastq2 ] ]
+            }
+        }
+        .tap{ ch_input_counts }
+        .map { meta, fastqs -> fastqs }
+        .reduce([:]) { counts, fastqs -> //get line number for each row to construct unique sample ids
+            counts[fastqs] = counts.size() + 1
+            return counts
+        }
+        .combine( ch_input_counts )
+        .map { lineno, meta, fastqs -> //append line number to sampleid
+            new_meta = meta + [id:meta.id+"_T"+lineno[fastqs]]
+            return [ new_meta, fastqs ]
+        }
+        .set { ch_reads }
+
+    ch_samples   = ch_reads.map { meta, fastqs -> meta}
+    ch_pedfile   = ch_samples.toList().map { makePed(it) }
+    ch_case_info = ch_samples.toList().map { create_case_channel(it) }
 
     // Initialize file channels for PREPARE_REFERENCES subworkflow
     ch_genome_fasta             = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
@@ -239,8 +269,6 @@ workflow RAREDISEASE {
                                                                            : Channel.value([])
     ch_versions                 = ch_versions.mix(ch_references.versions)
 
-    // Generate pedigree file
-    ch_pedfile = CHECK_INPUT.out.samples.toList().map { makePed(it) }
 
     // SV caller priority
     if (params.skip_cnv_calling) {
@@ -250,7 +278,7 @@ workflow RAREDISEASE {
     }
 
     // Input QC
-    FASTQC (CHECK_INPUT.out.reads)
+    FASTQC (ch_reads)
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     // CREATE CHROMOSOME BED AND INTERVALS
@@ -265,7 +293,7 @@ workflow RAREDISEASE {
 
     // ALIGNING READS, FETCH STATS, AND MERGE.
     ALIGN (
-        CHECK_INPUT.out.reads,
+        ch_reads,
         ch_genome_fasta,
         ch_genome_fai,
         ch_genome_bwaindex,
@@ -296,7 +324,7 @@ workflow RAREDISEASE {
     CALL_REPEAT_EXPANSIONS (
         ch_mapped.bam_bai,
         ch_variant_catalog,
-        CHECK_INPUT.out.case_info,
+        ch_case_info,
         ch_genome_fasta,
         ch_genome_fai
     )
@@ -313,7 +341,7 @@ workflow RAREDISEASE {
         .toList()
         .set { ch_bai_list }
 
-    CHECK_INPUT.out.case_info
+    ch_case_info
         .combine(ch_bam_list)
         .combine(ch_bai_list)
         .set { ch_bams_bais }
@@ -332,7 +360,7 @@ workflow RAREDISEASE {
         ch_dbsnp_tbi,
         ch_call_interval,
         ch_ml_model,
-        CHECK_INPUT.out.case_info
+        ch_case_info
     )
     ch_versions = ch_versions.mix(CALL_SNV.out.versions)
 
@@ -343,7 +371,7 @@ workflow RAREDISEASE {
         ch_genome_bwaindex,
         ch_genome_fasta,
         ch_genome_fai,
-        CHECK_INPUT.out.case_info,
+        ch_case_info,
         ch_target_bed,
         ch_genome_dictionary,
         ch_svcaller_priority,
@@ -370,7 +398,7 @@ workflow RAREDISEASE {
             file(params.gens_interval_list),
             file(params.gens_pon),
             file(params.gens_gnomad_pos),
-            CHECK_INPUT.out.case_info,
+            ch_case_info,
             ch_genome_dictionary
         )
         ch_versions = ch_versions.mix(GENS.out.versions)
@@ -433,7 +461,7 @@ workflow RAREDISEASE {
             params.genome,
             params.vep_cache_version,
             ch_vep_cache,
-            CHECK_INPUT.out.case_info
+            ch_case_info
         )
 
         ch_versions = ch_versions.mix(ANALYSE_MT.out.versions)
@@ -483,16 +511,9 @@ workflow RAREDISEASE {
                 .groupTuple()
                 .set { ch_merged_vcf }
 
-            ANNOTATE_SNVS.out.tbi
-                .concat(ANALYSE_MT.out.tbi)
-                .groupTuple()
-                .set { ch_merged_tbi }
-
-            ch_merged_vcf.join(ch_merged_tbi, failOnMismatch:true, failOnDuplicate:true).set {ch_concat_in}
-
-            BCFTOOLS_CONCAT (ch_concat_in)
-            ch_snv_annotate = BCFTOOLS_CONCAT.out.vcf
-            ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
+            GATK4_MERGEVCFS (ch_merged_vcf, ch_genome_dictionary)
+            ch_snv_annotate = GATK4_MERGEVCFS.out.vcf
+            ch_versions = ch_versions.mix(GATK4_MERGEVCFS.out.versions)
         }
 
         ANN_CSQ_PLI_SNV (
@@ -596,6 +617,38 @@ def makePed(samples) {
         }
     }
     return outfile
+}
+
+// Function to get a list of metadata (e.g. case id) for the case [ meta ]
+def create_case_channel(List rows) {
+    def case_info    = [:]
+    def probands     = []
+    def upd_children = []
+    def father       = ""
+    def mother       = ""
+
+    for (item in rows) {
+        if (item.phenotype == "2") {
+            probands.add(item.id.split("_T")[0])
+        }
+        if ( (item.paternal!="0") && (item.paternal!="") && (item.maternal!="0") && (item.maternal!="") ) {
+            upd_children.add(item.id.split("_T")[0])
+        }
+        if ( (item.paternal!="0") && (item.paternal!="") ) {
+            father = item.paternal
+        }
+        if ( (item.maternal!="0") && (item.maternal!="") ) {
+            mother = item.maternal
+        }
+    }
+
+    case_info.father       = father
+    case_info.mother       = mother
+    case_info.probands     = probands
+    case_info.upd_children = upd_children
+    case_info.id           = rows[0].case_id
+
+    return case_info
 }
 
 /*
