@@ -337,7 +337,7 @@
                     },
                     "sentieon/bwaindex": {
                         "branch": "master",
-                        "git_sha": "b9172e8c26a3db5009f7872654c44587e254f094",
+                        "git_sha": "49af8ed458e28729e483bc96e5a57c28163b9ea0",
                         "installed_by": ["modules"]
                     },
                     "smncopynumbercaller": {
