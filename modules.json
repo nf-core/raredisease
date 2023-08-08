@@ -340,6 +340,11 @@
                         "git_sha": "3ffae3598260a99e8db3207dead9f73f87f90d1f",
                         "installed_by": ["modules"]
                     },
+                    "sentieon/bwaindex": {
+                        "branch": "master",
+                        "git_sha": "49af8ed458e28729e483bc96e5a57c28163b9ea0",
+                        "installed_by": ["modules"]
+                    },
                     "smncopynumbercaller": {
                         "branch": "master",
                         "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
