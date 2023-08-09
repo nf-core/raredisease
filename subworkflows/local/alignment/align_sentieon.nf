@@ -2,7 +2,7 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SENTIEON_BWAMEM         } from '../../../modules/local/sentieon/bwamem'
+include { SENTIEON_BWAMEM         } from '../../../modules/nf-core/sentieon/bwamem/main'
 include { SENTIEON_DATAMETRICS    } from '../../../modules/local/sentieon/datametrics'
 include { SENTIEON_LOCUSCOLLECTOR } from '../../../modules/local/sentieon/locuscollector'
 include { SENTIEON_DEDUP          } from '../../../modules/local/sentieon/dedup'
@@ -25,11 +25,10 @@ workflow ALIGN_SENTIEON {
         ch_bqsr_bai = Channel.empty()
         ch_bqsr_csv = Channel.empty()
 
-        SENTIEON_BWAMEM ( ch_reads_input, ch_genome_fasta, ch_genome_fai, ch_bwa_index )
+        SENTIEON_BWAMEM ( ch_reads_input, ch_bwa_index, ch_genome_fasta.map{ meta, fasta -> fasta }, ch_genome_fai.map{ meta, fai -> fai })
 
         SENTIEON_BWAMEM.out
-            .bam
-            .join(SENTIEON_BWAMEM.out.bai, failOnMismatch:true, failOnDuplicate:true)
+            .bam_and_bai
             .map{ meta, bam, bai ->
                 new_id   = meta.id.split('_')[0]
                 new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"]

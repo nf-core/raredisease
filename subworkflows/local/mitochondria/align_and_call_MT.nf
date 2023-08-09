@@ -2,7 +2,7 @@
 // Align and call MT
 //
 
-include { SENTIEON_BWAMEM as SENTIEON_BWAMEM_MT                             } from '../../../modules/local/sentieon/bwamem'
+include { SENTIEON_BWAMEM as SENTIEON_BWAMEM_MT                             } from '../../../modules/nf-core/sentieon/bwamem/main'
 include { BWAMEM2_MEM as BWAMEM2_MEM_MT                                     } from '../../../modules/nf-core/bwamem2/mem/main'
 include { GATK4_MERGEBAMALIGNMENT as GATK4_MERGEBAMALIGNMENT_MT             } from '../../../modules/nf-core/gatk4/mergebamalignment/main'
 include { PICARD_ADDORREPLACEREADGROUPS as PICARD_ADDORREPLACEREADGROUPS_MT } from '../../../modules/nf-core/picard/addorreplacereadgroups/main'
@@ -32,10 +32,10 @@ workflow ALIGN_AND_CALL_MT {
 
         BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, true)
 
-        SENTIEON_BWAMEM_MT ( ch_fastq, ch_fasta, ch_fai, ch_bwaindex )
+        SENTIEON_BWAMEM_MT ( ch_fastq, ch_bwaindex, ch_fasta.map{ meta, fasta -> fasta }, ch_fai.map{ meta, fai -> fai } )
 
         Channel.empty()
-            .mix(BWAMEM2_MEM_MT.out.bam, SENTIEON_BWAMEM_MT.out.bam)
+            .mix(BWAMEM2_MEM_MT.out.bam, SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, bai -> [meta, bam] })
             .join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)
             .set {ch_bam_ubam}
 

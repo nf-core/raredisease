@@ -13,8 +13,8 @@ process FILTER_VEP {
     path (select_feature_file)
 
     output:
-    tuple val(meta), path("*.ann_filter.vcf.gz"), emit: vcf
-    path "versions.yml"                         , emit: versions
+    tuple val(meta), path("*.ann_filter.vcf"), emit: vcf
+    path "versions.yml"                      , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -26,7 +26,7 @@ process FILTER_VEP {
     filter_vep \\
         --format vcf \\
         --input_file $vcf \\
-        --output_file ${prefix}.ann_filter.vcf.gz \\
+        --output_file ${prefix}.ann_filter.vcf \\
         --only_matched \\
         --filter \"HGNC_ID in ${select_feature_file}\"
 
@@ -39,7 +39,7 @@ process FILTER_VEP {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.ann_filter.vcf.gz
+    touch ${prefix}.ann_filter.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

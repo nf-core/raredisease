@@ -92,6 +92,8 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 
 include { FILTER_VEP as FILTER_VEP_SNV          } from '../modules/local/filter_vep'
 include { FILTER_VEP as FILTER_VEP_SV           } from '../modules/local/filter_vep'
+include { TABIX_BGZIPTABIX as BGZIPTABIX_SNV    } from '../modules/nf-core/tabix/bgziptabix'
+include { TABIX_BGZIPTABIX as BGZIPTABIX_SV     } from '../modules/nf-core/tabix/bgziptabix'
 
 //
 // MODULE: Installed directly from nf-core/modules
@@ -436,6 +438,9 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(FILTER_VEP_SV.out.versions)
 
+        BGZIPTABIX_SV(FILTER_VEP_SV.out.vcf)
+        ch_versions = ch_versions.mix(BGZIPTABIX_SV.out.versions)
+
     }
 
     if (!params.skip_mt_analysis) {
@@ -535,6 +540,9 @@ workflow RAREDISEASE {
             ch_vep_filters
         )
         ch_versions = ch_versions.mix(FILTER_VEP_SNV.out.versions)
+
+        BGZIPTABIX_SNV(FILTER_VEP_SNV.out.vcf)
+        ch_versions = ch_versions.mix(BGZIPTABIX_SNV.out.versions)
 
     }
 
