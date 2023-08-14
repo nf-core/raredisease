@@ -7,8 +7,7 @@ include { SENTIEON_DATAMETRICS    } from '../../../modules/local/sentieon/datame
 include { SENTIEON_LOCUSCOLLECTOR } from '../../../modules/local/sentieon/locuscollector'
 include { SENTIEON_DEDUP          } from '../../../modules/local/sentieon/dedup'
 include { SENTIEON_BQSR           } from '../../../modules/local/sentieon/bqsr'
-include { SENTIEON_READWRITER     } from '../../../modules/local/sentieon/readwriter'
-
+include { SENTIEON_READWRITER     } from '../../../modules/nf-core/sentieon/readwriter/main'
 workflow ALIGN_SENTIEON {
     take:
         ch_reads_input     // channel: [mandatory] [ val(meta), path(reads_input) ]
@@ -41,7 +40,7 @@ workflow ALIGN_SENTIEON {
                 }
             .set{ merge_bams_in }
 
-        SENTIEON_READWRITER (merge_bams_in.multiple)
+        SENTIEON_READWRITER ( merge_bams_in.multiple, ch_genome_fasta, ch_genome_fai )
         ch_bam_bai = merge_bams_in.single.mix(SENTIEON_READWRITER.out.bam_bai)
 
         SENTIEON_DATAMETRICS (ch_bam_bai, ch_genome_fasta, ch_genome_fai )
