@@ -59,7 +59,6 @@ workflow ALIGN_SENTIEON {
 
         ch_versions = ch_versions.mix(SENTIEON_BWAMEM.out.versions.first())
         ch_versions = ch_versions.mix(SENTIEON_DATAMETRICS.out.versions.first())
-        ch_versions = ch_versions.mix(SENTIEON_LOCUSCOLLECTOR.out.versions.first())
         ch_versions = ch_versions.mix(SENTIEON_DEDUP.out.versions.first())
 
     emit:
