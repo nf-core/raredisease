@@ -4,8 +4,7 @@
 
 include { SENTIEON_BWAMEM         } from '../../../modules/nf-core/sentieon/bwamem/main'
 include { SENTIEON_DATAMETRICS    } from '../../../modules/nf-core/sentieon/datametrics/main'
-include { SENTIEON_LOCUSCOLLECTOR } from '../../../modules/local/sentieon/locuscollector'
-include { SENTIEON_DEDUP          } from '../../../modules/local/sentieon/dedup'
+include { SENTIEON_DEDUP          } from '../../../modules/nf-core/sentieon/dedup/main'
 include { SENTIEON_BQSR           } from '../../../modules/local/sentieon/bqsr'
 include { SENTIEON_READWRITER     } from '../../../modules/nf-core/sentieon/readwriter/main'
 workflow ALIGN_SENTIEON {
@@ -45,14 +44,7 @@ workflow ALIGN_SENTIEON {
 
         SENTIEON_DATAMETRICS (ch_bam_bai, ch_genome_fasta, ch_genome_fai )
 
-        SENTIEON_LOCUSCOLLECTOR ( ch_bam_bai )
-
-        ch_bam_bai
-            .join(SENTIEON_LOCUSCOLLECTOR.out.score, failOnMismatch:true, failOnDuplicate:true)
-            .join(SENTIEON_LOCUSCOLLECTOR.out.score_idx, failOnMismatch:true, failOnDuplicate:true)
-            .set { ch_bam_bai_score }
-
-        SENTIEON_DEDUP ( ch_bam_bai_score, ch_genome_fasta, ch_genome_fai )
+        SENTIEON_DEDUP ( ch_bam_bai, ch_genome_fasta, ch_genome_fai )
 
         if (params.variant_caller == "sentieon") {
             SENTIEON_DEDUP.out.bam
@@ -67,7 +59,6 @@ workflow ALIGN_SENTIEON {
 
         ch_versions = ch_versions.mix(SENTIEON_BWAMEM.out.versions.first())
         ch_versions = ch_versions.mix(SENTIEON_DATAMETRICS.out.versions.first())
-        ch_versions = ch_versions.mix(SENTIEON_LOCUSCOLLECTOR.out.versions.first())
         ch_versions = ch_versions.mix(SENTIEON_DEDUP.out.versions.first())
 
     emit:
