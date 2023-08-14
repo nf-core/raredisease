@@ -4,9 +4,7 @@
 
 include { SENTIEON_BWAMEM         } from '../../../modules/nf-core/sentieon/bwamem/main'
 include { SENTIEON_DATAMETRICS    } from '../../../modules/nf-core/sentieon/datametrics/main'
-include { SENTIEON_LOCUSCOLLECTOR } from '../../../modules/local/sentieon/locuscollector'
 include { SENTIEON_DEDUP          } from '../../../modules/nf-core/sentieon/dedup/main'
-include { SENTIEON_DEDUP          } from '../../../modules/local/sentieon/dedup'
 include { SENTIEON_BQSR           } from '../../../modules/local/sentieon/bqsr'
 include { SENTIEON_READWRITER     } from '../../../modules/nf-core/sentieon/readwriter/main'
 workflow ALIGN_SENTIEON {
