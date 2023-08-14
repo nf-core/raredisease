@@ -350,6 +350,11 @@
                         "git_sha": "b9172e8c26a3db5009f7872654c44587e254f094",
                         "installed_by": ["modules"]
                     },
+                    "sentieon/datametrics": {
+                        "branch": "master",
+                        "git_sha": "127edadc279e19da093fdd513926c6cdee82c306",
+                        "installed_by": ["modules"]
+                    },
                     "sentieon/readwriter": {
                         "branch": "master",
                         "git_sha": "b28e4dde755117e8dab5d6e85e292f145b8b53c3",

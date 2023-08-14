@@ -3,7 +3,7 @@
 //
 
 include { SENTIEON_BWAMEM         } from '../../../modules/nf-core/sentieon/bwamem/main'
-include { SENTIEON_DATAMETRICS    } from '../../../modules/local/sentieon/datametrics'
+include { SENTIEON_DATAMETRICS    } from '../../../modules/nf-core/sentieon/datametrics/main'
 include { SENTIEON_LOCUSCOLLECTOR } from '../../../modules/local/sentieon/locuscollector'
 include { SENTIEON_DEDUP          } from '../../../modules/local/sentieon/dedup'
 include { SENTIEON_BQSR           } from '../../../modules/local/sentieon/bqsr'
