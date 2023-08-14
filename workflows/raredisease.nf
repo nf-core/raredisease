@@ -300,8 +300,6 @@ workflow RAREDISEASE {
         ch_genome_fai,
         ch_genome_bwaindex,
         ch_genome_bwamem2index,
-        ch_dbsnp,
-        ch_dbsnp_tbi,
         params.platform
     )
     .set { ch_mapped }
