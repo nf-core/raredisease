@@ -41,7 +41,7 @@ workflow ALIGN_SENTIEON {
             .set{ merge_bams_in }
 
         SENTIEON_READWRITER ( merge_bams_in.multiple, ch_genome_fasta, ch_genome_fai )
-        ch_bam_bai = merge_bams_in.single.mix(SENTIEON_READWRITER.out.bam_bai)
+        ch_bam_bai = merge_bams_in.single.mix(SENTIEON_READWRITER.out.output_index)
 
         SENTIEON_DATAMETRICS (ch_bam_bai, ch_genome_fasta, ch_genome_fai )
 
