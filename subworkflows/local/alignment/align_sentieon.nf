@@ -5,7 +5,6 @@
 include { SENTIEON_BWAMEM         } from '../../../modules/nf-core/sentieon/bwamem/main'
 include { SENTIEON_DATAMETRICS    } from '../../../modules/nf-core/sentieon/datametrics/main'
 include { SENTIEON_DEDUP          } from '../../../modules/nf-core/sentieon/dedup/main'
-include { SENTIEON_BQSR           } from '../../../modules/local/sentieon/bqsr'
 include { SENTIEON_READWRITER     } from '../../../modules/nf-core/sentieon/readwriter/main'
 workflow ALIGN_SENTIEON {
     take:
@@ -13,15 +12,10 @@ workflow ALIGN_SENTIEON {
         ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
         ch_bwa_index       // channel: [mandatory] [ val(meta), path(bwa_index) ]
-        ch_known_dbsnp     // channel: [optional] [ path(known_dbsnp) ]
-        ch_known_dbsnp_tbi // channel: [optional] [ path(known_dbsnp_tbi) ]
         val_platform       // string:  [mandatory] default: illumina
 
     main:
         ch_versions = Channel.empty()
-        ch_bqsr_bam = Channel.empty()
-        ch_bqsr_bai = Channel.empty()
-        ch_bqsr_csv = Channel.empty()
 
         SENTIEON_BWAMEM ( ch_reads_input, ch_bwa_index, ch_genome_fasta.map{ meta, fasta -> fasta }, ch_genome_fai.map{ meta, fai -> fai })
 
@@ -46,17 +40,6 @@ workflow ALIGN_SENTIEON {
 
         SENTIEON_DEDUP ( ch_bam_bai, ch_genome_fasta, ch_genome_fai )
 
-        if (params.variant_caller == "sentieon") {
-            SENTIEON_DEDUP.out.bam
-                .join(SENTIEON_DEDUP.out.bai, failOnMismatch:true, failOnDuplicate:true)
-                .set { ch_dedup_bam_bai }
-            SENTIEON_BQSR ( ch_dedup_bam_bai, ch_genome_fasta, ch_genome_fai, ch_known_dbsnp, ch_known_dbsnp_tbi )
-            ch_bqsr_bam = SENTIEON_BQSR.out.bam
-            ch_bqsr_bai = SENTIEON_BQSR.out.bai
-            ch_bqsr_csv = SENTIEON_BQSR.out.recal_csv
-            ch_versions = ch_versions.mix(SENTIEON_BQSR.out.versions.first())
-        }
-
         ch_versions = ch_versions.mix(SENTIEON_BWAMEM.out.versions.first())
         ch_versions = ch_versions.mix(SENTIEON_DATAMETRICS.out.versions.first())
         ch_versions = ch_versions.mix(SENTIEON_DEDUP.out.versions.first())
@@ -64,9 +47,6 @@ workflow ALIGN_SENTIEON {
     emit:
         marked_bam  = SENTIEON_DEDUP.out.bam                             // channel: [ val(meta), path(bam) ]
         marked_bai  = SENTIEON_DEDUP.out.bai                             // channel: [ val(meta), path(bai) ]
-        recal_bam   = ch_bqsr_bam.ifEmpty(null)                          // channel: [ val(meta), path(bam) ]
-        recal_bai   = ch_bqsr_bai.ifEmpty(null)                          // channel: [ val(meta), path(bai) ]
-        recal_csv   = ch_bqsr_csv.ifEmpty(null)                          // channel: [ val(meta), path(csv) ]
         mq_metrics  = SENTIEON_DATAMETRICS.out.mq_metrics.ifEmpty(null)  // channel: [ val(meta), path(mq_metrics) ]
         qd_metrics  = SENTIEON_DATAMETRICS.out.qd_metrics.ifEmpty(null)  // channel: [ val(meta), path(qd_metrics) ]
         gc_metrics  = SENTIEON_DATAMETRICS.out.gc_metrics.ifEmpty(null)  // channel: [ val(meta), path(gc_metrics) ]
