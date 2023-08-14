@@ -2,8 +2,8 @@
 // A preprocessing workflow for Gens
 //
 
-include { GATK4_COLLECTREADCOUNTS as COLLECTREADCOUNTS } from '../../modules/local/gatk4/collectreadcounts/main'
-include { GATK4_DENOISEREADCOUNTS as DENOISEREADCOUNTS } from '../../modules/local/gatk4/denoisereadcounts/main'
+include { GATK4_COLLECTREADCOUNTS as COLLECTREADCOUNTS } from '../../modules/nf-core/gatk4/collectreadcounts/main'
+include { GATK4_DENOISEREADCOUNTS as DENOISEREADCOUNTS } from '../../modules/nf-core/gatk4/denoisereadcounts/main'
 include { GENS as GENS_GENERATE                        } from '../../modules/local/gens/main'
 
 workflow GENS {
