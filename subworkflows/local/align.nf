@@ -13,8 +13,6 @@ workflow ALIGN {
         ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
         ch_bwa_index       // channel: [mandatory] [ val(meta), path(index) ]
         ch_bwamem2_index   // channel: [mandatory] [ val(meta), path(index) ]
-        ch_known_dbsnp     // channel: [optional; used by sentieon] [ path(known_dbsnp) ]
-        ch_known_dbsnp_tbi // channel: [optional; used by sentieon] [ path(known_dbsnp_tbi) ]
         val_platform       // string:  [mandatory] illumina or a different technology
 
     main:
@@ -33,8 +31,6 @@ workflow ALIGN {
             ch_genome_fasta,
             ch_genome_fai,
             ch_bwa_index,
-            ch_known_dbsnp,
-            ch_known_dbsnp_tbi,
             val_platform
         )
 
