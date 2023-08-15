@@ -3,7 +3,7 @@
 //
 
 include { SENTIEON_DNASCOPE                        } from '../../../modules/local/sentieon/dnascope'
-include { SENTIEON_DNAMODELAPPLY                   } from '../../../modules/local/sentieon/dnamodelapply'
+include { SENTIEON_DNAMODELAPPLY                   } from '../../../modules/nf-core/sentieon/dnamodelapply/main'
 include { BCFTOOLS_MERGE                           } from '../../../modules/nf-core/bcftools/merge/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_SEN } from '../../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_SEN   } from '../../../modules/nf-core/bcftools/norm/main'
@@ -28,7 +28,7 @@ workflow CALL_SNV_SENTIEON {
 
         SENTIEON_DNASCOPE ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_dbsnp, ch_dbsnp_index, ch_call_interval, ch_ml_model )
 
-        SENTIEON_DNAMODELAPPLY ( SENTIEON_DNASCOPE.out.vcf_index, ch_genome_fasta, ch_genome_fai, ch_ml_model )
+        SENTIEON_DNAMODELAPPLY ( SENTIEON_DNASCOPE.out.vcf_index, ch_genome_fasta, ch_genome_fai, [ [:], ch_ml_model ] )
 
         BCF_FILTER_ONE (SENTIEON_DNAMODELAPPLY.out.vcf )
 

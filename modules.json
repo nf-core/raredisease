@@ -365,6 +365,11 @@
                         "git_sha": "915a0b16ba3e40ef59e7b44843b3118e17a9c906",
                         "installed_by": ["modules"]
                     },
+                    "sentieon/dnamodelapply": {
+                        "branch": "master",
+                        "git_sha": "43ef68091a1188fd8dc4c03f9341b556803c7514",
+                        "installed_by": ["modules"]
+                    },
                     "sentieon/readwriter": {
                         "branch": "master",
                         "git_sha": "b28e4dde755117e8dab5d6e85e292f145b8b53c3",
