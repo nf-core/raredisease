@@ -10,8 +10,8 @@ include { MOSDEPTH                                               } from '../../m
 include { UCSC_WIGTOBIGWIG                                       } from '../../modules/nf-core/ucsc/wigtobigwig/main'
 include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS   } from '../../modules/nf-core/picard/collectwgsmetrics/main'
 include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y } from '../../modules/nf-core/picard/collectwgsmetrics/main'
-include { SENTIEON_WGSMETRICSALGO as SENTIEON_WGSMETRICS         } from '../../modules/nf-core/sentieon/wgsmetrics/main'
-include { SENTIEON_WGSMETRICSALGO as SENTIEON_WGSMETRICS_Y       } from '../../modules/nf-core/sentieon/wgsmetrics/main'
+include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS             } from '../../modules/nf-core/sentieon/wgsmetrics/main'
+include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_Y           } from '../../modules/nf-core/sentieon/wgsmetrics/main'
 
 workflow QC_BAM {
 
