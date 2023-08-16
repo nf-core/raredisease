@@ -86,14 +86,6 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-//
-// MODULE: local modules
-//
-
-include { FILTER_VEP as FILTER_VEP_SNV          } from '../modules/local/filter_vep'
-include { FILTER_VEP as FILTER_VEP_SV           } from '../modules/local/filter_vep'
-include { TABIX_BGZIPTABIX as BGZIPTABIX_SNV    } from '../modules/nf-core/tabix/bgziptabix'
-include { TABIX_BGZIPTABIX as BGZIPTABIX_SV     } from '../modules/nf-core/tabix/bgziptabix'
 
 //
 // MODULE: Installed directly from nf-core/modules
@@ -105,6 +97,10 @@ include { FASTQC                                } from '../modules/nf-core/fastq
 include { GATK4_SELECTVARIANTS                  } from '../modules/nf-core/gatk4/selectvariants/main'
 include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
 include { SMNCOPYNUMBERCALLER                   } from '../modules/nf-core/smncopynumbercaller/main'
+include { ENSEMBLVEP_FILTERVEP as FILTERVEP_SNV } from '../modules/nf-core/ensemblvep/filtervep'
+include { ENSEMBLVEP_FILTERVEP as FILTERVEP_SV  } from '../modules/nf-core/ensemblvep/filtervep'
+include { TABIX_BGZIPTABIX as BGZIPTABIX_SNV    } from '../modules/nf-core/tabix/bgziptabix'
+include { TABIX_BGZIPTABIX as BGZIPTABIX_SV     } from '../modules/nf-core/tabix/bgziptabix'
 
 //
 // SUBWORKFLOWS
@@ -430,13 +426,13 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
 
-        FILTER_VEP_SV(
+        FILTERVEP_SV(
             RANK_VARIANTS_SV.out.vcf,
             ch_vep_filters
         )
-        ch_versions = ch_versions.mix(FILTER_VEP_SV.out.versions)
+        ch_versions = ch_versions.mix(FILTERVEP_SV.out.versions)
 
-        BGZIPTABIX_SV(FILTER_VEP_SV.out.vcf)
+        BGZIPTABIX_SV(FILTERVEP_SV.out.output)
         ch_versions = ch_versions.mix(BGZIPTABIX_SV.out.versions)
 
     }
@@ -533,13 +529,13 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
 
-        FILTER_VEP_SNV(
+        FILTERVEP_SNV(
             RANK_VARIANTS_SNV.out.vcf,
             ch_vep_filters
         )
-        ch_versions = ch_versions.mix(FILTER_VEP_SNV.out.versions)
+        ch_versions = ch_versions.mix(FILTERVEP_SNV.out.versions)
 
-        BGZIPTABIX_SNV(FILTER_VEP_SNV.out.vcf)
+        BGZIPTABIX_SNV(FILTERVEP_SNV.out.output)
         ch_versions = ch_versions.mix(BGZIPTABIX_SNV.out.versions)
 
     }
