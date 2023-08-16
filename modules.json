@@ -95,6 +95,11 @@
                         "git_sha": "39656f68219340420f03bd54a68e111c86e107e6",
                         "installed_by": ["modules"]
                     },
+                    "ensemblvep/filtervep": {
+                        "branch": "master",
+                        "git_sha": "29984d70aea47d06f0062a1785d76c357dd40ea9",
+                        "installed_by": ["modules"]
+                    },
                     "expansionhunter": {
                         "branch": "master",
                         "git_sha": "0260e5d22372eae434816d6970dedf3f5adc0053",
@@ -352,7 +357,7 @@
                     },
                     "sentieon/bwamem": {
                         "branch": "master",
-                        "git_sha": "b9172e8c26a3db5009f7872654c44587e254f094",
+                        "git_sha": "149b4746c6e16ef84f64db5bb245d5b9495fdc3f",
                         "installed_by": ["modules"]
                     },
                     "sentieon/datametrics": {
