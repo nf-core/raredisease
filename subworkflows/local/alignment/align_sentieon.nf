@@ -17,7 +17,7 @@ workflow ALIGN_SENTIEON {
     main:
         ch_versions = Channel.empty()
 
-        SENTIEON_BWAMEM ( ch_reads_input, ch_bwa_index, ch_genome_fasta.map{ meta, fasta -> fasta }, ch_genome_fai.map{ meta, fai -> fai })
+        SENTIEON_BWAMEM ( ch_reads_input, ch_bwa_index, ch_genome_fasta, ch_genome_fai )
 
         SENTIEON_BWAMEM.out
             .bam_and_bai
