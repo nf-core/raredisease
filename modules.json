@@ -370,6 +370,11 @@
                         "git_sha": "b28e4dde755117e8dab5d6e85e292f145b8b53c3",
                         "installed_by": ["modules"]
                     },
+                    "sentieon/wgsmetrics": {
+                        "branch": "master",
+                        "git_sha": "b1e9314b919f498e116bfc1417b7185185e99261",
+                        "installed_by": ["modules"]
+                    },
                     "smncopynumbercaller": {
                         "branch": "master",
                         "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
