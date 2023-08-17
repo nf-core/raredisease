@@ -28,7 +28,9 @@ workflow CALL_SNV_SENTIEON {
 
         SENTIEON_DNASCOPE ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_dbsnp, ch_dbsnp_index, ch_call_interval, ch_ml_model )
 
-        SENTIEON_DNAMODELAPPLY ( SENTIEON_DNASCOPE.out.vcf_index, ch_genome_fasta, ch_genome_fai, ch_ml_model )
+        ch_dnamodelapply_in = SENTIEON_DNASCOPE.out.vcf.join(SENTIEON_DNASCOPE.out.index, failOnMismatch:true, failOnDuplicate:true)
+
+        SENTIEON_DNAMODELAPPLY ( ch_dnamodelapply_in, ch_genome_fasta, ch_genome_fai, ch_ml_model )
 
         BCF_FILTER_ONE (SENTIEON_DNAMODELAPPLY.out.vcf )
 
