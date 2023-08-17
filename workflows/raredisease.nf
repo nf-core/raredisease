@@ -234,8 +234,8 @@ workflow RAREDISEASE {
                                                                            : Channel.empty()
     ch_intervals_y              = params.intervals_y                       ? Channel.fromPath(params.intervals_y).collect()
                                                                            : Channel.empty()
-    ch_ml_model                 = params.variant_caller.equals("sentieon") ? Channel.fromPath(params.ml_model).collect()
-                                                                           : Channel.value([])
+    ch_ml_model                 = params.variant_caller.equals("sentieon") ? Channel.fromPath(params.ml_model).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                           : Channel.value([[:],[]])
     ch_mt_intervals             = ch_references.mt_intervals
     ch_mtshift_backchain        = ch_references.mtshift_backchain
     ch_mtshift_bwaindex         = ch_references.mtshift_bwa_index
