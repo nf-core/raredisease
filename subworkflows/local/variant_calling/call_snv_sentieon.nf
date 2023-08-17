@@ -15,11 +15,11 @@ include { BCFTOOLS_FILTER as BCF_FILTER_TWO        } from '../../../modules/nf-c
 workflow CALL_SNV_SENTIEON {
     take:
         ch_bam_bai       // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_genome_fasta  // channel: [mandatory] [ path(fasta) ]
-        ch_genome_fai    // channel: [mandatory] [ path(fai) ]
+        ch_genome_fasta  // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai    // channel: [mandatory] [ val(meta), path(fai) ]
         ch_dbsnp         // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_dbsnp_index   // channel: [mandatory] [ val(meta), path(tbi) ]
-        ch_call_interval // channel: [mandatory] [ path(interval) ]
+        ch_call_interval // channel: [mandatory] [ val(meta), path(interval) ]
         ch_ml_model      // channel: [mandatory] [ val(meta), path(model) ]
         ch_case_info     // channel: [mandatory] [ val(case_info) ]
 
@@ -28,7 +28,7 @@ workflow CALL_SNV_SENTIEON {
 
         SENTIEON_DNASCOPE ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_dbsnp, ch_dbsnp_index, ch_call_interval, ch_ml_model )
 
-        ch_dnamodelapply_in = SENTIEON_DNASCOPE.out.vcf.join(SENTIEON_DNASCOPE.out.index, failOnMismatch:true, failOnDuplicate:true)
+        ch_dnamodelapply_in = SENTIEON_DNASCOPE.out.vcf.join(SENTIEON_DNASCOPE.out.index)
 
         SENTIEON_DNAMODELAPPLY ( ch_dnamodelapply_in, ch_genome_fasta, ch_genome_fai, ch_ml_model )
 
