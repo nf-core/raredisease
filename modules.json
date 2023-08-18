@@ -365,6 +365,11 @@
                         "git_sha": "43ef68091a1188fd8dc4c03f9341b556803c7514",
                         "installed_by": ["modules"]
                     },
+                    "sentieon/dnascope": {
+                        "branch": "master",
+                        "git_sha": "127edadc279e19da093fdd513926c6cdee82c306",
+                        "installed_by": ["modules"]
+                    },
                     "sentieon/readwriter": {
                         "branch": "master",
                         "git_sha": "b28e4dde755117e8dab5d6e85e292f145b8b53c3",

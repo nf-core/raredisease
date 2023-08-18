@@ -209,8 +209,8 @@ workflow RAREDISEASE {
     ch_cadd_header              = Channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_cadd_resources           = params.cadd_resources                    ? Channel.fromPath(params.cadd_resources).collect()
                                                                            : Channel.value([])
-    ch_call_interval            = params.call_interval                     ? Channel.fromPath(params.call_interval).collect()
-                                                                           : Channel.value([])
+    ch_call_interval            = params.call_interval                     ? Channel.fromPath(params.call_interval).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                           : Channel.value([[:],[]])
     ch_dbsnp_tbi                = params.known_dbsnp_tbi                   ? Channel.fromPath(params.known_dbsnp_tbi).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.known_dbsnp_tbi.ifEmpty([[],[]])
     ch_gcnvcaller_model         = params.gcnvcaller_model                  ? Channel.fromPath(params.gcnvcaller_model).splitCsv ( header:true )
@@ -234,8 +234,8 @@ workflow RAREDISEASE {
                                                                            : Channel.empty()
     ch_intervals_y              = params.intervals_y                       ? Channel.fromPath(params.intervals_y).collect()
                                                                            : Channel.empty()
-    ch_ml_model                 = params.variant_caller.equals("sentieon") ? Channel.fromPath(params.ml_model).collect()
-                                                                           : Channel.value([])
+    ch_ml_model                 = params.variant_caller.equals("sentieon") ? Channel.fromPath(params.ml_model).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                           : Channel.value([[:],[]])
     ch_mt_intervals             = ch_references.mt_intervals
     ch_mtshift_backchain        = ch_references.mtshift_backchain
     ch_mtshift_bwaindex         = ch_references.mtshift_bwa_index
