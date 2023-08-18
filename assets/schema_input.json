@@ -53,6 +53,7 @@
             "paternal_id": {
                 "errorMessage": "Paternal ID cannot contain spaces",
                 "meta": ["paternal"],
+                "default": "0",
                 "anyOf": [
                     {
                         "type": "string",
@@ -67,6 +68,7 @@
             "maternal_id": {
                 "errorMessage": "Maternal ID cannot contain spaces",
                 "meta": ["maternal"],
+                "default": "0",
                 "anyOf": [
                     {
                         "type": "string",
