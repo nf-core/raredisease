@@ -395,3 +395,24 @@ We recommend adding the following line to your environment to limit this (typica
 ```bash
 NXF_OPTS='-Xms1g -Xmx4g'
 ```
+
+### Running the pipeline without Internet access
+
+The pipeline and container images can be downloaded using [nf-core tools](https://nf-co.re/docs/usage/offline). For running offline, you of course have to make all the reference data available locally, and specify `--fasta`, etc., see [above](#reference-files-and-parameters).
+
+Contrary to the paragraph about [Nextflow](https://nf-co.re/docs/usage/offline#nextflow) on the page linked above, it is not possible to use the "-all" packaged version of Nextflow for this pipeline. The online version of Nextflow is necessary to support the necessary nextflow plugins. Download instead the file called just `nextflow`. Nextflow will download its dependencies when it is run. Additionally, you need to download the nf-validation plugin explicitly:
+
+```
+./nextflow plugin install nf-validation
+```
+
+Now you can transfer the `nextflow` binary as well as its directory `$HOME/.nextflow` to the system without Internet access, and use it there. It is necessary to use an explicit version of `nf-validation` offline, or Nextflow will check for the most recent version online. Find the version of nf-validation you downloaded in `$HOME/.nextflow/plugins`, then specify this version for `nf-validation` in your configuration file:
+
+```
+plugins {
+        // Set the plugin version explicitly, otherwise nextflow will look for the newest version online.
+        id 'nf-validation@0.3.1'
+}
+```
+
+This should go in your Nextflow confgiguration file, specified with `-c <YOURCONFIG>` when running the pipeline.
