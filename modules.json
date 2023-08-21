@@ -82,17 +82,22 @@
                     },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "05c280924b6c768d484c7c443dad5e605c4ff4b4",
                         "installed_by": ["modules"]
                     },
                     "deepvariant": {
                         "branch": "master",
-                        "git_sha": "4b7d4863a5883b76e6bff13b6e52468fab090c5b",
+                        "git_sha": "ed67f2fadd6d2a155b296f728e6b1f8c92ddc1a6",
                         "installed_by": ["modules"]
                     },
                     "eklipse": {
                         "branch": "master",
                         "git_sha": "39656f68219340420f03bd54a68e111c86e107e6",
+                        "installed_by": ["modules"]
+                    },
+                    "ensemblvep/filtervep": {
+                        "branch": "master",
+                        "git_sha": "29984d70aea47d06f0062a1785d76c357dd40ea9",
                         "installed_by": ["modules"]
                     },
                     "expansionhunter": {
@@ -120,9 +125,14 @@
                         "git_sha": "541811d779026c5d395925895fa5ed35e7216cc0",
                         "installed_by": ["modules"]
                     },
+                    "gatk4/denoisereadcounts": {
+                        "branch": "master",
+                        "git_sha": "38c559b2a8b9a8cda62fa215521f581eb979c773",
+                        "installed_by": ["modules"]
+                    },
                     "gatk4/determinegermlinecontigploidy": {
                         "branch": "master",
-                        "git_sha": "c6257c167fb88d18f3c2797e1af331d28f7b8ae7",
+                        "git_sha": "8c4542e5d421c4690cf1fa6ec729e9304763fdaf",
                         "installed_by": ["modules"]
                     },
                     "gatk4/filtermutectcalls": {
@@ -132,7 +142,7 @@
                     },
                     "gatk4/germlinecnvcaller": {
                         "branch": "master",
-                        "git_sha": "f6b848c6e1af9a9ecf4975aa8c8edad05e75e784",
+                        "git_sha": "8c4542e5d421c4690cf1fa6ec729e9304763fdaf",
                         "installed_by": ["modules"]
                     },
                     "gatk4/intervallisttools": {
@@ -157,7 +167,7 @@
                     },
                     "gatk4/postprocessgermlinecnvcalls": {
                         "branch": "master",
-                        "git_sha": "c6257c167fb88d18f3c2797e1af331d28f7b8ae7",
+                        "git_sha": "8c4542e5d421c4690cf1fa6ec729e9304763fdaf",
                         "installed_by": ["modules"]
                     },
                     "gatk4/preprocessintervals": {
@@ -247,12 +257,12 @@
                     },
                     "mosdepth": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "ebb27711cd5f4de921244bfa81c676504072d31c",
                         "installed_by": ["modules"]
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "a6e11ac655e744f7ebc724be669dd568ffdc0e80",
                         "installed_by": ["modules"]
                     },
                     "peddy": {
@@ -347,7 +357,7 @@
                     },
                     "sentieon/bwamem": {
                         "branch": "master",
-                        "git_sha": "b9172e8c26a3db5009f7872654c44587e254f094",
+                        "git_sha": "149b4746c6e16ef84f64db5bb245d5b9495fdc3f",
                         "installed_by": ["modules"]
                     },
                     "sentieon/datametrics": {
@@ -432,7 +442,7 @@
                     },
                     "untar": {
                         "branch": "master",
-                        "git_sha": "5c460c5a4736974abde2843294f35307ee2b0e5e",
+                        "git_sha": "d0b4fc03af52a1cc8c6fb4493b921b57352b1dd8",
                         "installed_by": ["modules"]
                     },
                     "upd": {

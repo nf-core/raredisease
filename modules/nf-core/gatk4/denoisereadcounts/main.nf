@@ -1,38 +1,42 @@
 process GATK4_DENOISEREADCOUNTS {
     tag "$meta.id"
-    label 'process_high'
+    label 'process_single'
 
     conda "bioconda::gatk4=4.4.0.0"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/gatk4:4.4.0.0--py36hdfd78af_0':
-        'quay.io/biocontainers/gatk4:4.4.0.0--py36hdfd78af_0' }"
+        'biocontainers/gatk4:4.4.0.0--py36hdfd78af_0' }"
 
     input:
-    tuple val(meta), path(read_counts)
-    path panel_of_normals
+    tuple val(meta), path(counts)
+    tuple val(meta2), path(pon)
 
     output:
-    tuple val(meta), path('*.standardizedCR.tsv'), emit: standardized_read_counts
-    tuple val(meta), path('*.denoisedCR.tsv')    , emit: denoised_read_counts
-    path  "versions.yml"                         , emit: versions
+    tuple val(meta), path("*_standardizedCR.tsv"), emit: standardized
+    tuple val(meta), path("*_denoisedCR.tsv")    , emit: denoised
+    path "versions.yml"                          , emit: versions
+
+    when:
+    task.ext.when == null || task.ext.when
 
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def avail_mem = 12288
+
+    def avail_mem = 3072
     if (!task.memory) {
-        log.info '[GATK DenoiseReadCounts] Available memory not known - defaulting to 12GB. Specify process memory requirements to change this.'
+        log.info '[GATK DenoiseReadCounts] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
         avail_mem = (task.memory.mega*0.8).intValue()
     }
     """
     gatk --java-options "-Xmx${avail_mem}M" DenoiseReadCounts \\
-        -I $read_counts \\
-        --count-panel-of-normals $panel_of_normals \\
-        --standardized-copy-ratios ${prefix}.standardizedCR.tsv \\
-        --denoised-copy-ratios ${prefix}.denoisedCR.tsv \\
-        $args \\
-        --tmp-dir .
+        ${args} \\
+        --tmp-dir . \\
+        --input ${counts} \\
+        --count-panel-of-normals ${pon} \\
+        --standardized-copy-ratios ${prefix}_standardizedCR.tsv \\
+        --denoised-copy-ratios ${prefix}_denoisedCR.tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -41,10 +45,11 @@ process GATK4_DENOISEREADCOUNTS {
     """
 
     stub:
+    def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.standardizedCR.tsv
-    touch ${prefix}.denoisedCR.tsv
+    touch ${prefix}_standardizedCR.tsv
+    touch ${prefix}_denoisedCR.tsv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

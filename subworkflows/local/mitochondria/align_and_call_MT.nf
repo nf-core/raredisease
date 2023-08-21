@@ -32,7 +32,7 @@ workflow ALIGN_AND_CALL_MT {
 
         BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, true)
 
-        SENTIEON_BWAMEM_MT ( ch_fastq, ch_bwaindex, ch_fasta.map{ meta, fasta -> fasta }, ch_fai.map{ meta, fai -> fai } )
+        SENTIEON_BWAMEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, ch_fai )
 
         Channel.empty()
             .mix(BWAMEM2_MEM_MT.out.bam, SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, bai -> [meta, bam] })
