@@ -30,6 +30,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make target bed file optional for WGS mode (Issue [#375](https://github.com/nf-core/raredisease/issues/375)) [#395](https://github.com/nf-core/raredisease/pull/395)
 - Added constraints to block the pipeline from running CollectWgsMetrics on WES samples [#396](https://github.com/nf-core/raredisease/pull/396)
 
+### `Updated`
+
+| Tool         | Old version | New version |
+| ------------ | ----------- | ----------- |
+| `filter_vep` | 107         | 110         |
+| `multiqc`    | 1.14        | 1.15        |
+| `untar`      | (grep 3.4)  | (grep 3.11) |
+
 ## v1.1.1 - Abu (Patch) [2023-07-26]
 
 ### `Fixed`
