@@ -2,21 +2,31 @@
 // call Single-nucleotide Varinats
 //
 
-include { CALL_SNV_DEEPVARIANT } from './variant_calling/call_snv_deepvariant'
-include { CALL_SNV_SENTIEON    } from './variant_calling/call_snv_sentieon'
-include { GATK4_SELECTVARIANTS } from '../../modules/nf-core/gatk4/selectvariants/main'
-
+include { CALL_SNV_DEEPVARIANT             } from './variant_calling/call_snv_deepvariant'
+include { CALL_SNV_SENTIEON                } from './variant_calling/call_snv_sentieon'
+include { CALL_SNV_MT                      } from './variant_calling/call_snv_MT'
+include { CALL_SNV_MT as CALL_SNV_MT_SHIFT } from './variant_calling/call_snv_MT'
+include { PICARD_LIFTOVERVCF               } from '../../modules/nf-core/picard/liftovervcf/main'
 
 workflow CALL_SNV {
     take:
-        ch_bam_bai           // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_known_dbsnp     // channel: [optional] [ val(meta), path(vcf) ]
-        ch_known_dbsnp_tbi // channel: [optional] [ val(meta), path(tbi) ]
-        ch_call_interval   // channel: [mandatory] [ path(intervals) ]
-        ch_ml_model        // channel: [mandatory] [ path(model) ]
-        ch_case_info       // channel: [mandatory] [ val(case_info) ]
+        ch_genome_bam_bai     // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_mt_bam_bai         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_mtshift_bam_bai   // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai         // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_dictionary  // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_mt_intervals       // channel: [optional] [ path(interval_list) ]
+        ch_mtshift_fasta      // channel: [optional] [ val(meta), path(fasta) ]
+        ch_mtshift_fai        // channel: [optional] [ val(meta), path(fai) ]
+        ch_mtshift_dictionary // channel: [optional] [ val(meta), path(dict) ]
+        ch_mtshift_intervals  // channel: [optional] [ path(interval_list) ]
+        ch_mtshift_backchain  // channel: [mandatory] [ val(meta), path(back_chain) ]
+        ch_dbsnp              // channel: [optional] [ val(meta), path(vcf) ]
+        ch_dbsnp_tbi          // channel: [optional] [ val(meta), path(tbi) ]
+        ch_call_interval      // channel: [mandatory] [ path(intervals) ]
+        ch_ml_model           // channel: [mandatory] [ path(model) ]
+        ch_case_info          // channel: [mandatory] [ val(case_info) ]
 
     main:
         ch_versions   = Channel.empty()
@@ -24,31 +34,63 @@ workflow CALL_SNV {
         ch_tabix      = Channel.empty()
 
         CALL_SNV_DEEPVARIANT (      // triggered only when params.variant_caller is set as deepvariant
-            ch_bam_bai,
+            ch_genome_bam_bai,
             ch_genome_fasta,
             ch_genome_fai,
             ch_case_info
         )
 
         CALL_SNV_SENTIEON(         // triggered only when params.variant_caller is set as sentieon
-            ch_bam_bai,
+            ch_genome_bam_bai,
             ch_genome_fasta,
             ch_genome_fai,
-            ch_known_dbsnp,
-            ch_known_dbsnp_tbi,
+            ch_dbsnp,
+            ch_dbsnp_tbi,
             ch_call_interval,
             ch_ml_model,
             ch_case_info
         )
 
-        ch_vcf      = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.vcf, CALL_SNV_SENTIEON.out.vcf)
-        ch_tabix    = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.tabix, CALL_SNV_SENTIEON.out.tabix)
+        CALL_SNV_MT(
+            ch_mt_bam_bai,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_genome_dictionary,
+            ch_mt_intervals
+        )
+
+        CALL_SNV_MT_SHIFT(
+            ch_mtshift_bam_bai,
+            ch_mtshift_fasta,
+            ch_mtshift_fai,
+            ch_mtshift_dictionary,
+            ch_mtshift_intervals
+        )
+
+        // LIFTOVER VCF FROM REFERENCE MT TO SHIFTED MT
+        PICARD_LIFTOVERVCF (
+            CALL_SNV_MT_SHIFT.out.vcf,
+            ch_genome_dictionary,
+            ch_genome_fasta,
+            ch_mtshift_backchain,
+        )
+
+        ch_genome_vcf   = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.vcf, CALL_SNV_SENTIEON.out.vcf)
+        ch_genome_tabix = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.tabix, CALL_SNV_SENTIEON.out.tabix)
+
+        ch_mt_vcf       = CALL_SNV_MT.out.vcf
+        ch_mtshift_vcf  = PICARD_LIFTOVERVCF.out.vcf_lifted
 
         ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
         ch_versions = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
+        ch_versions = ch_versions.mix(CALL_SNV_MT.out.versions)
+        ch_versions = ch_versions.mix(CALL_SNV_MT_SHIFT.out.versions)
+        ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions.first())
 
     emit:
-        vcf      = ch_vcf      // channel: [ val(meta), path(vcf) ]
-        tabix    = ch_tabix    // channel: [ val(meta), path(tbi) ]
-        versions = ch_versions // channel: [ path(versions.yml) ]
+        genome_vcf   = ch_genome_vcf   // channel: [ val(meta), path(vcf) ]
+        genome_tabix = ch_genome_tabix // channel: [ val(meta), path(tbi) ]
+        mt_vcf       = ch_mt_vcf       // channel: [ val(meta), path(vcf) ]
+        mtshift_vcf  = ch_mtshift_vcf  // channel: [ val(meta), path(vcf) ]
+        versions     = ch_versions     // channel: [ path(versions.yml) ]
 }

@@ -356,8 +356,17 @@ workflow RAREDISEASE {
     // STEP 2: VARIANT CALLING
     CALL_SNV (
         ch_mapped.genome_bam_bai,
+        ch_mapped.mt_bam_bai,
+        ch_mapped.mtshift_bam_bai,
         ch_genome_fasta,
         ch_genome_fai,
+        ch_genome_dictionary,
+        ch_mt_intervals,
+        ch_mtshift_fasta,
+        ch_mtshift_fai,
+        ch_mtshift_dictionary,
+        ch_mtshift_intervals,
+        ch_mtshift_backchain,
         ch_dbsnp,
         ch_dbsnp_tbi,
         ch_call_interval,
@@ -385,7 +394,7 @@ workflow RAREDISEASE {
 
     // ped correspondence, sex check, ancestry check
     PEDDY_CHECK (
-        CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, failOnMismatch:true, failOnDuplicate:true),
+        CALL_SNV.out.genome_vcf.join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true),
         ch_pedfile
     )
     ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
@@ -477,7 +486,7 @@ workflow RAREDISEASE {
 
     if (!params.skip_snv_annotation) {
 
-        ch_vcf = CALL_SNV.out.vcf.join(CALL_SNV.out.tabix, failOnMismatch:true, failOnDuplicate:true)
+        ch_vcf = CALL_SNV.out.genome_vcf.join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true)
 
         if (!params.skip_mt_analysis) {
             ch_vcf
