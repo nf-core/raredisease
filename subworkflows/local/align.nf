@@ -75,17 +75,20 @@ workflow ALIGN {
             ch_mtshift_fai
         )
 
-        ch_mt_marked_bam = Channel.empty().mix(ALIGN_MT.out.marked_bam, ALIGN_MT.out.marked_bam)
-        ch_mt_marked_bai = Channel.empty().mix(ALIGN_MT.out.marked_bai, ALIGN_MT.out.marked_bai)
+        ch_mt_marked_bam = ALIGN_MT.out.marked_bam
+        ch_mt_marked_bai = ALIGN_MT.out.marked_bai
         ch_mt_bam_bai    = ch_mt_marked_bam.join(ch_mt_marked_bai, failOnMismatch:true, failOnDuplicate:true)
 
-        ch_mtshift_marked_bam = Channel.empty().mix(ALIGN_MT_SHIFT.out.marked_bam, ALIGN_MT_SHIFT.out.marked_bam)
-        ch_mtshift_marked_bai = Channel.empty().mix(ALIGN_MT_SHIFT.out.marked_bai, ALIGN_MT_SHIFT.out.marked_bai)
+        ch_mtshift_marked_bam = ALIGN_MT_SHIFT.out.marked_bam
+        ch_mtshift_marked_bai = ALIGN_MT_SHIFT.out.marked_bai
         ch_mtshift_bam_bai    = ch_mtshift_marked_bam.join(ch_mtshift_marked_bai, failOnMismatch:true, failOnDuplicate:true)
 
         SAMTOOLS_VIEW( ch_genome_bam_bai, ch_genome_fasta, [] )
 
-        ch_versions   = Channel.empty().mix(ALIGN_BWAMEM2.out.versions, ALIGN_SENTIEON.out.versions)
+        ch_versions   = Channel.empty().mix(ALIGN_BWAMEM2.out.versions,
+                                            ALIGN_SENTIEON.out.versions,
+                                            ALIGN_MT.out.versions,
+                                            ALIGN_MT_SHIFT.out.versions)
 
     emit:
         genome_marked_bam  = ch_genome_marked_bam  // channel: [ val(meta), path(bam) ]
