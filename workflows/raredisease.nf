@@ -296,6 +296,12 @@ workflow RAREDISEASE {
         ch_genome_fai,
         ch_genome_bwaindex,
         ch_genome_bwamem2index,
+        ch_genome_dictionary,
+        ch_mtshift_bwaindex,
+        ch_mtshift_bwamem2index,
+        ch_mtshift_fasta,
+        ch_mtshift_dictionary,
+        ch_mtshift_fai,
         params.platform
     )
     .set { ch_mapped }
@@ -303,9 +309,9 @@ workflow RAREDISEASE {
 
     // BAM QUALITY CHECK
     QC_BAM (
-        ch_mapped.marked_bam,
-        ch_mapped.marked_bai,
-        ch_mapped.bam_bai,
+        ch_mapped.genome_marked_bam,
+        ch_mapped.genome_marked_bai,
+        ch_mapped.genome_bam_bai,
         ch_genome_fasta,
         ch_genome_fai,
         ch_bait_intervals,
@@ -318,7 +324,7 @@ workflow RAREDISEASE {
 
     // EXPANSIONHUNTER AND STRANGER
     CALL_REPEAT_EXPANSIONS (
-        ch_mapped.bam_bai,
+        ch_mapped.genome_bam_bai,
         ch_variant_catalog,
         ch_case_info,
         ch_genome_fasta,
@@ -327,12 +333,12 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
 
     // STEP 1.7: SMNCOPYNUMBERCALLER
-    ch_mapped.bam_bai
+    ch_mapped.genome_bam_bai
         .collect{it[1]}
         .toList()
         .set { ch_bam_list }
 
-    ch_mapped.bam_bai
+    ch_mapped.genome_bam_bai
         .collect{it[2]}
         .toList()
         .set { ch_bai_list }
@@ -349,7 +355,7 @@ workflow RAREDISEASE {
 
     // STEP 2: VARIANT CALLING
     CALL_SNV (
-        ch_mapped.bam_bai,
+        ch_mapped.genome_bam_bai,
         ch_genome_fasta,
         ch_genome_fai,
         ch_dbsnp,
@@ -361,9 +367,9 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(CALL_SNV.out.versions)
 
     CALL_STRUCTURAL_VARIANTS (
-        ch_mapped.marked_bam,
-        ch_mapped.marked_bai,
-        ch_mapped.bam_bai,
+        ch_mapped.genome_marked_bam,
+        ch_mapped.genome_marked_bai,
+        ch_mapped.genome_bam_bai,
         ch_genome_bwaindex,
         ch_genome_fasta,
         ch_genome_fai,
@@ -387,7 +393,7 @@ workflow RAREDISEASE {
     // GENS
     if (params.gens_switch) {
         GENS (
-            ch_mapped.bam_bai,
+            ch_mapped.genome_bam_bai,
             CALL_SNV.out.vcf,
             ch_genome_fasta,
             ch_genome_fai,
@@ -439,7 +445,7 @@ workflow RAREDISEASE {
 
     if (!params.skip_mt_analysis) {
         ANALYSE_MT (
-            ch_mapped.bam_bai,
+            ch_mapped.genome_bam_bai,
             ch_cadd_header,
             ch_cadd_resources,
             ch_genome_bwaindex,
