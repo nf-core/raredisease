@@ -1,5 +1,5 @@
 //
-// Align and call MT
+// Align MT
 //
 
 include { SENTIEON_BWAMEM as SENTIEON_BWAMEM_MT                             } from '../../../modules/nf-core/sentieon/bwamem/main'
