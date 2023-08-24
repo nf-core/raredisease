@@ -1,5 +1,5 @@
 //
-// A subworkflow to annotate snvs
+// A subworkflow to annotate snvs in the genome
 //
 
 include { VCFANNO                               } from '../../modules/nf-core/vcfanno/main'
@@ -20,7 +20,7 @@ include { TABIX_TABIX as TABIX_BCFTOOLS_VIEW    } from '../../modules/nf-core/ta
 include { GATK4_SELECTVARIANTS                  } from '../../modules/nf-core/gatk4/selectvariants/main'
 include { ANNOTATE_CADD                         } from './annotation/annotate_cadd'
 
-workflow ANNOTATE_SNVS {
+workflow ANNOTATE_GENOME_SNVS {
 
     take:
         ch_vcf                // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
@@ -45,7 +45,6 @@ workflow ANNOTATE_SNVS {
         BCFTOOLS_ROH (ch_vcf, ch_gnomad_af, [], [], [], [])
 
         RHOCALL_ANNOTATE (ch_vcf, BCFTOOLS_ROH.out.roh, [])
-
 
         ZIP_TABIX_ROHCALL (RHOCALL_ANNOTATE.out.vcf)
 

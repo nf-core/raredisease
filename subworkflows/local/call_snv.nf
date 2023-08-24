@@ -6,7 +6,7 @@ include { CALL_SNV_DEEPVARIANT             } from './variant_calling/call_snv_de
 include { CALL_SNV_SENTIEON                } from './variant_calling/call_snv_sentieon'
 include { CALL_SNV_MT                      } from './variant_calling/call_snv_MT'
 include { CALL_SNV_MT as CALL_SNV_MT_SHIFT } from './variant_calling/call_snv_MT'
-include { PICARD_LIFTOVERVCF               } from '../../modules/nf-core/picard/liftovervcf/main'
+include { POSTPROCESS_MT_CALLS             } from './variant_calling/postprocess_MT_calls'
 
 workflow CALL_SNV {
     take:
@@ -67,30 +67,28 @@ workflow CALL_SNV {
             ch_mtshift_intervals
         )
 
-        // LIFTOVER VCF FROM REFERENCE MT TO SHIFTED MT
-        PICARD_LIFTOVERVCF (
-            CALL_SNV_MT_SHIFT.out.vcf,
-            ch_genome_dictionary,
+        POSTPROCESS_MT_CALLS(
+            CALL_SNV_MT.out.vcf,
+            PICARD_LIFTOVERVCF.out.vcf_lifted,
             ch_genome_fasta,
-            ch_mtshift_backchain,
+            ch_genome_dictionary,
+            ch_genome_fai,
+            ch_case_info
         )
 
         ch_genome_vcf   = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.vcf, CALL_SNV_SENTIEON.out.vcf)
         ch_genome_tabix = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.tabix, CALL_SNV_SENTIEON.out.tabix)
-
-        ch_mt_vcf       = CALL_SNV_MT.out.vcf
-        ch_mtshift_vcf  = PICARD_LIFTOVERVCF.out.vcf_lifted
+        ch_mt_vcf       = POSTPROCESS_MT_CALLS.out.vcf
 
         ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
         ch_versions = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
         ch_versions = ch_versions.mix(CALL_SNV_MT.out.versions)
         ch_versions = ch_versions.mix(CALL_SNV_MT_SHIFT.out.versions)
-        ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions.first())
+        ch_versions = ch_versions.mix(POSTPROCESS_MT_CALLS.out.versions)
 
     emit:
         genome_vcf   = ch_genome_vcf   // channel: [ val(meta), path(vcf) ]
         genome_tabix = ch_genome_tabix // channel: [ val(meta), path(tbi) ]
         mt_vcf       = ch_mt_vcf       // channel: [ val(meta), path(vcf) ]
-        mtshift_vcf  = ch_mtshift_vcf  // channel: [ val(meta), path(vcf) ]
         versions     = ch_versions     // channel: [ path(versions.yml) ]
 }
