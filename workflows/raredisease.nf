@@ -110,7 +110,7 @@ include { ALIGN                                 } from '../subworkflows/local/al
 include { ANALYSE_MT                            } from '../subworkflows/local/analyse_MT'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV   } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV    } from '../subworkflows/local/annotate_consequence_pli'
-include { ANNOTATE_SNVS                         } from '../subworkflows/local/annotate_snvs'
+include { ANNOTATE_GENOME_SNVS                  } from '../subworkflows/local/annotate_genome_snvs'
 include { ANNOTATE_STRUCTURAL_VARIANTS          } from '../subworkflows/local/annotate_structural_variants'
 include { CALL_REPEAT_EXPANSIONS                } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                              } from '../subworkflows/local/call_snv'
@@ -502,7 +502,7 @@ workflow RAREDISEASE {
             ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
         }
 
-        ANNOTATE_SNVS (
+        ANNOTATE_GENOME_SNVS (
             ch_vcf,
             params.analysis_type,
             ch_cadd_header,
@@ -519,11 +519,11 @@ workflow RAREDISEASE {
         ).set {ch_snv_annotate}
         ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 
-        ch_snv_annotate = ANNOTATE_SNVS.out.vcf_ann
+        ch_snv_annotate = ANNOTATE_GENOME_SNVS.out.vcf_ann
 
         if (!params.skip_mt_analysis) {
 
-            ANNOTATE_SNVS.out.vcf_ann
+            ANNOTATE_GENOME_SNVS.out.vcf_ann
                 .concat(ANALYSE_MT.out.vcf)
                 .groupTuple()
                 .set { ch_merged_vcf }

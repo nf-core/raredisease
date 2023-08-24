@@ -10,15 +10,16 @@ include { BCFTOOLS_NORM as REMOVE_DUPLICATES_MT                 } from '../../..
 include { TABIX_TABIX as TABIX_TABIX_MT2                        } from '../../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                   } from '../../../modules/nf-core/bcftools/merge/main'
 include { TABIX_TABIX as TABIX_TABIX_MERGE                      } from '../../../modules/nf-core/tabix/tabix/main'
-include { PICARD_LIFTOVERVCF                                    } from '../../modules/nf-core/picard/liftovervcf/main'
+include { PICARD_LIFTOVERVCF                                    } from '../../../modules/nf-core/picard/liftovervcf/main'
 
 workflow POSTPROCESS_MT_CALLS {
     take:
         ch_mt_vcf              // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_mtshift_vcf         // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_dict         // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_genome_dictionary   // channel: [mandatory] [ val(meta), path(dict) ]
         ch_genome_fai          // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_mtshift_backchain   // channel: [mandatory] [ val(meta), path(backchain) ]
         ch_case_info           // channel: [mandatory] [ val(case_info) ]
 
     main:
@@ -32,18 +33,18 @@ workflow POSTPROCESS_MT_CALLS {
             ch_mtshift_backchain,
         )
 
-        ch_vcfs = ch_vcf1
-            .join(ch_vcf2, remainder: true)
+        ch_vcfs = ch_mt_vcf
+            .join(PICARD_LIFTOVERVCF.out.vcf_lifted, remainder: true)
             .map{ meta, vcf1, vcf2 ->
             [meta, [vcf1, vcf2]]
         }
-        GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_vcfs, ch_genome_dict)
+        GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_vcfs, ch_genome_dictionary)
 
         // Filtering Variants
         GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf
             .join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
             .set { ch_filt_vcf }
-        GATK4_VARIANTFILTRATION_MT (ch_filt_vcf, ch_genome_fasta, ch_genome_fai, ch_genome_dict)
+        GATK4_VARIANTFILTRATION_MT (ch_filt_vcf, ch_genome_fasta, ch_genome_fai, ch_genome_dictionary)
 
         // Spliting multiallelic calls
         GATK4_VARIANTFILTRATION_MT.out.vcf
@@ -104,9 +105,7 @@ workflow POSTPROCESS_MT_CALLS {
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
 
     emit:
-        haplog    = HAPLOGREP2_CLASSIFY_MT.out.txt // channel: [ val(meta), path(txt) ]
-        vcf       = ch_vcf_out                     // channel: [ val(meta), path(vcf) ]
-        tbi       = ch_tbi_out                     // channel: [ val(meta), path(tbi) ]
-        report    = ENSEMBLVEP_MT.out.report       // channel: [ path(html) ]
+        vcf       = ch_annotation_in               // channel: [ val(meta), path(vcf) ]
+        tbi       = TABIX_TABIX_MERGE.out.tbi      // channel: [ val(meta), path(tbi) ]
         versions  = ch_versions                    // channel: [ path(versions.yml) ]
 }

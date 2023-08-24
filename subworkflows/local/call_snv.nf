@@ -69,10 +69,11 @@ workflow CALL_SNV {
 
         POSTPROCESS_MT_CALLS(
             CALL_SNV_MT.out.vcf,
-            PICARD_LIFTOVERVCF.out.vcf_lifted,
+            CALL_SNV_MT_SHIFT.out.vcf,
             ch_genome_fasta,
             ch_genome_dictionary,
             ch_genome_fai,
+            ch_mtshift_backchain,
             ch_case_info
         )
 
