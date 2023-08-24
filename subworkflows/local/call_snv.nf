@@ -7,6 +7,7 @@ include { CALL_SNV_SENTIEON                } from './variant_calling/call_snv_se
 include { CALL_SNV_MT                      } from './variant_calling/call_snv_MT'
 include { CALL_SNV_MT as CALL_SNV_MT_SHIFT } from './variant_calling/call_snv_MT'
 include { POSTPROCESS_MT_CALLS             } from './variant_calling/postprocess_MT_calls'
+include { GATK4_SELECTVARIANTS             } from '../../modules/nf-core/gatk4/selectvariants/main'
 
 workflow CALL_SNV {
     take:
@@ -51,6 +52,19 @@ workflow CALL_SNV {
             ch_case_info
         )
 
+        ch_vcf       = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.vcf, CALL_SNV_SENTIEON.out.vcf)
+        ch_tabix     = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.tabix, CALL_SNV_SENTIEON.out.tabix)
+
+        ch_vcf
+            .join(ch_tabix, failOnMismatch:true, failOnDuplicate:true)
+            .map { meta, vcf, tbi -> return [meta, vcf, tbi, []]}
+            .set {ch_selvar_in}
+        GATK4_SELECTVARIANTS(ch_selvar_in) // remove mitochondrial variants
+
+        ch_genome_vcf       = GATK4_SELECTVARIANTS.out.vcf
+        ch_genome_tabix     = GATK4_SELECTVARIANTS.out.tbi
+        ch_genome_vcf_tabix = ch_genome_vcf.join(ch_genome_tabix, failOnMismatch:true, failOnDuplicate:true)
+
         CALL_SNV_MT(
             ch_mt_bam_bai,
             ch_genome_fasta,
@@ -77,19 +91,18 @@ workflow CALL_SNV {
             ch_case_info
         )
 
-        ch_genome_vcf   = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.vcf, CALL_SNV_SENTIEON.out.vcf)
-        ch_genome_tabix = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.tabix, CALL_SNV_SENTIEON.out.tabix)
-        ch_mt_vcf       = POSTPROCESS_MT_CALLS.out.vcf
-
         ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
         ch_versions = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
         ch_versions = ch_versions.mix(CALL_SNV_MT.out.versions)
         ch_versions = ch_versions.mix(CALL_SNV_MT_SHIFT.out.versions)
         ch_versions = ch_versions.mix(POSTPROCESS_MT_CALLS.out.versions)
+        ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
 
     emit:
-        genome_vcf   = ch_genome_vcf   // channel: [ val(meta), path(vcf) ]
-        genome_tabix = ch_genome_tabix // channel: [ val(meta), path(tbi) ]
-        mt_vcf       = ch_mt_vcf       // channel: [ val(meta), path(vcf) ]
-        versions     = ch_versions     // channel: [ path(versions.yml) ]
+        genome_vcf       = ch_genome_vcf                // channel: [ val(meta), path(vcf) ]
+        genome_tabix     = ch_genome_tabix              // channel: [ val(meta), path(tbi) ]
+        genome_vcf_tabix = ch_genome_vcf_tabix          // channel: [ val(meta), path(vcf), path(tbi) ]
+        mt_vcf           = POSTPROCESS_MT_CALLS.out.vcf // channel: [ val(meta), path(vcf) ]
+        mt_tabix         = POSTPROCESS_MT_CALLS.out.tbi // channel: [ val(meta), path(vcf) ]
+        versions         = ch_versions                  // channel: [ path(versions.yml) ]
 }
