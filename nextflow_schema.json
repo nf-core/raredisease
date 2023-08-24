@@ -405,7 +405,7 @@
                 },
                 "skip_vep_filter": {
                     "type": "boolean",
-                    "description": "Specifies whether or not to skip filtering based on vep results.",
+                    "description": "Specifies whether or not to filter results based on a list of candidate genes specified in 'vep_filters'.",
                     "fa_icon": "fas fa-toggle-on"
                 }
             }
