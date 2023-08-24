@@ -386,7 +386,7 @@
                 "skip_cnv_calling": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip CNV calling.",
-                    "fa_icon": "fas fa-book"
+                    "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_mt_analysis": {
                     "type": "boolean",
@@ -401,6 +401,11 @@
                 "skip_sv_annotation": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip annotate structural variant subworkflow.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_vep_filter": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to filter results based on a list of candidate genes specified in 'vep_filters'.",
                     "fa_icon": "fas fa-toggle-on"
                 }
             }

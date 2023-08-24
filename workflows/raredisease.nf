@@ -58,6 +58,10 @@ if (!params.skip_cnv_calling) {
     mandatoryParams += ["ploidy_model", "gcnvcaller_model"]
 }
 
+if (!params.skip_vep_filter) {
+    mandatoryParams += ["vep_filters"]
+}
+
 def missingParamsCount = 0
 for (param in mandatoryParams.unique()) {
     if (params[param] == null) {
