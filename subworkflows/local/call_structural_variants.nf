@@ -2,21 +2,26 @@
 // A nested subworkflow to call structural variants.
 //
 
-include { CALL_SV_MANTA              } from './variant_calling/call_sv_manta'
-include { CALL_SV_TIDDIT             } from './variant_calling/call_sv_tiddit'
-include { SVDB_MERGE                 } from '../../modules/nf-core/svdb/merge/main'
-include { CALL_SV_GERMLINECNVCALLER  } from './variant_calling/call_sv_germlinecnvcaller'
-include { TABIX_TABIX                } from '../../modules/nf-core/tabix/tabix/main'
+include { CALL_SV_MANTA                  } from './variant_calling/call_sv_manta'
+include { CALL_SV_MT                     } from './variant_calling/call_sv_MT'
+include { CALL_SV_MT as CALL_SV_MT_SHIFT } from './variant_calling/call_sv_MT'
+include { CALL_SV_TIDDIT                 } from './variant_calling/call_sv_tiddit'
+include { SVDB_MERGE                     } from '../../modules/nf-core/svdb/merge/main'
+include { CALL_SV_GERMLINECNVCALLER      } from './variant_calling/call_sv_germlinecnvcaller'
+include { TABIX_TABIX                    } from '../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_STRUCTURAL_VARIANTS {
 
     take:
-        ch_bam                 // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_bai                 // channel: [mandatory] [ val(meta), path(bai) ]
-        ch_bam_bai             // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_bam          // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_genome_bai          // channel: [mandatory] [ val(meta), path(bai) ]
+        ch_genome_bam_bai      // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_mt_bam_bai          // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_mtshift_bam_bai     // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_bwa_index           // channel: [mandatory] [ val(meta), path(index)]
         ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai          // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_mtshift_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_case_info           // channel: [mandatory] [ val(case_info) ]
         ch_target_bed          // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
         ch_genome_dictionary   // channel: [optional; used by mandatory for GATK's cnvcaller][ val(meta), path(dict) ]
@@ -28,20 +33,24 @@ workflow CALL_STRUCTURAL_VARIANTS {
     main:
         ch_versions = Channel.empty()
 
-        CALL_SV_MANTA (ch_bam, ch_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_target_bed)
+        CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_target_bed)
             .diploid_sv_vcf
             .collect{it[1]}
             .set{ manta_vcf }
 
-        CALL_SV_TIDDIT (ch_bam_bai, ch_genome_fasta, ch_bwa_index, ch_case_info)
+        CALL_SV_TIDDIT (ch_genome_bam_bai, ch_genome_fasta, ch_bwa_index, ch_case_info)
             .vcf
             .collect{it[1]}
             .set { tiddit_vcf }
 
-        CALL_SV_GERMLINECNVCALLER (ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model)
+        CALL_SV_GERMLINECNVCALLER (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model)
             .genotyped_intervals_vcf
             .collect{it[1]}
             .set { gcnvcaller_vcf }
+
+        CALL_SV_MT (ch_mt_bam_bai, ch_genome_fasta)
+
+        CALL_SV_MT_SHIFT (ch_mtshift_bam_bai, ch_mtshift_fasta)
 
         //merge
         if (params.skip_cnv_calling) {
