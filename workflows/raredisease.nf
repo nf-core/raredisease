@@ -112,7 +112,6 @@ include { TABIX_BGZIPTABIX as BGZIPTABIX_SV     } from '../modules/nf-core/tabix
 //
 
 include { ALIGN                                 } from '../subworkflows/local/align'
-include { ANALYSE_MT                            } from '../subworkflows/local/analyse_MT'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_MT    } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV   } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV    } from '../subworkflows/local/annotate_consequence_pli'
