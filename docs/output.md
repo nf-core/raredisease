@@ -433,7 +433,7 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 
 #### GENMOD
 
-[GENMOD](https://github.com/Clinical-Genomics/genmod) is a simple to use command line tool for annotating and analyzing genomic variations in the VCF file format. GENMOD can annotate genetic patterns of inheritance in vcf:s with single or multiple families of arbitrary size. VCF file annotated by GENMOD are further filtered using [filter_vep from VEP](https://www.ensembl.org/info/docs/tools/vep/script/vep_filter.html) to separate clinically relevant variants.
+[GENMOD](https://github.com/Clinical-Genomics/genmod) is a simple to use command line tool for annotating and analyzing genomic variations in the VCF file format. GENMOD can annotate genetic patterns of inheritance in vcf:s with single or multiple families of arbitrary size. VCF file annotated by GENMOD are further filtered using [filter_vep from VEP](https://www.ensembl.org/info/docs/tools/vep/script/vep_filter.html) to separate clinically relevant variants. You can skip the filtering step by setting --skip_vep_filter to true.
 
 <details markdown="1">
 <summary>Output files</summary>
