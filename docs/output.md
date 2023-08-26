@@ -51,6 +51,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - [Mitochondrial analysis](#mitochondrial-analysis)
   - [Alignment and variant calling](#alignment-and-variant-calling)
     - [MT deletion script](#mt-deletion-script)
+    - [eKLIPse](#eklipse)
   - [Annotation:](#annotation-)
     - [HaploGrep2](#haplogrep2)
     - [vcfanno](#vcfanno-1)
@@ -384,13 +385,25 @@ Mitochondrial analysis is run by default. If you want to turn off annotations se
 
 The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sensitivity to low AF and separate alignments using opposite genome breakpoints to allow for the tracing of lineages of rare mitochondrial variants.
 
+- `call_snv/mitochondria`
+  - `<case_id>_mitochondria.vcf.gz`: normalized vcf file containing MT variants.
+  - `<case_id>_mitochondria.vcf.gz.tbi`: index of the vcf file containing MT variants.
+
 ##### MT deletion script
 
 [MT deletion script](https://github.com/dnil/mitosign/blob/master/run_mt_del_check.sh) lists the fraction of mitochondrially aligning read pairs (per 1000) that appear discordant, as defined by an insert size of more than 1.2 kb (and less than 15 kb due to the circular nature of the genome) using samtools.
 
 - `call_sv/mitochondria`
-  - `<case_id>_svdbquery_vep.vcf.gz`: file containing svdb query, and vep annotations.
-  - `<case_id>_svdbquery_vep.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, and vep annotations.
+  - `<sample_id>.txt`: file containing deletions.
+
+##### eKLIPse
+
+[eKLIPse](https://github.com/dooguypapua/eKLIPse) allows the detection and quantification of large mtDNA rearrangements.
+
+- `call_sv/mitochondria`
+  - `eKLIPse_deletions.csv`: file containing all predicted deletions.
+  - `eKLIPse_genes.csv`: file summarizing cumulated deletions per mtDNA gene.
+  - `eKLIPse_<sample_id>.png`: circos plot.
 
 #### Annotation:
 
@@ -445,15 +458,15 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 - `rank_and_filter/`
   - `<case_id>_clinical_mt.vcf.gz`: file containing clinically relevant mitochondrial SNVs.
   - `<case_id>_clinical_mt.vcf.gz.tbi`: index of the file containing clinically relevant mitochondrial SNVs.
-  - `<case_id>_clinical_snv.vcf.gz`: file containing clinically relevant SNVs.
+  - `<case_id>_clinical_snv.vcf.gz`: file containing clinically relevant SNVs (does not include mitochondrial variants).
   - `<case_id>_clinical_snv.vcf.gz.tbi`: index of the file containing clinically relevant SNVs.
-  - `<case_id>_clinical_sv.vcf.gz`: file containing clinically relevant SVs.
+  - `<case_id>_clinical_sv.vcf.gz`: file containing clinically relevant SVs (includes mitochondrial variants).
   - `<case_id>_clinical_sv.vcf.gz.tbi`: index of the file containing clinically relevant SVs.
   - `<case_id>_ranked_mt.vcf.gz`: file containing mitochondrial SNV annotations with their rank scores.
   - `<case_id>_ranked_mt.vcf.gz.tbi`: index of the file containing mitochondrial SNV annotations with their rank scores.
-  - `<case_id>_ranked_snv.vcf.gz`: file containing SNV annotations with their rank scores.
+  - `<case_id>_ranked_snv.vcf.gz`: file containing SNV annotations with their rank scores (does not include mitochondrial variants).
   - `<case_id>_ranked_snv.vcf.gz.tbi`: index of the file containing SNV annotations with their rank scores.
-  - `<case_id>_ranked_sv.vcf.gz`: file containing SV annotations with their rank scores.
+  - `<case_id>_ranked_sv.vcf.gz`: file containing SV annotations with their rank scores (includes mitochondrial variants).
   - `<case_id>_ranked_sv.vcf.gz.tbi`: index of the file containing SV annotations with their rank scores.
 
 </details>
