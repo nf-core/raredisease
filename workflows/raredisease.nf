@@ -42,7 +42,7 @@ if (!params.skip_sv_annotation) {
     mandatoryParams += ["genome", "svdb_query_dbs", "vep_cache", "vep_cache_version", "score_config_sv"]
 }
 
-if (!params.skip_mt_analysis) {
+if (!params.skip_mt_annotation) {
     mandatoryParams += ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "vep_cache_version", "vep_cache"]
 }
 
@@ -249,6 +249,8 @@ workflow RAREDISEASE {
     ch_readcount_intervals      = params.readcount_intervals               ? Channel.fromPath(params.readcount_intervals).collect()
                                                                            : ( ch_references.readcount_intervals      ?: Channel.empty() )
     ch_reduced_penetrance       = params.reduced_penetrance                ? Channel.fromPath(params.reduced_penetrance).collect()
+                                                                           : Channel.value([])
+    ch_score_config_mt          = params.score_config_mt                   ? Channel.fromPath(params.score_config_mt).collect()
                                                                            : Channel.value([])
     ch_score_config_snv         = params.score_config_snv                  ? Channel.fromPath(params.score_config_snv).collect()
                                                                            : Channel.value([])
@@ -507,7 +509,7 @@ workflow RAREDISEASE {
             ANN_CSQ_PLI_MT.out.vcf_ann,
             ch_pedfile,
             ch_reduced_penetrance,
-            ch_score_config_snv
+            ch_score_config_mt
         )
         ch_versions = ch_versions.mix(RANK_VARIANTS_MT.out.versions)
 
