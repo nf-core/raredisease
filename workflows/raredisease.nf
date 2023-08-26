@@ -95,7 +95,6 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 // MODULE: Installed directly from nf-core/modules
 //
 
-include { GATK4_MERGEVCFS                       } from '../modules/nf-core/gatk4/mergevcfs/main'
 include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { FASTQC                                } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
