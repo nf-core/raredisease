@@ -647,15 +647,12 @@ def create_case_channel(List rows) {
             mother = item.maternal
         }
     }
-    println(probands)
 
     case_info.father       = father
     case_info.mother       = mother
     case_info.probands     = probands.unique()
     case_info.upd_children = upd_children.unique()
     case_info.id           = rows[0].case_id
-
-    println(case_info)
 
     return case_info
 }
