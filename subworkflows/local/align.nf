@@ -88,7 +88,9 @@ workflow ALIGN {
         ch_versions   = Channel.empty().mix(ALIGN_BWAMEM2.out.versions,
                                             ALIGN_SENTIEON.out.versions,
                                             ALIGN_MT.out.versions,
-                                            ALIGN_MT_SHIFT.out.versions)
+                                            ALIGN_MT_SHIFT.out.versions,
+                                            CONVERT_MT_BAM_TO_FASTQ.out.versions,
+                                            SAMTOOLS_VIEW.out.versions)
 
     emit:
         genome_marked_bam  = ch_genome_marked_bam  // channel: [ val(meta), path(bam) ]

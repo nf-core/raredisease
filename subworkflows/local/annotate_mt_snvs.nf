@@ -1,16 +1,8 @@
 //
-// Merge and annotate MT
+// Annotate MT
 //
 
-include { GATK4_MERGEVCFS as GATK4_MERGEVCFS_LIFT_UNLIFT_MT     } from '../../modules/nf-core/gatk4/mergevcfs/main'
-include { GATK4_VARIANTFILTRATION as GATK4_VARIANTFILTRATION_MT } from '../../modules/nf-core/gatk4/variantfiltration/main'
-include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_MT               } from '../../modules/nf-core/bcftools/norm/main'
 include { TABIX_TABIX as TABIX_TABIX_MT                         } from '../../modules/nf-core/tabix/tabix/main'
-include { BCFTOOLS_NORM as REMOVE_DUPLICATES_MT                 } from '../../modules/nf-core/bcftools/norm/main'
-include { TABIX_TABIX as TABIX_TABIX_MT2                        } from '../../modules/nf-core/tabix/tabix/main'
-include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                   } from '../../modules/nf-core/bcftools/merge/main'
-include { TABIX_TABIX as TABIX_TABIX_MERGE                      } from '../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_TABIX_MT3                        } from '../../modules/nf-core/tabix/tabix/main'
 include { ENSEMBLVEP as ENSEMBLVEP_MT                           } from '../../modules/local/ensemblvep/main'
 include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT         } from '../../modules/nf-core/haplogrep2/classify/main'
 include { VCFANNO as VCFANNO_MT                                 } from '../../modules/nf-core/vcfanno/main'
@@ -66,9 +58,9 @@ workflow ANNOTATE_MT_SNVS {
         )
 
         // Running vcfanno
-        TABIX_TABIX_MT3(ENSEMBLVEP_MT.out.vcf_gz)
+        TABIX_TABIX_MT(ENSEMBLVEP_MT.out.vcf_gz)
         ENSEMBLVEP_MT.out.vcf_gz
-            .join(TABIX_TABIX_MT3.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .join(TABIX_TABIX_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
             .map { meta, vcf, tbi -> return [meta, vcf, tbi, []]}
             .set { ch_in_vcfanno }
 
@@ -91,6 +83,7 @@ workflow ANNOTATE_MT_SNVS {
 
         ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
+        ch_versions = ch_versions.mix(TABIX_TABIX_MT.out.versions)
         ch_versions = ch_versions.mix(VCFANNO_MT.out.versions)
         ch_versions = ch_versions.mix(HMTNOTE_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions)

@@ -75,6 +75,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         TABIX_TABIX (SVDB_MERGE.out.vcf)
 
         ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
+        ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
         ch_versions = ch_versions.mix(CALL_SV_TIDDIT.out.versions)
         ch_versions = ch_versions.mix(CALL_SV_GERMLINECNVCALLER.out.versions)
         ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)

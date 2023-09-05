@@ -43,6 +43,7 @@ workflow ALIGN_MT {
         SAMTOOLS_INDEX_MT(SAMTOOLS_SORT_MT.out.bam)
 
         ch_versions = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
+        ch_versions = ch_versions.mix(SENTIEON_BWAMEM_MT.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_ADDORREPLACEREADGROUPS_MT.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
