@@ -676,8 +676,8 @@ def create_case_channel(List rows) {
 
     case_info.father       = father
     case_info.mother       = mother
-    case_info.probands     = probands
-    case_info.upd_children = upd_children
+    case_info.probands     = probands.unique()
+    case_info.upd_children = upd_children.unique()
     case_info.id           = rows[0].case_id
 
     return case_info
