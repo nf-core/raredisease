@@ -22,7 +22,8 @@ workflow CALL_SNV_SENTIEON {
         ch_call_interval   // channel: [mandatory] [ val(meta), path(interval) ]
         ch_ml_model        // channel: [mandatory] [ val(meta), path(model) ]
         ch_case_info       // channel: [mandatory] [ val(case_info) ]
-        ch_pcr_indel_model // channel: [mandatory] [ val(sentieon_dnascope_pcr_indel_model) ]
+        ch_pcr_indel_model // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
+ 
     main:
         ch_versions = Channel.empty()
 
