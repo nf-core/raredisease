@@ -17,7 +17,7 @@ workflow CALL_SNV {
         ch_call_interval   // channel: [mandatory] [ path(intervals) ]
         ch_ml_model        // channel: [mandatory] [ path(model) ]
         ch_case_info       // channel: [mandatory] [ val(case_info) ]
-        ch_pcr_indel_model // channel: [mandatory] [ val(sentieon_dnascope_pcr_indel_model) ]
+        ch_pcr_indel_model // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
 
     main:
         ch_versions   = Channel.empty()
