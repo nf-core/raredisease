@@ -360,7 +360,8 @@ workflow RAREDISEASE {
         ch_dbsnp_tbi,
         ch_call_interval,
         ch_ml_model,
-        ch_case_info
+        ch_case_info,
+        Channel.value(params.sentieon_dnascope_pcr_indel_model)
     )
     ch_versions = ch_versions.mix(CALL_SNV.out.versions)
 
