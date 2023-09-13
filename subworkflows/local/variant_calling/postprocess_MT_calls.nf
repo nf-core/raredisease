@@ -25,7 +25,7 @@ workflow POSTPROCESS_MT_CALLS {
     main:
         ch_versions = Channel.empty()
 
-        // LIFTOVER VCF FROM REFERENCE MT TO SHIFTED MT
+        // LIFTOVER SHIFTED VCF TO REFERENCE MT POSITIONS
         PICARD_LIFTOVERVCF (
             ch_mtshift_vcf,
             ch_genome_dictionary,
