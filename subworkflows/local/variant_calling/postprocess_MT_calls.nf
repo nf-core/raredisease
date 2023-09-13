@@ -1,5 +1,5 @@
 //
-// Merge and annotate MT
+// Merge and normalize MT variants
 //
 
 include { GATK4_MERGEVCFS as GATK4_MERGEVCFS_LIFT_UNLIFT_MT     } from '../../../modules/nf-core/gatk4/mergevcfs/main'
@@ -25,7 +25,7 @@ workflow POSTPROCESS_MT_CALLS {
     main:
         ch_versions = Channel.empty()
 
-        // LIFTOVER VCF FROM REFERENCE MT TO SHIFTED MT
+        // LIFTOVER SHIFTED VCF TO REFERENCE MT POSITIONS
         PICARD_LIFTOVERVCF (
             ch_mtshift_vcf,
             ch_genome_dictionary,

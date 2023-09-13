@@ -50,8 +50,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
         CALL_SV_MT (ch_mt_bam_bai, ch_genome_fasta)
 
-//        CALL_SV_MT_SHIFT (ch_mtshift_bam_bai, ch_mtshift_fasta)
-
         //merge
         if (params.skip_cnv_calling) {
             tiddit_vcf

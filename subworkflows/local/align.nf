@@ -7,7 +7,7 @@ include { ALIGN_SENTIEON             } from './alignment/align_sentieon'
 include { SAMTOOLS_VIEW              } from '../../modules/nf-core/samtools/view/main'
 include { ALIGN_MT                   } from './alignment/align_MT'
 include { ALIGN_MT as ALIGN_MT_SHIFT } from './alignment/align_MT'
-include { CONVERT_MT_BAM_TO_FASTQ    } from './convert_mt_bam_to_fastq'
+include { CONVERT_MT_BAM_TO_FASTQ    } from './mitochondria/convert_mt_bam_to_fastq'
 
 workflow ALIGN {
     take:

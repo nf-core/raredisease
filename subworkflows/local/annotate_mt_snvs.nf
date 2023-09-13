@@ -36,12 +36,12 @@ workflow ANNOTATE_MT_SNVS {
 
         // Pick input for vep
         ch_mt_vcf
-            .combine(ANNOTATE_CADD.out.vcf.ifEmpty("null"))
-            .branch { it  ->
-                merged: it[2].equals("null")
+            .join(ANNOTATE_CADD.out.vcf, remainder: true) // If CADD is not run then the third element in this channel will be `null`
+            .branch { it  ->                              // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
+                merged: it[2].equals(null)
                     return [it[0], it[1]]
-                cadd: !(it[2].equals("null"))
-                    return [it[2], it[3]]
+                cadd: !(it[2].equals(null))
+                    return [it[0], it[2]]
             }
             .set { ch_for_mix }
         ch_vep_in = ch_for_mix.merged.mix(ch_for_mix.cadd)
