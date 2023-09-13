@@ -10,7 +10,7 @@
             "sample": {
                 "type": "string",
                 "exists": true,
-                "meta": ["id"],
+                "meta": ["id", "sample"],
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces"
             },

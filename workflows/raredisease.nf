@@ -615,9 +615,7 @@ def makePed(samples) {
     outfile.text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\t')
     def samples_list = []
     for(int i = 0; i<samples.size(); i++) {
-        sample_tokenized   =  samples[i].id.tokenize("_")
-        sample_tokenized.removeLast()
-        sample_name        =  sample_tokenized.join("_")
+        sample_name        =  samples[i].sample
         if (!samples_list.contains(sample_name)) {
             outfile.append('\n' + [samples[i].case_id, sample_name, samples[i].paternal, samples[i].maternal, samples[i].sex, samples[i].phenotype].join('\t'));
             samples_list.add(sample_name)
@@ -636,10 +634,10 @@ def create_case_channel(List rows) {
 
     for (item in rows) {
         if (item.phenotype == "2") {
-            probands.add(item.id.split("_T")[0])
+            probands.add(item.sample)
         }
         if ( (item.paternal!="0") && (item.paternal!="") && (item.maternal!="0") && (item.maternal!="") ) {
-            upd_children.add(item.id.split("_T")[0])
+            upd_children.add(item.sample)
         }
         if ( (item.paternal!="0") && (item.paternal!="") ) {
             father = item.paternal
