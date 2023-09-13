@@ -131,9 +131,10 @@ nf-core/raredisease consists of several tools used for various purposes. For con
 3. Repeat expansions (ExpansionsHunter & Stranger)
 4. Variant calling - SNV (DeepVariant/Sentieon DNAscope)
 5. Variant calling - Structural variants (SV) (Tiddit & Manta)
-6. SNV annotation & ranking (rohcall, vcfanno, ensembl VEP, GENMOD)
-7. SV annotation & ranking (SVDB query, ensembl VEP, GENMOD)
-8. Mitochondrial annotation
+6. Copy number variant calling (GATK's GermlineCNVCaller)
+7. SNV annotation & ranking (rohcall, vcfanno, ensembl VEP, GENMOD)
+8. SV annotation & ranking (SVDB query, ensembl VEP, GENMOD)
+9. Mitochondrial annotation
 
 > We have only listed the groups that require at least one input from the user. For example, the pipeline also runs SMNCopyNumberCaller, but it does not require any input other than the bam files passed by the pipeline. Hence, it is not mentioned in the list above. To know more about the tools used in the pipeline check the [README](../README.md).
 
