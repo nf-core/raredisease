@@ -101,12 +101,12 @@ workflow ANNOTATE_GENOME_SNVS {
 
         // If CADD is run, pick CADD output as input for VEP else pass selectvariants output to VEP.
         GATK4_SELECTVARIANTS.out.vcf
-            .combine(ANNOTATE_CADD.out.vcf.ifEmpty("null")) // If CADD is not run then this channel will be empty, so assign a default value to allow filtering with branch operator
-            .branch { it  ->                                // If CADD is run, then "it" will be [[meta],selvar.vcf,[meta],cadd.vcf], else [[meta],selvar.vcf,null]
-                selvar: it[2].equals("null")
+            .join(ANNOTATE_CADD.out.vcf, remainder: true) // If CADD is not run then the third element in this channel will be `null`
+            .branch { it  ->                              // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
+                selvar: it[2].equals(null)
                     return [it[0], it[1]]
-                cadd: !(it[2].equals("null"))
-                    return [it[2], it[3]]
+                cadd: !(it[2].equals(null))
+                    return [it[0], it[2]]
             }
             .set { ch_for_mix }
 

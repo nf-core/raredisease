@@ -14,21 +14,37 @@ include { BCFTOOLS_FILTER as BCF_FILTER_TWO        } from '../../../modules/nf-c
 
 workflow CALL_SNV_SENTIEON {
     take:
-        ch_bam_bai       // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_genome_fasta  // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai    // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_dbsnp         // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_dbsnp_index   // channel: [mandatory] [ val(meta), path(tbi) ]
-        ch_call_interval // channel: [mandatory] [ val(meta), path(interval) ]
-        ch_ml_model      // channel: [mandatory] [ val(meta), path(model) ]
-        ch_case_info     // channel: [mandatory] [ val(case_info) ]
-
+        ch_bam_bai         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_dbsnp           // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_dbsnp_index     // channel: [mandatory] [ val(meta), path(tbi) ]
+        ch_call_interval   // channel: [mandatory] [ val(meta), path(interval) ]
+        ch_ml_model        // channel: [mandatory] [ val(meta), path(model) ]
+        ch_case_info       // channel: [mandatory] [ val(case_info) ]
+        ch_pcr_indel_model // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
+ 
     main:
         ch_versions = Channel.empty()
 
-        SENTIEON_DNASCOPE ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_dbsnp, ch_dbsnp_index, ch_call_interval, ch_ml_model )
+        // Combine bam and intervals
+        bam_bai_intervals = ch_bam_bai.combine(ch_call_interval)
+            .map{
+                meta, bam, bai, meta2, interval -> [meta, bam, bai, interval]
+            }
 
-        ch_dnamodelapply_in = SENTIEON_DNASCOPE.out.vcf.join(SENTIEON_DNASCOPE.out.index)
+        SENTIEON_DNASCOPE(
+            bam_bai_intervals,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_dbsnp,
+            ch_dbsnp_index,
+            ch_ml_model,
+            ch_pcr_indel_model,
+            'VARIANT',
+            false)
+
+        ch_dnamodelapply_in = SENTIEON_DNASCOPE.out.vcf.join(SENTIEON_DNASCOPE.out.vcf_tbi)
 
         SENTIEON_DNAMODELAPPLY ( ch_dnamodelapply_in, ch_genome_fasta, ch_genome_fai, ch_ml_model )
 

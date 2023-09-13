@@ -449,10 +449,13 @@
                     "fa_icon": "fas fa-align-center",
                     "description": "Interval in the reference that will be used in the software"
                 },
-                "pcr_amplification": {
-                    "type": "boolean",
-                    "description": "Indicates whether the sample library is amplified using PCR or not. Set to false for PCR Free samples.",
-                    "fa_icon": "fas fa-toggle-on"
+                "sentieon_dnascope_pcr_indel_model": {
+                    "type": "string",
+                    "default": "CONSERVATIVE",
+                    "fa_icon": "fas fa-bacon",
+                    "description": "Option for selecting the PCR indel model used by Sentieon Dnascope.",
+                    "help_text": "PCR indel model used to weed out false positive indels more or less aggressively. The possible MODELs are: NONE (used for PCR free samples), and HOSTILE, AGGRESSIVE and CONSERVATIVE, in order of decreasing aggressiveness. The default value is CONSERVATIVE.",
+                    "pattern": "^(NONE|HOSTILE|AGGRESSIVE|CONSERVATIVE)(?<!,)$"
                 },
                 "variant_caller": {
                     "type": "string",

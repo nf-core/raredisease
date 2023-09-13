@@ -28,6 +28,7 @@ workflow CALL_SNV {
         ch_call_interval      // channel: [mandatory] [ path(intervals) ]
         ch_ml_model           // channel: [mandatory] [ path(model) ]
         ch_case_info          // channel: [mandatory] [ val(case_info) ]
+        ch_pcr_indel_model    // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
 
     main:
         ch_versions   = Channel.empty()
@@ -49,7 +50,8 @@ workflow CALL_SNV {
             ch_dbsnp_tbi,
             ch_call_interval,
             ch_ml_model,
-            ch_case_info
+            ch_case_info,
+            ch_pcr_indel_model
         )
 
         ch_vcf       = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.vcf, CALL_SNV_SENTIEON.out.vcf)
