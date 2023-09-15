@@ -105,6 +105,6 @@ workflow CALL_SNV {
         genome_tabix     = ch_genome_tabix              // channel: [ val(meta), path(tbi) ]
         genome_vcf_tabix = ch_genome_vcf_tabix          // channel: [ val(meta), path(vcf), path(tbi) ]
         mt_vcf           = POSTPROCESS_MT_CALLS.out.vcf // channel: [ val(meta), path(vcf) ]
-        mt_tabix         = POSTPROCESS_MT_CALLS.out.tbi // channel: [ val(meta), path(vcf) ]
+        mt_tabix         = POSTPROCESS_MT_CALLS.out.tbi // channel: [ val(meta), path(tbi) ]
         versions         = ch_versions                  // channel: [ path(versions.yml) ]
 }
