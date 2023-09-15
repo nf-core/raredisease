@@ -22,7 +22,7 @@ workflow ALIGN_SENTIEON {
         SENTIEON_BWAMEM.out
             .bam_and_bai
             .map{ meta, bam, bai ->
-                new_id   = meta.id.split('_')[0]
+                new_id   = meta.sample
                 new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"]
                 [groupKey(new_meta, new_meta.num_lanes), bam, bai]
                 }
