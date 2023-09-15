@@ -33,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated modules from nf-core [#412](https://github.com/nf-core/raredisease/pull/412)
 - If present, remove duplicate entries in probands and upd_children in the meta. [#420](https://github.com/nf-core/raredisease/pull/420)
 - Fixes vep starting as many instances as the square of the number of scatters. [#405](https://github.com/nf-core/raredisease/pull/405)
-- Removed logic where we added an arbitrary substring to keep file names unique after alignment, and then split those string to get at the original string before merging with a simple copy operation.
+- Replaced the logic where we added an arbitrary substring to keep file names unique after alignment which we then removed using a split operator, with a simple copy operation. [#425](https://github.com/nf-core/raredisease/pull/425/files)
 
 ### `Updated`
 
