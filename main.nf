@@ -39,6 +39,7 @@ params.ploidy_model                   = WorkflowMain.getGenomeAttribute(params, 
 params.reduced_penetrance             = WorkflowMain.getGenomeAttribute(params, 'reduced_penetrance')
 params.readcount_intervals            = WorkflowMain.getGenomeAttribute(params, 'readcount_intervals')
 params.sequence_dictionary            = WorkflowMain.getGenomeAttribute(params, 'sequence_dictionary')
+params.score_config_mt                = WorkflowMain.getGenomeAttribute(params, 'score_config_mt')
 params.score_config_snv               = WorkflowMain.getGenomeAttribute(params, 'score_config_snv')
 params.score_config_sv                = WorkflowMain.getGenomeAttribute(params, 'score_config_sv')
 params.svdb_query_dbs                 = WorkflowMain.getGenomeAttribute(params, 'svdb_query_dbs')

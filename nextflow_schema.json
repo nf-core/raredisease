@@ -266,6 +266,13 @@
                     "help_text": "The saved references can be used for future pipeline runs, reducing processing times.",
                     "fa_icon": "fas fa-save"
                 },
+                "score_config_mt": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "description": "MT rank model config file for genmod."
+                },
                 "score_config_snv": {
                     "type": "string",
                     "exists": true,
@@ -388,9 +395,9 @@
                     "description": "Specifies whether or not to skip CNV calling.",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "skip_mt_analysis": {
+                "skip_mt_annotation": {
                     "type": "boolean",
-                    "description": "Specifies whether or not to skip the subworkflow that analyses mitochondrial genome separate from the nuclear genome.",
+                    "description": "Specifies whether or not to skip annotation of mitochondrial variants.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_snv_annotation": {
