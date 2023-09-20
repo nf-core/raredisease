@@ -9,7 +9,7 @@
    id="svg1"
    xml:space="preserve"
    inkscape:version="1.3 (0e150ed, 2023-07-21)"
-   sodipodi:docname="raredisease_workflow.svg"
+   sodipodi:docname="drawing.svg"
    inkscape:export-filename="raredisease_workflow.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
@@ -1438,4 +1438,11 @@
            style="font-size:4.93889px;stroke-width:0.264583"
            x="402.06009"
            y="307.42535"
-           id="tspan163">users have the option to not run these tools</tspan></text></g></g></svg>
+           id="tspan163">users have the option to not run these tools</tspan></text></g><rect
+       style="fill:#050505;stroke:#738cff;stroke-width:0.255;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:8;opacity:0"
+       id="rect1"
+       width="541.57782"
+       height="346.6254"
+       x="-8.5779066"
+       y="-6.2384772"
+       ry="3.3517513" /></g></svg>
