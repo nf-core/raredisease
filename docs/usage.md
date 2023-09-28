@@ -10,21 +10,25 @@ Table of contents:
   - [Run nf-core/raredisease with test data](#run-nf-coreraredisease-with-test-data)
     - [Updating the pipeline](#updating-the-pipeline)
   - [Run nf-core/raredisease with your data](#run-nf-coreraredisease-with-your-data)
-    - [Samplesheet](#samplesheet)
-    - [Reference files and parameters](#reference-files-and-parameters)
-      - [1. Alignment](#1-alignment)
-      - [2. QC stats from the alignment files](#2-qc-stats-from-the-alignment-files)
-      - [3. Repeat expansions](#3-repeat-expansions)
-      - [4. Variant calling - SNV](#4-variant-calling---snv)
-      - [5. Variant calling - Structural variants](#5-variant-calling---structural-variants)
-      - [6. Copy number variant calling](#6-copy-number-variant-calling)
-      - [7. SNV annotation & Ranking](#7-snv-annotation--ranking)
-      - [8. SV annotation & Ranking](#8-sv-annotation--ranking)
-      - [9. Mitochondrial annotation](#9-mitochondrial-annotation)
-    - [Run the pipeline](#run-the-pipeline)
-      - [Direct input in CLI](#direct-input-in-cli)
-      - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
+      - [Samplesheet](#samplesheet)
+      - [Reference files and parameters](#reference-files-and-parameters)
+        - [1. Alignment](#1-alignment)
+        - [2. QC stats from the alignment files](#2-qc-stats-from-the-alignment-files)
+        - [3. Repeat expansions](#3-repeat-expansions)
+        - [4. Variant calling - SNV](#4-variant-calling---snv)
+        - [5. Variant calling - Structural variants](#5-variant-calling---structural-variants)
+        - [6. Copy number variant calling](#6-copy-number-variant-calling)
+        - [7. SNV annotation \& Ranking](#7-snv-annotation--ranking)
+        - [8. SV annotation \& Ranking](#8-sv-annotation--ranking)
+        - [9. Mitochondrial annotation](#9-mitochondrial-annotation)
+      - [Run the pipeline](#run-the-pipeline)
+        - [Direct input in CLI](#direct-input-in-cli)
+        - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
   - [Best practices](#best-practices)
+  - [Core Nextflow arguments](#core-nextflow-arguments)
+    - [`-profile`](#-profile)
+    - [`-resume`](#-resume)
+    - [`-c`](#-c)
   - [Custom configuration](#custom-configuration)
     - [Changing resources](#changing-resources)
     - [Custom Containers](#custom-containers)
@@ -34,6 +38,7 @@ Table of contents:
     - [Azure Resource Requests](#azure-resource-requests)
     - [Running in the background](#running-in-the-background)
     - [Nextflow memory requirements](#nextflow-memory-requirements)
+    - [Running the pipeline without Internet access](#running-the-pipeline-without-internet-access)
 
 ## Introduction
 
@@ -118,7 +123,9 @@ If you would like to see more examples of what a typical samplesheet looks like 
 
 In nf-core/raredisease, references can be supplied using parameters listed [here](https://nf-co.re/raredisease/dev/parameters).
 
-> ⚠️ Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
+:::warning
+Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
+:::
 
 The above pipeline run specified with a params file in yaml format:
 
@@ -304,7 +311,9 @@ nextflow pull nf-core/raredisease
 
 To further assist in reproducbility, you can use share and re-use [parameter files](#running-the-pipeline) to repeat pipeline runs with the same settings without having to write out a command with every single parameter.
 
-> 💡 If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
+:::tip
+If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
+:::
 
 - **Restart a previous run:** Add `-resume` to your command when restarting a pipeline. Nextflow will use cached results from any pipeline steps where inputs are the same, and resume the run from where it terminated previously. For input to be considered the same, names and the files' contents must be identical. For more info about `-resume`, see [this blog post](https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html). You can also supply a run name to resume a specific run: `-resume [run-name]`. Use the `nextflow log` command to show previous run names.
 
@@ -330,6 +339,60 @@ input: 'data'
 ```
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
+
+## Core Nextflow arguments
+
+:::note
+These options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen).
+:::
+
+### `-profile`
+
+Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments.
+
+Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Apptainer, Conda) - see below.
+
+:::info
+We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
+:::
+
+{%- if nf_core_configs %}
+
+The pipeline also dynamically loads configurations from [https://github.com/nf-core/configs](https://github.com/nf-core/configs) when it runs, making multiple config profiles for various institutional clusters available at run time. For more information and to see if your system is available in these configs please see the [nf-core/configs documentation](https://github.com/nf-core/configs#documentation).
+{% else %}
+{% endif %}
+Note that multiple profiles can be loaded, for example: `-profile test,docker` - the order of arguments is important!
+They are loaded in sequence, so later profiles can overwrite earlier profiles.
+
+If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer enviroment.
+
+- `test`
+  - A profile with a complete configuration for automated testing
+  - Includes links to test data so needs no other parameters
+- `docker`
+  - A generic configuration profile to be used with [Docker](https://docker.com/)
+- `singularity`
+  - A generic configuration profile to be used with [Singularity](https://sylabs.io/docs/)
+- `podman`
+  - A generic configuration profile to be used with [Podman](https://podman.io/)
+- `shifter`
+  - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
+- `charliecloud`
+  - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
+- `apptainer`
+  - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
+- `conda`
+  - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
+
+### `-resume`
+
+Specify this when restarting a pipeline. Nextflow will use cached results from any pipeline steps where the inputs are the same, continuing from where it got to previously. For input to be considered the same, not only the names must be identical but the files' contents as well. For more info about this parameter, see [this blog post](https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html).
+
+You can also supply a run name to resume a specific run: `-resume [run-name]`. Use the `nextflow log` command to show previous run names.
+
+### `-c`
+
+Specify the path to a specific config file (this is a core Nextflow command). See the [nf-core website documentation](https://nf-co.re/usage/configuration) for more information.
 
 ## Custom configuration
 

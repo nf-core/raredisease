@@ -161,13 +161,6 @@
                     "description": "Path to the index file for the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
                 },
-                "igenomes_base": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "Directory / URL base for iGenomes references.",
-                    "default": "s3://ngi-igenomes/igenomes",
-                    "fa_icon": "fas fa-cloud-download-alt"
-                },
                 "igenomes_ignore": {
                     "type": "boolean",
                     "description": "Do not load the iGenomes reference config.",
