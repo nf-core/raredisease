@@ -31,6 +31,10 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 ## Pipeline summary
 
+<p align="center">
+    <img title="nf-core/raredisease workflow" src="docs/images/raredisease_metromap.png">
+</p>
+
 **1. Metrics:**
 
 - [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
@@ -91,11 +95,6 @@ On release, automated continuous integration tests run the pipeline on a full-si
 **9. Rank variants - SV and SNV:**
 
 - [GENMOD](https://github.com/Clinical-Genomics/genmod)
-
-<!-- prettier-ignore -->
-<p align="center">
-    <img title="nf-core/raredisease workflow" src="docs/images/raredisease_workflow_v1.0.0.png" width=40%>
-</p>
 
 Note that it is possible to include/exclude certain tools or steps.
 
