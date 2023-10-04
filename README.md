@@ -32,7 +32,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 ## Pipeline summary
 
 <p align="center">
-    <img title="nf-core/raredisease workflow" src="docs/images/raredisease_metromap.png">
+    <img title="nf-core/raredisease workflow" src="docs/images/raredisease_metromap_light.png">
 </p>
 
 **1. Metrics:**
