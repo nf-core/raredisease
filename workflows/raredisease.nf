@@ -54,7 +54,7 @@ if (params.variant_caller.equals("sentieon")) {
     mandatoryParams += ["ml_model"]
 }
 
-if (!params.skip_cnv_calling) {
+if (!params.skip_germlinecnvcaller) {
     mandatoryParams += ["ploidy_model", "gcnvcaller_model"]
 }
 
@@ -277,10 +277,10 @@ workflow RAREDISEASE {
 
 
     // SV caller priority
-    if (params.skip_cnv_calling) {
-        ch_svcaller_priority = Channel.value(["tiddit", "manta"])
+    if (params.skip_germlinecnvcaller) {
+        ch_svcaller_priority = Channel.value(["tiddit", "manta", "cnvnator"])
     } else {
-        ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller"])
+        ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
     }
 
     // Input QC
