@@ -80,6 +80,16 @@
                         "git_sha": "aad210ba51500be029740d088b4b4827f6f41509",
                         "installed_by": ["modules"]
                     },
+                    "cnvnator/cnvnator": {
+                        "branch": "master",
+                        "git_sha": "e0fcafde1e74156695fc27e90a6ad6325065e6c5",
+                        "installed_by": ["modules"]
+                    },
+                    "cnvnator/convert2vcf": {
+                        "branch": "master",
+                        "git_sha": "e0fcafde1e74156695fc27e90a6ad6325065e6c5",
+                        "installed_by": ["modules"]
+                    },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
                         "git_sha": "05c280924b6c768d484c7c443dad5e605c4ff4b4",
