@@ -388,6 +388,16 @@
                     "description": "Specifies whether or not to skip CNV calling.",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "skip_eklipse": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip eKLIPse.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_qualimap": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip Qualimap.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "skip_mt_annotation": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip annotation of mitochondrial variants.",
