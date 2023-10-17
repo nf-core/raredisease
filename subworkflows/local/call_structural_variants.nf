@@ -44,10 +44,14 @@ workflow CALL_STRUCTURAL_VARIANTS {
             .collect{it[1]}
             .set { tiddit_vcf }
 
-        CALL_SV_GERMLINECNVCALLER (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model)
-            .genotyped_intervals_vcf
-            .collect{it[1]}
-            .set { gcnvcaller_vcf }
+        if (!params.skip_germlinecnvcaller) {
+            CALL_SV_GERMLINECNVCALLER (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model)
+                .genotyped_intervals_vcf
+                .collect{it[1]}
+                .set { gcnvcaller_vcf }
+
+            ch_versions = ch_versions.mix(CALL_SV_GERMLINECNVCALLER.out.versions)
+        }
 
         CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_case_info)
             .vcf
@@ -83,7 +87,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
         ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
         ch_versions = ch_versions.mix(CALL_SV_TIDDIT.out.versions)
-        ch_versions = ch_versions.mix(CALL_SV_GERMLINECNVCALLER.out.versions)
         ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
 
     emit:

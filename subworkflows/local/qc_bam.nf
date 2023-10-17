@@ -29,6 +29,7 @@ workflow QC_BAM {
 
     main:
         ch_versions = Channel.empty()
+        ch_qualimap = Channel.empty()
 
         PICARD_COLLECTMULTIPLEMETRICS (ch_bam_bai, ch_genome_fasta, ch_genome_fai)
 
@@ -39,7 +40,10 @@ workflow QC_BAM {
 
         PICARD_COLLECTHSMETRICS (ch_hsmetrics_in, ch_genome_fasta, ch_genome_fai, [[],[]])
 
-        QUALIMAP_BAMQC (ch_bam, [])
+        if (!params.skip_qualimap) {
+            ch_qualimap = QUALIMAP_BAMQC (ch_bam, []).results
+            ch_versions = ch_versions.mix(QUALIMAP_BAMQC.out.versions.first())
+        }
 
         TIDDIT_COV (ch_bam, [[],[]]) // 2nd pos. arg is req. only for cram input
 
@@ -60,7 +64,6 @@ workflow QC_BAM {
 
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions.first())
-        ch_versions = ch_versions.mix(QUALIMAP_BAMQC.out.versions.first())
         ch_versions = ch_versions.mix(TIDDIT_COV.out.versions.first())
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions.first())
         ch_versions = ch_versions.mix(MOSDEPTH.out.versions.first())
@@ -70,7 +73,7 @@ workflow QC_BAM {
     emit:
         multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]
         hs_metrics       = PICARD_COLLECTHSMETRICS.out.metrics       // channel: [ val(meta), path(metrics) ]
-        qualimap_results = QUALIMAP_BAMQC.out.results                // channel: [ val(meta), path(qualimap_dir) ]
+        qualimap_results = ch_qualimap                               // channel: [ val(meta), path(qualimap_dir) ]
         tiddit_wig       = TIDDIT_COV.out.wig                        // channel: [ val(meta), path(wig) ]
         bigwig           = UCSC_WIGTOBIGWIG.out.bw                   // channel: [ val(meta), path(bw) ]
         d4               = MOSDEPTH.out.per_base_d4                  // channel: [ val(meta), path(d4) ]

@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A new parameter to skip filtering based on vep results [#416](https://github.com/nf-core/raredisease/pull/416)
 - A `metromap` representating the core parts of the pipeline [#428](https://github.com/nf-core/raredisease/pull/428)
 - Metromap and logos for light and dark theme [#432](https://github.com/nf-core/raredisease/pull/432)
+- New parameters to skip qualimap and eklipse (`--skip_qualimap` and `--skip_eklipse`) [#436](https://github.com/nf-core/raredisease/pull/436)
+- Fix "there is no process matching config selector warnings" [#435](https://github.com/nf-core/raredisease/pull/435)
 
 ### `Changed`
 
@@ -27,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Breaks down mitochondrial analysis workflow into smaller subworkflows that are more modular [#419](https://github.com/nf-core/raredisease/pull/419)
 - Replaced the parameter skip_mt_analysis which was used to turn on/off the mitochondrial workflow [#419](https://github.com/nf-core/raredisease/pull/419)
 - Adds a new parameter skip_mt_annotation which can be used to turn on/off annotation and ranking for mitochondrial SNVs [#419](https://github.com/nf-core/raredisease/pull/419)
+- Changed the name of the parameter from `skip_cnv_calling` to `skip_germlinecnvcaller` [#435](https://github.com/nf-core/raredisease/pull/435)
 
 ### `Fixed`
 
