@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A new parameter to skip filtering based on vep results [#416](https://github.com/nf-core/raredisease/pull/416)
 - A `metromap` representating the core parts of the pipeline [#428](https://github.com/nf-core/raredisease/pull/428)
 - Metromap and logos for light and dark theme [#432](https://github.com/nf-core/raredisease/pull/432)
+- A new parameter to skip qualimap [#436](https://github.com/nf-core/raredisease/pull/436)
 
 ### `Changed`
 
