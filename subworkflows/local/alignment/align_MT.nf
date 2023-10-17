@@ -21,14 +21,22 @@ workflow ALIGN_MT {
         ch_fai          // channel: [mandatory] [ val(meta), path(fai) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions     = Channel.empty()
+        ch_bwamem2_bam  = Channel.empty()
+        ch_sentieon_bam = Channel.empty()
 
-        BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, true)
-
-        SENTIEON_BWAMEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, ch_fai )
+        if (params.aligner.equals("bwamem2")) {
+            BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, true)
+            ch_bwamem2_bam = BWAMEM2_MEM_MT.out.bam
+            ch_versions    = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
+        } else if (params.aligner.equals("sentieon")) {
+            SENTIEON_BWAMEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, ch_fai )
+            ch_sentieon_bam = SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, bai -> [meta, bam] }
+            ch_versions     = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
+        }
 
         Channel.empty()
-            .mix(BWAMEM2_MEM_MT.out.bam, SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, bai -> [meta, bam] })
+            .mix(ch_bwamem2_bam, ch_sentieon_bam)
             .join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)
             .set {ch_bam_ubam}
 
@@ -42,8 +50,6 @@ workflow ALIGN_MT {
 
         SAMTOOLS_INDEX_MT(SAMTOOLS_SORT_MT.out.bam)
 
-        ch_versions = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
-        ch_versions = ch_versions.mix(SENTIEON_BWAMEM_MT.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_ADDORREPLACEREADGROUPS_MT.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())

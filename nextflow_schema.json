@@ -383,7 +383,7 @@
                     "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "skip_cnv_calling": {
+                "skip_germlinecnvcaller": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip CNV calling.",
                     "fa_icon": "fas fa-toggle-on"

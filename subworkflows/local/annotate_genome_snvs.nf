@@ -38,6 +38,7 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_split_intervals    // channel: [mandatory] [ path(intervals) ]
 
     main:
+        ch_cadd_vcf       = Channel.empty()
         ch_versions       = Channel.empty()
         ch_vcf_scatter_in = Channel.empty()
         ch_vep_in         = Channel.empty()
@@ -92,16 +93,20 @@ workflow ANNOTATE_GENOME_SNVS {
         GATK4_SELECTVARIANTS (ch_vcf_scatter_in)
 
         // Annotating with CADD
-        ANNOTATE_CADD (
-            GATK4_SELECTVARIANTS.out.vcf,
-            GATK4_SELECTVARIANTS.out.tbi,
-            ch_cadd_header,
-            ch_cadd_resources
-        )
+        if (params.cadd_resources != null) {
+            ANNOTATE_CADD (
+                GATK4_SELECTVARIANTS.out.vcf,
+                GATK4_SELECTVARIANTS.out.tbi,
+                ch_cadd_header,
+                ch_cadd_resources
+            )
+            ch_cadd_vcf = ANNOTATE_CADD.out.vcf
+            ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
+        }
 
         // If CADD is run, pick CADD output as input for VEP else pass selectvariants output to VEP.
         GATK4_SELECTVARIANTS.out.vcf
-            .join(ANNOTATE_CADD.out.vcf, remainder: true) // If CADD is not run then the third element in this channel will be `null`
+            .join(ch_cadd_vcf, remainder: true) // If CADD is not run then the third element in this channel will be `null`
             .branch { it  ->                              // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
                 selvar: it[2].equals(null)
                     return [it[0], it[1]]
@@ -158,7 +163,6 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(TABIX_BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions.first())
-        ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
         ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions.first())
         ch_versions = ch_versions.mix(TABIX_VEP.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
