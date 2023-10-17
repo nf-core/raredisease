@@ -388,6 +388,11 @@
                     "description": "Specifies whether or not to skip CNV calling.",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "skip_eklipse": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip eKLIPse.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "skip_qualimap": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip Qualimap.",
