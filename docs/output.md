@@ -261,7 +261,7 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 #### SVDB merge
 
-[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if skip_cnv_calling is set to false), Manta, and TIDDIT. Output files are published in the output folder.
+[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if skip_germlinecnvcaller is set to false), Manta, and TIDDIT. Output files are published in the output folder.
 
 <details markdown="1">
 <summary>Output files</summary>

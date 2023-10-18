@@ -31,31 +31,41 @@ workflow CALL_SNV {
         ch_pcr_indel_model    // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
 
     main:
-        ch_versions   = Channel.empty()
-        ch_vcf        = Channel.empty()
-        ch_tabix      = Channel.empty()
+        ch_versions     = Channel.empty()
+        ch_deepvar_vcf  = Channel.empty()
+        ch_deepvar_tbi  = Channel.empty()
+        ch_sentieon_vcf = Channel.empty()
+        ch_sentieon_tbi = Channel.empty()
 
-        CALL_SNV_DEEPVARIANT (      // triggered only when params.variant_caller is set as deepvariant
-            ch_genome_bam_bai,
-            ch_genome_fasta,
-            ch_genome_fai,
-            ch_case_info
-        )
+        if (params.variant_caller.equals("deepvariant")) {
+            CALL_SNV_DEEPVARIANT (      // triggered only when params.variant_caller is set as deepvariant
+                ch_genome_bam_bai,
+                ch_genome_fasta,
+                ch_genome_fai,
+                ch_case_info
+            )
+            ch_deepvar_vcf = CALL_SNV_DEEPVARIANT.out.vcf
+            ch_deepvar_tbi = CALL_SNV_DEEPVARIANT.out.tabix
+            ch_versions    = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
+        } else if (params.variant_caller.equals("sentieon")) {
+            CALL_SNV_SENTIEON(         // triggered only when params.variant_caller is set as sentieon
+                ch_genome_bam_bai,
+                ch_genome_fasta,
+                ch_genome_fai,
+                ch_dbsnp,
+                ch_dbsnp_tbi,
+                ch_call_interval,
+                ch_ml_model,
+                ch_case_info,
+                ch_pcr_indel_model
+            )
+            ch_sentieon_vcf = CALL_SNV_SENTIEON.out.vcf
+            ch_sentieon_tbi = CALL_SNV_SENTIEON.out.tabix
+            ch_versions    = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
+        }
 
-        CALL_SNV_SENTIEON(         // triggered only when params.variant_caller is set as sentieon
-            ch_genome_bam_bai,
-            ch_genome_fasta,
-            ch_genome_fai,
-            ch_dbsnp,
-            ch_dbsnp_tbi,
-            ch_call_interval,
-            ch_ml_model,
-            ch_case_info,
-            ch_pcr_indel_model
-        )
-
-        ch_vcf       = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.vcf, CALL_SNV_SENTIEON.out.vcf)
-        ch_tabix     = Channel.empty().mix(CALL_SNV_DEEPVARIANT.out.tabix, CALL_SNV_SENTIEON.out.tabix)
+        ch_vcf       = Channel.empty().mix(ch_deepvar_vcf, ch_sentieon_vcf)
+        ch_tabix     = Channel.empty().mix(ch_deepvar_tbi, ch_sentieon_tbi)
 
         ch_vcf
             .join(ch_tabix, failOnMismatch:true, failOnDuplicate:true)
@@ -93,8 +103,6 @@ workflow CALL_SNV {
             ch_case_info
         )
 
-        ch_versions = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
-        ch_versions = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
         ch_versions = ch_versions.mix(CALL_SNV_MT.out.versions)
         ch_versions = ch_versions.mix(CALL_SNV_MT_SHIFT.out.versions)
         ch_versions = ch_versions.mix(POSTPROCESS_MT_CALLS.out.versions)
