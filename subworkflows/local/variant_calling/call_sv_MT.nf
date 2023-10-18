@@ -18,6 +18,9 @@ workflow CALL_SV_MT {
 
         if (!params.skip_eklipse){
             EKLIPSE(ch_bam_bai,[])
+            ch_eklipse_del    = EKLIPSE.out.deletions
+            ch_eklipse_genes  = EKLIPSE.out.genes
+            ch_eklipse_circos = EKLIPSE.out.circos
             ch_versions = ch_versions.mix(EKLIPSE.out.versions.first())
        }
 
