@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Metromap and logos for light and dark theme [#432](https://github.com/nf-core/raredisease/pull/432)
 - New parameters to skip qualimap and eklipse (`--skip_qualimap` and `--skip_eklipse`) [#436](https://github.com/nf-core/raredisease/pull/436)
 - Fix "there is no process matching config selector warnings" [#435](https://github.com/nf-core/raredisease/pull/435)
+- New parameters to skip fastqc and haplocheck (`--skip_fastqc` and `--skip_haplocheck`) [#438](https://github.com/nf-core/raredisease/pull/438)
 
 ### `Changed`
 
