@@ -46,6 +46,6 @@ workflow CALL_SV_CNVNATOR {
         ch_versions = ch_versions.mix(CNVNATOR_CONVERT2VCF.out.versions)
 
     emit:
-        vcf        = CNVNATOR_CONVERT2VCF.out.vcf // channel: [ val(meta), path(*.tar.gz) ]
+        vcf        = SVDB_MERGE_CNVNATOR.out.vcf  // channel: [ val(meta), path(*.tar.gz) ]
         versions   = ch_versions                  // channel: [ versions.yml ]
 }
