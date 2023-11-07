@@ -27,6 +27,7 @@ process RETROSEQ_CALL {
     retroseq.pl \\
         -call \\
         -bam $bam \\
+        -input $input
         -ref $fasta \\
         -output ${prefix}.tab
 

@@ -33,7 +33,7 @@ input:
       pattern: "*.{tab}"
   - extra_files:
       type: file
-      description: Each file contains the coordinates of transposable elements of a particular type.
+      description: List of files. Each file contains the coordinates of transposable elements of a particular type.
 
 output:
   - meta:
