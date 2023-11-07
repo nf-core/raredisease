@@ -9,7 +9,7 @@ process RETROSEQ_CALL {
 
     input:
     tuple val(meta), path(bam), path(bai)
-    tuple val(meta), path(fasta) 
+    tuple val(meta), path(fasta)
 
     output:
     tuple val(meta), path("*.vcf"), emit: vcf
