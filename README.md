@@ -60,6 +60,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [Manta](https://github.com/Illumina/manta)
 - [TIDDIT's sv](https://github.com/SciLifeLab/TIDDIT)
 - Copy number variant calling:
+  - [CNVnator](https://github.com/abyzovlab/CNVnator)
   - [GATK GermlineCNVCaller](https://github.com/broadinstitute/gatk)
 
 **5. Annotation - SNV:**

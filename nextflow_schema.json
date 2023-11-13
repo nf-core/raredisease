@@ -395,7 +395,7 @@
                 },
                 "skip_germlinecnvcaller": {
                     "type": "boolean",
-                    "description": "Specifies whether or not to skip CNV calling.",
+                    "description": "Specifies whether or not to skip CNV calling using GATK's GermlineCNVCaller",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_eklipse": {
@@ -461,6 +461,12 @@
                     "format": "path",
                     "fa_icon": "fas fa-align-center",
                     "description": "Interval in the reference that will be used in the software"
+                },
+                "cnvnator_binsize": {
+                    "type": "number",
+                    "description": "Bin size for CNVnator",
+                    "default": "1000",
+                    "fa_icon": "fas fa-align-center"
                 },
                 "sentieon_dnascope_pcr_indel_model": {
                     "type": "string",

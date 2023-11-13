@@ -8,6 +8,7 @@ include { CALL_SV_MT as CALL_SV_MT_SHIFT } from './variant_calling/call_sv_MT'
 include { CALL_SV_TIDDIT                 } from './variant_calling/call_sv_tiddit'
 include { SVDB_MERGE                     } from '../../modules/nf-core/svdb/merge/main'
 include { CALL_SV_GERMLINECNVCALLER      } from './variant_calling/call_sv_germlinecnvcaller'
+include { CALL_SV_CNVNATOR               } from './variant_calling/call_sv_cnvnator'
 include { TABIX_TABIX                    } from '../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_STRUCTURAL_VARIANTS {
@@ -52,18 +53,25 @@ workflow CALL_STRUCTURAL_VARIANTS {
             ch_versions = ch_versions.mix(CALL_SV_GERMLINECNVCALLER.out.versions)
         }
 
+        CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_case_info)
+            .vcf
+            .collect{it[1]}
+            .set { cnvnator_vcf }
+
         CALL_SV_MT (ch_mt_bam_bai, ch_genome_fasta)
 
         //merge
         if (params.skip_germlinecnvcaller) {
             tiddit_vcf
                 .combine(manta_vcf)
+                .combine(cnvnator_vcf)
                 .toList()
                 .set { vcf_list }
         } else {
             tiddit_vcf
                 .combine(manta_vcf)
                 .combine(gcnvcaller_vcf)
+                .combine(cnvnator_vcf)
                 .toList()
                 .set { vcf_list }
         }

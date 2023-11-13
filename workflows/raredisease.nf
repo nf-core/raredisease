@@ -278,9 +278,9 @@ workflow RAREDISEASE {
 
     // SV caller priority
     if (params.skip_germlinecnvcaller) {
-        ch_svcaller_priority = Channel.value(["tiddit", "manta"])
+        ch_svcaller_priority = Channel.value(["tiddit", "manta", "cnvnator"])
     } else {
-        ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller"])
+        ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
     }
 
     // Input QC
