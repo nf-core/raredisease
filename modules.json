@@ -460,6 +460,11 @@
                         "git_sha": "9b159849d74f0eef251168c81c16da08215bbad5",
                         "installed_by": ["modules"]
                     },
+                    "vcf2cytosure": {
+                        "branch": "master",
+                        "git_sha": "2dba354d7c0a43a1e6d6ce26f408b4936d4ed619",
+                        "installed_by": ["modules"]
+                    },
                     "vcfanno": {
                         "branch": "master",
                         "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
