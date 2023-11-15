@@ -314,6 +314,10 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 [bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh) is a program for detecting runs of homo/autozygosity.from only bi-allelic sites. The output files are not published in the output folder, and is passed to vcfanno for further annotation.
 
+:::note
+In the case of running a quattro, i.e. two affected children and their parents, only one of the probands will be used for annotating regions of homozygosity. This is a know limitation that we are hoping to solve in a future release.
+:::
+
 #### vcfanno
 
 [vcfanno](https://github.com/brentp/vcfanno) allows you to quickly annotate your VCF with any number of INFO fields from any number of VCFs. It uses a simple configuration file to allow the user to specify the source annotation files and fields and how they will be added to the info of the query VCF. Values are pulled by name from the INFO field with special-cases of ID and FILTER to pull from those VCF columns. The output files are not published in the output folder, and is passed to CADD and/or VEP for further annotation.
