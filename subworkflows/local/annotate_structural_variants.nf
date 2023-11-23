@@ -61,14 +61,14 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         ch_vcf
             .join(SVDB_QUERY_DB.out.vcf, remainder: true)
             .branch { it  ->
-                call: it[2].equals(null)
+                original_call: it[2].equals(null)
                     return [it[0], it[1]]
-                db: !(it[2].equals(null))
+                annotated_with_db: !(it[2].equals(null))
                     return [it[0], it[2]]
             }
             .set { ch_for_mix_querydb }
 
-        ch_querydb_out = ch_for_mix_querydb.call.mix(ch_for_mix_querydb.db)
+        ch_querydb_out = ch_for_mix_querydb.original_call.mix(ch_for_mix_querydb.annotated_with_db)
 
         SVDB_QUERY_BEDPE (
             ch_querydb_out,
@@ -83,14 +83,14 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         ch_querydb_out
             .join(SVDB_QUERY_BEDPE.out.vcf, remainder: true)
             .branch { it  ->
-                db: it[2].equals(null)
+                querydb_out: it[2].equals(null)
                     return [it[0], it[1]]
-                bedped: !(it[2].equals(null))
+                annotated_with_bedped: !(it[2].equals(null))
                     return [it[0], it[2]]
             }
             .set { ch_for_mix_querybedpedb }
 
-        ch_querypedbed_out = ch_for_mix_querybedpedb.db.mix(ch_for_mix_querybedpedb.bedped)
+        ch_querypedbed_out = ch_for_mix_querybedpedb.querydb_out.mix(ch_for_mix_querybedpedb.annotated_with_bedped)
 
         PICARD_SORTVCF(ch_querypedbed_out, ch_genome_fasta, ch_genome_dictionary)
 
