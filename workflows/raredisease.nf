@@ -32,6 +32,7 @@ def mandatoryParams = [
     "variant_catalog",
     "variant_caller"
 ]
+def missingParamsCount = 0
 
 if (!params.skip_snv_annotation) {
     mandatoryParams += ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
@@ -39,7 +40,11 @@ if (!params.skip_snv_annotation) {
 }
 
 if (!params.skip_sv_annotation) {
-    mandatoryParams += ["genome", "svdb_query_dbs", "vep_cache", "vep_cache_version", "score_config_sv"]
+    mandatoryParams += ["genome", "vep_cache", "vep_cache_version", "score_config_sv"]
+    if (!params.svdb_query_bedpedbs && !params.svdb_query_dbs) {
+        println("params.svdb_query_bedpedbs or params.svdb_query_dbs should be set.")
+        missingParamsCount += 1
+    }
 }
 
 if (!params.skip_mt_annotation) {
@@ -62,7 +67,6 @@ if (!params.skip_vep_filter) {
     mandatoryParams += ["vep_filters"]
 }
 
-def missingParamsCount = 0
 for (param in mandatoryParams.unique()) {
     if (params[param] == null) {
         println("params." + param + " not set.")
@@ -258,6 +262,10 @@ workflow RAREDISEASE {
                                                                            : Channel.value([])
     ch_score_config_sv          = params.score_config_sv                   ? Channel.fromPath(params.score_config_sv).collect()
                                                                            : Channel.value([])
+    ch_sv_dbs                   = params.svdb_query_dbs                    ? Channel.fromPath(params.svdb_query_dbs)
+                                                                           : Channel.empty()
+    ch_sv_bedpedbs              = params.svdb_query_bedpedbs               ? Channel.fromPath(params.svdb_query_bedpedbs)
+                                                                           : Channel.empty()
     ch_target_bed               = ch_references.target_bed
     ch_target_intervals         = ch_references.target_intervals
     ch_variant_catalog          = params.variant_catalog                   ? Channel.fromPath(params.variant_catalog).map { it -> [[id:it[0].simpleName],it]}.collect()
@@ -401,8 +409,8 @@ workflow RAREDISEASE {
     if (!params.skip_sv_annotation) {
         ANNOTATE_STRUCTURAL_VARIANTS (
             CALL_STRUCTURAL_VARIANTS.out.vcf,
-            params.svdb_query_dbs,
-            params.svdb_query_bedpedbs,
+            ch_sv_dbs,
+            ch_sv_bedpedbs,
             params.genome,
             params.vep_cache_version,
             ch_vep_cache,

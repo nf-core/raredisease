@@ -14,7 +14,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
     take:
         ch_vcf                // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_sv_dbs             // channel: [mandatory] [ val(csv) ]
-        ch_sv_bedpedbs         // channel: [mandatory] [ val(csv) ]
+        ch_sv_bedpedbs        // channel: [mandatory] [ val(csv) ]
         val_vep_genome        // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version // string: [mandatory] default: 107
         ch_vep_cache          // channel: [mandatory] [ path(cache) ]
@@ -22,9 +22,11 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         ch_genome_dictionary  // channel: [mandatory] [ val(meta), path(dict) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions      = Channel.empty()
+        ch_svdb_dbs      = Channel.empty()
+        ch_svdb_bedpedbs = Channel.empty()
 
-        Channel.fromPath(ch_sv_dbs)
+        ch_sv_dbs
             .splitCsv ( header:true )
             .multiMap { row ->
                 vcf_dbs:  row.filename
@@ -35,7 +37,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             }
             .set { ch_svdb_dbs }
 
-        Channel.fromPath(ch_sv_bedpedbs)
+        ch_sv_bedpedbs
             .splitCsv ( header:true )
             .multiMap { row ->
                 bedpedbs: row.filename
