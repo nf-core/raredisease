@@ -176,9 +176,11 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 3. Repeat expansions
 
-| Mandatory       | Optional |
-| --------------- | -------- |
-| variant_catalog |          |
+| Mandatory                   | Optional |
+| --------------------------- | -------- |
+| variant_catalog<sup>1</sup> |          |
+
+<sup>1</sup> We reccomend using the catalogs found [here](https://github.com/Clinical-Genomics/reference-files/tree/master/rare-disease/disease_loci/ExpansionHunter-v5.0.0). These catalogs have been extended from the illumina ones to include information on pathogenicity, which is neccesarry for the workflow.
 
 ##### 4. Variant calling - SNV
 
