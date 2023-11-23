@@ -288,11 +288,19 @@
                     "pattern": "^\\S+\\.dict$",
                     "description": "Path to the genome dictionary file"
                 },
+                "svdb_query_bedpedbs": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Databases used for structural variant annotation in chrA-posA-chrB-posB-type-count-frequency format.",
+                    "fa_icon": "fas fa-file-csv",
+                    "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation."
+                },
                 "svdb_query_dbs": {
                     "type": "string",
                     "exists": true,
                     "format": "file-path",
-                    "description": "Databases used for structural variant annotation.",
+                    "description": "Databases used for structural variant annotation in vcf format.",
                     "fa_icon": "fas fa-file-csv",
                     "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation."
                 },

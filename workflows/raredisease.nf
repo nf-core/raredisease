@@ -402,6 +402,7 @@ workflow RAREDISEASE {
         ANNOTATE_STRUCTURAL_VARIANTS (
             CALL_STRUCTURAL_VARIANTS.out.vcf,
             params.svdb_query_dbs,
+            params.svdb_query_bedpedbs,
             params.genome,
             params.vep_cache_version,
             ch_vep_cache,
