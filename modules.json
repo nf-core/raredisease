@@ -102,7 +102,7 @@
                     },
                     "eklipse": {
                         "branch": "master",
-                        "git_sha": "39656f68219340420f03bd54a68e111c86e107e6",
+                        "git_sha": "0031772de29283811deb989a5b42d0310d35ec22",
                         "installed_by": ["modules"]
                     },
                     "ensemblvep/filtervep": {
@@ -417,7 +417,7 @@
                     },
                     "svdb/query": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "2a35cf4643135d51284236bc2835ee8b810c971d",
                         "installed_by": ["modules"]
                     },
                     "tabix/bgzip": {
