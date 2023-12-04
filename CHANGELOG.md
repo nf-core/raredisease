@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixes vep starting as many instances as the square of the number of scatters. [#405](https://github.com/nf-core/raredisease/pull/405)
 - Replaced the logic where we added an arbitrary substring to keep file names unique after alignment which we then removed using a split operator, with a simple copy operation. [#425](https://github.com/nf-core/raredisease/pull/425/files)
 - Preventing a crash of rhocall annotate in the case of running four individuals whereof two are affected.
+- Fixed memory qualifier in gatk4 germlinecnvcaller and postprocessgermlinecnvcalls
 
 ### `Updated`
 
