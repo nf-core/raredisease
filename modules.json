@@ -102,7 +102,7 @@
                     },
                     "eklipse": {
                         "branch": "master",
-                        "git_sha": "39656f68219340420f03bd54a68e111c86e107e6",
+                        "git_sha": "0031772de29283811deb989a5b42d0310d35ec22",
                         "installed_by": ["modules"]
                     },
                     "ensemblvep/filtervep": {
@@ -153,7 +153,8 @@
                     "gatk4/germlinecnvcaller": {
                         "branch": "master",
                         "git_sha": "8c4542e5d421c4690cf1fa6ec729e9304763fdaf",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/germlinecnvcaller/gatk4-germlinecnvcaller.diff"
                     },
                     "gatk4/intervallisttools": {
                         "branch": "master",
@@ -178,7 +179,8 @@
                     "gatk4/postprocessgermlinecnvcalls": {
                         "branch": "master",
                         "git_sha": "8c4542e5d421c4690cf1fa6ec729e9304763fdaf",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/postprocessgermlinecnvcalls/gatk4-postprocessgermlinecnvcalls.diff"
                     },
                     "gatk4/preprocessintervals": {
                         "branch": "master",
@@ -417,7 +419,7 @@
                     },
                     "svdb/query": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "2a35cf4643135d51284236bc2835ee8b810c971d",
                         "installed_by": ["modules"]
                     },
                     "tabix/bgzip": {

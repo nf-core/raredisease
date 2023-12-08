@@ -1,0 +1,14 @@
+Changes in module 'nf-core/gatk4/postprocessgermlinecnvcalls'
+--- modules/nf-core/gatk4/postprocessgermlinecnvcalls/main.nf
++++ modules/nf-core/gatk4/postprocessgermlinecnvcalls/main.nf
+@@ -35,7 +35,7 @@
+         avail_mem = (task.memory.mega*0.8).intValue()
+     }
+     """
+-    gatk --java-options "-Xmx${avail_mem}g" PostprocessGermlineCNVCalls \\
++    gatk --java-options "-Xmx${avail_mem}M" PostprocessGermlineCNVCalls \\
+         $calls_command \\
+         $model_command \\
+         $ploidy_command \\
+
+************************************************************
