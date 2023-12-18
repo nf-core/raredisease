@@ -12,20 +12,22 @@ include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS   } from '../../m
 include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y } from '../../modules/nf-core/picard/collectwgsmetrics/main'
 include { SENTIEON_WGSMETRICS                                                        } from '../../modules/nf-core/sentieon/wgsmetrics/main'
 include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_Y           } from '../../modules/nf-core/sentieon/wgsmetrics/main'
+include { NGSBITS_SAMPLEGENDER                                   } from '../../modules/nf-core/ngsbits/samplegender/main'
 
 workflow QC_BAM {
 
     take:
-        ch_bam              // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_bai              // channel: [mandatory] [ val(meta), path(bai) ]
-        ch_bam_bai          // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_genome_fasta     // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai       // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_bait_intervals   // channel: [mandatory] [ path(intervals_list) ]
-        ch_target_intervals // channel: [mandatory] [ path(intervals_list) ]
-        ch_chrom_sizes      // channel: [mandatory] [ path(sizes) ]
-        ch_intervals_wgs    // channel: [mandatory] [ path(intervals) ]
-        ch_intervals_y      // channel: [mandatory] [ path(intervals) ]
+        ch_bam                      // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_bai                      // channel: [mandatory] [ val(meta), path(bai) ]
+        ch_bam_bai                  // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_fasta             // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai               // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_bait_intervals           // channel: [mandatory] [ path(intervals_list) ]
+        ch_target_intervals         // channel: [mandatory] [ path(intervals_list) ]
+        ch_chrom_sizes              // channel: [mandatory] [ path(sizes) ]
+        ch_intervals_wgs            // channel: [mandatory] [ path(intervals) ]
+        ch_intervals_y              // channel: [mandatory] [ path(intervals) ]
+        ngsbits_samplegender_method // channel [val(method)]
 
     main:
         ch_versions = Channel.empty()
@@ -59,6 +61,9 @@ workflow QC_BAM {
         SENTIEON_WGSMETRICS ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs.map{ interval -> [[:], interval]} )
         SENTIEON_WGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y.map{ interval -> [[:], interval]} )
 
+        // Check sex
+        NGSBITS_SAMPLEGENDER(ch_bam_bai, ch_genome_fasta, ch_genome_fai, ngsbits_samplegender_method)
+
         ch_cov   = Channel.empty().mix(PICARD_COLLECTWGSMETRICS.out.metrics, SENTIEON_WGSMETRICS.out.wgs_metrics)
         ch_cov_y = Channel.empty().mix(PICARD_COLLECTWGSMETRICS_Y.out.metrics, SENTIEON_WGSMETRICS_Y.out.wgs_metrics)
 
@@ -67,6 +72,7 @@ workflow QC_BAM {
         ch_versions = ch_versions.mix(TIDDIT_COV.out.versions.first())
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions.first())
         ch_versions = ch_versions.mix(MOSDEPTH.out.versions.first())
+        ch_versions = ch_versions.mix(NGSBITS_SAMPLEGENDER.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS.out.versions.first(), SENTIEON_WGSMETRICS.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_Y.out.versions.first(), SENTIEON_WGSMETRICS_Y.out.versions.first())
 
@@ -78,6 +84,7 @@ workflow QC_BAM {
         bigwig           = UCSC_WIGTOBIGWIG.out.bw                   // channel: [ val(meta), path(bw) ]
         d4               = MOSDEPTH.out.per_base_d4                  // channel: [ val(meta), path(d4) ]
         global_dist      = MOSDEPTH.out.global_txt                   // channel: [ val(meta), path(txt) ]
+        sex_check        = NGSBITS_SAMPLEGENDER.out.tsv              // channel: [val(meta), path(tsv) ]
         cov              = ch_cov                                    // channel: [ val(meta), path(metrics) ]
         cov_y            = ch_cov_y                                  // channel: [ val(meta), path(metrics) ]
         versions         = ch_versions                               // channel: [ path(versions.yml) ]
