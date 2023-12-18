@@ -151,7 +151,7 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 1. Alignment
 
-| Mandatory                      | Optional                    |
+| Mandatory                      | Optional                       |
 | ------------------------------ | ------------------------------ |
 | aligner<sup>1</sup>            | fasta_fai<sup>3</sup>          |
 | fasta                          | bwamem2<sup>3</sup>            |

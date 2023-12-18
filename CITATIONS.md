@@ -49,6 +49,7 @@
   > Andrews, S. (2010). FastQC: A Quality Control Tool for High Throughput Sequence Data [Online].
 
 - [Fastp](https://github.com/OpenGene/fastp)
+
   > Shifu, C. (2023). Ultrafast one-pass FASTQ data preprocessing, quality control, and deduplication using fastp. iMeta 2: e107. https://doi.org/10.1002/imt2.107
 
 - [GATK](https://genome.cshlp.org/content/20/9/1297)
