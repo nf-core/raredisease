@@ -32,7 +32,7 @@ workflow ALIGN_MT {
         } else if (params.aligner.equals("sentieon")) {
             SENTIEON_BWAMEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, ch_fai )
             ch_sentieon_bam = SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, bai -> [meta, bam] }
-            ch_versions     = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
+            ch_versions     = ch_versions.mix(SENTIEON_BWAMEM_MT.out.versions.first())
         }
 
         Channel.empty()

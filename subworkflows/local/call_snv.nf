@@ -61,7 +61,7 @@ workflow CALL_SNV {
             )
             ch_sentieon_vcf = CALL_SNV_SENTIEON.out.vcf
             ch_sentieon_tbi = CALL_SNV_SENTIEON.out.tabix
-            ch_versions    = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
+            ch_versions    = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
         }
 
         ch_vcf       = Channel.empty().mix(ch_deepvar_vcf, ch_sentieon_vcf)
