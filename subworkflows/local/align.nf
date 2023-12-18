@@ -34,13 +34,13 @@ workflow ALIGN {
 
         if (!params.skip_fastp) {
             FASTP (ch_reads, [], false, false)
-            ch_input_reads = FASTP.out.reads
+            ch_reads = FASTP.out.reads
             ch_versions   = ch_versions.mix(FASTP.out.versions)
-        } else { ch_input_reads = ch_reads }
+        }
         
         if (params.aligner.equals("bwamem2")) {
             ALIGN_BWAMEM2 (             // Triggered when params.aligner is set as bwamem2
-                ch_input_reads,
+                ch_reads,
                 ch_genome_bwamem2index,
                 ch_genome_fasta,
                 ch_genome_fai,
@@ -51,7 +51,7 @@ workflow ALIGN {
             ch_versions   = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
         } else if (params.aligner.equals("sentieon")) {
             ALIGN_SENTIEON (            // Triggered when params.aligner is set as sentieon
-                ch_input_reads,
+                ch_reads,
                 ch_genome_fasta,
                 ch_genome_fai,
                 ch_genome_bwaindex,
