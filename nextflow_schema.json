@@ -386,6 +386,13 @@
                     "fa_icon": "fas fa-align-center",
                     "enum": ["illumina"]
                 },
+                "ngsbits_samplegender_method": {
+                    "type": "string",
+                    "default": "xy",
+                    "enum": ["xy", "hetx", "sry"],
+                    "description": "Method selection for ngs-bits samplegender",
+                    "fa_icon": "fas fa-align-center"
+                },
                 "save_mapped_as_cram": {
                     "type": "boolean",
                     "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
@@ -473,7 +480,7 @@
                 "cnvnator_binsize": {
                     "type": "number",
                     "description": "Bin size for CNVnator",
-                    "default": "1000",
+                    "default": 1000,
                     "fa_icon": "fas fa-align-center"
                 },
                 "sentieon_dnascope_pcr_indel_model": {

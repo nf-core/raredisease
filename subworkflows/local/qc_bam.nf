@@ -17,16 +17,17 @@ include { NGSBITS_SAMPLEGENDER                                   } from '../../m
 workflow QC_BAM {
 
     take:
-        ch_bam              // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_bai              // channel: [mandatory] [ val(meta), path(bai) ]
-        ch_bam_bai          // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_genome_fasta     // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai       // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_bait_intervals   // channel: [mandatory] [ path(intervals_list) ]
-        ch_target_intervals // channel: [mandatory] [ path(intervals_list) ]
-        ch_chrom_sizes      // channel: [mandatory] [ path(sizes) ]
-        ch_intervals_wgs    // channel: [mandatory] [ path(intervals) ]
-        ch_intervals_y      // channel: [mandatory] [ path(intervals) ]
+        ch_bam                      // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_bai                      // channel: [mandatory] [ val(meta), path(bai) ]
+        ch_bam_bai                  // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_fasta             // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai               // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_bait_intervals           // channel: [mandatory] [ path(intervals_list) ]
+        ch_target_intervals         // channel: [mandatory] [ path(intervals_list) ]
+        ch_chrom_sizes              // channel: [mandatory] [ path(sizes) ]
+        ch_intervals_wgs            // channel: [mandatory] [ path(intervals) ]
+        ch_intervals_y              // channel: [mandatory] [ path(intervals) ]
+        ngsbits_samplegender_method // channel [val(method)]
 
     main:
         ch_versions = Channel.empty()
@@ -61,7 +62,7 @@ workflow QC_BAM {
         SENTIEON_WGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y.map{ interval -> [[:], interval]} )
 
         // Check sex
-        NGSBITS_SAMPLEGENDER(ch_bam_bai, ch_genome_fasta, ch_genome_fai, "xy")
+        NGSBITS_SAMPLEGENDER(ch_bam_bai, ch_genome_fasta, ch_genome_fai, ngsbits_samplegender_method)
 
         ch_cov   = Channel.empty().mix(PICARD_COLLECTWGSMETRICS.out.metrics, SENTIEON_WGSMETRICS.out.wgs_metrics)
         ch_cov_y = Channel.empty().mix(PICARD_COLLECTWGSMETRICS_Y.out.metrics, SENTIEON_WGSMETRICS_Y.out.wgs_metrics)
