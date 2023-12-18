@@ -53,7 +53,7 @@
             "properties": {
                 "bait_padding": {
                     "type": "number",
-                    "default": 100,
+                    "default": 100.0,
                     "fa_icon": "fas fa-align-center",
                     "pattern": "^\\S+\\.bed(\\.gz)?$",
                     "description": "The amount to pad each end of the target intervals to create bait intervals."
@@ -396,6 +396,11 @@
                     "description": "Specifies whether or not to skip FASTQC.",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "skip_fastp": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip trimming with fastp.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "skip_haplocheck": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip haplocheck.",
@@ -451,6 +456,13 @@
                     "fa_icon": "fas fa-align-center",
                     "enum": ["bwamem2", "sentieon"]
                 },
+                "min_trimmed_length": {
+                    "type": "integer",
+                    "default": 40,
+                    "description": "Discard trimmed reads shorter than this",
+                    "help_text": "Minimum length of reads after adapter trimming. Shorter reads are discarded. The program default is 15 bp.  ",
+                    "fa_icon": "fas fa-less-than"
+                },
                 "rmdup": {
                     "type": "boolean",
                     "description": "Specifies whether duplicates reads should be removed prior to variant calling.",
@@ -473,7 +485,7 @@
                 "cnvnator_binsize": {
                     "type": "number",
                     "description": "Bin size for CNVnator",
-                    "default": "1000",
+                    "default": 1000.0,
                     "fa_icon": "fas fa-align-center"
                 },
                 "sentieon_dnascope_pcr_indel_model": {

@@ -2,6 +2,7 @@
 // Map to reference
 //
 
+include { FASTP                      } from '../../modules/nf-core/fastp/main'
 include { ALIGN_BWAMEM2              } from './alignment/align_bwamem2'
 include { ALIGN_SENTIEON             } from './alignment/align_sentieon'
 include { SAMTOOLS_VIEW              } from '../../modules/nf-core/samtools/view/main'
@@ -31,9 +32,17 @@ workflow ALIGN {
         ch_bwamem2_bai    = Channel.empty()
         ch_sentieon_bai   = Channel.empty()
 
+        if (!params.skip_germlinecnvcaller) {
+            FASTP(ch_reads, [], false, false)
+            ch_input_reads = FASTP.out.reads
+            ch_versions   = ch_versions.mix(FASTP.out.versions)
+        } else { ch_input_reads = ch_reads }
+        
+        //ch_input_reads.view()
+
         if (params.aligner.equals("bwamem2")) {
             ALIGN_BWAMEM2 (             // Triggered when params.aligner is set as bwamem2
-                ch_reads,
+                ch_input_reads,
                 ch_genome_bwamem2index,
                 ch_genome_fasta,
                 ch_genome_fai,
@@ -44,7 +53,7 @@ workflow ALIGN {
             ch_versions   = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
         } else if (params.aligner.equals("sentieon")) {
             ALIGN_SENTIEON (            // Triggered when params.aligner is set as sentieon
-                ch_reads,
+                ch_input_reads,
                 ch_genome_fasta,
                 ch_genome_fai,
                 ch_genome_bwaindex,
