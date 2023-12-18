@@ -35,6 +35,7 @@ params.known_dbsnp                    = WorkflowMain.getGenomeAttribute(params, 
 params.known_dbsnp_tbi                = WorkflowMain.getGenomeAttribute(params, 'known_dbsnp_tbi')
 params.ml_model                       = WorkflowMain.getGenomeAttribute(params, 'ml_model')
 params.mt_fasta                       = WorkflowMain.getGenomeAttribute(params, 'mt_fasta')
+params.ngsbits_samplegender_method    = WorkflowMain.getGenomeAttribute(params, 'ngsbits_samplegender_method')
 params.ploidy_model                   = WorkflowMain.getGenomeAttribute(params, 'ploidy_model')
 params.reduced_penetrance             = WorkflowMain.getGenomeAttribute(params, 'reduced_penetrance')
 params.readcount_intervals            = WorkflowMain.getGenomeAttribute(params, 'readcount_intervals')

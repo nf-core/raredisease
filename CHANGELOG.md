@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CNVnator for copy number variant calling [#438](https://github.com/nf-core/raredisease/pull/434)
 - A new parameter `svdb_query_bedpedbs` to provide bedpe files as databases for SVDB query [#449](https://github.com/nf-core/raredisease/pull/449)
 - Fastp to do adapter trimming. It can be skipped using`--skip_fastp`[#457](https://github.com/nf-core/raredisease/pull/457)
+- ngsbits samplegender to check sex [#453] (https://github.com/nf-core/raredisease/pull/453)
 
 ### `Changed`
 
@@ -48,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced the logic where we added an arbitrary substring to keep file names unique after alignment which we then removed using a split operator, with a simple copy operation. [#425](https://github.com/nf-core/raredisease/pull/425/files)
 - Preventing a crash of rhocall annotate in the case of running four individuals whereof two are affected.
 - Fixed memory qualifier in gatk4 germlinecnvcaller and postprocessgermlinecnvcalls
+- Fixed wrong process names when outputting versions in `ALIGN_SENTIEON` and `CALL_SNV`.
 
 ### `Updated`
 
