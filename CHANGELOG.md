@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New parameters to skip fastqc and haplocheck (`--skip_fastqc` and `--skip_haplocheck`) [#438](https://github.com/nf-core/raredisease/pull/438)
 - CNVnator for copy number variant calling [#438](https://github.com/nf-core/raredisease/pull/434)
 - A new parameter `svdb_query_bedpedbs` to provide bedpe files as databases for SVDB query [#449](https://github.com/nf-core/raredisease/pull/449)
-- Fastp to do adapter trimming. It can be skipped using`--skip_fastp`[#457](https://github.com/nf-core/raredisease/pull/457)
+- Fastp to do adapter trimming. It can be skipped using `--skip_fastp` [#457](https://github.com/nf-core/raredisease/pull/457)
 - ngsbits samplegender to check sex [#453] (https://github.com/nf-core/raredisease/pull/453)
 
 ### `Changed`

@@ -32,14 +32,12 @@ workflow ALIGN {
         ch_bwamem2_bai    = Channel.empty()
         ch_sentieon_bai   = Channel.empty()
 
-        if (!params.skip_germlinecnvcaller) {
-            FASTP(ch_reads, [], false, false)
+        if (!params.skip_fastp) {
+            FASTP (ch_reads, [], false, false)
             ch_input_reads = FASTP.out.reads
             ch_versions   = ch_versions.mix(FASTP.out.versions)
         } else { ch_input_reads = ch_reads }
         
-        //ch_input_reads.view()
-
         if (params.aligner.equals("bwamem2")) {
             ALIGN_BWAMEM2 (             // Triggered when params.aligner is set as bwamem2
                 ch_input_reads,
