@@ -326,7 +326,8 @@
                     "help_text": "Optional file to blacklist regions for VCF2cytosure",
                     "pattern": "^\\S+\\.bed$",
                     "format": "file-path",
-                    "fa_icon": "fas fa-file"
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to vcf2cytosure blacklist file"
                 },
                 "vcfanno_resources": {
                     "type": "string",
@@ -452,7 +453,6 @@
                 },
                 "vcf2cytosure_switch": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Turn on the vcf2cytosure subworkflow",
                     "fa_icon": "fas fa-toggle-on",
                     "help_text": "vcf2cytosure can generate CGH files from a structural variant VCF file that can be analysed in the CytoSure interpretation software. Cut offs for allele frequencies and bin sizes can be modified in the config file. Turned off by default."
