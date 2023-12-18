@@ -342,7 +342,8 @@ workflow RAREDISEASE {
         ch_target_intervals,
         ch_genome_chrsizes,
         ch_intervals_wgs,
-        ch_intervals_y
+        ch_intervals_y,
+        Channel.value(params.ngsbits_samplegender_method)
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions)
 
