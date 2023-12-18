@@ -2,33 +2,41 @@
 // Convert VCF with structural variations to the “.CGH” format used by the CytoSure Interpret Software
 //
 
-include { TIDDIT_COV   } from '../../modules/nf-core/tiddit/cov/main'
-include { VCF2CYTOSURE } from '../modules/nf-core/vcf2cytosure/main'
+include { BCFTOOLS_VIEW as SPLIT_AND_FILTER_SV_VCF } from '../../modules/nf-core/bcftools/view/main'
+include { TIDDIT_COV as TIDDIT_COV_VCF2CYTOSURE    } from '../../modules/nf-core/tiddit/cov/main'
+include { VCF2CYTOSURE                             } from '../../modules/nf-core/vcf2cytosure/main'
 
-workflow SV_VCF_TO_CYTOSURE {
+workflow GENERATE_CYTOSURE_FILES {
     take:
         ch_vcf  // channel: [mandatory] [ val(meta), path(vcf), path(vcf_index) ]
-        ch_bam   // channel: [mandatory] [ path(bam) ]
+        ch_bam  // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_blacklist // channel: [optional] [path(blacklist)]
 
     main:
         ch_versions = Channel.empty()
 
-        TIDDIT_COV (ch_bam, [[],[]]) // 2nd pos. arg is req. only for cram input
+        TIDDIT_COV_VCF2CYTOSURE (ch_bam, [[],[]])
 
-        ch_vcf.dump(tag: 'vcf_channel', pretty: true)
+        // Build channel: [val(sample_meta). path(vcf), path(vcf_index)]
+        ch_bam.combine(ch_vcf).map {
+            meta_sample, bam, meta_case, vcf, tbi ->
+            return [ meta_sample, vcf, tbi ]
+        }.set { ch_sample_vcf }
 
+        // Split vcf into sample vcf:s and frequency filter
+        SPLIT_AND_FILTER_SV_VCF ( ch_sample_vcf, [], [], [] )
 
+        VCF2CYTOSURE (
+            SPLIT_AND_FILTER_SV_VCF.out.vcf,
+            TIDDIT_COV_VCF2CYTOSURE.out.cov,
+            [[], []], [[], []],
+            ch_blacklist
+        )
 
-        // Split vcf in samples combine and drop 
-
-        // run vcf2cytosure samplevise
-
-
-        [id:sample, [vcf]]
-
-
-        ch_versions = ch_versions.mix(TIDDIT_COV.out.versions.first())
+        ch_versions = ch_versions.mix(TIDDIT_COV_VCF2CYTOSURE.out.versions.first())
+        ch_versions = ch_versions.mix(SPLIT_AND_FILTER_SV_VCF.out.versions.first())
+        ch_versions = ch_versions.mix(VCF2CYTOSURE.out.versions.first())
 
     emit:
-        versions = ch_versions   // channel: [ versions.yml ]
+        versions = ch_versions // channel: [ versions.yml ]
 }

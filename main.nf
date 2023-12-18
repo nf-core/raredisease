@@ -46,6 +46,7 @@ params.svdb_query_dbs                 = WorkflowMain.getGenomeAttribute(params, 
 params.target_bed                     = WorkflowMain.getGenomeAttribute(params, 'target_bed')
 params.variant_catalog                = WorkflowMain.getGenomeAttribute(params, 'variant_catalog')
 params.vep_filters                    = WorkflowMain.getGenomeAttribute(params, 'vep_filters')
+params.vcf2cytosure_blacklist         = WorkflowMain.getGenomeAttribute(params, 'vcf2cytosure_blacklist')
 params.vcfanno_resources              = WorkflowMain.getGenomeAttribute(params, 'vcfanno_resources')
 params.vcfanno_toml                   = WorkflowMain.getGenomeAttribute(params, 'vcfanno_toml')
 params.vcfanno_lua                    = WorkflowMain.getGenomeAttribute(params, 'vcfanno_lua')

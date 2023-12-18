@@ -12,7 +12,7 @@ process VCF2CYTOSURE {
     tuple val(meta2), path(coverage_bed)
     tuple val(meta3), path(cns)
     tuple val(meta4), path(snv_vcf)
-    path blacklist_bed
+    path(blacklist_bed)
 
     output:
     tuple val(meta), path("*.cgh"), emit: cgh

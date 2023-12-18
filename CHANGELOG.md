@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New parameters to skip fastqc and haplocheck (`--skip_fastqc` and `--skip_haplocheck`) [#438](https://github.com/nf-core/raredisease/pull/438)
 - CNVnator for copy number variant calling [#438](https://github.com/nf-core/raredisease/pull/434)
 - A new parameter `svdb_query_bedpedbs` to provide bedpe files as databases for SVDB query [#449](https://github.com/nf-core/raredisease/pull/449)
+- New workflow for generating cgh files frm SV vcfs for interpretation in the CytosSure interpretation software. Turned off by default
 
 ### `Changed`
 

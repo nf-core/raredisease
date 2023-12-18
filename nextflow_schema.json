@@ -321,6 +321,13 @@
                     "help_text": "Should be Stranger's extended JSON as described at https://github.com/Clinical-Genomics/stranger/blob/master/stranger/resources/variant_catalog_grch37.json. This file is used by both ExpansionHunter and Stranger",
                     "fa_icon": "fas fa-file"
                 },
+                "vcf2cytosure_blacklist": {
+                    "type": "string",
+                    "help_text": "Optional file to blacklist regions for VCF2cytosure",
+                    "pattern": "^\\S+\\.bed$",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file"
+                },
                 "vcfanno_resources": {
                     "type": "string",
                     "exists": true,
@@ -435,6 +442,13 @@
                     "type": "boolean",
                     "description": "Specifies whether or not to filter results based on a list of candidate genes specified in 'vep_filters'.",
                     "fa_icon": "fas fa-toggle-on"
+                },
+                "vcf2cytosure_switch": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Turn on the vcf2cytosure subworkflow",
+                    "fa_icon": "fas fa-toggle-on",
+                    "help_text": "vcf2cytosure can generate CGH files from a structural variant VCF file that can be analysed in the CytoSure interpretation software. Cut offs for allele frequencies and bin sizes can be modified in the config file. Turned off by default."
                 }
             }
         },
@@ -473,7 +487,7 @@
                 "cnvnator_binsize": {
                     "type": "number",
                     "description": "Bin size for CNVnator",
-                    "default": "1000",
+                    "default": 1000,
                     "fa_icon": "fas fa-align-center"
                 },
                 "sentieon_dnascope_pcr_indel_model": {
