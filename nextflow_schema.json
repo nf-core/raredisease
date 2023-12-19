@@ -446,16 +446,17 @@
                     "description": "Specifies whether or not to skip annotate structural variant subworkflow.",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "skip_vcf2cytosure": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Specifies whether or not to skip the vcf2cytosure subworkflow",
+                    "help_text": "vcf2cytosure can generate CGH files from a structural variant VCF file that can be analysed in the CytoSure interpretation software. Cut-offs for allele frequencies and bin sizes can be modified in the config file. Turned off by default.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "skip_vep_filter": {
                     "type": "boolean",
                     "description": "Specifies whether or not to filter results based on a list of candidate genes specified in 'vep_filters'.",
                     "fa_icon": "fas fa-toggle-on"
-                },
-                "vcf2cytosure_switch": {
-                    "type": "boolean",
-                    "description": "Turn on the vcf2cytosure subworkflow",
-                    "fa_icon": "fas fa-toggle-on",
-                    "help_text": "vcf2cytosure can generate CGH files from a structural variant VCF file that can be analysed in the CytoSure interpretation software. Cut offs for allele frequencies and bin sizes can be modified in the config file. Turned off by default."
                 }
             }
         },

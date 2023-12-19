@@ -570,7 +570,7 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
 
     // Generate CGH files from sequencing data, turned off by default
-    if ( params.vcf2cytosure_switch && params.analysis_type != "wes" ) {
+    if ( !params.skip_vcf2cytosure && params.analysis_type != "wes" ) {
         GENERATE_CYTOSURE_FILES (
             BGZIPTABIX_SV.out.gz_tbi,
             ch_mapped.genome_marked_bam,

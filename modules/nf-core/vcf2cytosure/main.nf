@@ -56,7 +56,7 @@ process VCF2CYTOSURE {
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
-    touch ${prefix}.xml
+    touch ${prefix}.cgh
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

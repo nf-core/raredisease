@@ -8,8 +8,8 @@ include { VCF2CYTOSURE                             } from '../../modules/nf-core
 
 workflow GENERATE_CYTOSURE_FILES {
     take:
-        ch_vcf  // channel: [mandatory] [ val(meta), path(vcf), path(vcf_index) ]
-        ch_bam  // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_vcf       // channel: [mandatory] [ val(meta), path(vcf), path(vcf_index) ]
+        ch_bam       // channel: [mandatory] [ val(meta), path(bam) ]
         ch_blacklist // channel: [optional] [path(blacklist)]
 
     main:
@@ -29,7 +29,7 @@ workflow GENERATE_CYTOSURE_FILES {
         VCF2CYTOSURE (
             SPLIT_AND_FILTER_SV_VCF.out.vcf,
             TIDDIT_COV_VCF2CYTOSURE.out.cov,
-            [[], []], [[], []],
+            [[:], []], [[:], []],
             ch_blacklist
         )
 
