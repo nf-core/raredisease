@@ -45,6 +45,7 @@ params.score_config_snv               = WorkflowMain.getGenomeAttribute(params, 
 params.score_config_sv                = WorkflowMain.getGenomeAttribute(params, 'score_config_sv')
 params.svdb_query_dbs                 = WorkflowMain.getGenomeAttribute(params, 'svdb_query_dbs')
 params.target_bed                     = WorkflowMain.getGenomeAttribute(params, 'target_bed')
+params.min_trimmed_length             = WorkflowMain.getGenomeAttribute(params, 'min_trimmed_length')
 params.variant_catalog                = WorkflowMain.getGenomeAttribute(params, 'variant_catalog')
 params.vep_filters                    = WorkflowMain.getGenomeAttribute(params, 'vep_filters')
 params.vcfanno_resources              = WorkflowMain.getGenomeAttribute(params, 'vcfanno_resources')
