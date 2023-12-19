@@ -52,7 +52,7 @@
             "description": "Reference genome related files and options required for the workflow.",
             "properties": {
                 "bait_padding": {
-                    "type": "number",
+                    "type": "integer",
                     "default": 100,
                     "fa_icon": "fas fa-align-center",
                     "pattern": "^\\S+\\.bed(\\.gz)?$",
@@ -411,6 +411,11 @@
                     "description": "Specifies whether or not to skip FASTQC.",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "skip_fastp": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip trimming with fastp.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "skip_haplocheck": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip haplocheck.",
@@ -472,6 +477,13 @@
                     "description": "Specifies the alignment algorithm to use - available options are 'bwamem2' and 'sentieon'.",
                     "fa_icon": "fas fa-align-center",
                     "enum": ["bwamem2", "sentieon"]
+                },
+                "min_trimmed_length": {
+                    "type": "integer",
+                    "default": 40,
+                    "description": "Discard trimmed reads shorter than this",
+                    "help_text": "Minimum length of reads after adapter trimming. Shorter reads are discarded. The program default is 15 bp.  ",
+                    "fa_icon": "fas fa-less-than"
                 },
                 "rmdup": {
                     "type": "boolean",
