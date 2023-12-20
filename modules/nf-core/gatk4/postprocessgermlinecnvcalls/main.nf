@@ -41,7 +41,8 @@ process GATK4_POSTPROCESSGERMLINECNVCALLS {
         $ploidy_command \\
         --output-genotyped-intervals ${prefix}_genotyped_intervals.vcf.gz \\
         --output-genotyped-segments ${prefix}_genotyped_segments.vcf.gz \\
-        --output-denoised-copy-ratios ${prefix}_denoised.vcf.gz
+        --output-denoised-copy-ratios ${prefix}_denoised.vcf.gz \\
+        --sites-only-vcf-output
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
