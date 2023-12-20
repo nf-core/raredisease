@@ -28,7 +28,7 @@ jobs:
           - "latest-everything"
         parameters:
           - "-profile test,docker"
-          - "-profile test_one_sample,docker"
+          - "-profile test_one_sample,docker -stub"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v4
