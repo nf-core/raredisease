@@ -12,7 +12,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
         ch_bam_bai             // channel: [mandatory][ val(meta), path(bam), path(bai) ]
         ch_fasta               // channel: [mandatory][ val(meta), path(ch_fasta_no_meta) ]
         ch_fai                 // channel: [mandatory][ val(meta), path(ch_fai) ]
-        ch_readcount_intervals // channel: [mandatory][ val(meta), path(bed), path(tbi) ]
+        ch_readcount_intervals // channel: [mandatory][ path(intervals) ]
         ch_genome_dictionary   // channel: [mandatory][ val(meta), path(ch_dict) ]
         ch_ploidy_model        // channel: [mandatory][ path(ch_ploidy_model) ]
         ch_gcnvcaller_model    // channel: [mandatory][ path(ch_gcnvcaller_model) ]
@@ -20,7 +20,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
     main:
         ch_versions = Channel.empty()
 
-        input = ch_bam_bai.combine( ch_readcount_intervals.collect{ it[1] } )
+        input = ch_bam_bai.combine( ch_readcount_intervals )
 
         GATK4_COLLECTREADCOUNTS ( input, ch_fasta, ch_fai, ch_genome_dictionary )
 
