@@ -134,6 +134,8 @@
 
   > Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D. BigWig and BigBed: enabling browsing of large distributed datasets. Bioinformatics. 2010;26(17):2204-2207. doi:10.1093/bioinformatics/btq351
 
+- [vcf2cytosure](https://github.com/NBISweden/vcf2cytosure)
+
 - [Vcfanno](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0973-5)
 
   > Pedersen BS, Layer RM, Quinlan AR. Vcfanno: fast, flexible annotation of genetic variants. Genome Biol. 2016;17(1):118. doi:10.1186/s13059-016-0973-5

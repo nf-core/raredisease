@@ -124,14 +124,15 @@ include { ANNOTATE_STRUCTURAL_VARIANTS          } from '../subworkflows/local/an
 include { CALL_REPEAT_EXPANSIONS                } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                              } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS              } from '../subworkflows/local/call_structural_variants'
+include { GENERATE_CYTOSURE_FILES               } from '../subworkflows/local/generate_cytosure_files'
 include { GENS                                  } from '../subworkflows/local/gens'
+include { PEDDY_CHECK                           } from '../subworkflows/local/peddy_check'
 include { PREPARE_REFERENCES                    } from '../subworkflows/local/prepare_references'
 include { QC_BAM                                } from '../subworkflows/local/qc_bam'
 include { RANK_VARIANTS as RANK_VARIANTS_MT     } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SNV    } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SV     } from '../subworkflows/local/rank_variants'
 include { SCATTER_GENOME                        } from '../subworkflows/local/scatter_genome'
-include { PEDDY_CHECK                           } from '../subworkflows/local/peddy_check'
 
 
 /*
@@ -272,6 +273,8 @@ workflow RAREDISEASE {
                                                                            : Channel.value([[],[]])
     ch_variant_consequences     = Channel.fromPath("$projectDir/assets/variant_consequences_v1.txt", checkIfExists: true).collect()
     ch_vcfanno_resources        = params.vcfanno_resources                 ? Channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
+                                                                           : Channel.value([])
+    ch_vcf2cytosure_blacklist   = params.vcf2cytosure_blacklist            ? Channel.fromPath(params.vcf2cytosure_blacklist).collect()
                                                                            : Channel.value([])
     ch_vcfanno_lua              = params.vcfanno_lua                       ? Channel.fromPath(params.vcfanno_lua).collect()
                                                                            : Channel.value([])
@@ -565,6 +568,16 @@ workflow RAREDISEASE {
         ch_pedfile
     )
     ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
+
+    // Generate CGH files from sequencing data, turned off by default
+    if ( !params.skip_vcf2cytosure && params.analysis_type != "wes" ) {
+        GENERATE_CYTOSURE_FILES (
+            BGZIPTABIX_SV.out.gz_tbi,
+            ch_mapped.genome_marked_bam,
+            ch_vcf2cytosure_blacklist
+        )
+        ch_versions = ch_versions.mix(GENERATE_CYTOSURE_FILES.out.versions)
+    }
 
     // GENS
     if (params.gens_switch) {

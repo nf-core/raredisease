@@ -321,6 +321,14 @@
                     "help_text": "Should be Stranger's extended JSON as described at https://github.com/Clinical-Genomics/stranger/blob/master/stranger/resources/variant_catalog_grch37.json. This file is used by both ExpansionHunter and Stranger",
                     "fa_icon": "fas fa-file"
                 },
+                "vcf2cytosure_blacklist": {
+                    "type": "string",
+                    "help_text": "Optional file to blacklist regions for VCF2cytosure",
+                    "pattern": "^\\S+\\.bed$",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to vcf2cytosure blacklist file"
+                },
                 "vcfanno_resources": {
                     "type": "string",
                     "exists": true,
@@ -441,6 +449,13 @@
                 "skip_sv_annotation": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip annotate structural variant subworkflow.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_vcf2cytosure": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Specifies whether or not to skip the vcf2cytosure subworkflow",
+                    "help_text": "vcf2cytosure can generate CGH files from a structural variant VCF file that can be analysed in the CytoSure interpretation software. Cut-offs for allele frequencies and bin sizes can be modified in the config file. Turned off by default.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_vep_filter": {
