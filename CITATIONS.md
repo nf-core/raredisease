@@ -48,6 +48,10 @@
 
   > Andrews, S. (2010). FastQC: A Quality Control Tool for High Throughput Sequence Data [Online].
 
+- [Fastp](https://github.com/OpenGene/fastp)
+
+  > Shifu, C. (2023). Ultrafast one-pass FASTQ data preprocessing, quality control, and deduplication using fastp. iMeta 2: e107. https://doi.org/10.1002/imt2.107
+
 - [GATK](https://genome.cshlp.org/content/20/9/1297)
 
   > McKenna A, Hanna M, Banks E, et al. The Genome Analysis Toolkit: A MapReduce framework for analyzing next-generation DNA sequencing data. Genome Res. 2010;20(9):1297-1303. doi:10.1101/gr.107524.110
@@ -129,6 +133,8 @@
 - [UCSC Bigwig and Bigbed](https://academic.oup.com/bioinformatics/article/26/17/2204/199001?login=true)
 
   > Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D. BigWig and BigBed: enabling browsing of large distributed datasets. Bioinformatics. 2010;26(17):2204-2207. doi:10.1093/bioinformatics/btq351
+
+- [vcf2cytosure](https://github.com/NBISweden/vcf2cytosure)
 
 - [Vcfanno](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0973-5)
 

@@ -115,6 +115,11 @@
                         "git_sha": "0260e5d22372eae434816d6970dedf3f5adc0053",
                         "installed_by": ["modules"]
                     },
+                    "fastp": {
+                        "branch": "master",
+                        "git_sha": "3c77ca9aac783e76c3614a06db3bfe4fef619bde",
+                        "installed_by": ["modules"]
+                    },
                     "fastqc": {
                         "branch": "master",
                         "git_sha": "bd8092b67b5103bdd52e300f75889442275c3117",
@@ -445,7 +450,8 @@
                     "tiddit/cov": {
                         "branch": "master",
                         "git_sha": "1c90a501d102b800c27697f5ef39a6e217ab1915",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/tiddit/cov/tiddit-cov.diff"
                     },
                     "tiddit/sv": {
                         "branch": "master",
@@ -466,6 +472,12 @@
                         "branch": "master",
                         "git_sha": "9b159849d74f0eef251168c81c16da08215bbad5",
                         "installed_by": ["modules"]
+                    },
+                    "vcf2cytosure": {
+                        "branch": "master",
+                        "git_sha": "2dba354d7c0a43a1e6d6ce26f408b4936d4ed619",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/vcf2cytosure/vcf2cytosure.diff"
                     },
                     "vcfanno": {
                         "branch": "master",

@@ -1,0 +1,26 @@
+Changes in module 'nf-core/tiddit/cov'
+--- modules/nf-core/tiddit/cov/meta.yml
++++ modules/nf-core/tiddit/cov/meta.yml
+@@ -44,7 +44,7 @@
+   - cov:
+       type: file
+       description: The coverage of different regions. Optional.
+-      pattern: "*.tab"
++      pattern: "*.bed"
+   - wig:
+       type: file
+       description: The coverage of different regions in WIG format. Optional.
+
+--- modules/nf-core/tiddit/cov/main.nf
++++ modules/nf-core/tiddit/cov/main.nf
+@@ -41,7 +41,7 @@
+     def prefix = task.ext.prefix ?: "${meta.id}"
+     """
+     touch ${prefix}.wig
+-    touch ${prefix}.tab
++    touch ${prefix}.bed
+ 
+     cat <<-END_VERSIONS > versions.yml
+     "${task.process}":
+
+************************************************************
