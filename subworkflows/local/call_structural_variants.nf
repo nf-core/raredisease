@@ -46,7 +46,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
         if (!params.skip_germlinecnvcaller) {
             CALL_SV_GERMLINECNVCALLER (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model)
-                .genotyped_segments_vcf
+                .genotyped_filtered_segments_vcf
                 .collect{it[1]}
                 .set { gcnvcaller_vcf }
 
