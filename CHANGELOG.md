@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Use `nf-validation` plugin for parameter and samplesheet validation [#386](https://github.com/nf-core/raredisease/pull/386)
 - A new parameter to skip filtering based on vep results [#416](https://github.com/nf-core/raredisease/pull/416)
+- A `metromap` representating the core parts of the pipeline [#428](https://github.com/nf-core/raredisease/pull/428)
+- Metromap and logos for light and dark theme [#432](https://github.com/nf-core/raredisease/pull/432)
+- New parameters to skip qualimap and eklipse (`--skip_qualimap` and `--skip_eklipse`) [#436](https://github.com/nf-core/raredisease/pull/436)
+- Fix "there is no process matching config selector warnings" [#435](https://github.com/nf-core/raredisease/pull/435)
+- New parameters to skip fastqc and haplocheck (`--skip_fastqc` and `--skip_haplocheck`) [#438](https://github.com/nf-core/raredisease/pull/438)
+- CNVnator for copy number variant calling [#438](https://github.com/nf-core/raredisease/pull/434)
+- A new parameter `svdb_query_bedpedbs` to provide bedpe files as databases for SVDB query [#449](https://github.com/nf-core/raredisease/pull/449)
+- ngsbits samplegender to check sex [#453](https://github.com/nf-core/raredisease/pull/453)
+- New workflow for generating cgh files from SV vcfs for interpretation in the CytosSure interpretation software. Turned off by default [#456](https://github.com/nf-core/raredisease/pull/456/)
+- Fastp to do adapter trimming. It can be skipped using `--skip_fastp` [#457](https://github.com/nf-core/raredisease/pull/457)
 
 ### `Changed`
 
@@ -25,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Breaks down mitochondrial analysis workflow into smaller subworkflows that are more modular [#419](https://github.com/nf-core/raredisease/pull/419)
 - Replaced the parameter skip_mt_analysis which was used to turn on/off the mitochondrial workflow [#419](https://github.com/nf-core/raredisease/pull/419)
 - Adds a new parameter skip_mt_annotation which can be used to turn on/off annotation and ranking for mitochondrial SNVs [#419](https://github.com/nf-core/raredisease/pull/419)
+- Changed the name of the parameter from `skip_cnv_calling` to `skip_germlinecnvcaller` [#435](https://github.com/nf-core/raredisease/pull/435)
 
 ### `Fixed`
 
@@ -37,6 +48,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - If present, remove duplicate entries in probands and upd_children in the meta. [#420](https://github.com/nf-core/raredisease/pull/420)
 - Fixes vep starting as many instances as the square of the number of scatters. [#405](https://github.com/nf-core/raredisease/pull/405)
 - Replaced the logic where we added an arbitrary substring to keep file names unique after alignment which we then removed using a split operator, with a simple copy operation. [#425](https://github.com/nf-core/raredisease/pull/425/files)
+- Preventing a crash of rhocall annotate in the case of running four individuals whereof two are affected.
+- Fixed memory qualifier in gatk4 germlinecnvcaller and postprocessgermlinecnvcalls
+- Fixed wrong process names when outputting versions in `ALIGN_SENTIEON` and `CALL_SNV`.
 
 ### `Updated`
 

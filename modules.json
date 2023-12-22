@@ -72,7 +72,7 @@
                     },
                     "cat/cat": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "d593e8f6b7d1bbbb2acf43a4b9efeeac8d6720f2",
                         "installed_by": ["modules"]
                     },
                     "chromograph": {
@@ -80,9 +80,19 @@
                         "git_sha": "aad210ba51500be029740d088b4b4827f6f41509",
                         "installed_by": ["modules"]
                     },
+                    "cnvnator/cnvnator": {
+                        "branch": "master",
+                        "git_sha": "e0fcafde1e74156695fc27e90a6ad6325065e6c5",
+                        "installed_by": ["modules"]
+                    },
+                    "cnvnator/convert2vcf": {
+                        "branch": "master",
+                        "git_sha": "e0fcafde1e74156695fc27e90a6ad6325065e6c5",
+                        "installed_by": ["modules"]
+                    },
                     "custom/dumpsoftwareversions": {
                         "branch": "master",
-                        "git_sha": "05c280924b6c768d484c7c443dad5e605c4ff4b4",
+                        "git_sha": "bba7e362e4afead70653f84d8700588ea28d0f9e",
                         "installed_by": ["modules"]
                     },
                     "deepvariant": {
@@ -92,7 +102,7 @@
                     },
                     "eklipse": {
                         "branch": "master",
-                        "git_sha": "39656f68219340420f03bd54a68e111c86e107e6",
+                        "git_sha": "0031772de29283811deb989a5b42d0310d35ec22",
                         "installed_by": ["modules"]
                     },
                     "ensemblvep/filtervep": {
@@ -105,9 +115,14 @@
                         "git_sha": "0260e5d22372eae434816d6970dedf3f5adc0053",
                         "installed_by": ["modules"]
                     },
+                    "fastp": {
+                        "branch": "master",
+                        "git_sha": "3c77ca9aac783e76c3614a06db3bfe4fef619bde",
+                        "installed_by": ["modules"]
+                    },
                     "fastqc": {
                         "branch": "master",
-                        "git_sha": "bd8092b67b5103bdd52e300f75889442275c3117",
+                        "git_sha": "65ad3e0b9a4099592e1102e92e10455dc661cf53",
                         "installed_by": ["modules"]
                     },
                     "gatk4/bedtointervallist": {
@@ -143,7 +158,8 @@
                     "gatk4/germlinecnvcaller": {
                         "branch": "master",
                         "git_sha": "8c4542e5d421c4690cf1fa6ec729e9304763fdaf",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/germlinecnvcaller/gatk4-germlinecnvcaller.diff"
                     },
                     "gatk4/intervallisttools": {
                         "branch": "master",
@@ -168,7 +184,8 @@
                     "gatk4/postprocessgermlinecnvcalls": {
                         "branch": "master",
                         "git_sha": "8c4542e5d421c4690cf1fa6ec729e9304763fdaf",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/gatk4/postprocessgermlinecnvcalls/gatk4-postprocessgermlinecnvcalls.diff"
                     },
                     "gatk4/preprocessintervals": {
                         "branch": "master",
@@ -262,7 +279,12 @@
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "a6e11ac655e744f7ebc724be669dd568ffdc0e80",
+                        "git_sha": "4ab13872435962dadc239979554d13709e20bf29",
+                        "installed_by": ["modules"]
+                    },
+                    "ngsbits/samplegender": {
+                        "branch": "master",
+                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
                         "installed_by": ["modules"]
                     },
                     "peddy": {
@@ -407,7 +429,7 @@
                     },
                     "svdb/query": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
+                        "git_sha": "2a35cf4643135d51284236bc2835ee8b810c971d",
                         "installed_by": ["modules"]
                     },
                     "tabix/bgzip": {
@@ -428,7 +450,8 @@
                     "tiddit/cov": {
                         "branch": "master",
                         "git_sha": "1c90a501d102b800c27697f5ef39a6e217ab1915",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/tiddit/cov/tiddit-cov.diff"
                     },
                     "tiddit/sv": {
                         "branch": "master",
@@ -449,6 +472,12 @@
                         "branch": "master",
                         "git_sha": "9b159849d74f0eef251168c81c16da08215bbad5",
                         "installed_by": ["modules"]
+                    },
+                    "vcf2cytosure": {
+                        "branch": "master",
+                        "git_sha": "2dba354d7c0a43a1e6d6ce26f408b4936d4ed619",
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/vcf2cytosure/vcf2cytosure.diff"
                     },
                     "vcfanno": {
                         "branch": "master",

@@ -24,20 +24,25 @@ workflow ANNOTATE_MT_SNVS {
         ch_vep_cache           // channel: [mandatory] [ path(cache) ]
 
     main:
+        ch_cadd_vcf = Channel.empty()
         ch_versions = Channel.empty()
 
         // Annotating with CADD
-        ANNOTATE_CADD (
-            ch_mt_vcf,
-            ch_mt_tbi,
-            ch_cadd_header,
-            ch_cadd_resources
-        )
+        if (params.cadd_resources != null) {
+            ANNOTATE_CADD (
+                ch_mt_vcf,
+                ch_mt_tbi,
+                ch_cadd_header,
+                ch_cadd_resources
+            )
+            ch_cadd_vcf = ANNOTATE_CADD.out.vcf
+            ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
+        }
 
         // Pick input for vep
         ch_mt_vcf
-            .join(ANNOTATE_CADD.out.vcf, remainder: true) // If CADD is not run then the third element in this channel will be `null`
-            .branch { it  ->                              // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
+            .join(ch_cadd_vcf, remainder: true) // If CADD is not run then the third element in this channel will be `null`
+            .branch { it  ->                    // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
                 merged: it[2].equals(null)
                     return [it[0], it[1]]
                 cadd: !(it[2].equals(null))
@@ -81,7 +86,6 @@ workflow ANNOTATE_MT_SNVS {
         // Running haplogrep2
         HAPLOGREP2_CLASSIFY_MT(ch_vep_in, "vcf.gz")
 
-        ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
         ch_versions = ch_versions.mix(TABIX_TABIX_MT.out.versions)
         ch_versions = ch_versions.mix(VCFANNO_MT.out.versions)

@@ -35,7 +35,7 @@ process GATK4_POSTPROCESSGERMLINECNVCALLS {
         avail_mem = (task.memory.mega*0.8).intValue()
     }
     """
-    gatk --java-options "-Xmx${avail_mem}g" PostprocessGermlineCNVCalls \\
+    gatk --java-options "-Xmx${avail_mem}M" PostprocessGermlineCNVCalls \\
         $calls_command \\
         $model_command \\
         $ploidy_command \\

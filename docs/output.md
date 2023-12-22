@@ -10,57 +10,61 @@ The directories listed below will be created in the results directory after the 
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
-- [Alignment](#alignment)
-  - [Mapping](#mapping)
-    - [Bwa-mem2](#bwa-mem2)
-    - [Sentieon bwa mem](#sentieon-bwa-mem)
-  - [Duplicate marking](#duplicate-marking)
-    - [Picard's MarkDuplicates](#picard-s-markduplicates)
-    - [Sentieon dedup](#sentieon-dedup)
-- [Quality control and reporting](#quality-control-and-reporting)
-  - [Quality control](#quality-control)
-    - [FastQC](#fastqc)
-    - [Mosdepth](#mosdepth)
-    - [Picard tools](#picard-tools)
-    - [Qualimap](#qualimap)
-    - [Sentieon WgsMetricsAlgo](#sention-wgsmetricsalgo)
-    - [TIDDIT's cov and UCSC WigToBigWig](#tiddits-cov-and-ucsc-wigtobigwig)
-  - [Reporting](#reporting)
-    - [MultiQC](#multiqc)
-- [Variant calling - SNV](#variant-calling---snv)
-  - [DeepVariant](#deepvariant)
-  - [Sentieon DNAscope](#sentieon-dnascope)
-- [Variant calling - SV](#variant-calling---sv)
-  - [Manta](#manta)
-  - [TIDDIT sv](#tiddit-sv)
-  - [GATK GermlineCNVCaller - CNV calling](#gatk-germlinecnvcaller---cnv-calling)
-  - [SVDB merge](#svdb-merge)
-- [Variant calling - repeat expansions](#variant-calling---repeat-expansions)
-  - [Expansion Hunter](#expansion-hunter)
-  - [Stranger](#stranger)
-- [Annotation - SNV](#annotation---snv)
-  - [bcftools roh](#bcftools-roh)
-  - [vcfanno](#vcfanno)
-  - [CADD](#cadd)
-  - [VEP](#vep)
-  - [UPD](#upd)
-  - [Chromograph](#chromograph)
-- [Annotation - SV](#annotation---sv)
-  - [SVDB query](#svdb-query)
-  - [VEP](#vep-1)
-- [Mitochondrial analysis](#mitochondrial-analysis)
-  - [Alignment and variant calling](#alignment-and-variant-calling)
-    - [MT deletion script](#mt-deletion-script)
-    - [eKLIPse](#eklipse)
-  - [Annotation:](#annotation-)
-    - [HaploGrep2](#haplogrep2)
-    - [vcfanno](#vcfanno-1)
-    - [CADD](#cadd-1)
-    - [VEP](#vep-2)
-    - [HmtNote](#hmtnote)
-- [Rank variants and filtering](#rank-variants-and-filtering)
-  - [GENMOD](#genmod)
-- [Pipeline information](#pipeline-information)
+- [nf-core/raredisease: Output](#nf-coreraredisease-output)
+  - [Introduction](#introduction)
+  - [Pipeline overview](#pipeline-overview)
+    - [Alignment](#alignment)
+      - [Mapping](#mapping)
+        - [Bwa-mem2](#bwa-mem2)
+        - [Sentieon bwa mem](#sentieon-bwa-mem)
+      - [Duplicate marking](#duplicate-marking)
+        - [Picard's MarkDuplicates](#picards-markduplicates)
+        - [Sentieon Dedup](#sentieon-dedup)
+    - [Quality control and reporting](#quality-control-and-reporting)
+      - [Quality control](#quality-control)
+        - [FastQC](#fastqc)
+        - [Mosdepth](#mosdepth)
+        - [Picard tools](#picard-tools)
+        - [Qualimap](#qualimap)
+        - [Sention WgsMetricsAlgo](#sention-wgsmetricsalgo)
+        - [TIDDIT's cov and UCSC WigToBigWig](#tiddits-cov-and-ucsc-wigtobigwig)
+      - [Reporting](#reporting)
+        - [MultiQC](#multiqc)
+    - [Variant calling - SNV](#variant-calling---snv)
+      - [DeepVariant](#deepvariant)
+      - [Sentieon DNAscope](#sentieon-dnascope)
+    - [Variant calling - SV](#variant-calling---sv)
+      - [Manta](#manta)
+      - [TIDDIT sv](#tiddit-sv)
+      - [GATK GermlineCNVCaller - CNV calling](#gatk-germlinecnvcaller---cnv-calling)
+      - [CNVnator - CNV calling](#cnvnator---cnv-calling)
+      - [SVDB merge](#svdb-merge)
+    - [Variant calling - repeat expansions](#variant-calling---repeat-expansions)
+      - [Expansion Hunter](#expansion-hunter)
+      - [Stranger](#stranger)
+    - [Annotation - SNV](#annotation---snv)
+      - [bcftools roh](#bcftools-roh)
+      - [vcfanno](#vcfanno)
+      - [CADD](#cadd)
+      - [VEP](#vep)
+      - [UPD](#upd)
+      - [Chromograph](#chromograph)
+    - [Annotation - SV](#annotation---sv)
+      - [SVDB query](#svdb-query)
+      - [VEP](#vep-1)
+    - [Mitochondrial analysis](#mitochondrial-analysis)
+      - [Alignment and variant calling](#alignment-and-variant-calling)
+        - [MT deletion script](#mt-deletion-script)
+        - [eKLIPse](#eklipse)
+      - [Annotation:](#annotation)
+        - [HaploGrep2](#haplogrep2)
+        - [vcfanno](#vcfanno-1)
+        - [CADD](#cadd-1)
+        - [Hmtnote](#hmtnote)
+        - [VEP](#vep-2)
+    - [Rank variants and filtering](#rank-variants-and-filtering)
+      - [GENMOD](#genmod)
+    - [Pipeline information](#pipeline-information)
 
 ### Alignment
 
@@ -195,6 +199,10 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 #### Reporting
 
+:::note
+The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They may contain adapter sequence and potentially regions with low quality.
+:::
+
 ##### MultiQC
 
 [MultiQC](http://multiqc.info) is a visualization tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in the report data directory.
@@ -255,9 +263,13 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 [GATK GermlineCNVCaller](https://github.com/broadinstitute/gatk) is used to identify copy number variants in germline samples given their read counts and a model describing a sample's ploidy. Output vcf files are treated as intermediates and are not placed in the output folder.
 
+#### CNVnator - CNV calling
+
+[CNVnator](https://github.com/abyzovlab/CNVnator) is used to identify copy number variants in germline samples given a bam file. Output vcf files are treated as intermediates and are not placed in the output folder.
+
 #### SVDB merge
 
-[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if skip_cnv_calling is set to false), Manta, and TIDDIT. Output files are published in the output folder.
+[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if skip_germlinecnvcaller is set to false), Manta, and TIDDIT. Output files are published in the output folder.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -301,6 +313,10 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 #### bcftools roh
 
 [bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh) is a program for detecting runs of homo/autozygosity.from only bi-allelic sites. The output files are not published in the output folder, and is passed to vcfanno for further annotation.
+
+:::note
+In the case of running a quattro, i.e. two affected children and their parents, only one of the probands will be used for annotating regions of homozygosity. This is a know limitation that we are hoping to solve in a future release.
+:::
 
 #### vcfanno
 
@@ -482,5 +498,6 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
   - Reports generated by Nextflow: `execution_report.html`, `execution_timeline.html`, `execution_trace.txt` and `pipeline_dag.dot`/`pipeline_dag.svg`.
   - Reports generated by the pipeline: `pipeline_report.html`, `pipeline_report.txt` and `software_versions.yml`. The `pipeline_report*` files will only be present if the `--email` / `--email_on_fail` parameter's are used when running the pipeline.
   - Reformatted samplesheet files used as input to the pipeline: `samplesheet.valid.csv`.
+  - Parameters used by the pipeline run: `params.json`.
 
 </details>

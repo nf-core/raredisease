@@ -52,7 +52,7 @@
             "description": "Reference genome related files and options required for the workflow.",
             "properties": {
                 "bait_padding": {
-                    "type": "number",
+                    "type": "integer",
                     "default": 100,
                     "fa_icon": "fas fa-align-center",
                     "pattern": "^\\S+\\.bed(\\.gz)?$",
@@ -160,13 +160,6 @@
                     "pattern": "^\\S+\\.bed(\\.gz)?\\.idx$",
                     "description": "Path to the index file for the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
-                },
-                "igenomes_base": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "Directory / URL base for iGenomes references.",
-                    "default": "s3://ngi-igenomes/igenomes",
-                    "fa_icon": "fas fa-cloud-download-alt"
                 },
                 "igenomes_ignore": {
                     "type": "boolean",
@@ -295,11 +288,19 @@
                     "pattern": "^\\S+\\.dict$",
                     "description": "Path to the genome dictionary file"
                 },
+                "svdb_query_bedpedbs": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Databases used for structural variant annotation in chrA-posA-chrB-posB-type-count-frequency format.",
+                    "fa_icon": "fas fa-file-csv",
+                    "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation."
+                },
                 "svdb_query_dbs": {
                     "type": "string",
                     "exists": true,
                     "format": "file-path",
-                    "description": "Databases used for structural variant annotation.",
+                    "description": "Databases used for structural variant annotation in vcf format.",
                     "fa_icon": "fas fa-file-csv",
                     "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation."
                 },
@@ -319,6 +320,14 @@
                     "description": "Path to variant catalog file",
                     "help_text": "Should be Stranger's extended JSON as described at https://github.com/Clinical-Genomics/stranger/blob/master/stranger/resources/variant_catalog_grch37.json. This file is used by both ExpansionHunter and Stranger",
                     "fa_icon": "fas fa-file"
+                },
+                "vcf2cytosure_blacklist": {
+                    "type": "string",
+                    "help_text": "Optional file to blacklist regions for VCF2cytosure",
+                    "pattern": "^\\S+\\.bed$",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to vcf2cytosure blacklist file"
                 },
                 "vcfanno_resources": {
                     "type": "string",
@@ -385,14 +394,46 @@
                     "fa_icon": "fas fa-align-center",
                     "enum": ["illumina"]
                 },
+                "ngsbits_samplegender_method": {
+                    "type": "string",
+                    "default": "xy",
+                    "enum": ["xy", "hetx", "sry"],
+                    "description": "Method selection for ngs-bits samplegender",
+                    "fa_icon": "fas fa-align-center"
+                },
                 "save_mapped_as_cram": {
                     "type": "boolean",
                     "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "skip_cnv_calling": {
+                "skip_fastqc": {
                     "type": "boolean",
-                    "description": "Specifies whether or not to skip CNV calling.",
+                    "description": "Specifies whether or not to skip FASTQC.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_fastp": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip trimming with fastp.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_haplocheck": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip haplocheck.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_germlinecnvcaller": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip CNV calling using GATK's GermlineCNVCaller",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_eklipse": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip eKLIPse.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_qualimap": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip Qualimap.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_mt_annotation": {
@@ -408,6 +449,13 @@
                 "skip_sv_annotation": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip annotate structural variant subworkflow.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_vcf2cytosure": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Specifies whether or not to skip the vcf2cytosure subworkflow",
+                    "help_text": "vcf2cytosure can generate CGH files from a structural variant VCF file that can be analysed in the CytoSure interpretation software. Cut-offs for allele frequencies and bin sizes can be modified in the config file. Turned off by default.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_vep_filter": {
@@ -430,6 +478,13 @@
                     "fa_icon": "fas fa-align-center",
                     "enum": ["bwamem2", "sentieon"]
                 },
+                "min_trimmed_length": {
+                    "type": "integer",
+                    "default": 40,
+                    "description": "Discard trimmed reads shorter than this",
+                    "help_text": "Minimum length of reads after adapter trimming. Shorter reads are discarded. The program default is 15 bp.  ",
+                    "fa_icon": "fas fa-less-than"
+                },
                 "rmdup": {
                     "type": "boolean",
                     "description": "Specifies whether duplicates reads should be removed prior to variant calling.",
@@ -448,6 +503,12 @@
                     "format": "path",
                     "fa_icon": "fas fa-align-center",
                     "description": "Interval in the reference that will be used in the software"
+                },
+                "cnvnator_binsize": {
+                    "type": "number",
+                    "description": "Bin size for CNVnator",
+                    "default": 1000,
+                    "fa_icon": "fas fa-align-center"
                 },
                 "sentieon_dnascope_pcr_indel_model": {
                     "type": "string",

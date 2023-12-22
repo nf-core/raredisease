@@ -32,6 +32,7 @@ def mandatoryParams = [
     "variant_catalog",
     "variant_caller"
 ]
+def missingParamsCount = 0
 
 if (!params.skip_snv_annotation) {
     mandatoryParams += ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
@@ -39,7 +40,11 @@ if (!params.skip_snv_annotation) {
 }
 
 if (!params.skip_sv_annotation) {
-    mandatoryParams += ["genome", "svdb_query_dbs", "vep_cache", "vep_cache_version", "score_config_sv"]
+    mandatoryParams += ["genome", "vep_cache", "vep_cache_version", "score_config_sv"]
+    if (!params.svdb_query_bedpedbs && !params.svdb_query_dbs) {
+        println("params.svdb_query_bedpedbs or params.svdb_query_dbs should be set.")
+        missingParamsCount += 1
+    }
 }
 
 if (!params.skip_mt_annotation) {
@@ -54,7 +59,7 @@ if (params.variant_caller.equals("sentieon")) {
     mandatoryParams += ["ml_model"]
 }
 
-if (!params.skip_cnv_calling) {
+if (!params.skip_germlinecnvcaller) {
     mandatoryParams += ["ploidy_model", "gcnvcaller_model"]
 }
 
@@ -62,7 +67,6 @@ if (!params.skip_vep_filter) {
     mandatoryParams += ["vep_filters"]
 }
 
-def missingParamsCount = 0
 for (param in mandatoryParams.unique()) {
     if (params[param] == null) {
         println("params." + param + " not set.")
@@ -120,14 +124,15 @@ include { ANNOTATE_STRUCTURAL_VARIANTS          } from '../subworkflows/local/an
 include { CALL_REPEAT_EXPANSIONS                } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                              } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS              } from '../subworkflows/local/call_structural_variants'
+include { GENERATE_CYTOSURE_FILES               } from '../subworkflows/local/generate_cytosure_files'
 include { GENS                                  } from '../subworkflows/local/gens'
+include { PEDDY_CHECK                           } from '../subworkflows/local/peddy_check'
 include { PREPARE_REFERENCES                    } from '../subworkflows/local/prepare_references'
 include { QC_BAM                                } from '../subworkflows/local/qc_bam'
 include { RANK_VARIANTS as RANK_VARIANTS_MT     } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SNV    } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SV     } from '../subworkflows/local/rank_variants'
 include { SCATTER_GENOME                        } from '../subworkflows/local/scatter_genome'
-include { PEDDY_CHECK                           } from '../subworkflows/local/peddy_check'
 
 
 /*
@@ -258,12 +263,18 @@ workflow RAREDISEASE {
                                                                            : Channel.value([])
     ch_score_config_sv          = params.score_config_sv                   ? Channel.fromPath(params.score_config_sv).collect()
                                                                            : Channel.value([])
+    ch_sv_dbs                   = params.svdb_query_dbs                    ? Channel.fromPath(params.svdb_query_dbs)
+                                                                           : Channel.empty()
+    ch_sv_bedpedbs              = params.svdb_query_bedpedbs               ? Channel.fromPath(params.svdb_query_bedpedbs)
+                                                                           : Channel.empty()
     ch_target_bed               = ch_references.target_bed
     ch_target_intervals         = ch_references.target_intervals
     ch_variant_catalog          = params.variant_catalog                   ? Channel.fromPath(params.variant_catalog).map { it -> [[id:it[0].simpleName],it]}.collect()
                                                                            : Channel.value([[],[]])
     ch_variant_consequences     = Channel.fromPath("$projectDir/assets/variant_consequences_v1.txt", checkIfExists: true).collect()
     ch_vcfanno_resources        = params.vcfanno_resources                 ? Channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
+                                                                           : Channel.value([])
+    ch_vcf2cytosure_blacklist   = params.vcf2cytosure_blacklist            ? Channel.fromPath(params.vcf2cytosure_blacklist).collect()
                                                                            : Channel.value([])
     ch_vcfanno_lua              = params.vcfanno_lua                       ? Channel.fromPath(params.vcfanno_lua).collect()
                                                                            : Channel.value([])
@@ -277,16 +288,17 @@ workflow RAREDISEASE {
 
 
     // SV caller priority
-    if (params.skip_cnv_calling) {
-        ch_svcaller_priority = Channel.value(["tiddit", "manta"])
+    if (params.skip_germlinecnvcaller) {
+        ch_svcaller_priority = Channel.value(["tiddit", "manta", "cnvnator"])
     } else {
-        ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller"])
+        ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
     }
 
     // Input QC
-    FASTQC (ch_reads)
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
-
+    if (!params.skip_fastqc) {
+        FASTQC (ch_reads)
+        ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+    }
     // CREATE CHROMOSOME BED AND INTERVALS
     SCATTER_GENOME (
         ch_genome_dictionary,
@@ -330,7 +342,8 @@ workflow RAREDISEASE {
         ch_target_intervals,
         ch_genome_chrsizes,
         ch_intervals_wgs,
-        ch_intervals_y
+        ch_intervals_y,
+        Channel.value(params.ngsbits_samplegender_method)
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions)
 
@@ -400,7 +413,8 @@ workflow RAREDISEASE {
     if (!params.skip_sv_annotation) {
         ANNOTATE_STRUCTURAL_VARIANTS (
             CALL_STRUCTURAL_VARIANTS.out.vcf,
-            params.svdb_query_dbs,
+            ch_sv_dbs,
+            ch_sv_bedpedbs,
             params.genome,
             params.vep_cache_version,
             ch_vep_cache,
@@ -555,6 +569,16 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
 
+    // Generate CGH files from sequencing data, turned off by default
+    if ( !params.skip_vcf2cytosure && params.analysis_type != "wes" ) {
+        GENERATE_CYTOSURE_FILES (
+            BGZIPTABIX_SV.out.gz_tbi,
+            ch_mapped.genome_marked_bam,
+            ch_vcf2cytosure_blacklist
+        )
+        ch_versions = ch_versions.mix(GENERATE_CYTOSURE_FILES.out.versions)
+    }
+
     // GENS
     if (params.gens_switch) {
         GENS (
@@ -593,7 +617,9 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    if (!params.skip_fastqc) {
+        ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    }
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.multiple_metrics.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.hs_metrics.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{it[1]}.collect().ifEmpty([]))
@@ -622,6 +648,7 @@ workflow.onComplete {
     if (params.email || params.email_on_fail) {
         NfcoreTemplate.email(workflow, params, summary_params, projectDir, log, multiqc_report)
     }
+    NfcoreTemplate.dump_parameters(workflow, params)
     NfcoreTemplate.summary(workflow, params, log)
     if (params.hook_url) {
         NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
@@ -659,16 +686,16 @@ def create_case_channel(List rows) {
     def mother       = ""
 
     for (item in rows) {
-        if (item.phenotype == "2") {
+        if (item.phenotype == 2) {
             probands.add(item.sample)
         }
-        if ( (item.paternal!="0") && (item.paternal!="") && (item.maternal!="0") && (item.maternal!="") ) {
+        if ( (item.paternal!=0) && (item.paternal!="") && (item.maternal!=0) && (item.maternal!="") ) {
             upd_children.add(item.sample)
         }
-        if ( (item.paternal!="0") && (item.paternal!="") ) {
+        if ( (item.paternal!=0) && (item.paternal!="") ) {
             father = item.paternal
         }
-        if ( (item.maternal!="0") && (item.maternal!="") ) {
+        if ( (item.maternal!=0) && (item.maternal!="") ) {
             mother = item.maternal
         }
     }
