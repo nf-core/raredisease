@@ -6,6 +6,7 @@ include { GATK4_COLLECTREADCOUNTS             } from '../../../modules/nf-core/g
 include { GATK4_DETERMINEGERMLINECONTIGPLOIDY } from '../../../modules/nf-core/gatk4/determinegermlinecontigploidy/main.nf'
 include { GATK4_GERMLINECNVCALLER             } from '../../../modules/nf-core/gatk4/germlinecnvcaller/main.nf'
 include { GATK4_POSTPROCESSGERMLINECNVCALLS   } from '../../../modules/nf-core/gatk4/postprocessgermlinecnvcalls/main.nf'
+include { BCFTOOLS_VIEW                       } from '../../../modules/nf-core/bcftools/view/main'
 
 workflow CALL_SV_GERMLINECNVCALLER {
     take:
@@ -47,16 +48,21 @@ workflow CALL_SV_GERMLINECNVCALLER {
 
         GATK4_POSTPROCESSGERMLINECNVCALLS ( ch_postproc_in )
 
+        // Filter out reference only (0/0) segments
+        BCFTOOLS_VIEW ( GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments, [], [], [] )
+
         ch_versions = ch_versions.mix(GATK4_COLLECTREADCOUNTS.out.versions)
         ch_versions = ch_versions.mix(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.versions)
         ch_versions = ch_versions.mix(GATK4_GERMLINECNVCALLER.out.versions)
         ch_versions = ch_versions.mix(GATK4_POSTPROCESSGERMLINECNVCALLS.out.versions)
+        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
 
     emit:
-        genotyped_intervals_vcf = GATK4_POSTPROCESSGERMLINECNVCALLS.out.intervals  // channel: [ val(meta), path(*.tar.gz) ]
-        genotyped_segments_vcf  = GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments   // channel: [ val(meta), path(*.tar.gz) ]
-        denoised_vcf            = GATK4_POSTPROCESSGERMLINECNVCALLS.out.denoised   // channel: [ val(meta), path(*.tar.gz) ]
-        versions                = ch_versions                                      // channel: [ versions.yml ]
+        genotyped_intervals_vcf          = GATK4_POSTPROCESSGERMLINECNVCALLS.out.intervals  // channel: [ val(meta), path(*.tar.gz) ]
+        genotyped_segments_vcf           = GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments   // channel: [ val(meta), path(*.tar.gz) ]
+        genotyped_filtered_segments_vcf  = BCFTOOLS_VIEW.out.vcf                            // channel: [ val(meta), path(*.tar.gz) ]
+        denoised_vcf                     = GATK4_POSTPROCESSGERMLINECNVCALLS.out.denoised   // channel: [ val(meta), path(*.tar.gz) ]
+        versions                         = ch_versions                                      // channel: [ versions.yml ]
 }
 
 // This function groups calls with same meta for postprocessing.
