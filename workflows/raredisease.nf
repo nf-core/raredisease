@@ -605,6 +605,7 @@ workflow RAREDISEASE {
         ch_me_references,
         params.genome
     )
+    ch_versions = ch_versions.mix(CALL_MOBILE_ELEMENTS.out.versions)
 
     //
     // MODULE: Pipeline reporting

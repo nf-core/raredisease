@@ -45,7 +45,7 @@ workflow CALL_MOBILE_ELEMENTS {
         )
 
         ME_INDEX_SPLIT_ALIGNMENT( ME_SPLIT_ALIGNMENT.out.bam )
-        
+
         ME_SPLIT_ALIGNMENT.out.bam
             .join(ME_INDEX_SPLIT_ALIGNMENT.out.bai, failOnMismatch:true)
             .set { ch_retroseq_input }
@@ -76,10 +76,10 @@ workflow CALL_MOBILE_ELEMENTS {
 
         // Filter and rank as done in findtroll? E.g. protein coding
 
-        ch_versions = ch_versions.mix(ME_SPLIT_ALIGNMENT.out.versions)
-        ch_versions = ch_versions.mix(ME_INDEX_SPLIT_ALIGNMENT.out.versions)
-        ch_versions = ch_versions.mix(RETROSEQ_DISCOVER.out.versions)
-        ch_versions = ch_versions.mix(RETROSEQ_CALL.out.versions)
+        ch_versions = ch_versions.mix(ME_SPLIT_ALIGNMENT.out.versions).first()
+        ch_versions = ch_versions.mix(ME_INDEX_SPLIT_ALIGNMENT.out.versions).first()
+        ch_versions = ch_versions.mix(RETROSEQ_DISCOVER.out.versions).first()
+        ch_versions = ch_versions.mix(RETROSEQ_CALL.out.versions).first()
 
     emit:
         versions = ch_versions              // channel: [ path(versions.yml) ]
