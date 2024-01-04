@@ -4,7 +4,7 @@ process RETROSEQ_DISCOVER {
 
     conda "bioconda::perl-retroseq=1.5=pl5321hdfd78af_1"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-    'docker.io/clinicalgenomics/retroseq:1.5_9d4f3b5' : 'docker.io/clinicalgenomics/retroseq:1.5_9d4f3b5' }"
+    'docker.io/clinicalgenomics/retroseq:1.5_9d4f3b5-1' : 'docker.io/clinicalgenomics/retroseq:1.5_9d4f3b5-1' }"
 
 
     input:

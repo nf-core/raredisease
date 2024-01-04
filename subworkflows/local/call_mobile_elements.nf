@@ -12,6 +12,7 @@ workflow CALL_MOBILE_ELEMENTS {
     take:
         ch_genome_bam_bai   // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_genome_fasta     // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai       // channel: [mandatory] [ val(meta), path(fai) ]
         ch_me_references    // channel: [mandatory] [path(tsv)]
         val_genome_build    // string: [mandatory] GRCh37 or GRCh38
 
@@ -63,12 +64,17 @@ workflow CALL_MOBILE_ELEMENTS {
             ch_me_reference_split.type.collect()
         )
 
+        RETROSEQ_DISCOVER.out.tab
+            .join(ch_retroseq_input, failOnMismatch: true)
+            .set { ch_retroseq_call_input }
+
         // Running retroseq call: clusters reads and checks on the breakpoints to decide whether a TEV is present
         RETROSEQ_CALL (
-            ch_retroseq_input,
-            RETROSEQ_DISCOVER.out.tab,
-            ch_genome_fasta
+            ch_retroseq_call_input,
+            ch_genome_fasta,
+            ch_genome_fai
         )
+
 
         // Run vep to annotate
 

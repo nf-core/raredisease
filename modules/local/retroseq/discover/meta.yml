@@ -22,15 +22,15 @@ input:
   - bam:
       type: file
       description: Sorted BAM file
-      pattern: "*.{bam}"
+      pattern: "*.bam"
   - bai:
       type: file
       description: Index of the sorted BAM file
-      pattern: "*.{bai}"
+      pattern: "*.bai"
   - me_references:
       type: file
       description: Paths to bed files containing transposable element coordinates in the genome.
-      pattern: "*.{bed}"
+      pattern: "*.bed"
   - me_types:
       type: list
       description: List of transposable element types to discover. Needs to be in sync with me_references.
@@ -48,7 +48,7 @@ output:
   - tab:
       type: file
       description: Output file containing lists of read pair names per TE type
-      pattern: "*.{tab}"
+      pattern: "*.tab"
 
 authors:
   - "@peterpru"

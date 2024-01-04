@@ -19,22 +19,26 @@ input:
       description: |
         Groovy Map containing sample information
         e.g. `[ id:'test', single_end:false ]`
-  - bam:
-      type: file
-      description: Sorted BAM file
-      pattern: "*.{bam}"
-  - bai:
-      type: file
-      description: Index of the sorted BAM file
-      pattern: "*.{bam}"
-  - fasta:
-      type: file
-      description: Reference genome in fasta format
-      pattern: "*.{fasta}"
   - tab:
       type: file
       description: Output file from running retroseq -call
-      pattern: "*.{tab}"
+      pattern: "*.tab"
+  - bam:
+      type: file
+      description: Sorted BAM file
+      pattern: "*.bam"
+  - bai:
+      type: file
+      description: Index of the sorted BAM file
+      pattern: "*.bam"
+  - fasta:
+      type: file
+      description: Reference genome in fasta format
+      pattern: "*.fasta"
+  - fai:
+      type: file
+      description: Reference FASTA index
+      pattern: "*.fai"
 
 output:
   - meta:
@@ -49,7 +53,7 @@ output:
   - vcf:
       type: file
       description: Output file containing TEVs and their location in the genome.
-      pattern: "*.{vcf}"
+      pattern: "*.vcf"
 
 authors:
   - "@peterpru"

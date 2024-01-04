@@ -293,7 +293,9 @@ workflow RAREDISEASE {
 
     // SV caller priority
     if (params.skip_germlinecnvcaller) {
-        ch_svcaller_priority = Channel.value(["tiddit", "manta", "cnvnator"])
+        // TODO: Uncomment and remove
+        ch_svcaller_priority = Channel.value(["tiddit", "manta"])
+        //ch_svcaller_priority = Channel.value(["tiddit", "manta", "cnvnator"])
     } else {
         ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
     }
@@ -602,6 +604,7 @@ workflow RAREDISEASE {
     CALL_MOBILE_ELEMENTS(
         ch_mapped.genome_bam_bai,
         ch_genome_fasta,
+        ch_genome_fai,
         ch_me_references,
         params.genome
     )

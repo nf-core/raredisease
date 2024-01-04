@@ -4,13 +4,13 @@ process RETROSEQ_CALL {
 
     conda "bioconda::perl-retroseq=1.5=pl5321hdfd78af_1"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-    'docker.io/clinicalgenomics/retroseq:1.5_9d4f3b5' : 'docker.io/clinicalgenomics/retroseq:1.5_9d4f3b5' }"
+    'docker.io/clinicalgenomics/retroseq:1.5_9d4f3b5-1' : 'docker.io/clinicalgenomics/retroseq:1.5_9d4f3b5-1' }"
 
 
     input:
-    tuple val(meta), path(bam), path(bai)
-    tuple val(meta), path(input)
-    tuple val(meta), path(fasta)
+    tuple val(meta), path(tab), path(bam), path(bai)
+    tuple val(meta2), path(fasta)
+    tuple val(meta3), path(fai)
 
     output:
     tuple val(meta), path("*.vcf"), emit: vcf
