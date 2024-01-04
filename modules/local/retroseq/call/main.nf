@@ -29,7 +29,7 @@ process RETROSEQ_CALL {
         -call \\
         $args \\
         -bam $bam \\
-        -input $input \\
+        -input $tab \\
         -ref $fasta \\
         -output ${prefix}.vcf
 
