@@ -9,6 +9,7 @@ process RETROSEQ_CALL {
 
     input:
     tuple val(meta), path(bam), path(bai)
+    tuple val(meta), path(input)
     tuple val(meta), path(fasta)
 
     output:
@@ -26,10 +27,11 @@ process RETROSEQ_CALL {
     """
     retroseq.pl \\
         -call \\
+        $args \\
         -bam $bam \\
-        -input $input
+        -input $input \\
         -ref $fasta \\
-        -output ${prefix}.tab
+        -output ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -42,7 +44,7 @@ process RETROSEQ_CALL {
     def prefix = task.ext.prefix ?: "${meta.id}"
     def VERSION = "1.5"
     """
-    touch ${prefix}.tab
+    touch ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

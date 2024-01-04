@@ -26,14 +26,14 @@ input:
   - bai:
       type: file
       description: Index of the sorted BAM file
-      pattern: "*.{bam}"
-  - tab:
+      pattern: "*.{bai}"
+  - me_references:
       type: file
-      description: Tab file containing a list of files, where each line is a TE type and the path to a bed file containing its coordinates in the genome.
-      pattern: "*.{tab}"
-  - extra_files:
-      type: file
-      description: List of files. Each file contains the coordinates of transposable elements of a particular type.
+      description: Paths to bed files containing transposable element coordinates in the genome.
+      pattern: "*.{bed}"
+  - me_types:
+      type: list
+      description: List of transposable element types to discover. Needs to be in sync with me_references.
 
 output:
   - meta:

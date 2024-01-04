@@ -9,8 +9,8 @@ process RETROSEQ_DISCOVER {
 
     input:
     tuple val(meta), path(bam), path(bai)
-    path(tab)
-    path(extra_files)
+    path(me_references)
+    val(me_types)
 
     output:
     tuple val(meta), path("*.tab"), emit: tab
@@ -25,10 +25,12 @@ process RETROSEQ_DISCOVER {
     def VERSION = "1.5" // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
 
     """
+    paste <(printf "%s\\n" $me_types | tr -d '[],') <(printf "%s\\n" $me_references) > me_reference_manifest.tsv
     retroseq.pl \\
         -discover \\
+        $args \\
         -bam $bam \\
-        -refTEs $tab\\
+        -refTEs me_reference_manifest.tsv\\
         -output ${prefix}.tab
 
     cat <<-END_VERSIONS > versions.yml
@@ -42,6 +44,7 @@ process RETROSEQ_DISCOVER {
     def prefix = task.ext.prefix ?: "${meta.id}"
     def VERSION = "1.5"
     """
+    paste <(printf "%s\\n" $me_types | tr -d '[],') <(printf "%s\\n" $me_references) > me_reference_manifest.tsv
     touch ${prefix}.tab
 
     cat <<-END_VERSIONS > versions.yml

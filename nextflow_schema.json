@@ -214,6 +214,15 @@
                     "help_text": "Used to extract relevant information from the references to analyse mitochondria",
                     "fa_icon": "fas fa-align-center"
                 },
+                "mobile_element_references": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "description": "File with mobile element references",
+                    "help_text": "Path to tsv file listing mobile element references. \nFormat: <mobile element type>\\t<path to bed file>",
+                    "pattern": "^\\S+\\.tsv$",
+                    "format": "file-path",
+                    "schema": "assets/mobile_element_references_schema.json"
+                },
                 "ml_model": {
                     "type": "string",
                     "exists": true,

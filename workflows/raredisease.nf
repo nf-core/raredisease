@@ -133,6 +133,7 @@ include { RANK_VARIANTS as RANK_VARIANTS_MT     } from '../subworkflows/local/ra
 include { RANK_VARIANTS as RANK_VARIANTS_SNV    } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SV     } from '../subworkflows/local/rank_variants'
 include { SCATTER_GENOME                        } from '../subworkflows/local/scatter_genome'
+include { CALL_MOBILE_ELEMENTS                  } from '../subworkflows/local/call_mobile_elements'
 
 
 /*
@@ -240,6 +241,9 @@ workflow RAREDISEASE {
     ch_intervals_wgs            = params.intervals_wgs                     ? Channel.fromPath(params.intervals_wgs).collect()
                                                                            : Channel.empty()
     ch_intervals_y              = params.intervals_y                       ? Channel.fromPath(params.intervals_y).collect()
+                                                                           : Channel.empty()
+    //ch_me_references            = params.mobile_element_references         ? Channel.fromPath(params.mobile_element_references)
+    ch_me_references            = params.mobile_element_references         ? Channel.fromSamplesheet("mobile_element_references")
                                                                            : Channel.empty()
     ch_ml_model                 = params.variant_caller.equals("sentieon") ? Channel.fromPath(params.ml_model).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : Channel.value([[:],[]])
@@ -594,6 +598,13 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(GENS.out.versions)
     }
+
+    CALL_MOBILE_ELEMENTS(
+        ch_mapped.genome_bam_bai,
+        ch_genome_fasta,
+        ch_me_references,
+        params.genome
+    )
 
     //
     // MODULE: Pipeline reporting

@@ -16,7 +16,7 @@ nextflow.enable.dsl = 2
     GENOME PARAMETER VALUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
+// TODO: Are the genome config used?
 params.fasta                          = WorkflowMain.getGenomeAttribute(params, 'fasta')
 params.fai                            = WorkflowMain.getGenomeAttribute(params, 'fai')
 params.bwa                            = WorkflowMain.getGenomeAttribute(params, 'bwa')
@@ -33,6 +33,7 @@ params.intervals_wgs                  = WorkflowMain.getGenomeAttribute(params, 
 params.intervals_y                    = WorkflowMain.getGenomeAttribute(params, 'intervals_y')
 params.known_dbsnp                    = WorkflowMain.getGenomeAttribute(params, 'known_dbsnp')
 params.known_dbsnp_tbi                = WorkflowMain.getGenomeAttribute(params, 'known_dbsnp_tbi')
+params.mobile_element_references      = WorkflowMain.getGenomeAttribute(params, 'mobile_element_references')
 params.ml_model                       = WorkflowMain.getGenomeAttribute(params, 'ml_model')
 params.mt_fasta                       = WorkflowMain.getGenomeAttribute(params, 'mt_fasta')
 params.ngsbits_samplegender_method    = WorkflowMain.getGenomeAttribute(params, 'ngsbits_samplegender_method')

@@ -29,8 +29,12 @@ input:
       pattern: "*.{bam}"
   - fasta:
       type: file
-      description: reference genome in fasta format
+      description: Reference genome in fasta format
       pattern: "*.{fasta}"
+  - tab:
+      type: file
+      description: Output file from running retroseq -call
+      pattern: "*.{tab}"
 
 output:
   - meta:
