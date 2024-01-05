@@ -606,6 +606,7 @@ workflow RAREDISEASE {
         ch_genome_fasta,
         ch_genome_fai,
         ch_me_references,
+        ch_case_info,
         params.genome
     )
     ch_versions = ch_versions.mix(CALL_MOBILE_ELEMENTS.out.versions)
