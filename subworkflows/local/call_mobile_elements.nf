@@ -26,8 +26,11 @@ workflow CALL_MOBILE_ELEMENTS {
     main:
         ch_versions = Channel.empty()
 
+        // TODO: Fix one sample join error
+
         // Building chromosome channel depending on genome version
         // TODO: Check how retroseq behaves when running chrY on female samples
+        // TODO: Would be nicer to read in the fai or dict
         Channel.of(1..22, 'X', 'Y')
             .branch { it ->
                 grch37: val_genome_build.equals('GRCh37')
@@ -51,8 +54,18 @@ workflow CALL_MOBILE_ELEMENTS {
         ME_SPLIT_ALIGNMENT ( ch_genome_bam_bai_interval, [[:], []], [] )
         ME_INDEX_SPLIT_ALIGNMENT ( ME_SPLIT_ALIGNMENT.out.bam )
 
+        ME_SPLIT_ALIGNMENT.out.bam.toList().dump(tag:'bam')
+        ME_INDEX_SPLIT_ALIGNMENT.out.bai.toList().dump(tag:'bai')
+
+        //ch_retroseq_input = CustomChannelOperators.joinOnKeys(
+        //    ME_SPLIT_ALIGNMENT.out.bam,
+        //    ME_SPLIT_ALIGNMENT.out.bai,
+        //    ["id", "interval"], 0,0, [failOnMismatch:true, failOnDuplicate:true]
+        //)
+        //ch_retroseq_input.dump(tag: 'join', pretty: true)
+
         ME_SPLIT_ALIGNMENT.out.bam
-            .join(ME_INDEX_SPLIT_ALIGNMENT.out.bai, failOnMismatch:true)
+            .join(ME_INDEX_SPLIT_ALIGNMENT.out.bai, failOnMismatch:true, failOnDuplicate: true)
             .set { ch_retroseq_input }
 
         ch_me_references
@@ -88,12 +101,12 @@ workflow CALL_MOBILE_ELEMENTS {
 
         // Concatenate the chromosme vcfs per sample
         BCFTOOLS_SORT_ME.out.vcf
-            .map { meta, vcf -> [ meta.findAll { !(it.key in ['interval']) }, vcf ] }
+            .map { meta, vcf -> [ meta - meta.subMap('interval'), vcf ] }
             .groupTuple(size: 24)
             .set { ch_vcfs }
 
         TABIX_ME_SPLIT.out.tbi
-            .map { meta, tbi -> [ meta.findAll { !(it.key in ['interval']) }, tbi ] }
+            .map { meta, tbi -> [ meta - meta.subMap('interval'), tbi ] }
             .groupTuple(size: 24)
             .set { ch_tbis }
 
