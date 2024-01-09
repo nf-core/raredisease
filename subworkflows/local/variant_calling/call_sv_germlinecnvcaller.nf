@@ -7,6 +7,7 @@ include { GATK4_DETERMINEGERMLINECONTIGPLOIDY } from '../../../modules/nf-core/g
 include { GATK4_GERMLINECNVCALLER             } from '../../../modules/nf-core/gatk4/germlinecnvcaller/main.nf'
 include { GATK4_POSTPROCESSGERMLINECNVCALLS   } from '../../../modules/nf-core/gatk4/postprocessgermlinecnvcalls/main.nf'
 include { BCFTOOLS_VIEW                       } from '../../../modules/nf-core/bcftools/view/main'
+include { TABIX_TABIX                         } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_SV_GERMLINECNVCALLER {
     take:
@@ -48,13 +49,22 @@ workflow CALL_SV_GERMLINECNVCALLER {
 
         GATK4_POSTPROCESSGERMLINECNVCALLS ( ch_postproc_in )
 
+        // GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments.view()
+
+        TABIX_TABIX(GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments)
+        TABIX_TABIX.out.tbi.view()
+        GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments
+            .join(TABIX_TABIX.out.tbi, failOnMismatch:true)
+            .set {ch_segments_in}
+        ch_segments_in.view()
         // Filter out reference only (0/0) segments
-        BCFTOOLS_VIEW ( GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments, [], [], [] )
+        BCFTOOLS_VIEW (ch_segments_in , [], [], [] )
 
         ch_versions = ch_versions.mix(GATK4_COLLECTREADCOUNTS.out.versions)
         ch_versions = ch_versions.mix(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.versions)
         ch_versions = ch_versions.mix(GATK4_GERMLINECNVCALLER.out.versions)
         ch_versions = ch_versions.mix(GATK4_POSTPROCESSGERMLINECNVCALLS.out.versions)
+        ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
 
     emit:
