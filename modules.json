@@ -449,7 +449,7 @@
                     },
                     "tiddit/cov": {
                         "branch": "master",
-                        "git_sha": "1c90a501d102b800c27697f5ef39a6e217ab1915",
+                        "git_sha": "ae07bd3d3e229ca82bd94531648736d44367a391",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/tiddit/cov/tiddit-cov.diff"
                     },
