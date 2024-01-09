@@ -77,6 +77,8 @@ process SENTIEON_DEDUP {
     touch ${prefix}.cram.crai
     touch ${prefix}.metrics
     touch ${prefix}.score
+    touch ${prefix}.bam
+    touch ${prefix}.bai
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
