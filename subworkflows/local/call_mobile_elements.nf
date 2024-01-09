@@ -26,8 +26,6 @@ workflow CALL_MOBILE_ELEMENTS {
     main:
         ch_versions = Channel.empty()
 
-        // TODO: Fix one sample join error
-
         // Building chromosome channel depending on genome version
         // TODO: Check how retroseq behaves when running chrY on female samples
         // TODO: Would be nicer to read in the fai or dict
@@ -53,16 +51,6 @@ workflow CALL_MOBILE_ELEMENTS {
         // Split bam file on chromosome and index
         ME_SPLIT_ALIGNMENT ( ch_genome_bam_bai_interval, [[:], []], [] )
         ME_INDEX_SPLIT_ALIGNMENT ( ME_SPLIT_ALIGNMENT.out.bam )
-
-        ME_SPLIT_ALIGNMENT.out.bam.toList().dump(tag:'bam')
-        ME_INDEX_SPLIT_ALIGNMENT.out.bai.toList().dump(tag:'bai')
-
-        //ch_retroseq_input = CustomChannelOperators.joinOnKeys(
-        //    ME_SPLIT_ALIGNMENT.out.bam,
-        //    ME_SPLIT_ALIGNMENT.out.bai,
-        //    ["id", "interval"], 0,0, [failOnMismatch:true, failOnDuplicate:true]
-        //)
-        //ch_retroseq_input.dump(tag: 'join', pretty: true)
 
         ME_SPLIT_ALIGNMENT.out.bam
             .join(ME_INDEX_SPLIT_ALIGNMENT.out.bai, failOnMismatch:true, failOnDuplicate: true)
@@ -99,7 +87,7 @@ workflow CALL_MOBILE_ELEMENTS {
         BCFTOOLS_SORT_ME ( BCFTOOLS_REHEADER_ME.out.vcf )
         TABIX_ME_SPLIT ( BCFTOOLS_SORT_ME.out.vcf )
 
-        // Concatenate the chromosme vcfs per sample
+        // Concatenate the chromosome vcfs to sample vcfs
         BCFTOOLS_SORT_ME.out.vcf
             .map { meta, vcf -> [ meta - meta.subMap('interval'), vcf ] }
             .groupTuple(size: 24)
@@ -129,10 +117,6 @@ workflow CALL_MOBILE_ELEMENTS {
         SVDB_MERGE_ME ( ch_svdb_merge_me_input, [] )
         TABIX_ME ( SVDB_MERGE_ME.out.vcf )
 
-        SVDB_MERGE_ME.out.vcf
-            .join(TABIX_ME.out.tbi)
-            .set { ch_me_vcf }
-
         ch_versions = ch_versions.mix(ME_SPLIT_ALIGNMENT.out.versions).first()
         ch_versions = ch_versions.mix(ME_INDEX_SPLIT_ALIGNMENT.out.versions).first()
         ch_versions = ch_versions.mix(RETROSEQ_DISCOVER.out.versions).first()
@@ -145,6 +129,7 @@ workflow CALL_MOBILE_ELEMENTS {
         ch_versions = ch_versions.mix(TABIX_ME.out.versions)
 
     emit:
-        me_vcf   = ch_me_vcf     // channel: [ val(meta), path(vcf), path(tbi) ]
-        versions = ch_versions   // channel: [ path(versions.yml) ]
+        vcf      = SVDB_MERGE_ME.out.vcf // channel: [ val(meta), path(vcf) ]
+        tbi      = TABIX_ME.out.tbi      // channel: [ val(meta), path(tbi) ]
+        versions = ch_versions           // channel: [ path(versions.yml) ]
 }
