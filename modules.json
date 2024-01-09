@@ -475,7 +475,7 @@
                     },
                     "vcf2cytosure": {
                         "branch": "master",
-                        "git_sha": "2dba354d7c0a43a1e6d6ce26f408b4936d4ed619",
+                        "git_sha": "8694793954175ddd3001ddfbc0e36782a674d8a7",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/vcf2cytosure/vcf2cytosure.diff"
                     },
