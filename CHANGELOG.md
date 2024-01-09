@@ -51,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Preventing a crash of rhocall annotate in the case of running four individuals whereof two are affected.
 - Fixed memory qualifier in gatk4 germlinecnvcaller and postprocessgermlinecnvcalls
 - Fixed wrong process names when outputting versions in `ALIGN_SENTIEON` and `CALL_SNV`.
+- Fixed stub-run outputs from `SENTIEON_DEDUP` preventing downstream crashing
 
 ### `Updated`
 
