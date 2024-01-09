@@ -293,9 +293,7 @@ workflow RAREDISEASE {
 
     // SV caller priority
     if (params.skip_germlinecnvcaller) {
-        // TODO: Uncomment and remove
-        ch_svcaller_priority = Channel.value(["tiddit", "manta"])
-        //ch_svcaller_priority = Channel.value(["tiddit", "manta", "cnvnator"])
+        ch_svcaller_priority = Channel.value(["tiddit", "manta", "cnvnator"])
     } else {
         ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
     }
@@ -356,14 +354,14 @@ workflow RAREDISEASE {
     //
     // EXPANSIONHUNTER AND STRANGER
     //
-    CALL_REPEAT_EXPANSIONS (
-        ch_mapped.genome_bam_bai,
-        ch_variant_catalog,
-        ch_case_info,
-        ch_genome_fasta,
-        ch_genome_fai
-    )
-    ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
+    //CALL_REPEAT_EXPANSIONS (
+    //    ch_mapped.genome_bam_bai,
+    //    ch_variant_catalog,
+    //    ch_case_info,
+    //    ch_genome_fasta,
+    //    ch_genome_fai
+    //)
+    //ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
 
     //
     // SNV CALLING

@@ -1,5 +1,0 @@
-type	path
-L1	./assets/grch37_g1k_l1.bed
-SVA	./assets/grch37_g1k_sva.bed
-ALU	./assets/grch37_g1k_alu.bed
-HERV	./assets/grch37_g1k_herv.bed

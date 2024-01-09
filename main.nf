@@ -16,7 +16,6 @@ nextflow.enable.dsl = 2
     GENOME PARAMETER VALUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-// TODO: Are the genome config used?
 params.fasta                          = WorkflowMain.getGenomeAttribute(params, 'fasta')
 params.fai                            = WorkflowMain.getGenomeAttribute(params, 'fai')
 params.bwa                            = WorkflowMain.getGenomeAttribute(params, 'bwa')

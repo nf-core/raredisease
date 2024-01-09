@@ -3,13 +3,13 @@
 //
 
 include { BCFTOOLS_REHEADER as BCFTOOLS_REHEADER_ME  } from '../../modules/nf-core/bcftools/reheader/main'
-include { BCFTOOLS_CONCAT as BCFTOOLS_CONCAT_ME  } from '../../modules/nf-core/bcftools/concat/main'
-include { BCFTOOLS_SORT as BCFTOOLS_SORT_ME  } from '../../modules/nf-core/bcftools/sort/main'
+include { BCFTOOLS_CONCAT as BCFTOOLS_CONCAT_ME      } from '../../modules/nf-core/bcftools/concat/main'
+include { BCFTOOLS_SORT as BCFTOOLS_SORT_ME          } from '../../modules/nf-core/bcftools/sort/main'
 include { RETROSEQ_CALL as RETROSEQ_CALL             } from '../../modules/local/retroseq/call/main'
 include { RETROSEQ_DISCOVER as RETROSEQ_DISCOVER     } from '../../modules/local/retroseq/discover/main'
 include { SAMTOOLS_INDEX as ME_INDEX_SPLIT_ALIGNMENT } from '../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_VIEW as ME_SPLIT_ALIGNMENT        } from '../../modules/nf-core/samtools/view/main'
-include { TABIX_TABIX as TABIX_ME              } from '../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_ME                    } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_ME_SPLIT              } from '../../modules/nf-core/tabix/tabix/main'
 include { SVDB_MERGE as SVDB_MERGE_ME                } from '../../modules/nf-core/svdb/merge/main'
 
@@ -26,17 +26,10 @@ workflow CALL_MOBILE_ELEMENTS {
     main:
         ch_versions = Channel.empty()
 
-        // Building chromosome channel depending on genome version
-        // TODO: Check how retroseq behaves when running chrY on female samples
-        // TODO: Would be nicer to read in the fai or dict
-        Channel.of(1..22, 'X', 'Y')
-            .branch { it ->
-                grch37: val_genome_build.equals('GRCh37')
-                    return [it.toString()]
-                grch38: val_genome_build.equals('GRCh38')
-                    return ['chr' + it.toString()]
-            }.set{ ch_chr_genome }
-        ch_chr_genome.grch37.mix(ch_chr_genome.grch38)
+        // Building chromosome channels based on fasta index
+        ch_genome_fai
+            .splitCsv(sep: "\t", elem: 1, limit: 25)
+            .map { meta, fai -> [ fai.first() ] }
             .set { ch_chr }
 
         // Building one bam channel per chromosome and adding interval

@@ -93,6 +93,10 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [Expansion Hunter](https://github.com/Illumina/ExpansionHunter)
 - [Stranger](https://github.com/Clinical-Genomics/stranger)
 
+**9. Variant calling - mobile elements:**
+
+- [RetroSeq](https://github.com/tk2/RetroSeq)
+
 **9. Rank variants - SV and SNV:**
 
 - [GENMOD](https://github.com/Clinical-Genomics/genmod)
