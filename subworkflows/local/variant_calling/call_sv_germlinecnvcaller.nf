@@ -49,14 +49,10 @@ workflow CALL_SV_GERMLINECNVCALLER {
 
         GATK4_POSTPROCESSGERMLINECNVCALLS ( ch_postproc_in )
 
-        // GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments.view()
-
         TABIX_TABIX(GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments)
-        TABIX_TABIX.out.tbi.view()
         GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments
             .join(TABIX_TABIX.out.tbi, failOnMismatch:true)
             .set {ch_segments_in}
-        ch_segments_in.view()
         // Filter out reference only (0/0) segments
         BCFTOOLS_VIEW (ch_segments_in , [], [], [] )
 
