@@ -64,10 +64,10 @@ workflow CALL_SV_GERMLINECNVCALLER {
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
 
     emit:
-        genotyped_intervals_vcf          = GATK4_POSTPROCESSGERMLINECNVCALLS.out.intervals  // channel: [ val(meta), path(*.tar.gz) ]
-        genotyped_segments_vcf           = GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments   // channel: [ val(meta), path(*.tar.gz) ]
-        genotyped_filtered_segments_vcf  = BCFTOOLS_VIEW.out.vcf                            // channel: [ val(meta), path(*.tar.gz) ]
-        denoised_vcf                     = GATK4_POSTPROCESSGERMLINECNVCALLS.out.denoised   // channel: [ val(meta), path(*.tar.gz) ]
+        genotyped_intervals_vcf          = GATK4_POSTPROCESSGERMLINECNVCALLS.out.intervals  // channel: [ val(meta), path(*.vcf.gz) ]
+        genotyped_segments_vcf           = GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments   // channel: [ val(meta), path(*.vcf.gz) ]
+        genotyped_filtered_segments_vcf  = BCFTOOLS_VIEW.out.vcf                            // channel: [ val(meta), path(*.vcf.gz) ]
+        denoised_vcf                     = GATK4_POSTPROCESSGERMLINECNVCALLS.out.denoised   // channel: [ val(meta), path(*.vcf.gz) ]
         versions                         = ch_versions                                      // channel: [ versions.yml ]
 }
 
