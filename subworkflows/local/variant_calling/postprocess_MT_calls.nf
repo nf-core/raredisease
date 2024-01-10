@@ -11,6 +11,9 @@ include { TABIX_TABIX as TABIX_TABIX_MT2                        } from '../../..
 include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                   } from '../../../modules/nf-core/bcftools/merge/main'
 include { TABIX_TABIX as TABIX_TABIX_MERGE                      } from '../../../modules/nf-core/tabix/tabix/main'
 include { PICARD_LIFTOVERVCF                                    } from '../../../modules/nf-core/picard/liftovervcf/main'
+include { BCFTOOLS_ANNOTATE                                     } from '../../../modules/nf-core/bcftools/annotate/main'
+include { TABIX_BGZIPTABIX as ZIP_TABIX_VARCALLERBED            } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { TABIX_TABIX as TABIX_ANNOTATE                         } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow POSTPROCESS_MT_CALLS {
     take:
@@ -21,6 +24,7 @@ workflow POSTPROCESS_MT_CALLS {
         ch_genome_fai          // channel: [mandatory] [ val(meta), path(fai) ]
         ch_mtshift_backchain   // channel: [mandatory] [ val(meta), path(backchain) ]
         ch_case_info           // channel: [mandatory] [ val(case_info) ]
+        ch_foundin_header      // channel: [mandatory] [ path(header) ]
 
     main:
         ch_versions = Channel.empty()
@@ -93,9 +97,28 @@ workflow POSTPROCESS_MT_CALLS {
 
         BCFTOOLS_MERGE_MT.out.merged_variants
             .mix(ch_case_vcf.single)
-            .set { ch_annotation_in }
+            .set { ch_addfoundintag_in }
 
-        TABIX_TABIX_MERGE(ch_annotation_in)
+        TABIX_TABIX_MERGE(ch_addfoundintag_in)
+
+        ch_genome_fai.map{meta, fai ->
+            return [meta, WorkflowRaredisease.makeBedWithVariantCallerInfo(fai, fai.parent.toString(), "mutect2")]
+            }
+            .set { ch_varcallerinfo }
+
+        ZIP_TABIX_VARCALLERBED (ch_varcallerinfo).gz_tbi
+            .map{meta,bed,tbi -> return [bed, tbi]}
+            .set{ch_varcallerbed}
+
+        ch_addfoundintag_in
+            .join(TABIX_TABIX_MERGE.out.tbi)
+            .combine(ch_varcallerbed)
+            .combine(ch_foundin_header)
+            .set { ch_annotate_in }
+
+        BCFTOOLS_ANNOTATE(ch_annotate_in)
+
+        TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 
         ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions.first())
         ch_versions = ch_versions.mix(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.versions.first())
@@ -103,9 +126,12 @@ workflow POSTPROCESS_MT_CALLS {
         ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_MT.out.versions.first())
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
+        ch_versions = ch_versions.mix(ZIP_TABIX_VARCALLERBED.out.versions)
+        ch_versions = ch_versions.mix(BCFTOOLS_ANNOTATE.out.versions)
+        ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)
 
     emit:
-        vcf       = ch_annotation_in               // channel: [ val(meta), path(vcf) ]
-        tbi       = TABIX_TABIX_MERGE.out.tbi      // channel: [ val(meta), path(tbi) ]
-        versions  = ch_versions                    // channel: [ path(versions.yml) ]
+        vcf       = BCFTOOLS_ANNOTATE.out.vcf   // channel: [ val(meta), path(vcf) ]
+        tbi       = TABIX_ANNOTATE.out.tbi      // channel: [ val(meta), path(tbi) ]
+        versions  = ch_versions                 // channel: [ path(versions.yml) ]
 }

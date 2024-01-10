@@ -2,15 +2,18 @@
 // A subworkflow to call SNVs by sentieon dnascope with a machine learning model.
 //
 
-include { SENTIEON_DNASCOPE                        } from '../../../modules/nf-core/sentieon/dnascope/main'
-include { SENTIEON_DNAMODELAPPLY                   } from '../../../modules/nf-core/sentieon/dnamodelapply/main'
-include { BCFTOOLS_MERGE                           } from '../../../modules/nf-core/bcftools/merge/main'
-include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_SEN } from '../../../modules/nf-core/bcftools/norm/main'
-include { BCFTOOLS_NORM as REMOVE_DUPLICATES_SEN   } from '../../../modules/nf-core/bcftools/norm/main'
-include { TABIX_TABIX as TABIX_SEN                 } from '../../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_BCFTOOLS            } from '../../../modules/nf-core/tabix/tabix/main'
-include { BCFTOOLS_FILTER as BCF_FILTER_ONE        } from '../../../modules/nf-core/bcftools/filter/main'
-include { BCFTOOLS_FILTER as BCF_FILTER_TWO        } from '../../../modules/nf-core/bcftools/filter/main'
+include { SENTIEON_DNASCOPE                          } from '../../../modules/nf-core/sentieon/dnascope/main'
+include { SENTIEON_DNAMODELAPPLY                     } from '../../../modules/nf-core/sentieon/dnamodelapply/main'
+include { BCFTOOLS_MERGE                             } from '../../../modules/nf-core/bcftools/merge/main'
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_SEN   } from '../../../modules/nf-core/bcftools/norm/main'
+include { BCFTOOLS_NORM as REMOVE_DUPLICATES_SEN     } from '../../../modules/nf-core/bcftools/norm/main'
+include { TABIX_TABIX as TABIX_SEN                   } from '../../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_BCFTOOLS              } from '../../../modules/nf-core/tabix/tabix/main'
+include { BCFTOOLS_FILTER as BCF_FILTER_ONE          } from '../../../modules/nf-core/bcftools/filter/main'
+include { BCFTOOLS_FILTER as BCF_FILTER_TWO          } from '../../../modules/nf-core/bcftools/filter/main'
+include { BCFTOOLS_ANNOTATE                          } from '../../../modules/nf-core/bcftools/annotate/main'
+include { TABIX_TABIX as TABIX_ANNOTATE              } from '../../../modules/nf-core/tabix/tabix/main'
+include { TABIX_BGZIPTABIX as ZIP_TABIX_VARCALLERBED } from '../../../modules/nf-core/tabix/bgziptabix/main'
 
 workflow CALL_SNV_SENTIEON {
     take:
@@ -23,7 +26,8 @@ workflow CALL_SNV_SENTIEON {
         ch_ml_model        // channel: [mandatory] [ val(meta), path(model) ]
         ch_case_info       // channel: [mandatory] [ val(case_info) ]
         ch_pcr_indel_model // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
- 
+        ch_foundin_header  // channel: [mandatory] [ path(header) ]
+
     main:
         ch_versions = Channel.empty()
 
@@ -85,6 +89,25 @@ workflow CALL_SNV_SENTIEON {
 
         TABIX_SEN(REMOVE_DUPLICATES_SEN.out.vcf)
 
+        ch_genome_fai.map{meta, fai ->
+            return [meta, WorkflowRaredisease.makeBedWithVariantCallerInfo(fai, fai.parent.toString(), "sentieon")]
+            }
+            .set { ch_varcallerinfo }
+
+        ZIP_TABIX_VARCALLERBED (ch_varcallerinfo).gz_tbi
+            .map{meta,bed,tbi -> return [bed, tbi]}
+            .set{ch_varcallerbed}
+
+        REMOVE_DUPLICATES_SEN.out.vcf
+            .join(TABIX_SEN.out.tbi)
+            .combine(ch_varcallerbed)
+            .combine(ch_foundin_header)
+            .set { ch_annotate_in }
+
+        BCFTOOLS_ANNOTATE(ch_annotate_in)
+
+        TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
+
         ch_versions = ch_versions.mix(SENTIEON_DNASCOPE.out.versions.first())
         ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE.out.versions.first())
@@ -92,9 +115,12 @@ workflow CALL_SNV_SENTIEON {
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_SEN.out.versions.first())
         ch_versions = ch_versions.mix(TABIX_SEN.out.versions.first())
         ch_versions = ch_versions.mix(BCF_FILTER_ONE.out.versions.first())
+        ch_versions = ch_versions.mix(ZIP_TABIX_VARCALLERBED.out.versions)
+        ch_versions = ch_versions.mix(BCFTOOLS_ANNOTATE.out.versions)
+        ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)
 
     emit:
-        vcf      = REMOVE_DUPLICATES_SEN.out.vcf // channel: [ val(meta), path(vcf) ]
-        tabix    = TABIX_SEN.out.tbi             // channel: [ val(meta), path(tbi) ]
-        versions = ch_versions                   // channel: [ path(versions.yml) ]
+        vcf      = BCFTOOLS_ANNOTATE.out.vcf  // channel: [ val(meta), path(vcf) ]
+        tabix    = TABIX_ANNOTATE.out.tbi     // channel: [ val(meta), path(tbi) ]
+        versions = ch_versions                // channel: [ path(versions.yml) ]
 }

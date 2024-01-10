@@ -76,6 +76,9 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_GL.out.versions)
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_GL.out.versions)
         ch_versions = ch_versions.mix(TABIX_GL.out.versions)
+        ch_versions = ch_versions.mix(ZIP_TABIX_VARCALLERBED.out.versions)
+        ch_versions = ch_versions.mix(BCFTOOLS_ANNOTATE.out.versions)
+        ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)
 
     emit:
         vcf      = BCFTOOLS_ANNOTATE.out.vcf    // channel: [ val(meta), path(vcf) ]

@@ -59,7 +59,8 @@ workflow CALL_SNV {
                 ch_call_interval,
                 ch_ml_model,
                 ch_case_info,
-                ch_pcr_indel_model
+                ch_pcr_indel_model,
+                ch_foundin_header
             )
             ch_sentieon_vcf = CALL_SNV_SENTIEON.out.vcf
             ch_sentieon_tbi = CALL_SNV_SENTIEON.out.tabix
@@ -102,7 +103,8 @@ workflow CALL_SNV {
             ch_genome_dictionary,
             ch_genome_fai,
             ch_mtshift_backchain,
-            ch_case_info
+            ch_case_info,
+            ch_foundin_header
         )
 
         ch_versions = ch_versions.mix(CALL_SNV_MT.out.versions)
