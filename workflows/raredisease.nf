@@ -242,7 +242,6 @@ workflow RAREDISEASE {
                                                                            : Channel.empty()
     ch_intervals_y              = params.intervals_y                       ? Channel.fromPath(params.intervals_y).collect()
                                                                            : Channel.empty()
-    //ch_me_references            = params.mobile_element_references         ? Channel.fromPath(params.mobile_element_references)
     ch_me_references            = params.mobile_element_references         ? Channel.fromSamplesheet("mobile_element_references")
                                                                            : Channel.empty()
     ch_ml_model                 = params.variant_caller.equals("sentieon") ? Channel.fromPath(params.ml_model).map {it -> [[id:it[0].simpleName], it]}.collect()
