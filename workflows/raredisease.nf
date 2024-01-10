@@ -220,6 +220,7 @@ workflow RAREDISEASE {
                                                                            : Channel.value([[:],[]])
     ch_dbsnp_tbi                = params.known_dbsnp_tbi                   ? Channel.fromPath(params.known_dbsnp_tbi).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : ch_references.known_dbsnp_tbi.ifEmpty([[],[]])
+    ch_foundin_header           = Channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
     ch_gcnvcaller_model         = params.gcnvcaller_model                  ? Channel.fromPath(params.gcnvcaller_model).splitCsv ( header:true )
                                                                             .map { row ->
                                                                                 return [[id:file(row.models).simpleName], row.models]
@@ -380,6 +381,7 @@ workflow RAREDISEASE {
         ch_call_interval,
         ch_ml_model,
         ch_case_info,
+        ch_foundin_header,
         Channel.value(params.sentieon_dnascope_pcr_indel_model)
     )
     ch_versions = ch_versions.mix(CALL_SNV.out.versions)

@@ -28,6 +28,7 @@ workflow CALL_SNV {
         ch_call_interval      // channel: [mandatory] [ path(intervals) ]
         ch_ml_model           // channel: [mandatory] [ path(model) ]
         ch_case_info          // channel: [mandatory] [ val(case_info) ]
+        ch_foundin_header     // channel: [mandatory] [ path(header) ]
         ch_pcr_indel_model    // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
 
     main:
@@ -42,7 +43,8 @@ workflow CALL_SNV {
                 ch_genome_bam_bai,
                 ch_genome_fasta,
                 ch_genome_fai,
-                ch_case_info
+                ch_case_info,
+                ch_foundin_header
             )
             ch_deepvar_vcf = CALL_SNV_DEEPVARIANT.out.vcf
             ch_deepvar_tbi = CALL_SNV_DEEPVARIANT.out.tabix

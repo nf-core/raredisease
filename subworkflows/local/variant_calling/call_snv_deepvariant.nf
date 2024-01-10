@@ -2,18 +2,22 @@
 // A variant caller workflow for deepvariant
 //
 
-include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_GL } from '../../../modules/nf-core/bcftools/norm/main'
-include { BCFTOOLS_NORM as REMOVE_DUPLICATES_GL   } from '../../../modules/nf-core/bcftools/norm/main'
-include { DEEPVARIANT                             } from '../../../modules/nf-core/deepvariant/main'
-include { GLNEXUS                                 } from '../../../modules/nf-core/glnexus/main'
-include { TABIX_TABIX as TABIX_GL                 } from '../../../modules/nf-core/tabix/tabix/main'
+include { BCFTOOLS_ANNOTATE                          } from '../../../modules/nf-core/bcftools/annotate/main'
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_GL    } from '../../../modules/nf-core/bcftools/norm/main'
+include { BCFTOOLS_NORM as REMOVE_DUPLICATES_GL      } from '../../../modules/nf-core/bcftools/norm/main'
+include { DEEPVARIANT                                } from '../../../modules/nf-core/deepvariant/main'
+include { GLNEXUS                                    } from '../../../modules/nf-core/glnexus/main'
+include { TABIX_BGZIPTABIX as ZIP_TABIX_VARCALLERBED } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { TABIX_TABIX as TABIX_GL                    } from '../../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_ANNOTATE              } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_SNV_DEEPVARIANT {
     take:
-        ch_bam_bai      // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_genome_fasta // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai   // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_case_info    // channel: [mandatory] [ val(case_info) ]
+        ch_bam_bai        // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_fasta   // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai     // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_case_info      // channel: [mandatory] [ val(case_info) ]
+        ch_foundin_header // channel: [mandatory] [ path(header) ]
 
     main:
         ch_versions = Channel.empty()
@@ -48,6 +52,25 @@ workflow CALL_SNV_DEEPVARIANT {
 
         TABIX_GL (REMOVE_DUPLICATES_GL.out.vcf)
 
+        ch_genome_fai.map{meta, fai ->
+            return [meta, WorkflowRaredisease.makeBedWithVariantCallerInfo(fai, fai.parent.toString(), "deepvariant")]
+            }
+            .set { ch_varcallerinfo }
+
+        ZIP_TABIX_VARCALLERBED (ch_varcallerinfo).gz_tbi
+            .map{meta,bed,tbi -> return [bed, tbi]}
+            .set{ch_varcallerbed}
+
+        REMOVE_DUPLICATES_GL.out.vcf
+            .join(TABIX_GL.out.tbi)
+            .combine(ch_varcallerbed)
+            .combine(ch_foundin_header)
+            .set { ch_annotate_in }
+
+        BCFTOOLS_ANNOTATE(ch_annotate_in)
+
+        TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
+
         ch_versions = ch_versions.mix(DEEPVARIANT.out.versions.first())
         ch_versions = ch_versions.mix(GLNEXUS.out.versions)
         ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_GL.out.versions)
@@ -55,7 +78,7 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_versions = ch_versions.mix(TABIX_GL.out.versions)
 
     emit:
-        vcf      = REMOVE_DUPLICATES_GL.out.vcf // channel: [ val(meta), path(vcf) ]
-        tabix    = TABIX_GL.out.tbi             // channel: [ val(meta), path(tbi) ]
+        vcf      = BCFTOOLS_ANNOTATE.out.vcf    // channel: [ val(meta), path(vcf) ]
+        tabix    = TABIX_ANNOTATE.out.tbi       // channel: [ val(meta), path(tbi) ]
         versions = ch_versions                  // channel: [ path(versions.yml) ]
 }

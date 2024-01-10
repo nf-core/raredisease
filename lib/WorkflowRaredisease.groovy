@@ -36,6 +36,20 @@ class WorkflowRaredisease {
     }
 
     //
+    // Create a bed file which includes the name of variant caller from fai
+    //
+    public static String makeBedWithVariantCallerInfo(fai, parent_dir, varcaller) {
+        def outfile = new File(parent_dir + '/' + varcaller +'.bed')
+        def writer  = outfile.newWriter()
+        fai.eachLine { line ->
+            def split_str = line.tokenize("\t")
+            writer << [split_str[0],"1",split_str[1],varcaller].join("\t") + "\n"
+        }
+        writer.close()
+        return outfile
+    }
+
+    //
     // Get workflow summary for MultiQC
     //
     public static String paramsSummaryMultiqc(workflow, summary) {
