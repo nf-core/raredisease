@@ -450,8 +450,7 @@
                     "tiddit/cov": {
                         "branch": "master",
                         "git_sha": "ae07bd3d3e229ca82bd94531648736d44367a391",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/tiddit/cov/tiddit-cov.diff"
+                        "installed_by": ["modules"]
                     },
                     "tiddit/sv": {
                         "branch": "master",
@@ -476,8 +475,7 @@
                     "vcf2cytosure": {
                         "branch": "master",
                         "git_sha": "8694793954175ddd3001ddfbc0e36782a674d8a7",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/vcf2cytosure/vcf2cytosure.diff"
+                        "installed_by": ["modules"]
                     },
                     "vcfanno": {
                         "branch": "master",
