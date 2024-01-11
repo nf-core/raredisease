@@ -25,6 +25,7 @@ workflow POSTPROCESS_MT_CALLS {
         ch_mtshift_backchain   // channel: [mandatory] [ val(meta), path(backchain) ]
         ch_case_info           // channel: [mandatory] [ val(case_info) ]
         ch_foundin_header      // channel: [mandatory] [ path(header) ]
+        ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
 
     main:
         ch_versions = Channel.empty()
@@ -101,8 +102,8 @@ workflow POSTPROCESS_MT_CALLS {
 
         TABIX_TABIX_MERGE(ch_addfoundintag_in)
 
-        ch_genome_fai.map{meta, fai ->
-            return [meta, WorkflowRaredisease.makeBedWithVariantCallerInfo(fai, fai.parent.toString(), "mutect2")]
+        ch_genome_chrsizes.flatten().map{chromsizes ->
+            return [[id:'mutect2'], WorkflowRaredisease.makeBedWithVariantCallerInfo(chromsizes, "mutect2")]
             }
             .set { ch_varcallerinfo }
 

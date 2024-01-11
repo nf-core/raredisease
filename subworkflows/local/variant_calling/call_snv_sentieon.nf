@@ -27,6 +27,7 @@ workflow CALL_SNV_SENTIEON {
         ch_case_info       // channel: [mandatory] [ val(case_info) ]
         ch_pcr_indel_model // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
         ch_foundin_header  // channel: [mandatory] [ path(header) ]
+        ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
 
     main:
         ch_versions = Channel.empty()
@@ -89,8 +90,8 @@ workflow CALL_SNV_SENTIEON {
 
         TABIX_SEN(REMOVE_DUPLICATES_SEN.out.vcf)
 
-        ch_genome_fai.map{meta, fai ->
-            return [meta, WorkflowRaredisease.makeBedWithVariantCallerInfo(fai, fai.parent.toString(), "sentieon")]
+        ch_genome_chrsizes.flatten().map{chromsizes ->
+            return [[id:'sentieon_dnascope'], WorkflowRaredisease.makeBedWithVariantCallerInfo(chromsizes, "sentieon_dnascope")]
             }
             .set { ch_varcallerinfo }
 

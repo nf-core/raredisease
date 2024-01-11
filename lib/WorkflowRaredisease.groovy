@@ -36,12 +36,13 @@ class WorkflowRaredisease {
     }
 
     //
-    // Create a bed file which includes the name of variant caller from fai
+    // Create a bed file which includes the name of variant caller from chromsizes file
     //
-    public static String makeBedWithVariantCallerInfo(fai, parent_dir, varcaller) {
+    public static String makeBedWithVariantCallerInfo(chromsizes, varcaller) {
+        def parent_dir = chromsizes.parent.toString()
         def outfile = new File(parent_dir + '/' + varcaller +'.bed')
         def writer  = outfile.newWriter()
-        fai.eachLine { line ->
+        chromsizes.eachLine { line ->
             def split_str = line.tokenize("\t")
             writer << [split_str[0],"1",split_str[1],varcaller].join("\t") + "\n"
         }

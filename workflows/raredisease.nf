@@ -367,6 +367,7 @@ workflow RAREDISEASE {
         ch_mapped.genome_bam_bai,
         ch_mapped.mt_bam_bai,
         ch_mapped.mtshift_bam_bai,
+        ch_genome_chrsizes,
         ch_genome_fasta,
         ch_genome_fai,
         ch_genome_dictionary,
