@@ -1,7 +1,7 @@
-name: vcf2cytosure
+name: tiddit_cov
 channels:
   - conda-forge
   - bioconda
   - defaults
 dependencies:
-  - bioconda::vcf2cytosure=0.9.1
+  - bioconda::tiddit=3.6.1
