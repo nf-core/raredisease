@@ -44,7 +44,7 @@ class WorkflowRaredisease {
         def writer  = outfile.newWriter()
         chromsizes.eachLine { line ->
             def split_str = line.tokenize("\t")
-            writer << [split_str[0],"1",split_str[1],varcaller].join("\t") + "\n"
+            writer << [split_str[0],"0",split_str[1],varcaller].join("\t") + "\n"
         }
         writer.close()
         return outfile
