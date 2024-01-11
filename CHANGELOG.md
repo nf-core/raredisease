@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New workflow for generating cgh files from SV vcfs for interpretation in the CytosSure interpretation software. Turned off by default [#456](https://github.com/nf-core/raredisease/pull/456/)
 - Fastp to do adapter trimming. It can be skipped using `--skip_fastp` [#457](https://github.com/nf-core/raredisease/pull/457)
 - Add FOUND_IN tag, which mentions the variant caller that found the mutation, in the INFO column of the vcf files [#471](https://github.com/nf-core/raredisease/pull/471)
+- GATK CNVCaller uses segments instead of intervals, filters out "reference" segments between the calls, and fixes a bug with how `ch_readcount_intervals` was handled
 
 ### `Changed`
 
