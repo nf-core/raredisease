@@ -482,7 +482,7 @@
                     "default": "bwamem2",
                     "description": "Specifies the alignment algorithm to use - available options are 'bwamem2' and 'sentieon'.",
                     "fa_icon": "fas fa-align-center",
-                    "enum": ["bwamem2", "sentieon"]
+                    "enum": ["bwa", "bwamem2", "sentieon"]
                 },
                 "min_trimmed_length": {
                     "type": "integer",
