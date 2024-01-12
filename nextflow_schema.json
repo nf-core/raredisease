@@ -294,7 +294,10 @@
                     "format": "file-path",
                     "description": "Databases used for structural variant annotation in chrA-posA-chrB-posB-type-count-frequency format.",
                     "fa_icon": "fas fa-file-csv",
-                    "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation."
+                    "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation.",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/svdb_query_bedpe_schema.json"
                 },
                 "svdb_query_dbs": {
                     "type": "string",
@@ -302,7 +305,10 @@
                     "format": "file-path",
                     "description": "Databases used for structural variant annotation in vcf format.",
                     "fa_icon": "fas fa-file-csv",
-                    "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation."
+                    "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation.",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/svdb_query_vcf_schema.json"
                 },
                 "target_bed": {
                     "type": "string",
