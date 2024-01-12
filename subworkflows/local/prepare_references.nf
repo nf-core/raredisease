@@ -48,10 +48,10 @@ workflow PREPARE_REFERENCES {
         SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.set{ch_sentieonbwa}
         SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[],[]])
         GATK_SD(ch_genome_fasta)
-        GET_CHROM_SIZES( SAMTOOLS_FAIDX_GENOME.out.fai )
+        ch_fai = Channel.empty().mix(ch_genome_fai, SAMTOOLS_FAIDX_GENOME.out.fai).collect()
+        GET_CHROM_SIZES( ch_fai )
 
         // MT indices
-        ch_fai = Channel.empty().mix(ch_genome_fai, SAMTOOLS_FAIDX_GENOME.out.fai).collect()
         SAMTOOLS_EXTRACT_MT(ch_genome_fasta, ch_fai)
         ch_mt_fasta_in = Channel.empty().mix(ch_mt_fasta, SAMTOOLS_EXTRACT_MT.out.fa).collect()
         SAMTOOLS_FAIDX_MT_SHIFT(ch_mt_fasta_in, [[],[]])
