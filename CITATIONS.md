@@ -100,6 +100,10 @@
 
   > Okonechnikov K, Conesa A, García-Alcalde F. Qualimap 2: advanced multi-sample quality control for high-throughput sequencing data. Bioinformatics. 2016;32(2):292-294. doi:10.1093/bioinformatics/btv566
 
+- [RetroSeq](https://academic.oup.com/bioinformatics/article/29/3/389/257479)
+
+  > Thomas M. Keane, Kim Wong, David J. Adams, RetroSeq: transposable element discovery from next-generation sequencing data. Bioinformatics.2013 Feb 1;29(3):389-90. doi: 10.1093/bioinformatics/bts697
+
 - [rhocall](https://github.com/dnil/rhocall)
 
 - [Sentieon DNAscope](https://www.biorxiv.org/content/10.1101/2022.05.20.492556v1.abstract)
