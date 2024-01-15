@@ -3,7 +3,7 @@
 //
 
 include { FASTP                      } from '../../modules/nf-core/fastp/main'
-include { ALIGN_BWAMEM2              } from './alignment/align_bwamem2'
+include { ALIGN_BWA_BWAMEM2          } from './alignment/align_bwa_bwamem2'
 include { ALIGN_SENTIEON             } from './alignment/align_sentieon'
 include { SAMTOOLS_VIEW              } from '../../modules/nf-core/samtools/view/main'
 include { ALIGN_MT                   } from './alignment/align_MT'
@@ -39,18 +39,19 @@ workflow ALIGN {
             ch_versions = ch_versions.mix(FASTP.out.versions)
             ch_fastp_json = FASTP.out.json
         }
-        
-        if (params.aligner.equals("bwamem2")) {
-            ALIGN_BWAMEM2 (             // Triggered when params.aligner is set as bwamem2
+
+        if (params.aligner.equals("bwamem2") || params.aligner.equals("bwa")) {
+            ALIGN_BWA_BWAMEM2 (             // Triggered when params.aligner is set as bwamem2 or bwa
                 ch_reads,
+                ch_genome_bwaindex,
                 ch_genome_bwamem2index,
                 ch_genome_fasta,
                 ch_genome_fai,
                 val_platform
             )
-            ch_bwamem2_bam = ALIGN_BWAMEM2.out.marked_bam
-            ch_bwamem2_bai = ALIGN_BWAMEM2.out.marked_bai
-            ch_versions   = ch_versions.mix(ALIGN_BWAMEM2.out.versions)
+            ch_bwamem2_bam = ALIGN_BWA_BWAMEM2.out.marked_bam
+            ch_bwamem2_bai = ALIGN_BWA_BWAMEM2.out.marked_bai
+            ch_versions   = ch_versions.mix(ALIGN_BWA_BWAMEM2.out.versions)
         } else if (params.aligner.equals("sentieon")) {
             ALIGN_SENTIEON (            // Triggered when params.aligner is set as sentieon
                 ch_reads,

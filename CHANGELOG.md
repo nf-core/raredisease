@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fastp to do adapter trimming. It can be skipped using `--skip_fastp` [#457](https://github.com/nf-core/raredisease/pull/457)
 - New workflow for calling insertion of mobile elements [#440](https://github.com/nf-core/raredisease/pull/440)
 - GATK CNVCaller uses segments instead of intervals, filters out "reference" segments between the calls, and fixes a bug with how `ch_readcount_intervals` was handled [#472](https://github.com/nf-core/raredisease/pull/472)
+- bwa aligner [#474](https://github.com/nf-core/raredisease/pull/474)
 - Add FOUND_IN tag, which mentions the variant caller that found the mutation, in the INFO column of the vcf files [#471](https://github.com/nf-core/raredisease/pull/471)
 
 ### `Changed`

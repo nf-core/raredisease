@@ -3,6 +3,7 @@
 //
 
 include { BWA_INDEX as BWA_INDEX_GENOME                      } from '../../modules/nf-core/bwa/index/main'
+include { BWA_INDEX as BWA_INDEX_MT_SHIFT                    } from '../../modules/nf-core/bwa/index/main'
 include { BWAMEM2_INDEX as BWAMEM2_INDEX_GENOME              } from '../../modules/nf-core/bwamem2/index/main'
 include { BWAMEM2_INDEX as BWAMEM2_INDEX_MT_SHIFT            } from '../../modules/nf-core/bwamem2/index/main'
 include { CAT_CAT as CAT_CAT_BAIT                            } from '../../modules/nf-core/cat/cat/main'
@@ -58,7 +59,9 @@ workflow PREPARE_REFERENCES {
         GATK_SD_MT_SHIFT(ch_mt_fasta_in)
         GATK_SHIFTFASTA(ch_mt_fasta_in, SAMTOOLS_FAIDX_MT_SHIFT.out.fai, GATK_SD_MT_SHIFT.out.dict)
         BWAMEM2_INDEX_MT_SHIFT(GATK_SHIFTFASTA.out.shift_fa)
+        BWA_INDEX_MT_SHIFT(GATK_SHIFTFASTA.out.shift_fa)
         SENTIEON_BWAINDEX_MT_SHIFT(GATK_SHIFTFASTA.out.shift_fa)
+        ch_bwa_mtshift = Channel.empty().mix(SENTIEON_BWAINDEX_MT_SHIFT.out.index, BWA_INDEX_MT_SHIFT.out.index).collect()
         GATK_SHIFTFASTA.out.intervals
             .multiMap{ meta, files ->
                     shift_intervals:
@@ -106,6 +109,7 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(GATK_SD_MT_SHIFT.out.versions)
         ch_versions = ch_versions.mix(GATK_SHIFTFASTA.out.versions)
         ch_versions = ch_versions.mix(BWAMEM2_INDEX_MT_SHIFT.out.versions)
+        ch_versions = ch_versions.mix(BWA_INDEX_MT_SHIFT.out.versions)
         ch_versions = ch_versions.mix(SENTIEON_BWAINDEX_MT_SHIFT.out.versions)
         ch_versions = ch_versions.mix(TABIX_GNOMAD_AF.out.versions)
         ch_versions = ch_versions.mix(TABIX_PT.out.versions)
@@ -132,7 +136,7 @@ workflow PREPARE_REFERENCES {
         mtshift_fai           = GATK_SHIFTFASTA.out.shift_fai.collect()                          // channel: [ val(meta), path(fai) ]
         mtshift_fasta         = GATK_SHIFTFASTA.out.shift_fa.collect()                           // channel: [ val(meta), path(fai) ]
         mtshift_dict          = GATK_SHIFTFASTA.out.dict.collect()                               // channel: [ path(dict) ]
-        mtshift_bwa_index     = SENTIEON_BWAINDEX_MT_SHIFT.out.index.collect()                   // channel: [ val(meta), path(index) ]
+        mtshift_bwa_index     = ch_bwa_mtshift                                                   // channel: [ val(meta), path(index) ]
         mtshift_bwamem2_index = BWAMEM2_INDEX_MT_SHIFT.out.index.collect()                       // channel: [ val(meta), path(index) ]
 
         gnomad_af_idx         = TABIX_GNOMAD_AF.out.tbi.collect()                                // channel: [ val(meta), path(fasta) ]

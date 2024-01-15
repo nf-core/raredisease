@@ -2,6 +2,7 @@
 // Align MT
 //
 
+include { BWA_MEM as BWA_MEM_MT                                             } from '../../../modules/nf-core/bwa/mem/main'
 include { SENTIEON_BWAMEM as SENTIEON_BWAMEM_MT                             } from '../../../modules/nf-core/sentieon/bwamem/main'
 include { BWAMEM2_MEM as BWAMEM2_MEM_MT                                     } from '../../../modules/nf-core/bwamem2/mem/main'
 include { GATK4_MERGEBAMALIGNMENT as GATK4_MERGEBAMALIGNMENT_MT             } from '../../../modules/nf-core/gatk4/mergebamalignment/main'
@@ -22,6 +23,7 @@ workflow ALIGN_MT {
 
     main:
         ch_versions     = Channel.empty()
+        ch_bwa_bam      = Channel.empty()
         ch_bwamem2_bam  = Channel.empty()
         ch_sentieon_bam = Channel.empty()
 
@@ -33,10 +35,13 @@ workflow ALIGN_MT {
             SENTIEON_BWAMEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, ch_fai )
             ch_sentieon_bam = SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, bai -> [meta, bam] }
             ch_versions     = ch_versions.mix(SENTIEON_BWAMEM_MT.out.versions.first())
+        } else if (params.aligner.equals("bwa")) {
+            BWA_MEM_MT ( ch_fastq, ch_bwaindex, true )
+            ch_bwa_bam      = BWA_MEM_MT.out.bam
+            ch_versions     = ch_versions.mix(BWA_MEM_MT.out.versions.first())
         }
-
         Channel.empty()
-            .mix(ch_bwamem2_bam, ch_sentieon_bam)
+            .mix(ch_bwamem2_bam, ch_sentieon_bam, ch_bwa_bam)
             .join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)
             .set {ch_bam_ubam}
 
