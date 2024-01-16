@@ -83,15 +83,15 @@ workflow CALL_MOBILE_ELEMENTS {
         // Concatenate the chromosome vcfs to sample vcfs
         BCFTOOLS_SORT_ME.out.vcf
             .map { meta, vcf -> [ meta - meta.subMap('interval'), vcf ] }
-            .groupTuple(size: 24)
+            .groupTuple(size: 25)
             .set { ch_vcfs }
 
         TABIX_ME_SPLIT.out.tbi
             .map { meta, tbi -> [ meta - meta.subMap('interval'), tbi ] }
-            .groupTuple(size: 24)
+            .groupTuple(size: 25)
             .set { ch_tbis }
 
-        ch_vcfs.join(ch_tbis)
+        ch_vcfs.join(ch_tbis, failOnMismatch: true)
             .set { ch_vcfs_tbis}
 
         BCFTOOLS_CONCAT_ME ( ch_vcfs_tbis )
