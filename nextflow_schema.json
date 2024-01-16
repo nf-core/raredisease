@@ -374,6 +374,15 @@
                     "help_text": "If no directory path is passed, vcf files will not be annotated by vep.",
                     "fa_icon": "fas fa-folder-open"
                 },
+                "vep_plugin_files": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Databases used by both named and custom plugins to annotate variants.",
+                    "fa_icon": "fas fa-file-csv",
+                    "help_text": "Path to a file containing the absolute paths to databases and their indices used by VEP's custom and named plugins resources defined within the vcfanno toml file. One line per resource.",
+                    "mimetype": "text/csv"
+                },
                 "vep_filters": {
                     "type": "string",
                     "exists": true,
@@ -557,10 +566,10 @@
             "properties": {
                 "vep_cache_version": {
                     "type": "integer",
-                    "default": 107,
+                    "default": 110,
                     "description": "Specify the version of the VEP cache provided to the `--vep_cache` option.",
                     "fa_icon": "fas fa-align-center",
-                    "enum": [107]
+                    "enum": [107, 110]
                 }
             }
         },
