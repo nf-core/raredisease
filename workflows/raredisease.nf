@@ -119,6 +119,7 @@ include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_MT    } from '../subworkflows/local/an
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV   } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV    } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_GENOME_SNVS                  } from '../subworkflows/local/annotate_genome_snvs'
+include { ANNOTATE_MOBILE_ELEMENTS              } from '../subworkflows/local/annotate_mobile_elements'
 include { ANNOTATE_MT_SNVS                      } from '../subworkflows/local/annotate_mt_snvs'
 include { ANNOTATE_STRUCTURAL_VARIANTS          } from '../subworkflows/local/annotate_structural_variants'
 include { CALL_REPEAT_EXPANSIONS                } from '../subworkflows/local/call_repeat_expansions'
@@ -244,6 +245,8 @@ workflow RAREDISEASE {
     ch_intervals_y              = params.intervals_y                       ? Channel.fromPath(params.intervals_y).collect()
                                                                            : Channel.empty()
     ch_me_references            = params.mobile_element_references         ? Channel.fromSamplesheet("mobile_element_references")
+                                                                           : Channel.empty()
+    ch_me_svdb_resources        = params.mobile_element_svdb_resources     ? Channel.fromPath(params.mobile_element_svdb_resources)
                                                                            : Channel.empty()
     ch_ml_model                 = params.variant_caller.equals("sentieon") ? Channel.fromPath(params.ml_model).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : Channel.value([[:],[]])
@@ -610,6 +613,19 @@ workflow RAREDISEASE {
         params.genome
     )
     ch_versions = ch_versions.mix(CALL_MOBILE_ELEMENTS.out.versions)
+
+    ANNOTATE_MOBILE_ELEMENTS(
+        CALL_MOBILE_ELEMENTS.out.vcf,
+        ch_me_svdb_resources,
+        ch_genome_fasta,
+        ch_genome_dictionary,
+        ch_vep_cache,
+        ch_variant_consequences,
+        ch_vep_filters,
+        params.genome,
+        params.vep_cache_version
+    )
+    ch_versions = ch_versions.mix(ANNOTATE_MOBILE_ELEMENTS.out.versions)
 
     //
     // MODULE: Pipeline reporting

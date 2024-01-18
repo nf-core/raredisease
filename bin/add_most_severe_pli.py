@@ -49,6 +49,7 @@ def construct_most_severe_pli_info(line: str, pli_ind: int) -> list:
     for field in info_fields:
         if field.startswith("CSQ="):
             transcripts = field.split("CSQ=")[1].split(",")
+            break
     pli_values = parse_vep_transcripts(transcripts, pli_ind)
     try:
         pli_max = max(pli_values)
@@ -80,7 +81,7 @@ def write_pli_annotated_vcf(file_in: TextIO, file_out: TextIO):
     for line in file_in:
         if line.startswith("#"):
             file_out.write(line)
-            if line.startswith("##INFO=<ID=CSQ"):
+            if line.startswith("##INFO=<ID=CSQ") and "pLI_gene_value" in line:
                 pli_ind = parse_vep_csq_schema(line)
                 file_out.write(
                     '##INFO=<ID=most_severe_pli,Number=1,Type=Float,Description="Probabililty of a gene being loss-of-function intolerant score.">\n'
