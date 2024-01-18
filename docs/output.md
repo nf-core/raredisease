@@ -492,6 +492,36 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 
 </details>
 
+### Mobile element analysis
+
+#### Calling mobile elements
+
+Mobile elements are identified from the bam file using [RetroSeq](https://github.com/tk2/RetroSeq) and the indiviual calls are merged to case VCF using SVDB.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `call_mobile_elements/`
+  - `<case_id>_mobile_elements.vcf.gz`: file containing mobile elements.
+  - `<case_id>_mobile_elements.vcf.gz.tbi`: index of the file containing mobile elements.
+
+</details>
+
+#### Annotating mobile elements
+
+The mobile elements are annotated with allele frequencies and allele counts using SVDB. These annotation files needed are preferably produced from a representative population. Further annoation is done using VEP and the resulting VCF is filtered using bcftools. The default filter is to only keep elements with `PASS` in the filter column but if no other post-processing is done we reccomend supplementing with an exclude expression based on population allele frequencies. The filtering key is dependent on the annotation files used but an example expression could look like this: `--exclude 'INFO/swegen_sva_FRQ > 0.1'`. If a list of HGNC id:s have been supplied with the option `--vep_filters`, variants matching those id:s will be presented in a seperate file using [filter_vep from VEP](https://www.ensembl.org/info/docs/tools/vep/script/vep_filter.html). This option can be disabled using the flag `--skip_vep_filter`. A VCF corresponding to the complete set of variants will also be produced.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `rank_and_filter/`
+  - `<case_id>_mobile_elements_annotated_research.vcf.gz`: VCF containting the complete set of annotated mobile elements.
+  - `<case_id>_mobile_elements_annotated_research.vcf.gz.tbi`: Index for VCF containting the complete set of annotated mobile elements.
+  - `<case_id>_mobile_elements_annotated_clinical.vcf.gz`: VCF containing selected annotated mobile elements.
+  - `<case_id>_mobile_elements_annotated_clincial.vcf.gz.tbi`: Index for VCF containing selected annotated mobile elements.
+
+</details>
+
 ### Pipeline information
 
 [Nextflow](https://www.nextflow.io/docs/latest/tracing.html) provides excellent functionality for generating various reports relevant to the running and execution of the pipeline. This will allow you to troubleshoot errors with the running of the pipeline, and also provide you with other information such as launch commands, run times and resource usage.
