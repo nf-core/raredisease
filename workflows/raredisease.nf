@@ -67,6 +67,10 @@ if (!params.skip_vep_filter) {
     mandatoryParams += ["vep_filters"]
 }
 
+if (!params.skip_me_annotation) {
+    mandatoryParams += ["mobile_element_svdb_annotations"]
+}
+
 for (param in mandatoryParams.unique()) {
     if (params[param] == null) {
         println("params." + param + " not set.")
@@ -614,18 +618,20 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(CALL_MOBILE_ELEMENTS.out.versions)
 
-    ANNOTATE_MOBILE_ELEMENTS(
-        CALL_MOBILE_ELEMENTS.out.vcf,
-        ch_me_svdb_resources,
-        ch_genome_fasta,
-        ch_genome_dictionary,
-        ch_vep_cache,
-        ch_variant_consequences,
-        ch_vep_filters,
-        params.genome,
-        params.vep_cache_version
-    )
-    ch_versions = ch_versions.mix(ANNOTATE_MOBILE_ELEMENTS.out.versions)
+    if (!params.skip_me_annotation) {
+        ANNOTATE_MOBILE_ELEMENTS(
+            CALL_MOBILE_ELEMENTS.out.vcf,
+            ch_me_svdb_resources,
+            ch_genome_fasta,
+            ch_genome_dictionary,
+            ch_vep_cache,
+            ch_variant_consequences,
+            ch_vep_filters,
+            params.genome,
+            params.vep_cache_version
+        )
+        ch_versions = ch_versions.mix(ANNOTATE_MOBILE_ELEMENTS.out.versions)
+    }
 
     //
     // MODULE: Pipeline reporting
