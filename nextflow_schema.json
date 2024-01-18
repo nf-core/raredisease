@@ -223,7 +223,7 @@
                     "format": "file-path",
                     "schema": "assets/mobile_element_references_schema.json"
                 },
-                "mobile_element_svdb_resources": {
+                "mobile_element_svdb_annotations": {
                     "type": "string",
                     "description": "File with mobile element allele frequency references",
                     "help_text": "Path to csv file listing files containing mobile element allele frequencies in reference populations. \nFormat: <vcf file path>,<in_freq_info_key>,<in_allele_count_info_key>,<out_freq_info_key>,<out_allele_count_info_key>",

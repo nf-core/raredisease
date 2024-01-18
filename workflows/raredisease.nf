@@ -246,7 +246,7 @@ workflow RAREDISEASE {
                                                                            : Channel.empty()
     ch_me_references            = params.mobile_element_references         ? Channel.fromSamplesheet("mobile_element_references")
                                                                            : Channel.empty()
-    ch_me_svdb_resources        = params.mobile_element_svdb_resources     ? Channel.fromPath(params.mobile_element_svdb_resources)
+    ch_me_svdb_resources        = params.mobile_element_svdb_annotations     ? Channel.fromPath(params.mobile_element_svdb_annotations)
                                                                            : Channel.empty()
     ch_ml_model                 = params.variant_caller.equals("sentieon") ? Channel.fromPath(params.ml_model).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : Channel.value([[:],[]])
