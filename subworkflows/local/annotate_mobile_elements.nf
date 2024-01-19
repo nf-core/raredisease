@@ -69,7 +69,7 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
             .map { meta, vcf ->
                 [ meta, vcf, [] ]
             }
-            .set {ch_bcftools_filter_input }
+            .set { ch_bcftools_filter_input }
 
         BCFTOOLS_VIEW_FILTER ( ch_bcftools_filter_input, [], [], [] )
 

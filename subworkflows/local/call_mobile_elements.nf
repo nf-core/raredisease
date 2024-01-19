@@ -28,7 +28,7 @@ workflow CALL_MOBILE_ELEMENTS {
 
         // Building chromosome channels based on fasta index
         ch_genome_fai
-            .splitCsv(sep: "\t", elem: 1, limit: 25)
+            .splitCsv( sep: "\t", elem: 1, limit: 25 )
             .map { meta, fai -> [ fai.first() ] }
             .collect()
             .map { chr -> [ chr, chr.size() ] }
@@ -37,7 +37,7 @@ workflow CALL_MOBILE_ELEMENTS {
 
         // Building one bam channel per chromosome and adding interval and the number of intervals
         ch_genome_bam_bai
-            .combine(ch_chr)
+            .combine( ch_chr )
             .map { meta, bam, bai, chr, nr_of_chrs ->
                 [ meta + [interval:chr, nr_of_intervals: nr_of_chrs], bam, bai ]
             }
@@ -48,7 +48,7 @@ workflow CALL_MOBILE_ELEMENTS {
         ME_INDEX_SPLIT_ALIGNMENT ( ME_SPLIT_ALIGNMENT.out.bam )
 
         ME_SPLIT_ALIGNMENT.out.bam
-            .join(ME_INDEX_SPLIT_ALIGNMENT.out.bai, failOnMismatch: true, failOnDuplicate: true)
+            .join( ME_INDEX_SPLIT_ALIGNMENT.out.bai, failOnMismatch: true, failOnDuplicate: true )
             .set { ch_retroseq_input }
 
         ch_me_references
@@ -104,7 +104,7 @@ workflow CALL_MOBILE_ELEMENTS {
             }
             .set { ch_tbis }
 
-        ch_vcfs.join(ch_tbis, failOnMismatch: true)
+        ch_vcfs.join( ch_tbis, failOnMismatch: true )
             .set { ch_vcfs_tbis }
 
         // Concatenate the chromosome vcfs to sample vcfs
