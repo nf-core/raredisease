@@ -26,5 +26,6 @@ workflow ANNOTATE_CSQ_PLI {
 
     emit:
         vcf_ann  = TABIX_BGZIPTABIX.out.gz_tbi.map { meta, vcf, tbi -> return [ meta, vcf ] }.collect() // channel: [ val(meta), path(vcf) ]
+        tbi_ann  = TABIX_BGZIPTABIX.out.gz_tbi.map { meta, vcf, tbi -> return [ meta, tbi ] }.collect() // channel: [ val(meta), path(tbi) ]
         versions = ch_versions                 // channel: [ path(versions.yml) ]
 }
