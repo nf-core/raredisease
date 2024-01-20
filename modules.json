@@ -347,6 +347,11 @@
                         "git_sha": "d73505dd68b27b53b4002e84eea21a2819907562",
                         "installed_by": ["modules"]
                     },
+                    "rtgtools/vcfeval": {
+                        "branch": "master",
+                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "installed_by": ["modules"]
+                    },
                     "samtools/faidx": {
                         "branch": "master",
                         "git_sha": "fd742419940e01ba1c5ecb172c3e32ec840662fe",
