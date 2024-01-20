@@ -28,16 +28,18 @@ workflow CALL_MOBILE_ELEMENTS {
 
         // Building chromosome channels based on fasta index
         ch_genome_fai
-            .splitCsv(sep: "\t", elem: 1, limit: 25)
+            .splitCsv( sep: "\t", elem: 1, limit: 25 )
             .map { meta, fai -> [ fai.first() ] }
+            .collect()
+            .map { chr -> [ chr, chr.size() ] }
+            .transpose()
             .set { ch_chr }
 
-        // Building one bam channel per chromosome and adding interval
+        // Building one bam channel per chromosome and adding interval and the number of intervals
         ch_genome_bam_bai
-            .combine(ch_chr)
-            .map {
-                meta, bam, bai, chr ->
-                return [ meta + [interval:chr], bam, bai ]
+            .combine( ch_chr )
+            .map { meta, bam, bai, chr, nr_of_chrs ->
+                [ meta + [interval:chr, nr_of_intervals: nr_of_chrs], bam, bai ]
             }
             .set { ch_genome_bam_bai_interval }
 
@@ -46,7 +48,7 @@ workflow CALL_MOBILE_ELEMENTS {
         ME_INDEX_SPLIT_ALIGNMENT ( ME_SPLIT_ALIGNMENT.out.bam )
 
         ME_SPLIT_ALIGNMENT.out.bam
-            .join(ME_INDEX_SPLIT_ALIGNMENT.out.bai, failOnMismatch:true, failOnDuplicate: true)
+            .join( ME_INDEX_SPLIT_ALIGNMENT.out.bai, failOnMismatch: true, failOnDuplicate: true )
             .set { ch_retroseq_input }
 
         ch_me_references
@@ -80,20 +82,32 @@ workflow CALL_MOBILE_ELEMENTS {
         BCFTOOLS_SORT_ME ( BCFTOOLS_REHEADER_ME.out.vcf )
         TABIX_ME_SPLIT ( BCFTOOLS_SORT_ME.out.vcf )
 
-        // Concatenate the chromosome vcfs to sample vcfs
+        // Preparing channels for input to bcftools concat
+        // resulting channel [ meta, [ vcf_1, vcf_2, ... ], [ tbi_1, tbi_2, ... ] ]
         BCFTOOLS_SORT_ME.out.vcf
-            .map { meta, vcf -> [ meta - meta.subMap('interval'), vcf ] }
-            .groupTuple(size: 25)
+            .map { meta, vcf ->
+                [ groupKey( meta - meta.subMap('interval'), meta.nr_of_intervals ), vcf ]
+            }
+            .groupTuple()
+            .map { meta, vcf ->
+                [ meta - meta.subMap('nr_of_intervals'), vcf ]
+            }
             .set { ch_vcfs }
 
         TABIX_ME_SPLIT.out.tbi
-            .map { meta, tbi -> [ meta - meta.subMap('interval'), tbi ] }
-            .groupTuple(size: 25)
+            .map { meta, vcf ->
+                [ groupKey( meta - meta.subMap('interval'), meta.nr_of_intervals ), vcf ]
+            }
+            .groupTuple()
+            .map { meta, vcf ->
+                [ meta - meta.subMap('nr_of_intervals'), vcf ]
+            }
             .set { ch_tbis }
 
-        ch_vcfs.join(ch_tbis, failOnMismatch: true)
-            .set { ch_vcfs_tbis}
+        ch_vcfs.join( ch_tbis, failOnMismatch: true )
+            .set { ch_vcfs_tbis }
 
+        // Concatenate the chromosome vcfs to sample vcfs
         BCFTOOLS_CONCAT_ME ( ch_vcfs_tbis )
 
         // Merge sample vcfs to a case vcf

@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - bwa aligner [#474](https://github.com/nf-core/raredisease/pull/474)
 - Add FOUND_IN tag, which mentions the variant caller that found the mutation, in the INFO column of the vcf files [#471](https://github.com/nf-core/raredisease/pull/471)
 - A new parameter `vep_plugin_files` to supply files required by vep plugins [#482](https://github.com/nf-core/raredisease/pull/482)
+- New workflow for annotating mobile elements [#483](https://github.com/nf-core/raredisease/pull/483)
 
 ### `Changed`
 

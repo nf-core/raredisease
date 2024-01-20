@@ -223,6 +223,15 @@
                     "format": "file-path",
                     "schema": "assets/mobile_element_references_schema.json"
                 },
+                "mobile_element_svdb_annotations": {
+                    "type": "string",
+                    "description": "File with mobile element allele frequency references",
+                    "help_text": "Path to csv file listing files containing mobile element allele frequencies in reference populations. \nFormat: <vcf file path>,<in_freq_info_key>,<in_allele_count_info_key>,<out_freq_info_key>,<out_allele_count_info_key>",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/svdb_query_vcf_schema.json"
+                },
                 "ml_model": {
                     "type": "string",
                     "exists": true,
@@ -458,6 +467,11 @@
                 "skip_qualimap": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip Qualimap.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_me_annotation": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip annotation of mobile_elements.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_mt_annotation": {

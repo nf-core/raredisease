@@ -269,6 +269,17 @@ no header and the following columns: `CHROM POS REF_ALLELE ALT_ALLELE AF`. Sampl
 | vep_cache         |                  |
 | score_config_mt   |                  |
 
+##### 10. Mobile element annotation
+
+| Mandatory                                   | Optional    |
+| ------------------------------------------- | ----------- |
+| genome                                      | vep_filters |
+| mobile_element_svdb_annotations<sup>1</sup> |             |
+| vep_cache_version                           |             |
+| vep_cache                                   |             |
+
+<sup>1</sup> A CSV file that describes the databases (VCFs) used by SVDB for annotating mobile elements with allele frequencies. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv).
+
 #### Run the pipeline
 
 You can directly supply the parameters in the command line (CLI) or use a config file from which the pipeline can import the parameters.
