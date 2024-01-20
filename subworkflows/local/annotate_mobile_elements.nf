@@ -2,13 +2,12 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SVDB_QUERY as SVDB_QUERY_DB    } from '../../modules/nf-core/svdb/query/main'
-include { PICARD_SORTVCF                 } from '../../modules/nf-core/picard/sortvcf/main'
-include { ENSEMBLVEP as ENSEMBLVEP_ME    } from '../../modules/local/ensemblvep/main'
-include { ENSEMBLVEP_FILTERVEP as FILTERVEP_ME  } from '../../modules/nf-core/ensemblvep/filtervep'
-include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_FILTER } from '../../modules/nf-core/bcftools/view/main'
-include { TABIX_BGZIPTABIX as BGZIP_TABIX_ME    } from '../../modules/nf-core/tabix/bgziptabix/main'
-
+include { SVDB_QUERY as SVDB_QUERY_DB             } from '../../modules/nf-core/svdb/query/main'
+include { PICARD_SORTVCF                          } from '../../modules/nf-core/picard/sortvcf/main'
+include { ENSEMBLVEP_VEP as ENSEMBLVEP_ME         } from '../../modules/nf-core/ensemblvep/vep/main'
+include { ENSEMBLVEP_FILTERVEP as FILTERVEP_ME    } from '../../modules/nf-core/ensemblvep/filtervep'
+include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_FILTER   } from '../../modules/nf-core/bcftools/view/main'
+include { TABIX_BGZIPTABIX as BGZIP_TABIX_ME      } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { ANNOTATE_CSQ_PLI as ANNOTATE_CSQ_PLI_ME } from '../../subworkflows/local/annotate_consequence_pli.nf'
 
 workflow ANNOTATE_MOBILE_ELEMENTS {
@@ -23,6 +22,7 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
         ch_vep_filters          // channel: [mandatory] [ path(vep_filter) ]
         val_vep_genome          // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version   // string: [mandatory] default: 107
+        ch_vep_extra_files      // channel: [mandatory] [ path(files) ]
 
     main:
         ch_versions = Channel.empty()
@@ -54,18 +54,21 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
             ch_genome_fasta,
             ch_genome_dictionary
         )
+        .vcf
+        .map { meta, vcf -> return [meta, vcf, []]}
+        .set { ch_vep_in }
 
         ENSEMBLVEP_ME(
-            PICARD_SORTVCF.out.vcf,
-            ch_genome_fasta,
+            ch_vep_in,
             val_vep_genome,
             "homo_sapiens",
             val_vep_cache_version,
             ch_vep_cache,
-            []
+            ch_genome_fasta,
+            ch_vep_extra_files
         )
 
-        ENSEMBLVEP_ME.out.vcf_gz
+        ENSEMBLVEP_ME.out.vcf
             .map { meta, vcf ->
                 [ meta, vcf, [] ]
             }
@@ -76,7 +79,7 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
         BCFTOOLS_VIEW_FILTER.out.vcf
             .multiMap { meta, vcf ->
                 clinical: [ meta + [ set: "clinical" ], vcf ]
-                research: [ meta + [ set: "research" ], vcf ]   
+                research: [ meta + [ set: "research" ], vcf ]
             }
             .set { ch_clin_research_vcf }
 

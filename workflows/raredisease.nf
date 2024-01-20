@@ -647,7 +647,8 @@ workflow RAREDISEASE {
             ch_variant_consequences,
             ch_vep_filters,
             params.genome,
-            params.vep_cache_version
+            params.vep_cache_version,
+            ch_vep_extra_files
         )
         ch_versions = ch_versions.mix(ANNOTATE_MOBILE_ELEMENTS.out.versions)
     }
