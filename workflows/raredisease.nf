@@ -34,6 +34,10 @@ def mandatoryParams = [
 ]
 def missingParamsCount = 0
 
+if (params.run_rtgvcfeval) {
+    mandatoryParams += ["rtg_truthvcfs"]
+}
+
 if (!params.skip_snv_annotation) {
     mandatoryParams += ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
     "gnomad_af", "score_config_snv"]
@@ -126,6 +130,7 @@ include { ANNOTATE_GENOME_SNVS                  } from '../subworkflows/local/an
 include { ANNOTATE_MOBILE_ELEMENTS              } from '../subworkflows/local/annotate_mobile_elements'
 include { ANNOTATE_MT_SNVS                      } from '../subworkflows/local/annotate_mt_snvs'
 include { ANNOTATE_STRUCTURAL_VARIANTS          } from '../subworkflows/local/annotate_structural_variants'
+include { CALL_MOBILE_ELEMENTS                  } from '../subworkflows/local/call_mobile_elements'
 include { CALL_REPEAT_EXPANSIONS                } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                              } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS              } from '../subworkflows/local/call_structural_variants'
@@ -138,8 +143,7 @@ include { RANK_VARIANTS as RANK_VARIANTS_MT     } from '../subworkflows/local/ra
 include { RANK_VARIANTS as RANK_VARIANTS_SNV    } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SV     } from '../subworkflows/local/rank_variants'
 include { SCATTER_GENOME                        } from '../subworkflows/local/scatter_genome'
-include { CALL_MOBILE_ELEMENTS                  } from '../subworkflows/local/call_mobile_elements'
-
+include { VARIANT_EVALUATION                    } from '../subworkflows/local/variant_evaluation'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -267,6 +271,8 @@ workflow RAREDISEASE {
     ch_readcount_intervals      = params.readcount_intervals               ? Channel.fromPath(params.readcount_intervals).collect()
                                                                            : ( ch_references.readcount_intervals      ?: Channel.empty() )
     ch_reduced_penetrance       = params.reduced_penetrance                ? Channel.fromPath(params.reduced_penetrance).collect()
+                                                                           : Channel.value([])
+    ch_rtg_truthvcfs            = params.rtg_truthvcfs                     ? Channel.fromPath(params.rtg_truthvcfs).collect()
                                                                            : Channel.value([])
     ch_score_config_mt          = params.score_config_mt                   ? Channel.fromPath(params.score_config_mt).collect()
                                                                            : Channel.value([])
@@ -396,6 +402,18 @@ workflow RAREDISEASE {
         Channel.value(params.sentieon_dnascope_pcr_indel_model)
     )
     ch_versions = ch_versions.mix(CALL_SNV.out.versions)
+
+    //
+    // VARIANT EVALUATION
+    //
+    CALL_SNV.out.genome_vcf_tabix.view()
+    if (params.run_rtgvcfeval) {
+        VARIANT_EVALUATION (
+            CALL_SNV.out.genome_vcf_tabix,
+            ch_genome_fai,
+            ch_rtg_truthvcfs
+        )
+    }
 
     //
     // SV CALLING

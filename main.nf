@@ -39,6 +39,7 @@ params.ngsbits_samplegender_method    = WorkflowMain.getGenomeAttribute(params, 
 params.ploidy_model                   = WorkflowMain.getGenomeAttribute(params, 'ploidy_model')
 params.reduced_penetrance             = WorkflowMain.getGenomeAttribute(params, 'reduced_penetrance')
 params.readcount_intervals            = WorkflowMain.getGenomeAttribute(params, 'readcount_intervals')
+params.rtg_truthvcfs                  = WorkflowMain.getGenomeAttribute(params, 'rtg_truthvcfs')
 params.sequence_dictionary            = WorkflowMain.getGenomeAttribute(params, 'sequence_dictionary')
 params.score_config_mt                = WorkflowMain.getGenomeAttribute(params, 'score_config_mt')
 params.score_config_snv               = WorkflowMain.getGenomeAttribute(params, 'score_config_snv')
