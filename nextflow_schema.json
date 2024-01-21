@@ -309,6 +309,14 @@
                     "fa_icon": "fas fa-file",
                     "description": "SV rank model config file for genmod."
                 },
+                "sdf": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "directory-path",
+                    "description": "Directory for pre-built sdf index. Used by rtg/vcfeval",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open"
+                },
                 "sequence_dictionary": {
                     "type": "string",
                     "exists": true,

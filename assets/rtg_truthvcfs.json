@@ -19,7 +19,7 @@
                 "pattern": "^\\S+\\.vcf(\\.gz)?$",
                 "errorMessage": "Path to vcf files cannot contain spaces and must be a .vcf or .vcf.gz file"
             },
-            "bed": {
+            "bedregions": {
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
@@ -27,6 +27,6 @@
                 "errorMessage": "Path to bed files cannot contain spaces"
             }
         },
-        "required": ["vcf", "samplename", "bed"]
+        "required": ["vcf", "samplename", "bedregions"]
     }
 }

@@ -20,7 +20,7 @@ workflow VARIANT_EVALUATION {
         ch_rtg_truthvcfs
             .splitCsv ( header:true )
             .map { row ->
-                return [[samplename:row.samplename[0], bed:row.bed[0]], row.vcf[0], []]
+                return [[samplename:row.samplename[0], bedregions:row.bedregions[0]], row.vcf[0], []]
             }
             .set { ch_rtgvcfs_dbs }
 

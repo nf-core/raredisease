@@ -44,6 +44,7 @@ params.sequence_dictionary            = WorkflowMain.getGenomeAttribute(params, 
 params.score_config_mt                = WorkflowMain.getGenomeAttribute(params, 'score_config_mt')
 params.score_config_snv               = WorkflowMain.getGenomeAttribute(params, 'score_config_snv')
 params.score_config_sv                = WorkflowMain.getGenomeAttribute(params, 'score_config_sv')
+params.sdf                            = WorkflowMain.getGenomeAttribute(params, 'sdf')
 params.svdb_query_dbs                 = WorkflowMain.getGenomeAttribute(params, 'svdb_query_dbs')
 params.target_bed                     = WorkflowMain.getGenomeAttribute(params, 'target_bed')
 params.min_trimmed_length             = WorkflowMain.getGenomeAttribute(params, 'min_trimmed_length')
