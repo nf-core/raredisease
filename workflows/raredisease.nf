@@ -254,7 +254,7 @@ workflow RAREDISEASE {
                                                                            : Channel.empty()
     ch_me_references            = params.mobile_element_references         ? Channel.fromSamplesheet("mobile_element_references")
                                                                            : Channel.empty()
-    ch_me_svdb_resources        = params.mobile_element_svdb_annotations     ? Channel.fromPath(params.mobile_element_svdb_annotations)
+    ch_me_svdb_resources        = params.mobile_element_svdb_annotations   ? Channel.fromPath(params.mobile_element_svdb_annotations)
                                                                            : Channel.empty()
     ch_ml_model                 = params.variant_caller.equals("sentieon") ? Channel.fromPath(params.ml_model).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : Channel.value([[:],[]])
@@ -280,6 +280,7 @@ workflow RAREDISEASE {
                                                                            : Channel.value([])
     ch_score_config_sv          = params.score_config_sv                   ? Channel.fromPath(params.score_config_sv).collect()
                                                                            : Channel.value([])
+    ch_sdf                      = ch_references.sdf
     ch_sv_dbs                   = params.svdb_query_dbs                    ? Channel.fromPath(params.svdb_query_dbs)
                                                                            : Channel.empty()
     ch_sv_bedpedbs              = params.svdb_query_bedpedbs               ? Channel.fromPath(params.svdb_query_bedpedbs)
@@ -302,7 +303,6 @@ workflow RAREDISEASE {
     ch_vep_filters              = params.vep_filters                       ? Channel.fromPath(params.vep_filters).collect()
                                                                            : Channel.value([])
     ch_versions                 = ch_versions.mix(ch_references.versions)
-
 
     // SV caller priority
     if (params.skip_germlinecnvcaller) {
@@ -406,12 +406,12 @@ workflow RAREDISEASE {
     //
     // VARIANT EVALUATION
     //
-    CALL_SNV.out.genome_vcf_tabix.view()
     if (params.run_rtgvcfeval) {
         VARIANT_EVALUATION (
             CALL_SNV.out.genome_vcf_tabix,
             ch_genome_fai,
-            ch_rtg_truthvcfs
+            ch_rtg_truthvcfs,
+            ch_sdf
         )
     }
 
