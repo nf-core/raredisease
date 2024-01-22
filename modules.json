@@ -117,7 +117,7 @@
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
-                        "git_sha": "214d575774c172062924ad3564b4f66655600730",
+                        "git_sha": "76a0696a60c41c57fc5f6040ac31b11ce5d4d8dd",
                         "installed_by": ["modules"]
                     },
                     "expansionhunter": {
