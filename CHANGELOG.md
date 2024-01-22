@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed the name of the parameter from `skip_cnv_calling` to `skip_germlinecnvcaller` [#435](https://github.com/nf-core/raredisease/pull/435)
 - Check SVDB query input files for existence and correct format [#476](https://github.com/nf-core/raredisease/pull/476)
 - Change hardcoded platform value to params.platform in align_MT.config [#475](https://github.com/nf-core/raredisease/pull/475)
+- The split into clincial and research VCFs is now done before ranking the varaints [#485](https://github.com/nf-core/raredisease/pull/485)
 
 ### `Fixed`
 
