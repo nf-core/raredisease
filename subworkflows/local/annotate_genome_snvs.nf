@@ -117,7 +117,7 @@ workflow ANNOTATE_GENOME_SNVS {
             .set { ch_for_mix }
 
         ch_for_mix.selvar.mix(ch_for_mix.cadd)
-            .map { meta, vcf -> return [meta, vcf, []]}
+            .map { meta, vcf -> return [meta, vcf, []] }
             .set { ch_vep_in }
 
 

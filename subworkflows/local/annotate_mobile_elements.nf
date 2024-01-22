@@ -55,7 +55,7 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
             ch_genome_dictionary
         )
         .vcf
-        .map { meta, vcf -> return [meta, vcf, []]}
+        .map { meta, vcf -> return [meta, vcf, []] }
         .set { ch_vep_in }
 
         ENSEMBLVEP_ME(

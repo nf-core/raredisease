@@ -54,7 +54,7 @@ workflow ANNOTATE_MT_SNVS {
 
         ch_for_mix.merged.mix(ch_for_mix.cadd)
             .tap { ch_haplogrep_in }
-            .map { meta, vcf -> return [meta, vcf, []]}
+            .map { meta, vcf -> return [meta, vcf, []] }
             .set { ch_vep_in }
 
 
