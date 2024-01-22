@@ -115,6 +115,11 @@
                         "git_sha": "29984d70aea47d06f0062a1785d76c357dd40ea9",
                         "installed_by": ["modules"]
                     },
+                    "ensemblvep/vep": {
+                        "branch": "master",
+                        "git_sha": "76a0696a60c41c57fc5f6040ac31b11ce5d4d8dd",
+                        "installed_by": ["modules"]
+                    },
                     "expansionhunter": {
                         "branch": "master",
                         "git_sha": "0260e5d22372eae434816d6970dedf3f5adc0053",

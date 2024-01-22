@@ -11,7 +11,7 @@ include { UPD as UPD_SITES                      } from '../../modules/nf-core/up
 include { UPD as UPD_REGIONS                    } from '../../modules/nf-core/upd/main'
 include { CHROMOGRAPH as CHROMOGRAPH_SITES      } from '../../modules/nf-core/chromograph/main'
 include { CHROMOGRAPH as CHROMOGRAPH_REGIONS    } from '../../modules/nf-core/chromograph/main'
-include { ENSEMBLVEP as ENSEMBLVEP_SNV          } from '../../modules/local/ensemblvep/main'
+include { ENSEMBLVEP_VEP as ENSEMBLVEP_SNV      } from '../../modules/nf-core/ensemblvep/vep/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_TABIX as TABIX_VEP              } from '../../modules/nf-core/tabix/tabix/main'
@@ -36,6 +36,7 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_gnomad_af          // channel: [optional] [ path(tab), path(tbi) ]
         ch_split_intervals    // channel: [mandatory] [ path(intervals) ]
+        ch_vep_extra_files    // channel: [mandatory] [ path(files) ]
 
     main:
         ch_cadd_vcf       = Channel.empty()
@@ -115,20 +116,23 @@ workflow ANNOTATE_GENOME_SNVS {
             }
             .set { ch_for_mix }
 
-        ch_vep_in = ch_for_mix.selvar.mix(ch_for_mix.cadd)
+        ch_for_mix.selvar.mix(ch_for_mix.cadd)
+            .map { meta, vcf -> return [meta, vcf, []] }
+            .set { ch_vep_in }
+
 
         // Annotating with ensembl Vep
         ENSEMBLVEP_SNV(
             ch_vep_in,
-            ch_genome_fasta,
             val_vep_genome,
             "homo_sapiens",
             val_vep_cache_version,
             ch_vep_cache,
-            []
+            ch_genome_fasta,
+            ch_vep_extra_files
         )
 
-        ENSEMBLVEP_SNV.out.vcf_gz
+        ENSEMBLVEP_SNV.out.vcf
             .map { meta, vcf -> [meta - meta.subMap('scatterid'), vcf] }
             .set { ch_vep_out }
 

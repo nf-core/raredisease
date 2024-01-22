@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://raw.githubusercontent.com/nf-core/raredisease/master/assets/mobile_element_references_schema.json",
+    "title": "Schema for VEP plugin files and their indices",
+    "description": "Schema for VEP plugin files and their indices",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "vep_files": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "errorMessage": "Path to vep plugin files and their indices"
+            }
+        },
+        "required": ["vep_files"]
+    }
+}
