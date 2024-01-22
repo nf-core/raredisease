@@ -390,7 +390,9 @@
                     "description": "Databases used by both named and custom plugins to annotate variants.",
                     "fa_icon": "fas fa-file-csv",
                     "help_text": "Path to a file containing the absolute paths to databases and their indices used by VEP's custom and named plugins resources defined within the vcfanno toml file. One line per resource.",
-                    "mimetype": "text/csv"
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/vep_plugin_files_schema.json"
                 },
                 "vep_filters": {
                     "type": "string",
