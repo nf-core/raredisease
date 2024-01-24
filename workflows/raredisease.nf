@@ -280,7 +280,8 @@ workflow RAREDISEASE {
                                                                            : Channel.value([])
     ch_score_config_sv          = params.score_config_sv                   ? Channel.fromPath(params.score_config_sv).collect()
                                                                            : Channel.value([])
-    ch_sdf                      = ch_references.sdf
+    ch_sdf                      = params.sdf                               ? Channel.fromPath(params.sdf).map{it -> [[id:it[0].simpleName],it]}.collect()
+                                                                           : ch_references.sdf
     ch_sv_dbs                   = params.svdb_query_dbs                    ? Channel.fromPath(params.svdb_query_dbs)
                                                                            : Channel.empty()
     ch_sv_bedpedbs              = params.svdb_query_bedpedbs               ? Channel.fromPath(params.svdb_query_bedpedbs)

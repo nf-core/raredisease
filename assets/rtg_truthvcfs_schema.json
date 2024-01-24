@@ -25,8 +25,15 @@
                 "exists": true,
                 "pattern": "^\\S+\\.bed$",
                 "errorMessage": "Path to bed files cannot contain spaces"
+            },
+            "evaluationregions": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.bed$",
+                "errorMessage": "Path to bed files cannot contain spaces"
             }
         },
-        "required": ["vcf", "samplename", "bedregions"]
+        "required": ["vcf", "samplename"]
     }
 }

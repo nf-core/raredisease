@@ -280,7 +280,7 @@
                     "help_text": "Path to comma-separated file containing information about the truth vcf files used by vcfeval.",
                     "pattern": "^\\S+\\.csv$",
                     "mimetype": "text/csv",
-                    "schema": "assets/rtg_truthvcfs.json"
+                    "schema": "assets/rtg_truthvcfs_schema.json"
                 },
                 "save_reference": {
                     "type": "boolean",

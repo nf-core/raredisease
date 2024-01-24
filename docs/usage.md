@@ -21,6 +21,8 @@ Table of contents:
       - [7. SNV annotation \& Ranking](#7-snv-annotation--ranking)
       - [8. SV annotation \& Ranking](#8-sv-annotation--ranking)
       - [9. Mitochondrial annotation](#9-mitochondrial-annotation)
+      - [10. Mobile element annoation](#10-mobile-element-annotation)
+      - [11. Variant evaluation](#11-variant-evaluation)
     - [Run the pipeline](#run-the-pipeline)
       - [Direct input in CLI](#direct-input-in-cli)
       - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
@@ -278,6 +280,16 @@ no header and the following columns: `CHROM POS REF_ALLELE ALT_ALLELE AF`. Sampl
 | vep_cache                                   |             |
 
 <sup>1</sup> A CSV file that describes the databases (VCFs) used by SVDB for annotating mobile elements with allele frequencies. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv).
+
+##### 11. Variant evaluation
+
+| Mandatory                  | Optional |
+| -------------------------- | -------- |
+| run_rtgvcfeval<sup>1</sup> | sdf      |
+| rtg_truthvcfs<sup>2</sup>  |          |
+
+<sup>1</sup> This parameter is set to false by default, set it to true if if you'd like to run the evaluation subworkflow
+<sup>2</sup> A CSV file that describes the truth VCF files used by RTG Tools' vcfeval for evaluating SNVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rtg_example.csv). The file contains four columns `samplename,vcf,bedregions,evaluationregions` where samplename is the user assigned samplename in the input samplesheet, vcf is the path to the truth vcf file, bedregions and evaluationregions are the path to the bed files that are supposed to be passed through --bed_regions and --evaluation_regions options of vcfeval.
 
 #### Run the pipeline
 

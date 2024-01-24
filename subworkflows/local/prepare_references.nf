@@ -52,7 +52,8 @@ workflow PREPARE_REFERENCES {
         GATK_SD(ch_genome_fasta)
         ch_fai = Channel.empty().mix(ch_genome_fai, SAMTOOLS_FAIDX_GENOME.out.fai).collect()
         GET_CHROM_SIZES( ch_fai )
-        ch_genome_fasta.map {meta, fasta -> return [meta, fasta, [], [] ]}.set {ch_rtgformat_in}
+        ch_genome_fasta.map { meta, fasta -> return [meta, fasta, [], [] ] }
+            .set {ch_rtgformat_in}
         RTGTOOLS_FORMAT(ch_rtgformat_in)
 
         // MT indices

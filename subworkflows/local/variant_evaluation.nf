@@ -20,7 +20,9 @@ workflow VARIANT_EVALUATION {
         ch_rtg_truthvcfs
             .splitCsv ( header:true )
             .map { row ->
-                return [[samplename:row.samplename[0], bedregions:row.bedregions[0]], row.vcf[0], []]
+                evregions  = row.evaluationregions[0].isEmpty() ? [] : row.evaluationregions[0]
+                bedregions = row.bedregions[0].isEmpty()        ? [] : row.bedregions[0]
+                return [[samplename:row.samplename[0], bedregions:bedregions, evaluationregions:evregions], row.vcf[0], []]
             }
             .set { ch_rtgvcfs_dbs }
 
@@ -35,15 +37,16 @@ workflow VARIANT_EVALUATION {
         ch_snv_vcf_tbi
             .combine(ch_truthvcf_tbi)
             .map { meta, query, qidx, meta2, truth, tidx ->
-                    return [meta + [samplename: meta2.samplename] , query, qidx, truth, tidx, meta2.bed, []]
+                    return [meta + [samplename: meta2.samplename] , query, qidx, truth, tidx, meta2.bedregions, meta2.evaluationregions]
             }
             .set { ch_vcfeval_in }
 
         RTGTOOLS_VCFEVAL ( ch_vcfeval_in, ch_sdf )
 
-        // ch_versions = ch_versions.mix(BUILD_BED.out.versions)
-        // ch_versions = ch_versions.mix(GATK4_SPLITINTERVALS.out.versions)
+        ch_versions = ch_versions.mix(BCFTOOLS_REHEADER.out.versions)
+        ch_versions = ch_versions.mix(TABIX_TRUTHVCF.out.versions)
+        ch_versions = ch_versions.mix(RTGTOOLS_VCFEVAL.out.versions)
 
     emit:
-        versions        = ch_versions                   // channel: [ path(versions.yml) ]
+        versions        = ch_versions // channel: [ path(versions.yml) ]
 }
