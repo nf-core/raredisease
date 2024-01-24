@@ -415,6 +415,7 @@ workflow RAREDISEASE {
             ch_sdf
         )
     }
+    ch_versions = ch_versions.mix(VARIANT_EVALUATION.out.versions)
 
     //
     // SV CALLING
