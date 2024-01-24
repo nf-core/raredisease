@@ -430,8 +430,8 @@ workflow RAREDISEASE {
             ch_rtg_truthvcfs,
             ch_sdf
         )
+        ch_versions = ch_versions.mix(VARIANT_EVALUATION.out.versions)
     }
-    ch_versions = ch_versions.mix(VARIANT_EVALUATION.out.versions)
 
     //
     // SV CALLING
