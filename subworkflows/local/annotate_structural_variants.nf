@@ -2,12 +2,12 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SVDB_QUERY as SVDB_QUERY_DB    } from '../../modules/nf-core/svdb/query/main'
-include { SVDB_QUERY as SVDB_QUERY_BEDPE } from '../../modules/nf-core/svdb/query/main'
-include { PICARD_SORTVCF                 } from '../../modules/nf-core/picard/sortvcf/main'
-include { BCFTOOLS_VIEW                  } from '../../modules/nf-core/bcftools/view/main'
-include { ENSEMBLVEP as ENSEMBLVEP_SV    } from '../../modules/local/ensemblvep/main'
-include { TABIX_TABIX as TABIX_VEP       } from '../../modules/nf-core/tabix/tabix/main'
+include { SVDB_QUERY as SVDB_QUERY_DB     } from '../../modules/nf-core/svdb/query/main'
+include { SVDB_QUERY as SVDB_QUERY_BEDPE  } from '../../modules/nf-core/svdb/query/main'
+include { PICARD_SORTVCF                  } from '../../modules/nf-core/picard/sortvcf/main'
+include { BCFTOOLS_VIEW                   } from '../../modules/nf-core/bcftools/view/main'
+include { ENSEMBLVEP_VEP as ENSEMBLVEP_SV } from '../../modules/nf-core/ensemblvep/vep/main'
+include { TABIX_TABIX as TABIX_VEP        } from '../../modules/nf-core/tabix/tabix/main'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
@@ -20,6 +20,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         ch_vep_cache          // channel: [mandatory] [ path(cache) ]
         ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_dictionary  // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_vep_extra_files    // channel: [mandatory] [ path(files) ]
 
     main:
         ch_versions      = Channel.empty()
@@ -97,18 +98,21 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         PICARD_SORTVCF.out.vcf.map { meta, vcf -> return [meta,vcf,[]] }.set { ch_sortvcf }
 
         BCFTOOLS_VIEW(ch_sortvcf, [], [], [])
+            .vcf
+            .map { meta, vcf -> return [meta, vcf, []]}
+            .set { ch_vep_in }
 
         ENSEMBLVEP_SV(
-            BCFTOOLS_VIEW.out.vcf,
-            ch_genome_fasta,
+            ch_vep_in,
             val_vep_genome,
             "homo_sapiens",
             val_vep_cache_version,
             ch_vep_cache,
-            []
+            ch_genome_fasta,
+            ch_vep_extra_files
         )
 
-        TABIX_VEP (ENSEMBLVEP_SV.out.vcf_gz)
+        TABIX_VEP (ENSEMBLVEP_SV.out.vcf)
 
         ch_versions = ch_versions.mix(SVDB_QUERY_DB.out.versions)
         ch_versions = ch_versions.mix(SVDB_QUERY_BEDPE.out.versions)
@@ -118,7 +122,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         ch_versions = ch_versions.mix(TABIX_VEP.out.versions)
 
     emit:
-        vcf_ann  = ENSEMBLVEP_SV.out.vcf_gz // channel: [ val(meta), path(vcf) ]
-        tbi      = TABIX_VEP.out.tbi        // channel: [ val(meta), path(tbi) ]
-        versions = ch_versions              // channel: [ path(versions.yml) ]
+        vcf_ann  = ENSEMBLVEP_SV.out.vcf // channel: [ val(meta), path(vcf) ]
+        tbi      = TABIX_VEP.out.tbi     // channel: [ val(meta), path(tbi) ]
+        versions = ch_versions           // channel: [ path(versions.yml) ]
 }
