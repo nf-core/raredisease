@@ -356,8 +356,6 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 - `annotate_snv/genome`
   - `<case_id>_rohann_vcfanno_filter_vep.vcf.gz`: file containing bcftools roh, vcfanno, and vep annotations.
   - `<case_id>_rohann_vcfanno_filter_vep.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, and vep annotations.
-  - `<case_id>_vep_csq_pli.vcf.gz`: file containing bcftools roh, vcfanno, vep, consequence and pli annotations.
-  - `<case_id>_vep_csq_pli.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, vep, consequence and pli annotations.
 
 </details>
 
@@ -395,8 +393,6 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 - `annotate_sv/`
   - `<case_id>_svdbquery_vep.vcf.gz`: file containing svdb query, and vep annotations.
   - `<case_id>_svdbquery_vep.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, and vep annotations.
-  - `<case_id>_vep_csq_pli.vcf.gz`: file containing bcftools roh, vcfanno, vep, consequence and pli annotations.
-  - `<case_id>_vep_csq_pli.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, vep, consequence and pli annotations.
 
 </details>
 
@@ -475,11 +471,11 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 
 #### Filter_vep
 
-[filter_vep from VEP](https://www.ensembl.org/info/docs/tools/vep/script/vep_filter.html) is used to subset the variants based on a list of HGNC ID:s. Typpical use case is that you want to filter your results to only include variants in a predefined set of clinically relevant genes. This step is optional and can be disabled by using the flag `--skip_vep_filter`. You will always get the complete VCF together with the clinical VCF.
+[filter_vep from VEP](https://www.ensembl.org/info/docs/tools/vep/script/vep_filter.html) is used to subset the variants based on a list of HGNC ID:s. Typical use case is that you want to filter your results to only include variants in a predefined set of clinically relevant genes. This step is optional and can be disabled by using the flag `--skip_vep_filter`. You will always get the complete VCF together with the clinical VCF.
 
 #### GENMOD
 
-[GENMOD](https://github.com/Clinical-Genomics/genmod) is a simple to use command line tool for annotating and analyzing genomic variations in the VCF file format. GENMOD can annotate genetic patterns of inheritance in vcf:s with single or multiple families of arbitrary size. Each variant variant will be asigned a predictded pathogenicity score. The score will be given both as a raw score and a normalized score with values between 0 and 1. The tags in the INFO field are `RankScore` and `RankScoreNormalized`. The score can be configured to fit your annotations and preferences by modifying the score config file.
+[GENMOD](https://github.com/Clinical-Genomics/genmod) is a simple to use command line tool for annotating and analyzing genomic variations in the VCF file format. GENMOD can annotate genetic patterns of inheritance in vcf:s with single or multiple families of arbitrary size. Each variant will be assigned a predicted pathogenicity score. The score will be given both as a raw score and a normalized score with values between 0 and 1. The tags in the INFO field are `RankScore` and `RankScoreNormalized`. The score can be configured to fit your annotations and preferences by modifying the score config file.
 
 <details markdown="1">
 <summary>Output files</summary>
