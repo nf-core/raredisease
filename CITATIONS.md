@@ -106,6 +106,10 @@
 
 - [rhocall](https://github.com/dnil/rhocall)
 
+- [RTG Tools (vcfeval)](https://github.com/RealTimeGenomics/rtg-tools)
+
+  > John G. Cleary, Ross Braithwaite, Kurt Gaastra, Brian S. Hilbush, Stuart Inglis, Sean A. Irvine, Alan Jackson, Richard Littin, Mehul Rathod, David Ware, Justin M. Zook, Len Trigg, and Francisco M. De La Vega. "Comparing Variant Call Files for Performance Benchmarking of Next-Generation Sequencing Variant Calling Pipelines." bioRxiv, 2015. doi:10.1101/023754.
+
 - [Sentieon DNAscope](https://www.biorxiv.org/content/10.1101/2022.05.20.492556v1.abstract)
 
   > Freed D, Pan R, Chen H, Li Z, Hu J, Aldana R. DNAscope: High Accuracy Small Variant Calling Using Machine Learning. Bioinformatics; 2022. doi:10.1101/2022.05.20.492556

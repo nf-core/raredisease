@@ -15,6 +15,7 @@ include { GATK4_PREPROCESSINTERVALS as GATK_PREPROCESS_WGS   } from '../../modul
 include { GATK4_PREPROCESSINTERVALS as GATK_PREPROCESS_WES   } from '../../modules/nf-core/gatk4/preprocessintervals/main.nf'
 include { GATK4_SHIFTFASTA as GATK_SHIFTFASTA                } from '../../modules/nf-core/gatk4/shiftfasta/main'
 include { GET_CHROM_SIZES                                    } from '../../modules/local/get_chrom_sizes'
+include { RTGTOOLS_FORMAT                                    } from '../../modules/nf-core/rtgtools/format/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_EXTRACT_MT              } from '../../modules/nf-core/samtools/faidx/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME            } from '../../modules/nf-core/samtools/faidx/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_MT_SHIFT          } from '../../modules/nf-core/samtools/faidx/main'
@@ -51,6 +52,9 @@ workflow PREPARE_REFERENCES {
         GATK_SD(ch_genome_fasta)
         ch_fai = Channel.empty().mix(ch_genome_fai, SAMTOOLS_FAIDX_GENOME.out.fai).collect()
         GET_CHROM_SIZES( ch_fai )
+        ch_genome_fasta.map { meta, fasta -> return [meta, fasta, [], [] ] }
+            .set {ch_rtgformat_in}
+        RTGTOOLS_FORMAT(ch_rtgformat_in)
 
         // MT indices
         SAMTOOLS_EXTRACT_MT(ch_genome_fasta, ch_fai)
@@ -120,6 +124,7 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
         ch_versions = ch_versions.mix(GATK_PREPROCESS_WGS.out.versions)
         ch_versions = ch_versions.mix(GATK_PREPROCESS_WES.out.versions)
+        ch_versions = ch_versions.mix(RTGTOOLS_FORMAT.out.versions)
 
     emit:
         genome_bwa_index      = Channel.empty().mix(ch_bwa, ch_sentieonbwa).collect()            // channel: [ val(meta), path(index) ]
@@ -129,7 +134,7 @@ workflow PREPARE_REFERENCES {
         genome_dict           = GATK_SD.out.dict.collect()                                       // channel: [ path(dict) ]
         readcount_intervals   = Channel.empty()
                                     .mix(ch_preprocwgs.interval_list,ch_preprocwes.interval_list)// channel: [ path(intervals) ]
-
+        sdf                   = RTGTOOLS_FORMAT.out.sdf                                          // channel: [ val (meta), path(intervals) ]
         mt_intervals          = ch_shiftfasta_mtintervals.intervals.collect()                    // channel: [ path(intervals) ]
         mtshift_intervals     = ch_shiftfasta_mtintervals.shift_intervals.collect()              // channel: [ path(intervals) ]
         mtshift_backchain     = GATK_SHIFTFASTA.out.shift_back_chain.collect()                   // channel: [ val(meta), path(backchain) ]
