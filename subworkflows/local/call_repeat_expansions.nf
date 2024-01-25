@@ -33,7 +33,7 @@ workflow CALL_REPEAT_EXPANSIONS {
 
         // Fix header and rename sample
         BCFTOOLS_REHEADER_EXP (
-            EXPANSIONHUNTER.out.vcf.map{ meta, vcf -> [ meta, vcf, [] ]},
+            EXPANSIONHUNTER.out.vcf.map{ meta, vcf -> [ meta, vcf, [], [] ]},
             ch_genome_fai
         )
         RENAMESAMPLE_EXP ( BCFTOOLS_REHEADER_EXP.out.vcf )
