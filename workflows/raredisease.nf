@@ -34,6 +34,10 @@ def mandatoryParams = [
 ]
 def missingParamsCount = 0
 
+if (params.run_rtgvcfeval) {
+    mandatoryParams += ["rtg_truthvcfs"]
+}
+
 if (!params.skip_snv_annotation) {
     mandatoryParams += ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
     "gnomad_af", "score_config_snv"]
@@ -126,6 +130,7 @@ include { ANNOTATE_GENOME_SNVS                  } from '../subworkflows/local/an
 include { ANNOTATE_MOBILE_ELEMENTS              } from '../subworkflows/local/annotate_mobile_elements'
 include { ANNOTATE_MT_SNVS                      } from '../subworkflows/local/annotate_mt_snvs'
 include { ANNOTATE_STRUCTURAL_VARIANTS          } from '../subworkflows/local/annotate_structural_variants'
+include { CALL_MOBILE_ELEMENTS                  } from '../subworkflows/local/call_mobile_elements'
 include { CALL_REPEAT_EXPANSIONS                } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                              } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS              } from '../subworkflows/local/call_structural_variants'
@@ -138,8 +143,7 @@ include { RANK_VARIANTS as RANK_VARIANTS_MT     } from '../subworkflows/local/ra
 include { RANK_VARIANTS as RANK_VARIANTS_SNV    } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SV     } from '../subworkflows/local/rank_variants'
 include { SCATTER_GENOME                        } from '../subworkflows/local/scatter_genome'
-include { CALL_MOBILE_ELEMENTS                  } from '../subworkflows/local/call_mobile_elements'
-
+include { VARIANT_EVALUATION                    } from '../subworkflows/local/variant_evaluation'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -250,7 +254,7 @@ workflow RAREDISEASE {
                                                                            : Channel.empty()
     ch_me_references            = params.mobile_element_references         ? Channel.fromSamplesheet("mobile_element_references")
                                                                            : Channel.empty()
-    ch_me_svdb_resources        = params.mobile_element_svdb_annotations     ? Channel.fromPath(params.mobile_element_svdb_annotations)
+    ch_me_svdb_resources        = params.mobile_element_svdb_annotations   ? Channel.fromPath(params.mobile_element_svdb_annotations)
                                                                            : Channel.empty()
     ch_ml_model                 = params.variant_caller.equals("sentieon") ? Channel.fromPath(params.ml_model).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                            : Channel.value([[:],[]])
@@ -268,12 +272,16 @@ workflow RAREDISEASE {
                                                                            : ( ch_references.readcount_intervals      ?: Channel.empty() )
     ch_reduced_penetrance       = params.reduced_penetrance                ? Channel.fromPath(params.reduced_penetrance).collect()
                                                                            : Channel.value([])
+    ch_rtg_truthvcfs            = params.rtg_truthvcfs                     ? Channel.fromPath(params.rtg_truthvcfs).collect()
+                                                                           : Channel.value([])
     ch_score_config_mt          = params.score_config_mt                   ? Channel.fromPath(params.score_config_mt).collect()
                                                                            : Channel.value([])
     ch_score_config_snv         = params.score_config_snv                  ? Channel.fromPath(params.score_config_snv).collect()
                                                                            : Channel.value([])
     ch_score_config_sv          = params.score_config_sv                   ? Channel.fromPath(params.score_config_sv).collect()
                                                                            : Channel.value([])
+    ch_sdf                      = params.sdf                               ? Channel.fromPath(params.sdf).map{it -> [[id:it[0].simpleName],it]}.collect()
+                                                                           : ch_references.sdf
     ch_sv_dbs                   = params.svdb_query_dbs                    ? Channel.fromPath(params.svdb_query_dbs)
                                                                            : Channel.empty()
     ch_sv_bedpedbs              = params.svdb_query_bedpedbs               ? Channel.fromPath(params.svdb_query_bedpedbs)
@@ -282,7 +290,7 @@ workflow RAREDISEASE {
     ch_target_intervals         = ch_references.target_intervals
     ch_variant_catalog          = params.variant_catalog                   ? Channel.fromPath(params.variant_catalog).map { it -> [[id:it[0].simpleName],it]}.collect()
                                                                            : Channel.value([[],[]])
-    ch_variant_consequences     = Channel.fromPath("$projectDir/assets/variant_consequences_v1.txt", checkIfExists: true).collect()
+    ch_variant_consequences     = Channel.fromPath("$projectDir/assets/variant_consequences_v2.txt", checkIfExists: true).collect()
     ch_vcfanno_resources        = params.vcfanno_resources                 ? Channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
                                                                            : Channel.value([])
     ch_vcf2cytosure_blacklist   = params.vcf2cytosure_blacklist            ? Channel.fromPath(params.vcf2cytosure_blacklist).collect()
@@ -293,10 +301,11 @@ workflow RAREDISEASE {
                                                                            : Channel.value([])
     ch_vep_cache                = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") )  ? ch_references.vep_resources
                                                                            : ( params.vep_cache    ? Channel.fromPath(params.vep_cache).collect() : Channel.value([]) )
+    ch_vep_extra_files_unsplit  = params.vep_plugin_files                  ? Channel.fromPath(params.vep_plugin_files).collect()
+                                                                           : Channel.value([])
     ch_vep_filters              = params.vep_filters                       ? Channel.fromPath(params.vep_filters).collect()
                                                                            : Channel.value([])
     ch_versions                 = ch_versions.mix(ch_references.versions)
-
 
     // SV caller priority
     if (params.skip_germlinecnvcaller) {
@@ -305,11 +314,25 @@ workflow RAREDISEASE {
         ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
     }
 
+    // Read and store paths in the vep_plugin_files file
+    ch_vep_extra_files_unsplit.splitCsv ( header:true )
+        .map { row ->
+            f = file(row.vep_files[0])
+            if(f.isFile() || f.isDirectory()){
+                return [f]
+            } else {
+                error("\nVep database file ${f} does not exist.")
+            }
+        }
+        .collect()
+        .set {ch_vep_extra_files}
+
     // Input QC
     if (!params.skip_fastqc) {
         FASTQC (ch_reads)
         ch_versions = ch_versions.mix(FASTQC.out.versions.first())
     }
+
     // CREATE CHROMOSOME BED AND INTERVALS
     SCATTER_GENOME (
         ch_genome_dictionary,
@@ -398,6 +421,19 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(CALL_SNV.out.versions)
 
     //
+    // VARIANT EVALUATION
+    //
+    if (params.run_rtgvcfeval) {
+        VARIANT_EVALUATION (
+            CALL_SNV.out.genome_vcf_tabix,
+            ch_genome_fai,
+            ch_rtg_truthvcfs,
+            ch_sdf
+        )
+        ch_versions = ch_versions.mix(VARIANT_EVALUATION.out.versions)
+    }
+
+    //
     // SV CALLING
     //
     CALL_STRUCTURAL_VARIANTS (
@@ -432,7 +468,8 @@ workflow RAREDISEASE {
             params.vep_cache_version,
             ch_vep_cache,
             ch_genome_fasta,
-            ch_genome_dictionary
+            ch_genome_dictionary,
+            ch_vep_extra_files
         ).set {ch_sv_annotate}
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
@@ -479,7 +516,8 @@ workflow RAREDISEASE {
             ch_vep_cache,
             ch_genome_fasta,
             ch_gnomad_af,
-            ch_scatter_split_intervals
+            ch_scatter_split_intervals,
+            ch_vep_extra_files
         ).set {ch_snv_annotate}
         ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 
@@ -526,6 +564,7 @@ workflow RAREDISEASE {
             params.genome,
             params.vep_cache_version,
             ch_vep_cache,
+            ch_vep_extra_files
         ).set {ch_mt_annotate}
         ch_versions = ch_versions.mix(ch_mt_annotate.versions)
 
@@ -628,7 +667,8 @@ workflow RAREDISEASE {
             ch_variant_consequences,
             ch_vep_filters,
             params.genome,
-            params.vep_cache_version
+            params.vep_cache_version,
+            ch_vep_extra_files
         )
         ch_versions = ch_versions.mix(ANNOTATE_MOBILE_ELEMENTS.out.versions)
     }
