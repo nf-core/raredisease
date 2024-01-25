@@ -102,6 +102,10 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 - [GENMOD](https://github.com/Clinical-Genomics/genmod)
 
+**11. Variant evaluation:**
+
+- [RTG Tools](https://github.com/RealTimeGenomics/rtg-tools)
+
 Note that it is possible to include/exclude certain tools or steps.
 
 ## Usage
