@@ -76,7 +76,7 @@ workflow CALL_MOBILE_ELEMENTS {
 
         // Fix the vcf by adding header, sorting and indexing
         BCFTOOLS_REHEADER_ME (
-            RETROSEQ_CALL.out.vcf.map{ meta, vcf -> [ meta, vcf, [] ] },
+            RETROSEQ_CALL.out.vcf.map{ meta, vcf -> [ meta, vcf, [], [] ] },
             ch_genome_fai
         )
         BCFTOOLS_SORT_ME ( BCFTOOLS_REHEADER_ME.out.vcf )

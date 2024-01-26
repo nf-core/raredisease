@@ -32,13 +32,13 @@ workflow CALL_SV_MANTA {
                 .combine(bai_file_list)
                 .map { it -> it + [ [], [] ] }
                 .set { manta_input }
-            MANTA ( manta_input, ch_genome_fasta, ch_genome_fai )
+            MANTA ( manta_input, ch_genome_fasta, ch_genome_fai, [] )
         } else {
             ch_case_info.combine(bam_file_list)
                 .combine(bai_file_list)
                 .combine(bed_input)
                 .set { manta_input }
-            MANTA ( manta_input, ch_genome_fasta, ch_genome_fai )
+            MANTA ( manta_input, ch_genome_fasta, ch_genome_fai, [] )
         }
 
         ch_versions = MANTA.out.versions
