@@ -356,8 +356,6 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 - `annotate_snv/genome`
   - `<case_id>_rohann_vcfanno_filter_vep.vcf.gz`: file containing bcftools roh, vcfanno, and vep annotations.
   - `<case_id>_rohann_vcfanno_filter_vep.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, and vep annotations.
-  - `<case_id>_vep_csq_pli.vcf.gz`: file containing bcftools roh, vcfanno, vep, consequence and pli annotations.
-  - `<case_id>_vep_csq_pli.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, vep, consequence and pli annotations.
 
 </details>
 
@@ -395,8 +393,6 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 - `annotate_sv/`
   - `<case_id>_svdbquery_vep.vcf.gz`: file containing svdb query, and vep annotations.
   - `<case_id>_svdbquery_vep.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, and vep annotations.
-  - `<case_id>_vep_csq_pli.vcf.gz`: file containing bcftools roh, vcfanno, vep, consequence and pli annotations.
-  - `<case_id>_vep_csq_pli.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, vep, consequence and pli annotations.
 
 </details>
 
@@ -471,28 +467,32 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 
 </details>
 
-### Rank variants and filtering
+### Filtering and ranking
+
+#### Filter_vep
+
+[filter_vep from VEP](https://www.ensembl.org/info/docs/tools/vep/script/vep_filter.html) is used to subset the variants based on a list of HGNC ID:s. Typical use case is that you want to filter your results to only include variants in a predefined set of clinically relevant genes. This step is optional and can be disabled by using the flag `--skip_vep_filter`. You will always get the complete VCF together with the clinical VCF.
 
 #### GENMOD
 
-[GENMOD](https://github.com/Clinical-Genomics/genmod) is a simple to use command line tool for annotating and analyzing genomic variations in the VCF file format. GENMOD can annotate genetic patterns of inheritance in vcf:s with single or multiple families of arbitrary size. VCF file annotated by GENMOD are further filtered using [filter_vep from VEP](https://www.ensembl.org/info/docs/tools/vep/script/vep_filter.html) to separate clinically relevant variants. You can skip the filtering step by setting --skip_vep_filter to true.
+[GENMOD](https://github.com/Clinical-Genomics/genmod) is a simple to use command line tool for annotating and analyzing genomic variations in the VCF file format. GENMOD can annotate genetic patterns of inheritance in vcf:s with single or multiple families of arbitrary size. Each variant will be assigned a predicted pathogenicity score. The score will be given both as a raw score and a normalized score with values between 0 and 1. The tags in the INFO field are `RankScore` and `RankScoreNormalized`. The score can be configured to fit your annotations and preferences by modifying the score config file.
 
 <details markdown="1">
 <summary>Output files</summary>
 
 - `rank_and_filter/`
-  - `<case_id>_clinical_mt.vcf.gz`: file containing clinically relevant mitochondrial SNVs.
-  - `<case_id>_clinical_mt.vcf.gz.tbi`: index of the file containing clinically relevant mitochondrial SNVs.
-  - `<case_id>_clinical_snv.vcf.gz`: file containing clinically relevant SNVs (does not include mitochondrial variants).
-  - `<case_id>_clinical_snv.vcf.gz.tbi`: index of the file containing clinically relevant SNVs.
-  - `<case_id>_clinical_sv.vcf.gz`: file containing clinically relevant SVs (includes mitochondrial variants).
-  - `<case_id>_clinical_sv.vcf.gz.tbi`: index of the file containing clinically relevant SVs.
-  - `<case_id>_ranked_mt.vcf.gz`: file containing mitochondrial SNV annotations with their rank scores.
-  - `<case_id>_ranked_mt.vcf.gz.tbi`: index of the file containing mitochondrial SNV annotations with their rank scores.
-  - `<case_id>_ranked_snv.vcf.gz`: file containing SNV annotations with their rank scores (does not include mitochondrial variants).
-  - `<case_id>_ranked_snv.vcf.gz.tbi`: index of the file containing SNV annotations with their rank scores.
-  - `<case_id>_ranked_sv.vcf.gz`: file containing SV annotations with their rank scores (includes mitochondrial variants).
-  - `<case_id>_ranked_sv.vcf.gz.tbi`: index of the file containing SV annotations with their rank scores.
+  - `<case_id>_mt_ranked_clinical.vcf.gz`: file containing clinically relevant mitochondrial SNVs.
+  - `<case_id>_mt_ranked_clinical.vcf.gz.tbi`: index of the file containing clinically relevant mitochondrial SNVs.
+  - `<case_id>_mt_ranked_research.vcf.gz`: file containing mitochondrial SNV annotations with their rank scores.
+  - `<case_id>_mt_ranked_research.vcf.gz.tbi`: index of the file containing mitochondrial SNV annotations with their rank scores.
+  - `<case_id>_snv_ranked_clinical.vcf.gz`: file containing clinically relevant SNVs (does not include mitochondrial variants).
+  - `<case_id>_snv_ranked_clinical.vcf.gz.tbi`: index of the file containing clinically relevant SNVs.
+  - `<case_id>_snv_ranked_research.vcf.gz`: file containing SNV annotations with their rank scores (does not include mitochondrial variants).
+  - `<case_id>_snv_ranked_research.vcf.gz.tbi`: index of the file containing SNV annotations with their rank scores.
+  - `<case_id>_sv_ranked_clinical.vcf.gz`: file containing clinically relevant SVs (includes mitochondrial variants).
+  - `<case_id>_sv_ranked_clinical.vcf.gz.tbi`: index of the file containing clinically relevant SVs.
+  - `<case_id>_sv_ranked_research.vcf.gz`: file containing SV annotations with their rank scores (includes mitochondrial variants).
+  - `<case_id>_sv_ranked_resarch.vcf.gz.tbi`: index of the file containing SV annotations with their rank scores.
 
 </details>
 

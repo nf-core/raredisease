@@ -2,13 +2,14 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SVDB_QUERY as SVDB_QUERY_DB             } from '../../modules/nf-core/svdb/query/main'
-include { PICARD_SORTVCF                          } from '../../modules/nf-core/picard/sortvcf/main'
-include { ENSEMBLVEP_VEP as ENSEMBLVEP_ME         } from '../../modules/nf-core/ensemblvep/vep/main'
-include { ENSEMBLVEP_FILTERVEP as FILTERVEP_ME    } from '../../modules/nf-core/ensemblvep/filtervep'
-include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_FILTER   } from '../../modules/nf-core/bcftools/view/main'
-include { TABIX_BGZIPTABIX as BGZIP_TABIX_ME      } from '../../modules/nf-core/tabix/bgziptabix/main'
-include { ANNOTATE_CSQ_PLI as ANNOTATE_CSQ_PLI_ME } from '../../subworkflows/local/annotate_consequence_pli.nf'
+include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_FILTER } from '../../modules/nf-core/bcftools/view/main'
+include { ENSEMBLVEP_VEP as ENSEMBLVEP_ME       } from '../../modules/nf-core/ensemblvep/vep/main'
+include { PICARD_SORTVCF                        } from '../../modules/nf-core/picard/sortvcf/main'
+include { SVDB_QUERY as SVDB_QUERY_DB           } from '../../modules/nf-core/svdb/query/main'
+include { TABIX_BGZIPTABIX as BGZIP_TABIX_ME    } from '../../modules/nf-core/tabix/bgziptabix/main'
+
+include { ANNOTATE_CSQ_PLI as ANNOTATE_CSQ_PLI_ME           } from '../../subworkflows/local/annotate_consequence_pli.nf'
+include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_ME } from '../../subworkflows/local/generate_clinical_set.nf'
 
 workflow ANNOTATE_MOBILE_ELEMENTS {
 
@@ -74,36 +75,24 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
             }
             .set { ch_bcftools_filter_input }
 
-        BCFTOOLS_VIEW_FILTER ( ch_bcftools_filter_input, [], [], [] )
+        BCFTOOLS_VIEW_FILTER( ch_bcftools_filter_input, [], [], [] )
 
-        BCFTOOLS_VIEW_FILTER.out.vcf
-            .multiMap { meta, vcf ->
-                clinical: [ meta + [ set: "clinical" ], vcf ]
-                research: [ meta + [ set: "research" ], vcf ]
-            }
-            .set { ch_clin_research_vcf }
-
-        FILTERVEP_ME(
-            ch_clin_research_vcf.clinical,
+        GENERATE_CLINICAL_SET_ME(
+            BCFTOOLS_VIEW_FILTER.out.vcf,
             ch_vep_filters
         )
 
-        ch_clin_research_vcf.research
-            .mix( FILTERVEP_ME.out.output )
-            .set { ch_annotate_csq_pli_me_input }
-
-
-        ANNOTATE_CSQ_PLI_ME (
-            ch_annotate_csq_pli_me_input,
+        ANNOTATE_CSQ_PLI_ME(
+            GENERATE_CLINICAL_SET_ME.out.vcf,
             ch_variant_consequences
         )
 
-        ch_versions = ch_versions.mix(SVDB_QUERY_DB.out.versions)
-        ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
-        ch_versions = ch_versions.mix(ENSEMBLVEP_ME.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW_FILTER.out.versions)
-        ch_versions = ch_versions.mix(FILTERVEP_ME.out.versions)
-        ch_versions = ch_versions.mix(ANNOTATE_CSQ_PLI_ME.out.versions)
+        ch_versions = ch_versions.mix( SVDB_QUERY_DB.out.versions )
+        ch_versions = ch_versions.mix( PICARD_SORTVCF.out.versions )
+        ch_versions = ch_versions.mix( ENSEMBLVEP_ME.out.versions )
+        ch_versions = ch_versions.mix( BCFTOOLS_VIEW_FILTER.out.versions )
+        ch_versions = ch_versions.mix( GENERATE_CLINICAL_SET_ME.out.versions )
+        ch_versions = ch_versions.mix( ANNOTATE_CSQ_PLI_ME.out.versions )
 
     emit:
         vcf      = ANNOTATE_CSQ_PLI_ME.out.vcf_ann  // channel: [ val(meta), path(vcf) ]

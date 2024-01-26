@@ -111,39 +111,36 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custo
 include { FASTQC                                } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
 include { SMNCOPYNUMBERCALLER                   } from '../modules/nf-core/smncopynumbercaller/main'
-include { ENSEMBLVEP_FILTERVEP as FILTERVEP_MT } from '../modules/nf-core/ensemblvep/filtervep'
-include { ENSEMBLVEP_FILTERVEP as FILTERVEP_SNV } from '../modules/nf-core/ensemblvep/filtervep'
-include { ENSEMBLVEP_FILTERVEP as FILTERVEP_SV  } from '../modules/nf-core/ensemblvep/filtervep'
-include { TABIX_BGZIPTABIX as BGZIPTABIX_MT    } from '../modules/nf-core/tabix/bgziptabix'
-include { TABIX_BGZIPTABIX as BGZIPTABIX_SNV    } from '../modules/nf-core/tabix/bgziptabix'
-include { TABIX_BGZIPTABIX as BGZIPTABIX_SV     } from '../modules/nf-core/tabix/bgziptabix'
 
 //
 // SUBWORKFLOWS
 //
 
-include { ALIGN                                 } from '../subworkflows/local/align'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_MT    } from '../subworkflows/local/annotate_consequence_pli'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV   } from '../subworkflows/local/annotate_consequence_pli'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV    } from '../subworkflows/local/annotate_consequence_pli'
-include { ANNOTATE_GENOME_SNVS                  } from '../subworkflows/local/annotate_genome_snvs'
-include { ANNOTATE_MOBILE_ELEMENTS              } from '../subworkflows/local/annotate_mobile_elements'
-include { ANNOTATE_MT_SNVS                      } from '../subworkflows/local/annotate_mt_snvs'
-include { ANNOTATE_STRUCTURAL_VARIANTS          } from '../subworkflows/local/annotate_structural_variants'
-include { CALL_MOBILE_ELEMENTS                  } from '../subworkflows/local/call_mobile_elements'
-include { CALL_REPEAT_EXPANSIONS                } from '../subworkflows/local/call_repeat_expansions'
-include { CALL_SNV                              } from '../subworkflows/local/call_snv'
-include { CALL_STRUCTURAL_VARIANTS              } from '../subworkflows/local/call_structural_variants'
-include { GENERATE_CYTOSURE_FILES               } from '../subworkflows/local/generate_cytosure_files'
-include { GENS                                  } from '../subworkflows/local/gens'
-include { PEDDY_CHECK                           } from '../subworkflows/local/peddy_check'
-include { PREPARE_REFERENCES                    } from '../subworkflows/local/prepare_references'
-include { QC_BAM                                } from '../subworkflows/local/qc_bam'
-include { RANK_VARIANTS as RANK_VARIANTS_MT     } from '../subworkflows/local/rank_variants'
-include { RANK_VARIANTS as RANK_VARIANTS_SNV    } from '../subworkflows/local/rank_variants'
-include { RANK_VARIANTS as RANK_VARIANTS_SV     } from '../subworkflows/local/rank_variants'
-include { SCATTER_GENOME                        } from '../subworkflows/local/scatter_genome'
-include { VARIANT_EVALUATION                    } from '../subworkflows/local/variant_evaluation'
+include { ALIGN                                              } from '../subworkflows/local/align'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_MT                 } from '../subworkflows/local/annotate_consequence_pli'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV                } from '../subworkflows/local/annotate_consequence_pli'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV                 } from '../subworkflows/local/annotate_consequence_pli'
+include { ANNOTATE_GENOME_SNVS                               } from '../subworkflows/local/annotate_genome_snvs'
+include { ANNOTATE_MOBILE_ELEMENTS                           } from '../subworkflows/local/annotate_mobile_elements'
+include { ANNOTATE_MT_SNVS                                   } from '../subworkflows/local/annotate_mt_snvs'
+include { ANNOTATE_STRUCTURAL_VARIANTS                       } from '../subworkflows/local/annotate_structural_variants'
+include { CALL_MOBILE_ELEMENTS                               } from '../subworkflows/local/call_mobile_elements'
+include { CALL_REPEAT_EXPANSIONS                             } from '../subworkflows/local/call_repeat_expansions'
+include { CALL_SNV                                           } from '../subworkflows/local/call_snv'
+include { CALL_STRUCTURAL_VARIANTS                           } from '../subworkflows/local/call_structural_variants'
+include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/local/generate_clinical_set'
+include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/local/generate_clinical_set'
+include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/local/generate_clinical_set'
+include { GENERATE_CYTOSURE_FILES                            } from '../subworkflows/local/generate_cytosure_files'
+include { GENS                                               } from '../subworkflows/local/gens'
+include { PEDDY_CHECK                                        } from '../subworkflows/local/peddy_check'
+include { PREPARE_REFERENCES                                 } from '../subworkflows/local/prepare_references'
+include { QC_BAM                                             } from '../subworkflows/local/qc_bam'
+include { RANK_VARIANTS as RANK_VARIANTS_MT                  } from '../subworkflows/local/rank_variants'
+include { RANK_VARIANTS as RANK_VARIANTS_SNV                 } from '../subworkflows/local/rank_variants'
+include { RANK_VARIANTS as RANK_VARIANTS_SV                  } from '../subworkflows/local/rank_variants'
+include { SCATTER_GENOME                                     } from '../subworkflows/local/scatter_genome'
+include { VARIANT_EVALUATION                                 } from '../subworkflows/local/variant_evaluation'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -470,11 +467,17 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_genome_dictionary,
             ch_vep_extra_files
-        ).set {ch_sv_annotate}
+        ).set { ch_sv_annotate }
         ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
-        ANN_CSQ_PLI_SV (
+        GENERATE_CLINICAL_SET_SV(
             ch_sv_annotate.vcf_ann,
+            ch_vep_filters
+        )
+        ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SV.out.versions)
+
+        ANN_CSQ_PLI_SV (
+            GENERATE_CLINICAL_SET_SV.out.vcf,
             ch_variant_consequences
         )
         ch_versions = ch_versions.mix(ANN_CSQ_PLI_SV.out.versions)
@@ -486,15 +489,6 @@ workflow RAREDISEASE {
             ch_score_config_sv
         )
         ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
-
-        FILTERVEP_SV(
-            RANK_VARIANTS_SV.out.vcf,
-            ch_vep_filters
-        )
-        ch_versions = ch_versions.mix(FILTERVEP_SV.out.versions)
-
-        BGZIPTABIX_SV(FILTERVEP_SV.out.output)
-        ch_versions = ch_versions.mix(BGZIPTABIX_SV.out.versions)
 
     }
 
@@ -518,13 +512,17 @@ workflow RAREDISEASE {
             ch_gnomad_af,
             ch_scatter_split_intervals,
             ch_vep_extra_files
-        ).set {ch_snv_annotate}
+        ).set { ch_snv_annotate }
         ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 
-        ch_snv_annotate = ANNOTATE_GENOME_SNVS.out.vcf_ann
+        GENERATE_CLINICAL_SET_SNV(
+            ch_snv_annotate.vcf_ann,
+            ch_vep_filters
+        )
+        ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SNV.out.versions)
 
         ANN_CSQ_PLI_SNV (
-            ch_snv_annotate,
+            GENERATE_CLINICAL_SET_SNV.out.vcf,
             ch_variant_consequences
         )
         ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)
@@ -536,15 +534,6 @@ workflow RAREDISEASE {
             ch_score_config_snv
         )
         ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
-
-        FILTERVEP_SNV(
-            RANK_VARIANTS_SNV.out.vcf,
-            ch_vep_filters
-        )
-        ch_versions = ch_versions.mix(FILTERVEP_SNV.out.versions)
-
-        BGZIPTABIX_SNV(FILTERVEP_SNV.out.output)
-        ch_versions = ch_versions.mix(BGZIPTABIX_SNV.out.versions)
 
     }
 
@@ -565,11 +554,17 @@ workflow RAREDISEASE {
             params.vep_cache_version,
             ch_vep_cache,
             ch_vep_extra_files
-        ).set {ch_mt_annotate}
+        ).set { ch_mt_annotate }
         ch_versions = ch_versions.mix(ch_mt_annotate.versions)
 
-        ANN_CSQ_PLI_MT (
+        GENERATE_CLINICAL_SET_MT(
             ch_mt_annotate.vcf_ann,
+            ch_vep_filters
+        )
+        ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_MT.out.versions)
+
+        ANN_CSQ_PLI_MT(
+            GENERATE_CLINICAL_SET_MT.out.vcf,
             ch_variant_consequences
         )
         ch_versions = ch_versions.mix(ANN_CSQ_PLI_MT.out.versions)
@@ -581,15 +576,6 @@ workflow RAREDISEASE {
             ch_score_config_mt
         )
         ch_versions = ch_versions.mix(RANK_VARIANTS_MT.out.versions)
-
-        FILTERVEP_MT(
-            RANK_VARIANTS_MT.out.vcf,
-            ch_vep_filters
-        )
-        ch_versions = ch_versions.mix(FILTERVEP_MT.out.versions)
-
-        BGZIPTABIX_MT(FILTERVEP_MT.out.output)
-        ch_versions = ch_versions.mix(BGZIPTABIX_MT.out.versions)
 
     }
 
