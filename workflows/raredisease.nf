@@ -312,17 +312,19 @@ workflow RAREDISEASE {
     }
 
     // Read and store paths in the vep_plugin_files file
-    ch_vep_extra_files_unsplit.splitCsv ( header:true )
-        .map { row ->
-            f = file(row.vep_files[0])
-            if(f.isFile() || f.isDirectory()){
-                return [f]
-            } else {
-                error("\nVep database file ${f} does not exist.")
+    if (params.vep_plugin_files) {
+        ch_vep_extra_files_unsplit.splitCsv ( header:true )
+            .map { row ->
+                f = file(row.vep_files[0])
+                if(f.isFile() || f.isDirectory()){
+                    return [f]
+                } else {
+                    error("\nVep database file ${f} does not exist.")
+                }
             }
-        }
-        .collect()
-        .set {ch_vep_extra_files}
+            .collect()
+            .set {ch_vep_extra_files}
+    }
 
     // Input QC
     if (!params.skip_fastqc) {
