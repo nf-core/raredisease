@@ -140,6 +140,7 @@ include { RANK_VARIANTS as RANK_VARIANTS_MT                  } from '../subworkf
 include { RANK_VARIANTS as RANK_VARIANTS_SNV                 } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SV                  } from '../subworkflows/local/rank_variants'
 include { SCATTER_GENOME                                     } from '../subworkflows/local/scatter_genome'
+include { SUBSAMPLE_MT                                       } from '../subworkflows/local/subsample_mt'
 include { VARIANT_EVALUATION                                 } from '../subworkflows/local/variant_evaluation'
 
 /*
@@ -361,6 +362,8 @@ workflow RAREDISEASE {
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
+
+    SUBSAMPLE_MT(ch_mapped.mt_marked_bam)
 
     //
     // BAM QUALITY CHECK
