@@ -12,11 +12,12 @@ process CNVNATOR_CNVNATOR {
     tuple val(meta2), path(root)
     tuple val(meta3), path(fasta)
     tuple val(meta4), path(fai)
+    val step
 
     output:
-    tuple val(output_meta), path("${prefix}.root"), emit: root
-    tuple val(output_meta), path("${prefix}.tab") , emit: tab, optional: true
-    path "versions.yml"                           , emit: versions
+    tuple val(output_meta), path("${output_meta.id}_${step}.root"), emit: root
+    tuple val(output_meta), path("*.tab")                         , emit: tab, optional: true
+    path "versions.yml"                                           , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -32,7 +33,11 @@ process CNVNATOR_CNVNATOR {
         reference = ''
     }
     calls_cmd = args.contains("-call") ? "> ${prefix}.tab" : ''
+    mv_cmd    = "mv ${prefix}.root ${prefix}_${step}.root"
+    steps     = ["his", "stat", "partition", "call"]
+    cp_cmd    = steps.contains(step) ? "cp ${root} ${prefix}.root" :""
     """
+    $cp_cmd
     cnvnator \\
         -root ${prefix}.root \\
         $args \\
@@ -40,6 +45,7 @@ process CNVNATOR_CNVNATOR {
         $input_cmd \\
         $calls_cmd
 
+    $mv_cmd 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         CNVnator: \$(echo \$(cnvnator 2>&1 | sed -n '3p' | sed 's/CNVnator v//'))
@@ -52,7 +58,7 @@ process CNVNATOR_CNVNATOR {
     output_meta   = bam             ? meta                : meta2
     def calls_cmd = args.contains("-call") ? "touch ${prefix}.tab" : ''
     """
-    touch ${prefix}.root
+    touch ${prefix}_${step}.root
     $calls_cmd
 
     cat <<-END_VERSIONS > versions.yml

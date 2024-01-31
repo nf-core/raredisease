@@ -8,7 +8,8 @@ include { VCF2CYTOSURE                             } from '../../modules/nf-core
 
 workflow GENERATE_CYTOSURE_FILES {
     take:
-        ch_vcf       // channel: [mandatory] [ val(meta), path(vcf), path(vcf_index) ]
+        ch_vcf       // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_tbi       // channel: [mandatory] [ val(meta), path(vcf_index) ]
         ch_bam       // channel: [mandatory] [ val(meta), path(bam) ]
         ch_blacklist // channel: [optional] [path(blacklist)]
 
@@ -17,8 +18,11 @@ workflow GENERATE_CYTOSURE_FILES {
 
         TIDDIT_COV_VCF2CYTOSURE (ch_bam, [[],[]])
 
-        // Build channel: [val(sample_meta). path(vcf), path(vcf_index)]
-        ch_bam.combine(ch_vcf).map {
+        // Build channel: [val(sample_meta), path(vcf), path(vcf_index)]
+        ch_vcf.join( ch_tbi, failOnMismatch: true )
+            .set { ch_vcf_tbi }
+
+        ch_bam.combine(ch_vcf_tbi).map {
             meta_sample, bam, meta_case, vcf, tbi ->
             return [ meta_sample, vcf, tbi ]
         }.set { ch_sample_vcf }
