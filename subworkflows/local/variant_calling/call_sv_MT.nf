@@ -22,7 +22,7 @@ workflow CALL_SV_MT {
             ch_eklipse_genes  = EKLIPSE.out.genes
             ch_eklipse_circos = EKLIPSE.out.circos
             ch_versions = ch_versions.mix(EKLIPSE.out.versions.first())
-       }
+        }
 
         MT_DELETION(ch_bam_bai, ch_fasta)
 

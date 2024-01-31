@@ -68,7 +68,7 @@ workflow CALL_REPEAT_EXPANSIONS {
         STRANGER ( SVDB_MERGE_REPEATS.out.vcf,  ch_variant_catalog )
         COMPRESS_STRANGER (
             STRANGER.out.vcf.map{ meta, vcf -> [meta, vcf, [] ]},
-             [], [], []
+            [], [], []
         )
         INDEX_STRANGER ( COMPRESS_STRANGER.out.vcf )
 
@@ -86,7 +86,7 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
- emit:
+emit:
         vcf      = ch_vcf_idx  // channel: [ val(meta), path(vcf), path(tbi) ]
         versions = ch_versions  // channel: [ path(versions.yml) ]
 }
