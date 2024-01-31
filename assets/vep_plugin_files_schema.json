@@ -9,7 +9,14 @@
         "properties": {
             "vep_files": {
                 "type": "string",
-                "format": "file-path",
+                "anyOf": [
+                    {
+                        "format": "file-path"
+                    },
+                    {
+                        "format": "directory-path"
+                    }
+                ],
                 "exists": true,
                 "errorMessage": "Path to vep plugin files and their indices"
             }
