@@ -1,7 +1,6 @@
 process CNVNATOR_CNVNATOR {
     tag "$meta.id"
     label 'process_single'
-    stageInMode 'copy'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
