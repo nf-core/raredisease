@@ -301,6 +301,10 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 - `repeat_expansions/`
   - `<sample_id>_repeat_expansion.vcf.gz`: file containing variant calls.
   - `<sample_id>_repeat_expansion.vcf.gz.tbi`: index of the file containing variant calls.
+  - `<sample_id>_exphunter_sorted.bam`: A BAMlet containing alignments of reads that overlap or located in close proximity to each variant identified by ExpansionHunter
+  - `<sample_id>_exphunter_sorted.bam.bai`: Index of the BAMlet file
+  - `<case_id>_repeat_expansion_stranger.vcf.gz`: Output from ExpansionHunter annotated with the pathologic implications of the repeat sizes by Stranger.
+  - `<case_id>_repeat_expansion_stranger.vcf.gz`: Index of the Stranger VCF file.
 
 </details>
 
