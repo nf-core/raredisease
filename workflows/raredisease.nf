@@ -762,13 +762,13 @@ def create_case_channel(List rows) {
         if (item.phenotype == 2) {
             probands.add(item.sample)
         }
-        if ( (item.paternal!=0) && (item.paternal!="") && (item.maternal!=0) && (item.maternal!="") ) {
+        if ( (item.paternal!="0") && (item.paternal!="") && (item.maternal!="0") && (item.maternal!="") ) {
             upd_children.add(item.sample)
         }
-        if ( (item.paternal!=0) && (item.paternal!="") ) {
+        if ( (item.paternal!="0") && (item.paternal!="") ) {
             father = item.paternal
         }
-        if ( (item.maternal!=0) && (item.maternal!="") ) {
+        if ( (item.maternal!="0") && (item.maternal!="") ) {
             mother = item.maternal
         }
     }
