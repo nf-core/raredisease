@@ -58,7 +58,7 @@ process CNVNATOR_CNVNATOR {
     output_meta   = bam             ? meta                : meta2
     def calls_cmd = args.contains("-call") ? "touch ${prefix}.tab" : ''
     """
-    touch ${prefix}.root
+    touch ${prefix}_${step}.root
     $calls_cmd
 
     cat <<-END_VERSIONS > versions.yml
