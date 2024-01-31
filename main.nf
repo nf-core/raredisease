@@ -35,7 +35,6 @@ params.known_dbsnp_tbi                = WorkflowMain.getGenomeAttribute(params, 
 params.mobile_element_references      = WorkflowMain.getGenomeAttribute(params, 'mobile_element_references')
 params.ml_model                       = WorkflowMain.getGenomeAttribute(params, 'ml_model')
 params.mt_fasta                       = WorkflowMain.getGenomeAttribute(params, 'mt_fasta')
-params.ngsbits_samplegender_method    = WorkflowMain.getGenomeAttribute(params, 'ngsbits_samplegender_method')
 params.ploidy_model                   = WorkflowMain.getGenomeAttribute(params, 'ploidy_model')
 params.reduced_penetrance             = WorkflowMain.getGenomeAttribute(params, 'reduced_penetrance')
 params.readcount_intervals            = WorkflowMain.getGenomeAttribute(params, 'readcount_intervals')
@@ -47,7 +46,6 @@ params.score_config_sv                = WorkflowMain.getGenomeAttribute(params, 
 params.sdf                            = WorkflowMain.getGenomeAttribute(params, 'sdf')
 params.svdb_query_dbs                 = WorkflowMain.getGenomeAttribute(params, 'svdb_query_dbs')
 params.target_bed                     = WorkflowMain.getGenomeAttribute(params, 'target_bed')
-params.min_trimmed_length             = WorkflowMain.getGenomeAttribute(params, 'min_trimmed_length')
 params.variant_catalog                = WorkflowMain.getGenomeAttribute(params, 'variant_catalog')
 params.vep_filters                    = WorkflowMain.getGenomeAttribute(params, 'vep_filters')
 params.vcf2cytosure_blacklist         = WorkflowMain.getGenomeAttribute(params, 'vcf2cytosure_blacklist')
@@ -55,7 +53,6 @@ params.vcfanno_resources              = WorkflowMain.getGenomeAttribute(params, 
 params.vcfanno_toml                   = WorkflowMain.getGenomeAttribute(params, 'vcfanno_toml')
 params.vcfanno_lua                    = WorkflowMain.getGenomeAttribute(params, 'vcfanno_lua')
 params.vep_cache                      = WorkflowMain.getGenomeAttribute(params, 'vep_cache')
-params.vep_cache_version              = WorkflowMain.getGenomeAttribute(params, 'vep_cache_version')
 params.vep_plugin_files               = WorkflowMain.getGenomeAttribute(params, 'vep_plugin_files')
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -79,7 +76,7 @@ if (params.validate_params) {
     validateParameters()
 }
 
-WorkflowMain.initialise(workflow, params, log)
+WorkflowMain.initialise(workflow, params, log, args)
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
