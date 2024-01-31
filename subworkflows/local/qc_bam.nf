@@ -4,13 +4,14 @@
 
 include { PICARD_COLLECTMULTIPLEMETRICS                          } from '../../modules/nf-core/picard/collectmultiplemetrics/main'
 include { PICARD_COLLECTHSMETRICS                                } from '../../modules/nf-core/picard/collecthsmetrics/main'
+include { CHROMOGRAPH as CHROMOGRAPH_COV                         } from '../../modules/nf-core/chromograph/main'
 include { QUALIMAP_BAMQC                                         } from '../../modules/nf-core/qualimap/bamqc/main'
 include { TIDDIT_COV                                             } from '../../modules/nf-core/tiddit/cov/main'
 include { MOSDEPTH                                               } from '../../modules/nf-core/mosdepth/main'
 include { UCSC_WIGTOBIGWIG                                       } from '../../modules/nf-core/ucsc/wigtobigwig/main'
 include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS   } from '../../modules/nf-core/picard/collectwgsmetrics/main'
 include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y } from '../../modules/nf-core/picard/collectwgsmetrics/main'
-include { SENTIEON_WGSMETRICS                                                        } from '../../modules/nf-core/sentieon/wgsmetrics/main'
+include { SENTIEON_WGSMETRICS                                    } from '../../modules/nf-core/sentieon/wgsmetrics/main'
 include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_Y           } from '../../modules/nf-core/sentieon/wgsmetrics/main'
 include { NGSBITS_SAMPLEGENDER                                   } from '../../modules/nf-core/ngsbits/samplegender/main'
 
@@ -50,6 +51,8 @@ workflow QC_BAM {
         TIDDIT_COV (ch_bam, [[],[]]) // 2nd pos. arg is req. only for cram input
 
         UCSC_WIGTOBIGWIG (TIDDIT_COV.out.wig, ch_chrom_sizes)
+
+        CHROMOGRAPH_COV([[:],[]], TIDDIT_COV.out.wig, [[:],[]], [[:],[]], [[:],[]], [[:],[]], [[:],[]])
 
         ch_bam_bai.map{ meta, bam, bai -> [meta, bam, bai, []]}.set{ch_mosdepth_in}
         MOSDEPTH (ch_mosdepth_in, ch_genome_fasta)
