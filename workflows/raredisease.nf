@@ -612,7 +612,8 @@ workflow RAREDISEASE {
     // Generate CGH files from sequencing data, turned off by default
     if ( !params.skip_vcf2cytosure && params.analysis_type != "wes" ) {
         GENERATE_CYTOSURE_FILES (
-            BGZIPTABIX_SV.out.gz_tbi,
+            ch_sv_annotate.vcf_ann,
+            ch_sv_annotate.tbi,
             ch_mapped.genome_marked_bam,
             ch_vcf2cytosure_blacklist
         )
