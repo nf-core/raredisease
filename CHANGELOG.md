@@ -47,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The split into clincial and research VCFs is now done before ranking the varaints [#485](https://github.com/nf-core/raredisease/pull/485)
 - Installed the nf-core version of ensemblvep/vep module [#482](https://github.com/nf-core/raredisease/pull/482)
 - The filenames of the ranked output VCF files have been changed. See [output.md](docs/output.md#filtering-and-ranking) for more information[#485](https://github.com/nf-core/raredisease/pull/485)
+- Patched cnvnator module so that the processes didn't have to rerun after a failed run [#503](https://github.com/nf-core/raredisease/pull/503).
 
 ### `Fixed`
 

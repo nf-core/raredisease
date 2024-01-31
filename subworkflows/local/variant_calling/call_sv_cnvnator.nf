@@ -22,11 +22,11 @@ workflow CALL_SV_CNVNATOR {
     main:
         ch_versions = Channel.empty()
 
-        CNVNATOR_RD ( ch_bam_bai, [[:],[]], [[:],[]], [[:],[]] )
-        CNVNATOR_HIST ( [[:],[],[]], CNVNATOR_RD.out.root, ch_fasta, ch_fai )
-        CNVNATOR_STAT ( [[:],[],[]], CNVNATOR_HIST.out.root, [[:],[]], [[:],[]] )
-        CNVNATOR_PARTITION ( [[:],[],[]], CNVNATOR_STAT.out.root, [[:],[]], [[:],[]] )
-        CNVNATOR_CALL ( [[:],[],[]], CNVNATOR_PARTITION.out.root, [[:],[]], [[:],[]] )
+        CNVNATOR_RD ( ch_bam_bai, [[:],[]], [[:],[]], [[:],[]], "rd" )
+        CNVNATOR_HIST ( [[:],[],[]], CNVNATOR_RD.out.root, ch_fasta, ch_fai, "his" )
+        CNVNATOR_STAT ( [[:],[],[]], CNVNATOR_HIST.out.root, [[:],[]], [[:],[]], "stat" )
+        CNVNATOR_PARTITION ( [[:],[],[]], CNVNATOR_STAT.out.root, [[:],[]], [[:],[]], "partition" )
+        CNVNATOR_CALL ( [[:],[],[]], CNVNATOR_PARTITION.out.root, [[:],[]], [[:],[]], "call" )
         CNVNATOR_CONVERT2VCF (CNVNATOR_CALL.out.tab).vcf
             .collect{it[1]}
             .toList()
