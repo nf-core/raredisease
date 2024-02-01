@@ -13,7 +13,7 @@ include { BCFTOOLS_FILTER as BCF_FILTER_ONE          } from '../../../modules/nf
 include { BCFTOOLS_FILTER as BCF_FILTER_TWO          } from '../../../modules/nf-core/bcftools/filter/main'
 include { BCFTOOLS_ANNOTATE                          } from '../../../modules/nf-core/bcftools/annotate/main'
 include { TABIX_TABIX as TABIX_ANNOTATE              } from '../../../modules/nf-core/tabix/tabix/main'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_VARCALLERBED } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { ADD_VARCALLER_TO_BED                       } from '../../../modules/local/add_varcallername_to_bed'
 
 workflow CALL_SNV_SENTIEON {
     take:
@@ -91,11 +91,11 @@ workflow CALL_SNV_SENTIEON {
         TABIX_SEN(REMOVE_DUPLICATES_SEN.out.vcf)
 
         ch_genome_chrsizes.flatten().map{chromsizes ->
-            return [[id:'sentieon_dnascope'], WorkflowRaredisease.makeBedWithVariantCallerInfo(chromsizes, "sentieon_dnascope")]
+            return [[id:'sentieon_dnascope'], chromsizes]
             }
             .set { ch_varcallerinfo }
 
-        ZIP_TABIX_VARCALLERBED (ch_varcallerinfo).gz_tbi
+        ADD_VARCALLER_TO_BED (ch_varcallerinfo).gz_tbi
             .map{meta,bed,tbi -> return [bed, tbi]}
             .set{ch_varcallerbed}
 
@@ -116,7 +116,7 @@ workflow CALL_SNV_SENTIEON {
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_SEN.out.versions.first())
         ch_versions = ch_versions.mix(TABIX_SEN.out.versions.first())
         ch_versions = ch_versions.mix(BCF_FILTER_ONE.out.versions.first())
-        ch_versions = ch_versions.mix(ZIP_TABIX_VARCALLERBED.out.versions)
+        ch_versions = ch_versions.mix(ADD_VARCALLER_TO_BED.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)
 
