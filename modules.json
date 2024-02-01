@@ -133,7 +133,7 @@
                     },
                     "fastqc": {
                         "branch": "master",
-                        "git_sha": "c9488585ce7bd35ccd2a30faa2371454c8112fb9",
+                        "git_sha": "f4ae1d942bd50c5c0b9bd2de1393ce38315ba57c",
                         "installed_by": ["modules"]
                     },
                     "gatk4/bedtointervallist": {
@@ -240,22 +240,22 @@
                     },
                     "genmod/annotate": {
                         "branch": "master",
-                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "git_sha": "1aba459a6f3528bee806403ae47bea304de26603",
                         "installed_by": ["modules"]
                     },
                     "genmod/compound": {
                         "branch": "master",
-                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "git_sha": "1aba459a6f3528bee806403ae47bea304de26603",
                         "installed_by": ["modules"]
                     },
                     "genmod/models": {
                         "branch": "master",
-                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "git_sha": "1aba459a6f3528bee806403ae47bea304de26603",
                         "installed_by": ["modules"]
                     },
                     "genmod/score": {
                         "branch": "master",
-                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "git_sha": "1aba459a6f3528bee806403ae47bea304de26603",
                         "installed_by": ["modules"]
                     },
                     "glnexus": {
@@ -330,7 +330,7 @@
                     },
                     "picard/markduplicates": {
                         "branch": "master",
-                        "git_sha": "20b0918591d4ba20047d7e13e5094bcceba81447",
+                        "git_sha": "ec833ac4c29db6005d18baccf3306f557c46b006",
                         "installed_by": ["modules"]
                     },
                     "picard/renamesampleinvcf": {
@@ -345,7 +345,7 @@
                     },
                     "qualimap/bamqc": {
                         "branch": "master",
-                        "git_sha": "260677adfe5eecf5f64d3db726f6854d4497b49b",
+                        "git_sha": "6b0e4fe14ca1b12e131f64608f0bbaf36fd11451",
                         "installed_by": ["modules"]
                     },
                     "rhocall/annotate": {
@@ -385,7 +385,7 @@
                     },
                     "samtools/stats": {
                         "branch": "master",
-                        "git_sha": "a64788f5ad388f1d2ac5bd5f1f3f8fc81476148c",
+                        "git_sha": "ec833ac4c29db6005d18baccf3306f557c46b006",
                         "installed_by": ["modules"]
                     },
                     "samtools/view": {
