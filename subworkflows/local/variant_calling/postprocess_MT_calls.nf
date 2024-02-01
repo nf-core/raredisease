@@ -12,7 +12,7 @@ include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                   } from '../../..
 include { TABIX_TABIX as TABIX_TABIX_MERGE                      } from '../../../modules/nf-core/tabix/tabix/main'
 include { PICARD_LIFTOVERVCF                                    } from '../../../modules/nf-core/picard/liftovervcf/main'
 include { BCFTOOLS_ANNOTATE                                     } from '../../../modules/nf-core/bcftools/annotate/main'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_VARCALLERBED            } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { ADD_VARCALLER_TO_BED                                  } from '../../../modules/local/add_varcallername_to_bed'
 include { TABIX_TABIX as TABIX_ANNOTATE                         } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow POSTPROCESS_MT_CALLS {
@@ -103,11 +103,11 @@ workflow POSTPROCESS_MT_CALLS {
         TABIX_TABIX_MERGE(ch_addfoundintag_in)
 
         ch_genome_chrsizes.flatten().map{chromsizes ->
-            return [[id:'mutect2'], WorkflowRaredisease.makeBedWithVariantCallerInfo(chromsizes, "mutect2")]
+            return [[id:'mutect2'], chromsizes]
             }
             .set { ch_varcallerinfo }
 
-        ZIP_TABIX_VARCALLERBED (ch_varcallerinfo).gz_tbi
+        ADD_VARCALLER_TO_BED (ch_varcallerinfo).gz_tbi
             .map{meta,bed,tbi -> return [bed, tbi]}
             .set{ch_varcallerbed}
 
@@ -127,7 +127,7 @@ workflow POSTPROCESS_MT_CALLS {
         ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_MT.out.versions.first())
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
-        ch_versions = ch_versions.mix(ZIP_TABIX_VARCALLERBED.out.versions)
+        ch_versions = ch_versions.mix(ADD_VARCALLER_TO_BED.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)
 
