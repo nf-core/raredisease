@@ -82,7 +82,7 @@
                     },
                     "chromograph": {
                         "branch": "master",
-                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "git_sha": "f05512229a501df5d67273bb7358c5f69667f40d",
                         "installed_by": ["modules"]
                     },
                     "cnvnator/cnvnator": {
