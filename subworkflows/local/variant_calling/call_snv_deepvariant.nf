@@ -7,9 +7,9 @@ include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_GL    } from '../../../modules/nf
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_GL      } from '../../../modules/nf-core/bcftools/norm/main'
 include { DEEPVARIANT                                } from '../../../modules/nf-core/deepvariant/main'
 include { GLNEXUS                                    } from '../../../modules/nf-core/glnexus/main'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_VARCALLERBED } from '../../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_TABIX as TABIX_GL                    } from '../../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_ANNOTATE              } from '../../../modules/nf-core/tabix/tabix/main'
+include { ADD_VARCALLER_TO_BED                       } from '../../../modules/local/add_varcallername_to_bed'
 
 workflow CALL_SNV_DEEPVARIANT {
     take:
@@ -54,11 +54,11 @@ workflow CALL_SNV_DEEPVARIANT {
         TABIX_GL (REMOVE_DUPLICATES_GL.out.vcf)
 
         ch_genome_chrsizes.flatten().map{chromsizes ->
-            return [[id:'deepvariant'], WorkflowRaredisease.makeBedWithVariantCallerInfo(chromsizes, "deepvariant")]
+            return [[id:'deepvariant'], chromsizes]
             }
             .set { ch_varcallerinfo }
 
-        ZIP_TABIX_VARCALLERBED (ch_varcallerinfo).gz_tbi
+        ADD_VARCALLER_TO_BED (ch_varcallerinfo).gz_tbi
             .map{meta,bed,tbi -> return [bed, tbi]}
             .set{ch_varcallerbed}
 
@@ -77,7 +77,7 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_GL.out.versions)
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_GL.out.versions)
         ch_versions = ch_versions.mix(TABIX_GL.out.versions)
-        ch_versions = ch_versions.mix(ZIP_TABIX_VARCALLERBED.out.versions)
+        ch_versions = ch_versions.mix(ADD_VARCALLER_TO_BED.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)
 
