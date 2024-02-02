@@ -10,7 +10,9 @@ include { SAMTOOLS_INDEX          } from '../../modules/nf-core/samtools/index/m
 workflow SUBSAMPLE_MT {
 
     take:
-        ch_mt_bam_bai    // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_mt_bam_bai          // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        val_mt_subsample_rd    // channel: [mandatory] [ val(read_dept) ]
+        val_mt_subsample_seed  // channel: [mandatory] [ val(seed) ]
 
     main:
         ch_versions = Channel.empty()
@@ -19,7 +21,12 @@ workflow SUBSAMPLE_MT {
 
         BEDTOOLS_GENOMECOV (ch_genomecov_in, [], "genomecov")
 
-        CALCULATE_SEED_FRACTION (BEDTOOLS_GENOMECOV.out.genomecov).csv
+        CALCULATE_SEED_FRACTION (
+            BEDTOOLS_GENOMECOV.out.genomecov,
+            val_mt_subsample_rd,
+            val_mt_subsample_seed
+            )
+            .csv
             .join(ch_mt_bam_bai, failOnMismatch:true)
             .map{meta, seedfrac, bam, bai ->
                 return [meta + [seedfrac: file(seedfrac).text.readLines()[0]], bam, bai]

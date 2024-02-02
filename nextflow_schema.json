@@ -27,7 +27,8 @@
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open"
+                    "fa_icon": "fas fa-folder-open",
+                    "default": "results"
                 },
                 "email": {
                     "type": "string",
@@ -212,7 +213,8 @@
                     "type": "string",
                     "description": "Name of the mitochondrial contig in the reference fasta file",
                     "help_text": "Used to extract relevant information from the references to analyse mitochondria",
-                    "fa_icon": "fas fa-align-center"
+                    "fa_icon": "fas fa-align-center",
+                    "default": "chrM"
                 },
                 "mobile_element_references": {
                     "type": "string",
@@ -505,6 +507,11 @@
                     "description": "Specifies whether or not to skip annotation of mitochondrial variants.",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "skip_mt_subsample": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to subsample mt alignment.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "skip_snv_annotation": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip annotate SNV subworkflow.",
@@ -547,6 +554,20 @@
                     "default": 40,
                     "description": "Discard trimmed reads shorter than this",
                     "help_text": "Minimum length of reads after adapter trimming. Shorter reads are discarded. The program default is 15 bp.  ",
+                    "fa_icon": "fas fa-less-than"
+                },
+                "mt_subsample_rd": {
+                    "type": "integer",
+                    "default": 150,
+                    "description": "Expected coverage to subsample mt alignment to.",
+                    "help_text": "To know more about this parameter check samtools' view documentation.",
+                    "fa_icon": "fas fa-less-than"
+                },
+                "mt_subsample_seed": {
+                    "type": "integer",
+                    "default": 30,
+                    "description": "Subsampling seed used to influence which subset of mitochondrial reads is kept. ",
+                    "help_text": "To know more about this parameter check samtools' view documentation.",
                     "fa_icon": "fas fa-less-than"
                 },
                 "rmdup": {

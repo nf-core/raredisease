@@ -363,7 +363,14 @@ workflow RAREDISEASE {
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
 
-    SUBSAMPLE_MT(ch_mapped.mt_bam_bai)
+    if (params.skip_mt_subsample) {
+        SUBSAMPLE_MT(
+            ch_mapped.mt_bam_bai,
+            params.mt_subsample_rd,
+            params.mt_subsample_seed
+        )
+        ch_versions   = ch_versions.mix(SUBSAMPLE_MT.out.versions)
+    }
 
     //
     // BAM QUALITY CHECK

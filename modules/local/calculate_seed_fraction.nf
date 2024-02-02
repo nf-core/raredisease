@@ -9,6 +9,8 @@ process CALCULATE_SEED_FRACTION {
 
     input:
     tuple val(meta), path(cov)
+    val rd
+    val seed
 
     output:
     tuple val(meta), path("seedfrac.csv"), emit: csv
@@ -23,7 +25,7 @@ process CALCULATE_SEED_FRACTION {
     """
     export MT_COVERAGE=`awk '{cov += \$3}END{ if (NR > 0) print cov / NR }' $cov`
 
-    python -c "import os;print('%0.6f' % (30+ 150/float(os.environ['MT_COVERAGE'])))" >seedfrac.csv
+    python -c "import os;print('%0.6f' % ($seed+ $rd/float(os.environ['MT_COVERAGE'])))" >seedfrac.csv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

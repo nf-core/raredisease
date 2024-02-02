@@ -21,6 +21,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
       - [Duplicate marking](#duplicate-marking)
         - [Picard's MarkDuplicates](#picards-markduplicates)
         - [Sentieon Dedup](#sentieon-dedup)
+      - [Subsample mitochondrial alignments](#subsample-mitochondrial-alignments)
     - [Quality control and reporting](#quality-control-and-reporting)
       - [Quality control](#quality-control)
         - [FastQC](#fastqc)
@@ -113,6 +114,18 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - `*.bam|*.cram`: Alignment file in bam/cram format.
   - `*.bai|*.crai`: Index of the corresponding bam/cram file.
   - `*.metrics`: Text file containing the dedup metrics.
+  </details>
+
+#### Subsample mitochondrial alignments
+
+[Samtools view](https://www.htslib.org/doc/samtools-view.html) is used by the pipeline to subsample mitochondrial alignments to a user specified coverage.
+
+<details markdown="1">
+<summary>Output files from Alignment</summary>
+
+- `{outputdir}/alignment/`
+  - `<sampleid>_mt_subsample.bam`: Alignment file in bam format.
+  - `<sampleid>_mt_subsample.bam.bai`: Index of the corresponding bam file.
   </details>
 
 ### Quality control and reporting
