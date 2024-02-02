@@ -119,7 +119,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 #### Subsample mitochondrial alignments
 
-[Samtools view](https://www.htslib.org/doc/samtools-view.html) is used by the pipeline to subsample mitochondrial alignments to a user specified coverage.
+[Samtools view](https://www.htslib.org/doc/samtools-view.html) is used by the pipeline to subsample mitochondrial alignments to a user specified coverage. The file is mainly intended to be used for visualization of MT alignments in IGV. The non-subsampled bam file is used for variant calling and other downstream analysis steps. 
 
 <details markdown="1">
 <summary>Output files from Alignment</summary>

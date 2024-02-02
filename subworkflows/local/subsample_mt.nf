@@ -25,13 +25,13 @@ workflow SUBSAMPLE_MT {
             BEDTOOLS_GENOMECOV.out.genomecov,
             val_mt_subsample_rd,
             val_mt_subsample_seed
-            )
-            .csv
-            .join(ch_mt_bam_bai, failOnMismatch:true)
-            .map{meta, seedfrac, bam, bai ->
-                return [meta + [seedfrac: file(seedfrac).text.readLines()[0]], bam, bai]
-            }
-            .set { ch_subsample_in }
+        )
+        .csv
+        .join(ch_mt_bam_bai, failOnMismatch:true)
+        .map{meta, seedfrac, bam, bai ->
+            return [meta + [seedfrac: file(seedfrac).text.readLines()[0]], bam, bai]
+        }
+        .set { ch_subsample_in }
 
         SAMTOOLS_VIEW(ch_subsample_in, [[:],[]], [])
 
