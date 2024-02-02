@@ -365,7 +365,6 @@ workflow RAREDISEASE {
 
     SUBSAMPLE_MT(ch_mapped.mt_bam_bai)
 
-    return
     //
     // BAM QUALITY CHECK
     //
