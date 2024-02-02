@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add FOUND_IN tag, which mentions the variant caller that found the mutation, in the INFO column of the vcf files [#471](https://github.com/nf-core/raredisease/pull/471)
 - A new parameter `vep_plugin_files` to supply files required by vep plugins [#482](https://github.com/nf-core/raredisease/pull/482)
 - New workflow for annotating mobile elements [#483](https://github.com/nf-core/raredisease/pull/483)
+- Added a functionality to subsample mitochondrial alignment, and a new parameter `skip_mt_subsample` to skip the subworkflow [#508](https://github.com/nf-core/raredisease/pull/508).
 
 ### `Changed`
 
