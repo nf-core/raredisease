@@ -28,6 +28,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
         - [Mosdepth](#mosdepth)
         - [Picard tools](#picard-tools)
         - [Qualimap](#qualimap)
+        - [Chromograph coverage](#chromograph-coverage)
         - [Sention WgsMetricsAlgo](#sention-wgsmetricsalgo)
         - [TIDDIT's cov and UCSC WigToBigWig](#tiddits-cov-and-ucsc-wigtobigwig)
       - [Reporting](#reporting)
@@ -194,6 +195,16 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <summary>Output files</summary>
 
 - `{outputdir}/qc_bam/<sampleid>_qualimap/` this directory includes a qualimap report and associated raw statistic files. You can open the .html file in your internet browser to see the in-depth report.
+  </details>
+
+##### Chromograph coverage
+
+[Chromograph](https://github.com/Clinical-Genomics/chromograph) is a python package to create PNG images from genetics data such as BED and WIG files.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `{outputdir}/qc_bam/<sampleid>_chromographcov/*.png` plots showing coverage across chromosomes for each chromosome.
   </details>
 
 ##### Sention WgsMetricsAlgo
