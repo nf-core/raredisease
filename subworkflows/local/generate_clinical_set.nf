@@ -8,25 +8,29 @@ include { TABIX_TABIX          } from '../../modules/nf-core/tabix/tabix'
 
 workflow GENERATE_CLINICAL_SET {
     take:
-        ch_vcf         // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_vep_filters // channel: [mandatory] [ path(feature_file) ]
+        ch_vcf      // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_hgnc_ids // channel: [mandatory] [ val(hgnc_ids) ]
 
     main:
         ch_versions = Channel.empty()
 
         ch_vcf
-            .multiMap { meta, vcf ->
-                clinical: [ meta + [ set: "clinical" ], vcf ]
+            .combine(ch_hgnc_ids)
+            .multiMap { meta, vcf, ids ->
+                clinical: [ meta + [ set: "clinical", hgnc_ids:ids ], vcf ]
                 research: [ meta + [ set: "research" ], vcf ]
             }
             .set { ch_clin_research_vcf }
 
         ENSEMBLVEP_FILTERVEP(
             ch_clin_research_vcf.clinical,
-            ch_vep_filters
+            []
         )
+        .output
+        .map {meta, vcf -> [ meta - meta.subMap('hgnc_ids'), vcf ]}
+        .set { ch_filtervep_out }
 
-        TABIX_BGZIP( ENSEMBLVEP_FILTERVEP.out.output )
+        TABIX_BGZIP( ch_filtervep_out )
 
         ch_clin_research_vcf.research
             .mix( TABIX_BGZIP.out.output )

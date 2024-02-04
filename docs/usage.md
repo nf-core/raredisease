@@ -221,15 +221,15 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 7. SNV annotation & Ranking
 
-| Mandatory                     | Optional                       |
-| ----------------------------- | ------------------------------ |
-| genome<sup>1</sup>            | reduced_penetrance<sup>7</sup> |
-| vcfanno_resources<sup>2</sup> | vcfanno_lua                    |
-| vcfanno_toml<sup>3</sup>      | vep_filters<sup>8</sup>        |
-| vep_cache_version             | cadd_resources<sup>9</sup>     |
-| vep_cache<sup>4</sup>         | vep_plugin_files<sup>10</sup>  |
-| gnomad_af<sup>5</sup>         |                                |
-| score_config_snv<sup>6</sup>  |                                |
+| Mandatory                     | Optional                                      |
+| ----------------------------- | --------------------------------------------- |
+| genome<sup>1</sup>            | reduced_penetrance<sup>7</sup>                |
+| vcfanno_resources<sup>2</sup> | vcfanno_lua                                   |
+| vcfanno_toml<sup>3</sup>      | vep_filters/vep_filters_scout_fmt<sup>8</sup> |
+| vep_cache_version             | cadd_resources<sup>9</sup>                    |
+| vep_cache<sup>4</sup>         | vep_plugin_files<sup>10</sup>                 |
+| gnomad_af<sup>5</sup>         |                                               |
+| score_config_snv<sup>6</sup>  |                                               |
 
 <sup>1</sup>Genome version is used by VEP. You have the option to choose between GRCh37 and GRCh38.<br />
 <sup>2</sup>Path to VCF files and their indices used by vcfanno. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_resources.txt).<br />
@@ -241,7 +241,7 @@ See example cache [here](https://raw.githubusercontent.com/nf-core/test-datasets
 no header and the following columns: `CHROM POS REF_ALLELE ALT_ALLELE AF`. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/gnomad_reformated.tab.gz).<br />
 <sup>6</sup>Used by GENMOD for ranking the variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_snv.ini).<br />
 <sup>7</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
-<sup>8</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into canditate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt). Not required if --skip_vep_filter is set to true.<br />
+<sup>8</sup> File containing a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into canditate variants and research variants. This file can either contain IDs on separate lines (`vep_filter`) or in the format exported by [scout](https://github.com/Clinical-Genomics/scout) (`vep_filters_scout_fmt`). Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt). Not required if --skip_vep_filter is set to true.<br />
 <sup>9</sup>Path to a folder containing cadd annotations. Equivalent of the data/annotations/ folder described [here](https://github.com/kircherlab/CADD-scripts/#manual-installation), and it is used to calculate CADD scores for small indels. <br />
 <sup>10</sup>A CSV file that describes the files used by VEP's named and custom plugins. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vep_files.csv). <br />
 
@@ -249,36 +249,36 @@ no header and the following columns: `CHROM POS REF_ALLELE ALT_ALLELE AF`. Sampl
 
 ##### 8. SV annotation & Ranking
 
-| Mandatory                                      | Optional           |
-| ---------------------------------------------- | ------------------ |
-| genome                                         | reduced_penetrance |
-| svdb_query_dbs/svdb_query_bedpedbs<sup>1</sup> |                    |
-| vep_cache_version                              | vep_filters        |
-| vep_cache                                      | vep_plugin_files   |
-| score_config_sv                                |                    |
+| Mandatory                                      | Optional                          |
+| ---------------------------------------------- | --------------------------------- |
+| genome                                         | reduced_penetrance                |
+| svdb_query_dbs/svdb_query_bedpedbs<sup>1</sup> |                                   |
+| vep_cache_version                              | vep_filters/vep_filters_scout_fmt |
+| vep_cache                                      | vep_plugin_files                  |
+| score_config_sv                                |                                   |
 
 <sup>1</sup> A CSV file that describes the databases (VCFs or BEDPEs) used by SVDB for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
 
 ##### 9. Mitochondrial annotation
 
-| Mandatory         | Optional         |
-| ----------------- | ---------------- |
-| genome            | vep_filters      |
-| mito_name         | vep_plugin_files |
-| vcfanno_resources |                  |
-| vcfanno_toml      |                  |
-| vep_cache_version |                  |
-| vep_cache         |                  |
-| score_config_mt   |                  |
+| Mandatory         | Optional                          |
+| ----------------- | --------------------------------- |
+| genome            | vep_filters/vep_filters_scout_fmt |
+| mito_name         | vep_plugin_files                  |
+| vcfanno_resources |                                   |
+| vcfanno_toml      |                                   |
+| vep_cache_version |                                   |
+| vep_cache         |                                   |
+| score_config_mt   |                                   |
 
 ##### 10. Mobile element annotation
 
-| Mandatory                                   | Optional    |
-| ------------------------------------------- | ----------- |
-| genome                                      | vep_filters |
-| mobile_element_svdb_annotations<sup>1</sup> |             |
-| vep_cache_version                           |             |
-| vep_cache                                   |             |
+| Mandatory                                   | Optional                          |
+| ------------------------------------------- | --------------------------------- |
+| genome                                      | vep_filters/vep_filters_scout_fmt |
+| mobile_element_svdb_annotations<sup>1</sup> |                                   |
+| vep_cache_version                           |                                   |
+| vep_cache                                   |                                   |
 
 <sup>1</sup> A CSV file that describes the databases (VCFs) used by SVDB for annotating mobile elements with allele frequencies. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv).
 

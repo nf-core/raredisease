@@ -421,6 +421,13 @@
                     "format": "path",
                     "fa_icon": "fas fa-file-csv",
                     "description": "Path to the file containing HGNC_IDs of interest on separate lines."
+                },
+                "vep_filters_scout_fmt": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-table",
+                    "description": "Path to a bed like file exported by scout, which contains HGNC_IDs to be used in filter_vep."
                 }
             },
             "required": ["fasta", "intervals_wgs", "intervals_y"]
