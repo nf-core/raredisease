@@ -522,8 +522,10 @@ workflow RAREDISEASE {
             ch_vep_cache,
             ch_genome_fasta,
             ch_gnomad_af,
+            ch_samples,
             ch_scatter_split_intervals,
-            ch_vep_extra_files
+            ch_vep_extra_files,
+            ch_genome_chrsizes
         ).set { ch_snv_annotate }
         ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 
