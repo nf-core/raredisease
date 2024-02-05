@@ -40,11 +40,11 @@ if (params.run_rtgvcfeval) {
 
 if (!params.skip_snv_annotation) {
     mandatoryParams += ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
-    "gnomad_af", "score_config_snv"]
+    "gnomad_af", "score_config_snv", "variant_consequences_snv"]
 }
 
 if (!params.skip_sv_annotation) {
-    mandatoryParams += ["genome", "vep_cache", "vep_cache_version", "score_config_sv"]
+    mandatoryParams += ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"]
     if (!params.svdb_query_bedpedbs && !params.svdb_query_dbs) {
         println("params.svdb_query_bedpedbs or params.svdb_query_dbs should be set.")
         missingParamsCount += 1
@@ -52,7 +52,7 @@ if (!params.skip_sv_annotation) {
 }
 
 if (!params.skip_mt_annotation) {
-    mandatoryParams += ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "vep_cache_version", "vep_cache"]
+    mandatoryParams += ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "vep_cache_version", "vep_cache", "variant_consequences_snv"]
 }
 
 if (params.analysis_type.equals("wes")) {
@@ -72,7 +72,7 @@ if (!params.skip_vep_filter) {
 }
 
 if (!params.skip_me_annotation) {
-    mandatoryParams += ["mobile_element_svdb_annotations"]
+    mandatoryParams += ["mobile_element_svdb_annotations", "variant_consequences_snv"]
 }
 
 for (param in mandatoryParams.unique()) {
@@ -288,7 +288,10 @@ workflow RAREDISEASE {
     ch_target_intervals         = ch_references.target_intervals
     ch_variant_catalog          = params.variant_catalog                    ? Channel.fromPath(params.variant_catalog).map { it -> [[id:it[0].simpleName],it]}.collect()
                                                                             : Channel.value([[],[]])
-    ch_variant_consequences     = Channel.fromPath("$projectDir/assets/variant_consequences_v2.txt", checkIfExists: true).collect()
+    ch_variant_consequences_snv = params.variant_consequences_snv           ? Channel.fromPath(params.variant_consequences_snv).collect()
+                                                                            : Channel.value([])
+    ch_variant_consequences_sv  = params.variant_consequences_sv            ? Channel.fromPath(params.variant_consequences_sv).collect()
+                                                                            : Channel.value([])
     ch_vcfanno_resources        = params.vcfanno_resources                  ? Channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
                                                                             : Channel.value([])
     ch_vcf2cytosure_blacklist   = params.vcf2cytosure_blacklist             ? Channel.fromPath(params.vcf2cytosure_blacklist).collect()
@@ -490,7 +493,7 @@ workflow RAREDISEASE {
 
         ANN_CSQ_PLI_SV (
             GENERATE_CLINICAL_SET_SV.out.vcf,
-            ch_variant_consequences
+            ch_variant_consequences_sv
         )
         ch_versions = ch_versions.mix(ANN_CSQ_PLI_SV.out.versions)
 
@@ -535,7 +538,7 @@ workflow RAREDISEASE {
 
         ANN_CSQ_PLI_SNV (
             GENERATE_CLINICAL_SET_SNV.out.vcf,
-            ch_variant_consequences
+            ch_variant_consequences_snv
         )
         ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)
 
@@ -577,7 +580,7 @@ workflow RAREDISEASE {
 
         ANN_CSQ_PLI_MT(
             GENERATE_CLINICAL_SET_MT.out.vcf,
-            ch_variant_consequences
+            ch_variant_consequences_snv
         )
         ch_versions = ch_versions.mix(ANN_CSQ_PLI_MT.out.versions)
 
@@ -663,7 +666,7 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_genome_dictionary,
             ch_vep_cache,
-            ch_variant_consequences,
+            ch_variant_consequences_sv,
             ch_vep_filters,
             params.genome,
             params.vep_cache_version,
