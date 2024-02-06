@@ -47,7 +47,7 @@
                     },
                     "bcftools/view": {
                         "branch": "master",
-                        "git_sha": "44096c08ffdbc694f5f92ae174ea0f7ba0f37e09",
+                        "git_sha": "7157328de1724e26d8ed3b13bb715fde62912896",
                         "installed_by": ["modules"]
                     },
                     "bedtools/genomecov": {
@@ -356,6 +356,11 @@
                     "rhocall/annotate": {
                         "branch": "master",
                         "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "installed_by": ["modules"]
+                    },
+                    "rhocall/viz": {
+                        "branch": "master",
+                        "git_sha": "6ea51097105e91adc656aa965de2f2a7c9c9b923",
                         "installed_by": ["modules"]
                     },
                     "rtgtools/format": {
