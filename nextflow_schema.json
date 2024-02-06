@@ -625,6 +625,18 @@
             "fa_icon": "fas fa-user-cog",
             "description": "Options used to facilitate the annotation of the variants.",
             "properties": {
+                "variant_consequences_snv": {
+                    "type": "string",
+                    "description": "File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic and mitochondrial SNVs.",
+                    "help_text": "For more information check https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "variant_consequences_sv": {
+                    "type": "string",
+                    "description": "File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic SVs.",
+                    "help_text": "For more information check https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html",
+                    "fa_icon": "fas fa-file-csv"
+                },
                 "vep_cache_version": {
                     "type": "integer",
                     "default": 110,
