@@ -427,7 +427,7 @@
                     "exists": true,
                     "format": "path",
                     "fa_icon": "fas fa-table",
-                    "description": "Path to a bed like file exported by scout, which contains HGNC_IDs to be used in filter_vep."
+                    "description": "Path to a bed-like file exported by scout, which contains HGNC_IDs to be used in filter_vep."
                 }
             },
             "required": ["fasta", "intervals_wgs", "intervals_y"]
