@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New workflow for annotating mobile elements [#483](https://github.com/nf-core/raredisease/pull/483)
 - Added a functionality to subsample mitochondrial alignment, and a new parameter `skip_mt_subsample` to skip the subworkflow [#508](https://github.com/nf-core/raredisease/pull/508).
 - Chromograph to plot coverage across chromosomes [#507](https://github.com/nf-core/raredisease/pull/507)
-- Added a new parameter `vep_filters_scout_fmt` to supply a bed like file exported by scout to be used in filter_vep [#511](https://github.com/nf-core/raredisease/pull/511).
+- Added a new parameter `vep_filters_scout_fmt` to supply a bed-like file exported by scout to be used in filter_vep [#511](https://github.com/nf-core/raredisease/pull/511).
 - Added two new parameters `variant_consequences_snv` and `variant_consequences_sv` to supply variant consequence files for annotating SNVs and SVs. [#509](https://github.com/nf-core/raredisease/pull/509)
 
 ### `Changed`
