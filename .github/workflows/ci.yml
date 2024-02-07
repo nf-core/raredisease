@@ -30,6 +30,13 @@ jobs:
           - "-profile test,docker"
           - "-profile test_one_sample,docker"
     steps:
+      - name: Free some space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
       - name: Check out pipeline code
         uses: actions/checkout@v4
 

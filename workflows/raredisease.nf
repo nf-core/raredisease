@@ -68,7 +68,13 @@ if (!params.skip_germlinecnvcaller) {
 }
 
 if (!params.skip_vep_filter) {
-    mandatoryParams += ["vep_filters"]
+    if (!params.vep_filters && !params.vep_filters_scout_fmt) {
+        println("params.vep_filters or params.vep_filters_scout_fmt should be set.")
+        missingParamsCount += 1
+    } else if (params.vep_filters && params.vep_filters_scout_fmt) {
+        println("Either params.vep_filters or params.vep_filters_scout_fmt should be set.")
+        missingParamsCount += 1
+    }
 }
 
 if (!params.skip_me_annotation) {
@@ -304,8 +310,10 @@ workflow RAREDISEASE {
                                                                             : ( params.vep_cache    ? Channel.fromPath(params.vep_cache).collect() : Channel.value([]) )
     ch_vep_extra_files_unsplit  = params.vep_plugin_files                   ? Channel.fromPath(params.vep_plugin_files).collect()
                                                                             : Channel.value([])
-    ch_vep_filters              = params.vep_filters                        ? Channel.fromPath(params.vep_filters).collect()
-                                                                            : Channel.value([])
+    ch_vep_filters_std_fmt      = params.vep_filters                        ? Channel.fromPath(params.vep_filters).splitCsv().collect()
+                                                                            : Channel.empty()
+    ch_vep_filters_scout_fmt    = params.vep_filters_scout_fmt              ? Channel.fromPath(params.vep_filters_scout_fmt).collect()
+                                                                            : Channel.empty()
     ch_versions                 = ch_versions.mix(ch_references.versions)
 
     // SV caller priority
@@ -329,6 +337,13 @@ workflow RAREDISEASE {
             .collect()
             .set {ch_vep_extra_files}
     }
+
+    // Read and store hgnc ids in a channel
+    ch_vep_filters_scout_fmt
+        .map { it -> parseHgncIds(it.text) }
+        .mix (ch_vep_filters_std_fmt)
+        .toList()
+        .set {ch_hgnc_ids}
 
     // Input QC
     if (!params.skip_fastqc) {
@@ -487,7 +502,7 @@ workflow RAREDISEASE {
 
         GENERATE_CLINICAL_SET_SV(
             ch_sv_annotate.vcf_ann,
-            ch_vep_filters
+            ch_hgnc_ids
         )
         ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SV.out.versions)
 
@@ -532,7 +547,7 @@ workflow RAREDISEASE {
 
         GENERATE_CLINICAL_SET_SNV(
             ch_snv_annotate.vcf_ann,
-            ch_vep_filters
+            ch_hgnc_ids
         )
         ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SNV.out.versions)
 
@@ -574,7 +589,7 @@ workflow RAREDISEASE {
 
         GENERATE_CLINICAL_SET_MT(
             ch_mt_annotate.vcf_ann,
-            ch_vep_filters
+            ch_hgnc_ids
         )
         ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_MT.out.versions)
 
@@ -667,7 +682,7 @@ workflow RAREDISEASE {
             ch_genome_dictionary,
             ch_vep_cache,
             ch_variant_consequences_sv,
-            ch_vep_filters,
+            ch_hgnc_ids,
             params.genome,
             params.vep_cache_version,
             ch_vep_extra_files
@@ -794,6 +809,18 @@ def create_case_channel(List rows) {
     case_info.id           = rows[0].case_id
 
     return case_info
+}
+
+// create hgnc list
+def parseHgncIds(List text) {
+    def ids = []
+    lines = text[0].tokenize("\n")
+    for(int i = 0; i<lines.size(); i++) {
+        if (!lines[i].startsWith("#")) {
+            ids.add(lines[i].tokenize()[3])
+        }
+    }
+    return ids
 }
 
 /*
