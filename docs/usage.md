@@ -221,16 +221,16 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 7. SNV annotation & Ranking
 
-| Mandatory                            | Optional                       |
-| ------------------------------------ | ------------------------------ |
-| genome<sup>1</sup>                   | reduced_penetrance<sup>8</sup> |
-| vcfanno_resources<sup>2</sup>        | vcfanno_lua                    |
-| vcfanno_toml<sup>3</sup>             | vep_filters<sup>9</sup>        |
-| vep_cache_version                    | cadd_resources<sup>10</sup>    |
-| vep_cache<sup>4</sup>                | vep_plugin_files<sup>11</sup>  |
-| gnomad_af<sup>5</sup>                |                                |
-| score_config_snv<sup>6</sup>         |                                |
-| variant_consequences_snv<sup>7</sup> |                                |
+| Mandatory                            | Optional                                      |
+| ------------------------------------ | --------------------------------------------- |
+| genome<sup>1</sup>                   | reduced_penetrance<sup>8</sup>                |
+| vcfanno_resources<sup>2</sup>        | vcfanno_lua                                   |
+| vcfanno_toml<sup>3</sup>             | vep_filters/vep_filters_scout_fmt<sup>9</sup> |
+| vep_cache_version                    | cadd_resources<sup>10</sup>                   |
+| vep_cache<sup>4</sup>                | vep_plugin_files<sup>11</sup>                 |
+| gnomad_af<sup>5</sup>                |                                               |
+| score_config_snv<sup>6</sup>         |                                               |
+| variant_consequences_snv<sup>7</sup> |                                               |
 
 <sup>1</sup>Genome version is used by VEP. You have the option to choose between GRCh37 and GRCh38.<br />
 <sup>2</sup>Path to VCF files and their indices used by vcfanno. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_resources.txt).<br />
@@ -251,40 +251,40 @@ no header and the following columns: `CHROM POS REF_ALLELE ALT_ALLELE AF`. Sampl
 
 ##### 8. SV annotation & Ranking
 
-| Mandatory                                      | Optional           |
-| ---------------------------------------------- | ------------------ |
-| genome                                         | reduced_penetrance |
-| svdb_query_dbs/svdb_query_bedpedbs<sup>1</sup> |                    |
-| vep_cache_version                              | vep_filters        |
-| vep_cache                                      | vep_plugin_files   |
-| score_config_sv                                |                    |
-| variant_consequences_sv<sup>2</sup>            |                    |
+| Mandatory                                      | Optional                          |
+| ---------------------------------------------- | --------------------------------- |
+| genome                                         | reduced_penetrance                |
+| svdb_query_dbs/svdb_query_bedpedbs<sup>1</sup> |                                   |
+| vep_cache_version                              | vep_filters/vep_filters_scout_fmt |
+| vep_cache                                      | vep_plugin_files                  |
+| score_config_sv                                |                                   |
+| variant_consequences_sv<sup>2</sup>            |                                   |
 
 <sup>1</sup> A CSV file that describes the databases (VCFs or BEDPEs) used by SVDB for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
 <sup>2</sup> File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic SVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/variant_consequences_v2.txt). You can learn more about these terms [here](https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html).
 
 ##### 9. Mitochondrial annotation
 
-| Mandatory                | Optional         |
-| ------------------------ | ---------------- |
-| genome                   | vep_filters      |
-| mito_name                | vep_plugin_files |
-| vcfanno_resources        |                  |
-| vcfanno_toml             |                  |
-| vep_cache_version        |                  |
-| vep_cache                |                  |
-| score_config_mt          |                  |
-| variant_consequences_snv |                  |
+| Mandatory                | Optional                          |
+| ------------------------ | --------------------------------- |
+| genome                   | vep_filters/vep_filters_scout_fmt |
+| mito_name                | vep_plugin_files                  |
+| vcfanno_resources        |                                   |
+| vcfanno_toml             |                                   |
+| vep_cache_version        |                                   |
+| vep_cache                |                                   |
+| score_config_mt          |                                   |
+| variant_consequences_snv |                                   |
 
 ##### 10. Mobile element annotation
 
-| Mandatory                                   | Optional    |
-| ------------------------------------------- | ----------- |
-| genome                                      | vep_filters |
-| mobile_element_svdb_annotations<sup>1</sup> |             |
-| vep_cache_version                           |             |
-| vep_cache                                   |             |
-| variant_consequences_sv                     |             |
+| Mandatory                                   | Optional                          |
+| ------------------------------------------- | --------------------------------- |
+| genome                                      | vep_filters/vep_filters_scout_fmt |
+| mobile_element_svdb_annotations<sup>1</sup> |                                   |
+| vep_cache_version                           |                                   |
+| vep_cache                                   |                                   |
+| variant_consequences_sv                     |                                   |
 
 <sup>1</sup> A CSV file that describes the databases (VCFs) used by SVDB for annotating mobile elements with allele frequencies. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv).
 

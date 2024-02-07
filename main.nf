@@ -50,6 +50,7 @@ params.variant_catalog                = WorkflowMain.getGenomeAttribute(params, 
 params.variant_consequences_snv       = WorkflowMain.getGenomeAttribute(params, 'variant_consequences_snv')
 params.variant_consequences_sv        = WorkflowMain.getGenomeAttribute(params, 'variant_consequences_sv')
 params.vep_filters                    = WorkflowMain.getGenomeAttribute(params, 'vep_filters')
+params.vep_filters_scout_fmt          = WorkflowMain.getGenomeAttribute(params, 'vep_filters_scout_fmt')
 params.vcf2cytosure_blacklist         = WorkflowMain.getGenomeAttribute(params, 'vcf2cytosure_blacklist')
 params.vcfanno_resources              = WorkflowMain.getGenomeAttribute(params, 'vcfanno_resources')
 params.vcfanno_toml                   = WorkflowMain.getGenomeAttribute(params, 'vcfanno_toml')

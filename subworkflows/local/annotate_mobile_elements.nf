@@ -20,7 +20,7 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
         ch_genome_dictionary    // channel: [mandatory] [ val(meta), path(dict) ]
         ch_vep_cache            // channel: [mandatory] [ path(cache) ]
         ch_variant_consequences // channel: [mandatory] [ path(consequences) ]
-        ch_vep_filters          // channel: [mandatory] [ path(vep_filter) ]
+        ch_hgnc_ids             // channel: [mandatory] [ val(hgnc_ids) ]
         val_vep_genome          // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version   // string: [mandatory] default: 107
         ch_vep_extra_files      // channel: [mandatory] [ path(files) ]
@@ -79,7 +79,7 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
 
         GENERATE_CLINICAL_SET_ME(
             BCFTOOLS_VIEW_FILTER.out.vcf,
-            ch_vep_filters
+            ch_hgnc_ids
         )
 
         ANNOTATE_CSQ_PLI_ME(
