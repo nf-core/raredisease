@@ -52,6 +52,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
       - [VEP](#vep)
       - [UPD](#upd)
       - [Chromograph](#chromograph)
+      - [Rhocall viz](#rhocall-viz)
     - [Annotation - SV](#annotation---sv)
       - [SVDB query](#svdb-query)
       - [VEP](#vep-1)
@@ -400,6 +401,19 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
   - `<case_id>_rohann_vcfanno_upd_sites_<chr#>.png`: file containing a plot showing upd sites across chromosomes.
 - `annotate_snv/genome/*regions_chromograph`
   - `<case_id>_rohann_vcfanno_upd_regions_<chr#>.png`: file containing a plot showing upd regions across chromosomes.
+
+</details>
+
+#### Rhocall viz
+
+[Rhocall viz](https://github.com/dnil/rhocall) plots binned zygosity and RHO-regions.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `annotate_snv/genome/<sample_id>_rhocallviz/<sample_id>_rhocallviz.bed`: file containing regions of homozygosity in bed format.
+- `annotate_snv/genome/<sample_id>_rhocallviz/<sample_id>_rhocallviz.wig`: file containing the fraction of homozygous SNPs in wig format.
+- `annotate_snv/genome/<sample_id>_rhocallviz/<sample_id>_rhocallviz.bw`: file containing the fraction of homozygous SNPs in bigwig format.
 
 </details>
 

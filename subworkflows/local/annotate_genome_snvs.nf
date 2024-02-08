@@ -19,6 +19,7 @@ include { TABIX_TABIX as TABIX_BCFTOOLS_CONCAT  } from '../../modules/nf-core/ta
 include { TABIX_TABIX as TABIX_BCFTOOLS_VIEW    } from '../../modules/nf-core/tabix/tabix/main'
 include { GATK4_SELECTVARIANTS                  } from '../../modules/nf-core/gatk4/selectvariants/main'
 include { ANNOTATE_CADD                         } from './annotation/annotate_cadd'
+include { ANNOTATE_RHOCALLVIZ                   } from './annotation/annotate_rhocallviz'
 
 workflow ANNOTATE_GENOME_SNVS {
 
@@ -35,8 +36,10 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_vep_cache          // channel: [mandatory] [ path(cache) ]
         ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_gnomad_af          // channel: [optional] [ path(tab), path(tbi) ]
+        ch_samples            // channel: [mandatory] [ val(sample_meta) ]
         ch_split_intervals    // channel: [mandatory] [ path(intervals) ]
         ch_vep_extra_files    // channel: [mandatory] [ path(files) ]
+        ch_genome_chrsizes    // channel: [mandatory] [ path(sizes) ]
 
     main:
         ch_cadd_vcf       = Channel.empty()
@@ -76,6 +79,9 @@ workflow ANNOTATE_GENOME_SNVS {
         CHROMOGRAPH_REGIONS([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_REGIONS.out.bed, [[],[]])
 
         ZIP_TABIX_VCFANNO (VCFANNO.out.vcf)
+
+        //rhocall_viz
+        ANNOTATE_RHOCALLVIZ(ZIP_TABIX_VCFANNO.out.gz_tbi, ch_samples, ch_genome_chrsizes)
 
         BCFTOOLS_VIEW(ZIP_TABIX_VCFANNO.out.gz_tbi, [], [], [])  // filter on frequencies
 
@@ -171,6 +177,7 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_versions = ch_versions.mix(TABIX_VEP.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
         ch_versions = ch_versions.mix(TABIX_BCFTOOLS_CONCAT.out.versions)
+        ch_versions = ch_versions.mix(ANNOTATE_RHOCALLVIZ.out.versions)
 
     emit:
         vcf_ann  = ch_vep_ann   // channel: [ val(meta), path(vcf) ]
