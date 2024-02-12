@@ -462,8 +462,8 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 [eKLIPse](https://github.com/dooguypapua/eKLIPse) allows the detection and quantification of large mtDNA rearrangements.
 
 - `call_sv/mitochondria`
-  - `eKLIPse_deletions.csv`: file containing all predicted deletions.
-  - `eKLIPse_genes.csv`: file summarizing cumulated deletions per mtDNA gene.
+  - `eKLIPse_<sample_id>_deletions.csv`: file containing all predicted deletions.
+  - `eKLIPse_<sample_id>_genes.csv`: file summarizing cumulated deletions per mtDNA gene.
   - `eKLIPse_<sample_id>.png`: circos plot.
 
 #### Annotation:

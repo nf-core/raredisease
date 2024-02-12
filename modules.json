@@ -113,7 +113,7 @@
                     },
                     "eklipse": {
                         "branch": "master",
-                        "git_sha": "0031772de29283811deb989a5b42d0310d35ec22",
+                        "git_sha": "7f265c2db4b1394c9303a3eb51e25d8447767347",
                         "installed_by": ["modules"]
                     },
                     "ensemblvep/filtervep": {
