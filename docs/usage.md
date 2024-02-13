@@ -23,6 +23,7 @@ Table of contents:
       - [9. Mitochondrial annotation](#9-mitochondrial-annotation)
       - [10. Mobile element annoation](#10-mobile-element-annotation)
       - [11. Variant evaluation](#11-variant-evaluation)
+      - [12. Prepare data CNV visualization in Gens](#12-prepare-data-for-cnv-visualisation-in-gens)
     - [Run the pipeline](#run-the-pipeline)
       - [Direct input in CLI](#direct-input-in-cli)
       - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
@@ -297,6 +298,21 @@ no header and the following columns: `CHROM POS REF_ALLELE ALT_ALLELE AF`. Sampl
 
 <sup>1</sup> This parameter is set to false by default, set it to true if if you'd like to run the evaluation subworkflow
 <sup>2</sup> A CSV file that describes the truth VCF files used by RTG Tools' vcfeval for evaluating SNVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rtg_example.csv). The file contains four columns `samplename,vcf,bedregions,evaluationregions` where samplename is the user assigned samplename in the input samplesheet, vcf is the path to the truth vcf file, bedregions and evaluationregions are the path to the bed files that are supposed to be passed through --bed_regions and --evaluation_regions options of vcfeval.
+
+##### 12. Prepare data for CNV visualisation in Gens
+
+Optionally the read data can be prepared for CNV visualization in [Gens](https://github.com/Clinical-Genomics-Lund/gens). This subworkflow is turned off by default. You can activate it by supplying the option `--skip_gens false`.
+
+| Mandatory                      | Optional |
+| ------------------------------ | -------- |
+| gens_pon_female<sup>1</sup>    |          |
+| gens_pon_male<sup>1</sup>      |          |
+| gens_interval_list<sup>2</sup> |          |
+| gens_gnomad_pos<sup>3</sup>    |          |
+
+<sup>1</sup> Instructions on how to generate the panel of normals can be found [here](https://github.com/Clinical-Genomics-Lund/gens?tab=readme-ov-file#create-pon)<br>
+<sup>2</sup> Interval list for CollectReadCounts. Instructions on how to generate the interval list file can be found [here](https://github.com/Clinical-Genomics-Lund/gens?tab=readme-ov-file#create-pon)<br>
+<sup>3</sup> File containing SNVs to be used for the B-allele frequency calculations. The developers of gens uses SNVs in gnomad with an allele frecuency above 5%.
 
 #### Run the pipeline
 
