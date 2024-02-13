@@ -9,7 +9,7 @@ include { GENS as GENS_GENERATE                        } from '../../modules/loc
 workflow GENS {
     take:
         ch_bam_bai            // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_vcf                // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_gvcf               // channel: [mandatory] [ val(meta), path(gvcf) ]
         ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai         // channel: [mandatory] [ val(meta), path(fai) ]
         ch_interval_list      // channel: [mandatory] [ path(interval_list) ]
@@ -21,11 +21,27 @@ workflow GENS {
     main:
         ch_versions = Channel.empty()
 
-        COLLECTREADCOUNTS (ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_sequence_dictionary, ch_interval_list)
+        ch_bam_bai
+            .combine(ch_interval_list)
+            .set { ch_bam_bai_intervals }
 
-        DENOISEREADCOUNTS (COLLECTREADCOUNTS.out.read_counts, ch_pon)
+        COLLECTREADCOUNTS (
+            ch_bam_bai_intervals,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_genome_dictionary
+        )
 
-        GENS_GENERATE (DENOISEREADCOUNTS.out.standardized_read_counts, ch_vcf.map { meta, vcf -> vcf }, ch_gnomad_pos)
+        DENOISEREADCOUNTS (
+            COLLECTREADCOUNTS.out.hdf5,
+            ch_pon
+        )
+
+        GENS_GENERATE (
+            DENOISEREADCOUNTS.out.standardized,
+            ch_gvcf,
+            ch_gnomad_pos
+        )
 
         ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions.first())
         ch_versions = ch_versions.mix(DENOISEREADCOUNTS.out.versions.first())

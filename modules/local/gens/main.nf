@@ -2,24 +2,26 @@ process GENS {
     tag "$meta.id"
     label 'process_medium'
 
-    container 'docker.io/raysloks/gens_preproc:1.0.1'
+    container 'docker.io/clinicalgenomics/gens_preproc:1.0.11'
 
     input:
     tuple val(meta), path(read_counts)
-    path  vcf
+    tuple val(meta2), path(gvcf)
     path  gnomad_positions
 
     output:
-    tuple val(meta), path('*.cov.bed.gz'), emit: cov
-    tuple val(meta), path('*.baf.bed.gz'), emit: baf
-    path  "versions.yml"                 , emit: versions
+    tuple val(meta), path('*.cov.bed.gz')    , emit: cov
+    tuple val(meta), path('*.cov.bed.gz.tbi'), emit: cov_index
+    tuple val(meta), path('*.baf.bed.gz')    , emit: baf
+    tuple val(meta), path('*.baf.bed.gz.tbi'), emit: baf_index
+    path  "versions.yml"                     , emit: versions
 
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     generate_gens_data.pl \\
         $read_counts \\
-        $vcf \\
+        $gvcf \\
         $prefix \\
         $gnomad_positions
 

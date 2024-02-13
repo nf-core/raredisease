@@ -81,6 +81,10 @@ if (!params.skip_me_annotation) {
     mandatoryParams += ["mobile_element_svdb_annotations", "variant_consequences_snv"]
 }
 
+if (!params.skip_gens) {
+    mandatoryParams += ["gens_gnomad_pos", "gens_interval_list", "gens_pon"]
+}
+
 for (param in mandatoryParams.unique()) {
     if (params[param] == null) {
         println("params." + param + " not set.")
@@ -246,22 +250,28 @@ workflow RAREDISEASE {
                                                                             : ch_references.genome_bwamem2_index
     ch_genome_chrsizes          = ch_references.genome_chrom_sizes
     ch_genome_fai               = ch_references.genome_fai
-    ch_genome_dictionary        = params.sequence_dictionary                ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                                            : ch_references.genome_dict
-    ch_gnomad_afidx             = params.gnomad_af_idx                      ? Channel.fromPath(params.gnomad_af_idx).collect()
-                                                                            : ch_references.gnomad_af_idx
-    ch_gnomad_af                = params.gnomad_af                          ? ch_gnomad_af_tab.join(ch_gnomad_afidx).map {meta, tab, idx -> [tab,idx]}.collect()
-                                                                            : Channel.empty()
-    ch_intervals_wgs            = params.intervals_wgs                      ? Channel.fromPath(params.intervals_wgs).collect()
-                                                                            : Channel.empty()
-    ch_intervals_y              = params.intervals_y                        ? Channel.fromPath(params.intervals_y).collect()
-                                                                            : Channel.empty()
-    ch_me_references            = params.mobile_element_references          ? Channel.fromSamplesheet("mobile_element_references")
-                                                                            : Channel.empty()
-    ch_me_svdb_resources        = params.mobile_element_svdb_annotations    ? Channel.fromPath(params.mobile_element_svdb_annotations)
-                                                                            : Channel.empty()
-    ch_ml_model                 = params.variant_caller.equals("sentieon")  ? Channel.fromPath(params.ml_model).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                                            : Channel.value([[:],[]])
+    ch_genome_dictionary        = params.sequence_dictionary               ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                           : ch_references.genome_dict
+    ch_gens_gnomad_pos          = params.gens_gnomad_pos                   ? Channel.fromPath(params.gens_gnomad_pos).collect()
+                                                                           : Channel.empty()
+    ch_gens_interval_list       = params.gens_interval_list                ? Channel.fromPath(params.gens_interval_list).collect()
+                                                                           : Channel.empty()
+    ch_gens_pon                 = params.gens_pon                          ? Channel.fromPath(params.gens_pon).map { it -> [ [id:it[0].simpleName], it ] }.collect()
+                                                                           : Channel.empty()
+    ch_gnomad_afidx             = params.gnomad_af_idx                     ? Channel.fromPath(params.gnomad_af_idx).collect()
+                                                                           : ch_references.gnomad_af_idx
+    ch_gnomad_af                = params.gnomad_af                         ? ch_gnomad_af_tab.join(ch_gnomad_afidx).map {meta, tab, idx -> [tab,idx]}.collect()
+                                                                           : Channel.empty()
+    ch_intervals_wgs            = params.intervals_wgs                     ? Channel.fromPath(params.intervals_wgs).collect()
+                                                                           : Channel.empty()
+    ch_intervals_y              = params.intervals_y                       ? Channel.fromPath(params.intervals_y).collect()
+                                                                           : Channel.empty()
+    ch_me_references            = params.mobile_element_references         ? Channel.fromSamplesheet("mobile_element_references")
+                                                                           : Channel.empty()
+    ch_me_svdb_resources        = params.mobile_element_svdb_annotations   ? Channel.fromPath(params.mobile_element_svdb_annotations)
+                                                                           : Channel.empty()
+    ch_ml_model                 = params.variant_caller.equals("sentieon") ? Channel.fromPath(params.ml_model).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                           : Channel.value([[:],[]])
     ch_mt_intervals             = ch_references.mt_intervals
     ch_mtshift_backchain        = ch_references.mtshift_backchain
     ch_mtshift_bwaindex         = ch_references.mtshift_bwa_index
@@ -651,15 +661,15 @@ workflow RAREDISEASE {
     }
 
     // GENS
-    if (params.gens_switch) {
+    if ( !params.skip_gens && params.analysis_type != "wes" ) {
         GENS (
             ch_mapped.genome_bam_bai,
-            CALL_SNV.out.vcf,
+            CALL_SNV.out.genome_gvcf,
             ch_genome_fasta,
             ch_genome_fai,
-            file(params.gens_interval_list),
-            file(params.gens_pon),
-            file(params.gens_gnomad_pos),
+            ch_gens_interval_list,
+            ch_gens_pon,
+            ch_gens_gnomad_pos,
             ch_case_info,
             ch_genome_dictionary
         )

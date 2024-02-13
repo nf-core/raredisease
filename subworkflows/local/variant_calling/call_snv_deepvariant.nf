@@ -82,7 +82,9 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)
 
     emit:
-        vcf      = BCFTOOLS_ANNOTATE.out.vcf    // channel: [ val(meta), path(vcf) ]
-        tabix    = TABIX_ANNOTATE.out.tbi       // channel: [ val(meta), path(tbi) ]
-        versions = ch_versions                  // channel: [ path(versions.yml) ]
+        vcf        = BCFTOOLS_ANNOTATE.out.vcf  // channel: [ val(meta), path(vcf) ]
+        tabix      = TABIX_ANNOTATE.out.tbi     // channel: [ val(meta), path(tbi) ]
+        gvcf       = DEEPVARIANT.out.gvcf       // channel: [ val(meta), path(gvcf)]
+        gvcf_tabix = DEEPVARIANT.out.gvcf_tbi   // channel: [ val(meta), path(gvcf_tbi)]
+        versions   = ch_versions                // channel: [ path(versions.yml) ]
 }
