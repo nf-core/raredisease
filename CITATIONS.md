@@ -60,6 +60,8 @@
 
   > Magnusson M, Hughes T, Glabilloy, Bitdeli Chef. genmod: Version 3.7.3. Published online November 15, 2018. doi:10.5281/ZENODO.3841142
 
+- [Gens](https://github.com/Clinical-Genomics-Lund/gens)
+
 - [GLnexus](https://academic.oup.com/bioinformatics/article/36/24/5582/6064144)
 
   > Yun T, Li H, Chang PC, Lin MF, Carroll A, McLean CY. Accurate, scalable cohort variant calls using DeepVariant and GLnexus. Robinson P, ed. Bioinformatics. 2021;36(24):5582-5589. doi:10.1093/bioinformatics/btaa1081
