@@ -135,13 +135,22 @@
                     "help_text": "This file contains the binning intervals used for CollectReadCounts.",
                     "hidden": true
                 },
-                "gens_pon": {
+                "gens_pon_female": {
                     "type": "string",
                     "exists": true,
                     "format": "file-path",
                     "fa_icon": "fas fa-file",
-                    "description": "Path to panel of normals for Gens.",
-                    "help_text": "The panel used to run DenoiseReadCounts.",
+                    "description": "Path to female panel of normals for Gens.",
+                    "help_text": "The female panel used to run DenoiseReadCounts.",
+                    "hidden": true
+                },
+                "gens_pon_male": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to male panel of normals for Gens.",
+                    "help_text": "The male panel used to run DenoiseReadCounts.",
                     "hidden": true
                 },
                 "gnomad_af": {

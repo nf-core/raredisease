@@ -82,7 +82,7 @@ if (!params.skip_me_annotation) {
 }
 
 if (!params.skip_gens) {
-    mandatoryParams += ["gens_gnomad_pos", "gens_interval_list", "gens_pon"]
+    mandatoryParams += ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"]
 }
 
 for (param in mandatoryParams.unique()) {
@@ -256,7 +256,9 @@ workflow RAREDISEASE {
                                                                             : Channel.empty()
     ch_gens_interval_list       = params.gens_interval_list                 ? Channel.fromPath(params.gens_interval_list).collect()
                                                                             : Channel.empty()
-    ch_gens_pon                 = params.gens_pon                           ? Channel.fromPath(params.gens_pon).map { it -> [ [id:it[0].simpleName], it ] }.collect()
+    ch_gens_pon_female          = params.gens_pon_female                    ? Channel.fromPath(params.gens_pon_female).map { it -> [ [id:it[0].simpleName], it ] }.collect()
+                                                                            : Channel.empty()
+    ch_gens_pon_male            = params.gens_pon_male                      ? Channel.fromPath(params.gens_pon_male).map { it -> [ [id:it[0].simpleName], it ] }.collect()
                                                                             : Channel.empty()
     ch_gnomad_afidx             = params.gnomad_af_idx                      ? Channel.fromPath(params.gnomad_af_idx).collect()
                                                                             : ch_references.gnomad_af_idx
@@ -668,7 +670,8 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_genome_fai,
             ch_gens_interval_list,
-            ch_gens_pon,
+            ch_gens_pon_female,
+            ch_gens_pon_male,
             ch_gens_gnomad_pos,
             ch_case_info,
             ch_genome_dictionary
