@@ -93,7 +93,7 @@ workflow ANNOTATE_GENOME_SNVS {
             .combine(ch_split_intervals)
             .map {
                 meta, vcf, tbi, interval ->
-                return [meta + [scatterid:interval.baseName], vcf, tbi, interval]
+                return [meta + [scatterid:interval.baseName, prefix: vcf.simpleName], vcf, tbi, interval]
             }
             .set { ch_vcf_scatter_in }
 
@@ -118,7 +118,7 @@ workflow ANNOTATE_GENOME_SNVS {
                 selvar: it[2].equals(null)
                     return [it[0], it[1]]
                 cadd: !(it[2].equals(null))
-                    return [it[0], it[2]]
+                    return [it[0] + [prefix: it[0].prefix + "_cadd"], it[2]]
             }
             .set { ch_for_mix }
 
@@ -156,9 +156,13 @@ workflow ANNOTATE_GENOME_SNVS {
 
         BCFTOOLS_CONCAT (ch_concat_in)
 
-        TABIX_BCFTOOLS_CONCAT (BCFTOOLS_CONCAT.out.vcf)
+        BCFTOOLS_CONCAT.out.vcf
+            .map { meta, vcf -> [meta - meta.subMap('prefix'), vcf] }
+            .set { ch_concat_out }
 
-        ch_vep_ann   = BCFTOOLS_CONCAT.out.vcf
+        TABIX_BCFTOOLS_CONCAT (ch_concat_out)
+
+        ch_vep_ann   = ch_concat_out
         ch_vep_index = TABIX_BCFTOOLS_CONCAT.out.tbi
 
         ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions)

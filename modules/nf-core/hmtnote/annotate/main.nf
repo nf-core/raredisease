@@ -11,7 +11,7 @@ process HMTNOTE_ANNOTATE {
     tuple val(meta), path(vcf)
 
     output:
-    tuple val(meta), path("*_annotated.vcf"), emit: vcf
+    tuple val(meta), path("${prefix}.vcf"), emit: vcf
     path "versions.yml"           , emit: versions
 
     when:
@@ -19,13 +19,13 @@ process HMTNOTE_ANNOTATE {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    prefix = task.ext.prefix ?: "${meta.id}"
 
     """
     hmtnote \\
         annotate \\
         $vcf \\
-        ${prefix}_annotated.vcf \\
+        ${prefix}.vcf \\
         $args
 
     cat <<-END_VERSIONS > versions.yml
@@ -34,9 +34,9 @@ process HMTNOTE_ANNOTATE {
     END_VERSIONS
     """
     stub:
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}_annotated.vcf
+    touch ${prefix}.vcf
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         hmtnote: \$(echo \$(hmtnote --version 2>&1) | sed 's/^.*hmtnote, version //; s/Using.*\$//' ))
