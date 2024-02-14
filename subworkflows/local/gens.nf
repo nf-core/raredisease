@@ -9,16 +9,16 @@ include { GENS as GENS_GENERATE                               } from '../../modu
 
 workflow GENS {
     take:
-        ch_bam_bai            // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_gvcf               // channel: [mandatory] [ val(meta), path(gvcf) ]
-        ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai         // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_interval_list      // channel: [mandatory] [ path(interval_list) ]
+        ch_bam_bai           // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_gvcf              // channel: [mandatory] [ val(meta), path(gvcf) ]
+        ch_genome_fasta      // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai        // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_interval_list     // channel: [mandatory] [ path(interval_list) ]
         ch_pon_female        // channel: [mandatory] [ path(pon) ]
-        ch_pon_male        // channel: [mandatory] [ path(pon) ]
-        ch_gnomad_pos         // channel: [mandatory] [ path(gnomad_pos) ]
-        ch_case_info          // channel: [mandatory] [ val(case_info) ]
-        ch_genome_dictionary  // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_pon_male          // channel: [mandatory] [ path(pon) ]
+        ch_gnomad_pos        // channel: [mandatory] [ path(gnomad_pos) ]
+        ch_case_info         // channel: [mandatory] [ val(case_info) ]
+        ch_genome_dictionary // channel: [mandatory] [ val(meta), path(dict) ]
 
     main:
         ch_versions = Channel.empty()
