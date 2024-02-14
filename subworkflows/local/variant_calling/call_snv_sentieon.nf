@@ -47,7 +47,8 @@ workflow CALL_SNV_SENTIEON {
             ch_ml_model,
             ch_pcr_indel_model,
             'VARIANT',
-            false)
+            true
+        )
 
         ch_dnamodelapply_in = SENTIEON_DNASCOPE.out.vcf.join(SENTIEON_DNASCOPE.out.vcf_tbi)
 
@@ -121,7 +122,9 @@ workflow CALL_SNV_SENTIEON {
         ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)
 
     emit:
-        vcf      = BCFTOOLS_ANNOTATE.out.vcf  // channel: [ val(meta), path(vcf) ]
-        tabix    = TABIX_ANNOTATE.out.tbi     // channel: [ val(meta), path(tbi) ]
-        versions = ch_versions                // channel: [ path(versions.yml) ]
+        vcf      = BCFTOOLS_ANNOTATE.out.vcf      // channel: [ val(meta), path(vcf) ]
+        tabix    = TABIX_ANNOTATE.out.tbi         // channel: [ val(meta), path(tbi) ]
+        gvcf     = SENTIEON_DNASCOPE.out.gvcf     // channel: [ val(meta), path(gvcf) ]
+        gvcf_tbi = SENTIEON_DNASCOPE.out.gvcf_tbi // channel: [ val(meta), path(gvcf_tbi) ]
+        versions = ch_versions                    // channel: [ path(versions.yml) ]
 }

@@ -33,11 +33,15 @@ workflow CALL_SNV {
         ch_pcr_indel_model    // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
 
     main:
-        ch_versions     = Channel.empty()
-        ch_deepvar_vcf  = Channel.empty()
-        ch_deepvar_tbi  = Channel.empty()
-        ch_sentieon_vcf = Channel.empty()
-        ch_sentieon_tbi = Channel.empty()
+        ch_versions      = Channel.empty()
+        ch_deepvar_vcf   = Channel.empty()
+        ch_deepvar_tbi   = Channel.empty()
+        ch_deepvar_gvcf  = Channel.empty()
+        ch_deepvar_gtbi  = Channel.empty()
+        ch_sentieon_vcf  = Channel.empty()
+        ch_sentieon_tbi  = Channel.empty()
+        ch_sentieon_gvcf = Channel.empty()
+        ch_sentieon_gtbi = Channel.empty()
 
         if (params.variant_caller.equals("deepvariant")) {
             CALL_SNV_DEEPVARIANT (      // triggered only when params.variant_caller is set as deepvariant
@@ -50,6 +54,8 @@ workflow CALL_SNV {
             )
             ch_deepvar_vcf = CALL_SNV_DEEPVARIANT.out.vcf
             ch_deepvar_tbi = CALL_SNV_DEEPVARIANT.out.tabix
+            ch_deepvar_gvcf = CALL_SNV_DEEPVARIANT.out.gvcf
+            ch_deepvar_gtbi = CALL_SNV_DEEPVARIANT.out.gvcf_tabix
             ch_versions    = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
         } else if (params.variant_caller.equals("sentieon")) {
             CALL_SNV_SENTIEON(         // triggered only when params.variant_caller is set as sentieon
@@ -67,11 +73,15 @@ workflow CALL_SNV {
             )
             ch_sentieon_vcf = CALL_SNV_SENTIEON.out.vcf
             ch_sentieon_tbi = CALL_SNV_SENTIEON.out.tabix
+            ch_sentieon_gvcf = CALL_SNV_SENTIEON.out.gvcf
+            ch_sentieon_gtbi = CALL_SNV_SENTIEON.out.gtbi
             ch_versions    = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
         }
 
-        ch_vcf       = Channel.empty().mix(ch_deepvar_vcf, ch_sentieon_vcf)
-        ch_tabix     = Channel.empty().mix(ch_deepvar_tbi, ch_sentieon_tbi)
+        ch_vcf    = Channel.empty().mix(ch_deepvar_vcf, ch_sentieon_vcf)
+        ch_tabix  = Channel.empty().mix(ch_deepvar_tbi, ch_sentieon_tbi)
+        ch_gvcf   = Channel.empty().mix(ch_deepvar_gvcf, ch_sentieon_gvcf)
+        ch_gtabix = Channel.empty().mix(ch_deepvar_gtbi, ch_sentieon_gtbi)
 
         ch_vcf
             .join(ch_tabix, failOnMismatch:true, failOnDuplicate:true)
@@ -120,6 +130,8 @@ workflow CALL_SNV {
         genome_vcf       = ch_genome_vcf                // channel: [ val(meta), path(vcf) ]
         genome_tabix     = ch_genome_tabix              // channel: [ val(meta), path(tbi) ]
         genome_vcf_tabix = ch_genome_vcf_tabix          // channel: [ val(meta), path(vcf), path(tbi) ]
+        genome_gvcf      = ch_gvcf                      // channel: [ val(meta), path(gvcf) ]
+        genome_gtabix    = ch_gtabix                    // channel: [ val(meta), path(gtbi) ]
         mt_vcf           = POSTPROCESS_MT_CALLS.out.vcf // channel: [ val(meta), path(vcf) ]
         mt_tabix         = POSTPROCESS_MT_CALLS.out.tbi // channel: [ val(meta), path(tbi) ]
         versions         = ch_versions                  // channel: [ path(versions.yml) ]

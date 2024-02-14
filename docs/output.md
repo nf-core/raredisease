@@ -72,6 +72,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
       - [Calling mobile elements](#calling-mobile-elements)
       - [Annotating mobile elements](#annotating-mobile-elements)
     - [Variant evaluation](#variant-evaluation)
+    - [Gens](#gens)
     - [Pipeline information](#pipeline-information)
 
 ### Alignment
@@ -591,6 +592,22 @@ Provided a truth set, SNVs can be evaluated using RTG Tools' vcfeval engine. Out
   - `<sample_id>_vcfeval.tp.vcf.gz.tbi`: index of the \*tp.vcf file
   - `<sample_id>_vcfeval.weighted_roc.tsv.gz`: contains ROC data derived from all analyzed call variants, regardless of their
     representation.
+
+</details>
+
+### Gens
+
+The sequencing data can be prepared for visualization of CNVs in [Gens](https://github.com/Clinical-Genomics-Lund/gens). This subworkflow is turned off by default. You can activate it by supplying the option `--skip_gens false`. You can read more about how to setup Gens [here](https://github.com/Clinical-Genomics-Lund/gens).
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `gens/`
+
+  - `<sample_id>_gens.baf.bed.gz`: contains sample b-allele frequencies in bed format.
+  - `<sample_id>_gens.baf.bed.gz.tbi`: index of the \*baf.bed.gz file.
+  - `<sample_id>_gens.cov.bed.gz`: contains sample coverage in bed format.
+  - `<sample_id>_gens.cov.bed.gz.tbi`: index of the \*cov.bed.gz file.
 
 </details>
 
