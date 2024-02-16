@@ -456,7 +456,7 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 [MT deletion script](https://github.com/dnil/mitosign/blob/master/run_mt_del_check.sh) lists the fraction of mitochondrially aligning read pairs (per 1000) that appear discordant, as defined by an insert size of more than 1.2 kb (and less than 15 kb due to the circular nature of the genome) using samtools.
 
 - `call_sv/mitochondria`
-  - `<sample_id>_mt_del.txt`: file containing deletions.
+  - `<sample_id>.txt`: file containing deletions.
 
 ##### eKLIPse
 
