@@ -113,7 +113,7 @@
                     },
                     "eklipse": {
                         "branch": "master",
-                        "git_sha": "0031772de29283811deb989a5b42d0310d35ec22",
+                        "git_sha": "7f265c2db4b1394c9303a3eb51e25d8447767347",
                         "installed_by": ["modules"]
                     },
                     "ensemblvep/filtervep": {
@@ -225,7 +225,7 @@
                     },
                     "gatk4/selectvariants": {
                         "branch": "master",
-                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "git_sha": "47cd015ac64f0294ae65a589693604127132a686",
                         "installed_by": ["modules"]
                     },
                     "gatk4/shiftfasta": {
@@ -281,7 +281,8 @@
                     "hmtnote/annotate": {
                         "branch": "master",
                         "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/hmtnote/annotate/hmtnote-annotate.diff"
                     },
                     "manta/germline": {
                         "branch": "master",
@@ -455,7 +456,7 @@
                     },
                     "svdb/merge": {
                         "branch": "master",
-                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "git_sha": "d9c95c45db561814ff6c46a0c0574581e81beaae",
                         "installed_by": ["modules"]
                     },
                     "svdb/query": {

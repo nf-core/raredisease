@@ -46,9 +46,9 @@ workflow ANNOTATE_MT_SNVS {
             .join(ch_cadd_vcf, remainder: true) // If CADD is not run then the third element in this channel will be `null`
             .branch { it  ->                    // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
                 merged: it[2].equals(null)
-                    return [it[0], it[1]]
+                    return [it[0]+ [prefix: it[1].simpleName + "_vep"], it[1]]
                 cadd: !(it[2].equals(null))
-                    return [it[0], it[2]]
+                    return [it[0] + [prefix: it[1].simpleName + "_cadd_vep"], it[2]]
             }
             .set { ch_for_mix }
 
@@ -73,15 +73,18 @@ workflow ANNOTATE_MT_SNVS {
         TABIX_TABIX_MT(ENSEMBLVEP_MT.out.vcf)
         ENSEMBLVEP_MT.out.vcf
             .join(TABIX_TABIX_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
-            .map { meta, vcf, tbi -> return [meta, vcf, tbi, []]}
+            .map { meta, vcf, tbi -> return [meta + [prefix: meta.prefix + "_vcfanno"], vcf, tbi, []]}
             .set { ch_in_vcfanno }
 
-        VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, [], ch_vcfanno_resources)
+        VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, [], ch_vcfanno_resources).vcf
+            .map { meta, vcf -> return [meta + [prefix: meta.prefix + "_hmtnote"], vcf]}
+            .set {ch_hmtnote_in}
 
         // HMTNOTE ANNOTATE
-        HMTNOTE_ANNOTATE(VCFANNO_MT.out.vcf)
-        HMTNOTE_ANNOTATE.out.vcf.map{meta, vcf ->
-            return [meta, WorkflowRaredisease.replaceSpacesInInfoColumn(vcf, vcf.parent.toString(), vcf.baseName)]
+        HMTNOTE_ANNOTATE(ch_hmtnote_in)
+        HMTNOTE_ANNOTATE.out.vcf
+            .map{meta, vcf ->
+                return [meta, WorkflowRaredisease.replaceSpacesInInfoColumn(vcf, vcf.parent.toString(), vcf.baseName)]
             }
             .set { ch_hmtnote_reformatted }
         ZIP_TABIX_HMTNOTE(ch_hmtnote_reformatted)

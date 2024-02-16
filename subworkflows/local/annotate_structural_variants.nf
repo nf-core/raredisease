@@ -95,7 +95,9 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
         PICARD_SORTVCF(ch_querypedbed_out, ch_genome_fasta, ch_genome_dictionary)
 
-        PICARD_SORTVCF.out.vcf.map { meta, vcf -> return [meta,vcf,[]] }.set { ch_sortvcf }
+        PICARD_SORTVCF.out.vcf
+            .map { meta, vcf -> return [meta,vcf,[]] }
+            .set { ch_sortvcf }
 
         BCFTOOLS_VIEW(ch_sortvcf, [], [], [])
             .vcf
