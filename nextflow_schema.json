@@ -508,6 +508,11 @@
                     "description": "Specifies whether or not to skip eKLIPse.",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "skip_peddy": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip peddy.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "skip_qualimap": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip Qualimap.",

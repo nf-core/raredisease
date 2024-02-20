@@ -84,7 +84,7 @@ workflow ANNOTATE_MT_SNVS {
         HMTNOTE_ANNOTATE(ch_hmtnote_in)
         HMTNOTE_ANNOTATE.out.vcf
             .map{meta, vcf ->
-                return [meta, WorkflowRaredisease.replaceSpacesInInfoColumn(vcf, vcf.parent.toString(), vcf.baseName)]
+                return [meta, file(replaceSpacesInInfoColumn(vcf, vcf.parent.toString(), vcf.baseName))]
             }
             .set { ch_hmtnote_reformatted }
         ZIP_TABIX_HMTNOTE(ch_hmtnote_reformatted)
@@ -108,4 +108,20 @@ workflow ANNOTATE_MT_SNVS {
         tbi       = ch_tbi_out                     // channel: [ val(meta), path(tbi) ]
         report    = ENSEMBLVEP_MT.out.report       // channel: [ path(html) ]
         versions  = ch_versions                    // channel: [ path(versions.yml) ]
+}
+
+def replaceSpacesInInfoColumn(vcf_file, parent_dir, base_name) {
+    def outfile = new File(parent_dir + '/' + base_name + '_formatted.vcf')
+    def writer  = outfile.newWriter()
+    vcf_file.eachLine { line ->
+        if (line.startsWith("#")) {
+            writer << line + "\n"
+        } else {
+            def split_str = line.tokenize("\t")
+            split_str[7] = split_str.getAt(7).replaceAll(" ","_")
+            writer << split_str.join("\t") + "\n"
+        }
+    }
+    writer.close()
+    return outfile
 }
