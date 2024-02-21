@@ -2,6 +2,7 @@
 // Annotate MT
 //
 
+include { replaceSpacesInInfoColumn                      } from './utils_nfcore_raredisease_pipeline/main'
 include { TABIX_TABIX as TABIX_TABIX_MT                  } from '../../modules/nf-core/tabix/tabix/main'
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_MT                } from '../../modules/nf-core/ensemblvep/vep/main'
 include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT  } from '../../modules/nf-core/haplogrep2/classify/main'
@@ -108,20 +109,4 @@ workflow ANNOTATE_MT_SNVS {
         tbi       = ch_tbi_out                     // channel: [ val(meta), path(tbi) ]
         report    = ENSEMBLVEP_MT.out.report       // channel: [ path(html) ]
         versions  = ch_versions                    // channel: [ path(versions.yml) ]
-}
-
-def replaceSpacesInInfoColumn(vcf_file, parent_dir, base_name) {
-    def outfile = new File(parent_dir + '/' + base_name + '_formatted.vcf')
-    def writer  = outfile.newWriter()
-    vcf_file.eachLine { line ->
-        if (line.startsWith("#")) {
-            writer << line + "\n"
-        } else {
-            def split_str = line.tokenize("\t")
-            split_str[7] = split_str.getAt(7).replaceAll(" ","_")
-            writer << split_str.join("\t") + "\n"
-        }
-    }
-    writer.close()
-    return outfile
 }
