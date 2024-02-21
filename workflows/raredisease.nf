@@ -1,19 +1,13 @@
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    PRINT PARAMS SUMMARY
+    IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
 include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet } from 'plugin/nf-validation'
-
-def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
-def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
-def summary_params = paramsSummaryMap(workflow)
-
-// Print parameter summary log to screen
-log.info logo + paramsSummaryLog(workflow) + citation
-
-WorkflowRaredisease.initialise(params, log)
+include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_raredisease_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,16 +89,6 @@ for (param in mandatoryParams.unique()) {
 if (missingParamsCount>0) {
     error("\nSet missing parameters and restart the run. For more information please check usage documentation on github.")
 }
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    CONFIG FILES
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-ch_multiqc_config                     = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
-ch_multiqc_custom_config              = params.multiqc_config              ? Channel.fromPath( params.multiqc_config )  : Channel.empty()
-ch_multiqc_logo                       = params.multiqc_logo                ? Channel.fromPath( params.multiqc_logo )    : Channel.empty()
-ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description )  : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,7 +101,6 @@ ch_multiqc_custom_methods_description = params.multiqc_methods_description ? fil
 // MODULE: Installed directly from nf-core/modules
 //
 
-include { CUSTOM_DUMPSOFTWAREVERSIONS           } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 include { FASTQC                                } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
 include { SMNCOPYNUMBERCALLER                   } from '../modules/nf-core/smncopynumbercaller/main'
@@ -159,46 +142,17 @@ include { VARIANT_EVALUATION                                 } from '../subworkf
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-// Info required for completion email and summary
-def multiqc_report = []
-
 workflow RAREDISEASE {
 
+    take:
+    ch_samplesheet // channel: samplesheet read in from --input
+
+    main:
+
     ch_versions = Channel.empty()
+    ch_multiqc_files = Channel.empty()
 
-    // Initialize read, sample, and case_info channels
-    ch_input = Channel.fromPath(params.input)
-    Channel.fromSamplesheet("input")
-        .tap { ch_original_input }
-        .map { meta, fastq1, fastq2 -> meta.id }
-        .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
-            counts[sample] = (counts[sample] ?: 0) + 1
-            counts
-        }
-        .combine( ch_original_input )
-        .map { counts, meta, fastq1, fastq2 ->
-            new_meta = meta + [num_lanes:counts[meta.id],
-                        read_group:"\'@RG\\tID:"+ fastq1.toString().split('/')[-1] + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
-            if (!fastq2) {
-                return [ new_meta + [ single_end:true ], [ fastq1 ] ]
-            } else {
-                return [ new_meta + [ single_end:false ], [ fastq1, fastq2 ] ]
-            }
-        }
-        .tap{ ch_input_counts }
-        .map { meta, fastqs -> fastqs }
-        .reduce([:]) { counts, fastqs -> //get line number for each row to construct unique sample ids
-            counts[fastqs] = counts.size() + 1
-            return counts
-        }
-        .combine( ch_input_counts )
-        .map { lineno, meta, fastqs -> //append line number to sampleid
-            new_meta = meta + [id:meta.id+"_T"+lineno[fastqs]]
-            return [ new_meta, fastqs ]
-        }
-        .set { ch_reads }
-
-    ch_samples   = ch_reads.map { meta, fastqs -> meta}
+    ch_samples   = ch_samplesheet.map { meta, fastqs -> meta}
     ch_pedfile   = ch_samples.toList().map { makePed(it) }
     ch_case_info = ch_samples.toList().map { create_case_channel(it) }
 
@@ -359,7 +313,7 @@ workflow RAREDISEASE {
 
     // Input QC
     if (!params.skip_fastqc) {
-        FASTQC (ch_reads)
+        FASTQC (ch_samplesheet)
         ch_versions = ch_versions.mix(FASTQC.out.versions.first())
     }
 
@@ -377,7 +331,7 @@ workflow RAREDISEASE {
     // ALIGNING READS, FETCH STATS, AND MERGE.
     //
     ALIGN (
-        ch_reads,
+        ch_samplesheet,
         ch_genome_fasta,
         ch_genome_fai,
         ch_genome_bwaindex,
@@ -645,11 +599,13 @@ workflow RAREDISEASE {
     ch_versions = ch_versions.mix(SMNCOPYNUMBERCALLER.out.versions)
 
     // ped correspondence, sex check, ancestry check
-    PEDDY_CHECK (
-        CALL_SNV.out.genome_vcf.join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true),
-        ch_pedfile
-    )
-    ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
+    if (!params.skip_peddy) {
+        PEDDY_CHECK (
+            CALL_SNV.out.genome_vcf.join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true),
+            ch_pedfile
+        )
+        ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
+    }
 
     // Generate CGH files from sequencing data, turned off by default
     if ( !params.skip_vcf2cytosure && params.analysis_type != "wes" ) {
@@ -706,27 +662,25 @@ workflow RAREDISEASE {
     }
 
     //
-    // MODULE: Pipeline reporting
+    // Collate and save software versions
     //
-
-    // The template v2.7.1 template update introduced: ch_versions.unique{ it.text }.collectFile(name: 'collated_versions.yml')
-    // This caused the pipeline to stall
-    CUSTOM_DUMPSOFTWAREVERSIONS (
-        ch_versions.unique().collectFile(name: 'collated_versions.yml')
-    )
+    softwareVersionsToYAML(ch_versions)
+        .collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'nf_core_pipeline_software_mqc_versions.yml', sort: true, newLine: true)
+        .set { ch_collated_versions }
 
     //
     // MODULE: MultiQC
     //
-    workflow_summary    = WorkflowRaredisease.paramsSummaryMultiqc(workflow, summary_params)
-    ch_workflow_summary = Channel.value(workflow_summary)
-
-    methods_description    = WorkflowRaredisease.methodsDescriptionText(workflow, ch_multiqc_custom_methods_description, params)
-    ch_methods_description = Channel.value(methods_description)
-    ch_multiqc_files = Channel.empty()
-    ch_multiqc_files = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml'))
-    ch_multiqc_files = ch_multiqc_files.mix(CUSTOM_DUMPSOFTWAREVERSIONS.out.mqc_yml.collect())
+    ch_multiqc_config                     = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
+    ch_multiqc_custom_config              = params.multiqc_config ? Channel.fromPath(params.multiqc_config, checkIfExists: true) : Channel.empty()
+    ch_multiqc_logo                       = params.multiqc_logo ? Channel.fromPath(params.multiqc_logo, checkIfExists: true) : Channel.empty()
+    summary_params                        = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
+    ch_workflow_summary                   = Channel.value(paramsSummaryMultiqc(summary_params))
+    ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
+    ch_methods_description                = Channel.value(methodsDescriptionText(ch_multiqc_custom_methods_description))
+    ch_multiqc_files                      = ch_multiqc_files.mix(ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
+    ch_multiqc_files                      = ch_multiqc_files.mix(ch_collated_versions)
+    ch_multiqc_files                      = ch_multiqc_files.mix(ch_methods_description.collectFile(name: 'methods_description_mqc.yaml', sort: false))
     if (!params.skip_fastqc) {
         ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
     }
@@ -735,9 +689,11 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(PEDDY_CHECK.out.ped.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(PEDDY_CHECK.out.csv.map{it[1]}.collect().ifEmpty([]))
 
+    if (!params.skip_peddy) {
+        ch_multiqc_files = ch_multiqc_files.mix(PEDDY_CHECK.out.ped.map{it[1]}.collect().ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(PEDDY_CHECK.out.csv.map{it[1]}.collect().ifEmpty([]))
+    }
 
     MULTIQC (
         ch_multiqc_files.collect(),
@@ -745,31 +701,10 @@ workflow RAREDISEASE {
         ch_multiqc_custom_config.toList(),
         ch_multiqc_logo.toList()
     )
-    multiqc_report = MULTIQC.out.report.toList()
-}
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    COMPLETION EMAIL AND SUMMARY
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-workflow.onComplete {
-    if (params.email || params.email_on_fail) {
-        NfcoreTemplate.email(workflow, params, summary_params, projectDir, log, multiqc_report)
-    }
-    NfcoreTemplate.dump_parameters(workflow, params)
-    NfcoreTemplate.summary(workflow, params, log)
-    if (params.hook_url) {
-        NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
-    }
-}
-
-workflow.onError {
-    if (workflow.errorReport.contains("Process requirement exceeds available memory")) {
-        println("🛑 Default resources exceed availability 🛑 ")
-        println("💡 See here on how to configure pipeline: https://nf-co.re/docs/usage/configuration#tuning-workflow-resources 💡")
-    }
+    emit:
+    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    versions       = ch_versions                 // channel: [ path(versions.yml) ]
 }
 
 /*

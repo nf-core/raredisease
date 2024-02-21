@@ -30,7 +30,9 @@
                 "anyOf": [
                     {
                         "type": "string",
-                        "pattern": "^\\S+\\.f(ast)?q\\.gz$"
+                        "pattern": "^\\S+\\.f(ast)?q\\.gz$",
+                        "format": "file-path",
+                        "exists": true
                     },
                     {
                         "type": "string",

@@ -2,6 +2,7 @@
 // Annotate MT
 //
 
+include { replaceSpacesInInfoColumn                      } from './utils_nfcore_raredisease_pipeline/main'
 include { TABIX_TABIX as TABIX_TABIX_MT                  } from '../../modules/nf-core/tabix/tabix/main'
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_MT                } from '../../modules/nf-core/ensemblvep/vep/main'
 include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT  } from '../../modules/nf-core/haplogrep2/classify/main'
@@ -84,7 +85,7 @@ workflow ANNOTATE_MT_SNVS {
         HMTNOTE_ANNOTATE(ch_hmtnote_in)
         HMTNOTE_ANNOTATE.out.vcf
             .map{meta, vcf ->
-                return [meta, WorkflowRaredisease.replaceSpacesInInfoColumn(vcf, vcf.parent.toString(), vcf.baseName)]
+                return [meta, file(replaceSpacesInInfoColumn(vcf, vcf.parent.toString(), vcf.baseName))]
             }
             .set { ch_hmtnote_reformatted }
         ZIP_TABIX_HMTNOTE(ch_hmtnote_reformatted)
