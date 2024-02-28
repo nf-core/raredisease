@@ -101,9 +101,16 @@ if (missingParamsCount>0) {
 // MODULE: Installed directly from nf-core/modules
 //
 
-include { FASTQC                                } from '../modules/nf-core/fastqc/main'
-include { MULTIQC                               } from '../modules/nf-core/multiqc/main'
-include { SMNCOPYNUMBERCALLER                   } from '../modules/nf-core/smncopynumbercaller/main'
+include { FASTQC              } from '../modules/nf-core/fastqc/main'
+include { MULTIQC             } from '../modules/nf-core/multiqc/main'
+include { SMNCOPYNUMBERCALLER } from '../modules/nf-core/smncopynumbercaller/main'
+
+//
+// MODULE: Local modules
+//
+
+include { RENAME_ALIGN_FILES as RENAME_BAM_FOR_SMNCALLER } from '../modules/local/rename_align_files'
+include { RENAME_ALIGN_FILES as RENAME_BAI_FOR_SMNCALLER } from '../modules/local/rename_align_files'
 
 //
 // SUBWORKFLOWS
@@ -578,13 +585,13 @@ workflow RAREDISEASE {
     }
 
     // STEP 1.7: SMNCOPYNUMBERCALLER
-    ch_mapped.genome_bam_bai
-        .collect{it[1]}
+    RENAME_BAM_FOR_SMNCALLER(ch_mapped.genome_marked_bam, "bam").output
+        .collect{it}
         .toList()
         .set { ch_bam_list }
 
-    ch_mapped.genome_bam_bai
-        .collect{it[2]}
+    RENAME_BAI_FOR_SMNCALLER(ch_mapped.genome_marked_bai, "bam.bai").output
+        .collect{it}
         .toList()
         .set { ch_bai_list }
 
@@ -596,6 +603,8 @@ workflow RAREDISEASE {
     SMNCOPYNUMBERCALLER (
         ch_bams_bais
     )
+    ch_versions = ch_versions.mix(RENAME_BAM_FOR_SMNCALLER.out.versions)
+    ch_versions = ch_versions.mix(RENAME_BAI_FOR_SMNCALLER.out.versions)
     ch_versions = ch_versions.mix(SMNCOPYNUMBERCALLER.out.versions)
 
     // ped correspondence, sex check, ancestry check
