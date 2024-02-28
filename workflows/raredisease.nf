@@ -244,6 +244,8 @@ workflow RAREDISEASE {
                                                                             : Channel.value([])
     ch_rtg_truthvcfs            = params.rtg_truthvcfs                      ? Channel.fromPath(params.rtg_truthvcfs).collect()
                                                                             : Channel.value([])
+    ch_sample_id_map            = params.sample_id_map                      ? Channel.fromSamplesheet("sample_id_map")
+                                                                            : Channel.value([])
     ch_score_config_mt          = params.score_config_mt                    ? Channel.fromPath(params.score_config_mt).collect()
                                                                             : Channel.value([])
     ch_score_config_snv         = params.score_config_snv                   ? Channel.fromPath(params.score_config_snv).collect()
@@ -613,6 +615,7 @@ workflow RAREDISEASE {
             ch_sv_annotate.vcf_ann,
             ch_sv_annotate.tbi,
             ch_mapped.genome_marked_bam,
+            ch_sample_id_map,
             ch_vcf2cytosure_blacklist
         )
         ch_versions = ch_versions.mix(GENERATE_CYTOSURE_FILES.out.versions)
