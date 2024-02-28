@@ -16,7 +16,8 @@ workflow GENERATE_CYTOSURE_FILES {
         ch_blacklist     // channel: [optional] [path(blacklist)]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions     = Channel.empty()
+        ch_reheader_out = Channel.empty()
 
         TIDDIT_COV_VCF2CYTOSURE (ch_bam, [[],[]])
 
@@ -24,24 +25,56 @@ workflow GENERATE_CYTOSURE_FILES {
         ch_vcf.join( ch_tbi, failOnMismatch: true )
             .set { ch_vcf_tbi }
 
-        ch_bam.combine(ch_vcf_tbi).map {
-            meta_sample, bam, meta_case, vcf, tbi ->
-            new_meta = ['id':meta_sample.sample]
-            return [ new_meta, vcf, tbi ]
-        }.set { ch_sample_vcf }
+        ch_bam.combine(ch_vcf_tbi)
+            .map {
+                meta_sample, bam, meta_case, vcf, tbi ->
+                new_meta = ['id':meta_sample.sample]
+                return [ new_meta, vcf, tbi ]
+            }
+            .join(ch_sample_id_map, remainder: true)
+            .branch { it  ->
+                id: it[3].equals(null)
+                    return [it[0] + [custid:it[0].id], it[1], it[2]]
+                custid: !(it[3].equals(null))
+                    return [it[0] + [custid:it[3]], it[1], it[2]]
+            }
+            .set { ch_for_mix }
+
+        Channel.empty()
+            .mix(ch_for_mix.id, ch_for_mix.custid)
+            .set { ch_sample_vcf }
 
         // Split vcf into sample vcf:s and frequency filter
         SPLIT_AND_FILTER_SV_VCF ( ch_sample_vcf, [], [], [] )
 
-        SPLIT_AND_FILTER_SV_VCF.out.vcf
-            .join(ch_sample_id_map)
-            .map { meta, vcf, custid -> return [meta+[custid:custid], vcf, [], []]}
-            .set { ch_reheader_in }
+        if (params.sample_id_map != null) {
 
-        BCFTOOLS_REHEADER_SV_VCF ( ch_reheader_in, [[:],[]] )
+            SPLIT_AND_FILTER_SV_VCF.out.vcf
+                .map { meta, vcf -> return [meta, vcf, [], []]}
+                .set { ch_reheader_in }
+
+            BCFTOOLS_REHEADER_SV_VCF ( ch_reheader_in, [[:],[]] ).vcf
+                .set {ch_reheader_out}
+
+            ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_SV_VCF.out.versions.first())
+        }
+
+        SPLIT_AND_FILTER_SV_VCF.out.vcf
+            .join(ch_reheader_out, remainder: true)
+            .branch { it  ->
+                split: it[2].equals(null)
+                    return [it[0], it[1]]
+                reheader: !(it[2].equals(null))
+                    return [it[0], it[2]]
+            }
+            .set { ch_for_mix }
+
+        Channel.empty()
+            .mix(ch_for_mix.split, ch_for_mix.reheader)
+            .set { ch_vcf2cytosure_in }
 
         VCF2CYTOSURE (
-            BCFTOOLS_REHEADER_SV_VCF.out.vcf,
+            ch_vcf2cytosure_in,
             TIDDIT_COV_VCF2CYTOSURE.out.cov,
             [[:], []], [[:], []],
             ch_blacklist
@@ -50,7 +83,6 @@ workflow GENERATE_CYTOSURE_FILES {
         ch_versions = ch_versions.mix(TIDDIT_COV_VCF2CYTOSURE.out.versions.first())
         ch_versions = ch_versions.mix(SPLIT_AND_FILTER_SV_VCF.out.versions.first())
         ch_versions = ch_versions.mix(VCF2CYTOSURE.out.versions.first())
-        ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_SV_VCF.out.versions.first())
 
     emit:
         versions = ch_versions // channel: [ versions.yml ]

@@ -245,7 +245,7 @@ workflow RAREDISEASE {
     ch_rtg_truthvcfs            = params.rtg_truthvcfs                      ? Channel.fromPath(params.rtg_truthvcfs).collect()
                                                                             : Channel.value([])
     ch_sample_id_map            = params.sample_id_map                      ? Channel.fromSamplesheet("sample_id_map")
-                                                                            : Channel.value([])
+                                                                            : Channel.empty()
     ch_score_config_mt          = params.score_config_mt                    ? Channel.fromPath(params.score_config_mt).collect()
                                                                             : Channel.value([])
     ch_score_config_snv         = params.score_config_snv                   ? Channel.fromPath(params.score_config_snv).collect()
