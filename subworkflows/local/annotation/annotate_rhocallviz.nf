@@ -8,6 +8,7 @@ include { BCFTOOLS_ROH                              } from '../../../modules/nf-
 include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_UNCOMPRESS } from '../../../modules/nf-core/bcftools/view/main'
 include { RHOCALL_VIZ                               } from '../../../modules/nf-core/rhocall/viz/main'
 include { UCSC_WIGTOBIGWIG                          } from '../../../modules/nf-core/ucsc/wigtobigwig/main'
+include { CHROMOGRAPH as CHROMOGRAPH_AUTOZYG        } from '../../../modules/nf-core/chromograph/main'
 
 workflow ANNOTATE_RHOCALLVIZ {
 
@@ -36,11 +37,14 @@ workflow ANNOTATE_RHOCALLVIZ {
 
         BCFTOOLS_VIEW_UNCOMPRESS(ch_roh_in,[],[],[])
 
-        RHOCALL_VIZ( BCFTOOLS_VIEW_UNCOMPRESS.out.vcf, BCFTOOLS_ROH.out.roh)
+        RHOCALL_VIZ(BCFTOOLS_VIEW_UNCOMPRESS.out.vcf, BCFTOOLS_ROH.out.roh)
+
+        CHROMOGRAPH_AUTOZYG(RHOCALL_VIZ.out.bed, [[],[]], [[],[]], [[],[]], [[],[]], [[],[]], [[],[]])
 
         UCSC_WIGTOBIGWIG(RHOCALL_VIZ.out.wig, ch_genome_chrsizes)
 
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions.first())
+        ch_versions = ch_versions.mix(CHROMOGRAPH_AUTOZYG.out.versions.first())
         ch_versions = ch_versions.mix(TABIX_TABIX.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW_UNCOMPRESS.out.versions.first())

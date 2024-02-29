@@ -402,6 +402,8 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
   - `<case_id>_rohann_vcfanno_upd_sites_<chr#>.png`: file containing a plot showing upd sites across chromosomes.
 - `annotate_snv/genome/*regions_chromograph`
   - `<case_id>_rohann_vcfanno_upd_regions_<chr#>.png`: file containing a plot showing upd regions across chromosomes.
+- `annotate_snv/genome/*autozyg_chromograph`
+  - `<sample_id>_rhocallviz_<chr#>.png`: file containing a plot showing regions of autozygosity across chromosomes.
 
 </details>
 
