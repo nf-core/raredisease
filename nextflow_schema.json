@@ -375,6 +375,17 @@
                     "help_text": "Should be Stranger's extended JSON as described at https://github.com/Clinical-Genomics/stranger/blob/master/stranger/resources/variant_catalog_grch37.json. This file is used by both ExpansionHunter and Stranger",
                     "fa_icon": "fas fa-file"
                 },
+                "sample_id_map": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Path to a file containing internal ids and customer ids in csv format.",
+                    "fa_icon": "fas fa-file-csv",
+                    "mimetype": "text/csv",
+                    "schema": "assets/sample_id_map.json",
+                    "help_text": "Optional file to rename sample ids in the vcf2cytosure vcf",
+                    "pattern": "^\\S+\\.csv$"
+                },
                 "vcf2cytosure_blacklist": {
                     "type": "string",
                     "help_text": "Optional file to blacklist regions for VCF2cytosure",
