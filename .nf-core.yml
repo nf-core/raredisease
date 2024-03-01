@@ -2,6 +2,7 @@ lint:
   files_exist:
     - conf/modules.config
   files_unchanged:
+    - .github/CONTRIBUTING.md
     - .github/PULL_REQUEST_TEMPLATE.md
     - docs/images/nf-core-raredisease_logo_dark.png
     - docs/images/nf-core-raredisease_logo_light.png
