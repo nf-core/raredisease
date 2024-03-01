@@ -1,1 +1,11 @@
+lint:
+  files_exist:
+    - conf/modules.config
+  files_unchanged:
+    - .github/PULL_REQUEST_TEMPLATE.md
+    - docs/images/nf-core-raredisease_logo_dark.png
+    - docs/images/nf-core-raredisease_logo_light.png
+    - assets/multiqc_config.yaml
+    - .github/workflows/linting.yml
+    - pyproject.toml
 repository_type: pipeline

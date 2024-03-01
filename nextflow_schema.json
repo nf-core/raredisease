@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "outdir"],
+            "required": ["outdir"],
             "properties": {
                 "input": {
                     "type": "string",
@@ -27,33 +27,70 @@
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open"
+                    "fa_icon": "fas fa-folder-open",
+                    "default": "results"
                 },
                 "email": {
                     "type": "string",
                     "description": "Email address for completion summary.",
                     "fa_icon": "fas fa-envelope",
                     "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
-                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                    "hidden": true
                 },
                 "multiqc_title": {
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
-                    "fa_icon": "fas fa-file-signature"
+                    "fa_icon": "fas fa-file-signature",
+                    "hidden": true
                 }
             }
         },
-        "reference_genome_options": {
-            "title": "Reference genome options",
+        "reference_file_options": {
+            "title": "Reference file options",
             "type": "object",
             "fa_icon": "fas fa-dna",
             "description": "Reference genome related files and options required for the workflow.",
             "properties": {
-                "genome": {
+                "bait_padding": {
+                    "type": "integer",
+                    "default": 100,
+                    "fa_icon": "fas fa-align-center",
+                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "description": "The amount to pad each end of the target intervals to create bait intervals."
+                },
+                "bwa": {
                     "type": "string",
-                    "description": "Name of iGenomes reference.",
-                    "fa_icon": "fas fa-book",
-                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details."
+                    "exists": true,
+                    "format": "directory-path",
+                    "description": "Directory for pre-built bwa index.",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open"
+                },
+                "bwamem2": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "directory-path",
+                    "description": "Directory for pre-built bwamem2 index.",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open"
+                },
+                "cadd_resources": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to the directory containing cadd annotations.",
+                    "help_text": "This folder contains the uncompressed files that would otherwise be in data/annotation folder as described in https://github.com/kircherlab/CADD-scripts/#manual-installation."
+                },
+                "fai": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference",
+                    "description": "Path to FASTA genome index file.",
+                    "pattern": "^\\S+\\.fn?a(sta)?\\.fai$",
+                    "fa_icon": "fas fa-file"
                 },
                 "fasta": {
                     "type": "string",
@@ -63,14 +100,570 @@
                     "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
                     "description": "Path to FASTA genome file.",
                     "help_text": "This parameter is *mandatory* if `--genome` is not specified. If you don't have a BWA index available this will be generated for you automatically. Combine with `--save_reference` to save BWA index for future runs.",
-                    "fa_icon": "far fa-file-code"
+                    "fa_icon": "fas fa-file"
+                },
+                "gcnvcaller_model": {
+                    "type": "string",
+                    "exists": true,
+                    "fa_icon": "fas fa-file",
+                    "description": "A file containing the path to models produced by GATK4 GermlineCNVCaller cohort.",
+                    "format": "file-path",
+                    "help_text": "This model is required for generating a cnv calls when using GermlineCNVCaller."
+                },
+                "genome": {
+                    "type": "string",
+                    "description": "Name of iGenomes reference.",
+                    "fa_icon": "fas fa-align-center",
+                    "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.",
+                    "default": "GRCh38"
+                },
+                "gens_gnomad_pos": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to a list of common SNP locations for Gens.",
+                    "help_text": "Locations of gnomad SNPs with a high enough BAF.",
+                    "hidden": true
+                },
+                "gens_interval_list": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to interval list for Gens.",
+                    "help_text": "This file contains the binning intervals used for CollectReadCounts.",
+                    "hidden": true
+                },
+                "gens_pon_female": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to female panel of normals for Gens.",
+                    "help_text": "The female panel used to run DenoiseReadCounts.",
+                    "hidden": true
+                },
+                "gens_pon_male": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to male panel of normals for Gens.",
+                    "help_text": "The male panel used to run DenoiseReadCounts.",
+                    "hidden": true
+                },
+                "gnomad_af": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.tab(\\.gz)?$",
+                    "description": "Path to the gnomad tab file with allele frequencies.",
+                    "help_text": "Path to the gnomad tab file with CHR/START/REF,ALT/AF. Can be generated from the gnomad annotations vcf."
+                },
+                "gnomad_af_idx": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.bed(\\.gz)?\\.idx$",
+                    "description": "Path to the index file for the gnomad tab file with allele frequencies.",
+                    "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
                 },
                 "igenomes_ignore": {
                     "type": "boolean",
                     "description": "Do not load the iGenomes reference config.",
                     "fa_icon": "fas fa-ban",
-                    "hidden": true,
                     "help_text": "Do not load `igenomes.config` when running the pipeline. You may choose this option if you observe clashes between custom parameters and those supplied in `igenomes.config`."
+                },
+                "intervals_wgs": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.intervals?(_list)?$",
+                    "description": "Path to the interval list of the genome (autosomes, sex chromosomes, and mitochondria).",
+                    "help_text": "Path to the interval list of the genome. This is used to calculate genome-wide coverage statistics."
+                },
+                "intervals_y": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.intervals?(_list)?$",
+                    "description": "Path to the interval list of the Y chromosome.",
+                    "help_text": "Path to the interval list of the Y chromosome. This is used to calculate coverage statistics for the Y chromosome."
+                },
+                "known_dbsnp": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.vcf(\\.gz)?$",
+                    "description": "Path to known dbSNP file."
+                },
+                "known_dbsnp_tbi": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.vcf(\\.gz)?\\.tbi$",
+                    "description": "Path to known dbSNP file index."
+                },
+                "local_genomes": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-map-marker-alt",
+                    "description": "Local directory base for genome references that map to the config.",
+                    "help_text": "This folder is a flat structure with file names that map to the config."
+                },
+                "mito_name": {
+                    "type": "string",
+                    "description": "Name of the mitochondrial contig in the reference fasta file",
+                    "help_text": "Used to extract relevant information from the references to analyse mitochondria",
+                    "fa_icon": "fas fa-align-center",
+                    "default": "chrM"
+                },
+                "mobile_element_references": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "description": "File with mobile element references",
+                    "help_text": "Path to tsv file listing mobile element references. \nFormat: <mobile element type>\\t<path to bed file>",
+                    "pattern": "^\\S+\\.tsv$",
+                    "format": "file-path",
+                    "schema": "assets/mobile_element_references_schema.json"
+                },
+                "mobile_element_svdb_annotations": {
+                    "type": "string",
+                    "description": "File with mobile element allele frequency references",
+                    "help_text": "Path to csv file listing files containing mobile element allele frequencies in reference populations. \nFormat: <vcf file path>,<in_freq_info_key>,<in_allele_count_info_key>,<out_freq_info_key>,<out_allele_count_info_key>",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/svdb_query_vcf_schema.json"
+                },
+                "ml_model": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to sentieon machine learning model file."
+                },
+                "mt_fasta": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "mimetype": "text/plain",
+                    "pattern": "^\\S+\\.fn?a(sta)?(\\.gz)?$",
+                    "description": "Path to mitochondrial FASTA genome file.",
+                    "fa_icon": "fas fa-file"
+                },
+                "ploidy_model": {
+                    "type": "string",
+                    "exists": true,
+                    "fa_icon": "fas fa-folder-open",
+                    "description": "Directory containing the ploidy model files",
+                    "format": "directory-path",
+                    "help_text": "Produced in GATK4 DetermineGermlineContigPloidy cohort, this model is required for generating a cnv model when using GermlineCNVCaller."
+                },
+                "readcount_intervals": {
+                    "type": "string",
+                    "exists": true,
+                    "fa_icon": "fas fa-file",
+                    "description": "Interval list file containing the intervals over which read counts are tabulated for CNV calling",
+                    "format": "file-path",
+                    "help_text": "Generated by GATK4 preprocessintervals. If absent, pipeline can generate this file."
+                },
+                "reduced_penetrance": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file-csv",
+                    "description": "File with gene ids that have reduced penetrance. For use with genmod"
+                },
+                "rtg_truthvcfs": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Vcf used for evaluating variant calls.",
+                    "fa_icon": "fas fa-file-csv",
+                    "help_text": "Path to comma-separated file containing information about the truth vcf files used by vcfeval.",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/rtg_truthvcfs_schema.json"
+                },
+                "save_reference": {
+                    "type": "boolean",
+                    "description": "If generated by the pipeline save the required indices/references in the results directory.",
+                    "help_text": "The saved references can be used for future pipeline runs, reducing processing times.",
+                    "fa_icon": "fas fa-save"
+                },
+                "score_config_mt": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "description": "MT rank model config file for genmod."
+                },
+                "score_config_snv": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "description": "SNV rank model config file for genmod."
+                },
+                "score_config_sv": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "description": "SV rank model config file for genmod."
+                },
+                "sdf": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "directory-path",
+                    "description": "Directory for pre-built sdf index. Used by rtg/vcfeval",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open"
+                },
+                "sequence_dictionary": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.dict$",
+                    "description": "Path to the genome dictionary file"
+                },
+                "svdb_query_bedpedbs": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Databases used for structural variant annotation in chrA-posA-chrB-posB-type-count-frequency format.",
+                    "fa_icon": "fas fa-file-csv",
+                    "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation.",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/svdb_query_bedpe_schema.json"
+                },
+                "svdb_query_dbs": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Databases used for structural variant annotation in vcf format.",
+                    "fa_icon": "fas fa-file-csv",
+                    "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation.",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/svdb_query_vcf_schema.json"
+                },
+                "target_bed": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "description": "Path to directory for target bed file.",
+                    "help_text": "If you would like to limit your analysis to specific regions of the genome, you can pass those regions in a bed file using this option"
+                },
+                "variant_catalog": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Path to variant catalog file",
+                    "help_text": "Should be Stranger's extended JSON as described at https://github.com/Clinical-Genomics/stranger/blob/master/stranger/resources/variant_catalog_grch37.json. This file is used by both ExpansionHunter and Stranger",
+                    "fa_icon": "fas fa-file"
+                },
+                "vcf2cytosure_blacklist": {
+                    "type": "string",
+                    "help_text": "Optional file to blacklist regions for VCF2cytosure",
+                    "pattern": "^\\S+\\.bed$",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to vcf2cytosure blacklist file"
+                },
+                "vcfanno_resources": {
+                    "type": "string",
+                    "exists": true,
+                    "description": "Path to a file containing the absolute paths to resources defined within the vcfanno toml file. One line per resource.",
+                    "help_text": "If no file is passed, default configurations will be used according to genome build within the context of the pipeline.",
+                    "fa_icon": "fas fa-file"
+                },
+                "vcfanno_toml": {
+                    "type": "string",
+                    "exists": true,
+                    "description": "Path to the vcfanno toml file.",
+                    "pattern": "^\\S+\\.toml$",
+                    "help_text": "If no toml is passed, default configurations will be used according to genome build within the context of the pipeline.",
+                    "fa_icon": "fas fa-file"
+                },
+                "vcfanno_lua": {
+                    "type": "string",
+                    "exists": true,
+                    "description": "Path to the vcfanno lua file.",
+                    "pattern": "^\\S+\\.lua$",
+                    "help_text": "Custom operations file (lua). For use when the built-in ops don't supply the needed reduction.",
+                    "fa_icon": "fas fa-file"
+                },
+                "vep_cache": {
+                    "type": "string",
+                    "exists": true,
+                    "description": "Path to vep's cache directory.",
+                    "help_text": "If no directory path is passed, vcf files will not be annotated by vep.",
+                    "fa_icon": "fas fa-folder-open"
+                },
+                "vep_plugin_files": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Databases used by both named and custom plugins to annotate variants.",
+                    "fa_icon": "fas fa-file-csv",
+                    "help_text": "Path to a file containing the absolute paths to databases and their indices used by VEP's custom and named plugins resources defined within the vcfanno toml file. One line per resource.",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/vep_plugin_files_schema.json"
+                },
+                "vep_filters": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file-csv",
+                    "description": "Path to the file containing HGNC_IDs of interest on separate lines."
+                },
+                "vep_filters_scout_fmt": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-table",
+                    "description": "Path to a bed-like file exported by scout, which contains HGNC_IDs to be used in filter_vep."
+                }
+            },
+            "required": ["fasta", "intervals_wgs", "intervals_y"]
+        },
+        "analysis_options": {
+            "title": "Analysis options",
+            "type": "object",
+            "fa_icon": "fas fa-user-cog",
+            "description": "Options used to steer the direction of the pipeline.",
+            "properties": {
+                "analysis_type": {
+                    "type": "string",
+                    "default": "wgs",
+                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
+                    "fa_icon": "fas fa-align-center",
+                    "enum": ["wgs", "wes", "mito"]
+                },
+                "platform": {
+                    "type": "string",
+                    "default": "illumina",
+                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
+                    "fa_icon": "fas fa-align-center",
+                    "enum": ["illumina"]
+                },
+                "ngsbits_samplegender_method": {
+                    "type": "string",
+                    "default": "xy",
+                    "description": "Method selection for ngs-bits samplegender",
+                    "fa_icon": "fas fa-align-center",
+                    "enum": ["xy", "hetx", "sry"]
+                },
+                "run_rtgvcfeval": {
+                    "type": "boolean",
+                    "description": "Specifies whether to run rtgtools' vcfeval",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "save_mapped_as_cram": {
+                    "type": "boolean",
+                    "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_fastqc": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip FASTQC.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_fastp": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip trimming with fastp.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_haplocheck": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip haplocheck.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_gens": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip gens preprocessing subworkflow.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_germlinecnvcaller": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip CNV calling using GATK's GermlineCNVCaller",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_eklipse": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip eKLIPse.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_peddy": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip peddy.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_qualimap": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip Qualimap.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_me_annotation": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip annotation of mobile_elements.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_mt_annotation": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip annotation of mitochondrial variants.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_mt_subsample": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to subsample mt alignment.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_snv_annotation": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip annotate SNV subworkflow.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_sv_annotation": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip annotate structural variant subworkflow.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_vcf2cytosure": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Specifies whether or not to skip the vcf2cytosure subworkflow",
+                    "help_text": "vcf2cytosure can generate CGH files from a structural variant VCF file that can be analysed in the CytoSure interpretation software. Cut-offs for allele frequencies and bin sizes can be modified in the config file. Turned off by default.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_vep_filter": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to filter results based on a list of candidate genes specified in 'vep_filters'.",
+                    "fa_icon": "fas fa-toggle-on"
+                }
+            }
+        },
+        "alignment_options": {
+            "title": "Alignment options",
+            "type": "object",
+            "fa_icon": "fas fa-map-signs",
+            "description": "Options to adjust parameters and filtering criteria for read alignments.",
+            "properties": {
+                "aligner": {
+                    "type": "string",
+                    "default": "bwamem2",
+                    "description": "Specifies the alignment algorithm to use - available options are 'bwamem2' and 'sentieon'.",
+                    "fa_icon": "fas fa-align-center",
+                    "enum": ["bwa", "bwamem2", "sentieon"]
+                },
+                "min_trimmed_length": {
+                    "type": "integer",
+                    "default": 40,
+                    "description": "Discard trimmed reads shorter than this",
+                    "help_text": "Minimum length of reads after adapter trimming. Shorter reads are discarded. The program default is 15 bp.  ",
+                    "fa_icon": "fas fa-less-than"
+                },
+                "mt_subsample_rd": {
+                    "type": "integer",
+                    "default": 150,
+                    "description": "Expected coverage to subsample mt alignment to.",
+                    "help_text": "To know more about this parameter check samtools' view documentation.",
+                    "fa_icon": "fas fa-less-than"
+                },
+                "mt_subsample_seed": {
+                    "type": "integer",
+                    "default": 30,
+                    "description": "Subsampling seed used to influence which subset of mitochondrial reads is kept. ",
+                    "help_text": "To know more about this parameter check samtools' view documentation.",
+                    "fa_icon": "fas fa-less-than"
+                },
+                "rmdup": {
+                    "type": "boolean",
+                    "description": "Specifies whether duplicates reads should be removed prior to variant calling.",
+                    "fa_icon": "fas fa-toggle-on"
+                }
+            }
+        },
+        "variant_calling_options": {
+            "title": "Variant calling options",
+            "type": "object",
+            "fa_icon": "fas fa-map-signs",
+            "description": "Options to adjust parameters and filtering criteria for variant calling.",
+            "properties": {
+                "call_interval": {
+                    "type": "string",
+                    "format": "path",
+                    "fa_icon": "fas fa-align-center",
+                    "description": "Interval in the reference that will be used in the software"
+                },
+                "cnvnator_binsize": {
+                    "type": "integer",
+                    "description": "Bin size for CNVnator",
+                    "default": 1000,
+                    "fa_icon": "fas fa-align-center"
+                },
+                "sentieon_dnascope_pcr_indel_model": {
+                    "type": "string",
+                    "default": "CONSERVATIVE",
+                    "fa_icon": "fas fa-bacon",
+                    "description": "Option for selecting the PCR indel model used by Sentieon Dnascope.",
+                    "help_text": "PCR indel model used to weed out false positive indels more or less aggressively. The possible MODELs are: NONE (used for PCR free samples), and HOSTILE, AGGRESSIVE and CONSERVATIVE, in order of decreasing aggressiveness. The default value is CONSERVATIVE.",
+                    "pattern": "^(NONE|HOSTILE|AGGRESSIVE|CONSERVATIVE)(?<!,)$"
+                },
+                "variant_caller": {
+                    "type": "string",
+                    "default": "deepvariant",
+                    "description": "Specifies the variant caller to use - available options are 'deepvariant' and 'sentieon'.",
+                    "fa_icon": "fas fa-random",
+                    "enum": ["deepvariant", "sentieon"]
+                },
+                "variant_type": {
+                    "type": "string",
+                    "default": "snp,indel",
+                    "description": "Specifies the variant types for sentieon variant caller.",
+                    "fa_icon": "fas fa-align-center",
+                    "enum": ["snp", "indel", "snp,indel"]
+                }
+            }
+        },
+        "annotation_options": {
+            "title": "Annotation options",
+            "type": "object",
+            "fa_icon": "fas fa-user-cog",
+            "description": "Options used to facilitate the annotation of the variants.",
+            "properties": {
+                "variant_consequences_snv": {
+                    "type": "string",
+                    "description": "File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic and mitochondrial SNVs.",
+                    "help_text": "For more information check https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "variant_consequences_sv": {
+                    "type": "string",
+                    "description": "File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic SVs.",
+                    "help_text": "For more information check https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "vep_cache_version": {
+                    "type": "integer",
+                    "default": 110,
+                    "description": "Specify the version of the VEP cache provided to the `--vep_cache` option.",
+                    "fa_icon": "fas fa-align-center",
+                    "enum": [107, 110]
                 }
             }
         },
@@ -223,20 +816,26 @@
                 "multiqc_config": {
                     "type": "string",
                     "format": "file-path",
+                    "exists": true,
                     "description": "Custom config file to supply to MultiQC.",
                     "fa_icon": "fas fa-cog",
                     "hidden": true
                 },
                 "multiqc_logo": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
                     "description": "Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file",
                     "fa_icon": "fas fa-image",
                     "hidden": true
                 },
                 "multiqc_methods_description": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
                     "description": "Custom MultiQC yaml file containing HTML including a methods description.",
-                    "fa_icon": "fas fa-cog"
+                    "fa_icon": "fas fa-cog",
+                    "hidden": true
                 },
                 "validate_params": {
                     "type": "boolean",
@@ -274,7 +873,19 @@
             "$ref": "#/definitions/input_output_options"
         },
         {
-            "$ref": "#/definitions/reference_genome_options"
+            "$ref": "#/definitions/reference_file_options"
+        },
+        {
+            "$ref": "#/definitions/analysis_options"
+        },
+        {
+            "$ref": "#/definitions/alignment_options"
+        },
+        {
+            "$ref": "#/definitions/variant_calling_options"
+        },
+        {
+            "$ref": "#/definitions/annotation_options"
         },
         {
             "$ref": "#/definitions/institutional_config_options"

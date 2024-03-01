@@ -80,23 +80,33 @@ workflow PIPELINE_INITIALISATION {
     //
     // Create channel from input file provided through params.input
     //
-    Channel
-        .fromSamplesheet("input")
-        .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
-                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
-                }
+    Channel.fromSamplesheet("input")
+        .tap { ch_original_input }
+        .map { meta, fastq1, fastq2 -> meta.id }
+        .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
+            counts[sample] = (counts[sample] ?: 0) + 1
+            counts
         }
-        .groupTuple()
-        .map {
-            validateInputSamplesheet(it)
+        .combine( ch_original_input )
+        .map { counts, meta, fastq1, fastq2 ->
+            new_meta = meta + [num_lanes:counts[meta.id],
+                        read_group:"\'@RG\\tID:"+ fastq1.toString().split('/')[-1] + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
+            if (!fastq2) {
+                return [ new_meta + [ single_end:true ], [ fastq1 ] ]
+            } else {
+                return [ new_meta + [ single_end:false ], [ fastq1, fastq2 ] ]
+            }
         }
-        .map {
-            meta, fastqs ->
-                return [ meta, fastqs.flatten() ]
+        .tap{ ch_input_counts }
+        .map { meta, fastqs -> fastqs }
+        .reduce([:]) { counts, fastqs -> //get line number for each row to construct unique sample ids
+            counts[fastqs] = counts.size() + 1
+            return counts
+        }
+        .combine( ch_input_counts )
+        .map { lineno, meta, fastqs -> //append line number to sampleid
+            new_meta = meta + [id:meta.id+"_T"+lineno[fastqs]]
+            return [ new_meta, fastqs ]
         }
         .set { ch_samplesheet }
 
@@ -178,6 +188,24 @@ def getGenomeAttribute(attribute) {
         }
     }
     return null
+}
+//
+// Replace spaces in vcf files with underscores
+//
+def replaceSpacesInInfoColumn(vcf_file, parent_dir, base_name) {
+    def outfile = new File(parent_dir + '/' + base_name + '_formatted.vcf')
+    def writer  = outfile.newWriter()
+    vcf_file.eachLine { line ->
+        if (line.startsWith("#")) {
+            writer << line + "\n"
+        } else {
+            def split_str = line.tokenize("\t")
+            split_str[7] = split_str.getAt(7).replaceAll(" ","_")
+            writer << split_str.join("\t") + "\n"
+        }
+    }
+    writer.close()
+    return outfile
 }
 
 //
