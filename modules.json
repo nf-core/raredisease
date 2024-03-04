@@ -471,7 +471,7 @@
                     },
                     "tabix/tabix": {
                         "branch": "master",
-                        "git_sha": "09d3c8c29b31a2dfd610305b10550f0e1dbcd4a9",
+                        "git_sha": "9502adb23c0b97ed8e616bbbdfa73b4585aec9a1",
                         "installed_by": ["modules"]
                     },
                     "tiddit/cov": {
