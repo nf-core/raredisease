@@ -103,6 +103,7 @@ if (missingParamsCount>0) {
 
 include { FASTQC              } from '../modules/nf-core/fastqc/main'
 include { MULTIQC             } from '../modules/nf-core/multiqc/main'
+include { PEDDY               } from '../modules/nf-core/peddy/main'
 include { SMNCOPYNUMBERCALLER } from '../modules/nf-core/smncopynumbercaller/main'
 
 //
@@ -133,7 +134,6 @@ include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_SNV } from '../subworkf
 include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/local/generate_clinical_set'
 include { GENERATE_CYTOSURE_FILES                            } from '../subworkflows/local/generate_cytosure_files'
 include { GENS                                               } from '../subworkflows/local/gens'
-include { PEDDY_CHECK                                        } from '../subworkflows/local/peddy_check'
 include { PREPARE_REFERENCES                                 } from '../subworkflows/local/prepare_references'
 include { QC_BAM                                             } from '../subworkflows/local/qc_bam'
 include { RANK_VARIANTS as RANK_VARIANTS_MT                  } from '../subworkflows/local/rank_variants'
@@ -611,11 +611,11 @@ workflow RAREDISEASE {
 
     // ped correspondence, sex check, ancestry check
     if (!params.skip_peddy) {
-        PEDDY_CHECK (
+        PEDDY (
             CALL_SNV.out.genome_vcf.join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true),
             ch_pedfile
         )
-        ch_versions = ch_versions.mix(PEDDY_CHECK.out.versions)
+        ch_versions = ch_versions.mix(PEDDY.out.versions.first())
     }
 
     // Generate CGH files from sequencing data, turned off by default
@@ -703,8 +703,8 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{it[1]}.collect().ifEmpty([]))
 
     if (!params.skip_peddy) {
-        ch_multiqc_files = ch_multiqc_files.mix(PEDDY_CHECK.out.ped.map{it[1]}.collect().ifEmpty([]))
-        ch_multiqc_files = ch_multiqc_files.mix(PEDDY_CHECK.out.csv.map{it[1]}.collect().ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{it[1]}.collect().ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.csv.map{it[1]}.collect().ifEmpty([]))
     }
 
     MULTIQC (

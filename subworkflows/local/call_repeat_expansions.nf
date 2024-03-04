@@ -11,7 +11,6 @@ include { STRANGER                                     } from '../../modules/nf-
 include { SAMTOOLS_SORT                                } from '../../modules/nf-core/samtools/sort/main'
 include { SAMTOOLS_INDEX                               } from '../../modules/nf-core/samtools/index/main'
 include { SVDB_MERGE as SVDB_MERGE_REPEATS             } from '../../modules/nf-core/svdb/merge/main'
-include { TABIX_BGZIPTABIX as BGZIPTABIX_EXP           } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_TABIX as INDEX_STRANGER                } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_EXP_RENAME              } from '../../modules/nf-core/tabix/tabix/main'
 
