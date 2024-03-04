@@ -6,7 +6,6 @@ include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_FILTER } from '../../modules/nf-core/bc
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_ME       } from '../../modules/nf-core/ensemblvep/vep/main'
 include { PICARD_SORTVCF                        } from '../../modules/nf-core/picard/sortvcf/main'
 include { SVDB_QUERY as SVDB_QUERY_DB           } from '../../modules/nf-core/svdb/query/main'
-include { TABIX_BGZIPTABIX as BGZIP_TABIX_ME    } from '../../modules/nf-core/tabix/bgziptabix/main'
 
 include { ANNOTATE_CSQ_PLI as ANNOTATE_CSQ_PLI_ME           } from '../../subworkflows/local/annotate_consequence_pli.nf'
 include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_ME } from '../../subworkflows/local/generate_clinical_set.nf'

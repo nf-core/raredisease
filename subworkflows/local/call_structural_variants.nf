@@ -4,7 +4,6 @@
 
 include { CALL_SV_MANTA                  } from './variant_calling/call_sv_manta'
 include { CALL_SV_MT                     } from './variant_calling/call_sv_MT'
-include { CALL_SV_MT as CALL_SV_MT_SHIFT } from './variant_calling/call_sv_MT'
 include { CALL_SV_TIDDIT                 } from './variant_calling/call_sv_tiddit'
 include { SVDB_MERGE                     } from '../../modules/nf-core/svdb/merge/main'
 include { CALL_SV_GERMLINECNVCALLER      } from './variant_calling/call_sv_germlinecnvcaller'
@@ -84,10 +83,12 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
         TABIX_TABIX (SVDB_MERGE.out.vcf)
 
+        ch_versions = ch_versions.mix(CALL_SV_CNVNATOR.out.versions)
         ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
         ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
         ch_versions = ch_versions.mix(CALL_SV_TIDDIT.out.versions)
         ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
+        ch_versions = ch_versions.mix(SVDB_MERGE.out.versions)
 
     emit:
         vcf      = SVDB_MERGE.out.vcf  // channel: [ val(meta), path(vcf)]

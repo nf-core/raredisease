@@ -102,6 +102,7 @@ workflow ANNOTATE_MT_SNVS {
         ch_versions = ch_versions.mix(VCFANNO_MT.out.versions)
         ch_versions = ch_versions.mix(HMTNOTE_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions)
+        ch_versions = ch_versions.mix(ZIP_TABIX_HMTNOTE.out.versions)
 
     emit:
         haplog    = HAPLOGREP2_CLASSIFY_MT.out.txt // channel: [ val(meta), path(txt) ]

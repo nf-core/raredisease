@@ -70,6 +70,7 @@ workflow QC_BAM {
         ch_cov   = Channel.empty().mix(PICARD_COLLECTWGSMETRICS.out.metrics, SENTIEON_WGSMETRICS.out.wgs_metrics)
         ch_cov_y = Channel.empty().mix(PICARD_COLLECTWGSMETRICS_Y.out.metrics, SENTIEON_WGSMETRICS_Y.out.wgs_metrics)
 
+        ch_versions = ch_versions.mix(CHROMOGRAPH_COV.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions.first())
         ch_versions = ch_versions.mix(TIDDIT_COV.out.versions.first())
