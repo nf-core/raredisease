@@ -6,6 +6,7 @@ lint:
     - .github/PULL_REQUEST_TEMPLATE.md
     - docs/images/nf-core-raredisease_logo_dark.png
     - docs/images/nf-core-raredisease_logo_light.png
+    - assets/nf-core-raredisease_logo_light.png
     - assets/multiqc_config.yaml
     - .github/workflows/linting.yml
     - pyproject.toml
