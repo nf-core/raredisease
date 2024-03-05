@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v1.2.0 - Genie [xxxx-xx-xx]
+## v2.0.0 - Asterix [xxxx-xx-xx]
 
 ### `Added`
 
@@ -69,14 +69,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed memory qualifier in gatk4 germlinecnvcaller and postprocessgermlinecnvcalls
 - Fixed wrong process names when outputting versions in `ALIGN_SENTIEON` and `CALL_SNV`.
 - Fixed gens subworkflow [#515](https://github.com/nf-core/raredisease/pull/515)
-
-### `Updated`
-
-| Tool         | Old version | New version |
-| ------------ | ----------- | ----------- |
-| `filter_vep` | 107         | 110         |
-| `multiqc`    | 1.14        | 1.15        |
-| `untar`      | (grep 3.4)  | (grep 3.11) |
 
 ## v1.1.1 - Abu (Patch) [2023-07-26]
 
