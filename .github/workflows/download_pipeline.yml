@@ -10,16 +10,14 @@ on:
       testbranch:
         description: "The specific branch you wish to utilize for the test execution of nf-core download."
         required: true
-        default: "dev"
+        default: "test-download"
   pull_request:
     types:
       - opened
     branches:
-      - master
       - dev
   pull_request_target:
     branches:
-      - master
       - dev
 
 env:
