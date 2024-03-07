@@ -42,14 +42,12 @@
             "sex": {
                 "type": "integer",
                 "meta": ["sex"],
-                "pattern": "^\\S+$",
                 "enum": [0, 1, 2],
                 "errorMessage": "Sex must be provided and cannot contain spaces"
             },
             "phenotype": {
                 "type": "integer",
                 "meta": ["phenotype"],
-                "pattern": "^\\S+$",
                 "enum": [0, 1, 2],
                 "errorMessage": "Phenotype must be provided and cannot contain spaces"
             },
