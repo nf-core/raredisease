@@ -1,14 +1,16 @@
+import nextflow.Nextflow
+
 class CustomFunctions {
 
     // Function to generate a pedigree file
-    def makePed(samples) {
+    public static File makePed(samples, outdir) {
 
         def case_name  = samples[0].case_id
-        def outfile  = file("${params.outdir}/pipeline_info/${case_name}" + '.ped')
+        def outfile  = new File(outdir +"/pipeline_info/${case_name}" + '.ped')
         outfile.text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\t')
         def samples_list = []
         for(int i = 0; i<samples.size(); i++) {
-            sample_name        =  samples[i].sample
+            def sample_name =  samples[i].sample
             if (!samples_list.contains(sample_name)) {
                 outfile.append('\n' + [samples[i].case_id, sample_name, samples[i].paternal, samples[i].maternal, samples[i].sex, samples[i].phenotype].join('\t'));
                 samples_list.add(sample_name)
@@ -18,7 +20,7 @@ class CustomFunctions {
     }
 
     // Function to get a list of metadata (e.g. case id) for the case [ meta ]
-    def createCaseChannel(List rows) {
+    public static LinkedHashMap createCaseChannel(List rows) {
         def case_info    = [:]
         def probands     = []
         def upd_children = []
@@ -50,36 +52,15 @@ class CustomFunctions {
     }
 
     // create hgnc list
-    def parseHgncIds(List text) {
+    public static ArrayList parseHgncIds(List text) {
         def ids = []
-        lines = text[0].tokenize("\n")
+        def lines = text[0].tokenize("\n")
         for(int i = 0; i<lines.size(); i++) {
             if (!lines[i].startsWith("#")) {
                 ids.add(lines[i].tokenize()[3])
             }
         }
         return ids
-    }
-
-    // This function groups calls with same meta for postprocessing.
-    def reduce_input(List gcnvoutput) {
-        def dictionary  = [:]
-        def reducedList = []
-        for (int i = 0; i<gcnvoutput.size(); i++) {
-                meta  = gcnvoutput[i][0]
-                model = gcnvoutput[i][1]
-            if(dictionary.containsKey(meta)) {
-                dictionary[meta] += [model]
-            } else {
-                dictionary[meta]  = [model]
-            }
-        }
-
-        for (i in dictionary) {
-            reducedList.add(i.key)
-            reducedList.add(i.value)
-            }
-        return reducedList
     }
 
 }

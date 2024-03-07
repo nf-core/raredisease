@@ -70,3 +70,24 @@ workflow CALL_SV_GERMLINECNVCALLER {
         denoised_vcf                     = GATK4_POSTPROCESSGERMLINECNVCALLS.out.denoised   // channel: [ val(meta), path(*.vcf.gz) ]
         versions                         = ch_versions                                      // channel: [ versions.yml ]
 }
+
+// This function groups calls with same meta for postprocessing.
+def reduce_input(List gcnvoutput) {
+    def dictionary  = [:]
+    def reducedList = []
+    for (int i = 0; i<gcnvoutput.size(); i++) {
+            meta  = gcnvoutput[i][0]
+            model = gcnvoutput[i][1]
+        if(dictionary.containsKey(meta)) {
+            dictionary[meta] += [model]
+        } else {
+            dictionary[meta]  = [model]
+        }
+    }
+
+    for (i in dictionary) {
+        reducedList.add(i.key)
+        reducedList.add(i.value)
+        }
+    return reducedList
+}

@@ -160,8 +160,8 @@ workflow RAREDISEASE {
     ch_multiqc_files = Channel.empty()
 
     ch_samples   = ch_samplesheet.map { meta, fastqs -> meta}
-    ch_pedfile   = ch_samples.toList().map { CustomFunctions.makePed(it) }
-    ch_case_info = ch_samples.toList().map { create_case_channel(it) }
+    ch_pedfile   = ch_samples.toList().map { CustomFunctions.makePed(it, params.outdir) }
+    ch_case_info = ch_samples.toList().map { CustomFunctions.createCaseChannel(it) }
 
     // Initialize file channels for PREPARE_REFERENCES subworkflow
     ch_genome_fasta             = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
