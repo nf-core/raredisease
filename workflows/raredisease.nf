@@ -160,7 +160,7 @@ workflow RAREDISEASE {
     ch_multiqc_files = Channel.empty()
 
     ch_samples   = ch_samplesheet.map { meta, fastqs -> meta}
-    ch_pedfile   = ch_samples.toList().map { CustomFunctions.makePed(it, params.outdir) }
+    ch_pedfile   = ch_samples.toList().map { file(CustomFunctions.makePed(it, params.outdir)) }
     ch_case_info = ch_samples.toList().map { CustomFunctions.createCaseChannel(it) }
 
     // Initialize file channels for PREPARE_REFERENCES subworkflow
