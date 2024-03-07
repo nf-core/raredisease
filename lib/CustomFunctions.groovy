@@ -1,4 +1,4 @@
-Class CustomFunctions {
+class CustomFunctions {
 
     // Function to generate a pedigree file
     def makePed(samples) {
@@ -62,7 +62,7 @@ Class CustomFunctions {
     }
 
     // This function groups calls with same meta for postprocessing.
-    def reduce_input (List gcnvoutput) {
+    def reduce_input(List gcnvoutput) {
         def dictionary  = [:]
         def reducedList = []
         for (int i = 0; i<gcnvoutput.size(); i++) {
