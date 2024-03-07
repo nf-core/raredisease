@@ -18,7 +18,7 @@
                     }
                 ],
                 "exists": true,
-                "errorMessage": "Path to vep plugin files and their indices"
+                "description": "Path to vep plugin files and their indices"
             }
         },
         "required": ["vep_files"]

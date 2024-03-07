@@ -584,22 +584,22 @@
                 "min_trimmed_length": {
                     "type": "integer",
                     "default": 40,
-                    "description": "Discard trimmed reads shorter than this",
-                    "help_text": "Minimum length of reads after adapter trimming. Shorter reads are discarded. The program default is 15 bp.  ",
+                    "description": "Discard trimmed reads shorter than the given value",
+                    "help_text": "Minimum length of reads after adapter trimming. Shorter reads are discarded.",
                     "fa_icon": "fas fa-less-than"
                 },
                 "mt_subsample_rd": {
                     "type": "integer",
                     "default": 150,
                     "description": "Expected coverage to subsample mt alignment to.",
-                    "help_text": "To know more about this parameter check samtools' view documentation.",
+                    "help_text": "To know more about this parameter check [samtools' view](https://www.htslib.org/doc/samtools-view.html) documentation.",
                     "fa_icon": "fas fa-less-than"
                 },
                 "mt_subsample_seed": {
                     "type": "integer",
                     "default": 30,
                     "description": "Subsampling seed used to influence which subset of mitochondrial reads is kept. ",
-                    "help_text": "To know more about this parameter check samtools' view documentation.",
+                    "help_text": "To know more about this parameter check [samtools' view](https://www.htslib.org/doc/samtools-view.html) documentation.",
                     "fa_icon": "fas fa-less-than"
                 },
                 "rmdup": {
@@ -633,7 +633,7 @@
                     "fa_icon": "fas fa-bacon",
                     "description": "Option for selecting the PCR indel model used by Sentieon Dnascope.",
                     "help_text": "PCR indel model used to weed out false positive indels more or less aggressively. The possible MODELs are: NONE (used for PCR free samples), and HOSTILE, AGGRESSIVE and CONSERVATIVE, in order of decreasing aggressiveness. The default value is CONSERVATIVE.",
-                    "pattern": "^(NONE|HOSTILE|AGGRESSIVE|CONSERVATIVE)(?<!,)$"
+                    "enum": ["NONE", "HOSTILE", "AGGRESSIVE", "CONSERVATIVE"]
                 },
                 "variant_caller": {
                     "type": "string",

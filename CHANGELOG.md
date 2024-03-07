@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Use `nf-validation` plugin for parameter and samplesheet validation [#386](https://github.com/nf-core/raredisease/pull/386)
-- A new parameter to skip filtering based on vep results [#416](https://github.com/nf-core/raredisease/pull/416)
+- A new parameter `skip_vep_filter` to skip filtering based on vep results [#416](https://github.com/nf-core/raredisease/pull/416)
 - A `metromap` representating the core parts of the pipeline [#428](https://github.com/nf-core/raredisease/pull/428)
 - Metromap and logos for light and dark theme [#432](https://github.com/nf-core/raredisease/pull/432)
 - New parameters to skip qualimap and eklipse (`--skip_qualimap` and `--skip_eklipse`) [#436](https://github.com/nf-core/raredisease/pull/436)

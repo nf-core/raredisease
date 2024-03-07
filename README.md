@@ -38,9 +38,10 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 ## Pipeline summary
 
-<p align="center">
-    <img title="nf-core/raredisease workflow" src="docs/images/raredisease_metromap_light.png">
-</p>
+  <picture align="center">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/raredisease_metromap_dark.png">
+    <img alt="nf-core/raredisease workflow" src="docs/images/raredisease_metromap_light.png">
+  </picture>
 
 **1. Metrics:**
 

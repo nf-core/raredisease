@@ -18,7 +18,7 @@
                 "format": "file-path",
                 "exists": true,
                 "pattern": "^\\S+\\.bed$",
-                "errorMessage": "Bed file, cannot contain spaces and must have extension '.bed'"
+                "errorMessage": "BED file name cannot contain spaces and must have extension '.bed'"
             }
         },
         "required": ["type", "path"]

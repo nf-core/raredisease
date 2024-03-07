@@ -89,7 +89,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ##### Sentieon bwa mem
 
-[Sentieon's bwa mem](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#map-reads-to-reference) is the software accelerated version of the bwa-mem algorithm. It is used to efficiently perform the alignment using BWA. Aligned reads are then coordinate sorted using Sentieon's [sort](https://support.sentieon.com/manual/usages/general/#util-syntax) utility. These files are treated as intermediates and are not placed in the output folder by default. It is not the default aligner, but it can be chosen by setting `--aligner` option to sentieon.
+[Sentieon's bwa mem](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#map-reads-to-reference) is the software accelerated version of the bwa-mem algorithm. It is used to efficiently perform the alignment using BWA. Aligned reads are then coordinate sorted using Sentieon's [sort](https://support.sentieon.com/manual/usages/general/#util-syntax) utility. These files are treated as intermediates and are not placed in the output folder by default. It is not the default aligner, but it can be chosen by setting `--aligner` option to "sentieon".
 
 #### Duplicate marking
 
@@ -304,7 +304,7 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 #### SVDB merge
 
-[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if skip_germlinecnvcaller is set to false), Manta, and TIDDIT. Output files are published in the output folder.
+[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if `skip_germlinecnvcaller` is set to false), Manta, and TIDDIT. Output files are published in the output folder.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -352,7 +352,7 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 [bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh) is a program for detecting runs of homo/autozygosity.from only bi-allelic sites. The output files are not published in the output folder, and is passed to vcfanno for further annotation.
 
 :::note
-In the case of running a quattro, i.e. two affected children and their parents, only one of the probands will be used for annotating regions of homozygosity. This is a know limitation that we are hoping to solve in a future release.
+In the case of running a quattro, i.e. two affected children and their parents, only one of the probands will be used for annotating regions of homozygosity. This is a known limitation that we are hoping to solve in a future release.
 :::
 
 #### vcfanno
@@ -518,7 +518,7 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 
 #### GENMOD
 
-[GENMOD](https://github.com/Clinical-Genomics/genmod) is a simple to use command line tool for annotating and analyzing genomic variations in the VCF file format. GENMOD can annotate genetic patterns of inheritance in vcf:s with single or multiple families of arbitrary size. Each variant will be assigned a predicted pathogenicity score. The score will be given both as a raw score and a normalized score with values between 0 and 1. The tags in the INFO field are `RankScore` and `RankScoreNormalized`. The score can be configured to fit your annotations and preferences by modifying the score config file.
+[GENMOD](https://github.com/Clinical-Genomics/genmod) is a simple to use command line tool for annotating and analyzing genomic variations in the VCF file format. GENMOD can annotate genetic patterns of inheritance in vcf files with single or multiple families of arbitrary size. Each variant will be assigned a predicted pathogenicity score. The score will be given both as a raw score and a normalized score with values between 0 and 1. The tags in the INFO field are `RankScore` and `RankScoreNormalized`. The score can be configured to fit your annotations and preferences by modifying the score config file.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -556,7 +556,7 @@ Mobile elements are identified from the bam file using [RetroSeq](https://github
 
 #### Annotating mobile elements
 
-The mobile elements are annotated with allele frequencies and allele counts using SVDB. These annotation files needed are preferably produced from a representative population. Further annoation is done using VEP and the resulting VCF is filtered using bcftools. The default filter is to only keep elements with `PASS` in the filter column but if no other post-processing is done we reccomend supplementing with an exclude expression based on population allele frequencies. The filtering key is dependent on the annotation files used but an example expression could look like this: `--exclude 'INFO/swegen_sva_FRQ > 0.1'`. If a list of HGNC id:s have been supplied with the option `--vep_filters`, variants matching those id:s will be presented in a seperate file using [filter_vep from VEP](https://www.ensembl.org/info/docs/tools/vep/script/vep_filter.html). This option can be disabled using the flag `--skip_vep_filter`. A VCF corresponding to the complete set of variants will also be produced.
+The mobile elements are annotated with allele frequencies and allele counts using SVDB. These annotation files needed are preferably produced from a representative population. Further annoation is done using VEP and the resulting VCF is filtered using bcftools. The default filter is to only keep elements with `PASS` in the filter column but if no other post-processing is done we reccomend supplementing with an exclude expression based on population allele frequencies. The filtering key is dependent on the annotation files used but an example expression could look like this: `--exclude 'INFO/swegen_sva_FRQ > 0.1'`. If a list of HGNC id's have been supplied with the option `--vep_filters`, variants matching those id's will be presented in a seperate file using [filter_vep from VEP](https://www.ensembl.org/info/docs/tools/vep/script/vep_filter.html). This option can be disabled using the flag `--skip_vep_filter`. A VCF corresponding to the complete set of variants will also be produced.
 
 <details markdown="1">
 <summary>Output files</summary>
