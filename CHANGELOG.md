@@ -70,6 +70,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed wrong process names when outputting versions in `ALIGN_SENTIEON` and `CALL_SNV`.
 - Fixed gens subworkflow [#515](https://github.com/nf-core/raredisease/pull/515)
 
+### Parameters
+
+| Old parameter         | New parameter                         |
+| --------------------- | ------------------------------------- |
+|                       | `--cnvnator_binsize`                  |
+|                       | `--gens_pon_female`                   |
+|                       | `--gens_pon_male`                     |
+|                       | `--min_trimmed_length`                |
+|                       | `--mobile_element_references`         |
+|                       | `--mobile_element_svdb_annotations`   |
+|                       | `--mt_subsample_rd`                   |
+|                       | `--mt_subsample_seed`                 |
+|                       | `--ngsbits_samplegender_method`       |
+|                       | `--rtg_truthvcfs`                     |
+|                       | `--run_rtgvcfeval`                    |
+|                       | `--sample_id_map`                     |
+|                       | `--score_config_mt`                   |
+|                       | `--sdf`                               |
+| `--pcr_amplification` | `--sentieon_dnascope_pcr_indel_model` |
+|                       | `--skip_eklipse`                      |
+|                       | `--skip_fastqc`                       |
+|                       | `--skip_fastp`                        |
+|                       | `--skip_gens`                         |
+|                       | `--skip_germlinecnvcaller`            |
+|                       | `--skip_haplocheck`                   |
+|                       | `--skip_me_annotation`                |
+|                       | `--skip_mt_annotation`                |
+|                       | `--skip_mt_subsample`                 |
+|                       | `--skip_peddy`                        |
+|                       | `--skip_qualimap`                     |
+|                       | `--skip_vcf2cytosure`                 |
+|                       | `--skip_vep_filter`                   |
+|                       | `--svdb_query_bedpedbs`               |
+|                       | `--variant_consequences_snv`          |
+|                       | `--variant_consequences_sv`           |
+|                       | `--vcf2cytosure_blacklist`            |
+|                       | `--vep_plugin_files`                  |
+|                       | `--vep_filters_scout_fmt`             |
+| `--gens_pon`          |                                       |
+| `--gens_switch`       |                                       |
+| `--skip_cnv_calling`  |                                       |
+| `--skip_mt_analysis`  |                                       |
+
+:::note
+Parameter has been updated if both old and new parameter information is present.
+Parameter has been added if just the new parameter information is present.
+Parameter has been removed if new parameter information isn't present.
+:::
+
 ## v1.1.1 - Abu (Patch) [2023-07-26]
 
 ### `Fixed`
