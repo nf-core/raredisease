@@ -13,18 +13,6 @@ nextflow.enable.dsl = 2
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-include { RAREDISEASE             } from './workflows/raredisease'
-include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
-include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
-
-include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     GENOME PARAMETER VALUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -53,11 +41,13 @@ params.ploidy_model                   = getGenomeAttribute('ploidy_model')
 params.reduced_penetrance             = getGenomeAttribute('reduced_penetrance')
 params.readcount_intervals            = getGenomeAttribute('readcount_intervals')
 params.rtg_truthvcfs                  = getGenomeAttribute('rtg_truthvcfs')
+params.sample_id_map                  = getGenomeAttribute('sample_id_map')
 params.sequence_dictionary            = getGenomeAttribute('sequence_dictionary')
 params.score_config_mt                = getGenomeAttribute('score_config_mt')
 params.score_config_snv               = getGenomeAttribute('score_config_snv')
 params.score_config_sv                = getGenomeAttribute('score_config_sv')
 params.sdf                            = getGenomeAttribute('sdf')
+params.svdb_query_bedpedbs            = getGenomeAttribute('svdb_query_bedpedbs')
 params.svdb_query_dbs                 = getGenomeAttribute('svdb_query_dbs')
 params.target_bed                     = getGenomeAttribute('target_bed')
 params.variant_catalog                = getGenomeAttribute('variant_catalog')
@@ -71,6 +61,17 @@ params.vcfanno_toml                   = getGenomeAttribute('vcfanno_toml')
 params.vcfanno_lua                    = getGenomeAttribute('vcfanno_lua')
 params.vep_cache                      = getGenomeAttribute('vep_cache')
 params.vep_plugin_files               = getGenomeAttribute('vep_plugin_files')
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+include { RAREDISEASE             } from './workflows/raredisease'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     NAMED WORKFLOWS FOR PIPELINE
@@ -147,3 +148,16 @@ workflow {
     THE END
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+//
+// Get attribute from genome config file e.g. fasta
+//
+
+def getGenomeAttribute(attribute) {
+    if (params.genomes && params.genome && params.genomes.containsKey(params.genome)) {
+        if (params.genomes[ params.genome ].containsKey(attribute)) {
+            return params.genomes[ params.genome ][ attribute ]
+        }
+    }
+    return null
+}
