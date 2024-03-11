@@ -75,8 +75,6 @@ workflow RAREDISEASE {
     ch_samplesheet // channel: samplesheet read in from --input
 
     main:
-    println(params)
-    return
 
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
