@@ -9,86 +9,6 @@ include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pi
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_raredisease_pipeline'
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    CHECK MANDATORY PARAMETERS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-def mandatoryParams = [
-    "aligner",
-    "analysis_type",
-    "fasta",
-    "input",
-    "intervals_wgs",
-    "intervals_y",
-    "platform",
-    "variant_catalog",
-    "variant_caller"
-]
-def missingParamsCount = 0
-
-if (params.run_rtgvcfeval) {
-    mandatoryParams += ["rtg_truthvcfs"]
-}
-
-if (!params.skip_snv_annotation) {
-    mandatoryParams += ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
-    "gnomad_af", "score_config_snv", "variant_consequences_snv"]
-}
-
-if (!params.skip_sv_annotation) {
-    mandatoryParams += ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"]
-    if (!params.svdb_query_bedpedbs && !params.svdb_query_dbs) {
-        println("params.svdb_query_bedpedbs or params.svdb_query_dbs should be set.")
-        missingParamsCount += 1
-    }
-}
-
-if (!params.skip_mt_annotation) {
-    mandatoryParams += ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "vep_cache_version", "vep_cache", "variant_consequences_snv"]
-}
-
-if (params.analysis_type.equals("wes")) {
-    mandatoryParams += ["target_bed"]
-}
-
-if (params.variant_caller.equals("sentieon")) {
-    mandatoryParams += ["ml_model"]
-}
-
-if (!params.skip_germlinecnvcaller) {
-    mandatoryParams += ["ploidy_model", "gcnvcaller_model"]
-}
-
-if (!params.skip_vep_filter) {
-    if (!params.vep_filters && !params.vep_filters_scout_fmt) {
-        println("params.vep_filters or params.vep_filters_scout_fmt should be set.")
-        missingParamsCount += 1
-    } else if (params.vep_filters && params.vep_filters_scout_fmt) {
-        println("Either params.vep_filters or params.vep_filters_scout_fmt should be set.")
-        missingParamsCount += 1
-    }
-}
-
-if (!params.skip_me_annotation) {
-    mandatoryParams += ["mobile_element_svdb_annotations", "variant_consequences_snv"]
-}
-
-if (!params.skip_gens) {
-    mandatoryParams += ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"]
-}
-
-for (param in mandatoryParams.unique()) {
-    if (params[param] == null) {
-        println("params." + param + " not set.")
-        missingParamsCount += 1
-    }
-}
-
-if (missingParamsCount>0) {
-    error("\nSet missing parameters and restart the run. For more information please check usage documentation on github.")
-}
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -155,6 +75,8 @@ workflow RAREDISEASE {
     ch_samplesheet // channel: samplesheet read in from --input
 
     main:
+    println(params)
+    return
 
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()

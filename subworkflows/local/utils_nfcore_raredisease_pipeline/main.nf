@@ -181,13 +181,12 @@ def validateInputSamplesheet(input) {
 //
 // Get attribute from genome config file e.g. fasta
 //
-def getGenomeAttribute(attribute) {
-    if (params.genomes && params.genome && params.genomes.containsKey(params.genome)) {
-        if (params.genomes[ params.genome ].containsKey(attribute)) {
-            return params.genomes[ params.genome ][ attribute ]
-        }
+def getGenomeAttribute(key, attribute) {
+    if ((params.genomes && params.genome && params.genomes.containsKey(params.genome) && params.genomes[ params.genome ].containsKey(key) )) {
+        params."$attribute" = params.genomes[ params.genome ][ key ]
+    } else {
+        params."$attribute" = null
     }
-    return null
 }
 //
 // Replace spaces in vcf files with underscores
