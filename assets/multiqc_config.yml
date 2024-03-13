@@ -21,6 +21,7 @@ run_modules:
   - qualimap
   - picard
   - mosdepth
+  - custom_content
 
 module_order:
   - fastqc:
