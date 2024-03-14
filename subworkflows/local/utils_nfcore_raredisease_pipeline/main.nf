@@ -180,25 +180,6 @@ def validateInputSamplesheet(input) {
 }
 
 //
-// Replace spaces in vcf files with underscores
-//
-def replaceSpacesInInfoColumn(vcf_file, parent_dir, base_name) {
-    def outfile = new File(parent_dir + '/' + base_name + '_formatted.vcf')
-    def writer  = outfile.newWriter()
-    vcf_file.eachLine { line ->
-        if (line.startsWith("#")) {
-            writer << line + "\n"
-        } else {
-            def split_str = line.tokenize("\t")
-            split_str[7] = split_str.getAt(7).replaceAll(" ","_")
-            writer << split_str.join("\t") + "\n"
-        }
-    }
-    writer.close()
-    return outfile
-}
-
-//
 // Exit pipeline if incorrect --genome key provided
 //
 def genomeExistsError() {

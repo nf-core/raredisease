@@ -2,7 +2,7 @@
 // Annotate MT
 //
 
-include { replaceSpacesInInfoColumn                      } from './utils_nfcore_raredisease_pipeline/main'
+include { REPLACE_SPACES_IN_VCFINFO                      } from '../../modules/local/replace_spaces_in_vcfinfo'
 include { TABIX_TABIX as TABIX_TABIX_MT                  } from '../../modules/nf-core/tabix/tabix/main'
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_MT                } from '../../modules/nf-core/ensemblvep/vep/main'
 include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT  } from '../../modules/nf-core/haplogrep2/classify/main'
@@ -83,12 +83,8 @@ workflow ANNOTATE_MT_SNVS {
 
         // HMTNOTE ANNOTATE
         HMTNOTE_ANNOTATE(ch_hmtnote_in)
-        HMTNOTE_ANNOTATE.out.vcf
-            .map{meta, vcf ->
-                return [meta, file(replaceSpacesInInfoColumn(vcf, vcf.parent.toString(), vcf.baseName))]
-            }
-            .set { ch_hmtnote_reformatted }
-        ZIP_TABIX_HMTNOTE(ch_hmtnote_reformatted)
+        REPLACE_SPACES_IN_VCFINFO(HMTNOTE_ANNOTATE.out.vcf)
+        ZIP_TABIX_HMTNOTE(REPLACE_SPACES_IN_VCFINFO.out.vcf)
 
         // Prepare output
         ch_vcf_out = ZIP_TABIX_HMTNOTE.out.gz_tbi.map{meta, vcf, tbi -> return [meta, vcf] }
@@ -103,6 +99,7 @@ workflow ANNOTATE_MT_SNVS {
         ch_versions = ch_versions.mix(HMTNOTE_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_HMTNOTE.out.versions)
+        ch_versions = ch_versions.mix(REPLACE_SPACES_IN_VCFINFO.out.versions)
 
     emit:
         haplog    = HAPLOGREP2_CLASSIFY_MT.out.txt // channel: [ val(meta), path(txt) ]
