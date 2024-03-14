@@ -21,6 +21,7 @@ run_modules:
   - qualimap
   - picard
   - mosdepth
+  - peddy
   - custom_content
 
 module_order:
@@ -34,6 +35,8 @@ module_order:
       name: "Qualimap"
   - mosdepth:
       name: "Mosdepth"
+  - peddy:
+      name: "Peddy"
 
 extra_fn_clean_exts:
   - "_sorted_md"
