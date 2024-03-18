@@ -3,7 +3,26 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2.0.0 - Asterix [xxxx-xx-xx]
+## 2.1.0 - Obelix [xxxx-xx-xx]
+
+### `Added`
+
+### `Changed`
+
+### `Fixed`
+
+### Parameters
+
+| Old parameter | New parameter |
+| ------------- | ------------- |
+
+:::note
+Parameter has been updated if both old and new parameter information is present.
+Parameter has been added if just the new parameter information is present.
+Parameter has been removed if new parameter information isn't present.
+:::
+
+## 2.0.0 - Asterix [2024-03-18]
 
 ### `Added`
 
