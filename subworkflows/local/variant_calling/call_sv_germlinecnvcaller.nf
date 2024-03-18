@@ -6,13 +6,15 @@ include { GATK4_COLLECTREADCOUNTS             } from '../../../modules/nf-core/g
 include { GATK4_DETERMINEGERMLINECONTIGPLOIDY } from '../../../modules/nf-core/gatk4/determinegermlinecontigploidy/main.nf'
 include { GATK4_GERMLINECNVCALLER             } from '../../../modules/nf-core/gatk4/germlinecnvcaller/main.nf'
 include { GATK4_POSTPROCESSGERMLINECNVCALLS   } from '../../../modules/nf-core/gatk4/postprocessgermlinecnvcalls/main.nf'
+include { BCFTOOLS_VIEW                       } from '../../../modules/nf-core/bcftools/view/main'
+include { TABIX_TABIX                         } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_SV_GERMLINECNVCALLER {
     take:
         ch_bam_bai             // channel: [mandatory][ val(meta), path(bam), path(bai) ]
         ch_fasta               // channel: [mandatory][ val(meta), path(ch_fasta_no_meta) ]
         ch_fai                 // channel: [mandatory][ val(meta), path(ch_fai) ]
-        ch_readcount_intervals // channel: [mandatory][ val(meta), path(bed), path(tbi) ]
+        ch_readcount_intervals // channel: [mandatory][ path(intervals) ]
         ch_genome_dictionary   // channel: [mandatory][ val(meta), path(ch_dict) ]
         ch_ploidy_model        // channel: [mandatory][ path(ch_ploidy_model) ]
         ch_gcnvcaller_model    // channel: [mandatory][ path(ch_gcnvcaller_model) ]
@@ -20,7 +22,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
     main:
         ch_versions = Channel.empty()
 
-        input = ch_bam_bai.combine( ch_readcount_intervals.collect{ it[1] } )
+        input = ch_bam_bai.combine( ch_readcount_intervals )
 
         GATK4_COLLECTREADCOUNTS ( input, ch_fasta, ch_fai, ch_genome_dictionary )
 
@@ -47,20 +49,30 @@ workflow CALL_SV_GERMLINECNVCALLER {
 
         GATK4_POSTPROCESSGERMLINECNVCALLS ( ch_postproc_in )
 
+        TABIX_TABIX(GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments)
+        GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments
+            .join(TABIX_TABIX.out.tbi, failOnMismatch:true)
+            .set {ch_segments_in}
+        // Filter out reference only (0/0) segments
+        BCFTOOLS_VIEW (ch_segments_in , [], [], [] )
+
         ch_versions = ch_versions.mix(GATK4_COLLECTREADCOUNTS.out.versions)
         ch_versions = ch_versions.mix(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.versions)
         ch_versions = ch_versions.mix(GATK4_GERMLINECNVCALLER.out.versions)
         ch_versions = ch_versions.mix(GATK4_POSTPROCESSGERMLINECNVCALLS.out.versions)
+        ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
+        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
 
     emit:
-        genotyped_intervals_vcf = GATK4_POSTPROCESSGERMLINECNVCALLS.out.intervals  // channel: [ val(meta), path(*.tar.gz) ]
-        genotyped_segments_vcf  = GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments   // channel: [ val(meta), path(*.tar.gz) ]
-        denoised_vcf            = GATK4_POSTPROCESSGERMLINECNVCALLS.out.denoised   // channel: [ val(meta), path(*.tar.gz) ]
-        versions                = ch_versions                                      // channel: [ versions.yml ]
+        genotyped_intervals_vcf          = GATK4_POSTPROCESSGERMLINECNVCALLS.out.intervals  // channel: [ val(meta), path(*.vcf.gz) ]
+        genotyped_segments_vcf           = GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments   // channel: [ val(meta), path(*.vcf.gz) ]
+        genotyped_filtered_segments_vcf  = BCFTOOLS_VIEW.out.vcf                            // channel: [ val(meta), path(*.vcf.gz) ]
+        denoised_vcf                     = GATK4_POSTPROCESSGERMLINECNVCALLS.out.denoised   // channel: [ val(meta), path(*.vcf.gz) ]
+        versions                         = ch_versions                                      // channel: [ versions.yml ]
 }
 
 // This function groups calls with same meta for postprocessing.
-def reduce_input (List gcnvoutput) {
+def reduce_input(List gcnvoutput) {
     def dictionary  = [:]
     def reducedList = []
     for (int i = 0; i<gcnvoutput.size(); i++) {

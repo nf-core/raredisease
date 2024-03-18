@@ -18,13 +18,20 @@ Table of contents:
       - [4. Variant calling - SNV](#4-variant-calling---snv)
       - [5. Variant calling - Structural variants](#5-variant-calling---structural-variants)
       - [6. Copy number variant calling](#6-copy-number-variant-calling)
-      - [7. SNV annotation & Ranking](#7-snv-annotation--ranking)
-      - [8. SV annotation & Ranking](#8-sv-annotation--ranking)
-      - [9. Mitochondrial analysis](#9-mitochondrial-analysis)
+      - [7. SNV annotation \& Ranking](#7-snv-annotation--ranking)
+      - [8. SV annotation \& Ranking](#8-sv-annotation--ranking)
+      - [9. Mitochondrial annotation](#9-mitochondrial-annotation)
+      - [10. Mobile element annoation](#10-mobile-element-annotation)
+      - [11. Variant evaluation](#11-variant-evaluation)
+      - [12. Prepare data CNV visualization in Gens](#12-prepare-data-for-cnv-visualisation-in-gens)
     - [Run the pipeline](#run-the-pipeline)
       - [Direct input in CLI](#direct-input-in-cli)
       - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
   - [Best practices](#best-practices)
+  - [Core Nextflow arguments](#core-nextflow-arguments)
+    - [`-profile`](#-profile)
+    - [`-resume`](#-resume)
+    - [`-c`](#-c)
   - [Custom configuration](#custom-configuration)
     - [Changing resources](#changing-resources)
     - [Custom Containers](#custom-containers)
@@ -34,6 +41,7 @@ Table of contents:
     - [Azure Resource Requests](#azure-resource-requests)
     - [Running in the background](#running-in-the-background)
     - [Nextflow memory requirements](#nextflow-memory-requirements)
+    - [Running the pipeline without Internet access](#running-the-pipeline-without-internet-access)
 
 ## Introduction
 
@@ -70,6 +78,10 @@ work                # Directory containing the Nextflow working files
 ```
 
 Test profile runs the pipeline with a case containing three samples, but if you would like to test the pipeline with one sample, use `-profile test_one_sample,<YOURPROFILE>`.
+
+:::note
+The default cpu and memory configurations used in raredisease are written keeping the test profile (&dataset, which is tiny) in mind. You should override these values in configs to get it to work on larger datasets. Check the section `custom-configuration` below to know more about how to configure resources for your platform.
+:::
 
 ### Updating the pipeline
 
@@ -116,24 +128,27 @@ If you would like to see more examples of what a typical samplesheet looks like 
 
 In nf-core/raredisease, references can be supplied using parameters listed [here](https://nf-co.re/raredisease/dev/parameters).
 
-> ⚠️ Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
+:::warning
+Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
+:::
 
 The above pipeline run specified with a params file in yaml format:
 
-Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can align with either bwamem2 or Sentieon BWA mem and call SNVs with either DeepVariant or Sentieon DNAscope. You also have the option to turn off sections of the pipeline if you do not want to run the. For example, snv annotation can be turned off by adding `--skip_snv_annotation` flag in the command line, or by setting it to true in a parameter file. This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, for SNV calling if you use DeepVariant as your variant caller, you need not provide the parameter `--ml_model`, which is only used by Sentieon DNAscope.
+Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can align with bwamem2 or bwa or Sentieon BWA mem and call SNVs with either DeepVariant or Sentieon DNAscope. You also have the option to turn off sections of the pipeline if you do not want to run the. For example, snv annotation can be turned off by adding `--skip_snv_annotation` flag in the command line, or by setting it to true in a parameter file. This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, for SNV calling if you use DeepVariant as your variant caller, you need not provide the parameter `--ml_model`, which is only used by Sentieon DNAscope.
 
 nf-core/raredisease consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
 
-1. Alignment (bwamem2/Sentieon BWA mem)
+1. Alignment (bwamem2/bwa/Sentieon BWA mem)
 2. QC stats from the alignment files
 3. Repeat expansions (ExpansionsHunter & Stranger)
 4. Variant calling - SNV (DeepVariant/Sentieon DNAscope)
 5. Variant calling - Structural variants (SV) (Tiddit & Manta)
-6. SNV annotation & ranking (rohcall, vcfanno, ensembl VEP, GENMOD)
-7. SV annotation & ranking (SVDB query, ensembl VEP, GENMOD)
-8. Mitochondrial analysis
+6. Copy number variant calling (GATK's GermlineCNVCaller)
+7. SNV annotation & ranking (rohcall, vcfanno, ensembl VEP, GENMOD)
+8. SV annotation & ranking (SVDB query, ensembl VEP, GENMOD)
+9. Mitochondrial annotation
 
-> We have only listed the groups that require at least one input from the user. For example, the pipeline also runs SMNCopyNumberCaller, but it does not require any input other than the bam files passed by the pipeline. Hence, it is not mentioned in the list above. To know more about the tools used in the pipeline check the [README](../README.md).
+> We have only listed the groups that require at least one input from the user. For example, the pipeline also runs SMNCopyNumberCaller, but it does not require any input other than the bam files passed by the pipeline. Hence, it is not mentioned in the list above. To know more about the tools used in the pipeline check the [README](https://nf-co.re/raredisease).
 
 The mandatory and optional parameters for each category are tabulated below.
 
@@ -141,16 +156,21 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 1. Alignment
 
-| Mandatory           | Optional                    |
-| ------------------- | --------------------------- |
-| aligner<sup>1</sup> | fasta_fai<sup>2</sup>       |
-| fasta               | bwamem2<sup>2</sup>         |
-| platform            | known_dbsnp<sup>3</sup>     |
-|                     | known_dbsnp_tbi<sup>3</sup> |
+| Mandatory                      | Optional                       |
+| ------------------------------ | ------------------------------ |
+| aligner<sup>1</sup>            | fasta_fai<sup>4</sup>          |
+| fasta<sup>2</sup>              | bwamem2<sup>4</sup>            |
+| platform                       | bwa<sup>4</sup>                |
+| mito_name/mt_fasta<sup>3</sup> | known_dbsnp<sup>5</sup>        |
+|                                | known_dbsnp_tbi<sup>5</sup>    |
+|                                | min_trimmed_length<sup>6</sup> |
 
-<sup>1</sup>Default value is bwamem2, but if you have a valid license for Sentieon, you have the option to use Sentieon as well.<br />
-<sup>2</sup>fasta_fai and bwamem2, if not provided by the user, will be generated by the pipeline when necessary.<br />
-<sup>3</sup>Used only by Sentieon.<br />
+<sup>1</sup>Default value is bwamem2. Other alternatives are bwa and sentieon (requires valid Sentieon license ).<br />
+<sup>2</sup>Analysis set reference genome in fasta format, first 25 contigs need to be chromosome 1-22, X, Y and the mitochondria.<br />
+<sup>3</sup>If mito_name is provided, mt_fasta can be generated by the pipeline.<br />
+<sup>4</sup>fasta_fai, bwa and bwamem2, if not provided by the user, will be generated by the pipeline when necessary.<br />
+<sup>5</sup>Used only by Sentieon.<br />
+<sup>6</sup>Default value is 40. Used only by fastp.<br />
 
 ##### 2. QC stats from the alignment files
 
@@ -165,9 +185,11 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 3. Repeat expansions
 
-| Mandatory       | Optional |
-| --------------- | -------- |
-| variant_catalog |          |
+| Mandatory                   | Optional |
+| --------------------------- | -------- |
+| variant_catalog<sup>1</sup> |          |
+
+<sup>1</sup> We reccomend using the catalogs found [here](https://github.com/Clinical-Genomics/reference-files/tree/master/rare-disease/disease_loci/ExpansionHunter-v5.0.0). These catalogs have been extended from the illumina ones to include information on pathogenicity, which is neccesarry for the workflow.
 
 ##### 4. Variant calling - SNV
 
@@ -202,53 +224,99 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 7. SNV annotation & Ranking
 
-| Mandatory                     | Optional                       |
-| ----------------------------- | ------------------------------ |
-| genome<sup>1</sup>            | reduced_penetrance<sup>7</sup> |
-| vcfanno_resources<sup>2</sup> | vcfanno_lua                    |
-| vcfanno_toml<sup>3</sup>      | vep_filters<sup>8</sup>        |
-| vep_cache_version             | cadd_resources<sup>9</sup>     |
-| vep_cache<sup>4</sup>         |                                |
-| gnomad_af<sup>5</sup>         |                                |
-| score_config_snv<sup>6</sup>  |                                |
+| Mandatory                            | Optional                                      |
+| ------------------------------------ | --------------------------------------------- |
+| genome<sup>1</sup>                   | reduced_penetrance<sup>8</sup>                |
+| vcfanno_resources<sup>2</sup>        | vcfanno_lua                                   |
+| vcfanno_toml<sup>3</sup>             | vep_filters/vep_filters_scout_fmt<sup>9</sup> |
+| vep_cache_version                    | cadd_resources<sup>10</sup>                   |
+| vep_cache<sup>4</sup>                | vep_plugin_files<sup>11</sup>                 |
+| gnomad_af<sup>5</sup>                |                                               |
+| score_config_snv<sup>6</sup>         |                                               |
+| variant_consequences_snv<sup>7</sup> |                                               |
 
 <sup>1</sup>Genome version is used by VEP. You have the option to choose between GRCh37 and GRCh38.<br />
 <sup>2</sup>Path to VCF files and their indices used by vcfanno. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_resources.txt).<br />
 <sup>3</sup>Path to a vcfanno configuration file. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_config.toml).<br />
 <sup>4</sup> VEP caches can be downloaded [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_cache.html#cache).
-VEP plugins and associated files may be installed in the cache directory, and the plugin pLI is mandatory to install.
+VEP plugins may be installed in the cache directory, and the plugin pLI is mandatory to install. To supply files required by VEP plugins, use `vep_plugin_files` parameter.
 See example cache [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz).<br />
 <sup>5</sup> GnomAD VCF files can be downloaded from [here](https://gnomad.broadinstitute.org/downloads). The option `gnomad_af` expects a tab-delimited file with
 no header and the following columns: `CHROM POS REF_ALLELE ALT_ALLELE AF`. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/gnomad_reformated.tab.gz).<br />
 <sup>6</sup>Used by GENMOD for ranking the variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_snv.ini).<br />
-<sup>7</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
-<sup>8</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into canditate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt).<br />
-<sup>9</sup>Path to a folder containing cadd annotations. Equivalent of the data/annotations/ folder described [here](https://github.com/kircherlab/CADD-scripts/#manual-installation), and it is used to calculate CADD scores for small indels. <br />
+<sup>7</sup>File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic and mitochondrial SNVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/variant_consequences_v2.txt). You can learn more about these terms [here](https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html).
+<sup>8</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
+<sup>9</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into canditate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt). Not required if --skip_vep_filter is set to true.<br />
+<sup>10</sup>Path to a folder containing cadd annotations. Equivalent of the data/annotations/ folder described [here](https://github.com/kircherlab/CADD-scripts/#manual-installation), and it is used to calculate CADD scores for small indels. <br />
+<sup>11</sup>A CSV file that describes the files used by VEP's named and custom plugins. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vep_files.csv). <br />
 
-> NB: We use CADD only to annotate small indels. To annotate SNVs with precomputed CADD scores, pass the file containing CADD scores as a resource to vcfanno instead. Files containing the precomputed CADD scores for SNVs can be downloaded from [here](https://cadd.gs.washington.edu/download) (description: "All possible SNVs of GRCh3<7/8>/hg3<7/8>")
+:::note
+We use CADD only to annotate small indels. To annotate SNVs with precomputed CADD scores, pass the file containing CADD scores as a resource to vcfanno instead. Files containing the precomputed CADD scores for SNVs can be downloaded from [here](https://cadd.gs.washington.edu/download) (download files listed under the description: "All possible SNVs of GRCh3<7/8>/hg3<7/8>")
+:::
 
 ##### 8. SV annotation & Ranking
 
-| Mandatory                  | Optional           |
-| -------------------------- | ------------------ |
-| genome                     | reduced_penetrance |
-| svdb_query_dbs<sup>1</sup> |                    |
-| vep_cache_version          | vep_filters        |
-| vep_cache                  |                    |
-| score_config_sv            |                    |
+| Mandatory                                      | Optional                          |
+| ---------------------------------------------- | --------------------------------- |
+| genome                                         | reduced_penetrance                |
+| svdb_query_dbs/svdb_query_bedpedbs<sup>1</sup> |                                   |
+| vep_cache_version                              | vep_filters/vep_filters_scout_fmt |
+| vep_cache                                      | vep_plugin_files                  |
+| score_config_sv                                |                                   |
+| variant_consequences_sv<sup>2</sup>            |                                   |
 
-<sup>1</sup> A CSV file that describes the databases (VCFs) used by SVDB for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
+<sup>1</sup> A CSV file that describes the databases (VCFs or BEDPEs) used by SVDB for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
+<sup>2</sup> File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic SVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/variant_consequences_v2.txt). You can learn more about these terms [here](https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html).
 
-##### 9. Mitochondrial analysis
+##### 9. Mitochondrial annotation
 
-| Mandatory         | Optional |
-| ----------------- | -------- |
-| genome            |          |
-| mito_name         |          |
-| vcfanno_resources |          |
-| vcfanno_toml      |          |
-| vep_cache_version |          |
-| vep_cache         |          |
+| Mandatory                | Optional                          |
+| ------------------------ | --------------------------------- |
+| genome                   | vep_filters/vep_filters_scout_fmt |
+| mito_name                | vep_plugin_files                  |
+| vcfanno_resources        |                                   |
+| vcfanno_toml             |                                   |
+| vep_cache_version        |                                   |
+| vep_cache                |                                   |
+| score_config_mt          |                                   |
+| variant_consequences_snv |                                   |
+
+##### 10. Mobile element annotation
+
+| Mandatory                                   | Optional                          |
+| ------------------------------------------- | --------------------------------- |
+| genome                                      | vep_filters/vep_filters_scout_fmt |
+| mobile_element_svdb_annotations<sup>1</sup> |                                   |
+| vep_cache_version                           |                                   |
+| vep_cache                                   |                                   |
+| variant_consequences_sv                     |                                   |
+
+<sup>1</sup> A CSV file that describes the databases (VCFs) used by SVDB for annotating mobile elements with allele frequencies. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv).
+
+##### 11. Variant evaluation
+
+| Mandatory                  | Optional |
+| -------------------------- | -------- |
+| run_rtgvcfeval<sup>1</sup> | sdf      |
+| rtg_truthvcfs<sup>2</sup>  |          |
+
+<sup>1</sup> This parameter is set to false by default, set it to true if if you'd like to run the evaluation subworkflow
+<sup>2</sup> A CSV file that describes the truth VCF files used by RTG Tools' vcfeval for evaluating SNVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rtg_example.csv). The file contains four columns `samplename,vcf,bedregions,evaluationregions` where samplename is the user assigned samplename in the input samplesheet, vcf is the path to the truth vcf file, bedregions and evaluationregions are the path to the bed files that are supposed to be passed through --bed_regions and --evaluation_regions options of vcfeval.
+
+##### 12. Prepare data for CNV visualisation in Gens
+
+Optionally the read data can be prepared for CNV visualization in [Gens](https://github.com/Clinical-Genomics-Lund/gens). This subworkflow is turned off by default. You can activate it by supplying the option `--skip_gens false`.
+
+| Mandatory                      | Optional |
+| ------------------------------ | -------- |
+| gens_pon_female<sup>1</sup>    |          |
+| gens_pon_male<sup>1</sup>      |          |
+| gens_interval_list<sup>2</sup> |          |
+| gens_gnomad_pos<sup>3</sup>    |          |
+
+<sup>1</sup> Instructions on how to generate the panel of normals can be found [here](https://github.com/Clinical-Genomics-Lund/gens?tab=readme-ov-file#create-pon)<br>
+<sup>2</sup> Interval list for CollectReadCounts. Instructions on how to generate the interval list file can be found [here](https://github.com/Clinical-Genomics-Lund/gens?tab=readme-ov-file#create-pon)<br>
+<sup>3</sup> File containing SNVs to be used for the B-allele frequency calculations. The developers of gens uses SNVs in gnomad with an allele frecuency above 5%.
 
 #### Run the pipeline
 
@@ -299,7 +367,9 @@ nextflow pull nf-core/raredisease
 
 To further assist in reproducbility, you can use share and re-use [parameter files](#running-the-pipeline) to repeat pipeline runs with the same settings without having to write out a command with every single parameter.
 
-> 💡 If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
+:::tip
+If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
+:::
 
 - **Restart a previous run:** Add `-resume` to your command when restarting a pipeline. Nextflow will use cached results from any pipeline steps where inputs are the same, and resume the run from where it terminated previously. For input to be considered the same, names and the files' contents must be identical. For more info about `-resume`, see [this blog post](https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html). You can also supply a run name to resume a specific run: `-resume [run-name]`. Use the `nextflow log` command to show previous run names.
 
@@ -325,6 +395,58 @@ input: 'data'
 ```
 
 You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-co.re/launch).
+
+## Core Nextflow arguments
+
+:::note
+These options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen).
+:::
+
+### `-profile`
+
+Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments.
+
+Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Apptainer, Conda) - see below.
+
+:::info
+We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
+:::
+
+The pipeline also dynamically loads configurations from [https://github.com/nf-core/configs](https://github.com/nf-core/configs) when it runs, making multiple config profiles for various institutional clusters available at run time. For more information and to see if your system is available in these configs please see the [nf-core/configs documentation](https://github.com/nf-core/configs#documentation).
+{% else %}
+{% endif %}
+Note that multiple profiles can be loaded, for example: `-profile test,docker` - the order of arguments is important!
+They are loaded in sequence, so later profiles can overwrite earlier profiles.
+
+If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer enviroment.
+
+- `test`
+  - A profile with a complete configuration for automated testing
+  - Includes links to test data so needs no other parameters
+- `docker`
+  - A generic configuration profile to be used with [Docker](https://docker.com/)
+- `singularity`
+  - A generic configuration profile to be used with [Singularity](https://sylabs.io/docs/)
+- `podman`
+  - A generic configuration profile to be used with [Podman](https://podman.io/)
+- `shifter`
+  - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
+- `charliecloud`
+  - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
+- `apptainer`
+  - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
+- `conda`
+  - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
+
+### `-resume`
+
+Specify this when restarting a pipeline. Nextflow will use cached results from any pipeline steps where the inputs are the same, continuing from where it got to previously. For input to be considered the same, not only the names must be identical but the files' contents as well. For more info about this parameter, see [this blog post](https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html).
+
+You can also supply a run name to resume a specific run: `-resume [run-name]`. Use the `nextflow log` command to show previous run names.
+
+### `-c`
+
+Specify the path to a specific config file (this is a core Nextflow command). See the [nf-core website documentation](https://nf-co.re/usage/configuration) for more information.
 
 ## Custom configuration
 
@@ -393,3 +515,24 @@ We recommend adding the following line to your environment to limit this (typica
 ```bash
 NXF_OPTS='-Xms1g -Xmx4g'
 ```
+
+### Running the pipeline without Internet access
+
+The pipeline and container images can be downloaded using [nf-core tools](https://nf-co.re/docs/usage/offline). For running offline, you of course have to make all the reference data available locally, and specify `--fasta`, etc., see [above](#reference-files-and-parameters).
+
+Contrary to the paragraph about [Nextflow](https://nf-co.re/docs/usage/offline#nextflow) on the page linked above, it is not possible to use the "-all" packaged version of Nextflow for this pipeline. The online version of Nextflow is necessary to support the necessary nextflow plugins. Download instead the file called just `nextflow`. Nextflow will download its dependencies when it is run. Additionally, you need to download the nf-validation plugin explicitly:
+
+```
+./nextflow plugin install nf-validation
+```
+
+Now you can transfer the `nextflow` binary as well as its directory `$HOME/.nextflow` to the system without Internet access, and use it there. It is necessary to use an explicit version of `nf-validation` offline, or Nextflow will check for the most recent version online. Find the version of nf-validation you downloaded in `$HOME/.nextflow/plugins`, then specify this version for `nf-validation` in your configuration file:
+
+```
+plugins {
+        // Set the plugin version explicitly, otherwise nextflow will look for the newest version online.
+        id 'nf-validation@0.3.1'
+}
+```
+
+This should go in your Nextflow confgiguration file, specified with `-c <YOURCONFIG>` when running the pipeline.

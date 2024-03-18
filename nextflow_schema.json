@@ -10,12 +10,13 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "outdir"],
+            "required": ["outdir"],
             "properties": {
                 "input": {
                     "type": "string",
                     "format": "file-path",
                     "exists": true,
+                    "schema": "assets/schema_input.json",
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.csv$",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
@@ -26,7 +27,8 @@
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open"
+                    "fa_icon": "fas fa-folder-open",
+                    "default": "results"
                 },
                 "email": {
                     "type": "string",
@@ -51,7 +53,7 @@
             "description": "Reference genome related files and options required for the workflow.",
             "properties": {
                 "bait_padding": {
-                    "type": "number",
+                    "type": "integer",
                     "default": 100,
                     "fa_icon": "fas fa-align-center",
                     "pattern": "^\\S+\\.bed(\\.gz)?$",
@@ -113,7 +115,8 @@
                     "description": "Name of iGenomes reference.",
                     "fa_icon": "fas fa-align-center",
                     "help_text": "If using a reference genome configured in the pipeline using iGenomes, use this parameter to give the ID for the reference. This is then used to build the full paths for all required reference genome files e.g. `--genome GRCh38`. \n\nSee the [nf-core website docs](https://nf-co.re/usage/reference_genomes) for more details.",
-                    "default": "GRCh38"
+                    "default": "GRCh38",
+                    "enum": ["GRCh37", "GRCh38"]
                 },
                 "gens_gnomad_pos": {
                     "type": "string",
@@ -133,13 +136,22 @@
                     "help_text": "This file contains the binning intervals used for CollectReadCounts.",
                     "hidden": true
                 },
-                "gens_pon": {
+                "gens_pon_female": {
                     "type": "string",
                     "exists": true,
                     "format": "file-path",
                     "fa_icon": "fas fa-file",
-                    "description": "Path to panel of normals for Gens.",
-                    "help_text": "The panel used to run DenoiseReadCounts.",
+                    "description": "Path to female panel of normals for Gens.",
+                    "help_text": "The female panel used to run DenoiseReadCounts.",
+                    "hidden": true
+                },
+                "gens_pon_male": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to male panel of normals for Gens.",
+                    "help_text": "The male panel used to run DenoiseReadCounts.",
                     "hidden": true
                 },
                 "gnomad_af": {
@@ -159,13 +171,6 @@
                     "pattern": "^\\S+\\.bed(\\.gz)?\\.idx$",
                     "description": "Path to the index file for the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
-                },
-                "igenomes_base": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "Directory / URL base for iGenomes references.",
-                    "default": "s3://ngi-igenomes/igenomes",
-                    "fa_icon": "fas fa-cloud-download-alt"
                 },
                 "igenomes_ignore": {
                     "type": "boolean",
@@ -218,7 +223,26 @@
                     "type": "string",
                     "description": "Name of the mitochondrial contig in the reference fasta file",
                     "help_text": "Used to extract relevant information from the references to analyse mitochondria",
-                    "fa_icon": "fas fa-align-center"
+                    "fa_icon": "fas fa-align-center",
+                    "default": "chrM"
+                },
+                "mobile_element_references": {
+                    "type": "string",
+                    "fa_icon": "fas fa-file",
+                    "description": "File with mobile element references",
+                    "help_text": "Path to tsv file listing mobile element references. \nFormat: <mobile element type>\\t<path to bed file>",
+                    "pattern": "^\\S+\\.tsv$",
+                    "format": "file-path",
+                    "schema": "assets/mobile_element_references_schema.json"
+                },
+                "mobile_element_svdb_annotations": {
+                    "type": "string",
+                    "description": "File with mobile element allele frequency references",
+                    "help_text": "Path to csv file listing files containing mobile element allele frequencies in reference populations. \nFormat: <vcf file path>,<in_freq_info_key>,<in_allele_count_info_key>,<out_freq_info_key>,<out_allele_count_info_key>",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/svdb_query_vcf_schema.json"
                 },
                 "ml_model": {
                     "type": "string",
@@ -259,11 +283,29 @@
                     "fa_icon": "fas fa-file-csv",
                     "description": "File with gene ids that have reduced penetrance. For use with genmod"
                 },
+                "rtg_truthvcfs": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Vcf used for evaluating variant calls.",
+                    "fa_icon": "fas fa-file-csv",
+                    "help_text": "Path to comma-separated file containing information about the truth vcf files used by vcfeval.",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/rtg_truthvcfs_schema.json"
+                },
                 "save_reference": {
                     "type": "boolean",
                     "description": "If generated by the pipeline save the required indices/references in the results directory.",
                     "help_text": "The saved references can be used for future pipeline runs, reducing processing times.",
                     "fa_icon": "fas fa-save"
+                },
+                "score_config_mt": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "description": "MT rank model config file for genmod."
                 },
                 "score_config_snv": {
                     "type": "string",
@@ -279,6 +321,14 @@
                     "fa_icon": "fas fa-file",
                     "description": "SV rank model config file for genmod."
                 },
+                "sdf": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "directory-path",
+                    "description": "Directory for pre-built sdf index. Used by rtg/vcfeval",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open"
+                },
                 "sequence_dictionary": {
                     "type": "string",
                     "exists": true,
@@ -287,13 +337,27 @@
                     "pattern": "^\\S+\\.dict$",
                     "description": "Path to the genome dictionary file"
                 },
+                "svdb_query_bedpedbs": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Databases used for structural variant annotation in chrA-posA-chrB-posB-type-count-frequency format.",
+                    "fa_icon": "fas fa-file-csv",
+                    "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation.",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/svdb_query_bedpe_schema.json"
+                },
                 "svdb_query_dbs": {
                     "type": "string",
                     "exists": true,
                     "format": "file-path",
-                    "description": "Databases used for structural variant annotation.",
+                    "description": "Databases used for structural variant annotation in vcf format.",
                     "fa_icon": "fas fa-file-csv",
-                    "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation."
+                    "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation.",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/svdb_query_vcf_schema.json"
                 },
                 "target_bed": {
                     "type": "string",
@@ -309,8 +373,27 @@
                     "exists": true,
                     "format": "file-path",
                     "description": "Path to variant catalog file",
-                    "help_text": "Used with ExpansionHunter and if no catalogue is passed, then a default will be used.",
+                    "help_text": "Should be Stranger's extended JSON as described at https://github.com/Clinical-Genomics/stranger/blob/master/stranger/resources/variant_catalog_grch37.json. This file is used by both ExpansionHunter and Stranger",
                     "fa_icon": "fas fa-file"
+                },
+                "sample_id_map": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Path to a file containing internal ids and customer ids in csv format.",
+                    "fa_icon": "fas fa-file-csv",
+                    "mimetype": "text/csv",
+                    "schema": "assets/sample_id_map.json",
+                    "help_text": "Optional file to rename sample ids in the vcf2cytosure vcf",
+                    "pattern": "^\\S+\\.csv$"
+                },
+                "vcf2cytosure_blacklist": {
+                    "type": "string",
+                    "help_text": "Optional file to blacklist regions for VCF2cytosure",
+                    "pattern": "^\\S+\\.bed$",
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to vcf2cytosure blacklist file"
                 },
                 "vcfanno_resources": {
                     "type": "string",
@@ -342,12 +425,30 @@
                     "help_text": "If no directory path is passed, vcf files will not be annotated by vep.",
                     "fa_icon": "fas fa-folder-open"
                 },
+                "vep_plugin_files": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Databases used by both named and custom plugins to annotate variants.",
+                    "fa_icon": "fas fa-file-csv",
+                    "help_text": "Path to a file containing the absolute paths to databases and their indices used by VEP's custom and named plugins resources defined within the vcfanno toml file. One line per resource.",
+                    "pattern": "^\\S+\\.csv$",
+                    "mimetype": "text/csv",
+                    "schema": "assets/vep_plugin_files_schema.json"
+                },
                 "vep_filters": {
                     "type": "string",
                     "exists": true,
                     "format": "path",
                     "fa_icon": "fas fa-file-csv",
                     "description": "Path to the file containing HGNC_IDs of interest on separate lines."
+                },
+                "vep_filters_scout_fmt": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-table",
+                    "description": "Path to a bed-like file exported by scout, which contains HGNC_IDs to be used in filter_vep."
                 }
             },
             "required": ["fasta", "intervals_wgs", "intervals_y"]
@@ -365,11 +466,6 @@
                     "fa_icon": "fas fa-align-center",
                     "enum": ["wgs", "wes", "mito"]
                 },
-                "gens_switch": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to run gens preprocessing subworkflow.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "platform": {
                     "type": "string",
                     "default": "illumina",
@@ -377,19 +473,76 @@
                     "fa_icon": "fas fa-align-center",
                     "enum": ["illumina"]
                 },
+                "ngsbits_samplegender_method": {
+                    "type": "string",
+                    "default": "xy",
+                    "description": "Method selection for ngs-bits samplegender",
+                    "fa_icon": "fas fa-align-center",
+                    "enum": ["xy", "hetx", "sry"]
+                },
+                "run_rtgvcfeval": {
+                    "type": "boolean",
+                    "description": "Specifies whether to run rtgtools' vcfeval",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "save_mapped_as_cram": {
                     "type": "boolean",
                     "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "skip_cnv_calling": {
+                "skip_fastqc": {
                     "type": "boolean",
-                    "description": "Specifies whether or not to skip CNV calling.",
-                    "fa_icon": "fas fa-book"
+                    "description": "Specifies whether or not to skip FASTQC.",
+                    "fa_icon": "fas fa-toggle-on"
                 },
-                "skip_mt_analysis": {
+                "skip_fastp": {
                     "type": "boolean",
-                    "description": "Specifies whether or not to skip the subworkflow that analyses mitochondrial genome separate from the nuclear genome.",
+                    "description": "Specifies whether or not to skip trimming with fastp.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_haplocheck": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip haplocheck.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_gens": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip gens preprocessing subworkflow.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_germlinecnvcaller": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip CNV calling using GATK's GermlineCNVCaller",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_eklipse": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip eKLIPse.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_peddy": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip peddy.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_qualimap": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip Qualimap.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_me_annotation": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip annotation of mobile_elements.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_mt_annotation": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip annotation of mitochondrial variants.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_mt_subsample": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to subsample mt alignment.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_snv_annotation": {
@@ -400,6 +553,18 @@
                 "skip_sv_annotation": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip annotate structural variant subworkflow.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_vcf2cytosure": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Specifies whether or not to skip the vcf2cytosure subworkflow",
+                    "help_text": "vcf2cytosure can generate CGH files from a structural variant VCF file that can be analysed in the CytoSure interpretation software. Cut-offs for allele frequencies and bin sizes can be modified in the config file. Turned off by default.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_vep_filter": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to filter results based on a list of candidate genes specified in 'vep_filters'.",
                     "fa_icon": "fas fa-toggle-on"
                 }
             }
@@ -415,7 +580,28 @@
                     "default": "bwamem2",
                     "description": "Specifies the alignment algorithm to use - available options are 'bwamem2' and 'sentieon'.",
                     "fa_icon": "fas fa-align-center",
-                    "enum": ["bwamem2", "sentieon"]
+                    "enum": ["bwa", "bwamem2", "sentieon"]
+                },
+                "min_trimmed_length": {
+                    "type": "integer",
+                    "default": 40,
+                    "description": "Discard trimmed reads shorter than the given value",
+                    "help_text": "Minimum length of reads after adapter trimming. Shorter reads are discarded.",
+                    "fa_icon": "fas fa-less-than"
+                },
+                "mt_subsample_rd": {
+                    "type": "integer",
+                    "default": 150,
+                    "description": "Expected coverage to subsample mt alignment to.",
+                    "help_text": "To know more about this parameter check [samtools' view](https://www.htslib.org/doc/samtools-view.html) documentation.",
+                    "fa_icon": "fas fa-less-than"
+                },
+                "mt_subsample_seed": {
+                    "type": "integer",
+                    "default": 30,
+                    "description": "Subsampling seed used to influence which subset of mitochondrial reads is kept. ",
+                    "help_text": "To know more about this parameter check [samtools' view](https://www.htslib.org/doc/samtools-view.html) documentation.",
+                    "fa_icon": "fas fa-less-than"
                 },
                 "rmdup": {
                     "type": "boolean",
@@ -436,10 +622,19 @@
                     "fa_icon": "fas fa-align-center",
                     "description": "Interval in the reference that will be used in the software"
                 },
-                "pcr_amplification": {
-                    "type": "boolean",
-                    "description": "Indicates whether the sample library is amplified using PCR or not. Set to false for PCR Free samples.",
-                    "fa_icon": "fas fa-toggle-on"
+                "cnvnator_binsize": {
+                    "type": "integer",
+                    "description": "Bin size for CNVnator",
+                    "default": 1000,
+                    "fa_icon": "fas fa-align-center"
+                },
+                "sentieon_dnascope_pcr_indel_model": {
+                    "type": "string",
+                    "default": "CONSERVATIVE",
+                    "fa_icon": "fas fa-bacon",
+                    "description": "Option for selecting the PCR indel model used by Sentieon Dnascope.",
+                    "help_text": "PCR indel model used to weed out false positive indels more or less aggressively. The possible MODELs are: NONE (used for PCR free samples), and HOSTILE, AGGRESSIVE and CONSERVATIVE, in order of decreasing aggressiveness. The default value is CONSERVATIVE.",
+                    "enum": ["NONE", "HOSTILE", "AGGRESSIVE", "CONSERVATIVE"]
                 },
                 "variant_caller": {
                     "type": "string",
@@ -450,7 +645,7 @@
                 },
                 "variant_type": {
                     "type": "string",
-                    "default": "snp",
+                    "default": "snp,indel",
                     "description": "Specifies the variant types for sentieon variant caller.",
                     "fa_icon": "fas fa-align-center",
                     "enum": ["snp", "indel", "snp,indel"]
@@ -463,12 +658,24 @@
             "fa_icon": "fas fa-user-cog",
             "description": "Options used to facilitate the annotation of the variants.",
             "properties": {
+                "variant_consequences_snv": {
+                    "type": "string",
+                    "description": "File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic and mitochondrial SNVs.",
+                    "help_text": "For more information check https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "variant_consequences_sv": {
+                    "type": "string",
+                    "description": "File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic SVs.",
+                    "help_text": "For more information check https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html",
+                    "fa_icon": "fas fa-file-csv"
+                },
                 "vep_cache_version": {
                     "type": "integer",
-                    "default": 107,
+                    "default": 110,
                     "description": "Specify the version of the VEP cache provided to the `--vep_cache` option.",
                     "fa_icon": "fas fa-align-center",
-                    "enum": [107]
+                    "enum": [107, 110]
                 }
             }
         },
@@ -621,18 +828,23 @@
                 "multiqc_config": {
                     "type": "string",
                     "format": "file-path",
+                    "exists": true,
                     "description": "Custom config file to supply to MultiQC.",
                     "fa_icon": "fas fa-cog",
                     "hidden": true
                 },
                 "multiqc_logo": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
                     "description": "Custom logo file to supply to MultiQC. File name must also be set in the MultiQC config file",
                     "fa_icon": "fas fa-image",
                     "hidden": true
                 },
                 "multiqc_methods_description": {
                     "type": "string",
+                    "format": "file-path",
+                    "exists": true,
                     "description": "Custom MultiQC yaml file containing HTML including a methods description.",
                     "fa_icon": "fas fa-cog",
                     "hidden": true

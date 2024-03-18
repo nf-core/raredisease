@@ -1,0 +1,40 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://raw.githubusercontent.com/nf-core/raredisease/master/assets/mobile_element_references_schema.json",
+    "title": "Schema for SVDB query - VCF",
+    "description": "Schema for the SVDB query database input, VCF version",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "filename": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.vcf?(\\.gz)?$",
+                "errorMessage": "Path to query database cannot contain spaces and must be a vcf file"
+            },
+            "in_freq_info_key": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "In frequency key cannot contain spaces"
+            },
+            "in_allele_count_info_key": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "In allele count key cannot contain spaces"
+            },
+            "out_freq_info_key": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Out frequency key must be provided and cannot contain spaces"
+            },
+            "out_allele_count_info_key": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Out allele count key must be provided and cannot contain spaces"
+            }
+        },
+        "required": ["filename", "out_freq_info_key", "out_allele_count_info_key"]
+    }
+}

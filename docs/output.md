@@ -10,56 +10,70 @@ The directories listed below will be created in the results directory after the 
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
-- [Alignment](#alignment)
-  - [Mapping](#mapping)
-    - [Bwa-mem2](#bwa-mem2)
-    - [Sentieon bwa mem](#sentieon-bwa-mem)
-  - [Duplicate marking](#duplicate-marking)
-    - [Picard's MarkDuplicates](#picard-s-markduplicates)
-    - [Sentieon dedup](#sentieon-dedup)
-- [Quality control and reporting](#quality-control-and-reporting)
-  - [Quality control](#quality-control)
-    - [FastQC](#fastqc)
-    - [Mosdepth](#mosdepth)
-    - [Picard tools](#picard-tools)
-    - [Qualimap](#qualimap)
-    - [Sentieon WgsMetricsAlgo](#sention-wgsmetricsalgo)
-    - [TIDDIT's cov and UCSC WigToBigWig](#tiddits-cov-and-ucsc-wigtobigwig)
-  - [Reporting](#reporting)
-    - [MultiQC](#multiqc)
-- [Variant calling - SNV](#variant-calling---snv)
-  - [DeepVariant](#deepvariant)
-  - [Sentieon DNAscope](#sentieon-dnascope)
-- [Variant calling - SV](#variant-calling---sv)
-  - [Manta](#manta)
-  - [TIDDIT sv](#tiddit-sv)
-  - [GATK GermlineCNVCaller - CNV calling](#gatk-germlinecnvcaller---cnv-calling)
-  - [SVDB merge](#svdb-merge)
-- [Variant calling - repeat expansions](#variant-calling---repeat-expansions)
-  - [Expansion Hunter](#expansion-hunter)
-  - [Stranger](#stranger)
-- [Annotation - SNV](#annotation---snv)
-  - [bcftools roh](#bcftools-roh)
-  - [vcfanno](#vcfanno)
-  - [CADD](#cadd)
-  - [VEP](#vep)
-  - [UPD](#upd)
-  - [Chromograph](#chromograph)
-- [Annotation - SV](#annotation---sv)
-  - [SVDB query](#svdb-query)
-  - [VEP](#vep-1)
-- [Mitochondrial analysis](#mitochondrial-analysis)
-  - [Alignment and variant calling](#alignment-and-variant-calling)
-    - [MT deletion script](#mt-deletion-script)
-  - [Annotation:](#annotation-)
-    - [HaploGrep2](#haplogrep2)
-    - [vcfanno](#vcfanno-1)
-    - [CADD](#cadd-1)
-    - [VEP](#vep-2)
-    - [HmtNote](#hmtnote)
-- [Rank variants and filtering](#rank-variants-and-filtering)
-  - [GENMOD](#genmod)
-- [Pipeline information](#pipeline-information)
+- [nf-core/raredisease: Output](#nf-coreraredisease-output)
+  - [Introduction](#introduction)
+  - [Pipeline overview](#pipeline-overview)
+    - [Alignment](#alignment)
+      - [Mapping](#mapping)
+        - [Bwa-mem2](#bwa-mem2)
+        - [BWA](#bwa)
+        - [Sentieon bwa mem](#sentieon-bwa-mem)
+      - [Duplicate marking](#duplicate-marking)
+        - [Picard's MarkDuplicates](#picards-markduplicates)
+        - [Sentieon Dedup](#sentieon-dedup)
+      - [Subsample mitochondrial alignments](#subsample-mitochondrial-alignments)
+    - [Quality control and reporting](#quality-control-and-reporting)
+      - [Quality control](#quality-control)
+        - [FastQC](#fastqc)
+        - [Mosdepth](#mosdepth)
+        - [Picard tools](#picard-tools)
+        - [Qualimap](#qualimap)
+        - [Chromograph coverage](#chromograph-coverage)
+        - [Sention WgsMetricsAlgo](#sention-wgsmetricsalgo)
+        - [TIDDIT's cov and UCSC WigToBigWig](#tiddits-cov-and-ucsc-wigtobigwig)
+      - [Reporting](#reporting)
+        - [MultiQC](#multiqc)
+    - [Variant calling - SNV](#variant-calling---snv)
+      - [DeepVariant](#deepvariant)
+      - [Sentieon DNAscope](#sentieon-dnascope)
+    - [Variant calling - SV](#variant-calling---sv)
+      - [Manta](#manta)
+      - [TIDDIT sv](#tiddit-sv)
+      - [GATK GermlineCNVCaller - CNV calling](#gatk-germlinecnvcaller---cnv-calling)
+      - [CNVnator - CNV calling](#cnvnator---cnv-calling)
+      - [SVDB merge](#svdb-merge)
+    - [Variant calling - repeat expansions](#variant-calling---repeat-expansions)
+      - [Expansion Hunter](#expansion-hunter)
+      - [Stranger](#stranger)
+    - [Annotation - SNV](#annotation---snv)
+      - [bcftools roh](#bcftools-roh)
+      - [vcfanno](#vcfanno)
+      - [CADD](#cadd)
+      - [VEP](#vep)
+      - [UPD](#upd)
+      - [Chromograph](#chromograph)
+      - [Rhocall viz](#rhocall-viz)
+    - [Annotation - SV](#annotation---sv)
+      - [SVDB query](#svdb-query)
+      - [VEP](#vep-1)
+    - [Mitochondrial analysis](#mitochondrial-analysis)
+      - [Alignment and variant calling](#alignment-and-variant-calling)
+        - [MT deletion script](#mt-deletion-script)
+        - [eKLIPse](#eklipse)
+      - [Annotation:](#annotation)
+        - [HaploGrep2](#haplogrep2)
+        - [vcfanno](#vcfanno-1)
+        - [CADD](#cadd-1)
+        - [Hmtnote](#hmtnote)
+        - [VEP](#vep-2)
+    - [Rank variants and filtering](#rank-variants-and-filtering)
+      - [GENMOD](#genmod)
+    - [Mobile element analysis](#mobile-element-analysis)
+      - [Calling mobile elements](#calling-mobile-elements)
+      - [Annotating mobile elements](#annotating-mobile-elements)
+    - [Variant evaluation](#variant-evaluation)
+    - [Gens](#gens)
+    - [Pipeline information](#pipeline-information)
 
 ### Alignment
 
@@ -69,15 +83,19 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 [Bwa-mem2](https://github.com/bwa-mem2/bwa-mem2) used to map the reads to a reference genome. The aligned reads are coordinate sorted with samtools sort. These files are treated as intermediates and are not placed in the output folder by default.
 
+##### BWA
+
+[BWA](https://github.com/lh3/bwa) used to map the reads to a reference genome. The aligned reads are coordinate sorted with samtools sort. These files are treated as intermediates and are not placed in the output folder by default. It is not the default aligner, but it can be chosen by setting `--aligner` option to bwa.
+
 ##### Sentieon bwa mem
 
-[Sentieon's bwa mem](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#map-reads-to-reference) is the software accelerated version of the bwa-mem algorithm. It is used to efficiently perform the alignment using BWA. Aligned reads are then coordinate sorted using Sentieon's [sort](https://support.sentieon.com/manual/usages/general/#util-syntax) utility. These files are treated as intermediates and are not placed in the output folder by default. It is not the default aligner, but it can be chosen over bwamem2 by setting `--aligner` option to sentieon.
+[Sentieon's bwa mem](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#map-reads-to-reference) is the software accelerated version of the bwa-mem algorithm. It is used to efficiently perform the alignment using BWA. Aligned reads are then coordinate sorted using Sentieon's [sort](https://support.sentieon.com/manual/usages/general/#util-syntax) utility. These files are treated as intermediates and are not placed in the output folder by default. It is not the default aligner, but it can be chosen by setting `--aligner` option to "sentieon".
 
 #### Duplicate marking
 
 ##### Picard's MarkDuplicates
 
-[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2 are processed by this tool. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
+[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2 and bwa are processed by this tool. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
 
 <details markdown="1">
 <summary>Output files from Alignment</summary>
@@ -98,7 +116,19 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - `{outputdir}/alignment/`
   - `*.bam|*.cram`: Alignment file in bam/cram format.
   - `*.bai|*.crai`: Index of the corresponding bam/cram file.
-  - `*.txt`: Text file containing the dedup metrics.
+  - `*.metrics`: Text file containing the dedup metrics.
+  </details>
+
+#### Subsample mitochondrial alignments
+
+[Samtools view](https://www.htslib.org/doc/samtools-view.html) is used by the pipeline to subsample mitochondrial alignments to a user specified coverage. The file is mainly intended to be used for visualization of MT alignments in IGV. The non-subsampled bam file is used for variant calling and other downstream analysis steps.
+
+<details markdown="1">
+<summary>Output files from Alignment</summary>
+
+- `{outputdir}/alignment/`
+  - `<sampleid>_mt_subsample.bam`: Alignment file in bam format.
+  - `<sampleid>_mt_subsample.bam.bai`: Index of the corresponding bam file.
   </details>
 
 ### Quality control and reporting
@@ -169,6 +199,16 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - `{outputdir}/qc_bam/<sampleid>_qualimap/` this directory includes a qualimap report and associated raw statistic files. You can open the .html file in your internet browser to see the in-depth report.
   </details>
 
+##### Chromograph coverage
+
+[Chromograph](https://github.com/Clinical-Genomics/chromograph) is a python package to create PNG images from genetics data such as BED and WIG files.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `{outputdir}/qc_bam/<sampleid>_chromographcov/*.png` plots showing coverage across chromosomes for each chromosome.
+  </details>
+
 ##### Sention WgsMetricsAlgo
 
 [Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/) is the Sentieon's equivalent of Picard's CollectWgsMetrics.
@@ -193,6 +233,10 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
     </details>
 
 #### Reporting
+
+:::note
+The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They may contain adapter sequence and potentially regions with low quality.
+:::
 
 ##### MultiQC
 
@@ -221,11 +265,9 @@ Results generated by MultiQC collate pipeline QC from supported tools e.g. FastQ
 <details markdown="1">
 <summary>Output files</summary>
 
-- `call_snv/`
-  - `<case_id>_split_rmdup.vcf.gz`: normalized vcf file containing MT variants. Only published when `--skip_mt_analysis` is set.
-  - `<case_id>_split_rmdup.vcf.gz.tbi`: index of the normalized vcf file containing MT variants. Only published when `--skip_mt_analysis` is set.
-  - `<case_id>_nomito.selectvariants.vcf.gz`: normalized vcf file containing no MT variants.
-  - `<case_id>_nomito.selectvariants.vcf.gz.tbi`: index of the vcf file containing no MT variants.
+- `call_snv/genome`
+  - `<case_id>_snv.vcf.gz`: normalized vcf file containing no MT variants.
+  - `<case_id>_snv.vcf.gz.tbi`: index of the vcf file containing no MT variants.
 
 </details>
 
@@ -236,11 +278,9 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 <details markdown="1">
 <summary>Output files</summary>
 
-- `call_snv/`
-  - `<case_id>_split_rmdup.vcf.gz`: normalized vcf file containing MT variants. Only published when `--skip_mt_analysis` is set.
-  - `<case_id>_split_rmdup.vcf.gz.tbi`: index of the normalized vcf file containing MT variants. Only published when `--skip_mt_analysis` is set.
-  - `<case_id>_nomito.selectvariants.vcf.gz`: normalized vcf file containing no MT variants.
-  - `<case_id>_nomito.selectvariants.vcf.gz.tbi`: index of the vcf file containing no MT variants.
+- `call_snv/genome`
+  - `<case_id>_snv.vcf.gz`: normalized vcf file containing no MT variants.
+  - `<case_id>_snv.vcf.gz.tbi`: index of the vcf file containing no MT variants.
 
 </details>
 
@@ -258,14 +298,18 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 [GATK GermlineCNVCaller](https://github.com/broadinstitute/gatk) is used to identify copy number variants in germline samples given their read counts and a model describing a sample's ploidy. Output vcf files are treated as intermediates and are not placed in the output folder.
 
+#### CNVnator - CNV calling
+
+[CNVnator](https://github.com/abyzovlab/CNVnator) is used to identify copy number variants in germline samples given a bam file. Output vcf files are treated as intermediates and are not placed in the output folder.
+
 #### SVDB merge
 
-[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if skip_cnv_calling is set to false), Manta, and TIDDIT. Output files are published in the output folder.
+[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if `skip_germlinecnvcaller` is set to false), Manta, and TIDDIT. Output files are published in the output folder.
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `call_sv/`
+- `call_sv/genome`
   - `<case_id>_sv_merge.vcf.gz`: file containing the merged variant calls.
   - `<case_id>_sv_merge.vcf.gz.tbi`: index of the file containing the merged variant calls.
 
@@ -283,6 +327,8 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 - `repeat_expansions/`
   - `<sample_id>_repeat_expansion.vcf.gz`: file containing variant calls.
   - `<sample_id>_repeat_expansion.vcf.gz.tbi`: index of the file containing variant calls.
+  - `<sample_id>_exphunter_sorted.bam`: A BAMlet containing alignments of reads that overlap or located in close proximity to each variant identified by ExpansionHunter
+  - `<sample_id>_exphunter_sorted.bam.bai`: Index of the BAMlet file
 
 </details>
 
@@ -294,8 +340,8 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 <summary>Output files</summary>
 
 - `repeat_expansions/`
-  - `<case_id>_repeat_expansion.vcf.gz`: file containing variant calls.
-  - `<case_id>_repeat_expansion.vcf.gz.tbi`: index of the file containing variant calls.
+  - `<case_id>_repeat_expansion_stranger.vcf.gz`: file containing variant calls.
+  - `<case_id>_repeat_expansion_stranger.vcf.gz.tbi`: index of the file containing variant calls.
 
 </details>
 
@@ -304,6 +350,10 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 #### bcftools roh
 
 [bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh) is a program for detecting runs of homo/autozygosity.from only bi-allelic sites. The output files are not published in the output folder, and is passed to vcfanno for further annotation.
+
+:::note
+In the case of running a quattro, i.e. two affected children and their parents, only one of the probands will be used for annotating regions of homozygosity. This is a known limitation that we are hoping to solve in a future release.
+:::
 
 #### vcfanno
 
@@ -326,16 +376,14 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 
 Based on VEP annotations, custom scripts used by the pipeline further annotate each record with the most severe consequence, and pli scores.
 
-> **NB**: Output files described below include mitochondrial annotations only if --skip_mt_analysis is set to true.
+> **NB**: Output files described below do not include mitochondrial annotations only if --skip_mt_annotation is set to true.
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `annotate_snv/`
-  - `<case_id>_rohann_vcfanno_filter_vep.vcf.gz`: file containing bcftools roh, vcfanno, and vep annotations.
-  - `<case_id>_rohann_vcfanno_filter_vep.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, and vep annotations.
-  - `<case_id>_vep_csq_pli.vcf.gz`: file containing bcftools roh, vcfanno, vep, consequence and pli annotations.
-  - `<case_id>_vep_csq_pli.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, vep, consequence and pli annotations.
+- `annotate_snv/genome`
+  - `<case_id>_rhocall_vcfanno_filter_<cadd_vep|vep>.vcf.gz`: file containing bcftools roh, vcfanno, cadd and vep annotations.
+  - `<case_id>_rhocall_vcfanno_filter_<cadd_vep|vep>.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, cadd and vep annotations.
 
 </details>
 
@@ -350,10 +398,25 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 <details markdown="1">
 <summary>Output files</summary>
 
-- `annotate_snv/*sites_chromograph`
+- `annotate_snv/genome/*sites_chromograph`
   - `<case_id>_rohann_vcfanno_upd_sites_<chr#>.png`: file containing a plot showing upd sites across chromosomes.
-- `annotate_snv/*regions_chromograph`
+- `annotate_snv/genome/*regions_chromograph`
   - `<case_id>_rohann_vcfanno_upd_regions_<chr#>.png`: file containing a plot showing upd regions across chromosomes.
+- `annotate_snv/genome/*autozyg_chromograph`
+  - `<sample_id>_rhocallviz_<chr#>.png`: file containing a plot showing regions of autozygosity across chromosomes.
+
+</details>
+
+#### Rhocall viz
+
+[Rhocall viz](https://github.com/dnil/rhocall) plots binned zygosity and RHO-regions.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `annotate_snv/genome/<sample_id>_rhocallviz/<sample_id>_rhocallviz.bed`: file containing regions of homozygosity in bed format.
+- `annotate_snv/genome/<sample_id>_rhocallviz/<sample_id>_rhocallviz.wig`: file containing the fraction of homozygous SNPs in wig format.
+- `annotate_snv/genome/<sample_id>_rhocallviz/<sample_id>_rhocallviz.bw`: file containing the fraction of homozygous SNPs in bigwig format.
 
 </details>
 
@@ -373,14 +436,12 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 - `annotate_sv/`
   - `<case_id>_svdbquery_vep.vcf.gz`: file containing svdb query, and vep annotations.
   - `<case_id>_svdbquery_vep.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, and vep annotations.
-  - `<case_id>_vep_csq_pli.vcf.gz`: file containing bcftools roh, vcfanno, vep, consequence and pli annotations.
-  - `<case_id>_vep_csq_pli.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, vep, consequence and pli annotations.
 
 </details>
 
 ### Mitochondrial analysis
 
-Mitochondrial analysis is run by default, to turn it off set `--skip_mt_analysis` to true.
+Mitochondrial analysis is run by default. If you want to turn off annotations set `--skip_mt_annotation` to true.
 
 #### Alignment and variant calling
 
@@ -388,9 +449,25 @@ Mitochondrial analysis is run by default, to turn it off set `--skip_mt_analysis
 
 The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sensitivity to low AF and separate alignments using opposite genome breakpoints to allow for the tracing of lineages of rare mitochondrial variants.
 
+- `call_snv/mitochondria`
+  - `<case_id>_mitochondria.vcf.gz`: normalized vcf file containing MT variants.
+  - `<case_id>_mitochondria.vcf.gz.tbi`: index of the vcf file containing MT variants.
+
 ##### MT deletion script
 
 [MT deletion script](https://github.com/dnil/mitosign/blob/master/run_mt_del_check.sh) lists the fraction of mitochondrially aligning read pairs (per 1000) that appear discordant, as defined by an insert size of more than 1.2 kb (and less than 15 kb due to the circular nature of the genome) using samtools.
+
+- `call_sv/mitochondria`
+  - `<sample_id>_mitochondria_deletions.txt`: file containing deletions.
+
+##### eKLIPse
+
+[eKLIPse](https://github.com/dooguypapua/eKLIPse) allows the detection and quantification of large mtDNA rearrangements.
+
+- `call_sv/mitochondria`
+  - `eKLIPse_<sample_id>_deletions.csv`: file containing all predicted deletions.
+  - `eKLIPse_<sample_id>_genes.csv`: file summarizing cumulated deletions per mtDNA gene.
+  - `eKLIPse_<sample_id>.png`: circos plot.
 
 #### Annotation:
 
@@ -401,8 +478,8 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 <details markdown="1">
 <summary>Output files</summary>
 
-- `annotate_mt/`
-  - `<case_id>_haplogrep.txt`: file containing haplogroup information.
+- `annotate_snv/mitochondria`
+  - `<case_id>_mitochondria_haplogrep.txt`: file containing haplogroup information.
 
 </details>
 
@@ -427,28 +504,112 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `annotate_mt/`
-  - `<case_id>_vep_vcfanno_mt.vcf.gz`: file containing mitochondrial annotations.
-  - `<case_id>_vep_vcfanno_mt.vcf.gz.tbi`: index of the file containing mitochondrial annotations.
+- `annotate_snv/mitochondria`
+  - `<case_id>_mitochondria_vep_vcfanno_hmtnote.vcf.gz`: file containing mitochondrial annotations.
+  - `<case_id>_mitochondria_vep_vcfanno_hmtnote.vcf.gz.tbi`: index of the file containing mitochondrial annotations.
 
 </details>
 
-### Rank variants and filtering
+### Filtering and ranking
+
+#### Filter_vep
+
+[filter_vep from VEP](https://www.ensembl.org/info/docs/tools/vep/script/vep_filter.html) is used to subset the variants based on a list of HGNC ID:s. Typical use case is that you want to filter your results to only include variants in a predefined set of clinically relevant genes. This step is optional and can be disabled by using the flag `--skip_vep_filter`. You will always get the complete VCF together with the clinical VCF.
 
 #### GENMOD
 
-[GENMOD](https://github.com/Clinical-Genomics/genmod) is a simple to use command line tool for annotating and analyzing genomic variations in the VCF file format. GENMOD can annotate genetic patterns of inheritance in vcf:s with single or multiple families of arbitrary size. VCF file annotated by GENMOD are further filtered using [filter_vep from VEP](https://www.ensembl.org/info/docs/tools/vep/script/vep_filter.html) to separate clinically relevant variants.
+[GENMOD](https://github.com/Clinical-Genomics/genmod) is a simple to use command line tool for annotating and analyzing genomic variations in the VCF file format. GENMOD can annotate genetic patterns of inheritance in vcf files with single or multiple families of arbitrary size. Each variant will be assigned a predicted pathogenicity score. The score will be given both as a raw score and a normalized score with values between 0 and 1. The tags in the INFO field are `RankScore` and `RankScoreNormalized`. The score can be configured to fit your annotations and preferences by modifying the score config file.
 
 <details markdown="1">
 <summary>Output files</summary>
 
 - `rank_and_filter/`
-  - `<case_id>_clinical_snv.ann_filter.vcf.gz`: file containing clinically relevant SNVs.
-  - `<case_id>_clinical_sv.ann_filter.vcf.gz`: file containing clinically relevant SVs.
-  - `<case_id>_ranked_snv.vcf.gz`: file containing SNV annotations with their rank scores.
-  - `<case_id>_ranked_snv.vcf.gz.tbi`: file containing SNV annotations with their rank scores.
-  - `<case_id>_ranked_sv.ann_filter.vcf.gz`: file containing SV annotations with their rank scores.
-  - `<case_id>_ranked_sv.ann_filter.vcf.gz.tbi`: file containing SV annotations with their rank scores.
+  - `<case_id>_mt_ranked_clinical.vcf.gz`: file containing clinically relevant mitochondrial SNVs.
+  - `<case_id>_mt_ranked_clinical.vcf.gz.tbi`: index of the file containing clinically relevant mitochondrial SNVs.
+  - `<case_id>_mt_ranked_research.vcf.gz`: file containing mitochondrial SNV annotations with their rank scores.
+  - `<case_id>_mt_ranked_research.vcf.gz.tbi`: index of the file containing mitochondrial SNV annotations with their rank scores.
+  - `<case_id>_snv_ranked_clinical.vcf.gz`: file containing clinically relevant SNVs (does not include mitochondrial variants).
+  - `<case_id>_snv_ranked_clinical.vcf.gz.tbi`: index of the file containing clinically relevant SNVs.
+  - `<case_id>_snv_ranked_research.vcf.gz`: file containing SNV annotations with their rank scores (does not include mitochondrial variants).
+  - `<case_id>_snv_ranked_research.vcf.gz.tbi`: index of the file containing SNV annotations with their rank scores.
+  - `<case_id>_sv_ranked_clinical.vcf.gz`: file containing clinically relevant SVs (includes mitochondrial variants).
+  - `<case_id>_sv_ranked_clinical.vcf.gz.tbi`: index of the file containing clinically relevant SVs.
+  - `<case_id>_sv_ranked_research.vcf.gz`: file containing SV annotations with their rank scores (includes mitochondrial variants).
+  - `<case_id>_sv_ranked_resarch.vcf.gz.tbi`: index of the file containing SV annotations with their rank scores.
+
+</details>
+
+### Mobile element analysis
+
+#### Calling mobile elements
+
+Mobile elements are identified from the bam file using [RetroSeq](https://github.com/tk2/RetroSeq) and the indiviual calls are merged to case VCF using SVDB.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `call_mobile_elements/`
+  - `<case_id>_mobile_elements.vcf.gz`: file containing mobile elements.
+  - `<case_id>_mobile_elements.vcf.gz.tbi`: index of the file containing mobile elements.
+
+</details>
+
+#### Annotating mobile elements
+
+The mobile elements are annotated with allele frequencies and allele counts using SVDB. These annotation files needed are preferably produced from a representative population. Further annoation is done using VEP and the resulting VCF is filtered using bcftools. The default filter is to only keep elements with `PASS` in the filter column but if no other post-processing is done we reccomend supplementing with an exclude expression based on population allele frequencies. The filtering key is dependent on the annotation files used but an example expression could look like this: `--exclude 'INFO/swegen_sva_FRQ > 0.1'`. If a list of HGNC id's have been supplied with the option `--vep_filters`, variants matching those id's will be presented in a seperate file using [filter_vep from VEP](https://www.ensembl.org/info/docs/tools/vep/script/vep_filter.html). This option can be disabled using the flag `--skip_vep_filter`. A VCF corresponding to the complete set of variants will also be produced.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `rank_and_filter/`
+  - `<case_id>_mobile_elements_annotated_research.vcf.gz`: VCF containting the complete set of annotated mobile elements.
+  - `<case_id>_mobile_elements_annotated_research.vcf.gz.tbi`: Index for VCF containting the complete set of annotated mobile elements.
+  - `<case_id>_mobile_elements_annotated_clinical.vcf.gz`: VCF containing selected annotated mobile elements.
+  - `<case_id>_mobile_elements_annotated_clincial.vcf.gz.tbi`: Index for VCF containing selected annotated mobile elements.
+
+</details>
+
+### Variant evaluation
+
+Provided a truth set, SNVs can be evaluated using RTG Tools' vcfeval engine. Output files generated are listed below with a short description, but if you'd like to know more about what's in each of the files, refer to RTG Tools documentation [here](https://www.animalgenome.org/bioinfo/resources/manuals/RTGOperationsManual.pdf).
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `rtgvcfeval/`
+
+  - `<sample_id>_vcfeval.fn.vcf.gz`: contains variants from the baseline VCF which were not correctly called.
+  - `<sample_id>_vcfeval.fn.vcf.gz.tbi`: index of the \*fn.vcf file
+  - `<sample_id>_vcfeval.fp.vcf.gz`: contains variants from the calls VCF which do not agree with baseline variants.
+  - `<sample_id>_vcfeval.fp.vcf.gz.tbi`: index of the \*fp.vcf file
+  - `<sample_id>_vcfeval.non_snp_roc.tsv.gz`: contains ROC data derived from those variants which were not represented as
+    SNPs.
+  - `<sample_id>_vcfeval.phasing.txt`: containing the data on the phasing
+  - `<sample_id>_vcfeval.snp_roc.tsv.gz`: contains ROC data derived from only those variants which were represented as SNPs.
+  - `<sample_id>_vcfeval.summary.txt`: contains the match summary statistics printed to standard output.
+  - `<sample_id>_vcfeval.tp-baseline.vcf.gz`: contains those variants from the baseline VCF which agree with variants in the
+    calls VCF.
+  - `<sample_id>_vcfeval.tp-baseline.vcf.gz.tbi`: index of the \*tp-baseline.vcf file
+  - `<sample_id>_vcfeval.tp.vcf.gz`: contains those variants from the calls VCF which agree with variants in the baseline VCF
+  - `<sample_id>_vcfeval.tp.vcf.gz.tbi`: index of the \*tp.vcf file
+  - `<sample_id>_vcfeval.weighted_roc.tsv.gz`: contains ROC data derived from all analyzed call variants, regardless of their
+    representation.
+
+</details>
+
+### Gens
+
+The sequencing data can be prepared for visualization of CNVs in [Gens](https://github.com/Clinical-Genomics-Lund/gens). This subworkflow is turned off by default. You can activate it by supplying the option `--skip_gens false`. You can read more about how to setup Gens [here](https://github.com/Clinical-Genomics-Lund/gens).
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `gens/`
+
+  - `<sample_id>_gens.baf.bed.gz`: contains sample b-allele frequencies in bed format.
+  - `<sample_id>_gens.baf.bed.gz.tbi`: index of the \*baf.bed.gz file.
+  - `<sample_id>_gens.cov.bed.gz`: contains sample coverage in bed format.
+  - `<sample_id>_gens.cov.bed.gz.tbi`: index of the \*cov.bed.gz file.
 
 </details>
 
@@ -463,5 +624,6 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
   - Reports generated by Nextflow: `execution_report.html`, `execution_timeline.html`, `execution_trace.txt` and `pipeline_dag.dot`/`pipeline_dag.svg`.
   - Reports generated by the pipeline: `pipeline_report.html`, `pipeline_report.txt` and `software_versions.yml`. The `pipeline_report*` files will only be present if the `--email` / `--email_on_fail` parameter's are used when running the pipeline.
   - Reformatted samplesheet files used as input to the pipeline: `samplesheet.valid.csv`.
+  - Parameters used by the pipeline run: `params.json`.
 
 </details>

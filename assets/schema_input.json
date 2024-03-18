@@ -9,65 +9,79 @@
         "properties": {
             "sample": {
                 "type": "string",
+                "exists": true,
+                "meta": ["id", "sample"],
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces"
             },
+            "lane": {
+                "type": "number",
+                "meta": ["lane"]
+            },
             "fastq_1": {
                 "type": "string",
+                "format": "file-path",
+                "exists": true,
                 "pattern": "^\\S+\\.f(ast)?q\\.gz$",
                 "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
             },
             "fastq_2": {
+                "type": "string",
                 "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
                 "anyOf": [
                     {
-                        "type": "string",
-                        "pattern": "^\\S+\\.f(ast)?q\\.gz$"
+                        "pattern": "^\\S+\\.f(ast)?q\\.gz$",
+                        "format": "file-path",
+                        "exists": true
                     },
                     {
-                        "type": "string",
                         "maxLength": 0
                     }
                 ]
             },
             "sex": {
-                "type": "string",
-                "pattern": "^\\S+$",
+                "type": "integer",
+                "meta": ["sex"],
+                "enum": [0, 1, 2],
                 "errorMessage": "Sex must be provided and cannot contain spaces"
             },
             "phenotype": {
-                "type": "string",
-                "pattern": "^\\S+$",
+                "type": "integer",
+                "meta": ["phenotype"],
+                "enum": [0, 1, 2],
                 "errorMessage": "Phenotype must be provided and cannot contain spaces"
             },
             "paternal_id": {
+                "type": "string",
                 "errorMessage": "Paternal ID cannot contain spaces",
+                "meta": ["paternal"],
+                "default": "0",
                 "anyOf": [
                     {
-                        "type": "string",
                         "pattern": "^\\S+$"
                     },
                     {
-                        "type": "string",
                         "maxLength": 0
                     }
                 ]
             },
             "maternal_id": {
+                "type": "string",
                 "errorMessage": "Maternal ID cannot contain spaces",
+                "meta": ["maternal"],
+                "default": "0",
                 "anyOf": [
                     {
-                        "type": "string",
                         "pattern": "^\\S+$"
                     },
                     {
-                        "type": "string",
                         "maxLength": 0
                     }
                 ]
             },
             "case_id": {
                 "type": "string",
+                "meta": ["case_id"],
                 "pattern": "^\\S+$",
                 "errorMessage": "Case name must be provided and cannot contain spaces"
             }

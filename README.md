@@ -1,12 +1,20 @@
-# ![nf-core/raredisease](docs/images/nf-core-raredisease_logo_light.png#gh-light-mode-only) ![nf-core/raredisease](docs/images/nf-core-raredisease_logo_dark.png#gh-dark-mode-only)
+<h1>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/nf-core-raredisease_logo_dark.png">
+    <img alt="nf-core/raredisease" src="docs/images/nf-core-raredisease_logo_light.png">
+  </picture>
+</h1>
 
-[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/raredisease/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.7995798-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.7995798)
+[![GitHub Actions CI Status](https://github.com/nf-core/raredisease/actions/workflows/ci.yml/badge.svg)](https://github.com/nf-core/raredisease/actions/workflows/ci.yml)
+[![GitHub Actions Linting Status](https://github.com/nf-core/raredisease/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/raredisease/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/raredisease/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.7995798-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.7995798)
+[![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
+[![GitHub Actions Linting Status](https://github.com/nf-core/raredisease/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/raredisease/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/raredisease/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.7995798-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.7995798)
 
 [![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A523.04.0-23aa62.svg)](https://www.nextflow.io/)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
-[![Launch on Nextflow Tower](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Nextflow%20Tower-%234256e7)](https://tower.nf/launch?pipeline=https://github.com/nf-core/raredisease)
+[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://tower.nf/launch?pipeline=https://github.com/nf-core/raredisease)
 
 [![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23raredisease-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/raredisease)[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
 
@@ -30,6 +38,11 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 ## Pipeline summary
 
+  <picture align="center">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/raredisease_metromap_dark.png">
+    <img alt="nf-core/raredisease workflow" src="docs/images/raredisease_metromap_light.png">
+  </picture>
+
 **1. Metrics:**
 
 - [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
@@ -43,6 +56,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 **2. Alignment:**
 
 - [Bwa-mem2](https://github.com/bwa-mem2/bwa-mem2)
+- [BWA](https://github.com/lh3/bwa)
 - [Sentieon DNAseq](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/)
 
 **3. Variant calling - SNV:**
@@ -55,6 +69,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [Manta](https://github.com/Illumina/manta)
 - [TIDDIT's sv](https://github.com/SciLifeLab/TIDDIT)
 - Copy number variant calling:
+  - [CNVnator](https://github.com/abyzovlab/CNVnator)
   - [GATK GermlineCNVCaller](https://github.com/broadinstitute/gatk)
 
 **5. Annotation - SNV:**
@@ -87,23 +102,24 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [Expansion Hunter](https://github.com/Illumina/ExpansionHunter)
 - [Stranger](https://github.com/Clinical-Genomics/stranger)
 
-**9. Rank variants - SV and SNV:**
+**9. Variant calling - mobile elements:**
+
+- [RetroSeq](https://github.com/tk2/RetroSeq)
+
+**10. Rank variants - SV and SNV:**
 
 - [GENMOD](https://github.com/Clinical-Genomics/genmod)
 
-<!-- prettier-ignore -->
-<p align="center">
-    <img title="nf-core/raredisease workflow" src="docs/images/raredisease_workflow_v1.0.0.png" width=40%>
-</p>
+**11. Variant evaluation:**
+
+- [RTG Tools](https://github.com/RealTimeGenomics/rtg-tools)
 
 Note that it is possible to include/exclude certain tools or steps.
 
 ## Usage
 
-> **Note**
-> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how
-> to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline)
-> with `-profile test` before running the workflow on actual data.
+> [!NOTE]
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
 First, prepare a samplesheet with your input data that looks as follows:
 
@@ -127,9 +143,8 @@ nextflow run nf-core/raredisease \
    --outdir <OUTDIR>
 ```
 
-> **Warning:**
-> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those
-> provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
+> [!WARNING]
+> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
 > see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
 
 For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/raredisease/usage) and the [parameter documentation](https://nf-co.re/raredisease/parameters).

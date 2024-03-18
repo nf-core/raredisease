@@ -46,7 +46,11 @@
 
 - [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 
-  > Andrews, S. (2010). FastQC: A Quality Control Tool for High Throughput Sequence Data [Online]. Available online https://www.bioinformatics.babraham.ac.uk/projects/fastqc/.
+  > Andrews, S. (2010). FastQC: A Quality Control Tool for High Throughput Sequence Data [Online].
+
+- [Fastp](https://github.com/OpenGene/fastp)
+
+  > Shifu, C. (2023). Ultrafast one-pass FASTQ data preprocessing, quality control, and deduplication using fastp. iMeta 2: e107. https://doi.org/10.1002/imt2.107
 
 - [GATK](https://genome.cshlp.org/content/20/9/1297)
 
@@ -55,6 +59,8 @@
 - [Genmod](https://github.com/Clinical-Genomics/genmod)
 
   > Magnusson M, Hughes T, Glabilloy, Bitdeli Chef. genmod: Version 3.7.3. Published online November 15, 2018. doi:10.5281/ZENODO.3841142
+
+- [Gens](https://github.com/Clinical-Genomics-Lund/gens)
 
 - [GLnexus](https://academic.oup.com/bioinformatics/article/36/24/5582/6064144)
 
@@ -80,6 +86,8 @@
 
   > Pedersen BS, Quinlan AR. Mosdepth: quick coverage calculation for genomes and exomes. Hancock J, ed. Bioinformatics. 2018;34(5):867-868. doi:10.1093/bioinformatics/btx699
 
+- [ngs-bits-samplegender](https://github.com/imgag/ngs-bits/tree/master)
+
 - [MultiQC](https://pubmed.ncbi.nlm.nih.gov/27312411/)
 
   > Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016 Oct 1;32(19):3047-8. doi: 10.1093/bioinformatics/btw354. Epub 2016 Jun 16. PubMed PMID: 27312411; PubMed Central PMCID: PMC5039924.
@@ -94,7 +102,15 @@
 
   > Okonechnikov K, Conesa A, García-Alcalde F. Qualimap 2: advanced multi-sample quality control for high-throughput sequencing data. Bioinformatics. 2016;32(2):292-294. doi:10.1093/bioinformatics/btv566
 
+- [RetroSeq](https://academic.oup.com/bioinformatics/article/29/3/389/257479)
+
+  > Thomas M. Keane, Kim Wong, David J. Adams, RetroSeq: transposable element discovery from next-generation sequencing data. Bioinformatics.2013 Feb 1;29(3):389-90. doi: 10.1093/bioinformatics/bts697
+
 - [rhocall](https://github.com/dnil/rhocall)
+
+- [RTG Tools (vcfeval)](https://github.com/RealTimeGenomics/rtg-tools)
+
+  > John G. Cleary, Ross Braithwaite, Kurt Gaastra, Brian S. Hilbush, Stuart Inglis, Sean A. Irvine, Alan Jackson, Richard Littin, Mehul Rathod, David Ware, Justin M. Zook, Len Trigg, and Francisco M. De La Vega. "Comparing Variant Call Files for Performance Benchmarking of Next-Generation Sequencing Variant Calling Pipelines." bioRxiv, 2015. doi:10.1101/023754.
 
 - [Sentieon DNAscope](https://www.biorxiv.org/content/10.1101/2022.05.20.492556v1.abstract)
 
@@ -127,6 +143,8 @@
 - [UCSC Bigwig and Bigbed](https://academic.oup.com/bioinformatics/article/26/17/2204/199001?login=true)
 
   > Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D. BigWig and BigBed: enabling browsing of large distributed datasets. Bioinformatics. 2010;26(17):2204-2207. doi:10.1093/bioinformatics/btq351
+
+- [vcf2cytosure](https://github.com/NBISweden/vcf2cytosure)
 
 - [Vcfanno](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0973-5)
 
