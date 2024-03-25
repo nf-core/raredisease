@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.1 - Asterix (Patch) [2024-03-25]
+
+### `Fixed`
+
+- Germlinecnvcaller subworkflow uses the output channel `casecalls` from germlinecnvcaller module instead of `calls` which was invalid. [#535](https://github.com/nf-core/raredisease/issues/535)
+
 ## 2.0.0 - Asterix [2024-03-18]
 
 ### `Added`
