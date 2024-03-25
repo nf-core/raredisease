@@ -40,7 +40,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
 
         GATK4_GERMLINECNVCALLER ( ch_gcnvc_in )
 
-        GATK4_GERMLINECNVCALLER.out.calls.toList()
+        GATK4_GERMLINECNVCALLER.out.casecalls.toList()
             .flatMap {reduce_input(it)}
             .buffer (size: 2)
             .combine(ch_gcnvcaller_model.collect{it[1]}.toList())
