@@ -15,19 +15,17 @@ workflow GENERATE_CLINICAL_SET {
         ch_versions = Channel.empty()
 
         ch_vcf
-            .combine(ch_hgnc_ids)
-            .multiMap { meta, vcf, ids ->
-                clinical: [ meta + [ set: "clinical", hgnc_ids:ids ], vcf ]
+            .multiMap { meta, vcf ->
+                clinical: [ meta + [ set: "clinical" ], vcf ]
                 research: [ meta + [ set: "research" ], vcf ]
             }
             .set { ch_clin_research_vcf }
 
         ENSEMBLVEP_FILTERVEP(
             ch_clin_research_vcf.clinical,
-            []
+            ch_hgnc_ids
         )
         .output
-        .map {meta, vcf -> [ meta - meta.subMap('hgnc_ids'), vcf ]}
         .set { ch_filtervep_out }
 
         TABIX_BGZIP( ch_filtervep_out )

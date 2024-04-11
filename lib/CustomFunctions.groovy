@@ -51,16 +51,4 @@ class CustomFunctions {
         return case_info
     }
 
-    // create hgnc list
-    public static ArrayList parseHgncIds(List text) {
-        def ids = []
-        def lines = text[0].tokenize("\n")
-        for(int i = 0; i<lines.size(); i++) {
-            if (!lines[i].startsWith("#")) {
-                ids.add(lines[i].tokenize()[3])
-            }
-        }
-        return ids
-    }
-
 }

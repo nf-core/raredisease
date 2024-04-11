@@ -112,6 +112,7 @@ include { SMNCOPYNUMBERCALLER } from '../modules/nf-core/smncopynumbercaller/mai
 
 include { RENAME_ALIGN_FILES as RENAME_BAM_FOR_SMNCALLER } from '../modules/local/rename_align_files'
 include { RENAME_ALIGN_FILES as RENAME_BAI_FOR_SMNCALLER } from '../modules/local/rename_align_files'
+include { CREATE_HGNCIDS_FILE                            } from '../modules/local/create_hgncids_file'
 
 //
 // SUBWORKFLOWS
@@ -285,9 +286,9 @@ workflow RAREDISEASE {
                                                                             : ( params.vep_cache    ? Channel.fromPath(params.vep_cache).collect() : Channel.value([]) )
     ch_vep_extra_files_unsplit  = params.vep_plugin_files                   ? Channel.fromPath(params.vep_plugin_files).collect()
                                                                             : Channel.value([])
-    ch_vep_filters_std_fmt      = params.vep_filters                        ? Channel.fromPath(params.vep_filters).splitCsv().collect()
+    ch_vep_filters_std_fmt      = params.vep_filters                        ? Channel.fromPath(params.vep_filters).map { it -> [[id:'standard'],it]}.collect()
                                                                             : Channel.empty()
-    ch_vep_filters_scout_fmt    = params.vep_filters_scout_fmt              ? Channel.fromPath(params.vep_filters_scout_fmt).collect()
+    ch_vep_filters_scout_fmt    = params.vep_filters_scout_fmt              ? Channel.fromPath(params.vep_filters_scout_fmt).map { it -> [[id:'scout'],it]}.collect()
                                                                             : Channel.empty()
     ch_versions                 = ch_versions.mix(ch_references.versions)
 
@@ -315,9 +316,11 @@ workflow RAREDISEASE {
 
     // Read and store hgnc ids in a channel
     ch_vep_filters_scout_fmt
-        .map { it -> CustomFunctions.parseHgncIds(it.text) }
         .mix (ch_vep_filters_std_fmt)
-        .toList()
+        .set {ch_vep_filters}
+
+    CREATE_HGNCIDS_FILE(ch_vep_filters)
+        .txt
         .set {ch_hgnc_ids}
 
     // Input QC
