@@ -11,8 +11,8 @@ process CREATE_HGNCIDS_FILE {
     tuple val(meta), path(input)
 
     output:
-    tuple val(meta), path("*_reformatted.txt"), emit: txt
-    path "versions.yml"                       , emit: versions
+    path("*_reformatted.txt"), emit: txt
+    path "versions.yml"      , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
