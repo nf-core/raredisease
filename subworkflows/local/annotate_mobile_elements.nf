@@ -16,7 +16,6 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
         ch_genome_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_dictionary    // channel: [mandatory] [ val(meta), path(dict) ]
         ch_vep_cache            // channel: [mandatory] [ path(cache) ]
-        ch_variant_consequences // channel: [mandatory] [ path(consequences) ]
         val_vep_genome          // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version   // string: [mandatory] default: 107
         ch_vep_extra_files      // channel: [mandatory] [ path(files) ]

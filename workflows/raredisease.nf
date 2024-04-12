@@ -669,7 +669,6 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_genome_dictionary,
             ch_vep_cache,
-            ch_variant_consequences_sv,
             params.genome,
             params.vep_cache_version,
             ch_vep_extra_files
@@ -684,7 +683,7 @@ workflow RAREDISEASE {
 
         ANN_CSQ_PLI_ME(
             GENERATE_CLINICAL_SET_ME.out.vcf,
-            ch_variant_consequences
+            ch_variant_consequences_sv
         )
         ch_versions = ch_versions.mix( ANN_CSQ_PLI_ME.out.versions )
 
