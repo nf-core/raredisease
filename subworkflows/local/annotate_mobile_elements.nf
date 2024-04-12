@@ -7,8 +7,6 @@ include { ENSEMBLVEP_VEP as ENSEMBLVEP_ME       } from '../../modules/nf-core/en
 include { PICARD_SORTVCF                        } from '../../modules/nf-core/picard/sortvcf/main'
 include { SVDB_QUERY as SVDB_QUERY_DB           } from '../../modules/nf-core/svdb/query/main'
 
-include { ANNOTATE_CSQ_PLI as ANNOTATE_CSQ_PLI_ME           } from '../../subworkflows/local/annotate_consequence_pli.nf'
-include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_ME } from '../../subworkflows/local/generate_clinical_set.nf'
 
 workflow ANNOTATE_MOBILE_ELEMENTS {
 
@@ -19,7 +17,6 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
         ch_genome_dictionary    // channel: [mandatory] [ val(meta), path(dict) ]
         ch_vep_cache            // channel: [mandatory] [ path(cache) ]
         ch_variant_consequences // channel: [mandatory] [ path(consequences) ]
-        ch_hgnc_ids             // channel: [mandatory] [ val(hgnc_ids) ]
         val_vep_genome          // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version   // string: [mandatory] default: 107
         ch_vep_extra_files      // channel: [mandatory] [ path(files) ]
@@ -76,25 +73,12 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
 
         BCFTOOLS_VIEW_FILTER( ch_bcftools_filter_input, [], [], [] )
 
-        GENERATE_CLINICAL_SET_ME(
-            BCFTOOLS_VIEW_FILTER.out.vcf,
-            ch_hgnc_ids
-        )
-
-        ANNOTATE_CSQ_PLI_ME(
-            GENERATE_CLINICAL_SET_ME.out.vcf,
-            ch_variant_consequences
-        )
-
         ch_versions = ch_versions.mix( SVDB_QUERY_DB.out.versions )
         ch_versions = ch_versions.mix( PICARD_SORTVCF.out.versions )
         ch_versions = ch_versions.mix( ENSEMBLVEP_ME.out.versions )
         ch_versions = ch_versions.mix( BCFTOOLS_VIEW_FILTER.out.versions )
-        ch_versions = ch_versions.mix( GENERATE_CLINICAL_SET_ME.out.versions )
-        ch_versions = ch_versions.mix( ANNOTATE_CSQ_PLI_ME.out.versions )
 
     emit:
-        vcf      = ANNOTATE_CSQ_PLI_ME.out.vcf_ann  // channel: [ val(meta), path(vcf) ]
-        tbi      = ANNOTATE_CSQ_PLI_ME.out.tbi_ann  // channel: [ val(meta), path(tbi) ]
+        vcf      = BCFTOOLS_VIEW_FILTER.out.vcf     // channel: [ val(meta), path(vcf) ]
         versions = ch_versions                      // channel: [ path(versions.yml) ]
 }

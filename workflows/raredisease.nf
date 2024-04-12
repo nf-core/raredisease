@@ -119,6 +119,7 @@ include { CREATE_HGNCIDS_FILE                            } from '../modules/loca
 //
 
 include { ALIGN                                              } from '../subworkflows/local/align'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_ME                 } from '../subworkflows/local/annotate_consequence_pli.nf'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_MT                 } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV                } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV                 } from '../subworkflows/local/annotate_consequence_pli'
@@ -130,6 +131,7 @@ include { CALL_MOBILE_ELEMENTS                               } from '../subworkf
 include { CALL_REPEAT_EXPANSIONS                             } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                                           } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS                           } from '../subworkflows/local/call_structural_variants'
+include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/local/generate_clinical_set.nf'
 include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/local/generate_clinical_set'
 include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/local/generate_clinical_set'
 include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/local/generate_clinical_set'
@@ -668,12 +670,24 @@ workflow RAREDISEASE {
             ch_genome_dictionary,
             ch_vep_cache,
             ch_variant_consequences_sv,
-            ch_hgnc_ids,
             params.genome,
             params.vep_cache_version,
             ch_vep_extra_files
         )
         ch_versions = ch_versions.mix(ANNOTATE_MOBILE_ELEMENTS.out.versions)
+
+        GENERATE_CLINICAL_SET_ME(
+            ANNOTATE_MOBILE_ELEMENTS.out.vcf,
+            ch_hgnc_ids
+        )
+        ch_versions = ch_versions.mix( GENERATE_CLINICAL_SET_ME.out.versions )
+
+        ANN_CSQ_PLI_ME(
+            GENERATE_CLINICAL_SET_ME.out.vcf,
+            ch_variant_consequences
+        )
+        ch_versions = ch_versions.mix( ANN_CSQ_PLI_ME.out.versions )
+
     }
 
     //
