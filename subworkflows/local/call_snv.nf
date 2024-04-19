@@ -74,7 +74,7 @@ workflow CALL_SNV {
             ch_sentieon_vcf = CALL_SNV_SENTIEON.out.vcf
             ch_sentieon_tbi = CALL_SNV_SENTIEON.out.tabix
             ch_sentieon_gvcf = CALL_SNV_SENTIEON.out.gvcf
-            ch_sentieon_gtbi = CALL_SNV_SENTIEON.out.gtbi
+            ch_sentieon_gtbi = CALL_SNV_SENTIEON.out.gvcf_tbi
             ch_versions    = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
         }
 
