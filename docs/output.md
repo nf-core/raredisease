@@ -319,14 +319,13 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 #### Expansion Hunter
 
-[Expansion Hunter](https://github.com/Illumina/ExpansionHunter) aims to estimate sizes of repeat sequences by performing a targeted search through alignments that span, flank, and are fully contained in each repeat.
+[Expansion Hunter](https://github.com/Illumina/ExpansionHunter) aims to estimate sizes of repeat sequences by performing a targeted search through alignments that span, flank, and are fully contained in each repeat. The files generated are ready to be used with [REViewer](https://github.com/Illumina/REViewer).
 
 <details markdown="1">
 <summary>Output files</summary>
 
 - `repeat_expansions/`
-  - `<sample_id>_repeat_expansion.vcf.gz`: file containing variant calls.
-  - `<sample_id>_repeat_expansion.vcf.gz.tbi`: index of the file containing variant calls.
+  - `<sample_id>_repeat_expansion.vcf`: file containing variant calls.
   - `<sample_id>_exphunter_sorted.bam`: A BAMlet containing alignments of reads that overlap or located in close proximity to each variant identified by ExpansionHunter
   - `<sample_id>_exphunter_sorted.bam.bai`: Index of the BAMlet file
 
