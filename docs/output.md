@@ -66,7 +66,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
         - [CADD](#cadd-1)
         - [Hmtnote](#hmtnote)
         - [VEP](#vep-2)
-    - [Rank variants and filtering](#rank-variants-and-filtering)
+    - [Filtering and ranking](#filtering-and-ranking)
+      - [Filter\_vep](#filter_vep)
       - [GENMOD](#genmod)
     - [Mobile element analysis](#mobile-element-analysis)
       - [Calling mobile elements](#calling-mobile-elements)
@@ -478,7 +479,7 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 <summary>Output files</summary>
 
 - `annotate_snv/mitochondria`
-  - `<case_id>_mitochondria_haplogrep.txt`: file containing haplogroup information.
+  - `<case_id>*haplogrep.txt`: file containing haplogroup information.
 
 </details>
 
@@ -504,8 +505,8 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 <summary>Output files</summary>
 
 - `annotate_snv/mitochondria`
-  - `<case_id>_mitochondria_vep_vcfanno_hmtnote.vcf.gz`: file containing mitochondrial annotations.
-  - `<case_id>_mitochondria_vep_vcfanno_hmtnote.vcf.gz.tbi`: index of the file containing mitochondrial annotations.
+  - `<case_id>_mitochondria_hmtnote_vep_vcfanno.vcf.gz`: file containing mitochondrial annotations.
+  - `<case_id>_mitochondria_hmtnote_vep_vcfanno.vcf.gz.tbi`: index of the file containing mitochondrial annotations.
 
 </details>
 
