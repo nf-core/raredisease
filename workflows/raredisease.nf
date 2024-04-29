@@ -303,7 +303,8 @@ workflow RAREDISEASE {
 
 
     // Generate pedigree file
-    ch_pedfile   = CREATE_PEDIGREE_FILE(ch_samples.toList())
+    ch_pedfile   = CREATE_PEDIGREE_FILE(ch_samples.toList()).out.ped
+    ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions())
 
     // Read and store paths in the vep_plugin_files file
     if (params.vep_plugin_files) {
