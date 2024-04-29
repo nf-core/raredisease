@@ -113,6 +113,7 @@ include { SMNCOPYNUMBERCALLER } from '../modules/nf-core/smncopynumbercaller/mai
 include { RENAME_ALIGN_FILES as RENAME_BAM_FOR_SMNCALLER } from '../modules/local/rename_align_files'
 include { RENAME_ALIGN_FILES as RENAME_BAI_FOR_SMNCALLER } from '../modules/local/rename_align_files'
 include { CREATE_HGNCIDS_FILE                            } from '../modules/local/create_hgncids_file'
+include { CREATE_PEDIGREE_FILE                           } from '../modules/local/create_pedigree_file'
 
 //
 // SUBWORKFLOWS
@@ -163,7 +164,6 @@ workflow RAREDISEASE {
     ch_multiqc_files = Channel.empty()
 
     ch_samples   = ch_samplesheet.map { meta, fastqs -> meta}
-    ch_pedfile   = ch_samples.toList().map { file(CustomFunctions.makePed(it, params.outdir)) }
     ch_case_info = ch_samples.toList().map { CustomFunctions.createCaseChannel(it) }
 
     // Initialize file channels for PREPARE_REFERENCES subworkflow
@@ -300,6 +300,10 @@ workflow RAREDISEASE {
     } else {
         ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
     }
+
+
+    // Generate pedigree file
+    ch_pedfile   = CREATE_PEDIGREE_FILE(ch_samples.toList())
 
     // Read and store paths in the vep_plugin_files file
     if (params.vep_plugin_files) {
