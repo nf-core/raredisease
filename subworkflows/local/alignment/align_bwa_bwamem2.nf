@@ -22,14 +22,15 @@ workflow ALIGN_BWA_BWAMEM2 {
 
     main:
         ch_versions = Channel.empty()
-
+        count = 0
         // Map, sort, and index
         if (params.aligner.equals("bwamem2")) {
             BWAMEM2_MEM ( ch_reads_input, ch_bwamem2_index, true )
             ch_align = BWAMEM2_MEM.out.bam
             ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions.first())
+            count = BWAMEM2_MEM.out.bam.ifEmpty(1)
         }
-        if (params.aligner.equals("bwa") || (params.aligner.equals("bwamem2") && !BWAMEM2_MEM.out.bam.exists())) {
+        if (params.aligner.equals("bwa") || count == 1) {
             BWA_MEM ( ch_reads_input, ch_bwa_index, true )
             ch_align = BWA_MEM.out.bam
             ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
