@@ -29,7 +29,7 @@ workflow ALIGN_BWA_BWAMEM2 {
             ch_align = BWAMEM2_MEM.out.bam
             ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions.first())
         }
-        else if (params.aligner.equals("bwa") || (params.aligner.equals("bwamem2") && !BWAMEM2_MEM.out.bam.exists())) {
+        if (params.aligner.equals("bwa") || (params.aligner.equals("bwamem2") && !BWAMEM2_MEM.out.bam.exists())) {
             BWA_MEM ( ch_reads_input, ch_bwa_index, true )
             ch_align = BWA_MEM.out.bam
             ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
