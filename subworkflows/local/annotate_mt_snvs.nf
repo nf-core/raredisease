@@ -42,14 +42,22 @@ workflow ANNOTATE_MT_SNVS {
         REPLACE_SPACES_IN_VCFINFO(HMTNOTE_ANNOTATE.out.vcf)
         ZIP_TABIX_HMTNOTE_MT(REPLACE_SPACES_IN_VCFINFO.out.vcf)
 
-        ch_hmtnote_vcf = ZIP_TABIX_HMTNOTE_MT.out.gz_tbi.map{meta, vcf, tbi -> return [meta, vcf]}
-        ch_hmtnote_tbi = ZIP_TABIX_HMTNOTE_MT.out.gz_tbi.map{meta, vcf, tbi -> return [meta, tbi]}
+        // Vcfanno
+        ZIP_TABIX_HMTNOTE_MT.out.gz_tbi
+            .map { meta, vcf, tbi -> return [meta + [prefix: meta.prefix + "_vcfanno"], vcf, tbi, []]}
+            .set { ch_in_vcfanno }
+
+        VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, [], ch_vcfanno_resources)
+        ZIP_TABIX_VCFANNO_MT(VCFANNO_MT.out.vcf)
+
+        ch_vcfanno_vcf = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, vcf, tbi -> return [meta, vcf]}
+        ch_vcfanno_tbi = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, vcf, tbi -> return [meta, tbi]}
 
         // Annotating with CADD
         if (params.cadd_resources != null) {
             ANNOTATE_CADD (
-                ch_hmtnote_vcf,
-                ch_hmtnote_tbi,
+                ch_vcfanno_vcf,
+                ch_vcfanno_tbi,
                 ch_cadd_header,
                 ch_cadd_resources
             )
@@ -60,7 +68,7 @@ workflow ANNOTATE_MT_SNVS {
         }
 
         // Pick input for vep
-        ch_hmtnote_vcf
+        ch_vcfanno_vcf
             .join(ch_cadd_vcf, remainder: true) // If CADD is not run then the third element in this channel will be `null`
             .branch { it  ->                    // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
                 merged: it[2].equals(null)
@@ -86,19 +94,7 @@ workflow ANNOTATE_MT_SNVS {
             ch_vep_extra_files
         )
 
-        // Running vcfanno
         TABIX_TABIX_VEP_MT(ENSEMBLVEP_MT.out.vcf)
-        ENSEMBLVEP_MT.out.vcf
-            .join(TABIX_TABIX_VEP_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
-            .map { meta, vcf, tbi -> return [meta + [prefix: meta.prefix + "_vcfanno"], vcf, tbi, []]}
-            .set { ch_in_vcfanno }
-
-        VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, [], ch_vcfanno_resources)
-        ZIP_TABIX_VCFANNO_MT(VCFANNO_MT.out.vcf)
-
-        // Prepare output
-        ch_vcf_out = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, vcf, tbi -> return [meta, vcf] }
-        ch_tbi_out = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, vcf, tbi -> return [meta, tbi] }
 
         // Running haplogrep2
         HAPLOGREP2_CLASSIFY_MT(ch_haplogrep_in, "vcf.gz")
@@ -114,8 +110,8 @@ workflow ANNOTATE_MT_SNVS {
 
     emit:
         haplog    = HAPLOGREP2_CLASSIFY_MT.out.txt // channel: [ val(meta), path(txt) ]
-        vcf_ann   = ch_vcf_out                     // channel: [ val(meta), path(vcf) ]
-        tbi       = ch_tbi_out                     // channel: [ val(meta), path(tbi) ]
+        vcf_ann   = ENSEMBLVEP_MT.out.vcf          // channel: [ val(meta), path(vcf) ]
+        tbi       = TABIX_TABIX_VEP_MT.out.tbi     // channel: [ val(meta), path(tbi) ]
         report    = ENSEMBLVEP_MT.out.report       // channel: [ path(html) ]
         versions  = ch_versions                    // channel: [ path(versions.yml) ]
 }

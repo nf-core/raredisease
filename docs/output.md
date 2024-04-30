@@ -67,7 +67,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
         - [Hmtnote](#hmtnote)
         - [VEP](#vep-2)
     - [Filtering and ranking](#filtering-and-ranking)
-      - [Filter\_vep](#filter_vep)
+      - [Filter_vep](#filter_vep)
       - [GENMOD](#genmod)
     - [Mobile element analysis](#mobile-element-analysis)
       - [Calling mobile elements](#calling-mobile-elements)
@@ -505,8 +505,8 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 <summary>Output files</summary>
 
 - `annotate_snv/mitochondria`
-  - `<case_id>_mitochondria_hmtnote_vep_vcfanno.vcf.gz`: file containing mitochondrial annotations.
-  - `<case_id>_mitochondria_hmtnote_vep_vcfanno.vcf.gz.tbi`: index of the file containing mitochondrial annotations.
+  - `<case_id>_mitochondria_hmtnote_vcfanno_<cadd_vep|vep>.vcf.gz`: file containing mitochondrial annotations.
+  - `<case_id>_mitochondria_hmtnote_vcfanno_<cadd_vep|vep>.vcf.gz.tbi`: index of the file containing mitochondrial annotations.
 
 </details>
 
