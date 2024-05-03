@@ -30,13 +30,13 @@ workflow ALIGN_BWA_BWAMEM2 {
             ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions.first())
             ch_align = BWAMEM2_MEM.out.bam
 
-            if  (ch_align == Channel.empty) {
+            if  (ch_align == Channel.empty()) {
                 BWA_MEM ( ch_reads_input, ch_bwa_index, true )
                 ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
                 ch_align = BWA_MEM.out.bam
             }
         }
-        else if (params.aligner.equals("bwamem2"){
+        else if (params.aligner.equals("bwa")){
                 BWA_MEM ( ch_reads_input, ch_bwa_index, true )
                 ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
                 ch_align = BWA_MEM.out.bam
