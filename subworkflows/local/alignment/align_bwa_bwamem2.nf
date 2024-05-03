@@ -22,7 +22,6 @@ workflow ALIGN_BWA_BWAMEM2 {
 
     main:
         ch_versions = Channel.empty()
-        ch_align_tmp = Channel.empty()
         // Map, sort, and index
         if (params.aligner.equals("bwamem2")) {
             BWAMEM2_MEM ( ch_reads_input, ch_bwamem2_index, true )
