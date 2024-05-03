@@ -22,26 +22,21 @@ workflow ALIGN_BWA_BWAMEM2 {
 
     main:
         ch_versions = Channel.empty()
-        ch_align = Channel.empty()
 
         // Map, sort, and index
         if (params.aligner.equals("bwamem2")) {
             BWAMEM2_MEM ( ch_reads_input, ch_bwamem2_index, true )
             ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions.first())
-            ch_align = BWAMEM2_MEM.out.bam
 
-            if  (ch_align == Channel.empty()) {
+            if  (!file.exists(BWAMEM2_MEM.out.bam)) {
                 BWA_MEM ( ch_reads_input, ch_bwa_index, true )
                 ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
                 ch_align = BWA_MEM.out.bam
+            }
+            else {
+                ch_align = BWAMEM2_MEM.out.bam
             }
         }
-        else if (params.aligner.equals("bwa")){
-                BWA_MEM ( ch_reads_input, ch_bwa_index, true )
-                ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
-                ch_align = BWA_MEM.out.bam
-            }
-
 
         SAMTOOLS_INDEX_ALIGN ( ch_align )
 
