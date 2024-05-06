@@ -3,6 +3,7 @@
 //
 
 include { BWA_MEM                                  } from '../../../modules/nf-core/bwa/mem/main'
+include { BWA_MEM as BWAMEM_FALLBACK               } from '../../../modules/nf-core/bwa/mem/main'
 include { BWAMEM2_MEM                              } from '../../../modules/nf-core/bwamem2/mem/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_ALIGN   } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MARKDUP } from '../../../modules/nf-core/samtools/index/main'
@@ -22,20 +23,33 @@ workflow ALIGN_BWA_BWAMEM2 {
 
     main:
         ch_versions = Channel.empty()
-        ch_align_tmp = Channel.empty()
+
         // Map, sort, and index
-        if (params.aligner.equals("bwamem2")) {
+        if (params.aligner.equals("bwa")) {
+            BWA_MEM ( ch_reads_input, ch_bwa_index, true )
+            ch_align = BWA_MEM.out.bam
+            ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
+        } else {
             BWAMEM2_MEM ( ch_reads_input, ch_bwamem2_index, true )
+            ch_align    = BWAMEM2_MEM.out.bam
             ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions.first())
-            ch_align_tmp = BWAMEM2_MEM.out.bam
-            if  (!ch_align_tmp) {
-                BWA_MEM ( ch_reads_input, ch_bwa_index, true )
-                ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
-                ch_align = BWA_MEM.out.bam
+
+            if (params.align_fallback.equals(true)) {
+                ch_reads_input
+                    .join(BWAMEM2_MEM.out.bam, remainder: true)
+                    .branch { it ->
+                        ERROR: it[2].equals(null)
+                            return [it[0], it[1]] // return reads
+                        SUCCESS: !it[2].equals(null)
+                            return [it[0], it[2]]  // return bam
+                    }
+                    .set { ch_fallback }
+
+                BWAMEM_FALLBACK ( ch_fallback.ERROR, ch_bwa_index, true )
+                ch_align = ch_fallback.SUCCESS.mix(BWAMEM_FALLBACK.out.bam)
+                ch_versions = ch_versions.mix(BWAMEM_FALLBACK.out.versions.first())
             }
-            else {
-                ch_align = BWAMEM2_MEM.out.bam
-            }
+
         }
 
         SAMTOOLS_INDEX_ALIGN ( ch_align )
