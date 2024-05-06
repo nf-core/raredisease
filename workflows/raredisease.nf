@@ -112,12 +112,15 @@ include { SMNCOPYNUMBERCALLER } from '../modules/nf-core/smncopynumbercaller/mai
 
 include { RENAME_ALIGN_FILES as RENAME_BAM_FOR_SMNCALLER } from '../modules/local/rename_align_files'
 include { RENAME_ALIGN_FILES as RENAME_BAI_FOR_SMNCALLER } from '../modules/local/rename_align_files'
+include { CREATE_HGNCIDS_FILE                            } from '../modules/local/create_hgncids_file'
+include { CREATE_PEDIGREE_FILE                           } from '../modules/local/create_pedigree_file'
 
 //
 // SUBWORKFLOWS
 //
 
 include { ALIGN                                              } from '../subworkflows/local/align'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_ME                 } from '../subworkflows/local/annotate_consequence_pli.nf'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_MT                 } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV                } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV                 } from '../subworkflows/local/annotate_consequence_pli'
@@ -129,6 +132,7 @@ include { CALL_MOBILE_ELEMENTS                               } from '../subworkf
 include { CALL_REPEAT_EXPANSIONS                             } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                                           } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS                           } from '../subworkflows/local/call_structural_variants'
+include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/local/generate_clinical_set.nf'
 include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/local/generate_clinical_set'
 include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/local/generate_clinical_set'
 include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/local/generate_clinical_set'
@@ -160,7 +164,6 @@ workflow RAREDISEASE {
     ch_multiqc_files = Channel.empty()
 
     ch_samples   = ch_samplesheet.map { meta, fastqs -> meta}
-    ch_pedfile   = ch_samples.toList().map { file(CustomFunctions.makePed(it, params.outdir)) }
     ch_case_info = ch_samples.toList().map { CustomFunctions.createCaseChannel(it) }
 
     // Initialize file channels for PREPARE_REFERENCES subworkflow
@@ -285,9 +288,9 @@ workflow RAREDISEASE {
                                                                             : ( params.vep_cache    ? Channel.fromPath(params.vep_cache).collect() : Channel.value([]) )
     ch_vep_extra_files_unsplit  = params.vep_plugin_files                   ? Channel.fromPath(params.vep_plugin_files).collect()
                                                                             : Channel.value([])
-    ch_vep_filters_std_fmt      = params.vep_filters                        ? Channel.fromPath(params.vep_filters).splitCsv().collect()
+    ch_vep_filters_std_fmt      = params.vep_filters                        ? Channel.fromPath(params.vep_filters).map { it -> [[id:'standard'],it]}.collect()
                                                                             : Channel.empty()
-    ch_vep_filters_scout_fmt    = params.vep_filters_scout_fmt              ? Channel.fromPath(params.vep_filters_scout_fmt).collect()
+    ch_vep_filters_scout_fmt    = params.vep_filters_scout_fmt              ? Channel.fromPath(params.vep_filters_scout_fmt).map { it -> [[id:'scout'],it]}.collect()
                                                                             : Channel.empty()
     ch_versions                 = ch_versions.mix(ch_references.versions)
 
@@ -297,6 +300,11 @@ workflow RAREDISEASE {
     } else {
         ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
     }
+
+
+    // Generate pedigree file
+    ch_pedfile   = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
+    ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
 
     // Read and store paths in the vep_plugin_files file
     if (params.vep_plugin_files) {
@@ -315,9 +323,11 @@ workflow RAREDISEASE {
 
     // Read and store hgnc ids in a channel
     ch_vep_filters_scout_fmt
-        .map { it -> CustomFunctions.parseHgncIds(it.text) }
         .mix (ch_vep_filters_std_fmt)
-        .toList()
+        .set {ch_vep_filters}
+
+    CREATE_HGNCIDS_FILE(ch_vep_filters)
+        .txt
         .set {ch_hgnc_ids}
 
     // Input QC
@@ -664,13 +674,24 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_genome_dictionary,
             ch_vep_cache,
-            ch_variant_consequences_sv,
-            ch_hgnc_ids,
             params.genome,
             params.vep_cache_version,
             ch_vep_extra_files
         )
         ch_versions = ch_versions.mix(ANNOTATE_MOBILE_ELEMENTS.out.versions)
+
+        GENERATE_CLINICAL_SET_ME(
+            ANNOTATE_MOBILE_ELEMENTS.out.vcf,
+            ch_hgnc_ids
+        )
+        ch_versions = ch_versions.mix( GENERATE_CLINICAL_SET_ME.out.versions )
+
+        ANN_CSQ_PLI_ME(
+            GENERATE_CLINICAL_SET_ME.out.vcf,
+            ch_variant_consequences_sv
+        )
+        ch_versions = ch_versions.mix( ANN_CSQ_PLI_ME.out.versions )
+
     }
 
     //

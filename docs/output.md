@@ -66,7 +66,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
         - [CADD](#cadd-1)
         - [Hmtnote](#hmtnote)
         - [VEP](#vep-2)
-    - [Rank variants and filtering](#rank-variants-and-filtering)
+    - [Filtering and ranking](#filtering-and-ranking)
+      - [Filter_vep](#filter_vep)
       - [GENMOD](#genmod)
     - [Mobile element analysis](#mobile-element-analysis)
       - [Calling mobile elements](#calling-mobile-elements)
@@ -319,14 +320,13 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 #### Expansion Hunter
 
-[Expansion Hunter](https://github.com/Illumina/ExpansionHunter) aims to estimate sizes of repeat sequences by performing a targeted search through alignments that span, flank, and are fully contained in each repeat.
+[Expansion Hunter](https://github.com/Illumina/ExpansionHunter) aims to estimate sizes of repeat sequences by performing a targeted search through alignments that span, flank, and are fully contained in each repeat. The files generated are ready to be used with [REViewer](https://github.com/Illumina/REViewer).
 
 <details markdown="1">
 <summary>Output files</summary>
 
 - `repeat_expansions/`
-  - `<sample_id>_repeat_expansion.vcf.gz`: file containing variant calls.
-  - `<sample_id>_repeat_expansion.vcf.gz.tbi`: index of the file containing variant calls.
+  - `<sample_id>_repeat_expansion.vcf`: file containing variant calls.
   - `<sample_id>_exphunter_sorted.bam`: A BAMlet containing alignments of reads that overlap or located in close proximity to each variant identified by ExpansionHunter
   - `<sample_id>_exphunter_sorted.bam.bai`: Index of the BAMlet file
 
@@ -479,7 +479,7 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 <summary>Output files</summary>
 
 - `annotate_snv/mitochondria`
-  - `<case_id>_mitochondria_haplogrep.txt`: file containing haplogroup information.
+  - `<case_id>*haplogrep.txt`: file containing haplogroup information.
 
 </details>
 
@@ -505,8 +505,8 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 <summary>Output files</summary>
 
 - `annotate_snv/mitochondria`
-  - `<case_id>_mitochondria_vep_vcfanno_hmtnote.vcf.gz`: file containing mitochondrial annotations.
-  - `<case_id>_mitochondria_vep_vcfanno_hmtnote.vcf.gz.tbi`: index of the file containing mitochondrial annotations.
+  - `<case_id>_mitochondria_hmtnote_vcfanno_<cadd_vep|vep>.vcf.gz`: file containing mitochondrial annotations.
+  - `<case_id>_mitochondria_hmtnote_vcfanno_<cadd_vep|vep>.vcf.gz.tbi`: index of the file containing mitochondrial annotations.
 
 </details>
 

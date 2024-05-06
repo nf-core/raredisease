@@ -22,6 +22,12 @@ Parameter has been added if just the new parameter information is present.
 Parameter has been removed if new parameter information isn't present.
 :::
 
+## 2.0.1 - Asterix (Patch) [2024-03-25]
+
+### `Fixed`
+
+- Germlinecnvcaller subworkflow uses the output channel `casecalls` from germlinecnvcaller module instead of `calls` which was invalid. [#535](https://github.com/nf-core/raredisease/issues/535)
+
 ## 2.0.0 - Asterix [2024-03-18]
 
 ### `Added`
