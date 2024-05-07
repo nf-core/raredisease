@@ -459,17 +459,17 @@
             "fa_icon": "fas fa-user-cog",
             "description": "Options used to steer the direction of the pipeline.",
             "properties": {
-                "bwa_as_fallback": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to use bwa as a fallback aligner in case bwamem2 throws an error.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "analysis_type": {
                     "type": "string",
                     "default": "wgs",
                     "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-align-center",
                     "enum": ["wgs", "wes", "mito"]
+                },
+                "bwa_as_fallback": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to use bwa as a fallback aligner in case bwamem2 throws an error.",
+                    "fa_icon": "fas fa-toggle-on"
                 },
                 "platform": {
                     "type": "string",
