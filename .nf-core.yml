@@ -8,3 +8,4 @@ lint:
     - docs/images/nf-core-raredisease_logo_light.png
     - assets/nf-core-raredisease_logo_light.png
 repository_type: pipeline
+nf_core_version: "2.14.1"
