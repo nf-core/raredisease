@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Include multiallelic indel sites in CADD scoring jobs [#545](https://github.com/nf-core/raredisease/pull/545)
+
 ### Parameters
 
 | Old parameter | New parameter |
