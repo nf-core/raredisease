@@ -1,10 +1,12 @@
 lint:
-  modules_config: False
+  files_exist:
+    - conf/modules.config
   files_unchanged:
     - .github/CONTRIBUTING.md
     - .github/PULL_REQUEST_TEMPLATE.md
     - docs/images/nf-core-raredisease_logo_dark.png
     - docs/images/nf-core-raredisease_logo_light.png
     - assets/nf-core-raredisease_logo_light.png
+  modules_config: False
 repository_type: pipeline
 nf_core_version: "2.14.1"
