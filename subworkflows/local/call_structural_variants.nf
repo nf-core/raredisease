@@ -57,7 +57,10 @@ workflow CALL_STRUCTURAL_VARIANTS {
             .collect{it[1]}
             .set { cnvnator_vcf }
 
-        CALL_SV_MT (ch_mt_bam_bai, ch_genome_fasta)
+        if (params.analysis_type.equals("wgs") || params.run_mt_for_wes) {
+            CALL_SV_MT (ch_mt_bam_bai, ch_genome_fasta)
+            ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
+        }
 
         //merge
         if (params.skip_germlinecnvcaller) {
@@ -85,7 +88,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
         ch_versions = ch_versions.mix(CALL_SV_CNVNATOR.out.versions)
         ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
-        ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
         ch_versions = ch_versions.mix(CALL_SV_TIDDIT.out.versions)
         ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
         ch_versions = ch_versions.mix(SVDB_MERGE.out.versions)

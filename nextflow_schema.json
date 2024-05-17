@@ -479,6 +479,11 @@
                     "fa_icon": "fas fa-align-center",
                     "enum": ["xy", "hetx", "sry"]
                 },
+                "run_mt_for_wes": {
+                    "type": "boolean",
+                    "description": "Specifies whether to run mitochondrial analysis for wes samples",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "run_rtgvcfeval": {
                     "type": "boolean",
                     "description": "Specifies whether to run rtgtools' vcfeval",

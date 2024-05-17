@@ -366,7 +366,7 @@ workflow RAREDISEASE {
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
 
-    if (!params.skip_mt_subsample) {
+    if (!params.skip_mt_subsample && (params.analysis_type.equals("wgs") || params.run_mt_for_wes)) {
         SUBSAMPLE_MT(
             ch_mapped.mt_bam_bai,
             params.mt_subsample_rd,
@@ -396,14 +396,16 @@ workflow RAREDISEASE {
     //
     // EXPANSIONHUNTER AND STRANGER
     //
-    CALL_REPEAT_EXPANSIONS (
-        ch_mapped.genome_bam_bai,
-        ch_variant_catalog,
-        ch_case_info,
-        ch_genome_fasta,
-        ch_genome_fai
-    )
-    ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
+    if (params.analysis_type.equals("wgs")) {
+        CALL_REPEAT_EXPANSIONS (
+            ch_mapped.genome_bam_bai,
+            ch_variant_catalog,
+            ch_case_info,
+            ch_genome_fasta,
+            ch_genome_fai
+        )
+        ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
+    }
 
     //
     // SNV CALLING
@@ -557,7 +559,7 @@ workflow RAREDISEASE {
     //
     // ANNOTATE MT SNVs
     //
-    if (!params.skip_mt_annotation) {
+    if (!params.skip_mt_annotation && (params.run_mt_for_wes || params.analysis_type.equals("wgs"))) {
 
         ANNOTATE_MT_SNVS (
             CALL_SNV.out.mt_vcf,
