@@ -7,4 +7,6 @@ lint:
     - docs/images/nf-core-raredisease_logo_dark.png
     - docs/images/nf-core-raredisease_logo_light.png
     - assets/nf-core-raredisease_logo_light.png
+  modules_config: False
 repository_type: pipeline
+nf_core_version: "2.14.1"
