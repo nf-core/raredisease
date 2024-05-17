@@ -9,7 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Refactored config files [#538](https://github.com/nf-core/raredisease/pull/538)
+- Refactored mobile element annotation subworkflow files [#538](https://github.com/nf-core/raredisease/pull/538)
+
 ### `Fixed`
+
+- Include multiallelic indel sites in CADD scoring jobs [#545](https://github.com/nf-core/raredisease/pull/545)
+- Fixed issues with samtools merge not being run on samples sequenced over multiple lanes [#538](https://github.com/nf-core/raredisease/pull/538)
 
 ### Parameters
 
