@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- A new parameter `run_mt_for_wes` to turn on mitochondrial analysis for WES cases [#552](https://github.com/nf-core/raredisease/pull/552)
+
 ### `Changed`
 
 - Refactored config files [#538](https://github.com/nf-core/raredisease/pull/538)
