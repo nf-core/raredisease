@@ -9,9 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Refactored config files [#538](https://github.com/nf-core/raredisease/pull/538)
+- Refactored mobile element annotation subworkflow files [#538](https://github.com/nf-core/raredisease/pull/538)
+
 ### `Fixed`
 
 - Include multiallelic indel sites in CADD scoring jobs [#545](https://github.com/nf-core/raredisease/pull/545)
+- Fixed issues with samtools merge not being run on samples sequenced over multiple lanes [#538](https://github.com/nf-core/raredisease/pull/538)
 
 ### Parameters
 
@@ -23,6 +27,12 @@ Parameter has been updated if both old and new parameter information is present.
 Parameter has been added if just the new parameter information is present.
 Parameter has been removed if new parameter information isn't present.
 :::
+
+## 2.0.1 - Asterix (Patch) [2024-03-25]
+
+### `Fixed`
+
+- Germlinecnvcaller subworkflow uses the output channel `casecalls` from germlinecnvcaller module instead of `calls` which was invalid. [#535](https://github.com/nf-core/raredisease/issues/535)
 
 ## 2.0.0 - Asterix [2024-03-18]
 
