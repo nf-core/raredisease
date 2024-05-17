@@ -34,7 +34,7 @@ workflow ALIGN_BWA_BWAMEM2 {
             ch_align    = BWAMEM2_MEM.out.bam
             ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions.first())
 
-            if (params.bwa_as_fallback.equals(true)) {
+            if (params.bwa_as_fallback) {
                 ch_reads_input
                     .join(BWAMEM2_MEM.out.bam, remainder: true)
                     .branch { it ->
