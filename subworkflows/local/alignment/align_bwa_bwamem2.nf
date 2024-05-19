@@ -4,6 +4,7 @@
 
 include { BWA_MEM                                  } from '../../../modules/nf-core/bwa/mem/main'
 include { BWAMEM2_MEM                              } from '../../../modules/nf-core/bwamem2/mem/main'
+include { BWAMEME_MEM                              } from '../../../modules/nf-core/bwameme/mem/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_ALIGN   } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MARKDUP } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_STATS                           } from '../../../modules/nf-core/samtools/stats/main'
@@ -16,6 +17,7 @@ workflow ALIGN_BWA_BWAMEM2 {
         ch_reads_input   // channel: [mandatory] [ val(meta), path(reads_input) ]
         ch_bwa_index     // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
         ch_bwamem2_index // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
+        ch_bwameme_index // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
         ch_genome_fasta  // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai    // channel: [mandatory] [ val(meta), path(fai) ]
         val_platform     // string:  [mandatory] default: illumina
@@ -28,10 +30,14 @@ workflow ALIGN_BWA_BWAMEM2 {
             BWA_MEM ( ch_reads_input, ch_bwa_index, true )
             ch_align = BWA_MEM.out.bam
             ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
-        } else {
+        } else if (params.aligner.equals("bwamem2")) {
             BWAMEM2_MEM ( ch_reads_input, ch_bwamem2_index, true )
             ch_align = BWAMEM2_MEM.out.bam
             ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions.first())
+        } else {
+            BWAMEME_MEM ( ch_reads_input, ch_bwameme_index, ch_genome_fasta, true )
+            ch_align = BWAMEME_MEM.out.bam
+            ch_versions = ch_versions.mix(BWAMEME_MEM.out.versions.first())
         }
 
         SAMTOOLS_INDEX_ALIGN ( ch_align )

@@ -17,9 +17,11 @@ workflow ALIGN {
         ch_genome_fai            // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_bwaindex       // channel: [mandatory] [ val(meta), path(index) ]
         ch_genome_bwamem2index   // channel: [mandatory] [ val(meta), path(index) ]
+        ch_genome_bwamemeindex   // channel: [mandatory] [ val(meta), path(index) ]
         ch_genome_dictionary     // channel: [mandatory] [ val(meta), path(dict) ]
         ch_mtshift_bwaindex      // channel: [mandatory] [ val(meta), path(index) ]
         ch_mtshift_bwamem2index  // channel: [mandatory] [ val(meta), path(index) ]
+        ch_mtshift_bwamemeindex  // channel: [mandatory] [ val(meta), path(index) ]
         ch_mtshift_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_mtshift_dictionary    // channel: [mandatory] [ val(meta), path(dict) ]
         ch_mtshift_fai           // channel: [mandatory] [ val(meta), path(fai) ]
@@ -40,11 +42,12 @@ workflow ALIGN {
             ch_fastp_json = FASTP.out.json
         }
 
-        if (params.aligner.equals("bwamem2") || params.aligner.equals("bwa")) {
-            ALIGN_BWA_BWAMEM2 (             // Triggered when params.aligner is set as bwamem2 or bwa
+        if (params.aligner.equals("bwamem2") || params.aligner.equals("bwa") || params.aligner.equals("bwameme")) {
+            ALIGN_BWA_BWAMEM2 (             // Triggered when params.aligner is set as bwamem2 or bwa or bwameme
                 ch_reads,
                 ch_genome_bwaindex,
                 ch_genome_bwamem2index,
+                ch_genome_bwamemeindex,
                 ch_genome_fasta,
                 ch_genome_fai,
                 val_platform
@@ -82,6 +85,7 @@ workflow ALIGN {
             CONVERT_MT_BAM_TO_FASTQ.out.bam,
             ch_genome_bwaindex,
             ch_genome_bwamem2index,
+            ch_genome_bwamemeindex,
             ch_genome_fasta,
             ch_genome_dictionary,
             ch_genome_fai
@@ -92,6 +96,7 @@ workflow ALIGN {
             CONVERT_MT_BAM_TO_FASTQ.out.bam,
             ch_mtshift_bwaindex,
             ch_mtshift_bwamem2index,
+            ch_mtshift_bwamemeindex,
             ch_mtshift_fasta,
             ch_mtshift_dictionary,
             ch_mtshift_fai

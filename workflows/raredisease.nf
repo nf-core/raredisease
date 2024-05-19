@@ -212,6 +212,8 @@ workflow RAREDISEASE {
                                                                             : ch_references.genome_bwa_index
     ch_genome_bwamem2index      = params.bwamem2                            ? Channel.fromPath(params.bwamem2).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                             : ch_references.genome_bwamem2_index
+    ch_genome_bwamemeindex      = params.bwameme                            ? Channel.fromPath(params.bwameme).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                            : ch_references.genome_bwameme_index
     ch_genome_chrsizes          = ch_references.genome_chrom_sizes
     ch_genome_fai               = ch_references.genome_fai
     ch_genome_dictionary        = params.sequence_dictionary                ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
@@ -242,6 +244,7 @@ workflow RAREDISEASE {
     ch_mtshift_backchain        = ch_references.mtshift_backchain
     ch_mtshift_bwaindex         = ch_references.mtshift_bwa_index
     ch_mtshift_bwamem2index     = ch_references.mtshift_bwamem2_index
+    ch_mtshift_bwamemeindex     = ch_references.mtshift_bwameme_index
     ch_mtshift_dictionary       = ch_references.mtshift_dict
     ch_mtshift_fai              = ch_references.mtshift_fai
     ch_mtshift_fasta            = ch_references.mtshift_fasta
@@ -355,9 +358,11 @@ workflow RAREDISEASE {
         ch_genome_fai,
         ch_genome_bwaindex,
         ch_genome_bwamem2index,
+        ch_genome_bwamemeindex,
         ch_genome_dictionary,
         ch_mtshift_bwaindex,
         ch_mtshift_bwamem2index,
+        ch_mtshift_bwamemeindex,
         ch_mtshift_fasta,
         ch_mtshift_dictionary,
         ch_mtshift_fai,
