@@ -75,6 +75,16 @@
                         "git_sha": "74363e1acc38eaedeede8d429477397c1a6f9e18",
                         "installed_by": ["modules"]
                     },
+                    "bwameme/index": {
+                        "branch": "master",
+                        "git_sha": "79480293280ff4f10f30bdea1ddd903f223f8489",
+                        "installed_by": ["modules"]
+                    },
+                    "bwameme/mem": {
+                        "branch": "master",
+                        "git_sha": "79480293280ff4f10f30bdea1ddd903f223f8489",
+                        "installed_by": ["modules"]
+                    },
                     "cadd": {
                         "branch": "master",
                         "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
