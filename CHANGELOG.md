@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- A new aligner, bwameme [#553](https://github.com/nf-core/raredisease/pull/553)
+
 ### `Changed`
 
 - Refactored config files [#538](https://github.com/nf-core/raredisease/pull/538)
@@ -21,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Old parameter | New parameter |
 | ------------- | ------------- |
+|               | bwameme       |
 
 :::note
 Parameter has been updated if both old and new parameter information is present.
