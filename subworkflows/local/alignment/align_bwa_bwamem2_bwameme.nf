@@ -13,7 +13,7 @@ include { SAMTOOLS_MERGE                           } from '../../../modules/nf-c
 include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-core/picard/markduplicates/main'
 
 
-workflow ALIGN_BWA_BWAMEM2 {
+workflow ALIGN_BWA_BWAMEM2_BWAMEME {
     take:
         ch_reads_input   // channel: [mandatory] [ val(meta), path(reads_input) ]
         ch_bwa_index     // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
