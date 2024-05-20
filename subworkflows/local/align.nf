@@ -28,12 +28,18 @@ workflow ALIGN {
         val_platform             // string:  [mandatory] illumina or a different technology
 
     main:
-        ch_versions       = Channel.empty()
-        ch_fastp_json     = Channel.empty()
-        ch_bwamem2_bam    = Channel.empty()
-        ch_sentieon_bam   = Channel.empty()
-        ch_bwamem2_bai    = Channel.empty()
-        ch_sentieon_bai   = Channel.empty()
+        ch_bwamem2_bam        = Channel.empty()
+        ch_bwamem2_bai        = Channel.empty()
+        ch_fastp_json         = Channel.empty()
+        ch_mt_bam_bai         = Channel.empty()
+        ch_mt_marked_bam      = Channel.empty()
+        ch_mt_marked_bai      = Channel.empty()
+        ch_mtshift_bam_bai    = Channel.empty()
+        ch_mtshift_marked_bam = Channel.empty()
+        ch_mtshift_marked_bai = Channel.empty()
+        ch_sentieon_bam       = Channel.empty()
+        ch_sentieon_bai       = Channel.empty()
+        ch_versions           = Channel.empty()
 
         if (!params.skip_fastp) {
             FASTP (ch_reads, [], false, false)
@@ -73,50 +79,52 @@ workflow ALIGN {
         ch_genome_bam_bai    = ch_genome_marked_bam.join(ch_genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
 
         // PREPARING READS FOR MT ALIGNMENT
-        CONVERT_MT_BAM_TO_FASTQ (
-            ch_genome_bam_bai,
-            ch_genome_fasta,
-            ch_genome_fai,
-            ch_genome_dictionary
-        )
 
-        ALIGN_MT (
-            CONVERT_MT_BAM_TO_FASTQ.out.fastq,
-            CONVERT_MT_BAM_TO_FASTQ.out.bam,
-            ch_genome_bwaindex,
-            ch_genome_bwamem2index,
-            ch_genome_bwamemeindex,
-            ch_genome_fasta,
-            ch_genome_dictionary,
-            ch_genome_fai
-        )
+        if (params.analysis_type.equals("wgs") || params.run_mt_for_wes) {
+            CONVERT_MT_BAM_TO_FASTQ (
+                ch_genome_bam_bai,
+                ch_genome_fasta,
+                ch_genome_fai,
+                ch_genome_dictionary
+            )
 
-        ALIGN_MT_SHIFT (
-            CONVERT_MT_BAM_TO_FASTQ.out.fastq,
-            CONVERT_MT_BAM_TO_FASTQ.out.bam,
-            ch_mtshift_bwaindex,
-            ch_mtshift_bwamem2index,
-            ch_mtshift_bwamemeindex,
-            ch_mtshift_fasta,
-            ch_mtshift_dictionary,
-            ch_mtshift_fai
-        )
+            ALIGN_MT (
+                CONVERT_MT_BAM_TO_FASTQ.out.fastq,
+                CONVERT_MT_BAM_TO_FASTQ.out.bam,
+                ch_genome_bwaindex,
+                ch_genome_bwamem2index,
+                ch_genome_bwamemeindex,
+                ch_genome_fasta,
+                ch_genome_dictionary,
+                ch_genome_fai
+            )
 
-        ch_mt_marked_bam = ALIGN_MT.out.marked_bam
-        ch_mt_marked_bai = ALIGN_MT.out.marked_bai
-        ch_mt_bam_bai    = ch_mt_marked_bam.join(ch_mt_marked_bai, failOnMismatch:true, failOnDuplicate:true)
+            ALIGN_MT_SHIFT (
+                CONVERT_MT_BAM_TO_FASTQ.out.fastq,
+                CONVERT_MT_BAM_TO_FASTQ.out.bam,
+                ch_mtshift_bwaindex,
+                ch_mtshift_bwamem2index,
+                ch_mtshift_bwamemeindex,
+                ch_mtshift_fasta,
+                ch_mtshift_dictionary,
+                ch_mtshift_fai
+            )
 
-        ch_mtshift_marked_bam = ALIGN_MT_SHIFT.out.marked_bam
-        ch_mtshift_marked_bai = ALIGN_MT_SHIFT.out.marked_bai
-        ch_mtshift_bam_bai    = ch_mtshift_marked_bam.join(ch_mtshift_marked_bai, failOnMismatch:true, failOnDuplicate:true)
+            ch_mt_marked_bam      = ALIGN_MT.out.marked_bam
+            ch_mt_marked_bai      = ALIGN_MT.out.marked_bai
+            ch_mt_bam_bai         = ch_mt_marked_bam.join(ch_mt_marked_bai, failOnMismatch:true, failOnDuplicate:true)
+            ch_mtshift_marked_bam = ALIGN_MT_SHIFT.out.marked_bam
+            ch_mtshift_marked_bai = ALIGN_MT_SHIFT.out.marked_bai
+            ch_mtshift_bam_bai    = ch_mtshift_marked_bam.join(ch_mtshift_marked_bai, failOnMismatch:true, failOnDuplicate:true)
+            ch_versions           = ch_versions.mix(ALIGN_MT.out.versions,
+                                        ALIGN_MT_SHIFT.out.versions,
+                                        CONVERT_MT_BAM_TO_FASTQ.out.versions)
+        }
 
         if (params.save_mapped_as_cram) {
             SAMTOOLS_VIEW( ch_genome_bam_bai, ch_genome_fasta, [] )
             ch_versions   = ch_versions.mix(SAMTOOLS_VIEW.out.versions)
         }
-        ch_versions   = ch_versions.mix(ALIGN_MT.out.versions,
-                                        ALIGN_MT_SHIFT.out.versions,
-                                        CONVERT_MT_BAM_TO_FASTQ.out.versions)
 
     emit:
         fastp_json         = ch_fastp_json         // channel: [ val(meta), path(json) ]

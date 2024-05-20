@@ -473,6 +473,12 @@
                     "fa_icon": "fas fa-align-center",
                     "enum": ["wgs", "wes", "mito"]
                 },
+                "bwa_as_fallback": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to use bwa as a fallback aligner in case bwamem2 throws an error.",
+                    "help_text": "errorStrategy needs to be set to ignore for the bwamem2 process for the fallback to work. Turned off by default.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "platform": {
                     "type": "string",
                     "default": "illumina",
@@ -486,6 +492,11 @@
                     "description": "Method selection for ngs-bits samplegender",
                     "fa_icon": "fas fa-align-center",
                     "enum": ["xy", "hetx", "sry"]
+                },
+                "run_mt_for_wes": {
+                    "type": "boolean",
+                    "description": "Specifies whether to run mitochondrial analysis for wes samples",
+                    "fa_icon": "fas fa-toggle-on"
                 },
                 "run_rtgvcfeval": {
                     "type": "boolean",

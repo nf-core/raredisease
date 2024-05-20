@@ -8,9 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - A new aligner, bwameme [#553](https://github.com/nf-core/raredisease/pull/553)
+- A new parameter `run_mt_for_wes` to turn on mitochondrial analysis for targeted analysis [#552](https://github.com/nf-core/raredisease/pull/552)
+- A new parameter `bwa_as_fallback` to switch aligner to bwa in case bwamem2 fails [#551](https://github.com/nf-core/raredisease/pull/551)
 
 ### `Changed`
 
+- Changed valid values for sex according to the PED file format [#550](https://github.com/nf-core/raredisease/pull/550)
 - Refactored config files [#538](https://github.com/nf-core/raredisease/pull/538)
 - Refactored mobile element annotation subworkflow files [#538](https://github.com/nf-core/raredisease/pull/538)
 
@@ -21,9 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter | New parameter |
-| ------------- | ------------- |
-|               | bwameme       |
+| Old parameter | New parameter   |
+| ------------- | --------------- |
+|               | bwameme         |
+|               | bwa_as_fallback |
+|               | run_mt_for_wes  |
 
 :::note
 Parameter has been updated if both old and new parameter information is present.

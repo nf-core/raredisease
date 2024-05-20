@@ -25,30 +25,25 @@ workflow ALIGN_MT {
 
     main:
         ch_versions     = Channel.empty()
-        ch_bwa_bam      = Channel.empty()
-        ch_bwamem2_bam  = Channel.empty()
-        ch_sentieon_bam = Channel.empty()
-        ch_bwameme_bam  = Channel.empty()
 
         if (params.aligner.equals("bwamem2")) {
             BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, true)
-            ch_bwamem2_bam = BWAMEM2_MEM_MT.out.bam
+            ch_align       = BWAMEM2_MEM_MT.out.bam
             ch_versions    = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
         } else if (params.aligner.equals("sentieon")) {
             SENTIEON_BWAMEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, ch_fai )
-            ch_sentieon_bam = SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, bai -> [meta, bam] }
-            ch_versions     = ch_versions.mix(SENTIEON_BWAMEM_MT.out.versions.first())
+            ch_align       = SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, bai -> [meta, bam] }
+            ch_versions    = ch_versions.mix(SENTIEON_BWAMEM_MT.out.versions.first())
         } else if (params.aligner.equals("bwa")) {
             BWA_MEM_MT ( ch_fastq, ch_bwaindex, true )
-            ch_bwa_bam      = BWA_MEM_MT.out.bam
-            ch_versions     = ch_versions.mix(BWA_MEM_MT.out.versions.first())
+            ch_align       = BWA_MEM_MT.out.bam
+            ch_versions    = ch_versions.mix(BWA_MEM_MT.out.versions.first())
         } else if (params.aligner.equals("bwameme")) {
             BWAMEME_MEM_MT (ch_fastq, ch_bwamemeindex, ch_fasta, true)
-            ch_bwameme_bam  = BWAMEME_MEM_MT.out.bam
-            ch_versions     = ch_versions.mix(BWAMEME_MEM_MT.out.versions.first())
+            ch_align       = BWAMEME_MEM_MT.out.bam
+            ch_versions    = ch_versions.mix(BWAMEME_MEM_MT.out.versions.first())
         }
-        Channel.empty()
-            .mix(ch_bwamem2_bam, ch_sentieon_bam, ch_bwa_bam, ch_bwameme_bam)
+        ch_align
             .join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)
             .set {ch_bam_ubam}
 
