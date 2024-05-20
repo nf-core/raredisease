@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- A new parameter `bwa_as_fallback` to switch aligner to bwa in case bwamem2 fails [#551](https://github.com/nf-core/raredisease/pull/551)
+
 ### `Changed`
 
 - Refactored config files [#538](https://github.com/nf-core/raredisease/pull/538)
