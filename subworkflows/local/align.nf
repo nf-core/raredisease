@@ -3,7 +3,7 @@
 //
 
 include { FASTP                      } from '../../modules/nf-core/fastp/main'
-include { ALIGN_BWA_BWAMEM2_BWAMEME  } from './alignment/align_bwa_bwamem2'
+include { ALIGN_BWA_BWAMEM2_BWAMEME  } from './alignment/align_bwa_bwamem2_bwameme'
 include { ALIGN_SENTIEON             } from './alignment/align_sentieon'
 include { SAMTOOLS_VIEW              } from '../../modules/nf-core/samtools/view/main'
 include { ALIGN_MT                   } from './alignment/align_MT'
