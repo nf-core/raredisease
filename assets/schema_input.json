@@ -40,9 +40,9 @@
                 ]
             },
             "sex": {
-                "type": "integer",
+                "type": "string",
                 "meta": ["sex"],
-                "enum": [0, 1, 2],
+                "enum": ["1", "2", "other"],
                 "errorMessage": "Sex must be provided and cannot contain spaces"
             },
             "phenotype": {
