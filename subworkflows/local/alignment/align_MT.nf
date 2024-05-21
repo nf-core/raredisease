@@ -5,6 +5,7 @@
 include { BWA_MEM as BWA_MEM_MT                                             } from '../../../modules/nf-core/bwa/mem/main'
 include { SENTIEON_BWAMEM as SENTIEON_BWAMEM_MT                             } from '../../../modules/nf-core/sentieon/bwamem/main'
 include { BWAMEM2_MEM as BWAMEM2_MEM_MT                                     } from '../../../modules/nf-core/bwamem2/mem/main'
+include { BWAMEME_MEM as BWAMEME_MEM_MT                                     } from '../../../modules/nf-core/bwameme/mem/main'
 include { GATK4_MERGEBAMALIGNMENT as GATK4_MERGEBAMALIGNMENT_MT             } from '../../../modules/nf-core/gatk4/mergebamalignment/main'
 include { PICARD_ADDORREPLACEREADGROUPS as PICARD_ADDORREPLACEREADGROUPS_MT } from '../../../modules/nf-core/picard/addorreplacereadgroups/main'
 include { PICARD_MARKDUPLICATES as PICARD_MARKDUPLICATES_MT                 } from '../../../modules/nf-core/picard/markduplicates/main'
@@ -17,6 +18,7 @@ workflow ALIGN_MT {
         ch_ubam         // channel: [mandatory] [ val(meta), path(bam) ]
         ch_bwaindex     // channel: [mandatory for sentieon] [ val(meta), path(index) ]
         ch_bwamem2index // channel: [mandatory for bwamem2] [ val(meta), path(index) ]
+        ch_bwamemeindex // channel: [mandatory for bwameme] [ val(meta), path(index) ]
         ch_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_dict         // channel: [mandatory] [ val(meta), path(dict) ]
         ch_fai          // channel: [mandatory] [ val(meta), path(fai) ]
@@ -36,6 +38,10 @@ workflow ALIGN_MT {
             BWA_MEM_MT ( ch_fastq, ch_bwaindex, true )
             ch_align       = BWA_MEM_MT.out.bam
             ch_versions    = ch_versions.mix(BWA_MEM_MT.out.versions.first())
+        } else if (params.aligner.equals("bwameme")) {
+            BWAMEME_MEM_MT (ch_fastq, ch_bwamemeindex, ch_fasta, true)
+            ch_align       = BWAMEME_MEM_MT.out.bam
+            ch_versions    = ch_versions.mix(BWAMEME_MEM_MT.out.versions.first())
         }
         ch_align
             .join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)

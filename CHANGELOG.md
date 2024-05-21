@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- A new aligner, bwameme [#553](https://github.com/nf-core/raredisease/pull/553)
 - A new parameter `run_mt_for_wes` to turn on mitochondrial analysis for targeted analysis [#552](https://github.com/nf-core/raredisease/pull/552)
 - A new parameter `bwa_as_fallback` to switch aligner to bwa in case bwamem2 fails [#551](https://github.com/nf-core/raredisease/pull/551)
 
@@ -25,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Old parameter | New parameter   |
 | ------------- | --------------- |
+|               | bwameme         |
 |               | bwa_as_fallback |
 |               | run_mt_for_wes  |
 
