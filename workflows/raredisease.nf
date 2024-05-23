@@ -71,6 +71,10 @@ if (!params.skip_vep_filter) {
     }
 }
 
+if (!params.skip_me_calling) {
+    mandatoryParams += ["mobile_element_references"]
+}
+
 if (!params.skip_me_annotation) {
     mandatoryParams += ["mobile_element_svdb_annotations", "variant_consequences_snv"]
 }
@@ -664,43 +668,44 @@ workflow RAREDISEASE {
         ch_versions = ch_versions.mix(GENS.out.versions)
     }
 
-    CALL_MOBILE_ELEMENTS(
-        ch_mapped.genome_bam_bai,
-        ch_genome_fasta,
-        ch_genome_fai,
-        ch_me_references,
-        ch_case_info,
-        params.genome
-    )
-    ch_versions = ch_versions.mix(CALL_MOBILE_ELEMENTS.out.versions)
-
-    if (!params.skip_me_annotation) {
-        ANNOTATE_MOBILE_ELEMENTS(
-            CALL_MOBILE_ELEMENTS.out.vcf,
-            ch_me_svdb_resources,
+    if (!params.skip_me_calling) {
+        CALL_MOBILE_ELEMENTS(
+            ch_mapped.genome_bam_bai,
             ch_genome_fasta,
-            ch_genome_dictionary,
-            ch_vep_cache,
-            params.genome,
-            params.vep_cache_version,
-            ch_vep_extra_files
+            ch_genome_fai,
+            ch_me_references,
+            ch_case_info,
+            params.genome
         )
-        ch_versions = ch_versions.mix(ANNOTATE_MOBILE_ELEMENTS.out.versions)
+        ch_versions = ch_versions.mix(CALL_MOBILE_ELEMENTS.out.versions)
 
-        GENERATE_CLINICAL_SET_ME(
-            ANNOTATE_MOBILE_ELEMENTS.out.vcf,
-            ch_hgnc_ids
-        )
-        ch_versions = ch_versions.mix( GENERATE_CLINICAL_SET_ME.out.versions )
+        if (!params.skip_me_annotation) {
+            ANNOTATE_MOBILE_ELEMENTS(
+                CALL_MOBILE_ELEMENTS.out.vcf,
+                ch_me_svdb_resources,
+                ch_genome_fasta,
+                ch_genome_dictionary,
+                ch_vep_cache,
+                params.genome,
+                params.vep_cache_version,
+                ch_vep_extra_files
+            )
+            ch_versions = ch_versions.mix(ANNOTATE_MOBILE_ELEMENTS.out.versions)
 
-        ANN_CSQ_PLI_ME(
-            GENERATE_CLINICAL_SET_ME.out.vcf,
-            ch_variant_consequences_sv
-        )
-        ch_versions = ch_versions.mix( ANN_CSQ_PLI_ME.out.versions )
+            GENERATE_CLINICAL_SET_ME(
+                ANNOTATE_MOBILE_ELEMENTS.out.vcf,
+                ch_hgnc_ids
+            )
+            ch_versions = ch_versions.mix( GENERATE_CLINICAL_SET_ME.out.versions )
 
+            ANN_CSQ_PLI_ME(
+                GENERATE_CLINICAL_SET_ME.out.vcf,
+                ch_variant_consequences_sv
+            )
+            ch_versions = ch_versions.mix( ANN_CSQ_PLI_ME.out.versions )
+
+        }
     }
-
     //
     // Collate and save software versions
     //

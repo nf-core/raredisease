@@ -548,9 +548,14 @@
                     "description": "Specifies whether or not to skip Qualimap.",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "skip_me_calling": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip calling mobile elements, and the subsequent annotation step.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "skip_me_annotation": {
                     "type": "boolean",
-                    "description": "Specifies whether or not to skip annotation of mobile_elements.",
+                    "description": "Specifies whether or not to skip annotation of mobile elements.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_mt_annotation": {
