@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed valid values for sex according to the PED file format [#550](https://github.com/nf-core/raredisease/pull/550)
 - Refactored config files [#538](https://github.com/nf-core/raredisease/pull/538)
 - Refactored mobile element annotation subworkflow files [#538](https://github.com/nf-core/raredisease/pull/538)
+- Refactored to remove "a process is defined more than once@=" warning [#557](https://github.com/nf-core/raredisease/pull/557)
 
 ### `Fixed`
 
