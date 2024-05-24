@@ -61,13 +61,13 @@ workflow QC_BAM {
 
         // COLLECT WGS METRICS
         if (!params.analysis_type.equals("wes")) {
-            PICARD_COLLECTWGSMETRICS ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs )
+            PICARD_COLLECTWGSMETRICS_WG ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs )
             PICARD_COLLECTWGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y )
-            SENTIEON_WGSMETRICS ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs.map{ interval -> [[:], interval]} )
+            SENTIEON_WGSMETRICS_WG ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs.map{ interval -> [[:], interval]} )
             SENTIEON_WGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y.map{ interval -> [[:], interval]} )
-            ch_cov   = Channel.empty().mix(PICARD_COLLECTWGSMETRICS.out.metrics, SENTIEON_WGSMETRICS.out.wgs_metrics)
+            ch_cov   = Channel.empty().mix(PICARD_COLLECTWGSMETRICS_WG.out.metrics, SENTIEON_WGSMETRICS_WG.out.wgs_metrics)
             ch_cov_y = Channel.empty().mix(PICARD_COLLECTWGSMETRICS_Y.out.metrics, SENTIEON_WGSMETRICS_Y.out.wgs_metrics)
-            ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS.out.versions.first(), SENTIEON_WGSMETRICS.out.versions.first())
+            ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_WG.out.versions.first(), SENTIEON_WGSMETRICS_WG.out.versions.first())
             ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_Y.out.versions.first(), SENTIEON_WGSMETRICS_Y.out.versions.first())
         }
         // Check sex
