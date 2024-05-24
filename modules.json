@@ -296,7 +296,7 @@
                     },
                     "mosdepth": {
                         "branch": "master",
-                        "git_sha": "e0616fba0919adb190bfe070d17fb12d76ba3a26",
+                        "git_sha": "69e3eb17fb31b772b18f134d6e8f8b93ee980e65",
                         "installed_by": ["modules"]
                     },
                     "multiqc": {

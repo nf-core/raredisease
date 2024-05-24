@@ -1,236 +1,23 @@
 {
     "homo_sapiens - bam, bai, [] - stub": {
         "content": [
-            {
-                "0": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.global.dist.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "1": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.summary.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "10": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.thresholds.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                    ]
-                ],
-                "11": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.thresholds.bed.gz.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "12": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
-                ],
-                "2": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.region.dist.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "3": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.per-base.d4:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "4": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.per-base.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                    ]
-                ],
-                "5": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.per-base.bed.gz.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "6": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.regions.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                    ]
-                ],
-                "7": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.regions.bed.gz.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "8": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.quantized.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                    ]
-                ],
-                "9": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.quantized.bed.gz.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "global_txt": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.global.dist.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "per_base_bed": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.per-base.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                    ]
-                ],
-                "per_base_csi": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.per-base.bed.gz.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "per_base_d4": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.per-base.d4:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "quantized_bed": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.quantized.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                    ]
-                ],
-                "quantized_csi": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.quantized.bed.gz.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "regions_bed": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.regions.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                    ]
-                ],
-                "regions_csi": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.regions.bed.gz.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "regions_txt": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.region.dist.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "summary_txt": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.summary.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "thresholds_bed": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.thresholds.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                    ]
-                ],
-                "thresholds_csi": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.thresholds.bed.gz.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "versions": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
-                ]
-            }
+            "test.global.dist.txt",
+            "test.summary.txt",
+            "test.region.dist.txt",
+            "test.per-base.d4",
+            "test.per-base.bed.gz",
+            "test.per-base.bed.gz.csi",
+            "test.regions.bed.gz",
+            "test.regions.bed.gz.csi",
+            "test.quantized.bed.gz",
+            "test.quantized.bed.gz.csi",
+            "test.thresholds.bed.gz",
+            "test.thresholds.bed.gz.csi",
+            [
+                "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
+            ]
         ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
-        },
-        "timestamp": "2024-04-29T13:33:16.953408231"
+        "timestamp": "2023-11-27T15:14:34.897155161"
     },
     "homo_sapiens - cram, crai, bed": {
         "content": [
@@ -260,7 +47,7 @@
                     
                 ],
                 "12": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
+                    "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
                 ],
                 "2": [
                     [
@@ -280,7 +67,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz:md5,da6db0fb375a3053a89db8c935eebbaa"
+                        "test.per-base.bed.gz:md5,bc1df47d46f818fee5275975925d769a"
                     ]
                 ],
                 "5": [
@@ -289,7 +76,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz.csi:md5,6f322dc9250522a701bd68bd18fa8294"
+                        "test.per-base.bed.gz.csi:md5,9e649ac749ff6c6073bef5ab63e8aaa4"
                     ]
                 ],
                 "6": [
@@ -298,7 +85,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz:md5,9ded0397623fda26a6a3514d6a0e2a2c"
+                        "test.regions.bed.gz:md5,5d398caf7171ec4406278e2add3009ae"
                     ]
                 ],
                 "7": [
@@ -307,7 +94,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz.csi:md5,e7df086f0a36e88ca231e143d43bd3f9"
+                        "test.regions.bed.gz.csi:md5,47669cfe41f3e222e74d81e1b1be191f"
                     ]
                 ],
                 "8": [
@@ -331,7 +118,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz:md5,da6db0fb375a3053a89db8c935eebbaa"
+                        "test.per-base.bed.gz:md5,bc1df47d46f818fee5275975925d769a"
                     ]
                 ],
                 "per_base_csi": [
@@ -340,7 +127,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz.csi:md5,6f322dc9250522a701bd68bd18fa8294"
+                        "test.per-base.bed.gz.csi:md5,9e649ac749ff6c6073bef5ab63e8aaa4"
                     ]
                 ],
                 "per_base_d4": [
@@ -358,7 +145,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz:md5,9ded0397623fda26a6a3514d6a0e2a2c"
+                        "test.regions.bed.gz:md5,5d398caf7171ec4406278e2add3009ae"
                     ]
                 ],
                 "regions_csi": [
@@ -367,7 +154,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz.csi:md5,e7df086f0a36e88ca231e143d43bd3f9"
+                        "test.regions.bed.gz.csi:md5,47669cfe41f3e222e74d81e1b1be191f"
                     ]
                 ],
                 "regions_txt": [
@@ -395,15 +182,11 @@
                     
                 ],
                 "versions": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
+                    "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
                 ]
             }
         ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
-        },
-        "timestamp": "2024-04-29T13:32:50.160217828"
+        "timestamp": "2023-11-27T14:47:18.171150781"
     },
     "homo_sapiens - bam, bai, [] - quantized": {
         "content": [
@@ -433,7 +216,7 @@
                     
                 ],
                 "12": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
+                    "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
                 ],
                 "2": [
                     
@@ -447,7 +230,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz:md5,da6db0fb375a3053a89db8c935eebbaa"
+                        "test.per-base.bed.gz:md5,bc1df47d46f818fee5275975925d769a"
                     ]
                 ],
                 "5": [
@@ -456,7 +239,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz.csi:md5,6f322dc9250522a701bd68bd18fa8294"
+                        "test.per-base.bed.gz.csi:md5,9e649ac749ff6c6073bef5ab63e8aaa4"
                     ]
                 ],
                 "6": [
@@ -471,7 +254,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.quantized.bed.gz:md5,f037c215449d361112efc10108fcc17c"
+                        "test.quantized.bed.gz:md5,3e434a8bafcf59a67841ae3d4d752838"
                     ]
                 ],
                 "9": [
@@ -480,7 +263,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.quantized.bed.gz.csi:md5,4f69e6ace50206a2768be66ded3a56f0"
+                        "test.quantized.bed.gz.csi:md5,be9617f551f19a33923f1e886eaefb93"
                     ]
                 ],
                 "global_txt": [
@@ -498,7 +281,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz:md5,da6db0fb375a3053a89db8c935eebbaa"
+                        "test.per-base.bed.gz:md5,bc1df47d46f818fee5275975925d769a"
                     ]
                 ],
                 "per_base_csi": [
@@ -507,7 +290,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz.csi:md5,6f322dc9250522a701bd68bd18fa8294"
+                        "test.per-base.bed.gz.csi:md5,9e649ac749ff6c6073bef5ab63e8aaa4"
                     ]
                 ],
                 "per_base_d4": [
@@ -519,7 +302,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.quantized.bed.gz:md5,f037c215449d361112efc10108fcc17c"
+                        "test.quantized.bed.gz:md5,3e434a8bafcf59a67841ae3d4d752838"
                     ]
                 ],
                 "quantized_csi": [
@@ -528,7 +311,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.quantized.bed.gz.csi:md5,4f69e6ace50206a2768be66ded3a56f0"
+                        "test.quantized.bed.gz.csi:md5,be9617f551f19a33923f1e886eaefb93"
                     ]
                 ],
                 "regions_bed": [
@@ -556,15 +339,11 @@
                     
                 ],
                 "versions": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
+                    "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
                 ]
             }
         ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
-        },
-        "timestamp": "2024-04-29T13:33:01.164885111"
+        "timestamp": "2023-11-27T14:47:29.228103864"
     },
     "homo_sapiens - bam, bai, bed": {
         "content": [
@@ -594,7 +373,7 @@
                     
                 ],
                 "12": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
+                    "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
                 ],
                 "2": [
                     [
@@ -614,7 +393,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz:md5,da6db0fb375a3053a89db8c935eebbaa"
+                        "test.per-base.bed.gz:md5,bc1df47d46f818fee5275975925d769a"
                     ]
                 ],
                 "5": [
@@ -623,7 +402,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz.csi:md5,6f322dc9250522a701bd68bd18fa8294"
+                        "test.per-base.bed.gz.csi:md5,9e649ac749ff6c6073bef5ab63e8aaa4"
                     ]
                 ],
                 "6": [
@@ -632,7 +411,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz:md5,9ded0397623fda26a6a3514d6a0e2a2c"
+                        "test.regions.bed.gz:md5,5d398caf7171ec4406278e2add3009ae"
                     ]
                 ],
                 "7": [
@@ -641,7 +420,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz.csi:md5,e7df086f0a36e88ca231e143d43bd3f9"
+                        "test.regions.bed.gz.csi:md5,47669cfe41f3e222e74d81e1b1be191f"
                     ]
                 ],
                 "8": [
@@ -665,7 +444,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz:md5,da6db0fb375a3053a89db8c935eebbaa"
+                        "test.per-base.bed.gz:md5,bc1df47d46f818fee5275975925d769a"
                     ]
                 ],
                 "per_base_csi": [
@@ -674,7 +453,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz.csi:md5,6f322dc9250522a701bd68bd18fa8294"
+                        "test.per-base.bed.gz.csi:md5,9e649ac749ff6c6073bef5ab63e8aaa4"
                     ]
                 ],
                 "per_base_d4": [
@@ -692,7 +471,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz:md5,9ded0397623fda26a6a3514d6a0e2a2c"
+                        "test.regions.bed.gz:md5,5d398caf7171ec4406278e2add3009ae"
                     ]
                 ],
                 "regions_csi": [
@@ -701,7 +480,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz.csi:md5,e7df086f0a36e88ca231e143d43bd3f9"
+                        "test.regions.bed.gz.csi:md5,47669cfe41f3e222e74d81e1b1be191f"
                     ]
                 ],
                 "regions_txt": [
@@ -729,15 +508,11 @@
                     
                 ],
                 "versions": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
+                    "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
                 ]
             }
         ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
-        },
-        "timestamp": "2024-04-29T13:32:39.071657456"
+        "timestamp": "2023-11-27T14:47:04.537716314"
     },
     "homo_sapiens - bam, bai, [] - window": {
         "content": [
@@ -767,7 +542,7 @@
                     
                 ],
                 "12": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
+                    "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
                 ],
                 "2": [
                     [
@@ -775,7 +550,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.mosdepth.region.dist.txt:md5,0b6ea9f0da1228252d9aef2d3b6f7f76"
+                        "test.mosdepth.region.dist.txt:md5,39e0e707ec32feb5176fd20a95f1f468"
                     ]
                 ],
                 "3": [
@@ -787,7 +562,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz:md5,da6db0fb375a3053a89db8c935eebbaa"
+                        "test.per-base.bed.gz:md5,bc1df47d46f818fee5275975925d769a"
                     ]
                 ],
                 "5": [
@@ -796,7 +571,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz.csi:md5,6f322dc9250522a701bd68bd18fa8294"
+                        "test.per-base.bed.gz.csi:md5,9e649ac749ff6c6073bef5ab63e8aaa4"
                     ]
                 ],
                 "6": [
@@ -805,7 +580,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz:md5,34f48d16fcdd61e44d812e29e02c77b8"
+                        "test.regions.bed.gz:md5,f02e2cb49cc050e13d76942d6960827a"
                     ]
                 ],
                 "7": [
@@ -814,7 +589,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz.csi:md5,2a30bcb7f5c7632136b3efce24723970"
+                        "test.regions.bed.gz.csi:md5,257d67678136963d9dd904330079609d"
                     ]
                 ],
                 "8": [
@@ -838,7 +613,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz:md5,da6db0fb375a3053a89db8c935eebbaa"
+                        "test.per-base.bed.gz:md5,bc1df47d46f818fee5275975925d769a"
                     ]
                 ],
                 "per_base_csi": [
@@ -847,7 +622,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz.csi:md5,6f322dc9250522a701bd68bd18fa8294"
+                        "test.per-base.bed.gz.csi:md5,9e649ac749ff6c6073bef5ab63e8aaa4"
                     ]
                 ],
                 "per_base_d4": [
@@ -865,7 +640,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz:md5,34f48d16fcdd61e44d812e29e02c77b8"
+                        "test.regions.bed.gz:md5,f02e2cb49cc050e13d76942d6960827a"
                     ]
                 ],
                 "regions_csi": [
@@ -874,7 +649,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz.csi:md5,2a30bcb7f5c7632136b3efce24723970"
+                        "test.regions.bed.gz.csi:md5,257d67678136963d9dd904330079609d"
                     ]
                 ],
                 "regions_txt": [
@@ -883,7 +658,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.mosdepth.region.dist.txt:md5,0b6ea9f0da1228252d9aef2d3b6f7f76"
+                        "test.mosdepth.region.dist.txt:md5,39e0e707ec32feb5176fd20a95f1f468"
                     ]
                 ],
                 "summary_txt": [
@@ -902,15 +677,11 @@
                     
                 ],
                 "versions": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
+                    "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
                 ]
             }
         ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
-        },
-        "timestamp": "2024-04-29T13:32:55.631776118"
+        "timestamp": "2023-11-27T14:47:23.708536171"
     },
     "homo_sapiens - bam, bai, []": {
         "content": [
@@ -940,7 +711,7 @@
                     
                 ],
                 "12": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
+                    "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
                 ],
                 "2": [
                     
@@ -954,7 +725,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz:md5,da6db0fb375a3053a89db8c935eebbaa"
+                        "test.per-base.bed.gz:md5,bc1df47d46f818fee5275975925d769a"
                     ]
                 ],
                 "5": [
@@ -963,7 +734,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz.csi:md5,6f322dc9250522a701bd68bd18fa8294"
+                        "test.per-base.bed.gz.csi:md5,9e649ac749ff6c6073bef5ab63e8aaa4"
                     ]
                 ],
                 "6": [
@@ -993,7 +764,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz:md5,da6db0fb375a3053a89db8c935eebbaa"
+                        "test.per-base.bed.gz:md5,bc1df47d46f818fee5275975925d769a"
                     ]
                 ],
                 "per_base_csi": [
@@ -1002,7 +773,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz.csi:md5,6f322dc9250522a701bd68bd18fa8294"
+                        "test.per-base.bed.gz.csi:md5,9e649ac749ff6c6073bef5ab63e8aaa4"
                     ]
                 ],
                 "per_base_d4": [
@@ -1039,15 +810,11 @@
                     
                 ],
                 "versions": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
+                    "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
                 ]
             }
         ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
-        },
-        "timestamp": "2024-04-29T13:32:33.642125299"
+        "timestamp": "2023-11-27T14:46:56.975710077"
     },
     "homo_sapiens - cram, crai, []": {
         "content": [
@@ -1077,7 +844,7 @@
                     
                 ],
                 "12": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
+                    "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
                 ],
                 "2": [
                     
@@ -1091,7 +858,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz:md5,da6db0fb375a3053a89db8c935eebbaa"
+                        "test.per-base.bed.gz:md5,bc1df47d46f818fee5275975925d769a"
                     ]
                 ],
                 "5": [
@@ -1100,7 +867,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz.csi:md5,6f322dc9250522a701bd68bd18fa8294"
+                        "test.per-base.bed.gz.csi:md5,9e649ac749ff6c6073bef5ab63e8aaa4"
                     ]
                 ],
                 "6": [
@@ -1130,7 +897,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz:md5,da6db0fb375a3053a89db8c935eebbaa"
+                        "test.per-base.bed.gz:md5,bc1df47d46f818fee5275975925d769a"
                     ]
                 ],
                 "per_base_csi": [
@@ -1139,7 +906,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz.csi:md5,6f322dc9250522a701bd68bd18fa8294"
+                        "test.per-base.bed.gz.csi:md5,9e649ac749ff6c6073bef5ab63e8aaa4"
                     ]
                 ],
                 "per_base_d4": [
@@ -1176,15 +943,11 @@
                     
                 ],
                 "versions": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
+                    "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
                 ]
             }
         ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
-        },
-        "timestamp": "2024-04-29T13:32:44.704920941"
+        "timestamp": "2023-11-27T14:47:12.09259995"
     },
     "homo_sapiens - bam, bai, bed - thresholds": {
         "content": [
@@ -1213,7 +976,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.thresholds.bed.gz:md5,fe70ae728cd10726c42a2bcd44adfc9d"
+                        "test.thresholds.bed.gz:md5,13101e326eea3cbfa1d569b69f494f4c"
                     ]
                 ],
                 "11": [
@@ -1222,11 +985,11 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.thresholds.bed.gz.csi:md5,219414a0751185adb98d2235d83ea055"
+                        "test.thresholds.bed.gz.csi:md5,912055ee9452229439df6fae95644196"
                     ]
                 ],
                 "12": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
+                    "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
                 ],
                 "2": [
                     [
@@ -1246,7 +1009,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz:md5,da6db0fb375a3053a89db8c935eebbaa"
+                        "test.per-base.bed.gz:md5,bc1df47d46f818fee5275975925d769a"
                     ]
                 ],
                 "5": [
@@ -1255,7 +1018,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz.csi:md5,6f322dc9250522a701bd68bd18fa8294"
+                        "test.per-base.bed.gz.csi:md5,9e649ac749ff6c6073bef5ab63e8aaa4"
                     ]
                 ],
                 "6": [
@@ -1264,7 +1027,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz:md5,9ded0397623fda26a6a3514d6a0e2a2c"
+                        "test.regions.bed.gz:md5,5d398caf7171ec4406278e2add3009ae"
                     ]
                 ],
                 "7": [
@@ -1273,7 +1036,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz.csi:md5,e7df086f0a36e88ca231e143d43bd3f9"
+                        "test.regions.bed.gz.csi:md5,47669cfe41f3e222e74d81e1b1be191f"
                     ]
                 ],
                 "8": [
@@ -1297,7 +1060,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz:md5,da6db0fb375a3053a89db8c935eebbaa"
+                        "test.per-base.bed.gz:md5,bc1df47d46f818fee5275975925d769a"
                     ]
                 ],
                 "per_base_csi": [
@@ -1306,7 +1069,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.per-base.bed.gz.csi:md5,6f322dc9250522a701bd68bd18fa8294"
+                        "test.per-base.bed.gz.csi:md5,9e649ac749ff6c6073bef5ab63e8aaa4"
                     ]
                 ],
                 "per_base_d4": [
@@ -1324,7 +1087,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz:md5,9ded0397623fda26a6a3514d6a0e2a2c"
+                        "test.regions.bed.gz:md5,5d398caf7171ec4406278e2add3009ae"
                     ]
                 ],
                 "regions_csi": [
@@ -1333,7 +1096,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.regions.bed.gz.csi:md5,e7df086f0a36e88ca231e143d43bd3f9"
+                        "test.regions.bed.gz.csi:md5,47669cfe41f3e222e74d81e1b1be191f"
                     ]
                 ],
                 "regions_txt": [
@@ -1360,7 +1123,7 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.thresholds.bed.gz:md5,fe70ae728cd10726c42a2bcd44adfc9d"
+                        "test.thresholds.bed.gz:md5,13101e326eea3cbfa1d569b69f494f4c"
                     ]
                 ],
                 "thresholds_csi": [
@@ -1369,18 +1132,14 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.thresholds.bed.gz.csi:md5,219414a0751185adb98d2235d83ea055"
+                        "test.thresholds.bed.gz.csi:md5,912055ee9452229439df6fae95644196"
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,87634e525fb18990cd98fe1080ad72ce"
+                    "versions.yml:md5,f8b1896c9c6784181f1234e87225f0e8"
                 ]
             }
         ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
-        },
-        "timestamp": "2024-04-29T13:33:06.737266831"
+        "timestamp": "2023-11-27T14:49:44.311847326"
     }
 }
