@@ -2,7 +2,7 @@
 // Map to reference, fetch stats for each demultiplexed read pair, merge, mark duplicates, and index.
 //
 
-include { BWA_MEM                                  } from '../../../modules/nf-core/bwa/mem/main'
+include { BWA_MEM as BWA                           } from '../../../modules/nf-core/bwa/mem/main'
 include { BWA_MEM as BWAMEM_FALLBACK               } from '../../../modules/nf-core/bwa/mem/main'
 include { BWAMEM2_MEM                              } from '../../../modules/nf-core/bwamem2/mem/main'
 include { BWAMEME_MEM                              } from '../../../modules/nf-core/bwameme/mem/main'
@@ -28,9 +28,9 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
 
         // Map, sort, and index
         if (params.aligner.equals("bwa")) {
-            BWA_MEM ( ch_reads_input, ch_bwa_index, ch_genome_fasta, true )
-            ch_align = BWA_MEM.out.bam
-            ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
+            BWA ( ch_reads_input, ch_bwa_index, ch_genome_fasta, true )
+            ch_align = BWA.out.bam
+            ch_versions = ch_versions.mix(BWA.out.versions.first())
         } else if (params.aligner.equals("bwameme")) {
             BWAMEME_MEM ( ch_reads_input, ch_bwameme_index, ch_genome_fasta, true )
             ch_align = BWAMEME_MEM.out.bam
