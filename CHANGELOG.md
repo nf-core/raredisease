@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactored config files [#538](https://github.com/nf-core/raredisease/pull/538)
 - Refactored mobile element annotation subworkflow files [#538](https://github.com/nf-core/raredisease/pull/538)
 - Refactored to remove "a process is defined more than once" warning [#557](https://github.com/nf-core/raredisease/pull/557)
+- Updated modules [#558](https://github.com/nf-core/raredisease/pull/558)
 
 ### `Fixed`
 
@@ -39,6 +40,14 @@ Parameter has been updated if both old and new parameter information is present.
 Parameter has been added if just the new parameter information is present.
 Parameter has been removed if new parameter information isn't present.
 :::
+
+### Module updates
+
+| Tool     | Old version | New version |
+| -------- | ----------- | ----------- |
+| bwa      | 0.7.17      | 0.7.18      |
+| CADD     | 1.6.1       | 1.6.post1   |
+| Sentieon | 202308.01   | 202308.02   |
 
 ## 2.0.1 - Asterix (Patch) [2024-03-25]
 

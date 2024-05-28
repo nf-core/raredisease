@@ -179,8 +179,7 @@
                     "gatk4/germlinecnvcaller": {
                         "branch": "master",
                         "git_sha": "60a7dbae179bcfa24c10294cc9a07423a239c19a",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/gatk4/germlinecnvcaller/gatk4-germlinecnvcaller.diff"
+                        "installed_by": ["modules"]
                     },
                     "gatk4/intervallisttools": {
                         "branch": "master",
@@ -205,8 +204,7 @@
                     "gatk4/postprocessgermlinecnvcalls": {
                         "branch": "master",
                         "git_sha": "60a7dbae179bcfa24c10294cc9a07423a239c19a",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/gatk4/postprocessgermlinecnvcalls/gatk4-postprocessgermlinecnvcalls.diff"
+                        "installed_by": ["modules"]
                     },
                     "gatk4/preprocessintervals": {
                         "branch": "master",
