@@ -48,6 +48,13 @@ Parameter has been removed if new parameter information isn't present.
 | bwa      | 0.7.17      | 0.7.18      |
 | CADD     | 1.6.1       | 1.6.post1   |
 | Sentieon | 202308.01   | 202308.02   |
+| bwameme  |             | 1.0.6       |
+
+:::note
+Version has been updated if both old and new version information is present.
+Version has been added if just the new version information is present.
+Version has been removed if new version information isn't present.
+:::
 
 ## 2.0.1 - Asterix (Patch) [2024-03-25]
 
