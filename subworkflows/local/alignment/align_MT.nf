@@ -27,7 +27,7 @@ workflow ALIGN_MT {
         ch_versions     = Channel.empty()
 
         if (params.aligner.equals("bwamem2")) {
-            BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, true)
+            BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, ch_fasta, true)
             ch_align       = BWAMEM2_MEM_MT.out.bam
             ch_versions    = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
         } else if (params.aligner.equals("sentieon")) {
@@ -35,7 +35,7 @@ workflow ALIGN_MT {
             ch_align       = SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, bai -> [meta, bam] }
             ch_versions    = ch_versions.mix(SENTIEON_BWAMEM_MT.out.versions.first())
         } else if (params.aligner.equals("bwa")) {
-            BWA_MEM_MT ( ch_fastq, ch_bwaindex, true )
+            BWA_MEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, true )
             ch_align       = BWA_MEM_MT.out.bam
             ch_versions    = ch_versions.mix(BWA_MEM_MT.out.versions.first())
         } else if (params.aligner.equals("bwameme")) {
@@ -49,11 +49,11 @@ workflow ALIGN_MT {
 
         GATK4_MERGEBAMALIGNMENT_MT (ch_bam_ubam, ch_fasta, ch_dict)
 
-        PICARD_ADDORREPLACEREADGROUPS_MT (GATK4_MERGEBAMALIGNMENT_MT.out.bam)
+        PICARD_ADDORREPLACEREADGROUPS_MT (GATK4_MERGEBAMALIGNMENT_MT.out.bam, [[:],[]], [[:],[]])
 
         PICARD_MARKDUPLICATES_MT (PICARD_ADDORREPLACEREADGROUPS_MT.out.bam, ch_fasta, ch_fai)
 
-        SAMTOOLS_SORT_MT (PICARD_MARKDUPLICATES_MT.out.bam)
+        SAMTOOLS_SORT_MT (PICARD_MARKDUPLICATES_MT.out.bam, [[:],[]])
 
         SAMTOOLS_INDEX_MT(SAMTOOLS_SORT_MT.out.bam)
 

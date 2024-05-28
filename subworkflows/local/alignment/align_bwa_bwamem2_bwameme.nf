@@ -28,7 +28,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
 
         // Map, sort, and index
         if (params.aligner.equals("bwa")) {
-            BWA ( ch_reads_input, ch_bwa_index, true )
+            BWA ( ch_reads_input, ch_bwa_index, ch_genome_fasta, true )
             ch_align = BWA.out.bam
             ch_versions = ch_versions.mix(BWA.out.versions.first())
         } else if (params.aligner.equals("bwameme")) {
@@ -36,7 +36,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
             ch_align = BWAMEME_MEM.out.bam
             ch_versions = ch_versions.mix(BWAMEME_MEM.out.versions.first())
         } else {
-            BWAMEM2_MEM ( ch_reads_input, ch_bwamem2_index, true )
+            BWAMEM2_MEM ( ch_reads_input, ch_bwamem2_index, ch_genome_fasta, true )
             ch_align    = BWAMEM2_MEM.out.bam
             ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions.first())
 
@@ -51,7 +51,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
                     }
                     .set { ch_fallback }
 
-                BWAMEM_FALLBACK ( ch_fallback.ERROR, ch_bwa_index, true )
+                BWAMEM_FALLBACK ( ch_fallback.ERROR, ch_bwa_index, ch_genome_fasta, true )
                 ch_align = ch_fallback.SUCCESS.mix(BWAMEM_FALLBACK.out.bam)
                 ch_versions = ch_versions.mix(BWAMEM_FALLBACK.out.versions.first())
             }
