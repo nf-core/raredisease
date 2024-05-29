@@ -19,7 +19,7 @@ workflow SUBSAMPLE_MT {
 
         ch_mt_bam_bai.map {meta, bam, bai -> return [meta, bam, -1]}.set {ch_genomecov_in}
 
-        BEDTOOLS_GENOMECOV (ch_genomecov_in, [], "genomecov")
+        BEDTOOLS_GENOMECOV (ch_genomecov_in, [], "genomecov", false)
 
         CALCULATE_SEED_FRACTION (
             BEDTOOLS_GENOMECOV.out.genomecov,

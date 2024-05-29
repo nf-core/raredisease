@@ -33,7 +33,7 @@ workflow CALL_REPEAT_EXPANSIONS {
         )
 
         // Sort and index realigned bam
-        SAMTOOLS_SORT(EXPANSIONHUNTER.out.bam)
+        SAMTOOLS_SORT(EXPANSIONHUNTER.out.bam, [[:],[]])
         SAMTOOLS_INDEX(SAMTOOLS_SORT.out.bam)
 
         // Fix header and rename sample

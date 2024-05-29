@@ -2,7 +2,7 @@
 // A subworkflow to plot binned zygosity and RHO-regions.
 //
 
-include { BCFTOOLS_VIEW                             } from '../../../modules/nf-core/bcftools/view/main'
+include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_RHOCALL    } from '../../../modules/nf-core/bcftools/view/main'
 include { TABIX_TABIX                               } from '../../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_ROH                              } from '../../../modules/nf-core/bcftools/roh/main'
 include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_UNCOMPRESS } from '../../../modules/nf-core/bcftools/view/main'
@@ -25,11 +25,11 @@ workflow ANNOTATE_RHOCALLVIZ {
             .map {meta, vcf, tbi, meta2 -> return [meta2,vcf,tbi]}
             .set { ch_rhocall_viz }
 
-        BCFTOOLS_VIEW(ch_rhocall_viz, [],[],[])
+        BCFTOOLS_VIEW_RHOCALL(ch_rhocall_viz, [],[],[])
 
-        TABIX_TABIX(BCFTOOLS_VIEW.out.vcf)
+        TABIX_TABIX(BCFTOOLS_VIEW_RHOCALL.out.vcf)
 
-        BCFTOOLS_VIEW.out.vcf
+        BCFTOOLS_VIEW_RHOCALL.out.vcf
             .join(TABIX_TABIX.out.tbi)
             .set {ch_roh_in }
 
@@ -43,7 +43,7 @@ workflow ANNOTATE_RHOCALLVIZ {
 
         UCSC_WIGTOBIGWIG(RHOCALL_VIZ.out.wig, ch_genome_chrsizes)
 
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions.first())
+        ch_versions = ch_versions.mix(BCFTOOLS_VIEW_RHOCALL.out.versions.first())
         ch_versions = ch_versions.mix(CHROMOGRAPH_AUTOZYG.out.versions.first())
         ch_versions = ch_versions.mix(TABIX_TABIX.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions.first())

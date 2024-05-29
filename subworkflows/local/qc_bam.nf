@@ -2,18 +2,18 @@
 // A quality check subworkflow for processed bams.
 //
 
-include { PICARD_COLLECTMULTIPLEMETRICS                          } from '../../modules/nf-core/picard/collectmultiplemetrics/main'
-include { PICARD_COLLECTHSMETRICS                                } from '../../modules/nf-core/picard/collecthsmetrics/main'
-include { CHROMOGRAPH as CHROMOGRAPH_COV                         } from '../../modules/nf-core/chromograph/main'
-include { QUALIMAP_BAMQC                                         } from '../../modules/nf-core/qualimap/bamqc/main'
-include { TIDDIT_COV                                             } from '../../modules/nf-core/tiddit/cov/main'
-include { MOSDEPTH                                               } from '../../modules/nf-core/mosdepth/main'
-include { UCSC_WIGTOBIGWIG                                       } from '../../modules/nf-core/ucsc/wigtobigwig/main'
-include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS   } from '../../modules/nf-core/picard/collectwgsmetrics/main'
-include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y } from '../../modules/nf-core/picard/collectwgsmetrics/main'
-include { SENTIEON_WGSMETRICS                                    } from '../../modules/nf-core/sentieon/wgsmetrics/main'
-include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_Y           } from '../../modules/nf-core/sentieon/wgsmetrics/main'
-include { NGSBITS_SAMPLEGENDER                                   } from '../../modules/nf-core/ngsbits/samplegender/main'
+include { PICARD_COLLECTMULTIPLEMETRICS                            } from '../../modules/nf-core/picard/collectmultiplemetrics/main'
+include { PICARD_COLLECTHSMETRICS                                  } from '../../modules/nf-core/picard/collecthsmetrics/main'
+include { CHROMOGRAPH as CHROMOGRAPH_COV                           } from '../../modules/nf-core/chromograph/main'
+include { QUALIMAP_BAMQC                                           } from '../../modules/nf-core/qualimap/bamqc/main'
+include { TIDDIT_COV                                               } from '../../modules/nf-core/tiddit/cov/main'
+include { MOSDEPTH                                                 } from '../../modules/nf-core/mosdepth/main'
+include { UCSC_WIGTOBIGWIG                                         } from '../../modules/nf-core/ucsc/wigtobigwig/main'
+include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_WG  } from '../../modules/nf-core/picard/collectwgsmetrics/main'
+include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y   } from '../../modules/nf-core/picard/collectwgsmetrics/main'
+include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_WG            } from '../../modules/nf-core/sentieon/wgsmetrics/main'
+include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_Y             } from '../../modules/nf-core/sentieon/wgsmetrics/main'
+include { NGSBITS_SAMPLEGENDER                                     } from '../../modules/nf-core/ngsbits/samplegender/main'
 
 workflow QC_BAM {
 
@@ -31,6 +31,8 @@ workflow QC_BAM {
         ngsbits_samplegender_method // channel [val(method)]
 
     main:
+        ch_cov      = Channel.empty()
+        ch_cov_y    = Channel.empty()
         ch_versions = Channel.empty()
         ch_qualimap = Channel.empty()
 
@@ -58,17 +60,19 @@ workflow QC_BAM {
         MOSDEPTH (ch_mosdepth_in, ch_genome_fasta)
 
         // COLLECT WGS METRICS
-        PICARD_COLLECTWGSMETRICS ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs )
-        PICARD_COLLECTWGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y )
-
-        SENTIEON_WGSMETRICS ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs.map{ interval -> [[:], interval]} )
-        SENTIEON_WGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y.map{ interval -> [[:], interval]} )
-
+        if (!params.analysis_type.equals("wes")) {
+            PICARD_COLLECTWGSMETRICS_WG ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs )
+            PICARD_COLLECTWGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y )
+            SENTIEON_WGSMETRICS_WG ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs.map{ interval -> [[:], interval]} )
+            SENTIEON_WGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y.map{ interval -> [[:], interval]} )
+            ch_cov   = Channel.empty().mix(PICARD_COLLECTWGSMETRICS_WG.out.metrics, SENTIEON_WGSMETRICS_WG.out.wgs_metrics)
+            ch_cov_y = Channel.empty().mix(PICARD_COLLECTWGSMETRICS_Y.out.metrics, SENTIEON_WGSMETRICS_Y.out.wgs_metrics)
+            ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_WG.out.versions.first(), SENTIEON_WGSMETRICS_WG.out.versions.first())
+            ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_Y.out.versions.first(), SENTIEON_WGSMETRICS_Y.out.versions.first())
+        }
         // Check sex
         NGSBITS_SAMPLEGENDER(ch_bam_bai, ch_genome_fasta, ch_genome_fai, ngsbits_samplegender_method)
 
-        ch_cov   = Channel.empty().mix(PICARD_COLLECTWGSMETRICS.out.metrics, SENTIEON_WGSMETRICS.out.wgs_metrics)
-        ch_cov_y = Channel.empty().mix(PICARD_COLLECTWGSMETRICS_Y.out.metrics, SENTIEON_WGSMETRICS_Y.out.wgs_metrics)
 
         ch_versions = ch_versions.mix(CHROMOGRAPH_COV.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions.first())
@@ -77,8 +81,6 @@ workflow QC_BAM {
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions.first())
         ch_versions = ch_versions.mix(MOSDEPTH.out.versions.first())
         ch_versions = ch_versions.mix(NGSBITS_SAMPLEGENDER.out.versions.first())
-        ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS.out.versions.first(), SENTIEON_WGSMETRICS.out.versions.first())
-        ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_Y.out.versions.first(), SENTIEON_WGSMETRICS_Y.out.versions.first())
 
     emit:
         multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]
