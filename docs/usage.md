@@ -547,4 +547,4 @@ plugins {
 }
 ```
 
-This should go in your Nextflow confgiguration file, specified with `-c <YOURCONFIG>` when running the pipeline.
+This should go in your Nextflow configuration file, specified with `-c <YOURCONFIG>` when running the pipeline.
