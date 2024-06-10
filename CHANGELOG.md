@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Citations for bwameme [#563](https://github.com/nf-core/raredisease/pull/563)
+
 ## 2.1.0 - Obelix [2024-05-29]
 
 ### `Added`
