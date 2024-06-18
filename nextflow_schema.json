@@ -113,7 +113,7 @@
                     "type": "string",
                     "exists": true,
                     "fa_icon": "fas fa-file",
-                    "description": "A file containing the path to the models produced by GATK4 GermlineCNVCaller cohort.",
+                    "description": "A file containing the path to models produced by GATK4 GermlineCNVCaller cohort.",
                     "format": "file-path",
                     "help_text": "This model is required for generating a cnv calls when using GermlineCNVCaller."
                 },
