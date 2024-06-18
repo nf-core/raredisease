@@ -21,9 +21,10 @@ Table of contents:
       - [7. SNV annotation \& Ranking](#7-snv-annotation--ranking)
       - [8. SV annotation \& Ranking](#8-sv-annotation--ranking)
       - [9. Mitochondrial annotation](#9-mitochondrial-annotation)
-      - [10. Mobile element annoation](#10-mobile-element-annotation)
-      - [11. Variant evaluation](#11-variant-evaluation)
-      - [12. Prepare data CNV visualization in Gens](#12-prepare-data-for-cnv-visualisation-in-gens)
+      - [10. Mobile element calling](#10-mobile-element-calling)
+      - [11. Mobile element annotation](#11-mobile-element-annotation)
+      - [12. Variant evaluation](#12-variant-evaluation)
+      - [13. Prepare data for CNV visualisation in Gens](#13-prepare-data-for-cnv-visualisation-in-gens)
     - [Run the pipeline](#run-the-pipeline)
       - [Direct input in CLI](#direct-input-in-cli)
       - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
@@ -281,7 +282,16 @@ We use CADD only to annotate small indels. To annotate SNVs with precomputed CAD
 | score_config_mt          |                                   |
 | variant_consequences_snv |                                   |
 
-##### 10. Mobile element annotation
+##### 10. Mobile element calling
+
+| Mandatory                             | Optional |
+| ------------------------------------- | -------- |
+| genome                                |          |
+| mobile_element_references<sup>1</sup> |          |
+
+<sup>1</sup> A TSV file that describes the references (BEDs) used by RetroSeq for calling mobile elements. Sample file [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/mobile_element_references.tsv)
+
+##### 11. Mobile element annotation
 
 | Mandatory                                   | Optional                          |
 | ------------------------------------------- | --------------------------------- |
@@ -293,7 +303,7 @@ We use CADD only to annotate small indels. To annotate SNVs with precomputed CAD
 
 <sup>1</sup> A CSV file that describes the databases (VCFs) used by SVDB for annotating mobile elements with allele frequencies. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv).
 
-##### 11. Variant evaluation
+##### 12. Variant evaluation
 
 | Mandatory                  | Optional |
 | -------------------------- | -------- |
@@ -303,7 +313,7 @@ We use CADD only to annotate small indels. To annotate SNVs with precomputed CAD
 <sup>1</sup> This parameter is set to false by default, set it to true if if you'd like to run the evaluation subworkflow
 <sup>2</sup> A CSV file that describes the truth VCF files used by RTG Tools' vcfeval for evaluating SNVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rtg_example.csv). The file contains four columns `samplename,vcf,bedregions,evaluationregions` where samplename is the user assigned samplename in the input samplesheet, vcf is the path to the truth vcf file, bedregions and evaluationregions are the path to the bed files that are supposed to be passed through --bed_regions and --evaluation_regions options of vcfeval.
 
-##### 12. Prepare data for CNV visualisation in Gens
+##### 13. Prepare data for CNV visualisation in Gens
 
 Optionally the read data can be prepared for CNV visualization in [Gens](https://github.com/Clinical-Genomics-Lund/gens). This subworkflow is turned off by default. You can activate it by supplying the option `--skip_gens false`.
 
@@ -435,6 +445,8 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
   - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
 - `apptainer`
   - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
+- `wave`
+  - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow ` 24.03.0-edge` or later).
 - `conda`
   - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
 

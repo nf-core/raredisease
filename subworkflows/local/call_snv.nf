@@ -38,6 +38,8 @@ workflow CALL_SNV {
         ch_deepvar_tbi   = Channel.empty()
         ch_deepvar_gvcf  = Channel.empty()
         ch_deepvar_gtbi  = Channel.empty()
+        ch_mt_vcf        = Channel.empty()
+        ch_mt_tabix      = Channel.empty()
         ch_sentieon_vcf  = Channel.empty()
         ch_sentieon_tbi  = Channel.empty()
         ch_sentieon_gvcf = Channel.empty()
@@ -74,7 +76,7 @@ workflow CALL_SNV {
             ch_sentieon_vcf = CALL_SNV_SENTIEON.out.vcf
             ch_sentieon_tbi = CALL_SNV_SENTIEON.out.tabix
             ch_sentieon_gvcf = CALL_SNV_SENTIEON.out.gvcf
-            ch_sentieon_gtbi = CALL_SNV_SENTIEON.out.gtbi
+            ch_sentieon_gtbi = CALL_SNV_SENTIEON.out.gvcf_tbi
             ch_versions    = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
         }
 
@@ -93,46 +95,49 @@ workflow CALL_SNV {
         ch_genome_tabix     = GATK4_SELECTVARIANTS.out.tbi
         ch_genome_vcf_tabix = ch_genome_vcf.join(ch_genome_tabix, failOnMismatch:true, failOnDuplicate:true)
 
-        CALL_SNV_MT(
-            ch_mt_bam_bai,
-            ch_genome_fasta,
-            ch_genome_fai,
-            ch_genome_dictionary,
-            ch_mt_intervals
-        )
+        if (params.analysis_type.equals("wgs") || params.run_mt_for_wes) {
+            CALL_SNV_MT(
+                ch_mt_bam_bai,
+                ch_genome_fasta,
+                ch_genome_fai,
+                ch_genome_dictionary,
+                ch_mt_intervals
+            )
 
-        CALL_SNV_MT_SHIFT(
-            ch_mtshift_bam_bai,
-            ch_mtshift_fasta,
-            ch_mtshift_fai,
-            ch_mtshift_dictionary,
-            ch_mtshift_intervals
-        )
+            CALL_SNV_MT_SHIFT(
+                ch_mtshift_bam_bai,
+                ch_mtshift_fasta,
+                ch_mtshift_fai,
+                ch_mtshift_dictionary,
+                ch_mtshift_intervals
+            )
 
-        POSTPROCESS_MT_CALLS(
-            CALL_SNV_MT.out.vcf,
-            CALL_SNV_MT_SHIFT.out.vcf,
-            ch_genome_fasta,
-            ch_genome_dictionary,
-            ch_genome_fai,
-            ch_mtshift_backchain,
-            ch_case_info,
-            ch_foundin_header,
-            ch_genome_chrsizes
-        )
-
-        ch_versions = ch_versions.mix(CALL_SNV_MT.out.versions)
-        ch_versions = ch_versions.mix(CALL_SNV_MT_SHIFT.out.versions)
-        ch_versions = ch_versions.mix(POSTPROCESS_MT_CALLS.out.versions)
-        ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
+            POSTPROCESS_MT_CALLS(
+                CALL_SNV_MT.out.vcf,
+                CALL_SNV_MT_SHIFT.out.vcf,
+                ch_genome_fasta,
+                ch_genome_dictionary,
+                ch_genome_fai,
+                ch_mtshift_backchain,
+                ch_case_info,
+                ch_foundin_header,
+                ch_genome_chrsizes
+            )
+            ch_mt_vcf   = POSTPROCESS_MT_CALLS.out.vcf
+            ch_mt_tabix = POSTPROCESS_MT_CALLS.out.tbi
+            ch_versions = ch_versions.mix(CALL_SNV_MT.out.versions)
+            ch_versions = ch_versions.mix(CALL_SNV_MT_SHIFT.out.versions)
+            ch_versions = ch_versions.mix(POSTPROCESS_MT_CALLS.out.versions)
+            ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
+        }
 
     emit:
-        genome_vcf       = ch_genome_vcf                // channel: [ val(meta), path(vcf) ]
-        genome_tabix     = ch_genome_tabix              // channel: [ val(meta), path(tbi) ]
-        genome_vcf_tabix = ch_genome_vcf_tabix          // channel: [ val(meta), path(vcf), path(tbi) ]
-        genome_gvcf      = ch_gvcf                      // channel: [ val(meta), path(gvcf) ]
-        genome_gtabix    = ch_gtabix                    // channel: [ val(meta), path(gtbi) ]
-        mt_vcf           = POSTPROCESS_MT_CALLS.out.vcf // channel: [ val(meta), path(vcf) ]
-        mt_tabix         = POSTPROCESS_MT_CALLS.out.tbi // channel: [ val(meta), path(tbi) ]
-        versions         = ch_versions                  // channel: [ path(versions.yml) ]
+        genome_vcf       = ch_genome_vcf       // channel: [ val(meta), path(vcf) ]
+        genome_tabix     = ch_genome_tabix     // channel: [ val(meta), path(tbi) ]
+        genome_vcf_tabix = ch_genome_vcf_tabix // channel: [ val(meta), path(vcf), path(tbi) ]
+        genome_gvcf      = ch_gvcf             // channel: [ val(meta), path(gvcf) ]
+        genome_gtabix    = ch_gtabix           // channel: [ val(meta), path(gtbi) ]
+        mt_vcf           = ch_mt_vcf           // channel: [ val(meta), path(vcf) ]
+        mt_tabix         = ch_mt_tabix         // channel: [ val(meta), path(tbi) ]
+        versions         = ch_versions         // channel: [ path(versions.yml) ]
 }

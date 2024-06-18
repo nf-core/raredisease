@@ -2,8 +2,10 @@
 // Map to reference, fetch stats for each demultiplexed read pair, merge, mark duplicates, and index.
 //
 
-include { BWA_MEM                                  } from '../../../modules/nf-core/bwa/mem/main'
+include { BWA_MEM as BWA                           } from '../../../modules/nf-core/bwa/mem/main'
+include { BWA_MEM as BWAMEM_FALLBACK               } from '../../../modules/nf-core/bwa/mem/main'
 include { BWAMEM2_MEM                              } from '../../../modules/nf-core/bwamem2/mem/main'
+include { BWAMEME_MEM                              } from '../../../modules/nf-core/bwameme/mem/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_ALIGN   } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MARKDUP } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_STATS                           } from '../../../modules/nf-core/samtools/stats/main'
@@ -11,11 +13,12 @@ include { SAMTOOLS_MERGE                           } from '../../../modules/nf-c
 include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-core/picard/markduplicates/main'
 
 
-workflow ALIGN_BWA_BWAMEM2 {
+workflow ALIGN_BWA_BWAMEM2_BWAMEME {
     take:
         ch_reads_input   // channel: [mandatory] [ val(meta), path(reads_input) ]
         ch_bwa_index     // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
         ch_bwamem2_index // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
+        ch_bwameme_index // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
         ch_genome_fasta  // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai    // channel: [mandatory] [ val(meta), path(fai) ]
         val_platform     // string:  [mandatory] default: illumina
@@ -25,13 +28,33 @@ workflow ALIGN_BWA_BWAMEM2 {
 
         // Map, sort, and index
         if (params.aligner.equals("bwa")) {
-            BWA_MEM ( ch_reads_input, ch_bwa_index, true )
-            ch_align = BWA_MEM.out.bam
-            ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
+            BWA ( ch_reads_input, ch_bwa_index, ch_genome_fasta, true )
+            ch_align = BWA.out.bam
+            ch_versions = ch_versions.mix(BWA.out.versions.first())
+        } else if (params.aligner.equals("bwameme")) {
+            BWAMEME_MEM ( ch_reads_input, ch_bwameme_index, ch_genome_fasta, true )
+            ch_align = BWAMEME_MEM.out.bam
+            ch_versions = ch_versions.mix(BWAMEME_MEM.out.versions.first())
         } else {
-            BWAMEM2_MEM ( ch_reads_input, ch_bwamem2_index, true )
-            ch_align = BWAMEM2_MEM.out.bam
+            BWAMEM2_MEM ( ch_reads_input, ch_bwamem2_index, ch_genome_fasta, true )
+            ch_align    = BWAMEM2_MEM.out.bam
             ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions.first())
+
+            if (params.bwa_as_fallback) {
+                ch_reads_input
+                    .join(BWAMEM2_MEM.out.bam, remainder: true)
+                    .branch { it ->
+                        ERROR: it[2].equals(null)
+                            return [it[0], it[1]] // return reads
+                        SUCCESS: !it[2].equals(null)
+                            return [it[0], it[2]]  // return bam
+                    }
+                    .set { ch_fallback }
+
+                BWAMEM_FALLBACK ( ch_fallback.ERROR, ch_bwa_index, ch_genome_fasta, true )
+                ch_align = ch_fallback.SUCCESS.mix(BWAMEM_FALLBACK.out.bam)
+                ch_versions = ch_versions.mix(BWAMEM_FALLBACK.out.versions.first())
+            }
         }
 
         SAMTOOLS_INDEX_ALIGN ( ch_align )
@@ -44,7 +67,7 @@ workflow ALIGN_BWA_BWAMEM2 {
         ch_align
             .map{ meta, bam ->
                     new_id   = meta.sample
-                    new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"]
+                    new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
                     [groupKey(new_meta, new_meta.num_lanes), bam]
                 }
             .groupTuple()
