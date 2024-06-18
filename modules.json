@@ -82,7 +82,7 @@
                     },
                     "bwameme/mem": {
                         "branch": "master",
-                        "git_sha": "79480293280ff4f10f30bdea1ddd903f223f8489",
+                        "git_sha": "c3793385cf559bb60d33e6c3b0cb379a40b26602",
                         "installed_by": ["modules"]
                     },
                     "cadd": {
