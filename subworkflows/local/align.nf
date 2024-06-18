@@ -25,6 +25,7 @@ workflow ALIGN {
         ch_mtshift_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_mtshift_dictionary    // channel: [mandatory] [ val(meta), path(dict) ]
         ch_mtshift_fai           // channel: [mandatory] [ val(meta), path(fai) ]
+        val_mbuffer_mem          // integer: [mandatory] memory in megabytes
         val_platform             // string:  [mandatory] illumina or a different technology
 
     main:
@@ -56,6 +57,7 @@ workflow ALIGN {
                 ch_genome_bwamemeindex,
                 ch_genome_fasta,
                 ch_genome_fai,
+                val_mbuffer_mem,
                 val_platform
             )
             ch_bwamem2_bam = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bam

@@ -370,6 +370,7 @@ workflow RAREDISEASE {
         ch_mtshift_fasta,
         ch_mtshift_dictionary,
         ch_mtshift_fai,
+        params.mbuffer_mem,
         params.platform
     )
     .set { ch_mapped }

@@ -605,6 +605,13 @@
                     "fa_icon": "fas fa-align-center",
                     "enum": ["bwa", "bwamem2", "bwameme", "sentieon"]
                 },
+                "mbuffer_mem": {
+                    "type": "integer",
+                    "default": 3072,
+                    "description": "Memory allocated for mbuffer in megabytes (used only by bwameme)",
+                    "help_text": "To know more about this parameter check [bwameme](https://github.com/kaist-ina/BWA-MEME?tab=readme-ov-file#building-pipeline-with-samtools) documentation.",
+                    "fa_icon": "fas fa-less-than"
+                },
                 "min_trimmed_length": {
                     "type": "integer",
                     "default": 40,
