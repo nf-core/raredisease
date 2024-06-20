@@ -217,6 +217,7 @@ def toolCitationText() {
     align_text = [
         params.aligner.equals("bwa") ? "BWA (Li, 2013)," :"",
         params.aligner.equals("bwamem2") ? "BWA-MEM2 (Vasimuddin et al., 2019)," : "",
+        params.aligner.equals("bwameme") ? "BWA-MEME (Jung et al., 2022)," : "",
         params.aligner.equals("sentieon") ? "Sentieon DNASeq (Kendig et al., 2019)," : "",
         params.aligner.equals("sentieon") ? "Sentieon Tools (Freed et al., 2017)," : ""
     ]
@@ -325,6 +326,7 @@ def toolBibliographyText() {
     align_text = [
         params.aligner.equals("bwa") ? "<li>Li, H. (2013). Aligning sequence reads, clone sequences and assembly contigs with BWA-MEM (arXiv:1303.3997). arXiv. http://arxiv.org/abs/1303.3997</li>" :"",
         params.aligner.equals("bwamem2") ? "<li>Vasimuddin, Md., Misra, S., Li, H., & Aluru, S. (2019). Efficient Architecture-Aware Acceleration of BWA-MEM for Multicore Systems. 2019 IEEE International Parallel and Distributed Processing Symposium (IPDPS), 314–324. https://doi.org/10.1109/IPDPS.2019.00041</li>" : "",
+        params.aligner.equals("bwameme") ? "<li>Jung Y, Han D. BWA-MEME: BWA-MEM emulated with a machine learning approach. Bioinformatics. 2022;38(9):2404-2413. doi:10.1093/bioinformatics/btac137</li>" : "",
         params.aligner.equals("sentieon") ? "<li>Kendig, K. I., Baheti, S., Bockol, M. A., Drucker, T. M., Hart, S. N., Heldenbrand, J. R., Hernaez, M., Hudson, M. E., Kalmbach, M. T., Klee, E. W., Mattson, N. R., Ross, C. A., Taschuk, M., Wieben, E. D., Wiepert, M., Wildman, D. E., & Mainzer, L. S. (2019). Sentieon DNASeq Variant Calling Workflow Demonstrates Strong Computational Performance and Accuracy. Frontiers in Genetics, 10, 736. https://doi.org/10.3389/fgene.2019.00736</li>" : "",
         params.aligner.equals("sentieon") ? "<li>Freed, D., Aldana, R., Weber, J. A., & Edwards, J. S. (2017). The Sentieon Genomics Tools—A fast and accurate solution to variant calling from next-generation sequence data (p. 115717). bioRxiv. https://doi.org/10.1101/115717</li>" : ""
     ]

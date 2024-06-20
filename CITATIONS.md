@@ -22,6 +22,10 @@
 
   > Vasimuddin Md, Misra S, Li H, Aluru S. Efficient Architecture-Aware Acceleration of BWA-MEM for Multicore Systems. In: 2019 IEEE International Parallel and Distributed Processing Symposium (IPDPS). IEEE; 2019:314-324. doi:10.1109/IPDPS.2019.00041
 
+- [BWA-MEME](https://academic.oup.com/bioinformatics/article/38/9/2404/6543607)
+
+  > Jung Y, Han D. BWA-MEME: BWA-MEM emulated with a machine learning approach. Bioinformatics. 2022;38(9):2404-2413. doi:10.1093/bioinformatics/btac137
+
 - [CADD<sup>1</sup>](https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-021-00835-9)<sup>,</sup> [<sup>2</sup>](https://academic.oup.com/nar/article/47/D1/D886/5146191)
 
   > Rentzsch P, Schubach M, Shendure J, Kircher M. CADD-Splice—improving genome-wide variant effect prediction using deep learning-derived splice scores. Genome Med. 2021;13(1):31. doi:10.1186/s13073-021-00835-9
