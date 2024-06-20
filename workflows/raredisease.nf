@@ -258,7 +258,7 @@ workflow RAREDISEASE {
     ch_ploidy_model             = params.ploidy_model                       ? Channel.fromPath(params.ploidy_model).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                             : Channel.empty()
     ch_readcount_intervals      = params.readcount_intervals                ? Channel.fromPath(params.readcount_intervals).collect()
-                                                                            : ( ch_references.readcount_intervals      ?: Channel.empty() )
+                                                                            : Channel.empty()
     ch_reduced_penetrance       = params.reduced_penetrance                 ? Channel.fromPath(params.reduced_penetrance).collect()
                                                                             : Channel.value([])
     ch_rtg_truthvcfs            = params.rtg_truthvcfs                      ? Channel.fromPath(params.rtg_truthvcfs).collect()
@@ -409,15 +409,17 @@ workflow RAREDISEASE {
     //
     // EXPANSIONHUNTER AND STRANGER
     //
-    if (params.analysis_type.equals("wgs")) {
-        CALL_REPEAT_EXPANSIONS (
-            ch_mapped.genome_bam_bai,
-            ch_variant_catalog,
-            ch_case_info,
-            ch_genome_fasta,
-            ch_genome_fai
-        )
-        ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
+    if (!params.skip_repeat_analysis) {
+        if ( params.analysis_type.equals("wgs") ) {
+            CALL_REPEAT_EXPANSIONS (
+                ch_mapped.genome_bam_bai,
+                ch_variant_catalog,
+                ch_case_info,
+                ch_genome_fasta,
+                ch_genome_fai
+            )
+            ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
+        }
     }
 
     //
