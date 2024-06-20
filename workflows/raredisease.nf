@@ -373,7 +373,8 @@ workflow RAREDISEASE {
         ch_mtshift_dictionary,
         ch_mtshift_fai,
         params.mbuffer_mem,
-        params.platform
+        params.platform,
+        params.samtools_sort_threads
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)

@@ -23,7 +23,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         ch_genome_fai    // channel: [mandatory] [ val(meta), path(fai) ]
         val_mbuffer_mem  // integer: [mandatory] default: 3072
         val_platform     // string:  [mandatory] default: illumina
-
+        val_sort_threads // integer: [mandatory] default: 4
     main:
         ch_versions = Channel.empty()
 
@@ -33,7 +33,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
             ch_align = BWA.out.bam
             ch_versions = ch_versions.mix(BWA.out.versions.first())
         } else if (params.aligner.equals("bwameme")) {
-            BWAMEME_MEM ( ch_reads_input, ch_bwameme_index, ch_genome_fasta, true, val_mbuffer_mem )
+            BWAMEME_MEM ( ch_reads_input, ch_bwameme_index, ch_genome_fasta, true, val_mbuffer_mem, val_sort_threads )
             ch_align = BWAMEME_MEM.out.bam
             ch_versions = ch_versions.mix(BWAMEME_MEM.out.versions.first())
         } else {
