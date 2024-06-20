@@ -31,13 +31,14 @@ include { UNTAR as UNTAR_VEP_CACHE                           } from '../../modul
 
 workflow PREPARE_REFERENCES {
     take:
-        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_mt_fasta        // channel: [mandatory for dedicated mt analysis] [ val(meta), path(fasta) ]
-        ch_gnomad_af_tab   // channel: [optional; used in for snv annotation] [ val(meta), path(tab) ]
-        ch_known_dbsnp     // channel: [optional; used only by sentieon] [ val(meta), path(vcf) ]
-        ch_target_bed      // channel: [mandatory for WES] [ path(bed) ]
-        ch_vep_cache       // channel: [mandatory for annotation] [ path(cache) ]
+        ch_genome_fasta      // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai        // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_dictionary // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_mt_fasta          // channel: [mandatory for dedicated mt analysis] [ val(meta), path(fasta) ]
+        ch_gnomad_af_tab     // channel: [optional; used in for snv annotation] [ val(meta), path(tab) ]
+        ch_known_dbsnp       // channel: [optional; used only by sentieon] [ val(meta), path(vcf) ]
+        ch_target_bed        // channel: [mandatory for WES] [ path(bed) ]
+        ch_vep_cache         // channel: [mandatory for annotation] [ path(cache) ]
 
     main:
         ch_versions    = Channel.empty()
@@ -49,7 +50,8 @@ workflow PREPARE_REFERENCES {
         // Genome indices
         SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[],[]])
         GATK_SD(ch_genome_fasta)
-        ch_fai = Channel.empty().mix(ch_genome_fai, SAMTOOLS_FAIDX_GENOME.out.fai).collect()
+        ch_fai  = Channel.empty().mix(ch_genome_fai, SAMTOOLS_FAIDX_GENOME.out.fai).collect()
+        ch_dict = Channel.empty().mix(ch_genome_dictionary, GATK_SD.out.dict).collect()
         GET_CHROM_SIZES( ch_fai )
 
         // Genome alignment indices
@@ -89,7 +91,7 @@ workflow PREPARE_REFERENCES {
         TABIX_PBT(ch_target_bed).gz_tbi.set { ch_bgzip_tbi }
 
         // Generate bait and target intervals
-        GATK_BILT(ch_target_bed, GATK_SD.out.dict).interval_list
+        GATK_BILT(ch_target_bed, ch_dict).interval_list
         GATK_ILT(GATK_BILT.out.interval_list)
         GATK_ILT.out.interval_list
             .collect{ it[1] }
@@ -100,10 +102,6 @@ workflow PREPARE_REFERENCES {
             .set { ch_bait_intervals_cat_in }
         CAT_CAT_BAIT ( ch_bait_intervals_cat_in )
         UNTAR_VEP_CACHE (ch_vep_cache)
-
-        //cnvcalling intervals
-        GATK_PREPROCESS_WGS (ch_genome_fasta, ch_fai, GATK_SD.out.dict, [[],[]], [[],[]]).set {ch_preprocwgs}
-        GATK_PREPROCESS_WES (ch_genome_fasta, ch_fai, GATK_SD.out.dict, GATK_BILT.out.interval_list, [[],[]]).set {ch_preprocwes}
 
         // RTG tools
         ch_genome_fasta.map { meta, fasta -> return [meta, fasta, [], [] ] }
@@ -134,8 +132,6 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(GATK_ILT.out.versions)
         ch_versions = ch_versions.mix(CAT_CAT_BAIT.out.versions)
         ch_versions = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
-        ch_versions = ch_versions.mix(GATK_PREPROCESS_WGS.out.versions)
-        ch_versions = ch_versions.mix(GATK_PREPROCESS_WES.out.versions)
         ch_versions = ch_versions.mix(RTGTOOLS_FORMAT.out.versions)
 
     emit:
@@ -144,9 +140,7 @@ workflow PREPARE_REFERENCES {
         genome_bwameme_index  = BWAMEME_INDEX_GENOME.out.index.collect()                         // channel: [ val(meta), path(index) ]
         genome_chrom_sizes    = GET_CHROM_SIZES.out.sizes.collect()                              // channel: [ path(sizes) ]
         genome_fai            = ch_fai                                                           // channel: [ val(meta), path(fai) ]
-        genome_dict           = GATK_SD.out.dict.collect()                                       // channel: [ path(dict) ]
-        readcount_intervals   = Channel.empty()
-                                    .mix(ch_preprocwgs.interval_list,ch_preprocwes.interval_list)// channel: [ path(intervals) ]
+        genome_dict           = ch_dict                                                          // channel: [ val(meta), path(dict) ]
         sdf                   = RTGTOOLS_FORMAT.out.sdf                                          // channel: [ val (meta), path(intervals) ]
         mt_intervals          = ch_shiftfasta_mtintervals.intervals.collect()                    // channel: [ path(intervals) ]
         mtshift_intervals     = ch_shiftfasta_mtintervals.shift_intervals.collect()              // channel: [ path(intervals) ]
