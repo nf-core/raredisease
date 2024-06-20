@@ -7,15 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- Two new parameters `mbuffer_mem` and `samtools_sort_threads` to control resources given to mbuffer and samtools sort in the bwameme module [#564](https://github.com/nf-core/raredisease/pull/564)
+- Two new parameters `mbuffer_mem` and `samtools_sort_threads` to control resources given to mbuffer and samtools sort in the bwameme module [#570](https://github.com/nf-core/raredisease/pull/570)
 
 ### `Changed`
 
-- `readcount_intervals` parameter is now manadatory for running germlinecnvcaller. [#564](https://github.com/nf-core/raredisease/pull/564)
+- `readcount_intervals` parameter is now manadatory for running germlinecnvcaller. [#570](https://github.com/nf-core/raredisease/pull/570)
 
 ### `Fixed`
 
-- Docker manifest error from gnu-wget container [#564](https://github.com/nf-core/raredisease/pull/564)
+- Docker manifest error from gnu-wget container [#570](https://github.com/nf-core/raredisease/pull/570)
 - Citations for bwameme [#563](https://github.com/nf-core/raredisease/pull/563)
 
 ### Parameters
