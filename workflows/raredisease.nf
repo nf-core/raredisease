@@ -355,9 +355,12 @@ workflow RAREDISEASE {
 
     ch_scatter_split_intervals  = ch_scatter.split_intervals  ?: Channel.empty()
 
-    //
-    // ALIGNING READS, FETCH STATS, AND MERGE.
-    //
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ALIGN & FETCH STATS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
     ALIGN (
         ch_samplesheet,
         ch_genome_fasta,
@@ -406,9 +409,12 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions)
 
-    //
-    // EXPANSIONHUNTER AND STRANGER
-    //
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    CALL AND ANNOTATE REPEAT EXPANSIONS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
     if (!params.skip_repeat_analysis) {
         if ( params.analysis_type.equals("wgs") ) {
             CALL_REPEAT_EXPANSIONS (
@@ -422,49 +428,133 @@ workflow RAREDISEASE {
         }
     }
 
-    //
-    // SNV CALLING
-    //
-    CALL_SNV (
-        ch_mapped.genome_bam_bai,
-        ch_mapped.mt_bam_bai,
-        ch_mapped.mtshift_bam_bai,
-        ch_genome_chrsizes,
-        ch_genome_fasta,
-        ch_genome_fai,
-        ch_genome_dictionary,
-        ch_mt_intervals,
-        ch_mtshift_fasta,
-        ch_mtshift_fai,
-        ch_mtshift_dictionary,
-        ch_mtshift_intervals,
-        ch_mtshift_backchain,
-        ch_dbsnp,
-        ch_dbsnp_tbi,
-        ch_call_interval,
-        ch_ml_model,
-        ch_case_info,
-        ch_foundin_header,
-        Channel.value(params.sentieon_dnascope_pcr_indel_model)
-    )
-    ch_versions = ch_versions.mix(CALL_SNV.out.versions)
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    CALL AND ANNOTATE NUCLEAR AND MITOCHONDRIAL SNVs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+    if (!params.skip_snv_calling) {
+        CALL_SNV (
+            ch_mapped.genome_bam_bai,
+            ch_mapped.mt_bam_bai,
+            ch_mapped.mtshift_bam_bai,
+            ch_genome_chrsizes,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_genome_dictionary,
+            ch_mt_intervals,
+            ch_mtshift_fasta,
+            ch_mtshift_fai,
+            ch_mtshift_dictionary,
+            ch_mtshift_intervals,
+            ch_mtshift_backchain,
+            ch_dbsnp,
+            ch_dbsnp_tbi,
+            ch_call_interval,
+            ch_ml_model,
+            ch_case_info,
+            ch_foundin_header,
+            Channel.value(params.sentieon_dnascope_pcr_indel_model)
+        )
+        ch_versions = ch_versions.mix(CALL_SNV.out.versions)
 
     //
-    // VARIANT EVALUATION
+    // ANNOTATE GENOME SNVs
     //
-    if (params.run_rtgvcfeval) {
-        VARIANT_EVALUATION (
-            CALL_SNV.out.genome_vcf_tabix,
-            ch_genome_fai,
-            ch_rtg_truthvcfs,
-            ch_sdf
-        )
-        ch_versions = ch_versions.mix(VARIANT_EVALUATION.out.versions)
+
+        if (!params.skip_snv_annotation) {
+
+            ANNOTATE_GENOME_SNVS (
+                CALL_SNV.out.genome_vcf_tabix,
+                params.analysis_type,
+                ch_cadd_header,
+                ch_cadd_resources,
+                ch_vcfanno_resources,
+                ch_vcfanno_lua,
+                ch_vcfanno_toml,
+                params.genome,
+                params.vep_cache_version,
+                ch_vep_cache,
+                ch_genome_fasta,
+                ch_gnomad_af,
+                ch_samples,
+                ch_scatter_split_intervals,
+                ch_vep_extra_files,
+                ch_genome_chrsizes
+            ).set { ch_snv_annotate }
+            ch_versions = ch_versions.mix(ch_snv_annotate.versions)
+
+            GENERATE_CLINICAL_SET_SNV(
+                ch_snv_annotate.vcf_ann,
+                ch_hgnc_ids
+            )
+            ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SNV.out.versions)
+
+            ANN_CSQ_PLI_SNV (
+                GENERATE_CLINICAL_SET_SNV.out.vcf,
+                ch_variant_consequences_snv
+            )
+            ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)
+
+            RANK_VARIANTS_SNV (
+                ANN_CSQ_PLI_SNV.out.vcf_ann,
+                ch_pedfile,
+                ch_reduced_penetrance,
+                ch_score_config_snv
+            )
+            ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
+        }
+
+    //
+    // ANNOTATE MT SNVs
+    //
+
+        if (!params.skip_mt_annotation && (params.run_mt_for_wes || params.analysis_type.equals("wgs"))) {
+
+            ANNOTATE_MT_SNVS (
+                CALL_SNV.out.mt_vcf,
+                CALL_SNV.out.mt_tabix,
+                ch_cadd_header,
+                ch_cadd_resources,
+                ch_genome_fasta,
+                ch_vcfanno_resources,
+                ch_vcfanno_toml,
+                params.genome,
+                params.vep_cache_version,
+                ch_vep_cache,
+                ch_vep_extra_files
+            ).set { ch_mt_annotate }
+            ch_versions = ch_versions.mix(ch_mt_annotate.versions)
+
+            GENERATE_CLINICAL_SET_MT(
+                ch_mt_annotate.vcf_ann,
+                ch_hgnc_ids
+            )
+            ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_MT.out.versions)
+
+            ANN_CSQ_PLI_MT(
+                GENERATE_CLINICAL_SET_MT.out.vcf,
+                ch_variant_consequences_snv
+            )
+            ch_versions = ch_versions.mix(ANN_CSQ_PLI_MT.out.versions)
+
+            RANK_VARIANTS_MT (
+                ANN_CSQ_PLI_MT.out.vcf_ann,
+                ch_pedfile,
+                ch_reduced_penetrance,
+                ch_score_config_mt
+            )
+            ch_versions = ch_versions.mix(RANK_VARIANTS_MT.out.versions)
+        }
     }
 
-    //
-    // SV CALLING
-    //
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    CALL AND ANNOTATE NUCLEAR AND MITOCHONDRIAL SVs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
     CALL_STRUCTURAL_VARIANTS (
         ch_mapped.genome_marked_bam,
         ch_mapped.genome_marked_bai,
@@ -524,94 +614,8 @@ workflow RAREDISEASE {
 
     }
 
-    //
-    // ANNOTATE GENOME SNVs
-    //
-    if (!params.skip_snv_annotation) {
 
-        ANNOTATE_GENOME_SNVS (
-            CALL_SNV.out.genome_vcf_tabix,
-            params.analysis_type,
-            ch_cadd_header,
-            ch_cadd_resources,
-            ch_vcfanno_resources,
-            ch_vcfanno_lua,
-            ch_vcfanno_toml,
-            params.genome,
-            params.vep_cache_version,
-            ch_vep_cache,
-            ch_genome_fasta,
-            ch_gnomad_af,
-            ch_samples,
-            ch_scatter_split_intervals,
-            ch_vep_extra_files,
-            ch_genome_chrsizes
-        ).set { ch_snv_annotate }
-        ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 
-        GENERATE_CLINICAL_SET_SNV(
-            ch_snv_annotate.vcf_ann,
-            ch_hgnc_ids
-        )
-        ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SNV.out.versions)
-
-        ANN_CSQ_PLI_SNV (
-            GENERATE_CLINICAL_SET_SNV.out.vcf,
-            ch_variant_consequences_snv
-        )
-        ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)
-
-        RANK_VARIANTS_SNV (
-            ANN_CSQ_PLI_SNV.out.vcf_ann,
-            ch_pedfile,
-            ch_reduced_penetrance,
-            ch_score_config_snv
-        )
-        ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
-
-    }
-
-    //
-    // ANNOTATE MT SNVs
-    //
-    if (!params.skip_mt_annotation && (params.run_mt_for_wes || params.analysis_type.equals("wgs"))) {
-
-        ANNOTATE_MT_SNVS (
-            CALL_SNV.out.mt_vcf,
-            CALL_SNV.out.mt_tabix,
-            ch_cadd_header,
-            ch_cadd_resources,
-            ch_genome_fasta,
-            ch_vcfanno_resources,
-            ch_vcfanno_toml,
-            params.genome,
-            params.vep_cache_version,
-            ch_vep_cache,
-            ch_vep_extra_files
-        ).set { ch_mt_annotate }
-        ch_versions = ch_versions.mix(ch_mt_annotate.versions)
-
-        GENERATE_CLINICAL_SET_MT(
-            ch_mt_annotate.vcf_ann,
-            ch_hgnc_ids
-        )
-        ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_MT.out.versions)
-
-        ANN_CSQ_PLI_MT(
-            GENERATE_CLINICAL_SET_MT.out.vcf,
-            ch_variant_consequences_snv
-        )
-        ch_versions = ch_versions.mix(ANN_CSQ_PLI_MT.out.versions)
-
-        RANK_VARIANTS_MT (
-            ANN_CSQ_PLI_MT.out.vcf_ann,
-            ch_pedfile,
-            ch_reduced_penetrance,
-            ch_score_config_mt
-        )
-        ch_versions = ch_versions.mix(RANK_VARIANTS_MT.out.versions)
-
-    }
 
     // STEP 1.7: SMNCOPYNUMBERCALLER
     RENAME_BAM_FOR_SMNCALLER(ch_mapped.genome_marked_bam, "bam").output
@@ -712,6 +716,20 @@ workflow RAREDISEASE {
 
         }
     }
+
+    //
+    // VARIANT EVALUATION
+    //
+    if (params.run_rtgvcfeval) {
+        VARIANT_EVALUATION (
+            CALL_SNV.out.genome_vcf_tabix,
+            ch_genome_fai,
+            ch_rtg_truthvcfs,
+            ch_sdf
+        )
+        ch_versions = ch_versions.mix(VARIANT_EVALUATION.out.versions)
+    }
+
     //
     // Collate and save software versions
     //
