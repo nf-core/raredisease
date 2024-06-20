@@ -206,11 +206,6 @@
                         "git_sha": "cf607b7749da0a8f5ca2a1e31233e13e3159e2fe",
                         "installed_by": ["modules"]
                     },
-                    "gatk4/preprocessintervals": {
-                        "branch": "master",
-                        "git_sha": "d742e3143f2ccb8853c29b35cfcf50b5e5026980",
-                        "installed_by": ["modules"]
-                    },
                     "gatk4/printreads": {
                         "branch": "master",
                         "git_sha": "d742e3143f2ccb8853c29b35cfcf50b5e5026980",
