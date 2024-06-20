@@ -258,7 +258,7 @@ workflow RAREDISEASE {
     ch_ploidy_model             = params.ploidy_model                       ? Channel.fromPath(params.ploidy_model).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                             : Channel.empty()
     ch_readcount_intervals      = params.readcount_intervals                ? Channel.fromPath(params.readcount_intervals).collect()
-                                                                            : ( ch_references.readcount_intervals      ?: Channel.empty() )
+                                                                            : Channel.empty()
     ch_reduced_penetrance       = params.reduced_penetrance                 ? Channel.fromPath(params.reduced_penetrance).collect()
                                                                             : Channel.value([])
     ch_rtg_truthvcfs            = params.rtg_truthvcfs                      ? Channel.fromPath(params.rtg_truthvcfs).collect()
