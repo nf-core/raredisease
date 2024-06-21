@@ -483,10 +483,9 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(CALL_SNV.out.versions)
 
-    //
-    // ANNOTATE GENOME SNVs
-    //
-
+        //
+        // ANNOTATE GENOME SNVs
+        //
         if (!params.skip_snv_annotation) {
 
             ANNOTATE_GENOME_SNVS (
@@ -530,10 +529,9 @@ workflow RAREDISEASE {
             ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
         }
 
-    //
-    // ANNOTATE MT SNVs
-    //
-
+        //
+        // ANNOTATE MT SNVs
+        //
         if (!params.skip_mt_annotation && (params.run_mt_for_wes || params.analysis_type.equals("wgs"))) {
 
             ANNOTATE_MT_SNVS (
