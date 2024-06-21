@@ -170,7 +170,9 @@ workflow RAREDISEASE {
     ch_samples   = ch_samplesheet.map { meta, fastqs -> meta}
     ch_case_info = ch_samples.toList().map { CustomFunctions.createCaseChannel(it) }
 
+    //
     // Initialize file channels for PREPARE_REFERENCES subworkflow
+    //
     ch_genome_fasta            = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
     ch_genome_fai              = params.fai                 ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                             : Channel.empty()
@@ -187,7 +189,9 @@ workflow RAREDISEASE {
     ch_vep_cache_unprocessed   = params.vep_cache           ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
                                                             : Channel.value([[],[]])
 
+    //
     // Prepare references and indices.
+    //
     PREPARE_REFERENCES (
         ch_genome_fasta,
         ch_genome_fai,
@@ -200,7 +204,9 @@ workflow RAREDISEASE {
     )
     .set { ch_references }
 
+    //
     // Gather built indices or get them from the params
+    //
     ch_bait_intervals           = ch_references.bait_intervals
     ch_cadd_header              = Channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_cadd_resources           = params.cadd_resources                     ? Channel.fromPath(params.cadd_resources).collect()
@@ -303,19 +309,31 @@ workflow RAREDISEASE {
                                                                             : Channel.empty()
     ch_versions                 = ch_versions.mix(ch_references.versions)
 
+    //
     // SV caller priority
+    //
     if (params.skip_germlinecnvcaller) {
-        ch_svcaller_priority = Channel.value(["tiddit", "manta", "cnvnator"])
+        if (params.analysis_type.equals("wgs")) {
+            ch_svcaller_priority = Channel.value(["tiddit", "manta", "cnvnator"])
+        } else {
+            ch_svcaller_priority = Channel.value(["manta"])
     } else {
-        ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
+        if (params.analysis_type.equals("wgs")) {
+            ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
+        } else {
+            ch_svcaller_priority = Channel.value(["manta", "gcnvcaller"])
+        }
     }
 
-
+    //
     // Generate pedigree file
+    //
     ch_pedfile   = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
     ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
 
+    //
     // Read and store paths in the vep_plugin_files file
+    //
     if (params.vep_plugin_files) {
         ch_vep_extra_files_unsplit.splitCsv ( header:true )
             .map { row ->
@@ -330,7 +348,9 @@ workflow RAREDISEASE {
             .set {ch_vep_extra_files}
     }
 
-    // Read and store hgnc ids in a channel
+    //
+    // Dump all HGNC ids in a file
+    //
     ch_vep_filters_scout_fmt
         .mix (ch_vep_filters_std_fmt)
         .set {ch_vep_filters}
@@ -339,13 +359,17 @@ workflow RAREDISEASE {
         .txt
         .set {ch_hgnc_ids}
 
+    //
     // Input QC
+    //
     if (!params.skip_fastqc) {
         FASTQC (ch_samplesheet)
         ch_versions = ch_versions.mix(FASTQC.out.versions.first())
     }
 
-    // CREATE CHROMOSOME BED AND INTERVALS
+    //
+    // Create chromosome bed and intervals for splitting and gathering operations
+    //
     SCATTER_GENOME (
         ch_genome_dictionary,
         ch_genome_fai,
@@ -551,134 +575,77 @@ workflow RAREDISEASE {
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    CALL AND ANNOTATE NUCLEAR AND MITOCHONDRIAL SVs
+    CALL AND ANNOTATE NUCLEAR SVs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    CALL_STRUCTURAL_VARIANTS (
-        ch_mapped.genome_marked_bam,
-        ch_mapped.genome_marked_bai,
-        ch_mapped.genome_bam_bai,
-        ch_mapped.mt_bam_bai,
-        ch_mapped.mtshift_bam_bai,
-        ch_genome_bwaindex,
-        ch_genome_fasta,
-        ch_genome_fai,
-        ch_mtshift_fasta,
-        ch_case_info,
-        ch_target_bed,
-        ch_genome_dictionary,
-        ch_svcaller_priority,
-        ch_readcount_intervals,
-        ch_ploidy_model,
-        ch_gcnvcaller_model
-    )
-    ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
+    if (!params.skip_sv_calling) {
+        CALL_STRUCTURAL_VARIANTS (
+            ch_mapped.genome_marked_bam,
+            ch_mapped.genome_marked_bai,
+            ch_mapped.genome_bam_bai,
+            ch_mapped.mt_bam_bai,
+            ch_mapped.mtshift_bam_bai,
+            ch_genome_bwaindex,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_mtshift_fasta,
+            ch_case_info,
+            ch_target_bed,
+            ch_genome_dictionary,
+            ch_svcaller_priority,
+            ch_readcount_intervals,
+            ch_ploidy_model,
+            ch_gcnvcaller_model
+        )
+        ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
     //
     // ANNOTATE STRUCTURAL VARIANTS
     //
-    if (!params.skip_sv_annotation) {
-        ANNOTATE_STRUCTURAL_VARIANTS (
-            CALL_STRUCTURAL_VARIANTS.out.vcf,
-            ch_sv_dbs,
-            ch_sv_bedpedbs,
-            params.genome,
-            params.vep_cache_version,
-            ch_vep_cache,
-            ch_genome_fasta,
-            ch_genome_dictionary,
-            ch_vep_extra_files
-        ).set { ch_sv_annotate }
-        ch_versions = ch_versions.mix(ch_sv_annotate.versions)
+        if (!params.skip_sv_annotation) {
+            ANNOTATE_STRUCTURAL_VARIANTS (
+                CALL_STRUCTURAL_VARIANTS.out.vcf,
+                ch_sv_dbs,
+                ch_sv_bedpedbs,
+                params.genome,
+                params.vep_cache_version,
+                ch_vep_cache,
+                ch_genome_fasta,
+                ch_genome_dictionary,
+                ch_vep_extra_files
+            ).set { ch_sv_annotate }
+            ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
-        GENERATE_CLINICAL_SET_SV(
-            ch_sv_annotate.vcf_ann,
-            ch_hgnc_ids
-        )
-        ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SV.out.versions)
+            GENERATE_CLINICAL_SET_SV(
+                ch_sv_annotate.vcf_ann,
+                ch_hgnc_ids
+            )
+            ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SV.out.versions)
 
-        ANN_CSQ_PLI_SV (
-            GENERATE_CLINICAL_SET_SV.out.vcf,
-            ch_variant_consequences_sv
-        )
-        ch_versions = ch_versions.mix(ANN_CSQ_PLI_SV.out.versions)
+            ANN_CSQ_PLI_SV (
+                GENERATE_CLINICAL_SET_SV.out.vcf,
+                ch_variant_consequences_sv
+            )
+            ch_versions = ch_versions.mix(ANN_CSQ_PLI_SV.out.versions)
 
-        RANK_VARIANTS_SV (
-            ANN_CSQ_PLI_SV.out.vcf_ann,
-            ch_pedfile,
-            ch_reduced_penetrance,
-            ch_score_config_sv
-        )
-        ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
-
+            RANK_VARIANTS_SV (
+                ANN_CSQ_PLI_SV.out.vcf_ann,
+                ch_pedfile,
+                ch_reduced_penetrance,
+                ch_score_config_sv
+            )
+            ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
+        }
     }
 
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    CALL AND ANNOTATE MOBILE ELEMENTS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
 
-
-
-    // STEP 1.7: SMNCOPYNUMBERCALLER
-    RENAME_BAM_FOR_SMNCALLER(ch_mapped.genome_marked_bam, "bam").output
-        .collect{it}
-        .toList()
-        .set { ch_bam_list }
-
-    RENAME_BAI_FOR_SMNCALLER(ch_mapped.genome_marked_bai, "bam.bai").output
-        .collect{it}
-        .toList()
-        .set { ch_bai_list }
-
-    ch_case_info
-        .combine(ch_bam_list)
-        .combine(ch_bai_list)
-        .set { ch_bams_bais }
-
-    SMNCOPYNUMBERCALLER (
-        ch_bams_bais
-    )
-    ch_versions = ch_versions.mix(RENAME_BAM_FOR_SMNCALLER.out.versions)
-    ch_versions = ch_versions.mix(RENAME_BAI_FOR_SMNCALLER.out.versions)
-    ch_versions = ch_versions.mix(SMNCOPYNUMBERCALLER.out.versions)
-
-    // ped correspondence, sex check, ancestry check
-    if (!params.skip_peddy) {
-        PEDDY (
-            CALL_SNV.out.genome_vcf.join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true),
-            ch_pedfile
-        )
-        ch_versions = ch_versions.mix(PEDDY.out.versions.first())
-    }
-
-    // Generate CGH files from sequencing data, turned off by default
-    if ( !params.skip_vcf2cytosure && params.analysis_type != "wes" ) {
-        GENERATE_CYTOSURE_FILES (
-            ch_sv_annotate.vcf_ann,
-            ch_sv_annotate.tbi,
-            ch_mapped.genome_marked_bam,
-            ch_sample_id_map,
-            ch_vcf2cytosure_blacklist
-        )
-        ch_versions = ch_versions.mix(GENERATE_CYTOSURE_FILES.out.versions)
-    }
-
-    // GENS
-    if ( !params.skip_gens && params.analysis_type != "wes" ) {
-        GENS (
-            ch_mapped.genome_bam_bai,
-            CALL_SNV.out.genome_gvcf,
-            ch_genome_fasta,
-            ch_genome_fai,
-            ch_gens_interval_list,
-            ch_gens_pon_female,
-            ch_gens_pon_male,
-            ch_gens_gnomad_pos,
-            ch_case_info,
-            ch_genome_dictionary
-        )
-        ch_versions = ch_versions.mix(GENS.out.versions)
-    }
-
-    if (!params.skip_me_calling) {
+    if (!params.skip_me_calling || params.analysis_type.equals("wes")) {
         CALL_MOBILE_ELEMENTS(
             ch_mapped.genome_bam_bai,
             ch_genome_fasta,
@@ -717,9 +684,90 @@ workflow RAREDISEASE {
         }
     }
 
-    //
-    // VARIANT EVALUATION
-    //
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    SMNCOPYNUMBERCALLER
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+    RENAME_BAM_FOR_SMNCALLER(ch_mapped.genome_marked_bam, "bam").output
+        .collect{it}
+        .toList()
+        .set { ch_bam_list }
+
+    RENAME_BAI_FOR_SMNCALLER(ch_mapped.genome_marked_bai, "bam.bai").output
+        .collect{it}
+        .toList()
+        .set { ch_bai_list }
+
+    ch_case_info
+        .combine(ch_bam_list)
+        .combine(ch_bai_list)
+        .set { ch_bams_bais }
+
+    SMNCOPYNUMBERCALLER (
+        ch_bams_bais
+    )
+    ch_versions = ch_versions.mix(RENAME_BAM_FOR_SMNCALLER.out.versions)
+    ch_versions = ch_versions.mix(RENAME_BAI_FOR_SMNCALLER.out.versions)
+    ch_versions = ch_versions.mix(SMNCOPYNUMBERCALLER.out.versions)
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    PEDDY
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+    if (!params.skip_peddy) {
+        PEDDY (
+            CALL_SNV.out.genome_vcf.join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true),
+            ch_pedfile
+        )
+        ch_versions = ch_versions.mix(PEDDY.out.versions.first())
+    }
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Generate CGH files from sequencing data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+    if ( !params.skip_vcf2cytosure && params.analysis_type != "wes" ) {
+        GENERATE_CYTOSURE_FILES (
+            ch_sv_annotate.vcf_ann,
+            ch_sv_annotate.tbi,
+            ch_mapped.genome_marked_bam,
+            ch_sample_id_map,
+            ch_vcf2cytosure_blacklist
+        )
+        ch_versions = ch_versions.mix(GENERATE_CYTOSURE_FILES.out.versions)
+    }
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    GENS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+    if ( !params.skip_gens && params.analysis_type != "wes" ) {
+        GENS (
+            ch_mapped.genome_bam_bai,
+            CALL_SNV.out.genome_gvcf,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_gens_interval_list,
+            ch_gens_pon_female,
+            ch_gens_pon_male,
+            ch_gens_gnomad_pos,
+            ch_case_info,
+            ch_genome_dictionary
+        )
+        ch_versions = ch_versions.mix(GENS.out.versions)
+    }
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    VARIANT EVALUATION WITH RTGTOOLS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
     if (params.run_rtgvcfeval) {
         VARIANT_EVALUATION (
             CALL_SNV.out.genome_vcf_tabix,
@@ -730,9 +778,12 @@ workflow RAREDISEASE {
         ch_versions = ch_versions.mix(VARIANT_EVALUATION.out.versions)
     }
 
-    //
-    // Collate and save software versions
-    //
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    COLLECT SOFTWARE VERSIONS & MultiQC
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",

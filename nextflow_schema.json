@@ -588,6 +588,11 @@
                     "description": "Specifies whether or not to skip annotate structural variant subworkflow.",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "skip_sv_calling": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip nuclear and mitochondrial SV calling and annotation.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "skip_vcf2cytosure": {
                     "type": "boolean",
                     "default": true,
