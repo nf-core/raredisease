@@ -38,10 +38,17 @@ workflow CALL_STRUCTURAL_VARIANTS {
             .collect{it[1]}
             .set{ manta_vcf }
 
-        CALL_SV_TIDDIT (ch_genome_bam_bai, ch_genome_fasta, ch_bwa_index, ch_case_info)
-            .vcf
-            .collect{it[1]}
-            .set { tiddit_vcf }
+        if (params.analysis_type.equals("wgs")) {
+            CALL_SV_TIDDIT (ch_genome_bam_bai, ch_genome_fasta, ch_bwa_index, ch_case_info)
+                .vcf
+                .collect{it[1]}
+                .set { tiddit_vcf }
+
+            CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_case_info)
+                .vcf
+                .collect{it[1]}
+                .set { cnvnator_vcf }
+        }
 
         if (!params.skip_germlinecnvcaller) {
             CALL_SV_GERMLINECNVCALLER (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model)
@@ -52,11 +59,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
             ch_versions = ch_versions.mix(CALL_SV_GERMLINECNVCALLER.out.versions)
         }
 
-        CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_case_info)
-            .vcf
-            .collect{it[1]}
-            .set { cnvnator_vcf }
-
         if (params.analysis_type.equals("wgs") || params.run_mt_for_wes) {
             CALL_SV_MT (ch_mt_bam_bai, ch_genome_fasta)
             ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
@@ -64,16 +66,25 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
         //merge
         if (params.skip_germlinecnvcaller) {
-            tiddit_vcf
-                .combine(manta_vcf)
-                .combine(cnvnator_vcf)
-                .toList()
-                .set { vcf_list }
-        } else {
+            if (params.analysis_type.equals("wgs")) {
+                tiddit_vcf
+                    .combine(manta_vcf)
+                    .combine(cnvnator_vcf)
+                    .toList()
+                    .set { vcf_list }
+            } else {
+                vcf_list = manta_vcf
+            }
+        } else if (params.analysis_type.equals("wgs")){
             tiddit_vcf
                 .combine(manta_vcf)
                 .combine(gcnvcaller_vcf)
                 .combine(cnvnator_vcf)
+                .toList()
+                .set { vcf_list }
+        } else {
+            manta_vcf
+                .combine(gcnvcaller_vcf)
                 .toList()
                 .set { vcf_list }
         }

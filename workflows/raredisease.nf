@@ -439,17 +439,15 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!params.skip_repeat_analysis) {
-        if ( params.analysis_type.equals("wgs") ) {
-            CALL_REPEAT_EXPANSIONS (
-                ch_mapped.genome_bam_bai,
-                ch_variant_catalog,
-                ch_case_info,
-                ch_genome_fasta,
-                ch_genome_fai
-            )
-            ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
-        }
+    if (!params.skip_repeat_analysis && params.analysis_type.equals("wgs") ) {
+        CALL_REPEAT_EXPANSIONS (
+            ch_mapped.genome_bam_bai,
+            ch_variant_catalog,
+            ch_case_info,
+            ch_genome_fasta,
+            ch_genome_fai
+        )
+        ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
     }
 
 /*
@@ -643,7 +641,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!params.skip_me_calling || params.analysis_type.equals("wes")) {
+    if (!params.skip_me_calling && params.analysis_type.equals("wgs")) {
         CALL_MOBILE_ELEMENTS(
             ch_mapped.genome_bam_bai,
             ch_genome_fasta,
@@ -688,28 +686,29 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    RENAME_BAM_FOR_SMNCALLER(ch_mapped.genome_marked_bam, "bam").output
-        .collect{it}
-        .toList()
-        .set { ch_bam_list }
+    if ( params.analysis_type.equals("wgs") ) {
+        RENAME_BAM_FOR_SMNCALLER(ch_mapped.genome_marked_bam, "bam").output
+            .collect{it}
+            .toList()
+            .set { ch_bam_list }
 
-    RENAME_BAI_FOR_SMNCALLER(ch_mapped.genome_marked_bai, "bam.bai").output
-        .collect{it}
-        .toList()
-        .set { ch_bai_list }
+        RENAME_BAI_FOR_SMNCALLER(ch_mapped.genome_marked_bai, "bam.bai").output
+            .collect{it}
+            .toList()
+            .set { ch_bai_list }
 
-    ch_case_info
-        .combine(ch_bam_list)
-        .combine(ch_bai_list)
-        .set { ch_bams_bais }
+        ch_case_info
+            .combine(ch_bam_list)
+            .combine(ch_bai_list)
+            .set { ch_bams_bais }
 
-    SMNCOPYNUMBERCALLER (
-        ch_bams_bais
-    )
-    ch_versions = ch_versions.mix(RENAME_BAM_FOR_SMNCALLER.out.versions)
-    ch_versions = ch_versions.mix(RENAME_BAI_FOR_SMNCALLER.out.versions)
-    ch_versions = ch_versions.mix(SMNCOPYNUMBERCALLER.out.versions)
-
+        SMNCOPYNUMBERCALLER (
+            ch_bams_bais
+        )
+        ch_versions = ch_versions.mix(RENAME_BAM_FOR_SMNCALLER.out.versions)
+        ch_versions = ch_versions.mix(RENAME_BAI_FOR_SMNCALLER.out.versions)
+        ch_versions = ch_versions.mix(SMNCOPYNUMBERCALLER.out.versions)
+    }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     PEDDY
@@ -728,7 +727,7 @@ workflow RAREDISEASE {
     Generate CGH files from sequencing data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if ( !params.skip_vcf2cytosure && params.analysis_type != "wes" ) {
+    if ( !params.skip_vcf2cytosure && params.analysis_type.equals("wgs") ) {
         GENERATE_CYTOSURE_FILES (
             ch_sv_annotate.vcf_ann,
             ch_sv_annotate.tbi,
@@ -744,7 +743,7 @@ workflow RAREDISEASE {
     GENS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if ( !params.skip_gens && params.analysis_type != "wes" ) {
+    if ( !params.skip_gens && params.analysis_type.equals("wgs") ) {
         GENS (
             ch_mapped.genome_bam_bai,
             CALL_SNV.out.genome_gvcf,
