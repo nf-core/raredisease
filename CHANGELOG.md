@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - `readcount_intervals` parameter is now mandatory for running germlinecnvcaller. [#570](https://github.com/nf-core/raredisease/pull/570)
+- Turn off CNVnator, TIDDIT, SMNCopyNumberCaller, Gens, and Vcf2cytosure for targeted analysis [#573](https://github.com/nf-core/raredisease/pull/573)
 
 ### `Fixed`
 
