@@ -215,14 +215,16 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 6. Copy number variant calling
 
-| Mandatory                      | Optional                        |
-| ------------------------------ | ------------------------------- |
-| ploidy_model<sup>1</sup>       | readcount_intervals<sup>3</sup> |
-| gcnvcaller_model<sup>1,2</sup> |                                 |
+| Mandatory                         | Optional |
+| --------------------------------- | -------- |
+| ploidy_model<sup>1,4</sup>        |          |
+| gcnvcaller_model<sup>1,2,4</sup>  |          |
+| readcount_intervals<sup>3,4</sup> |          |
 
 <sup>1</sup> Output from steps 3 & 4 of GATK's CNV calling pipeline run in cohort mode as described [here](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants).<br />
 <sup>2</sup> Sample file can be found [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/gcnvmodels.tsv) (Note the header 'models' in the sample file).<br />
 <sup>3</sup> Output from step 1 of GATK's CNV calling pipeline as described [here](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants).<br />
+<sup>4</sup> All these files can be generated using the germlinecnvcaller tool option in nf-core/createpanelrefs.<br />
 
 ##### 7. SNV annotation & Ranking
 

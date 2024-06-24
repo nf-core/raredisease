@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
-- `readcount_intervals` parameter is now manadatory for running germlinecnvcaller. [#570](https://github.com/nf-core/raredisease/pull/570)
+- `readcount_intervals` parameter is now mandatory for running germlinecnvcaller. [#570](https://github.com/nf-core/raredisease/pull/570)
 
 ### `Fixed`
 
