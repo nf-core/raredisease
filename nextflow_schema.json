@@ -533,11 +533,6 @@
                     "description": "Specifies whether or not to skip peddy.",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "skip_qualimap": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip Qualimap.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "skip_me_calling": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip calling mobile elements, and the subsequent annotation step.",

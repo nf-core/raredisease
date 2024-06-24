@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |                 | skip_sv_calling       |
 | skip_eklipse    |                       |
 | skip_haplocheck |                       |
+| skip_qualimap   |                       |
 
 ## 2.1.0 - Obelix [2024-05-29]
 
