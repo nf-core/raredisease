@@ -23,13 +23,20 @@ def mandatoryParams = [
     "intervals_wgs",
     "intervals_y",
     "platform",
-    "variant_catalog",
     "variant_caller"
 ]
 def missingParamsCount = 0
 
 if (params.run_rtgvcfeval) {
     mandatoryParams += ["rtg_truthvcfs"]
+}
+
+if (!params.skip_repeat_analysis) {
+    mandatoryParams += ["variant_catalog"]
+}
+
+if (!params.skip_snv_calling) {
+    mandatoryParams += ["genome"]
 }
 
 if (!params.skip_snv_annotation) {
@@ -317,6 +324,7 @@ workflow RAREDISEASE {
             ch_svcaller_priority = Channel.value(["tiddit", "manta", "cnvnator"])
         } else {
             ch_svcaller_priority = Channel.value(["manta"])
+        }
     } else {
         if (params.analysis_type.equals("wgs")) {
             ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
@@ -449,6 +457,7 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
     }
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -596,9 +605,9 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
-    //
-    // ANNOTATE STRUCTURAL VARIANTS
-    //
+        //
+        // ANNOTATE STRUCTURAL VARIANTS
+        //
         if (!params.skip_sv_annotation) {
             ANNOTATE_STRUCTURAL_VARIANTS (
                 CALL_STRUCTURAL_VARIANTS.out.vcf,
