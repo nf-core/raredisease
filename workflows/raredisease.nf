@@ -649,7 +649,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!params.skip_me_calling || params.analysis_type.equals("wes")) {
+    if (!params.skip_me_calling && params.analysis_type.equals("wgs")) {
         CALL_MOBILE_ELEMENTS(
             ch_mapped.genome_bam_bai,
             ch_genome_fasta,
