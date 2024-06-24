@@ -82,7 +82,7 @@
                     },
                     "bwameme/mem": {
                         "branch": "master",
-                        "git_sha": "79480293280ff4f10f30bdea1ddd903f223f8489",
+                        "git_sha": "0aa157a00b54bcbe2c50be375cafd68d928e7f4d",
                         "installed_by": ["modules"]
                     },
                     "cadd": {
@@ -204,11 +204,6 @@
                     "gatk4/postprocessgermlinecnvcalls": {
                         "branch": "master",
                         "git_sha": "cf607b7749da0a8f5ca2a1e31233e13e3159e2fe",
-                        "installed_by": ["modules"]
-                    },
-                    "gatk4/preprocessintervals": {
-                        "branch": "master",
-                        "git_sha": "d742e3143f2ccb8853c29b35cfcf50b5e5026980",
                         "installed_by": ["modules"]
                     },
                     "gatk4/printreads": {

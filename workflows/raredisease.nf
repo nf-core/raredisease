@@ -58,7 +58,7 @@ if (params.variant_caller.equals("sentieon")) {
 }
 
 if (!params.skip_germlinecnvcaller) {
-    mandatoryParams += ["ploidy_model", "gcnvcaller_model"]
+    mandatoryParams += ["ploidy_model", "gcnvcaller_model", "readcount_intervals"]
 }
 
 if (!params.skip_vep_filter) {
@@ -171,24 +171,27 @@ workflow RAREDISEASE {
     ch_case_info = ch_samples.toList().map { CustomFunctions.createCaseChannel(it) }
 
     // Initialize file channels for PREPARE_REFERENCES subworkflow
-    ch_genome_fasta             = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
-    ch_genome_fai               = params.fai            ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                        : Channel.empty()
-    ch_gnomad_af_tab            = params.gnomad_af      ? Channel.fromPath(params.gnomad_af).map{ it -> [[id:it[0].simpleName], it] }.collect()
-                                                        : Channel.value([[],[]])
-    ch_dbsnp                    = params.known_dbsnp    ? Channel.fromPath(params.known_dbsnp).map{ it -> [[id:it[0].simpleName], it] }.collect()
-                                                        : Channel.value([[],[]])
-    ch_mt_fasta                 = params.mt_fasta       ? Channel.fromPath(params.mt_fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
-                                                        : Channel.empty()
-    ch_target_bed_unprocessed   = params.target_bed     ? Channel.fromPath(params.target_bed).map{ it -> [[id:it[0].simpleName], it] }.collect()
-                                                        : Channel.value([[],[]])
-    ch_vep_cache_unprocessed    = params.vep_cache      ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
-                                                        : Channel.value([[],[]])
+    ch_genome_fasta            = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
+    ch_genome_fai              = params.fai                 ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                            : Channel.empty()
+    ch_genome_dictionary       = params.sequence_dictionary ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                            : Channel.empty()
+    ch_gnomad_af_tab           = params.gnomad_af           ? Channel.fromPath(params.gnomad_af).map{ it -> [[id:it[0].simpleName], it] }.collect()
+                                                            : Channel.value([[],[]])
+    ch_dbsnp                   = params.known_dbsnp         ? Channel.fromPath(params.known_dbsnp).map{ it -> [[id:it[0].simpleName], it] }.collect()
+                                                            : Channel.value([[],[]])
+    ch_mt_fasta                = params.mt_fasta            ? Channel.fromPath(params.mt_fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
+                                                            : Channel.empty()
+    ch_target_bed_unprocessed  = params.target_bed          ? Channel.fromPath(params.target_bed).map{ it -> [[id:it[0].simpleName], it] }.collect()
+                                                            : Channel.value([[],[]])
+    ch_vep_cache_unprocessed   = params.vep_cache           ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
+                                                            : Channel.value([[],[]])
 
     // Prepare references and indices.
     PREPARE_REFERENCES (
         ch_genome_fasta,
         ch_genome_fai,
+        ch_genome_dictionary,
         ch_mt_fasta,
         ch_gnomad_af_tab,
         ch_dbsnp,
@@ -220,8 +223,7 @@ workflow RAREDISEASE {
                                                                             : ch_references.genome_bwameme_index
     ch_genome_chrsizes          = ch_references.genome_chrom_sizes
     ch_genome_fai               = ch_references.genome_fai
-    ch_genome_dictionary        = params.sequence_dictionary                ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                                            : ch_references.genome_dict
+    ch_genome_dictionary        = ch_references.genome_dict
     ch_gens_gnomad_pos          = params.gens_gnomad_pos                    ? Channel.fromPath(params.gens_gnomad_pos).collect()
                                                                             : Channel.empty()
     ch_gens_interval_list       = params.gens_interval_list                 ? Channel.fromPath(params.gens_interval_list).collect()
@@ -256,7 +258,7 @@ workflow RAREDISEASE {
     ch_ploidy_model             = params.ploidy_model                       ? Channel.fromPath(params.ploidy_model).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                             : Channel.empty()
     ch_readcount_intervals      = params.readcount_intervals                ? Channel.fromPath(params.readcount_intervals).collect()
-                                                                            : ( ch_references.readcount_intervals      ?: Channel.empty() )
+                                                                            : Channel.empty()
     ch_reduced_penetrance       = params.reduced_penetrance                 ? Channel.fromPath(params.reduced_penetrance).collect()
                                                                             : Channel.value([])
     ch_rtg_truthvcfs            = params.rtg_truthvcfs                      ? Channel.fromPath(params.rtg_truthvcfs).collect()
@@ -370,7 +372,9 @@ workflow RAREDISEASE {
         ch_mtshift_fasta,
         ch_mtshift_dictionary,
         ch_mtshift_fai,
-        params.platform
+        params.mbuffer_mem,
+        params.platform,
+        params.samtools_sort_threads
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
