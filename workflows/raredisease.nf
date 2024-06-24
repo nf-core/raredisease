@@ -23,13 +23,20 @@ def mandatoryParams = [
     "intervals_wgs",
     "intervals_y",
     "platform",
-    "variant_catalog",
     "variant_caller"
 ]
 def missingParamsCount = 0
 
 if (params.run_rtgvcfeval) {
     mandatoryParams += ["rtg_truthvcfs"]
+}
+
+if (!params.skip_repeat_analysis) {
+    mandatoryParams += ["variant_catalog"]
+}
+
+if (!params.skip_snv_calling) {
+    mandatoryParams += ["genome"]
 }
 
 if (!params.skip_snv_annotation) {
