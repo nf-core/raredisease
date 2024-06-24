@@ -24,14 +24,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter | New parameter         |
-| ------------- | --------------------- |
-|               | mbuffer_mem           |
-|               | samtools_sort_threads |
-|               | skip_repeat_analysis  |
-|               | skip_snv_calling      |
-|               | skip_sv_calling       |
-| skip_eklipse  |                       |
+| Old parameter   | New parameter         |
+| --------------- | --------------------- |
+|                 | mbuffer_mem           |
+|                 | samtools_sort_threads |
+|                 | skip_repeat_analysis  |
+|                 | skip_snv_calling      |
+|                 | skip_sv_calling       |
+| skip_eklipse    |                       |
+| skip_haplocheck |                       |
 
 ## 2.1.0 - Obelix [2024-05-29]
 

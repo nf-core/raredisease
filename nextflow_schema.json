@@ -518,11 +518,6 @@
                     "description": "Specifies whether or not to skip trimming with fastp.",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "skip_haplocheck": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip haplocheck.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "skip_gens": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip gens preprocessing subworkflow.",

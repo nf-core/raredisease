@@ -224,7 +224,7 @@ def toolCitationText() {
     variant_call_text = [
         params.variant_caller.equals("deepvariant") ? "DeepVariant (Poplin et al., 2018)," : "",
         params.variant_caller.equals("sentieon") ? "Sentieon DNAscope (Freed et al., 2022)," : "",
-        params.skip_haplocheck ? "" : "Haplocheck (Weissensteiner et al., 2021),",
+        "Haplocheck (Weissensteiner et al., 2021),",
         "CNVnator (Abyzov et al., 2011),",
         "TIDDIT (Eisfeldt et al., 2017),",
         "Manta (Chen et al., 2016),",
@@ -333,7 +333,7 @@ def toolBibliographyText() {
     variant_call_text = [
         params.variant_caller.equals("deepvariant") ? "<li>Poplin, R., Chang, P.-C., Alexander, D., Schwartz, S., Colthurst, T., Ku, A., Newburger, D., Dijamco, J., Nguyen, N., Afshar, P. T., Gross, S. S., Dorfman, L., McLean, C. Y., & DePristo, M. A. (2018). A universal SNP and small-indel variant caller using deep neural networks. Nature Biotechnology, 36(10), 983–987. https://doi.org/10.1038/nbt.4235</li>" : "",
         params.variant_caller.equals("sentieon") ? "<li>Freed, D., Pan, R., Chen, H., Li, Z., Hu, J., & Aldana, R. (2022). DNAscope: High accuracy small variant calling using machine learning [Preprint]. Bioinformatics. https://doi.org/10.1101/2022.05.20.492556</li>" : "",
-        params.skip_haplocheck ? "" : "<li>Weissensteiner, H., Forer, L., Fendt, L., Kheirkhah, A., Salas, A., Kronenberg, F., & Schoenherr, S. (2021). Contamination detection in sequencing studies using the mitochondrial phylogeny. Genome Research, 31(2), 309–316. https://doi.org/10.1101/gr.256545.119</li>",
+        "<li>Weissensteiner, H., Forer, L., Fendt, L., Kheirkhah, A., Salas, A., Kronenberg, F., & Schoenherr, S. (2021). Contamination detection in sequencing studies using the mitochondrial phylogeny. Genome Research, 31(2), 309–316. https://doi.org/10.1101/gr.256545.119</li>",
         "<li>Abyzov, A., Urban, A. E., Snyder, M., & Gerstein, M. (2011). CNVnator: An approach to discover, genotype, and characterize typical and atypical CNVs from family and population genome sequencing. Genome Research, 21(6), 974–984. https://doi.org/10.1101/gr.114876.110</li>",
         "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>",
         "<li>Chen, X., Schulz-Trieglaff, O., Shaw, R., Barnes, B., Schlesinger, F., Källberg, M., Cox, A. J., Kruglyak, S., & Saunders, C. T. (2016). Manta: Rapid detection of structural variants and indels for germline and cancer sequencing applications. Bioinformatics, 32(8), 1220–1222. https://doi.org/10.1093/bioinformatics/btv710</li>",
