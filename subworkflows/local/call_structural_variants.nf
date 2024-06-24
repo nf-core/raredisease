@@ -73,7 +73,9 @@ workflow CALL_STRUCTURAL_VARIANTS {
                     .toList()
                     .set { vcf_list }
             } else {
-                vcf_list = manta_vcf
+                manta_vcf
+                    .toList()
+                    .set { vcf_list }
             }
         } else if (params.analysis_type.equals("wgs")){
             tiddit_vcf
