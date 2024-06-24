@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |                 | skip_snv_calling      |
 |                 | skip_sv_calling       |
 | skip_eklipse    |                       |
+| skip_fastqc     |                       |
 | skip_haplocheck |                       |
 | skip_qualimap   |                       |
 

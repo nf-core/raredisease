@@ -370,10 +370,8 @@ workflow RAREDISEASE {
     //
     // Input QC
     //
-    if (!params.skip_fastqc) {
-        FASTQC (ch_samplesheet)
-        ch_versions = ch_versions.mix(FASTQC.out.versions.first())
-    }
+    FASTQC (ch_samplesheet)
+    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     //
     // Create chromosome bed and intervals for splitting and gathering operations
@@ -830,9 +828,7 @@ workflow RAREDISEASE {
         )
     )
 
-    if (!params.skip_fastqc) {
-        ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
-    }
+    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.multiple_metrics.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.hs_metrics.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{it[1]}.collect().ifEmpty([]))

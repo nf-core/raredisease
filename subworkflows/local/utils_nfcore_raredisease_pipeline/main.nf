@@ -278,7 +278,7 @@ def toolCitationText() {
         "RetroSeq (Keane et al., 2013),",
     ]
     preprocessing_text = [
-        params.skip_fastqc ? "" : "FastQC (Andrews 2010),",
+        "FastQC (Andrews 2010),",
         params.skip_fastp  ? "" : "Fastp (Chen, 2023),",
     ]
     other_citation_text = [
@@ -389,7 +389,7 @@ def toolBibliographyText() {
         "<li>Keane, T. M., Wong, K., & Adams, D. J. (2013). RetroSeq: Transposable element discovery from next-generation sequencing data. Bioinformatics, 29(3), 389–390. https://doi.org/10.1093/bioinformatics/bts697</li>",
     ]
     preprocessing_text = [
-        params.skip_fastqc ? "" : "<li>Andrews S, (2010) FastQC, URL: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/</li>",
+        "<li>Andrews S, (2010) FastQC, URL: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/</li>",
         params.skip_fastp  ? "" : "<li>Chen, S. (2023). Ultrafast one-pass FASTQ data preprocessing, quality control, and deduplication using fastp. iMeta, 2(2), e107. https://doi.org/10.1002/imt2.107</li>",
     ]
     other_citation_text = [
