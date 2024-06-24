@@ -553,6 +553,11 @@
                     "description": "Specifies whether or not to skip calling and annotation of repeat expansions.",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "skip_smncopynumbercaller": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip smncopynumbercaller.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "skip_snv_annotation": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip annotate SNV subworkflow.",

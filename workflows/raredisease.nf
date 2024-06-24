@@ -90,6 +90,9 @@ if (!params.skip_gens) {
     mandatoryParams += ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"]
 }
 
+if (!params.skip_smncopynumbercaller) {
+    mandatoryParams += ["genome"]
+}
 for (param in mandatoryParams.unique()) {
     if (params[param] == null) {
         println("params." + param + " not set.")
@@ -693,7 +696,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if ( params.analysis_type.equals("wgs") ) {
+    if ( params.analysis_type.equals("wgs") && !params.skip_smncopynumbercaller ) {
         RENAME_BAM_FOR_SMNCALLER(ch_mapped.genome_marked_bam, "bam").output
             .collect{it}
             .toList()
