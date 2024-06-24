@@ -23,13 +23,20 @@ def mandatoryParams = [
     "intervals_wgs",
     "intervals_y",
     "platform",
-    "variant_catalog",
     "variant_caller"
 ]
 def missingParamsCount = 0
 
 if (params.run_rtgvcfeval) {
     mandatoryParams += ["rtg_truthvcfs"]
+}
+
+if (!params.skip_repeat_analysis) {
+    mandatoryParams += ["variant_catalog"]
+}
+
+if (!params.skip_snv_calling) {
+    mandatoryParams += ["genome"]
 }
 
 if (!params.skip_snv_annotation) {
@@ -439,18 +446,17 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!params.skip_repeat_analysis) {
-        if ( params.analysis_type.equals("wgs") ) {
-            CALL_REPEAT_EXPANSIONS (
-                ch_mapped.genome_bam_bai,
-                ch_variant_catalog,
-                ch_case_info,
-                ch_genome_fasta,
-                ch_genome_fai
-            )
-            ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
-        }
+    if (!params.skip_repeat_analysis && params.analysis_type.equals("wgs") ) {
+        CALL_REPEAT_EXPANSIONS (
+            ch_mapped.genome_bam_bai,
+            ch_variant_catalog,
+            ch_case_info,
+            ch_genome_fasta,
+            ch_genome_fai
+        )
+        ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
     }
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

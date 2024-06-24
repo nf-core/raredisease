@@ -7,11 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Two new parameters `skip_snv_calling` and `skip_repeat_analysis` to skip snv calling and repeat analysis respectively [#571](https://github.com/nf-core/raredisease/pull/571)
 - Two new parameters `mbuffer_mem` and `samtools_sort_threads` to control resources given to mbuffer and samtools sort in the bwameme module [#570](https://github.com/nf-core/raredisease/pull/570)
 
 ### `Changed`
 
-- `readcount_intervals` parameter is now manadatory for running germlinecnvcaller. [#570](https://github.com/nf-core/raredisease/pull/570)
+- `readcount_intervals` parameter is now mandatory for running germlinecnvcaller. [#570](https://github.com/nf-core/raredisease/pull/570)
 
 ### `Fixed`
 
@@ -24,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | ------------- | --------------------- |
 |               | mbuffer_mem           |
 |               | samtools_sort_threads |
+|               | skip_repeat_analysis  |
+|               | skip_snv_calling      |
 
 ## 2.1.0 - Obelix [2024-05-29]
 
