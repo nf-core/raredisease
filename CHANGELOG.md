@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Remove several skip parameters that had been included in the pipeline to avoid failed CI tests [#574](https://github.com/nf-core/raredisease/pull/574)
 - `readcount_intervals` parameter is now mandatory for running germlinecnvcaller. [#570](https://github.com/nf-core/raredisease/pull/570)
 - Turn off CNVnator, TIDDIT, SMNCopyNumberCaller, Gens, and Vcf2cytosure for targeted analysis [#573](https://github.com/nf-core/raredisease/pull/573)
 
@@ -30,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |               | skip_repeat_analysis  |
 |               | skip_snv_calling      |
 |               | skip_sv_calling       |
+| skip_eklipse  |                       |
 
 ## 2.1.0 - Obelix [2024-05-29]
 

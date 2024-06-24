@@ -533,11 +533,6 @@
                     "description": "Specifies whether or not to skip CNV calling using GATK's GermlineCNVCaller",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "skip_eklipse": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip eKLIPse.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "skip_peddy": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip peddy.",
