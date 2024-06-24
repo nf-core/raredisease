@@ -324,6 +324,7 @@ workflow RAREDISEASE {
             ch_svcaller_priority = Channel.value(["tiddit", "manta", "cnvnator"])
         } else {
             ch_svcaller_priority = Channel.value(["manta"])
+        }
     } else {
         if (params.analysis_type.equals("wgs")) {
             ch_svcaller_priority = Channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
@@ -604,9 +605,9 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
-    //
-    // ANNOTATE STRUCTURAL VARIANTS
-    //
+        //
+        // ANNOTATE STRUCTURAL VARIANTS
+        //
         if (!params.skip_sv_annotation) {
             ANNOTATE_STRUCTURAL_VARIANTS (
                 CALL_STRUCTURAL_VARIANTS.out.vcf,
