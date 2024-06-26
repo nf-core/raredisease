@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Two new parameters `skip_repeat_annotation` and `skip_repeat_calling` to skip calling and annotation of repeat expansions [#574](https://github.com/nf-core/raredisease/pull/574)
 - A new parameter `skip_smncopynumbercaller` to skip smncopynumbercaller module[#574](https://github.com/nf-core/raredisease/pull/574)
 - A new parameter `skip_sv_calling` to skip sv calling workflow [#572](https://github.com/nf-core/raredisease/pull/572)
 - Two new parameters `skip_snv_calling` and `skip_repeat_analysis` to skip snv calling and repeat analysis respectively [#571](https://github.com/nf-core/raredisease/pull/571)
@@ -14,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Removed `skip_repeat_analysis` added in #571 [#574](https://github.com/nf-core/raredisease/pull/574)
 - Remove several skip parameters that had been included in the pipeline to avoid failed CI tests (see parameters table below) [#574](https://github.com/nf-core/raredisease/pull/574)
 - `readcount_intervals` parameter is now mandatory for running germlinecnvcaller. [#570](https://github.com/nf-core/raredisease/pull/570)
 - Turn off CNVnator, TIDDIT, SMNCopyNumberCaller, Gens, and Vcf2cytosure for targeted analysis [#573](https://github.com/nf-core/raredisease/pull/573)
@@ -29,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | --------------- | ------------------------ |
 |                 | mbuffer_mem              |
 |                 | samtools_sort_threads    |
-|                 | skip_repeat_analysis     |
+|                 | skip_repeat_calling      |
 |                 | skip_snv_calling         |
 |                 | skip_sv_calling          |
 | skip_eklipse    |                          |
@@ -37,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | skip_haplocheck |                          |
 | skip_qualimap   |                          |
 |                 | skip_smncopynumbercaller |
+|                 | skip_repeat_annotation   |
 
 ## 2.1.0 - Obelix [2024-05-29]
 

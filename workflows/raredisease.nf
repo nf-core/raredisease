@@ -31,7 +31,11 @@ if (params.run_rtgvcfeval) {
     mandatoryParams += ["rtg_truthvcfs"]
 }
 
-if (!params.skip_repeat_analysis) {
+if (!params.skip_repeat_calling) {
+    mandatoryParams += ["variant_catalog"]
+}
+
+if (!params.skip_repeat_annotation) {
     mandatoryParams += ["variant_catalog"]
 }
 
@@ -141,6 +145,7 @@ include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV                 } from '../subworkf
 include { ANNOTATE_GENOME_SNVS                               } from '../subworkflows/local/annotate_genome_snvs'
 include { ANNOTATE_MOBILE_ELEMENTS                           } from '../subworkflows/local/annotate_mobile_elements'
 include { ANNOTATE_MT_SNVS                                   } from '../subworkflows/local/annotate_mt_snvs'
+include { ANNOTATE_REPEAT_EXPANSIONS                         } from '../subworkflows/local/annotate_repeat_expansions'
 include { ANNOTATE_STRUCTURAL_VARIANTS                       } from '../subworkflows/local/annotate_structural_variants'
 include { CALL_MOBILE_ELEMENTS                               } from '../subworkflows/local/call_mobile_elements'
 include { CALL_REPEAT_EXPANSIONS                             } from '../subworkflows/local/call_repeat_expansions'
@@ -448,7 +453,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!params.skip_repeat_analysis && params.analysis_type.equals("wgs") ) {
+    if (!params.skip_repeat_calling && params.analysis_type.equals("wgs") ) {
         CALL_REPEAT_EXPANSIONS (
             ch_mapped.genome_bam_bai,
             ch_variant_catalog,
@@ -457,6 +462,14 @@ workflow RAREDISEASE {
             ch_genome_fai
         )
         ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
+
+        if (!params.skip_repeat_annotation) {
+            ANNOTATE_REPEAT_EXPANSIONS (
+                ch_variant_catalog,
+                CALL_REPEAT_EXPANSIONS.out.vcf
+            )
+            ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
+        }
     }
 
 
