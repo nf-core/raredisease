@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Stub crashes due to peddy reported in [#566](https://github.com/nf-core/raredisease/issues/566) [#576](https://github.com/nf-core/raredisease/pull/576]
 - Docker manifest error from gnu-wget container [#570](https://github.com/nf-core/raredisease/pull/570)
 - Citations for bwameme [#563](https://github.com/nf-core/raredisease/pull/563)
 
