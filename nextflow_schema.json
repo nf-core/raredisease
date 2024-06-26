@@ -508,19 +508,9 @@
                     "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "skip_fastqc": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip FASTQC.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "skip_fastp": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip trimming with fastp.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_haplocheck": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip haplocheck.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_gens": {
@@ -533,19 +523,9 @@
                     "description": "Specifies whether or not to skip CNV calling using GATK's GermlineCNVCaller",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "skip_eklipse": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip eKLIPse.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "skip_peddy": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip peddy.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_qualimap": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip Qualimap.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_me_calling": {
@@ -568,9 +548,19 @@
                     "description": "Specifies whether or not to subsample mt alignment.",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "skip_repeat_analysis": {
+                "skip_repeat_annotation": {
                     "type": "boolean",
-                    "description": "Specifies whether or not to skip calling and annotation of repeat expansions.",
+                    "description": "Specifies whether or not to skip annotation of repeat expansions.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_repeat_calling": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip calling of repeat expansions.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_smncopynumbercaller": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip smncopynumbercaller.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_snv_annotation": {

@@ -45,10 +45,8 @@ workflow QC_BAM {
 
         PICARD_COLLECTHSMETRICS (ch_hsmetrics_in, ch_genome_fasta, ch_genome_fai, [[],[]])
 
-        if (!params.skip_qualimap) {
-            ch_qualimap = QUALIMAP_BAMQC (ch_bam, []).results
-            ch_versions = ch_versions.mix(QUALIMAP_BAMQC.out.versions.first())
-        }
+        ch_qualimap = QUALIMAP_BAMQC (ch_bam, []).results
+        ch_versions = ch_versions.mix(QUALIMAP_BAMQC.out.versions.first())
 
         TIDDIT_COV (ch_bam, [[],[]]) // 2nd pos. arg is req. only for cram input
 

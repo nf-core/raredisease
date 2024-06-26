@@ -31,7 +31,11 @@ if (params.run_rtgvcfeval) {
     mandatoryParams += ["rtg_truthvcfs"]
 }
 
-if (!params.skip_repeat_analysis) {
+if (!params.skip_repeat_calling) {
+    mandatoryParams += ["variant_catalog"]
+}
+
+if (!params.skip_repeat_annotation) {
     mandatoryParams += ["variant_catalog"]
 }
 
@@ -90,6 +94,9 @@ if (!params.skip_gens) {
     mandatoryParams += ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"]
 }
 
+if (!params.skip_smncopynumbercaller) {
+    mandatoryParams += ["genome"]
+}
 for (param in mandatoryParams.unique()) {
     if (params[param] == null) {
         println("params." + param + " not set.")
@@ -138,6 +145,7 @@ include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV                 } from '../subworkf
 include { ANNOTATE_GENOME_SNVS                               } from '../subworkflows/local/annotate_genome_snvs'
 include { ANNOTATE_MOBILE_ELEMENTS                           } from '../subworkflows/local/annotate_mobile_elements'
 include { ANNOTATE_MT_SNVS                                   } from '../subworkflows/local/annotate_mt_snvs'
+include { ANNOTATE_REPEAT_EXPANSIONS                         } from '../subworkflows/local/annotate_repeat_expansions'
 include { ANNOTATE_STRUCTURAL_VARIANTS                       } from '../subworkflows/local/annotate_structural_variants'
 include { CALL_MOBILE_ELEMENTS                               } from '../subworkflows/local/call_mobile_elements'
 include { CALL_REPEAT_EXPANSIONS                             } from '../subworkflows/local/call_repeat_expansions'
@@ -370,10 +378,8 @@ workflow RAREDISEASE {
     //
     // Input QC
     //
-    if (!params.skip_fastqc) {
-        FASTQC (ch_samplesheet)
-        ch_versions = ch_versions.mix(FASTQC.out.versions.first())
-    }
+    FASTQC (ch_samplesheet)
+    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     //
     // Create chromosome bed and intervals for splitting and gathering operations
@@ -447,7 +453,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!params.skip_repeat_analysis && params.analysis_type.equals("wgs") ) {
+    if (!params.skip_repeat_calling && params.analysis_type.equals("wgs") ) {
         CALL_REPEAT_EXPANSIONS (
             ch_mapped.genome_bam_bai,
             ch_variant_catalog,
@@ -456,6 +462,14 @@ workflow RAREDISEASE {
             ch_genome_fai
         )
         ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
+
+        if (!params.skip_repeat_annotation) {
+            ANNOTATE_REPEAT_EXPANSIONS (
+                ch_variant_catalog,
+                CALL_REPEAT_EXPANSIONS.out.vcf
+            )
+            ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
+        }
     }
 
 
@@ -695,7 +709,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if ( params.analysis_type.equals("wgs") ) {
+    if ( params.analysis_type.equals("wgs") && !params.skip_smncopynumbercaller ) {
         RENAME_BAM_FOR_SMNCALLER(ch_mapped.genome_marked_bam, "bam").output
             .collect{it}
             .toList()
@@ -830,9 +844,7 @@ workflow RAREDISEASE {
         )
     )
 
-    if (!params.skip_fastqc) {
-        ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
-    }
+    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.multiple_metrics.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.hs_metrics.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{it[1]}.collect().ifEmpty([]))
