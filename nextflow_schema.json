@@ -548,9 +548,14 @@
                     "description": "Specifies whether or not to subsample mt alignment.",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "skip_repeat_analysis": {
+                "skip_repeat_annotation": {
                     "type": "boolean",
-                    "description": "Specifies whether or not to skip calling and annotation of repeat expansions.",
+                    "description": "Specifies whether or not to skip annotation of repeat expansions.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_repeat_calling": {
+                    "type": "boolean",
+                    "description": "Specifies whether or not to skip calling of repeat expansions.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_smncopynumbercaller": {
