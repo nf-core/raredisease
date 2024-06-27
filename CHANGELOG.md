@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Refactored tool citation list [#577](https://github.com/nf-core/raredisease/pull/577)
 - Removed `skip_repeat_analysis` added in #571 [#574](https://github.com/nf-core/raredisease/pull/574)
 - Remove several skip parameters that had been included in the pipeline to avoid failed CI tests (see parameters table below) [#574](https://github.com/nf-core/raredisease/pull/574)
 - `readcount_intervals` parameter is now mandatory for running germlinecnvcaller. [#570](https://github.com/nf-core/raredisease/pull/570)
