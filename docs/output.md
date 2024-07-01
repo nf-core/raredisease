@@ -68,7 +68,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
         - [Hmtnote](#hmtnote)
         - [VEP](#vep-2)
     - [Filtering and ranking](#filtering-and-ranking)
-      - [Filter_vep](#filter_vep)
+      - [Filter\_vep](#filter_vep)
       - [GENMOD](#genmod)
     - [Mobile element analysis](#mobile-element-analysis)
       - [Calling mobile elements](#calling-mobile-elements)
@@ -387,8 +387,8 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 <summary>Output files</summary>
 
 - `annotate_snv/genome`
-  - `<case_id>_rhocall_vcfanno_filter_<cadd_vep|vep>.vcf.gz`: file containing bcftools roh, vcfanno, cadd and vep annotations.
-  - `<case_id>_rhocall_vcfanno_filter_<cadd_vep|vep>.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, cadd and vep annotations.
+  - `<case_id>_<rhocall_vcfanno|vcfanno>_filter_<cadd_vep|vep>.vcf.gz`: file containing bcftools roh, vcfanno, cadd and vep annotations.
+  - `<case_id>_<rhocall_vcfanno|vcfanno>_filter_<cadd_vep|vep>.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, cadd and vep annotations.
 
 </details>
 
