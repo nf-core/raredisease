@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Print warning messages if user intends to perform ranking when there are no affected samples [#579](https://github.com/nf-core/raredisease/pull/579)
 - Two new parameters `skip_repeat_annotation` and `skip_repeat_calling` to skip calling and annotation of repeat expansions [#574](https://github.com/nf-core/raredisease/pull/574)
 - A new parameter `skip_smncopynumbercaller` to skip smncopynumbercaller module[#574](https://github.com/nf-core/raredisease/pull/574)
 - A new parameter `skip_sv_calling` to skip sv calling workflow [#572](https://github.com/nf-core/raredisease/pull/572)
@@ -15,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Skip ROH calling with bcftools if there are no affected samples [#579](https://github.com/nf-core/raredisease/pull/579)
 - Refactored tool citation list [#577](https://github.com/nf-core/raredisease/pull/577)
 - Removed `skip_repeat_analysis` added in #571 [#574](https://github.com/nf-core/raredisease/pull/574)
 - Remove several skip parameters that had been included in the pipeline to avoid failed CI tests (see parameters table below) [#574](https://github.com/nf-core/raredisease/pull/574)
