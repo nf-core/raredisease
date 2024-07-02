@@ -43,11 +43,13 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .vcf
                 .collect{it[1]}
                 .set { tiddit_vcf }
+            ch_versions = ch_versions.mix(CALL_SV_TIDDIT.out.versions)
 
             CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_case_info)
                 .vcf
                 .collect{it[1]}
                 .set { cnvnator_vcf }
+            ch_versions = ch_versions.mix(CALL_SV_CNVNATOR.out.versions)
         }
 
         if (!params.skip_germlinecnvcaller) {
@@ -99,9 +101,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
         TABIX_TABIX (SVDB_MERGE.out.vcf)
 
-        ch_versions = ch_versions.mix(CALL_SV_CNVNATOR.out.versions)
         ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
-        ch_versions = ch_versions.mix(CALL_SV_TIDDIT.out.versions)
         ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
         ch_versions = ch_versions.mix(SVDB_MERGE.out.versions)
 
