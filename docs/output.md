@@ -387,8 +387,8 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 <summary>Output files</summary>
 
 - `annotate_snv/genome`
-  - `<case_id>_rhocall_vcfanno_filter_<cadd_vep|vep>.vcf.gz`: file containing bcftools roh, vcfanno, cadd and vep annotations.
-  - `<case_id>_rhocall_vcfanno_filter_<cadd_vep|vep>.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, cadd and vep annotations.
+  - `<case_id>_<rhocall_vcfanno|vcfanno>_filter_<cadd_vep|vep>.vcf.gz`: file containing bcftools roh, vcfanno, cadd and vep annotations.
+  - `<case_id>_<rhocall_vcfanno|vcfanno>_filter_<cadd_vep|vep>.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, cadd and vep annotations.
 
 </details>
 

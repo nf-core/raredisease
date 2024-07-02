@@ -541,8 +541,17 @@ workflow RAREDISEASE {
             )
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)
 
+            ANN_CSQ_PLI_SNV.out.vcf_ann
+                .filter { it ->
+                    if (it[0].probands.size()==0) {
+                        log.warn("Skipping nuclear SNV ranking since no affected samples are detected in the case")
+                    }
+                    it[0].probands.size()>0
+                }
+                .set {ch_ranksnv_nuclear_in}
+
             RANK_VARIANTS_SNV (
-                ANN_CSQ_PLI_SNV.out.vcf_ann,
+                ch_ranksnv_nuclear_in,
                 ch_pedfile,
                 ch_reduced_penetrance,
                 ch_score_config_snv
@@ -582,8 +591,17 @@ workflow RAREDISEASE {
             )
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_MT.out.versions)
 
+            ANN_CSQ_PLI_MT.out.vcf_ann
+                .filter { it ->
+                    if (it[0].probands.size()==0) {
+                        log.warn("Skipping mitochondrial SNV ranking since no affected samples are detected in the case")
+                    }
+                    it[0].probands.size()>0
+                }
+                .set {ch_ranksnv_mt_in}
+
             RANK_VARIANTS_MT (
-                ANN_CSQ_PLI_MT.out.vcf_ann,
+                ch_ranksnv_mt_in,
                 ch_pedfile,
                 ch_reduced_penetrance,
                 ch_score_config_mt
@@ -648,8 +666,17 @@ workflow RAREDISEASE {
             )
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_SV.out.versions)
 
+            ANN_CSQ_PLI_SV.out.vcf_ann
+                .filter { it ->
+                    if (it[0].probands.size()==0) {
+                        log.warn("Skipping SV ranking since no affected samples are detected in the case")
+                    }
+                    it[0].probands.size()>0
+                }
+                .set {ch_ranksnv_sv_in}
+
             RANK_VARIANTS_SV (
-                ANN_CSQ_PLI_SV.out.vcf_ann,
+                ch_ranksnv_sv_in,
                 ch_pedfile,
                 ch_reduced_penetrance,
                 ch_score_config_sv

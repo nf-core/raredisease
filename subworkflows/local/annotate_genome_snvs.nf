@@ -53,11 +53,21 @@ workflow ANNOTATE_GENOME_SNVS {
 
         ZIP_TABIX_ROHCALL (RHOCALL_ANNOTATE.out.vcf)
 
-        ZIP_TABIX_ROHCALL.out.gz_tbi
-            .map { meta, vcf, tbi -> return [meta, vcf, tbi, []]}
-            .set { ch_vcf_in }
+        ch_vcf
+            .join(ZIP_TABIX_ROHCALL.out.gz_tbi, remainder: true)
+            .branch { it  ->
+                noroh: it[3].equals(null)
+                    return [it[0] + [prefix: it[0].id], it[1], it[2]]
+                roh: !(it[3].equals(null))
+                    return [it[0] + [prefix: it[0].id + "_rhocall"], it[3], it[4]]
+            }
+            .set { ch_for_mix }
 
-        VCFANNO (ch_vcf_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
+        ch_for_mix.noroh.mix(ch_for_mix.roh)
+            .map { meta, vcf, tbi -> return [meta, vcf, tbi, []] }
+            .set { ch_vcfanno_in }
+
+        VCFANNO (ch_vcfanno_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
 
         VCFANNO.out.vcf
             .map {meta, vcf ->
