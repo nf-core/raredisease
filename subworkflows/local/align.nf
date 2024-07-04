@@ -100,7 +100,9 @@ workflow ALIGN {
                 ch_genome_bwamemeindex,
                 ch_genome_fasta,
                 ch_genome_dictionary,
-                ch_genome_fai
+                ch_genome_fai,
+                val_mbuffer_mem,
+                val_sort_threads
             )
 
             ALIGN_MT_SHIFT (
@@ -111,7 +113,9 @@ workflow ALIGN {
                 ch_mtshift_bwamemeindex,
                 ch_mtshift_fasta,
                 ch_mtshift_dictionary,
-                ch_mtshift_fai
+                ch_mtshift_fai,
+                val_mbuffer_mem,
+                val_sort_threads
             )
 
             ch_mt_marked_bam      = ALIGN_MT.out.marked_bam
