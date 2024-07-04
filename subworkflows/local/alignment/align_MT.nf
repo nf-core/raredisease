@@ -14,14 +14,16 @@ include { SAMTOOLS_SORT as SAMTOOLS_SORT_MT                                 } fr
 
 workflow ALIGN_MT {
     take:
-        ch_fastq        // channel: [mandatory] [ val(meta), [ path(reads) ] ]
-        ch_ubam         // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_bwaindex     // channel: [mandatory for sentieon] [ val(meta), path(index) ]
-        ch_bwamem2index // channel: [mandatory for bwamem2] [ val(meta), path(index) ]
-        ch_bwamemeindex // channel: [mandatory for bwameme] [ val(meta), path(index) ]
-        ch_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_dict         // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_fai          // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_fastq         // channel: [mandatory] [ val(meta), [ path(reads) ] ]
+        ch_ubam          // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_bwaindex      // channel: [mandatory for sentieon] [ val(meta), path(index) ]
+        ch_bwamem2index  // channel: [mandatory for bwamem2] [ val(meta), path(index) ]
+        ch_bwamemeindex  // channel: [mandatory for bwameme] [ val(meta), path(index) ]
+        ch_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_dict          // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_fai           // channel: [mandatory] [ val(meta), path(fai) ]
+        val_mbuffer_mem  // integer: [mandatory] default: 3072
+        val_sort_threads // integer: [mandatory] default: 4
 
     main:
         ch_versions     = Channel.empty()
@@ -39,7 +41,7 @@ workflow ALIGN_MT {
             ch_align       = BWA_MEM_MT.out.bam
             ch_versions    = ch_versions.mix(BWA_MEM_MT.out.versions.first())
         } else if (params.aligner.equals("bwameme")) {
-            BWAMEME_MEM_MT (ch_fastq, ch_bwamemeindex, ch_fasta, true)
+            BWAMEME_MEM_MT (ch_fastq, ch_bwamemeindex, ch_fasta, true, val_mbuffer_mem, val_sort_threads)
             ch_align       = BWAMEME_MEM_MT.out.bam
             ch_versions    = ch_versions.mix(BWAMEME_MEM_MT.out.versions.first())
         }
