@@ -1,0 +1,25 @@
+Changes in module 'nf-core/tiddit/sv'
+--- modules/nf-core/tiddit/sv/environment.yml
++++ modules/nf-core/tiddit/sv/environment.yml
+@@ -4,4 +4,4 @@
+   - bioconda
+   - defaults
+ dependencies:
+-  - bioconda::tiddit=3.6.1
++  - bioconda::tiddit=3.7.0
+
+--- modules/nf-core/tiddit/sv/main.nf
++++ modules/nf-core/tiddit/sv/main.nf
+@@ -4,8 +4,8 @@
+ 
+     conda "${moduleDir}/environment.yml"
+     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+-        'https://depot.galaxyproject.org/singularity/tiddit:3.6.1--py38h24c8ff8_0' :
+-        'biocontainers/tiddit:3.6.1--py38h24c8ff8_0' }"
++        'https://depot.galaxyproject.org/singularity/tiddit:3.7.0--py38hf6cf242_0' :
++        'biocontainers/tiddit:3.7.0--py38hf6cf242_0' }"
+ 
+     input:
+     tuple val(meta), path(input), path(input_index)
+
+************************************************************

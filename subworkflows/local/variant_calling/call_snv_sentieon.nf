@@ -46,8 +46,8 @@ workflow CALL_SNV_SENTIEON {
             ch_dbsnp_index,
             ch_ml_model,
             ch_pcr_indel_model,
-            'VARIANT',
-            true
+            'variant',
+            false
         )
 
         ch_dnamodelapply_in = SENTIEON_DNASCOPE.out.vcf.join(SENTIEON_DNASCOPE.out.vcf_tbi)
