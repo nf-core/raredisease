@@ -19,6 +19,7 @@ workflow ANNOTATE_MT_SNVS {
         ch_cadd_header         // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources      // channel: [mandatory] [ path(annotation) ]
         ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_vcfanno_lua        // channel: [mandatory] [ path(lua) ]
         ch_vcfanno_resources   // channel: [mandatory] [ path(resources) ]
         ch_vcfanno_toml        // channel: [mandatory] [ path(toml) ]
         val_vep_genome         // string:  [mandatory] GRCh37 or GRCh38
@@ -47,7 +48,7 @@ workflow ANNOTATE_MT_SNVS {
             .map { meta, vcf, tbi -> return [meta + [prefix: meta.prefix + "_vcfanno"], vcf, tbi, []]}
             .set { ch_in_vcfanno }
 
-        VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, [], ch_vcfanno_resources)
+        VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
         ZIP_TABIX_VCFANNO_MT(VCFANNO_MT.out.vcf)
 
         ch_vcfanno_vcf = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, vcf, tbi -> return [meta, vcf]}
@@ -56,8 +57,7 @@ workflow ANNOTATE_MT_SNVS {
         // Annotating with CADD
         if (params.cadd_resources != null) {
             ANNOTATE_CADD (
-                ch_vcfanno_vcf,
-                ch_vcfanno_tbi,
+                ZIP_TABIX_VCFANNO_MT.out.gz_tbi,
                 ch_cadd_header,
                 ch_cadd_resources
             )
