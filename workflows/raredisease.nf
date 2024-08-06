@@ -570,6 +570,7 @@ workflow RAREDISEASE {
                 ch_cadd_header,
                 ch_cadd_resources,
                 ch_genome_fasta,
+                ch_vcfanno_lua,
                 ch_vcfanno_resources,
                 ch_vcfanno_toml,
                 params.genome,

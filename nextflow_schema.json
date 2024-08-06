@@ -508,6 +508,12 @@
                     "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "scatter_count": {
+                    "type": "integer",
+                    "default": 20,
+                    "description": "Number of intervals to split your genome into (used to parallelize annotations)",
+                    "fa_icon": "fas fa-less-than"
+                },
                 "skip_fastp": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip trimming with fastp.",
