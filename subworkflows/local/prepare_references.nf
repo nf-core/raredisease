@@ -22,6 +22,7 @@ include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_MT_SHIFT          } from '../../modul
 include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_GENOME      } from '../../modules/nf-core/sentieon/bwaindex/main'
 include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_MT_SHIFT    } from '../../modules/nf-core/sentieon/bwaindex/main'
 include { TABIX_BGZIPTABIX as TABIX_PBT                      } from '../../modules/nf-core/tabix/bgziptabix/main'
+include { TABIX_BGZIPTABIX as TABIX_VCFANNOEXTRA             } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_TABIX as TABIX_DBSNP                         } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_GNOMAD_AF                     } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_PT                            } from '../../modules/nf-core/tabix/tabix/main'
@@ -36,14 +37,16 @@ workflow PREPARE_REFERENCES {
         ch_gnomad_af_tab     // channel: [optional; used in for snv annotation] [ val(meta), path(tab) ]
         ch_known_dbsnp       // channel: [optional; used only by sentieon] [ val(meta), path(vcf) ]
         ch_target_bed        // channel: [mandatory for WES] [ path(bed) ]
+        ch_vcfanno_extra_unprocessed     // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_vep_cache         // channel: [mandatory for annotation] [ path(cache) ]
 
     main:
-        ch_versions    = Channel.empty()
-        ch_tbi         = Channel.empty()
-        ch_bgzip_tbi   = Channel.empty()
-        ch_bwa         = Channel.empty()
-        ch_sentieonbwa = Channel.empty()
+        ch_versions      = Channel.empty()
+        ch_tbi           = Channel.empty()
+        ch_bgzip_tbi     = Channel.empty()
+        ch_bwa           = Channel.empty()
+        ch_sentieonbwa   = Channel.empty()
+        ch_vcfanno_extra = Channel.empty()
 
         // Genome indices
         SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[],[]])
@@ -87,6 +90,10 @@ workflow PREPARE_REFERENCES {
         TABIX_GNOMAD_AF(ch_gnomad_af_tab)
         TABIX_PT(ch_target_bed).tbi.set { ch_tbi }
         TABIX_PBT(ch_target_bed).gz_tbi.set { ch_bgzip_tbi }
+        TABIX_VCFANNOEXTRA(ch_vcfanno_extra_unprocessed)
+            .gz_tbi
+            .map { meta, vcf, tbi -> return [[vcf,tbi]] }
+            .set {ch_vcfanno_extra}
 
         // Generate bait and target intervals
         GATK_BILT(ch_target_bed, ch_dict).interval_list
@@ -125,6 +132,7 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(TABIX_GNOMAD_AF.out.versions)
         ch_versions = ch_versions.mix(TABIX_PT.out.versions)
         ch_versions = ch_versions.mix(TABIX_PBT.out.versions)
+        ch_versions = ch_versions.mix(TABIX_VCFANNOEXTRA.out.versions)
         ch_versions = ch_versions.mix(TABIX_DBSNP.out.versions)
         ch_versions = ch_versions.mix(GATK_BILT.out.versions)
         ch_versions = ch_versions.mix(GATK_ILT.out.versions)
@@ -153,6 +161,7 @@ workflow PREPARE_REFERENCES {
         gnomad_af_idx         = TABIX_GNOMAD_AF.out.tbi.collect()                                // channel: [ val(meta), path(fasta) ]
         known_dbsnp_tbi       = TABIX_DBSNP.out.tbi.collect()                                    // channel: [ val(meta), path(fasta) ]
         target_bed            = Channel.empty().mix(ch_tbi, ch_bgzip_tbi).collect()              // channel: [ val(meta), path(bed), path(tbi) ]
+        vcfanno_extra         = ch_vcfanno_extra.ifEmpty([[]])   // channel: [ path(intervals) ]
         bait_intervals        = CAT_CAT_BAIT.out.file_out.map{ meta, inter -> inter}.collect()   // channel: [ path(intervals) ]
         target_intervals      = GATK_BILT.out.interval_list.map{ meta, inter -> inter}.collect() // channel: [ path(interval_list) ]
         vep_resources         = UNTAR_VEP_CACHE.out.untar.map{meta, files -> [files]}.collect()  // channel: [ path(cache) ]

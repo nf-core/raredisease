@@ -58,6 +58,7 @@ params.variant_consequences_sv         = getGenomeAttribute('variant_consequence
 params.vep_filters                     = getGenomeAttribute('vep_filters')
 params.vep_filters_scout_fmt           = getGenomeAttribute('vep_filters_scout_fmt')
 params.vcf2cytosure_blacklist          = getGenomeAttribute('vcf2cytosure_blacklist')
+params.vcfanno_extra_resources         = getGenomeAttribute('vcfanno_extra_resources')
 params.vcfanno_resources               = getGenomeAttribute('vcfanno_resources')
 params.vcfanno_toml                    = getGenomeAttribute('vcfanno_toml')
 params.vcfanno_lua                     = getGenomeAttribute('vcfanno_lua')

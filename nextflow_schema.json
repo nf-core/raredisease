@@ -402,6 +402,14 @@
                     "fa_icon": "fas fa-file",
                     "description": "Path to vcf2cytosure blacklist file"
                 },
+                "vcfanno_extra_resources": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Path to a VCF file containing annotations.",
+                    "help_text": "can be used to supply case-specific annotations in addition to those provided using --vcfanno_resources",
+                    "fa_icon": "fas fa-file"
+                },
                 "vcfanno_resources": {
                     "type": "string",
                     "exists": true,
