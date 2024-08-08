@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Updated deepvariant to version 1.6.1 [#587](https://github.com/nf-core/raredisease/pull/587)
 - Parallelized vcfanno [#585](https://github.com/nf-core/raredisease/pull/585)
 - Skip ROH calling with bcftools if there are no affected samples [#579](https://github.com/nf-core/raredisease/pull/579)
 - Refactored tool citation list [#577](https://github.com/nf-core/raredisease/pull/577)
