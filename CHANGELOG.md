@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- A new parameter `vcfanno_extra_resources` to pass an extra resource to vcfanno [#588](https://github.com/nf-core/raredisease/pull/588)
 - A new parameter `scatter_count` to control how many interval files are created from a genome (used to parallelize annotations) [#585](https://github.com/nf-core/raredisease/pull/585)
 - Print warning messages if user intends to perform ranking when there are no affected samples [#579](https://github.com/nf-core/raredisease/pull/579)
 - Two new parameters `skip_repeat_annotation` and `skip_repeat_calling` to skip calling and annotation of repeat expansions [#574](https://github.com/nf-core/raredisease/pull/574)
