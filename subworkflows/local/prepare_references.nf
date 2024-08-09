@@ -93,6 +93,7 @@ workflow PREPARE_REFERENCES {
         TABIX_VCFANNOEXTRA(ch_vcfanno_extra_unprocessed)
             .gz_tbi
             .map { meta, vcf, tbi -> return [[vcf,tbi]] }
+            .collect()
             .set {ch_vcfanno_extra}
 
         // Generate bait and target intervals
