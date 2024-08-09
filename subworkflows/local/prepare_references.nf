@@ -162,7 +162,7 @@ workflow PREPARE_REFERENCES {
         gnomad_af_idx         = TABIX_GNOMAD_AF.out.tbi.collect()                                // channel: [ val(meta), path(fasta) ]
         known_dbsnp_tbi       = TABIX_DBSNP.out.tbi.collect()                                    // channel: [ val(meta), path(fasta) ]
         target_bed            = Channel.empty().mix(ch_tbi, ch_bgzip_tbi).collect()              // channel: [ val(meta), path(bed), path(tbi) ]
-        vcfanno_extra         = ch_vcfanno_extra.ifEmpty([[]])                                   // channel: [ path(intervals) ]
+        vcfanno_extra         = ch_vcfanno_extra.ifEmpty([[]])                                   // channel: [ [path(vcf), path(tbi)] ]
         bait_intervals        = CAT_CAT_BAIT.out.file_out.map{ meta, inter -> inter}.collect()   // channel: [ path(intervals) ]
         target_intervals      = GATK_BILT.out.interval_list.map{ meta, inter -> inter}.collect() // channel: [ path(interval_list) ]
         vep_resources         = UNTAR_VEP_CACHE.out.untar.map{meta, files -> [files]}.collect()  // channel: [ path(cache) ]
