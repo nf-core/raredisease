@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- A new functionality to pass gzipped resources to vcfanno_extra_resources [#589](https://github.com/nf-core/raredisease/pull/589)
 - A new parameter `vcfanno_extra_resources` to pass an extra resource to vcfanno [#588](https://github.com/nf-core/raredisease/pull/588)
 - A new parameter `scatter_count` to control how many interval files are created from a genome (used to parallelize annotations) [#585](https://github.com/nf-core/raredisease/pull/585)
 - Print warning messages if user intends to perform ranking when there are no affected samples [#579](https://github.com/nf-core/raredisease/pull/579)
@@ -51,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |                 | skip_smncopynumbercaller |
 |                 | skip_repeat_annotation   |
 |                 | scatter_count            |
+|                 | vcfanno_extra_resources  |
 
 ## 2.1.0 - Obelix [2024-05-29]
 
