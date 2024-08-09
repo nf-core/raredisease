@@ -19,9 +19,9 @@ workflow ANNOTATE_MT_SNVS {
         ch_cadd_header         // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources      // channel: [mandatory] [ path(annotation) ]
         ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_vcfanno_extra       // channel: [mandatory] [ path(resources & indices) ]
+        ch_vcfanno_extra       // channel: [mandatory] [ [path(vcf),path(index).....] ]
         ch_vcfanno_lua         // channel: [mandatory] [ path(lua) ]
-        ch_vcfanno_resources   // channel: [mandatory] [ path(resources & indices) ]
+        ch_vcfanno_resources   // channel: [mandatory] [ [path(vcf),path(index),.....] ]
         ch_vcfanno_toml        // channel: [mandatory] [ path(toml) ]
         val_vep_genome         // string:  [mandatory] GRCh37 or GRCh38
         val_vep_cache_version  // string:  [mandatory] 107
@@ -48,7 +48,6 @@ workflow ANNOTATE_MT_SNVS {
         ZIP_TABIX_HMTNOTE_MT.out.gz_tbi
             .combine(ch_vcfanno_extra)
             .map { meta, vcf, tbi, resources -> return [meta + [prefix: meta.prefix + "_vcfanno"], vcf, tbi, resources]}
-            .dump (tag:'test')
             .set { ch_in_vcfanno }
 
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
