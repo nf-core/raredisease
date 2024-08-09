@@ -188,21 +188,23 @@ workflow RAREDISEASE {
     //
     // Initialize file channels for PREPARE_REFERENCES subworkflow
     //
-    ch_genome_fasta            = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
-    ch_genome_fai              = params.fai                 ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                            : Channel.empty()
-    ch_genome_dictionary       = params.sequence_dictionary ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
-                                                            : Channel.empty()
-    ch_gnomad_af_tab           = params.gnomad_af           ? Channel.fromPath(params.gnomad_af).map{ it -> [[id:it[0].simpleName], it] }.collect()
-                                                            : Channel.value([[],[]])
-    ch_dbsnp                   = params.known_dbsnp         ? Channel.fromPath(params.known_dbsnp).map{ it -> [[id:it[0].simpleName], it] }.collect()
-                                                            : Channel.value([[],[]])
-    ch_mt_fasta                = params.mt_fasta            ? Channel.fromPath(params.mt_fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
-                                                            : Channel.empty()
-    ch_target_bed_unprocessed  = params.target_bed          ? Channel.fromPath(params.target_bed).map{ it -> [[id:it[0].simpleName], it] }.collect()
-                                                            : Channel.value([[],[]])
-    ch_vep_cache_unprocessed   = params.vep_cache           ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
-                                                            : Channel.value([[],[]])
+    ch_genome_fasta              = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
+    ch_genome_fai                = params.fai                 ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                : Channel.empty()
+    ch_genome_dictionary         = params.sequence_dictionary ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
+                                                                : Channel.empty()
+    ch_gnomad_af_tab             = params.gnomad_af           ? Channel.fromPath(params.gnomad_af).map{ it -> [[id:it[0].simpleName], it] }.collect()
+                                                                : Channel.value([[],[]])
+    ch_dbsnp                     = params.known_dbsnp         ? Channel.fromPath(params.known_dbsnp).map{ it -> [[id:it[0].simpleName], it] }.collect()
+                                                                : Channel.value([[],[]])
+    ch_mt_fasta                  = params.mt_fasta            ? Channel.fromPath(params.mt_fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
+                                                                : Channel.empty()
+    ch_target_bed_unprocessed    = params.target_bed          ? Channel.fromPath(params.target_bed).map{ it -> [[id:it[0].simpleName], it] }.collect()
+                                                                : Channel.value([[],[]])
+    ch_vcfanno_extra_unprocessed = params.vcfanno_extra_resources ? Channel.fromPath(params.vcfanno_extra_resources).map { it -> [[id:it.baseName], it] }.collect()
+                                                                : Channel.empty()
+    ch_vep_cache_unprocessed     = params.vep_cache           ? Channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
+                                                                : Channel.value([[],[]])
 
     //
     // Prepare references and indices.
@@ -215,6 +217,7 @@ workflow RAREDISEASE {
         ch_gnomad_af_tab,
         ch_dbsnp,
         ch_target_bed_unprocessed,
+        ch_vcfanno_extra_unprocessed,
         ch_vep_cache_unprocessed
     )
     .set { ch_references }
@@ -306,6 +309,7 @@ workflow RAREDISEASE {
                                                                             : Channel.value([])
     ch_variant_consequences_sv  = params.variant_consequences_sv            ? Channel.fromPath(params.variant_consequences_sv).collect()
                                                                             : Channel.value([])
+    ch_vcfanno_extra            = ch_references.vcfanno_extra
     ch_vcfanno_resources        = params.vcfanno_resources                  ? Channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
                                                                             : Channel.value([])
     ch_vcf2cytosure_blacklist   = params.vcf2cytosure_blacklist             ? Channel.fromPath(params.vcf2cytosure_blacklist).collect()
@@ -514,6 +518,7 @@ workflow RAREDISEASE {
                 params.analysis_type,
                 ch_cadd_header,
                 ch_cadd_resources,
+                ch_vcfanno_extra,
                 ch_vcfanno_resources,
                 ch_vcfanno_lua,
                 ch_vcfanno_toml,
@@ -570,6 +575,7 @@ workflow RAREDISEASE {
                 ch_cadd_header,
                 ch_cadd_resources,
                 ch_genome_fasta,
+                ch_vcfanno_extra,
                 ch_vcfanno_lua,
                 ch_vcfanno_resources,
                 ch_vcfanno_toml,

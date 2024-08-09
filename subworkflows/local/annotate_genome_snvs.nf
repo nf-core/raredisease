@@ -28,7 +28,8 @@ workflow ANNOTATE_GENOME_SNVS {
         analysis_type         // string: [mandatory] 'wgs' or 'wes'
         ch_cadd_header        // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources     // channel: [mandatory] [ path(annotation) ]
-        ch_vcfanno_resources  // channel: [mandatory] [ path(resources) ]
+        ch_vcfanno_extra      // channel: [mandatory] [ [path(vcf),path(index)] ]
+        ch_vcfanno_resources  // channel: [mandatory] [ [path(vcf),path(index),...] ]
         ch_vcfanno_lua        // channel: [mandatory] [ path(lua) ]
         ch_vcfanno_toml       // channel: [mandatory] [ path(toml) ]
         val_vep_genome        // string: [mandatory] GRCh37 or GRCh38
@@ -69,7 +70,7 @@ workflow ANNOTATE_GENOME_SNVS {
 
         GATK4_SELECTVARIANTS.out.vcf
             .join(GATK4_SELECTVARIANTS.out.tbi)
-            .map { meta, vcf, tbi -> return [meta, vcf, tbi, []] }
+            .combine(ch_vcfanno_extra)
             .set { ch_vcfanno_in }
 
         VCFANNO (ch_vcfanno_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
