@@ -279,6 +279,8 @@ workflow RAREDISEASE {
     ch_mtshift_fai              = ch_references.mtshift_fai
     ch_mtshift_fasta            = ch_references.mtshift_fasta
     ch_mtshift_intervals        = ch_references.mtshift_intervals
+    ch_par_bed                  = params.par_bed                            ? Channel.fromPath(params.par_bed).map{ it -> [[id:'par_bed'], it] }.collect()
+                                                                            : Channel.value([[],[]])
     ch_ploidy_model             = params.ploidy_model                       ? Channel.fromPath(params.ploidy_model).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                             : Channel.empty()
     ch_readcount_intervals      = params.readcount_intervals                ? Channel.fromPath(params.readcount_intervals).collect()
@@ -502,6 +504,7 @@ workflow RAREDISEASE {
             ch_dbsnp_tbi,
             ch_call_interval,
             ch_ml_model,
+            ch_par_bed,
             ch_case_info,
             ch_foundin_header,
             Channel.value(params.sentieon_dnascope_pcr_indel_model)
