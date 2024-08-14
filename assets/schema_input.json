@@ -42,7 +42,7 @@
             "sex": {
                 "type": "string",
                 "meta": ["sex"],
-                "enum": ["1", "2", "other"],
+                "enum": ["1", "2", "0", "other"],
                 "errorMessage": "Sex must be provided and cannot contain spaces"
             },
             "phenotype": {
