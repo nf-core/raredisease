@@ -156,9 +156,7 @@
                     "deepvariant": {
                         "branch": "master",
                         "git_sha": "ccf06a896339d2a4ed8594daa9f9adb827cb8189",
-                        "installed_by": [
-                            "modules"
-                        ]
+                        "installed_by": ["modules"]
                     },
                     "eklipse": {
                         "branch": "master",

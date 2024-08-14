@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- A new functionality to pass gzipped resources to vcfanno_extra_resources [#589](https://github.com/nf-core/raredisease/pull/589)
+- A new parameter `vcfanno_extra_resources` to pass an extra resource to vcfanno [#588](https://github.com/nf-core/raredisease/pull/588)
 - A new parameter `scatter_count` to control how many interval files are created from a genome (used to parallelize annotations) [#585](https://github.com/nf-core/raredisease/pull/585)
 - Print warning messages if user intends to perform ranking when there are no affected samples [#579](https://github.com/nf-core/raredisease/pull/579)
 - Two new parameters `skip_repeat_annotation` and `skip_repeat_calling` to skip calling and annotation of repeat expansions [#574](https://github.com/nf-core/raredisease/pull/574)
@@ -17,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Acceptable type for lane field in the samplesheet from number to string [#597](https://github.com/nf-core/raredisease/pull/597)
+- Allow `0` as a valid value for `sex` in the samplesheet [#595](https://github.com/nf-core/raredisease/pull/595)
+- Updated deepvariant to version 1.6.1 [#587](https://github.com/nf-core/raredisease/pull/587)
 - Parallelized vcfanno [#585](https://github.com/nf-core/raredisease/pull/585)
 - Skip ROH calling with bcftools if there are no affected samples [#579](https://github.com/nf-core/raredisease/pull/579)
 - Refactored tool citation list [#577](https://github.com/nf-core/raredisease/pull/577)
@@ -27,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Update docs to show 'vep_plugin_files' as a mandatory parameter for SNV annotation [#594](https://github.com/nf-core/raredisease/issues/593)
+- Error in SVDB merge when only a single SV caller is run [#586](https://github.com/nf-core/raredisease/pull/586)
 - Errors due to misplaced version statements [#578](https://github.com/nf-core/raredisease/pull/578)
 - Stub crashes due to peddy reported in [#566](https://github.com/nf-core/raredisease/issues/566) [#576](https://github.com/nf-core/raredisease/pull/576]
 - Docker manifest error from gnu-wget container [#570](https://github.com/nf-core/raredisease/pull/570)
@@ -48,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |                 | skip_smncopynumbercaller |
 |                 | skip_repeat_annotation   |
 |                 | scatter_count            |
+|                 | vcfanno_extra_resources  |
 
 ## 2.1.0 - Obelix [2024-05-29]
 
