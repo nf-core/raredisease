@@ -15,8 +15,9 @@
                 "errorMessage": "Sample name must be provided and cannot contain spaces"
             },
             "lane": {
-                "type": "number",
-                "meta": ["lane"]
+                "type": "string",
+                "meta": ["lane"],
+                "pattern": "^\\S+$"
             },
             "fastq_1": {
                 "type": "string",

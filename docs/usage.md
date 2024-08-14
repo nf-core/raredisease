@@ -10,24 +10,24 @@ Table of contents:
   - [Run nf-core/raredisease with test data](#run-nf-coreraredisease-with-test-data)
     - [Updating the pipeline](#updating-the-pipeline)
   - [Run nf-core/raredisease with your data](#run-nf-coreraredisease-with-your-data)
-    - [Samplesheet](#samplesheet)
-    - [Reference files and parameters](#reference-files-and-parameters)
-      - [1. Alignment](#1-alignment)
-      - [2. QC stats from the alignment files](#2-qc-stats-from-the-alignment-files)
-      - [3. Repeat expansions](#3-repeat-expansions)
-      - [4. Variant calling - SNV](#4-variant-calling---snv)
-      - [5. Variant calling - Structural variants](#5-variant-calling---structural-variants)
-      - [6. Copy number variant calling](#6-copy-number-variant-calling)
-      - [7. SNV annotation \& Ranking](#7-snv-annotation--ranking)
-      - [8. SV annotation \& Ranking](#8-sv-annotation--ranking)
-      - [9. Mitochondrial annotation](#9-mitochondrial-annotation)
-      - [10. Mobile element calling](#10-mobile-element-calling)
-      - [11. Mobile element annotation](#11-mobile-element-annotation)
-      - [12. Variant evaluation](#12-variant-evaluation)
-      - [13. Prepare data for CNV visualisation in Gens](#13-prepare-data-for-cnv-visualisation-in-gens)
-    - [Run the pipeline](#run-the-pipeline)
-      - [Direct input in CLI](#direct-input-in-cli)
-      - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
+      - [Samplesheet](#samplesheet)
+      - [Reference files and parameters](#reference-files-and-parameters)
+        - [1. Alignment](#1-alignment)
+        - [2. QC stats from the alignment files](#2-qc-stats-from-the-alignment-files)
+        - [3. Repeat expansions](#3-repeat-expansions)
+        - [4. Variant calling - SNV](#4-variant-calling---snv)
+        - [5. Variant calling - Structural variants](#5-variant-calling---structural-variants)
+        - [6. Copy number variant calling](#6-copy-number-variant-calling)
+        - [7. SNV annotation \& Ranking](#7-snv-annotation--ranking)
+        - [8. SV annotation \& Ranking](#8-sv-annotation--ranking)
+        - [9. Mitochondrial annotation](#9-mitochondrial-annotation)
+        - [10. Mobile element calling](#10-mobile-element-calling)
+        - [11. Mobile element annotation](#11-mobile-element-annotation)
+        - [12. Variant evaluation](#12-variant-evaluation)
+        - [13. Prepare data for CNV visualisation in Gens](#13-prepare-data-for-cnv-visualisation-in-gens)
+      - [Run the pipeline](#run-the-pipeline)
+        - [Direct input in CLI](#direct-input-in-cli)
+        - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
   - [Best practices](#best-practices)
   - [Core Nextflow arguments](#core-nextflow-arguments)
     - [`-profile`](#-profile)
@@ -102,17 +102,17 @@ A samplesheet is used to pass the information about the sample(s), such as the p
 
 nf-core/raredisease will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The pedigree information in the samplesheet (sex and phenotype) should be provided as they would be for a [ped file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format) (i.e. 1 for male, 2 for female, other for unknown).
 
-| Fields        | Description                                                                                                                                                                            |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `lane`        | Used to generate separate channels during the alignment step.                                                                                                                          |
-| `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
-| `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
-| `sex`         | Sex (1=male; 2=female; other=unknown).                                                                                                                                                 |
-| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                    |
-| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                  |
-| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                  |
-| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                                                                           |
+| Fields        | Description                                                                                                                                                                                             |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`).                  |
+| `lane`        | Used to generate separate channels during the alignment step. It is of string type, and we recommend using a combination of flowcell and lane to distinguish between different runs of the same sample. |
+| `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                          |
+| `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                          |
+| `sex`         | Sex (1=male; 2=female; other=unknown).                                                                                                                                                                  |
+| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                     |
+| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                   |
+| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                   |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                                                                                            |
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
