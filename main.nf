@@ -39,6 +39,7 @@ params.mobile_element_references       = getGenomeAttribute('mobile_element_refe
 params.mobile_element_svdb_annotations = getGenomeAttribute('mobile_element_svdb_annotations')
 params.ml_model                        = getGenomeAttribute('ml_model')
 params.mt_fasta                        = getGenomeAttribute('mt_fasta')
+params.par_bed                         = getGenomeAttribute('par_bed')
 params.ploidy_model                    = getGenomeAttribute('ploidy_model')
 params.reduced_penetrance              = getGenomeAttribute('reduced_penetrance')
 params.readcount_intervals             = getGenomeAttribute('readcount_intervals')
