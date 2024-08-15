@@ -267,6 +267,14 @@
                     "description": "Path to mitochondrial FASTA genome file.",
                     "fa_icon": "fas fa-file"
                 },
+                "par_bed": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "description": "Path to a BED file containing PAR regions (used by deepvariant)."
+                },
                 "ploidy_model": {
                     "type": "string",
                     "exists": true,

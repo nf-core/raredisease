@@ -201,10 +201,12 @@ The mandatory and optional parameters for each category are tabulated below.
 | ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup> |
 | analysis_type<sup>3</sup>  | call_interval<sup>2</sup>   |
 |                            | known_dbsnp_tbi<sup>2</sup> |
+|                            | par_bed<sup>4</sup>         |
 
 <sup>1</sup>Default variant caller is DeepVariant, but you have the option to use Sentieon as well.<br />
 <sup>2</sup>These parameters are only used by Sentieon.<br />
 <sup>3</sup>Default is WGS, but you have the option to choose WES as well.<br />
+<sup>4</sup>This parameter is only used by Deepvariant.<br />
 
 ##### 5. Variant calling - Structural variants
 
