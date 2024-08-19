@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- A new parameter `mt_aligner` to control which aligner is used to align reads to mitochondria
+- A new parameter `mt_aligner` to control which aligner is used to align reads to mitochondria [#600](https://github.com/nf-core/raredisease/pull/600)
 - A new parameter `par_bed` to pass a PAR bed files to deepvariant [#598](https://github.com/nf-core/raredisease/pull/598)
 - A new functionality to pass gzipped resources to vcfanno_extra_resources [#589](https://github.com/nf-core/raredisease/pull/589)
 - A new parameter `vcfanno_extra_resources` to pass an extra resource to vcfanno [#588](https://github.com/nf-core/raredisease/pull/588)
