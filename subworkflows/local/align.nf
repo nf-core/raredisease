@@ -97,12 +97,9 @@ workflow ALIGN {
                 CONVERT_MT_BAM_TO_FASTQ.out.bam,
                 ch_genome_bwaindex,
                 ch_genome_bwamem2index,
-                ch_genome_bwamemeindex,
                 ch_genome_fasta,
                 ch_genome_dictionary,
-                ch_genome_fai,
-                val_mbuffer_mem,
-                val_sort_threads
+                ch_genome_fai
             )
 
             ALIGN_MT_SHIFT (
@@ -110,12 +107,9 @@ workflow ALIGN {
                 CONVERT_MT_BAM_TO_FASTQ.out.bam,
                 ch_mtshift_bwaindex,
                 ch_mtshift_bwamem2index,
-                ch_mtshift_bwamemeindex,
                 ch_mtshift_fasta,
                 ch_mtshift_dictionary,
-                ch_mtshift_fai,
-                val_mbuffer_mem,
-                val_sort_threads
+                ch_mtshift_fai
             )
 
             ch_mt_marked_bam      = ALIGN_MT.out.marked_bam

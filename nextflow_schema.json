@@ -632,6 +632,13 @@
                     "fa_icon": "fas fa-align-center",
                     "enum": ["bwa", "bwamem2", "bwameme", "sentieon"]
                 },
+                "mt_aligner": {
+                    "type": "string",
+                    "default": "bwamem2",
+                    "description": "Specifies the alignment algorithm to use - available options are 'bwamem2' and 'sentieon'.",
+                    "fa_icon": "fas fa-align-center",
+                    "enum": ["bwa", "bwamem2", "sentieon"]
+                },
                 "samtools_sort_threads": {
                     "type": "integer",
                     "default": 4,

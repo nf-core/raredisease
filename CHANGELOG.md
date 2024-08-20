@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- A new parameter `mt_aligner` to control which aligner is used to align reads to mitochondria [#600](https://github.com/nf-core/raredisease/pull/600)
 - A new parameter `par_bed` to pass a PAR bed files to deepvariant [#598](https://github.com/nf-core/raredisease/pull/598)
 - A new functionality to pass gzipped resources to vcfanno_extra_resources [#589](https://github.com/nf-core/raredisease/pull/589)
 - A new parameter `vcfanno_extra_resources` to pass an extra resource to vcfanno [#588](https://github.com/nf-core/raredisease/pull/588)
@@ -20,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- bwameme can no longer be used to align mitochondrial reads [#600](https://github.com/nf-core/raredisease/pull/600)
 - Males' X and Y chromosomes will be treated as haploids during variant calling by deepvariant [#598](https://github.com/nf-core/raredisease/pull/598)
 - Acceptable type for lane field in the samplesheet from number to string [#597](https://github.com/nf-core/raredisease/pull/597)
 - Allow `0` as a valid value for `sex` in the samplesheet [#595](https://github.com/nf-core/raredisease/pull/595)
@@ -46,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Old parameter   | New parameter            |
 | --------------- | ------------------------ |
 |                 | mbuffer_mem              |
+|                 | mt_aligner               |
 |                 | samtools_sort_threads    |
 |                 | skip_repeat_calling      |
 |                 | skip_snv_calling         |
