@@ -90,7 +90,7 @@ workflow PIPELINE_INITIALISATION {
         .combine( ch_original_input )
         .map { counts, meta, fastq1, fastq2 ->
             new_meta = meta + [num_lanes:counts[meta.id],
-                        read_group:"\'@RG\\tID:"+ fastq1.simpleName + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
+                        read_group:"\'@RG\\tID:"+ fastq1.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
             if (!fastq2) {
                 return [ new_meta + [ single_end:true ], [ fastq1 ] ]
             } else {
