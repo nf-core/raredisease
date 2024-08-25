@@ -337,7 +337,7 @@ workflow RAREDISEASE {
         if (params.analysis_type.equals("wgs")) {
             ch_svcaller_priority = Channel.value(["tiddit", "manta", "cnvnator"])
         } else {
-            ch_svcaller_priority = Channel.value([])
+            ch_svcaller_priority = Channel.value([""])
         }
     } else {
         if (params.analysis_type.equals("wgs")) {
