@@ -21,7 +21,6 @@ workflow ALIGN {
         ch_genome_dictionary     // channel: [mandatory] [ val(meta), path(dict) ]
         ch_mtshift_bwaindex      // channel: [mandatory] [ val(meta), path(index) ]
         ch_mtshift_bwamem2index  // channel: [mandatory] [ val(meta), path(index) ]
-        ch_mtshift_bwamemeindex  // channel: [mandatory] [ val(meta), path(index) ]
         ch_mtshift_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_mtshift_dictionary    // channel: [mandatory] [ val(meta), path(dict) ]
         ch_mtshift_fai           // channel: [mandatory] [ val(meta), path(fai) ]
