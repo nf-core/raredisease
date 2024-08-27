@@ -191,7 +191,7 @@ workflow RAREDISEASE {
     ch_genome_fasta              = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
     ch_genome_fai                = params.fai                 ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                 : Channel.empty()
-    ch_genome_dictionary         = params.sequence_dictionary ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_genome_dict_unprocessed   = params.sequence_dictionary ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                 : Channel.empty()
     ch_gnomad_af_tab             = params.gnomad_af           ? Channel.fromPath(params.gnomad_af).map{ it -> [[id:it[0].simpleName], it] }.collect()
                                                                 : Channel.value([[],[]])
@@ -212,7 +212,7 @@ workflow RAREDISEASE {
     PREPARE_REFERENCES (
         ch_genome_fasta,
         ch_genome_fai,
-        ch_genome_dictionary,
+        ch_genome_dict_unprocessed,
         ch_mt_fasta,
         ch_gnomad_af_tab,
         ch_dbsnp,
