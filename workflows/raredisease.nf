@@ -274,7 +274,6 @@ workflow RAREDISEASE {
     ch_mtshift_backchain        = ch_references.mtshift_backchain
     ch_mtshift_bwaindex         = ch_references.mtshift_bwa_index
     ch_mtshift_bwamem2index     = ch_references.mtshift_bwamem2_index
-    ch_mtshift_bwamemeindex     = ch_references.mtshift_bwameme_index
     ch_mtshift_dictionary       = ch_references.mtshift_dict
     ch_mtshift_fai              = ch_references.mtshift_fai
     ch_mtshift_fasta            = ch_references.mtshift_fasta
@@ -415,7 +414,6 @@ workflow RAREDISEASE {
         ch_genome_dictionary,
         ch_mtshift_bwaindex,
         ch_mtshift_bwamem2index,
-        ch_mtshift_bwamemeindex,
         ch_mtshift_fasta,
         ch_mtshift_dictionary,
         ch_mtshift_fai,
