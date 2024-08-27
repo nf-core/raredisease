@@ -785,7 +785,7 @@ workflow RAREDISEASE {
     Generate CGH files from sequencing data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if ( !params.skip_vcf2cytosure && params.analysis_type.equals("wgs") ) {
+    if ( !params.skip_vcf2cytosure && params.analysis_type.equals("wgs") && !params.skip_sv_calling) {
         GENERATE_CYTOSURE_FILES (
             ch_sv_annotate.vcf_ann,
             ch_sv_annotate.tbi,
