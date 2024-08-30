@@ -103,8 +103,10 @@ workflow PREPARE_REFERENCES {
             .map { meta, tbi, vcf -> return [[vcf,tbi]]}
             .set {ch_vcfanno_index}
 
-        TABIX_BGZIPINDEX_VCFANNOEXTRA(ch_vcfanno_tabix_in.bgzipindex).gz_tbi
-            .map { meta, vcf, tbi -> return [[vcf,tbi]] }
+        TABIX_BGZIPINDEX_VCFANNOEXTRA(ch_vcfanno_tabix_in.bgzipindex)
+        Channel.empty()
+            .mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_tbi, TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_csi)
+            .map { meta, vcf, index -> return [[vcf,index]] }
             .set {ch_vcfanno_bgzip}
 
         Channel.empty()
