@@ -485,9 +485,9 @@
                 "analysis_type": {
                     "type": "string",
                     "default": "wgs",
-                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
+                    "description": "Specifies which analysis type for the pipeline- either 'wgs' or 'wes'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-align-center",
-                    "enum": ["wgs", "wes", "mito"]
+                    "enum": ["wgs", "wes"]
                 },
                 "bwa_as_fallback": {
                     "type": "boolean",
@@ -498,9 +498,8 @@
                 "platform": {
                     "type": "string",
                     "default": "illumina",
-                    "description": "Specifies which analysis type for the pipeline- either 'wgs','wes','mito'. This changes resources consumed and tools used.",
-                    "fa_icon": "fas fa-align-center",
-                    "enum": ["illumina"]
+                    "description": "Specifies the platform on which the reads were sequenced.",
+                    "fa_icon": "fas fa-align-center"
                 },
                 "ngsbits_samplegender_method": {
                     "type": "string",
