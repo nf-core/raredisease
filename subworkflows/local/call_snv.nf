@@ -46,7 +46,7 @@ workflow CALL_SNV {
         ch_sentieon_gvcf = Channel.empty()
         ch_sentieon_gtbi = Channel.empty()
 
-        if (params.variant_caller.equals("deepvariant")) {
+        if (params.variant_caller.equals("deepvariant") && !params.analysis_type.equals("mito")) {
             CALL_SNV_DEEPVARIANT (      // triggered only when params.variant_caller is set as deepvariant
                 ch_genome_bam_bai,
                 ch_genome_fasta,
@@ -97,7 +97,7 @@ workflow CALL_SNV {
         ch_genome_tabix     = GATK4_SELECTVARIANTS.out.tbi
         ch_genome_vcf_tabix = ch_genome_vcf.join(ch_genome_tabix, failOnMismatch:true, failOnDuplicate:true)
 
-        if (params.analysis_type.equals("wgs") || params.run_mt_for_wes) {
+        if (params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes) {
             CALL_SNV_MT(
                 ch_mt_bam_bai,
                 ch_genome_fasta,

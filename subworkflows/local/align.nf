@@ -83,7 +83,7 @@ workflow ALIGN {
 
         // PREPARING READS FOR MT ALIGNMENT
 
-        if (params.analysis_type.equals("wgs") || params.run_mt_for_wes) {
+        if (params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes) {
             CONVERT_MT_BAM_TO_FASTQ (
                 ch_genome_bam_bai,
                 ch_genome_fasta,

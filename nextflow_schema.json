@@ -485,9 +485,9 @@
                 "analysis_type": {
                     "type": "string",
                     "default": "wgs",
-                    "description": "Specifies which analysis type for the pipeline- either 'wgs' or 'wes'. This changes resources consumed and tools used.",
+                    "description": "Specifies which analysis type for the pipeline- either 'wgs', 'wes' or 'mito'. This changes resources consumed and tools used.",
                     "fa_icon": "fas fa-align-center",
-                    "enum": ["wgs", "wes"]
+                    "enum": ["wgs", "wes", "mito"]
                 },
                 "bwa_as_fallback": {
                     "type": "boolean",
