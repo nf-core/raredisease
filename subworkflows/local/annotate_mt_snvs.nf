@@ -21,7 +21,7 @@ workflow ANNOTATE_MT_SNVS {
         ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_vcfanno_extra       // channel: [mandatory] [ [path(vcf),path(index).....] ]
         ch_vcfanno_lua         // channel: [mandatory] [ path(lua) ]
-        ch_vcfanno_resources   // channel: [mandatory] [ [path(vcf),path(index),.....] ]
+        ch_vcfanno_resources   // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
         ch_vcfanno_toml        // channel: [mandatory] [ path(toml) ]
         val_vep_genome         // string:  [mandatory] GRCh37 or GRCh38
         val_vep_cache_version  // string:  [mandatory] 107
