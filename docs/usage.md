@@ -102,17 +102,17 @@ A samplesheet is used to pass the information about the sample(s), such as the p
 
 nf-core/raredisease will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The pedigree information in the samplesheet (sex and phenotype) should be provided as they would be for a [ped file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format) (i.e. 1 for male, 2 for female, other for unknown).
 
-| Fields        | Description                                                                                                                                                                            |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `lane`        | Used to generate separate channels during the alignment step.                                                                                                                          |
-| `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
-| `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                         |
-| `sex`         | Sex (1=male; 2=female; other=unknown).                                                                                                                                                 |
-| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                    |
-| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                  |
-| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                  |
-| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                                                                           |
+| Fields        | Description                                                                                                                                                                                             |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`).                  |
+| `lane`        | Used to generate separate channels during the alignment step. It is of string type, and we recommend using a combination of flowcell and lane to distinguish between different runs of the same sample. |
+| `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                          |
+| `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                          |
+| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                                                                                                               |
+| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                     |
+| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                   |
+| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                   |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                                                                                            |
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
@@ -139,7 +139,7 @@ Note that the pipeline is modular in architecture. It offers you the flexibility
 
 nf-core/raredisease consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
 
-1. Alignment (bwamem2/bwa/Sentieon BWA mem)
+1. Alignment (bwamem2/bwa/bwameme/Sentieon BWA mem)
 2. QC stats from the alignment files
 3. Repeat expansions (ExpansionsHunter & Stranger)
 4. Variant calling - SNV (DeepVariant/Sentieon DNAscope)
@@ -162,14 +162,15 @@ The mandatory and optional parameters for each category are tabulated below.
 | aligner<sup>1</sup>            | fasta_fai<sup>4</sup>          |
 | fasta<sup>2</sup>              | bwamem2<sup>4</sup>            |
 | platform                       | bwa<sup>4</sup>                |
-| mito_name/mt_fasta<sup>3</sup> | known_dbsnp<sup>5</sup>        |
+| mito_name/mt_fasta<sup>3</sup> | bwameme<sup>4</sup>            |
+|                                | known_dbsnp<sup>5</sup>        |
 |                                | known_dbsnp_tbi<sup>5</sup>    |
 |                                | min_trimmed_length<sup>6</sup> |
 
-<sup>1</sup>Default value is bwamem2. Other alternatives are bwa and sentieon (requires valid Sentieon license ).<br />
+<sup>1</sup>Default value is bwamem2. Other alternatives are bwa, bwameme and sentieon (requires valid Sentieon license ).<br />
 <sup>2</sup>Analysis set reference genome in fasta format, first 25 contigs need to be chromosome 1-22, X, Y and the mitochondria.<br />
 <sup>3</sup>If mito_name is provided, mt_fasta can be generated by the pipeline.<br />
-<sup>4</sup>fasta_fai, bwa and bwamem2, if not provided by the user, will be generated by the pipeline when necessary.<br />
+<sup>4</sup>fasta_fai, bwa, bwamem2 and bwameme, if not provided by the user, will be generated by the pipeline when necessary.<br />
 <sup>5</sup>Used only by Sentieon.<br />
 <sup>6</sup>Default value is 40. Used only by fastp.<br />
 
@@ -200,10 +201,12 @@ The mandatory and optional parameters for each category are tabulated below.
 | ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup> |
 | analysis_type<sup>3</sup>  | call_interval<sup>2</sup>   |
 |                            | known_dbsnp_tbi<sup>2</sup> |
+|                            | par_bed<sup>4</sup>         |
 
 <sup>1</sup>Default variant caller is DeepVariant, but you have the option to use Sentieon as well.<br />
 <sup>2</sup>These parameters are only used by Sentieon.<br />
 <sup>3</sup>Default is WGS, but you have the option to choose WES as well.<br />
+<sup>4</sup>This parameter is only used by Deepvariant.<br />
 
 ##### 5. Variant calling - Structural variants
 
@@ -214,27 +217,30 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 6. Copy number variant calling
 
-| Mandatory                      | Optional                        |
-| ------------------------------ | ------------------------------- |
-| ploidy_model<sup>1</sup>       | readcount_intervals<sup>3</sup> |
-| gcnvcaller_model<sup>1,2</sup> |                                 |
+| Mandatory                         | Optional |
+| --------------------------------- | -------- |
+| ploidy_model<sup>1,4</sup>        |          |
+| gcnvcaller_model<sup>1,2,4</sup>  |          |
+| readcount_intervals<sup>3,4</sup> |          |
 
 <sup>1</sup> Output from steps 3 & 4 of GATK's CNV calling pipeline run in cohort mode as described [here](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants).<br />
 <sup>2</sup> Sample file can be found [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/gcnvmodels.tsv) (Note the header 'models' in the sample file).<br />
 <sup>3</sup> Output from step 1 of GATK's CNV calling pipeline as described [here](https://gatk.broadinstitute.org/hc/en-us/articles/360035531152--How-to-Call-common-and-rare-germline-copy-number-variants).<br />
+<sup>4</sup> All these files can be generated using the germlinecnvcaller tool option in nf-core/createpanelrefs.<br />
 
 ##### 7. SNV annotation & Ranking
 
-| Mandatory                            | Optional                                      |
-| ------------------------------------ | --------------------------------------------- |
-| genome<sup>1</sup>                   | reduced_penetrance<sup>8</sup>                |
-| vcfanno_resources<sup>2</sup>        | vcfanno_lua                                   |
-| vcfanno_toml<sup>3</sup>             | vep_filters/vep_filters_scout_fmt<sup>9</sup> |
-| vep_cache_version                    | cadd_resources<sup>10</sup>                   |
-| vep_cache<sup>4</sup>                | vep_plugin_files<sup>11</sup>                 |
-| gnomad_af<sup>5</sup>                |                                               |
-| score_config_snv<sup>6</sup>         |                                               |
-| variant_consequences_snv<sup>7</sup> |                                               |
+| Mandatory                            | Optional                                       |
+| ------------------------------------ | ---------------------------------------------- |
+| genome<sup>1</sup>                   | reduced_penetrance<sup>9</sup>                 |
+| vcfanno_resources<sup>2</sup>        | vcfanno_lua                                    |
+| vcfanno_toml<sup>3</sup>             | vep_filters/vep_filters_scout_fmt<sup>10</sup> |
+| vep_cache_version                    | cadd_resources<sup>11</sup>                    |
+| vep_cache<sup>4</sup>                |                                                |
+| gnomad_af<sup>5</sup>                |                                                |
+| score_config_snv<sup>6</sup>         |                                                |
+| variant_consequences_snv<sup>7</sup> |                                                |
+| vep_plugin_files<sup>8</sup>         |                                                |
 
 <sup>1</sup>Genome version is used by VEP. You have the option to choose between GRCh37 and GRCh38.<br />
 <sup>2</sup>Path to VCF files and their indices used by vcfanno. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_resources.txt).<br />
@@ -246,10 +252,10 @@ See example cache [here](https://raw.githubusercontent.com/nf-core/test-datasets
 no header and the following columns: `CHROM POS REF_ALLELE ALT_ALLELE AF`. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/gnomad_reformated.tab.gz).<br />
 <sup>6</sup>Used by GENMOD for ranking the variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_snv.ini).<br />
 <sup>7</sup>File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic and mitochondrial SNVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/variant_consequences_v2.txt). You can learn more about these terms [here](https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html).
-<sup>8</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
-<sup>9</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into canditate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt). Not required if --skip_vep_filter is set to true.<br />
-<sup>10</sup>Path to a folder containing cadd annotations. Equivalent of the data/annotations/ folder described [here](https://github.com/kircherlab/CADD-scripts/#manual-installation), and it is used to calculate CADD scores for small indels. <br />
-<sup>11</sup>A CSV file that describes the files used by VEP's named and custom plugins. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vep_files.csv). <br />
+<sup>8</sup>A CSV file that describes the files used by VEP's named and custom plugins. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vep_files.csv). <br />
+<sup>9</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
+<sup>10</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into canditate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt). Not required if --skip_vep_filter is set to true.<br />
+<sup>11</sup>Path to a folder containing cadd annotations. Equivalent of the data/annotations/ folder described [here](https://github.com/kircherlab/CADD-scripts/#manual-installation), and it is used to calculate CADD scores for small indels. <br />
 
 :::note
 We use CADD only to annotate small indels. To annotate SNVs with precomputed CADD scores, pass the file containing CADD scores as a resource to vcfanno instead. Files containing the precomputed CADD scores for SNVs can be downloaded from [here](https://cadd.gs.washington.edu/download) (download files listed under the description: "All possible SNVs of GRCh3<7/8>/hg3<7/8>")
@@ -547,4 +553,4 @@ plugins {
 }
 ```
 
-This should go in your Nextflow confgiguration file, specified with `-c <YOURCONFIG>` when running the pipeline.
+This should go in your Nextflow configuration file, specified with `-c <YOURCONFIG>` when running the pipeline.

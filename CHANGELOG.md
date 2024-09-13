@@ -3,6 +3,76 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.2.0 - Dogmatix [2024-09-13]
+
+### `Added`
+
+- A new parameter `mt_aligner` to control which aligner is used to align reads to mitochondria [#600](https://github.com/nf-core/raredisease/pull/600)
+- A new parameter `par_bed` to pass a PAR bed files to deepvariant [#598](https://github.com/nf-core/raredisease/pull/598)
+- A new functionality to pass gzipped resources to vcfanno_extra_resources [#589](https://github.com/nf-core/raredisease/pull/589)
+- A new parameter `vcfanno_extra_resources` to pass an extra resource to vcfanno [#588](https://github.com/nf-core/raredisease/pull/588)
+- A new parameter `scatter_count` to control how many interval files are created from a genome (used to parallelize annotations) [#585](https://github.com/nf-core/raredisease/pull/585)
+- Print warning messages if user intends to perform ranking when there are no affected samples [#579](https://github.com/nf-core/raredisease/pull/579)
+- Two new parameters `skip_repeat_annotation` and `skip_repeat_calling` to skip calling and annotation of repeat expansions [#574](https://github.com/nf-core/raredisease/pull/574)
+- A new parameter `skip_smncopynumbercaller` to skip smncopynumbercaller module [#574](https://github.com/nf-core/raredisease/pull/574)
+- A new parameter `skip_sv_calling` to skip sv calling workflow [#572](https://github.com/nf-core/raredisease/pull/572)
+- Two new parameters `skip_snv_calling` and `skip_repeat_analysis` to skip snv calling and repeat analysis respectively [#571](https://github.com/nf-core/raredisease/pull/571)
+- Two new parameters `mbuffer_mem` and `samtools_sort_threads` to control resources given to mbuffer and samtools sort in the bwameme module [#570](https://github.com/nf-core/raredisease/pull/570)
+
+### `Changed`
+
+- Update default vep container from v110-v112 [#609](https://github.com/nf-core/raredisease/pull/609)
+- Default index for vcfanno extra annotation files from tbi to csi [#606](https://github.com/nf-core/raredisease/pull/606)
+- Updated the model for Sentieon DNAScope to v1.1 [#601](https://github.com/nf-core/raredisease/pull/601)
+- bwameme can no longer be used to align mitochondrial reads [#600](https://github.com/nf-core/raredisease/pull/600)
+- Males' X and Y chromosomes will be treated as haploids during variant calling by deepvariant [#598](https://github.com/nf-core/raredisease/pull/598)
+- Acceptable type for lane field in the samplesheet from number to string [#597](https://github.com/nf-core/raredisease/pull/597)
+- Allow `0` as a valid value for `sex` in the samplesheet [#595](https://github.com/nf-core/raredisease/pull/595)
+- Updated deepvariant to version 1.6.1 [#587](https://github.com/nf-core/raredisease/pull/587)
+- Parallelized vcfanno [#585](https://github.com/nf-core/raredisease/pull/585)
+- Skip ROH calling with bcftools if there are no affected samples [#579](https://github.com/nf-core/raredisease/pull/579)
+- Refactored tool citation list [#577](https://github.com/nf-core/raredisease/pull/577)
+- Removed `skip_repeat_analysis` added in #571 [#574](https://github.com/nf-core/raredisease/pull/574)
+- Remove several skip parameters that had been included in the pipeline to avoid failed CI tests (see parameters table below) [#574](https://github.com/nf-core/raredisease/pull/574)
+- `readcount_intervals` parameter is now mandatory for running germlinecnvcaller. [#570](https://github.com/nf-core/raredisease/pull/570)
+- Turn off CNVnator, TIDDIT, SMNCopyNumberCaller, Gens, and Vcf2cytosure for targeted analysis [#573](https://github.com/nf-core/raredisease/pull/573)
+
+### `Fixed`
+
+- Issues that cropped up when `aligner` and `mt_aligner` were different [#605](https://github.com/nf-core/raredisease/pull/605)
+- Update docs to show 'vep_plugin_files' as a mandatory parameter for SNV annotation [#594](https://github.com/nf-core/raredisease/pull/594)
+- Error in SVDB merge when only a single SV caller is run [#586](https://github.com/nf-core/raredisease/pull/586)
+- Errors due to misplaced version statements [#578](https://github.com/nf-core/raredisease/pull/578)
+- Stub crashes due to peddy reported in [#566](https://github.com/nf-core/raredisease/issues/566) [#576](https://github.com/nf-core/raredisease/pull/576]
+- Docker manifest error from gnu-wget container [#570](https://github.com/nf-core/raredisease/pull/570)
+- Citations for bwameme [#563](https://github.com/nf-core/raredisease/pull/563)
+
+### Parameters
+
+| Old parameter   | New parameter            |
+| --------------- | ------------------------ |
+|                 | mbuffer_mem              |
+|                 | mt_aligner               |
+|                 | samtools_sort_threads    |
+|                 | skip_repeat_calling      |
+|                 | skip_snv_calling         |
+|                 | skip_sv_calling          |
+| skip_eklipse    |                          |
+| skip_fastqc     |                          |
+| skip_haplocheck |                          |
+| skip_qualimap   |                          |
+|                 | skip_smncopynumbercaller |
+|                 | skip_repeat_annotation   |
+|                 | scatter_count            |
+|                 | vcfanno_extra_resources  |
+
+### Tool updates
+
+| Tool        | Old version | New version |
+| ----------- | ----------- | ----------- |
+| Deepvariant | 1.5.0       | 1.6.1       |
+| ensemblvep  | 110         | 112         |
+
 ## 2.1.0 - Obelix [2024-05-29]
 
 ### `Added`

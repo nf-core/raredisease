@@ -17,6 +17,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
       - [Mapping](#mapping)
         - [Bwa-mem2](#bwa-mem2)
         - [BWA](#bwa)
+        - [BWA-MEME](#bwa-meme)
         - [Sentieon bwa mem](#sentieon-bwa-mem)
       - [Duplicate marking](#duplicate-marking)
         - [Picard's MarkDuplicates](#picards-markduplicates)
@@ -88,6 +89,10 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 [BWA](https://github.com/lh3/bwa) used to map the reads to a reference genome. The aligned reads are coordinate sorted with samtools sort. These files are treated as intermediates and are not placed in the output folder by default. It is not the default aligner, but it can be chosen by setting `--aligner` option to bwa.
 
+##### BWA-MEME
+
+[BWA-MEME](https://github.com/kaist-ina/BWA-MEME) used to map the reads to a reference genome. The aligned reads are coordinate sorted with samtools sort. These files are treated as intermediates and are not placed in the output folder by default. It is not the default aligner, but it can be chosen by setting `--aligner` option to bwameme.
+
 ##### Sentieon bwa mem
 
 [Sentieon's bwa mem](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#map-reads-to-reference) is the software accelerated version of the bwa-mem algorithm. It is used to efficiently perform the alignment using BWA. Aligned reads are then coordinate sorted using Sentieon's [sort](https://support.sentieon.com/manual/usages/general/#util-syntax) utility. These files are treated as intermediates and are not placed in the output folder by default. It is not the default aligner, but it can be chosen by setting `--aligner` option to "sentieon".
@@ -96,7 +101,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ##### Picard's MarkDuplicates
 
-[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2 and bwa are processed by this tool. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
+[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2, bwameme and bwa are processed by this tool. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
 
 <details markdown="1">
 <summary>Output files from Alignment</summary>
@@ -382,8 +387,8 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 <summary>Output files</summary>
 
 - `annotate_snv/genome`
-  - `<case_id>_rhocall_vcfanno_filter_<cadd_vep|vep>.vcf.gz`: file containing bcftools roh, vcfanno, cadd and vep annotations.
-  - `<case_id>_rhocall_vcfanno_filter_<cadd_vep|vep>.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, cadd and vep annotations.
+  - `<case_id>_<rhocall_vcfanno|vcfanno>_filter_<cadd_vep|vep>.vcf.gz`: file containing bcftools roh, vcfanno, cadd and vep annotations.
+  - `<case_id>_<rhocall_vcfanno|vcfanno>_filter_<cadd_vep|vep>.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, cadd and vep annotations.
 
 </details>
 

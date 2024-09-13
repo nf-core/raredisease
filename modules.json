@@ -82,7 +82,7 @@
                     },
                     "bwameme/mem": {
                         "branch": "master",
-                        "git_sha": "79480293280ff4f10f30bdea1ddd903f223f8489",
+                        "git_sha": "0aa157a00b54bcbe2c50be375cafd68d928e7f4d",
                         "installed_by": ["modules"]
                     },
                     "cadd": {
@@ -113,7 +113,7 @@
                     },
                     "deepvariant": {
                         "branch": "master",
-                        "git_sha": "199ba086a259e1933d6e0ab7596e4a977bbd483a",
+                        "git_sha": "a7e8b8afd4fa82f20d745fa778bfdbf39c1f7efb",
                         "installed_by": ["modules"]
                     },
                     "eklipse": {
@@ -123,12 +123,12 @@
                     },
                     "ensemblvep/filtervep": {
                         "branch": "master",
-                        "git_sha": "214d575774c172062924ad3564b4f66655600730",
+                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
                         "installed_by": ["modules"]
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
-                        "git_sha": "76a0696a60c41c57fc5f6040ac31b11ce5d4d8dd",
+                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
                         "installed_by": ["modules"]
                     },
                     "expansionhunter": {
@@ -204,11 +204,6 @@
                     "gatk4/postprocessgermlinecnvcalls": {
                         "branch": "master",
                         "git_sha": "cf607b7749da0a8f5ca2a1e31233e13e3159e2fe",
-                        "installed_by": ["modules"]
-                    },
-                    "gatk4/preprocessintervals": {
-                        "branch": "master",
-                        "git_sha": "d742e3143f2ccb8853c29b35cfcf50b5e5026980",
                         "installed_by": ["modules"]
                     },
                     "gatk4/printreads": {
@@ -309,7 +304,7 @@
                     },
                     "peddy": {
                         "branch": "master",
-                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "git_sha": "bb8c1e039f2c1d603e8a93665d0386d5c6ac8e5e",
                         "installed_by": ["modules"]
                     },
                     "picard/addorreplacereadgroups": {

@@ -28,7 +28,8 @@ workflow ANNOTATE_GENOME_SNVS {
         analysis_type         // string: [mandatory] 'wgs' or 'wes'
         ch_cadd_header        // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources     // channel: [mandatory] [ path(annotation) ]
-        ch_vcfanno_resources  // channel: [mandatory] [ path(resources) ]
+        ch_vcfanno_extra      // channel: [mandatory] [ [path(vcf),path(index)] ]
+        ch_vcfanno_resources  // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
         ch_vcfanno_lua        // channel: [mandatory] [ path(lua) ]
         ch_vcfanno_toml       // channel: [mandatory] [ path(toml) ]
         val_vep_genome        // string: [mandatory] GRCh37 or GRCh38
@@ -53,79 +54,63 @@ workflow ANNOTATE_GENOME_SNVS {
 
         ZIP_TABIX_ROHCALL (RHOCALL_ANNOTATE.out.vcf)
 
-        ZIP_TABIX_ROHCALL.out.gz_tbi
-            .map { meta, vcf, tbi -> return [meta, vcf, tbi, []]}
-            .set { ch_vcf_in }
-
-        VCFANNO (ch_vcf_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
-
-        VCFANNO.out.vcf
-            .map {meta, vcf ->
-                def splitchannels = []
-                for (int i=0; i< meta.upd_children.size(); i++) {
-                    upd_sample = meta.upd_children[i]
-                    new_meta = meta + [upd_child:upd_sample]
-                    splitchannels.add([new_meta,vcf])
-                    }
-                return splitchannels
-            }
-            .flatten()
-            .buffer (size: 2)
-            .set { ch_upd_in }
-
-        UPD_SITES(ch_upd_in)
-        UPD_REGIONS(ch_upd_in)
-        CHROMOGRAPH_SITES([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_SITES.out.bed)
-        CHROMOGRAPH_REGIONS([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_REGIONS.out.bed, [[],[]])
-
-        ZIP_TABIX_VCFANNO (VCFANNO.out.vcf)
-
-        //rhocall_viz
-        ANNOTATE_RHOCALLVIZ(ZIP_TABIX_VCFANNO.out.gz_tbi, ch_samples, ch_genome_chrsizes)
-
-        BCFTOOLS_VIEW(ZIP_TABIX_VCFANNO.out.gz_tbi, [], [], [])  // filter on frequencies
-
-        TABIX_BCFTOOLS_VIEW (BCFTOOLS_VIEW.out.vcf)
-
-        BCFTOOLS_VIEW.out.vcf
-            .join(TABIX_BCFTOOLS_VIEW.out.tbi, failOnMismatch:true, failOnDuplicate:true)
-            .collect()
+        ch_vcf
+            .join(ZIP_TABIX_ROHCALL.out.gz_tbi, remainder: true)
             .combine(ch_split_intervals)
-            .map {
-                meta, vcf, tbi, interval ->
-                return [meta + [scatterid:interval.baseName, prefix: vcf.simpleName], vcf, tbi, interval]
+            .map { it  ->
+                if (it[3].equals(null)) {
+                    return [it[0] + [prefix: it[0].id, scatterid:it[4].baseName], it[1], it[2], it[4]]
+                } else {
+                    return [it[0] + [prefix: it[0].id + "_rhocall", scatterid:it[5].baseName], it[3], it[4], it[5]]
+                }
             }
             .set { ch_vcf_scatter_in }
 
         GATK4_SELECTVARIANTS (ch_vcf_scatter_in)
 
+        GATK4_SELECTVARIANTS.out.vcf
+            .join(GATK4_SELECTVARIANTS.out.tbi)
+            .combine(ch_vcfanno_extra)
+            .set { ch_vcfanno_in }
+
+        VCFANNO (ch_vcfanno_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
+
+        ZIP_TABIX_VCFANNO (VCFANNO.out.vcf)
+
+        BCFTOOLS_VIEW(ZIP_TABIX_VCFANNO.out.gz_tbi, [], [], [])  // filter on frequencies
+
         // Annotating with CADD
         if (params.cadd_resources != null) {
+            TABIX_BCFTOOLS_VIEW (BCFTOOLS_VIEW.out.vcf)
+
+            BCFTOOLS_VIEW.out.vcf
+                .join(TABIX_BCFTOOLS_VIEW.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+                .set { ch_cadd_in }
+
             ANNOTATE_CADD (
-                GATK4_SELECTVARIANTS.out.vcf,
-                GATK4_SELECTVARIANTS.out.tbi,
+                ch_cadd_in,
                 ch_cadd_header,
                 ch_cadd_resources
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
             ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
+            ch_versions = ch_versions.mix(TABIX_BCFTOOLS_VIEW.out.versions)
         }
 
         // If CADD is run, pick CADD output as input for VEP else pass selectvariants output to VEP.
-        GATK4_SELECTVARIANTS.out.vcf
+        BCFTOOLS_VIEW.out.vcf
             .join(ch_cadd_vcf, remainder: true) // If CADD is not run then the third element in this channel will be `null`
             .branch { it  ->                              // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
                 selvar: it[2].equals(null)
-                    return [it[0], it[1]]
+                    return [it[0] + [prefix: it[0].prefix + "_filter"], it[1]]
                 cadd: !(it[2].equals(null))
-                    return [it[0] + [prefix: it[0].prefix + "_cadd"], it[2]]
+                    return [it[0] + [prefix: it[0].prefix + "_filter_cadd"], it[2]]
             }
             .set { ch_for_mix }
 
         ch_for_mix.selvar.mix(ch_for_mix.cadd)
             .map { meta, vcf -> return [meta, vcf, []] }
             .set { ch_vep_in }
-
 
         // Annotating with ensembl Vep
         ENSEMBLVEP_SNV(
@@ -157,13 +142,36 @@ workflow ANNOTATE_GENOME_SNVS {
         BCFTOOLS_CONCAT (ch_concat_in)
 
         BCFTOOLS_CONCAT.out.vcf
+            .map {meta, vcf ->
+                def splitchannels = []
+                for (int i=0; i< meta.upd_children.size(); i++) {
+                    upd_sample = meta.upd_children[i]
+                    new_meta = meta + [upd_child:upd_sample, prefix: meta.prefix + "_vcfanno"]
+                    splitchannels.add([new_meta,vcf])
+                    }
+                return splitchannels
+            }
+            .flatten()
+            .buffer (size: 2)
+            .set { ch_upd_in }
+
+        UPD_SITES(ch_upd_in)
+        UPD_REGIONS(ch_upd_in)
+        CHROMOGRAPH_SITES([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_SITES.out.bed)
+        CHROMOGRAPH_REGIONS([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_REGIONS.out.bed, [[],[]])
+
+
+        BCFTOOLS_CONCAT.out.vcf
             .map { meta, vcf -> [meta - meta.subMap('prefix'), vcf] }
             .set { ch_concat_out }
 
         TABIX_BCFTOOLS_CONCAT (ch_concat_out)
 
-        ch_vep_ann   = ch_concat_out
-        ch_vep_index = TABIX_BCFTOOLS_CONCAT.out.tbi
+        ch_vep_ann       = ch_concat_out
+        ch_vep_index     = TABIX_BCFTOOLS_CONCAT.out.tbi
+        ch_vep_ann_index = ch_concat_out.join(TABIX_BCFTOOLS_CONCAT.out.tbi)
+        //rhocall_viz
+        ANNOTATE_RHOCALLVIZ(ch_vep_ann_index, ch_samples, ch_genome_chrsizes)
 
         ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions)
         ch_versions = ch_versions.mix(RHOCALL_ANNOTATE.out.versions)
@@ -175,7 +183,6 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_versions = ch_versions.mix(CHROMOGRAPH_REGIONS.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_VCFANNO.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
-        ch_versions = ch_versions.mix(TABIX_BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions.first())
         ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions.first())
         ch_versions = ch_versions.mix(TABIX_VEP.out.versions.first())
