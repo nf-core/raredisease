@@ -26,7 +26,7 @@ workflow ALIGN {
         ch_mtshift_fai           // channel: [mandatory] [ val(meta), path(fai) ]
         val_mbuffer_mem          // integer: [mandatory] memory in megabytes
         val_platform             // string:  [mandatory] illumina or a different technology
-        val_sort_threads         // integer: [mandatory] memory in megabytes
+        val_sort_threads         // integer: [mandatory] number of sorting threads
 
     main:
         ch_bwamem2_bam        = Channel.empty()
