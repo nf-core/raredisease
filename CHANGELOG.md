@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Update default vep container from v110-v112 [#609](https://github.com/nf-core/raredisease/pull/609)
 - Default index for vcfanno extra annotation files from tbi to csi [#606](https://github.com/nf-core/raredisease/pull/606)
 - Updated the model for Sentieon DNAScope to v1.1 [#601](https://github.com/nf-core/raredisease/pull/601)
 - bwameme can no longer be used to align mitochondrial reads [#600](https://github.com/nf-core/raredisease/pull/600)
@@ -70,6 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Tool        | Old version | New version |
 | ----------- | ----------- | ----------- |
 | Deepvariant | 1.5.0       | 1.6.1       |
+| ensemblvep  | 110         | 112         |
 
 ## 2.1.0 - Obelix [2024-05-29]
 
