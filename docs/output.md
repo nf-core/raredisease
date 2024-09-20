@@ -101,7 +101,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ##### Picard's MarkDuplicates
 
-[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2 bwameme and bwa are processed by this tool. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
+[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2, bwameme and bwa are processed by this tool. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
 
 <details markdown="1">
 <summary>Output files from Alignment</summary>

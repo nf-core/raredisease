@@ -31,7 +31,7 @@ workflow ALIGN {
         ch_mtshift_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         val_mbuffer_mem          // integer: [mandatory] memory in megabytes
         val_platform             // string:  [mandatory] illumina or a different technology
-        val_sort_threads         // integer: [mandatory] memory in megabytes
+        val_sort_threads         // integer: [mandatory] number of sorting threads
 
     main:
         ch_bwamem2_bam        = Channel.empty()
