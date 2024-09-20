@@ -19,9 +19,12 @@ workflow CALL_SNV {
         ch_genome_fai         // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_dictionary  // channel: [mandatory] [ val(meta), path(dict) ]
         ch_mt_intervals       // channel: [optional] [ path(interval_list) ]
-        ch_mtshift_fasta      // channel: [optional] [ val(meta), path(fasta) ]
-        ch_mtshift_fai        // channel: [optional] [ val(meta), path(fai) ]
+        ch_mt_dictionary      // channel: [optional] [ val(meta), path(dict) ]
+        ch_mt_fai             // channel: [optional] [ val(meta), path(fai) ]
+        ch_mt_fasta           // channel: [optional] [ val(meta), path(fasta) ]
         ch_mtshift_dictionary // channel: [optional] [ val(meta), path(dict) ]
+        ch_mtshift_fai        // channel: [optional] [ val(meta), path(fai) ]
+        ch_mtshift_fasta      // channel: [optional] [ val(meta), path(fasta) ]
         ch_mtshift_intervals  // channel: [optional] [ path(interval_list) ]
         ch_mtshift_backchain  // channel: [mandatory] [ val(meta), path(back_chain) ]
         ch_dbsnp              // channel: [optional] [ val(meta), path(vcf) ]
@@ -100,9 +103,9 @@ workflow CALL_SNV {
         if (params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes) {
             CALL_SNV_MT(
                 ch_mt_bam_bai,
-                ch_genome_fasta,
-                ch_genome_fai,
-                ch_genome_dictionary,
+                ch_mt_fasta,
+                ch_mt_fai,
+                ch_mt_dictionary,
                 ch_mt_intervals
             )
 
@@ -117,9 +120,9 @@ workflow CALL_SNV {
             POSTPROCESS_MT_CALLS(
                 CALL_SNV_MT.out.vcf,
                 CALL_SNV_MT_SHIFT.out.vcf,
-                ch_genome_fasta,
-                ch_genome_dictionary,
-                ch_genome_fai,
+                ch_mt_fasta,
+                ch_mt_dictionary,
+                ch_mt_fai,
                 ch_mtshift_backchain,
                 ch_case_info,
                 ch_foundin_header,
