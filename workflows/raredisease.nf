@@ -741,7 +741,8 @@ workflow RAREDISEASE {
 
             GENERATE_CLINICAL_SET_ME(
                 ANNOTATE_MOBILE_ELEMENTS.out.vcf,
-                ch_hgnc_ids
+                ch_hgnc_ids,
+                false
             )
             ch_versions = ch_versions.mix( GENERATE_CLINICAL_SET_ME.out.versions )
 
