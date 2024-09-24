@@ -550,7 +550,8 @@ workflow RAREDISEASE {
 
             GENERATE_CLINICAL_SET_SNV(
                 ch_snv_annotate.vcf_ann,
-                ch_hgnc_ids
+                ch_hgnc_ids,
+                false
             )
             ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SNV.out.versions)
 
@@ -602,7 +603,8 @@ workflow RAREDISEASE {
 
             GENERATE_CLINICAL_SET_MT(
                 ch_mt_annotate.vcf_ann,
-                ch_hgnc_ids
+                ch_hgnc_ids,
+                true
             )
             ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_MT.out.versions)
 
@@ -677,7 +679,8 @@ workflow RAREDISEASE {
 
             GENERATE_CLINICAL_SET_SV(
                 ch_sv_annotate.vcf_ann,
-                ch_hgnc_ids
+                ch_hgnc_ids,
+                false
             )
             ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SV.out.versions)
 
