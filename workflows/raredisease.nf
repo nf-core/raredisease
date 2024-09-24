@@ -271,6 +271,11 @@ workflow RAREDISEASE {
     ch_ml_model                 = params.variant_caller.equals("sentieon")  ? Channel.fromPath(params.ml_model).map {it -> [[id:it[0].simpleName], it]}.collect()
                                                                             : Channel.value([[:],[]])
     ch_mt_intervals             = ch_references.mt_intervals
+    ch_mt_bwaindex              = ch_references.mt_bwa_index
+    ch_mt_bwamem2index          = ch_references.mt_bwamem2_index
+    ch_mt_dictionary            = ch_references.mt_dict
+    ch_mt_fai                   = ch_references.mt_fai
+    ch_mt_fasta                 = ch_references.mt_fasta
     ch_mtshift_backchain        = ch_references.mtshift_backchain
     ch_mtshift_bwaindex         = ch_references.mtshift_bwa_index
     ch_mtshift_bwamem2index     = ch_references.mtshift_bwamem2_index
@@ -412,11 +417,16 @@ workflow RAREDISEASE {
         ch_genome_bwamem2index,
         ch_genome_bwamemeindex,
         ch_genome_dictionary,
+        ch_mt_bwaindex,
+        ch_mt_bwamem2index,
+        ch_mt_dictionary,
+        ch_mt_fai,
+        ch_mt_fasta,
         ch_mtshift_bwaindex,
         ch_mtshift_bwamem2index,
-        ch_mtshift_fasta,
         ch_mtshift_dictionary,
         ch_mtshift_fai,
+        ch_mtshift_fasta,
         params.mbuffer_mem,
         params.platform,
         params.samtools_sort_threads
@@ -493,9 +503,12 @@ workflow RAREDISEASE {
             ch_genome_fai,
             ch_genome_dictionary,
             ch_mt_intervals,
-            ch_mtshift_fasta,
-            ch_mtshift_fai,
+            ch_mt_dictionary,
+            ch_mt_fai,
+            ch_mt_fasta,
             ch_mtshift_dictionary,
+            ch_mtshift_fai,
+            ch_mtshift_fasta,
             ch_mtshift_intervals,
             ch_mtshift_backchain,
             ch_dbsnp,
@@ -568,7 +581,7 @@ workflow RAREDISEASE {
         //
         // ANNOTATE MT SNVs
         //
-        if (!params.skip_mt_annotation && (params.run_mt_for_wes || params.analysis_type.equals("wgs"))) {
+        if (!params.skip_mt_annotation && (params.run_mt_for_wes || params.analysis_type.matches("wgs|mito"))) {
 
             ANNOTATE_MT_SNVS (
                 CALL_SNV.out.mt_vcf,

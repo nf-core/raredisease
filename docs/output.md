@@ -316,7 +316,7 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 <summary>Output files</summary>
 
 - `call_sv/genome`
-  - `<case_id>_sv_merge.vcf.gz`: file containing the merged variant calls.
+  - `<case_id>_sv_merge.vcf.gz`: file containing the merged variant calls. As of version 2.3.0, this file also contains mitochondrial structural variants.
   - `<case_id>_sv_merge.vcf.gz.tbi`: index of the file containing the merged variant calls.
 
 </details>

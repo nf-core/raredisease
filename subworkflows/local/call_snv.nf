@@ -19,9 +19,12 @@ workflow CALL_SNV {
         ch_genome_fai         // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_dictionary  // channel: [mandatory] [ val(meta), path(dict) ]
         ch_mt_intervals       // channel: [optional] [ path(interval_list) ]
-        ch_mtshift_fasta      // channel: [optional] [ val(meta), path(fasta) ]
-        ch_mtshift_fai        // channel: [optional] [ val(meta), path(fai) ]
+        ch_mt_dictionary      // channel: [optional] [ val(meta), path(dict) ]
+        ch_mt_fai             // channel: [optional] [ val(meta), path(fai) ]
+        ch_mt_fasta           // channel: [optional] [ val(meta), path(fasta) ]
         ch_mtshift_dictionary // channel: [optional] [ val(meta), path(dict) ]
+        ch_mtshift_fai        // channel: [optional] [ val(meta), path(fai) ]
+        ch_mtshift_fasta      // channel: [optional] [ val(meta), path(fasta) ]
         ch_mtshift_intervals  // channel: [optional] [ path(interval_list) ]
         ch_mtshift_backchain  // channel: [mandatory] [ val(meta), path(back_chain) ]
         ch_dbsnp              // channel: [optional] [ val(meta), path(vcf) ]
@@ -46,7 +49,7 @@ workflow CALL_SNV {
         ch_sentieon_gvcf = Channel.empty()
         ch_sentieon_gtbi = Channel.empty()
 
-        if (params.variant_caller.equals("deepvariant")) {
+        if (params.variant_caller.equals("deepvariant") && !params.analysis_type.equals("mito")) {
             CALL_SNV_DEEPVARIANT (      // triggered only when params.variant_caller is set as deepvariant
                 ch_genome_bam_bai,
                 ch_genome_fasta,
@@ -97,12 +100,12 @@ workflow CALL_SNV {
         ch_genome_tabix     = GATK4_SELECTVARIANTS.out.tbi
         ch_genome_vcf_tabix = ch_genome_vcf.join(ch_genome_tabix, failOnMismatch:true, failOnDuplicate:true)
 
-        if (params.analysis_type.equals("wgs") || params.run_mt_for_wes) {
+        if (params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes) {
             CALL_SNV_MT(
                 ch_mt_bam_bai,
-                ch_genome_fasta,
-                ch_genome_fai,
-                ch_genome_dictionary,
+                ch_mt_fasta,
+                ch_mt_fai,
+                ch_mt_dictionary,
                 ch_mt_intervals
             )
 
@@ -117,9 +120,9 @@ workflow CALL_SNV {
             POSTPROCESS_MT_CALLS(
                 CALL_SNV_MT.out.vcf,
                 CALL_SNV_MT_SHIFT.out.vcf,
-                ch_genome_fasta,
-                ch_genome_dictionary,
-                ch_genome_fai,
+                ch_mt_fasta,
+                ch_mt_dictionary,
+                ch_mt_fai,
                 ch_mtshift_backchain,
                 ch_case_info,
                 ch_foundin_header,

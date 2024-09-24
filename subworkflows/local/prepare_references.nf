@@ -3,22 +3,25 @@
 //
 
 include { BWA_INDEX as BWA_INDEX_GENOME                      } from '../../modules/nf-core/bwa/index/main'
+include { BWA_INDEX as BWA_INDEX_MT                          } from '../../modules/nf-core/bwa/index/main'
 include { BWA_INDEX as BWA_INDEX_MT_SHIFT                    } from '../../modules/nf-core/bwa/index/main'
 include { BWAMEM2_INDEX as BWAMEM2_INDEX_GENOME              } from '../../modules/nf-core/bwamem2/index/main'
+include { BWAMEM2_INDEX as BWAMEM2_INDEX_MT                  } from '../../modules/nf-core/bwamem2/index/main'
 include { BWAMEM2_INDEX as BWAMEM2_INDEX_MT_SHIFT            } from '../../modules/nf-core/bwamem2/index/main'
 include { BWAMEME_INDEX as BWAMEME_INDEX_GENOME              } from '../../modules/nf-core/bwameme/index/main'
 include { CAT_CAT as CAT_CAT_BAIT                            } from '../../modules/nf-core/cat/cat/main'
 include { GATK4_BEDTOINTERVALLIST as GATK_BILT               } from '../../modules/nf-core/gatk4/bedtointervallist/main'
 include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD          } from '../../modules/nf-core/gatk4/createsequencedictionary/main'
-include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD_MT_SHIFT } from '../../modules/nf-core/gatk4/createsequencedictionary/main'
+include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD_MT       } from '../../modules/nf-core/gatk4/createsequencedictionary/main'
 include { GATK4_INTERVALLISTTOOLS as GATK_ILT                } from '../../modules/nf-core/gatk4/intervallisttools/main'
 include { GATK4_SHIFTFASTA as GATK_SHIFTFASTA                } from '../../modules/nf-core/gatk4/shiftfasta/main'
 include { GET_CHROM_SIZES                                    } from '../../modules/local/get_chrom_sizes'
 include { RTGTOOLS_FORMAT                                    } from '../../modules/nf-core/rtgtools/format/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_EXTRACT_MT              } from '../../modules/nf-core/samtools/faidx/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME            } from '../../modules/nf-core/samtools/faidx/main'
-include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_MT_SHIFT          } from '../../modules/nf-core/samtools/faidx/main'
+include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_MT                } from '../../modules/nf-core/samtools/faidx/main'
 include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_GENOME      } from '../../modules/nf-core/sentieon/bwaindex/main'
+include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_MT          } from '../../modules/nf-core/sentieon/bwaindex/main'
 include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_MT_SHIFT    } from '../../modules/nf-core/sentieon/bwaindex/main'
 include { TABIX_BGZIPTABIX as TABIX_PBT                      } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as TABIX_BGZIPINDEX_VCFANNOEXTRA  } from '../../modules/nf-core/tabix/bgziptabix/main'
@@ -66,11 +69,16 @@ workflow PREPARE_REFERENCES {
         // MT genome indices
         SAMTOOLS_EXTRACT_MT(ch_genome_fasta, ch_fai)
         ch_mt_fasta_in = Channel.empty().mix(ch_mt_fasta, SAMTOOLS_EXTRACT_MT.out.fa).collect()
-        SAMTOOLS_FAIDX_MT_SHIFT(ch_mt_fasta_in, [[],[]])
-        GATK_SD_MT_SHIFT(ch_mt_fasta_in)
-        GATK_SHIFTFASTA(ch_mt_fasta_in, SAMTOOLS_FAIDX_MT_SHIFT.out.fai, GATK_SD_MT_SHIFT.out.dict)
+        SAMTOOLS_FAIDX_MT(ch_mt_fasta_in, [[],[]])
+        GATK_SD_MT(ch_mt_fasta_in)
+        GATK_SHIFTFASTA(ch_mt_fasta_in, SAMTOOLS_FAIDX_MT.out.fai, GATK_SD_MT.out.dict)
 
         // MT alignment indices
+        BWAMEM2_INDEX_MT(ch_mt_fasta_in)
+        BWA_INDEX_MT(ch_mt_fasta_in)
+        SENTIEON_BWAINDEX_MT(ch_mt_fasta_in)
+        ch_bwa_mt = Channel.empty().mix(SENTIEON_BWAINDEX_MT.out.index, BWA_INDEX_MT.out.index).collect()
+
         BWAMEM2_INDEX_MT_SHIFT(GATK_SHIFTFASTA.out.shift_fa)
         BWA_INDEX_MT_SHIFT(GATK_SHIFTFASTA.out.shift_fa)
         SENTIEON_BWAINDEX_MT_SHIFT(GATK_SHIFTFASTA.out.shift_fa)
@@ -140,9 +148,12 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(GATK_SD.out.versions)
         ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_EXTRACT_MT.out.versions)
-        ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_MT_SHIFT.out.versions)
-        ch_versions = ch_versions.mix(GATK_SD_MT_SHIFT.out.versions)
+        ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_MT.out.versions)
+        ch_versions = ch_versions.mix(GATK_SD_MT.out.versions)
         ch_versions = ch_versions.mix(GATK_SHIFTFASTA.out.versions)
+        ch_versions = ch_versions.mix(BWAMEM2_INDEX_MT.out.versions)
+        ch_versions = ch_versions.mix(BWA_INDEX_MT.out.versions)
+        ch_versions = ch_versions.mix(SENTIEON_BWAINDEX_MT.out.versions)
         ch_versions = ch_versions.mix(BWAMEM2_INDEX_MT_SHIFT.out.versions)
         ch_versions = ch_versions.mix(BWA_INDEX_MT_SHIFT.out.versions)
         ch_versions = ch_versions.mix(SENTIEON_BWAINDEX_MT_SHIFT.out.versions)
@@ -167,11 +178,16 @@ workflow PREPARE_REFERENCES {
         genome_dict           = ch_dict                                                          // channel: [ val(meta), path(dict) ]
         sdf                   = RTGTOOLS_FORMAT.out.sdf                                          // channel: [ val (meta), path(intervals) ]
         mt_intervals          = ch_shiftfasta_mtintervals.intervals.collect()                    // channel: [ path(intervals) ]
+        mt_bwa_index          = ch_bwa_mt                                                        // channel: [ val(meta), path(index) ]
+        mt_bwamem2_index      = BWAMEM2_INDEX_MT.out.index.collect()                             // channel: [ val(meta), path(index) ]
+        mt_dict               = GATK_SD_MT.out.dict.collect()                                    // channel: [ val(meta), path(dict) ]
+        mt_fasta              = ch_mt_fasta_in.collect()                                         // channel: [ val(meta), path(fasta) ]
+        mt_fai                = SAMTOOLS_FAIDX_MT.out.fai.collect()                              // channel: [ val(meta), path(fai) ]
         mtshift_intervals     = ch_shiftfasta_mtintervals.shift_intervals.collect()              // channel: [ path(intervals) ]
         mtshift_backchain     = GATK_SHIFTFASTA.out.shift_back_chain.collect()                   // channel: [ val(meta), path(backchain) ]
+        mtshift_dict          = GATK_SHIFTFASTA.out.dict                                         // channel: [ val(meta), path(dict) ]
         mtshift_fai           = GATK_SHIFTFASTA.out.shift_fai.collect()                          // channel: [ val(meta), path(fai) ]
-        mtshift_fasta         = GATK_SHIFTFASTA.out.shift_fa.collect()                           // channel: [ val(meta), path(fai) ]
-        mtshift_dict          = GATK_SHIFTFASTA.out.dict.collect()                               // channel: [ path(dict) ]
+        mtshift_fasta         = GATK_SHIFTFASTA.out.shift_fa.collect()                           // channel: [ val(meta), path(fasta) ]
         mtshift_bwa_index     = ch_bwa_mtshift                                                   // channel: [ val(meta), path(index) ]
         mtshift_bwamem2_index = BWAMEM2_INDEX_MT_SHIFT.out.index.collect()                       // channel: [ val(meta), path(index) ]
 
