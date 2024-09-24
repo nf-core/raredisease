@@ -113,7 +113,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         }
 
     emit:
-        vcf      = ch_merged_svs  // channel: [ val(meta), path(vcf)]
+        vcf      = ch_merged_svs // channel: [ val(meta), path(vcf)]
         tbi      = ch_merged_tbi // channel: [ val(meta), path(tbi)]
-        versions = ch_versions         // channel: [ path(versions.yml) ]
+        versions = ch_versions   // channel: [ path(versions.yml) ]
 }
