@@ -205,7 +205,7 @@ The mandatory and optional parameters for each category are tabulated below.
 
 <sup>1</sup>Default variant caller is DeepVariant, but you have the option to use Sentieon as well.<br />
 <sup>2</sup>These parameters are only used by Sentieon.<br />
-<sup>3</sup>Default is WGS, but you have the option to choose WES as well.<br />
+<sup>3</sup>Default is `WGS`, but you have the option to choose `WES` and `mito` as well.<br />
 <sup>4</sup>This parameter is only used by Deepvariant.<br />
 
 ##### 5. Variant calling - Structural variants
