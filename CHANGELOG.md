@@ -3,6 +3,22 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.3.0dev - Getafix [xxxx-xx-xx]
+
+### `Added`
+
+- A new analysis option `mito` to call and annotate only mitochondrial variants [#608](https://github.com/nf-core/raredisease/pull/608)
+
+### `Changed`
+
+- Report only variants above 5% heteroplasmy in the clinical vcf file for mitochondria [#616](https://github.com/nf-core/raredisease/pull/616)
+
+### `Fixed`
+
+### Parameters
+
+### Tool updates
+
 ## 2.2.0 - Dogmatix [2024-09-13]
 
 ### `Added`
