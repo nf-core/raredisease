@@ -529,7 +529,7 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 <summary>Output files</summary>
 
 - `rank_and_filter/`
-  - `<case_id>_mt_ranked_clinical.vcf.gz`: file containing clinically relevant mitochondrial SNVs.
+  - `<case_id>_mt_ranked_clinical.vcf.gz`: file containing clinically relevant mitochondrial SNVs, and only contains variants less than 5%VAF by default.
   - `<case_id>_mt_ranked_clinical.vcf.gz.tbi`: index of the file containing clinically relevant mitochondrial SNVs.
   - `<case_id>_mt_ranked_research.vcf.gz`: file containing mitochondrial SNV annotations with their rank scores.
   - `<case_id>_mt_ranked_research.vcf.gz.tbi`: index of the file containing mitochondrial SNV annotations with their rank scores.
