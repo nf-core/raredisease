@@ -56,6 +56,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 **2. Alignment:**
 
 - [Bwa-mem2](https://github.com/bwa-mem2/bwa-mem2)
+- [BWA-MEME](https://github.com/kaist-ina/BWA-MEME)
 - [BWA](https://github.com/lh3/bwa)
 - [Sentieon DNAseq](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/)
 
