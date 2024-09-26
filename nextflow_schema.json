@@ -742,10 +742,9 @@
                 },
                 "vep_cache_version": {
                     "type": "integer",
-                    "default": 110,
+                    "default": 112,
                     "description": "Specify the version of the VEP cache provided to the `--vep_cache` option.",
-                    "fa_icon": "fas fa-align-center",
-                    "enum": [107, 110]
+                    "fa_icon": "fas fa-align-center"
                 }
             }
         },
