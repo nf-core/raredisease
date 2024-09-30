@@ -66,10 +66,9 @@ workflow CALL_SNV_DEEPVARIANT {
         REMOVE_DUPLICATES_GL.out.vcf
             .join(TABIX_GL.out.tbi)
             .combine(ch_varcallerbed)
-            .combine(ch_foundin_header)
             .set { ch_annotate_in }
 
-        BCFTOOLS_ANNOTATE(ch_annotate_in)
+        BCFTOOLS_ANNOTATE(ch_annotate_in, ch_foundin_header)
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 
