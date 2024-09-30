@@ -5,7 +5,7 @@
 include { BCFTOOLS_ANNOTATE                          } from '../../../modules/nf-core/bcftools/annotate/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_GL    } from '../../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_GL      } from '../../../modules/nf-core/bcftools/norm/main'
-include { DEEPVARIANT                                } from '../../../modules/nf-core/deepvariant/main'
+include { DEEPVARIANT_RUNDEEPVARIANT as DEEPVARIANT  } from '../../../modules/nf-core/deepvariant/rundeepvariant/main'
 include { GLNEXUS                                    } from '../../../modules/nf-core/glnexus/main'
 include { TABIX_TABIX as TABIX_GL                    } from '../../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_ANNOTATE              } from '../../../modules/nf-core/tabix/tabix/main'
