@@ -32,8 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | stranger | 0.8.1       | 0.9.1       |
 | tabix    | 1.19.1      | 1.20        |
 
-
-
 ## 2.2.0 - Dogmatix [2024-09-13]
 
 ### `Added`
