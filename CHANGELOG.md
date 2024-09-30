@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Update tools [#619](https://github.com/nf-core/raredisease/pull/619)
 - Report only variants above 5% heteroplasmy in the clinical vcf file for mitochondria [#616](https://github.com/nf-core/raredisease/pull/616)
 
 ### `Fixed`
@@ -20,6 +21,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Parameters
 
 ### Tool updates
+
+| Tool     | Old version | New version |
+| -------- | ----------- | ----------- |
+| bcftools | 1.18        | 1.20        |
+| mosdepth | 0.3.6       | 0.3.8       |
+| multiqc  | 1.21        | 1.25        |
+| picard   | 3.1.1       | 3.2.0       |
+| samtools | 1.19.2      | 1.21        |
+| stranger | 0.8.1       | 0.9.1       |
+| tabix    | 1.19.1      | 1.20        |
+
+
 
 ## 2.2.0 - Dogmatix [2024-09-13]
 
