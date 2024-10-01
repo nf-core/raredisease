@@ -5,7 +5,7 @@
 include { BCFTOOLS_ANNOTATE                          } from '../../../modules/nf-core/bcftools/annotate/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_GL    } from '../../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_GL      } from '../../../modules/nf-core/bcftools/norm/main'
-include { DEEPVARIANT                                } from '../../../modules/nf-core/deepvariant/main'
+include { DEEPVARIANT_RUNDEEPVARIANT as DEEPVARIANT  } from '../../../modules/nf-core/deepvariant/rundeepvariant/main'
 include { GLNEXUS                                    } from '../../../modules/nf-core/glnexus/main'
 include { TABIX_TABIX as TABIX_GL                    } from '../../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_ANNOTATE              } from '../../../modules/nf-core/tabix/tabix/main'
@@ -66,10 +66,9 @@ workflow CALL_SNV_DEEPVARIANT {
         REMOVE_DUPLICATES_GL.out.vcf
             .join(TABIX_GL.out.tbi)
             .combine(ch_varcallerbed)
-            .combine(ch_foundin_header)
             .set { ch_annotate_in }
 
-        BCFTOOLS_ANNOTATE(ch_annotate_in)
+        BCFTOOLS_ANNOTATE(ch_annotate_in, ch_foundin_header)
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 
