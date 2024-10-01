@@ -73,7 +73,7 @@ workflow CALL_SNV_SENTIEON {
             }
             .set{ ch_vcf_idx_merge_in }
 
-        BCFTOOLS_MERGE(ch_vcf_idx_merge_in.multiple, ch_genome_fasta, ch_genome_fai, [])
+        BCFTOOLS_MERGE(ch_vcf_idx_merge_in.multiple, ch_genome_fasta, ch_genome_fai, [[:],[]])
 
         ch_split_multi_in = BCFTOOLS_MERGE.out.merged_variants
                     .map{meta, bcf ->
