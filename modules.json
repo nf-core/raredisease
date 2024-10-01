@@ -52,7 +52,7 @@
                     },
                     "bedtools/genomecov": {
                         "branch": "master",
-                        "git_sha": "81b90194ce9911dbd55bba2c65c6919f6677abc4",
+                        "git_sha": "bfa8975eefb8df3e480a44ac9e594f23f52b2963",
                         "installed_by": ["modules"]
                     },
                     "bwa/index": {
@@ -369,7 +369,7 @@
                     },
                     "rtgtools/vcfeval": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "83e2df1e4ec594beb8a575b4db0b4197900f4ebd",
                         "installed_by": ["modules"]
                     },
                     "samtools/faidx": {
@@ -404,42 +404,42 @@
                     },
                     "sentieon/bwaindex": {
                         "branch": "master",
-                        "git_sha": "e809c6b078d5343bdf8b5b2b78483096a2b5a973",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "sentieon/bwamem": {
                         "branch": "master",
-                        "git_sha": "e809c6b078d5343bdf8b5b2b78483096a2b5a973",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "sentieon/datametrics": {
                         "branch": "master",
-                        "git_sha": "e809c6b078d5343bdf8b5b2b78483096a2b5a973",
+                        "git_sha": "2da71b7a52a7c6609cb8f29d316ed3fd90d0f7cc",
                         "installed_by": ["modules"]
                     },
                     "sentieon/dedup": {
                         "branch": "master",
-                        "git_sha": "e809c6b078d5343bdf8b5b2b78483096a2b5a973",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "sentieon/dnamodelapply": {
                         "branch": "master",
-                        "git_sha": "e809c6b078d5343bdf8b5b2b78483096a2b5a973",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "sentieon/dnascope": {
                         "branch": "master",
-                        "git_sha": "e809c6b078d5343bdf8b5b2b78483096a2b5a973",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "sentieon/readwriter": {
                         "branch": "master",
-                        "git_sha": "e809c6b078d5343bdf8b5b2b78483096a2b5a973",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "sentieon/wgsmetrics": {
                         "branch": "master",
-                        "git_sha": "e809c6b078d5343bdf8b5b2b78483096a2b5a973",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "smncopynumbercaller": {
