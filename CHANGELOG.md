@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
-- Update tools [#622](https://github.com/nf-core/raredisease/pull/622)
+- Update tools [#623](https://github.com/nf-core/raredisease/pull/623)
 - Update output file name prefix for upd and chromograph to sample-based [#620](https://github.com/nf-core/raredisease/pull/620)
 - Update tools [#619](https://github.com/nf-core/raredisease/pull/619)
 - Report only variants above 5% heteroplasmy in the clinical vcf file for mitochondria [#616](https://github.com/nf-core/raredisease/pull/616)
