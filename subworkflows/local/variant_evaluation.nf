@@ -37,7 +37,7 @@ workflow VARIANT_EVALUATION {
         ch_snv_vcf_tbi
             .combine(ch_truthvcf_tbi)
             .map { meta, query, qidx, meta2, truth, tidx ->
-                    return [meta + [samplename: meta2.samplename] , query, qidx, truth, tidx, meta2.bedregions, meta2.evaluationregions]
+                    return [meta + [samplename: meta2.samplename] , query, qidx, truth, tidx, meta2.evaluationregions, meta2.bedregions]
             }
             .set { ch_vcfeval_in }
 
