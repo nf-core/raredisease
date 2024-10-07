@@ -119,10 +119,13 @@ if (missingParamsCount>0) {
 // MODULE: Installed directly from nf-core/modules
 //
 
-include { FASTQC              } from '../modules/nf-core/fastqc/main'
-include { MULTIQC             } from '../modules/nf-core/multiqc/main'
-include { PEDDY               } from '../modules/nf-core/peddy/main'
-include { SMNCOPYNUMBERCALLER } from '../modules/nf-core/smncopynumbercaller/main'
+include { FASTQC                                            } from '../modules/nf-core/fastqc/main'
+include { MULTIQC                                           } from '../modules/nf-core/multiqc/main'
+include { PEDDY                                             } from '../modules/nf-core/peddy/main'
+include { SMNCOPYNUMBERCALLER                               } from '../modules/nf-core/smncopynumbercaller/main'
+include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_R1_FQ   } from '../modules/nf-core/spring/decompress/main'
+include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_R2_FQ   } from '../modules/nf-core/spring/decompress/main'
+include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_FQ_PAIR } from '../modules/nf-core/spring/decompress/main'
 
 //
 // MODULE: Local modules
@@ -393,7 +396,24 @@ workflow RAREDISEASE {
     //
     // Input QC
     //
-    FASTQC (ch_samplesheet)
+
+    ch_input_by_sample_type = ch_samplesheet.branch{
+        fastq_gz:           it[0].data_type == "fastq_gz"
+        interleaved_spring: it[0].data_type == "interleaved_spring"
+        separate_spring:    it[0].data_type == "separate_spring"
+    }
+
+    // Just one fastq.gz.spring-file with both R1 and R2
+    ch_one_fastq_gz_pair_from_spring = SPRING_DECOMPRESS_TO_FQ_PAIR(ch_input_by_sample_type.interleaved_spring, false).fastq
+
+    // Two fastq.gz.spring-files - one for R1 and one for R2
+    ch_r1_fastq_gz_from_spring   = SPRING_DECOMPRESS_TO_R1_FQ(ch_input_by_sample_type.separate_spring.map{ meta, files -> [meta, files[0] ]}, true).fastq
+    ch_r2_fastq_gz_from_spring   = SPRING_DECOMPRESS_TO_R2_FQ(ch_input_by_sample_type.separate_spring.map{ meta, files -> [meta, files[1] ]}, true).fastq
+    ch_two_fastq_gz_from_spring = ch_r1_fastq_gz_from_spring.join(ch_r2_fastq_gz_from_spring).map{ meta, fastq_1, fastq_2 -> [meta, [fastq_1, fastq_2]]}
+
+    ch_input_fastqs = ch_input_by_sample_type.fastq_gz.mix(ch_one_fastq_gz_pair_from_spring).mix(ch_two_fastq_gz_from_spring)
+
+    FASTQC (ch_input_fastqs)
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     //
@@ -415,7 +435,7 @@ workflow RAREDISEASE {
 */
 
     ALIGN (
-        ch_samplesheet,
+        ch_input_fastqs,
         ch_genome_fasta,
         ch_genome_fai,
         ch_genome_bwaindex,
