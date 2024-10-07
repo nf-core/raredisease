@@ -243,22 +243,22 @@
                     },
                     "genmod/annotate": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "55692e15e2ef8be6b37ad1475944a338770b4b3e",
                         "installed_by": ["modules"]
                     },
                     "genmod/compound": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "55692e15e2ef8be6b37ad1475944a338770b4b3e",
                         "installed_by": ["modules"]
                     },
                     "genmod/models": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "55692e15e2ef8be6b37ad1475944a338770b4b3e",
                         "installed_by": ["modules"]
                     },
                     "genmod/score": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "55692e15e2ef8be6b37ad1475944a338770b4b3e",
                         "installed_by": ["modules"]
                     },
                     "glnexus": {
@@ -294,7 +294,7 @@
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "b8d36829fa84b6e404364abff787e8b07f6d058c",
                         "installed_by": ["modules"]
                     },
                     "ngsbits/samplegender": {
