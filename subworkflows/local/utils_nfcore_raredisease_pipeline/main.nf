@@ -82,19 +82,26 @@ workflow PIPELINE_INITIALISATION {
     //
     Channel.fromSamplesheet("input")
         .tap { ch_original_input }
-        .map { meta, fastq1, fastq2 -> meta.id }
+        .map { meta, fastq1, fastq2, spring1, spring2 -> meta.id }
         .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
             counts[sample] = (counts[sample] ?: 0) + 1
             counts
         }
         .combine( ch_original_input )
-        .map { counts, meta, fastq1, fastq2 ->
-            new_meta = meta + [num_lanes:counts[meta.id],
-                        read_group:"\'@RG\\tID:"+ fastq1.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
-            if (!fastq2) {
-                return [ new_meta + [ single_end:true ], [ fastq1 ] ]
+        .map { counts, meta, fastq1, fastq2, spring1, spring2 ->
+            new_meta = meta + [num_lanes:counts[meta.id]]
+            if (fastq1 && fastq2) {
+                new_meta += [read_group:"\'@RG\\tID:"+ fastq1.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
+                return [ new_meta + [ single_end:false, data_type: "fastq_gz" ], [ fastq1, fastq2 ] ]
+            } else if (fastq1) {
+                new_meta += [read_group:"\'@RG\\tID:"+ fastq1.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
+                return [ new_meta + [ single_end:true, data_type: "fastq_gz" ], [ fastq1 ] ]
+            } else if (spring1 && spring2) {
+                new_meta += [read_group:"\'@RG\\tID:"+ spring1.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
+                return [ new_meta + [ single_end:false, data_type: "uninterleaved_spring" ], [ spring1, spring2 ] ]
             } else {
-                return [ new_meta + [ single_end:false ], [ fastq1, fastq2 ] ]
+                new_meta += [read_group:"\'@RG\\tID:"+ spring1.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
+                return [ new_meta + [ single_end:true, data_type: "interleaved_spring" ], [ spring1 ] ]
             }
         }
         .tap{ ch_input_counts }
