@@ -9,8 +9,6 @@
 ----------------------------------------------------------------------------------------
 */
 
-nextflow.enable.dsl = 2
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
@@ -20,7 +18,6 @@ nextflow.enable.dsl = 2
 include { RAREDISEASE  } from './workflows/raredisease'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
-
 include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 
 /*
@@ -56,10 +53,8 @@ workflow NFCORE_RAREDISEASE {
     RAREDISEASE (
         samplesheet
     )
-
     emit:
     multiqc_report = RAREDISEASE.out.multiqc_report // channel: /path/to/multiqc_report.html
-
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -70,27 +65,24 @@ workflow NFCORE_RAREDISEASE {
 workflow {
 
     main:
-
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
     PIPELINE_INITIALISATION (
         params.version,
-        params.help,
         params.validate_params,
         params.monochrome_logs,
         args,
         params.outdir,
         params.input
     )
-
+    
     //
     // WORKFLOW: Run main workflow
     //
     NFCORE_RAREDISEASE (
         PIPELINE_INITIALISATION.out.samplesheet
     )
-
     //
     // SUBWORKFLOW: Run completion tasks
     //
