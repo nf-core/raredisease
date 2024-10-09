@@ -9,7 +9,7 @@ lint:
     - docs/images/nf-core-raredisease_logo_light.png
     - assets/nf-core-raredisease_logo_light.png
   modules_config: false
-nf_core_version: 3.0.0
+nf_core_version: 3.0.1
 org_path: null
 repository_type: pipeline
 template:
