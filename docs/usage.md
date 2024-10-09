@@ -10,24 +10,24 @@ Table of contents:
   - [Run nf-core/raredisease with test data](#run-nf-coreraredisease-with-test-data)
     - [Updating the pipeline](#updating-the-pipeline)
   - [Run nf-core/raredisease with your data](#run-nf-coreraredisease-with-your-data)
-    - [Samplesheet](#samplesheet)
-    - [Reference files and parameters](#reference-files-and-parameters)
-      - [1. Alignment](#1-alignment)
-      - [2. QC stats from the alignment files](#2-qc-stats-from-the-alignment-files)
-      - [3. Repeat expansions](#3-repeat-expansions)
-      - [4. Variant calling - SNV](#4-variant-calling---snv)
-      - [5. Variant calling - Structural variants](#5-variant-calling---structural-variants)
-      - [6. Copy number variant calling](#6-copy-number-variant-calling)
-      - [7. SNV annotation \& Ranking](#7-snv-annotation--ranking)
-      - [8. SV annotation \& Ranking](#8-sv-annotation--ranking)
-      - [9. Mitochondrial annotation](#9-mitochondrial-annotation)
-      - [10. Mobile element calling](#10-mobile-element-calling)
-      - [11. Mobile element annotation](#11-mobile-element-annotation)
-      - [12. Variant evaluation](#12-variant-evaluation)
-      - [13. Prepare data for CNV visualisation in Gens](#13-prepare-data-for-cnv-visualisation-in-gens)
-    - [Run the pipeline](#run-the-pipeline)
-      - [Direct input in CLI](#direct-input-in-cli)
-      - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
+      - [Samplesheet](#samplesheet)
+      - [Reference files and parameters](#reference-files-and-parameters)
+        - [1. Alignment](#1-alignment)
+        - [2. QC stats from the alignment files](#2-qc-stats-from-the-alignment-files)
+        - [3. Repeat expansions](#3-repeat-expansions)
+        - [4. Variant calling - SNV](#4-variant-calling---snv)
+        - [5. Variant calling - Structural variants](#5-variant-calling---structural-variants)
+        - [6. Copy number variant calling](#6-copy-number-variant-calling)
+        - [7. SNV annotation \& Ranking](#7-snv-annotation--ranking)
+        - [8. SV annotation \& Ranking](#8-sv-annotation--ranking)
+        - [9. Mitochondrial annotation](#9-mitochondrial-annotation)
+        - [10. Mobile element calling](#10-mobile-element-calling)
+        - [11. Mobile element annotation](#11-mobile-element-annotation)
+        - [12. Variant evaluation](#12-variant-evaluation)
+        - [13. Prepare data for CNV visualisation in Gens](#13-prepare-data-for-cnv-visualisation-in-gens)
+      - [Run the pipeline](#run-the-pipeline)
+        - [Direct input in CLI](#direct-input-in-cli)
+        - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
   - [Best practices](#best-practices)
   - [Core Nextflow arguments](#core-nextflow-arguments)
     - [`-profile`](#-profile)
@@ -39,7 +39,6 @@ Table of contents:
     - [Custom Tool Arguments](#custom-tool-arguments)
       - [nf-core/configs](#nf-coreconfigs)
     - [Run Sentieon](#run-sentieon)
-    - [Azure Resource Requests](#azure-resource-requests)
     - [Running in the background](#running-in-the-background)
     - [Nextflow memory requirements](#nextflow-memory-requirements)
     - [Running the pipeline without Internet access](#running-the-pipeline-without-internet-access)
@@ -50,7 +49,7 @@ nf-core/raredisease is a bioinformatics best-practice analysis pipeline to call,
 
 ## Prerequisites
 
-1. Install Nextflow (>=22.10.1) using the instructions [here.](https://nextflow.io/docs/latest/getstarted.html#installation)
+1. Install Nextflow (>=24.04.2) using the instructions [here.](https://nextflow.io/docs/latest/getstarted.html#installation)
 2. Install one of the following technologies for full pipeline reproducibility: Docker, Singularity, Podman, Shifter or Charliecloud.
    > Almost all nf-core pipelines give you the option to use conda as well. However, some tools used in the raredisease pipeline do not have a conda package so we do not support conda at the moment.
 
@@ -134,6 +133,18 @@ Do not use `-c <file>` to specify parameters as this will result in errors. Cust
 :::
 
 The above pipeline run specified with a params file in yaml format:
+
+```bash
+nextflow run nf-core/raredisease -profile docker -params-file params.yaml
+```
+
+with:
+
+```yaml title="params.yaml"
+input: './samplesheet.csv'
+outdir: './results/'
+genome: 'GRCh37'
+```
 
 Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can align with bwamem2 or bwa or Sentieon BWA mem and call SNVs with either DeepVariant or Sentieon DNAscope. You also have the option to turn off sections of the pipeline if you do not want to run the. For example, snv annotation can be turned off by adding `--skip_snv_annotation` flag in the command line, or by setting it to true in a parameter file. This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, for SNV calling if you use DeepVariant as your variant caller, you need not provide the parameter `--ml_model`, which is only used by Sentieon DNAscope.
 
@@ -400,9 +411,9 @@ Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <
 nextflow run nf-core/raredisease -profile docker -params-file params.yaml
 ```
 
-with `params.yaml` containing:
+with:
 
-```yaml
+```yaml title="params.yaml"
 input: './samplesheet.csv'
 outdir: './results/'
 genome: 'GRCh37'
@@ -507,14 +518,6 @@ nextflow secrets set SENTIEON_LICENSE_BASE64 <LICENSE>
 ```
 
 If you are using Nextflow secrets, you have to set the environment variable `NXF_ENABLE_SECRETS` to true. This will see to it that the pipeline can retrieve the secret from Nextflow's secrets store during the pipeline execution. Keep in mind that versions of Nextflow Version 22.09.2-edge and onwards have NXF_ENABLE_SECRETS to true by default. If you are not using secrets set `NXF_ENABLE_SECRETS` to false, but make sure that the environment variable [`SENTIEON_LICENSE`](`NXF_ENABLE_SECRETS`) is set to reflect the value of your license server on your machine.
-
-### Azure Resource Requests
-
-To be used with the `azurebatch` profile by specifying the `-profile azurebatch`.
-We recommend providing a compute `params.vm_type` of `Standard_D16_v3` VMs by default but these options can be changed if required.
-
-Note that the choice of VM size depends on your quota and the overall workload during the analysis.
-For a thorough list, please refer the [Azure Sizes for virtual machines in Azure](https://docs.microsoft.com/en-us/azure/virtual-machines/sizes).
 
 ### Running in the background
 

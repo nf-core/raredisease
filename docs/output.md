@@ -68,7 +68,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
         - [Hmtnote](#hmtnote)
         - [VEP](#vep-2)
     - [Filtering and ranking](#filtering-and-ranking)
-      - [Filter_vep](#filter_vep)
+      - [Filter\_vep](#filter_vep)
       - [GENMOD](#genmod)
     - [Mobile element analysis](#mobile-element-analysis)
       - [Calling mobile elements](#calling-mobile-elements)
@@ -153,6 +153,10 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - `*_fastqc.zip`: Zip archive containing the FastQC report, tab-delimited data file and plot images.
 
 </details>
+
+:::note
+The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They may contain adapter sequence and potentially regions with low quality.
+:::
 
 ##### Mosdepth
 
@@ -239,10 +243,6 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
     </details>
 
 #### Reporting
-
-:::note
-The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They may contain adapter sequence and potentially regions with low quality.
-:::
 
 ##### MultiQC
 
