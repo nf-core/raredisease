@@ -3,11 +3,10 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
-include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet } from 'plugin/nf-validation'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { paramsSummaryMap;samplesheetToList } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc               } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML             } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText             } from '../subworkflows/local/utils_nfcore_raredisease_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -176,7 +175,6 @@ workflow RAREDISEASE {
 
     take:
     ch_samplesheet // channel: samplesheet read in from --input
-
     main:
 
     ch_versions = Channel.empty()
@@ -269,7 +267,7 @@ workflow RAREDISEASE {
                                                                             : Channel.empty()
     ch_intervals_y              = params.intervals_y                        ? Channel.fromPath(params.intervals_y).collect()
                                                                             : Channel.empty()
-    ch_me_references            = params.mobile_element_references          ? Channel.fromSamplesheet("mobile_element_references")
+    ch_me_references            = params.mobile_element_references          ? Channel.fromList(samplesheetToList(params.mobile_element_references, "${projectDir}/assets/mobile_element_references_schema.json"))
                                                                             : Channel.empty()
     ch_me_svdb_resources        = params.mobile_element_svdb_annotations    ? Channel.fromPath(params.mobile_element_svdb_annotations)
                                                                             : Channel.empty()
@@ -298,7 +296,7 @@ workflow RAREDISEASE {
                                                                             : Channel.value([])
     ch_rtg_truthvcfs            = params.rtg_truthvcfs                      ? Channel.fromPath(params.rtg_truthvcfs).collect()
                                                                             : Channel.value([])
-    ch_sample_id_map            = params.sample_id_map                      ? Channel.fromSamplesheet("sample_id_map")
+    ch_sample_id_map            = params.sample_id_map                      ? Channel.fromList(samplesheetToList(params.sample_id_map, "${projectDir}/assets/sample_id_map.json"))
                                                                             : Channel.empty()
     ch_score_config_mt          = params.score_config_mt                    ? Channel.fromPath(params.score_config_mt).collect()
                                                                             : Channel.value([])
@@ -864,10 +862,11 @@ workflow RAREDISEASE {
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name: 'nf_core_pipeline_software_mqc_versions.yml',
+            name: 'nf_core_'  + 'pipeline_software_' +  'mqc_'  + 'versions.yml',
             sort: true,
             newLine: true
         ).set { ch_collated_versions }
+
 
     //
     // MODULE: MultiQC
@@ -881,9 +880,12 @@ workflow RAREDISEASE {
         Channel.fromPath(params.multiqc_logo, checkIfExists: true) :
         Channel.fromPath("$projectDir/docs/images/nf-core-raredisease_logo_light.png", checkIfExists: true)
 
+
     summary_params      = paramsSummaryMap(
         workflow, parameters_schema: "nextflow_schema.json")
     ch_workflow_summary = Channel.value(paramsSummaryMultiqc(summary_params))
+    ch_multiqc_files = ch_multiqc_files.mix(
+        ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
 
     ch_multiqc_custom_methods_description = params.multiqc_methods_description ?
         file(params.multiqc_methods_description, checkIfExists: true) :
@@ -891,8 +893,6 @@ workflow RAREDISEASE {
     ch_methods_description                = Channel.value(
         methodsDescriptionText(ch_multiqc_custom_methods_description))
 
-    ch_multiqc_files = ch_multiqc_files.mix(
-        ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
     ch_multiqc_files = ch_multiqc_files.mix(
         ch_methods_description.collectFile(
@@ -922,9 +922,9 @@ workflow RAREDISEASE {
         []
     )
 
-    emit:
-    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
+
 }
 
 
