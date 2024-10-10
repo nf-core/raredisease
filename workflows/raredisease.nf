@@ -3,10 +3,10 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { paramsSummaryMap;samplesheetToList } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc               } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML             } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText             } from '../subworkflows/local/utils_nfcore_raredisease_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -267,7 +267,7 @@ workflow RAREDISEASE {
                                                                             : Channel.empty()
     ch_intervals_y              = params.intervals_y                        ? Channel.fromPath(params.intervals_y).collect()
                                                                             : Channel.empty()
-    ch_me_references            = params.mobile_element_references          ? Channel.fromSamplesheet("mobile_element_references")
+    ch_me_references            = params.mobile_element_references          ? Channel.fromList(samplesheetToList(params.mobile_element_references, "${projectDir}/assets/mobile_element_references_schema.json"))
                                                                             : Channel.empty()
     ch_me_svdb_resources        = params.mobile_element_svdb_annotations    ? Channel.fromPath(params.mobile_element_svdb_annotations)
                                                                             : Channel.empty()
@@ -296,7 +296,7 @@ workflow RAREDISEASE {
                                                                             : Channel.value([])
     ch_rtg_truthvcfs            = params.rtg_truthvcfs                      ? Channel.fromPath(params.rtg_truthvcfs).collect()
                                                                             : Channel.value([])
-    ch_sample_id_map            = params.sample_id_map                      ? Channel.fromSamplesheet("sample_id_map")
+    ch_sample_id_map            = params.sample_id_map                      ? Channel.fromList(samplesheetToList(params.sample_id_map, "${projectDir}/assets/sample_id_map.json"))
                                                                             : Channel.empty()
     ch_score_config_mt          = params.score_config_mt                    ? Channel.fromPath(params.score_config_mt).collect()
                                                                             : Channel.value([])
