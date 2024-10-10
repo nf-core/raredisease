@@ -907,19 +907,19 @@
             "$ref": "#/$defs/input_output_options"
         },
         {
-            "$ref": "#/definitions/reference_file_options"
+            "$ref": "#/$defs/reference_file_options"
         },
         {
-            "$ref": "#/definitions/analysis_options"
+            "$ref": "#/$defs/analysis_options"
         },
         {
-            "$ref": "#/definitions/alignment_options"
+            "$ref": "#/$defs/alignment_options"
         },
         {
-            "$ref": "#/definitions/variant_calling_options"
+            "$ref": "#/$defs/variant_calling_options"
         },
         {
-            "$ref": "#/definitions/annotation_options"
+            "$ref": "#/$defs/annotation_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"
