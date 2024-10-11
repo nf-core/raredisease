@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://raw.githubusercontent.com/nf-core/raredisease/master/assets/schema_input.json",
     "title": "nf-core/raredisease pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
@@ -9,15 +9,21 @@
         "properties": {
             "sample": {
                 "type": "string",
-                "exists": true,
                 "meta": ["id", "sample"],
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces"
             },
             "lane": {
-                "type": "string",
-                "meta": ["lane"],
-                "pattern": "^\\S+$"
+                "oneOf": [
+                    {
+                        "type": "integer"
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    }
+                ],
+                "meta": ["lane"]
             },
             "fastq_1": {
                 "type": "string",
@@ -41,9 +47,17 @@
                 ]
             },
             "sex": {
-                "type": "string",
+                "oneOf": [
+                    {
+                        "type": "integer",
+                        "enum": [0, 1, 2]
+                    },
+                    {
+                        "type": "string",
+                        "enum": ["other"]
+                    }
+                ],
                 "meta": ["sex"],
-                "enum": ["1", "2", "0", "other"],
                 "errorMessage": "Sex must be provided and cannot contain spaces"
             },
             "phenotype": {
@@ -53,12 +67,12 @@
                 "errorMessage": "Phenotype must be provided and cannot contain spaces"
             },
             "paternal_id": {
-                "type": "string",
                 "errorMessage": "Paternal ID cannot contain spaces",
                 "meta": ["paternal"],
                 "default": "0",
                 "anyOf": [
                     {
+                        "type": "string",
                         "pattern": "^\\S+$"
                     },
                     {
@@ -67,12 +81,12 @@
                 ]
             },
             "maternal_id": {
-                "type": "string",
                 "errorMessage": "Maternal ID cannot contain spaces",
                 "meta": ["maternal"],
                 "default": "0",
                 "anyOf": [
                     {
+                        "type": "string",
                         "pattern": "^\\S+$"
                     },
                     {
