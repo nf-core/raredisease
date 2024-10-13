@@ -36,8 +36,8 @@ workflow GENS {
 
         COLLECTREADCOUNTS.out.hdf5
             .branch { meta, counts ->
-                female: meta.sex.matches('2|other')
-                male: meta.sex.equals('1')
+                female: meta.sex.toString().matches('2|other|0')
+                male: meta.sex == 1
             }
             .set { ch_denoisereadcounts_in }
 
