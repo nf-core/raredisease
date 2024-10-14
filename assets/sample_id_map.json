@@ -1,0 +1,24 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/nf-core/raredisease/master/assets/mobile_element_references_schema.json",
+    "title": "Schema for customerid_internalid_map",
+    "description": "Schema for the file provided with params.customerid_internalid_map",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "customer_id": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Customer id cannot contain spaces"
+            },
+            "internal_id": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Internal id cannot contain spaces",
+                "meta": ["id"]
+            }
+        },
+        "required": ["customer_id", "internal_id"]
+    }
+}
