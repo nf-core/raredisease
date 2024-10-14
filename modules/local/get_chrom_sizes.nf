@@ -26,4 +26,15 @@ process GET_CHROM_SIZES {
         cut: \$(echo \$(cut --help 2>&1 | head -n 1 | cut -f1,2 -d' '))
     END_VERSIONS
     """
+
+    stub:
+    """
+    touch ${fai}.sizes
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        cut: \$(echo \$(cut --help 2>&1 | head -n 1 | cut -f1,2 -d' '))
+    END_VERSIONS
+    """
+
 }
