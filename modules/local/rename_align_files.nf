@@ -27,4 +27,14 @@ process RENAME_ALIGN_FILES {
         ln: \$(echo \$(ln --version 2>&1 | head -n 1 | cut -d ' ' -f4))
     END_VERSIONS
     """
+
+    stub:
+    """
+    ln -s $input ${meta.sample}.${extension}
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        ln: \$(echo \$(ln --version 2>&1 | head -n 1 | cut -d ' ' -f4))
+    END_VERSIONS
+    """
 }
