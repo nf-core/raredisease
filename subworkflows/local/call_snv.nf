@@ -30,6 +30,7 @@ workflow CALL_SNV {
         ch_dbsnp              // channel: [optional] [ val(meta), path(vcf) ]
         ch_dbsnp_tbi          // channel: [optional] [ val(meta), path(tbi) ]
         ch_call_interval      // channel: [mandatory] [ path(intervals) ]
+        ch_bait_intervals     // channel: [mandatory] [ path(intervals) ]
         ch_ml_model           // channel: [mandatory] [ path(model) ]
         ch_par_bed            // channel: [optional] [ val(meta), path(bed) ]
         ch_case_info          // channel: [mandatory] [ val(case_info) ]
@@ -54,6 +55,7 @@ workflow CALL_SNV {
                 ch_genome_bam_bai,
                 ch_genome_fasta,
                 ch_genome_fai,
+                ch_bait_intervals,
                 ch_par_bed,
                 ch_case_info,
                 ch_foundin_header,
