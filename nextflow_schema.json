@@ -698,7 +698,7 @@
                     "type": "string",
                     "format": "path",
                     "fa_icon": "fas fa-align-center",
-                    "description": "Interval in the reference that will be used in the software"
+                    "description": "Interval in the reference that will be used in the software. Used only by sentieon."
                 },
                 "cnvnator_binsize": {
                     "type": "integer",
