@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Merge output from germlinecnvcaller [#635](https://github.com/nf-core/raredisease/pull/635)
 - Update tools [#623](https://github.com/nf-core/raredisease/pull/623)
 - Update output file name prefix for upd and chromograph to sample-based [#620](https://github.com/nf-core/raredisease/pull/620)
 - Update tools [#619](https://github.com/nf-core/raredisease/pull/619)
