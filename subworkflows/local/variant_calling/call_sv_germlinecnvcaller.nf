@@ -67,8 +67,6 @@ workflow CALL_SV_GERMLINECNVCALLER {
             .combine(vcf_file_list)
             .set { merge_input_vcfs }
 
-        merge_input_vcfs
-
         SVDB_MERGE_GCNVCALLER ( merge_input_vcfs, [] )
 
         ch_versions = ch_versions.mix(GATK4_COLLECTREADCOUNTS.out.versions)
