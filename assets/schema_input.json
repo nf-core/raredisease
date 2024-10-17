@@ -42,7 +42,6 @@
             },
             "fastq_2": {
                 "errorMessage": "Gzipped FastQ file for reads 2. Cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
-                "dependentRequired": ["fastq_1"],
                 "anyOf": [
                     {
                         "type": "string",
@@ -73,7 +72,6 @@
             },
             "spring_2": {
                 "errorMessage": "Gzipped and spring-compressed FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz.spring' or '.fastq.gz.spring'",
-                "dependentRequired": ["spring_1"],
                 "anyOf": [
                     {
                         "type": "string",
@@ -142,6 +140,11 @@
                 "errorMessage": "Case name must be provided and cannot contain spaces"
             }
         },
-        "required": ["sample", "sex", "phenotype", "case_id"]
+        "required": ["sample", "sex", "phenotype", "case_id"],
+        "uniqueEntries": ["case_id"],
+        "dependentRequired": {
+            "fastq_2": ["fastq_1"],
+            "spring_2": ["spring_1"]
+        }
     }
 }
