@@ -517,7 +517,7 @@ workflow RAREDISEASE {
             ch_dbsnp,
             ch_dbsnp_tbi,
             ch_call_interval,
-            ch_target_bed,
+            ch_target_bed_unprocessed,
             ch_ml_model,
             ch_par_bed,
             ch_case_info,
