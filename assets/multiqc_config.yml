@@ -41,6 +41,6 @@ module_order:
 extra_fn_clean_exts:
   - "_sorted_md"
   - type: regex
-    pattern: "_T[0-9]"
+    pattern: "_LNUMBER[0-9]{1,}"
 
 disable_version_detection: true
