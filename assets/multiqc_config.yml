@@ -18,6 +18,7 @@ export_plots: true
 
 run_modules:
   - fastqc
+  - fastp
   - qualimap
   - picard
   - mosdepth
@@ -33,6 +34,8 @@ module_order:
       name: "Picard"
   - qualimap:
       name: "Qualimap"
+  - fastp:
+      name: "fastp"
   - mosdepth:
       name: "Mosdepth"
   - peddy:
