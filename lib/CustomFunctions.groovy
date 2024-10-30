@@ -5,7 +5,7 @@ class CustomFunctions {
     // Helper function to check if a value is neither 0, "0", nor ""
     private static boolean isNonZeroNonEmpty(value) {
         return (value instanceof String && value != "" && value != "0") ||
-               (value instanceof Number && value != 0)
+                (value instanceof Number && value != 0)
     }
 
     // Function to get a list of metadata (e.g. case id) for the case [ meta ]
