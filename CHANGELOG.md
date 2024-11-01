@@ -3,7 +3,46 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2.2.0dev - Dogmatix [XXXX-XX-XX]
+## 2.3.0dev - Getafix [xxxx-xx-xx]
+
+### `Added`
+
+- A new analysis option `mito` to call and annotate only mitochondrial variants [#608](https://github.com/nf-core/raredisease/pull/608)
+
+### `Changed`
+
+- Suffix used to identify unique fastq pairs from "\_T" to "\_LNUMBER" [#638](https://github.com/nf-core/raredisease/pull/638)
+- Merge output from germlinecnvcaller [#635](https://github.com/nf-core/raredisease/pull/635)
+- Update tools [#623](https://github.com/nf-core/raredisease/pull/623)
+- Update output file name prefix for upd and chromograph to sample-based [#620](https://github.com/nf-core/raredisease/pull/620)
+- Update tools [#619](https://github.com/nf-core/raredisease/pull/619)
+- Report only variants above 5% heteroplasmy in the clinical vcf file for mitochondria [#616](https://github.com/nf-core/raredisease/pull/616)
+
+### `Fixed`
+
+- Restrict deepvariant analysis of WES samples to bait regions [#633](https://github.com/nf-core/raredisease/pull/633)
+- bcftools annotate declaration in annotate CADD subworkflow [#624](https://github.com/nf-core/raredisease/pull/624)
+- Rhocallviz subworkflow will only be invocated once per sample [#621](https://github.com/nf-core/raredisease/pull/621)
+- Allow for VEP version 112 to be used and set it to default [#617](https://github.com/nf-core/raredisease/pull/617)
+
+### Parameters
+
+### Tool updates
+
+| Tool       | Old version | New version |
+| ---------- | ----------- | ----------- |
+| bcftools   | 1.18        | 1.20        |
+| ensemblvep | 112         | 113         |
+| genmod     | 3.8.2       | 3.8.3       |
+| mosdepth   | 0.3.6       | 0.3.8       |
+| multiqc    | 1.21        | 1.25.1      |
+| picard     | 3.1.1       | 3.2.0       |
+| samtools   | 1.19.2      | 1.21        |
+| sentieon   | 202308.02   | 202308.03   |
+| stranger   | 0.8.1       | 0.9.1       |
+| tabix      | 1.19.1      | 1.20        |
+
+## 2.2.0 - Dogmatix [2024-09-13]
 
 ### `Added`
 
@@ -14,13 +53,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A new parameter `scatter_count` to control how many interval files are created from a genome (used to parallelize annotations) [#585](https://github.com/nf-core/raredisease/pull/585)
 - Print warning messages if user intends to perform ranking when there are no affected samples [#579](https://github.com/nf-core/raredisease/pull/579)
 - Two new parameters `skip_repeat_annotation` and `skip_repeat_calling` to skip calling and annotation of repeat expansions [#574](https://github.com/nf-core/raredisease/pull/574)
-- A new parameter `skip_smncopynumbercaller` to skip smncopynumbercaller module[#574](https://github.com/nf-core/raredisease/pull/574)
+- A new parameter `skip_smncopynumbercaller` to skip smncopynumbercaller module [#574](https://github.com/nf-core/raredisease/pull/574)
 - A new parameter `skip_sv_calling` to skip sv calling workflow [#572](https://github.com/nf-core/raredisease/pull/572)
 - Two new parameters `skip_snv_calling` and `skip_repeat_analysis` to skip snv calling and repeat analysis respectively [#571](https://github.com/nf-core/raredisease/pull/571)
 - Two new parameters `mbuffer_mem` and `samtools_sort_threads` to control resources given to mbuffer and samtools sort in the bwameme module [#570](https://github.com/nf-core/raredisease/pull/570)
 
 ### `Changed`
 
+- Update default vep container from v110-v112 [#609](https://github.com/nf-core/raredisease/pull/609)
+- Default index for vcfanno extra annotation files from tbi to csi [#606](https://github.com/nf-core/raredisease/pull/606)
 - Updated the model for Sentieon DNAScope to v1.1 [#601](https://github.com/nf-core/raredisease/pull/601)
 - bwameme can no longer be used to align mitochondrial reads [#600](https://github.com/nf-core/raredisease/pull/600)
 - Males' X and Y chromosomes will be treated as haploids during variant calling by deepvariant [#598](https://github.com/nf-core/raredisease/pull/598)
@@ -37,7 +78,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
-- Update docs to show 'vep_plugin_files' as a mandatory parameter for SNV annotation [#594](https://github.com/nf-core/raredisease/issues/593)
+- Issues that cropped up when `aligner` and `mt_aligner` were different [#605](https://github.com/nf-core/raredisease/pull/605)
+- Update docs to show 'vep_plugin_files' as a mandatory parameter for SNV annotation [#594](https://github.com/nf-core/raredisease/pull/594)
 - Error in SVDB merge when only a single SV caller is run [#586](https://github.com/nf-core/raredisease/pull/586)
 - Errors due to misplaced version statements [#578](https://github.com/nf-core/raredisease/pull/578)
 - Stub crashes due to peddy reported in [#566](https://github.com/nf-core/raredisease/issues/566) [#576](https://github.com/nf-core/raredisease/pull/576]
@@ -68,6 +110,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Tool        | Old version | New version |
 | ----------- | ----------- | ----------- |
 | Deepvariant | 1.5.0       | 1.6.1       |
+| ensemblvep  | 110         | 112         |
 
 ## 2.1.0 - Obelix [2024-05-29]
 

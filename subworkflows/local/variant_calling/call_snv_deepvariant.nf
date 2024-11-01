@@ -5,8 +5,9 @@
 include { BCFTOOLS_ANNOTATE                          } from '../../../modules/nf-core/bcftools/annotate/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_GL    } from '../../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_GL      } from '../../../modules/nf-core/bcftools/norm/main'
-include { DEEPVARIANT                                } from '../../../modules/nf-core/deepvariant/main'
+include { DEEPVARIANT_RUNDEEPVARIANT as DEEPVARIANT  } from '../../../modules/nf-core/deepvariant/rundeepvariant/main'
 include { GLNEXUS                                    } from '../../../modules/nf-core/glnexus/main'
+include { TABIX_BGZIP                                } from '../../../modules/nf-core/tabix/bgzip/main'
 include { TABIX_TABIX as TABIX_GL                    } from '../../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_ANNOTATE              } from '../../../modules/nf-core/tabix/tabix/main'
 include { ADD_VARCALLER_TO_BED                       } from '../../../modules/local/add_varcallername_to_bed'
@@ -16,6 +17,7 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_bam_bai         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_target_bed      // channel: [mandatory] [ val(meta), path(bed), path(index) ]
         ch_par_bed         // channel: [optional] [ val(meta), path(bed) ]
         ch_case_info       // channel: [mandatory] [ val(case_info) ]
         ch_foundin_header  // channel: [mandatory] [ path(header) ]
@@ -24,10 +26,17 @@ workflow CALL_SNV_DEEPVARIANT {
     main:
         ch_versions = Channel.empty()
 
-        ch_bam_bai.map { meta, bam, bai ->
-                        return [meta, bam, bai, []]
-            }
-            .set { ch_deepvar_in }
+        if (params.analysis_type.equals("wes")) {
+            TABIX_BGZIP(ch_target_bed.map{meta, gzbed, index -> return [meta, gzbed]})
+            ch_bam_bai
+                .combine (TABIX_BGZIP.out.output.map {meta, bed -> return bed})
+                .set { ch_deepvar_in }
+        } else if (params.analysis_type.equals("wgs")) {
+            ch_bam_bai
+                .map { meta, bam, bai ->
+                        return [meta, bam, bai, []] }
+                .set { ch_deepvar_in }
+        }
 
         DEEPVARIANT ( ch_deepvar_in, ch_genome_fasta, ch_genome_fai, [[],[]], ch_par_bed )
         DEEPVARIANT.out.gvcf
@@ -66,10 +75,9 @@ workflow CALL_SNV_DEEPVARIANT {
         REMOVE_DUPLICATES_GL.out.vcf
             .join(TABIX_GL.out.tbi)
             .combine(ch_varcallerbed)
-            .combine(ch_foundin_header)
             .set { ch_annotate_in }
 
-        BCFTOOLS_ANNOTATE(ch_annotate_in)
+        BCFTOOLS_ANNOTATE(ch_annotate_in, ch_foundin_header)
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 

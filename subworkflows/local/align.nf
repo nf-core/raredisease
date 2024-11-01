@@ -19,14 +19,19 @@ workflow ALIGN {
         ch_genome_bwamem2index   // channel: [mandatory] [ val(meta), path(index) ]
         ch_genome_bwamemeindex   // channel: [mandatory] [ val(meta), path(index) ]
         ch_genome_dictionary     // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_mt_bwaindex           // channel: [mandatory] [ val(meta), path(index) ]
+        ch_mt_bwamem2index       // channel: [mandatory] [ val(meta), path(index) ]
+        ch_mt_dictionary         // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_mt_fai                // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_mt_fasta              // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_mtshift_bwaindex      // channel: [mandatory] [ val(meta), path(index) ]
         ch_mtshift_bwamem2index  // channel: [mandatory] [ val(meta), path(index) ]
-        ch_mtshift_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_mtshift_dictionary    // channel: [mandatory] [ val(meta), path(dict) ]
         ch_mtshift_fai           // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_mtshift_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         val_mbuffer_mem          // integer: [mandatory] memory in megabytes
         val_platform             // string:  [mandatory] illumina or a different technology
-        val_sort_threads         // integer: [mandatory] memory in megabytes
+        val_sort_threads         // integer: [mandatory] number of sorting threads
 
     main:
         ch_bwamem2_bam        = Channel.empty()
@@ -43,7 +48,7 @@ workflow ALIGN {
         ch_versions           = Channel.empty()
 
         if (!params.skip_fastp) {
-            FASTP (ch_reads, [], false, false)
+            FASTP (ch_reads, [], false, false, false)
             ch_reads = FASTP.out.reads
             ch_versions = ch_versions.mix(FASTP.out.versions)
             ch_fastp_json = FASTP.out.json
@@ -83,7 +88,7 @@ workflow ALIGN {
 
         // PREPARING READS FOR MT ALIGNMENT
 
-        if (params.analysis_type.equals("wgs") || params.run_mt_for_wes) {
+        if (params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes) {
             CONVERT_MT_BAM_TO_FASTQ (
                 ch_genome_bam_bai,
                 ch_genome_fasta,
@@ -94,11 +99,11 @@ workflow ALIGN {
             ALIGN_MT (
                 CONVERT_MT_BAM_TO_FASTQ.out.fastq,
                 CONVERT_MT_BAM_TO_FASTQ.out.bam,
-                ch_genome_bwaindex,
-                ch_genome_bwamem2index,
-                ch_genome_fasta,
-                ch_genome_dictionary,
-                ch_genome_fai
+                ch_mt_bwaindex,
+                ch_mt_bwamem2index,
+                ch_mt_fasta,
+                ch_mt_dictionary,
+                ch_mt_fai
             )
 
             ALIGN_MT_SHIFT (

@@ -61,7 +61,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
       - [Alignment and variant calling](#alignment-and-variant-calling)
         - [MT deletion script](#mt-deletion-script)
         - [eKLIPse](#eklipse)
-      - [Annotation:](#annotation)
+      - [Annotation](#annotation)
         - [HaploGrep2](#haplogrep2)
         - [vcfanno](#vcfanno-1)
         - [CADD](#cadd-1)
@@ -101,7 +101,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ##### Picard's MarkDuplicates
 
-[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2 bwameme and bwa are processed by this tool. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
+[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2, bwameme and bwa are processed by this tool. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
 
 <details markdown="1">
 <summary>Output files from Alignment</summary>
@@ -153,6 +153,10 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - `*_fastqc.zip`: Zip archive containing the FastQC report, tab-delimited data file and plot images.
 
 </details>
+
+:::note
+The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They may contain adapter sequence and potentially regions with low quality.
+:::
 
 ##### Mosdepth
 
@@ -240,10 +244,6 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 #### Reporting
 
-:::note
-The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They may contain adapter sequence and potentially regions with low quality.
-:::
-
 ##### MultiQC
 
 [MultiQC](http://multiqc.info) is a visualization tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in the report data directory.
@@ -316,7 +316,7 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 <summary>Output files</summary>
 
 - `call_sv/genome`
-  - `<case_id>_sv_merge.vcf.gz`: file containing the merged variant calls.
+  - `<case_id>_sv_merge.vcf.gz`: file containing the merged variant calls. As of version 2.3.0, this file also contains mitochondrial structural variants.
   - `<case_id>_sv_merge.vcf.gz.tbi`: index of the file containing the merged variant calls.
 
 </details>
@@ -404,9 +404,9 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 <summary>Output files</summary>
 
 - `annotate_snv/genome/*sites_chromograph`
-  - `<case_id>_rohann_vcfanno_upd_sites_<chr#>.png`: file containing a plot showing upd sites across chromosomes.
+  - `<sample_id>_rohann_vcfanno_upd_sites_<chr#>.png`: file containing a plot showing upd sites across chromosomes.
 - `annotate_snv/genome/*regions_chromograph`
-  - `<case_id>_rohann_vcfanno_upd_regions_<chr#>.png`: file containing a plot showing upd regions across chromosomes.
+  - `<sample_id>_rohann_vcfanno_upd_regions_<chr#>.png`: file containing a plot showing upd regions across chromosomes.
 - `annotate_snv/genome/*autozyg_chromograph`
   - `<sample_id>_rhocallviz_<chr#>.png`: file containing a plot showing regions of autozygosity across chromosomes.
 
@@ -450,7 +450,7 @@ Mitochondrial analysis is run by default. If you want to turn off annotations se
 
 #### Alignment and variant calling
 
-[Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline ](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-) The mitochondrial genome poses several challenges to the identification and understanding of somatic variants. The circularity of the mitochondrial genome means that the breakpoint in the reference genome is at an arbitrary position in the non-coding control region, creating a challenge in analyzing variation. Additionally, insertions of mitochondrial DNA into the nuclear genome (NuMTs) complicate the mapping of the mitochondrial genome and the distinction between NuMTs and the mitochondrial contig of interest. Lastly, mitochondrial variants often have very low heteroplasmy. Such low allele fraction (AF) variants can thus be mistaken for inherent sequencer noise.
+[Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-) The mitochondrial genome poses several challenges to the identification and understanding of somatic variants. The circularity of the mitochondrial genome means that the breakpoint in the reference genome is at an arbitrary position in the non-coding control region, creating a challenge in analyzing variation. Additionally, insertions of mitochondrial DNA into the nuclear genome (NuMTs) complicate the mapping of the mitochondrial genome and the distinction between NuMTs and the mitochondrial contig of interest. Lastly, mitochondrial variants often have very low heteroplasmy. Such low allele fraction (AF) variants can thus be mistaken for inherent sequencer noise.
 
 The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sensitivity to low AF and separate alignments using opposite genome breakpoints to allow for the tracing of lineages of rare mitochondrial variants.
 
@@ -474,7 +474,7 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
   - `eKLIPse_<sample_id>_genes.csv`: file summarizing cumulated deletions per mtDNA gene.
   - `eKLIPse_<sample_id>.png`: circos plot.
 
-#### Annotation:
+#### Annotation
 
 ##### HaploGrep2
 
@@ -529,7 +529,7 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 <summary>Output files</summary>
 
 - `rank_and_filter/`
-  - `<case_id>_mt_ranked_clinical.vcf.gz`: file containing clinically relevant mitochondrial SNVs.
+  - `<case_id>_mt_ranked_clinical.vcf.gz`: file containing clinically relevant mitochondrial SNVs, and only contains variants less than 5%VAF by default.
   - `<case_id>_mt_ranked_clinical.vcf.gz.tbi`: index of the file containing clinically relevant mitochondrial SNVs.
   - `<case_id>_mt_ranked_research.vcf.gz`: file containing mitochondrial SNV annotations with their rank scores.
   - `<case_id>_mt_ranked_research.vcf.gz.tbi`: index of the file containing mitochondrial SNV annotations with their rank scores.
