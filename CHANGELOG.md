@@ -29,6 +29,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
+| Old parameter | New parameter       |
+| ------------- | ------------------- |
+|               | extract_alignments  |
+|               | restrict_to_contigs |
+
 ### Tool updates
 
 | Tool       | Old version | New version |
