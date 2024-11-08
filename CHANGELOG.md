@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - A new analysis option `mito` to call and annotate only mitochondrial variants [#608](https://github.com/nf-core/raredisease/pull/608)
+- An option to restrict analysis to specific contigs [#644](https://github.com/nf-core/raredisease/pull/644)
 
 ### `Changed`
 
