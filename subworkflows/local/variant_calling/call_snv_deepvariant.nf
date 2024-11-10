@@ -49,7 +49,7 @@ workflow CALL_SNV_DEEPVARIANT {
             .combine(ch_file_list)
             .set { ch_gvcfs }
 
-        GLNEXUS ( ch_gvcfs )
+        GLNEXUS ( ch_gvcfs, [[:],[]] )
 
         ch_split_multi_in = GLNEXUS.out.bcf
                             .map{ meta, bcf ->
