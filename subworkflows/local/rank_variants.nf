@@ -25,12 +25,9 @@ workflow RANK_VARIANTS {
 
         ch_models_in = GENMOD_ANNOTATE.out.vcf.combine(ch_pedfile)
 
-        ch_models_in.dump(tag:'models')
         GENMOD_MODELS(ch_models_in, ch_reduced_penetrance)
 
         ch_score_in = GENMOD_MODELS.out.vcf.combine(ch_pedfile)
-
-        ch_score_in.dump(tag:'score')
 
         GENMOD_SCORE(ch_score_in, ch_score_config)
 
