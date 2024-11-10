@@ -104,7 +104,7 @@ workflow PIPELINE_INITIALISATION {
         }
         .combine( ch_input_counts )
         .map { lineno, meta, fastqs -> //append line number to sampleid
-            new_meta = meta + [id:meta.id+"_T"+lineno[fastqs]]
+            new_meta = meta + [id:meta.id+"_LNUMBER"+lineno[fastqs]]
             return [ new_meta, fastqs ]
         }
         .set { ch_samplesheet }
