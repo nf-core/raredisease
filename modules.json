@@ -399,7 +399,7 @@
                     },
                     "samtools/view": {
                         "branch": "master",
-                        "git_sha": "669eb24fd82a9d3cb18ad0e73673ecb26827f683",
+                        "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",
                         "installed_by": ["modules"]
                     },
                     "sentieon/bwaindex": {
