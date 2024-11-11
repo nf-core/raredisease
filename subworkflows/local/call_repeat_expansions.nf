@@ -58,7 +58,7 @@ workflow CALL_REPEAT_EXPANSIONS {
             .combine(ch_exp_vcfs)
             .set {ch_svdb_merge_input}
 
-        SVDB_MERGE_REPEATS ( ch_svdb_merge_input, [] )
+        SVDB_MERGE_REPEATS ( ch_svdb_merge_input, [], true )
 
         ch_versions = ch_versions.mix(EXPANSIONHUNTER.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_EXP.out.versions.first())

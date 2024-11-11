@@ -40,13 +40,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | ---------- | ----------- | ----------- |
 | bcftools   | 1.18        | 1.20        |
 | ensemblvep | 112         | 113         |
-| genmod     | 3.8.2       | 3.8.3       |
+| genmod     | 3.8.2       | 3.9         |
 | mosdepth   | 0.3.6       | 0.3.8       |
 | multiqc    | 1.21        | 1.25.1      |
-| picard     | 3.1.1       | 3.2.0       |
+| picard     | 3.1.1       | 3.3.0       |
 | samtools   | 1.19.2      | 1.21        |
 | sentieon   | 202308.02   | 202308.03   |
-| stranger   | 0.8.1       | 0.9.1       |
+| stranger   | 0.8.1       | 0.9.2       |
+| svdb       | 2.8.1       | 2.8.2       |
 | tabix      | 1.19.1      | 1.20        |
 
 ## 2.2.0 - Dogmatix [2024-09-13]
