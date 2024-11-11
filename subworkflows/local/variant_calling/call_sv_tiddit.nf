@@ -25,7 +25,7 @@ workflow CALL_SV_TIDDIT {
             .combine(vcf_file_list)
             .set { merge_input_vcfs }
 
-        SVDB_MERGE_TIDDIT ( merge_input_vcfs, [] )
+        SVDB_MERGE_TIDDIT ( merge_input_vcfs, [], true )
 
         ch_versions = TIDDIT_SV.out.versions.first()
         ch_versions = ch_versions.mix(SVDB_MERGE_TIDDIT.out.versions)
