@@ -70,7 +70,7 @@ workflow ALIGN {
             ch_bwamem2_bai = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bai
             ch_versions    = ch_versions.mix(ALIGN_BWA_BWAMEM2_BWAMEME.out.versions)
         } else if (params.aligner.equals("sentieon")) {
-            ALIGN_SENTIEON (            // Triggered when params.aligner is set as sentieon
+            ALIGN_SENTIEON (                        // Triggered when params.aligner is set as sentieon
                 ch_reads,
                 ch_genome_fasta,
                 ch_genome_fai,

@@ -2,10 +2,13 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SENTIEON_BWAMEM         } from '../../../modules/nf-core/sentieon/bwamem/main'
-include { SENTIEON_DATAMETRICS    } from '../../../modules/nf-core/sentieon/datametrics/main'
-include { SENTIEON_DEDUP          } from '../../../modules/nf-core/sentieon/dedup/main'
-include { SENTIEON_READWRITER     } from '../../../modules/nf-core/sentieon/readwriter/main'
+include { SENTIEON_BWAMEM                          } from '../../../modules/nf-core/sentieon/bwamem/main'
+include { SENTIEON_DATAMETRICS                     } from '../../../modules/nf-core/sentieon/datametrics/main'
+include { SENTIEON_DEDUP                           } from '../../../modules/nf-core/sentieon/dedup/main'
+include { SENTIEON_READWRITER                      } from '../../../modules/nf-core/sentieon/readwriter/main'
+include { SAMTOOLS_VIEW as EXTRACT_ALIGNMENTS      } from '../../../modules/nf-core/samtools/view/main'
+include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_EXTRACT } from '../../../modules/nf-core/samtools/index/main'
+
 workflow ALIGN_SENTIEON {
     take:
         ch_reads_input     // channel: [mandatory] [ val(meta), path(reads_input) ]
@@ -35,6 +38,14 @@ workflow ALIGN_SENTIEON {
 
         SENTIEON_READWRITER ( merge_bams_in.multiple, ch_genome_fasta, ch_genome_fai )
         ch_bam_bai = merge_bams_in.single.mix(SENTIEON_READWRITER.out.output_index)
+
+        // GET ALIGNMENT FROM SELECTED CONTIGS
+        if (params.extract_alignments) {
+            EXTRACT_ALIGNMENTS( ch_bam_bai, ch_genome_fasta, [])
+            ch_bam_bai = EXTRACT_ALIGNMENTS.out.bam
+            SAMTOOLS_INDEX_EXTRACT ( EXTRACT_ALIGNMENTS.out.bam )
+            ch_bam_bai = EXTRACT_ALIGNMENTS.out.bam.join(SAMTOOLS_INDEX_EXTRACT.out.bai, failOnMismatch:true, failOnDuplicate:true)
+        }
 
         SENTIEON_DATAMETRICS ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, false )
 

@@ -7,9 +7,11 @@ include { BWA_MEM as BWAMEM_FALLBACK               } from '../../../modules/nf-c
 include { BWAMEM2_MEM                              } from '../../../modules/nf-core/bwamem2/mem/main'
 include { BWAMEME_MEM                              } from '../../../modules/nf-core/bwameme/mem/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_ALIGN   } from '../../../modules/nf-core/samtools/index/main'
+include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_EXTRACT } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MARKDUP } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_STATS                           } from '../../../modules/nf-core/samtools/stats/main'
 include { SAMTOOLS_MERGE                           } from '../../../modules/nf-core/samtools/merge/main'
+include { SAMTOOLS_VIEW as EXTRACT_ALIGNMENTS      } from '../../../modules/nf-core/samtools/view/main'
 include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-core/picard/markduplicates/main'
 
 
@@ -81,6 +83,14 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         // If there are no samples to merge, skip the process
         SAMTOOLS_MERGE ( bams.multiple, ch_genome_fasta, ch_genome_fai )
         prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
+
+        // GET ALIGNMENT FROM SELECTED CONTIGS
+        if (params.extract_alignments) {
+            SAMTOOLS_INDEX_EXTRACT ( prepared_bam )
+            extract_bam_sorted_indexed = prepared_bam.join(SAMTOOLS_INDEX_EXTRACT.out.bai, failOnMismatch:true, failOnDuplicate:true)
+            EXTRACT_ALIGNMENTS( extract_bam_sorted_indexed, ch_genome_fasta, [])
+            prepared_bam = EXTRACT_ALIGNMENTS.out.bam
+        }
 
         // Marking duplicates
         MARKDUPLICATES ( prepared_bam , ch_genome_fasta, ch_genome_fai )
