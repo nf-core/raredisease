@@ -84,7 +84,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         SAMTOOLS_MERGE ( bams.multiple, ch_genome_fasta, ch_genome_fai )
         prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
 
-        // GET ALIGNMENT FROM PRIMARY CONTIGS
+        // GET ALIGNMENT FROM SELECTED CONTIGS
         if (params.extract_alignments) {
             SAMTOOLS_INDEX_EXTRACT ( prepared_bam )
             extract_bam_sorted_indexed = prepared_bam.join(SAMTOOLS_INDEX_EXTRACT.out.bai, failOnMismatch:true, failOnDuplicate:true)
