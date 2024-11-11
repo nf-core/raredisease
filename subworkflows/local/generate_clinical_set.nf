@@ -31,7 +31,7 @@ workflow GENERATE_CLINICAL_SET {
         .set { ch_filtervep_out }
 
         if (val_ismt) {
-            BCFTOOLS_FILTER (ch_filtervep_out)
+            BCFTOOLS_FILTER (ch_filtervep_out.map { meta, vcf -> return [meta, vcf, []]})
             ch_clinical = BCFTOOLS_FILTER.out.vcf
             ch_versions = ch_versions.mix( BCFTOOLS_FILTER.out.versions )
         } else {

@@ -103,7 +103,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .combine(vcf_list)
                 .set { merge_input_vcfs }
 
-            SVDB_MERGE (merge_input_vcfs, ch_svcaller_priority)
+            SVDB_MERGE (merge_input_vcfs, ch_svcaller_priority, true)
 
             TABIX_TABIX (SVDB_MERGE.out.vcf)
             ch_merged_svs = SVDB_MERGE.out.vcf
