@@ -36,7 +36,7 @@ workflow CALL_SV_CNVNATOR {
             .combine(vcf_file_list)
             .set { merge_input_vcfs }
 
-        SVDB_MERGE_CNVNATOR ( merge_input_vcfs, [] )
+        SVDB_MERGE_CNVNATOR ( merge_input_vcfs, [], true )
 
         ch_versions = ch_versions.mix(CNVNATOR_RD.out.versions)
         ch_versions = ch_versions.mix(CNVNATOR_HIST.out.versions)
