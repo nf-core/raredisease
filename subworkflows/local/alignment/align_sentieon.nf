@@ -39,7 +39,7 @@ workflow ALIGN_SENTIEON {
         SENTIEON_READWRITER ( merge_bams_in.multiple, ch_genome_fasta, ch_genome_fai )
         ch_bam_bai = merge_bams_in.single.mix(SENTIEON_READWRITER.out.output_index)
 
-        // GET ALIGNMENT FROM PRIMARY CONTIGS
+        // GET ALIGNMENT FROM SELECTED CONTIGS
         if (params.extract_alignments) {
             EXTRACT_ALIGNMENTS( ch_bam_bai, ch_genome_fasta, [])
             ch_bam_bai = EXTRACT_ALIGNMENTS.out.bam
