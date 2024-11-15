@@ -22,6 +22,7 @@ run_modules:
   - qualimap
   - picard
   - mosdepth
+  - ngsbits
   - peddy
   - custom_content
 
@@ -38,6 +39,8 @@ module_order:
       name: "fastp"
   - mosdepth:
       name: "Mosdepth"
+  - ngsbits:
+      name: "ngsbits"
   - peddy:
       name: "Peddy"
 
