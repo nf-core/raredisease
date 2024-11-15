@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - A new analysis option `mito` to call and annotate only mitochondrial variants [#608](https://github.com/nf-core/raredisease/pull/608)
+- An option to restrict analysis to specific contigs [#644](https://github.com/nf-core/raredisease/pull/644)
 
 ### `Changed`
 
@@ -27,6 +28,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated createCaseChannel function to include a check for maternal and paternal ids being set to a numeric 0 [#643](https://github.com/nf-core/raredisease/pull/643)
 
 ### Parameters
+
+| Old parameter | New parameter       |
+| ------------- | ------------------- |
+|               | extract_alignments  |
+|               | restrict_to_contigs |
 
 ### Tool updates
 
