@@ -25,7 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restrict deepvariant analysis of WES samples to bait regions [#633](https://github.com/nf-core/raredisease/pull/633)
 - bcftools annotate declaration in annotate CADD subworkflow [#624](https://github.com/nf-core/raredisease/pull/624)
 - Rhocallviz subworkflow will only be invocated once per sample [#621](https://github.com/nf-core/raredisease/pull/621)
-- Allow for VEP version 112 to be used and set it to default [#617](https://github.com/nf-core/raredisease/pull/617)
 - Updated createCaseChannel function to include a check for maternal and paternal ids being set to a numeric 0 [#643](https://github.com/nf-core/raredisease/pull/643)
 
 ### Parameters
@@ -40,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Tool       | Old version | New version |
 | ---------- | ----------- | ----------- |
 | bcftools   | 1.18        | 1.20        |
-| ensemblvep | 112         | 113         |
+| ensemblvep | 112         | 110         |
 | genmod     | 3.8.2       | 3.9         |
 | mosdepth   | 0.3.6       | 0.3.8       |
 | multiqc    | 1.21        | 1.25.1      |
