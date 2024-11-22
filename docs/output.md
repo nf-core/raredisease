@@ -171,7 +171,6 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 
 - `{outputdir}/qc_bam/`
   - `<sampleid>_mosdepth.global.dist.txt`: This file contains a cumulative distribution indicating the proportion of total bases that were covered for at least a given coverage value across each chromosome and the whole genome.
-  - `<sampleid>_mosdepth.per-base.d4`: This file contains a coverage for each base in the genome in d4 format.
   - `<sampleid>_mosdepth.summary.txt`: This file contains summary statistics, such as mean, minimum and maximum coverage per genomic contig.
 
 </details>
