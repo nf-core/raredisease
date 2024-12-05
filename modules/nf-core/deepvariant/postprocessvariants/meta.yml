@@ -1,4 +1,4 @@
-name: deepvariant_rundeepvariant
+name: deepvariant_postprocessvariants
 description: DeepVariant is an analysis pipeline that uses a deep neural network to
   call genetic variants from next-generation DNA sequencing data
 keywords:
@@ -21,17 +21,16 @@ input:
         description: |
           Groovy Map containing sample information
           e.g. [ id:'test', single_end:false ]
-    - input:
+    - variant_calls_tfrecord_files:
         type: file
-        description: BAM/CRAM file
-        pattern: "*.bam/cram"
-    - index:
+        description: |
+          One or more data files containing variant calls from DEEPVARIANT_CALLVARIANTS
+        pattern: "*.tfrecord.gz"
+    - gvcf_tfrecords:
         type: file
-        description: Index of BAM/CRAM file
-        pattern: "*.bai/crai"
-    - intervals:
-        type: file
-        description: file containing intervals
+        description: |
+          Sharded tfrecord file from DEEPVARIANT_MAKEEXAMPLES with the coverage information used for GVCF output
+        pattern: "*.gz"
   - - meta2:
         type: map
         description: |
@@ -59,15 +58,6 @@ input:
         type: file
         description: GZI index of reference fasta file
         pattern: "*.gzi"
-  - - meta5:
-        type: map
-        description: |
-          Groovy Map containing reference information
-          e.g. [ id:'genome' ]
-    - par_bed:
-        type: file
-        description: BED file containing PAR regions
-        pattern: "*.bed"
 output:
   - vcf:
       - meta:
@@ -87,7 +77,7 @@ output:
             e.g. [ id:'test', single_end:false ]
       - ${prefix}.vcf.gz.tbi:
           type: file
-          description: Tabix index file of compressed VCF
+          description: Index for VCF
           pattern: "*.vcf.gz.tbi"
   - gvcf:
       - meta:
@@ -107,16 +97,17 @@ output:
             e.g. [ id:'test', single_end:false ]
       - ${prefix}.g.vcf.gz.tbi:
           type: file
-          description: Tabix index file of compressed GVCF
+          description: Index for GVCF
           pattern: "*.g.vcf.gz.tbi"
   - versions:
       - versions.yml:
           type: file
-          description: File containing software versions
+          description: File containing software version
           pattern: "versions.yml"
 authors:
   - "@abhi18av"
   - "@ramprasadn"
+  - "@fa2k"
 maintainers:
   - "@abhi18av"
   - "@ramprasadn"
