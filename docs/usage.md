@@ -560,3 +560,23 @@ plugins {
 ```
 
 This should go in your Nextflow configuration file, specified with `-c <YOURCONFIG>` when running the pipeline.
+
+
+### Calling variants on the GPU with DeepVariant
+
+To use GPU for variant calling you have to override the container image. The GPU-enabled DeepVariant image is very large, so it's not used by default. You need to identify the DeepVariant version used by raredisease. Then replace the container image of the `DEEPVARIANT_CALLVARIANTS` process with one from Google's Docker Hub, `docker.io/google/deepvariant:X.Y.Z-gpu`, changing "X.Y.Z" to the version.
+
+For singularity / apptainer you can use containerOptions = '--nv' to enable GPU access. For Docker, use the `--gpus` option.
+
+If using a queue system like SLURM, or the Cloud, you usually have to enable certain options to get access to GPUs, e.g. the `queue` directive. If you run locally on a server with a single GPU, you can set `maxForks = 1` to prevent starting simultaneous GPU jobs for different samples.
+
+Configuration example:
+```
+    withName:"DEEPVARIANT_CALLVARIANTS" {
+        cpus = 6
+        containerOptions = '--nv'
+        container = 'docker.io/google/deepvariant:1.6.1-gpu'
+        maxForks = 1
+    }
+```
+
