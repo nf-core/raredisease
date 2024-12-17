@@ -19,6 +19,7 @@ export_plots: true
 run_modules:
   - fastqc
   - fastp
+  - haplocheck
   - qualimap
   - picard
   - mosdepth
@@ -39,6 +40,8 @@ module_order:
       name: "fastp"
   - mosdepth:
       name: "Mosdepth"
+  - haplocheck:
+      name: "haplocheck"
   - ngsbits:
       name: "ngsbits"
   - peddy:
