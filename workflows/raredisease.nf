@@ -472,20 +472,8 @@ workflow RAREDISEASE {
 */
 
     if ( params.analysis_type.equals("wgs") && (!params.skip_smncopynumbercaller || !params.skip_repeat_calling)) {
-        RENAME_BAM(ch_mapped.genome_marked_bam, "bam").output
-            .collect{it}
-            .toList()
-            .set { ch_bam_list }
-
-        RENAME_BAI(ch_mapped.genome_marked_bai, "bam.bai").output
-            .collect{it}
-            .toList()
-            .set { ch_bai_list }
-
-        ch_case_info
-            .combine(ch_bam_list)
-            .combine(ch_bai_list)
-            .set { ch_bams_bais }
+        RENAME_BAM(ch_mapped.genome_marked_bam, "bam")
+        RENAME_BAI(ch_mapped.genome_marked_bai, "bam.bai")
     }
 
 /*
@@ -496,7 +484,7 @@ workflow RAREDISEASE {
 
     if (!params.skip_repeat_calling && params.analysis_type.equals("wgs") ) {
         CALL_REPEAT_EXPANSIONS (
-            ch_bams_bais,
+            RENAME_BAM.out.output.join(RENAME_BAI.out.output, failOnMismatch:true, failOnDuplicate:true),
             ch_variant_catalog,
             ch_case_info,
             ch_genome_fasta,
@@ -790,6 +778,21 @@ workflow RAREDISEASE {
 */
 
     if ( params.analysis_type.equals("wgs") && !params.skip_smncopynumbercaller ) {
+
+        RENAME_BAM.out.output
+            .collect{it[1]}
+            .toList()
+            .set { ch_bam_list }
+
+        RENAME_BAI.out.output
+            .collect{it[1]}
+            .toList()
+            .set { ch_bai_list }
+
+        ch_case_info
+            .combine(ch_bam_list)
+            .combine(ch_bai_list)
+            .set { ch_bams_bais }
 
         SMNCOPYNUMBERCALLER (
             ch_bams_bais
