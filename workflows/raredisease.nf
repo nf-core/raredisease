@@ -127,10 +127,10 @@ include { SMNCOPYNUMBERCALLER } from '../modules/nf-core/smncopynumbercaller/mai
 // MODULE: Local modules
 //
 
-include { RENAME_ALIGN_FILES as RENAME_BAM_FOR_SMNCALLER } from '../modules/local/rename_align_files'
-include { RENAME_ALIGN_FILES as RENAME_BAI_FOR_SMNCALLER } from '../modules/local/rename_align_files'
-include { CREATE_HGNCIDS_FILE                            } from '../modules/local/create_hgncids_file'
-include { CREATE_PEDIGREE_FILE                           } from '../modules/local/create_pedigree_file'
+include { RENAME_ALIGN_FILES as RENAME_BAM } from '../modules/local/rename_align_files'
+include { RENAME_ALIGN_FILES as RENAME_BAI } from '../modules/local/rename_align_files'
+include { CREATE_HGNCIDS_FILE              } from '../modules/local/create_hgncids_file'
+include { CREATE_PEDIGREE_FILE             } from '../modules/local/create_pedigree_file'
 
 //
 // SUBWORKFLOWS
@@ -464,6 +464,30 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions)
 
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    RENAME ALIGNMENT FILES FOR SMNCOPYNUMBERCALLER & REPEATCALLING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+    if ( params.analysis_type.equals("wgs") && (!params.skip_smncopynumbercaller || !params.skip_repeat_calling)) {
+        RENAME_BAM(ch_mapped.genome_marked_bam, "bam").output
+            .collect{it}
+            .toList()
+            .set { ch_bam_list }
+
+        RENAME_BAI(ch_mapped.genome_marked_bai, "bam.bai").output
+            .collect{it}
+            .toList()
+            .set { ch_bai_list }
+
+        ch_case_info
+            .combine(ch_bam_list)
+            .combine(ch_bai_list)
+            .set { ch_bams_bais }
+    }
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CALL AND ANNOTATE REPEAT EXPANSIONS
@@ -472,7 +496,7 @@ workflow RAREDISEASE {
 
     if (!params.skip_repeat_calling && params.analysis_type.equals("wgs") ) {
         CALL_REPEAT_EXPANSIONS (
-            ch_mapped.genome_bam_bai,
+            ch_bams_bais,
             ch_variant_catalog,
             ch_case_info,
             ch_genome_fasta,
@@ -766,28 +790,15 @@ workflow RAREDISEASE {
 */
 
     if ( params.analysis_type.equals("wgs") && !params.skip_smncopynumbercaller ) {
-        RENAME_BAM_FOR_SMNCALLER(ch_mapped.genome_marked_bam, "bam").output
-            .collect{it}
-            .toList()
-            .set { ch_bam_list }
-
-        RENAME_BAI_FOR_SMNCALLER(ch_mapped.genome_marked_bai, "bam.bai").output
-            .collect{it}
-            .toList()
-            .set { ch_bai_list }
-
-        ch_case_info
-            .combine(ch_bam_list)
-            .combine(ch_bai_list)
-            .set { ch_bams_bais }
 
         SMNCOPYNUMBERCALLER (
             ch_bams_bais
         )
-        ch_versions = ch_versions.mix(RENAME_BAM_FOR_SMNCALLER.out.versions)
-        ch_versions = ch_versions.mix(RENAME_BAI_FOR_SMNCALLER.out.versions)
+        ch_versions = ch_versions.mix(RENAME_BAM.out.versions)
+        ch_versions = ch_versions.mix(RENAME_BAI.out.versions)
         ch_versions = ch_versions.mix(SMNCOPYNUMBERCALLER.out.versions)
     }
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     PEDDY
