@@ -107,6 +107,8 @@ workflow PREPARE_REFERENCES {
         // Compress and index target bed file in case of uncompressed input
         TABIX_PBT(ch_target_bed).gz_tbi
             .set { ch_bgzip_tbi }
+        ch_target_bed_gz_tbi = Channel.empty()
+            .mix(ch_trgt_bed_tbi, ch_bgzip_tbi)
 
         ch_vcfanno_extra_unprocessed
             .branch { it ->
@@ -132,9 +134,12 @@ workflow PREPARE_REFERENCES {
             .set{ch_vcfanno_extra}
 
         // Pad bed file
-        BEDTOOLS_PAD_TARGET_BED(ch_target_bed, ch_fai)
+        BEDTOOLS_PAD_TARGET_BED(
+            ch_target_bed,
+            ch_fai.map { _meta, fai -> return fai }
+        )
         TABIX_BGZIPINDEX_PADDED_BED(BEDTOOLS_PAD_TARGET_BED.out.bed).gz_tbi
-            .set { ch_padded_bed }
+            .set { ch_target_bed_gz_tbi }
 
         // Generate bait and target intervals
         GATK_BILT(ch_target_bed, ch_dict).interval_list
@@ -209,7 +214,7 @@ workflow PREPARE_REFERENCES {
         mtshift_bwamem2_index = BWAMEM2_INDEX_MT_SHIFT.out.index.collect()                                   // channel: [ val(meta), path(index) ]
         gnomad_af_idx         = TABIX_GNOMAD_AF.out.tbi.collect()                                            // channel: [ val(meta), path(fasta) ]
         known_dbsnp_tbi       = TABIX_DBSNP.out.tbi.collect()                                                // channel: [ val(meta), path(fasta) ]
-        target_bed            = Channel.empty().mix(ch_trgt_bed_tbi, ch_bgzip_tbi, ch_padded_bed).collect()  // channel: [ val(meta), path(bed), path(tbi) ]
+        target_bed            = ch_target_bed_gz_tbi.collect()                                               // channel: [ val(meta), path(bed), path(tbi) ]
         vcfanno_extra         = ch_vcfanno_extra.ifEmpty([[]])                                               // channel: [ [path(vcf), path(tbi)] ]
         bait_intervals        = CAT_CAT_BAIT.out.file_out.map{ meta, inter -> inter}.collect().ifEmpty([[]]) // channel: [ path(intervals) ]
         target_intervals      = GATK_BILT.out.interval_list.map{ meta, inter -> inter}.collect()             // channel: [ path(interval_list) ]
