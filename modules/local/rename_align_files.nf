@@ -12,7 +12,7 @@ process RENAME_ALIGN_FILES {
     val(extension)
 
     output:
-    path("*.{bam,bai}"), emit: output
+    tuple val(meta), path("*.{bam,bai}"), emit: output
     path "versions.yml", emit: versions
 
     when:
