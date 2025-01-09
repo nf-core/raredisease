@@ -101,8 +101,9 @@ workflow PREPARE_REFERENCES {
         TABIX_GNOMAD_AF(ch_gnomad_af_tab)
 
         // Index target bed file in case of gz input
-        TABIX_PT(ch_target_bed).tbi
-            .join(ch_target_bed)
+        TABIX_PT(ch_target_bed)
+        ch_target_bed
+            .join(TABIX_PT.out.tbi)
             .set{ ch_trgt_bed_tbi }
         // Compress and index target bed file in case of uncompressed input
         TABIX_PBT(ch_target_bed).gz_tbi
