@@ -295,7 +295,7 @@
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "cf17ca47590cc578dfb47db1c2a44ef86f89976d",
+                        "git_sha": "f80914f78fb7fa1c00b14cfeb29575ee12240d9c",
                         "installed_by": ["modules"]
                     },
                     "ngsbits/samplegender": {
