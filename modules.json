@@ -111,10 +111,20 @@
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
-                    "deepvariant/rundeepvariant": {
+                    "deepvariant/callvariants": {
                         "branch": "master",
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
-                        "installed_by": ["modules"]
+                        "installed_by": ["deepvariant"]
+                    },
+                    "deepvariant/makeexamples": {
+                        "branch": "master",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "installed_by": ["deepvariant"]
+                    },
+                    "deepvariant/postprocessvariants": {
+                        "branch": "master",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "installed_by": ["deepvariant"]
                     },
                     "eklipse": {
                         "branch": "master",
@@ -517,6 +527,11 @@
             },
             "subworkflows": {
                 "nf-core": {
+                    "deepvariant": {
+                        "branch": "master",
+                        "git_sha": "f1236caa87bac87e75698af65281a795cded208c",
+                        "installed_by": ["subworkflows"]
+                    },
                     "utils_nextflow_pipeline": {
                         "branch": "master",
                         "git_sha": "c2b22d85f30a706a3073387f30380704fcae013b",
