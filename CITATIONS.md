@@ -16,6 +16,10 @@
 
   > Danecek P, Bonfield JK, Liddle J, et al. Twelve years of SAMtools and BCFtools. GigaScience. 2021;10(2):giab008. doi:10.1093/gigascience/giab008
 
+- [BEDTools](https://academic.oup.com/bioinformatics/article/26/6/841/244688)
+
+  > Quinlan AR, Hall IM. BEDTools: a flexible suite of utilities for comparing genomic features. Bioinformatics. 2010;26(6):841-842. doi:10.1093/bioinformatics/btq033
+
 - [BWA-MEM](https://arxiv.org/abs/1303.3997)
 
   > Li H. Aligning sequence reads, clone sequences and assembly contigs with BWA-MEM. Published online May 26, 2013. Accessed March 14, 2023. http://arxiv.org/abs/1303.3997

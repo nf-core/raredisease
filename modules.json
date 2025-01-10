@@ -55,6 +55,11 @@
                         "git_sha": "bfa8975eefb8df3e480a44ac9e594f23f52b2963",
                         "installed_by": ["modules"]
                     },
+                    "bedtools/slop": {
+                        "branch": "master",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "installed_by": ["modules"]
+                    },
                     "bwa/index": {
                         "branch": "master",
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
