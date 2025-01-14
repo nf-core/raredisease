@@ -241,6 +241,10 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
   - `<sampleid>.bw`:
     </details>
 
+##### Haplocheck
+
+[Haplocheck](https://github.com/genepi/haplocheck/) analyses the mitochondrial content to detect contamination in samples. The results are displayed in MultiQC.
+
 #### Reporting
 
 ##### MultiQC
