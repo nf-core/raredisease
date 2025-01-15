@@ -175,18 +175,13 @@ workflow RAREDISEASE {
 
     take:
     ch_samplesheet // channel: samplesheet read in from --input
+    ch_samples
+    ch_case_info
+
     main:
 
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
-
-    ch_samples   = ch_samplesheet.map { meta, fastqs ->
-                        new_id = meta.sample
-                        new_meta = meta - meta.subMap('lane', 'read_group') + [id:new_id]
-                        return new_meta
-                    }.unique()
-
-    ch_case_info = ch_samples.toList().map { CustomFunctions.createCaseChannel(it) }
 
     //
     // Initialize file channels for PREPARE_REFERENCES subworkflow
