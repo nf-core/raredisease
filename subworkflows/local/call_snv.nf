@@ -2,11 +2,11 @@
 // call Single-nucleotide Varinats
 //
 
-include { CALL_SNV_DEEPVARIANT             } from './variant_calling/call_snv_deepvariant'
-include { CALL_SNV_SENTIEON                } from './variant_calling/call_snv_sentieon'
-include { CALL_SNV_MT                      } from './variant_calling/call_snv_MT'
-include { CALL_SNV_MT as CALL_SNV_MT_SHIFT } from './variant_calling/call_snv_MT'
-include { POSTPROCESS_MT_CALLS             } from './variant_calling/postprocess_MT_calls'
+include { CALL_SNV_DEEPVARIANT             } from './call_snv_deepvariant'
+include { CALL_SNV_SENTIEON                } from './call_snv_sentieon'
+include { CALL_SNV_MT                      } from './call_snv_MT'
+include { CALL_SNV_MT as CALL_SNV_MT_SHIFT } from './call_snv_MT'
+include { POSTPROCESS_MT_CALLS             } from './postprocess_MT_calls'
 include { GATK4_SELECTVARIANTS             } from '../../modules/nf-core/gatk4/selectvariants/main'
 
 workflow CALL_SNV {
