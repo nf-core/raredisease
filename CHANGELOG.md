@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - bcftools annotate declaration in annotate CADD subworkflow [#624](https://github.com/nf-core/raredisease/pull/624)
 - Rhocallviz subworkflow will only be invocated once per sample [#621](https://github.com/nf-core/raredisease/pull/621)
 - Updated createCaseChannel function to include a check for maternal and paternal ids being set to a numeric 0 [#643](https://github.com/nf-core/raredisease/pull/643)
+- Fixed issue of parsing sample sex in the configs [#659](https://github.com/nf-core/raredisease/pull/659)
 
 ### Parameters
 
