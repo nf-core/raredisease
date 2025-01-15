@@ -34,6 +34,8 @@ workflow NFCORE_RAREDISEASE {
 
     take:
     samplesheet // channel: samplesheet read in from --input
+    samples
+    case_info
 
     main:
 
@@ -41,7 +43,9 @@ workflow NFCORE_RAREDISEASE {
     // WORKFLOW: Run pipeline
     //
     RAREDISEASE (
-        samplesheet
+        samplesheet,
+        samples,
+        case_info
     )
     emit:
     multiqc_report = RAREDISEASE.out.multiqc_report // channel: /path/to/multiqc_report.html
@@ -71,7 +75,9 @@ workflow {
     // WORKFLOW: Run main workflow
     //
     NFCORE_RAREDISEASE (
-        PIPELINE_INITIALISATION.out.samplesheet
+        PIPELINE_INITIALISATION.out.samplesheet,
+        PIPELINE_INITIALISATION.out.samples,
+        PIPELINE_INITIALISATION.out.case_info
     )
     //
     // SUBWORKFLOW: Run completion tasks

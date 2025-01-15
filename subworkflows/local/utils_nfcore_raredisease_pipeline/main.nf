@@ -102,8 +102,19 @@ workflow PIPELINE_INITIALISATION {
         }
         .set { ch_samplesheet }
 
+    ch_samples   = ch_samplesheet.map { meta, fastqs ->
+                        new_id = meta.sample
+                        new_meta = meta - meta.subMap('lane', 'read_group') + [id:new_id]
+                        return new_meta
+                    }.unique()
+
+    ch_case_info = ch_samples.toList().map { createCaseChannel(it) }
+
+
     emit:
     samplesheet = ch_samplesheet
+    samples     = ch_samples
+    case_info   = ch_case_info
     versions    = ch_versions
 }
 
@@ -160,6 +171,44 @@ workflow PIPELINE_COMPLETION {
     FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+def boolean isNonZeroNonEmpty(value) {
+        return (value instanceof String && value != "" && value != "0") ||
+                (value instanceof Number && value != 0)
+    }
+
+    // Function to get a list of metadata (e.g. case id) for the case [ meta ]
+def createCaseChannel(List rows) {
+    def case_info    = [:]
+    def probands     = [] as Set
+    def upd_children = [] as Set
+    def father       = ""
+    def mother       = ""
+
+    rows.each { item ->
+        if (item?.phenotype == 2) {
+            probands << item.sample
+        }
+        if (isNonZeroNonEmpty(item?.paternal) && isNonZeroNonEmpty(item?.maternal)) {
+            upd_children << item.sample
+        }
+        if (isNonZeroNonEmpty(item?.paternal)) {
+            father = item.paternal
+        }
+        if (isNonZeroNonEmpty(item?.maternal)) {
+            mother = item.maternal
+        }
+    }
+
+    case_info.father       = father
+    case_info.mother       = mother
+    case_info.probands     = probands.toList()
+    case_info.upd_children = upd_children.toList()
+    case_info.id           = rows[0].case_id
+
+    return case_info
+}
+
 //
 // Check and validate pipeline parameters
 //
