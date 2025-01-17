@@ -447,6 +447,18 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 
 Mitochondrial analysis is run by default. If you want to turn off annotations set `--skip_mt_annotation` to true.
 
+#### Haplocheck
+
+[Haplocheck](https://github.com/genepi/haplocheck/) analyses the mitochondrial content to detect contamination in samples. The results are displayed in MultiQC.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `{outputdir}/haplocheck/`
+  - `<sampleid>.raw.txt`: haplocheck raw output. Read more about the file content [here](https://mitoverse.readthedocs.io/haplocheck/haplocheck/#textual-report-file-raw).
+
+</details>
+
 #### Alignment and variant calling
 
 [Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-) The mitochondrial genome poses several challenges to the identification and understanding of somatic variants. The circularity of the mitochondrial genome means that the breakpoint in the reference genome is at an arbitrary position in the non-coding control region, creating a challenge in analyzing variation. Additionally, insertions of mitochondrial DNA into the nuclear genome (NuMTs) complicate the mapping of the mitochondrial genome and the distinction between NuMTs and the mitochondrial contig of interest. Lastly, mitochondrial variants often have very low heteroplasmy. Such low allele fraction (AF) variants can thus be mistaken for inherent sequencer noise.

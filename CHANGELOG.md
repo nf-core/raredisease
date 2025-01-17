@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A new analysis option `mito` to call and annotate only mitochondrial variants [#608](https://github.com/nf-core/raredisease/pull/608)
 - An option to restrict analysis to specific contigs [#644](https://github.com/nf-core/raredisease/pull/644)
 - Fastp and ngsbits output files as input of MultiQC [#647](https://github.com/nf-core/raredisease/pull/647/).
+- Haplocheck output file as input of MultiQC [#662](https://github.com/nf-core/raredisease/pull/662)
 
 ### `Changed`
 
@@ -27,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - bcftools annotate declaration in annotate CADD subworkflow [#624](https://github.com/nf-core/raredisease/pull/624)
 - Rhocallviz subworkflow will only be invocated once per sample [#621](https://github.com/nf-core/raredisease/pull/621)
 - Updated createCaseChannel function to include a check for maternal and paternal ids being set to a numeric 0 [#643](https://github.com/nf-core/raredisease/pull/643)
+- Fixed issue of parsing sample sex in the configs [#659](https://github.com/nf-core/raredisease/pull/659)
+- Fixed how meta.id was set for input files, giving the resulting files clearer filenames [#661](https://github.com/nf-core/raredisease/pull/661)
 
 ### Parameters
 
