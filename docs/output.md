@@ -58,6 +58,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
       - [SVDB query](#svdb-query)
       - [VEP](#vep-1)
     - [Mitochondrial analysis](#mitochondrial-analysis)
+      - [Haplocheck](#haplocheck)
       - [Alignment and variant calling](#alignment-and-variant-calling)
         - [MT deletion script](#mt-deletion-script)
         - [eKLIPse](#eklipse)
