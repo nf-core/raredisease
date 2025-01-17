@@ -241,10 +241,6 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
   - `<sampleid>.bw`:
     </details>
 
-##### Haplocheck
-
-[Haplocheck](https://github.com/genepi/haplocheck/) analyses the mitochondrial content to detect contamination in samples. The results are displayed in MultiQC.
-
 #### Reporting
 
 ##### MultiQC
@@ -450,6 +446,18 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 ### Mitochondrial analysis
 
 Mitochondrial analysis is run by default. If you want to turn off annotations set `--skip_mt_annotation` to true.
+
+#### Haplocheck
+
+[Haplocheck](https://github.com/genepi/haplocheck/) analyses the mitochondrial content to detect contamination in samples. The results are displayed in MultiQC.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `{outputdir}/haplocheck/`
+  - `<sampleid>.raw.txt`: haplocheck raw output. Read more about the file content [here](https://mitoverse.readthedocs.io/haplocheck/haplocheck/#textual-report-file-raw).
+
+</details>
 
 #### Alignment and variant calling
 
