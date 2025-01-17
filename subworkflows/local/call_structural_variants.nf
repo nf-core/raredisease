@@ -2,12 +2,12 @@
 // A nested subworkflow to call structural variants.
 //
 
-include { CALL_SV_MANTA                  } from './variant_calling/call_sv_manta'
-include { CALL_SV_MT                     } from './variant_calling/call_sv_MT'
-include { CALL_SV_TIDDIT                 } from './variant_calling/call_sv_tiddit'
+include { CALL_SV_MANTA                  } from './call_sv_manta'
+include { CALL_SV_MT                     } from './call_sv_MT'
+include { CALL_SV_TIDDIT                 } from './call_sv_tiddit'
 include { SVDB_MERGE                     } from '../../modules/nf-core/svdb/merge/main'
-include { CALL_SV_GERMLINECNVCALLER      } from './variant_calling/call_sv_germlinecnvcaller'
-include { CALL_SV_CNVNATOR               } from './variant_calling/call_sv_cnvnator'
+include { CALL_SV_GERMLINECNVCALLER      } from './call_sv_germlinecnvcaller'
+include { CALL_SV_CNVNATOR               } from './call_sv_cnvnator'
 include { TABIX_TABIX                    } from '../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_STRUCTURAL_VARIANTS {
@@ -103,7 +103,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .combine(vcf_list)
                 .set { merge_input_vcfs }
 
-            SVDB_MERGE (merge_input_vcfs, ch_svcaller_priority)
+            SVDB_MERGE (merge_input_vcfs, ch_svcaller_priority, true)
 
             TABIX_TABIX (SVDB_MERGE.out.vcf)
             ch_merged_svs = SVDB_MERGE.out.vcf

@@ -171,7 +171,6 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 
 - `{outputdir}/qc_bam/`
   - `<sampleid>_mosdepth.global.dist.txt`: This file contains a cumulative distribution indicating the proportion of total bases that were covered for at least a given coverage value across each chromosome and the whole genome.
-  - `<sampleid>_mosdepth.per-base.d4`: This file contains a coverage for each base in the genome in d4 format.
   - `<sampleid>_mosdepth.summary.txt`: This file contains summary statistics, such as mean, minimum and maximum coverage per genomic contig.
 
 </details>
@@ -447,6 +446,18 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 ### Mitochondrial analysis
 
 Mitochondrial analysis is run by default. If you want to turn off annotations set `--skip_mt_annotation` to true.
+
+#### Haplocheck
+
+[Haplocheck](https://github.com/genepi/haplocheck/) analyses the mitochondrial content to detect contamination in samples. The results are displayed in MultiQC.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `{outputdir}/haplocheck/`
+  - `<sampleid>.raw.txt`: haplocheck raw output. Read more about the file content [here](https://mitoverse.readthedocs.io/haplocheck/haplocheck/#textual-report-file-raw).
+
+</details>
 
 #### Alignment and variant calling
 

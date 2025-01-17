@@ -109,8 +109,19 @@ workflow PIPELINE_INITIALISATION {
         }
         .set { ch_samplesheet }
 
+    ch_samples   = ch_samplesheet.map { meta, fastqs ->
+                        new_id = meta.sample
+                        new_meta = meta - meta.subMap('lane', 'read_group') + [id:new_id]
+                        return new_meta
+                    }.unique()
+
+    ch_case_info = ch_samples.toList().map { createCaseChannel(it) }
+
+
     emit:
     samplesheet = ch_samplesheet
+    samples     = ch_samples
+    case_info   = ch_case_info
     versions    = ch_versions
 }
 
@@ -133,6 +144,7 @@ workflow PIPELINE_COMPLETION {
 
     main:
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
+    def multiqc_reports = multiqc_report.toList()
 
     //
     // Completion email and summary
@@ -146,7 +158,7 @@ workflow PIPELINE_COMPLETION {
                 plaintext_email,
                 outdir,
                 monochrome_logs,
-                multiqc_report.toList()
+                multiqc_reports.getVal(),
             )
         }
 
@@ -166,6 +178,44 @@ workflow PIPELINE_COMPLETION {
     FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+def boolean isNonZeroNonEmpty(value) {
+        return (value instanceof String && value != "" && value != "0") ||
+                (value instanceof Number && value != 0)
+    }
+
+    // Function to get a list of metadata (e.g. case id) for the case [ meta ]
+def createCaseChannel(List rows) {
+    def case_info    = [:]
+    def probands     = [] as Set
+    def upd_children = [] as Set
+    def father       = ""
+    def mother       = ""
+
+    rows.each { item ->
+        if (item?.phenotype == 2) {
+            probands << item.sample
+        }
+        if (isNonZeroNonEmpty(item?.paternal) && isNonZeroNonEmpty(item?.maternal)) {
+            upd_children << item.sample
+        }
+        if (isNonZeroNonEmpty(item?.paternal)) {
+            father = item.paternal
+        }
+        if (isNonZeroNonEmpty(item?.maternal)) {
+            mother = item.maternal
+        }
+    }
+
+    case_info.father       = father
+    case_info.mother       = mother
+    case_info.probands     = probands.toList()
+    case_info.upd_children = upd_children.toList()
+    case_info.id           = rows[0].case_id
+
+    return case_info
+}
+
 //
 // Check and validate pipeline parameters
 //
@@ -308,6 +358,7 @@ def toolCitationText() {
     ]
     other_citation_text = [
         "BCFtools (Danecek et al., 2021),",
+        "BEDTools (Quinlan & Hall, 2010),",
         "GATK (McKenna et al., 2010),",
         "MultiQC (Ewels et al. 2016),",
         params.skip_peddy     ? "" : "Peddy (Pedersen & Quinlan, 2017),",
@@ -438,7 +489,8 @@ def toolBibliographyText() {
         params.run_rtgvcfeval ? "<li>Cleary, J. G., Braithwaite, R., Gaastra, K., Hilbush, B. S., Inglis, S., Irvine, S. A., Jackson, A., Littin, R., Rathod, M., Ware, D., Zook, J. M., Trigg, L., & Vega, F. M. D. L. (2015). Comparing Variant Call Files for Performance Benchmarking of Next-Generation Sequencing Variant Calling Pipelines (p. 023754). bioRxiv. https://doi.org/10.1101/023754</li>" : "",
         "<li>Li, H., Handsaker, B., Wysoker, A., Fennell, T., Ruan, J., Homer, N., Marth, G., Abecasis, G., Durbin, R., & 1000 Genome Project Data Processing Subgroup. (2009). The Sequence Alignment/Map format and SAMtools. Bioinformatics, 25(16), 2078–2079. https://doi.org/10.1093/bioinformatics/btp352</li>",
         (!params.skip_smncopynumbercaller && params.analysis_type.equals("wgs")) ? "<li>Chen, X., Sanchis-Juan, A., French, C. E., Connell, A. J., Delon, I., Kingsbury, Z., Chawla, A., Halpern, A. L., Taft, R. J., Bentley, D. R., Butchbach, M. E. R., Raymond, F. L., & Eberle, M. A. (2020). Spinal muscular atrophy diagnosis and carrier screening from genome sequencing data. Genetics in Medicine, 22(5), 945–953. https://doi.org/10.1038/s41436-020-0754-0</li>" : "",
-        "<li>Li, H. (2011). Tabix: Fast retrieval of sequence features from generic TAB-delimited files. Bioinformatics, 27(5), 718–719. https://doi.org/10.1093/bioinformatics/btq671</li>"
+        "<li>Li, H. (2011). Tabix: Fast retrieval of sequence features from generic TAB-delimited files. Bioinformatics, 27(5), 718–719. https://doi.org/10.1093/bioinformatics/btq671</li>",
+        "<li>Quinlan, AR., Hall IM. (2010). BEDTools: a flexible suite of utilities for comparing genomic features. Bioinfomatics, 26(6), 841-842. https://doi.org/10.1093/bioinformatics/btq033</li>"
     ]
 
     def concat_text = align_text +
@@ -459,7 +511,7 @@ def toolBibliographyText() {
 }
 
 def methodsDescriptionText(mqc_methods_yaml) {
-    // Convert  to a named map so can be used as with familar NXF ${workflow} variable syntax in the MultiQC YML file
+    // Convert  to a named map so can be used as with familiar NXF ${workflow} variable syntax in the MultiQC YML file
     def meta = [:]
     meta.workflow = workflow.toMap()
     meta["manifest_map"] = workflow.manifest.toMap()

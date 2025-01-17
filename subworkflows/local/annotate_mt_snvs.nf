@@ -8,7 +8,7 @@ include { TABIX_BGZIPTABIX as ZIP_TABIX_HMTNOTE_MT       } from '../../modules/n
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_MT                } from '../../modules/nf-core/ensemblvep/vep/main'
 include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT  } from '../../modules/nf-core/haplogrep2/classify/main'
 include { VCFANNO as VCFANNO_MT                          } from '../../modules/nf-core/vcfanno/main'
-include { ANNOTATE_CADD                                  } from './annotation/annotate_cadd'
+include { ANNOTATE_CADD                                  } from './annotate_cadd'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO_MT       } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { HMTNOTE_ANNOTATE                               } from '../../modules/nf-core/hmtnote/annotate/main'
 

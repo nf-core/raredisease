@@ -121,7 +121,7 @@ workflow CALL_MOBILE_ELEMENTS {
             .combine(ch_vcf_list)
             .set { ch_svdb_merge_me_input }
 
-        SVDB_MERGE_ME ( ch_svdb_merge_me_input, [] )
+        SVDB_MERGE_ME ( ch_svdb_merge_me_input, [], true )
         TABIX_ME ( SVDB_MERGE_ME.out.vcf )
 
         ch_versions = ch_versions.mix(ME_SPLIT_ALIGNMENT.out.versions).first()

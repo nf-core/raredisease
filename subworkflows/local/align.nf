@@ -3,12 +3,12 @@
 //
 
 include { FASTP                      } from '../../modules/nf-core/fastp/main'
-include { ALIGN_BWA_BWAMEM2_BWAMEME  } from './alignment/align_bwa_bwamem2_bwameme'
-include { ALIGN_SENTIEON             } from './alignment/align_sentieon'
+include { ALIGN_BWA_BWAMEM2_BWAMEME  } from './align_bwa_bwamem2_bwameme'
+include { ALIGN_SENTIEON             } from './align_sentieon'
 include { SAMTOOLS_VIEW              } from '../../modules/nf-core/samtools/view/main'
-include { ALIGN_MT                   } from './alignment/align_MT'
-include { ALIGN_MT as ALIGN_MT_SHIFT } from './alignment/align_MT'
-include { CONVERT_MT_BAM_TO_FASTQ    } from './mitochondria/convert_mt_bam_to_fastq'
+include { ALIGN_MT                   } from './align_MT'
+include { ALIGN_MT as ALIGN_MT_SHIFT } from './align_MT'
+include { CONVERT_MT_BAM_TO_FASTQ    } from './convert_mt_bam_to_fastq'
 
 workflow ALIGN {
     take:
@@ -70,7 +70,7 @@ workflow ALIGN {
             ch_bwamem2_bai = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bai
             ch_versions    = ch_versions.mix(ALIGN_BWA_BWAMEM2_BWAMEME.out.versions)
         } else if (params.aligner.equals("sentieon")) {
-            ALIGN_SENTIEON (            // Triggered when params.aligner is set as sentieon
+            ALIGN_SENTIEON (                        // Triggered when params.aligner is set as sentieon
                 ch_reads,
                 ch_genome_fasta,
                 ch_genome_fai,
