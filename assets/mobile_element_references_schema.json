@@ -1,0 +1,25 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/nf-core/raredisease/master/assets/mobile_element_references_schema.json",
+    "title": "Schema for mobile_element_references",
+    "description": "Schema for the file provided with params.mobile_element_references",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "type": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Mobile element type must be provided and cannot contain spaces"
+            },
+            "path": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+\\.bed$",
+                "errorMessage": "BED file name cannot contain spaces and must have extension '.bed'"
+            }
+        },
+        "required": ["type", "path"]
+    }
+}

@@ -1,0 +1,50 @@
+Changes in module 'nf-core/cnvnator/cnvnator'
+--- modules/nf-core/cnvnator/cnvnator/main.nf
++++ modules/nf-core/cnvnator/cnvnator/main.nf
+@@ -12,11 +12,12 @@
+     tuple val(meta2), path(root)
+     tuple val(meta3), path(fasta)
+     tuple val(meta4), path(fai)
++    val step
+ 
+     output:
+-    tuple val(output_meta), path("${prefix}.root"), emit: root
+-    tuple val(output_meta), path("${prefix}.tab") , emit: tab, optional: true
+-    path "versions.yml"                           , emit: versions
++    tuple val(output_meta), path("${output_meta.id}_${step}.root"), emit: root
++    tuple val(output_meta), path("*.tab")                         , emit: tab, optional: true
++    path "versions.yml"                                           , emit: versions
+ 
+     when:
+     task.ext.when == null || task.ext.when
+@@ -32,7 +33,11 @@
+         reference = ''
+     }
+     calls_cmd = args.contains("-call") ? "> ${prefix}.tab" : ''
++    mv_cmd    = "mv ${prefix}.root ${prefix}_${step}.root"
++    steps     = ["his", "stat", "partition", "call"]
++    cp_cmd    = steps.contains(step) ? "cp ${root} ${prefix}.root" :""
+     """
++    $cp_cmd
+     cnvnator \\
+         -root ${prefix}.root \\
+         $args \\
+@@ -40,6 +45,7 @@
+         $input_cmd \\
+         $calls_cmd
+ 
++    $mv_cmd 
+     cat <<-END_VERSIONS > versions.yml
+     "${task.process}":
+         CNVnator: \$(echo \$(cnvnator 2>&1 | sed -n '3p' | sed 's/CNVnator v//'))
+@@ -52,7 +58,7 @@
+     output_meta   = bam             ? meta                : meta2
+     def calls_cmd = args.contains("-call") ? "touch ${prefix}.tab" : ''
+     """
+-    touch ${prefix}.root
++    touch ${prefix}_${step}.root
+     $calls_cmd
+ 
+     cat <<-END_VERSIONS > versions.yml
+
+************************************************************
