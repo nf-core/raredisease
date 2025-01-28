@@ -1,16 +1,18 @@
 
 nextflow_process {
 
-    name "Test Process HAPLOGREP2_CLASSIFY"
+    name "Test Process HAPLOGREP3_CLASSIFY"
     script "../main.nf"
-    process "HAPLOGREP2_CLASSIFY"
+    process "HAPLOGREP3_CLASSIFY"
 
     tag "modules"
     tag "modules_nfcore"
-    tag "haplogrep2"
-    tag "haplogrep2/classify"
+    tag "haplogrep3"
+    tag "haplogrep3/classify"
 
-    test("test-haplogrep2-classify") {
+    test("test-haplogrep3-classify") {
+
+        config './nextflow.config'
 
         when {
             process {
@@ -19,8 +21,6 @@ nextflow_process {
 				    [ id:'test', single_end:false ], // meta map
 				    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/NA12878_chrM.vcf.gz', checkIfExists: true)
 				]
-				input[1] = 'vcf'
-
                 """
             }
         }
@@ -33,8 +33,10 @@ nextflow_process {
         }
     }
 
-    test("test-haplogrep2-classify-stub") {
+    test("test-haplogrep3-classify-stub") {
+
         options '-stub'
+
         when {
             process {
                 """
@@ -42,8 +44,6 @@ nextflow_process {
 				    [ id:'test', single_end:false ], // meta map
 				    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/NA12878_chrM.vcf.gz', checkIfExists: true)
 				]
-				input[1] = 'vcf'
-
                 """
             }
         }

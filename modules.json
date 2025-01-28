@@ -277,9 +277,9 @@
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
-                    "haplogrep2/classify": {
+                    "haplogrep3/classify": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "6af333190d76295671e4374df74513bdd7d1c596",
                         "installed_by": ["modules"]
                     },
                     "hmtnote/annotate": {

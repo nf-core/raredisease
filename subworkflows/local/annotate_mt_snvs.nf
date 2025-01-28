@@ -6,7 +6,7 @@ include { REPLACE_SPACES_IN_VCFINFO                      } from '../../modules/l
 include { TABIX_TABIX as TABIX_TABIX_VEP_MT              } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_HMTNOTE_MT       } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_MT                } from '../../modules/nf-core/ensemblvep/vep/main'
-include { HAPLOGREP2_CLASSIFY as HAPLOGREP2_CLASSIFY_MT  } from '../../modules/nf-core/haplogrep2/classify/main'
+include { HAPLOGREP3_CLASSIFY as HAPLOGREP3_CLASSIFY_MT  } from '../../modules/nf-core/haplogrep2/classify/main'
 include { VCFANNO as VCFANNO_MT                          } from '../../modules/nf-core/vcfanno/main'
 include { ANNOTATE_CADD                                  } from './annotate_cadd'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO_MT       } from '../../modules/nf-core/tabix/bgziptabix/main'
@@ -99,19 +99,19 @@ workflow ANNOTATE_MT_SNVS {
         TABIX_TABIX_VEP_MT(ENSEMBLVEP_MT.out.vcf)
 
         // Running haplogrep2
-        HAPLOGREP2_CLASSIFY_MT(ch_haplogrep_in, "vcf.gz")
+        HAPLOGREP3_CLASSIFY_MT(ch_haplogrep_in)
 
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
         ch_versions = ch_versions.mix(TABIX_TABIX_VEP_MT.out.versions)
         ch_versions = ch_versions.mix(VCFANNO_MT.out.versions)
         ch_versions = ch_versions.mix(HMTNOTE_ANNOTATE.out.versions)
-        ch_versions = ch_versions.mix(HAPLOGREP2_CLASSIFY_MT.out.versions)
+        ch_versions = ch_versions.mix(HAPLOGREP3_CLASSIFY_MT.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_VCFANNO_MT.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_HMTNOTE_MT.out.versions)
         ch_versions = ch_versions.mix(REPLACE_SPACES_IN_VCFINFO.out.versions)
 
     emit:
-        haplog    = HAPLOGREP2_CLASSIFY_MT.out.txt // channel: [ val(meta), path(txt) ]
+        haplog    = HAPLOGREP3_CLASSIFY_MT.out.txt // channel: [ val(meta), path(txt) ]
         vcf_ann   = ENSEMBLVEP_MT.out.vcf          // channel: [ val(meta), path(vcf) ]
         tbi       = TABIX_TABIX_VEP_MT.out.tbi     // channel: [ val(meta), path(tbi) ]
         report    = ENSEMBLVEP_MT.out.report       // channel: [ path(html) ]
