@@ -47,7 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | bcftools   | 1.18        | 1.20        |
 | ensemblvep | 112         | 110         |
 | genmod     | 3.8.2       | 3.9         |
-|haplogrep   | 2.4.0       | 3.2.2       |
+| haplogrep  | 2.4.0       | 3.2.2       |
 | mosdepth   | 0.3.6       | 0.3.8       |
 | multiqc    | 1.21        | 1.26        |
 | picard     | 3.1.1       | 3.3.0       |
