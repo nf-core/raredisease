@@ -2,15 +2,15 @@
 // A subworkflow to call CNVs using cnvnator
 //
 
-nextflow.enable.dsl = 2
-
-include { CNVNATOR_CNVNATOR as CNVNATOR_RD        } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
-include { CNVNATOR_CNVNATOR as CNVNATOR_HIST      } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
-include { CNVNATOR_CNVNATOR as CNVNATOR_STAT      } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
-include { CNVNATOR_CNVNATOR as CNVNATOR_PARTITION } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
-include { CNVNATOR_CNVNATOR as CNVNATOR_CALL      } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
-include { CNVNATOR_CONVERT2VCF                    } from '../../../modules/nf-core/cnvnator/convert2vcf/main.nf'
-include { SVDB_MERGE as SVDB_MERGE_CNVNATOR       } from '../../../modules/nf-core/svdb/merge/main'
+include { CNVNATOR_CNVNATOR as CNVNATOR_RD            } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
+include { CNVNATOR_CNVNATOR as CNVNATOR_HIST          } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
+include { CNVNATOR_CNVNATOR as CNVNATOR_STAT          } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
+include { CNVNATOR_CNVNATOR as CNVNATOR_PARTITION     } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
+include { CNVNATOR_CNVNATOR as CNVNATOR_CALL          } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
+include { CNVNATOR_CONVERT2VCF                        } from '../../../modules/nf-core/cnvnator/convert2vcf/main.nf'
+include { TABIX_BGZIPTABIX as INDEX_CNVNATOR          } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { BCFTOOLS_FILTER as BCFTOOLS_FILTER_CNVNATOR } from '../../../modules/nf-core/bcftools/filter/main.nf'
+include { SVDB_MERGE as SVDB_MERGE_CNVNATOR           } from '../../../modules/nf-core/svdb/merge/main'
 
 workflow CALL_SV_CNVNATOR {
     take:
@@ -27,7 +27,9 @@ workflow CALL_SV_CNVNATOR {
         CNVNATOR_STAT ( [[:],[],[]], CNVNATOR_HIST.out.root, [[:],[]], [[:],[]], "stat" )
         CNVNATOR_PARTITION ( [[:],[],[]], CNVNATOR_STAT.out.root, [[:],[]], [[:],[]], "partition" )
         CNVNATOR_CALL ( [[:],[],[]], CNVNATOR_PARTITION.out.root, [[:],[]], [[:],[]], "call" )
-        CNVNATOR_CONVERT2VCF (CNVNATOR_CALL.out.tab).vcf
+        CNVNATOR_CONVERT2VCF (CNVNATOR_CALL.out.tab)
+        INDEX_CNVNATOR (CNVNATOR_CONVERT2VCF.out.vcf)
+        BCFTOOLS_FILTER_CNVNATOR (INDEX_CNVNATOR.out.gz_tbi).vcf
             .collect{it[1]}
             .toList()
             .set { vcf_file_list }
@@ -45,6 +47,8 @@ workflow CALL_SV_CNVNATOR {
         ch_versions = ch_versions.mix(CNVNATOR_CALL.out.versions)
         ch_versions = ch_versions.mix(CNVNATOR_CONVERT2VCF.out.versions)
         ch_versions = ch_versions.mix(SVDB_MERGE_CNVNATOR.out.versions)
+        ch_versions = ch_versions.mix(INDEX_CNVNATOR.out.versions)
+        ch_versions = ch_versions.mix(BCFTOOLS_FILTER_CNVNATOR.out.versions)
 
     emit:
         vcf        = SVDB_MERGE_CNVNATOR.out.vcf  // channel: [ val(meta), path(*.tar.gz) ]
