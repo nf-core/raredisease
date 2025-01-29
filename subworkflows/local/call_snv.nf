@@ -45,6 +45,7 @@ workflow CALL_SNV {
         ch_deepvar_gtbi  = Channel.empty()
         ch_mt_vcf        = Channel.empty()
         ch_mt_tabix      = Channel.empty()
+        ch_mt_txt        = Channel.empty()
         ch_sentieon_vcf  = Channel.empty()
         ch_sentieon_tbi  = Channel.empty()
         ch_sentieon_gvcf = Channel.empty()
@@ -132,7 +133,7 @@ workflow CALL_SNV {
             )
             ch_mt_vcf   = POSTPROCESS_MT_CALLS.out.vcf
             ch_mt_tabix = POSTPROCESS_MT_CALLS.out.tbi
-            ch_mt_txt = CALL_SNV_MT.out.txt
+            ch_mt_txt   = CALL_SNV_MT.out.txt
             ch_versions = ch_versions.mix(CALL_SNV_MT.out.versions)
             ch_versions = ch_versions.mix(CALL_SNV_MT_SHIFT.out.versions)
             ch_versions = ch_versions.mix(POSTPROCESS_MT_CALLS.out.versions)
