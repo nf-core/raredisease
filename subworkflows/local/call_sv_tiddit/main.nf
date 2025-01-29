@@ -2,10 +2,10 @@
 // A structural variant caller workflow for tiddit
 //
 
-include { TIDDIT_SV                                 } from '../../../modules/nf-core/tiddit/sv/main'
-include { SVDB_MERGE as SVDB_MERGE_TIDDIT           } from '../../../modules/nf-core/svdb/merge/main'
-include { TABIX_BGZIPTABIX as INDEX_TIDDIT          } from '../../../modules/nf-core/tabix/bgziptabix/main'
-include { BCFTOOLS_FILTER as BCFTOOLS_FILTER_TIDDIT } from '../../../modules/nf-core/bcftools/filter/main.nf'
+include { TIDDIT_SV                             } from '../../../modules/nf-core/tiddit/sv/main'
+include { SVDB_MERGE as SVDB_MERGE_TIDDIT       } from '../../../modules/nf-core/svdb/merge/main'
+include { TABIX_BGZIPTABIX as INDEX_TIDDIT      } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_TIDDIT } from '../../../modules/nf-core/bcftools/view/main.nf'
 
 workflow CALL_SV_TIDDIT {
     take:
@@ -18,7 +18,7 @@ workflow CALL_SV_TIDDIT {
         TIDDIT_SV ( ch_bam_bai, ch_genome_fasta, ch_bwa_index )
 
         INDEX_TIDDIT (TIDDIT_SV.out.vcf)
-        BCFTOOLS_FILTER_TIDDIT (INDEX_TIDDIT.out.gz_tbi).vcf
+        BCFTOOLS_VIEW_TIDDIT (INDEX_TIDDIT.out.gz_tbi, [], [], []).vcf
             .collect{it[1]}
             .toList()
             .set { vcf_file_list }
@@ -32,7 +32,7 @@ workflow CALL_SV_TIDDIT {
         ch_versions = TIDDIT_SV.out.versions.first()
         ch_versions = ch_versions.mix(SVDB_MERGE_TIDDIT.out.versions)
         ch_versions = ch_versions.mix(INDEX_TIDDIT.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_FILTER_TIDDIT.out.versions)
+        ch_versions = ch_versions.mix(BCFTOOLS_VIEW_TIDDIT.out.versions)
 
     emit:
         vcf      = SVDB_MERGE_TIDDIT.out.vcf // channel: [ val(meta), path(vcf) ]
