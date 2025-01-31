@@ -18,22 +18,24 @@ process GET_CHROM_SIZES {
     task.ext.when == null || task.ext.when
 
     script:
+    def VERSION = "8.31"
     """
     cut -f 1,2 $fai > ${fai}.sizes
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        cut: \$(echo \$(cut --help 2>&1 | head -n 1 | cut -f1,2 -d' '))
+        coreutils: $VERSION
     END_VERSIONS
     """
 
     stub:
+    def VERSION = "8.31"
     """
     touch ${fai}.sizes
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        cut: \$(echo \$(cut --help 2>&1 | head -n 1 | cut -f1,2 -d' '))
+        coreutils: $VERSION
     END_VERSIONS
     """
 

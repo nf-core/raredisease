@@ -19,22 +19,24 @@ process RENAME_ALIGN_FILES {
     task.ext.when == null || task.ext.when
 
     script:
+    def VERSION = "8.31"
     """
     ln -s $input ${meta.sample}.${extension}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        ln: \$(echo \$(ln --version 2>&1 | head -n 1 | cut -d ' ' -f4))
+        coreutils: $VERSION
     END_VERSIONS
     """
 
     stub:
+    def VERSION = "8.31"
     """
     ln -s $input ${meta.sample}.${extension}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        ln: \$(echo \$(ln --version 2>&1 | head -n 1 | cut -d ' ' -f4))
+        coreutils: $VERSION
     END_VERSIONS
     """
 }

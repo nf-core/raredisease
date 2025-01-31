@@ -1,4 +1,7 @@
-Changes in module 'nf-core/hmtnote/annotate'
+Changes in component 'nf-core/hmtnote/annotate'
+'modules/nf-core/hmtnote/annotate/environment.yml' is unchanged
+'modules/nf-core/hmtnote/annotate/meta.yml' is unchanged
+Changes in 'hmtnote/annotate/main.nf':
 --- modules/nf-core/hmtnote/annotate/main.nf
 +++ modules/nf-core/hmtnote/annotate/main.nf
 @@ -11,7 +11,7 @@
@@ -10,7 +13,7 @@ Changes in module 'nf-core/hmtnote/annotate'
      path "versions.yml"           , emit: versions
  
      when:
-@@ -19,13 +19,13 @@
+@@ -19,27 +19,27 @@
  
      script:
      def args = task.ext.args ?: ''
@@ -26,7 +29,9 @@ Changes in module 'nf-core/hmtnote/annotate'
          $args
  
      cat <<-END_VERSIONS > versions.yml
-@@ -34,9 +34,9 @@
+     "${task.process}":
+-        hmtnote: \$(echo \$(hmtnote --version 2>&1) | sed 's/^.*hmtnote, version //; s/Using.*\$//' ))
++        hmtnote: \$(echo \$(hmtnote --version 2>&1) | sed 's/^.*hmtnote, version //; s/Using.*\$//' )
      END_VERSIONS
      """
      stub:
@@ -37,6 +42,10 @@ Changes in module 'nf-core/hmtnote/annotate'
 +    touch ${prefix}.vcf
      cat <<-END_VERSIONS > versions.yml
      "${task.process}":
-         hmtnote: \$(echo \$(hmtnote --version 2>&1) | sed 's/^.*hmtnote, version //; s/Using.*\$//' ))
+-        hmtnote: \$(echo \$(hmtnote --version 2>&1) | sed 's/^.*hmtnote, version //; s/Using.*\$//' ))
++        hmtnote: \$(echo \$(hmtnote --version 2>&1) | sed 's/^.*hmtnote, version //; s/Using.*\$//' )
+     END_VERSIONS
+     """
+ }
 
 ************************************************************
