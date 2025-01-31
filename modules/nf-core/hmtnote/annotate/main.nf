@@ -30,7 +30,7 @@ process HMTNOTE_ANNOTATE {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hmtnote: \$(echo \$(hmtnote --version 2>&1) | sed 's/^.*hmtnote, version //; s/Using.*\$//' ))
+        hmtnote: \$(echo \$(hmtnote --version 2>&1) | sed 's/^.*hmtnote, version //; s/Using.*\$//' )
     END_VERSIONS
     """
     stub:
@@ -39,7 +39,7 @@ process HMTNOTE_ANNOTATE {
     touch ${prefix}.vcf
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hmtnote: \$(echo \$(hmtnote --version 2>&1) | sed 's/^.*hmtnote, version //; s/Using.*\$//' ))
+        hmtnote: \$(echo \$(hmtnote --version 2>&1) | sed 's/^.*hmtnote, version //; s/Using.*\$//' )
     END_VERSIONS
     """
 }
