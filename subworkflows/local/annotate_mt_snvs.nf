@@ -31,6 +31,7 @@ workflow ANNOTATE_MT_SNVS {
 
     main:
         ch_versions = Channel.empty()
+        ch_haplog   = Channel.empty()
 
         // add prefix to meta
         ch_mt_vcf
@@ -98,22 +99,25 @@ workflow ANNOTATE_MT_SNVS {
 
         TABIX_TABIX_VEP_MT(ENSEMBLVEP_MT.out.vcf)
 
-        // Running haplogrep2
-        HAPLOGREP3_CLASSIFY_MT(ch_haplogrep_in)
+        // Running haplogrep3
+        if (!params.skip_haplogrep3) {
+            HAPLOGREP3_CLASSIFY_MT(ch_haplogrep_in)
+            ch_haplog   = HAPLOGREP3_CLASSIFY_MT.out.txt
+            ch_versions = ch_versions.mix(HAPLOGREP3_CLASSIFY_MT.out.versions)
+        }
 
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
         ch_versions = ch_versions.mix(TABIX_TABIX_VEP_MT.out.versions)
         ch_versions = ch_versions.mix(VCFANNO_MT.out.versions)
         ch_versions = ch_versions.mix(HMTNOTE_ANNOTATE.out.versions)
-        ch_versions = ch_versions.mix(HAPLOGREP3_CLASSIFY_MT.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_VCFANNO_MT.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_HMTNOTE_MT.out.versions)
         ch_versions = ch_versions.mix(REPLACE_SPACES_IN_VCFINFO.out.versions)
 
     emit:
-        haplog    = HAPLOGREP3_CLASSIFY_MT.out.txt // channel: [ val(meta), path(txt) ]
-        vcf_ann   = ENSEMBLVEP_MT.out.vcf          // channel: [ val(meta), path(vcf) ]
-        tbi       = TABIX_TABIX_VEP_MT.out.tbi     // channel: [ val(meta), path(tbi) ]
-        report    = ENSEMBLVEP_MT.out.report       // channel: [ path(html) ]
-        versions  = ch_versions                    // channel: [ path(versions.yml) ]
+        haplog    = ch_haplog                   // channel: [ val(meta), path(txt) ]
+        vcf_ann   = ENSEMBLVEP_MT.out.vcf       // channel: [ val(meta), path(vcf) ]
+        tbi       = TABIX_TABIX_VEP_MT.out.tbi  // channel: [ val(meta), path(tbi) ]
+        report    = ENSEMBLVEP_MT.out.report    // channel: [ path(html) ]
+        versions  = ch_versions                 // channel: [ path(versions.yml) ]
 }
