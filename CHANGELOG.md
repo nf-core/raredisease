@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- A new option `skip_haplogrep3` to skip haplogrep3 [#675](https://github.com/nf-core/raredisease/pull/675)
 - A new analysis option `mito` to call and annotate only mitochondrial variants [#608](https://github.com/nf-core/raredisease/pull/608)
 - An option `extract_alignments` to restrict analysis to specific contigs [#644](https://github.com/nf-core/raredisease/pull/644)
 - Fastp and ngsbits output files as input of MultiQC [#647](https://github.com/nf-core/raredisease/pull/647/).
@@ -40,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | ------------- | ------------------- |
 |               | extract_alignments  |
 |               | restrict_to_contigs |
+|               | skip_haplogrep3     |
 
 ### Tool updates
 
