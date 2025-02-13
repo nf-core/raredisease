@@ -1,0 +1,16 @@
+Changes in module 'nf-core/ensemblvep/vep'
+'modules/nf-core/ensemblvep/vep/meta.yml' is unchanged
+Changes in 'ensemblvep/vep/main.nf':
+--- modules/nf-core/ensemblvep/vep/main.nf
++++ modules/nf-core/ensemblvep/vep/main.nf
+@@ -20,7 +20,7 @@
+     tuple val(meta), path("*.vcf.gz")  , optional:true, emit: vcf
+     tuple val(meta), path("*.tab.gz")  , optional:true, emit: tab
+     tuple val(meta), path("*.json.gz") , optional:true, emit: json
+-    path "*.summary.html"              , emit: report
++    path "*.summary.html"              , optional:true, emit: report
+     path "versions.yml"                , emit: versions
+ 
+     when:
+
+************************************************************

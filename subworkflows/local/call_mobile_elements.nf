@@ -121,17 +121,17 @@ workflow CALL_MOBILE_ELEMENTS {
             .combine(ch_vcf_list)
             .set { ch_svdb_merge_me_input }
 
-        SVDB_MERGE_ME ( ch_svdb_merge_me_input, [] )
+        SVDB_MERGE_ME ( ch_svdb_merge_me_input, [], true )
         TABIX_ME ( SVDB_MERGE_ME.out.vcf )
 
-        ch_versions = ch_versions.mix(ME_SPLIT_ALIGNMENT.out.versions).first()
-        ch_versions = ch_versions.mix(ME_INDEX_SPLIT_ALIGNMENT.out.versions).first()
-        ch_versions = ch_versions.mix(RETROSEQ_DISCOVER.out.versions).first()
-        ch_versions = ch_versions.mix(RETROSEQ_CALL.out.versions).first()
-        ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_ME.out.versions).first()
-        ch_versions = ch_versions.mix(BCFTOOLS_SORT_ME.out.versions).first()
-        ch_versions = ch_versions.mix(TABIX_ME_SPLIT.out.versions).first()
-        ch_versions = ch_versions.mix(BCFTOOLS_CONCAT_ME.out.versions).first()
+        ch_versions = ch_versions.mix(ME_SPLIT_ALIGNMENT.out.versions.first())
+        ch_versions = ch_versions.mix(ME_INDEX_SPLIT_ALIGNMENT.out.versions.first())
+        ch_versions = ch_versions.mix(RETROSEQ_DISCOVER.out.versions.first())
+        ch_versions = ch_versions.mix(RETROSEQ_CALL.out.versions.first())
+        ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_ME.out.versions.first())
+        ch_versions = ch_versions.mix(BCFTOOLS_SORT_ME.out.versions.first())
+        ch_versions = ch_versions.mix(TABIX_ME_SPLIT.out.versions.first())
+        ch_versions = ch_versions.mix(BCFTOOLS_CONCAT_ME.out.versions.first())
         ch_versions = ch_versions.mix(SVDB_MERGE_ME.out.versions)
         ch_versions = ch_versions.mix(TABIX_ME.out.versions)
 

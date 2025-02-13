@@ -8,29 +8,25 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { UTILS_NFVALIDATION_PLUGIN } from '../../nf-core/utils_nfvalidation_plugin'
-include { paramsSummaryMap          } from 'plugin/nf-validation'
-include { fromSamplesheet           } from 'plugin/nf-validation'
-include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
+include { UTILS_NFSCHEMA_PLUGIN     } from '../../nf-core/utils_nfschema_plugin'
+include { paramsSummaryMap          } from 'plugin/nf-schema'
+include { samplesheetToList         } from 'plugin/nf-schema'
 include { completionEmail           } from '../../nf-core/utils_nfcore_pipeline'
 include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
-include { dashedLine                } from '../../nf-core/utils_nfcore_pipeline'
-include { nfCoreLogo                } from '../../nf-core/utils_nfcore_pipeline'
 include { imNotification            } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
-include { workflowCitation          } from '../../nf-core/utils_nfcore_pipeline'
+include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
 
 /*
-========================================================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     SUBWORKFLOW TO INITIALISE PIPELINE
-========================================================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
 workflow PIPELINE_INITIALISATION {
 
     take:
     version           // boolean: Display version and exit
-    help              // boolean: Display help text
     validate_params   // boolean: Boolean whether to validate parameters against the schema at runtime
     monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
@@ -54,16 +50,10 @@ workflow PIPELINE_INITIALISATION {
     //
     // Validate parameters and generate parameter summary to stdout
     //
-    pre_help_text = nfCoreLogo(monochrome_logs)
-    post_help_text = '\n' + workflowCitation() + '\n' + dashedLine(monochrome_logs)
-    def String workflow_command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
-    UTILS_NFVALIDATION_PLUGIN (
-        help,
-        workflow_command,
-        pre_help_text,
-        post_help_text,
+    UTILS_NFSCHEMA_PLUGIN (
+        workflow,
         validate_params,
-        "nextflow_schema.json"
+        null
     )
 
     //
@@ -72,6 +62,7 @@ workflow PIPELINE_INITIALISATION {
     UTILS_NFCORE_PIPELINE (
         nextflow_cli_args
     )
+
     //
     // Custom validation for pipeline parameters
     //
@@ -80,7 +71,8 @@ workflow PIPELINE_INITIALISATION {
     //
     // Create channel from input file provided through params.input
     //
-    Channel.fromSamplesheet("input")
+    Channel
+        .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .tap { ch_original_input }
         .map { meta, fastq1, fastq2 -> meta.id }
         .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
@@ -105,20 +97,31 @@ workflow PIPELINE_INITIALISATION {
         }
         .combine( ch_input_counts )
         .map { lineno, meta, fastqs -> //append line number to sampleid
-            new_meta = meta + [id:meta.id+"_T"+lineno[fastqs]]
+            new_meta = meta + [id:meta.id+"_LNUMBER"+lineno[fastqs]]
             return [ new_meta, fastqs ]
         }
         .set { ch_samplesheet }
 
+    ch_samples   = ch_samplesheet.map { meta, fastqs ->
+                        new_id = meta.sample
+                        new_meta = meta - meta.subMap('lane', 'read_group') + [id:new_id]
+                        return new_meta
+                    }.unique()
+
+    ch_case_info = ch_samples.toList().map { createCaseChannel(it) }
+
+
     emit:
     samplesheet = ch_samplesheet
+    samples     = ch_samples
+    case_info   = ch_case_info
     versions    = ch_versions
 }
 
 /*
-========================================================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     SUBWORKFLOW FOR PIPELINE COMPLETION
-========================================================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
 workflow PIPELINE_COMPLETION {
@@ -133,19 +136,26 @@ workflow PIPELINE_COMPLETION {
     multiqc_report  //  string: Path to MultiQC report
 
     main:
-
     summary_params = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
+    def multiqc_reports = multiqc_report.toList()
 
     //
     // Completion email and summary
     //
     workflow.onComplete {
         if (email || email_on_fail) {
-            completionEmail(summary_params, email, email_on_fail, plaintext_email, outdir, monochrome_logs, multiqc_report.toList())
+            completionEmail(
+                summary_params,
+                email,
+                email_on_fail,
+                plaintext_email,
+                outdir,
+                monochrome_logs,
+                multiqc_reports.getVal(),
+            )
         }
 
         completionSummary(monochrome_logs)
-
         if (hook_url) {
             imNotification(summary_params, hook_url)
         }
@@ -157,10 +167,48 @@ workflow PIPELINE_COMPLETION {
 }
 
 /*
-========================================================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     FUNCTIONS
-========================================================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+def boolean isNonZeroNonEmpty(value) {
+        return (value instanceof String && value != "" && value != "0") ||
+                (value instanceof Number && value != 0)
+    }
+
+    // Function to get a list of metadata (e.g. case id) for the case [ meta ]
+def createCaseChannel(List rows) {
+    def case_info    = [:]
+    def probands     = [] as Set
+    def upd_children = [] as Set
+    def father       = ""
+    def mother       = ""
+
+    rows.each { item ->
+        if (item?.phenotype == 2) {
+            probands << item.sample
+        }
+        if (isNonZeroNonEmpty(item?.paternal) && isNonZeroNonEmpty(item?.maternal)) {
+            upd_children << item.sample
+        }
+        if (isNonZeroNonEmpty(item?.paternal)) {
+            father = item.paternal
+        }
+        if (isNonZeroNonEmpty(item?.maternal)) {
+            mother = item.maternal
+        }
+    }
+
+    case_info.father       = father
+    case_info.mother       = mother
+    case_info.probands     = probands.toList()
+    case_info.upd_children = upd_children.toList()
+    case_info.id           = rows[0].case_id
+
+    return case_info
+}
+
 //
 // Check and validate pipeline parameters
 //
@@ -175,12 +223,24 @@ def validateInputSamplesheet(input) {
     def (metas, fastqs) = input[1..2]
 
     // Check that multiple runs of the same sample are of the same datatype i.e. single-end / paired-end
-    def endedness_ok = metas.collect{ it.single_end }.unique().size == 1
+    def endedness_ok = metas.collect{ meta -> meta.single_end }.unique().size == 1
     if (!endedness_ok) {
         error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
     }
 
     return [ metas[0], fastqs ]
+}
+
+//
+// Get attribute from genome config file e.g. fasta
+//
+def getGenomeAttribute(attribute) {
+    if (params.genomes && params.genome && params.genomes.containsKey(params.genome)) {
+        if (params.genomes[ params.genome ].containsKey(attribute)) {
+            return params.genomes[ params.genome ][ attribute ]
+        }
+    }
+    return null
 }
 
 //
@@ -196,7 +256,6 @@ def genomeExistsError() {
         error(error_string)
     }
 }
-
 //
 // Generate methods description for MultiQC
 //
@@ -292,6 +351,7 @@ def toolCitationText() {
     ]
     other_citation_text = [
         "BCFtools (Danecek et al., 2021),",
+        "BEDTools (Quinlan & Hall, 2010),",
         "GATK (McKenna et al., 2010),",
         "MultiQC (Ewels et al. 2016),",
         params.skip_peddy     ? "" : "Peddy (Pedersen & Quinlan, 2017),",
@@ -335,11 +395,11 @@ def toolBibliographyText() {
     def other_citation_text  = []
 
     align_text = [
-        params.aligner.equals("bwa") ? "<li>Li, H. (2013). Aligning sequence reads, clone sequences and assembly contigs with BWA-MEM (arXiv:1303.3997). arXiv. http://arxiv.org/abs/1303.3997</li>" :"",
-        params.aligner.equals("bwamem2") ? "<li>Vasimuddin, Md., Misra, S., Li, H., & Aluru, S. (2019). Efficient Architecture-Aware Acceleration of BWA-MEM for Multicore Systems. 2019 IEEE International Parallel and Distributed Processing Symposium (IPDPS), 314–324. https://doi.org/10.1109/IPDPS.2019.00041</li>" : "",
+        params.aligner.equals("bwa") || params.mt_aligner.equals("bwa") ? "<li>Li, H. (2013). Aligning sequence reads, clone sequences and assembly contigs with BWA-MEM (arXiv:1303.3997). arXiv. http://arxiv.org/abs/1303.3997</li>" :"",
+        params.aligner.equals("bwamem2") || params.mt_aligner.equals("bwamem2") ? "<li>Vasimuddin, Md., Misra, S., Li, H., & Aluru, S. (2019). Efficient Architecture-Aware Acceleration of BWA-MEM for Multicore Systems. 2019 IEEE International Parallel and Distributed Processing Symposium (IPDPS), 314–324. https://doi.org/10.1109/IPDPS.2019.00041</li>" : "",
         params.aligner.equals("bwameme") ? "<li>Jung Y, Han D. BWA-MEME: BWA-MEM emulated with a machine learning approach. Bioinformatics. 2022;38(9):2404-2413. doi:10.1093/bioinformatics/btac137</li>" : "",
-        params.aligner.equals("sentieon") ? "<li>Kendig, K. I., Baheti, S., Bockol, M. A., Drucker, T. M., Hart, S. N., Heldenbrand, J. R., Hernaez, M., Hudson, M. E., Kalmbach, M. T., Klee, E. W., Mattson, N. R., Ross, C. A., Taschuk, M., Wieben, E. D., Wiepert, M., Wildman, D. E., & Mainzer, L. S. (2019). Sentieon DNASeq Variant Calling Workflow Demonstrates Strong Computational Performance and Accuracy. Frontiers in Genetics, 10, 736. https://doi.org/10.3389/fgene.2019.00736</li>" : "",
-        params.aligner.equals("sentieon") ? "<li>Freed, D., Aldana, R., Weber, J. A., & Edwards, J. S. (2017). The Sentieon Genomics Tools—A fast and accurate solution to variant calling from next-generation sequence data (p. 115717). bioRxiv. https://doi.org/10.1101/115717</li>" : ""
+        params.aligner.equals("sentieon") || params.mt_aligner.equals("sentieon") ? "<li>Kendig, K. I., Baheti, S., Bockol, M. A., Drucker, T. M., Hart, S. N., Heldenbrand, J. R., Hernaez, M., Hudson, M. E., Kalmbach, M. T., Klee, E. W., Mattson, N. R., Ross, C. A., Taschuk, M., Wieben, E. D., Wiepert, M., Wildman, D. E., & Mainzer, L. S. (2019). Sentieon DNASeq Variant Calling Workflow Demonstrates Strong Computational Performance and Accuracy. Frontiers in Genetics, 10, 736. https://doi.org/10.3389/fgene.2019.00736</li>" : "",
+        params.aligner.equals("sentieon") || params.mt_aligner.equals("sentieon")? "<li>Freed, D., Aldana, R., Weber, J. A., & Edwards, J. S. (2017). The Sentieon Genomics Tools—A fast and accurate solution to variant calling from next-generation sequence data (p. 115717). bioRxiv. https://doi.org/10.1101/115717</li>" : ""
     ]
     repeats_text = [
         (!params.skip_repeat_calling && params.analysis_type.equals("wgs") )    ? "<li>Dolzhenko, E., Deshpande, V., Schlesinger, F., Krusche, P., Petrovski, R., Chen, S., Emig-Agius, D., Gross, A., Narzisi, G., Bowman, B., Scheffler, K., van Vugt, J. J. F. A., French, C., Sanchis-Juan, A., Ibáñez, K., Tucci, A., Lajoie, B. R., Veldink, J. H., Raymond, F. L., … Eberle, M. A. (2019). ExpansionHunter: A sequence-graph-based tool to analyze variation in short tandem repeat regions. Bioinformatics, 35(22), 4754–4756. https://doi.org/10.1093/bioinformatics/btz431</li>" : "",
@@ -422,7 +482,8 @@ def toolBibliographyText() {
         params.run_rtgvcfeval ? "<li>Cleary, J. G., Braithwaite, R., Gaastra, K., Hilbush, B. S., Inglis, S., Irvine, S. A., Jackson, A., Littin, R., Rathod, M., Ware, D., Zook, J. M., Trigg, L., & Vega, F. M. D. L. (2015). Comparing Variant Call Files for Performance Benchmarking of Next-Generation Sequencing Variant Calling Pipelines (p. 023754). bioRxiv. https://doi.org/10.1101/023754</li>" : "",
         "<li>Li, H., Handsaker, B., Wysoker, A., Fennell, T., Ruan, J., Homer, N., Marth, G., Abecasis, G., Durbin, R., & 1000 Genome Project Data Processing Subgroup. (2009). The Sequence Alignment/Map format and SAMtools. Bioinformatics, 25(16), 2078–2079. https://doi.org/10.1093/bioinformatics/btp352</li>",
         (!params.skip_smncopynumbercaller && params.analysis_type.equals("wgs")) ? "<li>Chen, X., Sanchis-Juan, A., French, C. E., Connell, A. J., Delon, I., Kingsbury, Z., Chawla, A., Halpern, A. L., Taft, R. J., Bentley, D. R., Butchbach, M. E. R., Raymond, F. L., & Eberle, M. A. (2020). Spinal muscular atrophy diagnosis and carrier screening from genome sequencing data. Genetics in Medicine, 22(5), 945–953. https://doi.org/10.1038/s41436-020-0754-0</li>" : "",
-        "<li>Li, H. (2011). Tabix: Fast retrieval of sequence features from generic TAB-delimited files. Bioinformatics, 27(5), 718–719. https://doi.org/10.1093/bioinformatics/btq671</li>"
+        "<li>Li, H. (2011). Tabix: Fast retrieval of sequence features from generic TAB-delimited files. Bioinformatics, 27(5), 718–719. https://doi.org/10.1093/bioinformatics/btq671</li>",
+        "<li>Quinlan, AR., Hall IM. (2010). BEDTools: a flexible suite of utilities for comparing genomic features. Bioinfomatics, 26(6), 841-842. https://doi.org/10.1093/bioinformatics/btq033</li>"
     ]
 
     def concat_text = align_text +
@@ -443,7 +504,7 @@ def toolBibliographyText() {
 }
 
 def methodsDescriptionText(mqc_methods_yaml) {
-    // Convert  to a named map so can be used as with familar NXF ${workflow} variable syntax in the MultiQC YML file
+    // Convert  to a named map so can be used as with familiar NXF ${workflow} variable syntax in the MultiQC YML file
     def meta = [:]
     meta.workflow = workflow.toMap()
     meta["manifest_map"] = workflow.manifest.toMap()
@@ -454,8 +515,10 @@ def methodsDescriptionText(mqc_methods_yaml) {
         // Removing `https://doi.org/` to handle pipelines using DOIs vs DOI resolvers
         // Removing ` ` since the manifest.doi is a string and not a proper list
         def temp_doi_ref = ""
-        String[] manifest_doi = meta.manifest_map.doi.tokenize(",")
-        for (String doi_ref: manifest_doi) temp_doi_ref += "(doi: <a href=\'https://doi.org/${doi_ref.replace("https://doi.org/", "").replace(" ", "")}\'>${doi_ref.replace("https://doi.org/", "").replace(" ", "")}</a>), "
+        def manifest_doi = meta.manifest_map.doi.tokenize(",")
+        manifest_doi.each { doi_ref ->
+            temp_doi_ref += "(doi: <a href=\'https://doi.org/${doi_ref.replace("https://doi.org/", "").replace(" ", "")}\'>${doi_ref.replace("https://doi.org/", "").replace(" ", "")}</a>), "
+        }
         meta["doi_text"] = temp_doi_ref.substring(0, temp_doi_ref.length() - 2)
     } else meta["doi_text"] = ""
     meta["nodoi_text"] = meta.manifest_map.doi ? "" : "<li>If available, make sure to update the text to include the Zenodo DOI of version of the pipeline used. </li>"
@@ -472,3 +535,4 @@ def methodsDescriptionText(mqc_methods_yaml) {
 
     return description_html.toString()
 }
+

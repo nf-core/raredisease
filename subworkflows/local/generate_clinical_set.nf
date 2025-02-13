@@ -5,11 +5,13 @@
 include { ENSEMBLVEP_FILTERVEP } from '../../modules/nf-core/ensemblvep/filtervep'
 include { TABIX_BGZIP          } from '../../modules/nf-core/tabix/bgzip'
 include { TABIX_TABIX          } from '../../modules/nf-core/tabix/tabix'
+include { BCFTOOLS_FILTER      } from '../../modules/nf-core/bcftools/filter'
 
 workflow GENERATE_CLINICAL_SET {
     take:
         ch_vcf      // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_hgnc_ids // channel: [mandatory] [ val(hgnc_ids) ]
+        val_ismt    // value: if mitochondria, set to true
 
     main:
         ch_versions = Channel.empty()
@@ -28,16 +30,23 @@ workflow GENERATE_CLINICAL_SET {
         .output
         .set { ch_filtervep_out }
 
-        TABIX_BGZIP( ch_filtervep_out )
+        if (val_ismt) {
+            BCFTOOLS_FILTER (ch_filtervep_out.map { meta, vcf -> return [meta, vcf, []]})
+            ch_clinical = BCFTOOLS_FILTER.out.vcf
+            ch_versions = ch_versions.mix( BCFTOOLS_FILTER.out.versions )
+        } else {
+            TABIX_BGZIP( ch_filtervep_out )
+            ch_clinical = TABIX_BGZIP.out.output
+            ch_versions = ch_versions.mix( TABIX_BGZIP.out.versions )
+        }
 
         ch_clin_research_vcf.research
-            .mix( TABIX_BGZIP.out.output )
+            .mix( ch_clinical )
             .set { ch_clin_research_split }
 
         TABIX_TABIX( ch_clin_research_split )
 
         ch_versions = ch_versions.mix( ENSEMBLVEP_FILTERVEP.out.versions )
-        ch_versions = ch_versions.mix( TABIX_BGZIP.out.versions )
         ch_versions = ch_versions.mix( TABIX_TABIX.out.versions )
 
     emit:

@@ -3,11 +3,10 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
-include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet } from 'plugin/nf-validation'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { paramsSummaryMap;samplesheetToList } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc               } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML             } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText             } from '../subworkflows/local/utils_nfcore_raredisease_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -128,10 +127,10 @@ include { SMNCOPYNUMBERCALLER } from '../modules/nf-core/smncopynumbercaller/mai
 // MODULE: Local modules
 //
 
-include { RENAME_ALIGN_FILES as RENAME_BAM_FOR_SMNCALLER } from '../modules/local/rename_align_files'
-include { RENAME_ALIGN_FILES as RENAME_BAI_FOR_SMNCALLER } from '../modules/local/rename_align_files'
-include { CREATE_HGNCIDS_FILE                            } from '../modules/local/create_hgncids_file'
-include { CREATE_PEDIGREE_FILE                           } from '../modules/local/create_pedigree_file'
+include { RENAME_ALIGN_FILES as RENAME_BAM } from '../modules/local/rename_align_files'
+include { RENAME_ALIGN_FILES as RENAME_BAI } from '../modules/local/rename_align_files'
+include { CREATE_HGNCIDS_FILE              } from '../modules/local/create_hgncids_file'
+include { CREATE_PEDIGREE_FILE             } from '../modules/local/create_pedigree_file'
 
 //
 // SUBWORKFLOWS
@@ -176,30 +175,29 @@ workflow RAREDISEASE {
 
     take:
     ch_samplesheet // channel: samplesheet read in from --input
+    ch_samples
+    ch_case_info
 
     main:
 
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
-    ch_samples   = ch_samplesheet.map { meta, fastqs -> meta}
-    ch_case_info = ch_samples.toList().map { CustomFunctions.createCaseChannel(it) }
-
     //
     // Initialize file channels for PREPARE_REFERENCES subworkflow
     //
-    ch_genome_fasta              = Channel.fromPath(params.fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
-    ch_genome_fai                = params.fai                 ? Channel.fromPath(params.fai).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_genome_fasta              = Channel.fromPath(params.fasta).map { it -> [[id:it.simpleName], it] }.collect()
+    ch_genome_fai                = params.fai                 ? Channel.fromPath(params.fai).map {it -> [[id:it.simpleName], it]}.collect()
                                                                 : Channel.empty()
-    ch_genome_dictionary         = params.sequence_dictionary ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_genome_dictionary         = params.sequence_dictionary ? Channel.fromPath(params.sequence_dictionary).map {it -> [[id:it.simpleName], it]}.collect()
                                                                 : Channel.empty()
-    ch_gnomad_af_tab             = params.gnomad_af           ? Channel.fromPath(params.gnomad_af).map{ it -> [[id:it[0].simpleName], it] }.collect()
+    ch_gnomad_af_tab             = params.gnomad_af           ? Channel.fromPath(params.gnomad_af).map{ it -> [[id:it.simpleName], it] }.collect()
                                                                 : Channel.value([[],[]])
-    ch_dbsnp                     = params.known_dbsnp         ? Channel.fromPath(params.known_dbsnp).map{ it -> [[id:it[0].simpleName], it] }.collect()
+    ch_dbsnp                     = params.known_dbsnp         ? Channel.fromPath(params.known_dbsnp).map{ it -> [[id:it.simpleName], it] }.collect()
                                                                 : Channel.value([[],[]])
-    ch_mt_fasta                  = params.mt_fasta            ? Channel.fromPath(params.mt_fasta).map { it -> [[id:it[0].simpleName], it] }.collect()
+    ch_mt_fasta                  = params.mt_fasta            ? Channel.fromPath(params.mt_fasta).map { it -> [[id:it.simpleName], it] }.collect()
                                                                 : Channel.empty()
-    ch_target_bed_unprocessed    = params.target_bed          ? Channel.fromPath(params.target_bed).map{ it -> [[id:it[0].simpleName], it] }.collect()
+    ch_target_bed_unprocessed    = params.target_bed          ? Channel.fromPath(params.target_bed).map{ it -> [[id:it.simpleName], it] }.collect()
                                                                 : Channel.value([[],[]])
     ch_vcfanno_extra_unprocessed = params.vcfanno_extra_resources ? Channel.fromPath(params.vcfanno_extra_resources).map { it -> [[id:it.baseName], it] }.collect()
                                                                 : Channel.empty()
@@ -229,9 +227,9 @@ workflow RAREDISEASE {
     ch_cadd_header              = Channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_cadd_resources           = params.cadd_resources                     ? Channel.fromPath(params.cadd_resources).collect()
                                                                             : Channel.value([])
-    ch_call_interval            = params.call_interval                      ? Channel.fromPath(params.call_interval).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_call_interval            = params.call_interval                      ? Channel.fromPath(params.call_interval).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : Channel.value([[:],[]])
-    ch_dbsnp_tbi                = params.known_dbsnp_tbi                    ? Channel.fromPath(params.known_dbsnp_tbi).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_dbsnp_tbi                = params.known_dbsnp_tbi                    ? Channel.fromPath(params.known_dbsnp_tbi).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : ch_references.known_dbsnp_tbi.ifEmpty([[],[]])
     ch_foundin_header           = Channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
     ch_gcnvcaller_model         = params.gcnvcaller_model                   ? Channel.fromPath(params.gcnvcaller_model).splitCsv ( header:true )
@@ -239,11 +237,11 @@ workflow RAREDISEASE {
                                                                                 return [[id:file(row.models).simpleName], row.models]
                                                                             }
                                                                             : Channel.empty()
-    ch_genome_bwaindex          = params.bwa                                ? Channel.fromPath(params.bwa).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_genome_bwaindex          = params.bwa                                ? Channel.fromPath(params.bwa).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : ch_references.genome_bwa_index
-    ch_genome_bwamem2index      = params.bwamem2                            ? Channel.fromPath(params.bwamem2).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_genome_bwamem2index      = params.bwamem2                            ? Channel.fromPath(params.bwamem2).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : ch_references.genome_bwamem2_index
-    ch_genome_bwamemeindex      = params.bwameme                            ? Channel.fromPath(params.bwameme).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_genome_bwamemeindex      = params.bwameme                            ? Channel.fromPath(params.bwameme).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : ch_references.genome_bwameme_index
     ch_genome_chrsizes          = ch_references.genome_chrom_sizes
     ch_genome_fai               = ch_references.genome_fai
@@ -252,9 +250,9 @@ workflow RAREDISEASE {
                                                                             : Channel.empty()
     ch_gens_interval_list       = params.gens_interval_list                 ? Channel.fromPath(params.gens_interval_list).collect()
                                                                             : Channel.empty()
-    ch_gens_pon_female          = params.gens_pon_female                    ? Channel.fromPath(params.gens_pon_female).map { it -> [ [id:it[0].simpleName], it ] }.collect()
+    ch_gens_pon_female          = params.gens_pon_female                    ? Channel.fromPath(params.gens_pon_female).map { it -> [ [id:it.simpleName], it ] }.collect()
                                                                             : Channel.empty()
-    ch_gens_pon_male            = params.gens_pon_male                      ? Channel.fromPath(params.gens_pon_male).map { it -> [ [id:it[0].simpleName], it ] }.collect()
+    ch_gens_pon_male            = params.gens_pon_male                      ? Channel.fromPath(params.gens_pon_male).map { it -> [ [id:it.simpleName], it ] }.collect()
                                                                             : Channel.empty()
     ch_gnomad_afidx             = params.gnomad_af_idx                      ? Channel.fromPath(params.gnomad_af_idx).collect()
                                                                             : ch_references.gnomad_af_idx
@@ -264,13 +262,18 @@ workflow RAREDISEASE {
                                                                             : Channel.empty()
     ch_intervals_y              = params.intervals_y                        ? Channel.fromPath(params.intervals_y).collect()
                                                                             : Channel.empty()
-    ch_me_references            = params.mobile_element_references          ? Channel.fromSamplesheet("mobile_element_references")
+    ch_me_references            = params.mobile_element_references          ? Channel.fromList(samplesheetToList(params.mobile_element_references, "${projectDir}/assets/mobile_element_references_schema.json"))
                                                                             : Channel.empty()
     ch_me_svdb_resources        = params.mobile_element_svdb_annotations    ? Channel.fromPath(params.mobile_element_svdb_annotations)
                                                                             : Channel.empty()
-    ch_ml_model                 = params.variant_caller.equals("sentieon")  ? Channel.fromPath(params.ml_model).map {it -> [[id:it[0].simpleName], it]}.collect()
+    ch_ml_model                 = params.variant_caller.equals("sentieon")  ? Channel.fromPath(params.ml_model).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : Channel.value([[:],[]])
     ch_mt_intervals             = ch_references.mt_intervals
+    ch_mt_bwaindex              = ch_references.mt_bwa_index
+    ch_mt_bwamem2index          = ch_references.mt_bwamem2_index
+    ch_mt_dictionary            = ch_references.mt_dict
+    ch_mt_fai                   = ch_references.mt_fai
+    ch_mt_fasta                 = ch_references.mt_fasta
     ch_mtshift_backchain        = ch_references.mtshift_backchain
     ch_mtshift_bwaindex         = ch_references.mtshift_bwa_index
     ch_mtshift_bwamem2index     = ch_references.mtshift_bwamem2_index
@@ -280,7 +283,7 @@ workflow RAREDISEASE {
     ch_mtshift_intervals        = ch_references.mtshift_intervals
     ch_par_bed                  = params.par_bed                            ? Channel.fromPath(params.par_bed).map{ it -> [[id:'par_bed'], it] }.collect()
                                                                             : Channel.value([[],[]])
-    ch_ploidy_model             = params.ploidy_model                       ? Channel.fromPath(params.ploidy_model).map{ it -> [[id:it[0].simpleName], it] }.collect()
+    ch_ploidy_model             = params.ploidy_model                       ? Channel.fromPath(params.ploidy_model).map{ it -> [[id:it.simpleName], it] }.collect()
                                                                             : Channel.empty()
     ch_readcount_intervals      = params.readcount_intervals                ? Channel.fromPath(params.readcount_intervals).collect()
                                                                             : Channel.empty()
@@ -288,7 +291,7 @@ workflow RAREDISEASE {
                                                                             : Channel.value([])
     ch_rtg_truthvcfs            = params.rtg_truthvcfs                      ? Channel.fromPath(params.rtg_truthvcfs).collect()
                                                                             : Channel.value([])
-    ch_sample_id_map            = params.sample_id_map                      ? Channel.fromSamplesheet("sample_id_map")
+    ch_sample_id_map            = params.sample_id_map                      ? Channel.fromList(samplesheetToList(params.sample_id_map, "${projectDir}/assets/sample_id_map.json"))
                                                                             : Channel.empty()
     ch_score_config_mt          = params.score_config_mt                    ? Channel.fromPath(params.score_config_mt).collect()
                                                                             : Channel.value([])
@@ -296,7 +299,7 @@ workflow RAREDISEASE {
                                                                             : Channel.value([])
     ch_score_config_sv          = params.score_config_sv                    ? Channel.fromPath(params.score_config_sv).collect()
                                                                             : Channel.value([])
-    ch_sdf                      = params.sdf                                ? Channel.fromPath(params.sdf).map{it -> [[id:it[0].simpleName],it]}.collect()
+    ch_sdf                      = params.sdf                                ? Channel.fromPath(params.sdf).map{it -> [[id:it.simpleName],it]}.collect()
                                                                             : ch_references.sdf
     ch_sv_dbs                   = params.svdb_query_dbs                     ? Channel.fromPath(params.svdb_query_dbs)
                                                                             : Channel.empty()
@@ -304,7 +307,7 @@ workflow RAREDISEASE {
                                                                             : Channel.empty()
     ch_target_bed               = ch_references.target_bed
     ch_target_intervals         = ch_references.target_intervals
-    ch_variant_catalog          = params.variant_catalog                    ? Channel.fromPath(params.variant_catalog).map { it -> [[id:it[0].simpleName],it]}.collect()
+    ch_variant_catalog          = params.variant_catalog                    ? Channel.fromPath(params.variant_catalog).map { it -> [[id:it.simpleName],it]}.collect()
                                                                             : Channel.value([[],[]])
     ch_variant_consequences_snv = params.variant_consequences_snv           ? Channel.fromPath(params.variant_consequences_snv).collect()
                                                                             : Channel.value([])
@@ -412,11 +415,16 @@ workflow RAREDISEASE {
         ch_genome_bwamem2index,
         ch_genome_bwamemeindex,
         ch_genome_dictionary,
+        ch_mt_bwaindex,
+        ch_mt_bwamem2index,
+        ch_mt_dictionary,
+        ch_mt_fai,
+        ch_mt_fasta,
         ch_mtshift_bwaindex,
         ch_mtshift_bwamem2index,
-        ch_mtshift_fasta,
         ch_mtshift_dictionary,
         ch_mtshift_fai,
+        ch_mtshift_fasta,
         params.mbuffer_mem,
         params.platform,
         params.samtools_sort_threads
@@ -451,6 +459,20 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions)
 
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    RENAME ALIGNMENT FILES FOR SMNCOPYNUMBERCALLER & REPEATCALLING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+    if ( params.analysis_type.equals("wgs") && (!params.skip_smncopynumbercaller || !params.skip_repeat_calling)) {
+        RENAME_BAM(ch_mapped.genome_marked_bam, "bam")
+        RENAME_BAI(ch_mapped.genome_marked_bai, "bam.bai")
+        ch_versions = ch_versions.mix(RENAME_BAM.out.versions)
+        ch_versions = ch_versions.mix(RENAME_BAI.out.versions)
+    }
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CALL AND ANNOTATE REPEAT EXPANSIONS
@@ -459,7 +481,7 @@ workflow RAREDISEASE {
 
     if (!params.skip_repeat_calling && params.analysis_type.equals("wgs") ) {
         CALL_REPEAT_EXPANSIONS (
-            ch_mapped.genome_bam_bai,
+            RENAME_BAM.out.output.join(RENAME_BAI.out.output, failOnMismatch:true, failOnDuplicate:true),
             ch_variant_catalog,
             ch_case_info,
             ch_genome_fasta,
@@ -493,14 +515,18 @@ workflow RAREDISEASE {
             ch_genome_fai,
             ch_genome_dictionary,
             ch_mt_intervals,
-            ch_mtshift_fasta,
-            ch_mtshift_fai,
+            ch_mt_dictionary,
+            ch_mt_fai,
+            ch_mt_fasta,
             ch_mtshift_dictionary,
+            ch_mtshift_fai,
+            ch_mtshift_fasta,
             ch_mtshift_intervals,
             ch_mtshift_backchain,
             ch_dbsnp,
             ch_dbsnp_tbi,
             ch_call_interval,
+            ch_target_bed,
             ch_ml_model,
             ch_par_bed,
             ch_case_info,
@@ -537,7 +563,8 @@ workflow RAREDISEASE {
 
             GENERATE_CLINICAL_SET_SNV(
                 ch_snv_annotate.vcf_ann,
-                ch_hgnc_ids
+                ch_hgnc_ids,
+                false
             )
             ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SNV.out.versions)
 
@@ -568,7 +595,7 @@ workflow RAREDISEASE {
         //
         // ANNOTATE MT SNVs
         //
-        if (!params.skip_mt_annotation && (params.run_mt_for_wes || params.analysis_type.equals("wgs"))) {
+        if (!params.skip_mt_annotation && (params.run_mt_for_wes || params.analysis_type.matches("wgs|mito"))) {
 
             ANNOTATE_MT_SNVS (
                 CALL_SNV.out.mt_vcf,
@@ -589,7 +616,8 @@ workflow RAREDISEASE {
 
             GENERATE_CLINICAL_SET_MT(
                 ch_mt_annotate.vcf_ann,
-                ch_hgnc_ids
+                ch_hgnc_ids,
+                true
             )
             ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_MT.out.versions)
 
@@ -664,7 +692,8 @@ workflow RAREDISEASE {
 
             GENERATE_CLINICAL_SET_SV(
                 ch_sv_annotate.vcf_ann,
-                ch_hgnc_ids
+                ch_hgnc_ids,
+                false
             )
             ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SV.out.versions)
 
@@ -725,7 +754,8 @@ workflow RAREDISEASE {
 
             GENERATE_CLINICAL_SET_ME(
                 ANNOTATE_MOBILE_ELEMENTS.out.vcf,
-                ch_hgnc_ids
+                ch_hgnc_ids,
+                false
             )
             ch_versions = ch_versions.mix( GENERATE_CLINICAL_SET_ME.out.versions )
 
@@ -745,13 +775,14 @@ workflow RAREDISEASE {
 */
 
     if ( params.analysis_type.equals("wgs") && !params.skip_smncopynumbercaller ) {
-        RENAME_BAM_FOR_SMNCALLER(ch_mapped.genome_marked_bam, "bam").output
-            .collect{it}
+
+        RENAME_BAM.out.output
+            .collect{it[1]}
             .toList()
             .set { ch_bam_list }
 
-        RENAME_BAI_FOR_SMNCALLER(ch_mapped.genome_marked_bai, "bam.bai").output
-            .collect{it}
+        RENAME_BAI.out.output
+            .collect{it[1]}
             .toList()
             .set { ch_bai_list }
 
@@ -763,10 +794,9 @@ workflow RAREDISEASE {
         SMNCOPYNUMBERCALLER (
             ch_bams_bais
         )
-        ch_versions = ch_versions.mix(RENAME_BAM_FOR_SMNCALLER.out.versions)
-        ch_versions = ch_versions.mix(RENAME_BAI_FOR_SMNCALLER.out.versions)
         ch_versions = ch_versions.mix(SMNCOPYNUMBERCALLER.out.versions)
     }
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     PEDDY
@@ -842,10 +872,11 @@ workflow RAREDISEASE {
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name: 'nf_core_pipeline_software_mqc_versions.yml',
+            name: 'nf_core_'  +  'raredisease_software_'  + 'mqc_'  + 'versions.yml',
             sort: true,
             newLine: true
         ).set { ch_collated_versions }
+
 
     //
     // MODULE: MultiQC
@@ -859,18 +890,18 @@ workflow RAREDISEASE {
         Channel.fromPath(params.multiqc_logo, checkIfExists: true) :
         Channel.fromPath("$projectDir/docs/images/nf-core-raredisease_logo_light.png", checkIfExists: true)
 
+
     summary_params      = paramsSummaryMap(
         workflow, parameters_schema: "nextflow_schema.json")
     ch_workflow_summary = Channel.value(paramsSummaryMultiqc(summary_params))
-
+    ch_multiqc_files = ch_multiqc_files.mix(
+        ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
     ch_multiqc_custom_methods_description = params.multiqc_methods_description ?
         file(params.multiqc_methods_description, checkIfExists: true) :
         file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
     ch_methods_description                = Channel.value(
         methodsDescriptionText(ch_multiqc_custom_methods_description))
 
-    ch_multiqc_files = ch_multiqc_files.mix(
-        ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
     ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
     ch_multiqc_files = ch_multiqc_files.mix(
         ch_methods_description.collectFile(
@@ -880,6 +911,9 @@ workflow RAREDISEASE {
     )
 
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(CALL_SNV.out.mt_txt.map{it[1]}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.fastp_json.map{it[1]}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.sex_check.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.multiple_metrics.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.hs_metrics.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{it[1]}.collect().ifEmpty([]))
@@ -895,12 +929,14 @@ workflow RAREDISEASE {
         ch_multiqc_files.collect(),
         ch_multiqc_config.toList(),
         ch_multiqc_custom_config.toList(),
-        ch_multiqc_logo.toList()
+        ch_multiqc_logo.toList(),
+        [],
+        []
     )
 
-    emit:
-    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
+
 }
 
 

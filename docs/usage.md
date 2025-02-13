@@ -34,12 +34,11 @@ Table of contents:
     - [`-resume`](#-resume)
     - [`-c`](#-c)
   - [Custom configuration](#custom-configuration)
-    - [Changing resources](#changing-resources)
+    - [Resource requests](#resource-requests)
     - [Custom Containers](#custom-containers)
     - [Custom Tool Arguments](#custom-tool-arguments)
       - [nf-core/configs](#nf-coreconfigs)
     - [Run Sentieon](#run-sentieon)
-    - [Azure Resource Requests](#azure-resource-requests)
     - [Running in the background](#running-in-the-background)
     - [Nextflow memory requirements](#nextflow-memory-requirements)
     - [Running the pipeline without Internet access](#running-the-pipeline-without-internet-access)
@@ -50,7 +49,7 @@ nf-core/raredisease is a bioinformatics best-practice analysis pipeline to call,
 
 ## Prerequisites
 
-1. Install Nextflow (>=22.10.1) using the instructions [here.](https://nextflow.io/docs/latest/getstarted.html#installation)
+1. Install Nextflow (>=24.04.2) using the instructions [here.](https://nextflow.io/docs/latest/getstarted.html#installation)
 2. Install one of the following technologies for full pipeline reproducibility: Docker, Singularity, Podman, Shifter or Charliecloud.
    > Almost all nf-core pipelines give you the option to use conda as well. However, some tools used in the raredisease pipeline do not have a conda package so we do not support conda at the moment.
 
@@ -129,11 +128,22 @@ If you would like to see more examples of what a typical samplesheet looks like 
 
 In nf-core/raredisease, references can be supplied using parameters listed [here](https://nf-co.re/raredisease/dev/parameters).
 
-:::warning
-Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
-:::
+> [!WARNING]
+> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
 
 The above pipeline run specified with a params file in yaml format:
+
+```bash
+nextflow run nf-core/raredisease -profile docker -params-file params.yaml
+```
+
+with:
+
+```yaml title="params.yaml"
+input: "./samplesheet.csv"
+outdir: "./results/"
+genome: "GRCh37"
+```
 
 Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can align with bwamem2 or bwa or Sentieon BWA mem and call SNVs with either DeepVariant or Sentieon DNAscope. You also have the option to turn off sections of the pipeline if you do not want to run the. For example, snv annotation can be turned off by adding `--skip_snv_annotation` flag in the command line, or by setting it to true in a parameter file. This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, for SNV calling if you use DeepVariant as your variant caller, you need not provide the parameter `--ml_model`, which is only used by Sentieon DNAscope.
 
@@ -157,15 +167,17 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 1. Alignment
 
-| Mandatory                      | Optional                       |
-| ------------------------------ | ------------------------------ |
-| aligner<sup>1</sup>            | fasta_fai<sup>4</sup>          |
-| fasta<sup>2</sup>              | bwamem2<sup>4</sup>            |
-| platform                       | bwa<sup>4</sup>                |
-| mito_name/mt_fasta<sup>3</sup> | bwameme<sup>4</sup>            |
-|                                | known_dbsnp<sup>5</sup>        |
-|                                | known_dbsnp_tbi<sup>5</sup>    |
-|                                | min_trimmed_length<sup>6</sup> |
+| Mandatory                      | Optional                        |
+| ------------------------------ | ------------------------------- |
+| aligner<sup>1</sup>            | fasta_fai<sup>4</sup>           |
+| fasta<sup>2</sup>              | bwamem2<sup>4</sup>             |
+| platform                       | bwa<sup>4</sup>                 |
+| mito_name/mt_fasta<sup>3</sup> | bwameme<sup>4</sup>             |
+|                                | known_dbsnp<sup>5</sup>         |
+|                                | known_dbsnp_tbi<sup>5</sup>     |
+|                                | min_trimmed_length<sup>6</sup>  |
+|                                | extract_alignments              |
+|                                | restrict_to_contigs<sup>7</sup> |
 
 <sup>1</sup>Default value is bwamem2. Other alternatives are bwa, bwameme and sentieon (requires valid Sentieon license ).<br />
 <sup>2</sup>Analysis set reference genome in fasta format, first 25 contigs need to be chromosome 1-22, X, Y and the mitochondria.<br />
@@ -173,6 +185,7 @@ The mandatory and optional parameters for each category are tabulated below.
 <sup>4</sup>fasta_fai, bwa, bwamem2 and bwameme, if not provided by the user, will be generated by the pipeline when necessary.<br />
 <sup>5</sup>Used only by Sentieon.<br />
 <sup>6</sup>Default value is 40. Used only by fastp.<br />
+<sup>7</sup>Used to limit your analysis to specific contigs. Can be used to remove alignments to unplaced contigs to minimize potential errors. This parameter should be used in conjunction with the `extract_alignments` parameter.<br />
 
 ##### 2. QC stats from the alignment files
 
@@ -205,7 +218,7 @@ The mandatory and optional parameters for each category are tabulated below.
 
 <sup>1</sup>Default variant caller is DeepVariant, but you have the option to use Sentieon as well.<br />
 <sup>2</sup>These parameters are only used by Sentieon.<br />
-<sup>3</sup>Default is WGS, but you have the option to choose WES as well.<br />
+<sup>3</sup>Default is `WGS`, but you have the option to choose `WES` and `mito` as well.<br />
 <sup>4</sup>This parameter is only used by Deepvariant.<br />
 
 ##### 5. Variant calling - Structural variants
@@ -381,11 +394,10 @@ nextflow pull nf-core/raredisease
 
 - **Reproducibility:** Specify a pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since. First, go to the [nf-core/raredisease releases page](https://github.com/nf-core/raredisease/releases) and find the latest pipeline version - numeric only (e.g. `1.3.1`). Then specify this when running the pipeline with `-r`, for example, `-r 1.3.1`. You can switch to another version by changing the number after the `-r` flag. The version number will be logged in reports when you run the pipeline. For example, you can view the version number at the bottom of the MultiQC reports.
 
-To further assist in reproducbility, you can use share and re-use [parameter files](#running-the-pipeline) to repeat pipeline runs with the same settings without having to write out a command with every single parameter.
+To further assist in reproducibility, you can use share and reuse [parameter files](#running-the-pipeline) to repeat pipeline runs with the same settings without having to write out a command with every single parameter.
 
-:::tip
-If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
-:::
+> [!TIP]
+> If you wish to share such profile (such as upload as supplementary material for academic publications), make sure to NOT include cluster specific paths to files, nor institutional specific profiles.
 
 - **Restart a previous run:** Add `-resume` to your command when restarting a pipeline. Nextflow will use cached results from any pipeline steps where inputs are the same, and resume the run from where it terminated previously. For input to be considered the same, names and the files' contents must be identical. For more info about `-resume`, see [this blog post](https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html). You can also supply a run name to resume a specific run: `-resume [run-name]`. Use the `nextflow log` command to show previous run names.
 
@@ -400,9 +412,9 @@ Pipeline settings can be provided in a `yaml` or `json` file via `-params-file <
 nextflow run nf-core/raredisease -profile docker -params-file params.yaml
 ```
 
-with `params.yaml` containing:
+with:
 
-```yaml
+```yaml title="params.yaml"
 input: './samplesheet.csv'
 outdir: './results/'
 genome: 'GRCh37'
@@ -414,9 +426,8 @@ You can also generate such `YAML`/`JSON` files via [nf-core/launch](https://nf-c
 
 ## Core Nextflow arguments
 
-:::note
-These options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen).
-:::
+> [!NOTE]
+> These options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen)
 
 ### `-profile`
 
@@ -424,17 +435,15 @@ Use this parameter to choose a configuration profile. Profiles can give configur
 
 Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Apptainer, Conda) - see below.
 
-:::info
-We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
-:::
+> [!IMPORTANT]
+> We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
 
-The pipeline also dynamically loads configurations from [https://github.com/nf-core/configs](https://github.com/nf-core/configs) when it runs, making multiple config profiles for various institutional clusters available at run time. For more information and to see if your system is available in these configs please see the [nf-core/configs documentation](https://github.com/nf-core/configs#documentation).
-{% else %}
-{% endif %}
+The pipeline also dynamically loads configurations from [https://github.com/nf-core/configs](https://github.com/nf-core/configs) when it runs, making multiple config profiles for various institutional clusters available at run time. For more information and to check if your system is supported, please see the [nf-core/configs documentation](https://github.com/nf-core/configs#documentation).
+
 Note that multiple profiles can be loaded, for example: `-profile test,docker` - the order of arguments is important!
 They are loaded in sequence, so later profiles can overwrite earlier profiles.
 
-If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer enviroment.
+If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended, since it can lead to different results on different machines dependent on the computer environment.
 
 - `test`
   - A profile with a complete configuration for automated testing
@@ -468,13 +477,15 @@ Specify the path to a specific config file (this is a core Nextflow command). Se
 
 ## Custom configuration
 
-### Changing resources
+### Resource requests
+
+Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the pipeline steps, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher resources request (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
 
 To change the resource requests, please see the [max resources](https://nf-co.re/docs/usage/configuration#max-resources) and [tuning workflow resources](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) section of the nf-core website.
 
 ### Custom Containers
 
-In some cases you may wish to change which container or conda environment a step of the pipeline uses for a particular tool. By default nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However in some cases the pipeline specified version maybe out of date.
+In some cases, you may wish to change the container or conda environment used by a pipeline steps for a particular tool. By default, nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However, in some cases the pipeline specified version maybe out of date.
 
 To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/usage/configuration#updating-tool-versions) section of the nf-core website.
 
@@ -508,14 +519,6 @@ nextflow secrets set SENTIEON_LICENSE_BASE64 <LICENSE>
 
 If you are using Nextflow secrets, you have to set the environment variable `NXF_ENABLE_SECRETS` to true. This will see to it that the pipeline can retrieve the secret from Nextflow's secrets store during the pipeline execution. Keep in mind that versions of Nextflow Version 22.09.2-edge and onwards have NXF_ENABLE_SECRETS to true by default. If you are not using secrets set `NXF_ENABLE_SECRETS` to false, but make sure that the environment variable [`SENTIEON_LICENSE`](`NXF_ENABLE_SECRETS`) is set to reflect the value of your license server on your machine.
 
-### Azure Resource Requests
-
-To be used with the `azurebatch` profile by specifying the `-profile azurebatch`.
-We recommend providing a compute `params.vm_type` of `Standard_D16_v3` VMs by default but these options can be changed if required.
-
-Note that the choice of VM size depends on your quota and the overall workload during the analysis.
-For a thorough list, please refer the [Azure Sizes for virtual machines in Azure](https://docs.microsoft.com/en-us/azure/virtual-machines/sizes).
-
 ### Running in the background
 
 Nextflow handles job submissions and supervises the running jobs. The Nextflow process must run until the pipeline is finished.
@@ -538,18 +541,18 @@ NXF_OPTS='-Xms1g -Xmx4g'
 
 The pipeline and container images can be downloaded using [nf-core tools](https://nf-co.re/docs/usage/offline). For running offline, you of course have to make all the reference data available locally, and specify `--fasta`, etc., see [above](#reference-files-and-parameters).
 
-Contrary to the paragraph about [Nextflow](https://nf-co.re/docs/usage/offline#nextflow) on the page linked above, it is not possible to use the "-all" packaged version of Nextflow for this pipeline. The online version of Nextflow is necessary to support the necessary nextflow plugins. Download instead the file called just `nextflow`. Nextflow will download its dependencies when it is run. Additionally, you need to download the nf-validation plugin explicitly:
+Contrary to the paragraph about [Nextflow](https://nf-co.re/docs/usage/offline#nextflow) on the page linked above, it is not possible to use the "-all" packaged version of Nextflow for this pipeline. The online version of Nextflow is necessary to support the necessary nextflow plugins. Download instead the file called just `nextflow`. Nextflow will download its dependencies when it is run. Additionally, you need to download the nf-schema plugin explicitly:
 
 ```
-./nextflow plugin install nf-validation
+./nextflow plugin install nf-schema
 ```
 
-Now you can transfer the `nextflow` binary as well as its directory `$HOME/.nextflow` to the system without Internet access, and use it there. It is necessary to use an explicit version of `nf-validation` offline, or Nextflow will check for the most recent version online. Find the version of nf-validation you downloaded in `$HOME/.nextflow/plugins`, then specify this version for `nf-validation` in your configuration file:
+Now you can transfer the `nextflow` binary as well as its directory `$HOME/.nextflow` to the system without Internet access, and use it there. It is necessary to use an explicit version of `nf-schema` offline, or Nextflow will check for the most recent version online. Find the version of nf-schema you downloaded in `$HOME/.nextflow/plugins`, then specify this version for `nf-schema` in your configuration file:
 
 ```
 plugins {
         // Set the plugin version explicitly, otherwise nextflow will look for the newest version online.
-        id 'nf-validation@0.3.1'
+        id 'nf-schema@2.1.1'
 }
 ```
 

@@ -1,0 +1,408 @@
+{
+    "@context": [
+        "https://w3id.org/ro/crate/1.1/context",
+        {
+            "GithubService": "https://w3id.org/ro/terms/test#GithubService",
+            "JenkinsService": "https://w3id.org/ro/terms/test#JenkinsService",
+            "PlanemoEngine": "https://w3id.org/ro/terms/test#PlanemoEngine",
+            "TestDefinition": "https://w3id.org/ro/terms/test#TestDefinition",
+            "TestInstance": "https://w3id.org/ro/terms/test#TestInstance",
+            "TestService": "https://w3id.org/ro/terms/test#TestService",
+            "TestSuite": "https://w3id.org/ro/terms/test#TestSuite",
+            "TravisService": "https://w3id.org/ro/terms/test#TravisService",
+            "definition": "https://w3id.org/ro/terms/test#definition",
+            "engineVersion": "https://w3id.org/ro/terms/test#engineVersion",
+            "instance": "https://w3id.org/ro/terms/test#instance",
+            "resource": "https://w3id.org/ro/terms/test#resource",
+            "runsOn": "https://w3id.org/ro/terms/test#runsOn"
+        }
+    ],
+    "@graph": [
+        {
+            "@id": "./",
+            "@type": "Dataset",
+            "creativeWorkStatus": "Stable",
+            "datePublished": "2025-02-13T08:16:02+00:00",
+            "description": "<h1>\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/images/nf-core-raredisease_logo_dark.png\">\n    <img alt=\"nf-core/raredisease\" src=\"docs/images/nf-core-raredisease_logo_light.png\">\n  </picture>\n</h1>\n\n[![GitHub Actions CI Status](https://github.com/nf-core/raredisease/actions/workflows/ci.yml/badge.svg)](https://github.com/nf-core/raredisease/actions/workflows/ci.yml)\n\n[![GitHub Actions Linting Status](https://github.com/nf-core/raredisease/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/raredisease/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/raredisease/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.7995798-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.7995798)\n[![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)\n[![GitHub Actions Linting Status](https://github.com/nf-core/raredisease/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/raredisease/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/raredisease/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.7995798-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.7995798)\n\n[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A524.04.2-23aa62.svg)](https://www.nextflow.io/)\n[![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)\n[![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)\n[![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)\n[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/nf-core/raredisease)\n\n[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23raredisease-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/raredisease)[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)\n\n#### TOC\n\n- [Introduction](#introduction)\n- [Pipeline summary](#pipeline-summary)\n- [Usage](#usage)\n- [Pipeline output](#pipeline-output)\n- [Credits](#credits)\n- [Contributions and Support](#contributions-and-support)\n- [Citations](#citations)\n\n## Introduction\n\n**nf-core/raredisease** is a best-practice bioinformatic pipeline for calling and scoring variants from WGS/WES data from rare disease patients. This pipeline is heavily inspired by [MIP](https://github.com/Clinical-Genomics/MIP).\n\nThe pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!\n\nOn release, automated continuous integration tests run the pipeline on a full-sized dataset on the AWS cloud infrastructure. This ensures that the pipeline runs on AWS, has sensible resource allocation defaults set to run on real-world datasets, and permits the persistent storage of results to benchmark between pipeline releases and other analysis sources. The results obtained from the full-sized test can be viewed on the [nf-core website](https://nf-co.re/raredisease/results).\n\n## Pipeline summary\n\n  <picture align=\"center\">\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/images/raredisease_metromap_dark.png\">\n    <img alt=\"nf-core/raredisease workflow\" src=\"docs/images/raredisease_metromap_light.png\">\n  </picture>\n\n**1. Metrics:**\n\n- [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)\n- [Mosdepth](https://github.com/brentp/mosdepth)\n- [MultiQC](http://multiqc.info/)\n- [Picard's CollectMutipleMetrics, CollectHsMetrics, and CollectWgsMetrics](https://broadinstitute.github.io/picard/)\n- [Qualimap](http://qualimap.conesalab.org/)\n- [Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/)\n- [TIDDIT's cov](https://github.com/J35P312/)\n\n**2. Alignment:**\n\n- [Bwa-mem2](https://github.com/bwa-mem2/bwa-mem2)\n- [BWA-MEME](https://github.com/kaist-ina/BWA-MEME)\n- [BWA](https://github.com/lh3/bwa)\n- [Sentieon DNAseq](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/)\n\n**3. Variant calling - SNV:**\n\n- [DeepVariant](https://github.com/google/deepvariant)\n- [Sentieon DNAscope](https://support.sentieon.com/manual/DNAscope_usage/dnascope/)\n\n**4. Variant calling - SV:**\n\n- [Manta](https://github.com/Illumina/manta)\n- [TIDDIT's sv](https://github.com/SciLifeLab/TIDDIT)\n- Copy number variant calling:\n  - [CNVnator](https://github.com/abyzovlab/CNVnator)\n  - [GATK GermlineCNVCaller](https://github.com/broadinstitute/gatk)\n\n**5. Annotation - SNV:**\n\n- [bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh)\n- [vcfanno](https://github.com/brentp/vcfanno)\n- [CADD](https://cadd.gs.washington.edu/)\n- [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)\n- [UPD](https://github.com/bjhall/upd)\n- [Chromograph](https://github.com/Clinical-Genomics/chromograph)\n\n**6. Annotation - SV:**\n\n- [SVDB query](https://github.com/J35P312/SVDB#Query)\n- [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)\n\n**7. Mitochondrial analysis:**\n\n- [Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline ](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-)\n- [eKLIPse](https://github.com/dooguypapua/eKLIPse/tree/master)\n- Annotation:\n  - [HaploGrep2](https://github.com/seppinho/haplogrep-cmd)\n  - [Hmtnote](https://github.com/robertopreste/HmtNote)\n  - [vcfanno](https://github.com/brentp/vcfanno)\n  - [CADD](https://cadd.gs.washington.edu/)\n  - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)\n\n**8. Variant calling - repeat expansions:**\n\n- [Expansion Hunter](https://github.com/Illumina/ExpansionHunter)\n- [Stranger](https://github.com/Clinical-Genomics/stranger)\n\n**9. Variant calling - mobile elements:**\n\n- [RetroSeq](https://github.com/tk2/RetroSeq)\n\n**10. Rank variants - SV and SNV:**\n\n- [GENMOD](https://github.com/Clinical-Genomics/genmod)\n\n**11. Variant evaluation:**\n\n- [RTG Tools](https://github.com/RealTimeGenomics/rtg-tools)\n\nNote that it is possible to include/exclude certain tools or steps.\n\n## Usage\n\n> [!NOTE]\n> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.\n\nFirst, prepare a samplesheet with your input data that looks as follows:\n\n`samplesheet.csv`:\n\n```csv\nsample,lane,fastq_1,fastq_2,sex,phenotype,paternal_id,maternal_id,case_id\nhugelymodelbat,1,reads_1.fastq.gz,reads_2.fastq.gz,1,2,,,justhusky\n```\n\nEach row represents a fastq file (single-end) or a pair of fastq files (paired end).\n\nSecond, ensure that you have defined the path to reference files and parameters required for the type of analysis that you want to perform. More information about this can be found [here](https://github.com/nf-core/raredisease/blob/dev/docs/usage.md).\n\nNow, you can run the pipeline using:\n\n```bash\nnextflow run nf-core/raredisease \\\n   -profile <docker/singularity/podman/shifter/charliecloud/conda/institute> \\\n   --input samplesheet.csv \\\n   --outdir <OUTDIR>\n```\n\n> [!WARNING]\n> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).\n\nFor more details and further functionality, please refer to the [usage documentation](https://nf-co.re/raredisease/usage) and the [parameter documentation](https://nf-co.re/raredisease/parameters).\n\n## Pipeline output\n\nFor more details about the output files and reports, please refer to the\n[output documentation](https://nf-co.re/raredisease/output).\n\n## Credits\n\nnf-core/raredisease was written in a collaboration between the Clinical Genomics nodes in Sweden, with major contributions from [Ramprasad Neethiraj](https://github.com/ramprasadn), [Anders Jemt](https://github.com/jemten), [Lucia Pena Perez](https://github.com/Lucpen), and [Mei Wu](https://github.com/projectoriented) at Clinical Genomics Stockholm.\n\nAdditional contributors were [Sima Rahimi](https://github.com/sima-r), [Gwenna Breton](https://github.com/Gwennid) and [Emma V\u00e4sterviga](https://github.com/EmmaCAndersson) (Clinical Genomics Gothenburg); [Halfdan Rydbeck](https://github.com/hrydbeck) and [Lauri Mesilaakso](https://github.com/ljmesi) (Clinical Genomics Link\u00f6ping); [Subazini Thankaswamy Kosalai](https://github.com/sysbiocoder) (Clinical Genomics \u00d6rebro); [Annick Renevey](https://github.com/rannick), [Peter Pruisscher](https://github.com/peterpru) and [Eva Caceres](https://github.com/fevac) (Clinical Genomics Stockholm); [Ryan Kennedy](https://github.com/ryanjameskennedy) (Clinical Genomics Lund); [Anders Sune Pedersen](https://github.com/asp8200) (Danish National Genome Center) and [Lucas Taniguti](https://github.com/lmtani).\n\nWe thank the nf-core community for their extensive assistance in the development of this pipeline.\n\n## Contributions and Support\n\nIf you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).\n\nFor further information or help, don't hesitate to get in touch on the [Slack `#raredisease` channel](https://nfcore.slack.com/channels/raredisease) (you can join with [this invite](https://nf-co.re/join/slack)).\n\n## Citations\n\nIf you use nf-core/raredisease for your analysis, please cite it using the following doi: [10.5281/zenodo.7995798](https://doi.org/10.5281/zenodo.7995798)\n\nAn extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.\n\nYou can cite the `nf-core` publication as follows:\n\n> **The nf-core framework for community-curated bioinformatics pipelines.**\n>\n> Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.\n>\n> _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).\n\nYou can read more about MIP's use in healthcare in,\n\n> Stranneheim H, Lagerstedt-Robinson K, Magnusson M, et al. Integration of whole genome sequencing into a healthcare setting: high diagnostic rates across multiple clinical entities in 3219 rare disease patients. Genome Med. 2021;13(1):40. doi:10.1186/s13073-021-00855-5\n",
+            "hasPart": [
+                {
+                    "@id": "main.nf"
+                },
+                {
+                    "@id": "assets/"
+                },
+                {
+                    "@id": "bin/"
+                },
+                {
+                    "@id": "conf/"
+                },
+                {
+                    "@id": "docs/"
+                },
+                {
+                    "@id": "docs/images/"
+                },
+                {
+                    "@id": "modules/"
+                },
+                {
+                    "@id": "modules/local/"
+                },
+                {
+                    "@id": "modules/nf-core/"
+                },
+                {
+                    "@id": "workflows/"
+                },
+                {
+                    "@id": "subworkflows/"
+                },
+                {
+                    "@id": "nextflow.config"
+                },
+                {
+                    "@id": "README.md"
+                },
+                {
+                    "@id": "nextflow_schema.json"
+                },
+                {
+                    "@id": "CHANGELOG.md"
+                },
+                {
+                    "@id": "LICENSE"
+                },
+                {
+                    "@id": "CODE_OF_CONDUCT.md"
+                },
+                {
+                    "@id": "CITATIONS.md"
+                },
+                {
+                    "@id": "modules.json"
+                },
+                {
+                    "@id": "docs/usage.md"
+                },
+                {
+                    "@id": "docs/output.md"
+                },
+                {
+                    "@id": ".nf-core.yml"
+                },
+                {
+                    "@id": ".pre-commit-config.yaml"
+                },
+                {
+                    "@id": ".prettierignore"
+                }
+            ],
+            "isBasedOn": "https://github.com/nf-core/raredisease",
+            "license": "MIT",
+            "mainEntity": {
+                "@id": "main.nf"
+            },
+            "mentions": [
+                {
+                    "@id": "#8e4ec9a3-3ca3-4c33-9030-5240144480e6"
+                }
+            ],
+            "name": "nf-core/raredisease"
+        },
+        {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+                "@id": "./"
+            },
+            "conformsTo": [
+                {
+                    "@id": "https://w3id.org/ro/crate/1.1"
+                },
+                {
+                    "@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.0"
+                }
+            ]
+        },
+        {
+            "@id": "main.nf",
+            "@type": [
+                "File",
+                "SoftwareSourceCode",
+                "ComputationalWorkflow"
+            ],
+            "creator": [
+                {
+                    "@id": "https://orcid.org/0000-0002-4100-9963"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-2219-0197"
+                },
+                {
+                    "@id": "#20065894+ramprasadn@users.noreply.github.com"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0003-1316-2845"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-5044-7754"
+                },
+                {
+                    "@id": "#25568561+projectoriented@users.noreply.github.com"
+                }
+            ],
+            "dateCreated": "",
+            "dateModified": "2025-02-13T09:16:02Z",
+            "dct:conformsTo": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/",
+            "keywords": [
+                "nf-core",
+                "nextflow",
+                "diagnostics",
+                "rare-disease",
+                "snv",
+                "structural-variants",
+                "variant-annotation",
+                "variant-calling",
+                "wes",
+                "wgs"
+            ],
+            "license": [
+                "MIT"
+            ],
+            "maintainer": [
+                {
+                    "@id": "https://orcid.org/0000-0002-4100-9963"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-2219-0197"
+                },
+                {
+                    "@id": "#20065894+ramprasadn@users.noreply.github.com"
+                },
+                {
+                    "@id": "https://orcid.org/0000-0002-5044-7754"
+                },
+                {
+                    "@id": "#25568561+projectoriented@users.noreply.github.com"
+                }
+            ],
+            "name": [
+                "nf-core/raredisease"
+            ],
+            "programmingLanguage": {
+                "@id": "https://w3id.org/workflowhub/workflow-ro-crate#nextflow"
+            },
+            "sdPublisher": {
+                "@id": "https://nf-co.re/"
+            },
+            "url": [
+                "https://github.com/nf-core/raredisease",
+                "https://nf-co.re/raredisease/2.3.0/"
+            ],
+            "version": [
+                "2.3.0"
+            ]
+        },
+        {
+            "@id": "https://w3id.org/workflowhub/workflow-ro-crate#nextflow",
+            "@type": "ComputerLanguage",
+            "identifier": {
+                "@id": "https://www.nextflow.io/"
+            },
+            "name": "Nextflow",
+            "url": {
+                "@id": "https://www.nextflow.io/"
+            },
+            "version": "!>=24.04.2"
+        },
+        {
+            "@id": "#8e4ec9a3-3ca3-4c33-9030-5240144480e6",
+            "@type": "TestSuite",
+            "instance": [
+                {
+                    "@id": "#a703adf6-983b-45c3-b677-914f26ce843c"
+                }
+            ],
+            "mainEntity": {
+                "@id": "main.nf"
+            },
+            "name": "Test suite for nf-core/raredisease"
+        },
+        {
+            "@id": "#a703adf6-983b-45c3-b677-914f26ce843c",
+            "@type": "TestInstance",
+            "name": "GitHub Actions workflow for testing nf-core/raredisease",
+            "resource": "repos/nf-core/raredisease/actions/workflows/ci.yml",
+            "runsOn": {
+                "@id": "https://w3id.org/ro/terms/test#GithubService"
+            },
+            "url": "https://api.github.com"
+        },
+        {
+            "@id": "https://w3id.org/ro/terms/test#GithubService",
+            "@type": "TestService",
+            "name": "Github Actions",
+            "url": {
+                "@id": "https://github.com"
+            }
+        },
+        {
+            "@id": "assets/",
+            "@type": "Dataset",
+            "description": "Additional files"
+        },
+        {
+            "@id": "bin/",
+            "@type": "Dataset",
+            "description": "Scripts that must be callable from a pipeline process"
+        },
+        {
+            "@id": "conf/",
+            "@type": "Dataset",
+            "description": "Configuration files"
+        },
+        {
+            "@id": "docs/",
+            "@type": "Dataset",
+            "description": "Markdown files for documenting the pipeline"
+        },
+        {
+            "@id": "docs/images/",
+            "@type": "Dataset",
+            "description": "Images for the documentation files"
+        },
+        {
+            "@id": "modules/",
+            "@type": "Dataset",
+            "description": "Modules used by the pipeline"
+        },
+        {
+            "@id": "modules/local/",
+            "@type": "Dataset",
+            "description": "Pipeline-specific modules"
+        },
+        {
+            "@id": "modules/nf-core/",
+            "@type": "Dataset",
+            "description": "nf-core modules"
+        },
+        {
+            "@id": "workflows/",
+            "@type": "Dataset",
+            "description": "Main pipeline workflows to be executed in main.nf"
+        },
+        {
+            "@id": "subworkflows/",
+            "@type": "Dataset",
+            "description": "Smaller subworkflows"
+        },
+        {
+            "@id": "nextflow.config",
+            "@type": "File",
+            "description": "Main Nextflow configuration file"
+        },
+        {
+            "@id": "README.md",
+            "@type": "File",
+            "description": "Basic pipeline usage information"
+        },
+        {
+            "@id": "nextflow_schema.json",
+            "@type": "File",
+            "description": "JSON schema for pipeline parameter specification"
+        },
+        {
+            "@id": "CHANGELOG.md",
+            "@type": "File",
+            "description": "Information on changes made to the pipeline"
+        },
+        {
+            "@id": "LICENSE",
+            "@type": "File",
+            "description": "The license - should be MIT"
+        },
+        {
+            "@id": "CODE_OF_CONDUCT.md",
+            "@type": "File",
+            "description": "The nf-core code of conduct"
+        },
+        {
+            "@id": "CITATIONS.md",
+            "@type": "File",
+            "description": "Citations needed when using the pipeline"
+        },
+        {
+            "@id": "modules.json",
+            "@type": "File",
+            "description": "Version information for modules from nf-core/modules"
+        },
+        {
+            "@id": "docs/usage.md",
+            "@type": "File",
+            "description": "Usage documentation"
+        },
+        {
+            "@id": "docs/output.md",
+            "@type": "File",
+            "description": "Output documentation"
+        },
+        {
+            "@id": ".nf-core.yml",
+            "@type": "File",
+            "description": "nf-core configuration file, configuring template features and linting rules"
+        },
+        {
+            "@id": ".pre-commit-config.yaml",
+            "@type": "File",
+            "description": "Configuration file for pre-commit hooks"
+        },
+        {
+            "@id": ".prettierignore",
+            "@type": "File",
+            "description": "Ignore file for prettier"
+        },
+        {
+            "@id": "https://nf-co.re/",
+            "@type": "Organization",
+            "name": "nf-core",
+            "url": "https://nf-co.re/"
+        },
+        {
+            "@id": "https://orcid.org/0000-0002-4100-9963",
+            "@type": "Person",
+            "email": "Gwenna.breton@gu.se",
+            "name": "Gwenna Breton"
+        },
+        {
+            "@id": "https://orcid.org/0000-0002-2219-0197",
+            "@type": "Person",
+            "email": "jemten@users.noreply.github.com",
+            "name": "Anders Jemt"
+        },
+        {
+            "@id": "#20065894+ramprasadn@users.noreply.github.com",
+            "@type": "Person",
+            "email": "20065894+ramprasadn@users.noreply.github.com",
+            "name": "Ramprasad Neethiraj"
+        },
+        {
+            "@id": "https://orcid.org/0000-0003-1316-2845",
+            "@type": "Person",
+            "email": "raysloks@gmail.com",
+            "name": "Emil Bertilsson"
+        },
+        {
+            "@id": "https://orcid.org/0000-0002-5044-7754",
+            "@type": "Person",
+            "email": "lucia.pena.perez@scilifelab.se",
+            "name": "Luc\u00eda Pe\u00f1a-P\u00e9rez"
+        },
+        {
+            "@id": "#25568561+projectoriented@users.noreply.github.com",
+            "@type": "Person",
+            "email": "25568561+projectoriented@users.noreply.github.com",
+            "name": "Mei Wu"
+        }
+    ]
+}

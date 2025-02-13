@@ -1,4 +1,4 @@
-name: ensemblvep_vep
+name: ENSEMBLVEP_VEP
 description: Ensembl Variant Effect Predictor (VEP). The output-file-format is controlled through `task.ext.args`.
 keywords:
   - annotation
@@ -83,10 +83,6 @@ output:
       description: File containing software versions
       pattern: "versions.yml"
 authors:
-  - "@maxulysse"
-  - "@matthdsm"
-  - "@nvnieuwk"
-maintainers:
   - "@maxulysse"
   - "@matthdsm"
   - "@nvnieuwk"
