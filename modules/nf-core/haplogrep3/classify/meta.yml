@@ -1,15 +1,15 @@
-name: "haplogrep2_classify"
+name: "haplogrep3_classify"
 description: classification into haplogroups
 keywords:
   - haplogroups
   - classify
   - mtDNA
 tools:
-  - "haplogrep2":
+  - "haplogrep3":
       description: "A tool for mtDNA haplogroup classification."
-      homepage: "https://github.com/seppinho/haplogrep-cmd"
-      documentation: "https://github.com/seppinho/haplogrep-cmd"
-      tool_dev_url: "https://github.com/seppinho/haplogrep-cmd"
+      homepage: "https://github.com/genepi/haplogrep3"
+      documentation: "https://github.com/genepi/haplogrep3"
+      tool_dev_url: "https://github.com/genepi/haplogrep3"
       licence: ["MIT"]
       identifier: ""
 input:
@@ -22,9 +22,6 @@ input:
         type: file
         description: valid options are hsd, vcf, or fasta files
         pattern: "*.{vcf,vcf.gz,fasta,hsd}"
-  - - format:
-        type: string
-        description: either "vcf", "fasta" or "hsd"
 output:
   - txt:
       - meta:
@@ -45,3 +42,4 @@ authors:
   - "@lucpen"
 maintainers:
   - "@lucpen"
+  - "@ramprasadn"

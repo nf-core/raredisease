@@ -22,6 +22,7 @@ process GENS {
         error "The gens pre-processing module does not support Conda. Please use Docker / Singularity / Podman instead."
     }
     def prefix = task.ext.prefix ?: "${meta.id}"
+    def VERSION = "1.0.11" // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
     """
     generate_gens_data.pl \\
         $read_counts \\
@@ -31,12 +32,13 @@ process GENS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        generate_gens_data.pl: \$(echo \$(generate_gens_data.pl --version 2>&1))
+        generate_gens_data.pl: $VERSION
     END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
+    def VERSION = "1.0.11"
     """
     touch ${prefix}.baf.bed.gz
     touch ${prefix}.baf.bed.gz.tbi
@@ -45,7 +47,7 @@ process GENS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        generate_gens_data.pl: \$(echo \$(generate_gens_data.pl --version 2>&1))
+        generate_gens_data.pl: $VERSION
     END_VERSIONS
     """
 }
