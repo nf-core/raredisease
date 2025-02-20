@@ -11,6 +11,7 @@ include { CNVNATOR_CONVERT2VCF                    } from '../../../modules/nf-co
 include { TABIX_BGZIPTABIX as INDEX_CNVNATOR      } from '../../../modules/nf-core/tabix/bgziptabix/main'
 include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_CNVNATOR } from '../../../modules/nf-core/bcftools/view/main.nf'
 include { SVDB_MERGE as SVDB_MERGE_CNVNATOR       } from '../../../modules/nf-core/svdb/merge/main'
+include { SPLIT_CHR } from '../../../modules/local/split_chr/main.nf'
 
 workflow CALL_SV_CNVNATOR {
     take:
@@ -22,8 +23,10 @@ workflow CALL_SV_CNVNATOR {
     main:
         ch_versions = Channel.empty()
 
+        SPLIT_CHR ( ch_fasta )
+
         CNVNATOR_RD ( ch_bam_bai, [[:],[]], [[:],[]], [[:],[]], "rd" )
-        CNVNATOR_HIST ( [[:],[],[]], CNVNATOR_RD.out.root, ch_fasta, ch_fai, "his" )
+        CNVNATOR_HIST ( [[:],[],[]], CNVNATOR_RD.out.root, SPLIT_CHR.out.output, [[:],[]], "his" )
         CNVNATOR_STAT ( [[:],[],[]], CNVNATOR_HIST.out.root, [[:],[]], [[:],[]], "stat" )
         CNVNATOR_PARTITION ( [[:],[],[]], CNVNATOR_STAT.out.root, [[:],[]], [[:],[]], "partition" )
         CNVNATOR_CALL ( [[:],[],[]], CNVNATOR_PARTITION.out.root, [[:],[]], [[:],[]], "call" )
@@ -49,6 +52,7 @@ workflow CALL_SV_CNVNATOR {
         ch_versions = ch_versions.mix(SVDB_MERGE_CNVNATOR.out.versions)
         ch_versions = ch_versions.mix(INDEX_CNVNATOR.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW_CNVNATOR.out.versions)
+        ch_versions = ch_versions.mix(SPLIT_CHR.out.versions)
 
     emit:
         vcf        = SVDB_MERGE_CNVNATOR.out.vcf  // channel: [ val(meta), path(*.tar.gz) ]
