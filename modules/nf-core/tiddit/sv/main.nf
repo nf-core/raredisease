@@ -23,7 +23,18 @@ process TIDDIT_SV {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def bwa_command = bwa_index ? "[[ -d $bwa_index ]] && for i in $bwa_index/*; do [[ -f $fasta && ! \"\$i\" =~ .*\"$fasta.\".* ]] && ln -s \$i ${fasta}.\${i##*.} || ln -s \$i .; done" : ""
+    def bwa_command = bwa_index ? """
+        if [[ -d $bwa_index ]]; then
+            for i in ${bwa_index}/*; do
+                if [[ -f $fasta && ! "\$i" =~ .*"${fasta}.".* ]]; then
+                    target="${fasta}.\${i##*.}"
+                else
+                    target="\$(basename "\$i")"
+                fi
+                [[ -e \$target ]] || ln -s "\$i" "\$target"
+            done
+        fi
+    """ : ""
 
     """
     $bwa_command
