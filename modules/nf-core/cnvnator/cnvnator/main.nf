@@ -28,7 +28,7 @@ process CNVNATOR_CNVNATOR {
     output_meta   = bam             ? meta                : meta2
     prefix        = task.ext.prefix ?: bam ? "${meta.id}" : "${meta2.id}"
     if (fasta) {
-        reference = fasta.isDirectory() ? "-d ${fasta}" : "-fasta ${fasta}"
+        reference = fasta.toString().endsWith('/') ? "-d ${fasta}" : "-fasta ${fasta}"
     } else {
         reference = ''
     }
@@ -45,7 +45,7 @@ process CNVNATOR_CNVNATOR {
         $input_cmd \\
         $calls_cmd
 
-    $mv_cmd 
+    $mv_cmd
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         CNVnator: \$(echo \$(cnvnator 2>&1 | sed -n '3p' | sed 's/CNVnator v//'))
