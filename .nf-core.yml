@@ -1,12 +1,12 @@
 lint:
   files_exist:
-    - conf/modules.config
+  - conf/modules.config
   files_unchanged:
-    - .github/CONTRIBUTING.md
-    - .github/PULL_REQUEST_TEMPLATE.md
-    - docs/images/nf-core-raredisease_logo_dark.png
-    - docs/images/nf-core-raredisease_logo_light.png
-    - assets/nf-core-raredisease_logo_light.png
+  - .github/CONTRIBUTING.md
+  - .github/PULL_REQUEST_TEMPLATE.md
+  - docs/images/nf-core-raredisease_logo_dark.png
+  - docs/images/nf-core-raredisease_logo_light.png
+  - assets/nf-core-raredisease_logo_light.png
   modules_config: false
 nf_core_version: 3.2.0
 repository_type: pipeline
@@ -18,4 +18,4 @@ template:
   name: raredisease
   org: nf-core
   outdir: .
-  version: 2.4.0dev
+  version: 2.4.0
