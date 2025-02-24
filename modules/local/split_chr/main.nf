@@ -11,7 +11,7 @@ process SPLIT_CHR {
     tuple val(meta), path(input)
 
     output:
-    tuple val(meta), path("chr_split/*.fa"), emit: output
+    tuple val(meta), path("chr_split"), emit: output
     path "versions.yml"                    , emit: versions
 
     when:
