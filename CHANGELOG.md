@@ -3,6 +3,28 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.4.0 - Vitalstatistix [2025-02-24]
+
+### `Added`
+
+- Add markduplicates metrics to multiqc [#679](https://github.com/nf-core/raredisease/pull/679)
+
+### `Changed`
+
+### `Fixed`
+
+### Parameters
+
+| Old parameter | New parameter |
+| ------------- | ------------- |
+|               |               |
+
+### Tool updates
+
+| Tool | Old version | New version |
+| ---- | ----------- | ----------- |
+|      |             |             |
+
 ## 2.3.0 - Getafix [2025-02-13]
 
 ### `Added`

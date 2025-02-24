@@ -37,6 +37,7 @@ workflow ALIGN {
         ch_bwamem2_bam        = Channel.empty()
         ch_bwamem2_bai        = Channel.empty()
         ch_fastp_json         = Channel.empty()
+        ch_markdup_metrics    = Channel.empty()
         ch_mt_bam_bai         = Channel.empty()
         ch_mt_marked_bam      = Channel.empty()
         ch_mt_marked_bai      = Channel.empty()
@@ -66,9 +67,10 @@ workflow ALIGN {
                 val_platform,
                 val_sort_threads
             )
-            ch_bwamem2_bam = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bam
-            ch_bwamem2_bai = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bai
-            ch_versions    = ch_versions.mix(ALIGN_BWA_BWAMEM2_BWAMEME.out.versions)
+            ch_bwamem2_bam     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bam
+            ch_bwamem2_bai     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bai
+            ch_markdup_metrics = ALIGN_BWA_BWAMEM2_BWAMEME.out.metrics
+            ch_versions        = ch_versions.mix(ALIGN_BWA_BWAMEM2_BWAMEME.out.versions)
         } else if (params.aligner.equals("sentieon")) {
             ALIGN_SENTIEON (                        // Triggered when params.aligner is set as sentieon
                 ch_reads,
@@ -77,8 +79,8 @@ workflow ALIGN {
                 ch_genome_bwaindex,
                 val_platform
             )
-            ch_sentieon_bam = ALIGN_SENTIEON.out.marked_bam
-            ch_sentieon_bai = ALIGN_SENTIEON.out.marked_bai
+            ch_sentieon_bam    = ALIGN_SENTIEON.out.marked_bam
+            ch_sentieon_bai    = ALIGN_SENTIEON.out.marked_bai
             ch_versions     = ch_versions.mix(ALIGN_SENTIEON.out.versions)
         }
 
@@ -137,6 +139,7 @@ workflow ALIGN {
         genome_marked_bam  = ch_genome_marked_bam  // channel: [ val(meta), path(bam) ]
         genome_marked_bai  = ch_genome_marked_bai  // channel: [ val(meta), path(bai) ]
         genome_bam_bai     = ch_genome_bam_bai     // channel: [ val(meta), path(bam), path(bai) ]
+        markdup_metrics    = ch_markdup_metrics    // channel: [ val(meta), path(txt) ]
         mt_marked_bam      = ch_mt_marked_bam      // channel: [ val(meta), path(bam) ]
         mt_marked_bai      = ch_mt_marked_bai      // channel: [ val(meta), path(bai) ]
         mt_bam_bai         = ch_mt_bam_bai         // channel: [ val(meta), path(bam), path(bai) ]
