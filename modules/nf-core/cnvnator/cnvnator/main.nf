@@ -28,7 +28,7 @@ process CNVNATOR_CNVNATOR {
     output_meta   = bam             ? meta                : meta2
     prefix        = task.ext.prefix ?: bam ? "${meta.id}" : "${meta2.id}"
     if (fasta) {
-        reference = fasta.toString().endsWith('/') ? "-d ${fasta}" : "-fasta ${fasta}"
+        reference = fasta.isDirectory()  ? "-d ${fasta}" : "-fasta ${fasta}"
     } else {
         reference = ''
     }
