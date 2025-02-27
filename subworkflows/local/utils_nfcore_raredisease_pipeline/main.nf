@@ -74,35 +74,39 @@ workflow PIPELINE_INITIALISATION {
     Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .tap { ch_original_input }
-        .map { meta, fastq1, fastq2 -> meta.id }
+        .map { meta, fastq1, fastq2, bam, bai -> meta.id }
         .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
             counts[sample] = (counts[sample] ?: 0) + 1
             counts
         }
         .combine( ch_original_input )
-        .map { counts, meta, fastq1, fastq2 ->
+        .map { counts, meta, fastq1, fastq2, bam, bai ->
             new_meta = meta + [num_lanes:counts[meta.id],
                         read_group:"\'@RG\\tID:"+ fastq1.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
-            if (!fastq2) {
-                return [ new_meta + [ single_end:true ], [ fastq1 ] ]
-            } else {
-                return [ new_meta + [ single_end:false ], [ fastq1, fastq2 ] ]
+            if (!params.skip_alignment){
+                if (!fastq2) {
+                    return [ new_meta + [ single_end:true ], [ fastq1 ] ]
+                } else {
+                    return [ new_meta + [ single_end:false ], [ fastq1, fastq2 ] ]
+                }
+            }else{
+                return [ new_meta, [bam, bai] ]
             }
         }
         .tap{ ch_input_counts }
-        .map { meta, fastqs -> fastqs }
-        .reduce([:]) { counts, fastqs -> //get line number for each row to construct unique sample ids
-            counts[fastqs] = counts.size() + 1
+        .map { meta, files -> files }
+        .reduce([:]) { counts, files -> //get line number for each row to construct unique sample ids
+            counts[files] = counts.size() + 1
             return counts
         }
         .combine( ch_input_counts )
-        .map { lineno, meta, fastqs -> //append line number to sampleid
-            new_meta = meta + [id:meta.id+"_LNUMBER"+lineno[fastqs]]
-            return [ new_meta, fastqs ]
+        .map { lineno, meta, files -> //append line number to sampleid
+            new_meta = meta + [id:meta.id+"_LNUMBER"+lineno[files]]
+            return [ new_meta, files ]
         }
         .set { ch_samplesheet }
 
-    ch_samples   = ch_samplesheet.map { meta, fastqs ->
+    ch_samples   = ch_samplesheet.map { meta, files ->
                         new_id = meta.sample
                         new_meta = meta - meta.subMap('lane', 'read_group') + [id:new_id]
                         return new_meta

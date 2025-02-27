@@ -1,0 +1,4 @@
+sample,lane,bam,bai,sex,phenotype,paternal_id,maternal_id,case_id
+earlycasualcaiman,1,/workspace/raredisease/results/alignment/earlycasualcaiman_sorted_md.bam,/workspace/raredisease/results/alignment/earlycasualcaiman_sorted_md.bam.bai,1,1,0,0,justhusky
+slowlycivilbuck,1,/workspace/raredisease/results/alignment/slowlycivilbuck_sorted_md.bam,/workspace/raredisease/results/alignment/slowlycivilbuck_sorted_md.bam.bai,2,1,0,0,justhusky
+hugelymodelbat,1,/workspace/raredisease/results/alignment/hugelymodelbat_sorted_md.bam,/workspace/raredisease/results/alignment/hugelymodelbat_sorted_md.bam.bai,1,2,earlycasualcaiman,slowlycivilbuck,justhusky

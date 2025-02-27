@@ -46,16 +46,34 @@ workflow ALIGN {
         ch_mtshift_marked_bai = Channel.empty()
         ch_sentieon_bam       = Channel.empty()
         ch_sentieon_bai       = Channel.empty()
+        ch_input_bam          = Channel.empty()
+        ch_input_bai          = Channel.empty()
         ch_versions           = Channel.empty()
 
-        if (!params.skip_fastp) {
+        if (!params.skip_fastp | !params.skip_alignment) {
             FASTP (ch_reads, [], false, false, false)
             ch_reads = FASTP.out.reads
             ch_versions = ch_versions.mix(FASTP.out.versions)
             ch_fastp_json = FASTP.out.json
         }
 
-        if (params.aligner.matches("bwamem2|bwa|bwameme")) {
+        ch_reads.view()
+        if (params.skip_alignment){
+
+            ch_reads.map { meta, files ->
+                        [meta, files].flatten()
+                    }
+                    .map { it -> [it[0], it[1]] }
+                    .set{ch_input_bam}
+
+            ch_reads.map { meta, files ->
+                        [meta, files].flatten()
+                    }
+                    .map { it -> [it[0], it[2]] }
+                    .set{ch_input_bai}
+
+        }
+        else if (params.aligner.matches("bwamem2|bwa|bwameme")) {
             ALIGN_BWA_BWAMEM2_BWAMEME (             // Triggered when params.aligner is set as bwamem2 or bwa or bwameme
                 ch_reads,
                 ch_genome_bwaindex,
@@ -84,10 +102,11 @@ workflow ALIGN {
             ch_versions     = ch_versions.mix(ALIGN_SENTIEON.out.versions)
         }
 
-        ch_genome_marked_bam = Channel.empty().mix(ch_bwamem2_bam, ch_sentieon_bam)
-        ch_genome_marked_bai = Channel.empty().mix(ch_bwamem2_bai, ch_sentieon_bai)
+        ch_genome_marked_bam = Channel.empty().mix(ch_bwamem2_bam, ch_sentieon_bam, ch_input_bam)
+        ch_genome_marked_bai = Channel.empty().mix(ch_bwamem2_bai, ch_sentieon_bai, ch_input_bai)
         ch_genome_bam_bai    = ch_genome_marked_bam.join(ch_genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
 
+        ch_genome_marked_bam.view()
         // PREPARING READS FOR MT ALIGNMENT
 
         if (params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes) {
@@ -133,7 +152,6 @@ workflow ALIGN {
             SAMTOOLS_VIEW( ch_genome_bam_bai, ch_genome_fasta, [] )
             ch_versions   = ch_versions.mix(SAMTOOLS_VIEW.out.versions)
         }
-
     emit:
         fastp_json         = ch_fastp_json         // channel: [ val(meta), path(json) ]
         genome_marked_bam  = ch_genome_marked_bam  // channel: [ val(meta), path(bam) ]

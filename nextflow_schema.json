@@ -643,7 +643,7 @@
                 },
                 "skip_alignment": {
                     "type": "boolean",
-                    "description": "Allows starting the analysis with alignment files (bam/cram) and skipping alignment step.",
+                    "description": "Allows starting the analysis with alignment files (bam) and skipping alignment step.",
                     "fa_icon": "fas fa-toggle-on"
                 }
             }
