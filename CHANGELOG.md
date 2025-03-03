@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Changed for loop to each in create_pedigree_file [#](https://github.com/nf-core/raredisease/pull/)
+
 ### `Fixed`
 
 ### Parameters
