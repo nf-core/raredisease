@@ -31,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Update SVDB/merge to fix language server problems [#684](https://github.com/nf-core/raredisease/pull/684)
+
 ### `Fixed`
 
 ### Parameters
