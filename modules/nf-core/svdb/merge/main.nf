@@ -69,7 +69,7 @@ process SVDB_MERGE {
         bcftools view \\
             $args2 \\
             --threads ${task.cpus} \\
-            --output ${prefix}.${extension}
+            --output ${prefix}.merged.${extension}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
