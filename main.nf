@@ -33,7 +33,8 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_rare
 workflow NFCORE_RAREDISEASE {
 
     take:
-    samplesheet // channel: samplesheet read in from --input
+    fastq
+    alignment
     samples
     case_info
 
@@ -43,7 +44,8 @@ workflow NFCORE_RAREDISEASE {
     // WORKFLOW: Run pipeline
     //
     RAREDISEASE (
-        samplesheet,
+        fastq,
+        alignment,
         samples,
         case_info
     )
@@ -75,7 +77,8 @@ workflow {
     // WORKFLOW: Run main workflow
     //
     NFCORE_RAREDISEASE (
-        PIPELINE_INITIALISATION.out.samplesheet,
+        PIPELINE_INITIALISATION.out.reads,
+        PIPELINE_INITIALISATION.out.align,
         PIPELINE_INITIALISATION.out.samples,
         PIPELINE_INITIALISATION.out.case_info
     )

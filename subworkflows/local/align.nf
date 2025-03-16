@@ -12,7 +12,8 @@ include { CONVERT_MT_BAM_TO_FASTQ    } from './convert_mt_bam_to_fastq'
 
 workflow ALIGN {
     take:
-        ch_reads                 // channel: [mandatory] [ val(meta), [path(reads)]  ]
+        ch_reads                 // channel: [optional] [ val(meta), [path(reads)]  ]
+        ch_alignments            // channel: [optional] [ val(meta), [path(bam),path(bai)]  ]
         ch_genome_fasta          // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai            // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_bwaindex       // channel: [mandatory] [ val(meta), path(index) ]
@@ -50,30 +51,33 @@ workflow ALIGN {
         ch_input_bai          = Channel.empty()
         ch_versions           = Channel.empty()
 
-        if (!params.skip_fastp | !params.skip_alignment) {
+        if (!params.skip_fastp) {
             FASTP (ch_reads, [], false, false, false)
             ch_reads = FASTP.out.reads
             ch_versions = ch_versions.mix(FASTP.out.versions)
             ch_fastp_json = FASTP.out.json
         }
 
-        ch_reads.view()
-        if (params.skip_alignment){
+        //
+        // If input is bam
+        //
+        ch_alignments.map { meta, files ->
+                    new_id   = meta.sample
+                    new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
+                    return [new_meta, files].flatten()
+                }
+                .map { it -> [it[0], it[1]] }
+                .set{ch_input_bam}
 
-            ch_reads.map { meta, files ->
-                        [meta, files].flatten()
-                    }
-                    .map { it -> [it[0], it[1]] }
-                    .set{ch_input_bam}
+        ch_alignments.map { meta, files ->
+                    new_id   = meta.sample
+                    new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
+                    return [new_meta, files].flatten()
+                }
+                .map { it -> [it[0], it[2]] }
+                .set{ch_input_bai}
 
-            ch_reads.map { meta, files ->
-                        [meta, files].flatten()
-                    }
-                    .map { it -> [it[0], it[2]] }
-                    .set{ch_input_bai}
-
-        }
-        else if (params.aligner.matches("bwamem2|bwa|bwameme")) {
+        if (params.aligner.matches("bwamem2|bwa|bwameme")) {
             ALIGN_BWA_BWAMEM2_BWAMEME (             // Triggered when params.aligner is set as bwamem2 or bwa or bwameme
                 ch_reads,
                 ch_genome_bwaindex,
@@ -106,7 +110,6 @@ workflow ALIGN {
         ch_genome_marked_bai = Channel.empty().mix(ch_bwamem2_bai, ch_sentieon_bai, ch_input_bai)
         ch_genome_bam_bai    = ch_genome_marked_bam.join(ch_genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
 
-        ch_genome_marked_bam.view()
         // PREPARING READS FOR MT ALIGNMENT
 
         if (params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes) {

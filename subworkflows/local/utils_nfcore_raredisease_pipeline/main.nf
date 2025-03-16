@@ -83,13 +83,11 @@ workflow PIPELINE_INITIALISATION {
         .map { counts, meta, fastq1, fastq2, bam, bai ->
             new_meta = meta + [num_lanes:counts[meta.id],
                         read_group:"\'@RG\\tID:"+ fastq1.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
-            if (!params.skip_alignment){
-                if (!fastq2) {
-                    return [ new_meta + [ single_end:true ], [ fastq1 ] ]
-                } else {
-                    return [ new_meta + [ single_end:false ], [ fastq1, fastq2 ] ]
-                }
-            }else{
+            if (fastq1 && !fastq2) {
+                return [ new_meta + [ single_end:true ], [ fastq1 ] ]
+            } else if (fastq1 && fastq2) {
+                return [ new_meta + [ single_end:false ], [ fastq1, fastq2 ] ]
+            } else {
                 return [ new_meta, [bam, bai] ]
             }
         }
@@ -104,22 +102,29 @@ workflow PIPELINE_INITIALISATION {
             new_meta = meta + [id:meta.id+"_LNUMBER"+lineno[files]]
             return [ new_meta, files ]
         }
-        .set { ch_samplesheet }
+        .tap { ch_samplesheet }
+        .branch { meta, files  ->                              // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
+            fastq: !files[0].toString().endsWith("bam")
+                return [meta, files]
+            align: files[0].toString().endsWith("bam")
+                return [meta, files]
+        }
+        .set {ch_samplesheet_by_type}
 
-    ch_samples   = ch_samplesheet.map { meta, files ->
-                        new_id = meta.sample
-                        new_meta = meta - meta.subMap('lane', 'read_group') + [id:new_id]
-                        return new_meta
+    ch_samples  = ch_samplesheet.map { meta, files ->
+                    new_id = meta.sample
+                    new_meta = meta - meta.subMap('lane', 'read_group') + [id:new_id]
+                    return new_meta
                     }.unique()
 
     ch_case_info = ch_samples.toList().map { createCaseChannel(it) }
 
-
     emit:
-    samplesheet = ch_samplesheet
-    samples     = ch_samples
-    case_info   = ch_case_info
-    versions    = ch_versions
+    reads     = ch_samplesheet_by_type.fastq
+    align     = ch_samplesheet_by_type.align
+    samples   = ch_samples
+    case_info = ch_case_info
+    versions  = ch_versions
 }
 
 /*

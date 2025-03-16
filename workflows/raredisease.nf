@@ -24,10 +24,6 @@ def mandatoryParams = [
 ]
 def missingParamsCount = 0
 
-if(!params.skip_alignment){
-    mandatoryParams += ["aligner", "platform"]
-}
-
 if (params.run_rtgvcfeval) {
     mandatoryParams += ["rtg_truthvcfs"]
 }
@@ -176,7 +172,8 @@ include { VARIANT_EVALUATION                                 } from '../subworkf
 workflow RAREDISEASE {
 
     take:
-    ch_samplesheet // channel: samplesheet read in from --input
+    ch_reads
+    ch_alignments
     ch_samples
     ch_case_info
 
@@ -400,17 +397,11 @@ workflow RAREDISEASE {
     ch_scatter_split_intervals  = ch_scatter.split_intervals  ?: Channel.empty()
 
     //
-    // Skip fastqc if pipeline skips aligment
+    // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is nott fastq)
     //
-    fastqc_report = Channel.empty()
-    if (!params.skip_alignment){
-        //
-        // Input QC
-        //
-        FASTQC (ch_samplesheet)
-        fastqc_report = FASTQC.out.zip
-        ch_versions = ch_versions.mix(FASTQC.out.versions.first())
-    }
+    FASTQC (ch_reads)
+    fastqc_report = FASTQC.out.zip
+    ch_versions   = ch_versions.mix(FASTQC.out.versions.first())
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -420,7 +411,8 @@ workflow RAREDISEASE {
 
 
     ALIGN (
-        ch_samplesheet,
+        ch_reads,
+        ch_alignments,
         ch_genome_fasta,
         ch_genome_fai,
         ch_genome_bwaindex,

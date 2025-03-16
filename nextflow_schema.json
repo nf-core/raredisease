@@ -640,11 +640,6 @@
                     "type": "boolean",
                     "description": "Specifies whether or not to filter results based on a list of candidate genes specified in 'vep_filters'.",
                     "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_alignment": {
-                    "type": "boolean",
-                    "description": "Allows starting the analysis with alignment files (bam) and skipping alignment step.",
-                    "fa_icon": "fas fa-toggle-on"
                 }
             }
         },
