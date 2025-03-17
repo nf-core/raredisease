@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- A feature to start the workflow from duplicate-marked bam files [#682](https://github.com/nf-core/raredisease/pull/682)
+
 ### `Changed`
 
 ### `Fixed`
