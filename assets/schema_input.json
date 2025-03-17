@@ -115,19 +115,8 @@
                 "errorMessage": "Case name must be provided and cannot contain spaces"
             }
         },
-        "anyOf": [
-            {
-                "dependentRequired": {
-                    "lane": ["fastq_1"]
-                }
-            },
-            {
-                "dependentRequired": {
-                    "lane": ["bam"]
-                }
-            }
-        ],
         "dependentRequired": {
+            "lane": ["fastq_1"],
             "bam": ["bai"]
         },
         "required": ["sample", "sex", "phenotype", "case_id"]
