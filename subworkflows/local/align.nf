@@ -12,7 +12,8 @@ include { CONVERT_MT_BAM_TO_FASTQ    } from './convert_mt_bam_to_fastq'
 
 workflow ALIGN {
     take:
-        ch_reads                 // channel: [mandatory] [ val(meta), [path(reads)]  ]
+        ch_reads                 // channel: [optional] [ val(meta), [path(reads)]  ]
+        ch_alignments            // channel: [optional] [ val(meta), [path(bam),path(bai)]  ]
         ch_genome_fasta          // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai            // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_bwaindex       // channel: [mandatory] [ val(meta), path(index) ]
@@ -55,6 +56,25 @@ workflow ALIGN {
             ch_fastp_json = FASTP.out.json
         }
 
+        //
+        // If input is bam
+        //
+        ch_alignments.map { meta, files ->
+                    new_id   = meta.sample
+                    new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
+                    return [new_meta, files].flatten()
+                }
+                .map { it -> [it[0], it[1]] }
+                .set{ch_input_bam}
+
+        ch_alignments.map { meta, files ->
+                    new_id   = meta.sample
+                    new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
+                    return [new_meta, files].flatten()
+                }
+                .map { it -> [it[0], it[2]] }
+                .set{ch_input_bai}
+
         if (params.aligner.matches("bwamem2|bwa|bwameme")) {
             ALIGN_BWA_BWAMEM2_BWAMEME (             // Triggered when params.aligner is set as bwamem2 or bwa or bwameme
                 ch_reads,
@@ -84,8 +104,8 @@ workflow ALIGN {
             ch_versions     = ch_versions.mix(ALIGN_SENTIEON.out.versions)
         }
 
-        ch_genome_marked_bam = Channel.empty().mix(ch_bwamem2_bam, ch_sentieon_bam)
-        ch_genome_marked_bai = Channel.empty().mix(ch_bwamem2_bai, ch_sentieon_bai)
+        ch_genome_marked_bam = Channel.empty().mix(ch_bwamem2_bam, ch_sentieon_bam, ch_input_bam)
+        ch_genome_marked_bai = Channel.empty().mix(ch_bwamem2_bai, ch_sentieon_bai, ch_input_bai)
         ch_genome_bam_bai    = ch_genome_marked_bam.join(ch_genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
 
         // PREPARING READS FOR MT ALIGNMENT
@@ -133,7 +153,6 @@ workflow ALIGN {
             SAMTOOLS_VIEW( ch_genome_bam_bai, ch_genome_fasta, [] )
             ch_versions   = ch_versions.mix(SAMTOOLS_VIEW.out.versions)
         }
-
     emit:
         fastp_json         = ch_fastp_json         // channel: [ val(meta), path(json) ]
         genome_marked_bam  = ch_genome_marked_bam  // channel: [ val(meta), path(bam) ]

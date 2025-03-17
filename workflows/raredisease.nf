@@ -15,13 +15,11 @@ include { methodsDescriptionText             } from '../subworkflows/local/utils
 */
 
 def mandatoryParams = [
-    "aligner",
     "analysis_type",
     "fasta",
     "input",
     "intervals_wgs",
     "intervals_y",
-    "platform",
     "variant_caller"
 ]
 def missingParamsCount = 0
@@ -174,7 +172,8 @@ include { VARIANT_EVALUATION                                 } from '../subworkf
 workflow RAREDISEASE {
 
     take:
-    ch_samplesheet // channel: samplesheet read in from --input
+    ch_reads
+    ch_alignments
     ch_samples
     ch_case_info
 
@@ -182,6 +181,7 @@ workflow RAREDISEASE {
 
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
+    ch_mt_txt = Channel.empty()
 
     //
     // Initialize file channels for PREPARE_REFERENCES subworkflow
@@ -358,6 +358,7 @@ workflow RAREDISEASE {
     //
     // Read and store paths in the vep_plugin_files file
     //
+    ch_vep_extra_files = Channel.empty()
     if (params.vep_plugin_files) {
         ch_vep_extra_files_unsplit.splitCsv ( header:true )
             .map { row ->
@@ -384,12 +385,6 @@ workflow RAREDISEASE {
         .set {ch_hgnc_ids}
 
     //
-    // Input QC
-    //
-    FASTQC (ch_samplesheet)
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
-
-    //
     // Create chromosome bed and intervals for splitting and gathering operations
     //
     SCATTER_GENOME (
@@ -401,6 +396,13 @@ workflow RAREDISEASE {
 
     ch_scatter_split_intervals  = ch_scatter.split_intervals  ?: Channel.empty()
 
+    //
+    // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is nott fastq)
+    //
+    FASTQC (ch_reads)
+    fastqc_report = FASTQC.out.zip
+    ch_versions   = ch_versions.mix(FASTQC.out.versions.first())
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ALIGN & FETCH STATS
@@ -408,7 +410,8 @@ workflow RAREDISEASE {
 */
 
     ALIGN (
-        ch_samplesheet,
+        ch_reads,
+        ch_alignments,
         ch_genome_fasta,
         ch_genome_fai,
         ch_genome_bwaindex,
@@ -534,6 +537,7 @@ workflow RAREDISEASE {
             Channel.value(params.sentieon_dnascope_pcr_indel_model)
         )
         ch_versions = ch_versions.mix(CALL_SNV.out.versions)
+        ch_mt_txt = CALL_SNV.out.mt_txt
 
         //
         // ANNOTATE GENOME SNVs
@@ -910,8 +914,8 @@ workflow RAREDISEASE {
         )
     )
 
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(CALL_SNV.out.mt_txt.map{it[1]}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(fastqc_report.collect{it[1]}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_mt_txt.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.fastp_json.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.markdup_metrics.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.sex_check.map{it[1]}.collect().ifEmpty([]))

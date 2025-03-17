@@ -46,6 +46,20 @@
                     }
                 ]
             },
+            "bam": {
+                "errorMessage": "BAM file cannot contain spaces and must have extension '.bam'",
+                "type": "string",
+                "pattern": "^\\S+\\.bam$",
+                "format": "file-path",
+                "exists": true
+            },
+            "bai": {
+                "errorMessage": "BAM index file cannot contain spaces and must have extension '.bai'",
+                "type": "string",
+                "pattern": "^\\S+\\.bai$",
+                "format": "file-path",
+                "exists": true
+            },
             "sex": {
                 "oneOf": [
                     {
@@ -101,6 +115,10 @@
                 "errorMessage": "Case name must be provided and cannot contain spaces"
             }
         },
-        "required": ["sample", "fastq_1", "sex", "phenotype", "case_id"]
+        "dependentRequired": {
+            "lane": ["fastq_1"],
+            "bam": ["bai"]
+        },
+        "required": ["sample", "sex", "phenotype", "case_id"]
     }
 }
