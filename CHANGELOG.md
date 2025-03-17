@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Changed for loop to each in create_pedigree_file [#683](https://github.com/nf-core/raredisease/pull/683)
+
 ### `Fixed`
 
 ### Parameters
@@ -32,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add markduplicates metrics to multiqc [#679](https://github.com/nf-core/raredisease/pull/679)
 
 ### `Changed`
+
+- Update SVDB/merge to fix language server problems [#684](https://github.com/nf-core/raredisease/pull/684)
 
 ### `Fixed`
 
