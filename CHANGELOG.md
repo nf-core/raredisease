@@ -3,13 +3,40 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2.4.0dev - Vitalstatistix [xxxx-xx-xx]
+## 2.5.0dev - Cacofonix [XXXX-XX-XX]
 
 ### `Added`
 
+- A feature to start the workflow from duplicate-marked bam files [#682](https://github.com/nf-core/raredisease/pull/682)
 - A functionality to take spring files as input [#678](https://github.com/nf-core/raredisease/pull/678)
 
 ### `Changed`
+
+- Changed for loop to each in create_pedigree_file [#683](https://github.com/nf-core/raredisease/pull/683)
+
+### `Fixed`
+
+### Parameters
+
+| Old parameter | New parameter |
+| ------------- | ------------- |
+|               |               |
+
+### Tool updates
+
+| Tool | Old version | New version |
+| ---- | ----------- | ----------- |
+|      |             |             |
+
+## 2.4.0 - Vitalstatistix [2025-02-24]
+
+### `Added`
+
+- Add markduplicates metrics to multiqc [#679](https://github.com/nf-core/raredisease/pull/679)
+
+### `Changed`
+
+- Update SVDB/merge to fix language server problems [#684](https://github.com/nf-core/raredisease/pull/684)
 
 ### `Fixed`
 

@@ -27,7 +27,7 @@ jobs:
     strategy:
       matrix:
         NXF_VER:
-          - "24.04.2"
+          - "24.04.4"
           - "latest-everything"
         profile:
           - "docker"
@@ -35,6 +35,7 @@ jobs:
         test_name:
           - "test"
           - "test_one_sample"
+          - "test_bam"
         isMaster:
           - ${{ github.base_ref == 'master' }}
         # Exclude conda and singularity on dev

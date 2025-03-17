@@ -19,13 +19,12 @@ process CREATE_PEDIGREE_FILE {
 
     script:
     def case_name = samples[0].case_id
-    def out   = new File(case_name + ".ped")
     outfile_text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\\t')
     def samples_list = []
-    for(int i = 0; i<samples.size(); i++) {
-        def sample_name =  samples[i].sample
+    samples.each { sample ->
+        def sample_name =  sample.sample
         if (!samples_list.contains(sample_name)) {
-            outfile_text += "\\n" + [samples[i].case_id, sample_name, samples[i].paternal, samples[i].maternal, samples[i].sex, samples[i].phenotype].join('\\t')
+            outfile_text += "\\n" + [sample.case_id, sample_name, sample.paternal, sample.maternal, sample.sex, sample.phenotype].join('\\t')
             samples_list.add(sample_name)
         }
     }
