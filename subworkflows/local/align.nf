@@ -47,8 +47,6 @@ workflow ALIGN {
         ch_mtshift_marked_bai = Channel.empty()
         ch_sentieon_bam       = Channel.empty()
         ch_sentieon_bai       = Channel.empty()
-        ch_input_bam          = Channel.empty()
-        ch_input_bai          = Channel.empty()
         ch_versions           = Channel.empty()
 
         if (!params.skip_fastp) {
