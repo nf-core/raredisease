@@ -60,7 +60,7 @@
                 "anyOf": [
                     {
                         "type": "string",
-                        "pattern": "^\\S+\\.f(ast)?q\\.gz.spring$"
+                        "pattern": "^\\S+.spring$"
                     },
                     {
                         "type": "string",
@@ -75,7 +75,7 @@
                 "anyOf": [
                     {
                         "type": "string",
-                        "pattern": "^\\S+\\.f(ast)?q\\.gz.spring$"
+                        "pattern": "^\\S+.spring$"
                     },
                     {
                         "type": "string",

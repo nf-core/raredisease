@@ -70,7 +70,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         ch_align
             .map{ meta, bam ->
                     new_id   = meta.sample
-                    new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
+                    new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane','data_type')
                     [groupKey(new_meta, new_meta.num_lanes), bam]
                 }
             .groupTuple()

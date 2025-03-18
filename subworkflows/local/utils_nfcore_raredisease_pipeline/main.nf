@@ -93,8 +93,8 @@ workflow PIPELINE_INITIALISATION {
                 return [ new_meta + [ single_end:false, data_type: "separate_spring" ], [ spring1, spring2 ] ]
             } else if (spring1 && !spring2) {
                 new_meta += [read_group:"\'@RG\\tID:"+ spring1.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
-                return [ new_meta + [ single_end:true, data_type: "interleaved_spring" ], [ spring1 ] ]
-            } else {
+                return [ new_meta + [ single_end:false, data_type: "interleaved_spring" ], [ spring1 ] ]
+            } else if (bam && bai) {
                 new_meta += [read_group:"\'@RG\\tID:"+ bam.simpleName + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
                 return [ new_meta, [bam, bai] ]
             }
