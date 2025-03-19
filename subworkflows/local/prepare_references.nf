@@ -88,7 +88,7 @@ workflow PREPARE_REFERENCES {
         GATK_SHIFTFASTA.out.intervals
             .multiMap{ meta, files ->
                     shift_intervals:
-                        ind = files.findIndexValues {it.toString().endsWith("shifted.intervals")}
+                        def ind = files.findIndexValues {it.toString().endsWith("shifted.intervals")}
                         files[ind]
                     intervals:
                         ind = files.findIndexValues {!(it.toString().endsWith("shifted.intervals"))}
@@ -148,7 +148,7 @@ workflow PREPARE_REFERENCES {
         GATK_ILT.out.interval_list
             .collect{ it[1] }
             .map { it ->
-                meta = it[0].toString().split("_split")[0].split("/")[-1] + "_bait.intervals_list"
+                def meta = it[0].toString().split("_split")[0].split("/")[-1] + "_bait.intervals_list"
                 return [[id:meta], it]
             }
             .set { ch_bait_intervals_cat_in }

@@ -71,6 +71,10 @@ workflow PIPELINE_INITIALISATION {
     //
     // Create channel from input file provided through params.input
     //
+    ch_original_input = Channel.empty()
+    ch_input_counts   = Channel.empty()
+    ch_samplesheet    = Channel.empty()
+
     Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .tap { ch_original_input }
@@ -81,7 +85,7 @@ workflow PIPELINE_INITIALISATION {
         }
         .combine( ch_original_input )
         .map { counts, meta, fastq1, fastq2, bam, bai ->
-            new_meta = meta + [num_lanes:counts[meta.id],
+            def new_meta = meta + [num_lanes:counts[meta.id],
                         read_group:"\'@RG\\tID:"+ fastq1.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
             if (fastq1 && !fastq2) {
                 return [ new_meta + [ single_end:true ], [ fastq1 ] ]
@@ -99,11 +103,11 @@ workflow PIPELINE_INITIALISATION {
         }
         .combine( ch_input_counts )
         .map { lineno, meta, files -> //append line number to sampleid
-            new_meta = meta + [id:meta.id+"_LNUMBER"+lineno[files]]
+            def new_meta = meta + [id:meta.id+"_LNUMBER"+lineno[files]]
             return [ new_meta, files ]
         }
         .tap { ch_samplesheet }
-        .branch { meta, files  ->                              // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
+        .branch { meta, files  ->
             fastq: !files[0].toString().endsWith("bam")
                 return [meta, files]
             align: files[0].toString().endsWith("bam")
@@ -112,8 +116,8 @@ workflow PIPELINE_INITIALISATION {
         .set {ch_samplesheet_by_type}
 
     ch_samples  = ch_samplesheet.map { meta, files ->
-                    new_id = meta.sample
-                    new_meta = meta - meta.subMap('lane', 'read_group') + [id:new_id]
+                    def new_id = meta.sample
+                    def new_meta = meta - meta.subMap('lane', 'read_group') + [id:new_id]
                     return new_meta
                     }.unique()
 
