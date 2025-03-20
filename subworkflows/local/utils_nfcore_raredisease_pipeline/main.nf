@@ -250,9 +250,10 @@ def checkRequiredParameters(params) {
         skip_repeat_annotation: ["variant_catalog"],
         skip_snv_calling: ["genome"],
         skip_snv_annotation: ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
-                              "gnomad_af", "score_config_snv", "variant_consequences_snv"],
+                                "gnomad_af", "score_config_snv", "variant_consequences_snv"],
         skip_sv_annotation: ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"],
-        skip_mt_annotation: ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "vep_cache_version", "vep_cache", "variant_consequences_snv"],
+        skip_mt_annotation: ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "score_config_mt",
+                                "vep_cache_version", "vep_cache", "variant_consequences_snv"],
         analysis_type_wes: ["target_bed"],
         variant_caller_sentieon: ["ml_model"],
         skip_germlinecnvcaller: ["ploidy_model", "gcnvcaller_model", "readcount_intervals"],
@@ -265,11 +266,13 @@ def checkRequiredParameters(params) {
     def missingParamsCount = 0
 
     conditionalParams.each { condition, paramsList ->
-        if (condition.contains("analysis_type_wes") && params.analysis_type.equals("wes")) {
+        if (condition == "analysis_type_wes" && params.analysis_type == "wes") {
             mandatoryParams += paramsList
-        } else if (condition.contains("variant_caller_sentieon") && params.variant_caller.equals("sentieon")) {
+        } else if (condition == "variant_caller_sentieon" && params.variant_caller == "sentieon") {
             mandatoryParams += paramsList
-        } else if (params[condition] != null && !params[condition]) {
+        } else if (condition == "run_rtgvcfeval" && params[condition]) {
+            mandatoryParams += paramsList
+        } else if (condition != "run_rtgvcfeval" && params.containsKey(condition) && !params[condition]) {
             mandatoryParams += paramsList
         }
     }
