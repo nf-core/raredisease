@@ -25,8 +25,8 @@ workflow ALIGN_SENTIEON {
         SENTIEON_BWAMEM.out
             .bam_and_bai
             .map{ meta, bam, bai ->
-                new_id   = meta.sample
-                new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
+                def new_id   = meta.sample
+                def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
                 [groupKey(new_meta, new_meta.num_lanes), bam, bai]
                 }
             .groupTuple()
