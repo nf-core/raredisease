@@ -23,9 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Tool updates
 
-| Tool | Old version | New version |
-| ---- | ----------- | ----------- |
-|      |             |             |
+| Tool        | Old version | New version |
+| ----------- | ----------- | ----------- |
+| DeepVariant | 1.6.1       | 1.8.0       |
 
 ## 2.4.0 - Vitalstatistix [2025-02-24]
 
