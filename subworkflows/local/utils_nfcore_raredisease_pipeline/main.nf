@@ -67,6 +67,7 @@ workflow PIPELINE_INITIALISATION {
     // Custom validation for pipeline parameters
     //
     validateInputParameters()
+    checkRequiredParameters(params)
 
     //
     // Create channel from input file provided through params.input
@@ -227,6 +228,77 @@ def createCaseChannel(List rows) {
 //
 def validateInputParameters() {
     genomeExistsError()
+}
+
+//
+// Validate parameters
+//
+
+def checkRequiredParameters(params) {
+    def mandatoryParams = [
+        "analysis_type",
+        "fasta",
+        "input",
+        "intervals_wgs",
+        "intervals_y",
+        "variant_caller"
+    ]
+
+    def conditionalParams = [
+        run_rtgvcfeval: ["rtg_truthvcfs"],
+        skip_repeat_calling: ["variant_catalog"],
+        skip_repeat_annotation: ["variant_catalog"],
+        skip_snv_calling: ["genome"],
+        skip_snv_annotation: ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
+                              "gnomad_af", "score_config_snv", "variant_consequences_snv"],
+        skip_sv_annotation: ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"],
+        skip_mt_annotation: ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "vep_cache_version", "vep_cache", "variant_consequences_snv"],
+        analysis_type_wes: ["target_bed"],
+        variant_caller_sentieon: ["ml_model"],
+        skip_germlinecnvcaller: ["ploidy_model", "gcnvcaller_model", "readcount_intervals"],
+        skip_me_calling: ["mobile_element_references"],
+        skip_me_annotation: ["mobile_element_svdb_annotations", "variant_consequences_snv"],
+        skip_gens: ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
+        skip_smncopynumbercaller: ["genome"]
+    ]
+
+    def missingParamsCount = 0
+
+    conditionalParams.each { condition, paramsList ->
+        if (condition.contains("analysis_type_wes") && params.analysis_type.equals("wes")) {
+            mandatoryParams += paramsList
+        } else if (condition.contains("variant_caller_sentieon") && params.variant_caller.equals("sentieon")) {
+            mandatoryParams += paramsList
+        } else if (params[condition] != null && !params[condition]) {
+            mandatoryParams += paramsList
+        }
+    }
+
+    if (!params.skip_sv_annotation && !params.svdb_query_bedpedbs && !params.svdb_query_dbs) {
+        println("params.svdb_query_bedpedbs or params.svdb_query_dbs should be set.")
+        missingParamsCount += 1
+    }
+
+    if (!params.skip_vep_filter) {
+        if (!params.vep_filters && !params.vep_filters_scout_fmt) {
+            println("params.vep_filters or params.vep_filters_scout_fmt should be set.")
+            missingParamsCount += 1
+        } else if (params.vep_filters && params.vep_filters_scout_fmt) {
+            println("Either params.vep_filters or params.vep_filters_scout_fmt should be set.")
+            missingParamsCount += 1
+        }
+    }
+
+    mandatoryParams.unique().each { param ->
+        if (params[param] == null) {
+            println("params." + param + " not set.")
+            missingParamsCount += 1
+        }
+    }
+
+    if (missingParamsCount > 0) {
+        error("\nSet missing parameters and restart the run. For more information please check usage documentation on github.")
+    }
 }
 
 //
