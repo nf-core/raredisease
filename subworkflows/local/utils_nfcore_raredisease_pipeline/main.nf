@@ -72,9 +72,6 @@ workflow PIPELINE_INITIALISATION {
     //
     // Create channel from input file provided through params.input
     //
-    ch_original_input = Channel.empty()
-    ch_input_counts   = Channel.empty()
-    ch_samplesheet    = Channel.empty()
 
     Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
@@ -245,22 +242,22 @@ def checkRequiredParameters(params) {
     ]
 
     def conditionalParams = [
-        run_rtgvcfeval: ["rtg_truthvcfs"],
-        skip_repeat_calling: ["variant_catalog"],
-        skip_repeat_annotation: ["variant_catalog"],
-        skip_snv_calling: ["genome"],
-        skip_snv_annotation: ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
-                                "gnomad_af", "score_config_snv", "variant_consequences_snv"],
-        skip_sv_annotation: ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"],
-        skip_mt_annotation: ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "score_config_mt",
-                                "vep_cache_version", "vep_cache", "variant_consequences_snv"],
-        analysis_type_wes: ["target_bed"],
-        variant_caller_sentieon: ["ml_model"],
-        skip_germlinecnvcaller: ["ploidy_model", "gcnvcaller_model", "readcount_intervals"],
-        skip_me_calling: ["mobile_element_references"],
-        skip_me_annotation: ["mobile_element_svdb_annotations", "variant_consequences_snv"],
-        skip_gens: ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
-        skip_smncopynumbercaller: ["genome"]
+        run_rtgvcfeval           : ["rtg_truthvcfs"],
+        skip_repeat_calling      : ["variant_catalog"],
+        skip_repeat_annotation   : ["variant_catalog"],
+        skip_snv_calling         : ["genome"],
+        skip_snv_annotation      : ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
+                                    "gnomad_af", "score_config_snv", "variant_consequences_snv"],
+        skip_sv_annotation       : ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"],
+        skip_mt_annotation       : ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "score_config_mt",
+                                    "vep_cache_version", "vep_cache", "variant_consequences_snv"],
+        analysis_type_wes        : ["target_bed"],
+        variant_caller_sentieon  : ["ml_model"],
+        skip_germlinecnvcaller   : ["ploidy_model", "gcnvcaller_model", "readcount_intervals"],
+        skip_me_calling          : ["mobile_element_references"],
+        skip_me_annotation       : ["mobile_element_svdb_annotations", "variant_consequences_snv"],
+        skip_gens                : ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
+        skip_smncopynumbercaller : ["genome"]
     ]
 
     def missingParamsCount = 0

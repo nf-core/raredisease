@@ -43,9 +43,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
         GATK4_GERMLINECNVCALLER ( ch_gcnvc_in )
 
         GATK4_GERMLINECNVCALLER.out.casecalls
-            .map { item ->
-                def meta = item[0]
-                def model_calls = item[1]
+            .map { meta, model_calls ->
                 return [meta.sample, meta, model_calls]
             }
             .groupTuple(by: 0)

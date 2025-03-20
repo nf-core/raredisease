@@ -12,8 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - Changed for loop to each in create_pedigree_file [#683](https://github.com/nf-core/raredisease/pull/683)
+- Refactored code to address issues highlighted by language server [#688](https://github.com/nf-core/raredisease/pull/688)
 
 ### `Fixed`
+
+- Errors due to channel name and structure inconsistencies in the sentieon SNV calling subworkflow[#688](https://github.com/nf-core/raredisease/pull/688)
 
 ### Parameters
 
