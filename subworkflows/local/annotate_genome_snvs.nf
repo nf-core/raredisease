@@ -142,13 +142,13 @@ workflow ANNOTATE_GENOME_SNVS {
         BCFTOOLS_CONCAT (ch_concat_in)
 
         BCFTOOLS_CONCAT.out.vcf
-        .flatMap { meta, vcf ->
-            meta.upd_children.collect { upd_sample ->
-                def new_meta = meta + [upd_child: upd_sample, prefix: meta.prefix + "_vcfanno"]
-                [new_meta, vcf]
+            .flatMap { meta, vcf ->
+                meta.upd_children.collect { upd_sample ->
+                    def new_meta = meta + [upd_child: upd_sample, prefix: meta.prefix + "_vcfanno"]
+                    [new_meta, vcf]
+                }
             }
-        }
-        .set { ch_upd_in }
+            .set { ch_upd_in }
 
         UPD_SITES(ch_upd_in)
         UPD_REGIONS(ch_upd_in)
