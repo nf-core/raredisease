@@ -67,6 +67,7 @@ workflow PIPELINE_INITIALISATION {
     // Custom validation for pipeline parameters
     //
     validateInputParameters()
+    checkRequiredParameters(params)
 
     //
     // Create channel from input file provided through params.input
@@ -81,7 +82,7 @@ workflow PIPELINE_INITIALISATION {
         }
         .combine( ch_original_input )
         .map { counts, meta, fastq1, fastq2, bam, bai ->
-            new_meta = meta + [num_lanes:counts[meta.id],
+            def new_meta = meta + [num_lanes:counts[meta.id],
                         read_group:"\'@RG\\tID:"+ fastq1.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
             if (fastq1 && !fastq2) {
                 return [ new_meta + [ single_end:true ], [ fastq1 ] ]
@@ -99,11 +100,11 @@ workflow PIPELINE_INITIALISATION {
         }
         .combine( ch_input_counts )
         .map { lineno, meta, files -> //append line number to sampleid
-            new_meta = meta + [id:meta.id+"_LNUMBER"+lineno[files]]
+            def new_meta = meta + [id:meta.id+"_LNUMBER"+lineno[files]]
             return [ new_meta, files ]
         }
         .tap { ch_samplesheet }
-        .branch { meta, files  ->                              // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
+        .branch { meta, files  ->
             fastq: !files[0].toString().endsWith("bam")
                 return [meta, files]
             align: files[0].toString().endsWith("bam")
@@ -112,8 +113,8 @@ workflow PIPELINE_INITIALISATION {
         .set {ch_samplesheet_by_type}
 
     ch_samples  = ch_samplesheet.map { meta, files ->
-                    new_id = meta.sample
-                    new_meta = meta - meta.subMap('lane', 'read_group') + [id:new_id]
+                    def new_id = meta.sample
+                    def new_meta = meta - meta.subMap('lane', 'read_group') + [id:new_id]
                     return new_meta
                     }.unique()
 
@@ -223,6 +224,80 @@ def createCaseChannel(List rows) {
 //
 def validateInputParameters() {
     genomeExistsError()
+}
+
+//
+// Validate parameters
+//
+
+def checkRequiredParameters(params) {
+    def mandatoryParams = [
+        "analysis_type",
+        "fasta",
+        "input",
+        "intervals_wgs",
+        "intervals_y",
+        "variant_caller"
+    ]
+
+    def conditionalParams = [
+        run_rtgvcfeval           : ["rtg_truthvcfs"],
+        skip_repeat_calling      : ["variant_catalog"],
+        skip_repeat_annotation   : ["variant_catalog"],
+        skip_snv_calling         : ["genome"],
+        skip_snv_annotation      : ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
+                                    "gnomad_af", "score_config_snv", "variant_consequences_snv"],
+        skip_sv_annotation       : ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"],
+        skip_mt_annotation       : ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "score_config_mt",
+                                    "vep_cache_version", "vep_cache", "variant_consequences_snv"],
+        analysis_type_wes        : ["target_bed"],
+        variant_caller_sentieon  : ["ml_model"],
+        skip_germlinecnvcaller   : ["ploidy_model", "gcnvcaller_model", "readcount_intervals"],
+        skip_me_calling          : ["mobile_element_references"],
+        skip_me_annotation       : ["mobile_element_svdb_annotations", "variant_consequences_snv"],
+        skip_gens                : ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
+        skip_smncopynumbercaller : ["genome"]
+    ]
+
+    def missingParamsCount = 0
+
+    conditionalParams.each { condition, paramsList ->
+        if (condition == "analysis_type_wes" && params.analysis_type == "wes") {
+            mandatoryParams += paramsList
+        } else if (condition == "variant_caller_sentieon" && params.variant_caller == "sentieon") {
+            mandatoryParams += paramsList
+        } else if (condition == "run_rtgvcfeval" && params[condition]) {
+            mandatoryParams += paramsList
+        } else if (condition != "run_rtgvcfeval" && params.containsKey(condition) && !params[condition]) {
+            mandatoryParams += paramsList
+        }
+    }
+
+    if (!params.skip_sv_annotation && !params.svdb_query_bedpedbs && !params.svdb_query_dbs) {
+        println("params.svdb_query_bedpedbs or params.svdb_query_dbs should be set.")
+        missingParamsCount += 1
+    }
+
+    if (!params.skip_vep_filter) {
+        if (!params.vep_filters && !params.vep_filters_scout_fmt) {
+            println("params.vep_filters or params.vep_filters_scout_fmt should be set.")
+            missingParamsCount += 1
+        } else if (params.vep_filters && params.vep_filters_scout_fmt) {
+            println("Either params.vep_filters or params.vep_filters_scout_fmt should be set.")
+            missingParamsCount += 1
+        }
+    }
+
+    mandatoryParams.unique().each { param ->
+        if (params[param] == null) {
+            println("params." + param + " not set.")
+            missingParamsCount += 1
+        }
+    }
+
+    if (missingParamsCount > 0) {
+        error("\nSet missing parameters and restart the run. For more information please check usage documentation on github.")
+    }
 }
 
 //
