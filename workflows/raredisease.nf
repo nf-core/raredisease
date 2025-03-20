@@ -10,103 +10,6 @@ include { methodsDescriptionText             } from '../subworkflows/local/utils
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    CHECK MANDATORY PARAMETERS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-def mandatoryParams = [
-    "analysis_type",
-    "fasta",
-    "input",
-    "intervals_wgs",
-    "intervals_y",
-    "variant_caller"
-]
-def missingParamsCount = 0
-
-if (params.run_rtgvcfeval) {
-    mandatoryParams += ["rtg_truthvcfs"]
-}
-
-if (!params.skip_repeat_calling) {
-    mandatoryParams += ["variant_catalog"]
-}
-
-if (!params.skip_repeat_annotation) {
-    mandatoryParams += ["variant_catalog"]
-}
-
-if (!params.skip_snv_calling) {
-    mandatoryParams += ["genome"]
-}
-
-if (!params.skip_snv_annotation) {
-    mandatoryParams += ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
-    "gnomad_af", "score_config_snv", "variant_consequences_snv"]
-}
-
-if (!params.skip_sv_annotation) {
-    mandatoryParams += ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"]
-    if (!params.svdb_query_bedpedbs && !params.svdb_query_dbs) {
-        println("params.svdb_query_bedpedbs or params.svdb_query_dbs should be set.")
-        missingParamsCount += 1
-    }
-}
-
-if (!params.skip_mt_annotation) {
-    mandatoryParams += ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "vep_cache_version", "vep_cache", "variant_consequences_snv"]
-}
-
-if (params.analysis_type.equals("wes")) {
-    mandatoryParams += ["target_bed"]
-}
-
-if (params.variant_caller.equals("sentieon")) {
-    mandatoryParams += ["ml_model"]
-}
-
-if (!params.skip_germlinecnvcaller) {
-    mandatoryParams += ["ploidy_model", "gcnvcaller_model", "readcount_intervals"]
-}
-
-if (!params.skip_vep_filter) {
-    if (!params.vep_filters && !params.vep_filters_scout_fmt) {
-        println("params.vep_filters or params.vep_filters_scout_fmt should be set.")
-        missingParamsCount += 1
-    } else if (params.vep_filters && params.vep_filters_scout_fmt) {
-        println("Either params.vep_filters or params.vep_filters_scout_fmt should be set.")
-        missingParamsCount += 1
-    }
-}
-
-if (!params.skip_me_calling) {
-    mandatoryParams += ["mobile_element_references"]
-}
-
-if (!params.skip_me_annotation) {
-    mandatoryParams += ["mobile_element_svdb_annotations", "variant_consequences_snv"]
-}
-
-if (!params.skip_gens) {
-    mandatoryParams += ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"]
-}
-
-if (!params.skip_smncopynumbercaller) {
-    mandatoryParams += ["genome"]
-}
-for (param in mandatoryParams.unique()) {
-    if (params[param] == null) {
-        println("params." + param + " not set.")
-        missingParamsCount += 1
-    }
-}
-
-if (missingParamsCount>0) {
-    error("\nSet missing parameters and restart the run. For more information please check usage documentation on github.")
-}
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT MODULES AND SUBWORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -365,7 +268,7 @@ workflow RAREDISEASE {
     if (params.vep_plugin_files) {
         ch_vep_extra_files_unsplit.splitCsv ( header:true )
             .map { row ->
-                f = file(row.vep_files[0])
+                def f = file(row.vep_files[0])
                 if(f.isFile() || f.isDirectory()){
                     return [f]
                 } else {

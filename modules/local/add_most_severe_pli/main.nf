@@ -18,14 +18,13 @@ process ADD_MOST_SEVERE_PLI {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     add_most_severe_pli.py --file_in ${vcf} --file_out ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        add_most_severe_pli: v1.0
+        add_most_severe_pli: v1.1
         python: \$(python --version | sed 's/Python //g')
     END_VERSIONS
     """
@@ -37,7 +36,7 @@ process ADD_MOST_SEVERE_PLI {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        add_most_severe_pli: v1.0
+        add_most_severe_pli: v1.1
         python: \$(python --version | sed 's/Python //g')
     END_VERSIONS
     """

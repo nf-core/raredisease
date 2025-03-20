@@ -12,9 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Updated `add_most_severe_consequence` and `add_most_severe_pli` to fix spelling and language server warnings [#689](https://github.com/nf-core/raredisease/pull/689)
+- Refactored code to address issues highlighted by language server [#688](https://github.com/nf-core/raredisease/pull/688)
 - Changed for loop to each in create_pedigree_file [#683](https://github.com/nf-core/raredisease/pull/683)
 
 ### `Fixed`
+
+- Errors due to channel name and structure inconsistencies in the sentieon SNV calling subworkflow[#688](https://github.com/nf-core/raredisease/pull/688)
 
 ### Parameters
 
@@ -24,9 +28,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Tool updates
 
-| Tool | Old version | New version |
-| ---- | ----------- | ----------- |
-|      |             |             |
+| Tool                        | Old version | New version |
+| --------------------------- | ----------- | ----------- |
+| DeepVariant                 | 1.6.1       | 1.8.0       |
+| add_most_severe_consequence | 1.0         | 1.1         |
+| add_most_severe_pli         | 1.0         | 1.1         |
 
 ## 2.4.0 - Vitalstatistix [2025-02-24]
 
