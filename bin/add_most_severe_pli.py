@@ -84,7 +84,7 @@ def write_pli_annotated_vcf(file_in: TextIO, file_out: TextIO):
             if line.startswith("##INFO=<ID=CSQ") and "pLI_gene_value" in line:
                 pli_ind = parse_vep_csq_schema(line)
                 file_out.write(
-                    '##INFO=<ID=most_severe_pli,Number=1,Type=Float,Description="Probabililty of a gene being loss-of-function intolerant score.">\n'
+                    '##INFO=<ID=most_severe_pli,Number=1,Type=Float,Description="Probability of a gene being loss-of-function intolerant score.">\n'
                 )
         else:
             vcf_record = construct_most_severe_pli_info(line, pli_ind)

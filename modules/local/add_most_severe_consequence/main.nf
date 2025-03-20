@@ -19,14 +19,13 @@ process ADD_MOST_SEVERE_CSQ {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     add_most_severe_consequence.py --file_in ${vcf} --file_out ${prefix}.vcf --variant_csq ${variant_consequences}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        add_most_severe_consequence: v1.0
+        add_most_severe_consequence: v1.1
         python: \$(python --version | sed 's/Python //g')
     END_VERSIONS
     """
@@ -38,7 +37,7 @@ process ADD_MOST_SEVERE_CSQ {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        add_most_severe_consequence: v1.0
+        add_most_severe_consequence: v1.1
         python: \$(python --version | sed 's/Python //g')
     END_VERSIONS
     """
