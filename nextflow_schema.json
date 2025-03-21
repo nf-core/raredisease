@@ -549,11 +549,6 @@
                     "description": "Number of intervals to split your genome into (used to parallelize annotations)",
                     "fa_icon": "fas fa-less-than"
                 },
-                "skip_fastp": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip trimming with fastp.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "skip_gens": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip gens preprocessing subworkflow.",
@@ -562,11 +557,6 @@
                 "skip_germlinecnvcaller": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip CNV calling using GATK's GermlineCNVCaller",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_haplogrep3": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip haplogrep3.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_peddy": {
@@ -628,6 +618,13 @@
                     "type": "boolean",
                     "description": "Specifies whether or not to skip nuclear and mitochondrial SV calling and annotation.",
                     "fa_icon": "fas fa-toggle-on"
+                },
+                "skip_tools": {
+                    "type": "string",
+                    "fa_icon": "fas fa-forward",
+                    "description": "Disable specified tools.",
+                    "help_text": "Multiple tools can be specified, separated by commas.\n\n> **NB** `--skip_tools baserecalibrator_report` is actually just not saving the reports.\n> **NB** `--skip_tools markduplicates_report` does not skip `MarkDuplicates` but prevent the collection of duplicate metrics that slows down performance.",
+                    "pattern": "^((fastp|gens|germlinecnvcaller|haplogrep3|peddy|smncopynumbercaller|vcf2cytosure|fastqc)?,?)*(?<!,)$"
                 },
                 "skip_vcf2cytosure": {
                     "type": "boolean",

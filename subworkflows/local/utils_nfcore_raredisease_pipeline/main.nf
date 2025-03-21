@@ -334,6 +334,12 @@ def toolCitationText() {
             "HaploGrep2 (Weissensteiner et al., 2016),",
             "Genmod (Magnusson et al., 2018),"
         ]
+        if (!(params.skip_tools && params.skip_tools.split(',').contains('haplogrep3'))) {
+            mt_annotation_text += [
+                "HaploGrep3 (Schönherr et al., 2023),"
+            ]
+
+        }
     }
     if (!params.skip_me_annotation && params.analysis_type.equals("wgs")) {
         me_annotation_text = [
@@ -356,7 +362,7 @@ def toolCitationText() {
     ]
     preprocessing_text = [
         "FastQC (Andrews 2010),",
-        params.skip_fastp  ? "" : "Fastp (Chen, 2023),"
+        params.skip_tools && params.skip_tools.split(',').contains('fastp') ? "" : "Fastp (Chen, 2023),"
     ]
     other_citation_text = [
         "BCFtools (Danecek et al., 2021),",
@@ -458,6 +464,11 @@ def toolBibliographyText() {
             "<li>Weissensteiner, H., Pacher, D., Kloss-Brandstätter, A., Forer, L., Specht, G., Bandelt, H.-J., Kronenberg, F., Salas, A., & Schönherr, S. (2016). HaploGrep 2: Mitochondrial haplogroup classification in the era of high-throughput sequencing. Nucleic Acids Research, 44(W1), W58–W63. https://doi.org/10.1093/nar/gkw233</li>",
             "<li>Magnusson, M., Hughes, T., Glabilloy, & Bitdeli Chef. (2018). genmod: Version 3.7.3 (3.7.3) [Computer software]. Zenodo. https://doi.org/10.5281/ZENODO.3841142</li>"
         ]
+        if (!(params.skip_tools && params.skip_tools.split(',').contains('haplogrep3'))) {
+            mt_annotation_text += [
+                "<li>Schönherr, S., Weissensteiner, H., Kronenberg, F., & Forer, L. (2023). Haplogrep 3 an interactive haplogroup classification and analysis platform. Nucleic Acids Research, 51(W1), W263-W268. https://doi.org/10.1093/nar/gkad284</li>"
+            ]
+        }
     }
     if (!params.skip_me_annotation && params.analysis_type.equals("wgs")) {
         me_annotation_text = [
@@ -480,7 +491,7 @@ def toolBibliographyText() {
     ]
     preprocessing_text = [
         "<li>Andrews S, (2010) FastQC, URL: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/</li>",
-        params.skip_fastp  ? "" : "<li>Chen, S. (2023). Ultrafast one-pass FASTQ data preprocessing, quality control, and deduplication using fastp. iMeta, 2(2), e107. https://doi.org/10.1002/imt2.107</li>"
+        params.skip_tools && params.skip_tools.split(',').contains('fastp') ? "" : "<li>Chen, S. (2023). Ultrafast one-pass FASTQ data preprocessing, quality control, and deduplication using fastp. iMeta, 2(2), e107. https://doi.org/10.1002/imt2.107</li>"
     ]
 
     other_citation_text = [
