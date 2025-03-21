@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | skip_gens                |               |
 | skip_peddy               |               |
 | skip_smncopynumbercaller |               |
+| skip_vcf2cytosure        |               |
 
 ### Tool updates
 
