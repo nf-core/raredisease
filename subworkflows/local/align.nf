@@ -60,16 +60,16 @@ workflow ALIGN {
         // If input is bam
         //
         ch_alignments.map { meta, files ->
-                    new_id   = meta.sample
-                    new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
+                    def new_id   = meta.sample
+                    def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
                     return [new_meta, files].flatten()
                 }
                 .map { it -> [it[0], it[1]] }
                 .set{ch_input_bam}
 
         ch_alignments.map { meta, files ->
-                    new_id   = meta.sample
-                    new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
+                    def new_id   = meta.sample
+                    def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
                     return [new_meta, files].flatten()
                 }
                 .map { it -> [it[0], it[2]] }

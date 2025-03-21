@@ -42,9 +42,16 @@ workflow CALL_SV_GERMLINECNVCALLER {
 
         GATK4_GERMLINECNVCALLER ( ch_gcnvc_in )
 
-        GATK4_GERMLINECNVCALLER.out.casecalls.toList()
-            .flatMap {reduce_input(it)}
-            .buffer (size: 2)
+        GATK4_GERMLINECNVCALLER.out.casecalls
+            .map { meta, model_calls ->
+                return [meta.sample, meta, model_calls]
+            }
+            .groupTuple(by: 0)
+            .map { sample, metas, model_calls ->
+                def meta = metas[0] // All metas should be the same for a given sample
+                def models = model_calls.collect { it.toString() }
+                return [meta, models]
+            }
             .combine(ch_gcnvcaller_model.collect{it[1]}.toList())
             .join(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls)
             .set {ch_postproc_in}
@@ -83,25 +90,4 @@ workflow CALL_SV_GERMLINECNVCALLER {
         genotyped_filtered_segments_vcf  = SVDB_MERGE_GCNVCALLER.out.vcf                    // channel: [ val(meta), path(*.vcf.gz) ]
         denoised_vcf                     = GATK4_POSTPROCESSGERMLINECNVCALLS.out.denoised   // channel: [ val(meta), path(*.vcf.gz) ]
         versions                         = ch_versions                                      // channel: [ versions.yml ]
-}
-
-// This function groups calls with same meta for postprocessing.
-def reduce_input(List gcnvoutput) {
-    def dictionary  = [:]
-    def reducedList = []
-    for (int i = 0; i<gcnvoutput.size(); i++) {
-            meta  = gcnvoutput[i][0]
-            model = gcnvoutput[i][1]
-        if(dictionary.containsKey(meta)) {
-            dictionary[meta] += [model]
-        } else {
-            dictionary[meta]  = [model]
-        }
-    }
-
-    for (i in dictionary) {
-        reducedList.add(i.key)
-        reducedList.add(i.value)
-        }
-    return reducedList
 }
