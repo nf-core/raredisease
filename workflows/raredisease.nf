@@ -238,7 +238,7 @@ workflow RAREDISEASE {
     //
     // SV caller priority
     //
-    if (params.skip_germlinecnvcaller) {
+    if (params.skip_tools && params.skip_tools.split(',').contains('germlinecnvcaller')) {
         if (params.analysis_type.equals("wgs")) {
             ch_svcaller_priority = Channel.value(["tiddit", "manta", "cnvnator"])
         } else {

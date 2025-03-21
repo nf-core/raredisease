@@ -549,11 +549,6 @@
                     "description": "Number of intervals to split your genome into (used to parallelize annotations)",
                     "fa_icon": "fas fa-less-than"
                 },
-                "skip_germlinecnvcaller": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip CNV calling using GATK's GermlineCNVCaller",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "skip_me_calling": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip calling mobile elements, and the subsequent annotation step.",

@@ -252,13 +252,13 @@ def checkRequiredParameters(params) {
                                     "vep_cache_version", "vep_cache", "variant_consequences_snv"],
         analysis_type_wes        : ["target_bed"],
         variant_caller_sentieon  : ["ml_model"],
-        skip_germlinecnvcaller   : ["ploidy_model", "gcnvcaller_model", "readcount_intervals"],
         skip_me_calling          : ["mobile_element_references"],
         skip_me_annotation       : ["mobile_element_svdb_annotations", "variant_consequences_snv"]
     ]
 
     def conditionalParamsTools = [
         gens                     : ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
+        germlinecnvcaller        : ["ploidy_mmodel", "gcnvcaller_model", "readcount_intervals"],
         smncopynumbercaller      : ["genome"]
     ]
 
