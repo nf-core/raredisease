@@ -82,6 +82,7 @@ workflow PIPELINE_INITIALISATION {
         }
         .combine( ch_original_input )
         .map { counts, meta, fastq1, fastq2, spring1, spring2, bam, bai ->
+            new_meta = meta + [num_lanes: counts[meta.id]]
             if (fastq1 && fastq2) {
                 new_meta += [read_group: generateReadGroupLine(fastq1, meta, params)]
                 return [new_meta + [single_end: false, data_type: "fastq_gz"], [fastq1, fastq2]]
