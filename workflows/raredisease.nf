@@ -371,8 +371,7 @@ workflow RAREDISEASE {
     RENAME ALIGNMENT FILES FOR SMNCOPYNUMBERCALLER & REPEATCALLING
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
-    if ( params.analysis_type.equals("wgs") && (!params.skip_smncopynumbercaller || !params.skip_repeat_calling)) {
+    if ( params.analysis_type.equals("wgs") && (!(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) || !params.skip_repeat_calling)) {
         RENAME_BAM(ch_mapped.genome_marked_bam, "bam")
         RENAME_BAI(ch_mapped.genome_marked_bai, "bam.bai")
         ch_versions = ch_versions.mix(RENAME_BAM.out.versions)
@@ -681,7 +680,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if ( params.analysis_type.equals("wgs") && !params.skip_smncopynumbercaller ) {
+    if ( params.analysis_type.equals("wgs") && !(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) ) {
 
         RENAME_BAM.out.output
             .collect{it[1]}

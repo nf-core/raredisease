@@ -21,12 +21,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter   | New parameter |
-| --------------- | ------------- |
-| skip_haplogrep3 | skip_tools    |
-| skip_fastp      |               |
-| skip_gens       |               |
-| skip_peddy      |               |
+| Old parameter            | New parameter |
+| ------------------------ | ------------- |
+| skip_haplogrep3          | skip_tools    |
+| skip_fastp               |               |
+| skip_gens                |               |
+| skip_peddy               |               |
+| skip_smncopynumbercaller |               |
 
 ### Tool updates
 
