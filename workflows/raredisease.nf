@@ -388,7 +388,7 @@ workflow RAREDISEASE {
         .set {ch_hgnc_ids}
 
     //
-    // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is nott fastq)
+    // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
     //
 
     ch_input_by_sample_type = ch_reads.branch{
@@ -401,8 +401,8 @@ workflow RAREDISEASE {
     ch_one_fastq_gz_pair_from_spring = SPRING_DECOMPRESS_TO_FQ_PAIR(ch_input_by_sample_type.interleaved_spring, false).fastq
 
     // Two fastq.gz.spring-files - one for R1 and one for R2
-    ch_r1_fastq_gz_from_spring   = SPRING_DECOMPRESS_TO_R1_FQ(ch_input_by_sample_type.separate_spring.map{ meta, files -> [meta, files[0] ]}, true).fastq
-    ch_r2_fastq_gz_from_spring   = SPRING_DECOMPRESS_TO_R2_FQ(ch_input_by_sample_type.separate_spring.map{ meta, files -> [meta, files[1] ]}, true).fastq
+    ch_r1_fastq_gz_from_spring  = SPRING_DECOMPRESS_TO_R1_FQ(ch_input_by_sample_type.separate_spring.map{ meta, files -> [meta, files[0] ]}, true).fastq
+    ch_r2_fastq_gz_from_spring  = SPRING_DECOMPRESS_TO_R2_FQ(ch_input_by_sample_type.separate_spring.map{ meta, files -> [meta, files[1] ]}, true).fastq
     ch_two_fastq_gz_from_spring = ch_r1_fastq_gz_from_spring.join(ch_r2_fastq_gz_from_spring).map{ meta, fastq_1, fastq_2 -> [meta, [fastq_1, fastq_2]]}
 
     ch_input_fastqs = ch_input_by_sample_type.fastq_gz.mix(ch_one_fastq_gz_pair_from_spring).mix(ch_two_fastq_gz_from_spring)
