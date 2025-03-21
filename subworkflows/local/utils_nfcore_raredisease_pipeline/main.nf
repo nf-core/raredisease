@@ -240,7 +240,7 @@ def checkRequiredParameters(params) {
         "variant_caller"
     ]
 
-    def conditionalParams = [
+    def conditionalParamsWorkflows = [
         run_rtgvcfeval           : ["rtg_truthvcfs"],
         skip_repeat_calling      : ["variant_catalog"],
         skip_repeat_annotation   : ["variant_catalog"],
@@ -264,7 +264,7 @@ def checkRequiredParameters(params) {
 
     def missingParamsCount = 0
 
-    conditionalParams.each { condition, paramsList ->
+    conditionalParamsWorkflows.each { condition, paramsList ->
         if (condition == "analysis_type_wes" && params.analysis_type == "wes") {
             mandatoryParams += paramsList
         } else if (condition == "variant_caller_sentieon" && params.variant_caller == "sentieon") {
@@ -272,6 +272,12 @@ def checkRequiredParameters(params) {
         } else if (condition == "run_rtgvcfeval" && params[condition]) {
             mandatoryParams += paramsList
         } else if (condition != "run_rtgvcfeval" && params.containsKey(condition) && !params[condition]) {
+            mandatoryParams += paramsList
+        }
+    }
+
+    conditionalParamsTools.each { tool, paramsList ->
+        if tool in params.skip_tools.split(',') {
             mandatoryParams += paramsList
         }
     }
