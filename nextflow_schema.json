@@ -549,19 +549,9 @@
                     "description": "Number of intervals to split your genome into (used to parallelize annotations)",
                     "fa_icon": "fas fa-less-than"
                 },
-                "skip_gens": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip gens preprocessing subworkflow.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "skip_germlinecnvcaller": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip CNV calling using GATK's GermlineCNVCaller",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_peddy": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip peddy.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "skip_me_calling": {

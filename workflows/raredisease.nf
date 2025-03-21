@@ -709,7 +709,7 @@ workflow RAREDISEASE {
     PEDDY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if (!params.skip_peddy) {
+    if (!(params.skip_tools && params.skip_tools.split(',').contains('peddy'))) {
         PEDDY (
             CALL_SNV.out.genome_vcf.join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true),
             ch_pedfile
@@ -738,7 +738,7 @@ workflow RAREDISEASE {
     GENS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if ( !params.skip_gens && params.analysis_type.equals("wgs") ) {
+    if (!(params.skip_tools && params.skip_tools.split(',').contains('gens')) && params.analysis_type.equals("wgs")) {
         GENS (
             ch_mapped.genome_bam_bai,
             CALL_SNV.out.genome_gvcf,
@@ -828,7 +828,7 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{it[1]}.collect().ifEmpty([]))
 
-    if (!params.skip_peddy) {
+    if (!(params.skip_tools && params.skip_tools.split(',').contains('peddy'))) {
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{it[1]}.collect().ifEmpty([]))
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.csv.map{it[1]}.collect().ifEmpty([]))
     }
