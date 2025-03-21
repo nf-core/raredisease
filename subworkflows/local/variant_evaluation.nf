@@ -20,8 +20,8 @@ workflow VARIANT_EVALUATION {
         ch_rtg_truthvcfs
             .splitCsv ( header:true )
             .map { row ->
-                evregions  = row.evaluationregions[0].isEmpty() ? [] : row.evaluationregions[0]
-                bedregions = row.bedregions[0].isEmpty()        ? [] : row.bedregions[0]
+                def evregions  = row.evaluationregions[0].isEmpty() ? [] : row.evaluationregions[0]
+                def bedregions = row.bedregions[0].isEmpty()        ? [] : row.bedregions[0]
                 return [[samplename:row.samplename[0], bedregions:bedregions, evaluationregions:evregions], row.vcf[0], [], []]
             }
             .set { ch_rtgvcfs_dbs }

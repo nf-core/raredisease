@@ -118,7 +118,7 @@
                     },
                     "deepvariant/rundeepvariant": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "470ac76fb4fbba2a9284c8b65191119c8bfe5a69",
                         "installed_by": ["modules"]
                     },
                     "eklipse": {

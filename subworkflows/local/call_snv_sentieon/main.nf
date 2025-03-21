@@ -75,7 +75,7 @@ workflow CALL_SNV_SENTIEON {
 
         BCFTOOLS_MERGE(ch_vcf_idx_merge_in.multiple, ch_genome_fasta, ch_genome_fai, [[:],[]])
 
-        ch_split_multi_in = BCFTOOLS_MERGE.out.merged_variants
+        ch_split_multi_in = BCFTOOLS_MERGE.out.vcf
                     .map{meta, bcf ->
                         return [meta, bcf, []]}
 
@@ -103,10 +103,9 @@ workflow CALL_SNV_SENTIEON {
         REMOVE_DUPLICATES_SEN.out.vcf
             .join(TABIX_SEN.out.tbi)
             .combine(ch_varcallerbed)
-            .combine(ch_foundin_header)
             .set { ch_annotate_in }
 
-        BCFTOOLS_ANNOTATE(ch_annotate_in)
+        BCFTOOLS_ANNOTATE(ch_annotate_in, ch_foundin_header)
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 
