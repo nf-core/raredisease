@@ -56,7 +56,7 @@
                 "exists": true
             },
             "spring_1": {
-                "errorMessage": "Gzipped and spring-compressed FastQ file for reads 1 cannot contain spaces and must have extension '.fq.gz.spring' or '.fastq.gz.spring'",
+                "errorMessage": "Gzipped and spring-compressed FastQ file for reads 1 cannot contain spaces and must have extension '.spring'",
                 "anyOf": [
                     {
                         "type": "string",
@@ -71,7 +71,7 @@
                 "exists": true
             },
             "spring_2": {
-                "errorMessage": "Gzipped and spring-compressed FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz.spring' or '.fastq.gz.spring'",
+                "errorMessage": "Gzipped and spring-compressed FastQ file for reads 2 cannot contain spaces and must have extension '.spring'",
                 "anyOf": [
                     {
                         "type": "string",
