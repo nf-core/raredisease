@@ -75,21 +75,29 @@ workflow PIPELINE_INITIALISATION {
     Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .tap { ch_original_input }
-        .map { meta, fastq1, fastq2, bam, bai -> meta.id }
+        .map { meta, fastq1, fastq2, spring1, spring2, bam, bai -> meta.id }
         .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
             counts[sample] = (counts[sample] ?: 0) + 1
             counts
         }
         .combine( ch_original_input )
-        .map { counts, meta, fastq1, fastq2, bam, bai ->
-            def new_meta = meta + [num_lanes:counts[meta.id],
-                        read_group:"\'@RG\\tID:"+ fastq1.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
-            if (fastq1 && !fastq2) {
-                return [ new_meta + [ single_end:true ], [ fastq1 ] ]
-            } else if (fastq1 && fastq2) {
-                return [ new_meta + [ single_end:false ], [ fastq1, fastq2 ] ]
-            } else {
-                return [ new_meta, [bam, bai] ]
+        .map { counts, meta, fastq1, fastq2, spring1, spring2, bam, bai ->
+            def new_meta = meta + [num_lanes:counts[meta.id]]
+            if (fastq1 && fastq2) {
+                new_meta += [read_group: generateReadGroupLine(fastq1, meta, params)]
+                return [new_meta + [single_end: false, data_type: "fastq_gz"], [fastq1, fastq2]]
+            } else if (fastq1 && !fastq2) {
+                new_meta += [read_group: generateReadGroupLine(fastq1, meta, params)]
+                return [new_meta + [single_end: true, data_type: "fastq_gz"], [fastq1]]
+            } else if (spring1 && spring2) {
+                new_meta += [read_group: generateReadGroupLine(spring1, meta, params)]
+                return [new_meta + [single_end: false, data_type: "separate_spring"], [spring1, spring2]]
+            } else if (spring1 && !spring2) {
+                new_meta += [read_group: generateReadGroupLine(spring1, meta, params)]
+                return [new_meta + [single_end: false, data_type: "interleaved_spring"], [spring1]]
+            } else if (bam && bai) {
+                new_meta += [read_group: generateReadGroupLine(bam, meta, params)]
+                return [new_meta, [bam, bai]]
             }
         }
         .tap{ ch_input_counts }
@@ -181,6 +189,9 @@ workflow PIPELINE_COMPLETION {
     FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+def generateReadGroupLine(file, meta, params) {
+    return "\'@RG\\tID:" + file.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"
+}
 
 def boolean isNonZeroNonEmpty(value) {
         return (value instanceof String && value != "" && value != "0") ||
