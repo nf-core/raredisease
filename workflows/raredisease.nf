@@ -329,7 +329,7 @@ workflow RAREDISEASE {
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is nott fastq)
     //
 
-    if !(params.skip_tools && params.skip_tools.split(',').contains('fastqc')) {
+    if (!(params.skip_tools && params.skip_tools.split(',').contains('fastqc'))) {
         FASTQC (ch_reads)
         fastqc_report = FASTQC.out.zip
         ch_versions   = ch_versions.mix(FASTQC.out.versions.first())
