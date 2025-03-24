@@ -75,21 +75,29 @@ workflow PIPELINE_INITIALISATION {
     Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .tap { ch_original_input }
-        .map { meta, fastq1, fastq2, bam, bai -> meta.id }
+        .map { meta, fastq1, fastq2, spring1, spring2, bam, bai -> meta.id }
         .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
             counts[sample] = (counts[sample] ?: 0) + 1
             counts
         }
         .combine( ch_original_input )
-        .map { counts, meta, fastq1, fastq2, bam, bai ->
-            def new_meta = meta + [num_lanes:counts[meta.id],
-                        read_group:"\'@RG\\tID:"+ fastq1.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"]
-            if (fastq1 && !fastq2) {
-                return [ new_meta + [ single_end:true ], [ fastq1 ] ]
-            } else if (fastq1 && fastq2) {
-                return [ new_meta + [ single_end:false ], [ fastq1, fastq2 ] ]
-            } else {
-                return [ new_meta, [bam, bai] ]
+        .map { counts, meta, fastq1, fastq2, spring1, spring2, bam, bai ->
+            def new_meta = meta + [num_lanes:counts[meta.id]]
+            if (fastq1 && fastq2) {
+                new_meta += [read_group: generateReadGroupLine(fastq1, meta, params)]
+                return [new_meta + [single_end: false, data_type: "fastq_gz"], [fastq1, fastq2]]
+            } else if (fastq1 && !fastq2) {
+                new_meta += [read_group: generateReadGroupLine(fastq1, meta, params)]
+                return [new_meta + [single_end: true, data_type: "fastq_gz"], [fastq1]]
+            } else if (spring1 && spring2) {
+                new_meta += [read_group: generateReadGroupLine(spring1, meta, params)]
+                return [new_meta + [single_end: false, data_type: "separate_spring"], [spring1, spring2]]
+            } else if (spring1 && !spring2) {
+                new_meta += [read_group: generateReadGroupLine(spring1, meta, params)]
+                return [new_meta + [single_end: false, data_type: "interleaved_spring"], [spring1]]
+            } else if (bam && bai) {
+                new_meta += [read_group: generateReadGroupLine(bam, meta, params)]
+                return [new_meta, [bam, bai]]
             }
         }
         .tap{ ch_input_counts }
@@ -181,6 +189,9 @@ workflow PIPELINE_COMPLETION {
     FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+def generateReadGroupLine(file, meta, params) {
+    return "\'@RG\\tID:" + file.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"
+}
 
 def boolean isNonZeroNonEmpty(value) {
         return (value instanceof String && value != "" && value != "0") ||
@@ -258,7 +269,7 @@ def checkRequiredParameters(params) {
 
     def conditionalParamsTools = [
         gens                     : ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
-        germlinecnvcaller        : ["ploidy_mmodel", "gcnvcaller_model", "readcount_intervals"],
+        germlinecnvcaller        : ["ploidy_model", "gcnvcaller_model", "readcount_intervals"],
         smncopynumbercaller      : ["genome"]
     ]
 
@@ -446,14 +457,14 @@ def toolCitationText() {
     ]
     preprocessing_text = [
         "FastQC (Andrews 2010),",
-        params.skip_tools && params.skip_tools.split(',').contains('fastp') ? "" : "Fastp (Chen, 2023),"
+        (params.skip_tools && params.skip_tools.split(',').contains('fastp')) ? "" : "Fastp (Chen, 2023),"
     ]
     other_citation_text = [
         "BCFtools (Danecek et al., 2021),",
         "BEDTools (Quinlan & Hall, 2010),",
         "GATK (McKenna et al., 2010),",
         "MultiQC (Ewels et al. 2016),",
-        params.skip_tools && params.skip_tools.split(',').contains('peddy') ? "" : "Peddy (Pedersen & Quinlan, 2017),",
+        (params.skip_tools && params.skip_tools.split(',').contains('peddy')) ? "" : "Peddy (Pedersen & Quinlan, 2017),",
         params.run_rtgvcfeval ? "RTG Tools (Cleary et al., 2015)," : "",
         "SAMtools (Li et al., 2009),",
         (!(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) && params.analysis_type.equals("wgs")) ? "SMNCopyNumberCaller (Chen et al., 2020)," : "",
@@ -575,14 +586,14 @@ def toolBibliographyText() {
     ]
     preprocessing_text = [
         "<li>Andrews S, (2010) FastQC, URL: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/</li>",
-        params.skip_tools && params.skip_tools.split(',').contains('fastp') ? "" : "<li>Chen, S. (2023). Ultrafast one-pass FASTQ data preprocessing, quality control, and deduplication using fastp. iMeta, 2(2), e107. https://doi.org/10.1002/imt2.107</li>"
+        (params.skip_tools && params.skip_tools.split(',').contains('fastp')) ? "" : "<li>Chen, S. (2023). Ultrafast one-pass FASTQ data preprocessing, quality control, and deduplication using fastp. iMeta, 2(2), e107. https://doi.org/10.1002/imt2.107</li>"
     ]
 
     other_citation_text = [
         "<li>Danecek, P., Bonfield, J. K., Liddle, J., Marshall, J., Ohan, V., Pollard, M. O., Whitwham, A., Keane, T., McCarthy, S. A., Davies, R. M., & Li, H. (2021). Twelve years of SAMtools and BCFtools. GigaScience, 10(2), giab008. https://doi.org/10.1093/gigascience/giab008</li>",
         "<li>McKenna, A., Hanna, M., Banks, E., Sivachenko, A., Cibulskis, K., Kernytsky, A., Garimella, K., Altshuler, D., Gabriel, S., Daly, M., & DePristo, M. A. (2010). The Genome Analysis Toolkit: A MapReduce framework for analyzing next-generation DNA sequencing data. Genome Research, 20(9), 1297–1303. https://doi.org/10.1101/gr.107524.110</li>",
         "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: Summarize analysis results for multiple tools and samples in a single report. Bioinformatics, 32(19), 3047–3048. https://doi.org/10.1093/bioinformatics/btw354</li>",
-        params.skip_tools && params.skip_tools.split(',').contains('peddy') ? "" : "<li>Pedersen, B. S., & Quinlan, A. R. (2017). Who’s Who? Detecting and Resolving Sample Anomalies in Human DNA Sequencing Studies with Peddy. The American Journal of Human Genetics, 100(3), 406–413. https://doi.org/10.1016/j.ajhg.2017.01.017</li>",
+        (params.skip_tools && params.skip_tools.split(',').contains('peddy')) ? "" : "<li>Pedersen, B. S., & Quinlan, A. R. (2017). Who’s Who? Detecting and Resolving Sample Anomalies in Human DNA Sequencing Studies with Peddy. The American Journal of Human Genetics, 100(3), 406–413. https://doi.org/10.1016/j.ajhg.2017.01.017</li>",
         params.run_rtgvcfeval ? "<li>Cleary, J. G., Braithwaite, R., Gaastra, K., Hilbush, B. S., Inglis, S., Irvine, S. A., Jackson, A., Littin, R., Rathod, M., Ware, D., Zook, J. M., Trigg, L., & Vega, F. M. D. L. (2015). Comparing Variant Call Files for Performance Benchmarking of Next-Generation Sequencing Variant Calling Pipelines (p. 023754). bioRxiv. https://doi.org/10.1101/023754</li>" : "",
         "<li>Li, H., Handsaker, B., Wysoker, A., Fennell, T., Ruan, J., Homer, N., Marth, G., Abecasis, G., Durbin, R., & 1000 Genome Project Data Processing Subgroup. (2009). The Sequence Alignment/Map format and SAMtools. Bioinformatics, 25(16), 2078–2079. https://doi.org/10.1093/bioinformatics/btp352</li>",
         (!(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) && params.analysis_type.equals("wgs")) ? "<li>Chen, X., Sanchis-Juan, A., French, C. E., Connell, A. J., Delon, I., Kingsbury, Z., Chawla, A., Halpern, A. L., Taft, R. J., Bentley, D. R., Butchbach, M. E. R., Raymond, F. L., & Eberle, M. A. (2020). Spinal muscular atrophy diagnosis and carrier screening from genome sequencing data. Genetics in Medicine, 22(5), 945–953. https://doi.org/10.1038/s41436-020-0754-0</li>" : "",

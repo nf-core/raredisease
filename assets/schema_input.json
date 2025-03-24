@@ -26,25 +26,64 @@
                 "meta": ["lane"]
             },
             "fastq_1": {
-                "type": "string",
-                "format": "file-path",
-                "exists": true,
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
-            },
-            "fastq_2": {
-                "type": "string",
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
+                "errorMessage": "Gzipped FastQ file for reads 1 must be provided. Cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
                 "anyOf": [
                     {
-                        "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                        "format": "file-path",
-                        "exists": true
+                        "type": "string",
+                        "pattern": "^\\S+\\.f(ast)?q\\.gz$"
                     },
                     {
+                        "type": "string",
                         "maxLength": 0
                     }
-                ]
+                ],
+                "format": "file-path",
+                "exists": true
+            },
+            "fastq_2": {
+                "errorMessage": "Gzipped FastQ file for reads 2. Cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+\\.f(ast)?q\\.gz$"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0
+                    }
+                ],
+                "format": "file-path",
+                "exists": true
+            },
+            "spring_1": {
+                "errorMessage": "Gzipped and spring-compressed FastQ file for reads 1 cannot contain spaces and must have extension '.spring'",
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+.spring$"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0
+                    }
+                ],
+                "format": "file-path",
+                "exists": true
+            },
+            "spring_2": {
+                "errorMessage": "Gzipped and spring-compressed FastQ file for reads 2 cannot contain spaces and must have extension '.spring'",
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+.spring$"
+                    },
+                    {
+                        "type": "string",
+                        "maxLength": 0
+                    }
+                ],
+                "format": "file-path",
+                "exists": true
             },
             "bam": {
                 "errorMessage": "BAM file cannot contain spaces and must have extension '.bam'",
@@ -115,8 +154,22 @@
                 "errorMessage": "Case name must be provided and cannot contain spaces"
             }
         },
+        "uniqueEntries": ["case_id"],
+        "anyOf": [
+            {
+                "dependentRequired": {
+                    "lane": ["fastq_1"]
+                }
+            },
+            {
+                "dependentRequired": {
+                    "lane": ["spring_1"]
+                }
+            }
+        ],
         "dependentRequired": {
-            "lane": ["fastq_1"],
+            "fastq_2": ["fastq_1"],
+            "spring_2": ["spring_1"],
             "bam": ["bai"]
         },
         "required": ["sample", "sex", "phenotype", "case_id"]
