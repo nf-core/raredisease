@@ -98,9 +98,9 @@ Running the pipeline involves three steps:
 
 #### Samplesheet
 
-A samplesheet is used to pass the information about the sample(s), such as the path to the FASTQ files and other meta data (sex, phenotype, etc.,) to the pipeline in csv format.
+A samplesheet is used to provide information about the sample(s) to the pipeline in CSV format, including the path to the FASTQ files and other metadata such as sex and phenotype.
 
-nf-core/raredisease will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The pedigree information in the samplesheet (sex and phenotype) should be provided as they would be for a [ped file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format) (i.e. 1 for male, 2 for female, other for unknown).
+The nf-core/raredisease pipeline accepts FASTQ files, SPRING files, or BAM files as input. Currently, the pipeline does not support single-end data from Illumina. The pedigree information in the samplesheet (sex and phenotype) should be provided in the same format as a [PED file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format), with sex indicated as 1 for male, 2 for female, and other for unknown.
 
 | Fields        | Description                                                                                                                                                                                             |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -108,6 +108,8 @@ nf-core/raredisease will auto-detect whether a sample is single- or paired-end u
 | `lane`        | Used to generate separate channels during the alignment step. It is of string type, and we recommend using a combination of flowcell and lane to distinguish between different runs of the same sample. |
 | `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                          |
 | `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                          |
+| `spring_1`    | Full path to spring-compressed file for read 1 or for reads 1 and 2. The Fastq file has to be first gzipped, then spring-compressed, and it must have the extension `.spring`.                          |
+| `spring_2`    | Full path to spring-compressed file for read 2. The Fastq file has to be first gzipped, then spring-compressed, and it must have the extension `.spring`.                                               |
 | `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                                                                                                               |
 | `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                     |
 | `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                   |
@@ -140,7 +142,7 @@ The nf-core/raredisease pipeline can handle duplicate-marked BAM files as input.
 | `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.          |
 | `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                   |
 
-If you would like to see an example of what a typical samplesheet looks like in this case, follow this link, [singleton](https://github.com/nf-core/test-datasets/blob/raredisease/testdata/samplesheet_bam.csv)
+If you would like to see an example of what a typical samplesheet looks like in this case, follow this [link.](https://github.com/nf-core/test-datasets/blob/raredisease/testdata/samplesheet_bam.csv)
 
 #### Reference files and parameters
 

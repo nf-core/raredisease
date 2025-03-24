@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - A feature to start the workflow from duplicate-marked bam files [#682](https://github.com/nf-core/raredisease/pull/682)
+- A functionality to take spring files as input [#678](https://github.com/nf-core/raredisease/pull/678)
 
 ### `Changed`
 
