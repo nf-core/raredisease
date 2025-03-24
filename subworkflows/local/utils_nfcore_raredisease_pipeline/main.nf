@@ -277,7 +277,7 @@ def checkRequiredParameters(params) {
     }
 
     conditionalParamsTools.each { tool, paramsList ->
-        if tool in params.skip_tools.split(',') {
+        if (tool in params.skip_tools.split(',')) {
             mandatoryParams += paramsList
         }
     }
