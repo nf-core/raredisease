@@ -11,7 +11,7 @@
                 "type": "string",
                 "meta": ["id", "sample"],
                 "pattern": "^\\S+$",
-                "errorMessage": "Sample name must be provided and cannot contain spaces"
+                "errorMessage": "Sample name must be provided and must be a string that cannot contain spaces"
             },
             "lane": {
                 "oneOf": [
@@ -23,65 +23,34 @@
                         "pattern": "^\\S+$"
                     }
                 ],
-                "meta": ["lane"]
+                "meta": ["lane"],
+                "errorMessage": "Lane must be an interger or a string that cannot contain spaces"
             },
             "fastq_1": {
                 "errorMessage": "Gzipped FastQ file for reads 1 must be provided. Cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+\\.f(ast)?q\\.gz$"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0
-                    }
-                ],
+                "type": "string",
+                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
                 "format": "file-path",
                 "exists": true
             },
             "fastq_2": {
                 "errorMessage": "Gzipped FastQ file for reads 2. Cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+\\.f(ast)?q\\.gz$"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0
-                    }
-                ],
+                "type": "string",
+                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
                 "format": "file-path",
                 "exists": true
             },
             "spring_1": {
                 "errorMessage": "Gzipped and spring-compressed FastQ file for reads 1 cannot contain spaces and must have extension '.spring'",
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+.spring$"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0
-                    }
-                ],
+                "type": "string",
+                "pattern": "^\\S+.spring$",
                 "format": "file-path",
                 "exists": true
             },
             "spring_2": {
                 "errorMessage": "Gzipped and spring-compressed FastQ file for reads 2 cannot contain spaces and must have extension '.spring'",
-                "anyOf": [
-                    {
-                        "type": "string",
-                        "pattern": "^\\S+.spring$"
-                    },
-                    {
-                        "type": "string",
-                        "maxLength": 0
-                    }
-                ],
+                "type": "string",
+                "pattern": "^\\S+.spring$",
                 "format": "file-path",
                 "exists": true
             },
@@ -111,12 +80,14 @@
                     }
                 ],
                 "meta": ["sex"],
-                "errorMessage": "Sex must be provided and cannot contain spaces"
+                "errorMessage": "Sex must be provided and cannot contain spaces",
+                "exists": true
             },
             "phenotype": {
                 "type": "integer",
                 "meta": ["phenotype"],
                 "enum": [0, 1, 2],
+                "exists": true,
                 "errorMessage": "Phenotype must be provided and cannot contain spaces"
             },
             "paternal_id": {
