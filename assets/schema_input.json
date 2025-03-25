@@ -27,7 +27,7 @@
                 "errorMessage": "Lane must be an interger or a string that cannot contain spaces"
             },
             "fastq_1": {
-                "errorMessage": "Gzipped FastQ file for reads 1 must be provided. Cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
+                "errorMessage": "Gzipped FastQ file for reads 1 must be provided, has to exist, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
                 "type": "string",
                 "pattern": "^\\S+\\.f(ast)?q\\.gz$",
                 "format": "file-path",
