@@ -17,8 +17,7 @@
                     "format": "file-path",
                     "exists": true,
                     "schema": "assets/schema_input.json",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
+                    "pattern": "^\\S+\\.(csv|tsv|json|yaml|yml)$",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
                     "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/raredisease/usage#samplesheet-input).",
                     "fa_icon": "fas fa-file-csv"
@@ -256,7 +255,6 @@
                     "help_text": "Path to csv file listing files containing mobile element allele frequencies in reference populations. \nFormat: <vcf file path>,<in_freq_info_key>,<in_allele_count_info_key>,<out_freq_info_key>,<out_allele_count_info_key>",
                     "fa_icon": "fas fa-file",
                     "pattern": "^\\S+\\.csv$",
-                    "mimetype": "text/csv",
                     "schema": "assets/svdb_query_vcf_schema.json"
                 },
                 "ml_model": {
@@ -313,8 +311,7 @@
                     "description": "Vcf used for evaluating variant calls.",
                     "fa_icon": "fas fa-file-csv",
                     "help_text": "Path to comma-separated file containing information about the truth vcf files used by vcfeval.",
-                    "pattern": "^\\S+\\.csv$",
-                    "mimetype": "text/csv",
+                    "pattern": "^\\S+\\.(csv|tsv|json|yaml|yml)$",
                     "schema": "assets/rtg_truthvcfs_schema.json"
                 },
                 "save_reference": {
@@ -367,8 +364,7 @@
                     "description": "Databases used for structural variant annotation in chrA-posA-chrB-posB-type-count-frequency format.",
                     "fa_icon": "fas fa-file-csv",
                     "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation.",
-                    "pattern": "^\\S+\\.csv$",
-                    "mimetype": "text/csv",
+                    "pattern": "^\\S+\\.(csv|tsv|json|yaml|yml)$",
                     "schema": "assets/svdb_query_bedpe_schema.json"
                 },
                 "svdb_query_dbs": {
@@ -378,8 +374,7 @@
                     "description": "Databases used for structural variant annotation in vcf format.",
                     "fa_icon": "fas fa-file-csv",
                     "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation.",
-                    "pattern": "^\\S+\\.csv$",
-                    "mimetype": "text/csv",
+                    "pattern": "^\\S+\\.(csv|tsv|json|yaml|yml)$",
                     "schema": "assets/svdb_query_vcf_schema.json"
                 },
                 "target_bed": {
