@@ -23,6 +23,7 @@
                     "fa_icon": "fas fa-file-csv"
                 },
                 "outdir": {
+                    "exists": true,
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
@@ -180,6 +181,7 @@
                 },
                 "igenomes_base": {
                     "type": "string",
+                    "exists": true,
                     "format": "directory-path",
                     "description": "The base path to the igenomes reference files",
                     "fa_icon": "fas fa-ban",
@@ -228,6 +230,7 @@
                 },
                 "local_genomes": {
                     "type": "string",
+                    "exists": true,
                     "format": "directory-path",
                     "fa_icon": "fas fa-map-marker-alt",
                     "description": "Local directory base for genome references that map to the config.",
@@ -243,6 +246,7 @@
                 "mobile_element_references": {
                     "type": "string",
                     "fa_icon": "fas fa-file",
+                    "exists": true,
                     "description": "File with mobile element references",
                     "help_text": "Path to tsv file listing mobile element references. \nFormat: <mobile element type>\\t<path to bed file>",
                     "pattern": "^\\S+\\.tsv$",
@@ -252,6 +256,7 @@
                 "mobile_element_svdb_annotations": {
                     "type": "string",
                     "description": "File with mobile element allele frequency references",
+                    "exists": true,
                     "help_text": "Path to csv file listing files containing mobile element allele frequencies in reference populations. \nFormat: <vcf file path>,<in_freq_info_key>,<in_allele_count_info_key>,<out_freq_info_key>,<out_allele_count_info_key>",
                     "fa_icon": "fas fa-file",
                     "pattern": "^\\S+\\.csv$",
@@ -407,6 +412,7 @@
                 },
                 "vcf2cytosure_blacklist": {
                     "type": "string",
+                    "exists": true,
                     "help_text": "Optional file to blacklist regions for VCF2cytosure",
                     "pattern": "^\\S+\\.bed$",
                     "format": "file-path",
@@ -708,6 +714,7 @@
             "properties": {
                 "call_interval": {
                     "type": "string",
+                    "exists": true,
                     "format": "path",
                     "fa_icon": "fas fa-align-center",
                     "description": "Interval in the reference that will be used in the software. Used only by sentieon."
@@ -784,6 +791,7 @@
                 },
                 "custom_config_base": {
                     "type": "string",
+                    "exists": true,
                     "description": "Base directory for Institutional configs.",
                     "default": "https://raw.githubusercontent.com/nf-core/configs/master",
                     "hidden": true,
