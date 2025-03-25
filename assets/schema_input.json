@@ -48,7 +48,7 @@
                 "exists": true
             },
             "spring_2": {
-                "errorMessage": "Gzipped and spring-compressed FastQ file for reads 2 cannot contain spaces and must have extension '.spring'",
+                "errorMessage": "Gzipped and spring-compressed FastQ file for reads 2 has to exist, cannot contain spaces and must have extension '.spring'",
                 "type": "string",
                 "pattern": "^\\S+.spring$",
                 "format": "file-path",
