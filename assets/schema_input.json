@@ -34,7 +34,7 @@
                 "exists": true
             },
             "fastq_2": {
-                "errorMessage": "Gzipped FastQ file for reads 2. Cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
+                "errorMessage": "Gzipped FastQ file for reads 2, has to exist, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
                 "type": "string",
                 "pattern": "^\\S+\\.f(ast)?q\\.gz$",
                 "format": "file-path",
