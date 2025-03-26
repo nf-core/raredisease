@@ -241,7 +241,7 @@ workflow RAREDISEASE {
     //
     // SV caller priority
     //
-    if (params.skip_germlinecnvcaller) {
+    if (params.skip_tools && params.skip_tools.split(',').contains('germlinecnvcaller')) {
         if (params.analysis_type.equals("wgs")) {
             ch_svcaller_priority = Channel.value(["tiddit", "manta", "cnvnator"])
         } else {
@@ -313,10 +313,6 @@ workflow RAREDISEASE {
 
     ch_input_fastqs = ch_input_by_sample_type.fastq_gz.mix(ch_one_fastq_gz_pair_from_spring).mix(ch_two_fastq_gz_from_spring)
 
-    FASTQC (ch_input_fastqs)
-    fastqc_report = FASTQC.out.zip
-    ch_versions   = ch_versions.mix(FASTQC.out.versions.first())
-
     //
     // Create chromosome bed and intervals for splitting and gathering operations
     //
@@ -328,6 +324,16 @@ workflow RAREDISEASE {
     .set { ch_scatter }
 
     ch_scatter_split_intervals  = ch_scatter.split_intervals  ?: Channel.empty()
+
+    //
+    // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is nott fastq)
+    //
+
+    if (!(params.skip_tools && params.skip_tools.split(',').contains('fastqc'))) {
+        FASTQC (ch_input_fastqs)
+        fastqc_report = FASTQC.out.zip
+        ch_versions   = ch_versions.mix(FASTQC.out.versions.first())
+    }
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -394,8 +400,7 @@ workflow RAREDISEASE {
     RENAME ALIGNMENT FILES FOR SMNCOPYNUMBERCALLER & REPEATCALLING
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
-    if ( params.analysis_type.equals("wgs") && (!params.skip_smncopynumbercaller || !params.skip_repeat_calling)) {
+    if ( params.analysis_type.equals("wgs") && (!(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) || !params.skip_repeat_calling)) {
         RENAME_BAM(ch_mapped.genome_marked_bam, "bam")
         RENAME_BAI(ch_mapped.genome_marked_bai, "bam.bai")
         ch_versions = ch_versions.mix(RENAME_BAM.out.versions)
@@ -704,7 +709,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if ( params.analysis_type.equals("wgs") && !params.skip_smncopynumbercaller ) {
+    if ( params.analysis_type.equals("wgs") && !(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) ) {
 
         RENAME_BAM.out.output
             .collect{it[1]}
@@ -732,7 +737,7 @@ workflow RAREDISEASE {
     PEDDY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if (!params.skip_peddy) {
+    if (!(params.skip_tools && params.skip_tools.split(',').contains('peddy'))) {
         PEDDY (
             CALL_SNV.out.genome_vcf.join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true),
             ch_pedfile
@@ -745,7 +750,7 @@ workflow RAREDISEASE {
     Generate CGH files from sequencing data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if ( !params.skip_vcf2cytosure && params.analysis_type.equals("wgs") && !params.skip_sv_calling && !params.skip_sv_annotation) {
+    if ( !(params.skip_tools && params.skip_tools.split(',').contains('vcf2cytosure')) && params.analysis_type.equals("wgs") && !params.skip_sv_calling && !params.skip_sv_annotation) {
         GENERATE_CYTOSURE_FILES (
             ch_sv_annotate.vcf_ann,
             ch_sv_annotate.tbi,
@@ -761,7 +766,7 @@ workflow RAREDISEASE {
     GENS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if ( !params.skip_gens && params.analysis_type.equals("wgs") ) {
+    if (!(params.skip_tools && params.skip_tools.split(',').contains('gens')) && params.analysis_type.equals("wgs")) {
         GENS (
             ch_mapped.genome_bam_bai,
             CALL_SNV.out.genome_gvcf,
@@ -851,7 +856,7 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{it[1]}.collect().ifEmpty([]))
 
-    if (!params.skip_peddy) {
+    if (!(params.skip_tools && params.skip_tools.split(',').contains('peddy'))) {
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{it[1]}.collect().ifEmpty([]))
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.csv.map{it[1]}.collect().ifEmpty([]))
     }

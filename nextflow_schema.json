@@ -550,31 +550,6 @@
                     "description": "Number of intervals to split your genome into (used to parallelize annotations)",
                     "fa_icon": "fas fa-less-than"
                 },
-                "skip_fastp": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip trimming with fastp.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_gens": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip gens preprocessing subworkflow.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_germlinecnvcaller": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip CNV calling using GATK's GermlineCNVCaller",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_haplogrep3": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip haplogrep3.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_peddy": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip peddy.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "skip_me_calling": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip calling mobile elements, and the subsequent annotation step.",
@@ -605,11 +580,6 @@
                     "description": "Specifies whether or not to skip calling of repeat expansions.",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "skip_smncopynumbercaller": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip smncopynumbercaller.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "skip_snv_annotation": {
                     "type": "boolean",
                     "description": "Specifies whether or not to skip annotate SNV subworkflow.",
@@ -630,12 +600,12 @@
                     "description": "Specifies whether or not to skip nuclear and mitochondrial SV calling and annotation.",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "skip_vcf2cytosure": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Specifies whether or not to skip the vcf2cytosure subworkflow",
-                    "help_text": "vcf2cytosure can generate CGH files from a structural variant VCF file that can be analysed in the CytoSure interpretation software. Cut-offs for allele frequencies and bin sizes can be modified in the config file. Turned off by default.",
-                    "fa_icon": "fas fa-toggle-on"
+                "skip_tools": {
+                    "type": "string",
+                    "fa_icon": "fas fa-forward",
+                    "description": "Disable specified tools.",
+                    "help_text": "Multiple tools can be specified, separated by commas.\n\n> **NB** `--skip_tools baserecalibrator_report` is actually just not saving the reports.\n> **NB** `--skip_tools markduplicates_report` does not skip `MarkDuplicates` but prevent the collection of duplicate metrics that slows down performance.",
+                    "pattern": "^((fastp|gens|germlinecnvcaller|haplogrep3|peddy|smncopynumbercaller|vcf2cytosure|fastqc)?,?)*(?<!,)$"
                 },
                 "skip_vep_filter": {
                     "type": "boolean",
