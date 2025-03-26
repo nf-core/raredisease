@@ -760,7 +760,6 @@
                 },
                 "custom_config_base": {
                     "type": "string",
-                    "exists": true,
                     "description": "Base directory for Institutional configs.",
                     "default": "https://raw.githubusercontent.com/nf-core/configs/master",
                     "hidden": true,
