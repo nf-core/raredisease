@@ -330,7 +330,7 @@ workflow RAREDISEASE {
     //
 
     if (!(params.skip_tools && params.skip_tools.split(',').contains('fastqc'))) {
-        FASTQC (ch_reads)
+        FASTQC (ch_input_fastqs)
         fastqc_report = FASTQC.out.zip
         ch_versions   = ch_versions.mix(FASTQC.out.versions.first())
     }
