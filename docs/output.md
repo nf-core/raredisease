@@ -310,7 +310,7 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 #### SVDB merge
 
-[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if `skip_germlinecnvcaller` is set to false), Manta, and TIDDIT. Output files are published in the output folder.
+[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if `skip_tools` doesn't include germlinecnvcaller), Manta, and TIDDIT. Output files are published in the output folder.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -616,7 +616,7 @@ Provided a truth set, SNVs can be evaluated using RTG Tools' vcfeval engine. Out
 
 ### Gens
 
-The sequencing data can be prepared for visualization of CNVs in [Gens](https://github.com/Clinical-Genomics-Lund/gens). This subworkflow is turned off by default. You can activate it by supplying the option `--skip_gens false`. You can read more about how to setup Gens [here](https://github.com/Clinical-Genomics-Lund/gens).
+The sequencing data can be prepared for visualization of CNVs in [Gens](https://github.com/Clinical-Genomics-Lund/gens). You can turn it off by supplying the option `--skip_tools gens`. You can read more about how to setup Gens [here](https://github.com/Clinical-Genomics-Lund/gens).
 
 <details markdown="1">
 <summary>Output files</summary>

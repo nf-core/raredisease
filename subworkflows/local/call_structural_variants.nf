@@ -57,7 +57,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
             ch_versions = ch_versions.mix(CALL_SV_CNVNATOR.out.versions)
         }
 
-        if (!params.skip_germlinecnvcaller) {
+        if (!(params.skip_tools && params.skip_tools.split(',').contains('germlinecnvcaller'))) {
             CALL_SV_GERMLINECNVCALLER (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model, ch_case_info)
                 .genotyped_filtered_segments_vcf
                 .collect{it[1]}
@@ -72,7 +72,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         }
 
         //merge
-        if (params.skip_germlinecnvcaller) {
+        if (params.skip_tools && params.skip_tools.split(',').contains('germlinecnvcaller')) {
             if (params.analysis_type.equals("wgs")) {
                 tiddit_vcf
                     .combine(manta_vcf)

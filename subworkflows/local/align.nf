@@ -49,7 +49,7 @@ workflow ALIGN {
         ch_sentieon_bai       = Channel.empty()
         ch_versions           = Channel.empty()
 
-        if (!params.skip_fastp) {
+        if (!(params.skip_tools && params.skip_tools.split(',').contains('fastp'))) {
             FASTP (ch_reads, [], false, false, false)
             ch_reads = FASTP.out.reads
             ch_versions = ch_versions.mix(FASTP.out.versions)

@@ -251,7 +251,7 @@ def checkRequiredParameters(params) {
         "variant_caller"
     ]
 
-    def conditionalParams = [
+    def conditionalParamsWorkflows = [
         run_rtgvcfeval           : ["rtg_truthvcfs"],
         skip_repeat_calling      : ["variant_catalog"],
         skip_repeat_annotation   : ["variant_catalog"],
@@ -263,16 +263,19 @@ def checkRequiredParameters(params) {
                                     "vep_cache_version", "vep_cache", "variant_consequences_snv"],
         analysis_type_wes        : ["target_bed"],
         variant_caller_sentieon  : ["ml_model"],
-        skip_germlinecnvcaller   : ["ploidy_model", "gcnvcaller_model", "readcount_intervals"],
         skip_me_calling          : ["mobile_element_references"],
-        skip_me_annotation       : ["mobile_element_svdb_annotations", "variant_consequences_snv"],
-        skip_gens                : ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
-        skip_smncopynumbercaller : ["genome"]
+        skip_me_annotation       : ["mobile_element_svdb_annotations", "variant_consequences_snv"]
+    ]
+
+    def conditionalParamsTools = [
+        gens                     : ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
+        germlinecnvcaller        : ["ploidy_mmodel", "gcnvcaller_model", "readcount_intervals"],
+        smncopynumbercaller      : ["genome"]
     ]
 
     def missingParamsCount = 0
 
-    conditionalParams.each { condition, paramsList ->
+    conditionalParamsWorkflows.each { condition, paramsList ->
         if (condition == "analysis_type_wes" && params.analysis_type == "wes") {
             mandatoryParams += paramsList
         } else if (condition == "variant_caller_sentieon" && params.variant_caller == "sentieon") {
@@ -280,6 +283,12 @@ def checkRequiredParameters(params) {
         } else if (condition == "run_rtgvcfeval" && params[condition]) {
             mandatoryParams += paramsList
         } else if (condition != "run_rtgvcfeval" && params.containsKey(condition) && !params[condition]) {
+            mandatoryParams += paramsList
+        }
+    }
+
+    conditionalParamsTools.each { tool, paramsList ->
+        if (!(params.skip_tools && tool in params.skip_tools.split(','))) {
             mandatoryParams += paramsList
         }
     }
@@ -417,9 +426,14 @@ def toolCitationText() {
             "VEP (McLaren et al., 2016),",
             "Vcfanno (Pedersen et al., 2016),",
             "Hmtnote (Preste et al., 2019),",
-            "HaploGrep2 (Weissensteiner et al., 2016),",
             "Genmod (Magnusson et al., 2018),"
         ]
+        if (!(params.skip_tools && params.skip_tools.split(',').contains('haplogrep3'))) {
+            mt_annotation_text += [
+                "HaploGrep3 (Schönherr et al., 2023),"
+            ]
+
+        }
     }
     if (!params.skip_me_annotation && params.analysis_type.equals("wgs")) {
         me_annotation_text = [
@@ -442,17 +456,17 @@ def toolCitationText() {
     ]
     preprocessing_text = [
         "FastQC (Andrews 2010),",
-        params.skip_fastp  ? "" : "Fastp (Chen, 2023),"
+        (params.skip_tools && params.skip_tools.split(',').contains('fastp')) ? "" : "Fastp (Chen, 2023),"
     ]
     other_citation_text = [
         "BCFtools (Danecek et al., 2021),",
         "BEDTools (Quinlan & Hall, 2010),",
         "GATK (McKenna et al., 2010),",
         "MultiQC (Ewels et al. 2016),",
-        params.skip_peddy     ? "" : "Peddy (Pedersen & Quinlan, 2017),",
+        (params.skip_tools && params.skip_tools.split(',').contains('peddy')) ? "" : "Peddy (Pedersen & Quinlan, 2017),",
         params.run_rtgvcfeval ? "RTG Tools (Cleary et al., 2015)," : "",
         "SAMtools (Li et al., 2009),",
-        (!params.skip_smncopynumbercaller && params.analysis_type.equals("wgs")) ? "SMNCopyNumberCaller (Chen et al., 2020)," : "",
+        (!(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) && params.analysis_type.equals("wgs")) ? "SMNCopyNumberCaller (Chen et al., 2020)," : "",
         "Tabix (Li, 2011)",
         "."
     ]
@@ -541,9 +555,13 @@ def toolBibliographyText() {
             "<li>Pedersen, B. S., Layer, R. M., & Quinlan, A. R. (2016). Vcfanno: Fast, flexible annotation of genetic variants. Genome Biology, 17(1), 118. https://doi.org/10.1186/s13059-016-0973-5</li>",
             "<li>McLaren, W., Gil, L., Hunt, S. E., Riat, H. S., Ritchie, G. R. S., Thormann, A., Flicek, P., & Cunningham, F. (2016). The Ensembl Variant Effect Predictor. Genome Biology, 17(1), 122. https://doi.org/10.1186/s13059-016-0974-4</li>",
             "<li>Preste, R., Clima, R., & Attimonelli, M. (2019). Human mitochondrial variant annotation with HmtNote [Preprint]. Bioinformatics. https://doi.org/10.1101/600619</li>",
-            "<li>Weissensteiner, H., Pacher, D., Kloss-Brandstätter, A., Forer, L., Specht, G., Bandelt, H.-J., Kronenberg, F., Salas, A., & Schönherr, S. (2016). HaploGrep 2: Mitochondrial haplogroup classification in the era of high-throughput sequencing. Nucleic Acids Research, 44(W1), W58–W63. https://doi.org/10.1093/nar/gkw233</li>",
             "<li>Magnusson, M., Hughes, T., Glabilloy, & Bitdeli Chef. (2018). genmod: Version 3.7.3 (3.7.3) [Computer software]. Zenodo. https://doi.org/10.5281/ZENODO.3841142</li>"
         ]
+        if (!(params.skip_tools && params.skip_tools.split(',').contains('haplogrep3'))) {
+            mt_annotation_text += [
+                "<li>Schönherr, S., Weissensteiner, H., Kronenberg, F., & Forer, L. (2023). Haplogrep 3 an interactive haplogroup classification and analysis platform. Nucleic Acids Research, 51(W1), W263-W268. https://doi.org/10.1093/nar/gkad284</li>"
+            ]
+        }
     }
     if (!params.skip_me_annotation && params.analysis_type.equals("wgs")) {
         me_annotation_text = [
@@ -566,17 +584,17 @@ def toolBibliographyText() {
     ]
     preprocessing_text = [
         "<li>Andrews S, (2010) FastQC, URL: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/</li>",
-        params.skip_fastp  ? "" : "<li>Chen, S. (2023). Ultrafast one-pass FASTQ data preprocessing, quality control, and deduplication using fastp. iMeta, 2(2), e107. https://doi.org/10.1002/imt2.107</li>"
+        (params.skip_tools && params.skip_tools.split(',').contains('fastp')) ? "" : "<li>Chen, S. (2023). Ultrafast one-pass FASTQ data preprocessing, quality control, and deduplication using fastp. iMeta, 2(2), e107. https://doi.org/10.1002/imt2.107</li>"
     ]
 
     other_citation_text = [
         "<li>Danecek, P., Bonfield, J. K., Liddle, J., Marshall, J., Ohan, V., Pollard, M. O., Whitwham, A., Keane, T., McCarthy, S. A., Davies, R. M., & Li, H. (2021). Twelve years of SAMtools and BCFtools. GigaScience, 10(2), giab008. https://doi.org/10.1093/gigascience/giab008</li>",
         "<li>McKenna, A., Hanna, M., Banks, E., Sivachenko, A., Cibulskis, K., Kernytsky, A., Garimella, K., Altshuler, D., Gabriel, S., Daly, M., & DePristo, M. A. (2010). The Genome Analysis Toolkit: A MapReduce framework for analyzing next-generation DNA sequencing data. Genome Research, 20(9), 1297–1303. https://doi.org/10.1101/gr.107524.110</li>",
         "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: Summarize analysis results for multiple tools and samples in a single report. Bioinformatics, 32(19), 3047–3048. https://doi.org/10.1093/bioinformatics/btw354</li>",
-        params.skip_peddy     ? "" : "<li>Pedersen, B. S., & Quinlan, A. R. (2017). Who’s Who? Detecting and Resolving Sample Anomalies in Human DNA Sequencing Studies with Peddy. The American Journal of Human Genetics, 100(3), 406–413. https://doi.org/10.1016/j.ajhg.2017.01.017</li>",
+        (params.skip_tools && params.skip_tools.split(',').contains('peddy')) ? "" : "<li>Pedersen, B. S., & Quinlan, A. R. (2017). Who’s Who? Detecting and Resolving Sample Anomalies in Human DNA Sequencing Studies with Peddy. The American Journal of Human Genetics, 100(3), 406–413. https://doi.org/10.1016/j.ajhg.2017.01.017</li>",
         params.run_rtgvcfeval ? "<li>Cleary, J. G., Braithwaite, R., Gaastra, K., Hilbush, B. S., Inglis, S., Irvine, S. A., Jackson, A., Littin, R., Rathod, M., Ware, D., Zook, J. M., Trigg, L., & Vega, F. M. D. L. (2015). Comparing Variant Call Files for Performance Benchmarking of Next-Generation Sequencing Variant Calling Pipelines (p. 023754). bioRxiv. https://doi.org/10.1101/023754</li>" : "",
         "<li>Li, H., Handsaker, B., Wysoker, A., Fennell, T., Ruan, J., Homer, N., Marth, G., Abecasis, G., Durbin, R., & 1000 Genome Project Data Processing Subgroup. (2009). The Sequence Alignment/Map format and SAMtools. Bioinformatics, 25(16), 2078–2079. https://doi.org/10.1093/bioinformatics/btp352</li>",
-        (!params.skip_smncopynumbercaller && params.analysis_type.equals("wgs")) ? "<li>Chen, X., Sanchis-Juan, A., French, C. E., Connell, A. J., Delon, I., Kingsbury, Z., Chawla, A., Halpern, A. L., Taft, R. J., Bentley, D. R., Butchbach, M. E. R., Raymond, F. L., & Eberle, M. A. (2020). Spinal muscular atrophy diagnosis and carrier screening from genome sequencing data. Genetics in Medicine, 22(5), 945–953. https://doi.org/10.1038/s41436-020-0754-0</li>" : "",
+        (!(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) && params.analysis_type.equals("wgs")) ? "<li>Chen, X., Sanchis-Juan, A., French, C. E., Connell, A. J., Delon, I., Kingsbury, Z., Chawla, A., Halpern, A. L., Taft, R. J., Bentley, D. R., Butchbach, M. E. R., Raymond, F. L., & Eberle, M. A. (2020). Spinal muscular atrophy diagnosis and carrier screening from genome sequencing data. Genetics in Medicine, 22(5), 945–953. https://doi.org/10.1038/s41436-020-0754-0</li>" : "",
         "<li>Li, H. (2011). Tabix: Fast retrieval of sequence features from generic TAB-delimited files. Bioinformatics, 27(5), 718–719. https://doi.org/10.1093/bioinformatics/btq671</li>",
         "<li>Quinlan, AR., Hall IM. (2010). BEDTools: a flexible suite of utilities for comparing genomic features. Bioinfomatics, 26(6), 841-842. https://doi.org/10.1093/bioinformatics/btq033</li>"
     ]

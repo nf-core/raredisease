@@ -354,7 +354,7 @@ We use CADD only to annotate small indels. To annotate SNVs with precomputed CAD
 
 ##### 13. Prepare data for CNV visualisation in Gens
 
-Optionally the read data can be prepared for CNV visualization in [Gens](https://github.com/Clinical-Genomics-Lund/gens). This subworkflow is turned off by default. You can activate it by supplying the option `--skip_gens false`.
+Optionally the read data can be prepared for CNV visualization in [Gens](https://github.com/Clinical-Genomics-Lund/gens). You can turn it off it by supplying the option `--skip_tools gens`.
 
 | Mandatory                      | Optional |
 | ------------------------------ | -------- |
