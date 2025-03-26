@@ -288,7 +288,7 @@ def checkRequiredParameters(params) {
     }
 
     conditionalParamsTools.each { tool, paramsList ->
-        if (tool in params.skip_tools.split(',')) {
+        if (!(params.skip_tools && tool in params.skip_tools.split(','))) {
             mandatoryParams += paramsList
         }
     }
@@ -426,7 +426,6 @@ def toolCitationText() {
             "VEP (McLaren et al., 2016),",
             "Vcfanno (Pedersen et al., 2016),",
             "Hmtnote (Preste et al., 2019),",
-            "HaploGrep2 (Weissensteiner et al., 2016),",
             "Genmod (Magnusson et al., 2018),"
         ]
         if (!(params.skip_tools && params.skip_tools.split(',').contains('haplogrep3'))) {
@@ -556,7 +555,6 @@ def toolBibliographyText() {
             "<li>Pedersen, B. S., Layer, R. M., & Quinlan, A. R. (2016). Vcfanno: Fast, flexible annotation of genetic variants. Genome Biology, 17(1), 118. https://doi.org/10.1186/s13059-016-0973-5</li>",
             "<li>McLaren, W., Gil, L., Hunt, S. E., Riat, H. S., Ritchie, G. R. S., Thormann, A., Flicek, P., & Cunningham, F. (2016). The Ensembl Variant Effect Predictor. Genome Biology, 17(1), 122. https://doi.org/10.1186/s13059-016-0974-4</li>",
             "<li>Preste, R., Clima, R., & Attimonelli, M. (2019). Human mitochondrial variant annotation with HmtNote [Preprint]. Bioinformatics. https://doi.org/10.1101/600619</li>",
-            "<li>Weissensteiner, H., Pacher, D., Kloss-Brandstätter, A., Forer, L., Specht, G., Bandelt, H.-J., Kronenberg, F., Salas, A., & Schönherr, S. (2016). HaploGrep 2: Mitochondrial haplogroup classification in the era of high-throughput sequencing. Nucleic Acids Research, 44(W1), W58–W63. https://doi.org/10.1093/nar/gkw233</li>",
             "<li>Magnusson, M., Hughes, T., Glabilloy, & Bitdeli Chef. (2018). genmod: Version 3.7.3 (3.7.3) [Computer software]. Zenodo. https://doi.org/10.5281/ZENODO.3841142</li>"
         ]
         if (!(params.skip_tools && params.skip_tools.split(',').contains('haplogrep3'))) {
