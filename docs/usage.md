@@ -78,7 +78,7 @@ work                # Directory containing the Nextflow working files
 # Other Nextflow hidden files, like history of pipeline logs.
 ```
 
-Test profile runs the pipeline with a case containing three samples, but if you would like to test the pipeline with one sample, use `-profile test_one_sample,<YOURPROFILE>`.
+Test profile runs the pipeline with a case containing three samples, but if you would like to test the pipeline with one sample, use `-profile test_singleton,<YOURPROFILE>`.
 
 :::note
 The default cpu and memory configurations used in raredisease are written keeping the test profile (&dataset, which is tiny) in mind. You should override these values in configs to get it to work on larger datasets. Check the section `custom-configuration` below to know more about how to configure resources for your platform.
