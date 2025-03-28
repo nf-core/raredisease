@@ -316,14 +316,15 @@ workflow RAREDISEASE {
     //
     // Create chromosome bed and intervals for splitting and gathering operations
     //
-    SCATTER_GENOME (
-        ch_genome_dictionary,
-        ch_genome_fai,
-        ch_genome_fasta
-    )
-    .set { ch_scatter }
-
-    ch_scatter_split_intervals  = ch_scatter.split_intervals  ?: Channel.empty()
+    ch_scatter_split_intervals = Channel.empty()
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_annotation'))) {
+        SCATTER_GENOME (
+            ch_genome_dictionary,
+            ch_genome_fai,
+            ch_genome_fasta
+        ).split_intervals
+        .set { ch_scatter_split_intervals }
+    }
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is nott fastq)
@@ -439,7 +440,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!params.skip_snv_calling) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_calling'))) {
         CALL_SNV (
             ch_mapped.genome_bam_bai,
             ch_mapped.mt_bam_bai,
@@ -473,7 +474,7 @@ workflow RAREDISEASE {
         //
         // ANNOTATE GENOME SNVs
         //
-        if (!params.skip_snv_annotation) {
+        if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_annotation'))) {
 
             ANNOTATE_GENOME_SNVS (
                 CALL_SNV.out.genome_vcf_tabix,

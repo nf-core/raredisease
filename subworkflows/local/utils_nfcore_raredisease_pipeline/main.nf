@@ -389,7 +389,7 @@ def toolCitationText() {
         (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_calling')) && params.analysis_type.equals("wgs"))    ? "ExpansionHunter (Dolzhenko et al., 2019)," : "",
         (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_annotation')) && params.analysis_type.equals("wgs")) ? "stranger (Nilsson & Magnusson, 2021)," : ""
     ]
-    if (!params.skip_snv_annotation) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_annotation'))) {
         snv_annotation_text = [
             "CADD (Rentzsch et al., 2019, 2021),",
             "Vcfanno (Pedersen et al., 2016),",
@@ -397,7 +397,7 @@ def toolCitationText() {
             "Genmod (Magnusson et al., 2018),"
         ]
     }
-    if (!params.skip_snv_calling) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_calling'))) {
         snv_calls_text = [
             params.variant_caller.equals("deepvariant") ? "DeepVariant (Poplin et al., 2018),"      : "",
             params.variant_caller.equals("sentieon")    ? "Sentieon DNAscope (Freed et al., 2022)," : "",
@@ -514,7 +514,7 @@ def toolBibliographyText() {
         (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_calling')) && params.analysis_type.equals("wgs") )    ? "<li>Dolzhenko, E., Deshpande, V., Schlesinger, F., Krusche, P., Petrovski, R., Chen, S., Emig-Agius, D., Gross, A., Narzisi, G., Bowman, B., Scheffler, K., van Vugt, J. J. F. A., French, C., Sanchis-Juan, A., Ibáñez, K., Tucci, A., Lajoie, B. R., Veldink, J. H., Raymond, F. L., … Eberle, M. A. (2019). ExpansionHunter: A sequence-graph-based tool to analyze variation in short tandem repeat regions. Bioinformatics, 35(22), 4754–4756. https://doi.org/10.1093/bioinformatics/btz431</li>" : "",
         (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_annotation')) && params.analysis_type.equals("wgs") ) ? "<li>Nilsson, D., & Magnusson, M. (2021). Moonso/stranger v0.7.1 (v0.7.1) [Computer software]. Zenodo. https://doi.org/10.5281/ZENODO.4548873</li>" : ""
     ]
-    if (!params.skip_snv_annotation) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_annotation'))) {
         snv_annotation_text = [
             "<li>Rentzsch, P., Schubach, M., Shendure, J., & Kircher, M. (2021). CADD-Splice—Improving genome-wide variant effect prediction using deep learning-derived splice scores. Genome Medicine, 13(1), 31. https://doi.org/10.1186/s13073-021-00835-9</li>",
             "<li>Rentzsch, P., Witten, D., Cooper, G. M., Shendure, J., & Kircher, M. (2019). CADD: Predicting the deleteriousness of variants throughout the human genome. Nucleic Acids Research, 47(D1), D886–D894. https://doi.org/10.1093/nar/gky1016</li>",
@@ -523,7 +523,7 @@ def toolBibliographyText() {
             "<li>Magnusson, M., Hughes, T., Glabilloy, & Bitdeli Chef. (2018). genmod: Version 3.7.3 (3.7.3) [Computer software]. Zenodo. https://doi.org/10.5281/ZENODO.3841142</li>"
         ]
     }
-    if (!params.skip_snv_calling) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_calling'))) {
         snv_calls_text = [
             params.variant_caller.equals("deepvariant") ? "<li>Poplin, R., Chang, P.-C., Alexander, D., Schwartz, S., Colthurst, T., Ku, A., Newburger, D., Dijamco, J., Nguyen, N., Afshar, P. T., Gross, S. S., Dorfman, L., McLean, C. Y., & DePristo, M. A. (2018). A universal SNP and small-indel variant caller using deep neural networks. Nature Biotechnology, 36(10), 983–987. https://doi.org/10.1038/nbt.4235</li>" : "",
             params.variant_caller.equals("sentieon") ? "<li>Freed, D., Pan, R., Chen, H., Li, Z., Hu, J., & Aldana, R. (2022). DNAscope: High accuracy small variant calling using machine learning [Preprint]. Bioinformatics. https://doi.org/10.1101/2022.05.20.492556</li>" : "",
