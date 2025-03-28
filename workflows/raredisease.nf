@@ -588,7 +588,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!params.skip_sv_calling) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_calling'))) {
         CALL_STRUCTURAL_VARIANTS (
             ch_mapped.genome_marked_bam,
             ch_mapped.genome_marked_bai,
@@ -612,7 +612,7 @@ workflow RAREDISEASE {
         //
         // ANNOTATE STRUCTURAL VARIANTS
         //
-        if (!params.skip_sv_annotation) {
+        if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_annotation'))) {
             ANNOTATE_STRUCTURAL_VARIANTS (
                 CALL_STRUCTURAL_VARIANTS.out.vcf,
                 ch_sv_dbs,
@@ -751,7 +751,7 @@ workflow RAREDISEASE {
     Generate CGH files from sequencing data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if ( !(params.skip_tools && params.skip_tools.split(',').contains('vcf2cytosure')) && params.analysis_type.equals("wgs") && !params.skip_sv_calling && !params.skip_sv_annotation) {
+    if ( !(params.skip_tools && params.skip_tools.split(',').contains('vcf2cytosure')) && params.analysis_type.equals("wgs") && !(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_calling')) && !(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_annotation'))) {
         GENERATE_CYTOSURE_FILES (
             ch_sv_annotate.vcf_ann,
             ch_sv_annotate.tbi,

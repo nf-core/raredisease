@@ -293,7 +293,7 @@ def checkRequiredParameters(params) {
         }
     }
 
-    if (!params.skip_sv_annotation && !params.svdb_query_bedpedbs && !params.svdb_query_dbs) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_annotation')) && !params.svdb_query_bedpedbs && !params.svdb_query_dbs) {
         println("params.svdb_query_bedpedbs or params.svdb_query_dbs should be set.")
         missingParamsCount += 1
     }
@@ -405,14 +405,14 @@ def toolCitationText() {
             "GLnexus (Yun et al., 2021),"
         ]
     }
-    if (!params.skip_sv_annotation) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_annotation'))) {
         sv_annotation_text = [
             "SVDB (Eisfeldt et al., 2017),",
             "VEP (McLaren et al., 2016),",
             "Genmod (Magnusson et al., 2018),"
         ]
     }
-    if (!params.skip_sv_calling) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_calling'))) {
         sv_calls_text = [
             params.analysis_type.equals("wgs") ? "CNVnator (Abyzov et al., 2011)," : "",
             params.analysis_type.equals("wgs") ? "TIDDIT (Eisfeldt et al., 2017)," : "",
@@ -532,14 +532,14 @@ def toolBibliographyText() {
         ]
     }
 
-    if (!params.skip_sv_annotation) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_annotation'))) {
         sv_annotation_text = [
             "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>",
             "<li>McLaren, W., Gil, L., Hunt, S. E., Riat, H. S., Ritchie, G. R. S., Thormann, A., Flicek, P., & Cunningham, F. (2016). The Ensembl Variant Effect Predictor. Genome Biology, 17(1), 122. https://doi.org/10.1186/s13059-016-0974-4</li>",
             "<li>Magnusson, M., Hughes, T., Glabilloy, & Bitdeli Chef. (2018). genmod: Version 3.7.3 (3.7.3) [Computer software]. Zenodo. https://doi.org/10.5281/ZENODO.3841142</li>"
         ]
     }
-    if (!params.skip_sv_calling) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_calling'))) {
         sv_calls_text = [
             params.analysis_type.equals("wgs") ? "<li>Abyzov, A., Urban, A. E., Snyder, M., & Gerstein, M. (2011). CNVnator: An approach to discover, genotype, and characterize typical and atypical CNVs from family and population genome sequencing. Genome Research, 21(6), 974–984. https://doi.org/10.1101/gr.114876.110</li>" : "",
             params.analysis_type.equals("wgs") ? "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>" : "",
