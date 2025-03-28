@@ -420,7 +420,7 @@ def toolCitationText() {
             params.analysis_type.equals("wgs") ? "eKLIPse (Goudenge et al., 2019)," : ""
         ]
     }
-    if (!params.skip_mt_annotation && (params.analysis_type.equals("wgs") || params.run_mt_for_wes)) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('mt_annotation')) && (params.analysis_type.equals("wgs") || params.run_mt_for_wes)) {
         mt_annotation_text = [
             "CADD (Rentzsch et al., 2019, 2021),",
             "VEP (McLaren et al., 2016),",
@@ -548,7 +548,7 @@ def toolBibliographyText() {
         ]
     }
 
-    if (!params.skip_mt_annotation && (params.analysis_type.equals("wgs") || params.run_mt_for_wes)) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('mt_annotation')) && (params.analysis_type.equals("wgs") || params.run_mt_for_wes)) {
         mt_annotation_text = [
             "<li>Rentzsch, P., Schubach, M., Shendure, J., & Kircher, M. (2021). CADD-Splice—Improving genome-wide variant effect prediction using deep learning-derived splice scores. Genome Medicine, 13(1), 31. https://doi.org/10.1186/s13073-021-00835-9</li>",
             "<li>Rentzsch, P., Witten, D., Cooper, G. M., Shendure, J., & Kircher, M. (2019). CADD: Predicting the deleteriousness of variants throughout the human genome. Nucleic Acids Research, 47(D1), D886–D894. https://doi.org/10.1093/nar/gky1016</li>",

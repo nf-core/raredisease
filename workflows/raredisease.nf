@@ -530,7 +530,7 @@ workflow RAREDISEASE {
         //
         // ANNOTATE MT SNVs
         //
-        if (!params.skip_mt_annotation && (params.run_mt_for_wes || params.analysis_type.matches("wgs|mito"))) {
+        if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('mt_annotation')) && (params.run_mt_for_wes || params.analysis_type.matches("wgs|mito"))) {
 
             ANNOTATE_MT_SNVS (
                 CALL_SNV.out.mt_vcf,
@@ -663,7 +663,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!params.skip_me_calling && params.analysis_type.equals("wgs")) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_calling')) && params.analysis_type.equals("wgs")) {
         CALL_MOBILE_ELEMENTS(
             ch_mapped.genome_bam_bai,
             ch_genome_fasta,
@@ -674,7 +674,7 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(CALL_MOBILE_ELEMENTS.out.versions)
 
-        if (!params.skip_me_annotation) {
+        if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_annotation'))) {
             ANNOTATE_MOBILE_ELEMENTS(
                 CALL_MOBILE_ELEMENTS.out.vcf,
                 ch_me_svdb_resources,

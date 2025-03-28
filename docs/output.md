@@ -69,7 +69,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
         - [Hmtnote](#hmtnote)
         - [VEP](#vep-2)
     - [Filtering and ranking](#filtering-and-ranking)
-      - [Filter_vep](#filter_vep)
+      - [Filter\_vep](#filter_vep)
       - [GENMOD](#genmod)
     - [Mobile element analysis](#mobile-element-analysis)
       - [Calling mobile elements](#calling-mobile-elements)
@@ -381,7 +381,7 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 
 Based on VEP annotations, custom scripts used by the pipeline further annotate each record with the most severe consequence, and pli scores.
 
-> **NB**: Output files described below do not include mitochondrial annotations only if --skip_mt_annotation is set to true.
+> **NB**: Output files described below do not include mitochondrial annotations only if --skip_subworklows includes mt_annotation.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -446,7 +446,7 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 
 ### Mitochondrial analysis
 
-Mitochondrial analysis is run by default. If you want to turn off annotations set `--skip_mt_annotation` to true.
+Mitochondrial analysis is run by default. If you want to turn off annotations set `--skip_subworkflows mt_annotation` to true.
 
 #### Haplocheck
 
