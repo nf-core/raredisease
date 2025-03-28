@@ -386,8 +386,8 @@ def toolCitationText() {
         params.aligner.equals("sentieon") ? "Sentieon Tools (Freed et al., 2017),"   : ""
     ]
     repeats_text = [
-        (!params.skip_repeat_calling && params.analysis_type.equals("wgs"))    ? "ExpansionHunter (Dolzhenko et al., 2019)," : "",
-        (!params.skip_repeat_annotation && params.analysis_type.equals("wgs")) ? "stranger (Nilsson & Magnusson, 2021)," : ""
+        (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_calling')) && params.analysis_type.equals("wgs"))    ? "ExpansionHunter (Dolzhenko et al., 2019)," : "",
+        (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_annotation')) && params.analysis_type.equals("wgs")) ? "stranger (Nilsson & Magnusson, 2021)," : ""
     ]
     if (!params.skip_snv_annotation) {
         snv_annotation_text = [
@@ -511,8 +511,8 @@ def toolBibliographyText() {
         params.aligner.equals("sentieon") || params.mt_aligner.equals("sentieon")? "<li>Freed, D., Aldana, R., Weber, J. A., & Edwards, J. S. (2017). The Sentieon Genomics Tools—A fast and accurate solution to variant calling from next-generation sequence data (p. 115717). bioRxiv. https://doi.org/10.1101/115717</li>" : ""
     ]
     repeats_text = [
-        (!params.skip_repeat_calling && params.analysis_type.equals("wgs") )    ? "<li>Dolzhenko, E., Deshpande, V., Schlesinger, F., Krusche, P., Petrovski, R., Chen, S., Emig-Agius, D., Gross, A., Narzisi, G., Bowman, B., Scheffler, K., van Vugt, J. J. F. A., French, C., Sanchis-Juan, A., Ibáñez, K., Tucci, A., Lajoie, B. R., Veldink, J. H., Raymond, F. L., … Eberle, M. A. (2019). ExpansionHunter: A sequence-graph-based tool to analyze variation in short tandem repeat regions. Bioinformatics, 35(22), 4754–4756. https://doi.org/10.1093/bioinformatics/btz431</li>" : "",
-        (!params.skip_repeat_annotation && params.analysis_type.equals("wgs") ) ? "<li>Nilsson, D., & Magnusson, M. (2021). Moonso/stranger v0.7.1 (v0.7.1) [Computer software]. Zenodo. https://doi.org/10.5281/ZENODO.4548873</li>" : ""
+        (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_calling')) && params.analysis_type.equals("wgs") )    ? "<li>Dolzhenko, E., Deshpande, V., Schlesinger, F., Krusche, P., Petrovski, R., Chen, S., Emig-Agius, D., Gross, A., Narzisi, G., Bowman, B., Scheffler, K., van Vugt, J. J. F. A., French, C., Sanchis-Juan, A., Ibáñez, K., Tucci, A., Lajoie, B. R., Veldink, J. H., Raymond, F. L., … Eberle, M. A. (2019). ExpansionHunter: A sequence-graph-based tool to analyze variation in short tandem repeat regions. Bioinformatics, 35(22), 4754–4756. https://doi.org/10.1093/bioinformatics/btz431</li>" : "",
+        (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_annotation')) && params.analysis_type.equals("wgs") ) ? "<li>Nilsson, D., & Magnusson, M. (2021). Moonso/stranger v0.7.1 (v0.7.1) [Computer software]. Zenodo. https://doi.org/10.5281/ZENODO.4548873</li>" : ""
     ]
     if (!params.skip_snv_annotation) {
         snv_annotation_text = [

@@ -367,7 +367,7 @@ workflow RAREDISEASE {
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
 
-    if (!params.skip_mt_subsample && (params.analysis_type.equals("wgs") || params.run_mt_for_wes)) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('mt_subsample')) && (params.analysis_type.equals("wgs") || params.run_mt_for_wes)) {
         SUBSAMPLE_MT(
             ch_mapped.mt_bam_bai,
             params.mt_subsample_rd,
@@ -400,7 +400,7 @@ workflow RAREDISEASE {
     RENAME ALIGNMENT FILES FOR SMNCOPYNUMBERCALLER & REPEATCALLING
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if ( params.analysis_type.equals("wgs") && (!(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) || !params.skip_repeat_calling)) {
+    if ( params.analysis_type.equals("wgs") && (!(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) || !(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_calling')))) {
         RENAME_BAM(ch_mapped.genome_marked_bam, "bam")
         RENAME_BAI(ch_mapped.genome_marked_bai, "bam.bai")
         ch_versions = ch_versions.mix(RENAME_BAM.out.versions)
@@ -413,7 +413,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!params.skip_repeat_calling && params.analysis_type.equals("wgs") ) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_calling')) && params.analysis_type.equals("wgs") ) {
         CALL_REPEAT_EXPANSIONS (
             RENAME_BAM.out.output.join(RENAME_BAI.out.output, failOnMismatch:true, failOnDuplicate:true),
             ch_variant_catalog,
@@ -423,7 +423,7 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
 
-        if (!params.skip_repeat_annotation) {
+        if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_annotation'))) {
             ANNOTATE_REPEAT_EXPANSIONS (
                 ch_variant_catalog,
                 CALL_REPEAT_EXPANSIONS.out.vcf
