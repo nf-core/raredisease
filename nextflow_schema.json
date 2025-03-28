@@ -17,9 +17,8 @@
                     "format": "file-path",
                     "exists": true,
                     "schema": "assets/schema_input.json",
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
-                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
+                    "pattern": "^\\S+\\.(csv|tsv|json|yaml|yml)$",
+                    "description": "Path to the samplesheet file containing information about the samples in the experiment.",
                     "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/raredisease/usage#samplesheet-input).",
                     "fa_icon": "fas fa-file-csv"
                 },
@@ -181,6 +180,7 @@
                 },
                 "igenomes_base": {
                     "type": "string",
+                    "exists": true,
                     "format": "directory-path",
                     "description": "The base path to the igenomes reference files",
                     "fa_icon": "fas fa-ban",
@@ -229,6 +229,7 @@
                 },
                 "local_genomes": {
                     "type": "string",
+                    "exists": true,
                     "format": "directory-path",
                     "fa_icon": "fas fa-map-marker-alt",
                     "description": "Local directory base for genome references that map to the config.",
@@ -244,6 +245,7 @@
                 "mobile_element_references": {
                     "type": "string",
                     "fa_icon": "fas fa-file",
+                    "exists": true,
                     "description": "File with mobile element references",
                     "help_text": "Path to tsv file listing mobile element references. \nFormat: <mobile element type>\\t<path to bed file>",
                     "pattern": "^\\S+\\.tsv$",
@@ -253,10 +255,10 @@
                 "mobile_element_svdb_annotations": {
                     "type": "string",
                     "description": "File with mobile element allele frequency references",
+                    "exists": true,
                     "help_text": "Path to csv file listing files containing mobile element allele frequencies in reference populations. \nFormat: <vcf file path>,<in_freq_info_key>,<in_allele_count_info_key>,<out_freq_info_key>,<out_allele_count_info_key>",
                     "fa_icon": "fas fa-file",
                     "pattern": "^\\S+\\.csv$",
-                    "mimetype": "text/csv",
                     "schema": "assets/svdb_query_vcf_schema.json"
                 },
                 "ml_model": {
@@ -313,8 +315,7 @@
                     "description": "Vcf used for evaluating variant calls.",
                     "fa_icon": "fas fa-file-csv",
                     "help_text": "Path to comma-separated file containing information about the truth vcf files used by vcfeval.",
-                    "pattern": "^\\S+\\.csv$",
-                    "mimetype": "text/csv",
+                    "pattern": "^\\S+\\.(csv|tsv|json|yaml|yml)$",
                     "schema": "assets/rtg_truthvcfs_schema.json"
                 },
                 "save_reference": {
@@ -367,8 +368,7 @@
                     "description": "Databases used for structural variant annotation in chrA-posA-chrB-posB-type-count-frequency format.",
                     "fa_icon": "fas fa-file-csv",
                     "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation.",
-                    "pattern": "^\\S+\\.csv$",
-                    "mimetype": "text/csv",
+                    "pattern": "^\\S+\\.(csv|tsv|json|yaml|yml)$",
                     "schema": "assets/svdb_query_bedpe_schema.json"
                 },
                 "svdb_query_dbs": {
@@ -378,8 +378,7 @@
                     "description": "Databases used for structural variant annotation in vcf format.",
                     "fa_icon": "fas fa-file-csv",
                     "help_text": "Path to comma-separated file containing information about the databases used for structural variant annotation.",
-                    "pattern": "^\\S+\\.csv$",
-                    "mimetype": "text/csv",
+                    "pattern": "^\\S+\\.(csv|tsv|json|yaml|yml)$",
                     "schema": "assets/svdb_query_vcf_schema.json"
                 },
                 "target_bed": {
@@ -412,6 +411,7 @@
                 },
                 "vcf2cytosure_blacklist": {
                     "type": "string",
+                    "exists": true,
                     "help_text": "Optional file to blacklist regions for VCF2cytosure",
                     "pattern": "^\\S+\\.bed$",
                     "format": "file-path",
@@ -635,6 +635,7 @@
             "properties": {
                 "call_interval": {
                     "type": "string",
+                    "exists": true,
                     "format": "path",
                     "fa_icon": "fas fa-align-center",
                     "description": "Interval in the reference that will be used in the software. Used only by sentieon."
