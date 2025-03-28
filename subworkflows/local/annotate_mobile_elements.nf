@@ -78,6 +78,6 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
         ch_versions = ch_versions.mix( BCFTOOLS_VIEW_FILTER.out.versions )
 
     emit:
-        vcf      = BCFTOOLS_VIEW_FILTER.out.vcf     // channel: [ val(meta), path(vcf) ]
+        vcf_ann  = BCFTOOLS_VIEW_FILTER.out.vcf     // channel: [ val(meta), path(vcf) ]
         versions = ch_versions                      // channel: [ path(versions.yml) ]
 }
