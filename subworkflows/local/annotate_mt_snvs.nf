@@ -31,7 +31,6 @@ workflow ANNOTATE_MT_SNVS {
     main:
         ch_versions     = Channel.empty()
         ch_haplog       = Channel.empty()
-        ch_haplogrep_in = Channel.empty()
 
         // add prefix to meta
         ch_mt_vcf
