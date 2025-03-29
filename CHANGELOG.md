@@ -28,15 +28,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter            | New parameter |
-| ------------------------ | ------------- |
-| skip_haplogrep3          | skip_tools    |
-| skip_fastp               |               |
-| skip_gens                |               |
-| skip_germlinecnvcaller   |               |
-| skip_peddy               |               |
-| skip_smncopynumbercaller |               |
-| skip_vcf2cytosure        |               |
+| Old parameter            | New parameter     |
+| ------------------------ | ----------------- |
+| skip_haplogrep3          | skip_tools        |
+| skip_fastp               |                   |
+| skip_gens                |                   |
+| skip_germlinecnvcaller   |                   |
+| skip_peddy               |                   |
+| skip_smncopynumbercaller |                   |
+| skip_vcf2cytosure        |                   |
+| skip_me_calling          | skip_subworkflows |
+| skip_me_annotation       |                   |
+| skip_mt_annotation       |                   |
+| skip_mt_subsample        |                   |
+| skip_repeat_annotation   |                   |
+| skip_repeat_calling      |                   |
+| skip_snv_annotation      |                   |
+| skip_snv_calling         |                   |
+| skip_sv_annotation       |                   |
+| skip_sv_calling          |                   |
 
 ### Tool updates
 
