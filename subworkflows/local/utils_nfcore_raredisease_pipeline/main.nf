@@ -254,7 +254,7 @@ def checkRequiredParameters(params) {
     def conditionalParams = [
         analysis_type_wes        : ["target_bed"],
         variant_caller_sentieon  : ["ml_model"],
-        run_rtgvcfeval           : ["rtg_truthvcfs"]
+        run_rtgvcfeval           : ["rtg_truthvcfs"],
         repeat_calling           : ["variant_catalog"],
         repeat_annotation        : ["variant_catalog"],
         snv_calling              : ["genome"],

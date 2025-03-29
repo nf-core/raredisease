@@ -446,7 +446,7 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 
 ### Mitochondrial analysis
 
-Mitochondrial analysis is run by default. If you want to turn off annotations set `--skip_subworkflows mt_annotation` to true.
+Mitochondrial analysis is run by default. If you want to turn off annotations set `--skip_subworkflows mt_annotation`.
 
 #### Haplocheck
 
