@@ -428,13 +428,13 @@ def toolCitationText() {
 
         }
     }
-    if (!params.skip_me_annotation && params.analysis_type.equals("wgs")) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_annotation')) && params.analysis_type.equals("wgs")) {
         me_annotation_text = [
             "VEP (McLaren et al., 2016),",
             "SVDB (Eisfeldt et al., 2017),"
         ]
     }
-    if (!params.skip_me_calling && params.analysis_type.equals("wgs")) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_calling')) && params.analysis_type.equals("wgs")) {
         me_calls_text = [
             "SVDB (Eisfeldt et al., 2017),",
             "RetroSeq (Keane et al., 2013),"
@@ -556,13 +556,13 @@ def toolBibliographyText() {
             ]
         }
     }
-    if (!params.skip_me_annotation && params.analysis_type.equals("wgs")) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_annotation')) && params.analysis_type.equals("wgs")) {
         me_annotation_text = [
             "<li>McLaren, W., Gil, L., Hunt, S. E., Riat, H. S., Ritchie, G. R. S., Thormann, A., Flicek, P., & Cunningham, F. (2016). The Ensembl Variant Effect Predictor. Genome Biology, 17(1), 122. https://doi.org/10.1186/s13059-016-0974-4</li>",
             "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>"
         ]
     }
-    if (!params.skip_me_calling && params.analysis_type.equals("wgs")) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_calling')) && params.analysis_type.equals("wgs")) {
         me_calls_text = [
             "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>",
             "<li>Keane, T. M., Wong, K., & Adams, D. J. (2013). RetroSeq: Transposable element discovery from next-generation sequencing data. Bioinformatics, 29(3), 389–390. https://doi.org/10.1093/bioinformatics/bts697</li>"
