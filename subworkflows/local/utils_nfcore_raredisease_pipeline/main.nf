@@ -251,23 +251,20 @@ def checkRequiredParameters(params) {
         "variant_caller"
     ]
 
-    def conditionalParamsWorkflows = [
-        run_rtgvcfeval           : ["rtg_truthvcfs"],
-        skip_repeat_calling      : ["variant_catalog"],
-        skip_repeat_annotation   : ["variant_catalog"],
-        skip_snv_calling         : ["genome"],
-        skip_snv_annotation      : ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
-                                    "gnomad_af", "score_config_snv", "variant_consequences_snv"],
-        skip_sv_annotation       : ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"],
-        skip_mt_annotation       : ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "score_config_mt",
-                                    "vep_cache_version", "vep_cache", "variant_consequences_snv"],
+    def conditionalParams = [
         analysis_type_wes        : ["target_bed"],
         variant_caller_sentieon  : ["ml_model"],
-        skip_me_calling          : ["mobile_element_references"],
-        skip_me_annotation       : ["mobile_element_svdb_annotations", "variant_consequences_snv"]
-    ]
-
-    def conditionalParamsTools = [
+        run_rtgvcfeval           : ["rtg_truthvcfs"]
+        repeat_calling           : ["variant_catalog"],
+        repeat_annotation        : ["variant_catalog"],
+        snv_calling              : ["genome"],
+        snv_annotation           : ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
+                                    "gnomad_af", "score_config_snv", "variant_consequences_snv"],
+        sv_annotation            : ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"],
+        mt_annotation            : ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "score_config_mt",
+                                    "vep_cache_version", "vep_cache", "variant_consequences_snv"],
+        me_calling               : ["mobile_element_references"],
+        me_annotation            : ["mobile_element_svdb_annotations", "variant_consequences_snv"],
         gens                     : ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
         germlinecnvcaller        : ["ploidy_mmodel", "gcnvcaller_model", "readcount_intervals"],
         smncopynumbercaller      : ["genome"]
@@ -275,20 +272,16 @@ def checkRequiredParameters(params) {
 
     def missingParamsCount = 0
 
-    conditionalParamsWorkflows.each { condition, paramsList ->
+    conditionalParams.each { condition, paramsList ->
         if (condition == "analysis_type_wes" && params.analysis_type == "wes") {
             mandatoryParams += paramsList
         } else if (condition == "variant_caller_sentieon" && params.variant_caller == "sentieon") {
             mandatoryParams += paramsList
         } else if (condition == "run_rtgvcfeval" && params[condition]) {
             mandatoryParams += paramsList
-        } else if (condition != "run_rtgvcfeval" && params.containsKey(condition) && !params[condition]) {
+        } else if (!(params.skip_subworkflows && condition in params.skip_subworkflows.split(','))) {
             mandatoryParams += paramsList
-        }
-    }
-
-    conditionalParamsTools.each { tool, paramsList ->
-        if (!(params.skip_tools && tool in params.skip_tools.split(','))) {
+        } else if (!(params.skip_tools && tool in params.skip_tools.split(','))) {
             mandatoryParams += paramsList
         }
     }
@@ -298,7 +291,7 @@ def checkRequiredParameters(params) {
         missingParamsCount += 1
     }
 
-    if (!params.skip_vep_filter) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('generate_clinical_set')) ) {
         if (!params.vep_filters && !params.vep_filters_scout_fmt) {
             println("params.vep_filters or params.vep_filters_scout_fmt should be set.")
             missingParamsCount += 1
