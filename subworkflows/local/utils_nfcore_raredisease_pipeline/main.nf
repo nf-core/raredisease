@@ -266,22 +266,18 @@ def checkRequiredParameters(params) {
         me_calling               : ["mobile_element_references"],
         me_annotation            : ["mobile_element_svdb_annotations", "variant_consequences_snv"],
         gens                     : ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
-        germlinecnvcaller        : ["ploidy_mmodel", "gcnvcaller_model", "readcount_intervals"],
+        germlinecnvcaller        : ["ploidy_model", "gcnvcaller_model", "readcount_intervals"],
         smncopynumbercaller      : ["genome"]
     ]
 
     def missingParamsCount = 0
 
     conditionalParams.each { condition, paramsList ->
-        if (condition == "analysis_type_wes" && params.analysis_type == "wes") {
-            mandatoryParams += paramsList
-        } else if (condition == "variant_caller_sentieon" && params.variant_caller == "sentieon") {
-            mandatoryParams += paramsList
-        } else if (condition == "run_rtgvcfeval" && params[condition]) {
-            mandatoryParams += paramsList
-        } else if (!(params.skip_subworkflows && condition in params.skip_subworkflows.split(','))) {
-            mandatoryParams += paramsList
-        } else if (!(params.skip_tools && tool in params.skip_tools.split(','))) {
+        if ((condition == "analysis_type_wes" && params.analysis_type == "wes") ||
+            (condition == "variant_caller_sentieon" && params.variant_caller == "sentieon") ||
+            (condition == "run_rtgvcfeval" && params[condition]) ||
+            (!params.skip_subworkflows && !params.skip_subworkflows.split(',').contains(condition)) ||
+            (!params.skip_tools && !params.skip_tools.split(',').contains(condition))) {
             mandatoryParams += paramsList
         }
     }
