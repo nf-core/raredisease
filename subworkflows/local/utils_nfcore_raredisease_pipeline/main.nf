@@ -251,10 +251,15 @@ def checkRequiredParameters(params) {
         "variant_caller"
     ]
 
-    def conditionalParams = [
+    // Static requirements that are not influenced by user-defined skips
+    def staticRequirements   = [
         analysis_type_wes        : ["target_bed"],
         variant_caller_sentieon  : ["ml_model"],
-        run_rtgvcfeval           : ["rtg_truthvcfs"],
+        run_rtgvcfeval           : ["rtg_truthvcfs"]
+    ]
+
+    // Requirements that can be modified by the user using either skip_tools or skip_subworkflows here
+    def dynamicRequirements = [
         repeat_calling           : ["variant_catalog"],
         repeat_annotation        : ["variant_catalog"],
         snv_calling              : ["genome"],
@@ -272,13 +277,18 @@ def checkRequiredParameters(params) {
 
     def missingParamsCount = 0
 
-    conditionalParams.each { condition, paramsList ->
+    staticRequirements.each { condition, paramsList ->
         if ((condition == "analysis_type_wes" && params.analysis_type == "wes") ||
             (condition == "variant_caller_sentieon" && params.variant_caller == "sentieon") ||
-            (condition == "run_rtgvcfeval" && params[condition]) ||
-            (!params.skip_subworkflows && !params.skip_subworkflows.split(',').contains(condition)) ||
-            (!params.skip_tools && !params.skip_tools.split(',').contains(condition))) {
-            mandatoryParams += paramsList
+            (condition == "run_rtgvcfeval" && params.run_rtgvcfeval)) {
+                mandatoryParams += paramsList
+        }
+    }
+
+    all_skips = params.skip_subworkflows+","+params.skip_tools
+    dynamicRequirements.each { condition, paramsList ->
+        if (!all_skips.split(',').contains(condition)) {
+                mandatoryParams += paramsList
         }
     }
 
