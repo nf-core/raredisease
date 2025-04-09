@@ -9,3 +9,5 @@ testing*
 null/
 .prettierignore
 .nf-test/
+.nf-test.log
+
