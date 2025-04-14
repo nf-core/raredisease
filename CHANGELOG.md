@@ -3,12 +3,6 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2.5.1dev - Magicix [2025-03-25]
-
-### `Changed`
-
-- Refactored `schema_input.json` and `nextflow_schema.json` to improve the error messages and validations of the pipeline
-
 ## 2.5.0dev - Cacofonix [XXXX-XX-XX]
 
 ### `Added`
@@ -19,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - Refactored code to only handle clinical variants in the generate_clinical_set workflow [#693](https://github.com/nf-core/raredisease/pull/693)
+- Refactored `schema_input.json` and `nextflow_schema.json` to improve the error messages and validations of the pipeline [#692](https://github.com/nf-core/raredisease/pull/692)
 - Updated `add_most_severe_consequence` and `add_most_severe_pli` to fix spelling and language server warnings [#689](https://github.com/nf-core/raredisease/pull/689)
 - Refactored code to address issues highlighted by language server [#688](https://github.com/nf-core/raredisease/pull/688)
 - Changed for loop to each in create_pedigree_file [#683](https://github.com/nf-core/raredisease/pull/683)
@@ -29,15 +24,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter            | New parameter |
-| ------------------------ | ------------- |
-| skip_haplogrep3          | skip_tools    |
-| skip_fastp               |               |
-| skip_gens                |               |
-| skip_germlinecnvcaller   |               |
-| skip_peddy               |               |
-| skip_smncopynumbercaller |               |
-| skip_vcf2cytosure        |               |
+| Old parameter            | New parameter     |
+| ------------------------ | ----------------- |
+| skip_haplogrep3          | skip_tools        |
+| skip_fastp               |                   |
+| skip_gens                |                   |
+| skip_germlinecnvcaller   |                   |
+| skip_peddy               |                   |
+| skip_smncopynumbercaller |                   |
+| skip_vcf2cytosure        |                   |
+| skip_me_calling          | skip_subworkflows |
+| skip_me_annotation       |                   |
+| skip_mt_annotation       |                   |
+| skip_mt_subsample        |                   |
+| skip_repeat_annotation   |                   |
+| skip_repeat_calling      |                   |
+| skip_snv_annotation      |                   |
+| skip_snv_calling         |                   |
+| skip_sv_annotation       |                   |
+| skip_sv_calling          |                   |
 
 ### Tool updates
 

@@ -549,67 +549,19 @@
                     "description": "Number of intervals to split your genome into (used to parallelize annotations)",
                     "fa_icon": "fas fa-less-than"
                 },
-                "skip_me_calling": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip calling mobile elements, and the subsequent annotation step.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_me_annotation": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip annotation of mobile elements.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_mt_annotation": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip annotation of mitochondrial variants.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_mt_subsample": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to subsample mt alignment.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_repeat_annotation": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip annotation of repeat expansions.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_repeat_calling": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip calling of repeat expansions.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_snv_annotation": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip annotate SNV subworkflow.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_snv_calling": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip nuclear and mitochondrial SNV calling and annotation.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_sv_annotation": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip annotate structural variant subworkflow.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "skip_sv_calling": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to skip nuclear and mitochondrial SV calling and annotation.",
-                    "fa_icon": "fas fa-toggle-on"
+                "skip_subworkflows": {
+                    "type": "string",
+                    "fa_icon": "fas fa-forward",
+                    "description": "Disable specified subworkflows.",
+                    "help_text": "Multiple subworkflows can be specified, separated by commas.",
+                    "pattern": "^((me_calling|me_annotation|mt_annotation|mt_subsample|repeat_annotation|repeat_calling|snv_annotation|snv_calling|sv_annotation|sv_calling|generate_clinical_set)?,?)*(?<!,)$"
                 },
                 "skip_tools": {
                     "type": "string",
                     "fa_icon": "fas fa-forward",
                     "description": "Disable specified tools.",
-                    "help_text": "Multiple tools can be specified, separated by commas.\n\n> **NB** `--skip_tools baserecalibrator_report` is actually just not saving the reports.\n> **NB** `--skip_tools markduplicates_report` does not skip `MarkDuplicates` but prevent the collection of duplicate metrics that slows down performance.",
+                    "help_text": "Multiple tools can be specified, separated by commas.",
                     "pattern": "^((fastp|gens|germlinecnvcaller|haplogrep3|peddy|smncopynumbercaller|vcf2cytosure|fastqc)?,?)*(?<!,)$"
-                },
-                "skip_vep_filter": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to filter results based on a list of candidate genes specified in 'vep_filters'.",
-                    "fa_icon": "fas fa-toggle-on"
                 }
             }
         },

@@ -251,54 +251,53 @@ def checkRequiredParameters(params) {
         "variant_caller"
     ]
 
-    def conditionalParamsWorkflows = [
-        run_rtgvcfeval           : ["rtg_truthvcfs"],
-        skip_repeat_calling      : ["variant_catalog"],
-        skip_repeat_annotation   : ["variant_catalog"],
-        skip_snv_calling         : ["genome"],
-        skip_snv_annotation      : ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
-                                    "gnomad_af", "score_config_snv", "variant_consequences_snv"],
-        skip_sv_annotation       : ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"],
-        skip_mt_annotation       : ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "score_config_mt",
-                                    "vep_cache_version", "vep_cache", "variant_consequences_snv"],
+    // Static requirements that are not influenced by user-defined skips
+    def staticRequirements   = [
         analysis_type_wes        : ["target_bed"],
         variant_caller_sentieon  : ["ml_model"],
-        skip_me_calling          : ["mobile_element_references"],
-        skip_me_annotation       : ["mobile_element_svdb_annotations", "variant_consequences_snv"]
+        run_rtgvcfeval           : ["rtg_truthvcfs"]
     ]
 
-    def conditionalParamsTools = [
+    // Requirements that can be modified by the user using either skip_tools or skip_subworkflows here
+    def dynamicRequirements = [
+        repeat_calling           : ["variant_catalog"],
+        repeat_annotation        : ["variant_catalog"],
+        snv_calling              : ["genome"],
+        snv_annotation           : ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
+                                    "gnomad_af", "score_config_snv", "variant_consequences_snv"],
+        sv_annotation            : ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"],
+        mt_annotation            : ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "score_config_mt",
+                                    "vep_cache_version", "vep_cache", "variant_consequences_snv"],
+        me_calling               : ["mobile_element_references"],
+        me_annotation            : ["mobile_element_svdb_annotations", "variant_consequences_snv"],
         gens                     : ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
-        germlinecnvcaller        : ["ploidy_mmodel", "gcnvcaller_model", "readcount_intervals"],
+        germlinecnvcaller        : ["ploidy_model", "gcnvcaller_model", "readcount_intervals"],
         smncopynumbercaller      : ["genome"]
     ]
 
     def missingParamsCount = 0
 
-    conditionalParamsWorkflows.each { condition, paramsList ->
-        if (condition == "analysis_type_wes" && params.analysis_type == "wes") {
-            mandatoryParams += paramsList
-        } else if (condition == "variant_caller_sentieon" && params.variant_caller == "sentieon") {
-            mandatoryParams += paramsList
-        } else if (condition == "run_rtgvcfeval" && params[condition]) {
-            mandatoryParams += paramsList
-        } else if (condition != "run_rtgvcfeval" && params.containsKey(condition) && !params[condition]) {
-            mandatoryParams += paramsList
+    staticRequirements.each { condition, paramsList ->
+        if ((condition == "analysis_type_wes" && params.analysis_type == "wes") ||
+            (condition == "variant_caller_sentieon" && params.variant_caller == "sentieon") ||
+            (condition == "run_rtgvcfeval" && params.run_rtgvcfeval)) {
+                mandatoryParams += paramsList
         }
     }
 
-    conditionalParamsTools.each { tool, paramsList ->
-        if (!(params.skip_tools && tool in params.skip_tools.split(','))) {
-            mandatoryParams += paramsList
+    all_skips = params.skip_subworkflows+","+params.skip_tools
+    dynamicRequirements.each { condition, paramsList ->
+        if (!all_skips.split(',').contains(condition)) {
+                mandatoryParams += paramsList
         }
     }
 
-    if (!params.skip_sv_annotation && !params.svdb_query_bedpedbs && !params.svdb_query_dbs) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_annotation')) && !params.svdb_query_bedpedbs && !params.svdb_query_dbs) {
         println("params.svdb_query_bedpedbs or params.svdb_query_dbs should be set.")
         missingParamsCount += 1
     }
 
-    if (!params.skip_vep_filter) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('generate_clinical_set')) ) {
         if (!params.vep_filters && !params.vep_filters_scout_fmt) {
             println("params.vep_filters or params.vep_filters_scout_fmt should be set.")
             missingParamsCount += 1
@@ -386,10 +385,10 @@ def toolCitationText() {
         params.aligner.equals("sentieon") ? "Sentieon Tools (Freed et al., 2017),"   : ""
     ]
     repeats_text = [
-        (!params.skip_repeat_calling && params.analysis_type.equals("wgs"))    ? "ExpansionHunter (Dolzhenko et al., 2019)," : "",
-        (!params.skip_repeat_annotation && params.analysis_type.equals("wgs")) ? "stranger (Nilsson & Magnusson, 2021)," : ""
+        (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_calling')) && params.analysis_type.equals("wgs"))    ? "ExpansionHunter (Dolzhenko et al., 2019)," : "",
+        (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_annotation')) && params.analysis_type.equals("wgs")) ? "stranger (Nilsson & Magnusson, 2021)," : ""
     ]
-    if (!params.skip_snv_annotation) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_annotation'))) {
         snv_annotation_text = [
             "CADD (Rentzsch et al., 2019, 2021),",
             "Vcfanno (Pedersen et al., 2016),",
@@ -397,7 +396,7 @@ def toolCitationText() {
             "Genmod (Magnusson et al., 2018),"
         ]
     }
-    if (!params.skip_snv_calling) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_calling'))) {
         snv_calls_text = [
             params.variant_caller.equals("deepvariant") ? "DeepVariant (Poplin et al., 2018),"      : "",
             params.variant_caller.equals("sentieon")    ? "Sentieon DNAscope (Freed et al., 2022)," : "",
@@ -405,14 +404,14 @@ def toolCitationText() {
             "GLnexus (Yun et al., 2021),"
         ]
     }
-    if (!params.skip_sv_annotation) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_annotation'))) {
         sv_annotation_text = [
             "SVDB (Eisfeldt et al., 2017),",
             "VEP (McLaren et al., 2016),",
             "Genmod (Magnusson et al., 2018),"
         ]
     }
-    if (!params.skip_sv_calling) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_calling'))) {
         sv_calls_text = [
             params.analysis_type.equals("wgs") ? "CNVnator (Abyzov et al., 2011)," : "",
             params.analysis_type.equals("wgs") ? "TIDDIT (Eisfeldt et al., 2017)," : "",
@@ -420,7 +419,7 @@ def toolCitationText() {
             params.analysis_type.equals("wgs") ? "eKLIPse (Goudenge et al., 2019)," : ""
         ]
     }
-    if (!params.skip_mt_annotation && (params.analysis_type.equals("wgs") || params.run_mt_for_wes)) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('mt_annotation')) && (params.analysis_type.equals("wgs") || params.run_mt_for_wes)) {
         mt_annotation_text = [
             "CADD (Rentzsch et al., 2019, 2021),",
             "VEP (McLaren et al., 2016),",
@@ -435,13 +434,13 @@ def toolCitationText() {
 
         }
     }
-    if (!params.skip_me_annotation && params.analysis_type.equals("wgs")) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_annotation')) && params.analysis_type.equals("wgs")) {
         me_annotation_text = [
             "VEP (McLaren et al., 2016),",
             "SVDB (Eisfeldt et al., 2017),"
         ]
     }
-    if (!params.skip_me_calling && params.analysis_type.equals("wgs")) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_calling')) && params.analysis_type.equals("wgs")) {
         me_calls_text = [
             "SVDB (Eisfeldt et al., 2017),",
             "RetroSeq (Keane et al., 2013),"
@@ -511,10 +510,10 @@ def toolBibliographyText() {
         params.aligner.equals("sentieon") || params.mt_aligner.equals("sentieon")? "<li>Freed, D., Aldana, R., Weber, J. A., & Edwards, J. S. (2017). The Sentieon Genomics Tools—A fast and accurate solution to variant calling from next-generation sequence data (p. 115717). bioRxiv. https://doi.org/10.1101/115717</li>" : ""
     ]
     repeats_text = [
-        (!params.skip_repeat_calling && params.analysis_type.equals("wgs") )    ? "<li>Dolzhenko, E., Deshpande, V., Schlesinger, F., Krusche, P., Petrovski, R., Chen, S., Emig-Agius, D., Gross, A., Narzisi, G., Bowman, B., Scheffler, K., van Vugt, J. J. F. A., French, C., Sanchis-Juan, A., Ibáñez, K., Tucci, A., Lajoie, B. R., Veldink, J. H., Raymond, F. L., … Eberle, M. A. (2019). ExpansionHunter: A sequence-graph-based tool to analyze variation in short tandem repeat regions. Bioinformatics, 35(22), 4754–4756. https://doi.org/10.1093/bioinformatics/btz431</li>" : "",
-        (!params.skip_repeat_annotation && params.analysis_type.equals("wgs") ) ? "<li>Nilsson, D., & Magnusson, M. (2021). Moonso/stranger v0.7.1 (v0.7.1) [Computer software]. Zenodo. https://doi.org/10.5281/ZENODO.4548873</li>" : ""
+        (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_calling')) && params.analysis_type.equals("wgs") )    ? "<li>Dolzhenko, E., Deshpande, V., Schlesinger, F., Krusche, P., Petrovski, R., Chen, S., Emig-Agius, D., Gross, A., Narzisi, G., Bowman, B., Scheffler, K., van Vugt, J. J. F. A., French, C., Sanchis-Juan, A., Ibáñez, K., Tucci, A., Lajoie, B. R., Veldink, J. H., Raymond, F. L., … Eberle, M. A. (2019). ExpansionHunter: A sequence-graph-based tool to analyze variation in short tandem repeat regions. Bioinformatics, 35(22), 4754–4756. https://doi.org/10.1093/bioinformatics/btz431</li>" : "",
+        (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_annotation')) && params.analysis_type.equals("wgs") ) ? "<li>Nilsson, D., & Magnusson, M. (2021). Moonso/stranger v0.7.1 (v0.7.1) [Computer software]. Zenodo. https://doi.org/10.5281/ZENODO.4548873</li>" : ""
     ]
-    if (!params.skip_snv_annotation) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_annotation'))) {
         snv_annotation_text = [
             "<li>Rentzsch, P., Schubach, M., Shendure, J., & Kircher, M. (2021). CADD-Splice—Improving genome-wide variant effect prediction using deep learning-derived splice scores. Genome Medicine, 13(1), 31. https://doi.org/10.1186/s13073-021-00835-9</li>",
             "<li>Rentzsch, P., Witten, D., Cooper, G. M., Shendure, J., & Kircher, M. (2019). CADD: Predicting the deleteriousness of variants throughout the human genome. Nucleic Acids Research, 47(D1), D886–D894. https://doi.org/10.1093/nar/gky1016</li>",
@@ -523,7 +522,7 @@ def toolBibliographyText() {
             "<li>Magnusson, M., Hughes, T., Glabilloy, & Bitdeli Chef. (2018). genmod: Version 3.7.3 (3.7.3) [Computer software]. Zenodo. https://doi.org/10.5281/ZENODO.3841142</li>"
         ]
     }
-    if (!params.skip_snv_calling) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_calling'))) {
         snv_calls_text = [
             params.variant_caller.equals("deepvariant") ? "<li>Poplin, R., Chang, P.-C., Alexander, D., Schwartz, S., Colthurst, T., Ku, A., Newburger, D., Dijamco, J., Nguyen, N., Afshar, P. T., Gross, S. S., Dorfman, L., McLean, C. Y., & DePristo, M. A. (2018). A universal SNP and small-indel variant caller using deep neural networks. Nature Biotechnology, 36(10), 983–987. https://doi.org/10.1038/nbt.4235</li>" : "",
             params.variant_caller.equals("sentieon") ? "<li>Freed, D., Pan, R., Chen, H., Li, Z., Hu, J., & Aldana, R. (2022). DNAscope: High accuracy small variant calling using machine learning [Preprint]. Bioinformatics. https://doi.org/10.1101/2022.05.20.492556</li>" : "",
@@ -532,14 +531,14 @@ def toolBibliographyText() {
         ]
     }
 
-    if (!params.skip_sv_annotation) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_annotation'))) {
         sv_annotation_text = [
             "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>",
             "<li>McLaren, W., Gil, L., Hunt, S. E., Riat, H. S., Ritchie, G. R. S., Thormann, A., Flicek, P., & Cunningham, F. (2016). The Ensembl Variant Effect Predictor. Genome Biology, 17(1), 122. https://doi.org/10.1186/s13059-016-0974-4</li>",
             "<li>Magnusson, M., Hughes, T., Glabilloy, & Bitdeli Chef. (2018). genmod: Version 3.7.3 (3.7.3) [Computer software]. Zenodo. https://doi.org/10.5281/ZENODO.3841142</li>"
         ]
     }
-    if (!params.skip_sv_calling) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_calling'))) {
         sv_calls_text = [
             params.analysis_type.equals("wgs") ? "<li>Abyzov, A., Urban, A. E., Snyder, M., & Gerstein, M. (2011). CNVnator: An approach to discover, genotype, and characterize typical and atypical CNVs from family and population genome sequencing. Genome Research, 21(6), 974–984. https://doi.org/10.1101/gr.114876.110</li>" : "",
             params.analysis_type.equals("wgs") ? "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>" : "",
@@ -548,7 +547,7 @@ def toolBibliographyText() {
         ]
     }
 
-    if (!params.skip_mt_annotation && (params.analysis_type.equals("wgs") || params.run_mt_for_wes)) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('mt_annotation')) && (params.analysis_type.equals("wgs") || params.run_mt_for_wes)) {
         mt_annotation_text = [
             "<li>Rentzsch, P., Schubach, M., Shendure, J., & Kircher, M. (2021). CADD-Splice—Improving genome-wide variant effect prediction using deep learning-derived splice scores. Genome Medicine, 13(1), 31. https://doi.org/10.1186/s13073-021-00835-9</li>",
             "<li>Rentzsch, P., Witten, D., Cooper, G. M., Shendure, J., & Kircher, M. (2019). CADD: Predicting the deleteriousness of variants throughout the human genome. Nucleic Acids Research, 47(D1), D886–D894. https://doi.org/10.1093/nar/gky1016</li>",
@@ -563,13 +562,13 @@ def toolBibliographyText() {
             ]
         }
     }
-    if (!params.skip_me_annotation && params.analysis_type.equals("wgs")) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_annotation')) && params.analysis_type.equals("wgs")) {
         me_annotation_text = [
             "<li>McLaren, W., Gil, L., Hunt, S. E., Riat, H. S., Ritchie, G. R. S., Thormann, A., Flicek, P., & Cunningham, F. (2016). The Ensembl Variant Effect Predictor. Genome Biology, 17(1), 122. https://doi.org/10.1186/s13059-016-0974-4</li>",
             "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>"
         ]
     }
-    if (!params.skip_me_calling && params.analysis_type.equals("wgs")) {
+    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_calling')) && params.analysis_type.equals("wgs")) {
         me_calls_text = [
             "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>",
             "<li>Keane, T. M., Wong, K., & Adams, D. J. (2013). RetroSeq: Transposable element discovery from next-generation sequencing data. Bioinformatics, 29(3), 389–390. https://doi.org/10.1093/bioinformatics/bts697</li>"
