@@ -496,15 +496,23 @@ workflow RAREDISEASE {
             ).set { ch_snv_annotate }
             ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 
+            ch_snv_annotate.vcf_ann
+                .multiMap { meta, vcf ->
+                    clinical: [ meta + [ set: "clinical" ], vcf ]
+                    research: [ meta + [ set: "research" ], vcf ]
+                }
+                .set { ch_clin_research_snv_vcf }
+
             GENERATE_CLINICAL_SET_SNV(
-                ch_snv_annotate.vcf_ann,
+                ch_clin_research_snv_vcf.clinical,
                 ch_hgnc_ids,
                 false
             )
             ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SNV.out.versions)
 
+            ch_ann_csq_snv_in = GENERATE_CLINICAL_SET_SNV.out.vcf.mix(ch_clin_research_snv_vcf.research)
             ANN_CSQ_PLI_SNV (
-                GENERATE_CLINICAL_SET_SNV.out.vcf,
+                ch_ann_csq_snv_in,
                 ch_variant_consequences_snv
             )
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)
@@ -549,15 +557,23 @@ workflow RAREDISEASE {
             ).set { ch_mt_annotate }
             ch_versions = ch_versions.mix(ch_mt_annotate.versions)
 
+            ch_mt_annotate.vcf_ann
+                .multiMap { meta, vcf ->
+                    clinical: [ meta + [ set: "clinical" ], vcf ]
+                    research: [ meta + [ set: "research" ], vcf ]
+                }
+                .set { ch_clin_research_mt_vcf }
+
             GENERATE_CLINICAL_SET_MT(
-                ch_mt_annotate.vcf_ann,
+                ch_clin_research_mt_vcf.clinical,
                 ch_hgnc_ids,
                 true
             )
             ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_MT.out.versions)
 
+            ch_ann_csq_mtsnv_in = GENERATE_CLINICAL_SET_MT.out.vcf.mix(ch_clin_research_mt_vcf.research)
             ANN_CSQ_PLI_MT(
-                GENERATE_CLINICAL_SET_MT.out.vcf,
+                ch_ann_csq_mtsnv_in,
                 ch_variant_consequences_snv
             )
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_MT.out.versions)
@@ -625,15 +641,24 @@ workflow RAREDISEASE {
             ).set { ch_sv_annotate }
             ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
+            ch_sv_annotate.vcf_ann
+                .multiMap { meta, vcf ->
+                    clinical: [ meta + [ set: "clinical" ], vcf ]
+                    research: [ meta + [ set: "research" ], vcf ]
+                }
+                .set { ch_clin_research_sv_vcf }
+
             GENERATE_CLINICAL_SET_SV(
-                ch_sv_annotate.vcf_ann,
+                ch_clin_research_sv_vcf.clinical,
                 ch_hgnc_ids,
                 false
             )
             ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SV.out.versions)
 
+            ch_ann_csq_sv_in = GENERATE_CLINICAL_SET_SV.out.vcf.mix(ch_clin_research_sv_vcf.research)
+
             ANN_CSQ_PLI_SV (
-                GENERATE_CLINICAL_SET_SV.out.vcf,
+                ch_ann_csq_sv_in,
                 ch_variant_consequences_sv
             )
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_SV.out.versions)
@@ -684,15 +709,24 @@ workflow RAREDISEASE {
                 params.genome,
                 params.vep_cache_version,
                 ch_vep_extra_files
-            )
+            ).set { ch_me_annotate }
             ch_versions = ch_versions.mix(ANNOTATE_MOBILE_ELEMENTS.out.versions)
 
+            ch_me_annotate.vcf_ann
+                .multiMap { meta, vcf ->
+                    clinical: [ meta + [ set: "clinical" ], vcf ]
+                    research: [ meta + [ set: "research" ], vcf ]
+                }
+                .set { ch_clin_research_me_vcf }
+
             GENERATE_CLINICAL_SET_ME(
-                ANNOTATE_MOBILE_ELEMENTS.out.vcf,
+                ch_clin_research_me_vcf.clinical,
                 ch_hgnc_ids,
                 false
             )
             ch_versions = ch_versions.mix( GENERATE_CLINICAL_SET_ME.out.versions )
+
+            ch_ann_csq_me_in = GENERATE_CLINICAL_SET_ME.out.vcf.mix(ch_clin_research_me_vcf.research)
 
             ANN_CSQ_PLI_ME(
                 GENERATE_CLINICAL_SET_ME.out.vcf,
