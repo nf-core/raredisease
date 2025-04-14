@@ -3,12 +3,6 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2.5.1dev - Magicix [2025-03-25]
-
-### `Changed`
-
-- Refactored `schema_input.json` and `nextflow_schema.json` to improve the error messages and validations of the pipeline
-
 ## 2.5.0dev - Cacofonix [XXXX-XX-XX]
 
 ### `Added`
@@ -18,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Refactored `schema_input.json` and `nextflow_schema.json` to improve the error messages and validations of the pipeline [#692](https://github.com/nf-core/raredisease/pull/692)
 - Updated `add_most_severe_consequence` and `add_most_severe_pli` to fix spelling and language server warnings [#689](https://github.com/nf-core/raredisease/pull/689)
 - Refactored code to address issues highlighted by language server [#688](https://github.com/nf-core/raredisease/pull/688)
 - Changed for loop to each in create_pedigree_file [#683](https://github.com/nf-core/raredisease/pull/683)

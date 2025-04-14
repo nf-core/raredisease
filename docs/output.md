@@ -69,7 +69,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
         - [Hmtnote](#hmtnote)
         - [VEP](#vep-2)
     - [Filtering and ranking](#filtering-and-ranking)
-      - [Filter\_vep](#filter_vep)
+      - [Filter_vep](#filter_vep)
       - [GENMOD](#genmod)
     - [Mobile element analysis](#mobile-element-analysis)
       - [Calling mobile elements](#calling-mobile-elements)
