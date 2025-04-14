@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Refactored code to only handle clinical variants in the generate_clinical_set workflow [#693](https://github.com/nf-core/raredisease/pull/693)
 - Refactored `schema_input.json` and `nextflow_schema.json` to improve the error messages and validations of the pipeline [#692](https://github.com/nf-core/raredisease/pull/692)
 - Updated `add_most_severe_consequence` and `add_most_severe_pli` to fix spelling and language server warnings [#689](https://github.com/nf-core/raredisease/pull/689)
 - Refactored code to address issues highlighted by language server [#688](https://github.com/nf-core/raredisease/pull/688)
