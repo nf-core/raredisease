@@ -517,6 +517,7 @@ workflow RAREDISEASE {
             }
 
             ch_ann_csq_snv_in = ch_clinical_snv_vcf.mix(ch_clin_research_snv_vcf.research)
+
             ANN_CSQ_PLI_SNV (
                 ch_ann_csq_snv_in,
                 ch_variant_consequences_snv
@@ -583,6 +584,7 @@ workflow RAREDISEASE {
             }
 
             ch_ann_csq_mtsnv_in = ch_clinical_mtsnv_vcf.mix(ch_clin_research_mt_vcf.research)
+
             ANN_CSQ_PLI_MT(
                 ch_ann_csq_mtsnv_in,
                 ch_variant_consequences_snv
@@ -672,6 +674,7 @@ workflow RAREDISEASE {
             }
 
             ch_ann_csq_sv_in = ch_clinical_sv_vcf.mix(ch_clin_research_sv_vcf.research)
+
             ANN_CSQ_PLI_SV (
                 ch_ann_csq_sv_in,
                 ch_variant_consequences_sv
@@ -747,6 +750,7 @@ workflow RAREDISEASE {
             }
 
             ch_ann_csq_me_in = ch_clinical_me_vcf.mix(ch_clin_research_me_vcf.research)
+
             ANN_CSQ_PLI_ME(
                 ch_ann_csq_me_in,
                 ch_variant_consequences_sv
