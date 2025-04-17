@@ -17,10 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `add_most_severe_consequence` and `add_most_severe_pli` to fix spelling and language server warnings [#689](https://github.com/nf-core/raredisease/pull/689)
 - Refactored code to address issues highlighted by language server [#688](https://github.com/nf-core/raredisease/pull/688)
 - Changed for loop to each in create_pedigree_file [#683](https://github.com/nf-core/raredisease/pull/683)
+- Changed default to remove mitochondrial variants with FILTER status not equal to PASS [#696](https://github.com/nf-core/raredisease/pull/696)
 
 ### `Fixed`
 
 - Errors due to channel name and structure inconsistencies in the sentieon SNV calling subworkflow[#688](https://github.com/nf-core/raredisease/pull/688)
+- Use '--mitochondria-mode' by default when running Gatk4 FilterMutectCalls on mitochondrial variants[#696](https://github.com/nf-core/raredisease/pull/696)
 
 ### Parameters
 
