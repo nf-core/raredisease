@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.4.1 - Vitalstatistix (Patch) [2025-04-00]
+
+### `Fixed`
+
+- Sort the input files before vcf2cytosure is invoked [#697](https://github.com/nf-core/raredisease/pull/697)
+
 ## 2.4.0 - Vitalstatistix [2025-02-24]
 
 ### `Added`
