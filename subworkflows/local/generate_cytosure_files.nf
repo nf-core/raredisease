@@ -71,18 +71,11 @@ workflow GENERATE_CYTOSURE_FILES {
 
         Channel.empty()
             .mix(ch_for_mix.split, ch_for_mix.reheader)
-            .toSortedList { a, b -> a[0].id <=> b[0].id }
-            .flatMap()
             .set { ch_vcf2cytosure_in }
-
-        TIDDIT_COV_VCF2CYTOSURE.out.cov
-            .toSortedList { a, b -> a[0].id <=> b[0].id }
-            .flatMap()
-            .set { ch_cov2cytosure_in }
 
         VCF2CYTOSURE (
             ch_vcf2cytosure_in,
-            ch_cov2cytosure_in,
+            TIDDIT_COV_VCF2CYTOSURE.out.cov,
             [[:], []], [[:], []],
             ch_blacklist
         )
