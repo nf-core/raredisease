@@ -503,6 +503,11 @@
                     "help_text": "errorStrategy needs to be set to ignore for the bwamem2 process for the fallback to work. Turned off by default.",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "concatenate_snv_calls": {
+                    "type": "boolean",
+                    "description": "Specifies whether to generate a concatenated VCF file containing both nuclear & mitochondrial snv calls",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "extract_alignments": {
                     "type": "boolean",
                     "default": "false",
