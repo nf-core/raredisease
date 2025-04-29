@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- A new parameter `concatenate_snv_calls` to generate concatenated VCF file containing nuclear & mitochondrial SNV calls [#698](https://github.com/nf-core/raredisease/pull/698)
+- A new parameter `concatenate_snv_calls` to generate concatenated VCF file containing nuclear & mitochondrial SNV calls [#699](https://github.com/nf-core/raredisease/pull/699)
 
 ### `Fixed`
 
