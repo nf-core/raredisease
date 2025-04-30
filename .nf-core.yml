@@ -8,7 +8,7 @@ lint:
     - docs/images/nf-core-raredisease_logo_light.png
     - assets/nf-core-raredisease_logo_light.png
   modules_config: false
-nf_core_version: 3.2.0
+nf_core_version: 3.2.1
 repository_type: pipeline
 template:
   author: Clinical Genomics Stockholm
@@ -18,4 +18,4 @@ template:
   name: raredisease
   org: nf-core
   outdir: .
-  version: 2.3.0
+  version: 2.5.0dev
