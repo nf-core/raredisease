@@ -9,7 +9,6 @@ include { CALL_SNV_MT as CALL_SNV_MT_SHIFT } from './call_snv_MT'
 include { POSTPROCESS_MT_CALLS             } from './postprocess_MT_calls'
 include { GATK4_SELECTVARIANTS             } from '../../modules/nf-core/gatk4/selectvariants/main'
 include { BCFTOOLS_CONCAT                  } from '../../modules/nf-core/bcftools/concat'
-include { TABIX_TABIX                      } from '../../modules/nf-core/tabix/tabix'
 
 workflow CALL_SNV {
     take:
@@ -149,7 +148,7 @@ workflow CALL_SNV {
             BCFTOOLS_CONCAT (
                 ch_concat_vcf_in
             )
-            TABIX_TABIX (BCFTOOLS_CONCAT.out.vcf)
+            ch_versions    = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
         }
 
     emit:
