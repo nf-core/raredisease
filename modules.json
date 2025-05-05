@@ -517,6 +517,11 @@
                         "branch": "master",
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
+                    },
+                    "verifybamid/verifybamid2": {
+                        "branch": "master",
+                        "git_sha": "791d6b519889737f5fffb4e665ab1489b863161f",
+                        "installed_by": ["modules"]
                     }
                 }
             },
