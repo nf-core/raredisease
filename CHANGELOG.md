@@ -5,9 +5,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v2.5.0 - Fulliautomatix [2025-05-05]
 
+### `Added`
+
+- A new parameter `concatenate_snv_calls` to generate a concatenated VCF file containing unannotated nuclear & mitochondrial SNV calls [#699](https://github.com/nf-core/raredisease/pull/699)
+
 ### `Fixed`
 
 - Sort the input files before vcf2cytosure is invoked [#697](https://github.com/nf-core/raredisease/pull/697)
+
+### Parameters
+
+| Old parameter | New parameter         |
+| ------------- | --------------------- |
+|               | concatenate_snv_calls |
 
 ## 2.4.0 - Vitalstatistix [2025-02-24]
 

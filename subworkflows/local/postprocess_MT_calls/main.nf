@@ -41,8 +41,9 @@ workflow POSTPROCESS_MT_CALLS {
         ch_vcfs = ch_mt_vcf
             .join(PICARD_LIFTOVERVCF.out.vcf_lifted, remainder: true)
             .map{ meta, vcf1, vcf2 ->
-            [meta, [vcf1, vcf2]]
-        }
+                [meta, [vcf1, vcf2]]
+            }
+
         GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_vcfs, ch_genome_dictionary)
 
         // Filtering Variants
@@ -66,14 +67,14 @@ workflow POSTPROCESS_MT_CALLS {
         TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
 
         REMOVE_DUPLICATES_MT.out.vcf
-            .collect{it[1]}
-            .ifEmpty([])
+            .map{ it -> it[1]}
+            .toSortedList{a, b -> a.name <=> b.name}
             .toList()
             .set { file_list_vcf }
 
         TABIX_TABIX_MT2.out.tbi
-            .collect{it[1]}
-            .ifEmpty([])
+            .map{ it -> it[1]}
+            .toSortedList{a, b -> a.name <=> b.name}
             .toList()
             .set { file_list_tbi }
 
