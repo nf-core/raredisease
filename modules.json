@@ -520,7 +520,7 @@
                     },
                     "verifybamid/verifybamid2": {
                         "branch": "master",
-                        "git_sha": "791d6b519889737f5fffb4e665ab1489b863161f",
+                        "git_sha": "33278f733f3452dc77bde5c1a45db3a5f9278ac0",
                         "installed_by": ["modules"]
                     }
                 }

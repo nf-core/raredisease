@@ -14,6 +14,7 @@ include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y   } from '../..
 include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_WG            } from '../../modules/nf-core/sentieon/wgsmetrics/main'
 include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_Y             } from '../../modules/nf-core/sentieon/wgsmetrics/main'
 include { NGSBITS_SAMPLEGENDER                                     } from '../../modules/nf-core/ngsbits/samplegender/main'
+include { VERIFYBAMID_VERIFYBAMID2                                 } from '../../modules/nf-core/verifybamid/verifybamid2/main'
 
 workflow QC_BAM {
 
@@ -28,7 +29,10 @@ workflow QC_BAM {
         ch_chrom_sizes              // channel: [mandatory] [ path(sizes) ]
         ch_intervals_wgs            // channel: [mandatory] [ path(intervals) ]
         ch_intervals_y              // channel: [mandatory] [ path(intervals) ]
-        ngsbits_samplegender_method // channel [val(method)]
+        ch_svd_bed                  // channel: [optional] [ path(bed) ]
+        ch_svd_mu                   // channel: [optional] [ path(meanpath) ]
+        ch_svd_ud                   // channel: [optional] [ path(ud) ]
+        ngsbits_samplegender_method // channel: [val(method)]
 
     main:
         ch_cov      = Channel.empty()
@@ -71,6 +75,9 @@ workflow QC_BAM {
         // Check sex
         NGSBITS_SAMPLEGENDER(ch_bam_bai, ch_genome_fasta, ch_genome_fai, ngsbits_samplegender_method)
 
+        // Check contamination
+        ch_svd_in = ch_svd_ud.combine(ch_svd_mu).combine(ch_svd_bed)
+        VERIFYBAMID_VERIFYBAMID2(ch_bam_bai, ch_svd_in, [], ch_genome_fasta.map {it-> it[1]})
 
         ch_versions = ch_versions.mix(CHROMOGRAPH_COV.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions.first())
@@ -79,6 +86,7 @@ workflow QC_BAM {
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions.first())
         ch_versions = ch_versions.mix(MOSDEPTH.out.versions.first())
         ch_versions = ch_versions.mix(NGSBITS_SAMPLEGENDER.out.versions.first())
+        ch_versions = ch_versions.mix(VERIFYBAMID_VERIFYBAMID2.out.versions.first())
 
     emit:
         multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]

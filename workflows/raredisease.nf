@@ -305,6 +305,12 @@ workflow RAREDISEASE {
                                                                             : Channel.empty()
     ch_sv_bedpedbs              = params.svdb_query_bedpedbs                ? Channel.fromPath(params.svdb_query_bedpedbs)
                                                                             : Channel.empty()
+    ch_svd_bed                  = params.svd_bed                            ? Channel.fromPath(params.svd_bed)
+                                                                            : Channel.empty()
+    ch_svd_mu                   = params.svd_mu                             ? Channel.fromPath(params.svd_mu)
+                                                                            : Channel.empty()
+    ch_svd_ud                   = params.svd_ud                             ? Channel.fromPath(params.svd_ud)
+                                                                            : Channel.empty()
     ch_target_bed               = ch_references.target_bed
     ch_target_intervals         = ch_references.target_intervals
     ch_variant_catalog          = params.variant_catalog                    ? Channel.fromPath(params.variant_catalog).map { it -> [[id:it.simpleName],it]}.collect()
@@ -455,6 +461,9 @@ workflow RAREDISEASE {
         ch_genome_chrsizes,
         ch_intervals_wgs,
         ch_intervals_y,
+        ch_svd_bed,
+        ch_svd_mu,
+        ch_svd_ud,
         Channel.value(params.ngsbits_samplegender_method)
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions)

@@ -410,6 +410,27 @@
                     "help_text": "Optional file to rename sample ids in the vcf2cytosure vcf",
                     "pattern": "^\\S+\\.csv$"
                 },
+                "svd_bed": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Path to a BED file containing markers used by verifybamid2.",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "svd_mu": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Path to mean matrix file of genotype matrix. Used by verifybamid2.",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "svd_ud": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Path to UD matrix file from SVD result of genotype matrix. Used by verifybamid2.",
+                    "fa_icon": "fas fa-file-csv"
+                },
                 "vcf2cytosure_blacklist": {
                     "type": "string",
                     "help_text": "Optional file to blacklist regions for VCF2cytosure",
