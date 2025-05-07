@@ -25,6 +25,7 @@ run_modules:
   - mosdepth
   - ngsbits
   - peddy
+  - verifybamid
   - custom_content
 
 module_order:
@@ -46,6 +47,8 @@ module_order:
       name: "ngsbits"
   - peddy:
       name: "Peddy"
+  - verifybamid:
+      name: "VerifyBamID2"
 
 extra_fn_clean_exts:
   - "_sorted_md"
