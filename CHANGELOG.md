@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - A new parameter `concatenate_snv_calls` to generate a concatenated VCF file containing unannotated nuclear & mitochondrial SNV calls [#699](https://github.com/nf-core/raredisease/pull/699)
 - Functionality to check contamination in samples using VerifyBamID2 [#701](https://github.com/nf-core/raredisease/pull/701)
+- New parameters `svd_bed`, `svd_mu`, and `svd_ud` to supply reference files for VerifyBamID2 [#701](https://github.com/nf-core/raredisease/pull/701)
 
 ### `Fixed`
 
