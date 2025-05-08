@@ -11,9 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Functionality to check contamination in samples using VerifyBamID2 [#701](https://github.com/nf-core/raredisease/pull/701)
 - New parameters `verifybamid_svd_bed`, `verifybamid_svd_mu`, and `verifybamid_svd_ud` to supply reference files for VerifyBamID2 [#701](https://github.com/nf-core/raredisease/pull/701)
 
+### `Changed`
+
+- Default to remove mitochondrial variants with FILTER status not equal to PASS [#697](https://github.com/nf-core/raredisease/pull/697)
+
 ### `Fixed`
 
 - Sort the input files before vcf2cytosure is invoked [#697](https://github.com/nf-core/raredisease/pull/697)
+- Use '--mitochondria-mode' by default when running Gatk4 FilterMutectCalls on mitochondrial variants[#697](https://github.com/nf-core/raredisease/pull/697)
 
 ### Parameters
 
