@@ -305,11 +305,11 @@ workflow RAREDISEASE {
                                                                             : Channel.empty()
     ch_sv_bedpedbs              = params.svdb_query_bedpedbs                ? Channel.fromPath(params.svdb_query_bedpedbs)
                                                                             : Channel.empty()
-    ch_svd_bed                  = params.svd_bed                            ? Channel.fromPath(params.svd_bed)
+    ch_svd_bed                  = params.verifybamid_svd_bed                ? Channel.fromPath(params.verifybamid_svd_bed)
                                                                             : Channel.empty()
-    ch_svd_mu                   = params.svd_mu                             ? Channel.fromPath(params.svd_mu)
+    ch_svd_mu                   = params.verifybamid_svd_mu                 ? Channel.fromPath(params.verifybamid_svd_mu)
                                                                             : Channel.empty()
-    ch_svd_ud                   = params.svd_ud                             ? Channel.fromPath(params.svd_ud)
+    ch_svd_ud                   = params.verifybamid_svd_ud                 ? Channel.fromPath(params.verifybamid_svd_ud)
                                                                             : Channel.empty()
     ch_target_bed               = ch_references.target_bed
     ch_target_intervals         = ch_references.target_intervals

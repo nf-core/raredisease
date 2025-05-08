@@ -245,7 +245,7 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 
 ##### VerifyBamID2
 
-[VerifyBamID2](https://github.com/Griffan/VerifyBamID) is used to analyse a bam file and generates a contamination report. The pipeline will only generate the following files when the parameters `svd_bed`, `svd_mu`, and `svd_ud` are provided.
+[VerifyBamID2](https://github.com/Griffan/VerifyBamID) is used to analyse a bam file and generates a contamination report. The pipeline will only generate the following files when the parameters `verifybamid_svd_bed`, `verifybamid_svd_mu`, and `verifybamid_svd_ud` are provided.
 
 <details markdown="1">
 <summary>Output files</summary>
