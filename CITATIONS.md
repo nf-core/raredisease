@@ -160,6 +160,10 @@
 
   > Pedersen BS, Layer RM, Quinlan AR. Vcfanno: fast, flexible annotation of genetic variants. Genome Biol. 2016;17(1):118. doi:10.1186/s13059-016-0973-5
 
+- [VerifyBamID2]()
+
+  > Zhang F, Flickinger M, Taliun SAG, Consortium IPG, Abecasis GR, Scott LJ, McCaroll SA, Pato CN, Boehnke M, & Kang HM. (2020). Ancestry-agnostic estimation of DNA sample contamination from sequence reads. Genome Research, 30(2), 185–194. https://doi.org/10.1101/gr.246934.118
+
 ## Software packaging/containerisation tools
 
 - [Anaconda](https://anaconda.com)
