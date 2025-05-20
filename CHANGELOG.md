@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `add_most_severe_consequence` and `add_most_severe_pli` to fix spelling and language server warnings [#689](https://github.com/nf-core/raredisease/pull/689)
 - Refactored code to address issues highlighted by language server [#688](https://github.com/nf-core/raredisease/pull/688)
 - Changed for loop to each in create_pedigree_file [#683](https://github.com/nf-core/raredisease/pull/683)
+- Refactored repeat annotation and updated Stranger [#702](https://github.com/nf-core/raredisease/pull/702)
 
 ### `Fixed`
 
@@ -51,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | DeepVariant                 | 1.6.1       | 1.8.0       |
 | add_most_severe_consequence | 1.0         | 1.1         |
 | add_most_severe_pli         | 1.0         | 1.1         |
+| stranger                    | 0.9.2       | 0.9.4       |
 
 ## 2.4.0 - Vitalstatistix [2025-02-24]
 

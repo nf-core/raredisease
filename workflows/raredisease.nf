@@ -26,6 +26,7 @@ include { SMNCOPYNUMBERCALLER                               } from '../modules/n
 include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_R1_FQ   } from '../modules/nf-core/spring/decompress/main'
 include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_R2_FQ   } from '../modules/nf-core/spring/decompress/main'
 include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_FQ_PAIR } from '../modules/nf-core/spring/decompress/main'
+include { STRANGER                                          } from '../modules/nf-core/stranger/main'
 
 //
 // MODULE: Local modules
@@ -48,7 +49,6 @@ include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV                 } from '../subworkf
 include { ANNOTATE_GENOME_SNVS                               } from '../subworkflows/local/annotate_genome_snvs'
 include { ANNOTATE_MOBILE_ELEMENTS                           } from '../subworkflows/local/annotate_mobile_elements'
 include { ANNOTATE_MT_SNVS                                   } from '../subworkflows/local/annotate_mt_snvs'
-include { ANNOTATE_REPEAT_EXPANSIONS                         } from '../subworkflows/local/annotate_repeat_expansions'
 include { ANNOTATE_STRUCTURAL_VARIANTS                       } from '../subworkflows/local/annotate_structural_variants'
 include { CALL_MOBILE_ELEMENTS                               } from '../subworkflows/local/call_mobile_elements'
 include { CALL_REPEAT_EXPANSIONS                             } from '../subworkflows/local/call_repeat_expansions'
@@ -425,11 +425,11 @@ workflow RAREDISEASE {
         ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
 
         if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_annotation'))) {
-            ANNOTATE_REPEAT_EXPANSIONS (
-                ch_variant_catalog,
-                CALL_REPEAT_EXPANSIONS.out.vcf
+            STRANGER (
+                CALL_REPEAT_EXPANSIONS.out.vcf,
+                ch_variant_catalog
             )
-            ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
+            ch_versions = ch_versions.mix(STRANGER.out.versions)
         }
     }
 
