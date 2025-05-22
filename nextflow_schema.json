@@ -410,6 +410,27 @@
                     "help_text": "Optional file to rename sample ids in the vcf2cytosure vcf",
                     "pattern": "^\\S+\\.csv$"
                 },
+                "verifybamid_svd_bed": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Path to a BED file containing markers used by verifybamid2.",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "verifybamid_svd_mu": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Path to mean matrix file of genotype matrix. Used by verifybamid2.",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "verifybamid_svd_ud": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Path to UD matrix file from SVD result of genotype matrix. Used by verifybamid2.",
+                    "fa_icon": "fas fa-file-csv"
+                },
                 "vcf2cytosure_blacklist": {
                     "type": "string",
                     "help_text": "Optional file to blacklist regions for VCF2cytosure",
@@ -501,6 +522,11 @@
                     "type": "boolean",
                     "description": "Specifies whether or not to use bwa as a fallback aligner in case bwamem2 throws an error.",
                     "help_text": "errorStrategy needs to be set to ignore for the bwamem2 process for the fallback to work. Turned off by default.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "concatenate_snv_calls": {
+                    "type": "boolean",
+                    "description": "Specifies whether to generate a concatenated VCF file containing both nuclear & mitochondrial snv calls",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "extract_alignments": {

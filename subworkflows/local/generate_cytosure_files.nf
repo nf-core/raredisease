@@ -28,15 +28,16 @@ workflow GENERATE_CYTOSURE_FILES {
         ch_bam.combine(ch_vcf_tbi)
             .map {
                 meta_sample, bam, meta_case, vcf, tbi ->
-                new_meta = ['id':meta_sample.sample, 'sex':meta_sample.sex]
-                return [ new_meta, vcf, tbi ]
+                id_meta = ['id':meta_sample.sample]
+                sex_meta = ['sex':meta_sample.sex]
+                return [ id_meta, sex_meta, vcf, tbi ]
             }
             .join(ch_sample_id_map, remainder: true)
             .branch { it  ->
-                id: it[3].equals(null)
-                    return [it[0] + [custid:it[0].id], it[1], it[2]]
-                custid: !(it[3].equals(null))
-                    return [it[0] + [custid:it[3]], it[1], it[2]]
+                id: it[4].equals(null)
+                    return [it[0] + [custid:it[0].id] + it[1], it[2], it[3]]
+                custid: !(it[4].equals(null))
+                    return [it[0] + [custid:it[4]] + it[1], it[2], it[3]]
             }
             .set { ch_for_mix }
 
@@ -71,11 +72,18 @@ workflow GENERATE_CYTOSURE_FILES {
 
         Channel.empty()
             .mix(ch_for_mix.split, ch_for_mix.reheader)
+            .toSortedList { a, b -> a[0].id <=> b[0].id }
+            .flatMap()
             .set { ch_vcf2cytosure_in }
+
+        TIDDIT_COV_VCF2CYTOSURE.out.cov
+            .toSortedList { a, b -> a[0].id <=> b[0].id }
+            .flatMap()
+            .set { ch_cov2cytosure_in }
 
         VCF2CYTOSURE (
             ch_vcf2cytosure_in,
-            TIDDIT_COV_VCF2CYTOSURE.out.cov,
+            ch_cov2cytosure_in,
             [[:], []], [[:], []],
             ch_blacklist
         )
