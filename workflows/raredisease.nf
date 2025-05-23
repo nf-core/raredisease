@@ -211,6 +211,12 @@ workflow RAREDISEASE {
                                                                             : Channel.empty()
     ch_sv_bedpedbs              = params.svdb_query_bedpedbs                ? Channel.fromPath(params.svdb_query_bedpedbs)
                                                                             : Channel.empty()
+    ch_svd_bed                  = params.verifybamid_svd_bed                ? Channel.fromPath(params.verifybamid_svd_bed)
+                                                                            : Channel.empty()
+    ch_svd_mu                   = params.verifybamid_svd_mu                 ? Channel.fromPath(params.verifybamid_svd_mu)
+                                                                            : Channel.empty()
+    ch_svd_ud                   = params.verifybamid_svd_ud                 ? Channel.fromPath(params.verifybamid_svd_ud)
+                                                                            : Channel.empty()
     ch_target_bed               = ch_references.target_bed
     ch_target_intervals         = ch_references.target_intervals
     ch_variant_catalog          = params.variant_catalog                    ? Channel.fromPath(params.variant_catalog).map { it -> [[id:it.simpleName],it]}.collect()
@@ -391,6 +397,9 @@ workflow RAREDISEASE {
         ch_genome_chrsizes,
         ch_intervals_wgs,
         ch_intervals_y,
+        ch_svd_bed,
+        ch_svd_mu,
+        ch_svd_ud,
         Channel.value(params.ngsbits_samplegender_method)
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions)
@@ -912,6 +921,7 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{it[1]}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.self_sm.map{it[1]}.collect().ifEmpty([]))
 
     if (!(params.skip_tools && params.skip_tools.split(',').contains('peddy'))) {
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{it[1]}.collect().ifEmpty([]))

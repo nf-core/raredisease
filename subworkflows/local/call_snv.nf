@@ -8,6 +8,7 @@ include { CALL_SNV_MT                      } from './call_snv_MT'
 include { CALL_SNV_MT as CALL_SNV_MT_SHIFT } from './call_snv_MT'
 include { POSTPROCESS_MT_CALLS             } from './postprocess_MT_calls'
 include { GATK4_SELECTVARIANTS             } from '../../modules/nf-core/gatk4/selectvariants/main'
+include { BCFTOOLS_CONCAT                  } from '../../modules/nf-core/bcftools/concat'
 
 workflow CALL_SNV {
     take:
@@ -45,6 +46,7 @@ workflow CALL_SNV {
         ch_deepvar_gtbi  = Channel.empty()
         ch_mt_vcf        = Channel.empty()
         ch_mt_tabix      = Channel.empty()
+        ch_mt_vcf_tabix  = Channel.empty()
         ch_mt_txt        = Channel.empty()
         ch_sentieon_vcf  = Channel.empty()
         ch_sentieon_tbi  = Channel.empty()
@@ -131,13 +133,22 @@ workflow CALL_SNV {
                 ch_foundin_header,
                 ch_genome_chrsizes
             )
-            ch_mt_vcf   = POSTPROCESS_MT_CALLS.out.vcf
-            ch_mt_tabix = POSTPROCESS_MT_CALLS.out.tbi
-            ch_mt_txt   = CALL_SNV_MT.out.txt
-            ch_versions = ch_versions.mix(CALL_SNV_MT.out.versions)
-            ch_versions = ch_versions.mix(CALL_SNV_MT_SHIFT.out.versions)
-            ch_versions = ch_versions.mix(POSTPROCESS_MT_CALLS.out.versions)
-            ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
+            ch_mt_vcf       = POSTPROCESS_MT_CALLS.out.vcf
+            ch_mt_tabix     = POSTPROCESS_MT_CALLS.out.tbi
+            ch_mt_vcf_tabix = ch_mt_vcf.join(ch_mt_tabix, failOnMismatch:true, failOnDuplicate:true)
+            ch_mt_txt       = CALL_SNV_MT.out.txt
+            ch_versions     = ch_versions.mix(CALL_SNV_MT.out.versions)
+            ch_versions     = ch_versions.mix(CALL_SNV_MT_SHIFT.out.versions)
+            ch_versions     = ch_versions.mix(POSTPROCESS_MT_CALLS.out.versions)
+            ch_versions     = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
+        }
+
+        if (params.concatenate_snv_calls) {
+            ch_concat_vcf_in = ch_genome_vcf_tabix.concat(ch_mt_vcf_tabix).groupTuple()
+            BCFTOOLS_CONCAT (
+                ch_concat_vcf_in
+            )
+            ch_versions    = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
         }
 
     emit:
