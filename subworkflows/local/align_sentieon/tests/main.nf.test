@@ -26,7 +26,7 @@ nextflow_workflow {
         when {
             params {
                 aligner = "sentieon"
-                testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
                 save_mapped_as_cram = true
             }
             workflow {
@@ -34,12 +34,12 @@ nextflow_workflow {
                 input[0] = Channel.of([
                     [ id:'test', sample:'test', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test'"  ], // meta map
                     [
-                        file(params.testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
-                        file(params.testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
+                        file(params.sarscov_testdata_base_path+ 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                        file(params.sarscov_testdata_base_path+ 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
                     ]
                 ])
-                input[1] = Channel.of([[id:'sarscov2'], [file(params.testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
-                input[2] = Channel.of([[id:'sarscov2'], [file(params.testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
+                input[1] = Channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path+ 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
+                input[2] = Channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path+ 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
                 input[3] = SENTIEON_BWAINDEX.out.index
                 input[4] = "illumina"
                 """

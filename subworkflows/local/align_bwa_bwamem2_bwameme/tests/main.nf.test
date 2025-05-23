@@ -26,7 +26,7 @@ nextflow_workflow {
         when {
             params {
                 aligner = "bwamem2"
-                testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
                 save_mapped_as_cram = true
                 restrict_to_contigs = "MT192765.1"
             }
@@ -35,15 +35,15 @@ nextflow_workflow {
                 input[0] = Channel.of([
                     [ id:'test', sample:'test', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test'"  ], // meta map
                     [
-                        file(params.testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
-                        file(params.testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
+                        file(params.sarscov_testdata_base_path+ 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                        file(params.sarscov_testdata_base_path+ 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
                     ]
                 ])
                 input[1] = [[:],[]]
                 input[2] = BWAMEM2_INDEX.out.index
                 input[3] = [[:],[]]
-                input[4] = Channel.of([[id:'sarscov2'], [file(params.testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
-                input[5] = Channel.of([[id:'sarscov2'], [file(params.testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
+                input[4] = Channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path+ 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
+                input[5] = Channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path+ 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
                 input[6] = 3072
                 input[7] = "illumina"
                 input[8] = 4
@@ -83,7 +83,7 @@ nextflow_workflow {
         when {
             params {
                 aligner = "bwameme"
-                testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
                 save_mapped_as_cram = false
                 restrict_to_contigs = "MT192765.1"
             }
@@ -92,15 +92,15 @@ nextflow_workflow {
                 input[0] = Channel.of([
                     [ id:'test', sample:'test', single_end:false, num_lanes:1, read_group:"\'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test\'"  ], // meta map
                     [
-                        file(params.testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
-                        file(params.testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
+                        file(params.sarscov_testdata_base_path+ 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                        file(params.sarscov_testdata_base_path+ 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
                     ]
                 ])
                 input[1] = [[:],[]]
                 input[2] = [[:],[]]
                 input[3] = BWAMEME_INDEX.out.index
-                input[4] = Channel.of([[id:'sarscov2'], [file(params.testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
-                input[5] = Channel.of([[id:'sarscov2'], [file(params.testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
+                input[4] = Channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path+ 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
+                input[5] = Channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path+ 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
                 input[6] = 3072
                 input[7] = "illumina"
                 input[8] = 4

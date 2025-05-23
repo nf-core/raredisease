@@ -13,11 +13,10 @@ nextflow_workflow {
                 mt_aligner         = "bwa"
                 variant_caller     = "deepvariant"
                 mito_name          = "MT"
-                testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/'
-                fasta              = params.testdata_base_path + 'reference.fasta'
-                fai                = params.testdata_base_path + 'reference.fasta.fai'
-                target_bed         = params.testdata_base_path + 'target.bed'
-                vep_cache          = params.testdata_base_path + 'vep_cache_and_plugins.tar.gz'
+                fasta              = params.raredisease_testdata_base_path+ 'reference/reference.fasta'
+                fai                = params.raredisease_testdata_base_path+ 'reference/reference.fasta.fai'
+                target_bed         = params.raredisease_testdata_base_path+ 'reference/target.bed'
+                vep_cache          = params.raredisease_testdata_base_path+ 'reference/vep_cache_and_plugins.tar.gz'
 
             }
             workflow {

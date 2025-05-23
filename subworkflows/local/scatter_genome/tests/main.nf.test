@@ -9,10 +9,11 @@ nextflow_workflow {
 
         when {
             params {
-                testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/'
-                fasta              = params.testdata_base_path + 'reference.fasta'
-                fai                = params.testdata_base_path + 'reference.fasta.fai'
-                dict               = params.testdata_base_path + 'reference.dict'
+                raredisease_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
+                fasta              = params.raredisease_testdata_base_path+ 'reference/reference.fasta'
+                fai                = params.raredisease_testdata_base_path+ 'reference/reference.fasta.fai'
+                dict               = params.raredisease_testdata_base_path+ 'reference/reference.dict'
+                scatter_count      = 20
             }
             workflow {
                 """
