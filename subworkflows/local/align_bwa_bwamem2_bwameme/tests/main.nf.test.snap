@@ -1,0 +1,94 @@
+{
+    "align bwamem2": {
+        "content": [
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "17f8c2ac941e887d9470f69453c08ea5"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "af8628d9df18b2d3d4f6fd47ef2bb872"
+                ]
+            ],
+            [
+                "versions.yml:md5,6046f0e9edf48b8d3bd335da75134ee4",
+                "versions.yml:md5,952f0145e6a0a3d1dbd70aac2edf4ced",
+                "versions.yml:md5,9d7492d23e5995a4955de5f751df05af",
+                "versions.yml:md5,e9e514dbea5a822d1978acac57bee61e",
+                "versions.yml:md5,f56a243ff21d59d873e0d0a3d3ee441d"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.6"
+        },
+        "timestamp": "2025-05-23T16:03:29.762040277"
+    },
+    "align bwameme": {
+        "content": [
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "144054510dda19100c4274a7db41bd8"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "af8628d9df18b2d3d4f6fd47ef2bb872"
+                ]
+            ],
+            [
+                "versions.yml:md5,390a09ae83280da84de93856149cc3a1",
+                "versions.yml:md5,952f0145e6a0a3d1dbd70aac2edf4ced",
+                "versions.yml:md5,9d7492d23e5995a4955de5f751df05af",
+                "versions.yml:md5,e9e514dbea5a822d1978acac57bee61e",
+                "versions.yml:md5,f56a243ff21d59d873e0d0a3d3ee441d"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.6"
+        },
+        "timestamp": "2025-05-23T16:04:03.379890309"
+    }
+}
