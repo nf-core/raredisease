@@ -26,6 +26,7 @@ include { SMNCOPYNUMBERCALLER                               } from '../modules/n
 include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_R1_FQ   } from '../modules/nf-core/spring/decompress/main'
 include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_R2_FQ   } from '../modules/nf-core/spring/decompress/main'
 include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_FQ_PAIR } from '../modules/nf-core/spring/decompress/main'
+include { STRANGER                                          } from '../modules/nf-core/stranger/main'
 
 //
 // MODULE: Local modules
@@ -48,7 +49,6 @@ include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV                 } from '../subworkf
 include { ANNOTATE_GENOME_SNVS                               } from '../subworkflows/local/annotate_genome_snvs'
 include { ANNOTATE_MOBILE_ELEMENTS                           } from '../subworkflows/local/annotate_mobile_elements'
 include { ANNOTATE_MT_SNVS                                   } from '../subworkflows/local/annotate_mt_snvs'
-include { ANNOTATE_REPEAT_EXPANSIONS                         } from '../subworkflows/local/annotate_repeat_expansions'
 include { ANNOTATE_STRUCTURAL_VARIANTS                       } from '../subworkflows/local/annotate_structural_variants'
 include { CALL_MOBILE_ELEMENTS                               } from '../subworkflows/local/call_mobile_elements'
 include { CALL_REPEAT_EXPANSIONS                             } from '../subworkflows/local/call_repeat_expansions'
@@ -210,6 +210,12 @@ workflow RAREDISEASE {
     ch_sv_dbs                   = params.svdb_query_dbs                     ? Channel.fromPath(params.svdb_query_dbs)
                                                                             : Channel.empty()
     ch_sv_bedpedbs              = params.svdb_query_bedpedbs                ? Channel.fromPath(params.svdb_query_bedpedbs)
+                                                                            : Channel.empty()
+    ch_svd_bed                  = params.verifybamid_svd_bed                ? Channel.fromPath(params.verifybamid_svd_bed)
+                                                                            : Channel.empty()
+    ch_svd_mu                   = params.verifybamid_svd_mu                 ? Channel.fromPath(params.verifybamid_svd_mu)
+                                                                            : Channel.empty()
+    ch_svd_ud                   = params.verifybamid_svd_ud                 ? Channel.fromPath(params.verifybamid_svd_ud)
                                                                             : Channel.empty()
     ch_target_bed               = ch_references.target_bed
     ch_target_intervals         = ch_references.target_intervals
@@ -391,6 +397,9 @@ workflow RAREDISEASE {
         ch_genome_chrsizes,
         ch_intervals_wgs,
         ch_intervals_y,
+        ch_svd_bed,
+        ch_svd_mu,
+        ch_svd_ud,
         Channel.value(params.ngsbits_samplegender_method)
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions)
@@ -425,11 +434,11 @@ workflow RAREDISEASE {
         ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
 
         if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_annotation'))) {
-            ANNOTATE_REPEAT_EXPANSIONS (
-                ch_variant_catalog,
-                CALL_REPEAT_EXPANSIONS.out.vcf
+            STRANGER (
+                CALL_REPEAT_EXPANSIONS.out.vcf,
+                ch_variant_catalog
             )
-            ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
+            ch_versions = ch_versions.mix(STRANGER.out.versions)
         }
     }
 
@@ -912,6 +921,7 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{it[1]}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.self_sm.map{it[1]}.collect().ifEmpty([]))
 
     if (!(params.skip_tools && params.skip_tools.split(',').contains('peddy'))) {
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{it[1]}.collect().ifEmpty([]))

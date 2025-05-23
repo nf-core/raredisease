@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2.5.0dev - Cacofonix [XXXX-XX-XX]
+## 2.6.0dev - Cacofonix [XXXX-XX-XX]
 
 ### `Added`
 
@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `add_most_severe_consequence` and `add_most_severe_pli` to fix spelling and language server warnings [#689](https://github.com/nf-core/raredisease/pull/689)
 - Refactored code to address issues highlighted by language server [#688](https://github.com/nf-core/raredisease/pull/688)
 - Changed for loop to each in create_pedigree_file [#683](https://github.com/nf-core/raredisease/pull/683)
+- Refactored repeat annotation and updated Stranger [#702](https://github.com/nf-core/raredisease/pull/702)
 
 ### `Fixed`
 
@@ -51,6 +52,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | DeepVariant                 | 1.6.1       | 1.8.0       |
 | add_most_severe_consequence | 1.0         | 1.1         |
 | add_most_severe_pli         | 1.0         | 1.1         |
+| stranger                    | 0.9.2       | 0.9.4       |
+
+## v2.5.0 - Fulliautomatix [2025-05-22]
+
+### `Added`
+
+- A new parameter `concatenate_snv_calls` to generate a concatenated VCF file containing unannotated nuclear & mitochondrial SNV calls [#699](https://github.com/nf-core/raredisease/pull/699)
+- Functionality to check contamination in samples using VerifyBamID2 [#701](https://github.com/nf-core/raredisease/pull/701)
+- New parameters `verifybamid_svd_bed`, `verifybamid_svd_mu`, and `verifybamid_svd_ud` to supply reference files for VerifyBamID2 [#701](https://github.com/nf-core/raredisease/pull/701)
+
+### `Changed`
+
+- Default to remove mitochondrial variants with FILTER status not equal to PASS [#697](https://github.com/nf-core/raredisease/pull/697)
+
+### `Fixed`
+
+- Sort the input files before vcf2cytosure is invoked [#697](https://github.com/nf-core/raredisease/pull/697)
+- Use '--mitochondria-mode' by default when running Gatk4 FilterMutectCalls on mitochondrial variants[#697](https://github.com/nf-core/raredisease/pull/697)
+
+### Parameters
+
+| Old parameter | New parameter         |
+| ------------- | --------------------- |
+|               | concatenate_snv_calls |
+|               | verifybamid_svd_bed   |
+|               | verifybamid_svd_mu    |
+|               | verifybamid_svd_ud    |
+
+### Tool updates
+
+| Tool         | Old version | New version |
+| ------------ | ----------- | ----------- |
+| VerifyBamID2 |             | 2.0.1       |
 
 ## 2.4.0 - Vitalstatistix [2025-02-24]
 

@@ -460,7 +460,7 @@
                     },
                     "stranger": {
                         "branch": "master",
-                        "git_sha": "26cdbf29e76695c7fd85e42e0015c7e96f979fe9",
+                        "git_sha": "ffe458cbd1208b82e33e607fa43fbe80df191047",
                         "installed_by": ["modules"]
                     },
                     "svdb/merge": {
@@ -521,6 +521,11 @@
                     "vcfanno": {
                         "branch": "master",
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "installed_by": ["modules"]
+                    },
+                    "verifybamid/verifybamid2": {
+                        "branch": "master",
+                        "git_sha": "33278f733f3452dc77bde5c1a45db3a5f9278ac0",
                         "installed_by": ["modules"]
                     }
                 }
