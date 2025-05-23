@@ -56,6 +56,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [Qualimap](http://qualimap.conesalab.org/)
 - [Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/)
 - [TIDDIT's cov](https://github.com/J35P312/)
+- [VerifyBamID2](https://github.com/Griffan/VerifyBamID)
 
 **2. Alignment:**
 

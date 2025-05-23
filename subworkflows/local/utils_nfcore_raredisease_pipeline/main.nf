@@ -451,6 +451,7 @@ def toolCitationText() {
         "Qualimap (Okonechnikov et al., 2016),",
         "TIDDIT (Eisfeldt et al., 2017),",
         "UCSC Bigwig and Bigbed (Kent et al., 2010),",
+        (params.verifybamid_svd_bed && params.verifybamid_svd_mu && params.verifybamid_svd_ud) ? "VerifyBamID2 (Zhang et al., 2020)," : "",
         "Mosdepth (Pedersen & Quinlan, 2018),"
     ]
     preprocessing_text = [
@@ -579,6 +580,7 @@ def toolBibliographyText() {
         "<li>Okonechnikov, K., Conesa, A., & García-Alcalde, F. (2016). Qualimap 2: Advanced multi-sample quality control for high-throughput sequencing data. Bioinformatics, 32(2), 292–294. https://doi.org/10.1093/bioinformatics/btv566</li>",
         "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>",
         "<li>Kent, W. J., Zweig, A. S., Barber, G., Hinrichs, A. S., & Karolchik, D. (2010). BigWig and BigBed: Enabling browsing of large distributed datasets. Bioinformatics, 26(17), 2204–2207. https://doi.org/10.1093/bioinformatics/btq351</li>",
+        (params.verifybamid_svd_bed && params.verifybamid_svd_mu && params.verifybamid_svd_ud) ? "<li>Zhang, F., Flickinger, M., Taliun, S. A. G., Consortium, I. P. G., Abecasis, G. R., Scott, L. J., McCaroll, S. A., Pato, C. N., Boehnke, M., & Kang, H. M. (2020). Ancestry-agnostic estimation of DNA sample contamination from sequence reads. Genome Research, 30(2), 185–194. https://doi.org/10.1101/gr.246934.118</li>" : "",
         "<li>Pedersen, B. S., & Quinlan, A. R. (2018). Mosdepth: Quick coverage calculation for genomes and exomes. Bioinformatics, 34(5), 867–868. https://doi.org/10.1093/bioinformatics/btx699</li>"
     ]
     preprocessing_text = [
