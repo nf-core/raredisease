@@ -1,0 +1,12 @@
+{
+    "CALL_REPEAT_EXPANSIONS": {
+        "content": [
+            "5f06dccb7fc4ad3758bc23e3232f9abb"
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-07-10T19:44:19.538636651"
+    }
+}

@@ -23,7 +23,7 @@ nextflow_workflow {
                     ]
                 )
                 input[1] = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + '/reference/variant_catalog.json', checkIfExists: true)).collect()
-                input[2] = "justhusky"
+                input[2] = Channel.of([id:'justhusky'])
                 input[3] = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
                 input[4] = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
                 """
@@ -32,7 +32,9 @@ nextflow_workflow {
 
         then {
             assert workflow.success
-            assert snapshot(workflow.out).match()
+            assert snapshot(
+                path(workflow.out.vcf[0][1].toString()).vcf.variantsMD5
+            ).match()
         }
 
     }
