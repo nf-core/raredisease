@@ -1,0 +1,40 @@
+nextflow_workflow {
+
+    name "Test Workflow CALL_REPEAT_EXPANSIONS"
+    script "subworkflows/local/call_repeat_expansions/main.nf"
+    workflow "CALL_REPEAT_EXPANSIONS"
+    tag "subworkflows"
+    tag "call_repeat_expansions"
+    config "./nextflow.config"
+
+    test("CALL_REPEAT_EXPANSIONS") {
+
+        when {
+            params {
+                outdir = "tests/results"
+            }
+            workflow {
+                """
+                input[0] = Channel.of(                    
+                    [
+                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1] = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + '/reference/variant_catalog.json', checkIfExists: true)).collect()
+                input[2] = "justhusky"
+                input[3] = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[4] = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}
