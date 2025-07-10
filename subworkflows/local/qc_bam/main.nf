@@ -2,19 +2,19 @@
 // A quality check subworkflow for processed bams.
 //
 
-include { PICARD_COLLECTMULTIPLEMETRICS                            } from '../../modules/nf-core/picard/collectmultiplemetrics/main'
-include { PICARD_COLLECTHSMETRICS                                  } from '../../modules/nf-core/picard/collecthsmetrics/main'
-include { CHROMOGRAPH as CHROMOGRAPH_COV                           } from '../../modules/nf-core/chromograph/main'
-include { QUALIMAP_BAMQC                                           } from '../../modules/nf-core/qualimap/bamqc/main'
-include { TIDDIT_COV                                               } from '../../modules/nf-core/tiddit/cov/main'
-include { MOSDEPTH                                                 } from '../../modules/nf-core/mosdepth/main'
-include { UCSC_WIGTOBIGWIG                                         } from '../../modules/nf-core/ucsc/wigtobigwig/main'
-include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_WG  } from '../../modules/nf-core/picard/collectwgsmetrics/main'
-include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y   } from '../../modules/nf-core/picard/collectwgsmetrics/main'
-include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_WG            } from '../../modules/nf-core/sentieon/wgsmetrics/main'
-include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_Y             } from '../../modules/nf-core/sentieon/wgsmetrics/main'
-include { NGSBITS_SAMPLEGENDER                                     } from '../../modules/nf-core/ngsbits/samplegender/main'
-include { VERIFYBAMID_VERIFYBAMID2                                 } from '../../modules/nf-core/verifybamid/verifybamid2/main'
+include { PICARD_COLLECTMULTIPLEMETRICS                            } from '../../../modules/nf-core/picard/collectmultiplemetrics/main'
+include { PICARD_COLLECTHSMETRICS                                  } from '../../../modules/nf-core/picard/collecthsmetrics/main'
+include { CHROMOGRAPH as CHROMOGRAPH_COV                           } from '../../../modules/nf-core/chromograph/main'
+include { QUALIMAP_BAMQC                                           } from '../../../modules/nf-core/qualimap/bamqc/main'
+include { TIDDIT_COV                                               } from '../../../modules/nf-core/tiddit/cov/main'
+include { MOSDEPTH                                                 } from '../../../modules/nf-core/mosdepth/main'
+include { UCSC_WIGTOBIGWIG                                         } from '../../../modules/nf-core/ucsc/wigtobigwig/main'
+include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_WG  } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
+include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y   } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
+include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_WG            } from '../../../modules/nf-core/sentieon/wgsmetrics/main'
+include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_Y             } from '../../../modules/nf-core/sentieon/wgsmetrics/main'
+include { NGSBITS_SAMPLEGENDER                                     } from '../../../modules/nf-core/ngsbits/samplegender/main'
+include { VERIFYBAMID_VERIFYBAMID2                                 } from '../../../modules/nf-core/verifybamid/verifybamid2/main'
 
 workflow QC_BAM {
 
@@ -53,6 +53,7 @@ workflow QC_BAM {
             ch_qualimap = QUALIMAP_BAMQC (ch_bam, []).results
             ch_versions = ch_versions.mix(QUALIMAP_BAMQC.out.versions.first())
         }
+
         TIDDIT_COV (ch_bam, [[],[]]) // 2nd pos. arg is req. only for cram input
 
         UCSC_WIGTOBIGWIG (TIDDIT_COV.out.wig, ch_chrom_sizes)
