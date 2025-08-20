@@ -607,7 +607,6 @@ Provided a truth set, SNVs can be evaluated using RTG Tools' vcfeval engine. Out
 <summary>Output files</summary>
 
 - `rtgvcfeval/`
-
   - `<sample_id>_vcfeval.fn.vcf.gz`: contains variants from the baseline VCF which were not correctly called.
   - `<sample_id>_vcfeval.fn.vcf.gz.tbi`: index of the \*fn.vcf file
   - `<sample_id>_vcfeval.fp.vcf.gz`: contains variants from the calls VCF which do not agree with baseline variants.
@@ -635,7 +634,6 @@ The sequencing data can be prepared for visualization of CNVs in [Gens](https://
 <summary>Output files</summary>
 
 - `gens/`
-
   - `<sample_id>_gens.baf.bed.gz`: contains sample b-allele frequencies in bed format.
   - `<sample_id>_gens.baf.bed.gz.tbi`: index of the \*baf.bed.gz file.
   - `<sample_id>_gens.cov.bed.gz`: contains sample coverage in bed format.

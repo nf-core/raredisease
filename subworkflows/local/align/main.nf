@@ -2,13 +2,13 @@
 // Map to reference
 //
 
-include { FASTP                      } from '../../modules/nf-core/fastp/main'
-include { ALIGN_BWA_BWAMEM2_BWAMEME  } from './align_bwa_bwamem2_bwameme'
-include { ALIGN_SENTIEON             } from './align_sentieon'
-include { SAMTOOLS_VIEW              } from '../../modules/nf-core/samtools/view/main'
-include { ALIGN_MT                   } from './align_MT'
-include { ALIGN_MT as ALIGN_MT_SHIFT } from './align_MT'
-include { CONVERT_MT_BAM_TO_FASTQ    } from './convert_mt_bam_to_fastq'
+include { FASTP                      } from '../../../modules/nf-core/fastp/main'
+include { ALIGN_BWA_BWAMEM2_BWAMEME  } from '../align_bwa_bwamem2_bwameme'
+include { ALIGN_SENTIEON             } from '../align_sentieon'
+include { SAMTOOLS_VIEW              } from '../../../modules/nf-core/samtools/view/main'
+include { ALIGN_MT                   } from '../align_MT'
+include { ALIGN_MT as ALIGN_MT_SHIFT } from '../align_MT'
+include { CONVERT_MT_BAM_TO_FASTQ    } from '../convert_mt_bam_to_fastq'
 
 workflow ALIGN {
     take:
@@ -153,6 +153,7 @@ workflow ALIGN {
             SAMTOOLS_VIEW( ch_genome_bam_bai, ch_genome_fasta, [] )
             ch_versions   = ch_versions.mix(SAMTOOLS_VIEW.out.versions)
         }
+
     emit:
         fastp_json         = ch_fastp_json         // channel: [ val(meta), path(json) ]
         genome_marked_bam  = ch_genome_marked_bam  // channel: [ val(meta), path(bam) ]

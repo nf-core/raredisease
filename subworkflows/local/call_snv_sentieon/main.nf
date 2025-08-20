@@ -53,7 +53,7 @@ workflow CALL_SNV_SENTIEON {
 
         SENTIEON_DNAMODELAPPLY ( ch_dnamodelapply_in, ch_genome_fasta, ch_genome_fai, ch_ml_model )
 
-        ch_bcffilterone_in = SENTIEON_DNAMODELAPPLY.out.vcf.join(SENTIEON_DNAMODELAPPLY.out.index, failOnMismatch: true)
+        ch_bcffilterone_in = SENTIEON_DNAMODELAPPLY.out.vcf.join(SENTIEON_DNAMODELAPPLY.out.tbi, failOnMismatch: true)
         BCF_FILTER_ONE (ch_bcffilterone_in)
 
         ch_bcffiltertwo_in = BCF_FILTER_ONE.out.vcf.join(BCF_FILTER_ONE.out.tbi, failOnMismatch: true)

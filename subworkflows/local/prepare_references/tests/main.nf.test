@@ -1,0 +1,39 @@
+nextflow_workflow {
+
+    name "Test Workflow PREPARE_REFERENCES"
+    script "subworkflows/local/prepare_references/main.nf"
+    workflow "PREPARE_REFERENCES"
+    config "./nextflow.config"
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                aligner            = "bwamem2"
+                mt_aligner         = "bwa"
+                variant_caller     = "deepvariant"
+                mito_name          = "MT"
+            }
+            workflow {
+                """
+                input[0] = Channel.of(params.pipelines_testdata_base_path + 'reference/reference.fasta').map {it -> [[id:'genome'], it]}.collect()
+                input[1] = Channel.of(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai').map {it -> [[id:'genome'], it]}.collect()
+                input[2] = Channel.empty()
+                input[3] = Channel.empty()
+                input[4] = Channel.of(params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz').map {it -> [[id:'genome'], it]}.collect()
+                input[5] = Channel.of(params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz').map {it -> [[id:'genome'], it]}.collect()
+                input[6] = Channel.of(params.pipelines_testdata_base_path + 'reference/target.bed').map {it -> [[id:'genome'], it]}.collect()
+                input[7] = Channel.empty()
+                input[8] = Channel.of(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz').map {it -> [[id:'genome'], it]}.collect()
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}

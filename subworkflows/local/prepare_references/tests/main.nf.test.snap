@@ -1,0 +1,911 @@
+{
+    "Should run without failures": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        [
+                            "reference.amb:md5,0a85644af00f9a856d874381d24e7803",
+                            "reference.ann:md5,8fdb46970ca95a4ef54f5f1a02d233cd",
+                            "reference.bwt:md5,0d1ba8d4e0229df6abb869a69f621dc8",
+                            "reference.pac:md5,96b449e1316067fdfba91b1399687bc2",
+                            "reference.sa:md5,c5c99cdc7a3cb6224841131b4b4285fe"
+                        ]
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        [
+                            "reference.fasta.0123:md5,0f0ff4414949e6787a25a563f19e2a3b",
+                            "reference.fasta.amb:md5,0a85644af00f9a856d874381d24e7803",
+                            "reference.fasta.ann:md5,8fdb46970ca95a4ef54f5f1a02d233cd",
+                            "reference.fasta.bwt.2bit.64:md5,3c0df9450afc5cb0ad5e85870829d9d0",
+                            "reference.fasta.pac:md5,96b449e1316067fdfba91b1399687bc2"
+                        ]
+                    ]
+                ],
+                "10": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_mt.dict:md5,249ad4680360e4a9fc1e3b44ed54f568"
+                    ]
+                ],
+                "11": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_mt.fa:md5,dcff3c6dd92e01b11edf7586ca4f5a78"
+                    ]
+                ],
+                "12": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_mt.fa.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
+                    ]
+                ],
+                "13": [
+                    [
+                        "genome_mt.shifted.intervals:md5,083d8f782fd4228dd9f6948ddbc64fd0"
+                    ]
+                ],
+                "14": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_shift.back_chain:md5,25d682d73a9bae009f4a38b3ede5dbc8"
+                    ]
+                ],
+                "15": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_shift.dict:md5,a714408661d0f6403f417304342574fc"
+                    ]
+                ],
+                "16": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_shift.fasta.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
+                    ]
+                ],
+                "17": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_shift.fasta:md5,3bb4de5911acad2dd87e8a183251d0dc"
+                    ]
+                ],
+                "18": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        [
+                            "genome_shift.amb:md5,ad1d6545efc080e69ad54ecdbcd0720c",
+                            "genome_shift.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
+                            "genome_shift.bwt:md5,c13d3e8c5ac29b56b31e1882e2111491",
+                            "genome_shift.pac:md5,0ead764b2f8fa112e3351ca517d2e125",
+                            "genome_shift.sa:md5,9ef1b52de302c6957f4dc82ed2f21bd1"
+                        ]
+                    ]
+                ],
+                "19": [
+                    
+                ],
+                "2": [
+                    
+                ],
+                "20": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "gnomad_reformated.tab.gz.tbi:md5,854afcf42d656c3d00a39dd9b69f66f7"
+                    ]
+                ],
+                "21": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "dbsnp_-138-.vcf.gz.tbi:md5,6695b71d9819806d50cd908051cf4cc0"
+                    ]
+                ],
+                "22": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_pad100.bed.gz:md5,7122d49f10e69c54d429a95cf4cf8fc9",
+                        "genome_pad100.bed.gz.tbi:md5,dc41277c9c9be1203643b9192260f9ac"
+                    ]
+                ],
+                "23": [
+                    [
+                        [
+                            
+                        ]
+                    ]
+                ],
+                "24": [
+                    [
+                        "genome_bait.intervals_list:md5,1f3d445e6e53260510710a8333d29cfe"
+                    ]
+                ],
+                "25": [
+                    [
+                        "genome_target.interval_list:md5,2959b7b0e1b298fe84ad708f447d6703"
+                    ]
+                ],
+                "26": [
+                    [
+                        [
+                            "LoFtool_scores.txt:md5,d9abd640ef22c790583b4b15d144ea6f",
+                            [
+                                "LoFtool.pm:md5,39fe102c44c6194fab9d1e42f6653ab5",
+                                "MaxEntScan.pm:md5,88e141bb8e21f776112f6aa4c1d1b195",
+                                "SpliceAI.pm:md5,860b0a5b8191ba6b2f85de2a76212355",
+                                "dbNSFP.pm:md5,6149e9e4e28df8812b9a6e017eb08e12",
+                                "pLI.pm:md5,3ab758b61b06ff5604a94f3f293ff918",
+                                "plugin_config.txt:md5,c722057245a51e950cf1b10ca3188f7f"
+                            ],
+                            [
+                                "me2x5:md5,0e3daf92c0aed69a8c78d6668cb79431",
+                                "score3.pl:md5,a50bbe208f226fa4df49a4a595898d4c",
+                                "score5.pl:md5,3b0b3ff5e1af1fcae9385d3e1fd03ff8",
+                                [
+                                    "hashseq.m:md5,b193eef9bd40086691021a2d19c2c5de",
+                                    "hashseq.m~:md5,0277f5c7c97a3b6ff258f04980ab2299",
+                                    "me1s0acc1:md5,98e8f71ae37c12e445f3a21fcd8467a2",
+                                    "me1s0acc2:md5,ed976352b5f3de894b60fa2ea0213cc9",
+                                    "me1s0acc3:md5,93c94296500c37c70e74b295f6ff1578",
+                                    "me1s0acc4:md5,83b8104e0080210fd0a96cda88c4f62d",
+                                    "me1s0acc5:md5,6d26531c6720902a85cd30d13c165b37",
+                                    "me1s0acc6:md5,403edfcea636de389912605d2bdc93eb",
+                                    "me1s0acc7:md5,b0525d474309a2bc08b3216967d0a436",
+                                    "me1s0acc8:md5,3935b25a6f4f63e3e2fea6bfc5a0c65e",
+                                    "me1s0acc9:md5,0f3b8a65c043fb53cc8aece8cb5b1ef8",
+                                    "me2s0:md5,c13a0c34bc8247f323b523eec99e811d",
+                                    "me2s0acc1:md5,0a4dcd11bce05f9706f33505f223eeac",
+                                    "me2s0acc2:md5,8565b8edb7f9582b4a23a58dbd11477e",
+                                    "me2s0acc3:md5,057916e5bac481c3b36a652dcebe5838",
+                                    "me2s0acc4:md5,09ba0ad8055b7db2f84dcf418e3d68e1",
+                                    "me2s0acc5:md5,1675124a3e906b6eb7051923c42035cc",
+                                    "me2s0acc6:md5,26e468f9476bb5d25cc3fca948738535",
+                                    "me2s0acc7:md5,5f35e846137a18d4fcc63bc892d4153a",
+                                    "me2s0acc8:md5,bae0098c03adfdce1ff13a13eadd3897",
+                                    "me2s0acc9:md5,1d733af14d438dc9dcdcddf51d841457",
+                                    "me2x3acc1:md5,00d620b842d47e8348440f8936ff6143",
+                                    "me2x3acc2:md5,cf36592d00b1e69eab00e0cc1f3cecaf",
+                                    "me2x3acc3:md5,136b3eaf2b7f78d0da78d9d4be53368f",
+                                    "me2x3acc4:md5,3a19125ed5b0f4a5ace7d048f9e005fe",
+                                    "me2x3acc5:md5,4e234dd1e58b04b499499f3244502e74",
+                                    "me2x3acc6:md5,df85b498edd7d4692c04cab8c01ae917",
+                                    "me2x3acc7:md5,f139698d62743bc816b5d4281071c657",
+                                    "me2x3acc8:md5,1d2462179e567b1c7beb2f6797e53e07",
+                                    "me2x3acc9:md5,36f1e98760a6c3a3e31b4e4a3071ab68",
+                                    "me2x5:md5,0e3daf92c0aed69a8c78d6668cb79431",
+                                    "splice5sequences:md5,1a1518daba4e02f757811869cb4bcefd"
+                                ],
+                                "test3:md5,97bbfcf2fa23fe249a79e219b1c0e3c6",
+                                "test5:md5,a7b00a84f65a525305a5fad91b4bbc61"
+                            ],
+                            [
+                                [
+                                    [
+                                        "1-1000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "1-1000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "10000001-11000000.gz:md5,3cc65ae9e19a9dbaa0175d573855b1c5",
+                                        "10000001-11000000_reg.gz:md5,bee170866e2339d8f294297c8d5d399d",
+                                        "1000001-2000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "1000001-2000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "11000001-12000000.gz:md5,d453356047147a676955c238a2b3502e",
+                                        "11000001-12000000_reg.gz:md5,872621db9595d97f014478e886da37ad",
+                                        "12000001-13000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "12000001-13000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "13000001-14000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "13000001-14000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "14000001-15000000.gz:md5,8f083b4db9509c63161c86d68373a004",
+                                        "14000001-15000000_reg.gz:md5,e7b5648e4e3bcb4253ba74edd401beba",
+                                        "15000001-16000000.gz:md5,d05a0116f9da34cd5657618c85d97181",
+                                        "15000001-16000000_reg.gz:md5,e41afae6cf10d1b025274c63907e9949",
+                                        "16000001-17000000.gz:md5,8250d7f851ec53acc6eb23e5973d780b",
+                                        "16000001-17000000_reg.gz:md5,e93e976e8316a646db6c58ac19a69e32",
+                                        "17000001-18000000.gz:md5,a70022d471c30e97052c7a640b91cc3a",
+                                        "17000001-18000000_reg.gz:md5,d1728b3ec1ec3bb9871e9aaa66a7a891",
+                                        "18000001-19000000.gz:md5,86cf339af4fbc2662c0fd97eb40192c3",
+                                        "18000001-19000000_reg.gz:md5,0fffcde9d99d05ae6f6ef1fab2d1af9d",
+                                        "19000001-20000000.gz:md5,87e20d3c192ca889a2b5f61bb1710466",
+                                        "19000001-20000000_reg.gz:md5,3860179bb94216dccca2d13bbbfa41c0",
+                                        "20000001-21000000.gz:md5,07e5c3464bdbaaead40d8d71799e0510",
+                                        "20000001-21000000_reg.gz:md5,298851c79adaa52be01f468fb3c3e70c",
+                                        "2000001-3000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "2000001-3000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "21000001-22000000.gz:md5,187079a822ed51bc9532e97f3c7109df",
+                                        "21000001-22000000_reg.gz:md5,65190153890d16157d25f386ec03346b",
+                                        "22000001-23000000.gz:md5,79969dbe6083b1c44825e347ea035f8d",
+                                        "22000001-23000000_reg.gz:md5,0774a40b5d3a4a80d943d883fd1bf011",
+                                        "23000001-24000000.gz:md5,0fc496a44d493fd74179824b1e9a98a4",
+                                        "23000001-24000000_reg.gz:md5,e27126e23dc446df0c9423596987f4bb",
+                                        "24000001-25000000.gz:md5,95b3d1d24d576cbbf489468097f2c213",
+                                        "24000001-25000000_reg.gz:md5,d384006e4c0e8bd38b89fd1b82e22506",
+                                        "25000001-26000000.gz:md5,77230b5177f6410f9324af8dde33e020",
+                                        "25000001-26000000_reg.gz:md5,667eecb6d3ffdb5613581591835c5e3d",
+                                        "26000001-27000000.gz:md5,fe6ad01b323d83ae376bdeb6cf047e3c",
+                                        "26000001-27000000_reg.gz:md5,aafd124971e6424e8db99b42b091bd99",
+                                        "27000001-28000000.gz:md5,27c790ae843453556c7b2242c36abd1a",
+                                        "27000001-28000000_reg.gz:md5,b510b713aa42bafb38351842821977c8",
+                                        "28000001-29000000.gz:md5,a6f366a37ad04cc773236be4dd09ddaf",
+                                        "28000001-29000000_reg.gz:md5,5f18facec28af19bfdd8a108a8f506d7",
+                                        "29000001-30000000.gz:md5,82fe6926eb7a292b9fc2e50d484c8c2f",
+                                        "29000001-30000000_reg.gz:md5,e3958033b25781baa21d90d183ec2a5e",
+                                        "30000001-31000000.gz:md5,1dcca9aea49227138ef3644d2821c647",
+                                        "30000001-31000000_reg.gz:md5,d5926ccaad9b9ad4edd0060e4a598438",
+                                        "3000001-4000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "3000001-4000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "31000001-32000000.gz:md5,f8fc56294a92150c19e315e99a83b4a5",
+                                        "31000001-32000000_reg.gz:md5,bc04a5e426609b7e15cfeed4d2e687b5",
+                                        "32000001-33000000.gz:md5,69ee3fa14cd1465ecaf00568359c4d09",
+                                        "32000001-33000000_reg.gz:md5,61b19ff1e07d2d9ec2d2fb9bb7946765",
+                                        "33000001-34000000.gz:md5,3a9067073eac98fb2f9f31b5cd07b146",
+                                        "33000001-34000000_reg.gz:md5,02ee515697fef7bb35c5e76720956241",
+                                        "34000001-35000000.gz:md5,1a5a50eaac5c4a0931a36559fcfff49b",
+                                        "34000001-35000000_reg.gz:md5,ee77f95bd990e73bb8945f8ddac3f27a",
+                                        "35000001-36000000.gz:md5,a31f574314f954fda8712d6aa356b0dd",
+                                        "35000001-36000000_reg.gz:md5,22f939323e6bbb5568f61dfdd4f6ba8b",
+                                        "36000001-37000000.gz:md5,9932081e83e182b21b93d4e86a2e6d30",
+                                        "36000001-37000000_reg.gz:md5,6aa882038538c82611978f3f700bd769",
+                                        "37000001-38000000.gz:md5,89196534aff56af350468ddb6a71e4a4",
+                                        "37000001-38000000_reg.gz:md5,bfaba7fc51688b715d10b579fc85b0c1",
+                                        "38000001-39000000.gz:md5,c7918ce6c4d44677df392c6a9d8b0bf6",
+                                        "38000001-39000000_reg.gz:md5,d0b5146d04d3827ea2c9744e69808bb7",
+                                        "39000001-40000000.gz:md5,244eaac70c773fef1a6d8cbc55570e5c",
+                                        "39000001-40000000_reg.gz:md5,bade6790bc37a658510307d91bc1d935",
+                                        "40000001-41000000.gz:md5,ed8e8285e0f0fed12f74415e7db1ca1c",
+                                        "40000001-41000000_reg.gz:md5,575f377254cd26f3b511d8739ede2657",
+                                        "4000001-5000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "4000001-5000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "41000001-42000000.gz:md5,bf269b45019dc1fdeae4b0ca3f07c31e",
+                                        "41000001-42000000_reg.gz:md5,dcae8fe4c21ca4b556310a2ed9f7db61",
+                                        "42000001-43000000.gz:md5,5884bb2c85e652aa312217ea42413ec3",
+                                        "42000001-43000000_reg.gz:md5,b70a294777a97b99f583a26e56ee24b6",
+                                        "43000001-44000000.gz:md5,f369e7eb0ca67b8c829a6c079c686482",
+                                        "43000001-44000000_reg.gz:md5,3ecaa382d73864f3fa5b1b20774b2dac",
+                                        "44000001-45000000.gz:md5,09fa55af78b28d1c6267c1c218be1852",
+                                        "44000001-45000000_reg.gz:md5,8bd3cc296bc92ed5c62e2f8249519076",
+                                        "45000001-46000000.gz:md5,bffba50564d697fa575d61553a94be0d",
+                                        "45000001-46000000_reg.gz:md5,9157f35b881bb7978f50f3c0eb122dc1",
+                                        "46000001-47000000.gz:md5,06610987a1a871c66cd7587275c580ad",
+                                        "46000001-47000000_reg.gz:md5,9261ebfa3f619083ba69b1431c8b1e57",
+                                        "47000001-48000000.gz:md5,a795a475d38eec771623db0435eaafd3",
+                                        "47000001-48000000_reg.gz:md5,595a4d4a2dc70a2ae1584b9369c45f50",
+                                        "48000001-49000000.gz:md5,84b0074dd00d2916aea645d4c5322f0d",
+                                        "48000001-49000000_reg.gz:md5,10b336ce80cd5e95f5d087a0b021658b",
+                                        "5000001-6000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "5000001-6000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "6000001-7000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "6000001-7000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "7000001-8000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "7000001-8000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "8000001-9000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "8000001-9000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "9000001-10000000.gz:md5,6484090af4453287309e7fc256b2a3ee",
+                                        "9000001-10000000_reg.gz:md5,eb88b4c6e52ee1b7f38742fc63a552b9",
+                                        "all_vars.gz:md5,cc58de49787b22b3b119e20dc1d9c813",
+                                        "all_vars.gz.csi:md5,efe6feefb4af3fa1cbb835f217160d79"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,cde70e0bc1908a02142c1ca22d4bb782",
+                                        "1-1000000_reg.gz:md5,65080eebbe9e956482406f08b8248ba9",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,5a949a8c013243a54487187b34dfafbd",
+                                        "1-1000000_reg.gz:md5,0808c8cb8633f74cf764fe4b0cfafbdf",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,533a20fead6e26e287951bf2842e48f7",
+                                        "1-1000000_reg.gz:md5,9aab0e39e0688b826e6e736458ad2d1c",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,efb8aaa6a3bc78eff17ed28a43099383",
+                                        "1-1000000_reg.gz:md5,1a27d4ab43920ef151e0089f3e9e4a4b",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,6cd5ac90da0873007ab74b8c64cdbe5d",
+                                        "1-1000000_reg.gz:md5,2f56086ea334b8bc196caf38f4712c24",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,37ecdcf6536f1c7cdd94048939c215c3",
+                                        "1-1000000_reg.gz:md5,607b20b49f8359be58de4adba7687fbc",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,6843883020c41262309eed07df3f3af4",
+                                        "1-1000000_reg.gz:md5,051b6db155fab6629ef30e80e8cb7cdd",
+                                        "1000001-2000000.gz:md5,17181e7730e8cd55e46c202568f818ad",
+                                        "1000001-2000000_reg.gz:md5,051b6db155fab6629ef30e80e8cb7cdd",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,b1e3e86cea70e7bee39139856afc038b",
+                                        "1-1000000_reg.gz:md5,68693c4e6a9ffe8ce4a018aa0ee4c95a",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,edd409f4bbe5e63910afb85d05dbdb7a",
+                                        "1-1000000_reg.gz:md5,68a25e6d83d8e15183496b5a97c3a670",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,09351a00fe7fa572e6b0e1c023f3da55",
+                                        "1-1000000_reg.gz:md5,a774233304f72832896de2e9227221b0",
+                                        "all_vars.gz:md5,ee9370e9bf063fb4f52fe1ab0b45f3d0",
+                                        "all_vars.gz.csi:md5,0397561c6d0b6c8ae9d0c083bb69e1e5"
+                                    ],
+                                    "chr_synonyms.txt:md5,ecc5ec48a5fb60f5f7198f641a123254",
+                                    "info.txt:md5,296e24b6257be06762c21f0066cf6718"
+                                ]
+                            ],
+                            "pLI_values_107.txt:md5,8e35e21aa84b5976776deda972883130",
+                            "spliceai_21_scores_raw_indel_-v1.3-.vcf.gz:md5,46d6b81b89f26fb807c4f73e53828754",
+                            "spliceai_21_scores_raw_indel_-v1.3-.vcf.gz.tbi:md5,a213a9f3156b0f2f6331ff35bc01f591",
+                            "spliceai_21_scores_raw_snv_-v1.3-.vcf.gz:md5,b16af27abef55deb104af19b2d289813",
+                            "spliceai_21_scores_raw_snv_-v1.3-.vcf.gz.tbi:md5,3fab1357156412ca02b2bdf075e97382"
+                        ]
+                    ]
+                ],
+                "27": [
+                    "versions.yml:md5,12e18a91d3ec0da87543f9fded01f1c1",
+                    "versions.yml:md5,18ec352f630429e7d036f31a45b4cc9d",
+                    "versions.yml:md5,1dd7f004d62b304a49613a400bdb20c8",
+                    "versions.yml:md5,26eb7437d00ad47436fb6f377c232a27",
+                    "versions.yml:md5,3e1d1e300c9f1e99a758f5854e226a8c",
+                    "versions.yml:md5,447a22450289bba28dd03ae4f4f92774",
+                    "versions.yml:md5,467b7fc47b7222904619e8b2b789709d",
+                    "versions.yml:md5,4c809981aaef975a666ac3812651bec6",
+                    "versions.yml:md5,6a0d25217268ed42e4cfe4f77972ba9b",
+                    "versions.yml:md5,6c2f65dfa53a173a7f7ba8ee03933dc0",
+                    "versions.yml:md5,7479477c0c4b6eb043c58bc40ee41198",
+                    "versions.yml:md5,7ac7b6cf323372066f60eea4bcdf2a56",
+                    "versions.yml:md5,94381c84c4482acd1f7bdb0309eb7d65",
+                    "versions.yml:md5,b426ba6290d3f2ccd5c547854d9e2b75",
+                    "versions.yml:md5,b9ba5dac48d896837b097c56bcdd768c",
+                    "versions.yml:md5,c18e81b268596fc9050cc8af016b09e8",
+                    "versions.yml:md5,d73bccf32c40dcb80a722652878c6c43",
+                    "versions.yml:md5,dac6d3657264cb33a64b581c43e6a0de",
+                    "versions.yml:md5,f5568ab78d420d74714985cdae832a6e"
+                ],
+                "3": [
+                    [
+                        "reference.fasta.fai.sizes:md5,b7bb58fb4d5cb50796e722222a13a2e6"
+                    ]
+                ],
+                "4": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference.fasta.fai"
+                    ]
+                ],
+                "5": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "reference.dict:md5,81abd0fc051c084405024e0927f7b436"
+                    ]
+                ],
+                "6": [
+                    
+                ],
+                "7": [
+                    [
+                        "genome_mt.intervals:md5,0930dafc5645246542112ae3d62573a3"
+                    ]
+                ],
+                "8": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        [
+                            "genome_mt.amb:md5,6749f645487281112c254ab829ea048c",
+                            "genome_mt.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
+                            "genome_mt.bwt:md5,96337a6d9dc0d7afc562fee8b1afb673",
+                            "genome_mt.pac:md5,ecbea80d481b6e8e70da3f464b977d91",
+                            "genome_mt.sa:md5,7c06a2c0b4f23e785e2f85383b9d1317"
+                        ]
+                    ]
+                ],
+                "9": [
+                    
+                ],
+                "bait_intervals": [
+                    [
+                        "genome_bait.intervals_list:md5,1f3d445e6e53260510710a8333d29cfe"
+                    ]
+                ],
+                "genome_bwa_index": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        [
+                            "reference.amb:md5,0a85644af00f9a856d874381d24e7803",
+                            "reference.ann:md5,8fdb46970ca95a4ef54f5f1a02d233cd",
+                            "reference.bwt:md5,0d1ba8d4e0229df6abb869a69f621dc8",
+                            "reference.pac:md5,96b449e1316067fdfba91b1399687bc2",
+                            "reference.sa:md5,c5c99cdc7a3cb6224841131b4b4285fe"
+                        ]
+                    ]
+                ],
+                "genome_bwamem2_index": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        [
+                            "reference.fasta.0123:md5,0f0ff4414949e6787a25a563f19e2a3b",
+                            "reference.fasta.amb:md5,0a85644af00f9a856d874381d24e7803",
+                            "reference.fasta.ann:md5,8fdb46970ca95a4ef54f5f1a02d233cd",
+                            "reference.fasta.bwt.2bit.64:md5,3c0df9450afc5cb0ad5e85870829d9d0",
+                            "reference.fasta.pac:md5,96b449e1316067fdfba91b1399687bc2"
+                        ]
+                    ]
+                ],
+                "genome_bwameme_index": [
+                    
+                ],
+                "genome_chrom_sizes": [
+                    [
+                        "reference.fasta.fai.sizes:md5,b7bb58fb4d5cb50796e722222a13a2e6"
+                    ]
+                ],
+                "genome_dict": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "reference.dict:md5,81abd0fc051c084405024e0927f7b436"
+                    ]
+                ],
+                "genome_fai": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference.fasta.fai"
+                    ]
+                ],
+                "gnomad_af_idx": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "gnomad_reformated.tab.gz.tbi:md5,854afcf42d656c3d00a39dd9b69f66f7"
+                    ]
+                ],
+                "known_dbsnp_tbi": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "dbsnp_-138-.vcf.gz.tbi:md5,6695b71d9819806d50cd908051cf4cc0"
+                    ]
+                ],
+                "mt_bwa_index": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        [
+                            "genome_mt.amb:md5,6749f645487281112c254ab829ea048c",
+                            "genome_mt.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
+                            "genome_mt.bwt:md5,96337a6d9dc0d7afc562fee8b1afb673",
+                            "genome_mt.pac:md5,ecbea80d481b6e8e70da3f464b977d91",
+                            "genome_mt.sa:md5,7c06a2c0b4f23e785e2f85383b9d1317"
+                        ]
+                    ]
+                ],
+                "mt_bwamem2_index": [
+                    
+                ],
+                "mt_dict": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_mt.dict:md5,249ad4680360e4a9fc1e3b44ed54f568"
+                    ]
+                ],
+                "mt_fai": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_mt.fa.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
+                    ]
+                ],
+                "mt_fasta": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_mt.fa:md5,dcff3c6dd92e01b11edf7586ca4f5a78"
+                    ]
+                ],
+                "mt_intervals": [
+                    [
+                        "genome_mt.intervals:md5,0930dafc5645246542112ae3d62573a3"
+                    ]
+                ],
+                "mtshift_backchain": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_shift.back_chain:md5,25d682d73a9bae009f4a38b3ede5dbc8"
+                    ]
+                ],
+                "mtshift_bwa_index": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        [
+                            "genome_shift.amb:md5,ad1d6545efc080e69ad54ecdbcd0720c",
+                            "genome_shift.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
+                            "genome_shift.bwt:md5,c13d3e8c5ac29b56b31e1882e2111491",
+                            "genome_shift.pac:md5,0ead764b2f8fa112e3351ca517d2e125",
+                            "genome_shift.sa:md5,9ef1b52de302c6957f4dc82ed2f21bd1"
+                        ]
+                    ]
+                ],
+                "mtshift_bwamem2_index": [
+                    
+                ],
+                "mtshift_dict": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_shift.dict:md5,a714408661d0f6403f417304342574fc"
+                    ]
+                ],
+                "mtshift_fai": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_shift.fasta.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
+                    ]
+                ],
+                "mtshift_fasta": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_shift.fasta:md5,3bb4de5911acad2dd87e8a183251d0dc"
+                    ]
+                ],
+                "mtshift_intervals": [
+                    [
+                        "genome_mt.shifted.intervals:md5,083d8f782fd4228dd9f6948ddbc64fd0"
+                    ]
+                ],
+                "sdf": [
+                    
+                ],
+                "target_bed": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome_pad100.bed.gz:md5,7122d49f10e69c54d429a95cf4cf8fc9",
+                        "genome_pad100.bed.gz.tbi:md5,dc41277c9c9be1203643b9192260f9ac"
+                    ]
+                ],
+                "target_intervals": [
+                    [
+                        "genome_target.interval_list:md5,2959b7b0e1b298fe84ad708f447d6703"
+                    ]
+                ],
+                "vcfanno_extra": [
+                    [
+                        [
+                            
+                        ]
+                    ]
+                ],
+                "vep_resources": [
+                    [
+                        [
+                            "LoFtool_scores.txt:md5,d9abd640ef22c790583b4b15d144ea6f",
+                            [
+                                "LoFtool.pm:md5,39fe102c44c6194fab9d1e42f6653ab5",
+                                "MaxEntScan.pm:md5,88e141bb8e21f776112f6aa4c1d1b195",
+                                "SpliceAI.pm:md5,860b0a5b8191ba6b2f85de2a76212355",
+                                "dbNSFP.pm:md5,6149e9e4e28df8812b9a6e017eb08e12",
+                                "pLI.pm:md5,3ab758b61b06ff5604a94f3f293ff918",
+                                "plugin_config.txt:md5,c722057245a51e950cf1b10ca3188f7f"
+                            ],
+                            [
+                                "me2x5:md5,0e3daf92c0aed69a8c78d6668cb79431",
+                                "score3.pl:md5,a50bbe208f226fa4df49a4a595898d4c",
+                                "score5.pl:md5,3b0b3ff5e1af1fcae9385d3e1fd03ff8",
+                                [
+                                    "hashseq.m:md5,b193eef9bd40086691021a2d19c2c5de",
+                                    "hashseq.m~:md5,0277f5c7c97a3b6ff258f04980ab2299",
+                                    "me1s0acc1:md5,98e8f71ae37c12e445f3a21fcd8467a2",
+                                    "me1s0acc2:md5,ed976352b5f3de894b60fa2ea0213cc9",
+                                    "me1s0acc3:md5,93c94296500c37c70e74b295f6ff1578",
+                                    "me1s0acc4:md5,83b8104e0080210fd0a96cda88c4f62d",
+                                    "me1s0acc5:md5,6d26531c6720902a85cd30d13c165b37",
+                                    "me1s0acc6:md5,403edfcea636de389912605d2bdc93eb",
+                                    "me1s0acc7:md5,b0525d474309a2bc08b3216967d0a436",
+                                    "me1s0acc8:md5,3935b25a6f4f63e3e2fea6bfc5a0c65e",
+                                    "me1s0acc9:md5,0f3b8a65c043fb53cc8aece8cb5b1ef8",
+                                    "me2s0:md5,c13a0c34bc8247f323b523eec99e811d",
+                                    "me2s0acc1:md5,0a4dcd11bce05f9706f33505f223eeac",
+                                    "me2s0acc2:md5,8565b8edb7f9582b4a23a58dbd11477e",
+                                    "me2s0acc3:md5,057916e5bac481c3b36a652dcebe5838",
+                                    "me2s0acc4:md5,09ba0ad8055b7db2f84dcf418e3d68e1",
+                                    "me2s0acc5:md5,1675124a3e906b6eb7051923c42035cc",
+                                    "me2s0acc6:md5,26e468f9476bb5d25cc3fca948738535",
+                                    "me2s0acc7:md5,5f35e846137a18d4fcc63bc892d4153a",
+                                    "me2s0acc8:md5,bae0098c03adfdce1ff13a13eadd3897",
+                                    "me2s0acc9:md5,1d733af14d438dc9dcdcddf51d841457",
+                                    "me2x3acc1:md5,00d620b842d47e8348440f8936ff6143",
+                                    "me2x3acc2:md5,cf36592d00b1e69eab00e0cc1f3cecaf",
+                                    "me2x3acc3:md5,136b3eaf2b7f78d0da78d9d4be53368f",
+                                    "me2x3acc4:md5,3a19125ed5b0f4a5ace7d048f9e005fe",
+                                    "me2x3acc5:md5,4e234dd1e58b04b499499f3244502e74",
+                                    "me2x3acc6:md5,df85b498edd7d4692c04cab8c01ae917",
+                                    "me2x3acc7:md5,f139698d62743bc816b5d4281071c657",
+                                    "me2x3acc8:md5,1d2462179e567b1c7beb2f6797e53e07",
+                                    "me2x3acc9:md5,36f1e98760a6c3a3e31b4e4a3071ab68",
+                                    "me2x5:md5,0e3daf92c0aed69a8c78d6668cb79431",
+                                    "splice5sequences:md5,1a1518daba4e02f757811869cb4bcefd"
+                                ],
+                                "test3:md5,97bbfcf2fa23fe249a79e219b1c0e3c6",
+                                "test5:md5,a7b00a84f65a525305a5fad91b4bbc61"
+                            ],
+                            [
+                                [
+                                    [
+                                        "1-1000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "1-1000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "10000001-11000000.gz:md5,3cc65ae9e19a9dbaa0175d573855b1c5",
+                                        "10000001-11000000_reg.gz:md5,bee170866e2339d8f294297c8d5d399d",
+                                        "1000001-2000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "1000001-2000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "11000001-12000000.gz:md5,d453356047147a676955c238a2b3502e",
+                                        "11000001-12000000_reg.gz:md5,872621db9595d97f014478e886da37ad",
+                                        "12000001-13000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "12000001-13000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "13000001-14000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "13000001-14000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "14000001-15000000.gz:md5,8f083b4db9509c63161c86d68373a004",
+                                        "14000001-15000000_reg.gz:md5,e7b5648e4e3bcb4253ba74edd401beba",
+                                        "15000001-16000000.gz:md5,d05a0116f9da34cd5657618c85d97181",
+                                        "15000001-16000000_reg.gz:md5,e41afae6cf10d1b025274c63907e9949",
+                                        "16000001-17000000.gz:md5,8250d7f851ec53acc6eb23e5973d780b",
+                                        "16000001-17000000_reg.gz:md5,e93e976e8316a646db6c58ac19a69e32",
+                                        "17000001-18000000.gz:md5,a70022d471c30e97052c7a640b91cc3a",
+                                        "17000001-18000000_reg.gz:md5,d1728b3ec1ec3bb9871e9aaa66a7a891",
+                                        "18000001-19000000.gz:md5,86cf339af4fbc2662c0fd97eb40192c3",
+                                        "18000001-19000000_reg.gz:md5,0fffcde9d99d05ae6f6ef1fab2d1af9d",
+                                        "19000001-20000000.gz:md5,87e20d3c192ca889a2b5f61bb1710466",
+                                        "19000001-20000000_reg.gz:md5,3860179bb94216dccca2d13bbbfa41c0",
+                                        "20000001-21000000.gz:md5,07e5c3464bdbaaead40d8d71799e0510",
+                                        "20000001-21000000_reg.gz:md5,298851c79adaa52be01f468fb3c3e70c",
+                                        "2000001-3000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "2000001-3000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "21000001-22000000.gz:md5,187079a822ed51bc9532e97f3c7109df",
+                                        "21000001-22000000_reg.gz:md5,65190153890d16157d25f386ec03346b",
+                                        "22000001-23000000.gz:md5,79969dbe6083b1c44825e347ea035f8d",
+                                        "22000001-23000000_reg.gz:md5,0774a40b5d3a4a80d943d883fd1bf011",
+                                        "23000001-24000000.gz:md5,0fc496a44d493fd74179824b1e9a98a4",
+                                        "23000001-24000000_reg.gz:md5,e27126e23dc446df0c9423596987f4bb",
+                                        "24000001-25000000.gz:md5,95b3d1d24d576cbbf489468097f2c213",
+                                        "24000001-25000000_reg.gz:md5,d384006e4c0e8bd38b89fd1b82e22506",
+                                        "25000001-26000000.gz:md5,77230b5177f6410f9324af8dde33e020",
+                                        "25000001-26000000_reg.gz:md5,667eecb6d3ffdb5613581591835c5e3d",
+                                        "26000001-27000000.gz:md5,fe6ad01b323d83ae376bdeb6cf047e3c",
+                                        "26000001-27000000_reg.gz:md5,aafd124971e6424e8db99b42b091bd99",
+                                        "27000001-28000000.gz:md5,27c790ae843453556c7b2242c36abd1a",
+                                        "27000001-28000000_reg.gz:md5,b510b713aa42bafb38351842821977c8",
+                                        "28000001-29000000.gz:md5,a6f366a37ad04cc773236be4dd09ddaf",
+                                        "28000001-29000000_reg.gz:md5,5f18facec28af19bfdd8a108a8f506d7",
+                                        "29000001-30000000.gz:md5,82fe6926eb7a292b9fc2e50d484c8c2f",
+                                        "29000001-30000000_reg.gz:md5,e3958033b25781baa21d90d183ec2a5e",
+                                        "30000001-31000000.gz:md5,1dcca9aea49227138ef3644d2821c647",
+                                        "30000001-31000000_reg.gz:md5,d5926ccaad9b9ad4edd0060e4a598438",
+                                        "3000001-4000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "3000001-4000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "31000001-32000000.gz:md5,f8fc56294a92150c19e315e99a83b4a5",
+                                        "31000001-32000000_reg.gz:md5,bc04a5e426609b7e15cfeed4d2e687b5",
+                                        "32000001-33000000.gz:md5,69ee3fa14cd1465ecaf00568359c4d09",
+                                        "32000001-33000000_reg.gz:md5,61b19ff1e07d2d9ec2d2fb9bb7946765",
+                                        "33000001-34000000.gz:md5,3a9067073eac98fb2f9f31b5cd07b146",
+                                        "33000001-34000000_reg.gz:md5,02ee515697fef7bb35c5e76720956241",
+                                        "34000001-35000000.gz:md5,1a5a50eaac5c4a0931a36559fcfff49b",
+                                        "34000001-35000000_reg.gz:md5,ee77f95bd990e73bb8945f8ddac3f27a",
+                                        "35000001-36000000.gz:md5,a31f574314f954fda8712d6aa356b0dd",
+                                        "35000001-36000000_reg.gz:md5,22f939323e6bbb5568f61dfdd4f6ba8b",
+                                        "36000001-37000000.gz:md5,9932081e83e182b21b93d4e86a2e6d30",
+                                        "36000001-37000000_reg.gz:md5,6aa882038538c82611978f3f700bd769",
+                                        "37000001-38000000.gz:md5,89196534aff56af350468ddb6a71e4a4",
+                                        "37000001-38000000_reg.gz:md5,bfaba7fc51688b715d10b579fc85b0c1",
+                                        "38000001-39000000.gz:md5,c7918ce6c4d44677df392c6a9d8b0bf6",
+                                        "38000001-39000000_reg.gz:md5,d0b5146d04d3827ea2c9744e69808bb7",
+                                        "39000001-40000000.gz:md5,244eaac70c773fef1a6d8cbc55570e5c",
+                                        "39000001-40000000_reg.gz:md5,bade6790bc37a658510307d91bc1d935",
+                                        "40000001-41000000.gz:md5,ed8e8285e0f0fed12f74415e7db1ca1c",
+                                        "40000001-41000000_reg.gz:md5,575f377254cd26f3b511d8739ede2657",
+                                        "4000001-5000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "4000001-5000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "41000001-42000000.gz:md5,bf269b45019dc1fdeae4b0ca3f07c31e",
+                                        "41000001-42000000_reg.gz:md5,dcae8fe4c21ca4b556310a2ed9f7db61",
+                                        "42000001-43000000.gz:md5,5884bb2c85e652aa312217ea42413ec3",
+                                        "42000001-43000000_reg.gz:md5,b70a294777a97b99f583a26e56ee24b6",
+                                        "43000001-44000000.gz:md5,f369e7eb0ca67b8c829a6c079c686482",
+                                        "43000001-44000000_reg.gz:md5,3ecaa382d73864f3fa5b1b20774b2dac",
+                                        "44000001-45000000.gz:md5,09fa55af78b28d1c6267c1c218be1852",
+                                        "44000001-45000000_reg.gz:md5,8bd3cc296bc92ed5c62e2f8249519076",
+                                        "45000001-46000000.gz:md5,bffba50564d697fa575d61553a94be0d",
+                                        "45000001-46000000_reg.gz:md5,9157f35b881bb7978f50f3c0eb122dc1",
+                                        "46000001-47000000.gz:md5,06610987a1a871c66cd7587275c580ad",
+                                        "46000001-47000000_reg.gz:md5,9261ebfa3f619083ba69b1431c8b1e57",
+                                        "47000001-48000000.gz:md5,a795a475d38eec771623db0435eaafd3",
+                                        "47000001-48000000_reg.gz:md5,595a4d4a2dc70a2ae1584b9369c45f50",
+                                        "48000001-49000000.gz:md5,84b0074dd00d2916aea645d4c5322f0d",
+                                        "48000001-49000000_reg.gz:md5,10b336ce80cd5e95f5d087a0b021658b",
+                                        "5000001-6000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "5000001-6000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "6000001-7000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "6000001-7000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "7000001-8000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "7000001-8000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "8000001-9000000.gz:md5,d849fbcad66db7914bc015e2e166c22c",
+                                        "8000001-9000000_reg.gz:md5,85dae2a4f36126d97dc94a25fe10b7bb",
+                                        "9000001-10000000.gz:md5,6484090af4453287309e7fc256b2a3ee",
+                                        "9000001-10000000_reg.gz:md5,eb88b4c6e52ee1b7f38742fc63a552b9",
+                                        "all_vars.gz:md5,cc58de49787b22b3b119e20dc1d9c813",
+                                        "all_vars.gz.csi:md5,efe6feefb4af3fa1cbb835f217160d79"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,cde70e0bc1908a02142c1ca22d4bb782",
+                                        "1-1000000_reg.gz:md5,65080eebbe9e956482406f08b8248ba9",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,5a949a8c013243a54487187b34dfafbd",
+                                        "1-1000000_reg.gz:md5,0808c8cb8633f74cf764fe4b0cfafbdf",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,533a20fead6e26e287951bf2842e48f7",
+                                        "1-1000000_reg.gz:md5,9aab0e39e0688b826e6e736458ad2d1c",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,efb8aaa6a3bc78eff17ed28a43099383",
+                                        "1-1000000_reg.gz:md5,1a27d4ab43920ef151e0089f3e9e4a4b",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,6cd5ac90da0873007ab74b8c64cdbe5d",
+                                        "1-1000000_reg.gz:md5,2f56086ea334b8bc196caf38f4712c24",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,37ecdcf6536f1c7cdd94048939c215c3",
+                                        "1-1000000_reg.gz:md5,607b20b49f8359be58de4adba7687fbc",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,6843883020c41262309eed07df3f3af4",
+                                        "1-1000000_reg.gz:md5,051b6db155fab6629ef30e80e8cb7cdd",
+                                        "1000001-2000000.gz:md5,17181e7730e8cd55e46c202568f818ad",
+                                        "1000001-2000000_reg.gz:md5,051b6db155fab6629ef30e80e8cb7cdd",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,b1e3e86cea70e7bee39139856afc038b",
+                                        "1-1000000_reg.gz:md5,68693c4e6a9ffe8ce4a018aa0ee4c95a",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,edd409f4bbe5e63910afb85d05dbdb7a",
+                                        "1-1000000_reg.gz:md5,68a25e6d83d8e15183496b5a97c3a670",
+                                        "all_vars.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                        "all_vars.gz.csi:md5,e56c94d2b47dd51557b553b568e7ffb8"
+                                    ],
+                                    [
+                                        "1-1000000.gz:md5,09351a00fe7fa572e6b0e1c023f3da55",
+                                        "1-1000000_reg.gz:md5,a774233304f72832896de2e9227221b0",
+                                        "all_vars.gz:md5,ee9370e9bf063fb4f52fe1ab0b45f3d0",
+                                        "all_vars.gz.csi:md5,0397561c6d0b6c8ae9d0c083bb69e1e5"
+                                    ],
+                                    "chr_synonyms.txt:md5,ecc5ec48a5fb60f5f7198f641a123254",
+                                    "info.txt:md5,296e24b6257be06762c21f0066cf6718"
+                                ]
+                            ],
+                            "pLI_values_107.txt:md5,8e35e21aa84b5976776deda972883130",
+                            "spliceai_21_scores_raw_indel_-v1.3-.vcf.gz:md5,46d6b81b89f26fb807c4f73e53828754",
+                            "spliceai_21_scores_raw_indel_-v1.3-.vcf.gz.tbi:md5,a213a9f3156b0f2f6331ff35bc01f591",
+                            "spliceai_21_scores_raw_snv_-v1.3-.vcf.gz:md5,b16af27abef55deb104af19b2d289813",
+                            "spliceai_21_scores_raw_snv_-v1.3-.vcf.gz.tbi:md5,3fab1357156412ca02b2bdf075e97382"
+                        ]
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,12e18a91d3ec0da87543f9fded01f1c1",
+                    "versions.yml:md5,18ec352f630429e7d036f31a45b4cc9d",
+                    "versions.yml:md5,1dd7f004d62b304a49613a400bdb20c8",
+                    "versions.yml:md5,26eb7437d00ad47436fb6f377c232a27",
+                    "versions.yml:md5,3e1d1e300c9f1e99a758f5854e226a8c",
+                    "versions.yml:md5,447a22450289bba28dd03ae4f4f92774",
+                    "versions.yml:md5,467b7fc47b7222904619e8b2b789709d",
+                    "versions.yml:md5,4c809981aaef975a666ac3812651bec6",
+                    "versions.yml:md5,6a0d25217268ed42e4cfe4f77972ba9b",
+                    "versions.yml:md5,6c2f65dfa53a173a7f7ba8ee03933dc0",
+                    "versions.yml:md5,7479477c0c4b6eb043c58bc40ee41198",
+                    "versions.yml:md5,7ac7b6cf323372066f60eea4bcdf2a56",
+                    "versions.yml:md5,94381c84c4482acd1f7bdb0309eb7d65",
+                    "versions.yml:md5,b426ba6290d3f2ccd5c547854d9e2b75",
+                    "versions.yml:md5,b9ba5dac48d896837b097c56bcdd768c",
+                    "versions.yml:md5,c18e81b268596fc9050cc8af016b09e8",
+                    "versions.yml:md5,d73bccf32c40dcb80a722652878c6c43",
+                    "versions.yml:md5,dac6d3657264cb33a64b581c43e6a0de",
+                    "versions.yml:md5,f5568ab78d420d74714985cdae832a6e"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.3"
+        },
+        "timestamp": "2025-06-25T19:15:39.213374312"
+    }
+}
