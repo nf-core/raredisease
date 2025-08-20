@@ -18,9 +18,9 @@ include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-c
 workflow ALIGN_BWA_BWAMEM2_BWAMEME {
     take:
         ch_reads_input   // channel: [mandatory] [ val(meta), path(reads_input) ]
-        ch_bwa_index     // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
+        ch_bwa_index     // channel: [mandatory] [ val(meta), path(bwa_index) ]
         ch_bwamem2_index // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
-        ch_bwameme_index // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
+        ch_bwameme_index // channel: [mandatory] [ val(meta), path(bwameme_index) ]
         ch_genome_fasta  // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai    // channel: [mandatory] [ val(meta), path(fai) ]
         val_mbuffer_mem  // integer: [mandatory] default: 3072

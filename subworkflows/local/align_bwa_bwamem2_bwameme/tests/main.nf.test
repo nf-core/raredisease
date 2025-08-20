@@ -1,0 +1,124 @@
+nextflow_workflow {
+
+    name "Test Workflow ALIGN_BWA_BWAMEM2_BWAMEME"
+    script "subworkflows/local/align_bwa_bwamem2_bwameme/main.nf"
+    workflow "ALIGN_BWA_BWAMEM2_BWAMEME"
+    tag "subworkflows"
+    tag "align_bwa_bwamem2_bwameme"
+    config "./nextflow.config"
+
+    test("align bwamem2") {
+
+        setup {
+            run("BWAMEM2_INDEX") {
+                script "modules/nf-core/bwamem2/index/main.nf"
+                process {
+                    """
+                    input[0] = Channel.of([
+                        [id:'sarscov2'],
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
+        when {
+            params {
+                aligner = "bwamem2"
+                sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                save_mapped_as_cram = true
+                restrict_to_contigs = "MT192765.1"
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test', sample:'test', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test'"  ], // meta map
+                    [
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
+                    ]
+                ])
+                input[1] = [[:],[]]
+                input[2] = BWAMEM2_INDEX.out.index
+                input[3] = [[:],[]]
+                input[4] = Channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
+                input[5] = Channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
+                input[6] = 3072
+                input[7] = "illumina"
+                input[8] = 4
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getHeaderMD5() ] },
+                        workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getReadsMD5() ] },
+                        workflow.out.versions
+                    ).match()
+                }
+            )
+        }
+    }
+
+    test("align bwameme") {
+
+        setup {
+            run("BWAMEME_INDEX") {
+                script "modules/nf-core/bwameme/index/main.nf"
+                process {
+                    """
+                    input[0] = Channel.of([
+                        [id:'sarscov2'],
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
+        when {
+            params {
+                aligner = "bwameme"
+                sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                save_mapped_as_cram = false
+                restrict_to_contigs = "MT192765.1"
+            }
+            workflow {
+                """
+                input[0] = Channel.of([
+                    [ id:'test', sample:'test', single_end:false, num_lanes:1, read_group:"\'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test\'"  ], // meta map
+                    [
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
+                    ]
+                ])
+                input[1] = [[:],[]]
+                input[2] = [[:],[]]
+                input[3] = BWAMEME_INDEX.out.index
+                input[4] = Channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
+                input[5] = Channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
+                input[6] = 3072
+                input[7] = "illumina"
+                input[8] = 4
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getHeaderMD5() ] },
+                        workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getReadsMD5() ] },
+                        workflow.out.versions
+                    ).match()
+                }
+            )
+        }
+    }
+
+}
