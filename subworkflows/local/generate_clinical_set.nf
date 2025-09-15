@@ -13,26 +13,26 @@ workflow GENERATE_CLINICAL_SET {
         val_ismt    // value: if mitochondria, set to true
 
     main:
+        ch_clinical = Channel.empty()
         ch_versions = Channel.empty()
 
-        ENSEMBLVEP_FILTERVEP(
-            ch_vcf,
-            ch_hgnc_ids
-        )
-        .output
-        .set { ch_filtervep_out }
-
         if (val_ismt) {
-            BCFTOOLS_FILTER (ch_filtervep_out.map { meta, vcf -> return [meta, vcf, []]})
+            BCFTOOLS_FILTER (ch_vcf.map { meta, vcf -> return [meta, vcf, []]})
             ch_clinical = BCFTOOLS_FILTER.out.vcf
             ch_versions = ch_versions.mix( BCFTOOLS_FILTER.out.versions )
         } else {
+            ENSEMBLVEP_FILTERVEP(
+                ch_vcf,
+                ch_hgnc_ids
+            )
+            .output
+            .set { ch_filtervep_out }
+
             TABIX_BGZIP( ch_filtervep_out )
             ch_clinical = TABIX_BGZIP.out.output
+            ch_versions = ch_versions.mix( ENSEMBLVEP_FILTERVEP.out.versions )
             ch_versions = ch_versions.mix( TABIX_BGZIP.out.versions )
         }
-
-        ch_versions = ch_versions.mix( ENSEMBLVEP_FILTERVEP.out.versions )
 
     emit:
         vcf      = ch_clinical // channel: [ val(meta), path(vcf) ]
