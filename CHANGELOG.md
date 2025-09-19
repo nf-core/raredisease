@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Interval parameter in the default retroseq call [#717](https://github.com/nf-core/raredisease/pull/717)
 - Tests for call_repeat_expansions and qc_bam subworkflows [#713](https://github.com/nf-core/raredisease/pull/713)
+- Parabricks DeepVariant as an optional variant caller
 
 ### `Changed`
 
@@ -35,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | htslib   | 1.20        | 1.21        |
 | mosdepth | 0.3.8       | 0.3.10      |
 | ngs-bits | 2023_02     | 2024_11     |
+| pbrun    |             | 4.5.1-1     |
 
 ## 2.6.0 - Cacofonix [2025-06-25]
 

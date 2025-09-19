@@ -3,6 +3,7 @@
 //
 
 include { CALL_SNV_DEEPVARIANT             } from './call_snv_deepvariant'
+include { CALL_SNV_DEEPVARIANT_PARABRICKS  } from './call_snv_deepvariant_parabricks'
 include { CALL_SNV_SENTIEON                } from './call_snv_sentieon'
 include { CALL_SNV_MT                      } from './call_snv_MT'
 include { CALL_SNV_MT as CALL_SNV_MT_SHIFT } from './call_snv_MT'
@@ -39,19 +40,23 @@ workflow CALL_SNV {
         ch_pcr_indel_model    // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
 
     main:
-        ch_versions      = Channel.empty()
-        ch_deepvar_vcf   = Channel.empty()
-        ch_deepvar_tbi   = Channel.empty()
-        ch_deepvar_gvcf  = Channel.empty()
-        ch_deepvar_gtbi  = Channel.empty()
-        ch_mt_vcf        = Channel.empty()
-        ch_mt_tabix      = Channel.empty()
-        ch_mt_vcf_tabix  = Channel.empty()
-        ch_mt_txt        = Channel.empty()
-        ch_sentieon_vcf  = Channel.empty()
-        ch_sentieon_tbi  = Channel.empty()
-        ch_sentieon_gvcf = Channel.empty()
-        ch_sentieon_gtbi = Channel.empty()
+        ch_versions         = Channel.empty()
+        ch_deepvar_vcf      = Channel.empty()
+        ch_deepvar_tbi      = Channel.empty()
+        ch_deepvar_gvcf     = Channel.empty()
+        ch_deepvar_gtbi     = Channel.empty()
+        ch_parabricks_vcf   = Channel.empty()
+        ch_parabricks_tbi   = Channel.empty()
+        ch_parabricks_gvcf  = Channel.empty()
+        ch_parabricks_gtbi  = Channel.empty()
+        ch_mt_vcf           = Channel.empty()
+        ch_mt_tabix         = Channel.empty()
+        ch_mt_vcf_tabix     = Channel.empty()
+        ch_mt_txt           = Channel.empty()
+        ch_sentieon_vcf     = Channel.empty()
+        ch_sentieon_tbi     = Channel.empty()
+        ch_sentieon_gvcf    = Channel.empty()
+        ch_sentieon_gtbi    = Channel.empty()
 
         if (params.variant_caller.equals("deepvariant") && !params.analysis_type.equals("mito")) {
             CALL_SNV_DEEPVARIANT (      // triggered only when params.variant_caller is set as deepvariant
@@ -69,6 +74,22 @@ workflow CALL_SNV {
             ch_deepvar_gvcf = CALL_SNV_DEEPVARIANT.out.gvcf
             ch_deepvar_gtbi = CALL_SNV_DEEPVARIANT.out.gvcf_tabix
             ch_versions    = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
+        } else if (params.variant_caller.equals("parabricks_deepvariant") && !params.analysis_type.equals("mito")) {
+            CALL_SNV_DEEPVARIANT_PARABRICKS (      // triggered only when params.variant_caller is set as parabricks_deepvariant
+                ch_genome_bam_bai,
+                ch_genome_fasta,
+                ch_genome_fai,
+                ch_target_bed,
+                ch_par_bed,
+                ch_case_info,
+                ch_foundin_header,
+                ch_genome_chrsizes
+            )
+            ch_parabricks_vcf = CALL_SNV_DEEPVARIANT_PARABRICKS.out.vcf
+            ch_parabricks_tbi = CALL_SNV_DEEPVARIANT_PARABRICKS.out.tabix
+            ch_parabricks_gvcf = CALL_SNV_DEEPVARIANT_PARABRICKS.out.gvcf
+            ch_parabricks_gtbi = CALL_SNV_DEEPVARIANT_PARABRICKS.out.gvcf_tabix
+            ch_versions    = ch_versions.mix(CALL_SNV_DEEPVARIANT_PARABRICKS.out.versions)
         } else if (params.variant_caller.equals("sentieon")) {
             CALL_SNV_SENTIEON(         // triggered only when params.variant_caller is set as sentieon
                 ch_genome_bam_bai,
@@ -90,10 +111,10 @@ workflow CALL_SNV {
             ch_versions    = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
         }
 
-        ch_vcf    = Channel.empty().mix(ch_deepvar_vcf, ch_sentieon_vcf)
-        ch_tabix  = Channel.empty().mix(ch_deepvar_tbi, ch_sentieon_tbi)
-        ch_gvcf   = Channel.empty().mix(ch_deepvar_gvcf, ch_sentieon_gvcf)
-        ch_gtabix = Channel.empty().mix(ch_deepvar_gtbi, ch_sentieon_gtbi)
+        ch_vcf    = Channel.empty().mix(ch_deepvar_vcf, ch_parabricks_vcf, ch_sentieon_vcf)
+        ch_tabix  = Channel.empty().mix(ch_deepvar_tbi, ch_parabricks_tbi, ch_sentieon_tbi)
+        ch_gvcf   = Channel.empty().mix(ch_deepvar_gvcf, ch_parabricks_gvcf, ch_sentieon_gvcf)
+        ch_gtabix = Channel.empty().mix(ch_deepvar_gtbi, ch_parabricks_gtbi, ch_sentieon_gtbi)
 
         ch_vcf
             .join(ch_tabix, failOnMismatch:true, failOnDuplicate:true)
