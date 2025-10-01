@@ -54,10 +54,6 @@ include { CALL_MOBILE_ELEMENTS                               } from '../subworkf
 include { CALL_REPEAT_EXPANSIONS                             } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                                           } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS                           } from '../subworkflows/local/call_structural_variants'
-include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/local/generate_clinical_set.nf'
-include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/local/generate_clinical_set'
-include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/local/generate_clinical_set'
-include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/local/generate_clinical_set'
 include { GENERATE_CYTOSURE_FILES                            } from '../subworkflows/local/generate_cytosure_files'
 include { GENS                                               } from '../subworkflows/local/gens'
 include { PREPARE_REFERENCES                                 } from '../subworkflows/local/prepare_references'
@@ -68,6 +64,10 @@ include { RANK_VARIANTS as RANK_VARIANTS_SV                  } from '../subworkf
 include { SCATTER_GENOME                                     } from '../subworkflows/local/scatter_genome'
 include { SUBSAMPLE_MT                                       } from '../subworkflows/local/subsample_mt'
 include { VARIANT_EVALUATION                                 } from '../subworkflows/local/variant_evaluation'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
