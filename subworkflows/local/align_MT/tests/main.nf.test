@@ -1,0 +1,143 @@
+nextflow_workflow {
+
+    name "Test Workflow ALIGN_MT"
+    script "subworkflows/local/align_MT/main.nf"
+    workflow "ALIGN_MT"
+    tag "subworkflows"
+    tag "align_mt"
+    config "./nextflow.config"
+
+    test("align mt - bwamem2") {
+
+        setup {
+            run("BWAMEM2_INDEX", alias: 'MT_MEM2') {
+                script "modules/nf-core/bwamem2/index/main.nf"
+                process {
+                    """
+                    input[0] = Channel.of([
+                        [id:'mt'],
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference_mt.fa', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+        when {
+            params {
+                mt_aligner          = 'bwamem2'
+                outdir              = "$outputDir"
+                pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
+            }
+            workflow {
+                """
+                input[0] = Channel.of(
+                    [
+                        [ id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", 'lane':1, 'sex':1, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
+                        [ file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_mt_1.fastq.gz', checkIfExists: true), file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)]
+                    ],
+                    [
+                        [ id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", 'lane':1, 'sex':1, 'phenotype':2, 'paternal':'earlycasualcaiman', 'maternal':'slowlycivilbuck', 'case_id':'justhusky'  ], // meta map
+                        [ file(params.pipelines_testdata_base_path + '/testdata/hugelymodelbat_mt_1.fastq.gz', checkIfExists: true), file(params.pipelines_testdata_base_path + '/testdata/hugelymodelbat_mt_2.fastq.gz', checkIfExists: true)]
+                    ],
+                    [
+                        [ id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'",  'lane':1, 'sex':2, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
+                        [ file(params.pipelines_testdata_base_path + '/testdata/slowlycivilbuck_mt_1.fastq.gz', checkIfExists: true), file(params.pipelines_testdata_base_path + '/testdata/slowlycivilbuck_mt_2.fastq.gz', checkIfExists: true)]
+                    ]
+                )
+                input[1] = Channel.of(
+                    [
+                        [ id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", 'lane':1, 'sex':1, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
+                        [ file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_mtreverted.bam', checkIfExists: true)]
+                    ],
+                    [
+                        [ id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", 'lane':1, 'sex':1, 'phenotype':2, 'paternal':'earlycasualcaiman', 'maternal':'slowlycivilbuck', 'case_id':'justhusky'  ], // meta map
+                        [ file(params.pipelines_testdata_base_path + '/testdata/hugelymodelbat_mtreverted.bam', checkIfExists: true)]
+                    ],
+                    [
+                        [ id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'",  'lane':1, 'sex':2, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
+                        [ file(params.pipelines_testdata_base_path + '/testdata/slowlycivilbuck_mtreverted.bam', checkIfExists: true)]
+                    ]
+                )
+                input[2] = [[:],[]]
+                input[3] = MT_MEM2.out.index.collect()
+                input[4] = Channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]])
+                input[5] = Channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)]])
+                input[6] = Channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]])
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+    test("align mt - bwa") {
+
+        setup {
+            run("BWA_INDEX", alias: 'MT_BWA') {
+                script "modules/nf-core/bwa/index/main.nf"
+                process {
+                    """
+                    input[0] = Channel.of([
+                        [id:'mt'],
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference_mt.fa', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+        when {
+            params {
+                mt_aligner          = 'bwa'
+                outdir              = "$outputDir"
+                pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
+            }
+            workflow {
+                """
+                input[0] = Channel.of(
+                    [
+                        [ id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", 'lane':1, 'sex':1, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
+                        [ file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_mt_1.fastq.gz', checkIfExists: true), file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)]
+                    ],
+                    [
+                        [ id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", 'lane':1, 'sex':1, 'phenotype':2, 'paternal':'earlycasualcaiman', 'maternal':'slowlycivilbuck', 'case_id':'justhusky'  ], // meta map
+                        [ file(params.pipelines_testdata_base_path + '/testdata/hugelymodelbat_mt_1.fastq.gz', checkIfExists: true), file(params.pipelines_testdata_base_path + '/testdata/hugelymodelbat_mt_2.fastq.gz', checkIfExists: true)]
+                    ],
+                    [
+                        [ id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'",  'lane':1, 'sex':2, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
+                        [ file(params.pipelines_testdata_base_path + '/testdata/slowlycivilbuck_mt_1.fastq.gz', checkIfExists: true), file(params.pipelines_testdata_base_path + '/testdata/slowlycivilbuck_mt_2.fastq.gz', checkIfExists: true)]
+                    ]
+                )
+                input[1] = Channel.of(
+                    [
+                        [ id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", 'lane':1, 'sex':1, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
+                        [ file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_mtreverted.bam', checkIfExists: true)]
+                    ],
+                    [
+                        [ id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", 'lane':1, 'sex':1, 'phenotype':2, 'paternal':'earlycasualcaiman', 'maternal':'slowlycivilbuck', 'case_id':'justhusky'  ], // meta map
+                        [ file(params.pipelines_testdata_base_path + '/testdata/hugelymodelbat_mtreverted.bam', checkIfExists: true)]
+                    ],
+                    [
+                        [ id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'",  'lane':1, 'sex':2, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
+                        [ file(params.pipelines_testdata_base_path + '/testdata/slowlycivilbuck_mtreverted.bam', checkIfExists: true)]
+                    ]
+                )
+                input[2] = MT_BWA.out.index.collect()
+                input[3] = [[:],[]]
+                input[4] = Channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]])
+                input[5] = Channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)]])
+                input[6] = Channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]])
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+}

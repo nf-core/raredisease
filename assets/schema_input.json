@@ -27,18 +27,18 @@
                 "errorMessage": "Lane must be an interger or a string that cannot contain spaces"
             },
             "fastq_1": {
-                "errorMessage": "Gzipped FastQ file for reads 1 must be provided, has to exist, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
+                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
                 "type": "string",
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
                 "format": "file-path",
-                "exists": true
+                "exists": true,
+                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$"
             },
             "fastq_2": {
-                "errorMessage": "Gzipped FastQ file for reads 2, has to exist, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
+                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
                 "type": "string",
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
                 "format": "file-path",
-                "exists": true
+                "exists": true,
+                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$"
             },
             "spring_1": {
                 "errorMessage": "Gzipped and spring-compressed FastQ file for reads 1 cannot contain spaces, has to exist and must have extension '.spring'",

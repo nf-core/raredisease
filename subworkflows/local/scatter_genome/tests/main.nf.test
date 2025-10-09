@@ -1,0 +1,34 @@
+nextflow_workflow {
+
+    name "Test Workflow SCATTER_GENOME"
+    script "subworkflows/local/scatter_genome/main.nf"
+    workflow "SCATTER_GENOME"
+    config "./nextflow.config"
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                pipelines_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
+                fasta              = params.pipelines_testdata_base_path + 'reference/reference.fasta'
+                fai                = params.pipelines_testdata_base_path + 'reference/reference.fasta.fai'
+                dict               = params.pipelines_testdata_base_path + 'reference/reference.dict'
+                scatter_count      = 20
+            }
+            workflow {
+                """
+                input[0] = Channel.of(params.dict).map {it -> [[id:'genome'], it]}.collect()
+                input[1] = Channel.of(params.fai).map {it -> [[id:'genome'], it]}.collect()
+                input[2] = Channel.of(params.fasta).map {it -> [[id:'genome'], it]}.collect()
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}
