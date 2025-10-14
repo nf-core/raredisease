@@ -13,7 +13,6 @@ nextflow_workflow {
             params {
                 aligner = "bwamem2"
                 skip_tools = null
-                outdir  = "tests/results"
             }
             workflow {
                 """
@@ -91,7 +90,6 @@ nextflow_workflow {
             params {
                 aligner = "sentieon"
                 skip_tools = null
-                outdir  = "tests/results"
             }
             workflow {
                 """

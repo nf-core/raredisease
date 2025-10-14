@@ -10,9 +10,6 @@ nextflow_workflow {
     test("CALL_REPEAT_EXPANSIONS") {
 
         when {
-            params {
-                outdir = "tests/results"
-            }
             workflow {
                 """
                 input[0] = Channel.of(
@@ -33,7 +30,8 @@ nextflow_workflow {
         then {
             assert workflow.success
             assert snapshot(
-                path(workflow.out.vcf[0][1].toString()).vcf.variantsMD5
+                path(workflow.out.vcf[0][1].toString()).vcf.variantsMD5,
+                path(workflow.out.vcf[0][1].toString()).vcf.summary
             ).match()
         }
 

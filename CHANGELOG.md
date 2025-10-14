@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Interval parameter in the default retroseq call [#717](https://github.com/nf-core/raredisease/pull/717)
+- Tests for call_repeat_expansions and qc_bam subworkflows [#713](https://github.com/nf-core/raredisease/pull/713)
 
 ### `Changed`
 
