@@ -515,9 +515,10 @@ workflow RAREDISEASE {
 
             ch_clinical_snv_vcf = Channel.empty()
             if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('vcf_filter_bcftools_ensemblvep'))) {
+                VCF_FILTER_BCFTOOLS_ENSEMBLVEP_SNV(
                     ch_clin_research_snv_vcf.clinical,
                     ch_hgnc_ids,
-                    true,
+                    false,
                     true
                 )
                 VCF_FILTER_BCFTOOLS_ENSEMBLVEP_SNV.out.vcf
@@ -677,7 +678,7 @@ workflow RAREDISEASE {
                 VCF_FILTER_BCFTOOLS_ENSEMBLVEP_SV(
                     ch_clin_research_sv_vcf.clinical,
                     ch_hgnc_ids,
-                    true,
+                    false,
                     true
                 )
                 VCF_FILTER_BCFTOOLS_ENSEMBLVEP_SV.out.vcf
@@ -754,7 +755,7 @@ workflow RAREDISEASE {
                 VCF_FILTER_BCFTOOLS_ENSEMBLVEP_ME(
                     ch_clin_research_me_vcf.clinical,
                     ch_hgnc_ids,
-                    true,
+                    false,
                     true
                 )
                 VCF_FILTER_BCFTOOLS_ENSEMBLVEP_ME.out.vcf
