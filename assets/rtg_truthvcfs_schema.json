@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/raredisease/master/assets/mobile_element_references_schema.json",
+    "$id": "https://raw.githubusercontent.com/nf-core/raredisease/master/assets/rtg_truthvcfs_schema.json",
     "title": "Schema for RTGTOOLS/VCFEVAL VCFs",
     "description": "Schema for the vcfeval's vcf input",
     "type": "array",

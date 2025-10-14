@@ -1,16 +1,8 @@
 {
     "-profile test": {
         "content": [
-            298,
+            817,
             {
-                "ADD_MOST_SEVERE_CSQ": {
-                    "add_most_severe_consequence": "v1.1",
-                    "python": "3.8.3"
-                },
-                "ADD_MOST_SEVERE_PLI": {
-                    "add_most_severe_pli": "v1.1",
-                    "python": "3.8.3"
-                },
                 "ADD_VARCALLER_TO_BED": {
                     "tabix": 1.12
                 },
@@ -20,19 +12,31 @@
                 "BCFTOOLS_CONCAT": {
                     "bcftools": 1.2
                 },
+                "BCFTOOLS_CONCAT_ME": {
+                    "bcftools": 1.2
+                },
                 "BCFTOOLS_MERGE_MT": {
                     "bcftools": 1.2
                 },
                 "BCFTOOLS_REHEADER_EXP": {
                     "bcftools": 1.21
                 },
+                "BCFTOOLS_REHEADER_ME": {
+                    "bcftools": 1.2
+                },
                 "BCFTOOLS_ROH": {
+                    "bcftools": 1.2
+                },
+                "BCFTOOLS_SORT_ME": {
                     "bcftools": 1.2
                 },
                 "BCFTOOLS_VIEW": {
                     "bcftools": 1.2
                 },
                 "BCFTOOLS_VIEW_CNVNATOR": {
+                    "bcftools": 1.2
+                },
+                "BCFTOOLS_VIEW_FILTER": {
                     "bcftools": 1.2
                 },
                 "BCFTOOLS_VIEW_MANTA": {
@@ -107,10 +111,21 @@
                     "create_pedigree_file": "v1.0",
                     "python": "3.8.3"
                 },
+                "CUSTOM_ADDMOSTSEVERECONSEQUENCE": {
+                    "add_most_severe_consequence": 1.1,
+                    "bgzip": 1.21
+                },
+                "CUSTOM_ADDMOSTSEVEREPLI": {
+                    "add_most_severe_pli": 1.1,
+                    "bgzip": 1.21
+                },
                 "DEEPVARIANT": {
                     "deepvariant": "1.8.0"
                 },
                 "ENSEMBLVEP_FILTERVEP": {
+                    "ensemblvep": 110.0
+                },
+                "ENSEMBLVEP_ME": {
                     "ensemblvep": 110.0
                 },
                 "ENSEMBLVEP_SNV": {
@@ -198,6 +213,12 @@
                 "MARKDUPLICATES": {
                     "picard": "3.3.0"
                 },
+                "ME_INDEX_SPLIT_ALIGNMENT": {
+                    "samtools": 1.21
+                },
+                "ME_SPLIT_ALIGNMENT": {
+                    "samtools": 1.21
+                },
                 "MOSDEPTH": {
                     "mosdepth": "0.3.10"
                 },
@@ -225,6 +246,9 @@
                 "PICARD_MARKDUPLICATES_MT": {
                     "picard": "3.3.0"
                 },
+                "PICARD_SORTVCF": {
+                    "picard": "3.3.0"
+                },
                 "REMOVE_DUPLICATES_GL": {
                     "bcftools": 1.21
                 },
@@ -239,6 +263,12 @@
                 },
                 "RENAME_BAM": {
                     "coreutils": 8.31
+                },
+                "RETROSEQ_CALL": {
+                    "retroseq_call": 1.5
+                },
+                "RETROSEQ_DISCOVER": {
+                    "retroseq_discover": 1.5
                 },
                 "RHOCALL_ANNOTATE": {
                     "rhocall": "0.5.1"
@@ -300,6 +330,10 @@
                     "svdb": "2.8.2",
                     "bcftools": 1.21
                 },
+                "SVDB_MERGE_ME": {
+                    "svdb": "2.8.2",
+                    "bcftools": 1.21
+                },
                 "SVDB_MERGE_REPEATS": {
                     "svdb": "2.8.2",
                     "bcftools": 1.21
@@ -307,6 +341,9 @@
                 "SVDB_MERGE_TIDDIT": {
                     "svdb": "2.8.2",
                     "bcftools": 1.21
+                },
+                "SVDB_QUERY_DB": {
+                    "svdb": "2.8.2"
                 },
                 "TABIX_ANNOTATE": {
                     "tabix": 1.21
@@ -320,9 +357,6 @@
                 "TABIX_BGZIPINDEX_PADDED_BED": {
                     "tabix": 1.2
                 },
-                "TABIX_BGZIPTABIX": {
-                    "tabix": 1.2
-                },
                 "TABIX_DBSNP": {
                     "tabix": 1.21
                 },
@@ -334,6 +368,12 @@
                 },
                 "TABIX_GNOMAD_AF": {
                     "tabix": 1.21
+                },
+                "TABIX_ME": {
+                    "tabix": 1.2
+                },
+                "TABIX_ME_SPLIT": {
+                    "tabix": 1.2
                 },
                 "TABIX_PBT": {
                     "tabix": 1.2
@@ -395,6 +435,13 @@
                 "alignment/slowlycivilbuck_sorted_md.MarkDuplicates.metrics.txt",
                 "alignment/slowlycivilbuck_sorted_md.bam",
                 "alignment/slowlycivilbuck_sorted_md.bam.bai",
+                "annotate_mobile_elements",
+                "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz",
+                "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz.csi",
+                "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz.tbi",
+                "annotate_mobile_elements/justhusky_me_pli_research.vcf.gz",
+                "annotate_mobile_elements/justhusky_me_pli_research.vcf.gz.csi",
+                "annotate_mobile_elements/justhusky_me_pli_research.vcf.gz.tbi",
                 "annotate_snv",
                 "annotate_snv/genome",
                 "annotate_snv/genome/earlycasualcaiman_rhocallviz",
@@ -417,6 +464,10 @@
                 "annotate_snv/genome/slowlycivilbuck_rhocallviz/slowlycivilbuck_rhocallviz.bw",
                 "annotate_snv/genome/slowlycivilbuck_rhocallviz/slowlycivilbuck_rhocallviz.wig",
                 "annotate_snv/genome/slowlycivilbuck_rhocallviz_autozyg_chromograph",
+                "call_mobile_elements",
+                "call_mobile_elements/justhusky_mobile_elements.vcf.gz",
+                "call_mobile_elements/justhusky_mobile_elements.vcf.gz.csi",
+                "call_mobile_elements/justhusky_mobile_elements.vcf.gz.tbi",
                 "call_snv",
                 "call_snv/genome",
                 "call_snv/genome/justhusky_snv.vcf.gz",
@@ -575,9 +626,9 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.6"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.8"
         },
-        "timestamp": "2025-07-10T20:55:24.657588384"
+        "timestamp": "2025-10-10T18:52:51.501264357"
     }
 }

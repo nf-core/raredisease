@@ -1,16 +1,8 @@
 {
     "-profile test_bam": {
         "content": [
-            282,
+            280,
             {
-                "ADD_MOST_SEVERE_CSQ": {
-                    "add_most_severe_consequence": "v1.1",
-                    "python": "3.8.3"
-                },
-                "ADD_MOST_SEVERE_PLI": {
-                    "add_most_severe_pli": "v1.1",
-                    "python": "3.8.3"
-                },
                 "ADD_VARCALLER_TO_BED": {
                     "tabix": 1.12
                 },
@@ -102,6 +94,14 @@
                 "CREATE_PEDIGREE_FILE": {
                     "create_pedigree_file": "v1.0",
                     "python": "3.8.3"
+                },
+                "CUSTOM_ADDMOSTSEVERECONSEQUENCE": {
+                    "add_most_severe_consequence": 1.1,
+                    "bgzip": 1.21
+                },
+                "CUSTOM_ADDMOSTSEVEREPLI": {
+                    "add_most_severe_pli": 1.1,
+                    "bgzip": 1.21
                 },
                 "DEEPVARIANT": {
                     "deepvariant": "1.8.0"
@@ -299,9 +299,6 @@
                     "tabix": 1.2
                 },
                 "TABIX_BGZIPINDEX_PADDED_BED": {
-                    "tabix": 1.2
-                },
-                "TABIX_BGZIPTABIX": {
                     "tabix": 1.2
                 },
                 "TABIX_DBSNP": {
@@ -540,9 +537,9 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.6"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.8"
         },
-        "timestamp": "2025-07-10T20:58:45.788245796"
+        "timestamp": "2025-10-10T18:57:59.891726639"
     }
 }
