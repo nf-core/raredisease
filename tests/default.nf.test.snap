@@ -22,7 +22,7 @@
                     "bcftools": 1.21
                 },
                 "BCFTOOLS_REHEADER_ME": {
-                    "bcftools": 1.2
+                    "bcftools": 1.21
                 },
                 "BCFTOOLS_ROH": {
                     "bcftools": 1.2
@@ -370,10 +370,10 @@
                     "tabix": 1.21
                 },
                 "TABIX_ME": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_ME_SPLIT": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_PBT": {
                     "tabix": 1.2
@@ -629,6 +629,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-10T18:52:51.501264357"
+        "timestamp": "2025-10-14T11:10:17.686286914"
     }
 }

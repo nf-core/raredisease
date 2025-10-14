@@ -1,12 +1,13 @@
 {
     "CALL_REPEAT_EXPANSIONS": {
         "content": [
-            "5f06dccb7fc4ad3758bc23e3232f9abb"
+            "5f06dccb7fc4ad3758bc23e3232f9abb",
+            "VcfFile [chromosomes=[21], sampleCount=1, variantCount=2, phased=false, phasedAutodetect=false]"
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.6"
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.8"
         },
-        "timestamp": "2025-07-10T19:44:19.538636651"
+        "timestamp": "2025-10-14T14:06:58.984015651"
     }
 }
