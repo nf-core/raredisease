@@ -308,6 +308,9 @@
                 "TABIX_BGZIPINDEX_PADDED_BED": {
                     "tabix": 1.2
                 },
+                "TABIX_BGZIPTABIX": {
+                    "tabix": 1.2
+                },
                 "TABIX_DBSNP": {
                     "tabix": 1.2
                 },
@@ -463,6 +466,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
         },
-        "timestamp": "2025-10-10T19:03:47.493506549"
+        "timestamp": "2025-10-15T09:43:13.720671267"
     }
 }
