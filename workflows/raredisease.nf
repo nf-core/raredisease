@@ -221,10 +221,10 @@ workflow RAREDISEASE {
     ch_target_intervals         = ch_references.target_intervals
     ch_variant_catalog          = params.variant_catalog                    ? Channel.fromPath(params.variant_catalog).map { it -> [[id:it.simpleName],it]}.collect()
                                                                             : Channel.value([[],[]])
-    ch_variant_consequences_snv = params.variant_consequences_snv           ? Channel.fromPath(params.variant_consequences_snv).collect()
-                                                                            : Channel.value([])
-    ch_variant_consequences_sv  = params.variant_consequences_sv            ? Channel.fromPath(params.variant_consequences_sv).collect()
-                                                                            : Channel.value([])
+    ch_variant_consequences_snv = params.variant_consequences_snv           ? Channel.fromPath(params.variant_consequences_snv).map { it -> [[id:it.simpleName],it]}.collect()
+                                                                            : Channel.value([[],[]])
+    ch_variant_consequences_sv  = params.variant_consequences_sv            ? Channel.fromPath(params.variant_consequences_sv).map { it -> [[id:it.simpleName],it]}.collect()
+                                                                            : Channel.value([[],[]])
     ch_vcfanno_extra            = ch_references.vcfanno_extra
     ch_vcfanno_resources        = params.vcfanno_resources                  ? Channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
                                                                             : Channel.value([])
@@ -530,7 +530,8 @@ workflow RAREDISEASE {
 
             ANN_CSQ_PLI_SNV (
                 ch_ann_csq_snv_in,
-                ch_variant_consequences_snv
+                ch_variant_consequences_snv,
+                false
             )
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)
 
@@ -599,7 +600,8 @@ workflow RAREDISEASE {
 
             ANN_CSQ_PLI_MT(
                 ch_ann_csq_mtsnv_in,
-                ch_variant_consequences_snv
+                ch_variant_consequences_snv,
+                false
             )
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_MT.out.versions)
 
@@ -690,7 +692,8 @@ workflow RAREDISEASE {
 
             ANN_CSQ_PLI_SV (
                 ch_ann_csq_sv_in,
-                ch_variant_consequences_sv
+                ch_variant_consequences_sv,
+                false
             )
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_SV.out.versions)
 
@@ -767,7 +770,8 @@ workflow RAREDISEASE {
 
             ANN_CSQ_PLI_ME(
                 ch_ann_csq_me_in,
-                ch_variant_consequences_sv
+                ch_variant_consequences_sv,
+                true
             )
             ch_versions = ch_versions.mix( ANN_CSQ_PLI_ME.out.versions )
 

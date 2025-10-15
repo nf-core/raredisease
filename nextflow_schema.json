@@ -174,7 +174,7 @@
                     "exists": true,
                     "format": "path",
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.bed(\\.gz)?\\.idx$",
+                    "pattern": "^\\S+\\.tab(\\.gz)?\\.tbi$",
                     "description": "Path to the index file for the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
                 },

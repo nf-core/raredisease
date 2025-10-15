@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/raredisease/master/assets/mobile_element_references_schema.json",
+    "$id": "https://raw.githubusercontent.com/nf-core/raredisease/master/assets/sample_id_map.json",
     "title": "Schema for customerid_internalid_map",
     "description": "Schema for the file provided with params.customerid_internalid_map",
     "type": "array",
