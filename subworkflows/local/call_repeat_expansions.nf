@@ -2,6 +2,7 @@
 // Run ExpansionHunter and Stranger
 //
 
+include { BCFTOOLS_FIXEXPANSIONHUNTERHEADER            } from '../../modules/local/bcftools/fixexpansionhunterheader/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_EXP     } from '../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_REHEADER as BCFTOOLS_REHEADER_EXP   } from '../../modules/nf-core/bcftools/reheader/main'
 include { EXPANSIONHUNTER                              } from '../../modules/nf-core/expansionhunter/main'
@@ -38,6 +39,10 @@ workflow CALL_REPEAT_EXPANSIONS {
             EXPANSIONHUNTER.out.vcf.map{ meta, vcf -> [ meta, vcf, [], [] ]},
             ch_genome_fai
         )
+
+        // Fix missing INFO headers from ExpansionHunter
+        BCFTOOLS_FIXEXPANSIONHUNTERHEADER ( BCFTOOLS_REHEADER_EXP.out.vcf )
+
         RENAMESAMPLE_EXP ( BCFTOOLS_REHEADER_EXP.out.vcf )
         TABIX_EXP_RENAME ( RENAMESAMPLE_EXP.out.vcf )
 
@@ -68,6 +73,8 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_versions = ch_versions.mix(SVDB_MERGE_REPEATS.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
+        ch_versions = ch_versions.mix(BCFTOOLS_FIXEXPANSIONHUNTERHEADER.out.versions.first())
+
 
 emit:
         vcf      = SVDB_MERGE_REPEATS.out.vcf  // channel: [ val(meta), path(vcf) ]
