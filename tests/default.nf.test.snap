@@ -1,7 +1,6 @@
 {
     "-profile test": {
         "content": [
-            817,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "tabix": 1.12
@@ -627,8 +626,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.8"
+            "nextflow": "25.10.0"
         },
-        "timestamp": "2025-10-14T11:10:17.686286914"
+        "timestamp": "2025-10-27T15:59:49.765279594"
     }
 }
