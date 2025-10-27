@@ -2,14 +2,14 @@
 // Run ExpansionHunter and Stranger
 //
 
-include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_EXP     } from '../../modules/nf-core/bcftools/norm/main'
-include { BCFTOOLS_REHEADER as BCFTOOLS_REHEADER_EXP   } from '../../modules/nf-core/bcftools/reheader/main'
-include { EXPANSIONHUNTER                              } from '../../modules/nf-core/expansionhunter/main'
-include { PICARD_RENAMESAMPLEINVCF as RENAMESAMPLE_EXP } from '../../modules/nf-core/picard/renamesampleinvcf/main'
-include { SAMTOOLS_SORT                                } from '../../modules/nf-core/samtools/sort/main'
-include { SAMTOOLS_INDEX                               } from '../../modules/nf-core/samtools/index/main'
-include { SVDB_MERGE as SVDB_MERGE_REPEATS             } from '../../modules/nf-core/svdb/merge/main'
-include { TABIX_TABIX as TABIX_EXP_RENAME              } from '../../modules/nf-core/tabix/tabix/main'
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_EXP     } from '../../../modules/nf-core/bcftools/norm/main'
+include { BCFTOOLS_REHEADER as BCFTOOLS_REHEADER_EXP   } from '../../../modules/nf-core/bcftools/reheader/main'
+include { EXPANSIONHUNTER                              } from '../../../modules/nf-core/expansionhunter/main'
+include { PICARD_RENAMESAMPLEINVCF as RENAMESAMPLE_EXP } from '../../../modules/nf-core/picard/renamesampleinvcf/main'
+include { SAMTOOLS_SORT                                } from '../../../modules/nf-core/samtools/sort/main'
+include { SAMTOOLS_INDEX                               } from '../../../modules/nf-core/samtools/index/main'
+include { SVDB_MERGE as SVDB_MERGE_REPEATS             } from '../../../modules/nf-core/svdb/merge/main'
+include { TABIX_TABIX as TABIX_EXP_RENAME              } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_REPEAT_EXPANSIONS {
     take:
