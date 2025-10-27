@@ -15,21 +15,11 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { RAREDISEASE  } from './workflows/raredisease'
+include { RAREDISEASE             } from './workflows/raredisease'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
-include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    GENOME PARAMETER VALUES
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
 
-// TODO nf-core: Remove this line if you don't need a FASTA file
-//   This is an example of how to use getGenomeAttribute() to fetch parameters
-//   from igenomes.config using `--genome`
-params.fasta = getGenomeAttribute('fasta')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -43,7 +33,10 @@ params.fasta = getGenomeAttribute('fasta')
 workflow NFCORE_RAREDISEASE {
 
     take:
-    samplesheet // channel: samplesheet read in from --input
+    fastq
+    alignment
+    samples
+    case_info
 
     main:
 
@@ -51,7 +44,10 @@ workflow NFCORE_RAREDISEASE {
     // WORKFLOW: Run pipeline
     //
     RAREDISEASE (
-        samplesheet
+        fastq,
+        alignment,
+        samples,
+        case_info
     )
     emit:
     multiqc_report = RAREDISEASE.out.multiqc_report // channel: /path/to/multiqc_report.html
@@ -84,7 +80,10 @@ workflow {
     // WORKFLOW: Run main workflow
     //
     NFCORE_RAREDISEASE (
-        PIPELINE_INITIALISATION.out.samplesheet
+        PIPELINE_INITIALISATION.out.reads,
+        PIPELINE_INITIALISATION.out.align,
+        PIPELINE_INITIALISATION.out.samples,
+        PIPELINE_INITIALISATION.out.case_info
     )
     //
     // SUBWORKFLOW: Run completion tasks

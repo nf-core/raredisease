@@ -1,0 +1,45 @@
+name: gens
+description:
+keywords:
+  - bed
+  - vcf
+tools:
+  - gens:
+      description: |
+        Gens is a web-based interactive tool to visualize genomic copy number profiles from WGS data (although it could theoretically be used for any type of data).
+        It plots the normalized read depth and alternative allele frequency.
+      homepage: https://github.com/Clinical-Genomics-Lund/gens
+      documentation: https://github.com/Clinical-Genomics-Lund/gens
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test']
+  - read_counts:
+      type: file
+      description: Input standardized read counts file
+      pattern: "*.tsv"
+  - vcf:
+      type: file
+      description: Input vcf file
+      pattern: "*.vcf"
+  - gnomad_positions:
+      type: file
+      description: SNV filter file
+      pattern: "*.txt"
+output:
+  - cov:
+      type: file
+      description: Gens preprocessed coverage file
+      pattern: "*.bed.gz"
+  - baf:
+      type: file
+      description: Gens preprocessed base allele frequency file
+      pattern: "*.bed.gz"
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+authors:
+  - "@raysloks"
