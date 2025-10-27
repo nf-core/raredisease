@@ -16,7 +16,7 @@
                     "bcftools": 1.2
                 },
                 "BCFTOOLS_REHEADER_EXP": {
-                    "bcftools": 1.2
+                    "bcftools": 1.21
                 },
                 "BCFTOOLS_ROH": {
                     "bcftools": 1.2
@@ -189,13 +189,13 @@
                     "manta": "1.6.0"
                 },
                 "MOSDEPTH": {
-                    "mosdepth": "0.3.8"
+                    "mosdepth": "0.3.10"
                 },
                 "MT_DELETION": {
                     "samtools": "1.19.2"
                 },
                 "NGSBITS_SAMPLEGENDER": {
-                    "ngs-bits": 202302
+                    "ngs-bits": 202411
                 },
                 "PICARD_ADDORREPLACEREADGROUPS_MT": {
                     "picard": "3.3.0"
@@ -219,10 +219,10 @@
                     "picard": "3.3.0"
                 },
                 "REMOVE_DUPLICATES_GL": {
-                    "bcftools": 1.2
+                    "bcftools": 1.21
                 },
                 "REMOVE_DUPLICATES_MT": {
-                    "bcftools": 1.2
+                    "bcftools": 1.21
                 },
                 "RENAMESAMPLE_EXP": {
                     "picard": "3.3.0"
@@ -261,13 +261,13 @@
                     "SMNCopyNumberCaller": "1.1.2"
                 },
                 "SPLIT_MULTIALLELICS_EXP": {
-                    "bcftools": 1.2
+                    "bcftools": 1.21
                 },
                 "SPLIT_MULTIALLELICS_GL": {
-                    "bcftools": 1.2
+                    "bcftools": 1.21
                 },
                 "SPLIT_MULTIALLELICS_MT": {
-                    "bcftools": 1.2
+                    "bcftools": 1.21
                 },
                 "STRANGER": {
                     "stranger": "0.9.4",
@@ -290,10 +290,10 @@
                     "bcftools": 1.21
                 },
                 "TABIX_ANNOTATE": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_BCFTOOLS_CONCAT": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_BGZIP": {
                     "tabix": 1.2
@@ -302,34 +302,34 @@
                     "tabix": 1.2
                 },
                 "TABIX_DBSNP": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_EXP_RENAME": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_GL": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_GNOMAD_AF": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_PBT": {
                     "tabix": 1.2
                 },
                 "TABIX_TABIX": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_TABIX_MERGE": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_TABIX_MT2": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_TABIX_MT": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TABIX_VEP": {
-                    "tabix": 1.2
+                    "tabix": 1.21
                 },
                 "TIDDIT_COV": {
                     "tiddit": "3.6.1"
