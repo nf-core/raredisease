@@ -593,7 +593,7 @@ workflow RAREDISEASE {
                 GENERATE_CLINICAL_SET_MT.out.vcf
                     .set { ch_clinical_mtsnv_vcf }
 
-                ch_versions = ch_versions.mix( GENERATE_CLINICAL_SET_MT.out.versions )
+                ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_MT.out.versions)
             }
 
             ch_ann_csq_mtsnv_in = ch_clinical_mtsnv_vcf.mix(ch_clin_research_mt_vcf.research)
