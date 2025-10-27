@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed`
 
 - Fixed inconsistencies in JSON schema [#714](https://github.com/nf-core/raredisease/pull/714)
+- Fixed conda declaration in the add_varcallername_to_bed module [#733](https://github.com/nf-core/raredisease/pull/733)
 
 ### Parameters
 
