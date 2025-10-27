@@ -27,9 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Tool updates
 
-| Tool | Old version | New version |
-| ---- | ----------- | ----------- |
-|      |             |             |
+| Tool     | Old version | New version |
+| -------- | ----------- | ----------- |
+| bcftools | 1.20        | 1.21        |
+| htslib   | 1.20        | 1.21        |
+| mosdepth | 0.3.8       | 0.3.10      |
+| ngs-bits | 2023_02     | 2024_11     |
 
 ## 2.6.0 - Cacofonix [2025-06-25]
 
