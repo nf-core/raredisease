@@ -64,10 +64,10 @@ include { RANK_VARIANTS as RANK_VARIANTS_SV                  } from '../subworkf
 include { SCATTER_GENOME                                     } from '../subworkflows/local/scatter_genome'
 include { SUBSAMPLE_MT                                       } from '../subworkflows/local/subsample_mt'
 include { VARIANT_EVALUATION                                 } from '../subworkflows/local/variant_evaluation'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as VCF_FILTER_BCFTOOLS_ENSEMBLVEP_ME  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as VCF_FILTER_BCFTOOLS_ENSEMBLVEP_MT  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as VCF_FILTER_BCFTOOLS_ENSEMBLVEP_SNV } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as VCF_FILTER_BCFTOOLS_ENSEMBLVEP_SV  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -514,16 +514,16 @@ workflow RAREDISEASE {
                 .set { ch_clin_research_snv_vcf }
 
             ch_clinical_snv_vcf = Channel.empty()
-            if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('vcf_filter_bcftools_ensemblvep'))) {
-                VCF_FILTER_BCFTOOLS_ENSEMBLVEP_SNV(
+            if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('generate_clinical_set'))) {
+                GENERATE_CLINICAL_SET_SNV(
                     ch_clin_research_snv_vcf.clinical,
                     ch_hgnc_ids,
                     false,
                     true
                 )
-                VCF_FILTER_BCFTOOLS_ENSEMBLVEP_SNV.out.vcf
+                GENERATE_CLINICAL_SET_SNV.out.vcf
                 .set { ch_clinical_snv_vcf }
-                ch_versions = ch_versions.mix(VCF_FILTER_BCFTOOLS_ENSEMBLVEP_SNV.out.versions)
+                ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SNV.out.versions)
             }
 
             ch_ann_csq_snv_in = ch_clinical_snv_vcf.mix(ch_clin_research_snv_vcf.research)
@@ -583,17 +583,17 @@ workflow RAREDISEASE {
                 .set { ch_clin_research_mt_vcf }
 
             ch_clinical_mtsnv_vcf = Channel.empty()
-            if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('vcf_filter_bcftools_ensemblvep'))) {
-                VCF_FILTER_BCFTOOLS_ENSEMBLVEP_MT(
+            if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('generate_clinical_set'))) {
+                GENERATE_CLINICAL_SET_MT(
                     ch_clin_research_mt_vcf.clinical,
                     ch_hgnc_ids,
                     true,
                     false
                 )
-                VCF_FILTER_BCFTOOLS_ENSEMBLVEP.out.vcf
+                GENERATE_CLINICAL_SET_MT.out.vcf
                     .set { ch_clinical_mtsnv_vcf }
 
-                ch_versions = ch_versions.mix( VCF_FILTER_BCFTOOLS_ENSEMBLVEP.out.versions )
+                ch_versions = ch_versions.mix( GENERATE_CLINICAL_SET_MT.out.versions )
             }
 
             ch_ann_csq_mtsnv_in = ch_clinical_mtsnv_vcf.mix(ch_clin_research_mt_vcf.research)
@@ -676,16 +676,16 @@ workflow RAREDISEASE {
                 .set { ch_clin_research_sv_vcf }
 
             ch_clinical_sv_vcf = Channel.empty()
-            if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('vcf_filter_bcftools_ensemblvep'))) {
-                VCF_FILTER_BCFTOOLS_ENSEMBLVEP_SV(
+            if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('generate_clinical_set'))) {
+                GENERATE_CLINICAL_SET_SV(
                     ch_clin_research_sv_vcf.clinical,
                     ch_hgnc_ids,
                     false,
                     true
                 )
-                VCF_FILTER_BCFTOOLS_ENSEMBLVEP_SV.out.vcf
+                GENERATE_CLINICAL_SET_SV.out.vcf
                 .set { ch_clinical_sv_vcf }
-                ch_versions = ch_versions.mix(VCF_FILTER_BCFTOOLS_ENSEMBLVEP_SV.out.versions)
+                ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SV.out.versions)
             }
 
             ch_ann_csq_sv_in = ch_clinical_sv_vcf.mix(ch_clin_research_sv_vcf.research)
@@ -754,16 +754,16 @@ workflow RAREDISEASE {
                 .set { ch_clin_research_me_vcf }
 
             ch_clinical_me_vcf = Channel.empty()
-            if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('vcf_filter_bcftools_ensemblvep'))) {
-                VCF_FILTER_BCFTOOLS_ENSEMBLVEP_ME(
+            if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('generate_clinical_set'))) {
+                GENERATE_CLINICAL_SET_ME(
                     ch_clin_research_me_vcf.clinical,
                     ch_hgnc_ids,
                     false,
                     true
                 )
-                VCF_FILTER_BCFTOOLS_ENSEMBLVEP_ME.out.vcf
+                GENERATE_CLINICAL_SET_ME.out.vcf
                 .set { ch_clinical_me_vcf }
-                ch_versions = ch_versions.mix( VCF_FILTER_BCFTOOLS_ENSEMBLVEP_ME.out.versions )
+                ch_versions = ch_versions.mix( GENERATE_CLINICAL_SET_ME.out.versions )
             }
 
             ch_ann_csq_me_in = ch_clinical_me_vcf.mix(ch_clin_research_me_vcf.research)

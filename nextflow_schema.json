@@ -585,7 +585,7 @@
                     "fa_icon": "fas fa-forward",
                     "description": "Disable specified subworkflows.",
                     "help_text": "Multiple subworkflows can be specified, separated by commas.",
-                    "pattern": "^((me_calling|me_annotation|mt_annotation|mt_subsample|repeat_annotation|repeat_calling|snv_annotation|snv_calling|sv_annotation|sv_calling|vcf_filter_bcftools_ensemblvep)?,?)*(?<!,)$"
+                    "pattern": "^((me_calling|me_annotation|mt_annotation|mt_subsample|repeat_annotation|repeat_calling|snv_annotation|snv_calling|sv_annotation|sv_calling|generate_clinical_set)?,?)*(?<!,)$"
                 },
                 "skip_tools": {
                     "type": "string",
