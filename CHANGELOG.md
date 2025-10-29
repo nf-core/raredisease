@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Use distinct output filenames for bcfools (in call_mobile_elements subworkflow) and svdb (in call_sv_tiddit subworkflow) [#716](https://github.com/nf-core/raredisease/pull/716)
 - Use nf-core's most severe consequence & pli scripts instead of local ones [#732](https://github.com/nf-core/raredisease/pull/732)
+- Use nf-core's VCF_FILTER_BCFTOOLS_ENSEMBLVEP subworkflow to generate clinical set instead of a local subworkflow [#727](https://github.com/nf-core/raredisease/pull/727)
 
 ### `Fixed`
 

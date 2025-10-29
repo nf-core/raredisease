@@ -356,6 +356,9 @@
                 "TABIX_BGZIPINDEX_PADDED_BED": {
                     "tabix": 1.2
                 },
+                "TABIX_BGZIPTABIX": {
+                    "tabix": 1.2
+                },
                 "TABIX_DBSNP": {
                     "tabix": 1.21
                 },

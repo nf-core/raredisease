@@ -48,7 +48,7 @@
                     "bcftools/view": {
                         "branch": "master",
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules", "vcf_filter_bcftools_ensemblvep"]
                     },
                     "bedtools/genomecov": {
                         "branch": "master",
@@ -139,7 +139,7 @@
                     "ensemblvep/filtervep": {
                         "branch": "master",
                         "git_sha": "6e3585d9ad20b41adc7d271009f8cb5e191ecab4",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules", "vcf_filter_bcftools_ensemblvep"]
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
@@ -491,7 +491,7 @@
                     "tabix/bgziptabix": {
                         "branch": "master",
                         "git_sha": "f448e846bdadd80fc8be31fbbc78d9f5b5131a45",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules", "vcf_filter_bcftools_ensemblvep"]
                     },
                     "tabix/tabix": {
                         "branch": "master",
@@ -555,6 +555,11 @@
                     "utils_nfschema_plugin": {
                         "branch": "master",
                         "git_sha": "4b406a74dc0449c0401ed87d5bfff4252fd277fd",
+                        "installed_by": ["subworkflows"]
+                    },
+                    "vcf_filter_bcftools_ensemblvep": {
+                        "branch": "master",
+                        "git_sha": "0567eee9276d4a358e5f9f01c810a149fbd241f8",
                         "installed_by": ["subworkflows"]
                     }
                 }

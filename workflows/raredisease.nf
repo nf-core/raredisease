@@ -41,33 +41,33 @@ include { CREATE_PEDIGREE_FILE             } from '../modules/local/create_pedig
 // SUBWORKFLOWS
 //
 
-include { ALIGN                                              } from '../subworkflows/local/align'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_ME                 } from '../subworkflows/local/annotate_consequence_pli.nf'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_MT                 } from '../subworkflows/local/annotate_consequence_pli'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV                } from '../subworkflows/local/annotate_consequence_pli'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV                 } from '../subworkflows/local/annotate_consequence_pli'
-include { ANNOTATE_GENOME_SNVS                               } from '../subworkflows/local/annotate_genome_snvs'
-include { ANNOTATE_MOBILE_ELEMENTS                           } from '../subworkflows/local/annotate_mobile_elements'
-include { ANNOTATE_MT_SNVS                                   } from '../subworkflows/local/annotate_mt_snvs'
-include { ANNOTATE_STRUCTURAL_VARIANTS                       } from '../subworkflows/local/annotate_structural_variants'
-include { CALL_MOBILE_ELEMENTS                               } from '../subworkflows/local/call_mobile_elements'
-include { CALL_REPEAT_EXPANSIONS                             } from '../subworkflows/local/call_repeat_expansions'
-include { CALL_SNV                                           } from '../subworkflows/local/call_snv'
-include { CALL_STRUCTURAL_VARIANTS                           } from '../subworkflows/local/call_structural_variants'
-include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/local/generate_clinical_set.nf'
-include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/local/generate_clinical_set'
-include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/local/generate_clinical_set'
-include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/local/generate_clinical_set'
-include { GENERATE_CYTOSURE_FILES                            } from '../subworkflows/local/generate_cytosure_files'
-include { GENS                                               } from '../subworkflows/local/gens'
-include { PREPARE_REFERENCES                                 } from '../subworkflows/local/prepare_references'
-include { QC_BAM                                             } from '../subworkflows/local/qc_bam'
-include { RANK_VARIANTS as RANK_VARIANTS_MT                  } from '../subworkflows/local/rank_variants'
-include { RANK_VARIANTS as RANK_VARIANTS_SNV                 } from '../subworkflows/local/rank_variants'
-include { RANK_VARIANTS as RANK_VARIANTS_SV                  } from '../subworkflows/local/rank_variants'
-include { SCATTER_GENOME                                     } from '../subworkflows/local/scatter_genome'
-include { SUBSAMPLE_MT                                       } from '../subworkflows/local/subsample_mt'
-include { VARIANT_EVALUATION                                 } from '../subworkflows/local/variant_evaluation'
+include { ALIGN                                                       } from '../subworkflows/local/align'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_ME                          } from '../subworkflows/local/annotate_consequence_pli.nf'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_MT                          } from '../subworkflows/local/annotate_consequence_pli'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV                         } from '../subworkflows/local/annotate_consequence_pli'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV                          } from '../subworkflows/local/annotate_consequence_pli'
+include { ANNOTATE_GENOME_SNVS                                        } from '../subworkflows/local/annotate_genome_snvs'
+include { ANNOTATE_MOBILE_ELEMENTS                                    } from '../subworkflows/local/annotate_mobile_elements'
+include { ANNOTATE_MT_SNVS                                            } from '../subworkflows/local/annotate_mt_snvs'
+include { ANNOTATE_STRUCTURAL_VARIANTS                                } from '../subworkflows/local/annotate_structural_variants'
+include { CALL_MOBILE_ELEMENTS                                        } from '../subworkflows/local/call_mobile_elements'
+include { CALL_REPEAT_EXPANSIONS                                      } from '../subworkflows/local/call_repeat_expansions'
+include { CALL_SNV                                                    } from '../subworkflows/local/call_snv'
+include { CALL_STRUCTURAL_VARIANTS                                    } from '../subworkflows/local/call_structural_variants'
+include { GENERATE_CYTOSURE_FILES                                     } from '../subworkflows/local/generate_cytosure_files'
+include { GENS                                                        } from '../subworkflows/local/gens'
+include { PREPARE_REFERENCES                                          } from '../subworkflows/local/prepare_references'
+include { QC_BAM                                                      } from '../subworkflows/local/qc_bam'
+include { RANK_VARIANTS as RANK_VARIANTS_MT                           } from '../subworkflows/local/rank_variants'
+include { RANK_VARIANTS as RANK_VARIANTS_SNV                          } from '../subworkflows/local/rank_variants'
+include { RANK_VARIANTS as RANK_VARIANTS_SV                           } from '../subworkflows/local/rank_variants'
+include { SCATTER_GENOME                                              } from '../subworkflows/local/scatter_genome'
+include { SUBSAMPLE_MT                                                } from '../subworkflows/local/subsample_mt'
+include { VARIANT_EVALUATION                                          } from '../subworkflows/local/variant_evaluation'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -518,9 +518,10 @@ workflow RAREDISEASE {
                 GENERATE_CLINICAL_SET_SNV(
                     ch_clin_research_snv_vcf.clinical,
                     ch_hgnc_ids,
-                    false
+                    false,
+                    true
                 )
-                .vcf
+                GENERATE_CLINICAL_SET_SNV.out.vcf
                 .set { ch_clinical_snv_vcf }
                 ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SNV.out.versions)
             }
@@ -586,10 +587,12 @@ workflow RAREDISEASE {
                 GENERATE_CLINICAL_SET_MT(
                     ch_clin_research_mt_vcf.clinical,
                     ch_hgnc_ids,
-                    true
+                    true,
+                    false
                 )
-                .vcf
-                .set { ch_clinical_mtsnv_vcf }
+                GENERATE_CLINICAL_SET_MT.out.vcf
+                    .set { ch_clinical_mtsnv_vcf }
+
                 ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_MT.out.versions)
             }
 
@@ -677,9 +680,10 @@ workflow RAREDISEASE {
                 GENERATE_CLINICAL_SET_SV(
                     ch_clin_research_sv_vcf.clinical,
                     ch_hgnc_ids,
-                    false
+                    false,
+                    true
                 )
-                .vcf
+                GENERATE_CLINICAL_SET_SV.out.vcf
                 .set { ch_clinical_sv_vcf }
                 ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SV.out.versions)
             }
@@ -754,9 +758,10 @@ workflow RAREDISEASE {
                 GENERATE_CLINICAL_SET_ME(
                     ch_clin_research_me_vcf.clinical,
                     ch_hgnc_ids,
-                    false
+                    false,
+                    true
                 )
-                .vcf
+                GENERATE_CLINICAL_SET_ME.out.vcf
                 .set { ch_clinical_me_vcf }
                 ch_versions = ch_versions.mix( GENERATE_CLINICAL_SET_ME.out.versions )
             }
