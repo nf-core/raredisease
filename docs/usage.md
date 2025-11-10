@@ -288,7 +288,7 @@ The mandatory and optional parameters for each category are tabulated below.
 VEP plugins may be installed in the cache directory, and the plugin pLI is mandatory to install. To supply files required by VEP plugins, use `vep_plugin_files` parameter.
 See example cache [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz).<br />
 <sup>5</sup> GnomAD VCF files can be downloaded from [here](https://gnomad.broadinstitute.org/downloads). The option `gnomad_af` expects a tab-delimited file with
-no header and the following columns: `CHROM POS REF_ALLELE ALT_ALLELE AF`. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/gnomad_reformated.tab.gz).<br />
+no header and the following columns: `CHROM POS REF_ALLELE,ALT_ALLELE AF`. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/gnomad_reformated.tab.gz).<br />
 <sup>6</sup>Used by GENMOD for ranking the variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_snv.ini).<br />
 <sup>7</sup>File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic and mitochondrial SNVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/variant_consequences_v2.txt). You can learn more about these terms [here](https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html).
 <sup>8</sup>A CSV file that describes the files used by VEP's named and custom plugins. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vep_files.csv). <br />
