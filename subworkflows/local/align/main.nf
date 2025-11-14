@@ -120,7 +120,7 @@ workflow ALIGN {
 
             ALIGN_MT (
                 CONVERT_MT_BAM_TO_FASTQ.out.fastq,
-                CONVERT_MT_BAM_TO_FASTQ.out.bam,
+                CONVERT_MT_BAM_TO_FASTQ.out.ubam,
                 ch_mt_bwaindex,
                 ch_mt_bwamem2index,
                 ch_mt_fasta,
@@ -130,7 +130,7 @@ workflow ALIGN {
 
             ALIGN_MT_SHIFT (
                 CONVERT_MT_BAM_TO_FASTQ.out.fastq,
-                CONVERT_MT_BAM_TO_FASTQ.out.bam,
+                CONVERT_MT_BAM_TO_FASTQ.out.ubam,
                 ch_mtshift_bwaindex,
                 ch_mtshift_bwamem2index,
                 ch_mtshift_fasta,
@@ -138,15 +138,17 @@ workflow ALIGN {
                 ch_mtshift_fai
             )
 
-            ch_mt_marked_bam      = ALIGN_MT.out.marked_bam
-            ch_mt_marked_bai      = ALIGN_MT.out.marked_bai
-            ch_mt_bam_bai         = ch_mt_marked_bam.join(ch_mt_marked_bai, failOnMismatch:true, failOnDuplicate:true)
-            ch_mtshift_marked_bam = ALIGN_MT_SHIFT.out.marked_bam
-            ch_mtshift_marked_bai = ALIGN_MT_SHIFT.out.marked_bai
-            ch_mtshift_bam_bai    = ch_mtshift_marked_bam.join(ch_mtshift_marked_bai, failOnMismatch:true, failOnDuplicate:true)
-            ch_versions           = ch_versions.mix(ALIGN_MT.out.versions,
-                                        ALIGN_MT_SHIFT.out.versions,
-                                        CONVERT_MT_BAM_TO_FASTQ.out.versions)
+            ch_mt_bam_bai            = CONVERT_MT_BAM_TO_FASTQ.out.bam_bai // Used for subsampling and SV calling
+            ch_mt_marked_bam         = ALIGN_MT.out.marked_bam
+            ch_mt_marked_bai         = ALIGN_MT.out.marked_bai
+            ch_mt_bam_bai_mtsub      = ch_mt_marked_bam
+                                        .join(ch_mt_marked_bai, failOnMismatch:true, failOnDuplicate:true) // Only for SNV calling
+            ch_mtshift_marked_bam    = ALIGN_MT_SHIFT.out.marked_bam
+            ch_mtshift_marked_bai    = ALIGN_MT_SHIFT.out.marked_bai
+            ch_mtshift_bam_bai_mtsub = ch_mtshift_marked_bam
+                                        .join(ch_mtshift_marked_bai, failOnMismatch:true, failOnDuplicate:true)
+            ch_versions              = ch_versions
+                                        .mix(ALIGN_MT.out.versions, ALIGN_MT_SHIFT.out.versions, CONVERT_MT_BAM_TO_FASTQ.out.versions)
         }
 
         if (params.save_mapped_as_cram) {
@@ -155,16 +157,13 @@ workflow ALIGN {
         }
 
     emit:
-        fastp_json         = ch_fastp_json         // channel: [ val(meta), path(json) ]
-        genome_marked_bam  = ch_genome_marked_bam  // channel: [ val(meta), path(bam) ]
-        genome_marked_bai  = ch_genome_marked_bai  // channel: [ val(meta), path(bai) ]
-        genome_bam_bai     = ch_genome_bam_bai     // channel: [ val(meta), path(bam), path(bai) ]
-        markdup_metrics    = ch_markdup_metrics    // channel: [ val(meta), path(txt) ]
-        mt_marked_bam      = ch_mt_marked_bam      // channel: [ val(meta), path(bam) ]
-        mt_marked_bai      = ch_mt_marked_bai      // channel: [ val(meta), path(bai) ]
-        mt_bam_bai         = ch_mt_bam_bai         // channel: [ val(meta), path(bam), path(bai) ]
-        mtshift_marked_bam = ch_mtshift_marked_bam // channel: [ val(meta), path(bam) ]
-        mtshift_marked_bai = ch_mtshift_marked_bai // channel: [ val(meta), path(bai) ]
-        mtshift_bam_bai    = ch_mtshift_bam_bai    // channel: [ val(meta), path(bam), path(bai) ]
-        versions           = ch_versions           // channel: [ path(versions.yml) ]
+        fastp_json            = ch_fastp_json            // channel: [ val(meta), path(json) ]
+        genome_marked_bam     = ch_genome_marked_bam     // channel: [ val(meta), path(bam) ]
+        genome_marked_bai     = ch_genome_marked_bai     // channel: [ val(meta), path(bai) ]
+        genome_bam_bai        = ch_genome_bam_bai        // channel: [ val(meta), path(bam), path(bai) ]
+        markdup_metrics       = ch_markdup_metrics       // channel: [ val(meta), path(txt) ]
+        mt_bam_bai            = ch_mt_bam_bai            // channel: [ val(meta), path(bam), path(bai) ]
+        mt_bam_bai_mtsub      = ch_mt_bam_bai_mtsub      // channel: [ val(meta), path(bam), path(bai) ]
+        mtshift_bam_bai_mtsub = ch_mtshift_bam_bai_mtsub // channel: [ val(meta), path(bam), path(bai) ]
+        versions              = ch_versions              // channel: [ path(versions.yml) ]
 }
