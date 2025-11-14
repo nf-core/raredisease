@@ -21,15 +21,14 @@ workflow CALL_MOBILE_ELEMENTS {
         ch_genome_fai       // channel: [mandatory] [ val(meta), path(fai) ]
         ch_me_references    // channel: [mandatory] [path(tsv)]
         ch_case_info        // channel: [mandatory] [ val(case_info) ]
-        val_genome_build    // string: [mandatory] GRCh37 or GRCh38
 
     main:
         ch_versions = Channel.empty()
 
         // Building chromosome channels based on fasta index
         ch_genome_fai
-            .splitCsv( sep: "\t", elem: 1, limit: 25 )
-            .map { meta, fai -> [ fai.first() ] }
+            .splitCsv( sep: "\t", elem: 1, limit: 24 )
+            .map { _meta, fai -> [ fai.first() ] }
             .collect()
             .map { chr -> [ chr, chr.size() ] }
             .transpose()
