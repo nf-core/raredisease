@@ -106,6 +106,7 @@ workflow NFCORE_RAREDISEASE {
     val_readcount_intervals
     val_reduced_penetrance
     val_rtg_truthvcfs
+    val_rank_with_mivmir_gicam
     val_run_mt_for_wes
     val_run_rtgvcfeval
     val_run_vcfanno_db_sanity_check
@@ -217,6 +218,8 @@ workflow NFCORE_RAREDISEASE {
     ch_score_config_mt          = channelFromPath(val_score_config_mt, true)
     ch_score_config_snv         = channelFromPath(val_score_config_snv, true)
     ch_score_config_sv          = channelFromPath(val_score_config_sv, true)
+    // ch_genmod_gicam_score_config is integral to GICAM inference; it cannot be changed without retraining gicam
+    ch_score_config_genmod_gicam = channel.fromPath("$projectDir/assets/rank_model_genmod_gicam.ini", checkIfExists: true).collect()
     ch_vcf2cytosure_blacklist   = channelFromPath(val_vcf2cytosure_blacklist, true)
     ch_vcfanno_lua              = channelFromPath(val_vcfanno_lua, true)
     ch_vcfanno_toml             = channelFromPath(val_vcfanno_toml, true)
@@ -434,6 +437,7 @@ workflow NFCORE_RAREDISEASE {
         ch_score_config_mt,
         ch_score_config_snv,
         ch_score_config_sv,
+        ch_score_config_genmod_gicam,
         ch_sdf,
         ch_sentieon_pcr_indel_model,
         ch_subdepth,
@@ -511,6 +515,7 @@ workflow NFCORE_RAREDISEASE {
         val_mt_subsample_rd,
         val_mt_subsample_seed,
         val_platform,
+        val_rank_with_mivmir_gicam,
         val_run_mt_for_wes,
         val_run_rtgvcfeval,
         val_run_vcfanno_db_sanity_check,
@@ -624,6 +629,7 @@ workflow {
         params.readcount_intervals,
         params.reduced_penetrance,
         params.rtg_truthvcfs,
+        params.rank_with_mivmir_gicam,
         params.run_mt_for_wes,
         params.run_rtgvcfeval,
         params.run_vcfanno_db_sanity_check,

@@ -69,6 +69,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
     - [Filtering and ranking](#filtering-and-ranking)
       - [Filter_vep](#filter_vep)
       - [GENMOD](#genmod)
+      - [MIVMIR, GICAM](#mivmir-gicam)
     - [Mobile element analysis](#mobile-element-analysis)
       - [Calling mobile elements](#calling-mobile-elements)
       - [Annotating mobile elements](#annotating-mobile-elements)
@@ -526,6 +527,15 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
   - `<case_id>_sv_ranked_resarch.vcf.gz.tbi`: index of the file containing SV annotations with their rank scores.
 
 </details>
+
+#### MIVMIR, GICAM
+
+[MIVMIR](../modules/local/mivmir/meta.yml) and [GICAM](../modules/local/gicam/meta.yml) are two machine learning models used to
+infer a pathogenicity score for SNVs. In essence, MIVMIR infer SNV pathogenicity and GICAM improves precision for
+duo, trio, ... analysis. MIVMIR, GICAM can be enabled by setting the `--rank_with_mivmir_gicam` feature flag and
+adds annotations `INFO/MivmirScore`, `INFO/MivmirExplanation`, `INFO/GicamScore`.
+Only `<case_id>_snv_ranked_<research|clinical>.vcf.gz` contains the above annotations.
+Refer to the module documentation `.yml` for more information on required inputs and output formats.
 
 ### Mobile element analysis
 
