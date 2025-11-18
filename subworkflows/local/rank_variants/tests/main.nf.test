@@ -29,6 +29,8 @@ nextflow_workflow {
                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/genmod.vcf.gz', checkIfExists: true)
                 ])
                 input[4] = false
+                input[5] = false
+                input[6] = []
                 """
             }
         }
@@ -56,6 +58,8 @@ nextflow_workflow {
                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/genmod.vcf.gz', checkIfExists: true)
                 ])
                 input[4] = true
+                input[5] = false
+                input[6] = []
                 """
             }
         }
@@ -64,6 +68,46 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+
+    test("RANK_VARIANTS - SNV WITH MIVMIR, GICAM") {
+
+        config "./nextflow.config"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.value(file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/ped/justhusky.ped', checkIfExists: true))
+                input[1] = channel.value(file(params.pipelines_testdata_base_path + 'reference/reduced_penetrance.tsv', checkIfExists: true))
+                // Dummy scoring config, Genmod scoring is not intended test target.
+                input[2] = channel.value(file(params.pipelines_testdata_base_path + 'reference/rank_model_dummy_mivmir_gicam_unit_test.ini', checkIfExists: true))
+                input[3] = channel.of([
+                    [id:'justhusky', single_end: false],
+                    //  Only SNV INDELs supported
+                    file(params.pipelines_testdata_base_path + 'testdata/justhusky_snv_rank_variants_mivmir_gicam.vcf', checkIfExists: true)
+                ])
+                input[4] = false
+                input[5] = true
+                // ch_genmod_gicam_score_config is integral to GICAM inference; it cannot be changed without retraining gicam
+                input[6] = channel.fromPath("$projectDir/assets/rank_model_genmod_gicam.ini", checkIfExists: true).collect()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                {
+                    with (path(workflow.out.vcf.get(0).get(1)).vcf.variants) {
+                        for (int i = 0; i < size(); i++) {
+                            assert snapshot(get(i).getAttribute('MivmirScore')).match('MIVMIR_GICAM-' + get(i).getChr() + '-' + get(i).getStart() + '-MivmirScore')
+                            assert snapshot(get(i).getAttribute('MivmirExplanation')).match('MIVMIR_GICAM-' + get(i).getChr() + '-' + get(i).getStart() + '-MivmirExplanation')
+                            assert snapshot(get(i).getAttribute('GicamScore')).match('MIVMIR_GICAM-' + get(i).getChr() + '-' + get(i).getStart() + '-GicamScore')
+                        }
+                    }
+                }
             )
         }
     }
