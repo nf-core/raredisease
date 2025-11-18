@@ -135,6 +135,7 @@ workflow RAREDISEASE {
     ch_scatter_split_intervals
     ch_score_config_mt
     ch_score_config_snv
+    ch_genmod_gicam_score_config
     ch_score_config_sv
     ch_sdf
     ch_sentieon_pcr_indel_model
@@ -464,8 +465,10 @@ workflow RAREDISEASE {
                 ch_pedfile,
                 ch_reduced_penetrance,
                 ch_score_config_snv,
+                ch_genmod_gicam_score_config,
                 ch_ranksnv_nuclear_in,
-                false
+                false,
+                true
             )
             ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
         }
@@ -536,7 +539,9 @@ workflow RAREDISEASE {
                 ch_pedfile,
                 ch_reduced_penetrance,
                 ch_score_config_mt,
+                ch_genmod_gicam_score_config,
                 ch_ranksnv_mt_in,
+                false,
                 false
             )
             ch_versions = ch_versions.mix(RANK_VARIANTS_MT.out.versions)
@@ -631,8 +636,10 @@ workflow RAREDISEASE {
                 ch_pedfile,
                 ch_reduced_penetrance,
                 ch_score_config_sv,
+                ch_genmod_gicam_score_config,
                 ch_ranksnv_sv_in,
-                true
+                true,
+                false
             )
             ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
         }

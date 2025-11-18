@@ -358,6 +358,13 @@
                     "fa_icon": "fas fa-file",
                     "description": "SV rank model config file for genmod."
                 },
+              "score_config_genmod_gicam_snv": {
+                "type": "string",
+                "exists": true,
+                "format": "path",
+                "fa_icon": "fas fa-file",
+                "description": "Rank model config file for genmod in conjunction with MIVMIR-GICAM scoring."
+              },
                 "sdf": {
                     "type": "string",
                     "exists": true,

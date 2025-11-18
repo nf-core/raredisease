@@ -92,6 +92,7 @@ workflow NFCORE_RAREDISEASE {
     val_save_mapped_as_cram
     val_score_config_mt
     val_score_config_snv
+    val_score_config_genmod_gicam_snv
     val_score_config_sv
     val_sdf
     val_sentieon_dnascope_pcr_indel_model
@@ -192,6 +193,7 @@ workflow NFCORE_RAREDISEASE {
     ch_rtg_truthvcfs            = channelFromPath(val_rtg_truthvcfs, true)
     ch_score_config_mt          = channelFromPath(val_score_config_mt, true)
     ch_score_config_snv         = channelFromPath(val_score_config_snv, true)
+    ch_genmod_gicam_score_config = channelFromPath(val_score_config_genmod_gicam_snv, true)
     ch_score_config_sv          = channelFromPath(val_score_config_sv, true)
     ch_vcf2cytosure_blacklist   = channelFromPath(val_vcf2cytosure_blacklist, true)
     ch_vcfanno_lua              = channelFromPath(val_vcfanno_lua, true)
@@ -397,6 +399,7 @@ workflow NFCORE_RAREDISEASE {
         ch_scatter_split_intervals,
         ch_score_config_mt,
         ch_score_config_snv,
+        ch_genmod_gicam_score_config,
         ch_score_config_sv,
         ch_sdf,
         ch_sentieon_pcr_indel_model,
@@ -547,6 +550,7 @@ workflow {
         params.save_mapped_as_cram,
         params.score_config_mt,
         params.score_config_snv,
+        params.score_config_genmod_gicam_snv,
         params.score_config_sv,
         params.sdf,
         params.sentieon_dnascope_pcr_indel_model,
