@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parameter `run_vcfanno_db_sanity_check` to check vcfanno database files for zero records and remove the corresponding annotation blocks from the TOML config before running vcfanno [#821](https://github.com/nf-core/raredisease/pull/821)
 - Added `--skip_split_multiallelics` parameter to allow users to skip the `bcftools norm --multiallelics -both` step in SNV calling (DeepVariant and Sentieon), which can cause indel quality degradation in single-interval runs [#823](https://github.com/nf-core/raredisease/pull/823)
 - Extended vcfanno database sanity check to include extra vcfanno resources (`vcfanno_extra`) alongside the main resources, and moved the check upstream to `raredisease.nf` so it covers both genome and mitochondrial SNV annotation subworkflows [#834](https://github.com/nf-core/raredisease/pull/834)
+- Add SNV scoring by MIVMIR, GICAM models [#812](https://github.com/nf-core/raredisease/pull/812)
 
 ### `Changed`
 
