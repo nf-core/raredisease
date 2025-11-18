@@ -54,6 +54,7 @@ include { CALL_MOBILE_ELEMENTS                                        } from '..
 include { CALL_REPEAT_EXPANSIONS                                      } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                                                    } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS                                    } from '../subworkflows/local/call_structural_variants'
+include { CALL_SV_MT                                                  } from '../subworkflows/local/call_sv_MT'
 include { GENERATE_CYTOSURE_FILES                                     } from '../subworkflows/local/generate_cytosure_files'
 include { GENS                                                        } from '../subworkflows/local/gens'
 include { PREPARE_REFERENCES                                          } from '../subworkflows/local/prepare_references'
@@ -715,6 +716,30 @@ workflow RAREDISEASE {
             ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
         }
     }
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    CALL MITOCHONDRIAL SVs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+    //
+    // Initialize file channels for mitosalt input
+    // 
+    ch_msconfig = params.mitosalt_config        ? channel.fromPath(params.mitosalt_config)
+                                                : channel.empty()
+    ch_msref    = params.mitosalt_reference     ? channel.fromPath(params.mitosalt_reference)
+                                                : channel.empty()
+
+    //
+    // Call mitochondrial SVs
+    //
+    CALL_SV_MT(
+        ch_reads,
+        ch_mapped.genome_bam_bai,
+        ch_genome_fasta,
+        ch_msconfig,
+        ch_msref
+    )
+    ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -3,7 +3,6 @@
 //
 
 include { CALL_SV_MANTA                  } from './call_sv_manta'
-include { CALL_SV_MT                     } from './call_sv_MT'
 include { CALL_SV_TIDDIT                 } from './call_sv_tiddit'
 include { SVDB_MERGE                     } from '../../modules/nf-core/svdb/merge/main'
 include { CALL_SV_GERMLINECNVCALLER      } from './call_sv_germlinecnvcaller'
@@ -64,11 +63,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .set { gcnvcaller_vcf }
 
             ch_versions = ch_versions.mix(CALL_SV_GERMLINECNVCALLER.out.versions)
-        }
-
-        if (params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes) {
-            CALL_SV_MT (ch_mt_bam_bai, ch_genome_fasta)
-            ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
         }
 
         //merge
