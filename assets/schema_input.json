@@ -9,25 +9,139 @@
         "properties": {
             "sample": {
                 "type": "string",
+                "meta": ["id", "sample"],
                 "pattern": "^\\S+$",
-                "errorMessage": "Sample name must be provided and cannot contain spaces",
-                "meta": ["id"]
+                "errorMessage": "Sample name must be provided and must be a string that cannot contain spaces"
+            },
+            "lane": {
+                "oneOf": [
+                    {
+                        "type": "integer"
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    }
+                ],
+                "meta": ["lane"],
+                "errorMessage": "Lane must be an interger or a string that cannot contain spaces"
             },
             "fastq_1": {
+                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$"
             },
             "fastq_2": {
+                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$"
+            },
+            "spring_1": {
+                "errorMessage": "Gzipped and spring-compressed FastQ file for reads 1 cannot contain spaces, has to exist and must have extension '.spring'",
+                "type": "string",
+                "pattern": "^\\S+.spring$",
+                "format": "file-path",
+                "exists": true
+            },
+            "spring_2": {
+                "errorMessage": "Gzipped and spring-compressed FastQ file for reads 2 has to exist, cannot contain spaces and must have extension '.spring'",
+                "type": "string",
+                "pattern": "^\\S+.spring$",
+                "format": "file-path",
+                "exists": true
+            },
+            "bam": {
+                "errorMessage": "BAM file cannot contain spaces and must have extension '.bam'",
+                "type": "string",
+                "pattern": "^\\S+\\.bam$",
+                "format": "file-path",
+                "exists": true
+            },
+            "bai": {
+                "errorMessage": "BAM index file cannot contain spaces and must have extension '.bai'",
+                "type": "string",
+                "pattern": "^\\S+\\.bai$",
+                "format": "file-path",
+                "exists": true
+            },
+            "sex": {
+                "oneOf": [
+                    {
+                        "type": "integer",
+                        "enum": [0, 1, 2]
+                    },
+                    {
+                        "type": "string",
+                        "enum": ["other"]
+                    }
+                ],
+                "meta": ["sex"],
+                "errorMessage": "Sex must be provided, has to be one of this values: '0, 1, 2, other' and cannot contain spaces"
+            },
+            "phenotype": {
+                "type": "integer",
+                "meta": ["phenotype"],
+                "enum": [0, 1, 2],
+                "exists": true,
+                "errorMessage": "Phenotype must be provided and cannot contain spaces"
+            },
+            "paternal_id": {
+                "errorMessage": "Paternal ID cannot contain spaces",
+                "meta": ["paternal"],
+                "default": "0",
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    },
+                    {
+                        "maxLength": 0
+                    }
+                ]
+            },
+            "maternal_id": {
+                "errorMessage": "Maternal ID cannot contain spaces",
+                "meta": ["maternal"],
+                "default": "0",
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    },
+                    {
+                        "maxLength": 0
+                    }
+                ]
+            },
+            "case_id": {
+                "type": "string",
+                "meta": ["case_id"],
+                "pattern": "^\\S+$",
+                "errorMessage": "Case name must be provided and cannot contain spaces"
             }
         },
-        "required": ["sample", "fastq_1"]
+        "uniqueEntries": ["case_id"],
+        "anyOf": [
+            {
+                "dependentRequired": {
+                    "lane": ["fastq_1"]
+                }
+            },
+            {
+                "dependentRequired": {
+                    "lane": ["spring_1"]
+                }
+            }
+        ],
+        "dependentRequired": {
+            "fastq_2": ["fastq_1"],
+            "spring_2": ["spring_1"],
+            "bam": ["bai"]
+        },
+        "required": ["sample", "sex", "phenotype", "case_id"]
     }
 }
