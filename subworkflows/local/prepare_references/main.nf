@@ -17,6 +17,8 @@ include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD_MT       } from '../../../mo
 include { GATK4_INTERVALLISTTOOLS as GATK_ILT                } from '../../../modules/nf-core/gatk4/intervallisttools/main'
 include { GATK4_SHIFTFASTA as GATK_SHIFTFASTA                } from '../../../modules/nf-core/gatk4/shiftfasta/main'
 include { GET_CHROM_SIZES                                    } from '../../../modules/local/get_chrom_sizes'
+include { HISAT2_BUILD as HISAT2_INDEX_GENOME                } from '../../../modules/nf-core/hisat2/build'
+include { LAST_LASTDB as LAST_INDEX_MT                       } from '../../../modules/nf-core/last/lastdb'
 include { RTGTOOLS_FORMAT                                    } from '../../../modules/nf-core/rtgtools/format/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_EXTRACT_MT              } from '../../../modules/nf-core/samtools/faidx/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME            } from '../../../modules/nf-core/samtools/faidx/main'
@@ -54,6 +56,8 @@ workflow PREPARE_REFERENCES {
         ch_vcfanno_extra = Channel.empty()
         ch_vcfanno_bgzip = Channel.empty()
         ch_vcfanno_index = Channel.empty()
+	ch_gtf           = Channel.empty()
+	ch_splicesites   = Channel.empty()
 
         // Genome indices
         SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[],[]])
@@ -67,6 +71,7 @@ workflow PREPARE_REFERENCES {
         BWAMEM2_INDEX_GENOME(ch_genome_fasta)
         BWAMEME_INDEX_GENOME(ch_genome_fasta)
         SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.set{ch_sentieonbwa}
+	HISAT2_INDEX_GENOME(ch_genome_fasta,ch_gtf,ch_splicesites) 
 
         // MT genome indices
         SAMTOOLS_EXTRACT_MT(ch_genome_fasta, ch_fai)
@@ -80,6 +85,7 @@ workflow PREPARE_REFERENCES {
         BWA_INDEX_MT(ch_mt_fasta_in)
         SENTIEON_BWAINDEX_MT(ch_mt_fasta_in)
         ch_bwa_mt = Channel.empty().mix(SENTIEON_BWAINDEX_MT.out.index, BWA_INDEX_MT.out.index).collect()
+	LAST_INDEX_MT(ch_mt_fasta_in)
 
         BWAMEM2_INDEX_MT_SHIFT(GATK_SHIFTFASTA.out.shift_fa)
         BWA_INDEX_MT_SHIFT(GATK_SHIFTFASTA.out.shift_fa)
@@ -166,6 +172,7 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(BWAMEME_INDEX_GENOME.out.versions)
         ch_versions = ch_versions.mix(SENTIEON_BWAINDEX_GENOME.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
+	ch_versions = ch_versions.mix(HISAT2_INDEX_GENOME.out.versions)
         ch_versions = ch_versions.mix(GATK_SD.out.versions)
         ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_EXTRACT_MT.out.versions)
@@ -174,6 +181,7 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(GATK_SHIFTFASTA.out.versions)
         ch_versions = ch_versions.mix(BWAMEM2_INDEX_MT.out.versions)
         ch_versions = ch_versions.mix(BWA_INDEX_MT.out.versions)
+	ch_versions = ch_versions.mix(LAST_INDEX_MT.out.versions)
         ch_versions = ch_versions.mix(SENTIEON_BWAINDEX_MT.out.versions)
         ch_versions = ch_versions.mix(BWAMEM2_INDEX_MT_SHIFT.out.versions)
         ch_versions = ch_versions.mix(BWA_INDEX_MT_SHIFT.out.versions)
@@ -196,6 +204,7 @@ workflow PREPARE_REFERENCES {
         genome_bwa_index      = Channel.empty().mix(ch_bwa, ch_sentieonbwa).collect()                        // channel: [ val(meta), path(index) ]
         genome_bwamem2_index  = BWAMEM2_INDEX_GENOME.out.index.collect()                                     // channel: [ val(meta), path(index) ]
         genome_bwameme_index  = BWAMEME_INDEX_GENOME.out.index.collect()                                     // channel: [ val(meta), path(index) ]
+	genome_hisat2_index   = HISAT2_INDEX_GENOME.out.index.collect()                                      // channel: [ val(meta), path(index) ]
         genome_chrom_sizes    = GET_CHROM_SIZES.out.sizes.collect()                                          // channel: [ path(sizes) ]
         genome_fai            = ch_fai                                                                       // channel: [ val(meta), path(fai) ]
         genome_dict           = ch_dict                                                                      // channel: [ val(meta), path(dict) ]
@@ -203,6 +212,7 @@ workflow PREPARE_REFERENCES {
         mt_intervals          = ch_shiftfasta_mtintervals.intervals.collect()                                // channel: [ path(intervals) ]
         mt_bwa_index          = ch_bwa_mt                                                                    // channel: [ val(meta), path(index) ]
         mt_bwamem2_index      = BWAMEM2_INDEX_MT.out.index.collect()                                         // channel: [ val(meta), path(index) ]
+	mt_last_index         = LAST_INDEX_MT.out.index						             // channel: [ val(meta), path(index) ]
         mt_dict               = GATK_SD_MT.out.dict.collect()                                                // channel: [ val(meta), path(dict) ]
         mt_fasta              = ch_mt_fasta_in.collect()                                                     // channel: [ val(meta), path(fasta) ]
         mt_fai                = SAMTOOLS_FAIDX_MT.out.fai.collect()                                          // channel: [ val(meta), path(fai) ]

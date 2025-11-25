@@ -1,17 +1,30 @@
 #!/usr/bin/env nextflow
 
 process MITOSALT {
-    tag "MITOSALT"
+    tag "$meta.id"
+    label "process_low"
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/03/0311c283e73736be01c2cbd1ca93ae826c209d9733ffa6d2d4d2caa31e7464cc/data':
         'community.wave.seqera.io/library/bbmap_bedtools_bioconductor-biostrings_bioconductor-pwalign_pruned:11434f3b6a01596d' }"
 
+//    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+//        'https://depot.galaxyproject.org/singularity/mitosalt:1.1.1--hdfd78af_2':
+//        'quay.io/biocontainers/mitosalt:1.1.1--hdfd78af_2' }"
+    
+//    container 'docker://ieduba/mitosalt:latest'
+
     input:
     tuple val(meta), path(reads)
     path config
     path genome
+//    tuple val(meta2), path(hisat2index)
+//    tuple val(meta3), path(genomefai)
+//    tuple val(meta4), path(lastindex)
+//    tuple val(meta5), path(mtfai)
+//    path chrsizes
+//    tuple val(meta6), path(mtfasta)
 
     output:
     tuple val(meta), path("*breakpoint") , emit: breakpoint
@@ -22,9 +35,11 @@ process MITOSALT {
     def VERSION = "1.1.1" // from perl script, unlikely to be updated
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
+    mkdir -p log indel bam tab bw plot
+
     MitoSAlt1.1.1.pl $config $reads $prefix
-    mv indel/*.breakpoint mitosalt_${prefix}.breakpoint
-    mv indel/*.cluster mitosalt_${prefix}.cluster
+    mv indel/*.breakpoint ${prefix}.breakpoint
+    mv indel/*.cluster ${prefix}.cluster
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -153,6 +153,8 @@ workflow RAREDISEASE {
     ch_genome_chrsizes          = ch_references.genome_chrom_sizes
     ch_genome_fai               = ch_references.genome_fai
     ch_genome_dictionary        = ch_references.genome_dict
+    ch_genome_hisat2index       = params.hisat2                             ? Channel.fromPath(params.hisat2).map {it -> [[id:it.simpleName], it]}.collect()
+                                                                            : ch_references.genome_hisat2_index
     ch_gens_gnomad_pos          = params.gens_gnomad_pos                    ? Channel.fromPath(params.gens_gnomad_pos).collect()
                                                                             : Channel.empty()
     ch_gens_interval_list       = params.gens_interval_list                 ? Channel.fromPath(params.gens_interval_list).collect()
@@ -175,12 +177,17 @@ workflow RAREDISEASE {
                                                                             : Channel.empty()
     ch_ml_model                 = params.variant_caller.equals("sentieon")  ? Channel.fromPath(params.ml_model).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : Channel.value([[:],[]])
+    ch_msconfig                 = params.mitosalt_config                    ? channel.fromPath(params.mitosalt_config)
+                                                                            : channel.empty()
+    ch_msref                    = params.mitosalt_reference                 ? channel.fromPath(params.mitosalt_reference)
+                                                                            : channel.empty()
     ch_mt_intervals             = ch_references.mt_intervals
     ch_mt_bwaindex              = ch_references.mt_bwa_index
     ch_mt_bwamem2index          = ch_references.mt_bwamem2_index
     ch_mt_dictionary            = ch_references.mt_dict
     ch_mt_fai                   = ch_references.mt_fai
     ch_mt_fasta                 = ch_references.mt_fasta
+    ch_mt_lastdb                = ch_references.mt_last_index
     ch_mtshift_backchain        = ch_references.mtshift_backchain
     ch_mtshift_bwaindex         = ch_references.mtshift_bwa_index
     ch_mtshift_bwamem2index     = ch_references.mtshift_bwamem2_index
@@ -208,6 +215,8 @@ workflow RAREDISEASE {
                                                                             : Channel.value([])
     ch_sdf                      = params.sdf                                ? Channel.fromPath(params.sdf).map{it -> [[id:it.simpleName],it]}.collect()
                                                                             : ch_references.sdf
+    ch_subdepth                 = params.mitosalt_depth                     ? channel.fromPath(params.mitosalt_depth)
+                                                                            : channel.empty()
     ch_sv_dbs                   = params.svdb_query_dbs                     ? Channel.fromPath(params.svdb_query_dbs)
                                                                             : Channel.empty()
     ch_sv_bedpedbs              = params.svdb_query_bedpedbs                ? Channel.fromPath(params.svdb_query_bedpedbs)
@@ -244,7 +253,7 @@ workflow RAREDISEASE {
     ch_vep_filters_scout_fmt    = params.vep_filters_scout_fmt              ? Channel.fromPath(params.vep_filters_scout_fmt).map { it -> [[id:'scout'],it]}.collect()
                                                                             : Channel.empty()
     ch_versions                 = ch_versions.mix(ch_references.versions)
-
+  
     //
     // SV caller priority
     //
@@ -722,22 +731,21 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
     //
-    // Initialize file channels for mitosalt input
-    // 
-    ch_msconfig = params.mitosalt_config        ? channel.fromPath(params.mitosalt_config)
-                                                : channel.empty()
-    ch_msref    = params.mitosalt_reference     ? channel.fromPath(params.mitosalt_reference)
-                                                : channel.empty()
-
-    //
     // Call mitochondrial SVs
     //
     CALL_SV_MT(
         ch_reads,
         ch_mapped.genome_bam_bai,
         ch_genome_fasta,
+	ch_genome_hisat2index,
+	ch_genome_fai,
+	ch_mt_lastdb,
+	ch_mt_fai,
+	ch_genome_chrsizes,
+	ch_mt_fasta,
         ch_msconfig,
-        ch_msref
+        ch_msref,
+        ch_subdepth
     )
     ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
 
