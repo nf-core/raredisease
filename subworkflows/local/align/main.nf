@@ -103,13 +103,13 @@ workflow ALIGN {
 
         ch_genome_marked_bam     = Channel.empty().mix(ch_bwamem2_bam, ch_sentieon_bam, ch_input_bam)
         ch_genome_marked_bai     = Channel.empty().mix(ch_bwamem2_bai, ch_sentieon_bai, ch_input_bai)
-        ch_genome_merked_bam_bai = ch_genome_marked_bam.join(ch_genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
+        ch_genome_marked_bam_bai = ch_genome_marked_bam.join(ch_genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
 
         // PREPARING READS FOR MT ALIGNMENT
 
         if (params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes) {
             CONVERT_MT_BAM_TO_FASTQ (
-                ch_genome_bam_bai,
+                ch_genome_marked_bam_bai,
                 ch_genome_fasta,
                 ch_genome_fai,
                 ch_genome_dictionary
@@ -145,7 +145,7 @@ workflow ALIGN {
         }
 
         if (params.save_mapped_as_cram) {
-            SAMTOOLS_VIEW( ch_genome_bam_bai, ch_genome_fasta, [] )
+            SAMTOOLS_VIEW( ch_genome_marked_bam_bai, ch_genome_fasta, [] )
             ch_versions   = ch_versions.mix(SAMTOOLS_VIEW.out.versions)
         }
 
@@ -153,7 +153,7 @@ workflow ALIGN {
         fastp_json                = ch_fastp_json            // channel: [ val(meta), path(json) ]
         genome_marked_bam         = ch_genome_marked_bam     // channel: [ val(meta), path(bam) ]
         genome_marked_bai         = ch_genome_marked_bai     // channel: [ val(meta), path(bai) ]
-        genome_bam_bai            = ch_genome_bam_bai        // channel: [ val(meta), path(bam), path(bai) ]
+        genome_marked_bam_bai     = ch_genome_marked_bam_bai // channel: [ val(meta), path(bam), path(bai) ]
         markdup_metrics           = ch_markdup_metrics       // channel: [ val(meta), path(txt) ]
         mt_bam_bai                = ch_mt_bam_bai            // channel: [ val(meta), path(bam), path(bai) ]
         mt_bam_bai_gatksubwf      = ch_mt_bam_bai_gatksubwf      // channel: [ val(meta), path(bam), path(bai) ]

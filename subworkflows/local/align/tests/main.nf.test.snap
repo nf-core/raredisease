@@ -270,7 +270,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2025-11-26T10:13:53.59654663"
+        "timestamp": "2025-11-26T13:57:27.462836066"
     },
     "align bwameme": {
         "content": [
@@ -425,6 +425,96 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2025-11-14T17:16:13.633955179"
+        "timestamp": "2025-11-26T14:03:43.037036726"
+    },
+    "align bwamem2 - wes": {
+        "content": [
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e",
+                    "earlycasualcaiman_sorted_md.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e",
+                    "hugelymodelbat_sorted_md.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e",
+                    "slowlycivilbuck_sorted_md.bam.bai"
+                ]
+            ],
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                "versions.yml:md5,3efddfe43fdf9bf446e23d1526a3973a",
+                "versions.yml:md5,6f9a56c7077343a78b6b2a9bb555631b",
+                "versions.yml:md5,6f9a56c7077343a78b6b2a9bb555631b",
+                "versions.yml:md5,6f9a56c7077343a78b6b2a9bb555631b",
+                "versions.yml:md5,7b799d18a80d6d144122cc97f83748c3",
+                "versions.yml:md5,8191c0426b9e36d914ea3f63bf2428e9",
+                "versions.yml:md5,81cee5ff00c008209a5c6fb06ac57de5",
+                "versions.yml:md5,81cee5ff00c008209a5c6fb06ac57de5",
+                "versions.yml:md5,81cee5ff00c008209a5c6fb06ac57de5",
+                "versions.yml:md5,87e7da5e82b70b42f06b30a245a5750e",
+                "versions.yml:md5,c31eb465488334212645bd43296d8bd7"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-11-26T13:58:00.971064108"
     }
 }
