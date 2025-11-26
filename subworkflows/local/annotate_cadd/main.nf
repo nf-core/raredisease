@@ -22,7 +22,7 @@ workflow ANNOTATE_CADD {
 
     main:
         ch_versions       = channel.empty()
-
+        ch_rename_chrs    = channel.empty()
 
         if (params.genome_build == 'GRCh38') {
 
@@ -32,12 +32,17 @@ workflow ANNOTATE_CADD {
             CADD_TO_REFERENCE_CHRNAMES ( ch_fai , [], false )
             ch_versions = ch_versions.mix(CADD_TO_REFERENCE_CHRNAMES.out.versions)
 
+            CADD_TO_REFERENCE_CHRNAMES.out.output.map { _meta, txt -> txt }
+                .set { ch_rename_chrs }
+
             ch_vcf
                 .map { meta, vcf, tbi -> [ meta, vcf, tbi, [], [] ] }
                 .set { rename_chrnames_in }
 
             RENAME_CHRNAMES (
                 rename_chrnames_in,
+                [],
+                [],
                 REFERENCE_TO_CADD_CHRNAMES.out.output.map { _meta, txt -> txt }
             )
             ch_versions = ch_versions.mix(RENAME_CHRNAMES.out.versions)
@@ -60,9 +65,10 @@ workflow ANNOTATE_CADD {
         ch_vcf
             .join(CADD.out.tsv)
             .join(TABIX_CADD.out.tbi)
+            .map { meta, vcf, annotations, annotations_index -> [ meta, vcf, [], annotations, annotations_index ] }
             .set { ch_annotate_in }
 
-        BCFTOOLS_ANNOTATE(ch_annotate_in, ch_header)
+        BCFTOOLS_ANNOTATE(ch_annotate_in, [], ch_header.map { _meta, header -> header }, ch_rename_chrs)
 
         TABIX_ANNOTATE (BCFTOOLS_ANNOTATE.out.vcf)
 
