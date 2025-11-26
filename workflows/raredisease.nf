@@ -452,8 +452,8 @@ workflow RAREDISEASE {
     if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_calling'))) {
         CALL_SNV (
             ch_mapped.genome_bam_bai,
-            ch_mapped.mt_bam_bai_mtsub,
-            ch_mapped.mtshift_bam_bai_mtsub,
+            ch_mapped.mt_bam_bai_gatksubwf,
+            ch_mapped.mtshift_bam_bai_gatksubwf,
             ch_genome_chrsizes,
             ch_genome_fasta,
             ch_genome_fai,

@@ -118,7 +118,9 @@ nextflow_workflow {
                             .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
                         workflow.out.mt_bam_bai
                             .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
-                        workflow.out.mtshift_bam_bai
+                        workflow.out.mt_bam_bai_gatksubwf
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.mtshift_bam_bai_gatksubwf
                             .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
                         workflow.out.versions
                     ).match()
