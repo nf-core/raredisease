@@ -7,7 +7,7 @@
                     "tabix": 1.12
                 },
                 "BCFTOOLS_ANNOTATE": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_CONCAT": {
                     "bcftools": 1.2
@@ -464,8 +464,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.8"
+            "nextflow": "25.10.0"
         },
-        "timestamp": "2025-10-15T09:43:13.720671267"
+        "timestamp": "2025-11-26T19:37:55.555932216"
     }
 }
