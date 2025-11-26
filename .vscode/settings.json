@@ -1,8 +1,4 @@
 {
-    "markdown.styles": [
-        "public/vscode_markdown.css"
-    ],
-    "cSpell.words": [
-        "chrs"
-    ]
+    "markdown.styles": ["public/vscode_markdown.css"],
+    "cSpell.words": ["chrs"]
 }
