@@ -1,0 +1,41 @@
+name: contamination_check
+description: Estimate sample contamination using GATK GetPileupSummaries and CalculateContamination
+keywords:
+  - contamination
+  - QC
+  - GATK
+components:
+  - gatk4/getpileupsummaries
+  - gatk4/calculatecontamination
+input:
+  - ch_bam:
+      type: file
+      description: BAM files with their indices
+      pattern: "*.{bam,cram}"
+  - ch_fasta:
+      type: file
+      description: Reference genome FASTA file
+      pattern: "*.{fa,fasta}"
+  - ch_contamination_vcf:
+      type: file
+      description: VCF file containing common germline variants (gnomAD)
+      pattern: "*.vcf.gz"
+  - ch_intervals:
+      type: file
+      description: BED file with target intervals
+      pattern: "*.bed"
+output:
+  - contamination_table:
+      type: file
+      description: Table containing contamination estimates
+      pattern: "*.contamination.table"
+  - segmentation_table:
+      type: file
+      description: Table containing tumor segmentation
+      pattern: "*.segmentation.table"
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+authors:
+  - "56053vujinovic"

@@ -1,0 +1,29 @@
+name: parse_contamination
+description: Parse GATK CalculateContamination output for MultiQC
+keywords:
+  - contamination
+  - MultiQC
+  - parsing
+tools:
+  - python:
+      description: Python programming language
+      homepage: https://www.python.org/
+input:
+  - meta:
+      type: map
+      description: Groovy Map containing sample information
+  - contamination_table:
+      type: file
+      description: GATK CalculateContamination output table
+      pattern: "*.contamination.table"
+output:
+  - mqc_table:
+      type: file
+      description: MultiQC custom content table
+      pattern: "*_contamination_mqc.tsv"
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+authors:
+  - "56053vujinovic"
