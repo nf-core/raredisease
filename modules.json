@@ -184,7 +184,7 @@
                     },
                     "gatk4/determinegermlinecontigploidy": {
                         "branch": "master",
-                        "git_sha": "d6dd4ddea1663edbf15f40e089cc16db96e75f1d",
+                        "git_sha": "ae8cd884f895585c6799ab4eb6a2c9f44df03336",
                         "installed_by": ["modules"]
                     },
                     "gatk4/filtermutectcalls": {
