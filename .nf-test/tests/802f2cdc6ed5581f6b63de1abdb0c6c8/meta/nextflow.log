@@ -1,0 +1,155 @@
+Nov-15 13:31:16.857 [main] DEBUG nextflow.cli.Launcher - $> nextflow -quiet -log /Users/annick.renevey/Projects/raredisease/.nf-test/tests/802f2cdc6ed5581f6b63de1abdb0c6c8/meta/nextflow.log run /Users/annick.renevey/Projects/raredisease/.nf-test-802f2cdc6ed5581f6b63de1abdb0c6c8.nf -c /Users/annick.renevey/Projects/raredisease/nextflow.config -c /Users/annick.renevey/Projects/raredisease/modules/nf-core/tabix/bgziptabix/tests/./tabix_tbi.config -params-file /Users/annick.renevey/Projects/raredisease/.nf-test/tests/802f2cdc6ed5581f6b63de1abdb0c6c8/meta/params.json -ansi-log false -with-trace /Users/annick.renevey/Projects/raredisease/.nf-test/tests/802f2cdc6ed5581f6b63de1abdb0c6c8/meta/trace.csv -w /Users/annick.renevey/Projects/raredisease/.nf-test/tests/802f2cdc6ed5581f6b63de1abdb0c6c8/work
+Nov-15 13:31:17.034 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 24.10.0
+Nov-15 13:31:17.095 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/Users/annick.renevey/.nextflow/plugins; core-plugins: nf-amazon@2.9.0,nf-azure@1.10.1,nf-cloudcache@0.4.2,nf-codecommit@0.2.2,nf-console@1.1.4,nf-google@1.15.2,nf-tower@1.9.3,nf-wave@1.7.2
+Nov-15 13:31:17.143 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Nov-15 13:31:17.144 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Nov-15 13:31:17.152 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
+Nov-15 13:31:17.181 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Nov-15 13:31:17.278 [main] DEBUG nextflow.config.ConfigBuilder - Found config base: /Users/annick.renevey/Projects/raredisease/nextflow.config
+Nov-15 13:31:17.294 [main] DEBUG nextflow.config.ConfigBuilder - User config file: /Users/annick.renevey/Projects/raredisease/nextflow.config
+Nov-15 13:31:17.296 [main] DEBUG nextflow.config.ConfigBuilder - User config file: /Users/annick.renevey/Projects/raredisease/modules/nf-core/tabix/bgziptabix/tests/./tabix_tbi.config
+Nov-15 13:31:17.303 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /Users/annick.renevey/Projects/raredisease/nextflow.config
+Nov-15 13:31:17.305 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /Users/annick.renevey/Projects/raredisease/nextflow.config
+Nov-15 13:31:17.306 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /Users/annick.renevey/Projects/raredisease/modules/nf-core/tabix/bgziptabix/tests/tabix_tbi.config
+Nov-15 13:31:17.419 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /Users/annick.renevey/.nextflow/secrets/store.json
+Nov-15 13:31:17.428 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@78d39a69] - activable => nextflow.secret.LocalSecretsProvider@78d39a69
+Nov-15 13:31:17.488 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Nov-15 13:31:25.071 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Nov-15 13:31:27.680 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Nov-15 13:31:28.003 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 from script declaration
+Nov-15 13:31:28.057 [main] INFO  nextflow.cli.CmdRun - Launching `/Users/annick.renevey/Projects/raredisease/.nf-test-802f2cdc6ed5581f6b63de1abdb0c6c8.nf` [marvelous_celsius] DSL2 - revision: be2d57c639
+Nov-15 13:31:28.074 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins declared=[nf-schema@2.1.1]
+Nov-15 13:31:28.080 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Nov-15 13:31:28.080 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[nf-schema@2.1.1]
+Nov-15 13:31:28.080 [main] DEBUG nextflow.plugin.PluginUpdater - Installing plugin nf-schema version: 2.1.1
+Nov-15 13:31:28.194 [main] INFO  org.pf4j.AbstractPluginManager - Plugin 'nf-schema@2.1.1' resolved
+Nov-15 13:31:28.196 [main] INFO  org.pf4j.AbstractPluginManager - Start plugin 'nf-schema@2.1.1'
+Nov-15 13:31:28.293 [main] DEBUG nextflow.plugin.BasePlugin - Plugin started nf-schema@2.1.1
+Nov-15 13:31:28.534 [main] DEBUG nextflow.Session - Session UUID: 33b7f0a5-cbf7-4a4c-8ee0-6ac139ead31d
+Nov-15 13:31:28.535 [main] DEBUG nextflow.Session - Run name: marvelous_celsius
+Nov-15 13:31:28.537 [main] DEBUG nextflow.Session - Executor pool size: 8
+Nov-15 13:31:28.553 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+Nov-15 13:31:28.564 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=24; workQueue=LinkedBlockingQueue[10000]; allowCoreThreadTimeout=false
+Nov-15 13:31:28.615 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 24.10.0 build 5928
+  Created: 27-10-2024 18:36 UTC (19:36 CEST)
+  System: Mac OS X 15.0.1
+  Runtime: Groovy 4.0.23 on OpenJDK 64-Bit Server VM 17.0.3+7-LTS
+  Encoding: UTF-8 (UTF-8)
+  Process: 46100@annickrmbp [130.229.165.9]
+  CPUs: 8 - Mem: 16 GB (32.3 MB) - Swap: 12 GB (784.6 MB)
+Nov-15 13:31:28.692 [main] DEBUG nextflow.Session - Work-dir: /Users/annick.renevey/Projects/raredisease/.nf-test/tests/802f2cdc6ed5581f6b63de1abdb0c6c8/work [Mac OS X]
+Nov-15 13:31:28.772 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Nov-15 13:31:28.785 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Nov-15 13:31:28.906 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+Nov-15 13:31:28.927 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 9; maxThreads: 1000
+Nov-15 13:31:28.994 [main] DEBUG nextflow.Session - Session start
+Nov-15 13:31:29.001 [main] DEBUG nextflow.trace.TraceFileObserver - Workflow started -- trace file: /Users/annick.renevey/Projects/raredisease/.nf-test/tests/802f2cdc6ed5581f6b63de1abdb0c6c8/meta/trace.csv
+Nov-15 13:31:29.016 [main] DEBUG nextflow.Session - Using default localLib path: /Users/annick.renevey/Projects/raredisease/lib
+Nov-15 13:31:29.021 [main] DEBUG nextflow.Session - Adding to the classpath library: /Users/annick.renevey/Projects/raredisease/lib
+Nov-15 13:31:29.939 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Nov-15 13:31:30.457 [main] WARN  nextflow.script.ScriptBinding - Access to undefined parameter `modules_testdata_base_path` -- Initialise it to a default value eg. `params.modules_testdata_base_path = some_value`
+Nov-15 13:31:30.473 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
+  Script_b428227b4d50d6b9: /Users/annick.renevey/Projects/raredisease/modules/nf-core/tabix/bgziptabix/main.nf
+  Script_21322127a7e32787: /Users/annick.renevey/Projects/raredisease/.nf-test-802f2cdc6ed5581f6b63de1abdb0c6c8.nf
+Nov-15 13:31:30.473 [main] DEBUG nextflow.Session - Session aborted -- Cause: /Users/annick.renevey/Projects/raredisease/.nf-test/tests/802f2cdc6ed5581f6b63de1abdb0c6c8/nullgenomics/sarscov2/genome/bed/test.bed
+Nov-15 13:31:30.477 [main] DEBUG nextflow.Session - 
+Thread[Actor Thread 1,5,main]
+  java.base@17.0.3/jdk.internal.misc.Unsafe.park(Native Method)
+  java.base@17.0.3/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+  java.base@17.0.3/java.util.concurrent.SynchronousQueue$TransferStack$SNode.block(SynchronousQueue.java:288)
+  java.base@17.0.3/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3463)
+  java.base@17.0.3/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3434)
+  java.base@17.0.3/java.util.concurrent.SynchronousQueue$TransferStack.transfer(SynchronousQueue.java:397)
+  java.base@17.0.3/java.util.concurrent.SynchronousQueue.take(SynchronousQueue.java:886)
+  java.base@17.0.3/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+  java.base@17.0.3/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+  java.base@17.0.3/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+  java.base@17.0.3/java.lang.Thread.run(Thread.java:833)
+
+Thread[Reference Handler,10,system]
+  java.base@17.0.3/java.lang.ref.Reference.waitForReferencePendingList(Native Method)
+  java.base@17.0.3/java.lang.ref.Reference.processPendingReferences(Reference.java:253)
+  java.base@17.0.3/java.lang.ref.Reference$ReferenceHandler.run(Reference.java:215)
+
+Thread[main,5,main]
+  java.base@17.0.3/java.lang.Thread.dumpThreads(Native Method)
+  java.base@17.0.3/java.lang.Thread.getAllStackTraces(Thread.java:1662)
+  app//nextflow.util.SysHelper.dumpThreads(SysHelper.groovy:188)
+  app//nextflow.Session.abort(Session.groovy:800)
+  app//nextflow.script.ScriptRunner.execute(ScriptRunner.groovy:149)
+  app//nextflow.cli.CmdRun.run(CmdRun.groovy:376)
+  app//nextflow.cli.Launcher.run(Launcher.groovy:503)
+  app//nextflow.cli.Launcher.main(Launcher.groovy:658)
+
+Thread[Finalizer,8,system]
+  java.base@17.0.3/java.lang.Object.wait(Native Method)
+  java.base@17.0.3/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:155)
+  java.base@17.0.3/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:176)
+  java.base@17.0.3/java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:172)
+
+Thread[Common-Cleaner,8,InnocuousThreadGroup]
+  java.base@17.0.3/java.lang.Object.wait(Native Method)
+  java.base@17.0.3/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:155)
+  java.base@17.0.3/jdk.internal.ref.CleanerImpl.run(CleanerImpl.java:140)
+  java.base@17.0.3/java.lang.Thread.run(Thread.java:833)
+  java.base@17.0.3/jdk.internal.misc.InnocuousThread.run(InnocuousThread.java:162)
+
+Thread[Thread-1,5,main]
+  java.base@17.0.3/jdk.internal.misc.Unsafe.park(Native Method)
+  java.base@17.0.3/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+  java.base@17.0.3/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+  java.base@17.0.3/java.util.concurrent.LinkedBlockingDeque.pollFirst(LinkedBlockingDeque.java:515)
+  java.base@17.0.3/java.util.concurrent.LinkedBlockingDeque.poll(LinkedBlockingDeque.java:677)
+  app//nextflow.util.SimpleAgent.run(SimpleAgent.groovy:89)
+  java.base@17.0.3/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+  java.base@17.0.3/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+  java.base@17.0.3/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+  java.base@17.0.3/java.lang.reflect.Method.invoke(Method.java:568)
+  app//org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:343)
+  app//groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:328)
+  app//groovy.lang.MetaClassImpl.doInvokeMethod(MetaClassImpl.java:1333)
+  app//groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1088)
+  app//groovy.lang.MetaClassImpl.invokeMethodClosure(MetaClassImpl.java:1017)
+  app//groovy.lang.MetaClassImpl.doInvokeMethod(MetaClassImpl.java:1207)
+  app//groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1088)
+  app//groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1007)
+  app//groovy.lang.Closure.call(Closure.java:433)
+  app//groovy.lang.Closure.call(Closure.java:412)
+  app//groovy.lang.Closure.run(Closure.java:505)
+  java.base@17.0.3/java.lang.Thread.run(Thread.java:833)
+
+Thread[Notification Thread,9,system]
+
+Thread[Signal Dispatcher,9,system]
+
+Nov-15 13:31:30.497 [main] ERROR nextflow.cli.Launcher - /Users/annick.renevey/Projects/raredisease/.nf-test/tests/802f2cdc6ed5581f6b63de1abdb0c6c8/nullgenomics/sarscov2/genome/bed/test.bed
+java.nio.file.NoSuchFileException: /Users/annick.renevey/Projects/raredisease/.nf-test/tests/802f2cdc6ed5581f6b63de1abdb0c6c8/nullgenomics/sarscov2/genome/bed/test.bed
+	at nextflow.file.FileHelper.checkIfExists(FileHelper.groovy:1099)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at nextflow.Nextflow.file(Nextflow.groovy:123)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at Script_21322127a7e32787$_runScript_closure4$_closure6.doCall(Script_21322127a7e32787:34)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:343)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:328)
+	at org.codehaus.groovy.runtime.metaclass.ClosureMetaClass.invokeMethod(ClosureMetaClass.java:279)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1007)
+	at groovy.lang.Closure.call(Closure.java:433)
+	at groovy.lang.Closure.call(Closure.java:412)
+	at nextflow.script.WorkflowDef.run0(WorkflowDef.groovy:204)
+	at nextflow.script.WorkflowDef.run(WorkflowDef.groovy:188)
+	at nextflow.script.BindableDef.invoke_a(BindableDef.groovy:51)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at nextflow.script.BaseScript.run0(BaseScript.groovy:198)
+	at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
+	at nextflow.script.BaseScript.run(BaseScript.groovy:209)
+	at nextflow.script.ScriptParser.runScript(ScriptParser.groovy:236)
+	at nextflow.script.ScriptRunner.run(ScriptRunner.groovy:243)
+	at nextflow.script.ScriptRunner.execute(ScriptRunner.groovy:138)
+	at nextflow.cli.CmdRun.run(CmdRun.groovy:376)
+	at nextflow.cli.Launcher.run(Launcher.groovy:503)
+	at nextflow.cli.Launcher.main(Launcher.groovy:658)

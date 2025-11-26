@@ -25,7 +25,6 @@ workflow ANNOTATE_GENOME_SNVS {
 
     take:
         ch_vcf                // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
-        analysis_type         // string: [mandatory] 'wgs' or 'wes'
         ch_cadd_header        // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources     // channel: [mandatory] [ path(annotation) ]
         ch_vcfanno_extra      // channel: [mandatory] [ [path(vcf),path(index)] ]
@@ -40,13 +39,14 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_samples            // channel: [mandatory] [ val(sample_meta) ]
         ch_split_intervals    // channel: [mandatory] [ path(intervals) ]
         ch_vep_extra_files    // channel: [mandatory] [ path(files) ]
+        ch_genome_fai         // channel: [mandatory] [ path(fai) ]
         ch_genome_chrsizes    // channel: [mandatory] [ path(sizes) ]
 
     main:
-        ch_cadd_vcf       = Channel.empty()
-        ch_versions       = Channel.empty()
-        ch_vcf_scatter_in = Channel.empty()
-        ch_vep_in         = Channel.empty()
+        ch_cadd_vcf       = channel.empty()
+        ch_versions       = channel.empty()
+        ch_vcf_scatter_in = channel.empty()
+        ch_vep_in         = channel.empty()
 
         BCFTOOLS_ROH (ch_vcf, ch_gnomad_af, [], [], [], [])
 
@@ -90,7 +90,8 @@ workflow ANNOTATE_GENOME_SNVS {
             ANNOTATE_CADD (
                 ch_cadd_in,
                 ch_cadd_header,
-                ch_cadd_resources
+                ch_cadd_resources,
+                ch_genome_fai
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
             ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)

@@ -257,6 +257,11 @@
                         "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
+                    "gawk": {
+                        "branch": "master",
+                        "git_sha": "5ee4d69ed992c3ce81cfbbdd0bef932fcb81c75a",
+                        "installed_by": ["modules"]
+                    },
                     "genmod/annotate": {
                         "branch": "master",
                         "git_sha": "91a84f951358143e93dc9e03470db4e6a4a7105c",

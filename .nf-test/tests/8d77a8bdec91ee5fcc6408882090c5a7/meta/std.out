@@ -1,0 +1,3 @@
+ERROR ~ No such file or directory: /Users/annick.renevey/Projects/raredisease/.nf-test/tests/8d77a8bdec91ee5fcc6408882090c5a7/nullgenomics/sarscov2/genome/bed/test.bed
+
+ -- Check script '/Users/annick.renevey/Projects/raredisease/.nf-test-8d77a8bdec91ee5fcc6408882090c5a7.nf' at line: 34 or see '/Users/annick.renevey/Projects/raredisease/.nf-test/tests/8d77a8bdec91ee5fcc6408882090c5a7/meta/nextflow.log' file for more details

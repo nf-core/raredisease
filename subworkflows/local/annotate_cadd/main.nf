@@ -2,12 +2,15 @@
 // A subworkflow to annotate snvs
 //
 
-include { BCFTOOLS_ANNOTATE             } from '../../../modules/nf-core/bcftools/annotate/main'
-include { BCFTOOLS_VIEW                 } from '../../../modules/nf-core/bcftools/view/main'
-include { CADD                          } from '../../../modules/nf-core/cadd/main'
-include { TABIX_TABIX as TABIX_ANNOTATE } from '../../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_CADD     } from '../../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_VIEW     } from '../../../modules/nf-core/tabix/tabix/main'
+include { BCFTOOLS_ANNOTATE                     } from '../../../modules/nf-core/bcftools/annotate/main'
+include { BCFTOOLS_VIEW                         } from '../../../modules/nf-core/bcftools/view/main'
+include { BCFTOOLS_ANNOTATE as RENAME_CHRNAMES  } from '../../../modules/nf-core/bcftools/annotate/main'
+include { CADD                                  } from '../../../modules/nf-core/cadd/main'
+include { GAWK as REFERENCE_TO_CADD_CHRNAMES    } from '../../../modules/nf-core/gawk/main'
+include { GAWK as CADD_TO_REFERENCE_CHRNAMES    } from '../../../modules/nf-core/gawk/main'
+include { TABIX_TABIX as TABIX_ANNOTATE         } from '../../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_CADD             } from '../../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_VIEW             } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow ANNOTATE_CADD {
 
@@ -15,9 +18,36 @@ workflow ANNOTATE_CADD {
         ch_vcf            // channel: [mandatory] [ val(meta), path(vcfs), path(idx) ]
         ch_header         // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources // channel: [mandatory] [ path(dir) ]
+        ch_fai            // channel: [optional]  [ path(fai) ]
 
     main:
-        ch_versions       = Channel.empty()
+        ch_versions       = channel.empty()
+
+
+        if (params.genome_build == 'GRCh38') {
+
+            REFERENCE_TO_CADD_CHRNAMES ( ch_fai , [], false )
+            ch_versions = ch_versions.mix(REFERENCE_TO_CADD_CHRNAMES.out.versions)
+
+            CADD_TO_REFERENCE_CHRNAMES ( ch_fai , [], false )
+            ch_versions = ch_versions.mix(CADD_TO_REFERENCE_CHRNAMES.out.versions)
+
+            ch_vcf
+                .map { meta, vcf, tbi -> [ meta, vcf, tbi, [], [] ] }
+                .set { rename_chrnames_in }
+
+            RENAME_CHRNAMES (
+                rename_chrnames_in,
+                REFERENCE_TO_CADD_CHRNAMES.out.output.map { _meta, txt -> txt }
+            )
+            ch_versions = ch_versions.mix(RENAME_CHRNAMES.out.versions)
+
+
+            RENAME_CHRNAMES.out.vcf
+                .map { meta, vcf -> [ meta, vcf, [] ] }
+                .set { ch_vcf }
+        }
+
 
         BCFTOOLS_VIEW(ch_vcf, [], [], [])
 
