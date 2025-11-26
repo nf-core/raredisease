@@ -23,7 +23,7 @@ process TABIX_BGZIPTABIX {
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    bgzip  --threads ${task.cpus} -c $args $input -o ${prefix}.${input.getExtension()}.gz
+    bgzip  --threads ${task.cpus} -c $args $input > ${prefix}.${input.getExtension()}.gz
     tabix --threads ${task.cpus} $args2 ${prefix}.${input.getExtension()}.gz
 
     cat <<-END_VERSIONS > versions.yml
