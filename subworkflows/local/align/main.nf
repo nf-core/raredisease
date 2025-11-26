@@ -35,19 +35,16 @@ workflow ALIGN {
         val_sort_threads         // integer: [mandatory] number of sorting threads
 
     main:
-        ch_bwamem2_bam        = Channel.empty()
-        ch_bwamem2_bai        = Channel.empty()
-        ch_fastp_json         = Channel.empty()
-        ch_markdup_metrics    = Channel.empty()
-        ch_mt_bam_bai         = Channel.empty()
-        ch_mt_marked_bam      = Channel.empty()
-        ch_mt_marked_bai      = Channel.empty()
-        ch_mtshift_bam_bai    = Channel.empty()
-        ch_mtshift_marked_bam = Channel.empty()
-        ch_mtshift_marked_bai = Channel.empty()
-        ch_sentieon_bam       = Channel.empty()
-        ch_sentieon_bai       = Channel.empty()
-        ch_versions           = Channel.empty()
+        ch_bwamem2_bam               = Channel.empty()
+        ch_bwamem2_bai               = Channel.empty()
+        ch_fastp_json                = Channel.empty()
+        ch_markdup_metrics           = Channel.empty()
+        ch_mt_bam_bai                = Channel.empty()
+        ch_mt_bam_bai_gatksubwf      = Channel.empty()
+        ch_mtshift_bam_bai_gatksubwf = Channel.empty()
+        ch_sentieon_bam              = Channel.empty()
+        ch_sentieon_bai              = Channel.empty()
+        ch_versions                  = Channel.empty()
 
         if (!(params.skip_tools && params.skip_tools.split(',').contains('fastp'))) {
             FASTP (ch_reads, [], false, false, false)
@@ -104,9 +101,9 @@ workflow ALIGN {
             ch_versions     = ch_versions.mix(ALIGN_SENTIEON.out.versions)
         }
 
-        ch_genome_marked_bam = Channel.empty().mix(ch_bwamem2_bam, ch_sentieon_bam, ch_input_bam)
-        ch_genome_marked_bai = Channel.empty().mix(ch_bwamem2_bai, ch_sentieon_bai, ch_input_bai)
-        ch_genome_bam_bai    = ch_genome_marked_bam.join(ch_genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
+        ch_genome_marked_bam     = Channel.empty().mix(ch_bwamem2_bam, ch_sentieon_bam, ch_input_bam)
+        ch_genome_marked_bai     = Channel.empty().mix(ch_bwamem2_bai, ch_sentieon_bai, ch_input_bai)
+        ch_genome_merked_bam_bai = ch_genome_marked_bam.join(ch_genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
 
         // PREPARING READS FOR MT ALIGNMENT
 
@@ -139,14 +136,10 @@ workflow ALIGN {
             )
 
             ch_mt_bam_bai                = CONVERT_MT_BAM_TO_FASTQ.out.bam_bai // Used for subsampling and SV calling
-            ch_mt_marked_bam             = ALIGN_MT.out.marked_bam
-            ch_mt_marked_bai             = ALIGN_MT.out.marked_bai
-            ch_mt_bam_bai_gatksubwf      = ch_mt_marked_bam
-                                            .join(ch_mt_marked_bai, failOnMismatch:true, failOnDuplicate:true) // Only for SNV calling
-            ch_mtshift_marked_bam        = ALIGN_MT_SHIFT.out.marked_bam
-            ch_mtshift_marked_bai        = ALIGN_MT_SHIFT.out.marked_bai
-            ch_mtshift_bam_bai_gatksubwf = ch_mtshift_marked_bam
-                                            .join(ch_mtshift_marked_bai, failOnMismatch:true, failOnDuplicate:true) // Only for SNV calling
+            ch_mt_bam_bai_gatksubwf      = ALIGN_MT.out.marked_bam
+                                            .join(ALIGN_MT.out.marked_bai, failOnMismatch:true, failOnDuplicate:true) // Only for SNV calling
+            ch_mtshift_bam_bai_gatksubwf = ALIGN_MT_SHIFT.out.marked_bam
+                                            .join(ALIGN_MT_SHIFT.out.marked_bai, failOnMismatch:true, failOnDuplicate:true) // Only for SNV calling
             ch_versions                  = ch_versions
                                             .mix(ALIGN_MT.out.versions, ALIGN_MT_SHIFT.out.versions, CONVERT_MT_BAM_TO_FASTQ.out.versions)
         }
