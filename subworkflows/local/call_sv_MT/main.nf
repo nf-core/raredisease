@@ -29,9 +29,8 @@ workflow CALL_SV_MT {
             SEQTK_SAMPLE (ch_reads_subdepth)
             ch_versions            = ch_versions.mix(SEQTK_SAMPLE.out.versions.first())
 
-//            MITOSALT(SEQTK_SAMPLE.out.reads, ch_msconfig, ch_msref, ch_genome_hisat2index, ch_genome_fai, ch_mt_lastdb, ch_mt_fai, ch_genome_chrsizes, ch_mt_fasta)
-	  MITOSALT(SEQTK_SAMPLE.out.reads, ch_msconfig, ch_msref)  
-          ch_versions            = ch_versions.mix(MITOSALT.out.versions.first())
+            MITOSALT(SEQTK_SAMPLE.out.reads, ch_msconfig, ch_msref, ch_genome_hisat2index, ch_genome_fai, ch_mt_lastdb, ch_mt_fai, ch_genome_chrsizes, ch_mt_fasta)
+            ch_versions            = ch_versions.mix(MITOSALT.out.versions.first())
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
 

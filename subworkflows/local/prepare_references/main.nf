@@ -56,8 +56,6 @@ workflow PREPARE_REFERENCES {
         ch_vcfanno_extra = Channel.empty()
         ch_vcfanno_bgzip = Channel.empty()
         ch_vcfanno_index = Channel.empty()
-	ch_gtf           = Channel.empty()
-	ch_splicesites   = Channel.empty()
 
         // Genome indices
         SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[],[]])
@@ -71,7 +69,7 @@ workflow PREPARE_REFERENCES {
         BWAMEM2_INDEX_GENOME(ch_genome_fasta)
         BWAMEME_INDEX_GENOME(ch_genome_fasta)
         SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.set{ch_sentieonbwa}
-	HISAT2_INDEX_GENOME(ch_genome_fasta,ch_gtf,ch_splicesites) 
+	HISAT2_INDEX_GENOME(ch_genome_fasta,[[:],[]], [[:],[]]) 
 
         // MT genome indices
         SAMTOOLS_EXTRACT_MT(ch_genome_fasta, ch_fai)
