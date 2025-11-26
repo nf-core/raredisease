@@ -389,7 +389,7 @@ workflow RAREDISEASE {
     QC_BAM (
         ch_mapped.genome_marked_bam,
         ch_mapped.genome_marked_bai,
-        ch_mapped.genome_bam_bai,
+        ch_mapped.genome_marked_bam_bai,
         ch_genome_fasta,
         ch_genome_fai,
         ch_bait_intervals,
@@ -451,9 +451,9 @@ workflow RAREDISEASE {
 
     if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_calling'))) {
         CALL_SNV (
-            ch_mapped.genome_bam_bai,
-            ch_mapped.mt_bam_bai,
-            ch_mapped.mtshift_bam_bai,
+            ch_mapped.genome_marked_bam_bai,
+            ch_mapped.mt_bam_bai_gatksubwf,
+            ch_mapped.mtshift_bam_bai_gatksubwf,
             ch_genome_chrsizes,
             ch_genome_fasta,
             ch_genome_fai,
@@ -635,13 +635,11 @@ workflow RAREDISEASE {
         CALL_STRUCTURAL_VARIANTS (
             ch_mapped.genome_marked_bam,
             ch_mapped.genome_marked_bai,
-            ch_mapped.genome_bam_bai,
+            ch_mapped.genome_marked_bam_bai,
             ch_mapped.mt_bam_bai,
-            ch_mapped.mtshift_bam_bai,
             ch_genome_bwaindex,
             ch_genome_fasta,
             ch_genome_fai,
-            ch_mtshift_fasta,
             ch_case_info,
             ch_target_bed,
             ch_genome_dictionary,
@@ -725,7 +723,7 @@ workflow RAREDISEASE {
 
     if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_calling')) && params.analysis_type.equals("wgs")) {
         CALL_MOBILE_ELEMENTS(
-            ch_mapped.genome_bam_bai,
+            ch_mapped.genome_marked_bam_bai,
             ch_genome_fasta,
             ch_genome_fai,
             ch_me_references,
@@ -843,7 +841,7 @@ workflow RAREDISEASE {
 */
     if (!(params.skip_tools && params.skip_tools.split(',').contains('gens')) && params.analysis_type.equals("wgs")) {
         GENS (
-            ch_mapped.genome_bam_bai,
+            ch_mapped.genome_marked_bam_bai,
             CALL_SNV.out.genome_gvcf,
             ch_genome_fasta,
             ch_genome_fai,
