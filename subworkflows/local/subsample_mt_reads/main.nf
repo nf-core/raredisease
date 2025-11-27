@@ -16,7 +16,7 @@ workflow SUBSAMPLE_MT_READS {
 
     main:
         ch_versions = Channel.empty()
- 
+
         SAMTOOLS_VIEW(ch_mt_bam_bai, [[:],[]], [])
 
         SAMTOOLS_COLLATE(SAMTOOLS_VIEW.out.bam, [[:],[]])
