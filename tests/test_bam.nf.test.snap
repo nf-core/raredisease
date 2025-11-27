@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            283,
+            274,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "tabix": 1.12
@@ -245,17 +245,11 @@
                 "SAMTOOLS_FAIDX_MT": {
                     "samtools": 1.21
                 },
-                "SAMTOOLS_INDEX": {
-                    "samtools": 1.21
-                },
-                "SAMTOOLS_INDEX_MT": {
-                    "samtools": 1.21
-                },
                 "SAMTOOLS_SORT": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_SORT_MT": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SMNCOPYNUMBERCALLER": {
                     "SMNCopyNumberCaller": "1.1.2"
@@ -521,17 +515,14 @@
                 "repeat_expansions",
                 "repeat_expansions/earlycasualcaiman_exphunter_sorted.bam",
                 "repeat_expansions/earlycasualcaiman_exphunter_sorted.bam.bai",
-                "repeat_expansions/earlycasualcaiman_exphunter_sorted.bam.csi",
                 "repeat_expansions/earlycasualcaiman_repeat_expansion.vcf",
                 "repeat_expansions/hugelymodelbat_exphunter_sorted.bam",
                 "repeat_expansions/hugelymodelbat_exphunter_sorted.bam.bai",
-                "repeat_expansions/hugelymodelbat_exphunter_sorted.bam.csi",
                 "repeat_expansions/hugelymodelbat_repeat_expansion.vcf",
                 "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz",
                 "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz.tbi",
                 "repeat_expansions/slowlycivilbuck_exphunter_sorted.bam",
                 "repeat_expansions/slowlycivilbuck_exphunter_sorted.bam.bai",
-                "repeat_expansions/slowlycivilbuck_exphunter_sorted.bam.csi",
                 "repeat_expansions/slowlycivilbuck_repeat_expansion.vcf",
                 "smncopynumbercaller",
                 "smncopynumbercaller/out",
@@ -543,6 +534,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2025-11-15T12:06:37.106816288"
+        "timestamp": "2025-11-27T16:14:53.307227004"
     }
 }
