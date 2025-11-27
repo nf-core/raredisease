@@ -5,7 +5,6 @@
 include { BEDTOOLS_GENOMECOV      } from '../../../modules/nf-core/bedtools/genomecov/main'
 include { CALCULATE_SEED_FRACTION } from '../../../modules/local/calculate_seed_fraction'
 include { SAMTOOLS_VIEW           } from '../../../modules/nf-core/samtools/view/main'
-include { SAMTOOLS_INDEX          } from '../../../modules/nf-core/samtools/index/main'
 
 workflow SUBSAMPLE_MT_FRAC {
 
@@ -33,14 +32,11 @@ workflow SUBSAMPLE_MT_FRAC {
         }
         .set { ch_subsample_in }
 
-        SAMTOOLS_VIEW(ch_subsample_in, [[:],[]], [])
-
-        SAMTOOLS_INDEX(SAMTOOLS_VIEW.out.bam)
+        SAMTOOLS_VIEW(ch_subsample_in, [[:],[]], [], 'bai')
 
         ch_versions = ch_versions.mix(BEDTOOLS_GENOMECOV.out.versions.first())
         ch_versions = ch_versions.mix(CALCULATE_SEED_FRACTION.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_VIEW.out.versions.first())
-        ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
     emit:
         versions = ch_versions  // channel: [ path(versions.yml) ]
