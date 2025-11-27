@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            280,
+            283,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "tabix": 1.12
