@@ -2,12 +2,12 @@
 // A subworkflow to subsample MT alignments
 //
 
-include { BEDTOOLS_GENOMECOV      } from '../../modules/nf-core/bedtools/genomecov/main'
-include { CALCULATE_SEED_FRACTION } from '../../modules/local/calculate_seed_fraction'
-include { SAMTOOLS_VIEW           } from '../../modules/nf-core/samtools/view/main'
-include { SAMTOOLS_INDEX          } from '../../modules/nf-core/samtools/index/main'
+include { BEDTOOLS_GENOMECOV      } from '../../../modules/nf-core/bedtools/genomecov/main'
+include { CALCULATE_SEED_FRACTION } from '../../../modules/local/calculate_seed_fraction'
+include { SAMTOOLS_VIEW           } from '../../../modules/nf-core/samtools/view/main'
+include { SAMTOOLS_INDEX          } from '../../../modules/nf-core/samtools/index/main'
 
-workflow SUBSAMPLE_MT {
+workflow SUBSAMPLE_MT_FRAC {
 
     take:
         ch_mt_bam_bai          // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
