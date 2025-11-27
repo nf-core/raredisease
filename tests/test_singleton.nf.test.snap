@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            150,
+            151,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "tabix": 1.12
@@ -464,8 +464,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.8"
+            "nextflow": "25.10.0"
         },
-        "timestamp": "2025-10-15T09:43:13.720671267"
+        "timestamp": "2025-11-15T12:11:02.492935999"
     }
 }
