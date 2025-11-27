@@ -31,12 +31,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Tool updates
 
-| Tool     | Old version | New version |
-| -------- | ----------- | ----------- |
-| bcftools | 1.20        | 1.21        |
-| htslib   | 1.20        | 1.21        |
-| mosdepth | 0.3.8       | 0.3.10      |
-| ngs-bits | 2023_02     | 2024_11     |
+| Tool                                | Old version | New version |
+| ----------------------------------- | ----------- | ----------- |
+| bcftools                            | 1.20        | 1.21        |
+| htslib                              | 1.20        | 1.21        |
+| mosdepth                            | 0.3.8       | 0.3.10      |
+| ngs-bits                            | 2023_02     | 2024_11     |
+| gatk4/determinegermlinecontigploidy | 4.5.0.0     | 4.6.2.0     |
+| gatk4/germlinecnvcaller             | 4.5.0.0     | 4.6.2.0     |
 
 ## 2.6.0 - Cacofonix [2025-06-25]
 
