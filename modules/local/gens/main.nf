@@ -2,7 +2,7 @@ process GENS {
     tag "$meta.id"
     label 'process_medium'
 
-    container 'docker.io/rannickscilifelab/gens_preproc:1.1.1'
+    container 'docker.io/clinicalgenomics/gens-preproc:1.1.2'
 
     input:
     tuple val(meta), path(read_counts)
