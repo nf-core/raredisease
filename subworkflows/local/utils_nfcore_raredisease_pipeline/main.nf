@@ -101,7 +101,7 @@ workflow PIPELINE_INITIALISATION {
     //
     // Create channel from input file provided through params.input
     //
-    Channel
+    channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .tap { ch_original_input }
         .map { meta, fastq1, fastq2, spring1, spring2, bam, bai -> meta.id }

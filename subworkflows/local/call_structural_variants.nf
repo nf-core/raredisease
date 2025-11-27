@@ -29,9 +29,9 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_gcnvcaller_model    // channel: [optional; used by mandatory for GATK's cnvcaller][ path(gcnvcaller_model) ]
 
     main:
-        ch_versions = Channel.empty()
-        ch_merged_svs = Channel.empty()
-        ch_merged_tbi = Channel.empty()
+        ch_versions = channel.empty()
+        ch_merged_svs = channel.empty()
+        ch_merged_tbi = channel.empty()
 
         if (!params.analysis_type.equals("mito")) {
             CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_target_bed)

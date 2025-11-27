@@ -13,7 +13,7 @@ workflow ANNOTATE_CSQ_PLI {
         val_index               // bool
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         CUSTOM_ADDMOSTSEVERECONSEQUENCE (ch_vcf, ch_variant_consequences)
 

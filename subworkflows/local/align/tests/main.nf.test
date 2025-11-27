@@ -12,7 +12,7 @@ nextflow_workflow {
             script "modules/nf-core/bwamem2/index/main.nf"
             process {
                 """
-                input[0] = Channel.of([
+                input[0] = channel.of([
                     [id:'mt'],
                     file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference_mt.fa', checkIfExists: true)
                 ])
@@ -23,7 +23,7 @@ nextflow_workflow {
             script "modules/nf-core/bwamem2/index/main.nf"
             process {
                 """
-                input[0] = Channel.of([
+                input[0] = channel.of([
                     [id:'shiftmt'],
                     file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference_shift.fasta', checkIfExists: true)
                 ])
@@ -39,7 +39,7 @@ nextflow_workflow {
                 script "modules/nf-core/bwamem2/index/main.nf"
                 process {
                     """
-                    input[0] = Channel.of([
+                    input[0] = channel.of([
                         [id:'genome'],
                         file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference.fasta', checkIfExists: true)
                     ])
@@ -63,7 +63,7 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = Channel.of(
+                input[0] = channel.of(
                     [
                         [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
                         [
@@ -86,23 +86,23 @@ nextflow_workflow {
                         ]
                     ]
                 )
-                input[1]  = Channel.empty()
-                input[2]  = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
-                input[3]  = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
-                input[4]  = Channel.empty()
+                input[1]  = channel.empty()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.empty()
                 input[5]  = GENOME_MEM2.out.index.collect()
-                input[6]  = Channel.empty()
-                input[7]  = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
-                input[8]  = Channel.empty()
+                input[6]  = channel.empty()
+                input[7]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
+                input[8]  = channel.empty()
                 input[9]  = MT_MEM2.out.index.collect()
-                input[10] = Channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
-                input[11] = Channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
-                input[12] = Channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
-                input[13] = Channel.empty()
+                input[10] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
+                input[11] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
+                input[12] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[13] = channel.empty()
                 input[14] = SHIFTMT_MEM2.out.index.collect()
-                input[15] = Channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
-                input[16] = Channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
-                input[17] = Channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[15] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
+                input[16] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
+                input[17] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
                 input[18] = 3072
                 input[19] = "illumina"
                 input[20] = 4
@@ -137,7 +137,7 @@ nextflow_workflow {
                 script "modules/nf-core/bwamem2/index/main.nf"
                 process {
                     """
-                    input[0] = Channel.of([
+                    input[0] = channel.of([
                         [id:'genome'],
                         file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference.fasta', checkIfExists: true)
                     ])
@@ -161,7 +161,7 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = Channel.of(
+                input[0] = channel.of(
                     [
                         [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
                         [
@@ -184,23 +184,23 @@ nextflow_workflow {
                         ]
                     ]
                 )
-                input[1]  = Channel.empty()
-                input[2]  = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
-                input[3]  = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
-                input[4]  = Channel.empty()
+                input[1]  = channel.empty()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.empty()
                 input[5]  = GENOME_MEM2.out.index.collect()
-                input[6]  = Channel.empty()
-                input[7]  = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
-                input[8]  = Channel.empty()
+                input[6]  = channel.empty()
+                input[7]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
+                input[8]  = channel.empty()
                 input[9]  = MT_MEM2.out.index.collect()
-                input[10] = Channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
-                input[11] = Channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
-                input[12] = Channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
-                input[13] = Channel.empty()
+                input[10] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
+                input[11] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
+                input[12] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[13] = channel.empty()
                 input[14] = SHIFTMT_MEM2.out.index.collect()
-                input[15] = Channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
-                input[16] = Channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
-                input[17] = Channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[15] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
+                input[16] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
+                input[17] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
                 input[18] = 3072
                 input[19] = "illumina"
                 input[20] = 4
@@ -234,7 +234,7 @@ nextflow_workflow {
                 script "modules/nf-core/bwameme/index/main.nf"
                 process {
                     """
-                    input[0] = Channel.of([
+                    input[0] = channel.of([
                         [id:'genome'],
                         file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference.fasta', checkIfExists: true)
                     ])
@@ -258,7 +258,7 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = Channel.fromList([
+                input[0] = channel.fromList([
                     [[ id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", 'lane':1, 'sex':1, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
                     [
                         file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_1.fastq.gz', checkIfExists: true),
@@ -275,23 +275,23 @@ nextflow_workflow {
                         file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_2.fastq.gz', checkIfExists: true)
                     ]]
                 ])
-                input[1]  = Channel.empty()
-                input[2]  = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
-                input[3]  = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
-                input[4]  = Channel.empty()
-                input[5]  = Channel.empty()
+                input[1]  = channel.empty()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.empty()
+                input[5]  = channel.empty()
                 input[6]  = GENOME_MEME.out.index.collect()
-                input[7]  = Channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
-                input[8]  = Channel.empty()
+                input[7]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
+                input[8]  = channel.empty()
                 input[9]  = MT_MEM2.out.index.collect()
-                input[10] = Channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
-                input[11] = Channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
-                input[12] = Channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
-                input[13] = Channel.empty()
+                input[10] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
+                input[11] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
+                input[12] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[13] = channel.empty()
                 input[14] = SHIFTMT_MEM2.out.index.collect()
-                input[15] = Channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
-                input[16] = Channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
-                input[17] = Channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[15] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
+                input[16] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
+                input[17] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
                 input[18] = 3072
                 input[19] = "illumina"
                 input[20] = 4

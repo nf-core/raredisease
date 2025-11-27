@@ -18,7 +18,7 @@ workflow ANNOTATE_RHOCALLVIZ {
         ch_genome_chrsizes // channel: [mandatory] [ path(sizes) ]
 
     main:
-        ch_versions       = Channel.empty()
+        ch_versions       = channel.empty()
 
         ch_vcf_tbi
             .combine(ch_samples)

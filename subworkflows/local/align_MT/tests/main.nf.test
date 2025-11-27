@@ -14,7 +14,7 @@ nextflow_workflow {
                 script "modules/nf-core/bwamem2/index/main.nf"
                 process {
                     """
-                    input[0] = Channel.of([
+                    input[0] = channel.of([
                         [id:'mt'],
                         file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference_mt.fa', checkIfExists: true)
                     ])
@@ -30,7 +30,7 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = Channel.of(
+                input[0] = channel.of(
                     [
                         [ id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", 'lane':1, 'sex':1, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
                         [ file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_mt_1.fastq.gz', checkIfExists: true), file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)]
@@ -44,7 +44,7 @@ nextflow_workflow {
                         [ file(params.pipelines_testdata_base_path + '/testdata/slowlycivilbuck_mt_1.fastq.gz', checkIfExists: true), file(params.pipelines_testdata_base_path + '/testdata/slowlycivilbuck_mt_2.fastq.gz', checkIfExists: true)]
                     ]
                 )
-                input[1] = Channel.of(
+                input[1] = channel.of(
                     [
                         [ id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", 'lane':1, 'sex':1, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
                         [ file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_mtreverted.bam', checkIfExists: true)]
@@ -60,9 +60,9 @@ nextflow_workflow {
                 )
                 input[2] = [[:],[]]
                 input[3] = MT_MEM2.out.index.collect()
-                input[4] = Channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]])
-                input[5] = Channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)]])
-                input[6] = Channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]])
+                input[4] = channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]])
+                input[5] = channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)]])
+                input[6] = channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]])
                 """
             }
         }
@@ -81,7 +81,7 @@ nextflow_workflow {
                 script "modules/nf-core/bwa/index/main.nf"
                 process {
                     """
-                    input[0] = Channel.of([
+                    input[0] = channel.of([
                         [id:'mt'],
                         file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference_mt.fa', checkIfExists: true)
                     ])
@@ -97,7 +97,7 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = Channel.of(
+                input[0] = channel.of(
                     [
                         [ id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", 'lane':1, 'sex':1, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
                         [ file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_mt_1.fastq.gz', checkIfExists: true), file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)]
@@ -111,7 +111,7 @@ nextflow_workflow {
                         [ file(params.pipelines_testdata_base_path + '/testdata/slowlycivilbuck_mt_1.fastq.gz', checkIfExists: true), file(params.pipelines_testdata_base_path + '/testdata/slowlycivilbuck_mt_2.fastq.gz', checkIfExists: true)]
                     ]
                 )
-                input[1] = Channel.of(
+                input[1] = channel.of(
                     [
                         [ id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", 'lane':1, 'sex':1, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
                         [ file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_mtreverted.bam', checkIfExists: true)]
@@ -127,9 +127,9 @@ nextflow_workflow {
                 )
                 input[2] = MT_BWA.out.index.collect()
                 input[3] = [[:],[]]
-                input[4] = Channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]])
-                input[5] = Channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)]])
-                input[6] = Channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]])
+                input[4] = channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]])
+                input[5] = channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)]])
+                input[6] = channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]])
                 """
             }
         }

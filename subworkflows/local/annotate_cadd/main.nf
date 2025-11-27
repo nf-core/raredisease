@@ -17,7 +17,7 @@ workflow ANNOTATE_CADD {
         ch_cadd_resources // channel: [mandatory] [ path(dir) ]
 
     main:
-        ch_versions       = Channel.empty()
+        ch_versions       = channel.empty()
 
         BCFTOOLS_VIEW(ch_vcf, [], [], [])
 

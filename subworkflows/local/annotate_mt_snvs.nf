@@ -29,8 +29,8 @@ workflow ANNOTATE_MT_SNVS {
         ch_vep_extra_files     // channel: [mandatory] [ path(files) ]
 
     main:
-        ch_versions     = Channel.empty()
-        ch_haplog       = Channel.empty()
+        ch_versions     = channel.empty()
+        ch_haplog       = channel.empty()
 
         // add prefix to meta
         ch_mt_vcf
@@ -66,7 +66,7 @@ workflow ANNOTATE_MT_SNVS {
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
             ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
         } else {
-            ch_cadd_vcf = Channel.empty()
+            ch_cadd_vcf = channel.empty()
         }
 
         // Pick input for vep

@@ -20,7 +20,7 @@ workflow CALL_SV_CNVNATOR {
         ch_case_info // channel: [mandatory] [ val(case_info) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         CNVNATOR_RD ( ch_bam_bai, [[:],[]], [[:],[]], [[:],[]], "rd" )
         CNVNATOR_HIST ( [[:],[],[]], CNVNATOR_RD.out.root, ch_fasta, ch_fai, "his" )

@@ -27,7 +27,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         val_platform     // string:  [mandatory] default: illumina
         val_sort_threads // integer: [mandatory] default: 4
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         // Map, sort, and index
         if (params.aligner.equals("bwa")) {

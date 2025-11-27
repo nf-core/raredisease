@@ -13,7 +13,7 @@ workflow SCATTER_GENOME {
         ch_genome_fasta  // channel: [mandatory] [ val(meta), path(fasta) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         BUILD_BED (ch_genome_fai)
 

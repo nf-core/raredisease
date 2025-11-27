@@ -43,10 +43,10 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_genome_chrsizes    // channel: [mandatory] [ path(sizes) ]
 
     main:
-        ch_cadd_vcf       = Channel.empty()
-        ch_versions       = Channel.empty()
-        ch_vcf_scatter_in = Channel.empty()
-        ch_vep_in         = Channel.empty()
+        ch_cadd_vcf       = channel.empty()
+        ch_versions       = channel.empty()
+        ch_vcf_scatter_in = channel.empty()
+        ch_vep_in         = channel.empty()
 
         BCFTOOLS_ROH (ch_vcf, ch_gnomad_af, [], [], [], [])
 

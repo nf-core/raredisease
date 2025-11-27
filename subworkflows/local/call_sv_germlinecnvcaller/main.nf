@@ -22,7 +22,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
         ch_case_info           // channel: [mandatory] [ val(case_info) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         input = ch_bam_bai.combine( ch_readcount_intervals )
 

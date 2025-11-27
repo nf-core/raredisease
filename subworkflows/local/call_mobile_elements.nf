@@ -23,7 +23,7 @@ workflow CALL_MOBILE_ELEMENTS {
         ch_case_info        // channel: [mandatory] [ val(case_info) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         // Building chromosome channels based on fasta index
         ch_genome_fai

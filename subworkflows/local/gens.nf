@@ -21,7 +21,7 @@ workflow GENS {
         ch_genome_dictionary // channel: [mandatory] [ val(meta), path(dict) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         ch_bam_bai
             .combine(ch_interval_list)

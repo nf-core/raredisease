@@ -15,9 +15,9 @@ workflow CALL_SNV_MT {
         ch_intervals  // channel: [mandatory] [ path(interval_list) ]
 
     main:
-        ch_versions        = Channel.empty()
-        ch_haplocheck_txt  = Channel.empty()
-        ch_haplocheck_html = Channel.empty()
+        ch_versions        = channel.empty()
+        ch_haplocheck_txt  = channel.empty()
+        ch_haplocheck_html = channel.empty()
 
         ch_bam_bai_int = ch_bam_bai.combine(ch_intervals)
 
