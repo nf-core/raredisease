@@ -37,7 +37,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
         GATK4_COLLECTREADCOUNTS.out.tsv
                 .join(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls)
                 .combine(ch_gcnvcaller_model)
-                .map({ meta, tsv, calls, meta2, model -> return [meta, tsv, [], calls, model ]})
+                .map({ meta, tsv, calls, _meta2, model -> return [meta, tsv, [], calls, model ]})
                 .set{ch_gcnvc_in}
 
         GATK4_GERMLINECNVCALLER ( ch_gcnvc_in )
@@ -47,12 +47,12 @@ workflow CALL_SV_GERMLINECNVCALLER {
                 return [meta.sample, meta, model_calls]
             }
             .groupTuple(by: 0)
-            .map { sample, metas, model_calls ->
+            .map { _sample, metas, model_calls ->
                 def meta = metas[0] // All metas should be the same for a given sample
-                def models = model_calls.collect { it.toString() }
+                def models = model_calls.collect { file -> file.toString() }
                 return [meta, models]
             }
-            .combine(ch_gcnvcaller_model.collect{it[1]}.toList())
+            .combine(ch_gcnvcaller_model.collect{meta, model -> model}.toList())
             .join(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls)
             .set {ch_postproc_in}
 
@@ -66,7 +66,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
         BCFTOOLS_VIEW (ch_segments_in , [], [], [] )
 
         BCFTOOLS_VIEW.out.vcf
-            .collect{it[1]}
+            .collect{meta, vcf -> vcf}
             .toList()
             .set { vcf_file_list }
 

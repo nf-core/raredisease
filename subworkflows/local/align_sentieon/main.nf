@@ -29,9 +29,9 @@ workflow ALIGN_SENTIEON {
                 [groupKey(new_meta, new_meta.num_lanes), bam, bai]
                 }
             .groupTuple()
-            .branch{
-                single: it[1].size() == 1
-                multiple: it[1].size() > 1
+            .branch{ _meta, bam, _bai ->
+                single: bam.size() == 1
+                multiple: bam.size() > 1
                 }
             .set{ merge_bams_in }
 

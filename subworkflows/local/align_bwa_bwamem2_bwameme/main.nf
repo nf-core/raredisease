@@ -74,9 +74,9 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
                     [groupKey(new_meta, new_meta.num_lanes), bam]
                 }
             .groupTuple()
-            .branch{
-                single: it[1].size() == 1
-                multiple: it[1].size() > 1
+            .branch{ meta, bam -> 
+                single: bam.size() == 1
+                multiple: bam.size() > 1
                 }
             .set{ bams }
 

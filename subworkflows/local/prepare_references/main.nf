@@ -87,10 +87,10 @@ workflow PREPARE_REFERENCES {
         GATK_SHIFTFASTA.out.intervals
             .multiMap{ _meta, files ->
                     shift_intervals:
-                        def ind = files.findIndexValues {it.toString().endsWith("shifted.intervals")}
+                        def ind = files.findIndexValues {file -> file.toString().endsWith("shifted.intervals")}
                         files[ind]
                     intervals:
-                        ind = files.findIndexValues {!(it.toString().endsWith("shifted.intervals"))}
+                        ind = files.findIndexValues {file -> !(file.toString().endsWith("shifted.intervals"))}
                         files[ind]
             }
             .set {ch_shiftfasta_mtintervals}
@@ -119,13 +119,13 @@ workflow PREPARE_REFERENCES {
 
         TABIX_VCFANNOEXTRA(ch_vcfanno_tabix_in.index).tbi
             .join(ch_vcfanno_tabix_in.index)
-            .map { meta, tbi, vcf -> return [[vcf,tbi]]}
+            .map { _meta, tbi, vcf -> return [[vcf,tbi]]}
             .set {ch_vcfanno_index}
 
         TABIX_BGZIPINDEX_VCFANNOEXTRA(ch_vcfanno_tabix_in.bgzipindex)
         channel.empty()
             .mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_tbi, TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_csi)
-            .map { meta, vcf, index -> return [[vcf,index]] }
+            .map { _meta, vcf, index -> return [[vcf,index]] }
             .set {ch_vcfanno_bgzip}
 
         channel.empty()
@@ -145,7 +145,7 @@ workflow PREPARE_REFERENCES {
         GATK_BILT(ch_target_bed, ch_dict).interval_list
         GATK_ILT(GATK_BILT.out.interval_list)
         GATK_ILT.out.interval_list
-            .collect{ it[1] }
+            .collect{ meta, list -> list }
             .map { it ->
                 def meta = it[0].toString().split("_split")[0].split("/")[-1] + "_bait.intervals_list"
                 return [[id:meta], it]

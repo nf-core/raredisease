@@ -35,8 +35,8 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
         if (!params.analysis_type.equals("mito")) {
             CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_target_bed)
-                .filtered_diploid_sv_vcf_tbi
-                .collect{ _meta, vcf, _tbi -> vcf }
+                .filtered_diploid_sv_vcf
+                .collect{ _meta, vcf -> vcf }
                 .set{ manta_vcf }
             ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
         }

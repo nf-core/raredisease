@@ -15,16 +15,16 @@ workflow CALL_SV_MANTA {
         ch_bed          // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
 
     main:
-        ch_bam.collect{it[1]}
+        ch_bam.collect{_meta, bam -> bam}
             .toList()
             .set { bam_file_list }
 
-        ch_bai.collect{it[1]}
+        ch_bai.collect{_meta, bai -> bai}
             .toList()
             .set { bai_file_list }
 
         ch_bed.map {
-                id, bed_file, index ->
+                _id, bed_file, index ->
                     return [bed_file, index]}
             .set { bed_input }
 
@@ -57,6 +57,6 @@ workflow CALL_SV_MANTA {
         candidate_sv_vcf_tbi           = MANTA.out.candidate_sv_vcf_tbi           // channel: [ val(meta), path(tbi) ]
         diploid_sv_vcf                 = MANTA.out.diploid_sv_vcf                 // channel: [ val(meta), path(vcf) ]
         diploid_sv_vcf_tbi             = MANTA.out.diploid_sv_vcf_tbi             // channel: [ val(meta), path(tbi) ]
-        filtered_diploid_sv_vcf_tbi    = BCFTOOLS_VIEW_MANTA.out.vcf              // channel: [ val(meta), path(vcf), path(tbi) ]
+        filtered_diploid_sv_vcf        = BCFTOOLS_VIEW_MANTA.out.vcf              // channel: [ val(meta), path(vcf) ]
         versions                       = ch_versions
 }
