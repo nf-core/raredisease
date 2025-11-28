@@ -168,7 +168,7 @@ workflow RAREDISEASE {
     ch_intervals_wgs            = params.intervals_wgs                      ? channel.fromPath(params.intervals_wgs).collect()
                                                                             : channel.empty()
     ch_intervals_y              = params.intervals_y                        ? channel.fromPath(params.intervals_y).collect()
-                                                                            : Channel.empty()
+                                                                            : channel.empty()
     ch_me_references            = params.mobile_element_references          ? channel.fromList(samplesheetToList(params.mobile_element_references, "${projectDir}/assets/mobile_element_references_schema.json"))
                                                                             : channel.empty()
     ch_me_svdb_resources        = params.mobile_element_svdb_annotations    ? channel.fromPath(params.mobile_element_svdb_annotations)
