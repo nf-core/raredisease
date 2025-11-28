@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Interval parameter in the default retroseq call [#717](https://github.com/nf-core/raredisease/pull/717)
 - Tests for call_repeat_expansions and qc_bam subworkflows [#713](https://github.com/nf-core/raredisease/pull/713)
+- Feature to subsample mitochondrial alignments based on number of reads. [#748](https://github.com/nf-core/raredisease/pull/748)
 
 ### `Changed`
 
@@ -42,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | gatk4/determinegermlinecontigploidy | 4.5.0.0     | 4.6.2.0     |
 | gatk4/germlinecnvcaller             | 4.5.0.0     | 4.6.2.0     |
 | gens-preproc                        | 1.0.11      | 1.1.2       |
+| samtools (sort & view)              | 1.21        | 1.22.1      |
 
 ## 2.6.0 - Cacofonix [2025-06-25]
 

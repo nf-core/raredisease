@@ -88,7 +88,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         if (params.extract_alignments) {
             SAMTOOLS_INDEX_EXTRACT ( prepared_bam )
             extract_bam_sorted_indexed = prepared_bam.join(SAMTOOLS_INDEX_EXTRACT.out.bai, failOnMismatch:true, failOnDuplicate:true)
-            EXTRACT_ALIGNMENTS( extract_bam_sorted_indexed, ch_genome_fasta, [])
+            EXTRACT_ALIGNMENTS( extract_bam_sorted_indexed, ch_genome_fasta, [], '')
             prepared_bam = EXTRACT_ALIGNMENTS.out.bam
             ch_versions = ch_versions.mix(EXTRACT_ALIGNMENTS.out.versions.first())
             ch_versions = ch_versions.mix(SAMTOOLS_INDEX_EXTRACT.out.versions.first())

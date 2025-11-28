@@ -62,7 +62,8 @@ include { RANK_VARIANTS as RANK_VARIANTS_MT                           } from '..
 include { RANK_VARIANTS as RANK_VARIANTS_SNV                          } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SV                           } from '../subworkflows/local/rank_variants'
 include { SCATTER_GENOME                                              } from '../subworkflows/local/scatter_genome'
-include { SUBSAMPLE_MT                                                } from '../subworkflows/local/subsample_mt'
+include { SUBSAMPLE_MT_FRAC                                           } from '../subworkflows/local/subsample_mt_frac'
+include { SUBSAMPLE_MT_READS                                          } from '../subworkflows/local/subsample_mt_reads'
 include { VARIANT_EVALUATION                                          } from '../subworkflows/local/variant_evaluation'
 include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
 include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
@@ -375,12 +376,19 @@ workflow RAREDISEASE {
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
 
     if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('mt_subsample')) && (params.analysis_type.equals("wgs") || params.run_mt_for_wes)) {
-        SUBSAMPLE_MT(
-            ch_mapped.mt_bam_bai,
-            params.mt_subsample_rd,
-            params.mt_subsample_seed
-        )
-        ch_versions   = ch_versions.mix(SUBSAMPLE_MT.out.versions)
+        if (params.mt_subsample_approach.equals("fraction")) {
+            SUBSAMPLE_MT_FRAC(
+                ch_mapped.mt_bam_bai,
+                params.mt_subsample_rd,
+                params.mt_subsample_seed
+            )
+            ch_versions   = ch_versions.mix(SUBSAMPLE_MT_FRAC.out.versions)
+        } else {
+            SUBSAMPLE_MT_READS(
+                ch_mapped.mt_bam_bai,
+            )
+            ch_versions   = ch_versions.mix(SUBSAMPLE_MT_READS.out.versions)
+        }
     }
 
     //

@@ -7,7 +7,6 @@ include { BCFTOOLS_CONCAT as BCFTOOLS_CONCAT_ME      } from '../../modules/nf-co
 include { BCFTOOLS_SORT as BCFTOOLS_SORT_ME          } from '../../modules/nf-core/bcftools/sort/main'
 include { RETROSEQ_CALL as RETROSEQ_CALL             } from '../../modules/local/retroseq/call/main'
 include { RETROSEQ_DISCOVER as RETROSEQ_DISCOVER     } from '../../modules/local/retroseq/discover/main'
-include { SAMTOOLS_INDEX as ME_INDEX_SPLIT_ALIGNMENT } from '../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_VIEW as ME_SPLIT_ALIGNMENT        } from '../../modules/nf-core/samtools/view/main'
 include { TABIX_TABIX as TABIX_ME                    } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_ME_SPLIT              } from '../../modules/nf-core/tabix/tabix/main'
@@ -43,11 +42,10 @@ workflow CALL_MOBILE_ELEMENTS {
             .set { ch_genome_bam_bai_interval }
 
         // Split bam file on chromosome and index
-        ME_SPLIT_ALIGNMENT ( ch_genome_bam_bai_interval, [[:], []], [] )
-        ME_INDEX_SPLIT_ALIGNMENT ( ME_SPLIT_ALIGNMENT.out.bam )
+        ME_SPLIT_ALIGNMENT ( ch_genome_bam_bai_interval, [[:], []], [], 'bai' )
 
         ME_SPLIT_ALIGNMENT.out.bam
-            .join( ME_INDEX_SPLIT_ALIGNMENT.out.bai, failOnMismatch: true, failOnDuplicate: true )
+            .join( ME_SPLIT_ALIGNMENT.out.bai, failOnMismatch: true, failOnDuplicate: true )
             .set { ch_retroseq_input }
 
         ch_me_references
@@ -124,7 +122,6 @@ workflow CALL_MOBILE_ELEMENTS {
         TABIX_ME ( SVDB_MERGE_ME.out.vcf )
 
         ch_versions = ch_versions.mix(ME_SPLIT_ALIGNMENT.out.versions.first())
-        ch_versions = ch_versions.mix(ME_INDEX_SPLIT_ALIGNMENT.out.versions.first())
         ch_versions = ch_versions.mix(RETROSEQ_DISCOVER.out.versions.first())
         ch_versions = ch_versions.mix(RETROSEQ_CALL.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_ME.out.versions.first())
