@@ -10,7 +10,6 @@ workflow VARIANT_EVALUATION {
 
     take:
         ch_snv_vcf_tbi     // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
-        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
         ch_rtg_truthvcfs   // channel: [mandatory] [ val(meta), path(dbs) ]
         ch_sdf             // channel: [mandatory] [ val(meta), path(sdf) ]
 

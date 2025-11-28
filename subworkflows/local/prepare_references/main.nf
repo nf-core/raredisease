@@ -47,7 +47,6 @@ workflow PREPARE_REFERENCES {
 
     main:
         ch_versions      = channel.empty()
-        ch_tbi           = channel.empty()
         ch_bgzip_tbi     = channel.empty()
         ch_bwa           = channel.empty()
         ch_sentieonbwa   = channel.empty()
@@ -86,7 +85,7 @@ workflow PREPARE_REFERENCES {
         SENTIEON_BWAINDEX_MT_SHIFT(GATK_SHIFTFASTA.out.shift_fa)
         ch_bwa_mtshift = channel.empty().mix(SENTIEON_BWAINDEX_MT_SHIFT.out.index, BWA_INDEX_MT_SHIFT.out.index).collect()
         GATK_SHIFTFASTA.out.intervals
-            .multiMap{ meta, files ->
+            .multiMap{ _meta, files ->
                     shift_intervals:
                         def ind = files.findIndexValues {it.toString().endsWith("shifted.intervals")}
                         files[ind]

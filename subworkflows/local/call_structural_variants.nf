@@ -29,14 +29,14 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_gcnvcaller_model    // channel: [optional; used by mandatory for GATK's cnvcaller][ path(gcnvcaller_model) ]
 
     main:
-        ch_versions = channel.empty()
+        ch_versions   = channel.empty()
         ch_merged_svs = channel.empty()
         ch_merged_tbi = channel.empty()
 
         if (!params.analysis_type.equals("mito")) {
             CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_target_bed)
                 .filtered_diploid_sv_vcf_tbi
-                .collect{it[1]}
+                .collect{ _meta, vcf, _tbi -> vcf }
                 .set{ manta_vcf }
             ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
         }
@@ -44,13 +44,13 @@ workflow CALL_STRUCTURAL_VARIANTS {
         if (params.analysis_type.equals("wgs")) {
             CALL_SV_TIDDIT (ch_genome_bam_bai, ch_genome_fasta, ch_bwa_index, ch_case_info)
                 .vcf
-                .collect{it[1]}
+                .collect{ _meta, vcf -> vcf }
                 .set { tiddit_vcf }
             ch_versions = ch_versions.mix(CALL_SV_TIDDIT.out.versions)
 
             CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_case_info)
                 .vcf
-                .collect{it[1]}
+                .collect{ _meta, vcf -> vcf }
                 .set { cnvnator_vcf }
             ch_versions = ch_versions.mix(CALL_SV_CNVNATOR.out.versions)
         }
@@ -58,7 +58,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         if (!(params.skip_tools && params.skip_tools.split(',').contains('germlinecnvcaller'))) {
             CALL_SV_GERMLINECNVCALLER (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model, ch_case_info)
                 .genotyped_filtered_segments_vcf
-                .collect{it[1]}
+                .collect{ _meta, vcf -> vcf }
                 .set { gcnvcaller_vcf }
 
             ch_versions = ch_versions.mix(CALL_SV_GERMLINECNVCALLER.out.versions)

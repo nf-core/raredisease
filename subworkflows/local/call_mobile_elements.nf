@@ -109,7 +109,7 @@ workflow CALL_MOBILE_ELEMENTS {
 
         // Merge sample vcfs to a case vcf
         BCFTOOLS_CONCAT_ME.out.vcf
-            .collect{it[1]}
+            .collect{_meta, vcf -> vcf}
             .toList()
             .collect()
             .set { ch_vcf_list }

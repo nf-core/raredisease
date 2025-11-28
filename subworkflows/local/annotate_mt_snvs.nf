@@ -15,7 +15,6 @@ include { HMTNOTE_ANNOTATE                               } from '../../modules/n
 workflow ANNOTATE_MT_SNVS {
     take:
         ch_mt_vcf              // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_mt_tbi              // channel: [mandatory] [ val(meta), path(tbi) ]
         ch_cadd_header         // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources      // channel: [mandatory] [ path(annotation) ]
         ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
@@ -55,7 +54,6 @@ workflow ANNOTATE_MT_SNVS {
         ZIP_TABIX_VCFANNO_MT(VCFANNO_MT.out.vcf)
 
         ch_vcfanno_vcf = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, vcf, _tbi -> return [meta, vcf]}
-        ch_vcfanno_tbi = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, _vcf, tbi -> return [meta, tbi]}
 
         // Annotating with CADD
         if (params.cadd_resources != null) {

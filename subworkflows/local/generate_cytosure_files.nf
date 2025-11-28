@@ -27,7 +27,7 @@ workflow GENERATE_CYTOSURE_FILES {
 
         ch_bam.combine(ch_vcf_tbi)
             .map {
-                meta_sample, bam, meta_case, vcf, tbi ->
+                meta_sample, _bam, _meta_case, vcf, tbi ->
                 def id_meta = ['id':meta_sample.sample]
                 def sex_meta = ['sex':meta_sample.sex]
                 return [ id_meta, sex_meta, vcf, tbi ]
