@@ -21,8 +21,8 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
         ch_vep_extra_files      // channel: [mandatory] [ path(files) ]
 
     main:
-        ch_versions = Channel.empty()
-        ch_svdb_dbs = Channel.empty()
+        ch_versions = channel.empty()
+        ch_svdb_dbs = channel.empty()
 
         ch_me_svdb_resources
             .splitCsv ( header:true )

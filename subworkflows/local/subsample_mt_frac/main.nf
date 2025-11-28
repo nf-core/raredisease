@@ -14,7 +14,7 @@ workflow SUBSAMPLE_MT_FRAC {
         val_mt_subsample_seed  // channel: [mandatory] [ val(seed) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         ch_mt_bam_bai.map {meta, bam, bai -> return [meta, bam, -1]}.set {ch_genomecov_in}
 

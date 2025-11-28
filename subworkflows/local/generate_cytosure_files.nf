@@ -16,8 +16,8 @@ workflow GENERATE_CYTOSURE_FILES {
         ch_blacklist     // channel: [optional] [path(blacklist)]
 
     main:
-        ch_versions     = Channel.empty()
-        ch_reheader_out = Channel.empty()
+        ch_versions     = channel.empty()
+        ch_reheader_out = channel.empty()
 
         TIDDIT_COV_VCF2CYTOSURE (ch_bam, [[],[]])
 
@@ -28,8 +28,8 @@ workflow GENERATE_CYTOSURE_FILES {
         ch_bam.combine(ch_vcf_tbi)
             .map {
                 meta_sample, bam, meta_case, vcf, tbi ->
-                id_meta = ['id':meta_sample.sample]
-                sex_meta = ['sex':meta_sample.sex]
+                def id_meta = ['id':meta_sample.sample]
+                def sex_meta = ['sex':meta_sample.sex]
                 return [ id_meta, sex_meta, vcf, tbi ]
             }
             .join(ch_sample_id_map, remainder: true)
@@ -41,7 +41,7 @@ workflow GENERATE_CYTOSURE_FILES {
             }
             .set { ch_for_mix }
 
-        Channel.empty()
+        channel.empty()
             .mix(ch_for_mix.id, ch_for_mix.custid)
             .set { ch_sample_vcf }
 
@@ -70,7 +70,7 @@ workflow GENERATE_CYTOSURE_FILES {
             }
             .set { ch_for_mix }
 
-        Channel.empty()
+        channel.empty()
             .mix(ch_for_mix.split, ch_for_mix.reheader)
             .toSortedList { a, b -> a[0].id <=> b[0].id }
             .flatMap()

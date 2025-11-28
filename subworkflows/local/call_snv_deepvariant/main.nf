@@ -24,7 +24,7 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         if (params.analysis_type.equals("wes")) {
             TABIX_BGZIP(ch_target_bed.map{meta, gzbed, index -> return [meta, gzbed]})

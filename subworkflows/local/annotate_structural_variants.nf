@@ -23,9 +23,9 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         ch_vep_extra_files    // channel: [mandatory] [ path(files) ]
 
     main:
-        ch_versions      = Channel.empty()
-        ch_svdb_dbs      = Channel.empty()
-        ch_svdb_bedpedbs = Channel.empty()
+        ch_versions      = channel.empty()
+        ch_svdb_dbs      = channel.empty()
+        ch_svdb_bedpedbs = channel.empty()
 
         ch_sv_dbs
             .splitCsv ( header:true )

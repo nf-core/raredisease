@@ -15,7 +15,7 @@ workflow CONVERT_MT_BAM_TO_FASTQ {
         ch_genome_dict  // channel: [mandatory] [ val(meta), path(dict) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         // Outputs bam containing only MT
         GATK4_PRINTREADS_MT ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_genome_dict )

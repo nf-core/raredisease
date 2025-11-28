@@ -29,7 +29,7 @@ workflow CALL_SNV_SENTIEON {
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         // Combine bam and intervals
         bam_bai_intervals = ch_bam_bai.combine(ch_call_interval)

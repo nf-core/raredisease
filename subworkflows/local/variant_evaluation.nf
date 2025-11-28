@@ -15,7 +15,7 @@ workflow VARIANT_EVALUATION {
         ch_sdf             // channel: [mandatory] [ val(meta), path(sdf) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         ch_rtg_truthvcfs
             .splitCsv ( header:true )

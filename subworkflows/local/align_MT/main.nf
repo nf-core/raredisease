@@ -21,7 +21,7 @@ workflow ALIGN_MT {
         ch_fai           // channel: [mandatory] [ val(meta), path(fai) ]
 
     main:
-        ch_versions     = Channel.empty()
+        ch_versions     = channel.empty()
 
         if (params.mt_aligner.equals("bwamem2")) {
             BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, ch_fasta, true)

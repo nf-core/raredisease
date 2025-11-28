@@ -28,7 +28,7 @@ workflow POSTPROCESS_MT_CALLS {
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         // LIFTOVER SHIFTED VCF TO REFERENCE MT POSITIONS
         PICARD_LIFTOVERVCF (

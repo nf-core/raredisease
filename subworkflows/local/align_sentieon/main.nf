@@ -17,7 +17,7 @@ workflow ALIGN_SENTIEON {
         val_platform       // string:  [mandatory] default: illumina
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         SENTIEON_BWAMEM ( ch_reads_input, ch_bwa_index, ch_genome_fasta, ch_genome_fai )
 

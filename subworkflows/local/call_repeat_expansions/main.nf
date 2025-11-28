@@ -19,7 +19,7 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         EXPANSIONHUNTER (
             ch_bam,
