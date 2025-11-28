@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | gatk4/determinegermlinecontigploidy | 4.5.0.0     | 4.6.2.0     |
 | gatk4/germlinecnvcaller             | 4.5.0.0     | 4.6.2.0     |
 | gens-preproc                        | 1.0.11      | 1.1.2       |
+| samtools (sort & view)              | 1.21        | 1.22.1      |
 
 ## 2.6.0 - Cacofonix [2025-06-25]
 
