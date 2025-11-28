@@ -27,10 +27,11 @@ workflow ANNOTATE_MT_SNVS {
         val_vep_cache_version  // string:  [mandatory] 107
         ch_vep_cache           // channel: [mandatory] [ path(cache) ]
         ch_vep_extra_files     // channel: [mandatory] [ path(files) ]
+        ch_fai                 // channel: [mandatory] [ path(fai) ]
 
     main:
-        ch_versions     = Channel.empty()
-        ch_haplog       = Channel.empty()
+        ch_versions     = channel.empty()
+        ch_haplog       = channel.empty()
 
         // add prefix to meta
         ch_mt_vcf
@@ -53,20 +54,21 @@ workflow ANNOTATE_MT_SNVS {
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
         ZIP_TABIX_VCFANNO_MT(VCFANNO_MT.out.vcf)
 
-        ch_vcfanno_vcf = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, vcf, tbi -> return [meta, vcf]}
-        ch_vcfanno_tbi = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, vcf, tbi -> return [meta, tbi]}
+        ch_vcfanno_vcf = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, vcf, _tbi -> return [meta, vcf]}
+        ch_vcfanno_tbi = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, _vcf, tbi -> return [meta, tbi]}
 
         // Annotating with CADD
         if (params.cadd_resources != null) {
             ANNOTATE_CADD (
                 ZIP_TABIX_VCFANNO_MT.out.gz_tbi,
                 ch_cadd_header,
-                ch_cadd_resources
+                ch_cadd_resources,
+                ch_fai
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
             ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
         } else {
-            ch_cadd_vcf = Channel.empty()
+            ch_cadd_vcf = channel.empty()
         }
 
         // Pick input for vep
