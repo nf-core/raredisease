@@ -47,7 +47,6 @@ workflow PREPARE_REFERENCES {
 
     main:
         ch_versions      = channel.empty()
-        ch_tbi           = channel.empty()
         ch_bgzip_tbi     = channel.empty()
         ch_bwa           = channel.empty()
         ch_sentieonbwa   = channel.empty()
@@ -86,12 +85,12 @@ workflow PREPARE_REFERENCES {
         SENTIEON_BWAINDEX_MT_SHIFT(GATK_SHIFTFASTA.out.shift_fa)
         ch_bwa_mtshift = channel.empty().mix(SENTIEON_BWAINDEX_MT_SHIFT.out.index, BWA_INDEX_MT_SHIFT.out.index).collect()
         GATK_SHIFTFASTA.out.intervals
-            .multiMap{ meta, files ->
+            .multiMap{ _meta, files ->
                     shift_intervals:
-                        def ind = files.findIndexValues {it.toString().endsWith("shifted.intervals")}
+                        def ind = files.findIndexValues {file -> file.toString().endsWith("shifted.intervals")}
                         files[ind]
                     intervals:
-                        ind = files.findIndexValues {!(it.toString().endsWith("shifted.intervals"))}
+                        ind = files.findIndexValues {file -> !(file.toString().endsWith("shifted.intervals"))}
                         files[ind]
             }
             .set {ch_shiftfasta_mtintervals}
@@ -112,21 +111,21 @@ workflow PREPARE_REFERENCES {
             .mix(ch_trgt_bed_tbi, ch_bgzip_tbi)
 
         ch_vcfanno_extra_unprocessed
-            .branch { it ->
-                bgzipindex: !it[1].toString().endsWith(".gz")
-                index: it[1].toString().endsWith(".gz")
+            .branch { _meta, vcf ->
+                bgzipindex: !vcf.toString().endsWith(".gz")
+                index: vcf.toString().endsWith(".gz")
             }
             .set { ch_vcfanno_tabix_in }
 
         TABIX_VCFANNOEXTRA(ch_vcfanno_tabix_in.index).tbi
             .join(ch_vcfanno_tabix_in.index)
-            .map { meta, tbi, vcf -> return [[vcf,tbi]]}
+            .map { _meta, tbi, vcf -> return [[vcf,tbi]]}
             .set {ch_vcfanno_index}
 
         TABIX_BGZIPINDEX_VCFANNOEXTRA(ch_vcfanno_tabix_in.bgzipindex)
         channel.empty()
             .mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_tbi, TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_csi)
-            .map { meta, vcf, index -> return [[vcf,index]] }
+            .map { _meta, vcf, index -> return [[vcf,index]] }
             .set {ch_vcfanno_bgzip}
 
         channel.empty()
@@ -146,7 +145,7 @@ workflow PREPARE_REFERENCES {
         GATK_BILT(ch_target_bed, ch_dict).interval_list
         GATK_ILT(GATK_BILT.out.interval_list)
         GATK_ILT.out.interval_list
-            .collect{ it[1] }
+            .collect{ _meta, list -> list }
             .map { it ->
                 def meta = it[0].toString().split("_split")[0].split("/")[-1] + "_bait.intervals_list"
                 return [[id:meta], it]
@@ -217,9 +216,9 @@ workflow PREPARE_REFERENCES {
         known_dbsnp_tbi       = TABIX_DBSNP.out.tbi.collect()                                                // channel: [ val(meta), path(fasta) ]
         target_bed            = ch_target_bed_gz_tbi.collect()                                               // channel: [ val(meta), path(bed), path(tbi) ]
         vcfanno_extra         = ch_vcfanno_extra.ifEmpty([[]])                                               // channel: [ [path(vcf), path(tbi)] ]
-        bait_intervals        = CAT_CAT_BAIT.out.file_out.map{ meta, inter -> inter}.collect().ifEmpty([[]]) // channel: [ path(intervals) ]
-        target_intervals      = GATK_BILT.out.interval_list.map{ meta, inter -> inter}.collect()             // channel: [ path(interval_list) ]
-        vep_resources         = UNTAR_VEP_CACHE.out.untar.map{meta, files -> [files]}.collect()              // channel: [ path(cache) ]
+        bait_intervals        = CAT_CAT_BAIT.out.file_out.map{ _meta, inter -> inter}.collect().ifEmpty([[]])// channel: [ path(intervals) ]
+        target_intervals      = GATK_BILT.out.interval_list.map{ _meta, inter -> inter}.collect()            // channel: [ path(interval_list) ]
+        vep_resources         = UNTAR_VEP_CACHE.out.untar.map{ _meta, files -> [files]}.collect()            // channel: [ path(cache) ]
         versions              = ch_versions                                                                  // channel: [ path(versions.yml) ]
 
 }

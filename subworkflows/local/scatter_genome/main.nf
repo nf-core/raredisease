@@ -24,6 +24,6 @@ workflow SCATTER_GENOME {
 
     emit:
         bed             = BUILD_BED.out.bed.collect()   // channel: [ val(meta), path(bed) ]
-        split_intervals = GATK4_SPLITINTERVALS.out.split_intervals.map { meta, it -> it }.flatten().collate(1) // channel: [ val(meta), [ path(interval_lists) ] ]
+        split_intervals = GATK4_SPLITINTERVALS.out.split_intervals.map { _meta, it -> it }.flatten().collate(1) // channel: [ val(meta), [ path(interval_lists) ] ]
         versions        = ch_versions                   // channel: [ path(versions.yml) ]
 }

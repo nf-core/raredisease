@@ -16,7 +16,7 @@ workflow SUBSAMPLE_MT_FRAC {
     main:
         ch_versions = channel.empty()
 
-        ch_mt_bam_bai.map {meta, bam, bai -> return [meta, bam, -1]}.set {ch_genomecov_in}
+        ch_mt_bam_bai.map {meta, bam, _bai -> return [meta, bam, -1]}.set {ch_genomecov_in}
 
         BEDTOOLS_GENOMECOV (ch_genomecov_in, [], "genomecov", false)
 

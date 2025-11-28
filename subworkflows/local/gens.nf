@@ -19,7 +19,6 @@ workflow GENS {
         ch_pon_female        // channel: [mandatory] [ path(pon) ]
         ch_pon_male          // channel: [mandatory] [ path(pon) ]
         ch_gnomad_pos        // channel: [mandatory] [ path(gnomad_pos) ]
-        ch_case_info         // channel: [mandatory] [ val(case_info) ]
         ch_genome_dictionary // channel: [mandatory] [ val(meta), path(dict) ]
 
     main:

@@ -20,7 +20,6 @@ workflow QC_BAM {
 
     take:
         ch_bam                      // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_bai                      // channel: [mandatory] [ val(meta), path(bai) ]
         ch_bam_bai                  // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_genome_fasta             // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai               // channel: [mandatory] [ val(meta), path(fai) ]

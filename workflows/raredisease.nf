@@ -396,7 +396,6 @@ workflow RAREDISEASE {
     //
     QC_BAM (
         ch_mapped.genome_marked_bam,
-        ch_mapped.genome_marked_bai,
         ch_mapped.genome_marked_bam_bai,
         ch_genome_fasta,
         ch_genome_fai,
@@ -465,7 +464,6 @@ workflow RAREDISEASE {
             ch_genome_chrsizes,
             ch_genome_fasta,
             ch_genome_fai,
-            ch_genome_dictionary,
             ch_mt_intervals,
             ch_mt_dictionary,
             ch_mt_fai,
@@ -568,7 +566,6 @@ workflow RAREDISEASE {
 
             ANNOTATE_MT_SNVS (
                 CALL_SNV.out.mt_vcf,
-                CALL_SNV.out.mt_tabix,
                 ch_cadd_header,
                 ch_cadd_resources,
                 ch_genome_fasta,
@@ -857,7 +854,6 @@ workflow RAREDISEASE {
             ch_gens_pon_female,
             ch_gens_pon_male,
             ch_gens_gnomad_pos,
-            ch_case_info,
             ch_genome_dictionary
         )
         ch_versions = ch_versions.mix(GENS.out.versions)
@@ -872,7 +868,6 @@ workflow RAREDISEASE {
     if (params.run_rtgvcfeval) {
         VARIANT_EVALUATION (
             CALL_SNV.out.genome_vcf_tabix,
-            ch_genome_fai,
             ch_rtg_truthvcfs,
             ch_sdf
         )

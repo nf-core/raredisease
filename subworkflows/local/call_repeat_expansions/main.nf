@@ -47,7 +47,7 @@ workflow CALL_REPEAT_EXPANSIONS {
 
         // Merge indiviual repeat expansions
         SPLIT_MULTIALLELICS_EXP.out.vcf
-            .collect{it[1]}
+            .collect{_meta, vcf -> vcf}
             .toList()
             .collect()
             .set {ch_exp_vcfs}

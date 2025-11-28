@@ -30,7 +30,7 @@ workflow CALL_SV_CNVNATOR {
         CNVNATOR_CONVERT2VCF (CNVNATOR_CALL.out.tab)
         INDEX_CNVNATOR (CNVNATOR_CONVERT2VCF.out.vcf)
         BCFTOOLS_VIEW_CNVNATOR (INDEX_CNVNATOR.out.gz_tbi, [], [], []).vcf
-            .collect{it[1]}
+            .collect{_meta, vcf -> vcf}
             .toList()
             .set { vcf_file_list }
 

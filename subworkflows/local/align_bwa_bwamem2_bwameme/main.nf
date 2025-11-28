@@ -46,11 +46,11 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
             if (params.bwa_as_fallback) {
                 ch_reads_input
                     .join(BWAMEM2_MEM.out.bam, remainder: true)
-                    .branch { it ->
-                        ERROR: it[2].equals(null)
-                            return [it[0], it[1]] // return reads
-                        SUCCESS: !it[2].equals(null)
-                            return [it[0], it[2]]  // return bam
+                    .branch { meta, reads, bam ->
+                        ERROR: bam.equals(null)
+                            return [meta, reads] // return reads
+                        SUCCESS: !bam.equals(null)
+                            return [meta, bam]  // return bam
                     }
                     .set { ch_fallback }
 
@@ -74,9 +74,9 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
                     [groupKey(new_meta, new_meta.num_lanes), bam]
                 }
             .groupTuple()
-            .branch{
-                single: it[1].size() == 1
-                multiple: it[1].size() > 1
+            .branch{ _meta, bam ->
+                single: bam.size() == 1
+                multiple: bam.size() > 1
                 }
             .set{ bams }
 

@@ -29,7 +29,7 @@ workflow ALIGN_MT {
             ch_versions    = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
         } else if (params.mt_aligner.equals("sentieon")) {
             SENTIEON_BWAMEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, ch_fai )
-            ch_align       = SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, bai -> [meta, bam] }
+            ch_align       = SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, _bai -> [meta, bam] }
             ch_versions    = ch_versions.mix(SENTIEON_BWAMEM_MT.out.versions.first())
         } else if (params.mt_aligner.equals("bwa")) {
             BWA_MEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, true )

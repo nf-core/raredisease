@@ -27,9 +27,9 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_versions = channel.empty()
 
         if (params.analysis_type.equals("wes")) {
-            TABIX_BGZIP(ch_target_bed.map{meta, gzbed, index -> return [meta, gzbed]})
+            TABIX_BGZIP(ch_target_bed.map{meta, gzbed, _index -> return [meta, gzbed]})
             ch_bam_bai
-                .combine (TABIX_BGZIP.out.output.map {meta, bed -> return bed})
+                .combine (TABIX_BGZIP.out.output.map {_meta, bed -> return bed})
                 .set { ch_deepvar_in }
             ch_versions = ch_versions.mix(TABIX_BGZIP.out.versions)
         } else if (params.analysis_type.equals("wgs")) {
@@ -41,7 +41,7 @@ workflow CALL_SNV_DEEPVARIANT {
 
         DEEPVARIANT ( ch_deepvar_in, ch_genome_fasta, ch_genome_fai, [[],[]], ch_par_bed )
         DEEPVARIANT.out.gvcf
-            .map{ it -> it[1]}
+            .map{ _meta, gvcf -> gvcf}
             .toSortedList{a, b -> a.name <=> b.name}
             .toList()
             .set { ch_file_list }
@@ -70,7 +70,7 @@ workflow CALL_SNV_DEEPVARIANT {
             .set { ch_varcallerinfo }
 
         ADD_VARCALLER_TO_BED (ch_varcallerinfo).gz_tbi
-            .map{meta,bed,tbi -> return [bed, tbi]}
+            .map{_meta,bed,tbi -> return [bed, tbi]}
             .set{ch_varcallerbed}
 
         REMOVE_DUPLICATES_GL.out.vcf
