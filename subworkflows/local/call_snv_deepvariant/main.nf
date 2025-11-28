@@ -41,7 +41,7 @@ workflow CALL_SNV_DEEPVARIANT {
 
         DEEPVARIANT ( ch_deepvar_in, ch_genome_fasta, ch_genome_fai, [[],[]], ch_par_bed )
         DEEPVARIANT.out.gvcf
-            .map{ it -> it[1]}
+            .map{ _meta, gvcf -> gvcf}
             .toSortedList{a, b -> a.name <=> b.name}
             .toList()
             .set { ch_file_list }

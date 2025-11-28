@@ -111,9 +111,9 @@ workflow PREPARE_REFERENCES {
             .mix(ch_trgt_bed_tbi, ch_bgzip_tbi)
 
         ch_vcfanno_extra_unprocessed
-            .branch { it ->
-                bgzipindex: !it[1].toString().endsWith(".gz")
-                index: it[1].toString().endsWith(".gz")
+            .branch { _meta, vcf ->
+                bgzipindex: !vcf.toString().endsWith(".gz")
+                index: vcf.toString().endsWith(".gz")
             }
             .set { ch_vcfanno_tabix_in }
 
@@ -145,7 +145,7 @@ workflow PREPARE_REFERENCES {
         GATK_BILT(ch_target_bed, ch_dict).interval_list
         GATK_ILT(GATK_BILT.out.interval_list)
         GATK_ILT.out.interval_list
-            .collect{ meta, list -> list }
+            .collect{ _meta, list -> list }
             .map { it ->
                 def meta = it[0].toString().split("_split")[0].split("/")[-1] + "_bait.intervals_list"
                 return [[id:meta], it]
@@ -216,9 +216,9 @@ workflow PREPARE_REFERENCES {
         known_dbsnp_tbi       = TABIX_DBSNP.out.tbi.collect()                                                // channel: [ val(meta), path(fasta) ]
         target_bed            = ch_target_bed_gz_tbi.collect()                                               // channel: [ val(meta), path(bed), path(tbi) ]
         vcfanno_extra         = ch_vcfanno_extra.ifEmpty([[]])                                               // channel: [ [path(vcf), path(tbi)] ]
-        bait_intervals        = CAT_CAT_BAIT.out.file_out.map{ meta, inter -> inter}.collect().ifEmpty([[]]) // channel: [ path(intervals) ]
-        target_intervals      = GATK_BILT.out.interval_list.map{ meta, inter -> inter}.collect()             // channel: [ path(interval_list) ]
-        vep_resources         = UNTAR_VEP_CACHE.out.untar.map{meta, files -> [files]}.collect()              // channel: [ path(cache) ]
+        bait_intervals        = CAT_CAT_BAIT.out.file_out.map{ _meta, inter -> inter}.collect().ifEmpty([[]])// channel: [ path(intervals) ]
+        target_intervals      = GATK_BILT.out.interval_list.map{ _meta, inter -> inter}.collect()            // channel: [ path(interval_list) ]
+        vep_resources         = UNTAR_VEP_CACHE.out.untar.map{ _meta, files -> [files]}.collect()            // channel: [ path(cache) ]
         versions              = ch_versions                                                                  // channel: [ path(versions.yml) ]
 
 }

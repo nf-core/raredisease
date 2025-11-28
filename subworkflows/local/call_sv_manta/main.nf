@@ -31,7 +31,7 @@ workflow CALL_SV_MANTA {
         if (params.analysis_type == "wgs" ) {
             ch_case_info.combine(bam_file_list)
                 .combine(bai_file_list)
-                .map { it -> it + [ [], [] ] }
+                .map { meta, input, index -> [meta, input, index] + [ [], [] ] }
                 .set { manta_input }
             MANTA ( manta_input, ch_genome_fasta, ch_genome_fai, [] )
         } else {
