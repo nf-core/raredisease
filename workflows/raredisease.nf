@@ -487,7 +487,6 @@ workflow RAREDISEASE {
 
             ANNOTATE_GENOME_SNVS (
                 CALL_SNV.out.genome_vcf_tabix,
-                params.analysis_type,
                 ch_cadd_header,
                 ch_cadd_resources,
                 ch_vcfanno_extra,
@@ -502,6 +501,7 @@ workflow RAREDISEASE {
                 ch_samples,
                 ch_scatter_split_intervals,
                 ch_vep_extra_files,
+                ch_genome_fai,
                 ch_genome_chrsizes
             ).set { ch_snv_annotate }
             ch_versions = ch_versions.mix(ch_snv_annotate.versions)
@@ -571,7 +571,8 @@ workflow RAREDISEASE {
                 params.genome,
                 params.vep_cache_version,
                 ch_vep_cache,
-                ch_vep_extra_files
+                ch_vep_extra_files,
+                ch_genome_fai
             ).set { ch_mt_annotate }
             ch_versions = ch_versions.mix(ch_mt_annotate.versions)
 
@@ -582,7 +583,7 @@ workflow RAREDISEASE {
                 }
                 .set { ch_clin_research_mt_vcf }
 
-            ch_clinical_mtsnv_vcf = Channel.empty()
+            ch_clinical_mtsnv_vcf = channel.empty()
             if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('generate_clinical_set'))) {
                 GENERATE_CLINICAL_SET_MT(
                     ch_clin_research_mt_vcf.clinical,
