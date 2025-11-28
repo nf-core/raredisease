@@ -134,10 +134,11 @@ workflow ANNOTATE_GENOME_SNVS {
             .join(TABIX_VEP.out.tbi, failOnMismatch:true)
             .groupTuple()
             .map { meta, vcfs, tbis ->
-                def sortedvcfs = vcfs.sort { it.baseName }
-                def sortedtbis = tbis.sort { it.baseName }
+                def sortedvcfs = vcfs.sort { vcf -> vcf.baseName }
+                def sortedtbis = tbis.sort { tbi -> tbi.baseName }
                 return [ meta, sortedvcfs, sortedtbis ]
             }
+            .dump (tag:'dumps')
             .set { ch_concat_in }
 
         BCFTOOLS_CONCAT (ch_concat_in)
