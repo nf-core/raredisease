@@ -145,7 +145,7 @@ workflow ALIGN {
         }
 
         if (params.save_mapped_as_cram) {
-            SAMTOOLS_VIEW( ch_genome_marked_bam_bai, ch_genome_fasta, [] )
+            SAMTOOLS_VIEW( ch_genome_marked_bam_bai, ch_genome_fasta, [], 'crai' )
             ch_versions   = ch_versions.mix(SAMTOOLS_VIEW.out.versions)
         }
 

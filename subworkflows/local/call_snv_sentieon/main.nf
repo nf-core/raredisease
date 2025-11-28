@@ -104,7 +104,7 @@ workflow CALL_SNV_SENTIEON {
             .combine(ch_varcallerbed)
             .set { ch_annotate_in }
 
-        BCFTOOLS_ANNOTATE(ch_annotate_in, ch_foundin_header)
+        BCFTOOLS_ANNOTATE(ch_annotate_in, [], ch_foundin_header, [])
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 

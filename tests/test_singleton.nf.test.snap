@@ -1,13 +1,13 @@
 {
     "-profile test_singleton": {
         "content": [
-            151,
+            148,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "tabix": 1.12
                 },
                 "BCFTOOLS_ANNOTATE": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_CONCAT": {
                     "bcftools": 1.2
@@ -243,23 +243,17 @@
                 "SAMTOOLS_FAIDX_MT": {
                     "samtools": 1.21
                 },
-                "SAMTOOLS_INDEX": {
-                    "samtools": 1.21
-                },
                 "SAMTOOLS_INDEX_ALIGN": {
                     "samtools": 1.21
                 },
                 "SAMTOOLS_INDEX_MARKDUP": {
                     "samtools": 1.21
                 },
-                "SAMTOOLS_INDEX_MT": {
-                    "samtools": 1.21
-                },
                 "SAMTOOLS_SORT": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_SORT_MT": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_STATS": {
                     "samtools": 1.21
@@ -452,7 +446,6 @@
                 "repeat_expansions",
                 "repeat_expansions/hugelymodelbat_exphunter_sorted.bam",
                 "repeat_expansions/hugelymodelbat_exphunter_sorted.bam.bai",
-                "repeat_expansions/hugelymodelbat_exphunter_sorted.bam.csi",
                 "repeat_expansions/hugelymodelbat_repeat_expansion.vcf",
                 "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz",
                 "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz.tbi",
@@ -466,6 +459,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2025-11-15T12:11:02.492935999"
+        "timestamp": "2025-11-27T16:22:08.027799973"
     }
 }
