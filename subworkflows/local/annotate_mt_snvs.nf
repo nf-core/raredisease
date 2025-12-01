@@ -70,8 +70,8 @@ workflow ANNOTATE_MT_SNVS {
         }
 
         ch_vcfanno_vcf
-            .join(ch_cadd_vcf, remainder: true) 
-            .branch { meta, vcfanno, cadd  ->   
+            .join(ch_cadd_vcf, remainder: true)
+            .branch { meta, vcfanno, cadd  ->
                 vcfanno: cadd.equals(null)
                     return [meta+ [prefix: meta.prefix + "_vep"], vcfanno]
                 cadd: !(cadd.equals(null))
