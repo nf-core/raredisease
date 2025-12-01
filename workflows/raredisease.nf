@@ -175,11 +175,11 @@ workflow RAREDISEASE {
                                                                             : Channel.empty()
     ch_me_svdb_resources        = params.mobile_element_svdb_annotations    ? Channel.fromPath(params.mobile_element_svdb_annotations)
                                                                             : Channel.empty()
+    ch_mito_name                = params.mito_name                          ? Channel.value(params.mito_name)
+                                                                            : Channel.value([])
     ch_ml_model                 = params.variant_caller.equals("sentieon")  ? Channel.fromPath(params.ml_model).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : Channel.value([[:],[]])
     ch_msconfig                 = params.mitosalt_config                    ? channel.fromPath(params.mitosalt_config)
-                                                                            : channel.empty()
-    ch_msref                    = params.mitosalt_reference                 ? channel.fromPath(params.mitosalt_reference)
                                                                             : channel.empty()
     ch_mt_intervals             = ch_references.mt_intervals
     ch_mt_bwaindex              = ch_references.mt_bwa_index
@@ -215,8 +215,8 @@ workflow RAREDISEASE {
                                                                             : Channel.value([])
     ch_sdf                      = params.sdf                                ? Channel.fromPath(params.sdf).map{it -> [[id:it.simpleName],it]}.collect()
                                                                             : ch_references.sdf
-    ch_subdepth                 = params.mitosalt_depth                     ? channel.fromPath(params.mitosalt_depth)
-                                                                            : channel.empty()
+    ch_subdepth                 = params.mitosalt_depth                     ? channel.value(params.mitosalt_depth)
+                                                                            : channel.value([])
     ch_sv_dbs                   = params.svdb_query_dbs                     ? Channel.fromPath(params.svdb_query_dbs)
                                                                             : Channel.empty()
     ch_sv_bedpedbs              = params.svdb_query_bedpedbs                ? Channel.fromPath(params.svdb_query_bedpedbs)
@@ -744,8 +744,8 @@ workflow RAREDISEASE {
 	ch_genome_chrsizes,
 	ch_mt_fasta,
         ch_msconfig,
-        ch_msref,
-        ch_subdepth
+        ch_subdepth,
+        ch_mito_name
     )
     ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
 

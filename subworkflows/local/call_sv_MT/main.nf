@@ -18,18 +18,19 @@ workflow CALL_SV_MT {
 	ch_genome_chrsizes    // channel: [mandatory] [ val(meta), path(chrsizes) ]
 	ch_mt_fasta           // channel: [mandatory] [ val(meta), path(mtfasta) ]
         ch_msconfig           // channel: [mandatory] [ path(msconfig) ]
-        ch_msref              // channel: [mandatory] [ path(genome) ]
         ch_subdepth           // channel: [mandatory] [ val(mitosalt_depth) ]
+	ch_mito_name          // channel: [mandatory] [ val(mito_name)
 
     main:
-        ch_versions            = Channel.empty()
+        ch_versions = Channel.empty()
 
         if (!(params.skip_tools && params.skip_tools.split(',').contains('mitosalt'))) {
-            ch_reads_subdepth      = ch_reads.map { meta, reads -> [meta, reads, '1000000'] }
+            ch_reads_subdepth      = ch_reads.concat(ch_subdepth).collect()
+	    ch_reads_subdepth.view()
             SEQTK_SAMPLE (ch_reads_subdepth)
             ch_versions            = ch_versions.mix(SEQTK_SAMPLE.out.versions.first())
 
-            MITOSALT(SEQTK_SAMPLE.out.reads, ch_msconfig, ch_msref, ch_genome_hisat2index, ch_genome_fai, ch_mt_lastdb, ch_mt_fai, ch_genome_chrsizes, ch_mt_fasta)
+            MITOSALT(SEQTK_SAMPLE.out.reads, ch_msconfig, ch_genome_hisat2index, ch_genome_fai, ch_mt_lastdb, ch_mt_fai, ch_genome_chrsizes, ch_mt_fasta, ch_mito_name)
             ch_versions            = ch_versions.mix(MITOSALT.out.versions.first())
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
