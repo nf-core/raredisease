@@ -49,24 +49,24 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert snapshot(
                         workflow.out.multiple_metrics
-                            .collect {_meta, metrics -> metrics}
+                            .collect {it[1]}
                             .flatten()
-                            .collect { file(metrics).name }
+                            .collect { file(it).name }
                             .toSorted(),
                         workflow.out.hs_metrics
-                            .collect {_meta, metrics -> metrics}
+                            .collect {it[1]}
                             .flatten()
-                            .collect { file(metrics).name }
+                            .collect { file(it).name }
                             .toSorted(),
                         workflow.out.d4
-                            .collect {_meta, metrics -> metrics}
+                            .collect {it[1]}
                             .flatten()
-                            .collect { file(metrics).name }
+                            .collect { file(it).name }
                             .toSorted(),
                         workflow.out.cov
-                            .collect {_meta, metrics -> metrics}
+                            .collect {it[1]}
                             .flatten()
-                            .collect { file(metrics).name }
+                            .collect { file(it).name }
                             .toSorted(),
                         workflow.out.tiddit_wig,
                         workflow.out.bigwig,
@@ -121,24 +121,24 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert snapshot(
                         workflow.out.multiple_metrics
-                            .collect {_meta, metrics -> metrics}
+                            .collect {it[1]}
                             .flatten()
-                            .collect { file(metrics).name }
+                            .collect { file(it).name }
                             .toSorted(),
                         workflow.out.hs_metrics
-                            .collect {_meta, metrics -> metrics}
+                            .collect {it[1]}
                             .flatten()
-                            .collect { file(metrics).name }
+                            .collect { file(it).name }
                             .toSorted(),
                         workflow.out.d4
-                            .collect {_meta, metrics -> metrics}
+                            .collect {it[1]}
                             .flatten()
-                            .collect { file(metrics).name }
+                            .collect { file(it).name }
                             .toSorted(),
                         workflow.out.cov
-                            .collect {_meta, metrics -> metrics}
+                            .collect {it[1]}
                             .flatten()
-                            .collect { file(metrics).name }
+                            .collect { file(it).name }
                             .toSorted(),
                         workflow.out.tiddit_wig,
                         workflow.out.bigwig,
