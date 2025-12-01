@@ -941,21 +941,21 @@ workflow RAREDISEASE {
         )
     )
 
-    ch_multiqc_files = ch_multiqc_files.mix(fastqc_report.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_mt_txt.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.fastp_json.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.markdup_metrics.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.sex_check.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.multiple_metrics.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.hs_metrics.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.self_sm.map{it[1]}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(fastqc_report.collect{_meta, metrics -> metrics}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_mt_txt.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.fastp_json.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.markdup_metrics.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.sex_check.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.multiple_metrics.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.hs_metrics.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.self_sm.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
 
     if (!(params.skip_tools && params.skip_tools.split(',').contains('peddy'))) {
-        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{it[1]}.collect().ifEmpty([]))
-        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.csv.map{it[1]}.collect().ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.csv.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
     }
 
     MULTIQC (

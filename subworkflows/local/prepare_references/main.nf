@@ -146,8 +146,8 @@ workflow PREPARE_REFERENCES {
         GATK_ILT(GATK_BILT.out.interval_list)
         GATK_ILT.out.interval_list
             .collect{ _meta, list -> list }
-            .map { it ->
-                def meta = it[0].toString().split("_split")[0].split("/")[-1] + "_bait.intervals_list"
+            .map { list ->
+                def meta = list.toString().split("_split")[0].split("/")[-1] + "_bait.intervals_list"
                 return [[id:meta], it]
             }
             .set { ch_bait_intervals_cat_in }
