@@ -790,12 +790,12 @@ workflow RAREDISEASE {
     if ( params.analysis_type.equals("wgs") && !(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) ) {
 
         RENAME_BAM.out.output
-            .collect{meta, bam -> bam}
+            .collect{_meta, bam -> bam}
             .toList()
             .set { ch_bam_list }
 
         RENAME_BAI.out.output
-            .collect{meta, bai -> bai}
+            .collect{_meta, bai -> bai}
             .toList()
             .set { ch_bai_list }
 
