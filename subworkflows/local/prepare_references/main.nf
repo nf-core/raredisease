@@ -148,7 +148,7 @@ workflow PREPARE_REFERENCES {
             .collect{ _meta, list -> list }
             .map { list ->
                 def meta = list.toString().split("_split")[0].split("/")[-1] + "_bait.intervals_list"
-                return [[id:meta], it]
+                return [[id:meta], list]
             }
             .set { ch_bait_intervals_cat_in }
         CAT_CAT_BAIT ( ch_bait_intervals_cat_in )
