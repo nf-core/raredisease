@@ -81,7 +81,7 @@ workflow QC_BAM {
         }
         // Check contamination
         ch_svd_in = ch_svd_ud.combine(ch_svd_mu).combine(ch_svd_bed).collect()
-        VERIFYBAMID_VERIFYBAMID2(ch_bam_bai, ch_svd_in, [], ch_genome_fasta.map {meta, fasta-> fasta})
+        VERIFYBAMID_VERIFYBAMID2(ch_bam_bai, ch_svd_in, [], ch_genome_fasta.map {_meta, fasta-> fasta})
 
         ch_versions = ch_versions.mix(CHROMOGRAPH_COV.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions.first())
