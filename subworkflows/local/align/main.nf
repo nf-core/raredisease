@@ -33,6 +33,10 @@ workflow ALIGN {
         val_mbuffer_mem          // integer: [mandatory] memory in megabytes
         val_platform             // string:  [mandatory] illumina or a different technology
         val_sort_threads         // integer: [mandatory] number of sorting threads
+        val_aligner              // string:  'bwa', 'bwamem2', 'bwameme', or 'sentieon'
+        val_analysis_type        // string:  'wgs', 'wes', or 'mito'
+        save_mapped_as_cram      // boolean
+        skip_fastp               // boolean
 
     main:
         ch_bwamem2_bam               = channel.empty()
@@ -46,7 +50,7 @@ workflow ALIGN {
         ch_sentieon_bai              = channel.empty()
         ch_versions                  = channel.empty()
 
-        if (!(params.skip_tools && params.skip_tools.split(',').contains('fastp'))) {
+        if (!skip_fastp) {
             FASTP (ch_reads, [], false, false, false)
             ch_reads = FASTP.out.reads
             ch_versions = ch_versions.mix(FASTP.out.versions)
@@ -72,7 +76,7 @@ workflow ALIGN {
                 .map { it -> [it[0], it[2]] }
                 .set{ch_input_bai}
 
-        if (params.aligner.matches("bwamem2|bwa|bwameme")) {
+        if (val_aligner.matches("bwamem2|bwa|bwameme")) {
             ALIGN_BWA_BWAMEM2_BWAMEME (             // Triggered when params.aligner is set as bwamem2 or bwa or bwameme
                 ch_reads,
                 ch_genome_bwaindex,
@@ -88,7 +92,7 @@ workflow ALIGN {
             ch_bwamem2_bai     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bai
             ch_markdup_metrics = ALIGN_BWA_BWAMEM2_BWAMEME.out.metrics
             ch_versions        = ch_versions.mix(ALIGN_BWA_BWAMEM2_BWAMEME.out.versions)
-        } else if (params.aligner.equals("sentieon")) {
+        } else if (val_aligner.equals("sentieon")) {
             ALIGN_SENTIEON (                        // Triggered when params.aligner is set as sentieon
                 ch_reads,
                 ch_genome_fasta,
@@ -107,7 +111,7 @@ workflow ALIGN {
 
         // PREPARING READS FOR MT ALIGNMENT
 
-        if (params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes) {
+        if (val_analysis_type.matches("wgs|mito") || params.run_mt_for_wes) {
             CONVERT_MT_BAM_TO_FASTQ (
                 ch_genome_marked_bam_bai,
                 ch_genome_fasta,
@@ -144,7 +148,7 @@ workflow ALIGN {
                                             .mix(ALIGN_MT.out.versions, ALIGN_MT_SHIFT.out.versions, CONVERT_MT_BAM_TO_FASTQ.out.versions)
         }
 
-        if (params.save_mapped_as_cram) {
+        if (save_mapped_as_cram) {
             SAMTOOLS_VIEW( ch_genome_marked_bam_bai, ch_genome_fasta, [], 'crai' )
             ch_versions   = ch_versions.mix(SAMTOOLS_VIEW.out.versions)
         }

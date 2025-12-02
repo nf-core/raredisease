@@ -32,6 +32,9 @@ workflow QC_BAM {
         ch_svd_mu                   // channel: [optional] [ path(meanpath) ]
         ch_svd_ud                   // channel: [optional] [ path(ud) ]
         ngsbits_samplegender_method // channel: [val(method)]
+        val_analysis_type           // string: "wes", "wgs", or "mito"
+        skip_ngsbits                // boolean
+        skip_qualimap               // boolean
 
     main:
         ch_cov      = channel.empty()
@@ -48,7 +51,7 @@ workflow QC_BAM {
             .set { ch_hsmetrics_in}
 
         PICARD_COLLECTHSMETRICS (ch_hsmetrics_in, ch_genome_fasta, ch_genome_fai, [[],[]])
-        if (!(params.skip_tools && params.skip_tools.split(',').contains('qualimap'))) {
+        if (!skip_qualimap) {
             ch_qualimap = QUALIMAP_BAMQC (ch_bam, []).results
             ch_versions = ch_versions.mix(QUALIMAP_BAMQC.out.versions.first())
         }
@@ -63,7 +66,7 @@ workflow QC_BAM {
         MOSDEPTH (ch_mosdepth_in, ch_genome_fasta)
 
         // COLLECT WGS METRICS
-        if (!params.analysis_type.equals("wes")) {
+        if (!val_analysis_type.equals("wes")) {
             PICARD_COLLECTWGSMETRICS_WG ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs )
             PICARD_COLLECTWGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y )
             SENTIEON_WGSMETRICS_WG ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs.map{ interval -> [[:], interval]} )
@@ -74,7 +77,7 @@ workflow QC_BAM {
             ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_Y.out.versions.first(), SENTIEON_WGSMETRICS_Y.out.versions.first())
         }
         // Check sex
-        if (!(params.skip_tools && params.skip_tools.split(',').contains('ngsbits'))) {
+        if (!skip_ngsbits) {
             NGSBITS_SAMPLEGENDER(ch_bam_bai, ch_genome_fasta, ch_genome_fai, ngsbits_samplegender_method)
             ch_ngsbits  = NGSBITS_SAMPLEGENDER.out.tsv
             ch_versions = ch_versions.mix(NGSBITS_SAMPLEGENDER.out.versions.first())

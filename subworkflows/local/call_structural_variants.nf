@@ -27,21 +27,25 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_readcount_intervals // channel: [optional; used by mandatory for GATK's cnvcaller][ path(intervals) ]
         ch_ploidy_model        // channel: [optional; used by mandatory for GATK's cnvcaller][ path(ploidy_model) ]
         ch_gcnvcaller_model    // channel: [optional; used by mandatory for GATK's cnvcaller][ path(gcnvcaller_model) ]
+        val_analysis_type      // string: "wes", "wgs", or "mito"
+        run_mt_for_wes         // boolean
+        skip_germlinecnvcaller // boolean
+        skip_eklipse           // boolean
 
     main:
         ch_versions   = channel.empty()
         ch_merged_svs = channel.empty()
         ch_merged_tbi = channel.empty()
 
-        if (!params.analysis_type.equals("mito")) {
-            CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_target_bed)
+        if (!val_analysis_type.equals("mito")) {
+            CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_target_bed, val_analysis_type)
                 .filtered_diploid_sv_vcf
                 .collect{ _meta, vcf -> vcf }
                 .set{ manta_vcf }
             ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
         }
 
-        if (params.analysis_type.equals("wgs")) {
+        if (val_analysis_type.equals("wgs")) {
             CALL_SV_TIDDIT (ch_genome_bam_bai, ch_genome_fasta, ch_bwa_index, ch_case_info)
                 .vcf
                 .collect{ _meta, vcf -> vcf }
@@ -55,7 +59,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
             ch_versions = ch_versions.mix(CALL_SV_CNVNATOR.out.versions)
         }
 
-        if (!(params.skip_tools && params.skip_tools.split(',').contains('germlinecnvcaller'))) {
+        if (skip_germlinecnvcaller) {
             CALL_SV_GERMLINECNVCALLER (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model, ch_case_info)
                 .genotyped_filtered_segments_vcf
                 .collect{ _meta, vcf -> vcf }
@@ -64,39 +68,39 @@ workflow CALL_STRUCTURAL_VARIANTS {
             ch_versions = ch_versions.mix(CALL_SV_GERMLINECNVCALLER.out.versions)
         }
 
-        if (params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes) {
-            CALL_SV_MT (ch_mt_bam_bai, ch_genome_fasta)
+        if (val_analysis_type.matches("wgs|mito") || run_mt_for_wes) {
+            CALL_SV_MT (ch_mt_bam_bai, ch_genome_fasta, skip_eklipse)
             ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
         }
 
         //merge
-        if (params.skip_tools && params.skip_tools.split(',').contains('germlinecnvcaller')) {
-            if (params.analysis_type.equals("wgs")) {
+        if (skip_germlinecnvcaller) {
+            if (val_analysis_type.equals("wgs")) {
                 tiddit_vcf
                     .combine(manta_vcf)
                     .combine(cnvnator_vcf)
                     .toList()
                     .set { vcf_list }
-            } else if (!params.analysis_type.equals("mito")) {
+            } else if (!val_analysis_type.equals("mito")) {
                 manta_vcf
                     .toList()
                     .set { vcf_list }
             }
-        } else if (params.analysis_type.equals("wgs")) {
+        } else if (val_analysis_type.equals("wgs")) {
             tiddit_vcf
                 .combine(manta_vcf)
                 .combine(gcnvcaller_vcf)
                 .combine(cnvnator_vcf)
                 .toList()
                 .set { vcf_list }
-        } else if (!params.analysis_type.equals("mito")) {
+        } else if (!val_analysis_type.equals("mito")) {
             manta_vcf
                 .combine(gcnvcaller_vcf)
                 .toList()
                 .set { vcf_list }
         }
 
-        if (!params.analysis_type.equals("mito")) {
+        if (!val_analysis_type.equals("mito")) {
             ch_case_info
                 .combine(vcf_list)
                 .set { merge_input_vcfs }

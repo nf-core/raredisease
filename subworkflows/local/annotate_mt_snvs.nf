@@ -27,6 +27,7 @@ workflow ANNOTATE_MT_SNVS {
         ch_vep_cache           // channel: [mandatory] [ path(cache) ]
         ch_vep_extra_files     // channel: [mandatory] [ path(files) ]
         ch_fai                 // channel: [mandatory] [ path(fai) ]
+        skip_haplogrep3        // boolean
 
     main:
         ch_versions     = channel.empty()
@@ -99,7 +100,7 @@ workflow ANNOTATE_MT_SNVS {
         TABIX_TABIX_VEP_MT(ENSEMBLVEP_MT.out.vcf)
 
         // Running haplogrep3
-        if (!(params.skip_tools && params.skip_tools.split(',').contains('haplogrep3'))) {
+        if (!skip_haplogrep3) {
             HAPLOGREP3_CLASSIFY_MT(ch_haplogrep_in)
             ch_haplog   = HAPLOGREP3_CLASSIFY_MT.out.txt
             ch_versions = ch_versions.mix(HAPLOGREP3_CLASSIFY_MT.out.versions)

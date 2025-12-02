@@ -83,12 +83,35 @@ workflow RAREDISEASE {
     ch_alignments
     ch_samples
     ch_case_info
+    analysis_type
+    skip_me_calling
+    skip_me_annotation
+    skip_mt_annotation
+    skip_mt_subsample
+    skip_repeat_annotation
+    skip_repeat_calling
+    skip_snv_annotation
+    skip_snv_calling
+    skip_sv_annotation
+    skip_sv_calling
+    skip_generate_clinical_set
+    skip_eklipse
+    skip_fastp
+    skip_fastqc
+    skip_gens
+    skip_germlinecnvcaller
+    skip_haplogrep3
+    skip_ngsbits
+    skip_peddy
+    skip_qualimap
+    skip_smncopynumbercaller
+    skip_vcf2cytosure
 
     main:
 
-    ch_versions = channel.empty()
+    ch_versions      = channel.empty()
     ch_multiqc_files = channel.empty()
-    ch_mt_txt = channel.empty()
+    ch_mt_txt        = channel.empty()
 
     //
     // Initialize file channels for PREPARE_REFERENCES subworkflow
@@ -248,14 +271,14 @@ workflow RAREDISEASE {
     //
     // SV caller priority
     //
-    if (params.skip_tools && params.skip_tools.split(',').contains('germlinecnvcaller')) {
-        if (params.analysis_type.equals("wgs")) {
+    if (skip_germlinecnvcaller) {
+        if (analysis_type.equals("wgs")) {
             ch_svcaller_priority = channel.value(["tiddit", "manta", "cnvnator"])
         } else {
             ch_svcaller_priority = channel.value([])
         }
     } else {
-        if (params.analysis_type.equals("wgs")) {
+        if (analysis_type.equals("wgs")) {
             ch_svcaller_priority = channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
         } else {
             ch_svcaller_priority = channel.value(["manta", "gcnvcaller"])
@@ -265,7 +288,7 @@ workflow RAREDISEASE {
     //
     // Generate pedigree file
     //
-    ch_pedfile   = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
+    ch_pedfile  = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
     ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
 
     //
@@ -324,7 +347,7 @@ workflow RAREDISEASE {
     // Create chromosome bed and intervals for splitting and gathering operations
     //
     ch_scatter_split_intervals = channel.empty()
-    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_annotation'))) {
+    if (!skip_snv_annotation) {
         SCATTER_GENOME (
             ch_genome_dictionary,
             ch_genome_fai,
@@ -337,7 +360,7 @@ workflow RAREDISEASE {
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is nott fastq)
     //
 
-    if (!(params.skip_tools && params.skip_tools.split(',').contains('fastqc'))) {
+    if (!skip_fastqc) {
         FASTQC (ch_input_fastqs)
         fastqc_report = FASTQC.out.zip
         ch_versions   = ch_versions.mix(FASTQC.out.versions.first())
@@ -370,12 +393,16 @@ workflow RAREDISEASE {
         ch_mtshift_fasta,
         params.mbuffer_mem,
         params.platform,
-        params.samtools_sort_threads
+        params.samtools_sort_threads,
+        params.aligner,
+        analysis_type,
+        params.save_mapped_as_cram,
+        skip_fastp
     )
     .set { ch_mapped }
     ch_versions   = ch_versions.mix(ALIGN.out.versions)
 
-    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('mt_subsample')) && (params.analysis_type.equals("wgs") || params.run_mt_for_wes)) {
+    if (!(skip_mt_subsample) && (analysis_type.equals("wgs") || params.run_mt_for_wes)) {
         if (params.mt_subsample_approach.equals("fraction")) {
             SUBSAMPLE_MT_FRAC(
                 ch_mapped.mt_bam_bai,
@@ -407,7 +434,10 @@ workflow RAREDISEASE {
         ch_svd_bed,
         ch_svd_mu,
         ch_svd_ud,
-        channel.value(params.ngsbits_samplegender_method)
+        channel.value(params.ngsbits_samplegender_method),
+        analysis_type,
+        skip_ngsbits,
+        skip_qualimap
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions)
 
@@ -417,7 +447,7 @@ workflow RAREDISEASE {
     RENAME ALIGNMENT FILES FOR SMNCOPYNUMBERCALLER & REPEATCALLING
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if ( params.analysis_type.equals("wgs") && (!(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) || !(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_calling')))) {
+    if ( analysis_type.equals("wgs") && (!skip_smncopynumbercaller || !skip_repeat_calling)) {
         RENAME_BAM(ch_mapped.genome_marked_bam, "bam")
         RENAME_BAI(ch_mapped.genome_marked_bai, "bam.bai")
         ch_versions = ch_versions.mix(RENAME_BAM.out.versions)
@@ -430,7 +460,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_calling')) && params.analysis_type.equals("wgs") ) {
+    if (!skip_repeat_calling && analysis_type.equals("wgs") ) {
         CALL_REPEAT_EXPANSIONS (
             RENAME_BAM.out.output.join(RENAME_BAI.out.output, failOnMismatch:true, failOnDuplicate:true),
             ch_variant_catalog,
@@ -440,7 +470,7 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
 
-        if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('repeat_annotation'))) {
+        if (!skip_repeat_annotation) {
             STRANGER (
                 CALL_REPEAT_EXPANSIONS.out.vcf,
                 ch_variant_catalog
@@ -456,7 +486,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_calling'))) {
+    if (!skip_snv_calling) {
         CALL_SNV (
             ch_mapped.genome_marked_bam_bai,
             ch_mapped.mt_bam_bai_gatksubwf,
@@ -481,7 +511,11 @@ workflow RAREDISEASE {
             ch_par_bed,
             ch_case_info,
             ch_foundin_header,
-            channel.value(params.sentieon_dnascope_pcr_indel_model)
+            channel.value(params.sentieon_dnascope_pcr_indel_model),
+            analysis_type,
+            params.variant_caller,
+            params.run_mt_for_wes,
+            params.concatenate_snv_calls
         )
         ch_versions = ch_versions.mix(CALL_SNV.out.versions)
         ch_mt_txt = CALL_SNV.out.mt_txt
@@ -489,7 +523,7 @@ workflow RAREDISEASE {
         //
         // ANNOTATE GENOME SNVs
         //
-        if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('snv_annotation'))) {
+        if (!skip_snv_annotation) {
 
             ANNOTATE_GENOME_SNVS (
                 CALL_SNV.out.genome_vcf_tabix,
@@ -520,7 +554,7 @@ workflow RAREDISEASE {
                 .set { ch_clin_research_snv_vcf }
 
             ch_clinical_snv_vcf = channel.empty()
-            if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('generate_clinical_set'))) {
+            if (!skip_generate_clinical_set) {
                 GENERATE_CLINICAL_SET_SNV(
                     ch_clin_research_snv_vcf.clinical,
                     ch_hgnc_ids,
@@ -562,7 +596,7 @@ workflow RAREDISEASE {
         //
         // ANNOTATE MT SNVs
         //
-        if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('mt_annotation')) && (params.run_mt_for_wes || params.analysis_type.matches("wgs|mito"))) {
+        if (!(skip_mt_annotation) && (params.run_mt_for_wes || analysis_type.matches("wgs|mito"))) {
 
             ANNOTATE_MT_SNVS (
                 CALL_SNV.out.mt_vcf,
@@ -577,7 +611,8 @@ workflow RAREDISEASE {
                 params.vep_cache_version,
                 ch_vep_cache,
                 ch_vep_extra_files,
-                ch_genome_fai
+                ch_genome_fai,
+                skip_haplogrep3
             ).set { ch_mt_annotate }
             ch_versions = ch_versions.mix(ch_mt_annotate.versions)
 
@@ -589,7 +624,7 @@ workflow RAREDISEASE {
                 .set { ch_clin_research_mt_vcf }
 
             ch_clinical_mtsnv_vcf = channel.empty()
-            if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('generate_clinical_set'))) {
+            if (!skip_generate_clinical_set) {
                 GENERATE_CLINICAL_SET_MT(
                     ch_clin_research_mt_vcf.clinical,
                     ch_hgnc_ids,
@@ -636,7 +671,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_calling'))) {
+    if (!skip_sv_calling) {
         CALL_STRUCTURAL_VARIANTS (
             ch_mapped.genome_marked_bam,
             ch_mapped.genome_marked_bai,
@@ -651,14 +686,18 @@ workflow RAREDISEASE {
             ch_svcaller_priority,
             ch_readcount_intervals,
             ch_ploidy_model,
-            ch_gcnvcaller_model
+            ch_gcnvcaller_model,
+            analysis_type,
+            params.run_mt_for_wes,
+            skip_germlinecnvcaller,
+            skip_eklipse
         )
         ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
         //
         // ANNOTATE STRUCTURAL VARIANTS
         //
-        if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_annotation'))) {
+        if (!skip_sv_annotation) {
             ANNOTATE_STRUCTURAL_VARIANTS (
                 CALL_STRUCTURAL_VARIANTS.out.vcf,
                 ch_sv_dbs,
@@ -680,7 +719,7 @@ workflow RAREDISEASE {
                 .set { ch_clin_research_sv_vcf }
 
             ch_clinical_sv_vcf = channel.empty()
-            if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('generate_clinical_set'))) {
+            if (!skip_generate_clinical_set) {
                 GENERATE_CLINICAL_SET_SV(
                     ch_clin_research_sv_vcf.clinical,
                     ch_hgnc_ids,
@@ -726,7 +765,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_calling')) && params.analysis_type.equals("wgs")) {
+    if (!skip_me_calling && analysis_type.equals("wgs")) {
         CALL_MOBILE_ELEMENTS(
             ch_mapped.genome_marked_bam_bai,
             ch_genome_fasta,
@@ -736,7 +775,7 @@ workflow RAREDISEASE {
         )
         ch_versions = ch_versions.mix(CALL_MOBILE_ELEMENTS.out.versions)
 
-        if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_annotation'))) {
+        if (!skip_me_annotation) {
             ANNOTATE_MOBILE_ELEMENTS(
                 CALL_MOBILE_ELEMENTS.out.vcf,
                 ch_me_svdb_resources,
@@ -757,7 +796,7 @@ workflow RAREDISEASE {
                 .set { ch_clin_research_me_vcf }
 
             ch_clinical_me_vcf = channel.empty()
-            if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('generate_clinical_set'))) {
+            if (!skip_generate_clinical_set) {
                 GENERATE_CLINICAL_SET_ME(
                     ch_clin_research_me_vcf.clinical,
                     ch_hgnc_ids,
@@ -787,7 +826,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if ( params.analysis_type.equals("wgs") && !(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) ) {
+    if ( analysis_type.equals("wgs") && !skip_smncopynumbercaller ) {
 
         RENAME_BAM.out.output
             .collect{it[1]}
@@ -815,7 +854,7 @@ workflow RAREDISEASE {
     PEDDY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if (!(params.skip_tools && params.skip_tools.split(',').contains('peddy'))) {
+    if (!skip_peddy) {
         PEDDY (
             CALL_SNV.out.genome_vcf.join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true),
             ch_pedfile
@@ -828,7 +867,7 @@ workflow RAREDISEASE {
     Generate CGH files from sequencing data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if ( !(params.skip_tools && params.skip_tools.split(',').contains('vcf2cytosure')) && params.analysis_type.equals("wgs") && !(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_calling')) && !(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_annotation'))) {
+    if (!skip_vcf2cytosure && analysis_type.equals("wgs") && !skip_sv_calling && !skip_sv_annotation) {
         GENERATE_CYTOSURE_FILES (
             ch_sv_annotate.vcf_ann,
             ch_sv_annotate.tbi,
@@ -844,7 +883,7 @@ workflow RAREDISEASE {
     GENS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if (!(params.skip_tools && params.skip_tools.split(',').contains('gens')) && params.analysis_type.equals("wgs")) {
+    if (!skip_gens && analysis_type.equals("wgs")) {
         GENS (
             ch_mapped.genome_marked_bam_bai,
             CALL_SNV.out.genome_gvcf,
@@ -941,7 +980,9 @@ workflow RAREDISEASE {
         )
     )
 
-    ch_multiqc_files = ch_multiqc_files.mix(fastqc_report.collect{it[1]}.ifEmpty([]))
+    if (!skip_fastqc) {
+        ch_multiqc_files = ch_multiqc_files.mix(fastqc_report.collect{it[1]}.ifEmpty([]))
+    }
     ch_multiqc_files = ch_multiqc_files.mix(ch_mt_txt.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.fastp_json.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.markdup_metrics.map{it[1]}.collect().ifEmpty([]))
@@ -953,7 +994,7 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{it[1]}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.self_sm.map{it[1]}.collect().ifEmpty([]))
 
-    if (!(params.skip_tools && params.skip_tools.split(',').contains('peddy'))) {
+    if (!skip_peddy) {
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{it[1]}.collect().ifEmpty([]))
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.csv.map{it[1]}.collect().ifEmpty([]))
     }
