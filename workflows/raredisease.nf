@@ -131,13 +131,21 @@ workflow RAREDISEASE {
     // Gather built indices or get them from the params
     //
     ch_bait_intervals           = ch_references.bait_intervals
+    ch_breakthreshold           = Channel.value(params.breakthreshold)
+    ch_breakspan                = Channel.value(params.breakspan)
     ch_cadd_header              = Channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_cadd_resources           = params.cadd_resources                     ? Channel.fromPath(params.cadd_resources).collect()
                                                                             : Channel.value([])
     ch_call_interval            = params.call_interval                      ? Channel.fromPath(params.call_interval).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : Channel.value([[:],[]])
+    ch_cluster_threshold        = Channel.value(params.cluster_threshold)
     ch_dbsnp_tbi                = params.known_dbsnp_tbi                    ? Channel.fromPath(params.known_dbsnp_tbi).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : ch_references.known_dbsnp_tbi.ifEmpty([[],[]])
+    ch_deletion_threshold_max   = Channel.value(params.deletion_threshold_max)
+    ch_deletion_threshold_min   = Channel.value(params.deletion_threshold_min)
+    ch_evalue_threshold         = Channel.value(params.evalue_threshold)
+    ch_exclude                  = Channel.value(params.exclude)
+    ch_flank                    = Channel.value(params.flank)
     ch_foundin_header           = Channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
     ch_gcnvcaller_model         = params.gcnvcaller_model                   ? Channel.fromPath(params.gcnvcaller_model).splitCsv ( header:true )
                                                                             .map { row ->
@@ -167,6 +175,7 @@ workflow RAREDISEASE {
                                                                             : ch_references.gnomad_af_idx
     ch_gnomad_af                = params.gnomad_af                          ? ch_gnomad_af_tab.join(ch_gnomad_afidx).map {meta, tab, idx -> [tab,idx]}.collect()
                                                                             : Channel.empty()
+    ch_hplimit                  = Channel.value(params.hplimit)
     ch_intervals_wgs            = params.intervals_wgs                      ? Channel.fromPath(params.intervals_wgs).collect()
                                                                             : Channel.empty()
     ch_intervals_y              = params.intervals_y                        ? Channel.fromPath(params.intervals_y).collect()
@@ -179,8 +188,6 @@ workflow RAREDISEASE {
                                                                             : Channel.value([])
     ch_ml_model                 = params.variant_caller.equals("sentieon")  ? Channel.fromPath(params.ml_model).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : Channel.value([[:],[]])
-    ch_msconfig                 = params.mitosalt_config                    ? channel.fromPath(params.mitosalt_config)
-                                                                            : channel.empty()
     ch_mt_intervals             = ch_references.mt_intervals
     ch_mt_bwaindex              = ch_references.mt_bwa_index
     ch_mt_bwamem2index          = ch_references.mt_bwamem2_index
@@ -195,6 +202,7 @@ workflow RAREDISEASE {
     ch_mtshift_fai              = ch_references.mtshift_fai
     ch_mtshift_fasta            = ch_references.mtshift_fasta
     ch_mtshift_intervals        = ch_references.mtshift_intervals
+    ch_paired_distance          = Channel.value(params.paired_distance)
     ch_par_bed                  = params.par_bed                            ? Channel.fromPath(params.par_bed).map{ it -> [[id:'par_bed'], it] }.collect()
                                                                             : Channel.value([[],[]])
     ch_ploidy_model             = params.ploidy_model                       ? Channel.fromPath(params.ploidy_model).map{ it -> [[id:it.simpleName], it] }.collect()
@@ -213,8 +221,12 @@ workflow RAREDISEASE {
                                                                             : Channel.value([])
     ch_score_config_sv          = params.score_config_sv                    ? Channel.fromPath(params.score_config_sv).collect()
                                                                             : Channel.value([])
+    ch_score_threshold          = Channel.value(params.score_threshold)
     ch_sdf                      = params.sdf                                ? Channel.fromPath(params.sdf).map{it -> [[id:it.simpleName],it]}.collect()
                                                                             : ch_references.sdf
+    ch_sizelimit                = Channel.value(params.sizelimit)
+    ch_split_distance_threshold = Channel.value(params.split_distance_threshold)
+    ch_split_length             = Channel.value(params.split_length)
     ch_subdepth                 = params.mitosalt_depth                     ? channel.value(params.mitosalt_depth)
                                                                             : channel.value([])
     ch_sv_dbs                   = params.svdb_query_dbs                     ? Channel.fromPath(params.svdb_query_dbs)
@@ -743,9 +755,22 @@ workflow RAREDISEASE {
 	ch_mt_fai,
 	ch_genome_chrsizes,
 	ch_mt_fasta,
-        ch_msconfig,
+        ch_score_threshold,
+	ch_evalue_threshold,
+	ch_split_length,
+	ch_paired_distance,
+	ch_deletion_threshold_min,
+	ch_deletion_threshold_max,
+	ch_breakthreshold,
+	ch_cluster_threshold,
+	ch_breakspan,
+	ch_sizelimit,
+	ch_hplimit,
+	ch_flank,
+	ch_split_distance_threshold,
         ch_subdepth,
-        ch_mito_name
+        ch_mito_name,
+	ch_exclude
     )
     ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
 

@@ -1,5 +1,3 @@
-#!/usr/bin/env nextflow
-
 process MITOSALT {
     tag "$meta.id"
     label "process_low"
@@ -17,14 +15,13 @@ process MITOSALT {
 
     input:
     tuple val(meta), path(reads)
-    path config
+    path msconfig
     tuple val(meta2), path(hisat2index)
     tuple val(meta3), path(genomefai)
     tuple val(meta4), path(lastindex)
     tuple val(meta5), path(mtfai)
     path chrsizes
     tuple val(meta6), path(mtfasta)
-    val mito_name
 
     output:
     tuple val(meta), path("*breakpoint") , emit: breakpoint
@@ -35,9 +32,9 @@ process MITOSALT {
     def VERSION = "1.1.1" // from perl script, unlikely to be updated
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    cat $config | sed "s,hsindex = .*,hsindex = ${hisat2index}/reference," | sed "s,^faindex = .*,faindex = $genomefai," | sed "s,lastindex = .*,lastindex = ${lastindex}/reference," | sed "s,mtfaindex = .*,mtfaindex = $mtfai," | sed "s,gsize = .*,gsize = $chrsizes," | sed "s,MT_fasta = .*,MT_fasta = $mtfasta," | sed "s,refchr = .*,refchr = ${mito_name}," > new-${config}
+    cat $msconfig | sed "s/threads = 1/threads = ${task.cpus}/" > new-${msconfig}
     mkdir -p log indel bam tab bw plot
-    MitoSAlt1.1.1.pl new-${config} $reads $prefix
+    MitoSAlt1.1.1.pl new-${msconfig} $reads $prefix
     mv indel/*.breakpoint ${prefix}.breakpoint
     mv indel/*.cluster ${prefix}.cluster
 
