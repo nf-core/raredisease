@@ -34,7 +34,9 @@ workflow ALIGN {
         val_platform             // string:  [mandatory] illumina or a different technology
         val_sort_threads         // integer: [mandatory] number of sorting threads
         val_aligner              // string:  'bwa', 'bwamem2', 'bwameme', or 'sentieon'
+        val_mt_aligner           // string:  'bwa', 'bwamem2', or 'sentieon'
         val_analysis_type        // string:  'wgs', 'wes', or 'mito'
+        extract_alignments       // boolean
         save_mapped_as_cram      // boolean
         skip_fastp               // boolean
 
@@ -75,7 +77,7 @@ workflow ALIGN {
                 }
                 .map { it -> [it[0], it[2]] }
                 .set{ch_input_bai}
-
+        println(val_aligner)
         if (val_aligner.matches("bwamem2|bwa|bwameme")) {
             ALIGN_BWA_BWAMEM2_BWAMEME (             // Triggered when params.aligner is set as bwamem2 or bwa or bwameme
                 ch_reads,
@@ -86,7 +88,9 @@ workflow ALIGN {
                 ch_genome_fai,
                 val_mbuffer_mem,
                 val_platform,
-                val_sort_threads
+                val_sort_threads,
+                val_aligner,
+                extract_alignments
             )
             ch_bwamem2_bam     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bam
             ch_bwamem2_bai     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bai
@@ -126,7 +130,8 @@ workflow ALIGN {
                 ch_mt_bwamem2index,
                 ch_mt_fasta,
                 ch_mt_dictionary,
-                ch_mt_fai
+                ch_mt_fai,
+                val_mt_aligner
             )
 
             ALIGN_MT_SHIFT (
@@ -136,7 +141,8 @@ workflow ALIGN {
                 ch_mtshift_bwamem2index,
                 ch_mtshift_fasta,
                 ch_mtshift_dictionary,
-                ch_mtshift_fai
+                ch_mtshift_fai,
+                val_mt_aligner
             )
 
             ch_mt_bam_bai                = CONVERT_MT_BAM_TO_FASTQ.out.bam_bai // Used for subsampling and SV calling

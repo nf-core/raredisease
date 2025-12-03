@@ -40,6 +40,9 @@ nextflow_workflow {
                 input[10] = channel.empty()
                 input[11] = channel.empty()
                 input[12] = 'xy'
+                input[13] = 'wgs'
+                input[14] = true
+                input[15] = false
                 """
             }
         }
@@ -111,6 +114,9 @@ nextflow_workflow {
                 input[10] = channel.empty()
                 input[11] = channel.empty()
                 input[12] = 'xy'
+                input[13] = 'wgs'
+                input[14] = true
+                input[15] = false
                 """
             }
         }

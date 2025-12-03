@@ -19,19 +19,20 @@ workflow ALIGN_MT {
         ch_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_dict          // channel: [mandatory] [ val(meta), path(dict) ]
         ch_fai           // channel: [mandatory] [ val(meta), path(fai) ]
+        val_mt_aligner   // string:  'bwa', 'bwamem2', or 'sentieon'
 
     main:
         ch_versions     = channel.empty()
 
-        if (params.mt_aligner.equals("bwamem2")) {
+        if (val_mt_aligner.equals("bwamem2")) {
             BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, ch_fasta, true)
             ch_align       = BWAMEM2_MEM_MT.out.bam
             ch_versions    = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
-        } else if (params.mt_aligner.equals("sentieon")) {
+        } else if (val_mt_aligner.equals("sentieon")) {
             SENTIEON_BWAMEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, ch_fai )
             ch_align       = SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, _bai -> [meta, bam] }
             ch_versions    = ch_versions.mix(SENTIEON_BWAMEM_MT.out.versions.first())
-        } else if (params.mt_aligner.equals("bwa")) {
+        } else if (val_mt_aligner.equals("bwa")) {
             BWA_MEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, true )
             ch_align       = BWA_MEM_MT.out.bam
             ch_versions    = ch_versions.mix(BWA_MEM_MT.out.versions.first())

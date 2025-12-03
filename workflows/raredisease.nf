@@ -395,7 +395,9 @@ workflow RAREDISEASE {
         params.platform,
         params.samtools_sort_threads,
         params.aligner,
+        params.mt_aligner,
         analysis_type,
+        params.extract_alignments,
         params.save_mapped_as_cram,
         skip_fastp
     )
