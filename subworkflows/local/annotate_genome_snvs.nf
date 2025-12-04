@@ -126,9 +126,9 @@ workflow ANNOTATE_GENOME_SNVS {
                 cadd: !(cadd.equals(null))
                     return [meta + [prefix: meta.prefix + "_filter_cadd"], cadd]
             }
-            .set { ch_for_mix }
+            .set { ch_annotated_vcfs }
 
-        ch_for_mix.selvar.mix(ch_for_mix.cadd)
+        ch_annotated_vcfs.selvar.mix(ch_annotated_vcfs.cadd)
             .map { meta, vcf -> return [meta, vcf, []] }
             .set { ch_vep_in }
 

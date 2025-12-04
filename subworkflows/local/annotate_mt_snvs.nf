@@ -77,9 +77,9 @@ workflow ANNOTATE_MT_SNVS {
                 cadd: !(cadd.equals(null))
                     return [meta + [prefix: meta.prefix + "_cadd_vep"], cadd]
             }
-            .set { ch_for_mix }
+            .set { ch_annotated_vcfs }
 
-        ch_for_mix.vcfanno.mix(ch_for_mix.cadd)
+        ch_annotated_vcfs.vcfanno.mix(ch_annotated_vcfs.cadd)
             .tap { ch_haplogrep_in }
             .map { meta, vcf -> return [meta, vcf, []] }
             .set { ch_vep_in }

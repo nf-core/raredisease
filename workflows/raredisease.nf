@@ -301,7 +301,7 @@ workflow RAREDISEASE {
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
     //
 
-    ch_input_by_sample_type = ch_reads.branch{ meta, reads ->
+    ch_input_by_sample_type = ch_reads.branch{ meta, _reads ->
         fastq_gz:           meta.data_type == "fastq_gz"
         interleaved_spring: meta.data_type == "interleaved_spring"
         separate_spring:    meta.data_type == "separate_spring"
