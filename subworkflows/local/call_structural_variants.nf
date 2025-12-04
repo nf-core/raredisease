@@ -59,7 +59,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
             ch_versions = ch_versions.mix(CALL_SV_CNVNATOR.out.versions)
         }
 
-        if (skip_germlinecnvcaller) {
+        if (!skip_germlinecnvcaller) {
             CALL_SV_GERMLINECNVCALLER (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model, ch_case_info)
                 .genotyped_filtered_segments_vcf
                 .collect{ _meta, vcf -> vcf }
