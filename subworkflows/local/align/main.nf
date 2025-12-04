@@ -77,7 +77,7 @@ workflow ALIGN {
                 }
                 .map { it -> [it[0], it[2]] }
                 .set{ch_input_bai}
-        println(val_aligner)
+
         if (val_aligner.matches("bwamem2|bwa|bwameme")) {
             ALIGN_BWA_BWAMEM2_BWAMEME (             // Triggered when params.aligner is set as bwamem2 or bwa or bwameme
                 ch_reads,
