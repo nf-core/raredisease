@@ -438,6 +438,7 @@ workflow RAREDISEASE {
         ch_svd_ud,
         channel.value(params.ngsbits_samplegender_method),
         analysis_type,
+        params.aligner,
         skip_ngsbits,
         skip_qualimap
     )
