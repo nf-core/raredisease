@@ -32,7 +32,7 @@ workflow QC_BAM {
         ch_svd_bed                  // channel: [optional] [ path(bed) ]
         ch_svd_mu                   // channel: [optional] [ path(meanpath) ]
         ch_svd_ud                   // channel: [optional] [ path(ud) ]
-        ch_sambamba_bed           // channel: [optional] [ val(meta), path(bed) ]
+        ch_sambamba_bed             // channel: [optional] [ val(meta), path(bed) ]
         ngsbits_samplegender_method // channel: [val(method)]
 
     main:
