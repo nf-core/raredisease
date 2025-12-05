@@ -329,7 +329,7 @@
                     "pattern": "^\\S+\\.bed$",
                     "fa_icon": "fas fa-file",
                     "format": "file-path",
-                    "description": "A BED file with regions of interest used in sambamba depth.",
+                    "description": "A BED file with regions of interest used in sambamba depth."
                 },
                 "save_reference": {
                     "type": "boolean",
