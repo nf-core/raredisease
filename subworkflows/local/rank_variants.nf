@@ -63,7 +63,7 @@ workflow RANK_VARIANTS {
             .map {meta, vcf_genmod, vcf_gicam, vcf_index_gicam -> return [ meta, vcf_genmod, [], vcf_gicam, vcf_index_gicam ]}
             .set {ch_merge_genmod_gicam}
             BCFTOOLS_MERGE_GENMOD_GICAM(ch_merge_genmod_gicam, [], [], [])
-            TABIX_BGZIP_GENMOD_GICAM(BCFTOOLS_MERGE_GENMOD_GICAM.out.vcf)
+            TABIX_BGZIP_GENMOD_GICAM(BCFTOOLS_MERGE_GENMOD_GICAM.out.vcf).output
             .set {ch_vcf}
         }
 

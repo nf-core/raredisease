@@ -4,7 +4,7 @@ process MIVMIR_INFER {
     tag "${meta.id}"
     label 'process_high'
 
-    container "docker.io/clinicalgenomics/rdds_mivmir:v1.12.0-rc3"
+    container "docker.io/clinicalgenomics/rdds_mivmir:v1.12.0-rc6"
 
     beforeScript "mkdir ${task.workDir}/rdds-tmp"
     afterScript "rm -r ${task.workDir}/rdds-tmp"
@@ -25,7 +25,7 @@ process MIVMIR_INFER {
     task.ext.when == null || task.ext.when
 
     script:
-    def VERSION = 'v1.12.0-rc3'
+    def VERSION = 'v1.12.0-rc6'
     """
     . /opt/pyenv/bin/activate
     export PYTHONPATH=/rdds/src
