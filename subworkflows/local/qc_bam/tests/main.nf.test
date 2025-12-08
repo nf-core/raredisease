@@ -39,11 +39,12 @@ nextflow_workflow {
                 input[9]  = channel.empty()
                 input[10] = channel.empty()
                 input[11] = channel.empty()
-                input[12] = 'xy'
-                input[13] = 'wgs'
-                input[14] = 'bwamem2'
-                input[15] = true
-                input[16] = false
+                input[12] = channel.empty()
+                input[13] = 'xy'
+                input[14] = 'wgs'
+                input[15] = 'bwamem2'
+                input[16] = true
+                input[17] = false
                 """
             }
         }
@@ -111,14 +112,15 @@ nextflow_workflow {
                 input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
                 input[7]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
                 input[8]  = channel.empty()
-                input[9] = channel.empty()
+                input[9]  = channel.empty()
                 input[10] = channel.empty()
                 input[11] = channel.empty()
-                input[12] = 'xy'
-                input[13] = 'wgs'
-                input[14] = 'sentieon'
-                input[15] = true
-                input[16] = false
+                input[12] = channel.empty()
+                input[13] = 'xy'
+                input[14] = 'wgs'
+                input[15] = 'sentieon'
+                input[16] = true
+                input[17] = false
                 """
             }
         }

@@ -221,6 +221,8 @@ workflow RAREDISEASE {
                                                                             : channel.value([])
     ch_rtg_truthvcfs            = params.rtg_truthvcfs                      ? channel.fromPath(params.rtg_truthvcfs).collect()
                                                                             : channel.value([])
+    ch_sambamba_bed             = params.sambamba_regions                   ? channel.fromPath(params.sambamba_regions).map{ it -> [[id:'sambamba'], it] }.collect()
+                                                                            : channel.empty()
     ch_sample_id_map            = params.sample_id_map                      ? channel.fromList(samplesheetToList(params.sample_id_map, "${projectDir}/assets/sample_id_map.json"))
                                                                             : channel.empty()
     ch_score_config_mt          = params.score_config_mt                    ? channel.fromPath(params.score_config_mt).collect()
@@ -436,6 +438,7 @@ workflow RAREDISEASE {
         ch_svd_bed,
         ch_svd_mu,
         ch_svd_ud,
+        ch_sambamba_bed,
         channel.value(params.ngsbits_samplegender_method),
         analysis_type,
         params.aligner,

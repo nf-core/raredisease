@@ -8,6 +8,7 @@ include { CHROMOGRAPH as CHROMOGRAPH_COV                           } from '../..
 include { QUALIMAP_BAMQC                                           } from '../../../modules/nf-core/qualimap/bamqc/main'
 include { TIDDIT_COV                                               } from '../../../modules/nf-core/tiddit/cov/main'
 include { MOSDEPTH                                                 } from '../../../modules/nf-core/mosdepth/main'
+include { SAMBAMBA_DEPTH                                           } from '../../../modules/nf-core/sambamba/depth/main'
 include { UCSC_WIGTOBIGWIG                                         } from '../../../modules/nf-core/ucsc/wigtobigwig/main'
 include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_WG  } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
 include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y   } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
@@ -31,6 +32,7 @@ workflow QC_BAM {
         ch_svd_bed                  // channel: [optional] [ path(bed) ]
         ch_svd_mu                   // channel: [optional] [ path(meanpath) ]
         ch_svd_ud                   // channel: [optional] [ path(ud) ]
+        ch_sambamba_bed             // channel: [optional] [ val(meta), path(bed) ]
         ngsbits_samplegender_method // channel: [val(method)]
         val_analysis_type           // string: "wes", "wgs", or "mito"
         val_aligner                 // string: "bwa", "bwamem2", "bwameme", or "sentieon"
@@ -66,6 +68,9 @@ workflow QC_BAM {
         ch_bam_bai.map{ meta, bam, bai -> [meta, bam, bai, []]}.set{ch_mosdepth_in}
         MOSDEPTH (ch_mosdepth_in, ch_genome_fasta)
 
+
+        SAMBAMBA_DEPTH(ch_bam_bai, ch_sambamba_bed, 'region')
+
         // COLLECT WGS METRICS
         if (!val_analysis_type.equals("wes")) {
             if (val_aligner.matches("bwa|bwameme|bwamem2")) {
@@ -99,6 +104,7 @@ workflow QC_BAM {
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions)
         ch_versions = ch_versions.mix(MOSDEPTH.out.versions)
         ch_versions = ch_versions.mix(VERIFYBAMID_VERIFYBAMID2.out.versions)
+        ch_versions = ch_versions.mix(SAMBAMBA_DEPTH.out.versions.first())
 
     emit:
         multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]
