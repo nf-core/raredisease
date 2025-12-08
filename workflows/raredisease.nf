@@ -303,10 +303,10 @@ workflow RAREDISEASE {
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
     //
 
-    ch_input_by_sample_type = ch_reads.branch{
-        fastq_gz:           it[0].data_type == "fastq_gz"
-        interleaved_spring: it[0].data_type == "interleaved_spring"
-        separate_spring:    it[0].data_type == "separate_spring"
+    ch_input_by_sample_type = ch_reads.branch{ meta, _reads ->
+        fastq_gz:           meta.data_type == "fastq_gz"
+        interleaved_spring: meta.data_type == "interleaved_spring"
+        separate_spring:    meta.data_type == "separate_spring"
     }
 
     // Just one fastq.gz.spring-file with both R1 and R2
@@ -545,11 +545,11 @@ workflow RAREDISEASE {
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)
 
             ANN_CSQ_PLI_SNV.out.vcf_ann
-                .filter { it ->
-                    if (it[0].probands.size()==0) {
+                .filter { meta, _vcf ->
+                    if (meta.probands.size()==0) {
                         log.warn("Skipping nuclear SNV ranking since no affected samples are detected in the case")
                     }
-                    it[0].probands.size()>0
+                    meta.probands.size()>0
                 }
                 .set {ch_ranksnv_nuclear_in}
 
@@ -615,11 +615,11 @@ workflow RAREDISEASE {
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_MT.out.versions)
 
             ANN_CSQ_PLI_MT.out.vcf_ann
-                .filter { it ->
-                    if (it[0].probands.size()==0) {
+                .filter { meta, _vcf ->
+                    if (meta.probands.size()==0) {
                         log.warn("Skipping mitochondrial SNV ranking since no affected samples are detected in the case")
                     }
-                    it[0].probands.size()>0
+                    meta.probands.size()>0
                 }
                 .set {ch_ranksnv_mt_in}
 
@@ -705,11 +705,11 @@ workflow RAREDISEASE {
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_SV.out.versions)
 
             ANN_CSQ_PLI_SV.out.vcf_ann
-                .filter { it ->
-                    if (it[0].probands.size()==0) {
+                .filter { meta, _vcf ->
+                    if (meta.probands.size()==0) {
                         log.warn("Skipping SV ranking since no affected samples are detected in the case")
                     }
-                    it[0].probands.size()>0
+                    meta.probands.size()>0
                 }
                 .set {ch_ranksnv_sv_in}
 
@@ -793,12 +793,12 @@ workflow RAREDISEASE {
     if ( params.analysis_type.equals("wgs") && !(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) ) {
 
         RENAME_BAM.out.output
-            .collect{it[1]}
+            .collect{_meta, bam -> bam}
             .toList()
             .set { ch_bam_list }
 
         RENAME_BAI.out.output
-            .collect{it[1]}
+            .collect{_meta, bai -> bai}
             .toList()
             .set { ch_bai_list }
 
@@ -944,21 +944,21 @@ workflow RAREDISEASE {
         )
     )
 
-    ch_multiqc_files = ch_multiqc_files.mix(fastqc_report.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_mt_txt.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.fastp_json.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.markdup_metrics.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.sex_check.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.multiple_metrics.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.hs_metrics.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.self_sm.map{it[1]}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(fastqc_report.collect{_meta, metrics -> metrics}.ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_mt_txt.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.fastp_json.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.markdup_metrics.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.sex_check.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.multiple_metrics.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.hs_metrics.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.self_sm.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
 
     if (!(params.skip_tools && params.skip_tools.split(',').contains('peddy'))) {
-        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{it[1]}.collect().ifEmpty([]))
-        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.csv.map{it[1]}.collect().ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.csv.map{_meta, metrics -> metrics}.collect().ifEmpty([]))
     }
 
     MULTIQC (

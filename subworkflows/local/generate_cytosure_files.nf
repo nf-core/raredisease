@@ -33,11 +33,11 @@ workflow GENERATE_CYTOSURE_FILES {
                 return [ id_meta, sex_meta, vcf, tbi ]
             }
             .join(ch_sample_id_map, remainder: true)
-            .branch { it  ->
-                id: it[4].equals(null)
-                    return [it[0] + [custid:it[0].id] + it[1], it[2], it[3]]
-                custid: !(it[4].equals(null))
-                    return [it[0] + [custid:it[4]] + it[1], it[2], it[3]]
+            .branch { id_meta, sex_meta, vcf, tbi, samplemap  ->
+                id: samplemap.equals(null)
+                    return [id_meta + [custid:id_meta.id] + sex_meta, vcf, tbi]
+                custid: !(samplemap.equals(null))
+                    return [id_meta + [custid:samplemap] + sex_meta, vcf, tbi]
             }
             .set { ch_for_mix }
 
@@ -62,11 +62,11 @@ workflow GENERATE_CYTOSURE_FILES {
 
         SPLIT_AND_FILTER_SV_VCF.out.vcf
             .join(ch_reheader_out, remainder: true)
-            .branch { it  ->
-                split: it[2].equals(null)
-                    return [it[0], it[1]]
-                reheader: !(it[2].equals(null))
-                    return [it[0], it[2]]
+            .branch { meta, filteredvcf, reheaderedvcf  ->
+                split: reheaderedvcf.equals(null)
+                    return [meta, filteredvcf]
+                reheader: !(reheaderedvcf.equals(null))
+                    return [meta, reheaderedvcf]
             }
             .set { ch_for_mix }
 
