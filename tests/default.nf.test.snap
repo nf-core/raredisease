@@ -294,7 +294,7 @@
                     "coreutils": 8.31
                 },
                 "REPLACE_SPACES_IN_VCFINFO": {
-                    "replace_spaces_in_vcfinfo": "v1.0",
+                    "replace_spaces_in_vcfinfo": 1.0,
                     "python": "3.8.3"
                 },
                 "RETROSEQ_CALL": {
@@ -919,6 +919,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2025-12-04T17:20:17.784028039"
+        "timestamp": "2025-12-08T10:42:54.212910271"
     }
 }
