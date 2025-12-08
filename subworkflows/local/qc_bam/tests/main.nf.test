@@ -36,10 +36,11 @@ nextflow_workflow {
                 input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
                 input[7]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
                 input[8]  = channel.empty()
-                input[9] = channel.empty()
+                input[9]  = channel.empty()
                 input[10] = channel.empty()
                 input[11] = channel.empty()
-                input[12] = 'xy'
+                input[12] = channel.empty()
+                input[13] = 'xy'
                 """
             }
         }
@@ -107,10 +108,11 @@ nextflow_workflow {
                 input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
                 input[7]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
                 input[8]  = channel.empty()
-                input[9] = channel.empty()
+                input[9]  = channel.empty()
                 input[10] = channel.empty()
                 input[11] = channel.empty()
-                input[12] = 'xy'
+                input[12] = channel.empty()
+                input[13] = 'xy'
                 """
             }
         }
