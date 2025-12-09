@@ -592,7 +592,7 @@
                     "fa_icon": "fas fa-forward",
                     "description": "Disable specified tools.",
                     "help_text": "Multiple tools can be specified, separated by commas.",
-                    "pattern": "^((fastp|gens|germlinecnvcaller|haplogrep3|peddy|smncopynumbercaller|vcf2cytosure|fastqc|qualimap|ngsbits|mitosalt)?,?)*(?<!,)$"
+                    "pattern": "^((fastp|gens|germlinecnvcaller|haplogrep3|peddy|smncopynumbercaller|vcf2cytosure|fastqc|qualimap|ngsbits)?,?)*(?<!,)$"
                 }
             }
         },
