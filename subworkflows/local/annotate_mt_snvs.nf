@@ -103,7 +103,6 @@ workflow ANNOTATE_MT_SNVS {
         if (!skip_haplogrep3) {
             HAPLOGREP3_CLASSIFY_MT(ch_haplogrep_in)
             ch_haplog   = HAPLOGREP3_CLASSIFY_MT.out.txt
-            ch_versions = ch_versions.mix(HAPLOGREP3_CLASSIFY_MT.out.versions)
         }
 
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
