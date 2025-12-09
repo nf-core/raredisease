@@ -67,7 +67,7 @@ workflow ALIGN {
                     def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
                     return [new_meta, files].flatten()
                 }
-                .map { it -> [it[0], it[1]] }
+                .map { meta, bam, _bai -> [meta, bam] }
                 .set{ch_input_bam}
 
         ch_alignments.map { meta, files ->
@@ -75,7 +75,7 @@ workflow ALIGN {
                     def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
                     return [new_meta, files].flatten()
                 }
-                .map { it -> [it[0], it[2]] }
+                .map { meta, _bam, bai -> [meta, bai] }
                 .set{ch_input_bai}
 
         if (val_aligner.matches("bwamem2|bwa|bwameme")) {

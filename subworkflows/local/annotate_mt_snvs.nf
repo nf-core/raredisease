@@ -35,8 +35,8 @@ workflow ANNOTATE_MT_SNVS {
 
         // add prefix to meta
         ch_mt_vcf
-            .map { it  ->
-                return [it[0]+ [prefix: it[1].simpleName + "_hmtnote"], it[1]]
+            .map { meta, vcf  ->
+                return [meta+ [prefix: vcf.simpleName + "_hmtnote"], vcf]
             }
             .set { ch_hmtnote_in }
 
@@ -70,18 +70,17 @@ workflow ANNOTATE_MT_SNVS {
             ch_cadd_vcf = channel.empty()
         }
 
-        // Pick input for vep
         ch_vcfanno_vcf
-            .join(ch_cadd_vcf, remainder: true) // If CADD is not run then the third element in this channel will be `null`
-            .branch { it  ->                    // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
-                merged: it[2].equals(null)
-                    return [it[0]+ [prefix: it[0].prefix + "_vep"], it[1]]
-                cadd: !(it[2].equals(null))
-                    return [it[0] + [prefix: it[0].prefix + "_cadd_vep"], it[2]]
+            .join(ch_cadd_vcf, remainder: true)
+            .branch { meta, vcfanno, cadd  ->
+                vcfanno: cadd.equals(null)
+                    return [meta+ [prefix: meta.prefix + "_vep"], vcfanno]
+                cadd: !(cadd.equals(null))
+                    return [meta + [prefix: meta.prefix + "_cadd_vep"], cadd]
             }
-            .set { ch_for_mix }
+            .set { ch_annotated_vcfs }
 
-        ch_for_mix.merged.mix(ch_for_mix.cadd)
+        ch_annotated_vcfs.vcfanno.mix(ch_annotated_vcfs.cadd)
             .tap { ch_haplogrep_in }
             .map { meta, vcf -> return [meta, vcf, []] }
             .set { ch_vep_in }

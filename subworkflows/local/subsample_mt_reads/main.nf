@@ -14,7 +14,7 @@ workflow SUBSAMPLE_MT_READS {
         ch_mt_bam_bai             // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         SAMTOOLS_VIEW(ch_mt_bam_bai, [[:],[]], [], '')
 

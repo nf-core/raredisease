@@ -16,8 +16,6 @@ workflow CALL_SNV_MT {
 
     main:
         ch_versions        = channel.empty()
-        ch_haplocheck_txt  = channel.empty()
-        ch_haplocheck_html = channel.empty()
 
         ch_bam_bai_int = ch_bam_bai.combine(ch_intervals)
 
