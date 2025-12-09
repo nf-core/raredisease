@@ -57,7 +57,7 @@ workflow CALL_SNV {
         ch_sentieon_gtbi = channel.empty()
 
         if (val_variant_caller.equals("deepvariant") && !val_analysis_type.equals("mito")) {
-            CALL_SNV_DEEPVARIANT (      
+            CALL_SNV_DEEPVARIANT (
                 ch_genome_bam_bai,
                 ch_genome_fasta,
                 ch_genome_fai,
@@ -74,7 +74,7 @@ workflow CALL_SNV {
             ch_deepvar_gtbi = CALL_SNV_DEEPVARIANT.out.gvcf_tabix
             ch_versions     = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
         } else if (val_variant_caller.equals("sentieon")) {
-            CALL_SNV_SENTIEON(         
+            CALL_SNV_SENTIEON(
                 ch_genome_bam_bai,
                 ch_genome_fasta,
                 ch_genome_fai,
