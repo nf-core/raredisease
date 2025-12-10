@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Interval parameter in the default retroseq call [#717](https://github.com/nf-core/raredisease/pull/717)
 - Tests for call_repeat_expansions and qc_bam subworkflows [#713](https://github.com/nf-core/raredisease/pull/713)
+- Parabricks DeepVariant as an optional variant caller [#724](https://github.com/nf-core/raredisease/pull/724)
 - Feature to subsample mitochondrial alignments based on number of reads [#748](https://github.com/nf-core/raredisease/pull/748)
 - Functionality to generate coverage information using Sambamba depth [#752](https://github.com/nf-core/raredisease/pull/752)
 
@@ -41,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | htslib                              | 1.20        | 1.21        |
 | mosdepth                            | 0.3.8       | 0.3.10      |
 | ngs-bits                            | 2023_02     | 2024_11     |
+| pbrun                               |             | 4.5.1-1     |
 | gatk4/determinegermlinecontigploidy | 4.5.0.0     | 4.6.2.0     |
 | gatk4/germlinecnvcaller             | 4.5.0.0     | 4.6.2.0     |
 | gens-preproc                        | 1.0.11      | 1.1.2       |

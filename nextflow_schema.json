@@ -709,9 +709,9 @@
                 "variant_caller": {
                     "type": "string",
                     "default": "deepvariant",
-                    "description": "Specifies the variant caller to use - available options are 'deepvariant' and 'sentieon'.",
-                    "fa_icon": "fas fa-random",
-                    "enum": ["deepvariant", "sentieon"]
+                    "description": "Variant caller to use for SNV calling",
+                    "enum": ["deepvariant", "sentieon", "parabricks_deepvariant"],
+                    "help_text": "Choose between DeepVariant, Sentieon DNAscope, or Parabricks DeepVariant for SNV calling. Parabricks DeepVariant requires GPU resources."
                 },
                 "variant_type": {
                     "type": "string",
