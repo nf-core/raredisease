@@ -15,18 +15,14 @@ workflow CALL_SNV_MT {
         ch_intervals  // channel: [mandatory] [ path(interval_list) ]
 
     main:
-        ch_versions        = Channel.empty()
-        ch_haplocheck_txt  = Channel.empty()
-        ch_haplocheck_html = Channel.empty()
+        ch_versions        = channel.empty()
 
         ch_bam_bai_int = ch_bam_bai.combine(ch_intervals)
 
         GATK4_MUTECT2_MT (ch_bam_bai_int, ch_fasta, ch_fai, ch_dict, [], [], [],[])
 
-        HAPLOCHECK_MT (GATK4_MUTECT2_MT.out.vcf).set { ch_haplocheck }
+        HAPLOCHECK_MT (GATK4_MUTECT2_MT.out.vcf)
         ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions.first())
-        ch_haplocheck_txt  = HAPLOCHECK_MT.out.txt
-        ch_haplocheck_html = HAPLOCHECK_MT.out.html
 
         // Filter Mutect2 calls
         ch_mutect_vcf = GATK4_MUTECT2_MT.out.vcf.join(GATK4_MUTECT2_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
@@ -46,7 +42,7 @@ workflow CALL_SNV_MT {
         tbi            = GATK4_FILTERMUTECTCALLS_MT.out.tbi   // channel: [ val(meta), path(tbi) ]
         stats          = GATK4_MUTECT2_MT.out.stats           // channel: [ val(meta), path(stats) ]
         filt_stats     = GATK4_FILTERMUTECTCALLS_MT.out.stats // channel: [ val(meta), path(tsv) ]
-        txt            = ch_haplocheck_txt                    // channel: [ val(meta), path(txt) ]
-        html           = ch_haplocheck_html                   // channel: [ val(meta), path(html) ]
+        txt            = HAPLOCHECK_MT.out.txt                // channel: [ val(meta), path(txt) ]
+        html           = HAPLOCHECK_MT.out.html               // channel: [ val(meta), path(html) ]
         versions       = ch_versions                          // channel: [ path(versions.yml) ]
 }

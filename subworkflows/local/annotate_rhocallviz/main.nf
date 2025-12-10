@@ -18,11 +18,11 @@ workflow ANNOTATE_RHOCALLVIZ {
         ch_genome_chrsizes // channel: [mandatory] [ path(sizes) ]
 
     main:
-        ch_versions       = Channel.empty()
+        ch_versions       = channel.empty()
 
         ch_vcf_tbi
             .combine(ch_samples)
-            .map {meta, vcf, tbi, meta2 -> return [meta2,vcf,tbi]}
+            .map {_meta, vcf, tbi, meta2 -> return [meta2,vcf,tbi]}
             .set { ch_rhocall_viz }
 
         BCFTOOLS_VIEW_RHOCALL(ch_rhocall_viz, [],[],[])

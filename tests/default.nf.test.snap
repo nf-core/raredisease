@@ -6,7 +6,7 @@
                     "tabix": 1.12
                 },
                 "BCFTOOLS_ANNOTATE": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_CONCAT": {
                     "bcftools": 1.2
@@ -212,11 +212,8 @@
                 "MARKDUPLICATES": {
                     "picard": "3.3.0"
                 },
-                "ME_INDEX_SPLIT_ALIGNMENT": {
-                    "samtools": 1.21
-                },
                 "ME_SPLIT_ALIGNMENT": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "MOSDEPTH": {
                     "mosdepth": "0.3.10"
@@ -281,23 +278,17 @@
                 "SAMTOOLS_FAIDX_MT": {
                     "samtools": 1.21
                 },
-                "SAMTOOLS_INDEX": {
-                    "samtools": 1.21
-                },
                 "SAMTOOLS_INDEX_ALIGN": {
                     "samtools": 1.21
                 },
                 "SAMTOOLS_INDEX_MARKDUP": {
                     "samtools": 1.21
                 },
-                "SAMTOOLS_INDEX_MT": {
-                    "samtools": 1.21
-                },
                 "SAMTOOLS_SORT": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_SORT_MT": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_STATS": {
                     "samtools": 1.21
@@ -609,17 +600,14 @@
                 "repeat_expansions",
                 "repeat_expansions/earlycasualcaiman_exphunter_sorted.bam",
                 "repeat_expansions/earlycasualcaiman_exphunter_sorted.bam.bai",
-                "repeat_expansions/earlycasualcaiman_exphunter_sorted.bam.csi",
                 "repeat_expansions/earlycasualcaiman_repeat_expansion.vcf",
                 "repeat_expansions/hugelymodelbat_exphunter_sorted.bam",
                 "repeat_expansions/hugelymodelbat_exphunter_sorted.bam.bai",
-                "repeat_expansions/hugelymodelbat_exphunter_sorted.bam.csi",
                 "repeat_expansions/hugelymodelbat_repeat_expansion.vcf",
                 "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz",
                 "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz.tbi",
                 "repeat_expansions/slowlycivilbuck_exphunter_sorted.bam",
                 "repeat_expansions/slowlycivilbuck_exphunter_sorted.bam.bai",
-                "repeat_expansions/slowlycivilbuck_exphunter_sorted.bam.csi",
                 "repeat_expansions/slowlycivilbuck_repeat_expansion.vcf",
                 "smncopynumbercaller",
                 "smncopynumbercaller/out",
@@ -631,6 +619,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2025-10-27T15:59:49.765279594"
+        "timestamp": "2025-11-27T16:06:28.721832727"
     }
 }

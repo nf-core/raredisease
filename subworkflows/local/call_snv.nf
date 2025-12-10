@@ -19,7 +19,6 @@ workflow CALL_SNV {
         ch_genome_chrsizes    // channel: [mandatory] [ path(sizes) ]
         ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai         // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_genome_dictionary  // channel: [mandatory] [ val(meta), path(dict) ]
         ch_mt_intervals       // channel: [optional] [ path(interval_list) ]
         ch_mt_dictionary      // channel: [optional] [ val(meta), path(dict) ]
         ch_mt_fai             // channel: [optional] [ val(meta), path(fai) ]
@@ -69,8 +68,8 @@ workflow CALL_SNV {
                 ch_foundin_header,
                 ch_genome_chrsizes
             )
-            ch_deepvar_vcf = CALL_SNV_DEEPVARIANT.out.vcf
-            ch_deepvar_tbi = CALL_SNV_DEEPVARIANT.out.tabix
+            ch_deepvar_vcf  = CALL_SNV_DEEPVARIANT.out.vcf
+            ch_deepvar_tbi  = CALL_SNV_DEEPVARIANT.out.tabix
             ch_deepvar_gvcf = CALL_SNV_DEEPVARIANT.out.gvcf
             ch_deepvar_gtbi = CALL_SNV_DEEPVARIANT.out.gvcf_tabix
             ch_versions    = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
@@ -85,11 +84,11 @@ workflow CALL_SNV {
                 ch_foundin_header,
                 ch_genome_chrsizes
             )
-            ch_parabricks_vcf = CALL_SNV_DEEPVARIANT_PARABRICKS.out.vcf
-            ch_parabricks_tbi = CALL_SNV_DEEPVARIANT_PARABRICKS.out.tabix
+            ch_parabricks_vcf  = CALL_SNV_DEEPVARIANT_PARABRICKS.out.vcf
+            ch_parabricks_tbi  = CALL_SNV_DEEPVARIANT_PARABRICKS.out.tabix
             ch_parabricks_gvcf = CALL_SNV_DEEPVARIANT_PARABRICKS.out.gvcf
             ch_parabricks_gtbi = CALL_SNV_DEEPVARIANT_PARABRICKS.out.gvcf_tabix
-            ch_versions    = ch_versions.mix(CALL_SNV_DEEPVARIANT_PARABRICKS.out.versions)
+            ch_versions        = ch_versions.mix(CALL_SNV_DEEPVARIANT_PARABRICKS.out.versions)
         } else if (params.variant_caller.equals("sentieon")) {
             CALL_SNV_SENTIEON(         // triggered only when params.variant_caller is set as sentieon
                 ch_genome_bam_bai,
@@ -104,11 +103,11 @@ workflow CALL_SNV {
                 ch_foundin_header,
                 ch_genome_chrsizes
             )
-            ch_sentieon_vcf = CALL_SNV_SENTIEON.out.vcf
-            ch_sentieon_tbi = CALL_SNV_SENTIEON.out.tabix
+            ch_sentieon_vcf  = CALL_SNV_SENTIEON.out.vcf
+            ch_sentieon_tbi  = CALL_SNV_SENTIEON.out.tabix
             ch_sentieon_gvcf = CALL_SNV_SENTIEON.out.gvcf
             ch_sentieon_gtbi = CALL_SNV_SENTIEON.out.gvcf_tbi
-            ch_versions    = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
+            ch_versions      = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
         }
 
         ch_vcf    = Channel.empty().mix(ch_deepvar_vcf, ch_parabricks_vcf, ch_sentieon_vcf)

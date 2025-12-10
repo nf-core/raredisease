@@ -20,8 +20,6 @@ process CALCULATE_SEED_FRACTION {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
     """
     export MT_COVERAGE=`awk '{cov += \$3}END{ if (NR > 0) print cov / NR }' $cov`
 

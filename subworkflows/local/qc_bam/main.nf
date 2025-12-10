@@ -8,6 +8,7 @@ include { CHROMOGRAPH as CHROMOGRAPH_COV                           } from '../..
 include { QUALIMAP_BAMQC                                           } from '../../../modules/nf-core/qualimap/bamqc/main'
 include { TIDDIT_COV                                               } from '../../../modules/nf-core/tiddit/cov/main'
 include { MOSDEPTH                                                 } from '../../../modules/nf-core/mosdepth/main'
+include { SAMBAMBA_DEPTH                                           } from '../../../modules/nf-core/sambamba/depth/main'
 include { UCSC_WIGTOBIGWIG                                         } from '../../../modules/nf-core/ucsc/wigtobigwig/main'
 include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_WG  } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
 include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y   } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
@@ -20,7 +21,6 @@ workflow QC_BAM {
 
     take:
         ch_bam                      // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_bai                      // channel: [mandatory] [ val(meta), path(bai) ]
         ch_bam_bai                  // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_genome_fasta             // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai               // channel: [mandatory] [ val(meta), path(fai) ]
@@ -32,14 +32,15 @@ workflow QC_BAM {
         ch_svd_bed                  // channel: [optional] [ path(bed) ]
         ch_svd_mu                   // channel: [optional] [ path(meanpath) ]
         ch_svd_ud                   // channel: [optional] [ path(ud) ]
+        ch_sambamba_bed             // channel: [optional] [ val(meta), path(bed) ]
         ngsbits_samplegender_method // channel: [val(method)]
 
     main:
-        ch_cov      = Channel.empty()
-        ch_cov_y    = Channel.empty()
-        ch_versions = Channel.empty()
-        ch_qualimap = Channel.empty()
-        ch_ngsbits  = Channel.empty()
+        ch_cov      = channel.empty()
+        ch_cov_y    = channel.empty()
+        ch_versions = channel.empty()
+        ch_qualimap = channel.empty()
+        ch_ngsbits  = channel.empty()
 
         PICARD_COLLECTMULTIPLEMETRICS (ch_bam_bai, ch_genome_fasta, ch_genome_fai)
 
@@ -63,14 +64,17 @@ workflow QC_BAM {
         ch_bam_bai.map{ meta, bam, bai -> [meta, bam, bai, []]}.set{ch_mosdepth_in}
         MOSDEPTH (ch_mosdepth_in, ch_genome_fasta)
 
+
+        SAMBAMBA_DEPTH(ch_bam_bai, ch_sambamba_bed, 'region')
+
         // COLLECT WGS METRICS
         if (!params.analysis_type.equals("wes")) {
             PICARD_COLLECTWGSMETRICS_WG ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs )
             PICARD_COLLECTWGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y )
             SENTIEON_WGSMETRICS_WG ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs.map{ interval -> [[:], interval]} )
             SENTIEON_WGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y.map{ interval -> [[:], interval]} )
-            ch_cov   = Channel.empty().mix(PICARD_COLLECTWGSMETRICS_WG.out.metrics, SENTIEON_WGSMETRICS_WG.out.wgs_metrics)
-            ch_cov_y = Channel.empty().mix(PICARD_COLLECTWGSMETRICS_Y.out.metrics, SENTIEON_WGSMETRICS_Y.out.wgs_metrics)
+            ch_cov   = channel.empty().mix(PICARD_COLLECTWGSMETRICS_WG.out.metrics, SENTIEON_WGSMETRICS_WG.out.wgs_metrics)
+            ch_cov_y = channel.empty().mix(PICARD_COLLECTWGSMETRICS_Y.out.metrics, SENTIEON_WGSMETRICS_Y.out.wgs_metrics)
             ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_WG.out.versions.first(), SENTIEON_WGSMETRICS_WG.out.versions.first())
             ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_Y.out.versions.first(), SENTIEON_WGSMETRICS_Y.out.versions.first())
         }
@@ -82,7 +86,7 @@ workflow QC_BAM {
         }
         // Check contamination
         ch_svd_in = ch_svd_ud.combine(ch_svd_mu).combine(ch_svd_bed).collect()
-        VERIFYBAMID_VERIFYBAMID2(ch_bam_bai, ch_svd_in, [], ch_genome_fasta.map {it-> it[1]})
+        VERIFYBAMID_VERIFYBAMID2(ch_bam_bai, ch_svd_in, [], ch_genome_fasta.map {_meta, fasta-> fasta})
 
         ch_versions = ch_versions.mix(CHROMOGRAPH_COV.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions.first())
@@ -91,6 +95,8 @@ workflow QC_BAM {
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions.first())
         ch_versions = ch_versions.mix(MOSDEPTH.out.versions.first())
         ch_versions = ch_versions.mix(VERIFYBAMID_VERIFYBAMID2.out.versions.first())
+        ch_versions = ch_versions.mix(SAMBAMBA_DEPTH.out.versions.first())
+
 
     emit:
         multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]

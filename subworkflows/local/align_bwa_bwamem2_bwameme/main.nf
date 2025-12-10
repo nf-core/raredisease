@@ -27,7 +27,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         val_platform     // string:  [mandatory] default: illumina
         val_sort_threads // integer: [mandatory] default: 4
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         // Map, sort, and index
         if (params.aligner.equals("bwa")) {
@@ -46,11 +46,11 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
             if (params.bwa_as_fallback) {
                 ch_reads_input
                     .join(BWAMEM2_MEM.out.bam, remainder: true)
-                    .branch { it ->
-                        ERROR: it[2].equals(null)
-                            return [it[0], it[1]] // return reads
-                        SUCCESS: !it[2].equals(null)
-                            return [it[0], it[2]]  // return bam
+                    .branch { meta, reads, bam ->
+                        ERROR: bam.equals(null)
+                            return [meta, reads] // return reads
+                        SUCCESS: !bam.equals(null)
+                            return [meta, bam]  // return bam
                     }
                     .set { ch_fallback }
 
@@ -74,9 +74,9 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
                     [groupKey(new_meta, new_meta.num_lanes), bam]
                 }
             .groupTuple()
-            .branch{
-                single: it[1].size() == 1
-                multiple: it[1].size() > 1
+            .branch{ _meta, bam ->
+                single: bam.size() == 1
+                multiple: bam.size() > 1
                 }
             .set{ bams }
 
@@ -88,7 +88,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         if (params.extract_alignments) {
             SAMTOOLS_INDEX_EXTRACT ( prepared_bam )
             extract_bam_sorted_indexed = prepared_bam.join(SAMTOOLS_INDEX_EXTRACT.out.bai, failOnMismatch:true, failOnDuplicate:true)
-            EXTRACT_ALIGNMENTS( extract_bam_sorted_indexed, ch_genome_fasta, [])
+            EXTRACT_ALIGNMENTS( extract_bam_sorted_indexed, ch_genome_fasta, [], '')
             prepared_bam = EXTRACT_ALIGNMENTS.out.bam
             ch_versions = ch_versions.mix(EXTRACT_ALIGNMENTS.out.versions.first())
             ch_versions = ch_versions.mix(SAMTOOLS_INDEX_EXTRACT.out.versions.first())

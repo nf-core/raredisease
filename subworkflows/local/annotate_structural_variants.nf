@@ -23,9 +23,9 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         ch_vep_extra_files    // channel: [mandatory] [ path(files) ]
 
     main:
-        ch_versions      = Channel.empty()
-        ch_svdb_dbs      = Channel.empty()
-        ch_svdb_bedpedbs = Channel.empty()
+        ch_versions      = channel.empty()
+        ch_svdb_dbs      = channel.empty()
+        ch_svdb_bedpedbs = channel.empty()
 
         ch_sv_dbs
             .splitCsv ( header:true )
@@ -61,11 +61,11 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
         ch_vcf
             .join(SVDB_QUERY_DB.out.vcf, remainder: true)
-            .branch { it  ->
-                original_call: it[2].equals(null)
-                    return [it[0], it[1]]
-                annotated_with_db: !(it[2].equals(null))
-                    return [it[0], it[2]]
+            .branch { meta, vcfcalls, annotatedvcf  ->
+                original_call: annotatedvcf.equals(null)
+                    return [meta, vcfcalls]
+                annotated_with_db: !(annotatedvcf.equals(null))
+                    return [meta, annotatedvcf]
             }
             .set { ch_for_mix_querydb }
 
@@ -83,15 +83,15 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
         ch_querydb_out
             .join(SVDB_QUERY_BEDPE.out.vcf, remainder: true)
-            .branch { it  ->
-                querydb_out: it[2].equals(null)
-                    return [it[0], it[1]]
-                annotated_with_bedped: !(it[2].equals(null))
-                    return [it[0], it[2]]
+            .branch { meta, annotated_db, annotated_bedped  ->
+                querydb_out: annotated_bedped.equals(null)
+                    return [meta, annotated_db]
+                querybedped_out: !(annotated_bedped.equals(null))
+                    return [meta, annotated_bedped]
             }
             .set { ch_for_mix_querybedpedb }
 
-        ch_querypedbed_out = ch_for_mix_querybedpedb.querydb_out.mix(ch_for_mix_querybedpedb.annotated_with_bedped)
+        ch_querypedbed_out = ch_for_mix_querybedpedb.querydb_out.mix(ch_for_mix_querybedpedb.querybedped_out)
 
         PICARD_SORTVCF(ch_querypedbed_out, ch_genome_fasta, ch_genome_dictionary)
 

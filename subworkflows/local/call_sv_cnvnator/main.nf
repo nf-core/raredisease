@@ -20,7 +20,7 @@ workflow CALL_SV_CNVNATOR {
         ch_case_info // channel: [mandatory] [ val(case_info) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         CNVNATOR_RD ( ch_bam_bai, [[:],[]], [[:],[]], [[:],[]], "rd" )
         CNVNATOR_HIST ( [[:],[],[]], CNVNATOR_RD.out.root, ch_fasta, ch_fai, "his" )
@@ -30,7 +30,7 @@ workflow CALL_SV_CNVNATOR {
         CNVNATOR_CONVERT2VCF (CNVNATOR_CALL.out.tab)
         INDEX_CNVNATOR (CNVNATOR_CONVERT2VCF.out.vcf)
         BCFTOOLS_VIEW_CNVNATOR (INDEX_CNVNATOR.out.gz_tbi, [], [], []).vcf
-            .collect{it[1]}
+            .collect{_meta, vcf -> vcf}
             .toList()
             .set { vcf_file_list }
 

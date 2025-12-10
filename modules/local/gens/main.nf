@@ -2,7 +2,7 @@ process GENS {
     tag "$meta.id"
     label 'process_medium'
 
-    container 'docker.io/clinicalgenomics/gens_preproc:1.0.11'
+    container 'docker.io/clinicalgenomics/gens-preproc:1.1.2'
 
     input:
     tuple val(meta), path(read_counts)
@@ -10,11 +10,9 @@ process GENS {
     path  gnomad_positions
 
     output:
-    tuple val(meta), path('*.cov.bed.gz')    , emit: cov
-    tuple val(meta), path('*.cov.bed.gz.tbi'), emit: cov_index
-    tuple val(meta), path('*.baf.bed.gz')    , emit: baf
-    tuple val(meta), path('*.baf.bed.gz.tbi'), emit: baf_index
-    path  "versions.yml"                     , emit: versions
+    tuple val(meta), path('*.cov.bed')    , emit: cov
+    tuple val(meta), path('*.baf.bed')    , emit: baf
+    path  "versions.yml"                  , emit: versions
 
     script:
     // Exit if running this module with -profile conda / -profile mamba
@@ -22,32 +20,29 @@ process GENS {
         error "The gens pre-processing module does not support Conda. Please use Docker / Singularity / Podman instead."
     }
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def VERSION = "1.0.11" // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
     """
-    generate_gens_data.pl \\
-        $read_counts \\
-        $gvcf \\
-        $prefix \\
-        $gnomad_positions
+    generate_gens_data.py \\
+        --coverage $read_counts \\
+        --gvcf $gvcf \\
+        --label $prefix \\
+        --baf_positions $gnomad_positions \\
+        --outdir \$PWD
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        generate_gens_data.pl: $VERSION
+        generate_gens_data.py: \$(echo \$(generate_gens_data.py --version))
     END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def VERSION = "1.0.11"
     """
-    touch ${prefix}.baf.bed.gz
-    touch ${prefix}.baf.bed.gz.tbi
-    touch ${prefix}.cov.bed.gz
-    touch ${prefix}.cov.bed.gz.tbi
+    touch ${prefix}.baf.bed
+    touch ${prefix}.cov.bed
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        generate_gens_data.pl: $VERSION
+        generate_gens_data.py: \$(echo \$(generate_gens_data.py --version))
     END_VERSIONS
     """
 }

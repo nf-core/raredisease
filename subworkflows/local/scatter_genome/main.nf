@@ -13,7 +13,7 @@ workflow SCATTER_GENOME {
         ch_genome_fasta  // channel: [mandatory] [ val(meta), path(fasta) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         BUILD_BED (ch_genome_fai)
 
@@ -24,6 +24,6 @@ workflow SCATTER_GENOME {
 
     emit:
         bed             = BUILD_BED.out.bed.collect()   // channel: [ val(meta), path(bed) ]
-        split_intervals = GATK4_SPLITINTERVALS.out.split_intervals.map { meta, it -> it }.flatten().collate(1) // channel: [ val(meta), [ path(interval_lists) ] ]
+        split_intervals = GATK4_SPLITINTERVALS.out.split_intervals.map { _meta, it -> it }.flatten().collate(1) // channel: [ val(meta), [ path(interval_lists) ] ]
         versions        = ch_versions                   // channel: [ path(versions.yml) ]
 }

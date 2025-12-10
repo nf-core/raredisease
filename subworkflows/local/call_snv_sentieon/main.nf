@@ -29,12 +29,12 @@ workflow CALL_SNV_SENTIEON {
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         // Combine bam and intervals
         bam_bai_intervals = ch_bam_bai.combine(ch_call_interval)
             .map{
-                meta, bam, bai, meta2, interval -> [meta, bam, bai, interval]
+                meta, bam, bai, _meta2, interval -> [meta, bam, bai, interval]
             }
 
         SENTIEON_DNASCOPE(
@@ -60,15 +60,15 @@ workflow CALL_SNV_SENTIEON {
         BCF_FILTER_TWO ( ch_bcffiltertwo_in )
 
         BCF_FILTER_TWO.out.vcf.join(BCF_FILTER_TWO.out.tbi, failOnMismatch:true, failOnDuplicate:true)
-            .map { meta,vcf,tbi -> return [vcf,tbi] }
+            .map { _meta, vcf, tbi -> return [vcf, tbi] }
             .set { ch_vcf_idx }
 
         ch_case_info
             .combine(ch_vcf_idx)
             .groupTuple()
-            .branch{                                                                                                    // branch the channel into multiple channels (single, multiple) depending on size of list
-                single: it[1].size() == 1
-                multiple: it[1].size() > 1
+            .branch{ _meta, vcfs, _idx ->                                                                                                    // branch the channel into multiple channels (single, multiple) depending on size of list
+                single: vcfs.size() == 1
+                multiple: vcfs.size() > 1
             }
             .set{ ch_vcf_idx_merge_in }
 
@@ -96,7 +96,7 @@ workflow CALL_SNV_SENTIEON {
             .set { ch_varcallerinfo }
 
         ADD_VARCALLER_TO_BED (ch_varcallerinfo).gz_tbi
-            .map{meta,bed,tbi -> return [bed, tbi]}
+            .map{_meta, bed, tbi -> return [bed, tbi]}
             .set{ch_varcallerbed}
 
         REMOVE_DUPLICATES_SEN.out.vcf
@@ -104,7 +104,7 @@ workflow CALL_SNV_SENTIEON {
             .combine(ch_varcallerbed)
             .set { ch_annotate_in }
 
-        BCFTOOLS_ANNOTATE(ch_annotate_in, ch_foundin_header)
+        BCFTOOLS_ANNOTATE(ch_annotate_in, [], ch_foundin_header, [])
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 
