@@ -268,7 +268,7 @@ def validateInputParameters() {
 
 //
 // Initialize skip parameters
-// 
+//
 def parseSkipList(paramValue, toolName) {
     return paramValue ? paramValue.split(',').contains(toolName) : false
 }
