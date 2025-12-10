@@ -32,7 +32,7 @@ nextflow_workflow {
         }
     }
 
-    test("align bwamem2") {
+    test("align bwamem2 - wgs") {
 
         setup {
             run("BWAMEM2_INDEX", alias: 'GENOME_MEM2') {
@@ -50,12 +50,7 @@ nextflow_workflow {
 
         when {
             params {
-                aligner             = 'bwamem2'
-                mt_aligner          = 'bwamem2'
                 pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
-                save_mapped_as_cram = true
-                analysis_type       = "wgs"
-                skip_tools          = null
                 platform            = "illumina"
                 min_trimmed_length  = 50
                 mito_name           = "MT"
@@ -106,6 +101,12 @@ nextflow_workflow {
                 input[18] = 3072
                 input[19] = "illumina"
                 input[20] = 4
+                input[21] = "bwamem2"
+                input[22] = "bwamem2"
+                input[23] = "wgs"
+                input[24] = false
+                input[25] = true
+                input[26] = false
                 """
             }
         }
@@ -148,12 +149,8 @@ nextflow_workflow {
 
         when {
             params {
-                aligner             = 'bwamem2'
-                mt_aligner          = 'bwamem2'
                 pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
                 save_mapped_as_cram = true
-                analysis_type       = "wes"
-                skip_tools          = null
                 platform            = "illumina"
                 min_trimmed_length  = 50
                 mito_name           = "MT"
@@ -204,6 +201,12 @@ nextflow_workflow {
                 input[18] = 3072
                 input[19] = "illumina"
                 input[20] = 4
+                input[21] = "bwamem2"
+                input[22] = "bwamem2"
+                input[23] = "wes"
+                input[24] = false
+                input[25] = false
+                input[26] = false
                 """
             }
         }
@@ -219,15 +222,14 @@ nextflow_workflow {
                         workflow.out.mt_bam_bai_gatksubwf
                             .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
                         workflow.out.mtshift_bam_bai_gatksubwf
-                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
-                        workflow.out.versions
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },                        workflow.out.versions
                     ).match()
                 }
             )
         }
     }
 
-    test("align bwameme") {
+    test("align bwameme - wgs") {
 
         setup {
             run("BWAMEME_INDEX", alias: 'GENOME_MEME') {
@@ -245,12 +247,7 @@ nextflow_workflow {
 
         when {
             params {
-                aligner             = 'bwameme'
-                mt_aligner          = 'bwamem2'
                 pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
-                save_mapped_as_cram = true
-                analysis_type       = "wgs"
-                skip_tools          = "fastp"
                 platform            = "illumina"
                 min_trimmed_length  = 50
                 mito_name           = "MT"
@@ -295,6 +292,12 @@ nextflow_workflow {
                 input[18] = 3072
                 input[19] = "illumina"
                 input[20] = 4
+                input[21] = "bwameme"
+                input[22] = "bwamem2"
+                input[23] = "wgs"
+                input[24] = false
+                input[25] = true
+                input[26] = true
                 """
             }
         }

@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            274,
+            794,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "tabix": 1.12
@@ -12,19 +12,34 @@
                 "BCFTOOLS_CONCAT": {
                     "bcftools": 1.2
                 },
+                "BCFTOOLS_CONCAT_ME": {
+                    "bcftools": 1.2
+                },
                 "BCFTOOLS_MERGE_MT": {
                     "bcftools": 1.2
                 },
                 "BCFTOOLS_REHEADER_EXP": {
                     "bcftools": 1.21
                 },
+                "BCFTOOLS_REHEADER_ME": {
+                    "bcftools": 1.21
+                },
                 "BCFTOOLS_ROH": {
+                    "bcftools": 1.2
+                },
+                "BCFTOOLS_SORT": {
+                    "bcftools": 1.2
+                },
+                "BCFTOOLS_SORT_ME": {
                     "bcftools": 1.2
                 },
                 "BCFTOOLS_VIEW": {
                     "bcftools": 1.2
                 },
                 "BCFTOOLS_VIEW_CNVNATOR": {
+                    "bcftools": 1.2
+                },
+                "BCFTOOLS_VIEW_FILTER": {
                     "bcftools": 1.2
                 },
                 "BCFTOOLS_VIEW_MANTA": {
@@ -109,7 +124,16 @@
                 "ENSEMBLVEP_FILTERVEP": {
                     "ensemblvep": 110.0
                 },
+                "ENSEMBLVEP_ME": {
+                    "ensemblvep": 110.0
+                },
+                "ENSEMBLVEP_MT": {
+                    "ensemblvep": 110.0
+                },
                 "ENSEMBLVEP_SNV": {
+                    "ensemblvep": 110.0
+                },
+                "ENSEMBLVEP_SV": {
                     "ensemblvep": 110.0
                 },
                 "EXPANSIONHUNTER": {
@@ -158,6 +182,9 @@
                 "GATK_SHIFTFASTA": {
                     "gatk4": "4.5.0.0"
                 },
+                "GAWK": {
+                    "gawk": "5.3.0"
+                },
                 "GENMOD_ANNOTATE": {
                     "genmod": 3.9
                 },
@@ -179,6 +206,9 @@
                 "HAPLOCHECK_MT": {
                     "haplocheck": "1.3.3"
                 },
+                "HMTNOTE_ANNOTATE": {
+                    "hmtnote": "0.7.2"
+                },
                 "INDEX_CNVNATOR": {
                     "tabix": 1.2
                 },
@@ -187,6 +217,9 @@
                 },
                 "MANTA": {
                     "manta": "1.6.0"
+                },
+                "ME_SPLIT_ALIGNMENT": {
+                    "samtools": "1.22.1"
                 },
                 "MOSDEPTH": {
                     "mosdepth": "0.3.10"
@@ -218,6 +251,9 @@
                 "PICARD_MARKDUPLICATES_MT": {
                     "picard": "3.3.0"
                 },
+                "PICARD_SORTVCF": {
+                    "picard": "3.3.0"
+                },
                 "REMOVE_DUPLICATES_GL": {
                     "bcftools": 1.21
                 },
@@ -233,11 +269,24 @@
                 "RENAME_BAM": {
                     "coreutils": 8.31
                 },
+                "REPLACE_SPACES_IN_VCFINFO": {
+                    "replace_spaces_in_vcfinfo": 1.0,
+                    "python": "3.8.3"
+                },
+                "RETROSEQ_CALL": {
+                    "retroseq_call": 1.5
+                },
+                "RETROSEQ_DISCOVER": {
+                    "retroseq_discover": 1.5
+                },
                 "RHOCALL_ANNOTATE": {
                     "rhocall": "0.5.1"
                 },
                 "RHOCALL_VIZ": {
                     "rhocall": "0.5.1"
+                },
+                "SAMTOOLS_COLLATE": {
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_EXTRACT_MT": {
                     "samtools": 1.21
@@ -251,8 +300,17 @@
                 "SAMTOOLS_SORT_MT": {
                     "samtools": "1.22.1"
                 },
+                "SAMTOOLS_VIEW": {
+                    "samtools": "1.22.1"
+                },
+                "SAM_TO_BAM": {
+                    "samtools": "1.22.1"
+                },
                 "SMNCOPYNUMBERCALLER": {
                     "SMNCopyNumberCaller": "1.1.2"
+                },
+                "SPLIT_AND_FILTER_SV_VCF": {
+                    "bcftools": 1.2
                 },
                 "SPLIT_MULTIALLELICS_EXP": {
                     "bcftools": 1.21
@@ -275,6 +333,10 @@
                     "svdb": "2.8.2",
                     "bcftools": 1.21
                 },
+                "SVDB_MERGE_ME": {
+                    "svdb": "2.8.2",
+                    "bcftools": 1.21
+                },
                 "SVDB_MERGE_REPEATS": {
                     "svdb": "2.8.2",
                     "bcftools": 1.21
@@ -282,6 +344,9 @@
                 "SVDB_MERGE_TIDDIT": {
                     "svdb": "2.8.2",
                     "bcftools": 1.21
+                },
+                "SVDB_QUERY_DB": {
+                    "svdb": "2.8.2"
                 },
                 "TABIX_ANNOTATE": {
                     "tabix": 1.21
@@ -310,6 +375,12 @@
                 "TABIX_GNOMAD_AF": {
                     "tabix": 1.21
                 },
+                "TABIX_ME": {
+                    "tabix": 1.21
+                },
+                "TABIX_ME_SPLIT": {
+                    "tabix": 1.21
+                },
                 "TABIX_PBT": {
                     "tabix": 1.2
                 },
@@ -325,10 +396,16 @@
                 "TABIX_TABIX_MT": {
                     "tabix": 1.21
                 },
+                "TABIX_TABIX_VEP_MT": {
+                    "tabix": 1.21
+                },
                 "TABIX_VEP": {
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
+                    "tiddit": "3.6.1"
+                },
+                "TIDDIT_COV_VCF2CYTOSURE": {
                     "tiddit": "3.6.1"
                 },
                 "TIDDIT_SV": {
@@ -346,20 +423,46 @@
                 "UPD_SITES": {
                     "upd": 0.1
                 },
+                "VCF2CYTOSURE": {
+                    "vcf2cytosure": "0.9.1"
+                },
                 "VCFANNO": {
+                    "vcfanno": "0.3.5"
+                },
+                "VCFANNO_MT": {
                     "vcfanno": "0.3.5"
                 },
                 "Workflow": {
                     "nf-core/raredisease": "v2.7.0dev"
+                },
+                "ZIP_TABIX_HMTNOTE_MT": {
+                    "tabix": 1.2
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "tabix": 1.2
                 },
                 "ZIP_TABIX_VCFANNO": {
                     "tabix": 1.2
+                },
+                "ZIP_TABIX_VCFANNO_MT": {
+                    "tabix": 1.2
                 }
             },
             [
+                "alignment",
+                "alignment/earlycasualcaiman_mt_subsample.bam",
+                "alignment/earlycasualcaiman_mt_subsample.bam.bai",
+                "alignment/hugelymodelbat_mt_subsample.bam",
+                "alignment/hugelymodelbat_mt_subsample.bam.bai",
+                "alignment/slowlycivilbuck_mt_subsample.bam",
+                "alignment/slowlycivilbuck_mt_subsample.bam.bai",
+                "annotate_mobile_elements",
+                "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz",
+                "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz.csi",
+                "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz.tbi",
+                "annotate_mobile_elements/justhusky_me_pli_research.vcf.gz",
+                "annotate_mobile_elements/justhusky_me_pli_research.vcf.gz.csi",
+                "annotate_mobile_elements/justhusky_me_pli_research.vcf.gz.tbi",
                 "annotate_snv",
                 "annotate_snv/genome",
                 "annotate_snv/genome/earlycasualcaiman_rhocallviz",
@@ -382,6 +485,20 @@
                 "annotate_snv/genome/slowlycivilbuck_rhocallviz/slowlycivilbuck_rhocallviz.bw",
                 "annotate_snv/genome/slowlycivilbuck_rhocallviz/slowlycivilbuck_rhocallviz.wig",
                 "annotate_snv/genome/slowlycivilbuck_rhocallviz_autozyg_chromograph",
+                "annotate_snv/mitochondria",
+                "annotate_snv/mitochondria/justhusky_mitochondria_hmtnote_vcfanno_vep.vcf.gz",
+                "annotate_snv/mitochondria/justhusky_mitochondria_hmtnote_vcfanno_vep.vcf.gz.tbi",
+                "annotate_sv",
+                "annotate_sv/justhusky_svdbquery_vep.json.gz",
+                "annotate_sv/justhusky_svdbquery_vep.summary.html",
+                "annotate_sv/justhusky_svdbquery_vep.tab.gz",
+                "annotate_sv/justhusky_svdbquery_vep.vcf.gz",
+                "annotate_sv/justhusky_svdbquery_vep.vcf.gz.csi",
+                "annotate_sv/justhusky_svdbquery_vep.vcf.gz.tbi",
+                "call_mobile_elements",
+                "call_mobile_elements/justhusky_mobile_elements.vcf.gz",
+                "call_mobile_elements/justhusky_mobile_elements.vcf.gz.csi",
+                "call_mobile_elements/justhusky_mobile_elements.vcf.gz.tbi",
                 "call_snv",
                 "call_snv/genome",
                 "call_snv/genome/justhusky_snv.vcf.gz",
@@ -504,6 +621,14 @@
                 "qc_bam/slowlycivilbuck_wgsmetrics.CollectWgsMetrics.coverage_metrics",
                 "qc_bam/slowlycivilbuck_wgsmetrics_y.CollectWgsMetrics.coverage_metrics",
                 "rank_and_filter",
+                "rank_and_filter/justhusky_mt_ranked_clinical.vcf.gz",
+                "rank_and_filter/justhusky_mt_ranked_clinical.vcf.gz.csi",
+                "rank_and_filter/justhusky_mt_ranked_clinical.vcf.gz.gzi",
+                "rank_and_filter/justhusky_mt_ranked_clinical.vcf.gz.tbi",
+                "rank_and_filter/justhusky_mt_ranked_research.vcf.gz",
+                "rank_and_filter/justhusky_mt_ranked_research.vcf.gz.csi",
+                "rank_and_filter/justhusky_mt_ranked_research.vcf.gz.gzi",
+                "rank_and_filter/justhusky_mt_ranked_research.vcf.gz.tbi",
                 "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz",
                 "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz.csi",
                 "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz.gzi",
@@ -512,6 +637,12 @@
                 "rank_and_filter/justhusky_snv_ranked_research.vcf.gz.csi",
                 "rank_and_filter/justhusky_snv_ranked_research.vcf.gz.gzi",
                 "rank_and_filter/justhusky_snv_ranked_research.vcf.gz.tbi",
+                "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz",
+                "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz.csi",
+                "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz.tbi",
+                "rank_and_filter/justhusky_sv_ranked_research.vcf.gz",
+                "rank_and_filter/justhusky_sv_ranked_research.vcf.gz.csi",
+                "rank_and_filter/justhusky_sv_ranked_research.vcf.gz.tbi",
                 "repeat_expansions",
                 "repeat_expansions/earlycasualcaiman_exphunter_sorted.bam",
                 "repeat_expansions/earlycasualcaiman_exphunter_sorted.bam.bai",
@@ -527,13 +658,17 @@
                 "smncopynumbercaller",
                 "smncopynumbercaller/out",
                 "smncopynumbercaller/out/justhusky_smncopynumbercaller.json",
-                "smncopynumbercaller/out/justhusky_smncopynumbercaller.tsv"
+                "smncopynumbercaller/out/justhusky_smncopynumbercaller.tsv",
+                "vcf2cytosure",
+                "vcf2cytosure/earlycasualcaiman.cgh",
+                "vcf2cytosure/hugelymodelbat.cgh",
+                "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.0"
+            "nextflow": "25.10.2"
         },
-        "timestamp": "2025-11-27T16:14:53.307227004"
+        "timestamp": "2025-12-08T16:34:48.46542842"
     }
 }

@@ -25,9 +25,7 @@ nextflow_workflow {
 
         when {
             params {
-                aligner = "bwamem2"
                 sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
-                save_mapped_as_cram = true
                 restrict_to_contigs = "MT192765.1"
             }
             workflow {
@@ -47,6 +45,8 @@ nextflow_workflow {
                 input[6] = 3072
                 input[7] = "illumina"
                 input[8] = 4
+                input[9] = "bwamem2"
+                input[10] = true
                 """
             }
         }
@@ -82,9 +82,7 @@ nextflow_workflow {
 
         when {
             params {
-                aligner = "bwameme"
                 sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
-                save_mapped_as_cram = false
                 restrict_to_contigs = "MT192765.1"
             }
             workflow {
@@ -104,6 +102,8 @@ nextflow_workflow {
                 input[6] = 3072
                 input[7] = "illumina"
                 input[8] = 4
+                input[9] = "bwameme"
+                input[10] = true
                 """
             }
         }

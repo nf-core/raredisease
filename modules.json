@@ -294,7 +294,7 @@
                     },
                     "haplogrep3/classify": {
                         "branch": "master",
-                        "git_sha": "6af333190d76295671e4374df74513bdd7d1c596",
+                        "git_sha": "c95c60597ce23da23ac21f4e6c5d7c0cdb711b8f",
                         "installed_by": ["modules"]
                     },
                     "hmtnote/annotate": {

@@ -11,8 +11,8 @@ nextflow_workflow {
 
         when {
             params {
-                aligner = "bwamem2"
                 skip_tools = null
+                outdir     = "$outputDir"
             }
             workflow {
                 """
@@ -41,6 +41,10 @@ nextflow_workflow {
                 input[11] = channel.empty()
                 input[12] = channel.empty()
                 input[13] = 'xy'
+                input[14] = 'wgs'
+                input[15] = 'bwamem2'
+                input[16] = true
+                input[17] = false
                 """
             }
         }
@@ -83,7 +87,7 @@ nextflow_workflow {
 
         when {
             params {
-                aligner = "sentieon"
+                outdir     = "$outputDir"
                 skip_tools = null
             }
             workflow {
@@ -113,6 +117,10 @@ nextflow_workflow {
                 input[11] = channel.empty()
                 input[12] = channel.empty()
                 input[13] = 'xy'
+                input[14] = 'wgs'
+                input[15] = 'sentieon'
+                input[16] = true
+                input[17] = false
                 """
             }
         }

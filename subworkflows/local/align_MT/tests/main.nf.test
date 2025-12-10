@@ -24,8 +24,7 @@ nextflow_workflow {
         }
         when {
             params {
-                mt_aligner          = 'bwamem2'
-                outdir              = "$outputDir"
+                outdir                       = "$outputDir"
                 pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
             }
             workflow {
@@ -63,6 +62,7 @@ nextflow_workflow {
                 input[4] = channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]])
                 input[5] = channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)]])
                 input[6] = channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]])
+                input[7] = "bwamem2"
                 """
             }
         }
@@ -91,8 +91,7 @@ nextflow_workflow {
         }
         when {
             params {
-                mt_aligner          = 'bwa'
-                outdir              = "$outputDir"
+                outdir                       = "$outputDir"
                 pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
             }
             workflow {
@@ -130,6 +129,7 @@ nextflow_workflow {
                 input[4] = channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]])
                 input[5] = channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)]])
                 input[6] = channel.value([[id:'mt'], [file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]])
+                input[7] = 'bwa'
                 """
             }
         }
