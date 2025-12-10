@@ -59,7 +59,6 @@ include { QC_BAM                                                      } from '..
 include { RANK_VARIANTS as RANK_VARIANTS_MT                           } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SNV                          } from '../subworkflows/local/rank_variants'
 include { RANK_VARIANTS as RANK_VARIANTS_SV                           } from '../subworkflows/local/rank_variants'
-include { SCATTER_GENOME                                              } from '../subworkflows/local/scatter_genome'
 include { SUBSAMPLE_MT_FRAC                                           } from '../subworkflows/local/subsample_mt_frac'
 include { SUBSAMPLE_MT_READS                                          } from '../subworkflows/local/subsample_mt_reads'
 include { VARIANT_EVALUATION                                          } from '../subworkflows/local/variant_evaluation'
@@ -99,8 +98,6 @@ workflow RAREDISEASE {
     ch_gens_pon_female
     ch_gens_pon_male
     ch_gnomad_af
-    ch_gnomad_af_tab
-    ch_gnomad_afidx
     ch_hgnc_ids
     ch_intervals_wgs
     ch_intervals_y
@@ -130,12 +127,14 @@ workflow RAREDISEASE {
     ch_sambamba_bed
     ch_sample_id_map
     ch_samples
+    ch_scatter_split_intervals
     ch_score_config_mt
     ch_score_config_snv
     ch_score_config_sv
     ch_sdf
     ch_sv_bedpedbs
     ch_sv_dbs
+    ch_svcaller_priority
     ch_svd_bed
     ch_svd_mu
     ch_svd_ud
@@ -151,7 +150,6 @@ workflow RAREDISEASE {
     ch_vcfanno_toml
     ch_vep_cache
     ch_vep_extra_files
-    ch_vep_filters
     ch_versions
     analysis_type
     skip_me_calling
@@ -182,22 +180,6 @@ workflow RAREDISEASE {
     ch_multiqc_files = channel.empty()
     ch_mt_txt        = channel.empty()
 
-    // SV caller priority
-    //
-    if (skip_germlinecnvcaller) {
-        if (analysis_type.equals("wgs")) {
-            ch_svcaller_priority = channel.value(["tiddit", "manta", "cnvnator"])
-        } else {
-            ch_svcaller_priority = channel.value([])
-        }
-    } else {
-        if (analysis_type.equals("wgs")) {
-            ch_svcaller_priority = channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
-        } else {
-            ch_svcaller_priority = channel.value(["manta", "gcnvcaller"])
-        }
-    }
-
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
     //
@@ -220,19 +202,6 @@ workflow RAREDISEASE {
     ch_versions                 = ch_versions.mix(SPRING_DECOMPRESS_TO_R2_FQ.out.versions.first())
 
     ch_input_fastqs = ch_input_by_sample_type.fastq_gz.mix(ch_one_fastq_gz_pair_from_spring).mix(ch_two_fastq_gz_from_spring)
-
-    //
-    // Create chromosome bed and intervals for splitting and gathering operations
-    //
-    ch_scatter_split_intervals = channel.empty()
-    if (!skip_snv_annotation) {
-        SCATTER_GENOME (
-            ch_genome_dictionary,
-            ch_genome_fai,
-            ch_genome_fasta
-        ).split_intervals
-        .set { ch_scatter_split_intervals }
-    }
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is nott fastq)

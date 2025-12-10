@@ -17,10 +17,12 @@
 include { samplesheetToList       } from 'plugin/nf-schema'
 include { CREATE_HGNCIDS_FILE     } from './modules/local/create_hgncids_file'
 include { CREATE_PEDIGREE_FILE    } from './modules/local/create_pedigree_file'
+include { parseSkipList           } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { PREPARE_REFERENCES      } from './subworkflows/local/prepare_references'
 include { RAREDISEASE             } from './workflows/raredisease'
+include { SCATTER_GENOME          } from './subworkflows/local/scatter_genome'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -110,7 +112,7 @@ workflow NFCORE_RAREDISEASE {
                                                                             : channel.empty()
     ch_gnomad_afidx             = params.gnomad_af_idx                      ? channel.fromPath(params.gnomad_af_idx).collect()
                                                                             : ch_references.gnomad_af_idx
-    ch_gnomad_af                = params.gnomad_af                          ? ch_gnomad_af_tab.join(ch_gnomad_afidx).map {meta, tab, idx -> [tab,idx]}.collect()
+    ch_gnomad_af                = params.gnomad_af                          ? ch_gnomad_af_tab.join(ch_gnomad_afidx).map {_meta, tab, idx -> [tab,idx]}.collect()
                                                                             : channel.empty()
     ch_intervals_wgs            = params.intervals_wgs                      ? channel.fromPath(params.intervals_wgs).collect()
                                                                             : channel.empty()
@@ -228,32 +230,60 @@ workflow NFCORE_RAREDISEASE {
     //
     ch_pedfile  = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
 
-    if (params.skip_tools) {
-        skip_eklipse             = params.skip_tools.split(',').contains('eklipse')
-        skip_fastp               = params.skip_tools.split(',').contains('fastp')
-        skip_fastqc              = params.skip_tools.split(',').contains('fastqc')
-        skip_gens                = params.skip_tools.split(',').contains('gens')
-        skip_germlinecnvcaller   = params.skip_tools.split(',').contains('germlinecnvcaller')
-        skip_haplogrep3          = params.skip_tools.split(',').contains('haplogrep3')
-        skip_ngsbits             = params.skip_tools.split(',').contains('ngsbits')
-        skip_peddy               = params.skip_tools.split(',').contains('peddy')
-        skip_qualimap            = params.skip_tools.split(',').contains('qualimap')
-        skip_smncopynumbercaller = params.skip_tools.split(',').contains('smncopynumbercaller')
-        skip_vcf2cytosure        = params.skip_tools.split(',').contains('vcf2cytosure')
+    // Tools
+    skip_eklipse               = parseSkipList(params.skip_tools, 'eklipse')
+    skip_fastp                 = parseSkipList(params.skip_tools, 'fastp')
+    skip_fastqc                = parseSkipList(params.skip_tools, 'fastqc')
+    skip_gens                  = parseSkipList(params.skip_tools, 'gens')
+    skip_germlinecnvcaller     = parseSkipList(params.skip_tools, 'germlinecnvcaller')
+    skip_haplogrep3            = parseSkipList(params.skip_tools, 'haplogrep3')
+    skip_ngsbits               = parseSkipList(params.skip_tools, 'ngsbits')
+    skip_peddy                 = parseSkipList(params.skip_tools, 'peddy')
+    skip_qualimap              = parseSkipList(params.skip_tools, 'qualimap')
+    skip_smncopynumbercaller   = parseSkipList(params.skip_tools, 'smncopynumbercaller')
+    skip_vcf2cytosure          = parseSkipList(params.skip_tools, 'vcf2cytosure')
+
+    // Subworkflows
+    skip_me_annotation         = parseSkipList(params.skip_subworkflows, 'me_annotation')
+    skip_me_calling            = parseSkipList(params.skip_subworkflows, 'me_calling')
+    skip_mt_annotation         = parseSkipList(params.skip_subworkflows, 'mt_annotation')
+    skip_mt_subsample          = parseSkipList(params.skip_subworkflows, 'mt_subsample')
+    skip_repeat_annotation     = parseSkipList(params.skip_subworkflows, 'repeat_annotation')
+    skip_repeat_calling        = parseSkipList(params.skip_subworkflows, 'repeat_calling')
+    skip_snv_annotation        = parseSkipList(params.skip_subworkflows, 'snv_annotation')
+    skip_snv_calling           = parseSkipList(params.skip_subworkflows, 'snv_calling')
+    skip_sv_annotation         = parseSkipList(params.skip_subworkflows, 'sv_annotation')
+    skip_sv_calling            = parseSkipList(params.skip_subworkflows, 'sv_calling')
+    skip_generate_clinical_set = parseSkipList(params.skip_subworkflows, 'generate_clinical_set')
+
+    //
+    // SV caller priority
+    //
+    if (skip_germlinecnvcaller) {
+        if (params.analysis_type.equals("wgs")) {
+            ch_svcaller_priority = channel.value(["tiddit", "manta", "cnvnator"])
+        } else {
+            ch_svcaller_priority = channel.value([])
+        }
+    } else {
+        if (params.analysis_type.equals("wgs")) {
+            ch_svcaller_priority = channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
+        } else {
+            ch_svcaller_priority = channel.value(["manta", "gcnvcaller"])
+        }
     }
 
-    if (params.skip_subworkflows) {
-        skip_me_annotation         = params.skip_tools.split(',').contains('me_annotation')
-        skip_me_calling            = params.skip_tools.split(',').contains('me_calling')
-        skip_mt_annotation         = params.skip_tools.split(',').contains('mt_annotation')
-        skip_mt_subsample          = params.skip_tools.split(',').contains('mt_subsample')
-        skip_repeat_annotation     = params.skip_tools.split(',').contains('repeat_annotation')
-        skip_repeat_calling        = params.skip_tools.split(',').contains('repeat_calling')
-        skip_snv_annotation        = params.skip_tools.split(',').contains('snv_annotation')
-        skip_snv_calling           = params.skip_tools.split(',').contains('snv_calling')
-        skip_sv_annotation         = params.skip_tools.split(',').contains('sv_annotation')
-        skip_sv_calling            = params.skip_tools.split(',').contains('sv_calling')
-        skip_generate_clinical_set = params.skip_tools.split(',').contains('generate_clinical_set')
+    //
+    // Create chromosome bed and intervals for splitting and gathering operations
+    //
+    ch_scatter_split_intervals = channel.empty()
+    if (!skip_snv_annotation) {
+        SCATTER_GENOME (
+            ch_genome_dictionary,
+            ch_genome_fai,
+            ch_genome_fasta
+        ).split_intervals
+        .set { ch_scatter_split_intervals }
     }
 
     RAREDISEASE (
@@ -279,8 +309,6 @@ workflow NFCORE_RAREDISEASE {
         ch_gens_pon_female,
         ch_gens_pon_male,
         ch_gnomad_af,
-        ch_gnomad_af_tab,
-        ch_gnomad_afidx,
         ch_hgnc_ids,
         ch_intervals_wgs,
         ch_intervals_y,
@@ -310,12 +338,14 @@ workflow NFCORE_RAREDISEASE {
         ch_sambamba_bed,
         ch_sample_id_map,
         ch_samples,
+        ch_scatter_split_intervals,
         ch_score_config_mt,
         ch_score_config_snv,
         ch_score_config_sv,
         ch_sdf,
         ch_sv_bedpedbs,
         ch_sv_dbs,
+        ch_svcaller_priority,
         ch_svd_bed,
         ch_svd_mu,
         ch_svd_ud,
@@ -331,7 +361,6 @@ workflow NFCORE_RAREDISEASE {
         ch_vcfanno_toml,
         ch_vep_cache,
         ch_vep_extra_files,
-        ch_vep_filters,
         ch_versions,
         params.analysis_type,
         skip_me_calling,
@@ -375,7 +404,6 @@ workflow {
     PIPELINE_INITIALISATION (
         params.version,
         params.validate_params,
-        params.monochrome_logs,
         args,
         params.outdir,
         params.input,
