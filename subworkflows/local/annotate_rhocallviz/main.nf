@@ -46,9 +46,9 @@ workflow ANNOTATE_RHOCALLVIZ {
                 .set { ch_rhocall_viz_input }
 
         RHOCALL_VIZ(
-                ch_rhocall_viz_input.vcf,
-                ch_rhocall_viz_input.roh
-            )
+            ch_rhocall_viz_input.vcf,
+            ch_rhocall_viz_input.roh,
+        )
 
         CHROMOGRAPH_AUTOZYG(RHOCALL_VIZ.out.bed, [[],[]], [[],[]], [[],[]], [[],[]], [[],[]], [[],[]])
 
