@@ -159,10 +159,6 @@ workflow NFCORE_RAREDISEASE {
                                                                             : channel.value([])
     ch_sdf                      = params.sdf                                ? channel.fromPath(params.sdf).map{it -> [[id:it.simpleName],it]}.collect()
                                                                             : ch_references.sdf
-    ch_sv_dbs                   = params.svdb_query_dbs                     ? channel.fromPath(params.svdb_query_dbs)
-                                                                            : channel.empty()
-    ch_sv_bedpedbs              = params.svdb_query_bedpedbs                ? channel.fromPath(params.svdb_query_bedpedbs)
-                                                                            : channel.empty()
     ch_svd_bed                  = params.verifybamid_svd_bed                ? channel.fromPath(params.verifybamid_svd_bed)
                                                                             : channel.empty()
     ch_svd_mu                   = params.verifybamid_svd_mu                 ? channel.fromPath(params.verifybamid_svd_mu)
@@ -344,8 +340,6 @@ workflow NFCORE_RAREDISEASE {
         ch_score_config_snv,
         ch_score_config_sv,
         ch_sdf,
-        ch_sv_bedpedbs,
-        ch_sv_dbs,
         ch_svcaller_priority,
         ch_svd_bed,
         ch_svd_mu,
@@ -364,6 +358,8 @@ workflow NFCORE_RAREDISEASE {
         ch_vep_extra_files,
         ch_versions,
         params.analysis_type,
+        params.svdb_query_bedpedbs,
+        params.svdb_query_dbs,
         skip_me_calling,
         skip_me_annotation,
         skip_mt_annotation,

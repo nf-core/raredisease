@@ -37,7 +37,18 @@ workflow ANNOTATE_RHOCALLVIZ {
 
         BCFTOOLS_VIEW_UNCOMPRESS(ch_roh_in,[],[],[])
 
-        RHOCALL_VIZ(BCFTOOLS_VIEW_UNCOMPRESS.out.vcf, BCFTOOLS_ROH.out.roh)
+        BCFTOOLS_VIEW_UNCOMPRESS.out.vcf
+                .join(BCFTOOLS_ROH.out.roh)
+                .multiMap { meta, vcf, roh ->
+                    vcf: [meta, vcf]
+                    roh: [meta, roh]
+                }
+                .set { ch_rhocall_viz_input }
+
+        RHOCALL_VIZ(
+                ch_rhocall_viz_input.vcf,
+                ch_rhocall_viz_input.roh
+            )
 
         CHROMOGRAPH_AUTOZYG(RHOCALL_VIZ.out.bed, [[],[]], [[],[]], [[],[]], [[],[]], [[],[]], [[],[]])
 

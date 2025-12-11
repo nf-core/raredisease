@@ -48,7 +48,13 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_vcf_scatter_in = channel.empty()
         ch_vep_in         = channel.empty()
 
-        BCFTOOLS_ROH (ch_vcf, ch_gnomad_af, [], [], [], [])
+        ch_vcf
+            .filter { meta, _vcf, _tbi -> 
+                meta.probands.size() > 0 
+            }
+            .set { ch_roh_in }
+
+        BCFTOOLS_ROH (ch_roh_in, ch_gnomad_af, [], [], [], [])
 
         RHOCALL_ANNOTATE (ch_vcf, BCFTOOLS_ROH.out.roh, [])
 

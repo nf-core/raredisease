@@ -13,8 +13,8 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
     take:
         ch_vcf                // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_sv_dbs             // channel: [mandatory] [ val(csv) ]
-        ch_sv_bedpedbs        // channel: [mandatory] [ val(csv) ]
+        svdb_query_bedpedbs   // String: [optional] params.svdb_query_bedpedbs
+        svdb_query_dbs        // String: [optional] params.svdb_query_dbs
         val_vep_genome        // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version // string: [mandatory] default: 107
         ch_vep_cache          // channel: [mandatory] [ path(cache) ]
@@ -27,73 +27,59 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         ch_svdb_dbs      = channel.empty()
         ch_svdb_bedpedbs = channel.empty()
 
-        ch_sv_dbs
-            .splitCsv ( header:true )
-            .multiMap { row ->
-                vcf_dbs:  row.filename
-                in_frqs:  row.in_freq_info_key
-                in_occs:  row.in_allele_count_info_key
-                out_frqs: row.out_freq_info_key
-                out_occs: row.out_allele_count_info_key
-            }
-            .set { ch_svdb_dbs }
+        if (svdb_query_dbs) {
+            channel.fromPath(svdb_query_dbs)
+                .splitCsv ( header:true )
+                .multiMap { row ->
+                    vcf_dbs:  row.filename
+                    in_frqs:  row.in_freq_info_key
+                    in_occs:  row.in_allele_count_info_key
+                    out_frqs: row.out_freq_info_key
+                    out_occs: row.out_allele_count_info_key
+                }
+                .set { ch_svdb_dbs }
 
-        ch_sv_bedpedbs
-            .splitCsv ( header:true )
-            .multiMap { row ->
-                bedpedbs: row.filename
-                in_frqs:  row.in_freq_info_key
-                in_occs:  row.in_allele_count_info_key
-                out_frqs: row.out_freq_info_key
-                out_occs: row.out_allele_count_info_key
-            }
-            .set { ch_svdb_bedpedbs }
+            SVDB_QUERY_DB (
+                ch_vcf,
+                ch_svdb_dbs.in_occs.toList(),
+                ch_svdb_dbs.in_frqs.toList(),
+                ch_svdb_dbs.out_occs.toList(),
+                ch_svdb_dbs.out_frqs.toList(),
+                ch_svdb_dbs.vcf_dbs.toList(),
+                []
+            )
 
-        SVDB_QUERY_DB (
-            ch_vcf,
-            ch_svdb_dbs.in_occs.toList(),
-            ch_svdb_dbs.in_frqs.toList(),
-            ch_svdb_dbs.out_occs.toList(),
-            ch_svdb_dbs.out_frqs.toList(),
-            ch_svdb_dbs.vcf_dbs.toList(),
-            []
-        )
+            ch_vcf      = SVDB_QUERY_DB.out.vcf
+            ch_versions = ch_versions.mix(SVDB_QUERY_DB.out.versions)
+        }
 
-        ch_vcf
-            .join(SVDB_QUERY_DB.out.vcf, remainder: true)
-            .branch { meta, vcfcalls, annotatedvcf  ->
-                original_call: annotatedvcf.equals(null)
-                    return [meta, vcfcalls]
-                annotated_with_db: !(annotatedvcf.equals(null))
-                    return [meta, annotatedvcf]
-            }
-            .set { ch_for_mix_querydb }
+        if (svdb_query_bedpedbs) {
+            channel.fromPath(svdb_query_bedpedbs)
+                .splitCsv ( header:true )
+                .multiMap { row ->
+                    bedpedbs: row.filename
+                    in_frqs:  row.in_freq_info_key
+                    in_occs:  row.in_allele_count_info_key
+                    out_frqs: row.out_freq_info_key
+                    out_occs: row.out_allele_count_info_key
+                }
+                .set { ch_svdb_bedpedbs }
 
-        ch_querydb_out = ch_for_mix_querydb.original_call.mix(ch_for_mix_querydb.annotated_with_db)
+            SVDB_QUERY_BEDPE (
+                ch_vcf,
+                ch_svdb_bedpedbs.in_occs.toList(),
+                ch_svdb_bedpedbs.in_frqs.toList(),
+                ch_svdb_bedpedbs.out_occs.toList(),
+                ch_svdb_bedpedbs.out_frqs.toList(),
+                [],
+                ch_svdb_bedpedbs.bedpedbs.toList()
+            )
 
-        SVDB_QUERY_BEDPE (
-            ch_querydb_out,
-            ch_svdb_bedpedbs.in_occs.toList(),
-            ch_svdb_bedpedbs.in_frqs.toList(),
-            ch_svdb_bedpedbs.out_occs.toList(),
-            ch_svdb_bedpedbs.out_frqs.toList(),
-            [],
-            ch_svdb_bedpedbs.bedpedbs.toList()
-        )
+            ch_vcf      = SVDB_QUERY_BEDPE.out.vcf
+            ch_versions = ch_versions.mix(SVDB_QUERY_BEDPE.out.versions)
+        }
 
-        ch_querydb_out
-            .join(SVDB_QUERY_BEDPE.out.vcf, remainder: true)
-            .branch { meta, annotated_db, annotated_bedped  ->
-                querydb_out: annotated_bedped.equals(null)
-                    return [meta, annotated_db]
-                querybedped_out: !(annotated_bedped.equals(null))
-                    return [meta, annotated_bedped]
-            }
-            .set { ch_for_mix_querybedpedb }
-
-        ch_querypedbed_out = ch_for_mix_querybedpedb.querydb_out.mix(ch_for_mix_querybedpedb.querybedped_out)
-
-        PICARD_SORTVCF(ch_querypedbed_out, ch_genome_fasta, ch_genome_dictionary)
+        PICARD_SORTVCF(ch_vcf, ch_genome_fasta, ch_genome_dictionary)
 
         PICARD_SORTVCF.out.vcf
             .map { meta, vcf -> return [meta,vcf,[]] }
@@ -116,8 +102,6 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
         TABIX_VEP (ENSEMBLVEP_SV.out.vcf)
 
-        ch_versions = ch_versions.mix(SVDB_QUERY_DB.out.versions)
-        ch_versions = ch_versions.mix(SVDB_QUERY_BEDPE.out.versions)
         ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(ENSEMBLVEP_SV.out.versions)
