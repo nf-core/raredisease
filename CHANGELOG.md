@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed inconsistencies in JSON schema [#714](https://github.com/nf-core/raredisease/pull/714)
 - Fixed conda declaration in the add_varcallername_to_bed module [#733](https://github.com/nf-core/raredisease/pull/733)
 - Fixed CADD annotation to support chr prefix [#745](https://github.com/nf-core/raredisease/pull/745)
-- Fixed mismatch between VCF and ROH calls when analysing multiple samples [#739](https://github.com/nf-core/raredisease/issues/739)
+- Fixed mismatch between VCF and ROH calls when analysing multiple samples [#755](https://github.com/nf-core/raredisease/pull/755)
 
 ### Parameters
 
