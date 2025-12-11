@@ -11,8 +11,8 @@ nextflow_workflow {
 
         when {
             params {
-                aligner = "bwamem2"
                 skip_tools = null
+                outdir     = "$outputDir"
             }
             workflow {
                 """
@@ -36,10 +36,15 @@ nextflow_workflow {
                 input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
                 input[7]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
                 input[8]  = channel.empty()
-                input[9] = channel.empty()
+                input[9]  = channel.empty()
                 input[10] = channel.empty()
                 input[11] = channel.empty()
-                input[12] = 'xy'
+                input[12] = channel.empty()
+                input[13] = 'xy'
+                input[14] = 'wgs'
+                input[15] = 'bwamem2'
+                input[16] = true
+                input[17] = false
                 """
             }
         }
@@ -82,7 +87,7 @@ nextflow_workflow {
 
         when {
             params {
-                aligner = "sentieon"
+                outdir     = "$outputDir"
                 skip_tools = null
             }
             workflow {
@@ -107,10 +112,15 @@ nextflow_workflow {
                 input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
                 input[7]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
                 input[8]  = channel.empty()
-                input[9] = channel.empty()
+                input[9]  = channel.empty()
                 input[10] = channel.empty()
                 input[11] = channel.empty()
-                input[12] = 'xy'
+                input[12] = channel.empty()
+                input[13] = 'xy'
+                input[14] = 'wgs'
+                input[15] = 'sentieon'
+                input[16] = true
+                input[17] = false
                 """
             }
         }

@@ -22,17 +22,18 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_case_info       // channel: [mandatory] [ val(case_info) ]
         ch_foundin_header  // channel: [mandatory] [ path(header) ]
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
+        val_analysis_type  // boolean
 
     main:
         ch_versions = channel.empty()
 
-        if (params.analysis_type.equals("wes")) {
+        if (val_analysis_type.equals("wes")) {
             TABIX_BGZIP(ch_target_bed.map{meta, gzbed, _index -> return [meta, gzbed]})
             ch_bam_bai
                 .combine (TABIX_BGZIP.out.output.map {_meta, bed -> return bed})
                 .set { ch_deepvar_in }
             ch_versions = ch_versions.mix(TABIX_BGZIP.out.versions)
-        } else if (params.analysis_type.equals("wgs")) {
+        } else if (val_analysis_type.equals("wgs")) {
             ch_bam_bai
                 .map { meta, bam, bai ->
                         return [meta, bam, bai, []] }

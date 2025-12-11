@@ -27,6 +27,7 @@ workflow ANNOTATE_MT_SNVS {
         ch_vep_cache           // channel: [mandatory] [ path(cache) ]
         ch_vep_extra_files     // channel: [mandatory] [ path(files) ]
         ch_fai                 // channel: [mandatory] [ path(fai) ]
+        skip_haplogrep3        // boolean
 
     main:
         ch_versions     = channel.empty()
@@ -34,8 +35,8 @@ workflow ANNOTATE_MT_SNVS {
 
         // add prefix to meta
         ch_mt_vcf
-            .map { it  ->
-                return [it[0]+ [prefix: it[1].simpleName + "_hmtnote"], it[1]]
+            .map { meta, vcf  ->
+                return [meta+ [prefix: vcf.simpleName + "_hmtnote"], vcf]
             }
             .set { ch_hmtnote_in }
 
@@ -69,18 +70,17 @@ workflow ANNOTATE_MT_SNVS {
             ch_cadd_vcf = channel.empty()
         }
 
-        // Pick input for vep
         ch_vcfanno_vcf
-            .join(ch_cadd_vcf, remainder: true) // If CADD is not run then the third element in this channel will be `null`
-            .branch { it  ->                    // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
-                merged: it[2].equals(null)
-                    return [it[0]+ [prefix: it[0].prefix + "_vep"], it[1]]
-                cadd: !(it[2].equals(null))
-                    return [it[0] + [prefix: it[0].prefix + "_cadd_vep"], it[2]]
+            .join(ch_cadd_vcf, remainder: true)
+            .branch { meta, vcfanno, cadd  ->
+                vcfanno: cadd.equals(null)
+                    return [meta+ [prefix: meta.prefix + "_vep"], vcfanno]
+                cadd: !(cadd.equals(null))
+                    return [meta + [prefix: meta.prefix + "_cadd_vep"], cadd]
             }
-            .set { ch_for_mix }
+            .set { ch_annotated_vcfs }
 
-        ch_for_mix.merged.mix(ch_for_mix.cadd)
+        ch_annotated_vcfs.vcfanno.mix(ch_annotated_vcfs.cadd)
             .tap { ch_haplogrep_in }
             .map { meta, vcf -> return [meta, vcf, []] }
             .set { ch_vep_in }
@@ -99,10 +99,9 @@ workflow ANNOTATE_MT_SNVS {
         TABIX_TABIX_VEP_MT(ENSEMBLVEP_MT.out.vcf)
 
         // Running haplogrep3
-        if (!(params.skip_tools && params.skip_tools.split(',').contains('haplogrep3'))) {
+        if (!skip_haplogrep3) {
             HAPLOGREP3_CLASSIFY_MT(ch_haplogrep_in)
             ch_haplog   = HAPLOGREP3_CLASSIFY_MT.out.txt
-            ch_versions = ch_versions.mix(HAPLOGREP3_CLASSIFY_MT.out.versions)
         }
 
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)

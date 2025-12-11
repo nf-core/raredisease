@@ -52,7 +52,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
                 def models = model_calls.collect { file -> file.toString() }
                 return [meta, models]
             }
-            .combine(ch_gcnvcaller_model.collect{meta, model -> model}.toList())
+            .combine(ch_gcnvcaller_model.collect{_meta, model -> model}.toList())
             .join(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls)
             .set {ch_postproc_in}
 
@@ -66,7 +66,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
         BCFTOOLS_VIEW (ch_segments_in , [], [], [] )
 
         BCFTOOLS_VIEW.out.vcf
-            .collect{meta, vcf -> vcf}
+            .collect{_meta, vcf -> vcf}
             .toList()
             .set { vcf_file_list }
 

@@ -294,7 +294,7 @@
                     },
                     "haplogrep3/classify": {
                         "branch": "master",
-                        "git_sha": "6af333190d76295671e4374df74513bdd7d1c596",
+                        "git_sha": "c95c60597ce23da23ac21f4e6c5d7c0cdb711b8f",
                         "installed_by": ["modules"]
                     },
                     "hmtnote/annotate": {
@@ -391,6 +391,11 @@
                     "rtgtools/vcfeval": {
                         "branch": "master",
                         "git_sha": "83e2df1e4ec594beb8a575b4db0b4197900f4ebd",
+                        "installed_by": ["modules"]
+                    },
+                    "sambamba/depth": {
+                        "branch": "master",
+                        "git_sha": "b093f74ddc3ada57a84a209f0e4fb3871bacf2ad",
                         "installed_by": ["modules"]
                     },
                     "samtools/collate": {
