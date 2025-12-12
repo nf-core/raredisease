@@ -17,8 +17,8 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         svdb_query_dbs        // String: [optional] params.svdb_query_dbs
         val_vep_genome        // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version // string: [mandatory] default: 107
-        ch_svdb_bedpedbs      // channel: [optional] 
-        ch_svdb_dbs           // channel: [optional] 
+        ch_svdb_bedpedbs      // channel: [optional]
+        ch_svdb_dbs           // channel: [optional]
         ch_vep_cache          // channel: [mandatory] [ path(cache) ]
         ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_dictionary  // channel: [mandatory] [ val(meta), path(dict) ]
