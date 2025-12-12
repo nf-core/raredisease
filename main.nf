@@ -165,6 +165,10 @@ workflow NFCORE_RAREDISEASE {
                                                                             : channel.empty()
     ch_svd_ud                   = params.verifybamid_svd_ud                 ? channel.fromPath(params.verifybamid_svd_ud)
                                                                             : channel.empty()
+    ch_svdb_bedpedbs            = params.svdb_query_bedpedbs                ? channel.fromList(samplesheetToList(params.svdb_query_bedpedbs, "assets/svdb_query_bedpe_schema.json")).collect()
+                                                                            : channel.empty()
+    ch_svdb_dbs                 = params.svdb_query_dbs                     ? channel.fromList(samplesheetToList(params.svdb_query_dbs, "assets/svdb_query_vcf_schema.json")).collect()
+                                                                            : channel.empty()
     ch_target_bed               = ch_references.target_bed
     ch_target_intervals         = ch_references.target_intervals
     ch_variant_catalog          = params.variant_catalog                    ? channel.fromPath(params.variant_catalog).map { it -> [[id:it.simpleName],it]}.collect()
@@ -344,6 +348,8 @@ workflow NFCORE_RAREDISEASE {
         ch_svd_bed,
         ch_svd_mu,
         ch_svd_ud,
+        ch_svdb_bedpedbs,
+        ch_svdb_dbs,
         ch_target_bed,
         ch_target_intervals,
         ch_variant_catalog,

@@ -17,6 +17,8 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         svdb_query_dbs        // String: [optional] params.svdb_query_dbs
         val_vep_genome        // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version // string: [mandatory] default: 107
+        ch_svdb_bedpedbs      // channel: [optional] 
+        ch_svdb_dbs           // channel: [optional] 
         ch_vep_cache          // channel: [mandatory] [ path(cache) ]
         ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_dictionary  // channel: [mandatory] [ val(meta), path(dict) ]
@@ -24,18 +26,15 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
     main:
         ch_versions      = channel.empty()
-        ch_svdb_dbs      = channel.empty()
-        ch_svdb_bedpedbs = channel.empty()
 
         if (svdb_query_dbs) {
-            channel.fromPath(svdb_query_dbs)
-                .splitCsv ( header:true )
-                .multiMap { row ->
-                    vcf_dbs:  row.filename
-                    in_frqs:  row.in_freq_info_key
-                    in_occs:  row.in_allele_count_info_key
-                    out_frqs: row.out_freq_info_key
-                    out_occs: row.out_allele_count_info_key
+            ch_svdb_dbs
+                .multiMap { file, in_freq_info_key, in_allele_count_info_key, out_freq_info_key, out_allele_count_info_key ->
+                    vcf_dbs:  file
+                    in_frqs:  in_freq_info_key
+                    in_occs:  in_allele_count_info_key
+                    out_frqs: out_freq_info_key
+                    out_occs: out_allele_count_info_key
                 }
                 .set { ch_svdb_dbs }
 
@@ -54,14 +53,13 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         }
 
         if (svdb_query_bedpedbs) {
-            channel.fromPath(svdb_query_bedpedbs)
-                .splitCsv ( header:true )
-                .multiMap { row ->
-                    bedpedbs: row.filename
-                    in_frqs:  row.in_freq_info_key
-                    in_occs:  row.in_allele_count_info_key
-                    out_frqs: row.out_freq_info_key
-                    out_occs: row.out_allele_count_info_key
+            ch_svdb_bedpedbs
+                .multiMap { file, in_freq_info_key, in_allele_count_info_key, out_freq_info_key, out_allele_count_info_key ->
+                    bedpedbs: file
+                    in_frqs:  in_freq_info_key
+                    in_occs:  in_allele_count_info_key
+                    out_frqs: out_freq_info_key
+                    out_occs: out_allele_count_info_key
                 }
                 .set { ch_svdb_bedpedbs }
 

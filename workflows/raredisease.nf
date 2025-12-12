@@ -136,6 +136,8 @@ workflow RAREDISEASE {
     ch_svd_bed
     ch_svd_mu
     ch_svd_ud
+    ch_svdb_bedpedbs
+    ch_svdb_dbs
     ch_target_bed
     ch_target_intervals
     ch_variant_catalog
@@ -555,6 +557,8 @@ workflow RAREDISEASE {
                 svdb_query_dbs,
                 params.genome,
                 params.vep_cache_version,
+                ch_svdb_bedpedbs,
+                ch_svdb_dbs,
                 ch_vep_cache,
                 ch_genome_fasta,
                 ch_genome_dictionary,
