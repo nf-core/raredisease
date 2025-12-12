@@ -49,8 +49,8 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_vep_in         = channel.empty()
 
         ch_vcf
-            .filter { meta, _vcf, _tbi -> 
-                meta.probands.size() > 0 
+            .filter { meta, _vcf, _tbi ->
+                meta.probands.size() > 0
             }
             .set { ch_roh_in }
 
