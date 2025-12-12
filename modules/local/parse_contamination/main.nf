@@ -21,9 +21,9 @@ process PARSE_CONTAMINATION {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     #!/usr/bin/env python3
-    
+
     import csv
-    
+
     # Read GATK contamination table
     with open("${contamination_table}", 'r') as f:
         lines = f.readlines()
@@ -32,7 +32,7 @@ process PARSE_CONTAMINATION {
         sample = data_line[0]
         contamination = float(data_line[1])
         contamination_pct = contamination * 100
-    
+
     # Write MultiQC custom content file
     with open("${prefix}_contamination_mqc.tsv", 'w') as out:
         # Header with MultiQC configuration
@@ -52,7 +52,7 @@ process PARSE_CONTAMINATION {
         # Data
         out.write("Sample\\tcontamination_pct\\n")
         out.write(f"${meta.id}\\t{contamination_pct:.4f}\\n")
-    
+
     # Create versions file
     with open("versions.yml", 'w') as v:
         v.write('"${task.process}":\\n')
