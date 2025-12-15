@@ -84,7 +84,7 @@ workflow PREPARE_REFERENCES {
         } else {
             ch_genome_dict = channel.fromPath(val_genome_dict).map {it -> [[id:it.simpleName], it]}.collect()
         }
-    
+
         GET_CHROM_SIZES( ch_fai )
 
         // Genome alignment indices
