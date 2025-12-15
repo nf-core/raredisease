@@ -49,16 +49,10 @@ workflow NFCORE_RAREDISEASE {
 
     ch_versions                  = channel.empty()
     ch_genome_fasta              = channel.fromPath(params.fasta).map { it -> [[id:it.simpleName], it] }.collect()
-    ch_genome_fai                = params.fai                 ? channel.fromPath(params.fai).map {it -> [[id:it.simpleName], it]}.collect()
-                                                                : channel.empty()
-    ch_genome_dictionary         = params.sequence_dictionary ? channel.fromPath(params.sequence_dictionary).map {it -> [[id:it.simpleName], it]}.collect()
-                                                                : channel.empty()
     ch_gnomad_af_tab             = params.gnomad_af           ? channel.fromPath(params.gnomad_af).map{ it -> [[id:it.simpleName], it] }.collect()
                                                                 : channel.value([[],[]])
     ch_dbsnp                     = params.known_dbsnp         ? channel.fromPath(params.known_dbsnp).map{ it -> [[id:it.simpleName], it] }.collect()
                                                                 : channel.value([[],[]])
-    ch_mt_fasta                  = params.mt_fasta            ? channel.fromPath(params.mt_fasta).map { it -> [[id:it.simpleName], it] }.collect()
-                                                                : channel.empty()
     ch_target_bed_unprocessed    = params.target_bed          ? channel.fromPath(params.target_bed).map{ it -> [[id:it.simpleName], it] }.collect()
                                                                 : channel.value([[],[]])
     ch_vcfanno_extra_unprocessed = params.vcfanno_extra_resources ? channel.fromPath(params.vcfanno_extra_resources).map { it -> [[id:it.baseName], it] }.collect()
@@ -68,14 +62,21 @@ workflow NFCORE_RAREDISEASE {
 
     PREPARE_REFERENCES (
         ch_genome_fasta,
-        ch_genome_fai,
-        ch_genome_dictionary,
-        ch_mt_fasta,
         ch_gnomad_af_tab,
         ch_dbsnp,
         ch_target_bed_unprocessed,
         ch_vcfanno_extra_unprocessed,
-        ch_vep_cache_unprocessed
+        ch_vep_cache_unprocessed,
+        params.aligner,
+        params.analysis_type,
+        params.bwa,
+        params.bwamem2,
+        params.bwameme,
+        params.fai,
+        params.mt_aligner,
+        params.mt_fasta,
+        params.run_mt_for_wes,
+        params.sequence_dictionary
     )
     .set { ch_references }
 
