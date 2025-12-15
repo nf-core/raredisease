@@ -159,15 +159,15 @@ workflow NFCORE_RAREDISEASE {
                                                                             : channel.value([])
     ch_sdf                      = params.sdf                                ? channel.fromPath(params.sdf).map{it -> [[id:it.simpleName],it]}.collect()
                                                                             : ch_references.sdf
-    ch_sv_dbs                   = params.svdb_query_dbs                     ? channel.fromPath(params.svdb_query_dbs)
-                                                                            : channel.empty()
-    ch_sv_bedpedbs              = params.svdb_query_bedpedbs                ? channel.fromPath(params.svdb_query_bedpedbs)
-                                                                            : channel.empty()
     ch_svd_bed                  = params.verifybamid_svd_bed                ? channel.fromPath(params.verifybamid_svd_bed)
                                                                             : channel.empty()
     ch_svd_mu                   = params.verifybamid_svd_mu                 ? channel.fromPath(params.verifybamid_svd_mu)
                                                                             : channel.empty()
     ch_svd_ud                   = params.verifybamid_svd_ud                 ? channel.fromPath(params.verifybamid_svd_ud)
+                                                                            : channel.empty()
+    ch_svdb_bedpedbs            = params.svdb_query_bedpedbs                ? channel.fromList(samplesheetToList(params.svdb_query_bedpedbs, "assets/svdb_query_bedpe_schema.json")).collect()
+                                                                            : channel.empty()
+    ch_svdb_dbs                 = params.svdb_query_dbs                     ? channel.fromList(samplesheetToList(params.svdb_query_dbs, "assets/svdb_query_vcf_schema.json")).collect()
                                                                             : channel.empty()
     ch_target_bed               = ch_references.target_bed
     ch_target_intervals         = ch_references.target_intervals
@@ -344,12 +344,12 @@ workflow NFCORE_RAREDISEASE {
         ch_score_config_snv,
         ch_score_config_sv,
         ch_sdf,
-        ch_sv_bedpedbs,
-        ch_sv_dbs,
         ch_svcaller_priority,
         ch_svd_bed,
         ch_svd_mu,
         ch_svd_ud,
+        ch_svdb_bedpedbs,
+        ch_svdb_dbs,
         ch_target_bed,
         ch_target_intervals,
         ch_variant_catalog,
@@ -364,6 +364,8 @@ workflow NFCORE_RAREDISEASE {
         ch_vep_extra_files,
         ch_versions,
         params.analysis_type,
+        params.svdb_query_bedpedbs,
+        params.svdb_query_dbs,
         skip_me_calling,
         skip_me_annotation,
         skip_mt_annotation,
