@@ -132,12 +132,12 @@ workflow RAREDISEASE {
     ch_score_config_snv
     ch_score_config_sv
     ch_sdf
-    ch_sv_bedpedbs
-    ch_sv_dbs
     ch_svcaller_priority
     ch_svd_bed
     ch_svd_mu
     ch_svd_ud
+    ch_svdb_bedpedbs
+    ch_svdb_dbs
     ch_target_bed
     ch_target_intervals
     ch_variant_catalog
@@ -152,6 +152,8 @@ workflow RAREDISEASE {
     ch_vep_extra_files
     ch_versions
     analysis_type
+    svdb_query_bedpedbs
+    svdb_query_dbs
     skip_me_calling
     skip_me_annotation
     skip_mt_annotation
@@ -551,10 +553,12 @@ workflow RAREDISEASE {
         if (!skip_sv_annotation) {
             ANNOTATE_STRUCTURAL_VARIANTS (
                 CALL_STRUCTURAL_VARIANTS.out.vcf,
-                ch_sv_dbs,
-                ch_sv_bedpedbs,
+                svdb_query_bedpedbs,
+                svdb_query_dbs,
                 params.genome,
                 params.vep_cache_version,
+                ch_svdb_bedpedbs,
+                ch_svdb_dbs,
                 ch_vep_cache,
                 ch_genome_fasta,
                 ch_genome_dictionary,
