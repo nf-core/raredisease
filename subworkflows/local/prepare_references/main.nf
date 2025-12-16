@@ -24,19 +24,16 @@ include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_MT                } from '../../../mo
 include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_GENOME      } from '../../../modules/nf-core/sentieon/bwaindex/main'
 include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_MT          } from '../../../modules/nf-core/sentieon/bwaindex/main'
 include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_MT_SHIFT    } from '../../../modules/nf-core/sentieon/bwaindex/main'
-include { TABIX_BGZIPTABIX as TABIX_PBT                      } from '../../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as TABIX_BGZIPINDEX_PADDED_BED    } from '../../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as TABIX_BGZIPINDEX_VCFANNOEXTRA  } from '../../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_TABIX as TABIX_VCFANNOEXTRA                  } from '../../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_DBSNP                         } from '../../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_GNOMAD_AF                     } from '../../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_PT                            } from '../../../modules/nf-core/tabix/tabix/main'
 include { UNTAR as UNTAR_VEP_CACHE                           } from '../../../modules/nf-core/untar/main'
 
 workflow PREPARE_REFERENCES {
     take:
         ch_genome_fasta              // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_target_bed                // channel: [mandatory for WES] [ path(bed) ]
         ch_vcfanno_extra_unprocessed // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_vep_cache                 // channel: [mandatory for annotation] [ path(cache) ]
         val_aligner
@@ -53,6 +50,7 @@ workflow PREPARE_REFERENCES {
         val_mtfasta
         val_run_mt_for_wes
         val_genome_dict
+        val_target_bed
 
     main:
         ch_versions               = channel.empty()
@@ -72,6 +70,7 @@ workflow PREPARE_REFERENCES {
         ch_mt_fasta               = channel.empty()
         ch_sentieonbwa            = channel.empty()
         ch_shiftfasta_mtintervals = channel.empty()
+        ch_target_bed_gz_tbi      = channel.value([[:],[],[]])
         ch_vcfanno_extra          = channel.empty()
         ch_vcfanno_bgzip          = channel.empty()
         ch_vcfanno_index          = channel.empty()
@@ -179,16 +178,18 @@ workflow PREPARE_REFERENCES {
             ch_gnomad_af_idx = ch_gnomad_af.join(ch_gnomad_idx).map {_meta, tab, idx -> [tab,idx]}.collect()                                                        
         }
 
-        // Index target bed file in case of gz input
-        TABIX_PT(ch_target_bed)
-        ch_target_bed
-            .join(TABIX_PT.out.tbi)
-            .set{ ch_trgt_bed_tbi }
-        // Compress and index target bed file in case of uncompressed input
-        TABIX_PBT(ch_target_bed).gz_tbi
-            .set { ch_bgzip_tbi }
-        ch_target_bed_gz_tbi = channel.empty()
-            .mix(ch_trgt_bed_tbi, ch_bgzip_tbi)
+        // Index target bed file
+        if (val_target_bed) {
+            ch_target_bed = channel.fromPath(params.target_bed).map{ it -> [[id:it.simpleName], it] }.collect()
+            BEDTOOLS_PAD_TARGET_BED(
+                ch_target_bed,
+                ch_fai.map { _meta, fai -> return fai }
+            )
+            TABIX_BGZIPINDEX_PADDED_BED(BEDTOOLS_PAD_TARGET_BED.out.bed).gz_tbi
+                .set { ch_target_bed_gz_tbi }
+            ch_versions = ch_versions.mix(BEDTOOLS_PAD_TARGET_BED.out.versions)
+            ch_versions = ch_versions.mix(TABIX_BGZIPINDEX_PADDED_BED.out.versions)
+        }
 
         ch_vcfanno_extra_unprocessed
             .branch { _meta, vcf ->
@@ -213,13 +214,6 @@ workflow PREPARE_REFERENCES {
             .collect()
             .set{ch_vcfanno_extra}
 
-        // Pad bed file
-        BEDTOOLS_PAD_TARGET_BED(
-            ch_target_bed,
-            ch_fai.map { _meta, fai -> return fai }
-        )
-        TABIX_BGZIPINDEX_PADDED_BED(BEDTOOLS_PAD_TARGET_BED.out.bed).gz_tbi
-            .set { ch_target_bed_gz_tbi }
 
         // Generate bait and target intervals
         GATK_BILT(ch_target_bed, ch_genome_dict).interval_list
@@ -241,12 +235,8 @@ workflow PREPARE_REFERENCES {
 
         // Gather versions
         ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
-        ch_versions = ch_versions.mix(TABIX_PT.out.versions)
-        ch_versions = ch_versions.mix(TABIX_PBT.out.versions)
         ch_versions = ch_versions.mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.versions)
         ch_versions = ch_versions.mix(TABIX_VCFANNOEXTRA.out.versions)
-        ch_versions = ch_versions.mix(BEDTOOLS_PAD_TARGET_BED.out.versions)
-        ch_versions = ch_versions.mix(TABIX_BGZIPINDEX_PADDED_BED.out.versions)
         ch_versions = ch_versions.mix(GATK_BILT.out.versions)
         ch_versions = ch_versions.mix(GATK_ILT.out.versions)
         ch_versions = ch_versions.mix(CAT_CAT_BAIT.out.versions)

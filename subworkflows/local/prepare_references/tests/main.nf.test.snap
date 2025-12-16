@@ -135,10 +135,10 @@
                 "23": [
                     [
                         {
-                            "id": "genome"
+                            "id": "target"
                         },
-                        "genome_pad100.bed.gz:md5,7122d49f10e69c54d429a95cf4cf8fc9",
-                        "genome_pad100.bed.gz.tbi:md5,dc41277c9c9be1203643b9192260f9ac"
+                        "target_pad100.bed.gz:md5,7122d49f10e69c54d429a95cf4cf8fc9",
+                        "target_pad100.bed.gz.tbi:md5,dc41277c9c9be1203643b9192260f9ac"
                     ]
                 ],
                 "24": [
@@ -150,12 +150,12 @@
                 ],
                 "25": [
                     [
-                        "genome_bait.intervals_list:md5,1f3d445e6e53260510710a8333d29cfe"
+                        "target_bait.intervals_list:md5,84cbdac15bdfcd14b8a810e35f7ccc54"
                     ]
                 ],
                 "26": [
                     [
-                        "genome_target.interval_list:md5,2959b7b0e1b298fe84ad708f447d6703"
+                        "target_target.interval_list:md5,2959b7b0e1b298fe84ad708f447d6703"
                     ]
                 ],
                 "27": [
@@ -404,7 +404,6 @@
                     "versions.yml:md5,7479477c0c4b6eb043c58bc40ee41198",
                     "versions.yml:md5,77768b2bc91b4934bd8a3e3c392f11d2",
                     "versions.yml:md5,7ac7b6cf323372066f60eea4bcdf2a56",
-                    "versions.yml:md5,b426ba6290d3f2ccd5c547854d9e2b75",
                     "versions.yml:md5,b9ba5dac48d896837b097c56bcdd768c",
                     "versions.yml:md5,c18e81b268596fc9050cc8af016b09e8",
                     "versions.yml:md5,d73bccf32c40dcb80a722652878c6c43",
@@ -460,7 +459,7 @@
                 ],
                 "bait_intervals": [
                     [
-                        "genome_bait.intervals_list:md5,1f3d445e6e53260510710a8333d29cfe"
+                        "target_bait.intervals_list:md5,84cbdac15bdfcd14b8a810e35f7ccc54"
                     ]
                 ],
                 "dbsnp": [
@@ -643,15 +642,15 @@
                 "target_bed": [
                     [
                         {
-                            "id": "genome"
+                            "id": "target"
                         },
-                        "genome_pad100.bed.gz:md5,7122d49f10e69c54d429a95cf4cf8fc9",
-                        "genome_pad100.bed.gz.tbi:md5,dc41277c9c9be1203643b9192260f9ac"
+                        "target_pad100.bed.gz:md5,7122d49f10e69c54d429a95cf4cf8fc9",
+                        "target_pad100.bed.gz.tbi:md5,dc41277c9c9be1203643b9192260f9ac"
                     ]
                 ],
                 "target_intervals": [
                     [
-                        "genome_target.interval_list:md5,2959b7b0e1b298fe84ad708f447d6703"
+                        "target_target.interval_list:md5,2959b7b0e1b298fe84ad708f447d6703"
                     ]
                 ],
                 "vcfanno_extra": [
@@ -907,7 +906,6 @@
                     "versions.yml:md5,7479477c0c4b6eb043c58bc40ee41198",
                     "versions.yml:md5,77768b2bc91b4934bd8a3e3c392f11d2",
                     "versions.yml:md5,7ac7b6cf323372066f60eea4bcdf2a56",
-                    "versions.yml:md5,b426ba6290d3f2ccd5c547854d9e2b75",
                     "versions.yml:md5,b9ba5dac48d896837b097c56bcdd768c",
                     "versions.yml:md5,c18e81b268596fc9050cc8af016b09e8",
                     "versions.yml:md5,d73bccf32c40dcb80a722652878c6c43",
@@ -920,6 +918,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-16T10:16:04.746173646"
+        "timestamp": "2025-12-16T11:12:17.45974749"
     }
 }
