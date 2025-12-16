@@ -15,21 +15,23 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of(params.pipelines_testdata_base_path + 'reference/reference.fasta').map {it -> [[id:'genome'], it]}.collect()
-                input[1]  = channel.of(params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz').map {it -> [[id:'genome'], it]}.collect()
-                input[2]  = channel.of(params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz').map {it -> [[id:'genome'], it]}.collect()
-                input[3]  = channel.of(params.pipelines_testdata_base_path + 'reference/target.bed').map {it -> [[id:'genome'], it]}.collect()
-                input[4]  = channel.empty()
-                input[5]  = channel.of(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz').map {it -> [[id:'genome'], it]}.collect()
-                input[6]  = "bwamem2"
-                input[7]  = "wgs"
+                input[1]  = channel.of(params.pipelines_testdata_base_path + 'reference/target.bed').map {it -> [[id:'genome'], it]}.collect()
+                input[2]  = channel.empty()
+                input[3]  = channel.of(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz').map {it -> [[id:'genome'], it]}.collect()
+                input[4]  = "bwamem2"
+                input[5]  = "wgs"
+                input[6]  = null
+                input[7]  = null
                 input[8]  = null
                 input[9]  = null
-                input[10] = null
+                input[10] = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
                 input[11] = null
-                input[12] = "bwa"
+                input[12] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
                 input[13] = null
-                input[14] = false
+                input[14] = "bwa"
                 input[15] = null
+                input[16] = false
+                input[17] = null
                 """
             }
         }

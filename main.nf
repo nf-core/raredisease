@@ -51,8 +51,6 @@ workflow NFCORE_RAREDISEASE {
     ch_genome_fasta              = channel.fromPath(params.fasta).map { it -> [[id:it.simpleName], it] }.collect()
     ch_gnomad_af_tab             = params.gnomad_af           ? channel.fromPath(params.gnomad_af).map{ it -> [[id:it.simpleName], it] }.collect()
                                                                 : channel.value([[],[]])
-    ch_dbsnp                     = params.known_dbsnp         ? channel.fromPath(params.known_dbsnp).map{ it -> [[id:it.simpleName], it] }.collect()
-                                                                : channel.value([[],[]])
     ch_target_bed_unprocessed    = params.target_bed          ? channel.fromPath(params.target_bed).map{ it -> [[id:it.simpleName], it] }.collect()
                                                                 : channel.value([[],[]])
     ch_vcfanno_extra_unprocessed = params.vcfanno_extra_resources ? channel.fromPath(params.vcfanno_extra_resources).map { it -> [[id:it.baseName], it] }.collect()
@@ -63,7 +61,6 @@ workflow NFCORE_RAREDISEASE {
     PREPARE_REFERENCES (
         ch_genome_fasta,
         ch_gnomad_af_tab,
-        ch_dbsnp,
         ch_target_bed_unprocessed,
         ch_vcfanno_extra_unprocessed,
         ch_vep_cache_unprocessed,
@@ -73,6 +70,10 @@ workflow NFCORE_RAREDISEASE {
         params.bwamem2,
         params.bwameme,
         params.fai,
+        params.gnomad_af,
+        params.gnomad_af_idx,
+        params.known_dbsnp,
+        params.known_dbsnp_tbi,
         params.mt_aligner,
         params.mt_fasta,
         params.run_mt_for_wes,
@@ -86,8 +87,8 @@ workflow NFCORE_RAREDISEASE {
                                                                             : channel.value([])
     ch_call_interval            = params.call_interval                      ? channel.fromPath(params.call_interval).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : channel.value([[:],[]])
-    ch_dbsnp_tbi                = params.known_dbsnp_tbi                    ? channel.fromPath(params.known_dbsnp_tbi).map {it -> [[id:it.simpleName], it]}.collect()
-                                                                            : ch_references.known_dbsnp_tbi.ifEmpty([[],[]])
+    ch_dbsnp                    = ch_references.dbsnp
+    ch_dbsnp_tbi                = ch_references.dbsnp_tbi
     ch_foundin_header           = channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
     ch_gcnvcaller_model         = params.gcnvcaller_model                   ? channel.fromPath(params.gcnvcaller_model).splitCsv ( header:true )
                                                                             .map { row ->
@@ -113,8 +114,7 @@ workflow NFCORE_RAREDISEASE {
                                                                             : channel.empty()
     ch_gnomad_afidx             = params.gnomad_af_idx                      ? channel.fromPath(params.gnomad_af_idx).collect()
                                                                             : ch_references.gnomad_af_idx
-    ch_gnomad_af                = params.gnomad_af                          ? ch_gnomad_af_tab.join(ch_gnomad_afidx).map {_meta, tab, idx -> [tab,idx]}.collect()
-                                                                            : channel.empty()
+    ch_gnomad_af                = ch_references.gnomad_af_idx
     ch_intervals_wgs            = params.intervals_wgs                      ? channel.fromPath(params.intervals_wgs).collect()
                                                                             : channel.empty()
     ch_intervals_y              = params.intervals_y                        ? channel.fromPath(params.intervals_y).collect()

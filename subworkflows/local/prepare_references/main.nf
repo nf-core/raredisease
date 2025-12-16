@@ -36,8 +36,6 @@ include { UNTAR as UNTAR_VEP_CACHE                           } from '../../../mo
 workflow PREPARE_REFERENCES {
     take:
         ch_genome_fasta              // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_gnomad_af_tab             // channel: [optional; used in for snv annotation] [ val(meta), path(tab) ]
-        ch_known_dbsnp               // channel: [optional; used only by sentieon] [ val(meta), path(vcf) ]
         ch_target_bed                // channel: [mandatory for WES] [ path(bed) ]
         ch_vcfanno_extra_unprocessed // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_vep_cache                 // channel: [mandatory for annotation] [ path(cache) ]
@@ -47,28 +45,36 @@ workflow PREPARE_REFERENCES {
         val_bwamem2
         val_bwameme
         val_fai
+        val_gnomad_af
+        val_gnomad_af_idx
+        val_known_dbsnp
+        val_known_dbsnp_tbi
         val_mtaligner
         val_mtfasta
         val_run_mt_for_wes
         val_genome_dict
 
     main:
-        ch_versions              = channel.empty()
-        ch_bgzip_tbi             = channel.empty()
-        ch_bwa                   = channel.empty()
-        ch_genome_bwameme_index  = channel.empty()
-        ch_genome_bwamem2_index  = channel.empty()
-        ch_mt_bwa_index          = channel.empty()
-        ch_mt_bwamem2_index      = channel.empty()
-        ch_mtshift_bwa_index     = channel.empty()
-        ch_mtshift_bwamem2_index = channel.empty()
-        ch_mt_dict               = channel.empty()
-        ch_mt_fai                = channel.empty()
-        ch_mt_fasta              = channel.empty()
-        ch_sentieonbwa           = channel.empty()
-        ch_vcfanno_extra         = channel.empty()
-        ch_vcfanno_bgzip         = channel.empty()
-        ch_vcfanno_index         = channel.empty()
+        ch_versions               = channel.empty()
+        ch_bgzip_tbi              = channel.empty()
+        ch_bwa                    = channel.empty()
+        ch_genome_bwameme_index   = channel.empty()
+        ch_genome_bwamem2_index   = channel.empty()
+        ch_gnomad_af_idx          = channel.empty()
+        ch_dbsnp                  = channel.value([[:],[]])
+        ch_dbsnp_tbi              = channel.value([[:],[]])
+        ch_mt_bwa_index           = channel.empty()
+        ch_mt_bwamem2_index       = channel.empty()
+        ch_mtshift_bwa_index      = channel.empty()
+        ch_mtshift_bwamem2_index  = channel.empty()
+        ch_mt_dict                = channel.empty()
+        ch_mt_fai                 = channel.empty()
+        ch_mt_fasta               = channel.empty()
+        ch_sentieonbwa            = channel.empty()
+        ch_shiftfasta_mtintervals = channel.empty()
+        ch_vcfanno_extra          = channel.empty()
+        ch_vcfanno_bgzip          = channel.empty()
+        ch_vcfanno_index          = channel.empty()
 
         // Genome indices
         if (!val_fai) {
@@ -120,6 +126,16 @@ workflow PREPARE_REFERENCES {
             ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta, [[],[]]).fai.collect()
             ch_mt_dict = GATK_SD_MT(ch_mt_fasta).dict.collect()
             GATK_SHIFTFASTA(ch_mt_fasta, ch_mt_fai, ch_mt_dict)
+            GATK_SHIFTFASTA.out.intervals
+                .multiMap{ _meta, files ->
+                        shift_intervals:
+                            def ind = files.findIndexValues {file -> file.toString().endsWith("shifted.intervals")}
+                            files[ind]
+                        intervals:
+                            ind = files.findIndexValues {file -> !(file.toString().endsWith("shifted.intervals"))}
+                            files[ind]
+                }
+                .set {ch_shiftfasta_mtintervals}
 
             ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_MT.out.versions,GATK_SD_MT.out.versions, GATK_SHIFTFASTA.out.versions)
         }
@@ -141,20 +157,27 @@ workflow PREPARE_REFERENCES {
             ch_versions              = ch_versions.mix(SENTIEON_BWAINDEX_MT.out.versions, SENTIEON_BWAINDEX_MT_SHIFT.out.versions)
         }
 
-        GATK_SHIFTFASTA.out.intervals
-            .multiMap{ _meta, files ->
-                    shift_intervals:
-                        def ind = files.findIndexValues {file -> file.toString().endsWith("shifted.intervals")}
-                        files[ind]
-                    intervals:
-                        ind = files.findIndexValues {file -> !(file.toString().endsWith("shifted.intervals"))}
-                        files[ind]
-            }
-            .set {ch_shiftfasta_mtintervals}
-
         // Vcf, tab and bed indices
-        TABIX_DBSNP(ch_known_dbsnp)
-        TABIX_GNOMAD_AF(ch_gnomad_af_tab)
+        if (val_known_dbsnp) {
+            ch_dbsnp = channel.fromPath(val_known_dbsnp).map{ it -> [[id:it.simpleName], it] }.collect()
+            if (val_known_dbsnp_tbi) {
+                ch_dbsnp_tbi = channel.fromPath(val_known_dbsnp_tbi).map{ it -> [[id:it.simpleName], it] }.collect()
+            } else {
+                ch_dbsnp_tbi = TABIX_DBSNP(ch_dbsnp).tbi.collect()
+                ch_versions  = ch_versions.mix(TABIX_DBSNP.out.versions)
+            }
+        } 
+
+        if (val_gnomad_af) {
+            ch_gnomad_af = channel.fromPath(val_gnomad_af).map{ it -> [[id:it.simpleName], it] }.collect()
+            if (val_gnomad_af_idx) {
+                ch_gnomad_idx = channel.fromPath(val_gnomad_af_idx).map{ it -> [[id:it.simpleName], it] }.collect()
+            } else {
+                ch_gnomad_idx = TABIX_GNOMAD_AF(ch_gnomad_af).tbi.collect()
+                ch_versions  = ch_versions.mix(TABIX_GNOMAD_AF.out.versions)
+            }
+            ch_gnomad_af_idx = ch_gnomad_af.join(ch_gnomad_idx).map {_meta, tab, idx -> [tab,idx]}.collect()                                                        
+        }
 
         // Index target bed file in case of gz input
         TABIX_PT(ch_target_bed)
@@ -218,12 +241,10 @@ workflow PREPARE_REFERENCES {
 
         // Gather versions
         ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
-        ch_versions = ch_versions.mix(TABIX_GNOMAD_AF.out.versions)
         ch_versions = ch_versions.mix(TABIX_PT.out.versions)
         ch_versions = ch_versions.mix(TABIX_PBT.out.versions)
         ch_versions = ch_versions.mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.versions)
         ch_versions = ch_versions.mix(TABIX_VCFANNOEXTRA.out.versions)
-        ch_versions = ch_versions.mix(TABIX_DBSNP.out.versions)
         ch_versions = ch_versions.mix(BEDTOOLS_PAD_TARGET_BED.out.versions)
         ch_versions = ch_versions.mix(TABIX_BGZIPINDEX_PADDED_BED.out.versions)
         ch_versions = ch_versions.mix(GATK_BILT.out.versions)
@@ -233,12 +254,15 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(RTGTOOLS_FORMAT.out.versions)
 
     emit:
+        dbsnp                 = ch_dbsnp                                                                     // channel: [ val(meta), path(dbsnp) ]
+        dbsnp_tbi             = ch_dbsnp_tbi                                                                 // channel: [ val(meta), path(dbsnp_idx) ]
         genome_bwa_index      = channel.empty().mix(ch_bwa, ch_sentieonbwa).collect()                        // channel: [ val(meta), path(index) ]
         genome_bwamem2_index  = ch_genome_bwamem2_index                                                      // channel: [ val(meta), path(index) ]
         genome_bwameme_index  = ch_genome_bwameme_index                                                      // channel: [ val(meta), path(index) ]
         genome_chrom_sizes    = GET_CHROM_SIZES.out.sizes.collect()                                          // channel: [ path(sizes) ]
         genome_fai            = ch_fai                                                                       // channel: [ val(meta), path(fai) ]
         genome_dict           = ch_genome_dict                                                               // channel: [ val(meta), path(dict) ]
+        gnomad_af_idx         = ch_gnomad_af_idx                                                             // channel: [ val(gnomad), path(idx) ]
         sdf                   = RTGTOOLS_FORMAT.out.sdf                                                      // channel: [ val (meta), path(intervals) ]
         mt_intervals          = ch_shiftfasta_mtintervals.intervals.collect()                                // channel: [ path(intervals) ]
         mt_bwa_index          = ch_mt_bwa_index                                                              // channel: [ val(meta), path(index) ]
@@ -253,8 +277,6 @@ workflow PREPARE_REFERENCES {
         mtshift_fasta         = GATK_SHIFTFASTA.out.shift_fa.collect()                                       // channel: [ val(meta), path(fasta) ]
         mtshift_bwa_index     = ch_mtshift_bwa_index                                                         // channel: [ val(meta), path(index) ]
         mtshift_bwamem2_index = ch_mtshift_bwamem2_index                                                     // channel: [ val(meta), path(index) ]
-        gnomad_af_idx         = TABIX_GNOMAD_AF.out.tbi.collect()                                            // channel: [ val(meta), path(fasta) ]
-        known_dbsnp_tbi       = TABIX_DBSNP.out.tbi.collect()                                                // channel: [ val(meta), path(fasta) ]
         target_bed            = ch_target_bed_gz_tbi.collect()                                               // channel: [ val(meta), path(bed), path(tbi) ]
         vcfanno_extra         = ch_vcfanno_extra.ifEmpty([[]])                                               // channel: [ [path(vcf), path(tbi)] ]
         bait_intervals        = CAT_CAT_BAIT.out.file_out.map{ _meta, inter -> inter}.collect().ifEmpty([[]])// channel: [ path(intervals) ]
