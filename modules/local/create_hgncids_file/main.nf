@@ -11,7 +11,7 @@ process CREATE_HGNCIDS_FILE {
     tuple val(meta), path(input)
 
     output:
-    path("*_reformatted.txt"), emit: txt
+    tuple val(meta), path("*_reformatted.txt"), emit: txt
     path "versions.yml"      , emit: versions
 
     when:

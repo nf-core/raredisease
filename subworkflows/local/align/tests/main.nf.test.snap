@@ -1,0 +1,513 @@
+{
+    "align bwamem2 - wgs": {
+        "content": [
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d948b0bd18f6f6526f5d8832465e1542",
+                    "earlycasualcaiman_sorted_md.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "2530fd24192b09084f45011703bd4954",
+                    "hugelymodelbat_sorted_md.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "cc1385671a27d394f628d2d7868eba80",
+                    "slowlycivilbuck_sorted_md.bam.bai"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "df4054395a0ae4588719c34560b4e26f",
+                    "earlycasualcaiman.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "601871c90e6b0a1f805d19ea8b60a7e5",
+                    "hugelymodelbat.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "35da26a8d2d56b62e01b2e879cd8addd",
+                    "slowlycivilbuck.bam.bai"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "9beeefe789d896c08d55e8b8d13d9623",
+                    "earlycasualcaiman_sorted_merged_md_sorted.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "b18998c8cf7dc417ca9a122ba1c9403d",
+                    "hugelymodelbat_sorted_merged_md_sorted.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "a5d6892191a2c8c1f29966448623ca1b",
+                    "slowlycivilbuck_sorted_merged_md_sorted.bam.bai"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "130fb09f419109e40a6be267bfbd8c88",
+                    "earlycasualcaiman_sorted_merged_md_sorted_shifted.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "97e6eaae1cda668da59e5c16a9bbcc1d",
+                    "hugelymodelbat_sorted_merged_md_sorted_shifted.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "427b5e476d84c5277d2d24210800ad60",
+                    "slowlycivilbuck_sorted_merged_md_sorted_shifted.bam.bai"
+                ]
+            ],
+            [
+                "versions.yml:md5,04cb590a101237e8d8726039ee466819",
+                "versions.yml:md5,210790d64830e81c512ff898e8d888db",
+                "versions.yml:md5,3524532e0d268745c6d6c785bc7e734e",
+                "versions.yml:md5,3efddfe43fdf9bf446e23d1526a3973a",
+                "versions.yml:md5,6cbf152be76b9a14bb7eccb2658cabb3",
+                "versions.yml:md5,76abbad692af483cd9c6bc9c5d29b330",
+                "versions.yml:md5,7b799d18a80d6d144122cc97f83748c3",
+                "versions.yml:md5,8191c0426b9e36d914ea3f63bf2428e9",
+                "versions.yml:md5,81cee5ff00c008209a5c6fb06ac57de5",
+                "versions.yml:md5,81cee5ff00c008209a5c6fb06ac57de5",
+                "versions.yml:md5,81cee5ff00c008209a5c6fb06ac57de5",
+                "versions.yml:md5,87e7da5e82b70b42f06b30a245a5750e",
+                "versions.yml:md5,914929705542ec69faf26ad6c672e2af",
+                "versions.yml:md5,9c218b25dd02dc279b1ce6fad9ae182b",
+                "versions.yml:md5,b1c46403177c797d5fc304eebf16731c",
+                "versions.yml:md5,b511e8fd8c8b46c5470d3e3e79673502",
+                "versions.yml:md5,b9749a7d836c638ad5deb0f8b208c7ec",
+                "versions.yml:md5,bc6e997423a4d7b3c3db4374ae26b64f",
+                "versions.yml:md5,bc6e997423a4d7b3c3db4374ae26b64f",
+                "versions.yml:md5,bc6e997423a4d7b3c3db4374ae26b64f",
+                "versions.yml:md5,c31eb465488334212645bd43296d8bd7",
+                "versions.yml:md5,d19b223e2ea8c907b23c9b301c15f3fb",
+                "versions.yml:md5,deacbc4b4196d58efb6dab2e2d333ee9",
+                "versions.yml:md5,f8dd98ba8455bb8d00379fba39cc9e65"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-12-03T13:44:41.37749287"
+    },
+    "align bwameme - wgs": {
+        "content": [
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "9266e8231917cc16ff9845e50ed22801",
+                    "earlycasualcaiman_sorted_md.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "1df3c2e109a79ba4e7b8293aefbad8",
+                    "hugelymodelbat_sorted_md.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "645db4b1d55d6d42cba2b55eee1a630",
+                    "slowlycivilbuck_sorted_md.bam.bai"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "c55f8bf7b7c42ad8dcef6565eff4440b",
+                    "earlycasualcaiman.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "7fc6a7a47e90fb46daeff00093c7c498",
+                    "hugelymodelbat.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "f0b3fe7d566ae0db56bb85e17d8ec28f",
+                    "slowlycivilbuck.bam.bai"
+                ]
+            ],
+            [
+                
+            ],
+            [
+                "versions.yml:md5,04cb590a101237e8d8726039ee466819",
+                "versions.yml:md5,210790d64830e81c512ff898e8d888db",
+                "versions.yml:md5,3524532e0d268745c6d6c785bc7e734e",
+                "versions.yml:md5,3efddfe43fdf9bf446e23d1526a3973a",
+                "versions.yml:md5,6cbf152be76b9a14bb7eccb2658cabb3",
+                "versions.yml:md5,76abbad692af483cd9c6bc9c5d29b330",
+                "versions.yml:md5,7b799d18a80d6d144122cc97f83748c3",
+                "versions.yml:md5,87e7da5e82b70b42f06b30a245a5750e",
+                "versions.yml:md5,914929705542ec69faf26ad6c672e2af",
+                "versions.yml:md5,9c218b25dd02dc279b1ce6fad9ae182b",
+                "versions.yml:md5,aef5efcb8852a854022d16b939b52d17",
+                "versions.yml:md5,b1c46403177c797d5fc304eebf16731c",
+                "versions.yml:md5,b511e8fd8c8b46c5470d3e3e79673502",
+                "versions.yml:md5,b9749a7d836c638ad5deb0f8b208c7ec",
+                "versions.yml:md5,bc6e997423a4d7b3c3db4374ae26b64f",
+                "versions.yml:md5,bc6e997423a4d7b3c3db4374ae26b64f",
+                "versions.yml:md5,bc6e997423a4d7b3c3db4374ae26b64f",
+                "versions.yml:md5,c31eb465488334212645bd43296d8bd7",
+                "versions.yml:md5,d19b223e2ea8c907b23c9b301c15f3fb",
+                "versions.yml:md5,deacbc4b4196d58efb6dab2e2d333ee9",
+                "versions.yml:md5,f8dd98ba8455bb8d00379fba39cc9e65"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
+        },
+        "timestamp": "2025-12-03T17:04:26.065011032"
+    },
+    "align bwamem2 - wes": {
+        "content": [
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e",
+                    "earlycasualcaiman_sorted_md.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e",
+                    "hugelymodelbat_sorted_md.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e",
+                    "slowlycivilbuck_sorted_md.bam.bai"
+                ]
+            ],
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                "versions.yml:md5,3efddfe43fdf9bf446e23d1526a3973a",
+                "versions.yml:md5,7b799d18a80d6d144122cc97f83748c3",
+                "versions.yml:md5,8191c0426b9e36d914ea3f63bf2428e9",
+                "versions.yml:md5,81cee5ff00c008209a5c6fb06ac57de5",
+                "versions.yml:md5,81cee5ff00c008209a5c6fb06ac57de5",
+                "versions.yml:md5,81cee5ff00c008209a5c6fb06ac57de5",
+                "versions.yml:md5,87e7da5e82b70b42f06b30a245a5750e",
+                "versions.yml:md5,c31eb465488334212645bd43296d8bd7"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
+        },
+        "timestamp": "2025-12-08T16:34:03.159847454"
+    }
+}

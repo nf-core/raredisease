@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/raredisease/master/assets/mobile_element_references_schema.json",
+    "$id": "https://raw.githubusercontent.com/nf-core/raredisease/master/assets/svdb_query_vcf_schema.json",
     "title": "Schema for SVDB query - VCF",
     "description": "Schema for the SVDB query database input, VCF version",
     "type": "array",

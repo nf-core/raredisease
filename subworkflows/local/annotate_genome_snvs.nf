@@ -25,7 +25,6 @@ workflow ANNOTATE_GENOME_SNVS {
 
     take:
         ch_vcf                // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
-        analysis_type         // string: [mandatory] 'wgs' or 'wes'
         ch_cadd_header        // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources     // channel: [mandatory] [ path(annotation) ]
         ch_vcfanno_extra      // channel: [mandatory] [ [path(vcf),path(index)] ]
@@ -40,15 +39,22 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_samples            // channel: [mandatory] [ val(sample_meta) ]
         ch_split_intervals    // channel: [mandatory] [ path(intervals) ]
         ch_vep_extra_files    // channel: [mandatory] [ path(files) ]
+        ch_genome_fai         // channel: [mandatory] [ path(fai) ]
         ch_genome_chrsizes    // channel: [mandatory] [ path(sizes) ]
 
     main:
-        ch_cadd_vcf       = Channel.empty()
-        ch_versions       = Channel.empty()
-        ch_vcf_scatter_in = Channel.empty()
-        ch_vep_in         = Channel.empty()
+        ch_cadd_vcf       = channel.empty()
+        ch_versions       = channel.empty()
+        ch_vcf_scatter_in = channel.empty()
+        ch_vep_in         = channel.empty()
 
-        BCFTOOLS_ROH (ch_vcf, ch_gnomad_af, [], [], [], [])
+        ch_vcf
+            .filter { meta, _vcf, _tbi ->
+                meta.probands.size() > 0
+            }
+            .set { ch_roh_in }
+
+        BCFTOOLS_ROH (ch_roh_in, ch_gnomad_af, [], [], [], [])
 
         RHOCALL_ANNOTATE (ch_vcf, BCFTOOLS_ROH.out.roh, [])
 
@@ -57,11 +63,31 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_vcf
             .join(ZIP_TABIX_ROHCALL.out.gz_tbi, remainder: true)
             .combine(ch_split_intervals)
-            .map { it  ->
-                if (it[3].equals(null)) {
-                    return [it[0] + [prefix: it[0].id, scatterid:it[4].baseName], it[1], it[2], it[4]]
+            .map { it ->
+                    def meta = it[0]
+                    def vcf  = it[1]
+                    def tbi  = it[2]
+
+                def hasRohCall = (it.size() == 6)
+
+                if (hasRohCall) {
+                    def rohcall      = it[3]
+                    def rohcallindex = it[4]
+                    def interval     = it[5]
+                    return [
+                        meta + [prefix: meta.id + "_rhocall", scatterid: interval.baseName],
+                        rohcall,
+                        rohcallindex,
+                        interval
+                    ]
                 } else {
-                    return [it[0] + [prefix: it[0].id + "_rhocall", scatterid:it[5].baseName], it[3], it[4], it[5]]
+                    def interval = it[4]
+                    return [
+                        meta + [prefix: meta.id, scatterid: interval.baseName],
+                        vcf,
+                        tbi,
+                        interval
+                    ]
                 }
             }
             .set { ch_vcf_scatter_in }
@@ -90,25 +116,25 @@ workflow ANNOTATE_GENOME_SNVS {
             ANNOTATE_CADD (
                 ch_cadd_in,
                 ch_cadd_header,
-                ch_cadd_resources
+                ch_cadd_resources,
+                ch_genome_fai
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
             ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
             ch_versions = ch_versions.mix(TABIX_BCFTOOLS_VIEW.out.versions)
         }
 
-        // If CADD is run, pick CADD output as input for VEP else pass selectvariants output to VEP.
         BCFTOOLS_VIEW.out.vcf
-            .join(ch_cadd_vcf, remainder: true) // If CADD is not run then the third element in this channel will be `null`
-            .branch { it  ->                              // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
-                selvar: it[2].equals(null)
-                    return [it[0] + [prefix: it[0].prefix + "_filter"], it[1]]
-                cadd: !(it[2].equals(null))
-                    return [it[0] + [prefix: it[0].prefix + "_filter_cadd"], it[2]]
+            .join(ch_cadd_vcf, remainder: true)
+            .branch { meta, selectvariants, cadd  ->
+                selvar: cadd.equals(null)
+                    return [meta + [prefix: meta.prefix + "_filter"], selectvariants]
+                cadd: !(cadd.equals(null))
+                    return [meta + [prefix: meta.prefix + "_filter_cadd"], cadd]
             }
-            .set { ch_for_mix }
+            .set { ch_annotated_vcfs }
 
-        ch_for_mix.selvar.mix(ch_for_mix.cadd)
+        ch_annotated_vcfs.selvar.mix(ch_annotated_vcfs.cadd)
             .map { meta, vcf -> return [meta, vcf, []] }
             .set { ch_vep_in }
 
@@ -133,8 +159,8 @@ workflow ANNOTATE_GENOME_SNVS {
             .join(TABIX_VEP.out.tbi, failOnMismatch:true)
             .groupTuple()
             .map { meta, vcfs, tbis ->
-                def sortedvcfs = vcfs.sort { it.baseName }
-                def sortedtbis = tbis.sort { it.baseName }
+                def sortedvcfs = vcfs.sort { vcf -> vcf.baseName }
+                def sortedtbis = tbis.sort { tbi -> tbi.baseName }
                 return [ meta, sortedvcfs, sortedtbis ]
             }
             .set { ch_concat_in }

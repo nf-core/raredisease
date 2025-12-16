@@ -17,24 +17,27 @@ include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-c
 
 workflow ALIGN_BWA_BWAMEM2_BWAMEME {
     take:
-        ch_reads_input   // channel: [mandatory] [ val(meta), path(reads_input) ]
-        ch_bwa_index     // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
-        ch_bwamem2_index // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
-        ch_bwameme_index // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
-        ch_genome_fasta  // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai    // channel: [mandatory] [ val(meta), path(fai) ]
-        val_mbuffer_mem  // integer: [mandatory] default: 3072
-        val_platform     // string:  [mandatory] default: illumina
-        val_sort_threads // integer: [mandatory] default: 4
+        ch_reads_input     // channel: [mandatory] [ val(meta), path(reads_input) ]
+        ch_bwa_index       // channel: [mandatory] [ val(meta), path(bwa_index) ]
+        ch_bwamem2_index   // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
+        ch_bwameme_index   // channel: [mandatory] [ val(meta), path(bwameme_index) ]
+        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
+        val_mbuffer_mem    // integer: [mandatory] default: 3072
+        val_platform       // string:  [mandatory] default: illumina
+        val_sort_threads   // integer: [mandatory] default: 4
+        val_aligner        // string:  'bwa', 'bwamem2', 'bwameme', or 'sentieon'
+        extract_alignments // boolean
+
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         // Map, sort, and index
-        if (params.aligner.equals("bwa")) {
+        if (val_aligner.equals("bwa")) {
             BWA ( ch_reads_input, ch_bwa_index, ch_genome_fasta, true )
             ch_align = BWA.out.bam
             ch_versions = ch_versions.mix(BWA.out.versions.first())
-        } else if (params.aligner.equals("bwameme")) {
+        } else if (val_aligner.equals("bwameme")) {
             BWAMEME_MEM ( ch_reads_input, ch_bwameme_index, ch_genome_fasta, true, val_mbuffer_mem, val_sort_threads )
             ch_align = BWAMEME_MEM.out.bam
             ch_versions = ch_versions.mix(BWAMEME_MEM.out.versions.first())
@@ -46,11 +49,11 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
             if (params.bwa_as_fallback) {
                 ch_reads_input
                     .join(BWAMEM2_MEM.out.bam, remainder: true)
-                    .branch { it ->
-                        ERROR: it[2].equals(null)
-                            return [it[0], it[1]] // return reads
-                        SUCCESS: !it[2].equals(null)
-                            return [it[0], it[2]]  // return bam
+                    .branch { meta, reads, bam ->
+                        ERROR: bam.equals(null)
+                            return [meta, reads] // return reads
+                        SUCCESS: !bam.equals(null)
+                            return [meta, bam]  // return bam
                     }
                     .set { ch_fallback }
 
@@ -74,9 +77,9 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
                     [groupKey(new_meta, new_meta.num_lanes), bam]
                 }
             .groupTuple()
-            .branch{
-                single: it[1].size() == 1
-                multiple: it[1].size() > 1
+            .branch{ _meta, bam ->
+                single: bam.size() == 1
+                multiple: bam.size() > 1
                 }
             .set{ bams }
 
@@ -85,10 +88,10 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
 
         // GET ALIGNMENT FROM SELECTED CONTIGS
-        if (params.extract_alignments) {
+        if (extract_alignments) {
             SAMTOOLS_INDEX_EXTRACT ( prepared_bam )
             extract_bam_sorted_indexed = prepared_bam.join(SAMTOOLS_INDEX_EXTRACT.out.bai, failOnMismatch:true, failOnDuplicate:true)
-            EXTRACT_ALIGNMENTS( extract_bam_sorted_indexed, ch_genome_fasta, [])
+            EXTRACT_ALIGNMENTS( extract_bam_sorted_indexed, ch_genome_fasta, [], '')
             prepared_bam = EXTRACT_ALIGNMENTS.out.bam
             ch_versions = ch_versions.mix(EXTRACT_ALIGNMENTS.out.versions.first())
             ch_versions = ch_versions.mix(SAMTOOLS_INDEX_EXTRACT.out.versions.first())

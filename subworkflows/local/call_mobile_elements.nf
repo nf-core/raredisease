@@ -7,7 +7,6 @@ include { BCFTOOLS_CONCAT as BCFTOOLS_CONCAT_ME      } from '../../modules/nf-co
 include { BCFTOOLS_SORT as BCFTOOLS_SORT_ME          } from '../../modules/nf-core/bcftools/sort/main'
 include { RETROSEQ_CALL as RETROSEQ_CALL             } from '../../modules/local/retroseq/call/main'
 include { RETROSEQ_DISCOVER as RETROSEQ_DISCOVER     } from '../../modules/local/retroseq/discover/main'
-include { SAMTOOLS_INDEX as ME_INDEX_SPLIT_ALIGNMENT } from '../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_VIEW as ME_SPLIT_ALIGNMENT        } from '../../modules/nf-core/samtools/view/main'
 include { TABIX_TABIX as TABIX_ME                    } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_ME_SPLIT              } from '../../modules/nf-core/tabix/tabix/main'
@@ -21,15 +20,14 @@ workflow CALL_MOBILE_ELEMENTS {
         ch_genome_fai       // channel: [mandatory] [ val(meta), path(fai) ]
         ch_me_references    // channel: [mandatory] [path(tsv)]
         ch_case_info        // channel: [mandatory] [ val(case_info) ]
-        val_genome_build    // string: [mandatory] GRCh37 or GRCh38
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         // Building chromosome channels based on fasta index
         ch_genome_fai
-            .splitCsv( sep: "\t", elem: 1, limit: 25 )
-            .map { meta, fai -> [ fai.first() ] }
+            .splitCsv( sep: "\t", elem: 1, limit: 24 )
+            .map { _meta, fai -> [ fai.first() ] }
             .collect()
             .map { chr -> [ chr, chr.size() ] }
             .transpose()
@@ -44,11 +42,10 @@ workflow CALL_MOBILE_ELEMENTS {
             .set { ch_genome_bam_bai_interval }
 
         // Split bam file on chromosome and index
-        ME_SPLIT_ALIGNMENT ( ch_genome_bam_bai_interval, [[:], []], [] )
-        ME_INDEX_SPLIT_ALIGNMENT ( ME_SPLIT_ALIGNMENT.out.bam )
+        ME_SPLIT_ALIGNMENT ( ch_genome_bam_bai_interval, [[:], []], [], 'bai' )
 
         ME_SPLIT_ALIGNMENT.out.bam
-            .join( ME_INDEX_SPLIT_ALIGNMENT.out.bai, failOnMismatch: true, failOnDuplicate: true )
+            .join( ME_SPLIT_ALIGNMENT.out.bai, failOnMismatch: true, failOnDuplicate: true )
             .set { ch_retroseq_input }
 
         ch_me_references
@@ -112,7 +109,7 @@ workflow CALL_MOBILE_ELEMENTS {
 
         // Merge sample vcfs to a case vcf
         BCFTOOLS_CONCAT_ME.out.vcf
-            .collect{it[1]}
+            .collect{_meta, vcf -> vcf}
             .toList()
             .collect()
             .set { ch_vcf_list }
@@ -125,7 +122,6 @@ workflow CALL_MOBILE_ELEMENTS {
         TABIX_ME ( SVDB_MERGE_ME.out.vcf )
 
         ch_versions = ch_versions.mix(ME_SPLIT_ALIGNMENT.out.versions.first())
-        ch_versions = ch_versions.mix(ME_INDEX_SPLIT_ALIGNMENT.out.versions.first())
         ch_versions = ch_versions.mix(RETROSEQ_DISCOVER.out.versions.first())
         ch_versions = ch_versions.mix(RETROSEQ_CALL.out.versions.first())
         ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_ME.out.versions.first())

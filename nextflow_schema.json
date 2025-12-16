@@ -174,7 +174,7 @@
                     "exists": true,
                     "format": "path",
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.bed(\\.gz)?\\.idx$",
+                    "pattern": "^\\S+\\.tab(\\.gz)?\\.tbi$",
                     "description": "Path to the index file for the gnomad tab file with allele frequencies.",
                     "help_text": "Path to the index of gnomad tab file with CHR/START/REF,ALT/AF"
                 },
@@ -322,6 +322,14 @@
                     "help_text": "Path to comma-separated file containing information about the truth vcf files used by vcfeval.",
                     "pattern": "^\\S+\\.(csv|tsv|json|yaml|yml)$",
                     "schema": "assets/rtg_truthvcfs_schema.json"
+                },
+                "sambamba_regions": {
+                    "type": "string",
+                    "exists": true,
+                    "pattern": "^\\S+\\.bed$",
+                    "fa_icon": "fas fa-file",
+                    "format": "file-path",
+                    "description": "A BED file with regions of interest used in sambamba depth."
                 },
                 "save_reference": {
                     "type": "boolean",
@@ -661,17 +669,30 @@
                     "help_text": "Minimum length of reads after adapter trimming. Shorter reads are discarded.",
                     "fa_icon": "fas fa-less-than"
                 },
+                "mt_subsample_approach": {
+                    "type": "string",
+                    "default": "reads",
+                    "description": "Subsample mitochondria based on fraction of reads or number of reads",
+                    "enum": ["fraction", "reads"],
+                    "fa_icon": "fas fa-align-center"
+                },
+                "mt_subsample_reads": {
+                    "type": "integer",
+                    "default": 18000,
+                    "description": "Expected number of reads to subsample mitochondria to, when mt_subsample_approach is set to reads",
+                    "fa_icon": "fas fa-less-than"
+                },
                 "mt_subsample_rd": {
                     "type": "integer",
                     "default": 150,
-                    "description": "Expected coverage to subsample mt alignment to.",
+                    "description": "Expected coverage to subsample mt alignment to, when mt_subsample_approach is set to fraction",
                     "help_text": "To know more about this parameter check [samtools' view](https://www.htslib.org/doc/samtools-view.html) documentation.",
                     "fa_icon": "fas fa-less-than"
                 },
                 "mt_subsample_seed": {
                     "type": "integer",
                     "default": 30,
-                    "description": "Subsampling seed used to influence which subset of mitochondrial reads is kept. ",
+                    "description": "Subsampling seed used to influence which subset of mitochondrial reads is kept. Used when mt_subsample_approach is set to fraction",
                     "help_text": "To know more about this parameter check [samtools' view](https://www.htslib.org/doc/samtools-view.html) documentation.",
                     "fa_icon": "fas fa-less-than"
                 },
@@ -899,6 +920,18 @@
                     "fa_icon": "far calendar",
                     "description": "Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss.",
                     "hidden": true
+                },
+                "help": {
+                    "type": ["boolean", "string"],
+                    "description": "Display the help message."
+                },
+                "help_full": {
+                    "type": "boolean",
+                    "description": "Display the full detailed help message."
+                },
+                "show_hidden": {
+                    "type": "boolean",
+                    "description": "Display hidden parameters in the help message (only works when --help or --help_full are provided)."
                 }
             }
         }

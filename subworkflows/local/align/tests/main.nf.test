@@ -1,0 +1,321 @@
+nextflow_workflow {
+
+    name "Test Workflow ALIGN"
+    script "subworkflows/local/align/main.nf"
+    workflow "ALIGN"
+    tag "subworkflows"
+    tag "align"
+    config "./nextflow.config"
+
+    setup {
+        run("BWAMEM2_INDEX", alias: 'MT_MEM2') {
+            script "modules/nf-core/bwamem2/index/main.nf"
+            process {
+                """
+                input[0] = channel.of([
+                    [id:'mt'],
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference_mt.fa', checkIfExists: true)
+                ])
+                """
+            }
+        }
+        run("BWAMEM2_INDEX", alias: 'SHIFTMT_MEM2') {
+            script "modules/nf-core/bwamem2/index/main.nf"
+            process {
+                """
+                input[0] = channel.of([
+                    [id:'shiftmt'],
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference_shift.fasta', checkIfExists: true)
+                ])
+                """
+            }
+        }
+    }
+
+    test("align bwamem2 - wgs") {
+
+        setup {
+            run("BWAMEM2_INDEX", alias: 'GENOME_MEM2') {
+                script "modules/nf-core/bwamem2/index/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'genome'],
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
+        when {
+            params {
+                pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
+                platform            = "illumina"
+                min_trimmed_length  = 50
+                mito_name           = "MT"
+                outdir              = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [
+                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_1.fastq.gz', checkIfExists: true),
+                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_2.fastq.gz', checkIfExists: true)
+                        ]
+                    ],
+                    [
+                        [id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", lane:1, sex:1, phenotype:2, paternal:'earlycasualcaiman', maternal:'slowlycivilbuck', case_id:'justhusky'],
+                        [
+                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_1.fastq.gz', checkIfExists: true),
+                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_2.fastq.gz', checkIfExists: true)
+                        ]
+                    ],
+                    [
+                        [id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [
+                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_1.fastq.gz', checkIfExists: true),
+                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_2.fastq.gz', checkIfExists: true)
+                        ]
+                    ]
+                )
+                input[1]  = channel.empty()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.empty()
+                input[5]  = GENOME_MEM2.out.index.collect()
+                input[6]  = channel.empty()
+                input[7]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
+                input[8]  = channel.empty()
+                input[9]  = MT_MEM2.out.index.collect()
+                input[10] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
+                input[11] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
+                input[12] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[13] = channel.empty()
+                input[14] = SHIFTMT_MEM2.out.index.collect()
+                input[15] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
+                input[16] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
+                input[17] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[18] = 3072
+                input[19] = "illumina"
+                input[20] = 4
+                input[21] = "bwamem2"
+                input[22] = "bwamem2"
+                input[23] = "wgs"
+                input[24] = false
+                input[25] = true
+                input[26] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.genome_marked_bam_bai
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.mt_bam_bai
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.mt_bam_bai_gatksubwf
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.mtshift_bam_bai_gatksubwf
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.versions
+                    ).match()
+                }
+            )
+        }
+    }
+    test("align bwamem2 - wes") {
+
+        options "-stub"
+
+        setup {
+            run("BWAMEM2_INDEX", alias: 'GENOME_MEM2') {
+                script "modules/nf-core/bwamem2/index/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'genome'],
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
+        when {
+            params {
+                pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
+                save_mapped_as_cram = true
+                platform            = "illumina"
+                min_trimmed_length  = 50
+                mito_name           = "MT"
+                outdir              = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [
+                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_1.fastq.gz', checkIfExists: true),
+                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_2.fastq.gz', checkIfExists: true)
+                        ]
+                    ],
+                    [
+                        [id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", lane:1, sex:1, phenotype:2, paternal:'earlycasualcaiman', maternal:'slowlycivilbuck', case_id:'justhusky'],
+                        [
+                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_1.fastq.gz', checkIfExists: true),
+                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_2.fastq.gz', checkIfExists: true)
+                        ]
+                    ],
+                    [
+                        [id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [
+                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_1.fastq.gz', checkIfExists: true),
+                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_2.fastq.gz', checkIfExists: true)
+                        ]
+                    ]
+                )
+                input[1]  = channel.empty()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.empty()
+                input[5]  = GENOME_MEM2.out.index.collect()
+                input[6]  = channel.empty()
+                input[7]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
+                input[8]  = channel.empty()
+                input[9]  = MT_MEM2.out.index.collect()
+                input[10] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
+                input[11] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
+                input[12] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[13] = channel.empty()
+                input[14] = SHIFTMT_MEM2.out.index.collect()
+                input[15] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
+                input[16] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
+                input[17] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[18] = 3072
+                input[19] = "illumina"
+                input[20] = 4
+                input[21] = "bwamem2"
+                input[22] = "bwamem2"
+                input[23] = "wes"
+                input[24] = false
+                input[25] = false
+                input[26] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.genome_marked_bam_bai
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.mt_bam_bai
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.mt_bam_bai_gatksubwf
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.mtshift_bam_bai_gatksubwf
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },                        workflow.out.versions
+                    ).match()
+                }
+            )
+        }
+    }
+
+    test("align bwameme - wgs") {
+
+        setup {
+            run("BWAMEME_INDEX", alias: 'GENOME_MEME') {
+                script "modules/nf-core/bwameme/index/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'genome'],
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
+        when {
+            params {
+                pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
+                platform            = "illumina"
+                min_trimmed_length  = 50
+                mito_name           = "MT"
+                outdir              = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = channel.fromList([
+                    [[ id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", 'lane':1, 'sex':1, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
+                    [
+                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_1.fastq.gz', checkIfExists: true),
+                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_2.fastq.gz', checkIfExists: true)
+                    ]],
+                    [[ id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", 'lane':1, 'sex':1, 'phenotype':2, 'paternal':'earlycasualcaiman', 'maternal':'slowlycivilbuck', 'case_id':'justhusky'  ], // meta map
+                    [
+                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_1.fastq.gz', checkIfExists: true),
+                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_2.fastq.gz', checkIfExists: true)
+                    ]],
+                    [[ id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'",  'lane':1, 'sex':2, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
+                    [
+                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_1.fastq.gz', checkIfExists: true),
+                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_2.fastq.gz', checkIfExists: true)
+                    ]]
+                ])
+                input[1]  = channel.empty()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.empty()
+                input[5]  = channel.empty()
+                input[6]  = GENOME_MEME.out.index.collect()
+                input[7]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
+                input[8]  = channel.empty()
+                input[9]  = MT_MEM2.out.index.collect()
+                input[10] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
+                input[11] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
+                input[12] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[13] = channel.empty()
+                input[14] = SHIFTMT_MEM2.out.index.collect()
+                input[15] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
+                input[16] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
+                input[17] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[18] = 3072
+                input[19] = "illumina"
+                input[20] = 4
+                input[21] = "bwameme"
+                input[22] = "bwamem2"
+                input[23] = "wgs"
+                input[24] = false
+                input[25] = true
+                input[26] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.genome_marked_bam_bai
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.mt_bam_bai
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.mtshift_bam_bai
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.versions
+                    ).match()
+                }
+            )
+        }
+    }
+}

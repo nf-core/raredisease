@@ -11,6 +11,7 @@
 include { UTILS_NFSCHEMA_PLUGIN     } from '../../nf-core/utils_nfschema_plugin'
 include { paramsSummaryMap          } from 'plugin/nf-schema'
 include { samplesheetToList         } from 'plugin/nf-schema'
+include { paramsHelp                } from 'plugin/nf-schema'
 include { completionEmail           } from '../../nf-core/utils_nfcore_pipeline'
 include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
 include { imNotification            } from '../../nf-core/utils_nfcore_pipeline'
@@ -28,14 +29,16 @@ workflow PIPELINE_INITIALISATION {
     take:
     version           // boolean: Display version and exit
     validate_params   // boolean: Boolean whether to validate parameters against the schema at runtime
-    monochrome_logs   // boolean: Do not use coloured log outputs
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir            //  string: The output directory where the results will be saved
     input             //  string: Path to input samplesheet
+    help              // boolean: Display help message and exit
+    help_full         // boolean: Show the full help message
+    show_hidden       // boolean: Show hidden parameters in the help message
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     //
     // Print version and exit if required and dump pipeline parameters to JSON file
@@ -50,10 +53,35 @@ workflow PIPELINE_INITIALISATION {
     //
     // Validate parameters and generate parameter summary to stdout
     //
+    before_text = """
+-\033[2m----------------------------------------------------\033[0m-
+                                        \033[0;32m,--.\033[0;30m/\033[0;32m,-.\033[0m
+\033[0;34m        ___     __   __   __   ___     \033[0;32m/,-._.--~\'\033[0m
+\033[0;34m  |\\ | |__  __ /  ` /  \\ |__) |__         \033[0;33m}  {\033[0m
+\033[0;34m  | \\| |       \\__, \\__/ |  \\ |___     \033[0;32m\\`-._,-`-,\033[0m
+                                        \033[0;32m`._,._,\'\033[0m
+\033[0;35m  nf-core/raredisease ${workflow.manifest.version}\033[0m
+-\033[2m----------------------------------------------------\033[0m-
+"""
+    after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/','')}"}.join("\n")}${workflow.manifest.doi ? "\n" : ""}
+* The nf-core framework
+    https://doi.org/10.1038/s41587-020-0439-x
+
+* Software dependencies
+    https://github.com/nf-core/raredisease/blob/master/CITATIONS.md
+"""
+    command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
+
     UTILS_NFSCHEMA_PLUGIN (
         workflow,
         validate_params,
-        null
+        null,
+        help,
+        help_full,
+        show_hidden,
+        before_text,
+        after_text,
+        command
     )
 
     //
@@ -72,10 +100,10 @@ workflow PIPELINE_INITIALISATION {
     //
     // Create channel from input file provided through params.input
     //
-    Channel
-        .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
+    channel
+        .fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
         .tap { ch_original_input }
-        .map { meta, fastq1, fastq2, spring1, spring2, bam, bai -> meta.id }
+        .map { meta, _fastq1, _fastq2, _spring1, _spring2, _bam, _bai -> meta.id }
         .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
             counts[sample] = (counts[sample] ?: 0) + 1
             counts
@@ -101,7 +129,7 @@ workflow PIPELINE_INITIALISATION {
             }
         }
         .tap{ ch_input_counts }
-        .map { meta, files -> files }
+        .map { _meta, files -> files }
         .reduce([:]) { counts, files -> //get line number for each row to construct unique sample ids
             counts[files] = counts.size() + 1
             return counts
@@ -120,13 +148,13 @@ workflow PIPELINE_INITIALISATION {
         }
         .set {ch_samplesheet_by_type}
 
-    ch_samples  = ch_samplesheet.map { meta, files ->
+    ch_samples  = ch_samplesheet.map { meta, _files ->
                     def new_id = meta.sample
                     def new_meta = meta - meta.subMap('lane', 'read_group') + [id:new_id]
                     return new_meta
                     }.unique()
 
-    ch_case_info = ch_samples.toList().map { createCaseChannel(it) }
+    ch_case_info = ch_samples.toList().map { it -> createCaseChannel(it) }
 
     emit:
     reads     = ch_samplesheet_by_type.fastq
@@ -237,6 +265,14 @@ def validateInputParameters() {
     genomeExistsError()
 }
 
+
+//
+// Initialize skip parameters
+//
+def parseSkipList(paramValue, toolName) {
+    return paramValue ? paramValue.split(',').contains(toolName) : false
+}
+
 //
 // Validate parameters
 //
@@ -285,7 +321,7 @@ def checkRequiredParameters(params) {
         }
     }
 
-    all_skips = params.skip_subworkflows+","+params.skip_tools
+    def all_skips = params.skip_subworkflows+","+params.skip_tools
     dynamicRequirements.each { condition, paramsList ->
         if (!all_skips.split(',').contains(condition)) {
                 mandatoryParams += paramsList

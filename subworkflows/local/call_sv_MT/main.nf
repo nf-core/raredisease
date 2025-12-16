@@ -7,16 +7,17 @@ include { EKLIPSE     } from '../../../modules/nf-core/eklipse/main'
 
 workflow CALL_SV_MT {
     take:
-        ch_bam_bai      // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_bam_bai   // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_fasta     // channel: [mandatory] [ val(meta), path(fasta) ]
+        skip_eklipse // boolean
 
     main:
-        ch_versions       = Channel.empty()
-        ch_eklipse_del    = Channel.empty()
-        ch_eklipse_genes  = Channel.empty()
-        ch_eklipse_circos = Channel.empty()
+        ch_versions       = channel.empty()
+        ch_eklipse_del    = channel.empty()
+        ch_eklipse_genes  = channel.empty()
+        ch_eklipse_circos = channel.empty()
 
-        if (!(params.skip_tools && params.skip_tools.split(',').contains('eklipse'))) {
+        if (!skip_eklipse) {
             EKLIPSE(ch_bam_bai,[])
             ch_eklipse_del    = EKLIPSE.out.deletions
             ch_eklipse_genes  = EKLIPSE.out.genes

@@ -2,30 +2,32 @@
 // A subworkflow to add most severe consequence and pli to a vep annotated vcf
 //
 
-include { ADD_MOST_SEVERE_CSQ } from '../../modules/local/add_most_severe_consequence'
-include { ADD_MOST_SEVERE_PLI } from '../../modules/local/add_most_severe_pli'
-include { TABIX_BGZIPTABIX    } from '../../modules/nf-core/tabix/bgziptabix/main'
+include { CUSTOM_ADDMOSTSEVERECONSEQUENCE } from '../../modules/nf-core/custom/addmostsevereconsequence'
+include { CUSTOM_ADDMOSTSEVEREPLI         } from '../../modules/nf-core/custom/addmostseverepli'
+include { TABIX_TABIX                     } from '../../modules/nf-core/tabix/tabix/main'
 
 workflow ANNOTATE_CSQ_PLI {
     take:
         ch_vcf                  // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_variant_consequences // channel: [mandatory] [ path(consequences) ]
+        val_index               // bool
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
-        ADD_MOST_SEVERE_CSQ (ch_vcf, ch_variant_consequences)
+        CUSTOM_ADDMOSTSEVERECONSEQUENCE (ch_vcf, ch_variant_consequences)
 
-        ADD_MOST_SEVERE_PLI (ADD_MOST_SEVERE_CSQ.out.vcf)
+        CUSTOM_ADDMOSTSEVEREPLI (CUSTOM_ADDMOSTSEVERECONSEQUENCE.out.vcf)
 
-        TABIX_BGZIPTABIX (ADD_MOST_SEVERE_PLI.out.vcf)
+        if (val_index) {
+            TABIX_TABIX(CUSTOM_ADDMOSTSEVEREPLI.out.vcf)
+            ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
+        }
 
-        ch_versions = ch_versions.mix(ADD_MOST_SEVERE_CSQ.out.versions)
-        ch_versions = ch_versions.mix(ADD_MOST_SEVERE_PLI.out.versions)
-        ch_versions = ch_versions.mix(TABIX_BGZIPTABIX.out.versions)
+        ch_versions = ch_versions.mix(CUSTOM_ADDMOSTSEVERECONSEQUENCE.out.versions)
+        ch_versions = ch_versions.mix(CUSTOM_ADDMOSTSEVEREPLI.out.versions)
 
     emit:
-        vcf_ann  = TABIX_BGZIPTABIX.out.gz_tbi.map { meta, vcf, tbi -> return [ meta, vcf ] } // channel: [ val(meta), path(vcf) ]
-        tbi_ann  = TABIX_BGZIPTABIX.out.gz_tbi.map { meta, vcf, tbi -> return [ meta, tbi ] } // channel: [ val(meta), path(tbi) ]
-        versions = ch_versions                 // channel: [ path(versions.yml) ]
+        vcf_ann  = CUSTOM_ADDMOSTSEVEREPLI.out.vcf // channel: [ val(meta), path(vcf) ]
+        versions = ch_versions                     // channel: [ path(versions.yml) ]
 }

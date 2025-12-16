@@ -22,17 +22,18 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_case_info       // channel: [mandatory] [ val(case_info) ]
         ch_foundin_header  // channel: [mandatory] [ path(header) ]
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
+        val_analysis_type  // boolean
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
-        if (params.analysis_type.equals("wes")) {
-            TABIX_BGZIP(ch_target_bed.map{meta, gzbed, index -> return [meta, gzbed]})
+        if (val_analysis_type.equals("wes")) {
+            TABIX_BGZIP(ch_target_bed.map{meta, gzbed, _index -> return [meta, gzbed]})
             ch_bam_bai
-                .combine (TABIX_BGZIP.out.output.map {meta, bed -> return bed})
+                .combine (TABIX_BGZIP.out.output.map {_meta, bed -> return bed})
                 .set { ch_deepvar_in }
             ch_versions = ch_versions.mix(TABIX_BGZIP.out.versions)
-        } else if (params.analysis_type.equals("wgs")) {
+        } else if (val_analysis_type.equals("wgs")) {
             ch_bam_bai
                 .map { meta, bam, bai ->
                         return [meta, bam, bai, []] }
@@ -41,7 +42,7 @@ workflow CALL_SNV_DEEPVARIANT {
 
         DEEPVARIANT ( ch_deepvar_in, ch_genome_fasta, ch_genome_fai, [[],[]], ch_par_bed )
         DEEPVARIANT.out.gvcf
-            .map{ it -> it[1]}
+            .map{ _meta, gvcf -> gvcf}
             .toSortedList{a, b -> a.name <=> b.name}
             .toList()
             .set { ch_file_list }
@@ -70,7 +71,7 @@ workflow CALL_SNV_DEEPVARIANT {
             .set { ch_varcallerinfo }
 
         ADD_VARCALLER_TO_BED (ch_varcallerinfo).gz_tbi
-            .map{meta,bed,tbi -> return [bed, tbi]}
+            .map{_meta,bed,tbi -> return [bed, tbi]}
             .set{ch_varcallerbed}
 
         REMOVE_DUPLICATES_GL.out.vcf
@@ -78,7 +79,7 @@ workflow CALL_SNV_DEEPVARIANT {
             .combine(ch_varcallerbed)
             .set { ch_annotate_in }
 
-        BCFTOOLS_ANNOTATE(ch_annotate_in, ch_foundin_header)
+        BCFTOOLS_ANNOTATE(ch_annotate_in, [], ch_foundin_header, [])
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 

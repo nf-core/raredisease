@@ -8,7 +8,6 @@ include { BWAMEM2_MEM as BWAMEM2_MEM_MT                                     } fr
 include { GATK4_MERGEBAMALIGNMENT as GATK4_MERGEBAMALIGNMENT_MT             } from '../../../modules/nf-core/gatk4/mergebamalignment/main'
 include { PICARD_ADDORREPLACEREADGROUPS as PICARD_ADDORREPLACEREADGROUPS_MT } from '../../../modules/nf-core/picard/addorreplacereadgroups/main'
 include { PICARD_MARKDUPLICATES as PICARD_MARKDUPLICATES_MT                 } from '../../../modules/nf-core/picard/markduplicates/main'
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MT                               } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_SORT as SAMTOOLS_SORT_MT                                 } from '../../../modules/nf-core/samtools/sort/main'
 
 workflow ALIGN_MT {
@@ -20,19 +19,20 @@ workflow ALIGN_MT {
         ch_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_dict          // channel: [mandatory] [ val(meta), path(dict) ]
         ch_fai           // channel: [mandatory] [ val(meta), path(fai) ]
+        val_mt_aligner   // string:  'bwa', 'bwamem2', or 'sentieon'
 
     main:
-        ch_versions     = Channel.empty()
+        ch_versions     = channel.empty()
 
-        if (params.mt_aligner.equals("bwamem2")) {
+        if (val_mt_aligner.equals("bwamem2")) {
             BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, ch_fasta, true)
             ch_align       = BWAMEM2_MEM_MT.out.bam
             ch_versions    = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
-        } else if (params.mt_aligner.equals("sentieon")) {
+        } else if (val_mt_aligner.equals("sentieon")) {
             SENTIEON_BWAMEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, ch_fai )
-            ch_align       = SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, bai -> [meta, bam] }
+            ch_align       = SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, _bai -> [meta, bam] }
             ch_versions    = ch_versions.mix(SENTIEON_BWAMEM_MT.out.versions.first())
-        } else if (params.mt_aligner.equals("bwa")) {
+        } else if (val_mt_aligner.equals("bwa")) {
             BWA_MEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, true )
             ch_align       = BWA_MEM_MT.out.bam
             ch_versions    = ch_versions.mix(BWA_MEM_MT.out.versions.first())
@@ -47,18 +47,15 @@ workflow ALIGN_MT {
 
         PICARD_MARKDUPLICATES_MT (PICARD_ADDORREPLACEREADGROUPS_MT.out.bam, ch_fasta, ch_fai)
 
-        SAMTOOLS_SORT_MT (PICARD_MARKDUPLICATES_MT.out.bam, [[:],[]])
-
-        SAMTOOLS_INDEX_MT(SAMTOOLS_SORT_MT.out.bam)
+        SAMTOOLS_SORT_MT (PICARD_MARKDUPLICATES_MT.out.bam, [[:],[]], 'bai')
 
         ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_ADDORREPLACEREADGROUPS_MT.out.versions.first())
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_SORT_MT.out.versions.first())
-        ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MT.out.versions.first())
 
     emit:
         marked_bam  = SAMTOOLS_SORT_MT.out.bam   // channel: [ val(meta), path(bam) ]
-        marked_bai  = SAMTOOLS_INDEX_MT.out.bai  // channel: [ val(meta), path(bai) ]
+        marked_bai  = SAMTOOLS_SORT_MT.out.bai   // channel: [ val(meta), path(bai) ]
         versions    = ch_versions                // channel: [ path(versions.yml) ]
 }

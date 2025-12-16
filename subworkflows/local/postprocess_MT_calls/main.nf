@@ -28,7 +28,7 @@ workflow POSTPROCESS_MT_CALLS {
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         // LIFTOVER SHIFTED VCF TO REFERENCE MT POSITIONS
         PICARD_LIFTOVERVCF (
@@ -67,13 +67,13 @@ workflow POSTPROCESS_MT_CALLS {
         TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
 
         REMOVE_DUPLICATES_MT.out.vcf
-            .map{ it -> it[1]}
+            .map{ _meta, vcf -> vcf}
             .toSortedList{a, b -> a.name <=> b.name}
             .toList()
             .set { file_list_vcf }
 
         TABIX_TABIX_MT2.out.tbi
-            .map{ it -> it[1]}
+            .map{ _meta, vcf -> vcf}
             .toSortedList{a, b -> a.name <=> b.name}
             .toList()
             .set { file_list_tbi }
@@ -109,7 +109,7 @@ workflow POSTPROCESS_MT_CALLS {
             .set { ch_varcallerinfo }
 
         ADD_VARCALLER_TO_BED (ch_varcallerinfo).gz_tbi
-            .map{meta,bed,tbi -> return [bed, tbi]}
+            .map{_meta,bed,tbi -> return [bed, tbi]}
             .set{ch_varcallerbed}
 
         ch_addfoundintag_in
@@ -117,7 +117,7 @@ workflow POSTPROCESS_MT_CALLS {
             .combine(ch_varcallerbed)
             .set { ch_annotate_in }
 
-        BCFTOOLS_ANNOTATE(ch_annotate_in,ch_foundin_header)
+        BCFTOOLS_ANNOTATE(ch_annotate_in, [], ch_foundin_header, [])
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 

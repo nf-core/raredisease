@@ -18,7 +18,6 @@ workflow CALL_SNV {
         ch_genome_chrsizes    // channel: [mandatory] [ path(sizes) ]
         ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai         // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_genome_dictionary  // channel: [mandatory] [ val(meta), path(dict) ]
         ch_mt_intervals       // channel: [optional] [ path(interval_list) ]
         ch_mt_dictionary      // channel: [optional] [ val(meta), path(dict) ]
         ch_mt_fai             // channel: [optional] [ val(meta), path(fai) ]
@@ -37,24 +36,28 @@ workflow CALL_SNV {
         ch_case_info          // channel: [mandatory] [ val(case_info) ]
         ch_foundin_header     // channel: [mandatory] [ path(header) ]
         ch_pcr_indel_model    // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
+        val_analysis_type     // string:  'wgs', 'wes', or 'mito'
+        val_variant_caller    // string:  'deepvariant' or 'sentieon'
+        run_mt_for_wes        // boolean
+        concatenate_snv_calls // boolean
 
     main:
-        ch_versions      = Channel.empty()
-        ch_deepvar_vcf   = Channel.empty()
-        ch_deepvar_tbi   = Channel.empty()
-        ch_deepvar_gvcf  = Channel.empty()
-        ch_deepvar_gtbi  = Channel.empty()
-        ch_mt_vcf        = Channel.empty()
-        ch_mt_tabix      = Channel.empty()
-        ch_mt_vcf_tabix  = Channel.empty()
-        ch_mt_txt        = Channel.empty()
-        ch_sentieon_vcf  = Channel.empty()
-        ch_sentieon_tbi  = Channel.empty()
-        ch_sentieon_gvcf = Channel.empty()
-        ch_sentieon_gtbi = Channel.empty()
+        ch_versions      = channel.empty()
+        ch_deepvar_vcf   = channel.empty()
+        ch_deepvar_tbi   = channel.empty()
+        ch_deepvar_gvcf  = channel.empty()
+        ch_deepvar_gtbi  = channel.empty()
+        ch_mt_vcf        = channel.empty()
+        ch_mt_tabix      = channel.empty()
+        ch_mt_vcf_tabix  = channel.empty()
+        ch_mt_txt        = channel.empty()
+        ch_sentieon_vcf  = channel.empty()
+        ch_sentieon_tbi  = channel.empty()
+        ch_sentieon_gvcf = channel.empty()
+        ch_sentieon_gtbi = channel.empty()
 
-        if (params.variant_caller.equals("deepvariant") && !params.analysis_type.equals("mito")) {
-            CALL_SNV_DEEPVARIANT (      // triggered only when params.variant_caller is set as deepvariant
+        if (val_variant_caller.equals("deepvariant") && !val_analysis_type.equals("mito")) {
+            CALL_SNV_DEEPVARIANT (
                 ch_genome_bam_bai,
                 ch_genome_fasta,
                 ch_genome_fai,
@@ -62,15 +65,16 @@ workflow CALL_SNV {
                 ch_par_bed,
                 ch_case_info,
                 ch_foundin_header,
-                ch_genome_chrsizes
+                ch_genome_chrsizes,
+                val_analysis_type
             )
-            ch_deepvar_vcf = CALL_SNV_DEEPVARIANT.out.vcf
-            ch_deepvar_tbi = CALL_SNV_DEEPVARIANT.out.tabix
+            ch_deepvar_vcf  = CALL_SNV_DEEPVARIANT.out.vcf
+            ch_deepvar_tbi  = CALL_SNV_DEEPVARIANT.out.tabix
             ch_deepvar_gvcf = CALL_SNV_DEEPVARIANT.out.gvcf
             ch_deepvar_gtbi = CALL_SNV_DEEPVARIANT.out.gvcf_tabix
-            ch_versions    = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
-        } else if (params.variant_caller.equals("sentieon")) {
-            CALL_SNV_SENTIEON(         // triggered only when params.variant_caller is set as sentieon
+            ch_versions     = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
+        } else if (val_variant_caller.equals("sentieon")) {
+            CALL_SNV_SENTIEON(
                 ch_genome_bam_bai,
                 ch_genome_fasta,
                 ch_genome_fai,
@@ -83,17 +87,17 @@ workflow CALL_SNV {
                 ch_foundin_header,
                 ch_genome_chrsizes
             )
-            ch_sentieon_vcf = CALL_SNV_SENTIEON.out.vcf
-            ch_sentieon_tbi = CALL_SNV_SENTIEON.out.tabix
+            ch_sentieon_vcf  = CALL_SNV_SENTIEON.out.vcf
+            ch_sentieon_tbi  = CALL_SNV_SENTIEON.out.tabix
             ch_sentieon_gvcf = CALL_SNV_SENTIEON.out.gvcf
             ch_sentieon_gtbi = CALL_SNV_SENTIEON.out.gvcf_tbi
-            ch_versions    = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
+            ch_versions      = ch_versions.mix(CALL_SNV_SENTIEON.out.versions)
         }
 
-        ch_vcf    = Channel.empty().mix(ch_deepvar_vcf, ch_sentieon_vcf)
-        ch_tabix  = Channel.empty().mix(ch_deepvar_tbi, ch_sentieon_tbi)
-        ch_gvcf   = Channel.empty().mix(ch_deepvar_gvcf, ch_sentieon_gvcf)
-        ch_gtabix = Channel.empty().mix(ch_deepvar_gtbi, ch_sentieon_gtbi)
+        ch_vcf    = channel.empty().mix(ch_deepvar_vcf, ch_sentieon_vcf)
+        ch_tabix  = channel.empty().mix(ch_deepvar_tbi, ch_sentieon_tbi)
+        ch_gvcf   = channel.empty().mix(ch_deepvar_gvcf, ch_sentieon_gvcf)
+        ch_gtabix = channel.empty().mix(ch_deepvar_gtbi, ch_sentieon_gtbi)
 
         ch_vcf
             .join(ch_tabix, failOnMismatch:true, failOnDuplicate:true)
@@ -105,7 +109,7 @@ workflow CALL_SNV {
         ch_genome_tabix     = GATK4_SELECTVARIANTS.out.tbi
         ch_genome_vcf_tabix = ch_genome_vcf.join(ch_genome_tabix, failOnMismatch:true, failOnDuplicate:true)
 
-        if (params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes) {
+        if (val_analysis_type.matches("wgs|mito") || run_mt_for_wes) {
             CALL_SNV_MT(
                 ch_mt_bam_bai,
                 ch_mt_fasta,
@@ -143,7 +147,7 @@ workflow CALL_SNV {
             ch_versions     = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
         }
 
-        if (params.concatenate_snv_calls) {
+        if (concatenate_snv_calls) {
             ch_concat_vcf_in = ch_genome_vcf_tabix.concat(ch_mt_vcf_tabix).groupTuple()
             BCFTOOLS_CONCAT (
                 ch_concat_vcf_in
