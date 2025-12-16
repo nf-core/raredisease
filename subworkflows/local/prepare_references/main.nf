@@ -55,6 +55,7 @@ workflow PREPARE_REFERENCES {
     main:
         ch_versions               = channel.empty()
         ch_bgzip_tbi              = channel.empty()
+        ch_bait_intervals         = channel.empty()
         ch_bwa                    = channel.empty()
         ch_genome_bwameme_index   = channel.empty()
         ch_genome_bwamem2_index   = channel.empty()
@@ -71,6 +72,7 @@ workflow PREPARE_REFERENCES {
         ch_sentieonbwa            = channel.empty()
         ch_shiftfasta_mtintervals = channel.empty()
         ch_target_bed_gz_tbi      = channel.value([[:],[],[]])
+        ch_target_intervals       = channel.empty()
         ch_vcfanno_extra          = channel.empty()
         ch_vcfanno_bgzip          = channel.empty()
         ch_vcfanno_index          = channel.empty()
@@ -181,14 +183,28 @@ workflow PREPARE_REFERENCES {
         // Index target bed file
         if (val_target_bed) {
             ch_target_bed = channel.fromPath(params.target_bed).map{ it -> [[id:it.simpleName], it] }.collect()
+ 
             BEDTOOLS_PAD_TARGET_BED(
                 ch_target_bed,
                 ch_fai.map { _meta, fai -> return fai }
             )
-            TABIX_BGZIPINDEX_PADDED_BED(BEDTOOLS_PAD_TARGET_BED.out.bed).gz_tbi
-                .set { ch_target_bed_gz_tbi }
-            ch_versions = ch_versions.mix(BEDTOOLS_PAD_TARGET_BED.out.versions)
-            ch_versions = ch_versions.mix(TABIX_BGZIPINDEX_PADDED_BED.out.versions)
+            ch_target_bed_gz_tbi = TABIX_BGZIPINDEX_PADDED_BED(BEDTOOLS_PAD_TARGET_BED.out.bed).gz_tbi
+
+            ch_target_intervals = GATK_BILT(ch_target_bed, ch_genome_dict).interval_list.map{ _meta, inter -> inter}.collect()
+
+            GATK_ILT(GATK_BILT.out.interval_list)
+
+            GATK_ILT.out.interval_list
+                .collect{ _meta, list -> list }
+                .map { list ->
+                    def meta = list.toString().split("_split")[0].split("/")[-1] + "_bait.intervals_list"
+                    return [[id:meta], list]
+                }
+                .set { ch_bait_intervals_cat_in }
+
+            ch_bait_intervals = CAT_CAT_BAIT ( ch_bait_intervals_cat_in ).file_out.map {_meta, inter -> inter}.collect().ifEmpty([[]])
+
+            ch_versions = ch_versions.mix(BEDTOOLS_PAD_TARGET_BED.out.versions, TABIX_BGZIPINDEX_PADDED_BED.out.versions, GATK_BILT.out.versions, GATK_ILT.out.versions, CAT_CAT_BAIT.out.versions)
         }
 
         ch_vcfanno_extra_unprocessed
@@ -214,18 +230,7 @@ workflow PREPARE_REFERENCES {
             .collect()
             .set{ch_vcfanno_extra}
 
-
         // Generate bait and target intervals
-        GATK_BILT(ch_target_bed, ch_genome_dict).interval_list
-        GATK_ILT(GATK_BILT.out.interval_list)
-        GATK_ILT.out.interval_list
-            .collect{ _meta, list -> list }
-            .map { list ->
-                def meta = list.toString().split("_split")[0].split("/")[-1] + "_bait.intervals_list"
-                return [[id:meta], list]
-            }
-            .set { ch_bait_intervals_cat_in }
-        CAT_CAT_BAIT ( ch_bait_intervals_cat_in )
         UNTAR_VEP_CACHE (ch_vep_cache)
 
         // RTG tools
@@ -237,9 +242,6 @@ workflow PREPARE_REFERENCES {
         ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
         ch_versions = ch_versions.mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.versions)
         ch_versions = ch_versions.mix(TABIX_VCFANNOEXTRA.out.versions)
-        ch_versions = ch_versions.mix(GATK_BILT.out.versions)
-        ch_versions = ch_versions.mix(GATK_ILT.out.versions)
-        ch_versions = ch_versions.mix(CAT_CAT_BAIT.out.versions)
         ch_versions = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
         ch_versions = ch_versions.mix(RTGTOOLS_FORMAT.out.versions)
 
@@ -269,8 +271,8 @@ workflow PREPARE_REFERENCES {
         mtshift_bwamem2_index = ch_mtshift_bwamem2_index                                                     // channel: [ val(meta), path(index) ]
         target_bed            = ch_target_bed_gz_tbi.collect()                                               // channel: [ val(meta), path(bed), path(tbi) ]
         vcfanno_extra         = ch_vcfanno_extra.ifEmpty([[]])                                               // channel: [ [path(vcf), path(tbi)] ]
-        bait_intervals        = CAT_CAT_BAIT.out.file_out.map{ _meta, inter -> inter}.collect().ifEmpty([[]])// channel: [ path(intervals) ]
-        target_intervals      = GATK_BILT.out.interval_list.map{ _meta, inter -> inter}.collect()            // channel: [ path(interval_list) ]
+        bait_intervals        = ch_bait_intervals                                                            // channel: [ path(intervals) ]
+        target_intervals      = ch_target_intervals                                                          // channel: [ path(interval_list) ]
         vep_resources         = UNTAR_VEP_CACHE.out.untar.map{ _meta, files -> [files]}.collect()            // channel: [ path(cache) ]
         versions              = ch_versions                                                                  // channel: [ path(versions.yml) ]
 
