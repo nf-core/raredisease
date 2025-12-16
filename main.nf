@@ -49,8 +49,6 @@ workflow NFCORE_RAREDISEASE {
 
     ch_versions                  = channel.empty()
     ch_genome_fasta              = channel.fromPath(params.fasta).map { it -> [[id:it.simpleName], it] }.collect()
-    ch_gnomad_af_tab             = params.gnomad_af           ? channel.fromPath(params.gnomad_af).map{ it -> [[id:it.simpleName], it] }.collect()
-                                                                : channel.value([[],[]])
     ch_vcfanno_extra_unprocessed = params.vcfanno_extra_resources ? channel.fromPath(params.vcfanno_extra_resources).map { it -> [[id:it.baseName], it] }.collect()
                                                                 : channel.empty()
     ch_vep_cache_unprocessed     = params.vep_cache           ? channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
@@ -58,7 +56,6 @@ workflow NFCORE_RAREDISEASE {
 
     PREPARE_REFERENCES (
         ch_genome_fasta,
-        ch_gnomad_af_tab,
         ch_vcfanno_extra_unprocessed,
         ch_vep_cache_unprocessed,
         params.aligner,
