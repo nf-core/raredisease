@@ -41,35 +41,34 @@ include { PARSE_CONTAMINATION              } from '../modules/local/parse_contam
 // SUBWORKFLOWS
 //
 
-include { ALIGN                                              } from '../subworkflows/local/align'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_ME                 } from '../subworkflows/local/annotate_consequence_pli.nf'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_MT                 } from '../subworkflows/local/annotate_consequence_pli'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV                } from '../subworkflows/local/annotate_consequence_pli'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV                 } from '../subworkflows/local/annotate_consequence_pli'
-include { ANNOTATE_GENOME_SNVS                               } from '../subworkflows/local/annotate_genome_snvs'
-include { ANNOTATE_MOBILE_ELEMENTS                           } from '../subworkflows/local/annotate_mobile_elements'
-include { ANNOTATE_MT_SNVS                                   } from '../subworkflows/local/annotate_mt_snvs'
-include { ANNOTATE_STRUCTURAL_VARIANTS                       } from '../subworkflows/local/annotate_structural_variants'
-include { CALL_MOBILE_ELEMENTS                               } from '../subworkflows/local/call_mobile_elements'
-include { CALL_REPEAT_EXPANSIONS                             } from '../subworkflows/local/call_repeat_expansions'
-include { CALL_SNV                                           } from '../subworkflows/local/call_snv'
-include { CALL_STRUCTURAL_VARIANTS                           } from '../subworkflows/local/call_structural_variants'
-include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/local/generate_clinical_set.nf'
-include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/local/generate_clinical_set'
-include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/local/generate_clinical_set'
-include { GENERATE_CLINICAL_SET as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/local/generate_clinical_set'
-include { GENERATE_CYTOSURE_FILES                            } from '../subworkflows/local/generate_cytosure_files'
-include { GENS                                               } from '../subworkflows/local/gens'
-include { PREPARE_REFERENCES                                 } from '../subworkflows/local/prepare_references'
-include { QC_BAM                                             } from '../subworkflows/local/qc_bam'
-include { RANK_VARIANTS as RANK_VARIANTS_MT                  } from '../subworkflows/local/rank_variants'
-include { RANK_VARIANTS as RANK_VARIANTS_SNV                 } from '../subworkflows/local/rank_variants'
-include { RANK_VARIANTS as RANK_VARIANTS_SV                  } from '../subworkflows/local/rank_variants'
-include { SCATTER_GENOME                                     } from '../subworkflows/local/scatter_genome'
-include { SUBSAMPLE_MT                                       } from '../subworkflows/local/subsample_mt'
-include { VARIANT_EVALUATION                                 } from '../subworkflows/local/variant_evaluation'
-include { CONTAMINATION_CHECK                                } from '../subworkflows/local/contamination_check/main'
-
+include { ALIGN                                                       } from '../subworkflows/local/align'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_ME                          } from '../subworkflows/local/annotate_consequence_pli.nf'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_MT                          } from '../subworkflows/local/annotate_consequence_pli'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV                         } from '../subworkflows/local/annotate_consequence_pli'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV                          } from '../subworkflows/local/annotate_consequence_pli'
+include { ANNOTATE_GENOME_SNVS                                        } from '../subworkflows/local/annotate_genome_snvs'
+include { ANNOTATE_MOBILE_ELEMENTS                                    } from '../subworkflows/local/annotate_mobile_elements'
+include { ANNOTATE_MT_SNVS                                            } from '../subworkflows/local/annotate_mt_snvs'
+include { ANNOTATE_STRUCTURAL_VARIANTS                                } from '../subworkflows/local/annotate_structural_variants'
+include { CALL_MOBILE_ELEMENTS                                        } from '../subworkflows/local/call_mobile_elements'
+include { CALL_REPEAT_EXPANSIONS                                      } from '../subworkflows/local/call_repeat_expansions'
+include { CALL_SNV                                                    } from '../subworkflows/local/call_snv'
+include { CALL_STRUCTURAL_VARIANTS                                    } from '../subworkflows/local/call_structural_variants'
+include { CONTAMINATION_CHECK                                         } from '../subworkflows/local/contamination_check/main'
+include { GENERATE_CYTOSURE_FILES                                     } from '../subworkflows/local/generate_cytosure_files'
+include { GENS                                                        } from '../subworkflows/local/gens'
+include { PREPARE_REFERENCES                                          } from '../subworkflows/local/prepare_references'
+include { QC_BAM                                                      } from '../subworkflows/local/qc_bam'
+include { RANK_VARIANTS as RANK_VARIANTS_MT                           } from '../subworkflows/local/rank_variants'
+include { RANK_VARIANTS as RANK_VARIANTS_SNV                          } from '../subworkflows/local/rank_variants'
+include { RANK_VARIANTS as RANK_VARIANTS_SV                           } from '../subworkflows/local/rank_variants'
+include { SUBSAMPLE_MT_FRAC                                           } from '../subworkflows/local/subsample_mt_frac'
+include { SUBSAMPLE_MT_READS                                          } from '../subworkflows/local/subsample_mt_reads'
+include { VARIANT_EVALUATION                                          } from '../subworkflows/local/variant_evaluation'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
@@ -957,25 +956,29 @@ workflow RAREDISEASE {
             sort: true
         )
     )
-
-    ch_multiqc_files = ch_multiqc_files.mix(fastqc_report.collect{it[1]}.ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ch_mt_txt.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.fastp_json.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.markdup_metrics.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.sex_check.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.multiple_metrics.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.hs_metrics.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{it[1]}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.self_sm.map{it[1]}.collect().ifEmpty([]))
-// Add contamination results to MultiQC
-    ch_multiqc_files = ch_multiqc_files.mix(ch_contamination_mqc.map { meta, file -> file })
-
-    if (!(params.skip_tools && params.skip_tools.split(',').contains('peddy'))) {
-        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{it[1]}.collect().ifEmpty([]))
-        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.csv.map{it[1]}.collect().ifEmpty([]))
+    if (!skip_fastqc) {
+        ch_multiqc_files = ch_multiqc_files.mix(fastqc_report.collect{_meta, reports -> reports}.ifEmpty([]))
     }
+    ch_multiqc_files = ch_multiqc_files.mix(ch_mt_txt.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.fastp_json.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.markdup_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.sex_check.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.multiple_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.hs_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.self_sm.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    
+    // Add contamination results to MultiQC
+    ch_multiqc_files = ch_multiqc_files.mix(ch_contamination_mqc.map { _meta, file -> file })
+
+    if (!skip_peddy) {
+        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{_meta, reports -> reports}.collect().ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.csv.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    }
+
+    MULTIQC (
 
     MULTIQC (
         ch_multiqc_files.collect(),
