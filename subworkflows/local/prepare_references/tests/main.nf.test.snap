@@ -23,11 +23,6 @@
                 ],
                 "11": [
                     [
-                        "reference_mt.intervals:md5,0930dafc5645246542112ae3d62573a3"
-                    ]
-                ],
-                "12": [
-                    [
                         {
                             "id": "reference"
                         },
@@ -40,10 +35,10 @@
                         ]
                     ]
                 ],
-                "13": [
+                "12": [
                     
                 ],
-                "14": [
+                "13": [
                     [
                         {
                             "id": "reference"
@@ -51,7 +46,7 @@
                         "reference_mt.dict:md5,9b0db3306084213d47d83aa994b219f6"
                     ]
                 ],
-                "15": [
+                "14": [
                     [
                         {
                             "id": "reference"
@@ -59,7 +54,7 @@
                         "reference_mt.fa.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
                     ]
                 ],
-                "16": [
+                "15": [
                     [
                         {
                             "id": "reference"
@@ -67,12 +62,12 @@
                         "reference_mt.fa:md5,dcff3c6dd92e01b11edf7586ca4f5a78"
                     ]
                 ],
-                "17": [
+                "16": [
                     [
-                        "reference_mt.shifted.intervals:md5,083d8f782fd4228dd9f6948ddbc64fd0"
+                        "reference_mt.intervals:md5,0930dafc5645246542112ae3d62573a3"
                     ]
                 ],
-                "18": [
+                "17": [
                     [
                         {
                             "id": "reference"
@@ -80,13 +75,22 @@
                         "reference_shift.back_chain:md5,25d682d73a9bae009f4a38b3ede5dbc8"
                     ]
                 ],
-                "19": [
+                "18": [
                     [
                         {
                             "id": "reference"
                         },
-                        "reference_shift.dict:md5,a714408661d0f6403f417304342574fc"
+                        [
+                            "reference_shift.amb:md5,ad1d6545efc080e69ad54ecdbcd0720c",
+                            "reference_shift.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
+                            "reference_shift.bwt:md5,c13d3e8c5ac29b56b31e1882e2111491",
+                            "reference_shift.pac:md5,0ead764b2f8fa112e3351ca517d2e125",
+                            "reference_shift.sa:md5,9ef1b52de302c6957f4dc82ed2f21bd1"
+                        ]
                     ]
+                ],
+                "19": [
+                    
                 ],
                 "2": [
                     [
@@ -101,7 +105,7 @@
                         {
                             "id": "reference"
                         },
-                        "reference_shift.fasta.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
+                        "reference_shift.dict:md5,a714408661d0f6403f417304342574fc"
                     ]
                 ],
                 "21": [
@@ -109,7 +113,7 @@
                         {
                             "id": "reference"
                         },
-                        "reference_shift.fasta:md5,3bb4de5911acad2dd87e8a183251d0dc"
+                        "reference_shift.fasta.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
                     ]
                 ],
                 "22": [
@@ -117,17 +121,13 @@
                         {
                             "id": "reference"
                         },
-                        [
-                            "reference_shift.amb:md5,ad1d6545efc080e69ad54ecdbcd0720c",
-                            "reference_shift.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
-                            "reference_shift.bwt:md5,c13d3e8c5ac29b56b31e1882e2111491",
-                            "reference_shift.pac:md5,0ead764b2f8fa112e3351ca517d2e125",
-                            "reference_shift.sa:md5,9ef1b52de302c6957f4dc82ed2f21bd1"
-                        ]
+                        "reference_shift.fasta:md5,3bb4de5911acad2dd87e8a183251d0dc"
                     ]
                 ],
                 "23": [
-                    
+                    [
+                        "reference_mt.shifted.intervals:md5,083d8f782fd4228dd9f6948ddbc64fd0"
+                    ]
                 ],
                 "24": [
                     
@@ -930,6 +930,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-17T09:21:48.119185152"
+        "timestamp": "2025-12-17T09:51:07.657949096"
     }
 }
