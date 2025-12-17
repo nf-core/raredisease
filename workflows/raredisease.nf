@@ -176,6 +176,7 @@ workflow RAREDISEASE {
     skip_qualimap
     skip_smncopynumbercaller
     skip_vcf2cytosure
+    val_target_bed
 
     main:
 
@@ -289,6 +290,7 @@ workflow RAREDISEASE {
         channel.value(params.ngsbits_samplegender_method),
         analysis_type,
         params.aligner,
+        val_target_bed,
         skip_ngsbits,
         skip_qualimap
     )
@@ -442,6 +444,8 @@ workflow RAREDISEASE {
                 ch_pedfile,
                 ch_reduced_penetrance,
                 ch_score_config_snv
+                false,
+                true
             )
             ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
         }
@@ -512,7 +516,9 @@ workflow RAREDISEASE {
                 ch_ranksnv_mt_in,
                 ch_pedfile,
                 ch_reduced_penetrance,
-                ch_score_config_mt
+                ch_score_config_mt,
+                false,
+                true
             )
             ch_versions = ch_versions.mix(RANK_VARIANTS_MT.out.versions)
         }
@@ -608,7 +614,9 @@ workflow RAREDISEASE {
                 ch_ranksnv_sv_in,
                 ch_pedfile,
                 ch_reduced_penetrance,
-                ch_score_config_sv
+                ch_score_config_sv,
+                true,
+                false
             )
             ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
         }
