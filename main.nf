@@ -48,22 +48,15 @@ workflow NFCORE_RAREDISEASE {
     //
 
     ch_versions                  = channel.empty()
-    ch_genome_fasta              = channel.fromPath(params.fasta).map { it -> [[id:it.simpleName], it] }.collect()
-    ch_vcfanno_extra_unprocessed = params.vcfanno_extra_resources ? channel.fromPath(params.vcfanno_extra_resources).map { it -> [[id:it.baseName], it] }.collect()
-                                                                : channel.empty()
-    ch_vep_cache_unprocessed     = params.vep_cache           ? channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
-                                                                : channel.value([[],[]])
 
     PREPARE_REFERENCES (
-        ch_genome_fasta,
-        ch_vcfanno_extra_unprocessed,
-        ch_vep_cache_unprocessed,
         params.aligner,
         params.analysis_type,
         params.bwa,
         params.bwamem2,
         params.bwameme,
         params.fai,
+        params.fasta,
         params.gnomad_af,
         params.gnomad_af_idx,
         params.known_dbsnp,
@@ -71,11 +64,16 @@ workflow NFCORE_RAREDISEASE {
         params.mt_aligner,
         params.mt_fasta,
         params.run_mt_for_wes,
+        params.run_rtgvcfeval,
+        params.sdf,
         params.sequence_dictionary,
-        params.target_bed
+        params.target_bed,
+        params.vcfanno_extra_resources,
+        params.vep_cache
     )
     .set { ch_references }
 
+    ch_genome_fasta             = ch_references.genome_fasta
     ch_bait_intervals           = ch_references.bait_intervals
     ch_cadd_header              = channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_cadd_resources           = params.cadd_resources                     ? channel.fromPath(params.cadd_resources).collect()
@@ -182,8 +180,7 @@ workflow NFCORE_RAREDISEASE {
                                                                             : channel.value([])
     ch_vcfanno_toml             = params.vcfanno_toml                       ? channel.fromPath(params.vcfanno_toml).collect()
                                                                             : channel.value([])
-    ch_vep_cache                = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") )  ? ch_references.vep_resources
-                                                                            : ( params.vep_cache    ? channel.fromPath(params.vep_cache).collect() : channel.value([]) )
+    ch_vep_cache                = ch_references.vep_resources
     ch_vep_filters_std_fmt      = params.vep_filters                        ? channel.fromPath(params.vep_filters).map { it -> [[id:'standard'],it]}.collect()
                                                                             : channel.empty()
     ch_vep_filters_scout_fmt    = params.vep_filters_scout_fmt              ? channel.fromPath(params.vep_filters_scout_fmt).map { it -> [[id:'scout'],it]}.collect()

@@ -33,15 +33,13 @@ include { UNTAR as UNTAR_VEP_CACHE                           } from '../../../mo
 
 workflow PREPARE_REFERENCES {
     take:
-        ch_genome_fasta              // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_vcfanno_extra_unprocessed // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_vep_cache                 // channel: [mandatory for annotation] [ path(cache) ]
         val_aligner
         val_analysis_type
         val_bwa
         val_bwamem2
         val_bwameme
         val_fai
+        val_fasta
         val_gnomad_af
         val_gnomad_af_idx
         val_known_dbsnp
@@ -49,8 +47,12 @@ workflow PREPARE_REFERENCES {
         val_mtaligner
         val_mtfasta
         val_run_mt_for_wes
+        val_run_rtgvcfeval
+        val_sdf
         val_genome_dict
         val_target_bed
+        val_vcfanno_extra
+        val_vep_cache
 
     main:
         ch_versions               = channel.empty()
@@ -66,59 +68,76 @@ workflow PREPARE_REFERENCES {
         ch_mt_bwamem2_index       = channel.empty()
         ch_mtshift_bwa_index      = channel.empty()
         ch_mtshift_bwamem2_index  = channel.empty()
+        ch_mtshift_backchain      = channel.empty()   
+        ch_mtshift_dict           = channel.empty()   
+        ch_mtshift_fai            = channel.empty()   
+        ch_mtshift_fasta          = channel.empty()   
+
         ch_mt_dict                = channel.empty()
         ch_mt_fai                 = channel.empty()
         ch_mt_fasta               = channel.empty()
+        ch_sdf                    = channel.empty()
         ch_sentieonbwa            = channel.empty()
         ch_shiftfasta_mtintervals = channel.empty()
         ch_target_bed_gz_tbi      = channel.value([[:],[],[]])
         ch_target_intervals       = channel.empty()
-        ch_vcfanno_extra          = channel.empty()
-        ch_vcfanno_bgzip          = channel.empty()
-        ch_vcfanno_index          = channel.empty()
+        ch_vcfanno_extra          = channel.value([])
+        ch_vep_resources          = channel.value([])
 
+        ch_genome_fasta = channel.fromPath(val_fasta).map { it -> [[id:it.simpleName], it] }.collect()
+        //
         // Genome indices
+        //
         if (!val_fai) {
-            ch_fai = SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[],[]]).fai.collect()
-            ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
+            ch_genome_fai = SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[],[]]).fai.collect()
+            ch_versions   = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
         } else {
-            ch_fai  = channel.fromPath(val_fai).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_fai = channel.fromPath(val_fai).map {it -> [[id:it.simpleName], it]}.collect()
         }
+
+        GET_CHROM_SIZES( ch_genome_fai )
 
         if (!val_genome_dict) {
             ch_genome_dict = GATK_SD(ch_genome_fasta).dict.collect()
-            ch_versions = ch_versions.mix(GATK_SD.out.versions)
+            ch_versions    = ch_versions.mix(GATK_SD.out.versions)
         } else {
             ch_genome_dict = channel.fromPath(val_genome_dict).map {it -> [[id:it.simpleName], it]}.collect()
         }
-
-        GET_CHROM_SIZES( ch_fai )
-
+        //
         // Genome alignment indices
+        //
         if (!val_bwa) {
             if (!val_aligner.equals("sentieon") || val_mtaligner.equals("bwa")) {
-                BWA_INDEX_GENOME(ch_genome_fasta).index.set{ch_bwa}
+                ch_bwa      = BWA_INDEX_GENOME(ch_genome_fasta).index.collect()
                 ch_versions = ch_versions.mix(BWA_INDEX_GENOME.out.versions)
             }
             if (val_aligner.equals("sentieon") || val_mtaligner.equals("sentieon")) {
-                SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.set{ch_sentieonbwa}
+                ch_bwa      = SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.collect()
                 ch_versions = ch_versions.mix(SENTIEON_BWAINDEX_GENOME.out.versions)
             }
+        } else if (val_bwa) {
+            ch_bwa = channel.fromPath(val_bwa).map {it -> [[id:it.simpleName], it]}.collect()
         }
+
         if (!val_bwamem2 && (val_aligner.equals("bwamem2") || val_mtaligner.equals("bwamem2"))) {
             ch_genome_bwamem2_index = BWAMEM2_INDEX_GENOME(ch_genome_fasta).index.collect()
-            ch_versions = ch_versions.mix(BWAMEM2_INDEX_GENOME.out.versions)
+            ch_versions             = ch_versions.mix(BWAMEM2_INDEX_GENOME.out.versions)
+        } else if (val_bwamem2) {
+            ch_genome_bwamem2_index = channel.fromPath(val_bwamem2).map {it -> [[id:it.simpleName], it]}.collect()
         }
+
         if (!val_bwamem2 && val_aligner.equals("bwameme")) {
             ch_genome_bwameme_index = BWAMEME_INDEX_GENOME(ch_genome_fasta).index.collect()
-            ch_versions = ch_versions.mix(BWAMEME_INDEX_GENOME.out.versions)
+            ch_versions             = ch_versions.mix(BWAMEME_INDEX_GENOME.out.versions)
+        } else if (val_bwameme) {
+            ch_genome_bwameme_index = channel.fromPath(val_bwameme).map {it -> [[id:it.simpleName], it]}.collect()
         }
-
+        //
         // MT genome indices
-
+        //
         if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
             if (!val_mtfasta) {
-                ch_mt_fasta = SAMTOOLS_EXTRACT_MT(ch_genome_fasta, ch_fai).fa.collect()
+                ch_mt_fasta = SAMTOOLS_EXTRACT_MT(ch_genome_fasta, ch_genome_fai).fa.collect()
                 ch_versions = ch_versions.mix(SAMTOOLS_EXTRACT_MT.out.versions)
             } else {
                 ch_mt_fasta = channel.fromPath(val_mtfasta).map { it -> [[id:it.simpleName], it] }.collect()
@@ -126,7 +145,14 @@ workflow PREPARE_REFERENCES {
 
             ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta, [[],[]]).fai.collect()
             ch_mt_dict = GATK_SD_MT(ch_mt_fasta).dict.collect()
+
             GATK_SHIFTFASTA(ch_mt_fasta, ch_mt_fai, ch_mt_dict)
+
+            ch_mtshift_backchain     = GATK_SHIFTFASTA.out.shift_back_chain.collect()      // channel:[ val(meta), path(backchain) ]
+            ch_mtshift_dict          = GATK_SHIFTFASTA.out.dict                            // channel:[ val(meta), path(dict) ]
+            ch_mtshift_fai           = GATK_SHIFTFASTA.out.shift_fai.collect()             // channel:[ val(meta), path(fai) ]
+            ch_mtshift_fasta         = GATK_SHIFTFASTA.out.shift_fa.collect()              // channel:[ val(meta), path(fasta) ]
+
             GATK_SHIFTFASTA.out.intervals
                 .multiMap{ _meta, files ->
                         shift_intervals:
@@ -140,25 +166,27 @@ workflow PREPARE_REFERENCES {
 
             ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_MT.out.versions,GATK_SD_MT.out.versions, GATK_SHIFTFASTA.out.versions)
         }
-
+        //
         // MT alignment indices
+        //
         if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("bwamem2")) {
             ch_mt_bwamem2_index      = BWAMEM2_INDEX_MT(ch_mt_fasta).index.collect()
-            ch_mtshift_bwamem2_index = BWAMEM2_INDEX_MT_SHIFT(GATK_SHIFTFASTA.out.shift_fa).index.collect()
+            ch_mtshift_bwamem2_index = BWAMEM2_INDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
             ch_versions              = ch_versions.mix(BWAMEM2_INDEX_MT.out.versions, BWAMEM2_INDEX_MT_SHIFT.out.versions)
         }
         if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("bwa")) {
             ch_mt_bwa_index          = BWA_INDEX_MT(ch_mt_fasta).index.collect()
-            ch_mtshift_bwa_index     = BWA_INDEX_MT_SHIFT(GATK_SHIFTFASTA.out.shift_fa).index.collect()
+            ch_mtshift_bwa_index     = BWA_INDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
             ch_versions              = ch_versions.mix(BWA_INDEX_MT.out.versions, BWA_INDEX_MT_SHIFT.out.versions)
         }
         if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("sentieon")) {
             ch_mt_bwa_index          = SENTIEON_BWAINDEX_MT(ch_mt_fasta).index.collect()
-            ch_mtshift_bwa_index     = SENTIEON_BWAINDEX_MT_SHIFT(GATK_SHIFTFASTA.out.shift_fa).index.collect()
+            ch_mtshift_bwa_index     = SENTIEON_BWAINDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
             ch_versions              = ch_versions.mix(SENTIEON_BWAINDEX_MT.out.versions, SENTIEON_BWAINDEX_MT_SHIFT.out.versions)
         }
-
+        //
         // Vcf, tab and bed indices
+        //
         if (val_known_dbsnp) {
             ch_dbsnp = channel.fromPath(val_known_dbsnp).map{ it -> [[id:it.simpleName], it] }.collect()
             if (val_known_dbsnp_tbi) {
@@ -179,14 +207,15 @@ workflow PREPARE_REFERENCES {
             }
             ch_gnomad_af_idx = ch_gnomad_af.join(ch_gnomad_idx).map {_meta, tab, idx -> [tab,idx]}.collect()                                                        
         }
-
+        //
         // Index target bed file
+        //
         if (val_target_bed) {
             ch_target_bed = channel.fromPath(params.target_bed).map{ it -> [[id:it.simpleName], it] }.collect()
  
             BEDTOOLS_PAD_TARGET_BED(
                 ch_target_bed,
-                ch_fai.map { _meta, fai -> return fai }
+                ch_genome_fai.map { _meta, fai -> return fai }
             )
             ch_target_bed_gz_tbi = TABIX_BGZIPINDEX_PADDED_BED(BEDTOOLS_PAD_TARGET_BED.out.bed).gz_tbi
 
@@ -206,74 +235,81 @@ workflow PREPARE_REFERENCES {
 
             ch_versions = ch_versions.mix(BEDTOOLS_PAD_TARGET_BED.out.versions, TABIX_BGZIPINDEX_PADDED_BED.out.versions, GATK_BILT.out.versions, GATK_ILT.out.versions, CAT_CAT_BAIT.out.versions)
         }
+        //
+        // Prepare vcfanno extra files
+        //
+        if (val_vcfanno_extra) {
+            ch_vcfanno_tabix_in = channel.fromPath(val_vcfanno_extra).map { it -> [[id:it.baseName], it] }
 
-        ch_vcfanno_extra_unprocessed
-            .branch { _meta, vcf ->
-                bgzipindex: !vcf.toString().endsWith(".gz")
-                index: vcf.toString().endsWith(".gz")
+            if (val_vcfanno_extra.endsWith(".gz")) {
+                TABIX_VCFANNOEXTRA(ch_vcfanno_tabix_in).tbi
+                    .join(ch_vcfanno_tabix_in)
+                    .map { _meta, tbi, vcf -> return [[vcf,tbi]]}
+                    .set {ch_vcfanno_extra}
+                ch_versions = ch_versions.mix(TABIX_VCFANNOEXTRA.out.versions)
+            } else {
+                TABIX_BGZIPINDEX_VCFANNOEXTRA(ch_vcfanno_tabix_in)
+                channel.empty()
+                    .mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_tbi, TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_csi)
+                    .map { _meta, vcf, index -> return [[vcf,index]] }
+                    .set {ch_vcfanno_extra}
+                ch_versions = ch_versions.mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.versions)
             }
-            .set { ch_vcfanno_tabix_in }
-
-        TABIX_VCFANNOEXTRA(ch_vcfanno_tabix_in.index).tbi
-            .join(ch_vcfanno_tabix_in.index)
-            .map { _meta, tbi, vcf -> return [[vcf,tbi]]}
-            .set {ch_vcfanno_index}
-
-        TABIX_BGZIPINDEX_VCFANNOEXTRA(ch_vcfanno_tabix_in.bgzipindex)
-        channel.empty()
-            .mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_tbi, TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_csi)
-            .map { _meta, vcf, index -> return [[vcf,index]] }
-            .set {ch_vcfanno_bgzip}
-
-        channel.empty()
-            .mix(ch_vcfanno_bgzip, ch_vcfanno_index)
-            .collect()
-            .set{ch_vcfanno_extra}
-
-        // Generate bait and target intervals
-        UNTAR_VEP_CACHE (ch_vep_cache)
-
+        }
+        //
+        // Prepare vep cache files
+        //
+        if (val_vep_cache) {
+            if (val_vep_cache.endsWith("tar.gz")) {
+                ch_vep_resources = UNTAR_VEP_CACHE (channel.fromPath(val_vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()).untar.map{ _meta, files -> [files]}.collect()
+                ch_versions      = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
+            } else {
+                ch_vep_resources = channel.fromPath(params.vep_cache).collect()
+            }
+        }
+        //
         // RTG tools
-        ch_genome_fasta.map { meta, fasta -> return [meta, fasta, [], [] ] }
-            .set {ch_rtgformat_in}
-        RTGTOOLS_FORMAT(ch_rtgformat_in)
+        //
+        if (!val_sdf && val_run_rtgvcfeval) {
+            ch_genome_fasta.map { meta, fasta -> return [meta, fasta, [], [] ] }
+                .set {ch_rtgformat_in}
+            ch_sdf      = RTGTOOLS_FORMAT(ch_rtgformat_in).out.sdf
+            ch_versions = ch_versions.mix(RTGTOOLS_FORMAT.out.versions)
+        }
 
         // Gather versions
         ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
-        ch_versions = ch_versions.mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.versions)
-        ch_versions = ch_versions.mix(TABIX_VCFANNOEXTRA.out.versions)
-        ch_versions = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
-        ch_versions = ch_versions.mix(RTGTOOLS_FORMAT.out.versions)
 
     emit:
-        dbsnp                 = ch_dbsnp                                                                     // channel: [ val(meta), path(dbsnp) ]
-        dbsnp_tbi             = ch_dbsnp_tbi                                                                 // channel: [ val(meta), path(dbsnp_idx) ]
-        genome_bwa_index      = channel.empty().mix(ch_bwa, ch_sentieonbwa).collect()                        // channel: [ val(meta), path(index) ]
-        genome_bwamem2_index  = ch_genome_bwamem2_index                                                      // channel: [ val(meta), path(index) ]
-        genome_bwameme_index  = ch_genome_bwameme_index                                                      // channel: [ val(meta), path(index) ]
-        genome_chrom_sizes    = GET_CHROM_SIZES.out.sizes.collect()                                          // channel: [ path(sizes) ]
-        genome_fai            = ch_fai                                                                       // channel: [ val(meta), path(fai) ]
-        genome_dict           = ch_genome_dict                                                               // channel: [ val(meta), path(dict) ]
-        gnomad_af_idx         = ch_gnomad_af_idx                                                             // channel: [ val(gnomad), path(idx) ]
-        sdf                   = RTGTOOLS_FORMAT.out.sdf                                                      // channel: [ val (meta), path(intervals) ]
-        mt_intervals          = ch_shiftfasta_mtintervals.intervals.collect()                                // channel: [ path(intervals) ]
-        mt_bwa_index          = ch_mt_bwa_index                                                              // channel: [ val(meta), path(index) ]
-        mt_bwamem2_index      = ch_mt_bwamem2_index                                                          // channel: [ val(meta), path(index) ]
-        mt_dict               = ch_mt_dict                                                                   // channel: [ val(meta), path(dict) ]
-        mt_fai                = ch_mt_fai                                                                    // channel: [ val(meta), path(fai) ]
-        mt_fasta              = ch_mt_fasta                                                                  // channel: [ val(meta), path(fasta) ]
-        mtshift_intervals     = ch_shiftfasta_mtintervals.shift_intervals.collect()                          // channel: [ path(intervals) ]
-        mtshift_backchain     = GATK_SHIFTFASTA.out.shift_back_chain.collect()                               // channel: [ val(meta), path(backchain) ]
-        mtshift_dict          = GATK_SHIFTFASTA.out.dict                                                     // channel: [ val(meta), path(dict) ]
-        mtshift_fai           = GATK_SHIFTFASTA.out.shift_fai.collect()                                      // channel: [ val(meta), path(fai) ]
-        mtshift_fasta         = GATK_SHIFTFASTA.out.shift_fa.collect()                                       // channel: [ val(meta), path(fasta) ]
-        mtshift_bwa_index     = ch_mtshift_bwa_index                                                         // channel: [ val(meta), path(index) ]
-        mtshift_bwamem2_index = ch_mtshift_bwamem2_index                                                     // channel: [ val(meta), path(index) ]
-        target_bed            = ch_target_bed_gz_tbi.collect()                                               // channel: [ val(meta), path(bed), path(tbi) ]
-        vcfanno_extra         = ch_vcfanno_extra.ifEmpty([[]])                                               // channel: [ [path(vcf), path(tbi)] ]
-        bait_intervals        = ch_bait_intervals                                                            // channel: [ path(intervals) ]
-        target_intervals      = ch_target_intervals                                                          // channel: [ path(interval_list) ]
-        vep_resources         = UNTAR_VEP_CACHE.out.untar.map{ _meta, files -> [files]}.collect()            // channel: [ path(cache) ]
-        versions              = ch_versions                                                                  // channel: [ path(versions.yml) ]
+        bait_intervals        = ch_bait_intervals                                   // channel:[ path(intervals) ]
+        dbsnp                 = ch_dbsnp                                            // channel:[ val(meta), path(dbsnp) ]
+        dbsnp_tbi             = ch_dbsnp_tbi                                        // channel:[ val(meta), path(dbsnp_idx) ]
+        genome_bwa_index      = ch_bwa                                              // channel:[ val(meta), path(index) ]
+        genome_bwamem2_index  = ch_genome_bwamem2_index                             // channel:[ val(meta), path(index) ]
+        genome_bwameme_index  = ch_genome_bwameme_index                             // channel:[ val(meta), path(index) ]
+        genome_chrom_sizes    = GET_CHROM_SIZES.out.sizes.collect()                 // channel:[ path(sizes) ]
+        genome_fai            = ch_genome_fai                                       // channel:[ val(meta), path(fai) ]
+        genome_fasta          = ch_genome_fasta                                     // channel:[ val(meta), path(fasta) ]
+        genome_dict           = ch_genome_dict                                      // channel:[ val(meta), path(dict) ]
+        gnomad_af_idx         = ch_gnomad_af_idx                                    // channel:[ val(gnomad), path(idx) ]
+        mt_intervals          = ch_shiftfasta_mtintervals.intervals.collect()       // channel:[ path(intervals) ]
+        mt_bwa_index          = ch_mt_bwa_index                                     // channel:[ val(meta), path(index) ]
+        mt_bwamem2_index      = ch_mt_bwamem2_index                                 // channel:[ val(meta), path(index) ]
+        mt_dict               = ch_mt_dict                                          // channel:[ val(meta), path(dict) ]
+        mt_fai                = ch_mt_fai                                           // channel:[ val(meta), path(fai) ]
+        mt_fasta              = ch_mt_fasta                                         // channel:[ val(meta), path(fasta) ]
+        mtshift_intervals     = ch_shiftfasta_mtintervals.shift_intervals.collect() // channel:[ path(intervals) ]
+        mtshift_backchain     = ch_mtshift_backchain                                // channel:[ val(meta), path(backchain) ]
+        mtshift_dict          = ch_mtshift_dict                                     // channel:[ val(meta), path(dict) ]
+        mtshift_fai           = ch_mtshift_fai                                      // channel:[ val(meta), path(fai) ]
+        mtshift_fasta         = ch_mtshift_fasta                                    // channel:[ val(meta), path(fasta) ]
+        mtshift_bwa_index     = ch_mtshift_bwa_index                                // channel:[ val(meta), path(index) ]
+        mtshift_bwamem2_index = ch_mtshift_bwamem2_index                            // channel:[ val(meta), path(index) ]
+        sdf                   = ch_sdf                                              // channel:[ val (meta), path(sdf) ]
+        target_bed            = ch_target_bed_gz_tbi.collect()                      // channel:[ val(meta), path(bed), path(tbi) ]
+        target_intervals      = ch_target_intervals                                 // channel:[ path(interval_list) ]
+        vcfanno_extra         = ch_vcfanno_extra                                    // channel:[ [path(vcf), path(tbi)] ]
+        vep_resources         = ch_vep_resources                                    // channel:[ path(cache) ]
+        versions              = ch_versions                                         // channel:[ path(versions.yml) ]
 
 }
