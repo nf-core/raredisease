@@ -33,26 +33,27 @@ include { UNTAR as UNTAR_VEP_CACHE                           } from '../../../mo
 
 workflow PREPARE_REFERENCES {
     take:
-        val_aligner
-        val_analysis_type
-        val_bwa
-        val_bwamem2
-        val_bwameme
-        val_fai
-        val_fasta
-        val_gnomad_af
-        val_gnomad_af_idx
-        val_known_dbsnp
-        val_known_dbsnp_tbi
-        val_mtaligner
-        val_mtfasta
-        val_run_mt_for_wes
-        val_run_rtgvcfeval
-        val_sdf
-        val_genome_dict
-        val_target_bed
-        val_vcfanno_extra
-        val_vep_cache
+        val_aligner                  // String: "bwa", "bwamem2", "sentieon" or "bwameme"
+        val_analysis_type            // String: "wgs", "wes", or "mito"
+        val_bwa                      // String: path to bwa index
+        val_bwamem2                  // String: path to bwamem2 index
+        val_bwameme                  // String: path to bwameme index
+        val_fai                      // String: path to genome fasta index
+        val_fasta                    // String: path to genome fasta 
+        val_gnomad_af                // String: path to gnomad allele frequency file
+        val_gnomad_af_idx            // String: path to gnomad allele frequency file's index
+        val_known_dbsnp              // String: path to dbsnp file
+        val_known_dbsnp_tbi          // String: path to dbsnp file's index
+        val_mtaligner                // String: "bwa", "bwamem2", or "sentieon"
+        val_mtfasta                  // String: path to mitochondrial fasta
+        val_run_mt_for_wes           // Boolean
+        val_run_rtgvcfeval           // Boolean
+        val_sdf                      // String: path to sdf file
+        val_genome_dict              // String: path to genome dictionary
+        val_target_bed               // String: path to target bed file
+        val_vcfanno_extra            // String: path to additional annotation files used by vcfanno 
+        val_vep_cache                // String: path to vep cache folder
+
 
     main:
         ch_versions               = channel.empty()
