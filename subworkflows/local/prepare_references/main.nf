@@ -40,7 +40,7 @@ workflow PREPARE_REFERENCES {
         val_bwamem2                  // String: path to bwamem2 index
         val_bwameme                  // String: path to bwameme index
         val_fai                      // String: path to genome fasta index
-        val_fasta                    // String: path to genome fasta 
+        val_fasta                    // String: path to genome fasta
         val_gnomad_af                // String: path to gnomad allele frequency file
         val_gnomad_af_idx            // String: path to gnomad allele frequency file's index
         val_known_dbsnp              // String: path to dbsnp file
@@ -52,7 +52,7 @@ workflow PREPARE_REFERENCES {
         val_sdf                      // String: path to sdf file
         val_genome_dict              // String: path to genome dictionary
         val_target_bed               // String: path to target bed file
-        val_vcfanno_extra            // String: path to additional annotation files used by vcfanno 
+        val_vcfanno_extra            // String: path to additional annotation files used by vcfanno
         val_vep_cache                // String: path to vep cache folder
 
 
@@ -69,10 +69,10 @@ workflow PREPARE_REFERENCES {
         ch_mt_bwamem2_index       = channel.empty()
         ch_mtshift_bwa_index      = channel.empty()
         ch_mtshift_bwamem2_index  = channel.empty()
-        ch_mtshift_backchain      = channel.empty()   
-        ch_mtshift_dict           = channel.empty()   
-        ch_mtshift_fai            = channel.empty()   
-        ch_mtshift_fasta          = channel.empty()   
+        ch_mtshift_backchain      = channel.empty()
+        ch_mtshift_dict           = channel.empty()
+        ch_mtshift_fai            = channel.empty()
+        ch_mtshift_fasta          = channel.empty()
         ch_mt_dict                = channel.empty()
         ch_mt_fai                 = channel.empty()
         ch_mt_fasta               = channel.empty()
@@ -147,10 +147,10 @@ workflow PREPARE_REFERENCES {
 
             GATK_SHIFTFASTA(ch_mt_fasta, ch_mt_fai, ch_mt_dict)
 
-            ch_mtshift_backchain     = GATK_SHIFTFASTA.out.shift_back_chain.collect() 
-            ch_mtshift_dict          = GATK_SHIFTFASTA.out.dict                       
-            ch_mtshift_fai           = GATK_SHIFTFASTA.out.shift_fai.collect()        
-            ch_mtshift_fasta         = GATK_SHIFTFASTA.out.shift_fa.collect()         
+            ch_mtshift_backchain     = GATK_SHIFTFASTA.out.shift_back_chain.collect()
+            ch_mtshift_dict          = GATK_SHIFTFASTA.out.dict
+            ch_mtshift_fai           = GATK_SHIFTFASTA.out.shift_fai.collect()
+            ch_mtshift_fasta         = GATK_SHIFTFASTA.out.shift_fa.collect()
 
             GATK_SHIFTFASTA.out.intervals
                 .multiMap{ _meta, files ->
@@ -163,8 +163,8 @@ workflow PREPARE_REFERENCES {
                 }
                 .set {ch_shiftfasta_mtintervals}
 
-            ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_MT.out.versions, 
-                                            GATK_SD_MT.out.versions, 
+            ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_MT.out.versions,
+                                            GATK_SD_MT.out.versions,
                                             GATK_SHIFTFASTA.out.versions)
         }
         //
@@ -196,7 +196,7 @@ workflow PREPARE_REFERENCES {
                 ch_dbsnp_tbi = TABIX_DBSNP(ch_dbsnp).tbi.collect()
                 ch_versions  = ch_versions.mix(TABIX_DBSNP.out.versions)
             }
-        } 
+        }
 
         if (val_gnomad_af) {
             ch_gnomad_af = channel.fromPath(val_gnomad_af).map{ it -> [[id:it.simpleName], it] }.collect()
@@ -206,7 +206,7 @@ workflow PREPARE_REFERENCES {
                 ch_gnomad_idx = TABIX_GNOMAD_AF(ch_gnomad_af).tbi.collect()
                 ch_versions  = ch_versions.mix(TABIX_GNOMAD_AF.out.versions)
             }
-            ch_gnomad_af_idx = ch_gnomad_af.join(ch_gnomad_idx).map {_meta, tab, idx -> [tab,idx]}.collect()                                                        
+            ch_gnomad_af_idx = ch_gnomad_af.join(ch_gnomad_idx).map {_meta, tab, idx -> [tab,idx]}.collect()
         }
         //
         // Index target bed file
@@ -234,10 +234,10 @@ workflow PREPARE_REFERENCES {
 
             ch_bait_intervals = CAT_CAT_BAIT ( ch_bait_intervals_cat_in ).file_out.map {_meta, inter -> inter}.collect().ifEmpty([[]])
 
-            ch_versions = ch_versions.mix(BEDTOOLS_PAD_TARGET_BED.out.versions, 
-                                            TABIX_BGZIPINDEX_PADDED_BED.out.versions, 
-                                            GATK_BILT.out.versions, 
-                                            GATK_ILT.out.versions, 
+            ch_versions = ch_versions.mix(BEDTOOLS_PAD_TARGET_BED.out.versions,
+                                            TABIX_BGZIPINDEX_PADDED_BED.out.versions,
+                                            GATK_BILT.out.versions,
+                                            GATK_ILT.out.versions,
                                             CAT_CAT_BAIT.out.versions)
         }
         //
