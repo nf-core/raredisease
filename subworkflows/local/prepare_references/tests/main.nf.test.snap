@@ -43,7 +43,7 @@
                         {
                             "id": "genome"
                         },
-                        "genome_mt.fa:md5,dcff3c6dd92e01b11edf7586ca4f5a78"
+                        "genome_mt.fa.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
                     ]
                 ],
                 "12": [
@@ -51,7 +51,7 @@
                         {
                             "id": "genome"
                         },
-                        "genome_mt.fa.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
+                        "genome_mt.fa:md5,dcff3c6dd92e01b11edf7586ca4f5a78"
                     ]
                 ],
                 "13": [
@@ -389,6 +389,7 @@
                     "versions.yml:md5,18ec352f630429e7d036f31a45b4cc9d",
                     "versions.yml:md5,1dd7f004d62b304a49613a400bdb20c8",
                     "versions.yml:md5,26eb7437d00ad47436fb6f377c232a27",
+                    "versions.yml:md5,3d14ad719ad5095ae199e915140148b6",
                     "versions.yml:md5,447a22450289bba28dd03ae4f4f92774",
                     "versions.yml:md5,467b7fc47b7222904619e8b2b789709d",
                     "versions.yml:md5,4c809981aaef975a666ac3812651bec6",
@@ -415,7 +416,7 @@
                         {
                             "id": "genome"
                         },
-                        "https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference.fasta.fai"
+                        "reference.fasta.fai:md5,bf4047e05f95deb372eb8ffd601cbc29"
                     ]
                 ],
                 "5": [
@@ -505,7 +506,7 @@
                         {
                             "id": "genome"
                         },
-                        "https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference.fasta.fai"
+                        "reference.fasta.fai:md5,bf4047e05f95deb372eb8ffd601cbc29"
                     ]
                 ],
                 "gnomad_af_idx": [
@@ -884,6 +885,7 @@
                     "versions.yml:md5,18ec352f630429e7d036f31a45b4cc9d",
                     "versions.yml:md5,1dd7f004d62b304a49613a400bdb20c8",
                     "versions.yml:md5,26eb7437d00ad47436fb6f377c232a27",
+                    "versions.yml:md5,3d14ad719ad5095ae199e915140148b6",
                     "versions.yml:md5,447a22450289bba28dd03ae4f4f92774",
                     "versions.yml:md5,467b7fc47b7222904619e8b2b789709d",
                     "versions.yml:md5,4c809981aaef975a666ac3812651bec6",
@@ -903,9 +905,9 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.6"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
         },
-        "timestamp": "2025-07-10T22:52:01.91651849"
+        "timestamp": "2025-12-15T16:15:07.860328132"
     }
 }
