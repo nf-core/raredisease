@@ -1,3 +1,4 @@
+
 //
 // Prepare reference files
 //
@@ -79,8 +80,8 @@ workflow PREPARE_REFERENCES {
         ch_shiftfasta_mtintervals = channel.empty()
         ch_target_bed_gz_tbi      = channel.value([[:],[],[]])
         ch_target_intervals       = channel.empty()
-        ch_vcfanno_extra          = channel.value([])
-        ch_vep_resources          = channel.value([])
+        ch_vcfanno_extra          = channel.value([[]])
+        ch_vep_resources          = channel.value([[]])
 
         ch_genome_fasta = channel.fromPath(val_fasta).map { it -> [[id:it.simpleName], it] }.collect()
         //
