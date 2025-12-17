@@ -417,9 +417,6 @@
                 "TABIX_ME_SPLIT": {
                     "tabix": 1.21
                 },
-                "TABIX_PBT": {
-                    "tabix": 1.2
-                },
                 "TABIX_TABIX": {
                     "tabix": 1.21
                 },
@@ -919,6 +916,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-09T10:05:22.987340316"
+        "timestamp": "2025-12-17T13:47:44.773905542"
     }
 }
