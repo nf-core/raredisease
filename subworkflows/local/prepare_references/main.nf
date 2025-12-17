@@ -41,16 +41,16 @@ workflow PREPARE_REFERENCES {
         ch_target_bed                // channel: [mandatory for WES] [ path(bed) ]
         ch_vcfanno_extra_unprocessed // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_vep_cache                 // channel: [mandatory for annotation] [ path(cache) ]
-        val_aligner
-        val_analysis_type
-        val_bwa
-        val_bwamem2
-        val_bwameme
-        val_fai
-        val_mtaligner
-        val_mtfasta
-        val_run_mt_for_wes
-        val_genome_dict
+        val_aligner                  // String: "bwa", "bwamem2", "sentieon" or "bwameme"
+        val_analysis_type            // String: "wgs", "wes", or "mito"
+        val_bwa                      // String: path to bwa index
+        val_bwamem2                  // String: path to bwamem2 index
+        val_bwameme                  // String: path to bwameme index
+        val_fai                      // String: path to genome fasta index
+        val_mtaligner                // String: "bwa", "bwamem2", or "sentieon"
+        val_mtfasta                  // String: path to mitochondrial fasta
+        val_run_mt_for_wes           // Boolean
+        val_genome_dict              // String: path to genome dictionary
 
     main:
         ch_versions              = channel.empty()
