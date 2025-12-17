@@ -57,7 +57,6 @@ workflow PREPARE_REFERENCES {
 
     main:
         ch_versions               = channel.empty()
-        ch_bgzip_tbi              = channel.empty()
         ch_bait_intervals         = channel.empty()
         ch_bwa                    = channel.empty()
         ch_genome_bwameme_index   = channel.empty()
@@ -73,12 +72,10 @@ workflow PREPARE_REFERENCES {
         ch_mtshift_dict           = channel.empty()   
         ch_mtshift_fai            = channel.empty()   
         ch_mtshift_fasta          = channel.empty()   
-
         ch_mt_dict                = channel.empty()
         ch_mt_fai                 = channel.empty()
         ch_mt_fasta               = channel.empty()
         ch_sdf                    = channel.empty()
-        ch_sentieonbwa            = channel.empty()
         ch_shiftfasta_mtintervals = channel.empty()
         ch_target_bed_gz_tbi      = channel.value([[:],[],[]])
         ch_target_intervals       = channel.empty()
@@ -149,10 +146,10 @@ workflow PREPARE_REFERENCES {
 
             GATK_SHIFTFASTA(ch_mt_fasta, ch_mt_fai, ch_mt_dict)
 
-            ch_mtshift_backchain     = GATK_SHIFTFASTA.out.shift_back_chain.collect()      // channel:[ val(meta), path(backchain) ]
-            ch_mtshift_dict          = GATK_SHIFTFASTA.out.dict                            // channel:[ val(meta), path(dict) ]
-            ch_mtshift_fai           = GATK_SHIFTFASTA.out.shift_fai.collect()             // channel:[ val(meta), path(fai) ]
-            ch_mtshift_fasta         = GATK_SHIFTFASTA.out.shift_fa.collect()              // channel:[ val(meta), path(fasta) ]
+            ch_mtshift_backchain     = GATK_SHIFTFASTA.out.shift_back_chain.collect() 
+            ch_mtshift_dict          = GATK_SHIFTFASTA.out.dict                       
+            ch_mtshift_fai           = GATK_SHIFTFASTA.out.shift_fai.collect()        
+            ch_mtshift_fasta         = GATK_SHIFTFASTA.out.shift_fa.collect()         
 
             GATK_SHIFTFASTA.out.intervals
                 .multiMap{ _meta, files ->
@@ -165,7 +162,9 @@ workflow PREPARE_REFERENCES {
                 }
                 .set {ch_shiftfasta_mtintervals}
 
-            ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_MT.out.versions,GATK_SD_MT.out.versions, GATK_SHIFTFASTA.out.versions)
+            ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_MT.out.versions, 
+                                            GATK_SD_MT.out.versions, 
+                                            GATK_SHIFTFASTA.out.versions)
         }
         //
         // MT alignment indices
@@ -213,7 +212,7 @@ workflow PREPARE_REFERENCES {
         //
         if (val_target_bed) {
             ch_target_bed = channel.fromPath(params.target_bed).map{ it -> [[id:it.simpleName], it] }.collect()
- 
+
             BEDTOOLS_PAD_TARGET_BED(
                 ch_target_bed,
                 ch_genome_fai.map { _meta, fai -> return fai }
@@ -234,7 +233,11 @@ workflow PREPARE_REFERENCES {
 
             ch_bait_intervals = CAT_CAT_BAIT ( ch_bait_intervals_cat_in ).file_out.map {_meta, inter -> inter}.collect().ifEmpty([[]])
 
-            ch_versions = ch_versions.mix(BEDTOOLS_PAD_TARGET_BED.out.versions, TABIX_BGZIPINDEX_PADDED_BED.out.versions, GATK_BILT.out.versions, GATK_ILT.out.versions, CAT_CAT_BAIT.out.versions)
+            ch_versions = ch_versions.mix(BEDTOOLS_PAD_TARGET_BED.out.versions, 
+                                            TABIX_BGZIPINDEX_PADDED_BED.out.versions, 
+                                            GATK_BILT.out.versions, 
+                                            GATK_ILT.out.versions, 
+                                            CAT_CAT_BAIT.out.versions)
         }
         //
         // Prepare vcfanno extra files
