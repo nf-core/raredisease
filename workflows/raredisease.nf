@@ -177,7 +177,7 @@ workflow RAREDISEASE {
     skip_qualimap
     skip_smncopynumbercaller
     skip_vcf2cytosure
-    
+
 
     main:
 
