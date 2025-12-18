@@ -354,6 +354,7 @@ workflow NFCORE_RAREDISEASE {
         params.analysis_type,
         params.svdb_query_bedpedbs,
         params.svdb_query_dbs,
+        params.target_bed,
         skip_me_calling,
         skip_me_annotation,
         skip_mt_annotation,

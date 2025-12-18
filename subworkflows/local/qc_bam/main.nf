@@ -36,15 +36,17 @@ workflow QC_BAM {
         ngsbits_samplegender_method // channel: [val(method)]
         val_analysis_type           // string: "wes", "wgs", or "mito"
         val_aligner                 // string: "bwa", "bwamem2", "bwameme", or "sentieon"
+        val_target_bed              // string: path to target bed file
         skip_ngsbits                // boolean
         skip_qualimap               // boolean
 
     main:
-        ch_cov      = channel.empty()
-        ch_cov_y    = channel.empty()
-        ch_versions = channel.empty()
-        ch_qualimap = channel.empty()
-        ch_ngsbits  = channel.empty()
+        ch_cov       = channel.empty()
+        ch_cov_y     = channel.empty()
+        ch_versions  = channel.empty()
+        ch_hsmetrics = channel.empty()
+        ch_qualimap  = channel.empty()
+        ch_ngsbits   = channel.empty()
 
         PICARD_COLLECTMULTIPLEMETRICS (ch_bam_bai, ch_genome_fasta, ch_genome_fai)
 
@@ -53,7 +55,10 @@ workflow QC_BAM {
             .combine(ch_target_intervals)
             .set { ch_hsmetrics_in}
 
-        PICARD_COLLECTHSMETRICS (ch_hsmetrics_in, ch_genome_fasta, ch_genome_fai, [[],[]])
+        if (val_target_bed) {
+            ch_hsmetrics = PICARD_COLLECTHSMETRICS (ch_hsmetrics_in, ch_genome_fasta, ch_genome_fai, [[],[]]).metrics
+            ch_versions  = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions)
+        }
         if (!skip_qualimap) {
             ch_qualimap = QUALIMAP_BAMQC (ch_bam, []).results
             ch_versions = ch_versions.mix(QUALIMAP_BAMQC.out.versions)
@@ -99,7 +104,6 @@ workflow QC_BAM {
 
         ch_versions = ch_versions.mix(CHROMOGRAPH_COV.out.versions)
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions)
-        ch_versions = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions)
         ch_versions = ch_versions.mix(TIDDIT_COV.out.versions)
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions)
         ch_versions = ch_versions.mix(MOSDEPTH.out.versions)
@@ -108,7 +112,7 @@ workflow QC_BAM {
 
     emit:
         multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]
-        hs_metrics       = PICARD_COLLECTHSMETRICS.out.metrics       // channel: [ val(meta), path(metrics) ]
+        hs_metrics       = ch_hsmetrics                              // channel: [ val(meta), path(metrics) ]
         qualimap_results = ch_qualimap                               // channel: [ val(meta), path(qualimap_dir) ]
         tiddit_wig       = TIDDIT_COV.out.wig                        // channel: [ val(meta), path(wig) ]
         bigwig           = UCSC_WIGTOBIGWIG.out.bw                   // channel: [ val(meta), path(bw) ]
