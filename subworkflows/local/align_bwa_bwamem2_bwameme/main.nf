@@ -45,22 +45,6 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
             BWAMEM2_MEM ( ch_reads_input, ch_bwamem2_index, ch_genome_fasta, true )
             ch_align    = BWAMEM2_MEM.out.bam
             ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions.first())
-
-            if (params.bwa_as_fallback) {
-                ch_reads_input
-                    .join(BWAMEM2_MEM.out.bam, remainder: true)
-                    .branch { meta, reads, bam ->
-                        ERROR: bam.equals(null)
-                            return [meta, reads] // return reads
-                        SUCCESS: !bam.equals(null)
-                            return [meta, bam]  // return bam
-                    }
-                    .set { ch_fallback }
-
-                BWAMEM_FALLBACK ( ch_fallback.ERROR, ch_bwa_index, ch_genome_fasta, true )
-                ch_align = ch_fallback.SUCCESS.mix(BWAMEM_FALLBACK.out.bam)
-                ch_versions = ch_versions.mix(BWAMEM_FALLBACK.out.versions.first())
-            }
         }
 
         SAMTOOLS_INDEX_ALIGN ( ch_align )
