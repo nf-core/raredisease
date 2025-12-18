@@ -148,7 +148,7 @@ workflow PREPARE_REFERENCES {
             GATK_SHIFTFASTA(ch_mt_fasta, ch_mt_fai, ch_mt_dict)
 
             ch_mtshift_backchain     = GATK_SHIFTFASTA.out.shift_back_chain.collect()
-            ch_mtshift_dict          = GATK_SHIFTFASTA.out.dict
+            ch_mtshift_dict          = GATK_SHIFTFASTA.out.dict.collect()
             ch_mtshift_fai           = GATK_SHIFTFASTA.out.shift_fai.collect()
             ch_mtshift_fasta         = GATK_SHIFTFASTA.out.shift_fa.collect()
 
