@@ -11,25 +11,30 @@ nextflow_workflow {
             params {
                 variant_caller     = "deepvariant"
                 mito_name          = "MT"
+                bait_padding       = 100
             }
             workflow {
                 """
-                input[0]  = channel.of(params.pipelines_testdata_base_path + 'reference/reference.fasta').map {it -> [[id:'genome'], it]}.collect()
-                input[1]  = channel.of(params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz').map {it -> [[id:'genome'], it]}.collect()
-                input[2]  = channel.of(params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz').map {it -> [[id:'genome'], it]}.collect()
-                input[3]  = channel.of(params.pipelines_testdata_base_path + 'reference/target.bed').map {it -> [[id:'genome'], it]}.collect()
-                input[4]  = channel.empty()
-                input[5]  = channel.of(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz').map {it -> [[id:'genome'], it]}.collect()
-                input[6]  = "bwamem2"
-                input[7]  = "wgs"
+                input[0]  = "bwamem2"
+                input[1]  = "wgs"
+                input[2]  = null
+                input[3]  = null
+                input[4]  = null
+                input[5]  = null
+                input[6]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
+                input[7]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
                 input[8]  = null
-                input[9]  = null
+                input[9]  = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
                 input[10] = null
-                input[11] = null
-                input[12] = "bwa"
-                input[13] = null
+                input[11] = "bwa"
+                input[12] = null
+                input[13] = false
                 input[14] = false
                 input[15] = null
+                input[16] = null
+                input[17] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[18] = null
+                input[19] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
                 """
             }
         }

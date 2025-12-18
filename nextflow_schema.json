@@ -399,7 +399,7 @@
                     "exists": true,
                     "format": "path",
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "pattern": "^\\S+\\.bed$",
                     "description": "Path to directory for target bed file.",
                     "help_text": "If you would like to limit your analysis to specific regions of the genome, you can pass those regions in a bed file using this option"
                 },

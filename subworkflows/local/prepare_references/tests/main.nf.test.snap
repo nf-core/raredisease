@@ -4,104 +4,88 @@
             {
                 "0": [
                     [
-                        {
-                            "id": "genome"
-                        },
-                        [
-                            "reference.amb:md5,0a85644af00f9a856d874381d24e7803",
-                            "reference.ann:md5,8fdb46970ca95a4ef54f5f1a02d233cd",
-                            "reference.bwt:md5,0d1ba8d4e0229df6abb869a69f621dc8",
-                            "reference.pac:md5,96b449e1316067fdfba91b1399687bc2",
-                            "reference.sa:md5,c5c99cdc7a3cb6224841131b4b4285fe"
-                        ]
+                        "target_bait.intervals_list:md5,84cbdac15bdfcd14b8a810e35f7ccc54"
                     ]
                 ],
                 "1": [
                     [
                         {
-                            "id": "genome"
+                            "id": "dbsnp_-138-"
                         },
-                        [
-                            "reference.fasta.0123:md5,0f0ff4414949e6787a25a563f19e2a3b",
-                            "reference.fasta.amb:md5,0a85644af00f9a856d874381d24e7803",
-                            "reference.fasta.ann:md5,8fdb46970ca95a4ef54f5f1a02d233cd",
-                            "reference.fasta.bwt.2bit.64:md5,3c0df9450afc5cb0ad5e85870829d9d0",
-                            "reference.fasta.pac:md5,96b449e1316067fdfba91b1399687bc2"
-                        ]
+                        "/nf-core/test-datasets/raredisease/reference/dbsnp_-138-.vcf.gz"
                     ]
                 ],
                 "10": [
                     [
-                        {
-                            "id": "genome"
-                        },
-                        "genome_mt.dict:md5,249ad4680360e4a9fc1e3b44ed54f568"
+                        "/nf-core/test-datasets/raredisease/reference/gnomad_reformated.tab.gz",
+                        "gnomad_reformated.tab.gz.tbi:md5,854afcf42d656c3d00a39dd9b69f66f7"
                     ]
                 ],
                 "11": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "genome_mt.fa.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
+                        [
+                            "reference_mt.amb:md5,6749f645487281112c254ab829ea048c",
+                            "reference_mt.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
+                            "reference_mt.bwt:md5,96337a6d9dc0d7afc562fee8b1afb673",
+                            "reference_mt.pac:md5,ecbea80d481b6e8e70da3f464b977d91",
+                            "reference_mt.sa:md5,7c06a2c0b4f23e785e2f85383b9d1317"
+                        ]
                     ]
                 ],
                 "12": [
-                    [
-                        {
-                            "id": "genome"
-                        },
-                        "genome_mt.fa:md5,dcff3c6dd92e01b11edf7586ca4f5a78"
-                    ]
+                    
                 ],
                 "13": [
                     [
-                        "genome_mt.shifted.intervals:md5,083d8f782fd4228dd9f6948ddbc64fd0"
+                        {
+                            "id": "reference"
+                        },
+                        "reference_mt.dict:md5,9b0db3306084213d47d83aa994b219f6"
                     ]
                 ],
                 "14": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "genome_shift.back_chain:md5,25d682d73a9bae009f4a38b3ede5dbc8"
+                        "reference_mt.fa.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
                     ]
                 ],
                 "15": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "genome_shift.dict:md5,a714408661d0f6403f417304342574fc"
+                        "reference_mt.fa:md5,dcff3c6dd92e01b11edf7586ca4f5a78"
                     ]
                 ],
                 "16": [
                     [
-                        {
-                            "id": "genome"
-                        },
-                        "genome_shift.fasta.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
+                        "reference_mt.intervals:md5,0930dafc5645246542112ae3d62573a3"
                     ]
                 ],
                 "17": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "genome_shift.fasta:md5,3bb4de5911acad2dd87e8a183251d0dc"
+                        "reference_shift.back_chain:md5,25d682d73a9bae009f4a38b3ede5dbc8"
                     ]
                 ],
                 "18": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
                         [
-                            "genome_shift.amb:md5,ad1d6545efc080e69ad54ecdbcd0720c",
-                            "genome_shift.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
-                            "genome_shift.bwt:md5,c13d3e8c5ac29b56b31e1882e2111491",
-                            "genome_shift.pac:md5,0ead764b2f8fa112e3351ca517d2e125",
-                            "genome_shift.sa:md5,9ef1b52de302c6957f4dc82ed2f21bd1"
+                            "reference_shift.amb:md5,ad1d6545efc080e69ad54ecdbcd0720c",
+                            "reference_shift.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
+                            "reference_shift.bwt:md5,c13d3e8c5ac29b56b31e1882e2111491",
+                            "reference_shift.pac:md5,0ead764b2f8fa112e3351ca517d2e125",
+                            "reference_shift.sa:md5,9ef1b52de302c6957f4dc82ed2f21bd1"
                         ]
                     ]
                 ],
@@ -109,51 +93,67 @@
                     
                 ],
                 "2": [
-                    
+                    [
+                        {
+                            "id": "dbsnp_-138-"
+                        },
+                        "dbsnp_-138-.vcf.gz.tbi:md5,6695b71d9819806d50cd908051cf4cc0"
+                    ]
                 ],
                 "20": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "gnomad_reformated.tab.gz.tbi:md5,854afcf42d656c3d00a39dd9b69f66f7"
+                        "reference_shift.dict:md5,a714408661d0f6403f417304342574fc"
                     ]
                 ],
                 "21": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "dbsnp_-138-.vcf.gz.tbi:md5,6695b71d9819806d50cd908051cf4cc0"
+                        "reference_shift.fasta.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
                     ]
                 ],
                 "22": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "genome_pad100.bed.gz:md5,7122d49f10e69c54d429a95cf4cf8fc9",
-                        "genome_pad100.bed.gz.tbi:md5,dc41277c9c9be1203643b9192260f9ac"
+                        "reference_shift.fasta:md5,3bb4de5911acad2dd87e8a183251d0dc"
                     ]
                 ],
                 "23": [
+                    [
+                        "reference_mt.shifted.intervals:md5,083d8f782fd4228dd9f6948ddbc64fd0"
+                    ]
+                ],
+                "24": [
+                    
+                ],
+                "25": [
+                    [
+                        {
+                            "id": "target"
+                        },
+                        "target_pad100.bed.gz:md5,7122d49f10e69c54d429a95cf4cf8fc9",
+                        "target_pad100.bed.gz.tbi:md5,dc41277c9c9be1203643b9192260f9ac"
+                    ]
+                ],
+                "26": [
+                    [
+                        "target_target.interval_list:md5,2959b7b0e1b298fe84ad708f447d6703"
+                    ]
+                ],
+                "27": [
                     [
                         [
                             
                         ]
                     ]
                 ],
-                "24": [
-                    [
-                        "genome_bait.intervals_list:md5,1f3d445e6e53260510710a8333d29cfe"
-                    ]
-                ],
-                "25": [
-                    [
-                        "genome_target.interval_list:md5,2959b7b0e1b298fe84ad708f447d6703"
-                    ]
-                ],
-                "26": [
+                "28": [
                     [
                         [
                             "LoFtool_scores.txt:md5,d9abd640ef22c790583b4b15d144ea6f",
@@ -384,7 +384,7 @@
                         ]
                     ]
                 ],
-                "27": [
+                "29": [
                     "versions.yml:md5,12e18a91d3ec0da87543f9fded01f1c1",
                     "versions.yml:md5,18ec352f630429e7d036f31a45b4cc9d",
                     "versions.yml:md5,1dd7f004d62b304a49613a400bdb20c8",
@@ -399,7 +399,6 @@
                     "versions.yml:md5,7479477c0c4b6eb043c58bc40ee41198",
                     "versions.yml:md5,77768b2bc91b4934bd8a3e3c392f11d2",
                     "versions.yml:md5,7ac7b6cf323372066f60eea4bcdf2a56",
-                    "versions.yml:md5,b426ba6290d3f2ccd5c547854d9e2b75",
                     "versions.yml:md5,b9ba5dac48d896837b097c56bcdd768c",
                     "versions.yml:md5,c18e81b268596fc9050cc8af016b09e8",
                     "versions.yml:md5,d73bccf32c40dcb80a722652878c6c43",
@@ -408,59 +407,89 @@
                 ],
                 "3": [
                     [
-                        "reference.fasta.fai.sizes:md5,b7bb58fb4d5cb50796e722222a13a2e6"
+                        {
+                            "id": "reference"
+                        },
+                        [
+                            "reference.amb:md5,0a85644af00f9a856d874381d24e7803",
+                            "reference.ann:md5,8fdb46970ca95a4ef54f5f1a02d233cd",
+                            "reference.bwt:md5,0d1ba8d4e0229df6abb869a69f621dc8",
+                            "reference.pac:md5,96b449e1316067fdfba91b1399687bc2",
+                            "reference.sa:md5,c5c99cdc7a3cb6224841131b4b4285fe"
+                        ]
                     ]
                 ],
                 "4": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "reference.fasta.fai:md5,bf4047e05f95deb372eb8ffd601cbc29"
+                        [
+                            "reference.fasta.0123:md5,0f0ff4414949e6787a25a563f19e2a3b",
+                            "reference.fasta.amb:md5,0a85644af00f9a856d874381d24e7803",
+                            "reference.fasta.ann:md5,8fdb46970ca95a4ef54f5f1a02d233cd",
+                            "reference.fasta.bwt.2bit.64:md5,3c0df9450afc5cb0ad5e85870829d9d0",
+                            "reference.fasta.pac:md5,96b449e1316067fdfba91b1399687bc2"
+                        ]
                     ]
                 ],
                 "5": [
-                    [
-                        {
-                            "id": "genome"
-                        },
-                        "reference.dict:md5,81abd0fc051c084405024e0927f7b436"
-                    ]
+                    
                 ],
                 "6": [
-                    
+                    [
+                        "reference.fasta.fai.sizes:md5,b7bb58fb4d5cb50796e722222a13a2e6"
+                    ]
                 ],
                 "7": [
                     [
-                        "genome_mt.intervals:md5,0930dafc5645246542112ae3d62573a3"
+                        {
+                            "id": "reference"
+                        },
+                        "reference.fasta.fai:md5,bf4047e05f95deb372eb8ffd601cbc29"
                     ]
                 ],
                 "8": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        [
-                            "genome_mt.amb:md5,6749f645487281112c254ab829ea048c",
-                            "genome_mt.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
-                            "genome_mt.bwt:md5,96337a6d9dc0d7afc562fee8b1afb673",
-                            "genome_mt.pac:md5,ecbea80d481b6e8e70da3f464b977d91",
-                            "genome_mt.sa:md5,7c06a2c0b4f23e785e2f85383b9d1317"
-                        ]
+                        "/nf-core/test-datasets/raredisease/reference/reference.fasta"
                     ]
                 ],
                 "9": [
-                    
+                    [
+                        {
+                            "id": "reference"
+                        },
+                        "reference.dict:md5,81abd0fc051c084405024e0927f7b436"
+                    ]
                 ],
                 "bait_intervals": [
                     [
-                        "genome_bait.intervals_list:md5,1f3d445e6e53260510710a8333d29cfe"
+                        "target_bait.intervals_list:md5,84cbdac15bdfcd14b8a810e35f7ccc54"
+                    ]
+                ],
+                "dbsnp": [
+                    [
+                        {
+                            "id": "dbsnp_-138-"
+                        },
+                        "/nf-core/test-datasets/raredisease/reference/dbsnp_-138-.vcf.gz"
+                    ]
+                ],
+                "dbsnp_tbi": [
+                    [
+                        {
+                            "id": "dbsnp_-138-"
+                        },
+                        "dbsnp_-138-.vcf.gz.tbi:md5,6695b71d9819806d50cd908051cf4cc0"
                     ]
                 ],
                 "genome_bwa_index": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
                         [
                             "reference.amb:md5,0a85644af00f9a856d874381d24e7803",
@@ -474,7 +503,7 @@
                 "genome_bwamem2_index": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
                         [
                             "reference.fasta.0123:md5,0f0ff4414949e6787a25a563f19e2a3b",
@@ -496,7 +525,7 @@
                 "genome_dict": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
                         "reference.dict:md5,81abd0fc051c084405024e0927f7b436"
                     ]
@@ -504,38 +533,36 @@
                 "genome_fai": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
                         "reference.fasta.fai:md5,bf4047e05f95deb372eb8ffd601cbc29"
                     ]
                 ],
-                "gnomad_af_idx": [
+                "genome_fasta": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "gnomad_reformated.tab.gz.tbi:md5,854afcf42d656c3d00a39dd9b69f66f7"
+                        "/nf-core/test-datasets/raredisease/reference/reference.fasta"
                     ]
                 ],
-                "known_dbsnp_tbi": [
+                "gnomad_af_idx": [
                     [
-                        {
-                            "id": "genome"
-                        },
-                        "dbsnp_-138-.vcf.gz.tbi:md5,6695b71d9819806d50cd908051cf4cc0"
+                        "/nf-core/test-datasets/raredisease/reference/gnomad_reformated.tab.gz",
+                        "gnomad_reformated.tab.gz.tbi:md5,854afcf42d656c3d00a39dd9b69f66f7"
                     ]
                 ],
                 "mt_bwa_index": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
                         [
-                            "genome_mt.amb:md5,6749f645487281112c254ab829ea048c",
-                            "genome_mt.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
-                            "genome_mt.bwt:md5,96337a6d9dc0d7afc562fee8b1afb673",
-                            "genome_mt.pac:md5,ecbea80d481b6e8e70da3f464b977d91",
-                            "genome_mt.sa:md5,7c06a2c0b4f23e785e2f85383b9d1317"
+                            "reference_mt.amb:md5,6749f645487281112c254ab829ea048c",
+                            "reference_mt.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
+                            "reference_mt.bwt:md5,96337a6d9dc0d7afc562fee8b1afb673",
+                            "reference_mt.pac:md5,ecbea80d481b6e8e70da3f464b977d91",
+                            "reference_mt.sa:md5,7c06a2c0b4f23e785e2f85383b9d1317"
                         ]
                     ]
                 ],
@@ -545,51 +572,51 @@
                 "mt_dict": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "genome_mt.dict:md5,249ad4680360e4a9fc1e3b44ed54f568"
+                        "reference_mt.dict:md5,9b0db3306084213d47d83aa994b219f6"
                     ]
                 ],
                 "mt_fai": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "genome_mt.fa.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
+                        "reference_mt.fa.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
                     ]
                 ],
                 "mt_fasta": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "genome_mt.fa:md5,dcff3c6dd92e01b11edf7586ca4f5a78"
+                        "reference_mt.fa:md5,dcff3c6dd92e01b11edf7586ca4f5a78"
                     ]
                 ],
                 "mt_intervals": [
                     [
-                        "genome_mt.intervals:md5,0930dafc5645246542112ae3d62573a3"
+                        "reference_mt.intervals:md5,0930dafc5645246542112ae3d62573a3"
                     ]
                 ],
                 "mtshift_backchain": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "genome_shift.back_chain:md5,25d682d73a9bae009f4a38b3ede5dbc8"
+                        "reference_shift.back_chain:md5,25d682d73a9bae009f4a38b3ede5dbc8"
                     ]
                 ],
                 "mtshift_bwa_index": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
                         [
-                            "genome_shift.amb:md5,ad1d6545efc080e69ad54ecdbcd0720c",
-                            "genome_shift.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
-                            "genome_shift.bwt:md5,c13d3e8c5ac29b56b31e1882e2111491",
-                            "genome_shift.pac:md5,0ead764b2f8fa112e3351ca517d2e125",
-                            "genome_shift.sa:md5,9ef1b52de302c6957f4dc82ed2f21bd1"
+                            "reference_shift.amb:md5,ad1d6545efc080e69ad54ecdbcd0720c",
+                            "reference_shift.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
+                            "reference_shift.bwt:md5,c13d3e8c5ac29b56b31e1882e2111491",
+                            "reference_shift.pac:md5,0ead764b2f8fa112e3351ca517d2e125",
+                            "reference_shift.sa:md5,9ef1b52de302c6957f4dc82ed2f21bd1"
                         ]
                     ]
                 ],
@@ -599,30 +626,30 @@
                 "mtshift_dict": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "genome_shift.dict:md5,a714408661d0f6403f417304342574fc"
+                        "reference_shift.dict:md5,a714408661d0f6403f417304342574fc"
                     ]
                 ],
                 "mtshift_fai": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "genome_shift.fasta.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
+                        "reference_shift.fasta.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
                     ]
                 ],
                 "mtshift_fasta": [
                     [
                         {
-                            "id": "genome"
+                            "id": "reference"
                         },
-                        "genome_shift.fasta:md5,3bb4de5911acad2dd87e8a183251d0dc"
+                        "reference_shift.fasta:md5,3bb4de5911acad2dd87e8a183251d0dc"
                     ]
                 ],
                 "mtshift_intervals": [
                     [
-                        "genome_mt.shifted.intervals:md5,083d8f782fd4228dd9f6948ddbc64fd0"
+                        "reference_mt.shifted.intervals:md5,083d8f782fd4228dd9f6948ddbc64fd0"
                     ]
                 ],
                 "sdf": [
@@ -631,15 +658,15 @@
                 "target_bed": [
                     [
                         {
-                            "id": "genome"
+                            "id": "target"
                         },
-                        "genome_pad100.bed.gz:md5,7122d49f10e69c54d429a95cf4cf8fc9",
-                        "genome_pad100.bed.gz.tbi:md5,dc41277c9c9be1203643b9192260f9ac"
+                        "target_pad100.bed.gz:md5,7122d49f10e69c54d429a95cf4cf8fc9",
+                        "target_pad100.bed.gz.tbi:md5,dc41277c9c9be1203643b9192260f9ac"
                     ]
                 ],
                 "target_intervals": [
                     [
-                        "genome_target.interval_list:md5,2959b7b0e1b298fe84ad708f447d6703"
+                        "target_target.interval_list:md5,2959b7b0e1b298fe84ad708f447d6703"
                     ]
                 ],
                 "vcfanno_extra": [
@@ -895,7 +922,6 @@
                     "versions.yml:md5,7479477c0c4b6eb043c58bc40ee41198",
                     "versions.yml:md5,77768b2bc91b4934bd8a3e3c392f11d2",
                     "versions.yml:md5,7ac7b6cf323372066f60eea4bcdf2a56",
-                    "versions.yml:md5,b426ba6290d3f2ccd5c547854d9e2b75",
                     "versions.yml:md5,b9ba5dac48d896837b097c56bcdd768c",
                     "versions.yml:md5,c18e81b268596fc9050cc8af016b09e8",
                     "versions.yml:md5,d73bccf32c40dcb80a722652878c6c43",
@@ -908,6 +934,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-15T16:15:07.860328132"
+        "timestamp": "2025-12-17T13:36:20.294622928"
     }
 }
