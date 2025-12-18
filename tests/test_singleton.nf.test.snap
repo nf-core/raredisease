@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            367,
+            361,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "tabix": 1.12
@@ -379,9 +379,6 @@
                 "TABIX_BCFTOOLS_CONCAT": {
                     "tabix": 1.21
                 },
-                "TABIX_BGZIP": {
-                    "tabix": 1.2
-                },
                 "TABIX_BGZIPINDEX_PADDED_BED": {
                     "tabix": 1.2
                 },
@@ -630,26 +627,16 @@
                 "qc_bam/hugelymodelbat_wgsmetrics_y.CollectWgsMetrics.coverage_metrics",
                 "rank_and_filter",
                 "rank_and_filter/justhusky_mt_ranked_clinical.vcf.gz",
-                "rank_and_filter/justhusky_mt_ranked_clinical.vcf.gz.csi",
-                "rank_and_filter/justhusky_mt_ranked_clinical.vcf.gz.gzi",
                 "rank_and_filter/justhusky_mt_ranked_clinical.vcf.gz.tbi",
                 "rank_and_filter/justhusky_mt_ranked_research.vcf.gz",
-                "rank_and_filter/justhusky_mt_ranked_research.vcf.gz.csi",
-                "rank_and_filter/justhusky_mt_ranked_research.vcf.gz.gzi",
                 "rank_and_filter/justhusky_mt_ranked_research.vcf.gz.tbi",
                 "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz",
-                "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz.csi",
-                "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz.gzi",
                 "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz.tbi",
                 "rank_and_filter/justhusky_snv_ranked_research.vcf.gz",
-                "rank_and_filter/justhusky_snv_ranked_research.vcf.gz.csi",
-                "rank_and_filter/justhusky_snv_ranked_research.vcf.gz.gzi",
                 "rank_and_filter/justhusky_snv_ranked_research.vcf.gz.tbi",
                 "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz",
-                "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz.csi",
                 "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz.tbi",
                 "rank_and_filter/justhusky_sv_ranked_research.vcf.gz",
-                "rank_and_filter/justhusky_sv_ranked_research.vcf.gz.csi",
                 "rank_and_filter/justhusky_sv_ranked_research.vcf.gz.tbi",
                 "repeat_expansions",
                 "repeat_expansions/hugelymodelbat_exphunter_sorted.bam",
@@ -675,6 +662,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-17T14:03:35.94640986"
+        "timestamp": "2025-12-18T17:37:33.421833397"
     }
 }

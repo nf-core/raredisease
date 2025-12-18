@@ -444,9 +444,8 @@ workflow RAREDISEASE {
                 ch_ranksnv_nuclear_in,
                 ch_pedfile,
                 ch_reduced_penetrance,
-                ch_score_config_snv
-                false,
-                true
+                ch_score_config_snv,
+                false
             )
             ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
         }
@@ -518,8 +517,7 @@ workflow RAREDISEASE {
                 ch_pedfile,
                 ch_reduced_penetrance,
                 ch_score_config_mt,
-                false,
-                true
+                false
             )
             ch_versions = ch_versions.mix(RANK_VARIANTS_MT.out.versions)
         }
@@ -616,8 +614,7 @@ workflow RAREDISEASE {
                 ch_pedfile,
                 ch_reduced_penetrance,
                 ch_score_config_sv,
-                true,
-                false
+                true
             )
             ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
         }

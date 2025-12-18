@@ -7,8 +7,7 @@ include { GENMOD_MODELS    } from '../../modules/nf-core/genmod/models/main'
 include { GENMOD_SCORE     } from '../../modules/nf-core/genmod/score/main'
 include { GENMOD_COMPOUND  } from '../../modules/nf-core/genmod/compound/main'
 include { BCFTOOLS_SORT    } from '../../modules/nf-core/bcftools/sort/main'
-include { TABIX_BGZIP      } from '../../modules/nf-core/tabix/bgzip/main'
-include { TABIX_TABIX      } from '../../modules/nf-core/tabix/tabix/main'
+include { TABIX_BGZIPTABIX } from '../../modules/nf-core/tabix/bgziptabix/main'
 
 workflow RANK_VARIANTS {
 
@@ -18,7 +17,6 @@ workflow RANK_VARIANTS {
         ch_reduced_penetrance // channel: [mandatory] [ path(pentrance) ]
         ch_score_config       // channel: [mandatory] [ path(ini) ]
         process_with_sort     // Boolean
-        process_with_tabix    // Boolean
 
     main:
         ch_versions = channel.empty()
@@ -36,21 +34,17 @@ workflow RANK_VARIANTS {
         GENMOD_COMPOUND(GENMOD_SCORE.out.vcf)
 
         if (process_with_sort) {
-            ch_vcf = BCFTOOLS_SORT(GENMOD_COMPOUND.out.vcf) // SV file needs to be sorted before indexing
+            ch_vcf = BCFTOOLS_SORT(GENMOD_COMPOUND.out.vcf).vcf // SV file needs to be sorted before indexing
             ch_versions = ch_versions.mix(BCFTOOLS_SORT.out.versions)
+        } else {
+            ch_vcf = TABIX_BGZIPTABIX(GENMOD_COMPOUND.out.vcf).gz_tbi.map {meta, vcf, _tbi -> return [meta, vcf]} //run only for SNVs
+            ch_versions = ch_versions.mix(TABIX_BGZIPTABIX.out.versions)
         }
-        if (process_with_tabix) {
-            ch_vcf = TABIX_BGZIP(GENMOD_COMPOUND.out.vcf) //run only for SNVs
-            ch_versions = ch_versions.mix(TABIX_BGZIP.out.versions)
-        }
-
-        TABIX_TABIX (ch_vcf)
 
         ch_versions = ch_versions.mix(GENMOD_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(GENMOD_MODELS.out.versions)
         ch_versions = ch_versions.mix(GENMOD_SCORE.out.versions)
         ch_versions = ch_versions.mix(GENMOD_COMPOUND.out.versions)
-        ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
 
     emit:
         vcf      = ch_vcf       // channel: [ val(meta), path(vcf) ]
