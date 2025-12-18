@@ -154,6 +154,7 @@ workflow RAREDISEASE {
     analysis_type
     svdb_query_bedpedbs
     svdb_query_dbs
+    target_bed
     skip_me_calling
     skip_me_annotation
     skip_mt_annotation
@@ -176,7 +177,7 @@ workflow RAREDISEASE {
     skip_qualimap
     skip_smncopynumbercaller
     skip_vcf2cytosure
-    val_target_bed
+    
 
     main:
 
@@ -290,7 +291,7 @@ workflow RAREDISEASE {
         channel.value(params.ngsbits_samplegender_method),
         analysis_type,
         params.aligner,
-        val_target_bed,
+        target_bed,
         skip_ngsbits,
         skip_qualimap
     )

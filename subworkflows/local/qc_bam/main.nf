@@ -41,12 +41,12 @@ workflow QC_BAM {
         skip_qualimap               // boolean
 
     main:
-        ch_cov      = channel.empty()
-        ch_cov_y    = channel.empty()
-        ch_versions = channel.empty()
-        ch_hsmetrics= channel.empty()
-        ch_qualimap = channel.empty()
-        ch_ngsbits  = channel.empty()
+        ch_cov       = channel.empty()
+        ch_cov_y     = channel.empty()
+        ch_versions  = channel.empty()
+        ch_hsmetrics = channel.empty()
+        ch_qualimap  = channel.empty()
+        ch_ngsbits   = channel.empty()
 
         PICARD_COLLECTMULTIPLEMETRICS (ch_bam_bai, ch_genome_fasta, ch_genome_fai)
 
