@@ -133,6 +133,7 @@ workflow RAREDISEASE {
     ch_score_config_snv
     ch_score_config_sv
     ch_sdf
+    ch_sentieon_pcr_indel_model
     ch_svcaller_priority
     ch_svd_bed
     ch_svd_mu
@@ -191,7 +192,6 @@ workflow RAREDISEASE {
     val_sample_id_map
     val_samtools_sort_threads
     val_save_mapped_as_cram
-    val_sentieon_dnascope_pcr_indel_model
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
     val_target_bed
@@ -364,30 +364,30 @@ workflow RAREDISEASE {
 
     if (!skip_snv_calling) {
         CALL_SNV (
+            ch_call_interval,
+            ch_case_info,
+            ch_dbsnp,
+            ch_dbsnp_tbi,
+            ch_foundin_header,
             ch_mapped.genome_marked_bam_bai,
-            ch_mapped.mt_bam_bai_gatksubwf,
-            ch_mapped.mtshift_bam_bai_gatksubwf,
             ch_genome_chrsizes,
             ch_genome_fasta,
             ch_genome_fai,
-            ch_mt_intervals,
+            ch_ml_model,
+            ch_mapped.mt_bam_bai_gatksubwf,
             ch_mt_dictionary,
             ch_mt_fai,
             ch_mt_fasta,
+            ch_mt_intervals,
+            ch_mapped.mtshift_bam_bai_gatksubwf,
             ch_mtshift_dictionary,
             ch_mtshift_fai,
             ch_mtshift_fasta,
             ch_mtshift_intervals,
             ch_mtshift_backchain,
-            ch_dbsnp,
-            ch_dbsnp_tbi,
-            ch_call_interval,
-            ch_target_bed,
-            ch_ml_model,
             ch_par_bed,
-            ch_case_info,
-            ch_foundin_header,
-            channel.value(val_sentieon_dnascope_pcr_indel_model),
+            ch_sentieon_pcr_indel_model,
+            ch_target_bed,
             val_analysis_type,
             val_variant_caller,
             val_run_mt_for_wes,

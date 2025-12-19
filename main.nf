@@ -136,6 +136,7 @@ workflow NFCORE_RAREDISEASE {
     ch_ngsbits_method           = channel.value(params.ngsbits_samplegender_method)
     ch_par_bed                  = params.par_bed                            ? channel.fromPath(params.par_bed).map{ it -> [[id:'par_bed'], it] }.collect()
                                                                             : channel.value([[],[]])
+    ch_sentieon_pcr_indel_model = channel.value(params.sentieon_dnascope_pcr_indel_model)
     ch_ploidy_model             = params.ploidy_model                       ? channel.fromPath(params.ploidy_model).map{ it -> [[id:it.simpleName], it] }.collect()
                                                                             : channel.empty()
     ch_readcount_intervals      = params.readcount_intervals                ? channel.fromPath(params.readcount_intervals).collect()
@@ -334,6 +335,7 @@ workflow NFCORE_RAREDISEASE {
         ch_score_config_snv,
         ch_score_config_sv,
         ch_sdf,
+        ch_sentieon_pcr_indel_model,
         ch_svcaller_priority,
         ch_svd_bed,
         ch_svd_mu,
@@ -392,12 +394,10 @@ workflow NFCORE_RAREDISEASE {
         params.sample_id_map,
         params.samtools_sort_threads,
         params.save_mapped_as_cram,
-        params.sentieon_dnascope_pcr_indel_model,
         params.svdb_query_bedpedbs,
         params.svdb_query_dbs,
         params.target_bed,
         params.variant_caller,
-        params.vep_genome,
         params.vep_cache_version
     )
     emit:

@@ -9,9 +9,9 @@ include { GATK4_FILTERMUTECTCALLS as  GATK4_FILTERMUTECTCALLS_MT            } fr
 workflow CALL_SNV_MT {
     take:
         ch_bam_bai    // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_fasta      // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_fai        // channel: [mandatory] [ val(meta), path(fai) ]
         ch_dict       // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_fai        // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_fasta      // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_intervals  // channel: [mandatory] [ path(interval_list) ]
 
     main:
@@ -38,11 +38,11 @@ workflow CALL_SNV_MT {
         ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
 
     emit:
-        vcf            = GATK4_FILTERMUTECTCALLS_MT.out.vcf   // channel: [ val(meta), path(vcf) ]
-        tbi            = GATK4_FILTERMUTECTCALLS_MT.out.tbi   // channel: [ val(meta), path(tbi) ]
-        stats          = GATK4_MUTECT2_MT.out.stats           // channel: [ val(meta), path(stats) ]
         filt_stats     = GATK4_FILTERMUTECTCALLS_MT.out.stats // channel: [ val(meta), path(tsv) ]
-        txt            = HAPLOCHECK_MT.out.txt                // channel: [ val(meta), path(txt) ]
         html           = HAPLOCHECK_MT.out.html               // channel: [ val(meta), path(html) ]
+        stats          = GATK4_MUTECT2_MT.out.stats           // channel: [ val(meta), path(stats) ]
+        tbi            = GATK4_FILTERMUTECTCALLS_MT.out.tbi   // channel: [ val(meta), path(tbi) ]
+        txt            = HAPLOCHECK_MT.out.txt                // channel: [ val(meta), path(txt) ]
+        vcf            = GATK4_FILTERMUTECTCALLS_MT.out.vcf   // channel: [ val(meta), path(vcf) ]
         versions       = ch_versions                          // channel: [ path(versions.yml) ]
 }

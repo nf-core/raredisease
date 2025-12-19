@@ -17,15 +17,15 @@ include { TABIX_TABIX as TABIX_ANNOTATE                         } from '../../..
 
 workflow POSTPROCESS_MT_CALLS {
     take:
-        ch_mt_vcf              // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_mtshift_vcf         // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_dictionary   // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_genome_fai          // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_mtshift_backchain   // channel: [mandatory] [ val(meta), path(backchain) ]
-        ch_case_info           // channel: [mandatory] [ val(case_info) ]
-        ch_foundin_header      // channel: [mandatory] [ path(header) ]
-        ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
+        ch_case_info         // channel: [mandatory] [ val(case_info) ]
+        ch_foundin_header    // channel: [mandatory] [ path(header) ]
+        ch_genome_chrsizes   // channel: [mandatory] [ path(chrsizes) ]
+        ch_genome_dictionary // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_genome_fai        // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_fasta      // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_mt_vcf            // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_mtshift_backchain // channel: [mandatory] [ val(meta), path(backchain) ]
+        ch_mtshift_vcf       // channel: [mandatory] [ val(meta), path(vcf) ]
 
     main:
         ch_versions = channel.empty()
@@ -135,7 +135,7 @@ workflow POSTPROCESS_MT_CALLS {
         ch_versions = ch_versions.mix(TABIX_TABIX_MT2.out.versions)
 
     emit:
-        vcf       = BCFTOOLS_ANNOTATE.out.vcf   // channel: [ val(meta), path(vcf) ]
         tbi       = TABIX_ANNOTATE.out.tbi      // channel: [ val(meta), path(tbi) ]
+        vcf       = BCFTOOLS_ANNOTATE.out.vcf   // channel: [ val(meta), path(vcf) ]
         versions  = ch_versions                 // channel: [ path(versions.yml) ]
 }

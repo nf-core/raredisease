@@ -17,16 +17,16 @@ include { ADD_VARCALLER_TO_BED                       } from '../../../modules/lo
 workflow CALL_SNV_SENTIEON {
     take:
         ch_bam_bai         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_call_interval   // channel: [mandatory] [ val(meta), path(interval) ]
+        ch_case_info       // channel: [mandatory] [ val(case_info) ]
         ch_dbsnp           // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_dbsnp_index     // channel: [mandatory] [ val(meta), path(tbi) ]
-        ch_call_interval   // channel: [mandatory] [ val(meta), path(interval) ]
-        ch_ml_model        // channel: [mandatory] [ val(meta), path(model) ]
-        ch_case_info       // channel: [mandatory] [ val(case_info) ]
-        ch_pcr_indel_model // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
         ch_foundin_header  // channel: [mandatory] [ path(header) ]
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
+        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_ml_model        // channel: [mandatory] [ val(meta), path(model) ]
+        ch_pcr_indel_model // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
 
     main:
         ch_versions = channel.empty()
@@ -121,9 +121,9 @@ workflow CALL_SNV_SENTIEON {
         ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)
 
     emit:
-        vcf      = BCFTOOLS_ANNOTATE.out.vcf      // channel: [ val(meta), path(vcf) ]
-        tabix    = TABIX_ANNOTATE.out.tbi         // channel: [ val(meta), path(tbi) ]
         gvcf     = SENTIEON_DNASCOPE.out.gvcf     // channel: [ val(meta), path(gvcf) ]
         gvcf_tbi = SENTIEON_DNASCOPE.out.gvcf_tbi // channel: [ val(meta), path(gvcf_tbi) ]
+        tabix    = TABIX_ANNOTATE.out.tbi         // channel: [ val(meta), path(tbi) ]
+        vcf      = BCFTOOLS_ANNOTATE.out.vcf      // channel: [ val(meta), path(vcf) ]
         versions = ch_versions                    // channel: [ path(versions.yml) ]
 }
