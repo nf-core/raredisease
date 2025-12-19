@@ -28,7 +28,6 @@ workflow ANNOTATE_MT_SNVS {
         skip_haplogrep3        // boolean
         val_cadd_resources     // string:  path to cadd resources file
         val_genome             // string:  GRCh37 or GRCh38
-        val_vep_genome         // string:  GRCh37 or GRCh38
         val_vep_cache_version  // string:  vep version ex: 107
 
     main:
@@ -91,7 +90,7 @@ workflow ANNOTATE_MT_SNVS {
         // Annotating with ensembl Vep
         ENSEMBLVEP_MT(
             ch_vep_in,
-            val_vep_genome,
+            val_genome,
             "homo_sapiens",
             val_vep_cache_version,
             ch_vep_cache,

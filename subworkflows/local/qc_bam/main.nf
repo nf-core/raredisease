@@ -20,25 +20,25 @@ include { VERIFYBAMID_VERIFYBAMID2                                 } from '../..
 workflow QC_BAM {
 
     take:
-        ch_bam                      // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_bam_bai                  // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_genome_fasta             // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai               // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_bait_intervals           // channel: [mandatory] [ path(intervals_list) ]
-        ch_target_intervals         // channel: [mandatory] [ path(intervals_list) ]
-        ch_chrom_sizes              // channel: [mandatory] [ path(sizes) ]
-        ch_intervals_wgs            // channel: [mandatory] [ path(intervals) ]
-        ch_intervals_y              // channel: [mandatory] [ path(intervals) ]
-        ch_svd_bed                  // channel: [optional] [ path(bed) ]
-        ch_svd_mu                   // channel: [optional] [ path(meanpath) ]
-        ch_svd_ud                   // channel: [optional] [ path(ud) ]
-        ch_sambamba_bed             // channel: [optional] [ val(meta), path(bed) ]
-        ngsbits_samplegender_method // channel: [val(method)]
-        val_analysis_type           // string: "wes", "wgs", or "mito"
-        val_aligner                 // string: "bwa", "bwamem2", "bwameme", or "sentieon"
-        val_target_bed              // string: path to target bed file
-        skip_ngsbits                // boolean
-        skip_qualimap               // boolean
+        ch_bam                          // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_bam_bai                      // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_fasta                 // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai                   // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_bait_intervals               // channel: [mandatory] [ path(intervals_list) ]
+        ch_target_intervals             // channel: [mandatory] [ path(intervals_list) ]
+        ch_chrom_sizes                  // channel: [mandatory] [ path(sizes) ]
+        ch_intervals_wgs                // channel: [mandatory] [ path(intervals) ]
+        ch_intervals_y                  // channel: [mandatory] [ path(intervals) ]
+        ch_svd_bed                      // channel: [optional] [ path(bed) ]
+        ch_svd_mu                       // channel: [optional] [ path(meanpath) ]
+        ch_svd_ud                       // channel: [optional] [ path(ud) ]
+        ch_sambamba_bed                 // channel: [optional] [ val(meta), path(bed) ]
+        val_analysis_type               // string: "wes", "wgs", or "mito"
+        val_aligner                     // string: "bwa", "bwamem2", "bwameme", or "sentieon"
+        val_ngsbits_samplegender_method // channel: [val(method)]
+        val_target_bed                  // string: path to target bed file
+        skip_ngsbits                    // boolean
+        skip_qualimap                   // boolean
 
     main:
         ch_cov       = channel.empty()
@@ -94,7 +94,7 @@ workflow QC_BAM {
         }
         // Check sex
         if (!skip_ngsbits) {
-            NGSBITS_SAMPLEGENDER(ch_bam_bai, ch_genome_fasta, ch_genome_fai, ngsbits_samplegender_method)
+            NGSBITS_SAMPLEGENDER(ch_bam_bai, ch_genome_fasta, ch_genome_fai, channel.value(val_ngsbits_samplegender_method))
             ch_ngsbits  = NGSBITS_SAMPLEGENDER.out.tsv
             ch_versions = ch_versions.mix(NGSBITS_SAMPLEGENDER.out.versions)
         }

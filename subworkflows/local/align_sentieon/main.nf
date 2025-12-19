@@ -10,17 +10,17 @@ include { SAMTOOLS_VIEW as EXTRACT_ALIGNMENTS      } from '../../../modules/nf-c
 
 workflow ALIGN_SENTIEON {
     take:
-        ch_reads_input         // channel: [mandatory] [ val(meta), path(reads_input) ]
-        ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai          // channel: [mandatory] [ val(meta), path(fai) ]
         ch_bwa_index           // channel: [mandatory] [ val(meta), path(bwa_index) ]
+        ch_genome_fai          // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_input_reads         // channel: [mandatory] [ val(meta), path(reads_input) ]
         val_extract_alignments //  string: boolean
         val_platform           //  string: [mandatory] default: illumina
 
     main:
         ch_versions = channel.empty()
 
-        SENTIEON_BWAMEM ( ch_reads_input, ch_bwa_index, ch_genome_fasta, ch_genome_fai )
+        SENTIEON_BWAMEM ( ch_input_reads, ch_bwa_index, ch_genome_fasta, ch_genome_fai )
 
         SENTIEON_BWAMEM.out
             .bam_and_bai

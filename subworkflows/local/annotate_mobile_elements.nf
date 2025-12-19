@@ -16,7 +16,7 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
         ch_genome_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_dictionary    // channel: [mandatory] [ val(meta), path(dict) ]
         ch_vep_cache            // channel: [mandatory] [ path(cache) ]
-        val_vep_genome          // string: [mandatory] GRCh37 or GRCh38
+        val_genome              // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version   // string: [mandatory] default: 107
         ch_vep_extra_files      // channel: [mandatory] [ path(files) ]
 
@@ -56,7 +56,7 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
 
         ENSEMBLVEP_ME(
             ch_vep_in,
-            val_vep_genome,
+            val_genome,
             "homo_sapiens",
             val_vep_cache_version,
             ch_vep_cache,

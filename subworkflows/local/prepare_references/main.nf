@@ -212,7 +212,7 @@ workflow PREPARE_REFERENCES {
         // Index target bed file
         //
         if (val_target_bed) {
-            ch_target_bed = channel.fromPath(params.target_bed).map{ it -> [[id:it.simpleName], it] }.collect()
+            ch_target_bed = channel.fromPath(val_target_bed).map{ it -> [[id:it.simpleName], it] }.collect()
 
             BEDTOOLS_PAD_TARGET_BED(
                 ch_target_bed,
@@ -269,7 +269,7 @@ workflow PREPARE_REFERENCES {
                 ch_vep_resources = UNTAR_VEP_CACHE (channel.fromPath(val_vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()).untar.map{ _meta, files -> [files]}.collect()
                 ch_versions      = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
             } else {
-                ch_vep_resources = channel.fromPath(params.vep_cache).collect()
+                ch_vep_resources = channel.fromPath(val_vep_cache).collect()
             }
         }
         //

@@ -12,13 +12,13 @@ include { SAMTOOLS_SORT as SAMTOOLS_SORT_MT                                 } fr
 
 workflow ALIGN_MT {
     take:
-        ch_fastq         // channel: [mandatory] [ val(meta), [ path(reads) ] ]
-        ch_ubam          // channel: [mandatory] [ val(meta), path(bam) ]
         ch_bwaindex      // channel: [mandatory for sentieon] [ val(meta), path(index) ]
         ch_bwamem2index  // channel: [mandatory for bwamem2] [ val(meta), path(index) ]
-        ch_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_dict          // channel: [mandatory] [ val(meta), path(dict) ]
         ch_fai           // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fastq         // channel: [mandatory] [ val(meta), [ path(reads) ] ]
+        ch_ubam          // channel: [mandatory] [ val(meta), path(bam) ]
         val_mt_aligner   // string:  'bwa', 'bwamem2', or 'sentieon'
 
     main:
@@ -55,7 +55,7 @@ workflow ALIGN_MT {
         ch_versions = ch_versions.mix(SAMTOOLS_SORT_MT.out.versions.first())
 
     emit:
-        marked_bam  = SAMTOOLS_SORT_MT.out.bam   // channel: [ val(meta), path(bam) ]
         marked_bai  = SAMTOOLS_SORT_MT.out.bai   // channel: [ val(meta), path(bai) ]
+        marked_bam  = SAMTOOLS_SORT_MT.out.bam   // channel: [ val(meta), path(bam) ]
         versions    = ch_versions                // channel: [ path(versions.yml) ]
 }

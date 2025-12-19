@@ -41,7 +41,6 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_genome_chrsizes    // channel: [mandatory] [ path(sizes) ]
         val_cadd_resources    // string: path to cadd resources file
         val_genome            // string: GRCh37 or GRCh38
-        val_vep_genome        // string: GRCh37 or GRCh38
         val_vep_cache_version // string:  vep version ex: 107
 
     main:
@@ -144,7 +143,7 @@ workflow ANNOTATE_GENOME_SNVS {
         // Annotating with ensembl Vep
         ENSEMBLVEP_SNV(
             ch_vep_in,
-            val_vep_genome,
+            val_genome,
             "homo_sapiens",
             val_vep_cache_version,
             ch_vep_cache,

@@ -12,22 +12,22 @@ include { TABIX_TABIX as TABIX_VEP        } from '../../modules/nf-core/tabix/ta
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
     take:
-        ch_vcf                // channel: [mandatory] [ val(meta), path(vcf) ]
-        svdb_query_bedpedbs   // String: [optional] params.svdb_query_bedpedbs
-        svdb_query_dbs        // String: [optional] params.svdb_query_dbs
-        val_vep_genome        // string: [mandatory] GRCh37 or GRCh38
-        val_vep_cache_version // string: [mandatory] default: 107
-        ch_svdb_bedpedbs      // channel: [optional]
-        ch_svdb_dbs           // channel: [optional]
-        ch_vep_cache          // channel: [mandatory] [ path(cache) ]
-        ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_dictionary  // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_vep_extra_files    // channel: [mandatory] [ path(files) ]
+        ch_vcf                  // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_svdb_bedpedbs        // channel: [optional]
+        ch_svdb_dbs             // channel: [optional]
+        ch_vep_cache            // channel: [mandatory] [ path(cache) ]
+        ch_genome_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_dictionary    // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_vep_extra_files      // channel: [mandatory] [ path(files) ]
+        val_svdb_query_bedpedbs // String: [optional] params.svdb_query_bedpedbs
+        val_svdb_query_dbs      // String: [optional] params.svdb_query_dbs
+        val_genome              // string: [mandatory] GRCh37 or GRCh38
+        val_vep_cache_version   // string: [mandatory] default: 107
 
     main:
         ch_versions      = channel.empty()
 
-        if (svdb_query_dbs) {
+        if (val_svdb_query_dbs) {
             ch_svdb_dbs
                 .multiMap { file, in_freq_info_key, in_allele_count_info_key, out_freq_info_key, out_allele_count_info_key ->
                     vcf_dbs:  file
@@ -52,7 +52,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             ch_versions = ch_versions.mix(SVDB_QUERY_DB.out.versions)
         }
 
-        if (svdb_query_bedpedbs) {
+        if (val_svdb_query_bedpedbs) {
             ch_svdb_bedpedbs
                 .multiMap { file, in_freq_info_key, in_allele_count_info_key, out_freq_info_key, out_allele_count_info_key ->
                     bedpedbs: file
@@ -90,7 +90,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
         ENSEMBLVEP_SV(
             ch_vep_in,
-            val_vep_genome,
+            val_genome,
             "homo_sapiens",
             val_vep_cache_version,
             ch_vep_cache,
