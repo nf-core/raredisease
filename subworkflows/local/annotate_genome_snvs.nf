@@ -40,6 +40,7 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_genome_fai         // channel: [mandatory] [ path(fai) ]
         ch_genome_chrsizes    // channel: [mandatory] [ path(sizes) ]
         val_cadd_resources    // string: path to cadd resources file
+        val_genome            // string: GRCh37 or GRCh38
         val_vep_genome        // string: GRCh37 or GRCh38
         val_vep_cache_version // string:  vep version ex: 107
 
@@ -118,7 +119,8 @@ workflow ANNOTATE_GENOME_SNVS {
                 ch_cadd_in,
                 ch_cadd_header,
                 ch_cadd_resources,
-                ch_genome_fai
+                ch_genome_fai,
+                val_genome
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
             ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)

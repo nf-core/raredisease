@@ -41,7 +41,8 @@ nextflow_workflow {
                 input[1] = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
                 input[2] = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
                 input[3] = SENTIEON_BWAINDEX.out.index
-                input[4] = "illumina"
+                input[4] = false
+                input[5] = "illumina"
                 """
             }
         }

@@ -103,6 +103,7 @@ workflow ALIGN {
                 ch_genome_fasta,
                 ch_genome_fai,
                 ch_genome_bwaindex,
+                val_extract_alignments,
                 val_platform
             )
             ch_sentieon_bam    = ALIGN_SENTIEON.out.marked_bam

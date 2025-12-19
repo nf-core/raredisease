@@ -188,6 +188,7 @@ workflow RAREDISEASE {
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
     val_target_bed
+    val_vep_genome
     val_vep_cache_version
 
     main:
@@ -411,6 +412,7 @@ workflow RAREDISEASE {
                 ch_genome_chrsizes,
                 val_cadd_resources,
                 val_genome,
+                val_vep_genome,
                 val_vep_cache_version
             ).set { ch_snv_annotate }
             ch_versions = ch_versions.mix(ch_snv_annotate.versions)
@@ -483,6 +485,7 @@ workflow RAREDISEASE {
                 skip_haplogrep3,
                 val_cadd_resources,
                 val_genome,
+                val_vep_genome,
                 val_vep_cache_version
             ).set { ch_mt_annotate }
             ch_versions = ch_versions.mix(ch_mt_annotate.versions)

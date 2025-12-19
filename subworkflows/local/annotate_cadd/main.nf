@@ -19,12 +19,13 @@ workflow ANNOTATE_CADD {
         ch_header         // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources // channel: [mandatory] [ path(dir) ]
         ch_fai            // channel: [optional]  [ path(fai) ]
+        val_genome        //  string: GRCh37 or GRCh37
 
     main:
         ch_versions       = channel.empty()
         ch_rename_chrs    = channel.empty()
 
-        if (params.genome_build == 'GRCh38') {
+        if (val_genome.equals('GRCh38')) {
 
             REFERENCE_TO_CADD_CHRNAMES ( ch_fai , [], false )
             ch_versions = ch_versions.mix(REFERENCE_TO_CADD_CHRNAMES.out.versions)

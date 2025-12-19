@@ -27,6 +27,7 @@ workflow ANNOTATE_MT_SNVS {
         ch_fai                 // channel: [mandatory] [ path(fai) ]
         skip_haplogrep3        // boolean
         val_cadd_resources     // string:  path to cadd resources file
+        val_genome             // string:  GRCh37 or GRCh38
         val_vep_genome         // string:  GRCh37 or GRCh38
         val_vep_cache_version  // string:  vep version ex: 107
 
@@ -63,7 +64,8 @@ workflow ANNOTATE_MT_SNVS {
                 ZIP_TABIX_VCFANNO_MT.out.gz_tbi,
                 ch_cadd_header,
                 ch_cadd_resources,
-                ch_fai
+                ch_fai,
+                val_genome
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
             ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)

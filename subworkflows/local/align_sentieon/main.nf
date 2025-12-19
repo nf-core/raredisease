@@ -10,11 +10,12 @@ include { SAMTOOLS_VIEW as EXTRACT_ALIGNMENTS      } from '../../../modules/nf-c
 
 workflow ALIGN_SENTIEON {
     take:
-        ch_reads_input     // channel: [mandatory] [ val(meta), path(reads_input) ]
-        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_bwa_index       // channel: [mandatory] [ val(meta), path(bwa_index) ]
-        val_platform       // string:  [mandatory] default: illumina
+        ch_reads_input         // channel: [mandatory] [ val(meta), path(reads_input) ]
+        ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai          // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_bwa_index           // channel: [mandatory] [ val(meta), path(bwa_index) ]
+        val_extract_alignments //  string: boolean
+        val_platform           //  string: [mandatory] default: illumina
 
     main:
         ch_versions = channel.empty()
@@ -39,7 +40,7 @@ workflow ALIGN_SENTIEON {
         ch_bam_bai = merge_bams_in.single.mix(SENTIEON_READWRITER.out.output_index)
 
         // GET ALIGNMENT FROM SELECTED CONTIGS
-        if (params.extract_alignments) {
+        if (val_extract_alignments) {
             EXTRACT_ALIGNMENTS( ch_bam_bai, ch_genome_fasta, [], 'bai')
             ch_bam_bai = EXTRACT_ALIGNMENTS.out.bam.join(EXTRACT_ALIGNMENTS.out.bai, failOnMismatch:true, failOnDuplicate:true)
             ch_versions = ch_versions.mix(EXTRACT_ALIGNMENTS.out.versions.first())
