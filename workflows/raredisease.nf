@@ -117,6 +117,7 @@ workflow RAREDISEASE {
     ch_mtshift_fai
     ch_mtshift_fasta
     ch_mtshift_intervals
+    ch_ngsbits_method
     ch_par_bed
     ch_pedfile
     ch_ploidy_model
@@ -184,7 +185,6 @@ workflow RAREDISEASE {
     val_mt_subsample_approach
     val_mt_subsample_rd
     val_mt_subsample_seed
-    val_ngsbits_samplegender_method
     val_platform
     val_run_mt_for_wes
     val_run_rtgvcfeval
@@ -297,20 +297,20 @@ workflow RAREDISEASE {
     QC_BAM (
         ch_mapped.genome_marked_bam,
         ch_mapped.genome_marked_bam_bai,
-        ch_genome_fasta,
-        ch_genome_fai,
         ch_bait_intervals,
-        ch_target_intervals,
         ch_genome_chrsizes,
+        ch_genome_fai,
+        ch_genome_fasta,
         ch_intervals_wgs,
         ch_intervals_y,
+        ch_ngsbits_method,
         ch_svd_bed,
         ch_svd_mu,
         ch_svd_ud,
         ch_sambamba_bed,
+        ch_target_intervals,
         val_analysis_type,
         val_aligner,
-        val_ngsbits_samplegender_method,
         val_target_bed,
         skip_ngsbits,
         skip_qualimap

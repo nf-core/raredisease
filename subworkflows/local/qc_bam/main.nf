@@ -22,20 +22,20 @@ workflow QC_BAM {
     take:
         ch_bam                          // channel: [mandatory] [ val(meta), path(bam) ]
         ch_bam_bai                      // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_genome_fasta                 // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai                   // channel: [mandatory] [ val(meta), path(fai) ]
         ch_bait_intervals               // channel: [mandatory] [ path(intervals_list) ]
-        ch_target_intervals             // channel: [mandatory] [ path(intervals_list) ]
-        ch_chrom_sizes                  // channel: [mandatory] [ path(sizes) ]
+        ch_genome_chrsizes              // channel: [mandatory] [ path(sizes) ]
+        ch_genome_fai                   // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_fasta                 // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_intervals_wgs                // channel: [mandatory] [ path(intervals) ]
         ch_intervals_y                  // channel: [mandatory] [ path(intervals) ]
+        ch_ngsbits_method               // channel: [val(method)]
         ch_svd_bed                      // channel: [optional] [ path(bed) ]
         ch_svd_mu                       // channel: [optional] [ path(meanpath) ]
         ch_svd_ud                       // channel: [optional] [ path(ud) ]
         ch_sambamba_bed                 // channel: [optional] [ val(meta), path(bed) ]
+        ch_target_intervals             // channel: [mandatory] [ path(intervals_list) ]
         val_analysis_type               // string: "wes", "wgs", or "mito"
         val_aligner                     // string: "bwa", "bwamem2", "bwameme", or "sentieon"
-        val_ngsbits_samplegender_method // channel: [val(method)]
         val_target_bed                  // string: path to target bed file
         skip_ngsbits                    // boolean
         skip_qualimap                   // boolean
@@ -66,7 +66,7 @@ workflow QC_BAM {
 
         TIDDIT_COV (ch_bam, [[],[]]) // 2nd pos. arg is req. only for cram input
 
-        UCSC_WIGTOBIGWIG (TIDDIT_COV.out.wig, ch_chrom_sizes)
+        UCSC_WIGTOBIGWIG (TIDDIT_COV.out.wig, ch_genome_chrsizes)
 
         CHROMOGRAPH_COV([[:],[]], TIDDIT_COV.out.wig, [[:],[]], [[:],[]], [[:],[]], [[:],[]], [[:],[]])
 
@@ -94,7 +94,7 @@ workflow QC_BAM {
         }
         // Check sex
         if (!skip_ngsbits) {
-            NGSBITS_SAMPLEGENDER(ch_bam_bai, ch_genome_fasta, ch_genome_fai, channel.value(val_ngsbits_samplegender_method))
+            NGSBITS_SAMPLEGENDER(ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_ngsbits_method)
             ch_ngsbits  = NGSBITS_SAMPLEGENDER.out.tsv
             ch_versions = ch_versions.mix(NGSBITS_SAMPLEGENDER.out.versions)
         }
