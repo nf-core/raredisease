@@ -397,7 +397,6 @@ workflow NFCORE_RAREDISEASE {
         params.svdb_query_dbs,
         params.target_bed,
         params.variant_caller,
-        params.vep_genome,
         params.vep_cache_version
     )
     emit:
