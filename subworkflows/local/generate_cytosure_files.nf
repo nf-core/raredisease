@@ -9,11 +9,12 @@ include { VCF2CYTOSURE                                  } from '../../modules/nf
 
 workflow GENERATE_CYTOSURE_FILES {
     take:
-        ch_vcf           // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_tbi           // channel: [mandatory] [ val(meta), path(vcf_index) ]
-        ch_bam           // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_sample_id_map // channel: [optional] [val(id), val(id)]
-        ch_blacklist     // channel: [optional] [path(blacklist)]
+        ch_vcf            // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_tbi            // channel: [mandatory] [ val(meta), path(vcf_index) ]
+        ch_bam            // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_sample_id_map  // channel: [optional] [val(id), val(id)]
+        ch_blacklist      // channel: [optional] [path(blacklist)]
+        val_sample_id_map // string: path to sample_id_map file
 
     main:
         ch_versions     = channel.empty()
@@ -48,7 +49,7 @@ workflow GENERATE_CYTOSURE_FILES {
         // Split vcf into sample vcf:s and frequency filter
         SPLIT_AND_FILTER_SV_VCF ( ch_sample_vcf, [], [], [] )
 
-        if (params.sample_id_map != null) {
+        if (!val_sample_id_map.equals(null)) {
 
             SPLIT_AND_FILTER_SV_VCF.out.vcf
                 .map { meta, vcf -> return [meta, vcf, [], []]}

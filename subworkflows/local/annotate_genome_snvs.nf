@@ -31,8 +31,6 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_vcfanno_resources  // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
         ch_vcfanno_lua        // channel: [mandatory] [ path(lua) ]
         ch_vcfanno_toml       // channel: [mandatory] [ path(toml) ]
-        val_vep_genome        // string: [mandatory] GRCh37 or GRCh38
-        val_vep_cache_version // string: [mandatory] default: 107
         ch_vep_cache          // channel: [mandatory] [ path(cache) ]
         ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_gnomad_af          // channel: [optional] [ path(tab), path(tbi) ]
@@ -41,6 +39,9 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_vep_extra_files    // channel: [mandatory] [ path(files) ]
         ch_genome_fai         // channel: [mandatory] [ path(fai) ]
         ch_genome_chrsizes    // channel: [mandatory] [ path(sizes) ]
+        val_cadd_resources    // string: path to cadd resources file
+        val_vep_genome        // string: GRCh37 or GRCh38
+        val_vep_cache_version // string:  vep version ex: 107
 
     main:
         ch_cadd_vcf       = channel.empty()
@@ -106,7 +107,7 @@ workflow ANNOTATE_GENOME_SNVS {
         BCFTOOLS_VIEW(ZIP_TABIX_VCFANNO.out.gz_tbi, [], [], [])  // filter on frequencies
 
         // Annotating with CADD
-        if (params.cadd_resources != null) {
+        if (!val_cadd_resources.equals(null)) {
             TABIX_BCFTOOLS_VIEW (BCFTOOLS_VIEW.out.vcf)
 
             BCFTOOLS_VIEW.out.vcf

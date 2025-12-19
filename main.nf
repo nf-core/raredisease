@@ -351,10 +351,6 @@ workflow NFCORE_RAREDISEASE {
         ch_vep_cache,
         ch_vep_extra_files,
         ch_versions,
-        params.analysis_type,
-        params.svdb_query_bedpedbs,
-        params.svdb_query_dbs,
-        params.target_bed,
         skip_me_calling,
         skip_me_annotation,
         skip_mt_annotation,
@@ -376,7 +372,23 @@ workflow NFCORE_RAREDISEASE {
         skip_peddy,
         skip_qualimap,
         skip_smncopynumbercaller,
-        skip_vcf2cytosure
+        skip_vcf2cytosure,
+        params.aligner,
+        params.analysis_type,
+        params.cadd_resources,
+        params.extract_alignments,
+        params.genome,
+        params.mbuffer_mem,
+        params.mt_aligner,
+        params.platform,
+        params.run_mt_for_wes,
+        params.sample_id_map,
+        params.samtools_sort_threads,
+        params.save_mapped_as_cram,
+        params.svdb_query_bedpedbs,
+        params.svdb_query_dbs,
+        params.target_bed,
+        params.vep_cache_version
     )
     emit:
     multiqc_report = RAREDISEASE.out.multiqc_report // channel: /path/to/multiqc_report.html

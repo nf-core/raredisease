@@ -98,15 +98,16 @@ nextflow_workflow {
                 input[15] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
                 input[16] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
                 input[17] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
-                input[18] = 3072
-                input[19] = "illumina"
-                input[20] = 4
-                input[21] = "bwamem2"
-                input[22] = "bwamem2"
-                input[23] = "wgs"
-                input[24] = false
-                input[25] = true
-                input[26] = false
+                input[18] = false
+                input[19] = "bwamem2"
+                input[20] = "wgs"
+                input[21] = false
+                input[22] = 3072
+                input[23] = "bwamem2"
+                input[24] = "illumina"
+                input[25] = false
+                input[26] = 4
+                input[27] = true
                 """
             }
         }
@@ -198,15 +199,16 @@ nextflow_workflow {
                 input[15] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
                 input[16] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
                 input[17] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
-                input[18] = 3072
-                input[19] = "illumina"
-                input[20] = 4
-                input[21] = "bwamem2"
-                input[22] = "bwamem2"
-                input[23] = "wes"
-                input[24] = false
+                input[18] = false
+                input[19] = "bwamem2"
+                input[20] = "wes"
+                input[21] = false
+                input[22] = 3072
+                input[23] = "bwamem2"
+                input[24] = "illumina"
                 input[25] = false
-                input[26] = false
+                input[26] = 4
+                input[27] = false
                 """
             }
         }
@@ -289,15 +291,16 @@ nextflow_workflow {
                 input[15] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
                 input[16] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
                 input[17] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
-                input[18] = 3072
-                input[19] = "illumina"
-                input[20] = 4
-                input[21] = "bwameme"
-                input[22] = "bwamem2"
-                input[23] = "wgs"
-                input[24] = false
-                input[25] = true
-                input[26] = true
+                input[18] = true
+                input[19] = "bwameme"
+                input[20] = "wgs"
+                input[21] = false
+                input[22] = 3072
+                input[23] = "bwamem2"
+                input[24] = "illumina"
+                input[25] = false
+                input[26] = 4
+                input[27] = true
                 """
             }
         }

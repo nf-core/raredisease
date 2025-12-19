@@ -17,17 +17,17 @@ include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-c
 
 workflow ALIGN_BWA_BWAMEM2_BWAMEME {
     take:
-        ch_reads_input     // channel: [mandatory] [ val(meta), path(reads_input) ]
-        ch_bwa_index       // channel: [mandatory] [ val(meta), path(bwa_index) ]
-        ch_bwamem2_index   // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
-        ch_bwameme_index   // channel: [mandatory] [ val(meta), path(bwameme_index) ]
-        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
-        val_mbuffer_mem    // integer: [mandatory] default: 3072
-        val_platform       // string:  [mandatory] default: illumina
-        val_sort_threads   // integer: [mandatory] default: 4
-        val_aligner        // string:  'bwa', 'bwamem2', 'bwameme', or 'sentieon'
-        extract_alignments // boolean
+        ch_reads_input         // channel: [mandatory] [ val(meta), path(reads_input) ]
+        ch_bwa_index           // channel: [mandatory] [ val(meta), path(bwa_index) ]
+        ch_bwamem2_index       // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
+        ch_bwameme_index       // channel: [mandatory] [ val(meta), path(bwameme_index) ]
+        ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai          // channel: [mandatory] [ val(meta), path(fai) ]
+        val_aligner            // string:  'bwa', 'bwamem2', 'bwameme', or 'sentieon'
+        val_extract_alignments // boolean
+        val_mbuffer_mem        // integer: [mandatory] default: 3072
+        val_platform           // string:  [mandatory] default: illumina
+        val_sort_threads       // integer: [mandatory] default: 4
 
     main:
         ch_versions = channel.empty()
@@ -72,7 +72,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
 
         // GET ALIGNMENT FROM SELECTED CONTIGS
-        if (extract_alignments) {
+        if (val_extract_alignments) {
             SAMTOOLS_INDEX_EXTRACT ( prepared_bam )
             extract_bam_sorted_indexed = prepared_bam.join(SAMTOOLS_INDEX_EXTRACT.out.bai, failOnMismatch:true, failOnDuplicate:true)
             EXTRACT_ALIGNMENTS( extract_bam_sorted_indexed, ch_genome_fasta, [], '')

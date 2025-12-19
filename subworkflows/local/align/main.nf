@@ -30,15 +30,16 @@ workflow ALIGN {
         ch_mtshift_dictionary    // channel: [mandatory] [ val(meta), path(dict) ]
         ch_mtshift_fai           // channel: [mandatory] [ val(meta), path(fai) ]
         ch_mtshift_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
-        val_mbuffer_mem          // integer: [mandatory] memory in megabytes
-        val_platform             // string:  [mandatory] illumina or a different technology
-        val_sort_threads         // integer: [mandatory] number of sorting threads
-        val_aligner              // string:  'bwa', 'bwamem2', 'bwameme', or 'sentieon'
-        val_mt_aligner           // string:  'bwa', 'bwamem2', or 'sentieon'
-        val_analysis_type        // string:  'wgs', 'wes', or 'mito'
-        extract_alignments       // boolean
-        save_mapped_as_cram      // boolean
         skip_fastp               // boolean
+        val_aligner              // string:  'bwa', 'bwamem2', 'bwameme', or 'sentieon'
+        val_analysis_type        // string:  'wgs', 'wes', or 'mito'
+        val_extract_alignments   // boolean
+        val_mbuffer_mem          // integer: [mandatory] memory in megabytes
+        val_mt_aligner           // string:  'bwa', 'bwamem2', or 'sentieon'
+        val_platform             // string:  [mandatory] illumina or a different technology
+        val_run_mt_for_wes       // boolean
+        val_sort_threads         // integer: [mandatory] number of sorting threads
+        val_save_mapped_as_cram      // boolean
 
     main:
         ch_bwamem2_bam               = channel.empty()
@@ -86,11 +87,11 @@ workflow ALIGN {
                 ch_genome_bwamemeindex,
                 ch_genome_fasta,
                 ch_genome_fai,
+                val_aligner,
+                val_extract_alignments,
                 val_mbuffer_mem,
                 val_platform,
-                val_sort_threads,
-                val_aligner,
-                extract_alignments
+                val_sort_threads
             )
             ch_bwamem2_bam     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bam
             ch_bwamem2_bai     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bai
@@ -115,7 +116,7 @@ workflow ALIGN {
 
         // PREPARING READS FOR MT ALIGNMENT
 
-        if (val_analysis_type.matches("wgs|mito") || params.run_mt_for_wes) {
+        if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
             CONVERT_MT_BAM_TO_FASTQ (
                 ch_genome_marked_bam_bai,
                 ch_genome_fasta,
@@ -154,7 +155,7 @@ workflow ALIGN {
                                             .mix(ALIGN_MT.out.versions, ALIGN_MT_SHIFT.out.versions, CONVERT_MT_BAM_TO_FASTQ.out.versions)
         }
 
-        if (save_mapped_as_cram) {
+        if (val_save_mapped_as_cram) {
             SAMTOOLS_VIEW( ch_genome_marked_bam_bai, ch_genome_fasta, [], 'crai' )
             ch_versions   = ch_versions.mix(SAMTOOLS_VIEW.out.versions)
         }
