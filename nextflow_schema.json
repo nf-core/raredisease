@@ -538,7 +538,6 @@
                 },
                 "extract_alignments": {
                     "type": "boolean",
-                    "default": "false",
                     "description": "After aligning the reads to a reference, extract alignments from specific regions/contigs and restrict the analysis to those regions/contigs.",
                     "help_text": "Set this to true, and specify the contig(s) using `restrict_to_contigs` parameter",
                     "fa_icon": "fas fa-toggle-on"
@@ -870,6 +869,17 @@
                     "description": "Custom MultiQC yaml file containing HTML including a methods description.",
                     "fa_icon": "fas fa-cog",
                     "hidden": true
+                },
+                "multiqc_samples": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Path to a file containing internal ids and customer ids in tab seperated format.",
+                    "fa_icon": "fas fa-table",
+                    "mimetype": "text/csv",
+                    "schema": "assets/sample_id_map.json",
+                    "help_text": "File for multiqc to group entries by samples",
+                    "pattern": "^\\S+\\.tsv$"
                 },
                 "validate_params": {
                     "type": "boolean",
