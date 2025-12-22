@@ -14,17 +14,17 @@ include { HMTNOTE_ANNOTATE                               } from '../../modules/n
 
 workflow ANNOTATE_MT_SNVS {
     take:
-        ch_mt_vcf              // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_cadd_header         // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources      // channel: [mandatory] [ path(annotation) ]
         ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai                 // channel: [mandatory] [ path(fai) ]
+        ch_mt_vcf              // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_vcfanno_extra       // channel: [mandatory] [ [path(vcf),path(index)] ]
         ch_vcfanno_lua         // channel: [mandatory] [ path(lua) ]
         ch_vcfanno_resources   // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
         ch_vcfanno_toml        // channel: [mandatory] [ path(toml) ]
         ch_vep_cache           // channel: [mandatory] [ path(cache) ]
         ch_vep_extra_files     // channel: [mandatory] [ path(files) ]
-        ch_fai                 // channel: [mandatory] [ path(fai) ]
         skip_haplogrep3        // boolean
         val_cadd_resources     // string:  path to cadd resources file
         val_genome             // string:  GRCh37 or GRCh38
@@ -116,8 +116,8 @@ workflow ANNOTATE_MT_SNVS {
 
     emit:
         haplog    = ch_haplog                   // channel: [ val(meta), path(txt) ]
-        vcf_ann   = ENSEMBLVEP_MT.out.vcf       // channel: [ val(meta), path(vcf) ]
-        tbi       = TABIX_TABIX_VEP_MT.out.tbi  // channel: [ val(meta), path(tbi) ]
         report    = ENSEMBLVEP_MT.out.report    // channel: [ path(html) ]
+        tbi       = TABIX_TABIX_VEP_MT.out.tbi  // channel: [ val(meta), path(tbi) ]
+        vcf_ann   = ENSEMBLVEP_MT.out.vcf       // channel: [ val(meta), path(vcf) ]
         versions  = ch_versions                 // channel: [ path(versions.yml) ]
 }

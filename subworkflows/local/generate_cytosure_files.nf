@@ -9,11 +9,11 @@ include { VCF2CYTOSURE                                  } from '../../modules/nf
 
 workflow GENERATE_CYTOSURE_FILES {
     take:
-        ch_vcf            // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_tbi            // channel: [mandatory] [ val(meta), path(vcf_index) ]
         ch_bam            // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_sample_id_map  // channel: [optional] [val(id), val(id)]
         ch_blacklist      // channel: [optional] [path(blacklist)]
+        ch_sample_id_map  // channel: [optional] [val(id), val(id)]
+        ch_tbi            // channel: [mandatory] [ val(meta), path(vcf_index) ]
+        ch_vcf            // channel: [mandatory] [ val(meta), path(vcf) ]
         val_sample_id_map // string: path to sample_id_map file
 
     main:

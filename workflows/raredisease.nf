@@ -389,9 +389,9 @@ workflow RAREDISEASE {
             ch_sentieon_pcr_indel_model,
             ch_target_bed,
             val_analysis_type,
-            val_variant_caller,
+            val_concatenate_snv_calls,
             val_run_mt_for_wes,
-            val_concatenate_snv_calls
+            val_variant_caller
         )
         ch_versions = ch_versions.mix(CALL_SNV.out.versions)
         ch_mt_txt = CALL_SNV.out.mt_txt
@@ -462,10 +462,10 @@ workflow RAREDISEASE {
                 .set {ch_ranksnv_nuclear_in}
 
             RANK_VARIANTS_SNV (
-                ch_ranksnv_nuclear_in,
                 ch_pedfile,
                 ch_reduced_penetrance,
                 ch_score_config_snv,
+                ch_ranksnv_nuclear_in,
                 false
             )
             ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
@@ -477,17 +477,17 @@ workflow RAREDISEASE {
         if (!(skip_mt_annotation) && (val_run_mt_for_wes || val_analysis_type.matches("wgs|mito"))) {
 
             ANNOTATE_MT_SNVS (
-                CALL_SNV.out.mt_vcf,
                 ch_cadd_header,
                 ch_cadd_resources,
                 ch_genome_fasta,
+                ch_genome_fai,
+                CALL_SNV.out.mt_vcf,
                 ch_vcfanno_extra,
                 ch_vcfanno_lua,
                 ch_vcfanno_resources,
                 ch_vcfanno_toml,
                 ch_vep_cache,
                 ch_vep_extra_files,
-                ch_genome_fai,
                 skip_haplogrep3,
                 val_cadd_resources,
                 val_genome,
@@ -535,10 +535,10 @@ workflow RAREDISEASE {
                 .set {ch_ranksnv_mt_in}
 
             RANK_VARIANTS_MT (
-                ch_ranksnv_mt_in,
                 ch_pedfile,
                 ch_reduced_penetrance,
                 ch_score_config_mt,
+                ch_ranksnv_mt_in,
                 false
             )
             ch_versions = ch_versions.mix(RANK_VARIANTS_MT.out.versions)
@@ -579,12 +579,12 @@ workflow RAREDISEASE {
         //
         if (!skip_sv_annotation) {
             ANNOTATE_STRUCTURAL_VARIANTS (
-                CALL_STRUCTURAL_VARIANTS.out.vcf,
+                ch_genome_dictionary,
+                ch_genome_fasta,
                 ch_svdb_bedpedbs,
                 ch_svdb_dbs,
+                CALL_STRUCTURAL_VARIANTS.out.vcf,
                 ch_vep_cache,
-                ch_genome_fasta,
-                ch_genome_dictionary,
                 ch_vep_extra_files,
                 val_svdb_query_bedpedbs,
                 val_svdb_query_dbs,
@@ -632,10 +632,10 @@ workflow RAREDISEASE {
                 .set {ch_ranksnv_sv_in}
 
             RANK_VARIANTS_SV (
-                ch_ranksnv_sv_in,
                 ch_pedfile,
                 ch_reduced_penetrance,
                 ch_score_config_sv,
+                ch_ranksnv_sv_in,
                 true
             )
             ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
@@ -650,20 +650,20 @@ workflow RAREDISEASE {
 
     if (!skip_me_calling && val_analysis_type.equals("wgs")) {
         CALL_MOBILE_ELEMENTS(
+            ch_case_info,
             ch_mapped.genome_marked_bam_bai,
-            ch_genome_fasta,
             ch_genome_fai,
-            ch_me_references,
-            ch_case_info
+            ch_genome_fasta,
+            ch_me_references
         )
         ch_versions = ch_versions.mix(CALL_MOBILE_ELEMENTS.out.versions)
 
         if (!skip_me_annotation) {
             ANNOTATE_MOBILE_ELEMENTS(
-                CALL_MOBILE_ELEMENTS.out.vcf,
-                ch_me_svdb_resources,
-                ch_genome_fasta,
                 ch_genome_dictionary,
+                ch_genome_fasta,
+                ch_me_svdb_resources,
+                CALL_MOBILE_ELEMENTS.out.vcf,
                 ch_vep_cache,
                 val_genome,
                 val_vep_cache_version,
@@ -752,11 +752,11 @@ workflow RAREDISEASE {
 */
     if (!skip_vcf2cytosure && val_analysis_type.equals("wgs") && !skip_sv_calling && !skip_sv_annotation) {
         GENERATE_CYTOSURE_FILES (
-            ch_sv_annotate.vcf_ann,
-            ch_sv_annotate.tbi,
             ch_mapped.genome_marked_bam,
-            ch_sample_id_map,
             ch_vcf2cytosure_blacklist,
+            ch_sample_id_map,
+            ch_sv_annotate.tbi,
+            ch_sv_annotate.vcf_ann,
             val_sample_id_map
         )
         ch_versions = ch_versions.mix(GENERATE_CYTOSURE_FILES.out.versions)
@@ -770,14 +770,14 @@ workflow RAREDISEASE {
     if (!skip_gens && analysis_type.equals("wgs")) {
         GENS (
             ch_mapped.genome_marked_bam_bai,
-            CALL_SNV.out.genome_gvcf,
-            ch_genome_fasta,
+            ch_genome_dictionary,
             ch_genome_fai,
+            ch_genome_fasta,
+            ch_gens_gnomad_pos,
+            CALL_SNV.out.genome_gvcf,
             ch_gens_interval_list,
             ch_gens_pon_female,
-            ch_gens_pon_male,
-            ch_gens_gnomad_pos,
-            ch_genome_dictionary
+            ch_gens_pon_male
         )
         ch_versions = ch_versions.mix(GENS.out.versions)
     }
@@ -790,9 +790,9 @@ workflow RAREDISEASE {
 
     if (val_run_rtgvcfeval) {
         VARIANT_EVALUATION (
-            CALL_SNV.out.genome_vcf_tabix,
             ch_rtg_truthvcfs,
-            ch_sdf
+            ch_sdf,
+            CALL_SNV.out.genome_vcf_tabix
         )
         ch_versions = ch_versions.mix(VARIANT_EVALUATION.out.versions)
     }

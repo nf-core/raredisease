@@ -12,12 +12,12 @@ include { TABIX_TABIX as TABIX_VEP        } from '../../modules/nf-core/tabix/ta
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
     take:
-        ch_vcf                  // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_genome_dictionary    // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_genome_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_svdb_bedpedbs        // channel: [optional]
         ch_svdb_dbs             // channel: [optional]
+        ch_vcf                  // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_vep_cache            // channel: [mandatory] [ path(cache) ]
-        ch_genome_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_dictionary    // channel: [mandatory] [ val(meta), path(dict) ]
         ch_vep_extra_files      // channel: [mandatory] [ path(files) ]
         val_svdb_query_bedpedbs // String: [optional] params.svdb_query_bedpedbs
         val_svdb_query_dbs      // String: [optional] params.svdb_query_dbs
@@ -106,7 +106,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         ch_versions = ch_versions.mix(TABIX_VEP.out.versions)
 
     emit:
-        vcf_ann  = ENSEMBLVEP_SV.out.vcf // channel: [ val(meta), path(vcf) ]
         tbi      = TABIX_VEP.out.tbi     // channel: [ val(meta), path(tbi) ]
+        vcf_ann  = ENSEMBLVEP_SV.out.vcf // channel: [ val(meta), path(vcf) ]
         versions = ch_versions           // channel: [ path(versions.yml) ]
 }

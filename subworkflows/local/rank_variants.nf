@@ -12,10 +12,10 @@ include { TABIX_BGZIPTABIX } from '../../modules/nf-core/tabix/bgziptabix/main'
 workflow RANK_VARIANTS {
 
     take:
-        ch_vcf                // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_pedfile            // channel: [mandatory] [ path(ped) ]
         ch_reduced_penetrance // channel: [mandatory] [ path(pentrance) ]
         ch_score_config       // channel: [mandatory] [ path(ini) ]
+        ch_vcf                // channel: [mandatory] [ val(meta), path(vcf) ]
         process_with_sort     // Boolean
 
     main:

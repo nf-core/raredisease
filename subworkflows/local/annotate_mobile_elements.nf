@@ -11,10 +11,10 @@ include { SVDB_QUERY as SVDB_QUERY_DB           } from '../../modules/nf-core/sv
 workflow ANNOTATE_MOBILE_ELEMENTS {
 
     take:
-        ch_vcf                  // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_me_svdb_resources    // channel: [mandatory] [ path(csv) ]
-        ch_genome_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_dictionary    // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_genome_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_me_svdb_resources    // channel: [mandatory] [ path(csv) ]
+        ch_vcf                  // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_vep_cache            // channel: [mandatory] [ path(cache) ]
         val_genome              // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version   // string: [mandatory] default: 107

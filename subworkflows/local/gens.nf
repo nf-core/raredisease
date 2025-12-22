@@ -12,14 +12,14 @@ include { TABIX_BGZIPTABIX as GENS_GENERATE_COV_INDEX         } from '../../modu
 workflow GENS {
     take:
         ch_bam_bai           // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_gvcf              // channel: [mandatory] [ val(meta), path(gvcf) ]
-        ch_genome_fasta      // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_dictionary // channel: [mandatory] [ val(meta), path(dict) ]
         ch_genome_fai        // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_fasta      // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_gnomad_pos        // channel: [mandatory] [ path(gnomad_pos) ]
+        ch_gvcf              // channel: [mandatory] [ val(meta), path(gvcf) ]
         ch_interval_list     // channel: [mandatory] [ path(interval_list) ]
         ch_pon_female        // channel: [mandatory] [ path(pon) ]
         ch_pon_male          // channel: [mandatory] [ path(pon) ]
-        ch_gnomad_pos        // channel: [mandatory] [ path(gnomad_pos) ]
-        ch_genome_dictionary // channel: [mandatory] [ val(meta), path(dict) ]
 
     main:
         ch_versions = channel.empty()
@@ -73,7 +73,7 @@ workflow GENS {
         ch_versions = ch_versions.mix(GENS_GENERATE_COV_INDEX.out.versions.first())
 
     emit:
-        gens_cov_bed_gz = GENS_GENERATE.out.cov // channel: [ val(meta), path(bed) ]
         gens_baf_bed_gz = GENS_GENERATE.out.baf // channel: [ val(meta), path(bed) ]
+        gens_cov_bed_gz = GENS_GENERATE.out.cov // channel: [ val(meta), path(bed) ]
         versions        = ch_versions           // channel: [ path(versions.yml) ]
 }
