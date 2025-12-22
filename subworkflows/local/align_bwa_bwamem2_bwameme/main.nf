@@ -3,7 +3,6 @@
 //
 
 include { BWA_MEM as BWA                           } from '../../../modules/nf-core/bwa/mem/main'
-include { BWA_MEM as BWAMEM_FALLBACK               } from '../../../modules/nf-core/bwa/mem/main'
 include { BWAMEM2_MEM                              } from '../../../modules/nf-core/bwamem2/mem/main'
 include { BWAMEME_MEM                              } from '../../../modules/nf-core/bwameme/mem/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_ALIGN   } from '../../../modules/nf-core/samtools/index/main'
