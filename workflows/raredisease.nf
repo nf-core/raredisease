@@ -117,6 +117,7 @@ workflow RAREDISEASE {
     ch_mtshift_fai
     ch_mtshift_fasta
     ch_mtshift_intervals
+    ch_multiqc_samples
     ch_ngsbits_method
     ch_par_bed
     ch_pedfile
@@ -889,7 +890,7 @@ workflow RAREDISEASE {
         ch_multiqc_custom_config.toList(),
         ch_multiqc_logo.toList(),
         [],
-        []
+        ch_multiqc_samples
     )
 
     emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
