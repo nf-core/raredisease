@@ -877,7 +877,6 @@
                     "description": "Path to a file containing internal ids and customer ids in tab seperated format.",
                     "fa_icon": "fas fa-table",
                     "mimetype": "text/csv",
-                    "schema": "assets/sample_id_map.json",
                     "help_text": "File for multiqc to group entries by samples",
                     "pattern": "^\\S+\\.tsv$"
                 },
