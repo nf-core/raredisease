@@ -874,10 +874,10 @@
                     "type": "string",
                     "exists": true,
                     "format": "file-path",
-                    "description": "Path to a file containing internal ids and customer ids in tab seperated format. For more info check, https://docs.seqera.io/multiqc/reports/customisation#sample-grouping",
+                    "description": "Path to a file containing internal ids and customer ids in tab seperated format. For more info check, https://docs.seqera.io/multiqc/reports/customisation#sample-name-replacement",
                     "fa_icon": "fas fa-table",
                     "mimetype": "text/csv",
-                    "help_text": "File for multiqc to group entries by samples",
+                    "help_text": "File for multiqc to embed renaming patterns in reports",
                     "pattern": "^\\S+\\.tsv$"
                 },
                 "validate_params": {
