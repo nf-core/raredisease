@@ -80,7 +80,7 @@ workflow ALIGN {
                 .set{ch_input_bai}
 
         if (val_aligner.matches("bwamem2|bwa|bwameme")) {
-            ALIGN_BWA_BWAMEM2_BWAMEME (             
+            ALIGN_BWA_BWAMEM2_BWAMEME (
                 ch_genome_bwaindex,
                 ch_genome_bwamem2index,
                 ch_genome_bwamemeindex,
@@ -98,7 +98,7 @@ workflow ALIGN {
             ch_markdup_metrics = ALIGN_BWA_BWAMEM2_BWAMEME.out.metrics
             ch_versions        = ch_versions.mix(ALIGN_BWA_BWAMEM2_BWAMEME.out.versions)
         } else if (val_aligner.equals("sentieon")) {
-            ALIGN_SENTIEON (                        
+            ALIGN_SENTIEON (
                 ch_genome_bwaindex,
                 ch_genome_fai,
                 ch_genome_fasta,

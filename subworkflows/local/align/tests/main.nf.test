@@ -87,7 +87,7 @@ nextflow_workflow {
                             file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_2.fastq.gz', checkIfExists: true)
                         ]
                     ]
-                )                
+                )
                 input[8]  = channel.empty()
                 input[9]  = MT_MEM2.out.index.collect()
                 input[10] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
