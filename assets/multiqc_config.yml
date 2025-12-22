@@ -59,7 +59,7 @@ extra_fn_clean_exts:
     pattern: "_LNUMBER[0-9]{1,}"
 
 table_sample_merge:
-  "R1": "_1"
-  "R2": "_2"
+  "(R1)": "_1"
+  "(R2)": "_2"
 
 disable_version_detection: true
