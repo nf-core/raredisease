@@ -134,7 +134,7 @@ workflow NFCORE_RAREDISEASE {
     ch_ml_model                 = params.variant_caller.equals("sentieon")  ? channel.fromPath(params.ml_model).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : channel.value([[:],[]])
     ch_multiqc_samples          = params.multiqc_samples                    ? channel.value(params.multiqc_samples)
-                                                                            : channel.value([[]])
+                                                                            : channel.value([])
     ch_ngsbits_method           = channel.value(params.ngsbits_samplegender_method)
     ch_par_bed                  = params.par_bed                            ? channel.fromPath(params.par_bed).map{ it -> [[id:'par_bed'], it] }.collect()
                                                                             : channel.value([[],[]])
