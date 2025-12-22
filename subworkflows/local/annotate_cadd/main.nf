@@ -15,10 +15,10 @@ include { TABIX_TABIX as TABIX_VIEW             } from '../../../modules/nf-core
 workflow ANNOTATE_CADD {
 
     take:
-        ch_vcf            // channel: [mandatory] [ val(meta), path(vcfs), path(idx) ]
-        ch_header         // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources // channel: [mandatory] [ path(dir) ]
         ch_fai            // channel: [optional]  [ path(fai) ]
+        ch_header         // channel: [mandatory] [ path(txt) ]
+        ch_vcf            // channel: [mandatory] [ val(meta), path(vcfs), path(idx) ]
         val_genome        //  string: GRCh37 or GRCh37
 
     main:
@@ -81,7 +81,7 @@ workflow ANNOTATE_CADD {
         ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions.first())
 
     emit:
-        vcf  = BCFTOOLS_ANNOTATE.out.vcf // channel: [ val(meta), path(vcf) ]
         tbi  = TABIX_ANNOTATE.out.tbi    // channel: [ val(meta), path(tbi) ]
+        vcf  = BCFTOOLS_ANNOTATE.out.vcf // channel: [ val(meta), path(vcf) ]
         versions = ch_versions           // channel: [ path(versions.yml) ]
 }

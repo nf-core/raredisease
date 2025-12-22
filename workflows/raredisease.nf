@@ -402,21 +402,21 @@ workflow RAREDISEASE {
         if (!skip_snv_annotation) {
 
             ANNOTATE_GENOME_SNVS (
-                CALL_SNV.out.genome_vcf_tabix,
                 ch_cadd_header,
                 ch_cadd_resources,
-                ch_vcfanno_extra,
-                ch_vcfanno_resources,
-                ch_vcfanno_lua,
-                ch_vcfanno_toml,
-                ch_vep_cache,
+                ch_genome_chrsizes,
+                ch_genome_fai,
                 ch_genome_fasta,
                 ch_gnomad_af,
                 ch_samples,
                 ch_scatter_split_intervals,
+                CALL_SNV.out.genome_vcf_tabix,
+                ch_vcfanno_extra,
+                ch_vcfanno_lua,
+                ch_vcfanno_resources,
+                ch_vcfanno_toml,
+                ch_vep_cache,
                 ch_vep_extra_files,
-                ch_genome_fai,
-                ch_genome_chrsizes,
                 val_cadd_resources,
                 val_genome,
                 val_vep_cache_version
@@ -446,8 +446,8 @@ workflow RAREDISEASE {
             ch_ann_csq_snv_in = ch_clinical_snv_vcf.mix(ch_clin_research_snv_vcf.research)
 
             ANN_CSQ_PLI_SNV (
-                ch_ann_csq_snv_in,
                 ch_variant_consequences_snv,
+                ch_ann_csq_snv_in,
                 false
             )
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)
@@ -519,8 +519,8 @@ workflow RAREDISEASE {
             ch_ann_csq_mtsnv_in = ch_clinical_mtsnv_vcf.mix(ch_clin_research_mt_vcf.research)
 
             ANN_CSQ_PLI_MT(
-                ch_ann_csq_mtsnv_in,
                 ch_variant_consequences_snv,
+                ch_ann_csq_mtsnv_in,
                 false
             )
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_MT.out.versions)
@@ -616,8 +616,8 @@ workflow RAREDISEASE {
             ch_ann_csq_sv_in = ch_clinical_sv_vcf.mix(ch_clin_research_sv_vcf.research)
 
             ANN_CSQ_PLI_SV (
-                ch_ann_csq_sv_in,
                 ch_variant_consequences_sv,
+                ch_ann_csq_sv_in,
                 false
             )
             ch_versions = ch_versions.mix(ANN_CSQ_PLI_SV.out.versions)
@@ -694,8 +694,8 @@ workflow RAREDISEASE {
             ch_ann_csq_me_in = ch_clinical_me_vcf.mix(ch_clin_research_me_vcf.research)
 
             ANN_CSQ_PLI_ME(
-                ch_ann_csq_me_in,
                 ch_variant_consequences_sv,
+                ch_ann_csq_me_in,
                 true
             )
             ch_versions = ch_versions.mix( ANN_CSQ_PLI_ME.out.versions )

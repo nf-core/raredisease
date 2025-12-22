@@ -60,10 +60,10 @@ workflow ANNOTATE_MT_SNVS {
         // Annotating with CADD
         if (!val_cadd_resources.equals(null)) {
             ANNOTATE_CADD (
-                ZIP_TABIX_VCFANNO_MT.out.gz_tbi,
-                ch_cadd_header,
                 ch_cadd_resources,
                 ch_fai,
+                ch_cadd_header,
+                ZIP_TABIX_VCFANNO_MT.out.gz_tbi,
                 val_genome
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf

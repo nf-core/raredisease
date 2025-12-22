@@ -24,21 +24,21 @@ include { ANNOTATE_RHOCALLVIZ                   } from './annotate_rhocallviz'
 workflow ANNOTATE_GENOME_SNVS {
 
     take:
-        ch_vcf                // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
         ch_cadd_header        // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources     // channel: [mandatory] [ path(annotation) ]
-        ch_vcfanno_extra      // channel: [mandatory] [ [path(vcf),path(index)] ]
-        ch_vcfanno_resources  // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
-        ch_vcfanno_lua        // channel: [mandatory] [ path(lua) ]
-        ch_vcfanno_toml       // channel: [mandatory] [ path(toml) ]
-        ch_vep_cache          // channel: [mandatory] [ path(cache) ]
+        ch_genome_chrsizes    // channel: [mandatory] [ path(sizes) ]
+        ch_genome_fai         // channel: [mandatory] [ path(fai) ]
         ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_gnomad_af          // channel: [optional] [ path(tab), path(tbi) ]
         ch_samples            // channel: [mandatory] [ val(sample_meta) ]
         ch_split_intervals    // channel: [mandatory] [ path(intervals) ]
+        ch_vcf                // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
+        ch_vcfanno_extra      // channel: [mandatory] [ [path(vcf),path(index)] ]
+        ch_vcfanno_lua        // channel: [mandatory] [ path(lua) ]
+        ch_vcfanno_resources  // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
+        ch_vcfanno_toml       // channel: [mandatory] [ path(toml) ]
+        ch_vep_cache          // channel: [mandatory] [ path(cache) ]
         ch_vep_extra_files    // channel: [mandatory] [ path(files) ]
-        ch_genome_fai         // channel: [mandatory] [ path(fai) ]
-        ch_genome_chrsizes    // channel: [mandatory] [ path(sizes) ]
         val_cadd_resources    // string: path to cadd resources file
         val_genome            // string: GRCh37 or GRCh38
         val_vep_cache_version // string:  vep version ex: 107
@@ -115,10 +115,10 @@ workflow ANNOTATE_GENOME_SNVS {
                 .set { ch_cadd_in }
 
             ANNOTATE_CADD (
-                ch_cadd_in,
-                ch_cadd_header,
                 ch_cadd_resources,
                 ch_genome_fai,
+                ch_cadd_header,
+                ch_cadd_in,
                 val_genome
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
@@ -194,7 +194,7 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_vep_index     = TABIX_BCFTOOLS_CONCAT.out.tbi
         ch_vep_ann_index = ch_concat_out.join(TABIX_BCFTOOLS_CONCAT.out.tbi)
         //rhocall_viz
-        ANNOTATE_RHOCALLVIZ(ch_vep_ann_index, ch_samples, ch_genome_chrsizes)
+        ANNOTATE_RHOCALLVIZ(ch_genome_chrsizes, ch_samples, ch_vep_ann_index )
 
         ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions)
         ch_versions = ch_versions.mix(RHOCALL_ANNOTATE.out.versions)
@@ -214,7 +214,7 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_versions = ch_versions.mix(ANNOTATE_RHOCALLVIZ.out.versions)
 
     emit:
-        vcf_ann  = ch_vep_ann   // channel: [ val(meta), path(vcf) ]
         tbi      = ch_vep_index // channel: [ val(meta), path(tbi) ]
+        vcf_ann  = ch_vep_ann   // channel: [ val(meta), path(vcf) ]
         versions = ch_versions  // channel: [ path(versions.yml) ]
 }

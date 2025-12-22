@@ -13,9 +13,9 @@ include { CHROMOGRAPH as CHROMOGRAPH_AUTOZYG        } from '../../../modules/nf-
 workflow ANNOTATE_RHOCALLVIZ {
 
     take:
-        ch_vcf_tbi         // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
-        ch_samples         // channel: [mandatory] [ val(sample_meta) ]
         ch_genome_chrsizes // channel: [mandatory] [ path(sizes) ]
+        ch_samples         // channel: [mandatory] [ val(sample_meta) ]
+        ch_vcf_tbi         // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
 
     main:
         ch_versions       = channel.empty()

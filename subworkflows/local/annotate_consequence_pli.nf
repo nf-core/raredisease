@@ -8,8 +8,8 @@ include { TABIX_TABIX                     } from '../../modules/nf-core/tabix/ta
 
 workflow ANNOTATE_CSQ_PLI {
     take:
-        ch_vcf                  // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_variant_consequences // channel: [mandatory] [ path(consequences) ]
+        ch_vcf                  // channel: [mandatory] [ val(meta), path(vcf) ]
         val_index               // bool
 
     main:
