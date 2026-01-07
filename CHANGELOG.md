@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tests for call_repeat_expansions and qc_bam subworkflows [#713](https://github.com/nf-core/raredisease/pull/713)
 - Feature to subsample mitochondrial alignments based on number of reads [#748](https://github.com/nf-core/raredisease/pull/748)
 - Functionality to generate coverage information using Sambamba depth [#752](https://github.com/nf-core/raredisease/pull/752)
+- Parameter to pass a file containing new sample ids to use with multiqc [#764](https://github.com/nf-core/raredisease/pull/764)
 
 ### `Changed`
 
@@ -36,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | --------------- | ---------------- |
 |                 | sambamba_regions |
 | bwa_as_fallback |                  |
+|                 | multiqc_samples  |
 
 ### Tool updates
 
