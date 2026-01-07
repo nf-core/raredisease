@@ -7,11 +7,6 @@ process MITOSALT {
         'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/03/0311c283e73736be01c2cbd1ca93ae826c209d9733ffa6d2d4d2caa31e7464cc/data':
         'community.wave.seqera.io/library/bbmap_bedtools_bioconductor-biostrings_bioconductor-pwalign_pruned:11434f3b6a01596d' }"
 
-//    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-//        'https://depot.galaxyproject.org/singularity/mitosalt:1.1.1--hdfd78af_2':
-//        'quay.io/biocontainers/mitosalt:1.1.1--hdfd78af_2' }"
-    
-//    container 'docker://ieduba/mitosalt:latest'
 
     input:
     tuple val(meta), path(reads)
