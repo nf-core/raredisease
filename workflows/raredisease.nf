@@ -27,13 +27,15 @@ include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_R1_FQ   } from '../modules/n
 include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_R2_FQ   } from '../modules/nf-core/spring/decompress/main'
 include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_FQ_PAIR } from '../modules/nf-core/spring/decompress/main'
 include { STRANGER                                          } from '../modules/nf-core/stranger/main'
-
 //
 // MODULE: Local modules
 //
 
 include { RENAME_ALIGN_FILES as RENAME_BAM } from '../modules/local/rename_align_files'
 include { RENAME_ALIGN_FILES as RENAME_BAI } from '../modules/local/rename_align_files'
+include { CREATE_HGNCIDS_FILE              } from '../modules/local/create_hgncids_file'
+include { CREATE_PEDIGREE_FILE             } from '../modules/local/create_pedigree_file'
+include { PARSE_CONTAMINATION              } from '../modules/local/parse_contamination/main'
 
 //
 // SUBWORKFLOWS
@@ -52,6 +54,7 @@ include { CALL_MOBILE_ELEMENTS                                        } from '..
 include { CALL_REPEAT_EXPANSIONS                                      } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                                                    } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS                                    } from '../subworkflows/local/call_structural_variants'
+include { CONTAMINATION_CHECK                                         } from '../subworkflows/local/contamination_check/main'
 include { GENERATE_CYTOSURE_FILES                                     } from '../subworkflows/local/generate_cytosure_files'
 include { GENS                                                        } from '../subworkflows/local/gens'
 include { PREPARE_REFERENCES                                          } from '../subworkflows/local/prepare_references'
@@ -317,7 +320,53 @@ workflow RAREDISEASE {
     )
     ch_versions = ch_versions.mix(QC_BAM.out.versions)
 
+    //
+    // SUBWORKFLOW: Check for contamination using GATK
+    //
+    ch_contamination_mqc = Channel.empty()
 
+    if (params.run_contamination && params.contamination_sites) {
+
+        log.info "=== CONTAMINATION CHECK ENABLED ==="
+        log.info "Analysis type: ${params.analysis_type}"
+
+        // Prepare contamination sites channel
+        ch_contamination_sites = Channel.of([
+            file(params.contamination_sites, checkIfExists: true),
+            file(params.contamination_sites_tbi, checkIfExists: true)
+        ]).collect()
+
+        // Prepare intervals channel - CRITICAL: Use Channel.empty() for WGS, not Channel.of([])
+        if (params.analysis_type == 'wes' && params.target_bed) {
+            ch_intervals_contamination = Channel.fromPath(params.target_bed).collect()
+            log.info "Using target BED for WES contamination check"
+        } else {
+            ch_intervals_contamination = Channel.empty()
+            log.info "No intervals for WGS contamination check (genome-wide)"
+        }
+
+        // Prepare BAM input with BAI
+        ch_bam_for_contamination = ch_mapped.genome_marked_bam
+            .join(ch_mapped.genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
+
+        CONTAMINATION_CHECK (
+            ch_bam_for_contamination,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_genome_dictionary,
+            ch_contamination_sites,
+            ch_intervals_contamination
+        )
+
+        // Parse for MultiQC
+        PARSE_CONTAMINATION (
+            CONTAMINATION_CHECK.out.contamination_table
+        )
+
+        ch_contamination_mqc = PARSE_CONTAMINATION.out.mqc_table
+        ch_versions = ch_versions.mix(CONTAMINATION_CHECK.out.versions)
+        ch_versions = ch_versions.mix(PARSE_CONTAMINATION.out.versions)
+    }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RENAME ALIGNMENT FILES FOR SMNCOPYNUMBERCALLER & REPEATCALLING
@@ -877,6 +926,9 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.self_sm.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    
+    // Add contamination results to MultiQC
+    ch_multiqc_files = ch_multiqc_files.mix(ch_contamination_mqc.map { _meta, file -> file })
 
     if (!skip_peddy) {
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{_meta, reports -> reports}.collect().ifEmpty([]))
