@@ -175,8 +175,6 @@ workflow RAREDISEASE {
                                                                             : Channel.empty()
     ch_me_svdb_resources        = params.mobile_element_svdb_annotations    ? Channel.fromPath(params.mobile_element_svdb_annotations)
                                                                             : Channel.empty()
-    ch_mito_name                = params.mito_name                          ? Channel.value(params.mito_name)
-                                                                            : Channel.value([])
     ch_ml_model                 = params.variant_caller.equals("sentieon")  ? Channel.fromPath(params.ml_model).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : Channel.value([[:],[]])
     ch_mt_intervals             = ch_references.mt_intervals
@@ -735,28 +733,28 @@ workflow RAREDISEASE {
         ch_reads,
         ch_mapped.genome_bam_bai,
         ch_genome_fasta,
-	ch_genome_hisat2index,
-	ch_genome_fai,
-	ch_mt_lastdb,
-	ch_mt_fai,
-	ch_genome_chrsizes,
-	ch_mt_fasta,
+        ch_genome_hisat2index,
+        ch_genome_fai,
+        ch_mt_lastdb,
+        ch_mt_fai,
+        ch_genome_chrsizes,
+        ch_mt_fasta,
         params.score_threshold,
-	params.evalue_threshold,
-	params.split_length,
-	params.paired_distance,
-	params.deletion_threshold_min,
-	params.deletion_threshold_max,
-	params.breakthreshold,
-	params.cluster_threshold,
-	params.breakspan,
-	params.sizelimit,
-	params.hplimit,
-	params.flank,
-	params.split_distance_threshold,
+        params.evalue_threshold,
+        params.split_length,
+        params.paired_distance,
+        params.deletion_threshold_min,
+        params.deletion_threshold_max,
+        params.breakthreshold,
+        params.cluster_threshold,
+        params.breakspan,
+        params.sizelimit,
+        params.hplimit,
+        params.flank,
+        params.split_distance_threshold,
         ch_subdepth,
-        ch_mito_name,
-	params.exclude
+        params.mito_name,
+        params.exclude
     )
     ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
 

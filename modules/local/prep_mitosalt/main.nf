@@ -79,4 +79,11 @@ process PREP_MITOSALT {
     echo "i_del = yes"                                            >> mitosalt_config.txt
     echo "cn_mt = yes"                                            >> mitosalt_config.txt
     """
+
+    stub:
+    """
+    echo "hisat2 = hisat2" > mitosalt_config.txt
+    echo "lastal = lastal" >> mitosalt_config.txt
+    """
+
 }

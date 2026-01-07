@@ -13,11 +13,11 @@ workflow CALL_SV_MT {
         ch_bam_bai                   // channel: [mandatory] [ val(meta), path(bam) ]
         ch_genome_fasta              // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_hisat2index        // channel: [mandatory] [ val(meta), path(hisat2index) ]
-	ch_genome_fai                // channel: [mandatory] [ val(meta), path(genomefai) ]
-	ch_mt_lastdb                 // channel: [mandatory] [ val(meta), path(lastindex) ]
-	ch_mt_fai                    // channel: [mandatory] [ val(meta), path(mtfai) ]
-	ch_genome_chrsizes           // channel: [mandatory] [ val(meta), path(chrsizes) ]
-	ch_mt_fasta                  // channel: [mandatory] [ val(meta), path(mtfasta) ]
+        ch_genome_fai                // channel: [mandatory] [ val(meta), path(genomefai) ]
+        ch_mt_lastdb                 // channel: [mandatory] [ val(meta), path(lastindex) ]
+        ch_mt_fai                    // channel: [mandatory] [ val(meta), path(mtfai) ]
+        ch_genome_chrsizes           // channel: [mandatory] [ val(meta), path(chrsizes) ]
+        ch_mt_fasta                  // channel: [mandatory] [ val(meta), path(mtfasta) ]
         val_score_threshold          // string: [mandatory] mitosalt_score_threshold
         val_evalue_threshold         // string: [mandatory] mitosalt_evalue_threshold
         val_split_length             // string: [mandatory] mitosalt_split_length
@@ -32,8 +32,8 @@ workflow CALL_SV_MT {
         val_flank                    // string: [mandatory] mitosalt_flank
         val_split_distance_threshold // string: [mandatory] mitosalt_split_dist_threshold
         ch_subdepth                  // channel: [mandatory] [ val(mitosalt_depth) ]
-	ch_mito_name                 // channel: [mandatory] [ val(mito_name) ]
-	val_exclude                  // string: [mandatory] mitosalt_exclude
+        val_mito_name                // string: [mandatory] mito_name
+        val_exclude                  // string: [mandatory] mitosalt_exclude
 
     main:
         ch_versions = Channel.empty()
@@ -50,8 +50,8 @@ workflow CALL_SV_MT {
 	        ch_mt_fai,                  
 	        ch_genome_chrsizes,         
 	        ch_mt_fasta,
-		ch_mito_name,
-		val_exclude,                
+	        val_mito_name,
+	        val_exclude,                
 	        val_score_threshold,         
 	        val_evalue_threshold,        
 	        val_split_length,            
@@ -68,8 +68,8 @@ workflow CALL_SV_MT {
 	    ) 
 
             MITOSALT( 
-		SEQTK_SAMPLE.out.reads, 
-		PREP_MITOSALT.out.msconfig,
+                SEQTK_SAMPLE.out.reads, 
+                PREP_MITOSALT.out.msconfig,
                 ch_genome_hisat2index,
                 ch_genome_fai,
                 ch_mt_lastdb,
