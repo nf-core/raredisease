@@ -43,29 +43,29 @@ workflow CALL_SV_MT {
             SEQTK_SAMPLE (ch_reads_subdepth)
             ch_versions            = ch_versions.mix(SEQTK_SAMPLE.out.versions.first())
 
-	    PREP_MITOSALT(
-	        ch_genome_hisat2index,      
-	        ch_genome_fai,              
-	        ch_mt_lastdb,               
-	        ch_mt_fai,                  
-	        ch_genome_chrsizes,         
-	        ch_mt_fasta,
-	        val_mito_name,
-	        val_exclude,                
-	        val_score_threshold,         
-	        val_evalue_threshold,        
-	        val_split_length,            
-	        val_paired_distance,         
-	        val_deletion_threshold_min,  
-	        val_deletion_threshold_max,  
-	        val_breakthreshold,          
-	        val_cluster_threshold,       
-	        val_breakspan,               
-	        val_sizelimit,               
-	        val_hplimit,                 
-	        val_flank,                   
-	        val_split_distance_threshold
-	    ) 
+            PREP_MITOSALT(
+                ch_genome_hisat2index,      
+                ch_genome_fai,              
+                ch_mt_lastdb,               
+                ch_mt_fai,                  
+                ch_genome_chrsizes,         
+                ch_mt_fasta,
+                val_mito_name,
+                val_exclude,                
+                val_score_threshold,         
+                val_evalue_threshold,        
+                val_split_length,            
+                val_paired_distance,         
+                val_deletion_threshold_min,  
+                val_deletion_threshold_max,  
+                val_breakthreshold,          
+                val_cluster_threshold,       
+                val_breakspan,               
+                val_sizelimit,               
+                val_hplimit,                 
+                val_flank,                   
+                val_split_distance_threshold
+            ) 
 
             MITOSALT( 
                 SEQTK_SAMPLE.out.reads, 
@@ -76,7 +76,7 @@ workflow CALL_SV_MT {
                 ch_mt_fai,
                 ch_genome_chrsizes,
                 ch_mt_fasta
-	    )
+            )
             ch_versions            = ch_versions.mix(MITOSALT.out.versions.first())
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
