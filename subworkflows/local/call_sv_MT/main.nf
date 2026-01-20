@@ -39,15 +39,12 @@ workflow CALL_SV_MT {
         ch_versions = Channel.empty()
 
         if (!(params.skip_tools && params.skip_tools.split(',').contains('mitosalt'))) {
-            ch_reads_subdepth      = ch_reads.concat(ch_subdepth).collect()
+            ch_reads_subdepth      = ch_reads.combine(ch_subdepth)
+
             SEQTK_SAMPLE (ch_reads_subdepth)
-            ch_versions            = ch_versions.mix(SEQTK_SAMPLE.out.versions.first())
-            ch_genome_chrsizes.dump(tag:"chrsizes")
-            ch_genome_fai.dump(tag:"fai")
-            ch_genome_hisat2index.dump(tag:"hisat2")
-            ch_mt_lastdb.dump(tag:"lastdb")
+
             PREP_MITOSALT(
-                ch_genome_chrsizes,         
+                ch_genome_chrsizes,
                 ch_genome_fai,              
                 ch_genome_hisat2index,      
                 ch_mt_fai,                  
@@ -80,11 +77,13 @@ workflow CALL_SV_MT {
                 ch_mt_fasta,
                 ch_mt_lastdb
             )
-            ch_versions            = ch_versions.mix(MITOSALT.out.versions.first())
+
+            ch_versions = ch_versions.mix(MITOSALT.out.versions)
+            ch_versions = ch_versions.mix(SEQTK_SAMPLE.out.versions)
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
 
-        ch_versions = ch_versions.mix(MT_DELETION.out.versions.first())
+        ch_versions = ch_versions.mix(MT_DELETION.out.versions)
 
     emit:
         mitosalt_breakpoint = MITOSALT.out.breakpoint       // channel: [ val(meta), path(breakpoint) ]

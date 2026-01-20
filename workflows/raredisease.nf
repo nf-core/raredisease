@@ -659,7 +659,7 @@ workflow RAREDISEASE {
             ch_mt_fai,
             ch_mt_fasta,
             ch_mt_lastdb,
-            ch_reads,
+            ch_input_fastqs,
             ch_subdepth,
             params.breakspan,
             params.breakthreshold,

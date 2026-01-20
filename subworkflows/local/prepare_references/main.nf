@@ -64,6 +64,8 @@ workflow PREPARE_REFERENCES {
         ch_bwa                    = channel.empty()
         ch_genome_bwameme_index   = channel.empty()
         ch_genome_bwamem2_index   = channel.empty()
+        ch_genome_hisat2_index    = channel.empty()
+        ch_mt_last_index          = channel.empty()
         ch_gnomad_af_idx          = channel.empty()
         ch_dbsnp                  = channel.value([[:],[]])
         ch_dbsnp_tbi              = channel.value([[:],[]])
@@ -147,8 +149,8 @@ workflow PREPARE_REFERENCES {
             ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta, [[],[]]).fai.collect()
             ch_mt_dict = GATK_SD_MT(ch_mt_fasta).dict.collect()
 
-            ch_genome_hisat2_index = HISAT2_INDEX_GENOME(ch_genome_fasta,[[:],[]], [[:],[]]).out.index.collect() 
-            ch_mt_last_index       = LAST_INDEX_MT(ch_mt_fasta).out.index
+            ch_genome_hisat2_index = HISAT2_INDEX_GENOME(ch_genome_fasta,[[:],[]], [[:],[]]).index.collect() 
+            ch_mt_last_index       = LAST_INDEX_MT(ch_mt_fasta).index.collect()
 
             GATK_SHIFTFASTA(ch_mt_fasta, ch_mt_fai, ch_mt_dict)
 
