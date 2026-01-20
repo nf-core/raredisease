@@ -7,20 +7,20 @@ include { SENTIEON_DATAMETRICS                     } from '../../../modules/nf-c
 include { SENTIEON_DEDUP                           } from '../../../modules/nf-core/sentieon/dedup/main'
 include { SENTIEON_READWRITER                      } from '../../../modules/nf-core/sentieon/readwriter/main'
 include { SAMTOOLS_VIEW as EXTRACT_ALIGNMENTS      } from '../../../modules/nf-core/samtools/view/main'
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_EXTRACT } from '../../../modules/nf-core/samtools/index/main'
 
 workflow ALIGN_SENTIEON {
     take:
-        ch_reads_input     // channel: [mandatory] [ val(meta), path(reads_input) ]
-        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_bwa_index       // channel: [mandatory] [ val(meta), path(bwa_index) ]
-        val_platform       // string:  [mandatory] default: illumina
+        ch_bwa_index           // channel: [mandatory] [ val(meta), path(bwa_index) ]
+        ch_genome_fai          // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_input_reads         // channel: [mandatory] [ val(meta), path(reads_input) ]
+        val_extract_alignments //  string: boolean
+        val_platform           //  string: [mandatory] default: illumina
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
-        SENTIEON_BWAMEM ( ch_reads_input, ch_bwa_index, ch_genome_fasta, ch_genome_fai )
+        SENTIEON_BWAMEM ( ch_input_reads, ch_bwa_index, ch_genome_fasta, ch_genome_fai )
 
         SENTIEON_BWAMEM.out
             .bam_and_bai
@@ -30,9 +30,9 @@ workflow ALIGN_SENTIEON {
                 [groupKey(new_meta, new_meta.num_lanes), bam, bai]
                 }
             .groupTuple()
-            .branch{
-                single: it[1].size() == 1
-                multiple: it[1].size() > 1
+            .branch{ _meta, bam, _bai ->
+                single: bam.size() == 1
+                multiple: bam.size() > 1
                 }
             .set{ merge_bams_in }
 
@@ -40,14 +40,10 @@ workflow ALIGN_SENTIEON {
         ch_bam_bai = merge_bams_in.single.mix(SENTIEON_READWRITER.out.output_index)
 
         // GET ALIGNMENT FROM SELECTED CONTIGS
-        if (params.extract_alignments) {
-            EXTRACT_ALIGNMENTS( ch_bam_bai, ch_genome_fasta, [])
-            ch_bam_bai = EXTRACT_ALIGNMENTS.out.bam
-            SAMTOOLS_INDEX_EXTRACT ( EXTRACT_ALIGNMENTS.out.bam )
-            ch_bam_bai = EXTRACT_ALIGNMENTS.out.bam.join(SAMTOOLS_INDEX_EXTRACT.out.bai, failOnMismatch:true, failOnDuplicate:true)
+        if (val_extract_alignments) {
+            EXTRACT_ALIGNMENTS( ch_bam_bai, ch_genome_fasta, [], 'bai')
+            ch_bam_bai = EXTRACT_ALIGNMENTS.out.bam.join(EXTRACT_ALIGNMENTS.out.bai, failOnMismatch:true, failOnDuplicate:true)
             ch_versions = ch_versions.mix(EXTRACT_ALIGNMENTS.out.versions.first())
-            ch_versions = ch_versions.mix(SAMTOOLS_INDEX_EXTRACT.out.versions.first())
-
         }
 
         SENTIEON_DATAMETRICS ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, false )

@@ -35,7 +35,7 @@ process REPLACE_SPACES_IN_VCFINFO {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        replace_spaces_in_vcfinfo: v1.0
+        replace_spaces_in_vcfinfo: 1.0
         python: \$(python --version | sed 's/Python //g')
     END_VERSIONS
     """
@@ -52,7 +52,7 @@ process REPLACE_SPACES_IN_VCFINFO {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        replace_spaces_in_vcfinfo: v1.0
+        replace_spaces_in_vcfinfo: 1.0
         python: \$(python --version | sed 's/Python //g')
     END_VERSIONS
     """

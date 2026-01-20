@@ -14,28 +14,30 @@ include { HMTNOTE_ANNOTATE                               } from '../../modules/n
 
 workflow ANNOTATE_MT_SNVS {
     take:
-        ch_mt_vcf              // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_mt_tbi              // channel: [mandatory] [ val(meta), path(tbi) ]
         ch_cadd_header         // channel: [mandatory] [ path(txt) ]
         ch_cadd_resources      // channel: [mandatory] [ path(annotation) ]
         ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai                 // channel: [mandatory] [ path(fai) ]
+        ch_mt_vcf              // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_vcfanno_extra       // channel: [mandatory] [ [path(vcf),path(index)] ]
         ch_vcfanno_lua         // channel: [mandatory] [ path(lua) ]
         ch_vcfanno_resources   // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
         ch_vcfanno_toml        // channel: [mandatory] [ path(toml) ]
-        val_vep_genome         // string:  [mandatory] GRCh37 or GRCh38
-        val_vep_cache_version  // string:  [mandatory] 107
         ch_vep_cache           // channel: [mandatory] [ path(cache) ]
         ch_vep_extra_files     // channel: [mandatory] [ path(files) ]
+        skip_haplogrep3        // boolean
+        val_cadd_resources     // string:  path to cadd resources file
+        val_genome             // string:  GRCh37 or GRCh38
+        val_vep_cache_version  // string:  vep version ex: 107
 
     main:
-        ch_versions     = Channel.empty()
-        ch_haplog       = Channel.empty()
+        ch_versions     = channel.empty()
+        ch_haplog       = channel.empty()
 
         // add prefix to meta
         ch_mt_vcf
-            .map { it  ->
-                return [it[0]+ [prefix: it[1].simpleName + "_hmtnote"], it[1]]
+            .map { meta, vcf  ->
+                return [meta+ [prefix: vcf.simpleName + "_hmtnote"], vcf]
             }
             .set { ch_hmtnote_in }
 
@@ -53,34 +55,34 @@ workflow ANNOTATE_MT_SNVS {
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
         ZIP_TABIX_VCFANNO_MT(VCFANNO_MT.out.vcf)
 
-        ch_vcfanno_vcf = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, vcf, tbi -> return [meta, vcf]}
-        ch_vcfanno_tbi = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, vcf, tbi -> return [meta, tbi]}
+        ch_vcfanno_vcf = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, vcf, _tbi -> return [meta, vcf]}
 
         // Annotating with CADD
-        if (params.cadd_resources != null) {
+        if (!val_cadd_resources.equals(null)) {
             ANNOTATE_CADD (
-                ZIP_TABIX_VCFANNO_MT.out.gz_tbi,
+                ch_cadd_resources,
+                ch_fai,
                 ch_cadd_header,
-                ch_cadd_resources
+                ZIP_TABIX_VCFANNO_MT.out.gz_tbi,
+                val_genome
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
             ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
         } else {
-            ch_cadd_vcf = Channel.empty()
+            ch_cadd_vcf = channel.empty()
         }
 
-        // Pick input for vep
         ch_vcfanno_vcf
-            .join(ch_cadd_vcf, remainder: true) // If CADD is not run then the third element in this channel will be `null`
-            .branch { it  ->                    // If CADD is run, then "it" will be [[meta],selvar.vcf,cadd.vcf], else [[meta],selvar.vcf,null]
-                merged: it[2].equals(null)
-                    return [it[0]+ [prefix: it[0].prefix + "_vep"], it[1]]
-                cadd: !(it[2].equals(null))
-                    return [it[0] + [prefix: it[0].prefix + "_cadd_vep"], it[2]]
+            .join(ch_cadd_vcf, remainder: true)
+            .branch { meta, vcfanno, cadd  ->
+                vcfanno: cadd.equals(null)
+                    return [meta+ [prefix: meta.prefix + "_vep"], vcfanno]
+                cadd: !(cadd.equals(null))
+                    return [meta + [prefix: meta.prefix + "_cadd_vep"], cadd]
             }
-            .set { ch_for_mix }
+            .set { ch_annotated_vcfs }
 
-        ch_for_mix.merged.mix(ch_for_mix.cadd)
+        ch_annotated_vcfs.vcfanno.mix(ch_annotated_vcfs.cadd)
             .tap { ch_haplogrep_in }
             .map { meta, vcf -> return [meta, vcf, []] }
             .set { ch_vep_in }
@@ -88,7 +90,7 @@ workflow ANNOTATE_MT_SNVS {
         // Annotating with ensembl Vep
         ENSEMBLVEP_MT(
             ch_vep_in,
-            val_vep_genome,
+            val_genome,
             "homo_sapiens",
             val_vep_cache_version,
             ch_vep_cache,
@@ -99,10 +101,9 @@ workflow ANNOTATE_MT_SNVS {
         TABIX_TABIX_VEP_MT(ENSEMBLVEP_MT.out.vcf)
 
         // Running haplogrep3
-        if (!(params.skip_tools && params.skip_tools.split(',').contains('haplogrep3'))) {
+        if (!skip_haplogrep3) {
             HAPLOGREP3_CLASSIFY_MT(ch_haplogrep_in)
             ch_haplog   = HAPLOGREP3_CLASSIFY_MT.out.txt
-            ch_versions = ch_versions.mix(HAPLOGREP3_CLASSIFY_MT.out.versions)
         }
 
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
@@ -115,8 +116,8 @@ workflow ANNOTATE_MT_SNVS {
 
     emit:
         haplog    = ch_haplog                   // channel: [ val(meta), path(txt) ]
-        vcf_ann   = ENSEMBLVEP_MT.out.vcf       // channel: [ val(meta), path(vcf) ]
-        tbi       = TABIX_TABIX_VEP_MT.out.tbi  // channel: [ val(meta), path(tbi) ]
         report    = ENSEMBLVEP_MT.out.report    // channel: [ path(html) ]
+        tbi       = TABIX_TABIX_VEP_MT.out.tbi  // channel: [ val(meta), path(tbi) ]
+        vcf_ann   = ENSEMBLVEP_MT.out.vcf       // channel: [ val(meta), path(vcf) ]
         versions  = ch_versions                 // channel: [ path(versions.yml) ]
 }

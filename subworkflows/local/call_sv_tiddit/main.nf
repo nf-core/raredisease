@@ -19,7 +19,7 @@ workflow CALL_SV_TIDDIT {
 
         INDEX_TIDDIT (TIDDIT_SV.out.vcf)
         BCFTOOLS_VIEW_TIDDIT (INDEX_TIDDIT.out.gz_tbi, [], [], []).vcf
-            .collect{it[1]}
+            .collect{ _meta, vcf -> vcf}
             .toList()
             .set { vcf_file_list }
 

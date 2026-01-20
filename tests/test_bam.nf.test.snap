@@ -1,15 +1,18 @@
 {
     "-profile test_bam": {
         "content": [
-            280,
+            795,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "tabix": 1.12
                 },
                 "BCFTOOLS_ANNOTATE": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_CONCAT": {
+                    "bcftools": 1.2
+                },
+                "BCFTOOLS_CONCAT_ME": {
                     "bcftools": 1.2
                 },
                 "BCFTOOLS_MERGE_MT": {
@@ -18,13 +21,25 @@
                 "BCFTOOLS_REHEADER_EXP": {
                     "bcftools": 1.21
                 },
+                "BCFTOOLS_REHEADER_ME": {
+                    "bcftools": 1.21
+                },
                 "BCFTOOLS_ROH": {
+                    "bcftools": 1.2
+                },
+                "BCFTOOLS_SORT": {
+                    "bcftools": 1.2
+                },
+                "BCFTOOLS_SORT_ME": {
                     "bcftools": 1.2
                 },
                 "BCFTOOLS_VIEW": {
                     "bcftools": 1.2
                 },
                 "BCFTOOLS_VIEW_CNVNATOR": {
+                    "bcftools": 1.2
+                },
+                "BCFTOOLS_VIEW_FILTER": {
                     "bcftools": 1.2
                 },
                 "BCFTOOLS_VIEW_MANTA": {
@@ -106,10 +121,22 @@
                 "DEEPVARIANT": {
                     "deepvariant": "1.8.0"
                 },
+                "EKLIPSE": {
+                    "eklipse": 1.8
+                },
                 "ENSEMBLVEP_FILTERVEP": {
                     "ensemblvep": 110.0
                 },
+                "ENSEMBLVEP_ME": {
+                    "ensemblvep": 110.0
+                },
+                "ENSEMBLVEP_MT": {
+                    "ensemblvep": 110.0
+                },
                 "ENSEMBLVEP_SNV": {
+                    "ensemblvep": 110.0
+                },
+                "ENSEMBLVEP_SV": {
                     "ensemblvep": 110.0
                 },
                 "EXPANSIONHUNTER": {
@@ -158,6 +185,9 @@
                 "GATK_SHIFTFASTA": {
                     "gatk4": "4.5.0.0"
                 },
+                "GAWK": {
+                    "gawk": "5.3.0"
+                },
                 "GENMOD_ANNOTATE": {
                     "genmod": 3.9
                 },
@@ -179,6 +209,12 @@
                 "HAPLOCHECK_MT": {
                     "haplocheck": "1.3.3"
                 },
+                "HAPLOGREP3_CLASSIFY_MT": {
+                    "haplogrep3": "3.2.2"
+                },
+                "HMTNOTE_ANNOTATE": {
+                    "hmtnote": "0.7.2"
+                },
                 "INDEX_CNVNATOR": {
                     "tabix": 1.2
                 },
@@ -188,6 +224,9 @@
                 "MANTA": {
                     "manta": "1.6.0"
                 },
+                "ME_SPLIT_ALIGNMENT": {
+                    "samtools": "1.22.1"
+                },
                 "MOSDEPTH": {
                     "mosdepth": "0.3.10"
                 },
@@ -196,6 +235,9 @@
                 },
                 "NGSBITS_SAMPLEGENDER": {
                     "ngs-bits": 202411
+                },
+                "PEDDY": {
+                    "peddy": "0.4.8"
                 },
                 "PICARD_ADDORREPLACEREADGROUPS_MT": {
                     "picard": "3.3.0"
@@ -218,6 +260,12 @@
                 "PICARD_MARKDUPLICATES_MT": {
                     "picard": "3.3.0"
                 },
+                "PICARD_SORTVCF": {
+                    "picard": "3.3.0"
+                },
+                "QUALIMAP_BAMQC": {
+                    "qualimap": 2.3
+                },
                 "REMOVE_DUPLICATES_GL": {
                     "bcftools": 1.21
                 },
@@ -233,11 +281,24 @@
                 "RENAME_BAM": {
                     "coreutils": 8.31
                 },
+                "REPLACE_SPACES_IN_VCFINFO": {
+                    "replace_spaces_in_vcfinfo": 1.0,
+                    "python": "3.8.3"
+                },
+                "RETROSEQ_CALL": {
+                    "retroseq_call": 1.5
+                },
+                "RETROSEQ_DISCOVER": {
+                    "retroseq_discover": 1.5
+                },
                 "RHOCALL_ANNOTATE": {
                     "rhocall": "0.5.1"
                 },
                 "RHOCALL_VIZ": {
                     "rhocall": "0.5.1"
+                },
+                "SAMTOOLS_COLLATE": {
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_EXTRACT_MT": {
                     "samtools": 1.21
@@ -245,20 +306,23 @@
                 "SAMTOOLS_FAIDX_MT": {
                     "samtools": 1.21
                 },
-                "SAMTOOLS_INDEX": {
-                    "samtools": 1.21
-                },
-                "SAMTOOLS_INDEX_MT": {
-                    "samtools": 1.21
-                },
                 "SAMTOOLS_SORT": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_SORT_MT": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_VIEW": {
+                    "samtools": "1.22.1"
+                },
+                "SAM_TO_BAM": {
+                    "samtools": "1.22.1"
                 },
                 "SMNCOPYNUMBERCALLER": {
                     "SMNCopyNumberCaller": "1.1.2"
+                },
+                "SPLIT_AND_FILTER_SV_VCF": {
+                    "bcftools": 1.2
                 },
                 "SPLIT_MULTIALLELICS_EXP": {
                     "bcftools": 1.21
@@ -281,6 +345,10 @@
                     "svdb": "2.8.2",
                     "bcftools": 1.21
                 },
+                "SVDB_MERGE_ME": {
+                    "svdb": "2.8.2",
+                    "bcftools": 1.21
+                },
                 "SVDB_MERGE_REPEATS": {
                     "svdb": "2.8.2",
                     "bcftools": 1.21
@@ -289,14 +357,14 @@
                     "svdb": "2.8.2",
                     "bcftools": 1.21
                 },
+                "SVDB_QUERY_DB": {
+                    "svdb": "2.8.2"
+                },
                 "TABIX_ANNOTATE": {
                     "tabix": 1.21
                 },
                 "TABIX_BCFTOOLS_CONCAT": {
                     "tabix": 1.21
-                },
-                "TABIX_BGZIP": {
-                    "tabix": 1.2
                 },
                 "TABIX_BGZIPINDEX_PADDED_BED": {
                     "tabix": 1.2
@@ -316,8 +384,11 @@
                 "TABIX_GNOMAD_AF": {
                     "tabix": 1.21
                 },
-                "TABIX_PBT": {
-                    "tabix": 1.2
+                "TABIX_ME": {
+                    "tabix": 1.21
+                },
+                "TABIX_ME_SPLIT": {
+                    "tabix": 1.21
                 },
                 "TABIX_TABIX": {
                     "tabix": 1.21
@@ -331,10 +402,16 @@
                 "TABIX_TABIX_MT": {
                     "tabix": 1.21
                 },
+                "TABIX_TABIX_VEP_MT": {
+                    "tabix": 1.21
+                },
                 "TABIX_VEP": {
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
+                    "tiddit": "3.6.1"
+                },
+                "TIDDIT_COV_VCF2CYTOSURE": {
                     "tiddit": "3.6.1"
                 },
                 "TIDDIT_SV": {
@@ -352,20 +429,46 @@
                 "UPD_SITES": {
                     "upd": 0.1
                 },
+                "VCF2CYTOSURE": {
+                    "vcf2cytosure": "0.9.1"
+                },
                 "VCFANNO": {
+                    "vcfanno": "0.3.5"
+                },
+                "VCFANNO_MT": {
                     "vcfanno": "0.3.5"
                 },
                 "Workflow": {
                     "nf-core/raredisease": "v2.7.0dev"
+                },
+                "ZIP_TABIX_HMTNOTE_MT": {
+                    "tabix": 1.2
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "tabix": 1.2
                 },
                 "ZIP_TABIX_VCFANNO": {
                     "tabix": 1.2
+                },
+                "ZIP_TABIX_VCFANNO_MT": {
+                    "tabix": 1.2
                 }
             },
             [
+                "alignment",
+                "alignment/earlycasualcaiman_mt_subsample.bam",
+                "alignment/earlycasualcaiman_mt_subsample.bam.bai",
+                "alignment/hugelymodelbat_mt_subsample.bam",
+                "alignment/hugelymodelbat_mt_subsample.bam.bai",
+                "alignment/slowlycivilbuck_mt_subsample.bam",
+                "alignment/slowlycivilbuck_mt_subsample.bam.bai",
+                "annotate_mobile_elements",
+                "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz",
+                "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz.csi",
+                "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz.tbi",
+                "annotate_mobile_elements/justhusky_me_pli_research.vcf.gz",
+                "annotate_mobile_elements/justhusky_me_pli_research.vcf.gz.csi",
+                "annotate_mobile_elements/justhusky_me_pli_research.vcf.gz.tbi",
                 "annotate_snv",
                 "annotate_snv/genome",
                 "annotate_snv/genome/earlycasualcaiman_rhocallviz",
@@ -388,6 +491,21 @@
                 "annotate_snv/genome/slowlycivilbuck_rhocallviz/slowlycivilbuck_rhocallviz.bw",
                 "annotate_snv/genome/slowlycivilbuck_rhocallviz/slowlycivilbuck_rhocallviz.wig",
                 "annotate_snv/genome/slowlycivilbuck_rhocallviz_autozyg_chromograph",
+                "annotate_snv/mitochondria",
+                "annotate_snv/mitochondria/justhusky_mitochondria_hmtnote_vcfanno_vep.vcf.gz",
+                "annotate_snv/mitochondria/justhusky_mitochondria_hmtnote_vcfanno_vep.vcf.gz.tbi",
+                "annotate_snv/mitochondria/justhusky_mitochondria_hmtnote_vcfanno_vep_haplogrep.txt",
+                "annotate_sv",
+                "annotate_sv/justhusky_svdbquery_vep.json.gz",
+                "annotate_sv/justhusky_svdbquery_vep.summary.html",
+                "annotate_sv/justhusky_svdbquery_vep.tab.gz",
+                "annotate_sv/justhusky_svdbquery_vep.vcf.gz",
+                "annotate_sv/justhusky_svdbquery_vep.vcf.gz.csi",
+                "annotate_sv/justhusky_svdbquery_vep.vcf.gz.tbi",
+                "call_mobile_elements",
+                "call_mobile_elements/justhusky_mobile_elements.vcf.gz",
+                "call_mobile_elements/justhusky_mobile_elements.vcf.gz.csi",
+                "call_mobile_elements/justhusky_mobile_elements.vcf.gz.tbi",
                 "call_snv",
                 "call_snv/genome",
                 "call_snv/genome/justhusky_snv.vcf.gz",
@@ -402,6 +520,15 @@
                 "call_sv/genome/justhusky_sv.vcf.gz.csi",
                 "call_sv/genome/justhusky_sv.vcf.gz.tbi",
                 "call_sv/mitochondria",
+                "call_sv/mitochondria/eKLIPse_earlycasualcaiman.png",
+                "call_sv/mitochondria/eKLIPse_earlycasualcaiman_deletions.csv",
+                "call_sv/mitochondria/eKLIPse_earlycasualcaiman_genes.csv",
+                "call_sv/mitochondria/eKLIPse_hugelymodelbat.png",
+                "call_sv/mitochondria/eKLIPse_hugelymodelbat_deletions.csv",
+                "call_sv/mitochondria/eKLIPse_hugelymodelbat_genes.csv",
+                "call_sv/mitochondria/eKLIPse_slowlycivilbuck.png",
+                "call_sv/mitochondria/eKLIPse_slowlycivilbuck_deletions.csv",
+                "call_sv/mitochondria/eKLIPse_slowlycivilbuck_genes.csv",
                 "call_sv/mitochondria/earlycasualcaiman_mitochondria_deletions.txt",
                 "call_sv/mitochondria/hugelymodelbat_mitochondria_deletions.txt",
                 "call_sv/mitochondria/slowlycivilbuck_mitochondria_deletions.txt",
@@ -417,11 +544,72 @@
                 "ngsbits_samplegender/earlycasualcaiman_ngsbits_sex.tsv",
                 "ngsbits_samplegender/hugelymodelbat_ngsbits_sex.tsv",
                 "ngsbits_samplegender/slowlycivilbuck_ngsbits_sex.tsv",
+                "peddy",
+                "peddy/justhusky.het_check.csv",
+                "peddy/justhusky.html",
+                "peddy/justhusky.ped_check.csv",
+                "peddy/justhusky.peddy.ped",
+                "peddy/justhusky.sex_check.csv",
+                "peddy/justhusky.vs.html",
                 "pedigree",
                 "pedigree/justhusky.ped",
                 "pipeline_info",
                 "pipeline_info/nf_core_raredisease_software_mqc_versions.yml",
                 "qc_bam",
+                "qc_bam/earlycasualcaiman",
+                "qc_bam/earlycasualcaiman/css",
+                "qc_bam/earlycasualcaiman/css/agogo.css",
+                "qc_bam/earlycasualcaiman/css/ajax-loader.gif",
+                "qc_bam/earlycasualcaiman/css/basic.css",
+                "qc_bam/earlycasualcaiman/css/bgfooter.png",
+                "qc_bam/earlycasualcaiman/css/bgtop.png",
+                "qc_bam/earlycasualcaiman/css/comment-bright.png",
+                "qc_bam/earlycasualcaiman/css/comment-close.png",
+                "qc_bam/earlycasualcaiman/css/comment.png",
+                "qc_bam/earlycasualcaiman/css/doctools.js",
+                "qc_bam/earlycasualcaiman/css/down-pressed.png",
+                "qc_bam/earlycasualcaiman/css/down.png",
+                "qc_bam/earlycasualcaiman/css/file.png",
+                "qc_bam/earlycasualcaiman/css/jquery.js",
+                "qc_bam/earlycasualcaiman/css/minus.png",
+                "qc_bam/earlycasualcaiman/css/plus.png",
+                "qc_bam/earlycasualcaiman/css/pygments.css",
+                "qc_bam/earlycasualcaiman/css/qualimap_logo_small.png",
+                "qc_bam/earlycasualcaiman/css/report.css",
+                "qc_bam/earlycasualcaiman/css/searchtools.js",
+                "qc_bam/earlycasualcaiman/css/underscore.js",
+                "qc_bam/earlycasualcaiman/css/up-pressed.png",
+                "qc_bam/earlycasualcaiman/css/up.png",
+                "qc_bam/earlycasualcaiman/css/websupport.js",
+                "qc_bam/earlycasualcaiman/genome_results.txt",
+                "qc_bam/earlycasualcaiman/images_qualimapReport",
+                "qc_bam/earlycasualcaiman/images_qualimapReport/genome_coverage_0to50_histogram.png",
+                "qc_bam/earlycasualcaiman/images_qualimapReport/genome_coverage_across_reference.png",
+                "qc_bam/earlycasualcaiman/images_qualimapReport/genome_coverage_histogram.png",
+                "qc_bam/earlycasualcaiman/images_qualimapReport/genome_coverage_quotes.png",
+                "qc_bam/earlycasualcaiman/images_qualimapReport/genome_gc_content_per_window.png",
+                "qc_bam/earlycasualcaiman/images_qualimapReport/genome_homopolymer_indels.png",
+                "qc_bam/earlycasualcaiman/images_qualimapReport/genome_insert_size_across_reference.png",
+                "qc_bam/earlycasualcaiman/images_qualimapReport/genome_insert_size_histogram.png",
+                "qc_bam/earlycasualcaiman/images_qualimapReport/genome_mapping_quality_across_reference.png",
+                "qc_bam/earlycasualcaiman/images_qualimapReport/genome_mapping_quality_histogram.png",
+                "qc_bam/earlycasualcaiman/images_qualimapReport/genome_reads_clipping_profile.png",
+                "qc_bam/earlycasualcaiman/images_qualimapReport/genome_reads_content_per_read_position.png",
+                "qc_bam/earlycasualcaiman/images_qualimapReport/genome_uniq_read_starts_histogram.png",
+                "qc_bam/earlycasualcaiman/qualimapReport.html",
+                "qc_bam/earlycasualcaiman/raw_data_qualimapReport",
+                "qc_bam/earlycasualcaiman/raw_data_qualimapReport/coverage_across_reference.txt",
+                "qc_bam/earlycasualcaiman/raw_data_qualimapReport/coverage_histogram.txt",
+                "qc_bam/earlycasualcaiman/raw_data_qualimapReport/duplication_rate_histogram.txt",
+                "qc_bam/earlycasualcaiman/raw_data_qualimapReport/genome_fraction_coverage.txt",
+                "qc_bam/earlycasualcaiman/raw_data_qualimapReport/homopolymer_indels.txt",
+                "qc_bam/earlycasualcaiman/raw_data_qualimapReport/insert_size_across_reference.txt",
+                "qc_bam/earlycasualcaiman/raw_data_qualimapReport/insert_size_histogram.txt",
+                "qc_bam/earlycasualcaiman/raw_data_qualimapReport/mapped_reads_clipping_profile.txt",
+                "qc_bam/earlycasualcaiman/raw_data_qualimapReport/mapped_reads_gc-content_distribution.txt",
+                "qc_bam/earlycasualcaiman/raw_data_qualimapReport/mapped_reads_nucleotide_content.txt",
+                "qc_bam/earlycasualcaiman/raw_data_qualimapReport/mapping_quality_across_reference.txt",
+                "qc_bam/earlycasualcaiman/raw_data_qualimapReport/mapping_quality_histogram.txt",
                 "qc_bam/earlycasualcaiman_chromographcov",
                 "qc_bam/earlycasualcaiman_hsmetrics.CollectHsMetrics.coverage_metrics",
                 "qc_bam/earlycasualcaiman_mosdepth.global.dist.txt",
@@ -451,6 +639,60 @@
                 "qc_bam/earlycasualcaiman_tidditcov.wig",
                 "qc_bam/earlycasualcaiman_wgsmetrics.CollectWgsMetrics.coverage_metrics",
                 "qc_bam/earlycasualcaiman_wgsmetrics_y.CollectWgsMetrics.coverage_metrics",
+                "qc_bam/hugelymodelbat",
+                "qc_bam/hugelymodelbat/css",
+                "qc_bam/hugelymodelbat/css/agogo.css",
+                "qc_bam/hugelymodelbat/css/ajax-loader.gif",
+                "qc_bam/hugelymodelbat/css/basic.css",
+                "qc_bam/hugelymodelbat/css/bgfooter.png",
+                "qc_bam/hugelymodelbat/css/bgtop.png",
+                "qc_bam/hugelymodelbat/css/comment-bright.png",
+                "qc_bam/hugelymodelbat/css/comment-close.png",
+                "qc_bam/hugelymodelbat/css/comment.png",
+                "qc_bam/hugelymodelbat/css/doctools.js",
+                "qc_bam/hugelymodelbat/css/down-pressed.png",
+                "qc_bam/hugelymodelbat/css/down.png",
+                "qc_bam/hugelymodelbat/css/file.png",
+                "qc_bam/hugelymodelbat/css/jquery.js",
+                "qc_bam/hugelymodelbat/css/minus.png",
+                "qc_bam/hugelymodelbat/css/plus.png",
+                "qc_bam/hugelymodelbat/css/pygments.css",
+                "qc_bam/hugelymodelbat/css/qualimap_logo_small.png",
+                "qc_bam/hugelymodelbat/css/report.css",
+                "qc_bam/hugelymodelbat/css/searchtools.js",
+                "qc_bam/hugelymodelbat/css/underscore.js",
+                "qc_bam/hugelymodelbat/css/up-pressed.png",
+                "qc_bam/hugelymodelbat/css/up.png",
+                "qc_bam/hugelymodelbat/css/websupport.js",
+                "qc_bam/hugelymodelbat/genome_results.txt",
+                "qc_bam/hugelymodelbat/images_qualimapReport",
+                "qc_bam/hugelymodelbat/images_qualimapReport/genome_coverage_0to50_histogram.png",
+                "qc_bam/hugelymodelbat/images_qualimapReport/genome_coverage_across_reference.png",
+                "qc_bam/hugelymodelbat/images_qualimapReport/genome_coverage_histogram.png",
+                "qc_bam/hugelymodelbat/images_qualimapReport/genome_coverage_quotes.png",
+                "qc_bam/hugelymodelbat/images_qualimapReport/genome_gc_content_per_window.png",
+                "qc_bam/hugelymodelbat/images_qualimapReport/genome_homopolymer_indels.png",
+                "qc_bam/hugelymodelbat/images_qualimapReport/genome_insert_size_across_reference.png",
+                "qc_bam/hugelymodelbat/images_qualimapReport/genome_insert_size_histogram.png",
+                "qc_bam/hugelymodelbat/images_qualimapReport/genome_mapping_quality_across_reference.png",
+                "qc_bam/hugelymodelbat/images_qualimapReport/genome_mapping_quality_histogram.png",
+                "qc_bam/hugelymodelbat/images_qualimapReport/genome_reads_clipping_profile.png",
+                "qc_bam/hugelymodelbat/images_qualimapReport/genome_reads_content_per_read_position.png",
+                "qc_bam/hugelymodelbat/images_qualimapReport/genome_uniq_read_starts_histogram.png",
+                "qc_bam/hugelymodelbat/qualimapReport.html",
+                "qc_bam/hugelymodelbat/raw_data_qualimapReport",
+                "qc_bam/hugelymodelbat/raw_data_qualimapReport/coverage_across_reference.txt",
+                "qc_bam/hugelymodelbat/raw_data_qualimapReport/coverage_histogram.txt",
+                "qc_bam/hugelymodelbat/raw_data_qualimapReport/duplication_rate_histogram.txt",
+                "qc_bam/hugelymodelbat/raw_data_qualimapReport/genome_fraction_coverage.txt",
+                "qc_bam/hugelymodelbat/raw_data_qualimapReport/homopolymer_indels.txt",
+                "qc_bam/hugelymodelbat/raw_data_qualimapReport/insert_size_across_reference.txt",
+                "qc_bam/hugelymodelbat/raw_data_qualimapReport/insert_size_histogram.txt",
+                "qc_bam/hugelymodelbat/raw_data_qualimapReport/mapped_reads_clipping_profile.txt",
+                "qc_bam/hugelymodelbat/raw_data_qualimapReport/mapped_reads_gc-content_distribution.txt",
+                "qc_bam/hugelymodelbat/raw_data_qualimapReport/mapped_reads_nucleotide_content.txt",
+                "qc_bam/hugelymodelbat/raw_data_qualimapReport/mapping_quality_across_reference.txt",
+                "qc_bam/hugelymodelbat/raw_data_qualimapReport/mapping_quality_histogram.txt",
                 "qc_bam/hugelymodelbat_chromographcov",
                 "qc_bam/hugelymodelbat_hsmetrics.CollectHsMetrics.coverage_metrics",
                 "qc_bam/hugelymodelbat_mosdepth.global.dist.txt",
@@ -480,6 +722,60 @@
                 "qc_bam/hugelymodelbat_tidditcov.wig",
                 "qc_bam/hugelymodelbat_wgsmetrics.CollectWgsMetrics.coverage_metrics",
                 "qc_bam/hugelymodelbat_wgsmetrics_y.CollectWgsMetrics.coverage_metrics",
+                "qc_bam/slowlycivilbuck",
+                "qc_bam/slowlycivilbuck/css",
+                "qc_bam/slowlycivilbuck/css/agogo.css",
+                "qc_bam/slowlycivilbuck/css/ajax-loader.gif",
+                "qc_bam/slowlycivilbuck/css/basic.css",
+                "qc_bam/slowlycivilbuck/css/bgfooter.png",
+                "qc_bam/slowlycivilbuck/css/bgtop.png",
+                "qc_bam/slowlycivilbuck/css/comment-bright.png",
+                "qc_bam/slowlycivilbuck/css/comment-close.png",
+                "qc_bam/slowlycivilbuck/css/comment.png",
+                "qc_bam/slowlycivilbuck/css/doctools.js",
+                "qc_bam/slowlycivilbuck/css/down-pressed.png",
+                "qc_bam/slowlycivilbuck/css/down.png",
+                "qc_bam/slowlycivilbuck/css/file.png",
+                "qc_bam/slowlycivilbuck/css/jquery.js",
+                "qc_bam/slowlycivilbuck/css/minus.png",
+                "qc_bam/slowlycivilbuck/css/plus.png",
+                "qc_bam/slowlycivilbuck/css/pygments.css",
+                "qc_bam/slowlycivilbuck/css/qualimap_logo_small.png",
+                "qc_bam/slowlycivilbuck/css/report.css",
+                "qc_bam/slowlycivilbuck/css/searchtools.js",
+                "qc_bam/slowlycivilbuck/css/underscore.js",
+                "qc_bam/slowlycivilbuck/css/up-pressed.png",
+                "qc_bam/slowlycivilbuck/css/up.png",
+                "qc_bam/slowlycivilbuck/css/websupport.js",
+                "qc_bam/slowlycivilbuck/genome_results.txt",
+                "qc_bam/slowlycivilbuck/images_qualimapReport",
+                "qc_bam/slowlycivilbuck/images_qualimapReport/genome_coverage_0to50_histogram.png",
+                "qc_bam/slowlycivilbuck/images_qualimapReport/genome_coverage_across_reference.png",
+                "qc_bam/slowlycivilbuck/images_qualimapReport/genome_coverage_histogram.png",
+                "qc_bam/slowlycivilbuck/images_qualimapReport/genome_coverage_quotes.png",
+                "qc_bam/slowlycivilbuck/images_qualimapReport/genome_gc_content_per_window.png",
+                "qc_bam/slowlycivilbuck/images_qualimapReport/genome_homopolymer_indels.png",
+                "qc_bam/slowlycivilbuck/images_qualimapReport/genome_insert_size_across_reference.png",
+                "qc_bam/slowlycivilbuck/images_qualimapReport/genome_insert_size_histogram.png",
+                "qc_bam/slowlycivilbuck/images_qualimapReport/genome_mapping_quality_across_reference.png",
+                "qc_bam/slowlycivilbuck/images_qualimapReport/genome_mapping_quality_histogram.png",
+                "qc_bam/slowlycivilbuck/images_qualimapReport/genome_reads_clipping_profile.png",
+                "qc_bam/slowlycivilbuck/images_qualimapReport/genome_reads_content_per_read_position.png",
+                "qc_bam/slowlycivilbuck/images_qualimapReport/genome_uniq_read_starts_histogram.png",
+                "qc_bam/slowlycivilbuck/qualimapReport.html",
+                "qc_bam/slowlycivilbuck/raw_data_qualimapReport",
+                "qc_bam/slowlycivilbuck/raw_data_qualimapReport/coverage_across_reference.txt",
+                "qc_bam/slowlycivilbuck/raw_data_qualimapReport/coverage_histogram.txt",
+                "qc_bam/slowlycivilbuck/raw_data_qualimapReport/duplication_rate_histogram.txt",
+                "qc_bam/slowlycivilbuck/raw_data_qualimapReport/genome_fraction_coverage.txt",
+                "qc_bam/slowlycivilbuck/raw_data_qualimapReport/homopolymer_indels.txt",
+                "qc_bam/slowlycivilbuck/raw_data_qualimapReport/insert_size_across_reference.txt",
+                "qc_bam/slowlycivilbuck/raw_data_qualimapReport/insert_size_histogram.txt",
+                "qc_bam/slowlycivilbuck/raw_data_qualimapReport/mapped_reads_clipping_profile.txt",
+                "qc_bam/slowlycivilbuck/raw_data_qualimapReport/mapped_reads_gc-content_distribution.txt",
+                "qc_bam/slowlycivilbuck/raw_data_qualimapReport/mapped_reads_nucleotide_content.txt",
+                "qc_bam/slowlycivilbuck/raw_data_qualimapReport/mapping_quality_across_reference.txt",
+                "qc_bam/slowlycivilbuck/raw_data_qualimapReport/mapping_quality_histogram.txt",
                 "qc_bam/slowlycivilbuck_chromographcov",
                 "qc_bam/slowlycivilbuck_hsmetrics.CollectHsMetrics.coverage_metrics",
                 "qc_bam/slowlycivilbuck_mosdepth.global.dist.txt",
@@ -510,39 +806,44 @@
                 "qc_bam/slowlycivilbuck_wgsmetrics.CollectWgsMetrics.coverage_metrics",
                 "qc_bam/slowlycivilbuck_wgsmetrics_y.CollectWgsMetrics.coverage_metrics",
                 "rank_and_filter",
+                "rank_and_filter/justhusky_mt_ranked_clinical.vcf.gz",
+                "rank_and_filter/justhusky_mt_ranked_clinical.vcf.gz.tbi",
+                "rank_and_filter/justhusky_mt_ranked_research.vcf.gz",
+                "rank_and_filter/justhusky_mt_ranked_research.vcf.gz.tbi",
                 "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz",
-                "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz.csi",
-                "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz.gzi",
                 "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz.tbi",
                 "rank_and_filter/justhusky_snv_ranked_research.vcf.gz",
-                "rank_and_filter/justhusky_snv_ranked_research.vcf.gz.csi",
-                "rank_and_filter/justhusky_snv_ranked_research.vcf.gz.gzi",
                 "rank_and_filter/justhusky_snv_ranked_research.vcf.gz.tbi",
+                "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz",
+                "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz.tbi",
+                "rank_and_filter/justhusky_sv_ranked_research.vcf.gz",
+                "rank_and_filter/justhusky_sv_ranked_research.vcf.gz.tbi",
                 "repeat_expansions",
                 "repeat_expansions/earlycasualcaiman_exphunter_sorted.bam",
                 "repeat_expansions/earlycasualcaiman_exphunter_sorted.bam.bai",
-                "repeat_expansions/earlycasualcaiman_exphunter_sorted.bam.csi",
                 "repeat_expansions/earlycasualcaiman_repeat_expansion.vcf",
                 "repeat_expansions/hugelymodelbat_exphunter_sorted.bam",
                 "repeat_expansions/hugelymodelbat_exphunter_sorted.bam.bai",
-                "repeat_expansions/hugelymodelbat_exphunter_sorted.bam.csi",
                 "repeat_expansions/hugelymodelbat_repeat_expansion.vcf",
                 "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz",
                 "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz.tbi",
                 "repeat_expansions/slowlycivilbuck_exphunter_sorted.bam",
                 "repeat_expansions/slowlycivilbuck_exphunter_sorted.bam.bai",
-                "repeat_expansions/slowlycivilbuck_exphunter_sorted.bam.csi",
                 "repeat_expansions/slowlycivilbuck_repeat_expansion.vcf",
                 "smncopynumbercaller",
                 "smncopynumbercaller/out",
                 "smncopynumbercaller/out/justhusky_smncopynumbercaller.json",
-                "smncopynumbercaller/out/justhusky_smncopynumbercaller.tsv"
+                "smncopynumbercaller/out/justhusky_smncopynumbercaller.tsv",
+                "vcf2cytosure",
+                "vcf2cytosure/earlycasualcaiman.cgh",
+                "vcf2cytosure/hugelymodelbat.cgh",
+                "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.04.8"
+            "nextflow": "25.10.2"
         },
-        "timestamp": "2025-10-15T09:40:09.030137924"
+        "timestamp": "2025-12-18T17:30:21.579519047"
     }
 }

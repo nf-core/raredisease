@@ -7,7 +7,6 @@ include { BCFTOOLS_REHEADER as BCFTOOLS_REHEADER_EXP   } from '../../../modules/
 include { EXPANSIONHUNTER                              } from '../../../modules/nf-core/expansionhunter/main'
 include { PICARD_RENAMESAMPLEINVCF as RENAMESAMPLE_EXP } from '../../../modules/nf-core/picard/renamesampleinvcf/main'
 include { SAMTOOLS_SORT                                } from '../../../modules/nf-core/samtools/sort/main'
-include { SAMTOOLS_INDEX                               } from '../../../modules/nf-core/samtools/index/main'
 include { SVDB_MERGE as SVDB_MERGE_REPEATS             } from '../../../modules/nf-core/svdb/merge/main'
 include { TABIX_TABIX as TABIX_EXP_RENAME              } from '../../../modules/nf-core/tabix/tabix/main'
 
@@ -20,7 +19,7 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         EXPANSIONHUNTER (
             ch_bam,
@@ -30,8 +29,7 @@ workflow CALL_REPEAT_EXPANSIONS {
         )
 
         // Sort and index realigned bam
-        SAMTOOLS_SORT(EXPANSIONHUNTER.out.bam, [[:],[]])
-        SAMTOOLS_INDEX(SAMTOOLS_SORT.out.bam)
+        SAMTOOLS_SORT(EXPANSIONHUNTER.out.bam, [[:],[]], 'bai')
 
         // Fix header and rename sample
         BCFTOOLS_REHEADER_EXP (
@@ -49,7 +47,7 @@ workflow CALL_REPEAT_EXPANSIONS {
 
         // Merge indiviual repeat expansions
         SPLIT_MULTIALLELICS_EXP.out.vcf
-            .collect{it[1]}
+            .collect{_meta, vcf -> vcf}
             .toList()
             .collect()
             .set {ch_exp_vcfs}
@@ -67,7 +65,6 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_EXP.out.versions.first())
         ch_versions = ch_versions.mix(SVDB_MERGE_REPEATS.out.versions.first())
         ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions.first())
-        ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
 emit:
         vcf      = SVDB_MERGE_REPEATS.out.vcf  // channel: [ val(meta), path(vcf) ]

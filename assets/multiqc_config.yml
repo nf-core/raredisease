@@ -53,7 +53,13 @@ module_order:
 
 extra_fn_clean_exts:
   - "_sorted_md"
+  - "_mosdepth"
+  - "_sorted"
   - type: regex
     pattern: "_LNUMBER[0-9]{1,}"
+
+table_sample_merge:
+  "(R1)": "_1"
+  "(R2)": "_2"
 
 disable_version_detection: true

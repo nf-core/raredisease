@@ -6,22 +6,23 @@ include { GATK4_COLLECTREADCOUNTS as COLLECTREADCOUNTS        } from '../../modu
 include { GATK4_DENOISEREADCOUNTS as DENOISEREADCOUNTS_FEMALE } from '../../modules/nf-core/gatk4/denoisereadcounts/main'
 include { GATK4_DENOISEREADCOUNTS as DENOISEREADCOUNTS_MALE   } from '../../modules/nf-core/gatk4/denoisereadcounts/main'
 include { GENS as GENS_GENERATE                               } from '../../modules/local/gens/main'
+include { TABIX_BGZIPTABIX as GENS_GENERATE_BAF_INDEX         } from '../../modules/nf-core/tabix/bgziptabix/main'
+include { TABIX_BGZIPTABIX as GENS_GENERATE_COV_INDEX         } from '../../modules/nf-core/tabix/bgziptabix/main'
 
 workflow GENS {
     take:
         ch_bam_bai           // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_gvcf              // channel: [mandatory] [ val(meta), path(gvcf) ]
-        ch_genome_fasta      // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_dictionary // channel: [mandatory] [ val(meta), path(dict) ]
         ch_genome_fai        // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_fasta      // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_gnomad_pos        // channel: [mandatory] [ path(gnomad_pos) ]
+        ch_gvcf              // channel: [mandatory] [ val(meta), path(gvcf) ]
         ch_interval_list     // channel: [mandatory] [ path(interval_list) ]
         ch_pon_female        // channel: [mandatory] [ path(pon) ]
         ch_pon_male          // channel: [mandatory] [ path(pon) ]
-        ch_gnomad_pos        // channel: [mandatory] [ path(gnomad_pos) ]
-        ch_case_info         // channel: [mandatory] [ val(case_info) ]
-        ch_genome_dictionary // channel: [mandatory] [ val(meta), path(dict) ]
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         ch_bam_bai
             .combine(ch_interval_list)
@@ -35,7 +36,7 @@ workflow GENS {
         )
 
         COLLECTREADCOUNTS.out.hdf5
-            .branch { meta, counts ->
+            .branch { meta, _counts ->
                 female: meta.sex.toString().matches('2|other|0')
                 male: meta.sex == 1
             }
@@ -60,13 +61,19 @@ workflow GENS {
             ch_gnomad_pos
         )
 
+        GENS_GENERATE_BAF_INDEX (GENS_GENERATE.out.baf)
+
+        GENS_GENERATE_COV_INDEX (GENS_GENERATE.out.cov)
+
         ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions.first())
         ch_versions = ch_versions.mix(DENOISEREADCOUNTS_FEMALE.out.versions.first())
         ch_versions = ch_versions.mix(DENOISEREADCOUNTS_MALE.out.versions.first())
         ch_versions = ch_versions.mix(GENS_GENERATE.out.versions.first())
+        ch_versions = ch_versions.mix(GENS_GENERATE_BAF_INDEX.out.versions.first())
+        ch_versions = ch_versions.mix(GENS_GENERATE_COV_INDEX.out.versions.first())
 
     emit:
-        gens_cov_bed_gz = GENS_GENERATE.out.cov // channel: [ val(meta), path(bed) ]
         gens_baf_bed_gz = GENS_GENERATE.out.baf // channel: [ val(meta), path(bed) ]
+        gens_cov_bed_gz = GENS_GENERATE.out.cov // channel: [ val(meta), path(bed) ]
         versions        = ch_versions           // channel: [ path(versions.yml) ]
 }

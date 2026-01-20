@@ -7,31 +7,32 @@ include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_MANTA } from '../../../modules/nf-core/
 
 workflow CALL_SV_MANTA {
     take:
-        ch_bam          // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_bai          // channel: [mandatory] [ val(meta), path(bai) ]
-        ch_genome_fasta // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai   // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_case_info    // channel: [mandatory] [ val(case_info) ]
-        ch_bed          // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
+        ch_bam            // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_bai            // channel: [mandatory] [ val(meta), path(bai) ]
+        ch_genome_fasta   // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai     // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_case_info      // channel: [mandatory] [ val(case_info) ]
+        ch_bed            // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
+        val_analysis_type // string: "wes", "wgs", or "mito"
 
     main:
-        ch_bam.collect{it[1]}
+        ch_bam.collect{_meta, bam -> bam}
             .toList()
             .set { bam_file_list }
 
-        ch_bai.collect{it[1]}
+        ch_bai.collect{_meta, bai -> bai}
             .toList()
             .set { bai_file_list }
 
         ch_bed.map {
-                id, bed_file, index ->
+                _id, bed_file, index ->
                     return [bed_file, index]}
             .set { bed_input }
 
-        if (params.analysis_type == "wgs" ) {
+        if (val_analysis_type.equals("wgs")) {
             ch_case_info.combine(bam_file_list)
                 .combine(bai_file_list)
-                .map { it -> it + [ [], [] ] }
+                .map { meta, input, index -> [meta, input, index] + [ [], [] ] }
                 .set { manta_input }
             MANTA ( manta_input, ch_genome_fasta, ch_genome_fai, [] )
         } else {
@@ -57,6 +58,6 @@ workflow CALL_SV_MANTA {
         candidate_sv_vcf_tbi           = MANTA.out.candidate_sv_vcf_tbi           // channel: [ val(meta), path(tbi) ]
         diploid_sv_vcf                 = MANTA.out.diploid_sv_vcf                 // channel: [ val(meta), path(vcf) ]
         diploid_sv_vcf_tbi             = MANTA.out.diploid_sv_vcf_tbi             // channel: [ val(meta), path(tbi) ]
-        filtered_diploid_sv_vcf_tbi    = BCFTOOLS_VIEW_MANTA.out.vcf              // channel: [ val(meta), path(vcf), path(tbi) ]
+        filtered_diploid_sv_vcf        = BCFTOOLS_VIEW_MANTA.out.vcf              // channel: [ val(meta), path(vcf) ]
         versions                       = ch_versions
 }

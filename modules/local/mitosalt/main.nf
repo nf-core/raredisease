@@ -15,12 +15,12 @@ process MITOSALT {
     input:
     tuple val(meta), path(reads)
     path msconfig
-    tuple val(meta2), path(hisat2index)
-    tuple val(meta3), path(genomefai)
-    tuple val(meta4), path(lastindex)
-    tuple val(meta5), path(mtfai)
     path chrsizes
+    tuple val(meta3), path(genomefai)
+    tuple val(meta2), path(hisat2index)
+    tuple val(meta5), path(mtfai)
     tuple val(meta6), path(mtfasta)
+    tuple val(meta4), path(lastindex)
 
     output:
     tuple val(meta), path("*breakpoint") , emit: breakpoint

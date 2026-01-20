@@ -10,7 +10,8 @@ nextflow_pipeline {
 
         when {
             params {
-                outdir = "$outputDir"
+                outdir     = "$outputDir"
+                skip_tools = "germlinecnvcaller,gens"
             }
         }
 

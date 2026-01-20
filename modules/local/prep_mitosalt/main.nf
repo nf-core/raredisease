@@ -3,27 +3,27 @@ process PREP_MITOSALT {
     label "process_low"
 
     input:
-    tuple val(meta), path(hisat2index)
-    tuple val(meta2), path(genomefai)
-    tuple val(meta3), path(lastindex)
-    tuple val(meta4), path(mtfai)
     path chrsizes
+    tuple val(meta2), path(genomefai)
+    tuple val(meta), path(hisat2index)
+    tuple val(meta4), path(mtfai)
     tuple val(meta5), path(mtfasta)
-    val mito_name
-    val exclude
-    val score_threshold
-    val evalue_threshold
-    val split_length
-    val paired_distance
-    val deletion_threshold_min
-    val deletion_threshold_max
+    tuple val(meta3), path(lastindex)
+    val breakspan
     val breakthreshold
     val cluster_threshold
-    val breakspan
-    val sizelimit
-    val hplimit
+    val deletion_threshold_max
+    val deletion_threshold_min
+    val evalue_threshold
+    val exclude
     val flank
+    val hplimit
+    val mito_name
+    val paired_distance
+    val score_threshold
+    val sizelimit
     val split_distance_threshold
+    val split_length
    
     output:
     path "mitosalt_config.txt", emit: msconfig

@@ -13,16 +13,16 @@ include { CHROMOGRAPH as CHROMOGRAPH_AUTOZYG        } from '../../../modules/nf-
 workflow ANNOTATE_RHOCALLVIZ {
 
     take:
-        ch_vcf_tbi         // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
-        ch_samples         // channel: [mandatory] [ val(sample_meta) ]
         ch_genome_chrsizes // channel: [mandatory] [ path(sizes) ]
+        ch_samples         // channel: [mandatory] [ val(sample_meta) ]
+        ch_vcf_tbi         // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
 
     main:
-        ch_versions       = Channel.empty()
+        ch_versions       = channel.empty()
 
         ch_vcf_tbi
             .combine(ch_samples)
-            .map {meta, vcf, tbi, meta2 -> return [meta2,vcf,tbi]}
+            .map {_meta, vcf, tbi, meta2 -> return [meta2,vcf,tbi]}
             .set { ch_rhocall_viz }
 
         BCFTOOLS_VIEW_RHOCALL(ch_rhocall_viz, [],[],[])
@@ -37,7 +37,18 @@ workflow ANNOTATE_RHOCALLVIZ {
 
         BCFTOOLS_VIEW_UNCOMPRESS(ch_roh_in,[],[],[])
 
-        RHOCALL_VIZ(BCFTOOLS_VIEW_UNCOMPRESS.out.vcf, BCFTOOLS_ROH.out.roh)
+        BCFTOOLS_VIEW_UNCOMPRESS.out.vcf
+                .join(BCFTOOLS_ROH.out.roh)
+                .multiMap { meta, vcf, roh ->
+                    vcf: [meta, vcf]
+                    roh: [meta, roh]
+                }
+                .set { ch_rhocall_viz_input }
+
+        RHOCALL_VIZ(
+            ch_rhocall_viz_input.vcf,
+            ch_rhocall_viz_input.roh,
+        )
 
         CHROMOGRAPH_AUTOZYG(RHOCALL_VIZ.out.bed, [[],[]], [[],[]], [[],[]], [[],[]], [[],[]], [[],[]])
 
