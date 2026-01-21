@@ -40,6 +40,36 @@ workflow NFCORE_RAREDISEASE {
     ch_case_info
     ch_reads
     ch_samples
+    val_aligner
+    val_analysis_type
+    val_bwa
+    val_bwamem2
+    val_bwameme
+    val_cadd_resources
+    val_fai
+    val_fasta
+    val_gnomad_af
+    val_gnomad_af_idx
+    val_known_dbsnp
+    val_known_dbsnp_tbi
+    val_mt_aligner
+    val_mt_fasta
+    val_multiqc_samples
+    val_reduced_penetrance
+    val_rtg_truthvcfs
+    val_run_mt_for_wes
+    val_run_rtgvcfeval
+    val_score_config_mt
+    val_score_config_snv
+    val_score_config_sv
+    val_sdf
+    val_sequence_dictionary
+    val_target_bed
+    val_vcf2cytosure_blacklist
+    val_vcfanno_extra_resources
+    val_vcfanno_lua
+    val_vcfanno_toml
+    val_vep_cache
 
     main:
 
@@ -47,29 +77,29 @@ workflow NFCORE_RAREDISEASE {
     // WORKFLOW: Run pipeline
     //
 
-    ch_versions                  = channel.empty()
+    ch_versions = channel.empty()
 
     PREPARE_REFERENCES (
-        params.aligner,
-        params.analysis_type,
-        params.bwa,
-        params.bwamem2,
-        params.bwameme,
-        params.fai,
-        params.fasta,
-        params.gnomad_af,
-        params.gnomad_af_idx,
-        params.known_dbsnp,
-        params.known_dbsnp_tbi,
-        params.mt_aligner,
-        params.mt_fasta,
-        params.run_mt_for_wes,
-        params.run_rtgvcfeval,
-        params.sdf,
-        params.sequence_dictionary,
-        params.target_bed,
-        params.vcfanno_extra_resources,
-        params.vep_cache
+        val_aligner,
+        val_analysis_type,
+        val_bwa,
+        val_bwamem2,
+        val_bwameme,
+        val_fai,
+        val_fasta,
+        val_gnomad_af,
+        val_gnomad_af_idx,
+        val_known_dbsnp,
+        val_known_dbsnp_tbi,
+        val_mt_aligner,
+        val_mt_fasta,
+        val_run_mt_for_wes,
+        val_run_rtgvcfeval,
+        val_sdf,
+        val_sequence_dictionary,
+        val_target_bed,
+        val_vcfanno_extra_resources,
+        val_vep_cache
     )
     .set { ch_references }
 
@@ -104,9 +134,19 @@ workflow NFCORE_RAREDISEASE {
     ch_vep_cache                = ch_references.vep_resources
     ch_versions                 = ch_versions.mix(ch_references.versions)
 
+    // Using channelFromPathOrValue helper (val_x ? channel.fromPath(val_x).collect() : channel.value([]))
+    ch_cadd_resources           = channelFromPathOrValue(val_cadd_resources)
+    ch_multiqc_samples          = channelFromPathOrValue(val_multiqc_samples)
+    ch_reduced_penetrance       = channelFromPathOrValue(val_reduced_penetrance)
+    ch_rtg_truthvcfs            = channelFromPathOrValue(val_rtg_truthvcfs)
+    ch_score_config_mt          = channelFromPathOrValue(val_score_config_mt)
+    ch_score_config_snv         = channelFromPathOrValue(val_score_config_snv)
+    ch_score_config_sv          = channelFromPathOrValue(val_score_config_sv)
+    ch_vcf2cytosure_blacklist   = channelFromPathOrValue(val_vcf2cytosure_blacklist)
+    ch_vcfanno_lua              = channelFromPathOrValue(val_vcfanno_lua)
+    ch_vcfanno_toml             = channelFromPathOrValue(val_vcfanno_toml)
+
     ch_cadd_header              = channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
-    ch_cadd_resources           = params.cadd_resources                     ? channel.fromPath(params.cadd_resources).collect()
-                                                                            : channel.value([])
     ch_call_interval            = params.call_interval                      ? channel.fromPath(params.call_interval).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : channel.value([[:],[]])
     ch_foundin_header           = channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
@@ -133,8 +173,6 @@ workflow NFCORE_RAREDISEASE {
                                                                             : channel.empty()
     ch_ml_model                 = params.variant_caller.equals("sentieon")  ? channel.fromPath(params.ml_model).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : channel.value([[:],[]])
-    ch_multiqc_samples          = params.multiqc_samples                    ? channel.fromPath(params.multiqc_samples)
-                                                                            : channel.value([])
     ch_ngsbits_method           = channel.value(params.ngsbits_samplegender_method)
     ch_par_bed                  = params.par_bed                            ? channel.fromPath(params.par_bed).map{ it -> [[id:'par_bed'], it] }.collect()
                                                                             : channel.value([[],[]])
@@ -143,20 +181,10 @@ workflow NFCORE_RAREDISEASE {
                                                                             : channel.empty()
     ch_readcount_intervals      = params.readcount_intervals                ? channel.fromPath(params.readcount_intervals).collect()
                                                                             : channel.empty()
-    ch_reduced_penetrance       = params.reduced_penetrance                 ? channel.fromPath(params.reduced_penetrance).collect()
-                                                                            : channel.value([])
-    ch_rtg_truthvcfs            = params.rtg_truthvcfs                      ? channel.fromPath(params.rtg_truthvcfs).collect()
-                                                                            : channel.value([])
     ch_sambamba_bed             = params.sambamba_regions                   ? channel.fromPath(params.sambamba_regions).map{ it -> [[id:'sambamba'], it] }.collect()
                                                                             : channel.empty()
     ch_sample_id_map            = params.sample_id_map                      ? channel.fromList(samplesheetToList(params.sample_id_map, "${projectDir}/assets/sample_id_map.json"))
                                                                             : channel.empty()
-    ch_score_config_mt          = params.score_config_mt                    ? channel.fromPath(params.score_config_mt).collect()
-                                                                            : channel.value([])
-    ch_score_config_snv         = params.score_config_snv                   ? channel.fromPath(params.score_config_snv).collect()
-                                                                            : channel.value([])
-    ch_score_config_sv          = params.score_config_sv                    ? channel.fromPath(params.score_config_sv).collect()
-                                                                            : channel.value([])
     ch_svd_bed                  = params.verifybamid_svd_bed                ? channel.fromPath(params.verifybamid_svd_bed)
                                                                             : channel.empty()
     ch_svd_mu                   = params.verifybamid_svd_mu                 ? channel.fromPath(params.verifybamid_svd_mu)
@@ -174,12 +202,6 @@ workflow NFCORE_RAREDISEASE {
     ch_variant_consequences_sv  = params.variant_consequences_sv            ? channel.fromPath(params.variant_consequences_sv).map { it -> [[id:it.simpleName],it]}.collect()
                                                                             : channel.value([[],[]])
     ch_vcfanno_resources        = params.vcfanno_resources                  ? channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
-                                                                            : channel.value([])
-    ch_vcf2cytosure_blacklist   = params.vcf2cytosure_blacklist             ? channel.fromPath(params.vcf2cytosure_blacklist).collect()
-                                                                            : channel.value([])
-    ch_vcfanno_lua              = params.vcfanno_lua                        ? channel.fromPath(params.vcfanno_lua).collect()
-                                                                            : channel.value([])
-    ch_vcfanno_toml             = params.vcfanno_toml                       ? channel.fromPath(params.vcfanno_toml).collect()
                                                                             : channel.value([])
     ch_vep_filters_std_fmt      = params.vep_filters                        ? channel.fromPath(params.vep_filters).map { it -> [[id:'standard'],it]}.collect()
                                                                             : channel.empty()
@@ -435,7 +457,37 @@ workflow {
         PIPELINE_INITIALISATION.out.align,
         PIPELINE_INITIALISATION.out.case_info,
         PIPELINE_INITIALISATION.out.reads,
-        PIPELINE_INITIALISATION.out.samples
+        PIPELINE_INITIALISATION.out.samples,
+        params.aligner,
+        params.analysis_type,
+        params.bwa,
+        params.bwamem2,
+        params.bwameme,
+        params.cadd_resources,
+        params.fai,
+        params.fasta,
+        params.gnomad_af,
+        params.gnomad_af_idx,
+        params.known_dbsnp,
+        params.known_dbsnp_tbi,
+        params.mt_aligner,
+        params.mt_fasta,
+        params.multiqc_samples,
+        params.reduced_penetrance,
+        params.rtg_truthvcfs,
+        params.run_mt_for_wes,
+        params.run_rtgvcfeval,
+        params.score_config_mt,
+        params.score_config_snv,
+        params.score_config_sv,
+        params.sdf,
+        params.sequence_dictionary,
+        params.target_bed,
+        params.vcf2cytosure_blacklist,
+        params.vcfanno_extra_resources,
+        params.vcfanno_lua,
+        params.vcfanno_toml,
+        params.vep_cache
     )
     //
     // SUBWORKFLOW: Run completion tasks
@@ -449,6 +501,21 @@ workflow {
         params.hook_url,
         NFCORE_RAREDISEASE.out.multiqc_report
     )
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    HELPER FUNCTIONS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+/**
+ * Creates a channel from a file path if the parameter is provided, otherwise returns a channel with an empty value
+ * @param filePath The path to the file (can be null)
+ * @return Channel with collected file path or channel.value([])
+ */
+def channelFromPathOrValue(filePath) {
+    return filePath ? channel.fromPath(filePath).collect() : channel.value([])
 }
 
 /*
