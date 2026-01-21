@@ -48,13 +48,19 @@ workflow NFCORE_RAREDISEASE {
     val_cadd_resources
     val_fai
     val_fasta
+    val_gens_gnomad_pos
+    val_gens_interval_list
     val_gnomad_af
     val_gnomad_af_idx
+    val_intervals_wgs
+    val_intervals_y
     val_known_dbsnp
     val_known_dbsnp_tbi
+    val_mobile_element_svdb_annotations
     val_mt_aligner
     val_mt_fasta
     val_multiqc_samples
+    val_readcount_intervals
     val_reduced_penetrance
     val_rtg_truthvcfs
     val_run_mt_for_wes
@@ -64,11 +70,16 @@ workflow NFCORE_RAREDISEASE {
     val_score_config_sv
     val_sdf
     val_sequence_dictionary
+    val_svdb_query_bedpedbs
+    val_svdb_query_dbs
     val_target_bed
     val_vcf2cytosure_blacklist
     val_vcfanno_extra_resources
     val_vcfanno_lua
     val_vcfanno_toml
+    val_verifybamid_svd_bed
+    val_verifybamid_svd_mu
+    val_verifybamid_svd_ud
     val_vep_cache
 
     main:
@@ -145,6 +156,19 @@ workflow NFCORE_RAREDISEASE {
     ch_vcf2cytosure_blacklist   = channelFromPathOrValue(val_vcf2cytosure_blacklist)
     ch_vcfanno_lua              = channelFromPathOrValue(val_vcfanno_lua)
     ch_vcfanno_toml             = channelFromPathOrValue(val_vcfanno_toml)
+
+    // Using channelFromPathOrEmpty helper (val_x ? channel.fromPath(val_x).collect() : channel.empty())
+    ch_gens_gnomad_pos          = channelFromPathOrEmpty(val_gens_gnomad_pos)
+    ch_gens_interval_list       = channelFromPathOrEmpty(val_gens_interval_list)
+    ch_intervals_wgs            = channelFromPathOrEmpty(val_intervals_wgs)
+    ch_intervals_y              = channelFromPathOrEmpty(val_intervals_y)
+    ch_me_svdb_resources        = channelFromPathOrEmpty(val_mobile_element_svdb_annotations)
+    ch_readcount_intervals      = channelFromPathOrEmpty(val_readcount_intervals)
+    ch_svd_bed                  = channelFromPathOrEmpty(val_verifybamid_svd_bed)
+    ch_svd_mu                   = channelFromPathOrEmpty(val_verifybamid_svd_mu)
+    ch_svd_ud                   = channelFromPathOrEmpty(val_verifybamid_svd_ud)
+    ch_svdb_bedpedbs            = channelFromPathOrEmpty(val_svdb_query_bedpedbs)
+    ch_svdb_dbs                 = channelFromPathOrEmpty(val_svdb_query_dbs)
 
     ch_cadd_header              = channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_call_interval            = params.call_interval                      ? channel.fromPath(params.call_interval).map {it -> [[id:it.simpleName], it]}.collect()
@@ -466,13 +490,19 @@ workflow {
         params.cadd_resources,
         params.fai,
         params.fasta,
+        params.gens_gnomad_pos,
+        params.gens_interval_list,
         params.gnomad_af,
         params.gnomad_af_idx,
+        params.intervals_wgs,
+        params.intervals_y,
         params.known_dbsnp,
         params.known_dbsnp_tbi,
+        params.mobile_element_svdb_annotations,
         params.mt_aligner,
         params.mt_fasta,
         params.multiqc_samples,
+        params.readcount_intervals,
         params.reduced_penetrance,
         params.rtg_truthvcfs,
         params.run_mt_for_wes,
@@ -482,11 +512,16 @@ workflow {
         params.score_config_sv,
         params.sdf,
         params.sequence_dictionary,
+        params.svdb_query_bedpedbs,
+        params.svdb_query_dbs,
         params.target_bed,
         params.vcf2cytosure_blacklist,
         params.vcfanno_extra_resources,
         params.vcfanno_lua,
         params.vcfanno_toml,
+        params.verifybamid_svd_bed,
+        params.verifybamid_svd_mu,
+        params.verifybamid_svd_ud,
         params.vep_cache
     )
     //
@@ -508,6 +543,16 @@ workflow {
     HELPER FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+
+/**
+ * Creates a channel from a file path if the parameter is provided, otherwise returns an empty channel
+ * @param filePath The path to the file (can be null)
+ * @return Channel with collected file path or empty channel
+ */
+def channelFromPathOrEmpty(filePath) {
+    return filePath ? channel.fromPath(filePath).collect() : channel.empty()
+}
 
 /**
  * Creates a channel from a file path if the parameter is provided, otherwise returns a channel with an empty value
