@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parameter to pass a file containing new sample ids to use with multiqc [#764](https://github.com/nf-core/raredisease/pull/764)
 - A helper function channelFromPathOrValue to create channels in a readable fashion in main.nf [#766](https://github.com/nf-core/raredisease/pull/766)
 - A helper function channelFromPathOrEmpty to create channels in a readable fashion in main.nf [#767](https://github.com/nf-core/raredisease/pull/767)
-- A helper function channelFromPathWithIdOrDoubleEmpty to create channels in a readable fashion in main.nf [#768](https://github.com/nf-core/raredisease/pull/768)
+- A helper function channelFromPathWithMeta to create channels in a readable fashion in main.nf [#768](https://github.com/nf-core/raredisease/pull/768)
 
 ### `Changed`
 

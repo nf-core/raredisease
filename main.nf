@@ -51,6 +51,8 @@ workflow NFCORE_RAREDISEASE {
     val_fasta
     val_gens_gnomad_pos
     val_gens_interval_list
+    val_gens_pon_female
+    val_gens_pon_male
     val_gnomad_af
     val_gnomad_af_idx
     val_intervals_wgs
@@ -62,11 +64,14 @@ workflow NFCORE_RAREDISEASE {
     val_mt_aligner
     val_mt_fasta
     val_multiqc_samples
+    val_par_bed
+    val_ploidy_model
     val_readcount_intervals
     val_reduced_penetrance
     val_rtg_truthvcfs
     val_run_mt_for_wes
     val_run_rtgvcfeval
+    val_sambamba_regions
     val_score_config_mt
     val_score_config_snv
     val_score_config_sv
@@ -82,6 +87,8 @@ workflow NFCORE_RAREDISEASE {
     val_vcfanno_extra_resources
     val_vcfanno_lua
     val_vcfanno_toml
+    val_vep_filters
+    val_vep_filters_scout_fmt
     val_verifybamid_svd_bed
     val_verifybamid_svd_mu
     val_verifybamid_svd_ud
@@ -175,12 +182,23 @@ workflow NFCORE_RAREDISEASE {
     ch_svdb_bedpedbs            = channelFromPathOrEmpty(val_svdb_query_bedpedbs)
     ch_svdb_dbs                 = channelFromPathOrEmpty(val_svdb_query_dbs)
 
-    // Using channelFromPathWithIdOrDoubleEmpty helper (with simpleName)
-    ch_call_interval            = channelFromPathWithIdOrDoubleEmpty(val_call_interval)
-    ch_ml_model                 = channelFromPathWithIdOrDoubleEmpty(val_ml_model)
-    ch_variant_catalog          = channelFromPathWithIdOrDoubleEmpty(val_variant_catalog)
-    ch_variant_consequences_snv = channelFromPathWithIdOrDoubleEmpty(val_variant_consequences_snv)
-    ch_variant_consequences_sv  = channelFromPathWithIdOrDoubleEmpty(val_variant_consequences_sv)
+    // Using channelFromPathWithMeta helper (with simpleName). If filepath is null, returns, [[:],[]]
+    ch_call_interval            = channelFromPathWithMeta(val_call_interval, true)
+    ch_ml_model                 = channelFromPathWithMeta(val_ml_model, true)
+    ch_variant_catalog          = channelFromPathWithMeta(val_variant_catalog, true)
+    ch_variant_consequences_snv = channelFromPathWithMeta(val_variant_consequences_snv, true)
+    ch_variant_consequences_sv  = channelFromPathWithMeta(val_variant_consequences_sv, true)
+
+    // Using channelFromPathWithMeta helper (with simpleName). If filepath is null, returns, empty channel
+    ch_gens_pon_female          = channelFromPathWithMeta(val_gens_pon_female)
+    ch_gens_pon_male            = channelFromPathWithMeta(val_gens_pon_male)
+    ch_ploidy_model             = channelFromPathWithMeta(val_ploidy_model)
+
+    // Using channelFromPathWithMeta helper. Returns either an empty channel or [[:],[]] with custom ID.
+    ch_par_bed                  = channelFromPathWithMeta(val_par_bed, true, "par_bed")
+    ch_sambamba_bed             = channelFromPathWithMeta(val_sambamba_regions, false, 'sambamba')
+    ch_vep_filters_std_fmt      = channelFromPathWithMeta(val_vep_filters, false, 'standard')
+    ch_vep_filters_scout_fmt    = channelFromPathWithMeta(val_vep_filters_scout_fmt, false, 'scout')
 
     ch_cadd_header              = channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_foundin_header           = channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
@@ -189,18 +207,12 @@ workflow NFCORE_RAREDISEASE {
                                                                                 return [[id:file(row.models).simpleName], row.models]
                                                                             }
                                                                             : channel.empty()
-    ch_gens_pon_female          = params.gens_pon_female                    ? channel.fromPath(params.gens_pon_female).map { it -> [ [id:it.simpleName], it ] }.collect()
-                                                                            : channel.empty()
-    ch_gens_pon_male            = params.gens_pon_male                      ? channel.fromPath(params.gens_pon_male).map { it -> [ [id:it.simpleName], it ] }.collect()
-                                                                            : channel.empty()
     ch_me_references            = params.mobile_element_references          ? channel.fromList(samplesheetToList(params.mobile_element_references, "${projectDir}/assets/mobile_element_references_schema.json"))
                                                                             : channel.empty()
     ch_ngsbits_method           = channel.value(params.ngsbits_samplegender_method)
     ch_par_bed                  = params.par_bed                            ? channel.fromPath(params.par_bed).map{ it -> [[id:'par_bed'], it] }.collect()
                                                                             : channel.value([[],[]])
     ch_sentieon_pcr_indel_model = channel.value(params.sentieon_dnascope_pcr_indel_model)
-    ch_ploidy_model             = params.ploidy_model                       ? channel.fromPath(params.ploidy_model).map{ it -> [[id:it.simpleName], it] }.collect()
-                                                                            : channel.empty()
     ch_sambamba_bed             = params.sambamba_regions                   ? channel.fromPath(params.sambamba_regions).map{ it -> [[id:'sambamba'], it] }.collect()
                                                                             : channel.empty()
     ch_sample_id_map            = params.sample_id_map                      ? channel.fromList(samplesheetToList(params.sample_id_map, "${projectDir}/assets/sample_id_map.json"))
@@ -473,6 +485,8 @@ workflow {
         params.fasta,
         params.gens_gnomad_pos,
         params.gens_interval_list,
+        params.gens_pon_female,
+        params.gens_pon_male,
         params.gnomad_af,
         params.gnomad_af_idx,
         params.intervals_wgs,
@@ -484,11 +498,14 @@ workflow {
         params.mt_aligner,
         params.mt_fasta,
         params.multiqc_samples,
+        params.par_bed,
+        params.ploidy_model,
         params.readcount_intervals,
         params.reduced_penetrance,
         params.rtg_truthvcfs,
         params.run_mt_for_wes,
         params.run_rtgvcfeval,
+        params.sambamba_regions,
         params.score_config_mt,
         params.score_config_snv,
         params.score_config_sv,
@@ -504,6 +521,8 @@ workflow {
         params.vcfanno_extra_resources,
         params.vcfanno_lua,
         params.vcfanno_toml,
+        params.vep_filters,
+        params.vep_filters_scout_fmt,
         params.verifybamid_svd_bed,
         params.verifybamid_svd_mu,
         params.verifybamid_svd_ud,
@@ -547,20 +566,19 @@ def channelFromPathOrValue(filePath) {
     return filePath ? channel.fromPath(filePath).collect() : channel.value([])
 }
 
-
 /**
  * Creates a channel from a file path, maps it to [id, file] format, and collects
- * Falls back to channel.value([[:], []]) if file path is null
  * @param filePath The path to the file (can be null)
- * @param useSimpleName Whether to use simpleName for the id (default: true)
- * @return Channel with [[id:name], file] format or channel.value([[:], []])
+ * @param doubleEmpty If true, returns channel.value([[:], []]) when filePath is null; otherwise returns channel.empty() (default: false)
+ * @return Channel with [[id:name], file] format and collected, or fallback channel
  */
-def channelFromPathWithIdOrDoubleEmpty(filePath) {
+def channelFromPathWithMeta(filePath, doubleEmpty = false, customId = null) {
     if (!filePath) {
-        return channel.value([[:], []])
+        return doubleEmpty ? channel.value([[:], []]) : channel.empty()
     }
+    def meta_id = customId ?: filePath.simplename
     return channel.fromPath(filePath).map { file ->
-        return [[id: file.simpleName], file]
+        return [[id: meta_id], file]
     }.collect()
 }
 /*
