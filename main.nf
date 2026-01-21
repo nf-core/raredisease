@@ -145,30 +145,30 @@ workflow NFCORE_RAREDISEASE {
     ch_vep_cache                = ch_references.vep_resources
     ch_versions                 = ch_versions.mix(ch_references.versions)
 
-    // Using channelFromPathOrValue helper (val_x ? channel.fromPath(val_x).collect() : channel.value([]))
-    ch_cadd_resources           = channelFromPathOrValue(val_cadd_resources)
-    ch_multiqc_samples          = channelFromPathOrValue(val_multiqc_samples)
-    ch_reduced_penetrance       = channelFromPathOrValue(val_reduced_penetrance)
-    ch_rtg_truthvcfs            = channelFromPathOrValue(val_rtg_truthvcfs)
-    ch_score_config_mt          = channelFromPathOrValue(val_score_config_mt)
-    ch_score_config_snv         = channelFromPathOrValue(val_score_config_snv)
-    ch_score_config_sv          = channelFromPathOrValue(val_score_config_sv)
-    ch_vcf2cytosure_blacklist   = channelFromPathOrValue(val_vcf2cytosure_blacklist)
-    ch_vcfanno_lua              = channelFromPathOrValue(val_vcfanno_lua)
-    ch_vcfanno_toml             = channelFromPathOrValue(val_vcfanno_toml)
+    // Using channelFromPath helper (val_x ? channel.fromPath(val_x).collect() : channel.value([]))
+    ch_cadd_resources           = channelFromPath(val_cadd_resources, true)
+    ch_multiqc_samples          = channelFromPath(val_multiqc_samples, true)
+    ch_reduced_penetrance       = channelFromPath(val_reduced_penetrance, true)
+    ch_rtg_truthvcfs            = channelFromPath(val_rtg_truthvcfs, true)
+    ch_score_config_mt          = channelFromPath(val_score_config_mt, true)
+    ch_score_config_snv         = channelFromPath(val_score_config_snv, true)
+    ch_score_config_sv          = channelFromPath(val_score_config_sv, true)
+    ch_vcf2cytosure_blacklist   = channelFromPath(val_vcf2cytosure_blacklist, true)
+    ch_vcfanno_lua              = channelFromPath(val_vcfanno_lua, true)
+    ch_vcfanno_toml             = channelFromPath(val_vcfanno_toml, true)
 
-    // Using channelFromPathOrEmpty helper (val_x ? channel.fromPath(val_x).collect() : channel.empty())
-    ch_gens_gnomad_pos          = channelFromPathOrEmpty(val_gens_gnomad_pos)
-    ch_gens_interval_list       = channelFromPathOrEmpty(val_gens_interval_list)
-    ch_intervals_wgs            = channelFromPathOrEmpty(val_intervals_wgs)
-    ch_intervals_y              = channelFromPathOrEmpty(val_intervals_y)
-    ch_me_svdb_resources        = channelFromPathOrEmpty(val_mobile_element_svdb_annotations)
-    ch_readcount_intervals      = channelFromPathOrEmpty(val_readcount_intervals)
-    ch_svd_bed                  = channelFromPathOrEmpty(val_verifybamid_svd_bed)
-    ch_svd_mu                   = channelFromPathOrEmpty(val_verifybamid_svd_mu)
-    ch_svd_ud                   = channelFromPathOrEmpty(val_verifybamid_svd_ud)
-    ch_svdb_bedpedbs            = channelFromPathOrEmpty(val_svdb_query_bedpedbs)
-    ch_svdb_dbs                 = channelFromPathOrEmpty(val_svdb_query_dbs)
+    // Using channelFromPath helper (val_x ? channel.fromPath(val_x).collect() : channel.empty())
+    ch_gens_gnomad_pos          = channelFromPath(val_gens_gnomad_pos)
+    ch_gens_interval_list       = channelFromPath(val_gens_interval_list)
+    ch_intervals_wgs            = channelFromPath(val_intervals_wgs)
+    ch_intervals_y              = channelFromPath(val_intervals_y)
+    ch_me_svdb_resources        = channelFromPath(val_mobile_element_svdb_annotations)
+    ch_readcount_intervals      = channelFromPath(val_readcount_intervals)
+    ch_svd_bed                  = channelFromPath(val_verifybamid_svd_bed)
+    ch_svd_mu                   = channelFromPath(val_verifybamid_svd_mu)
+    ch_svd_ud                   = channelFromPath(val_verifybamid_svd_ud)
+    ch_svdb_bedpedbs            = channelFromPath(val_svdb_query_bedpedbs)
+    ch_svdb_dbs                 = channelFromPath(val_svdb_query_dbs)
 
     ch_cadd_header              = channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_call_interval            = params.call_interval                      ? channel.fromPath(params.call_interval).map {it -> [[id:it.simpleName], it]}.collect()
@@ -522,23 +522,17 @@ workflow {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-
 /**
- * Creates a channel from a file path if the parameter is provided, otherwise returns an empty channel
+ * Creates a channel from a file path if provided, otherwise returns a fallback channel
  * @param filePath The path to the file (can be null)
- * @return Channel with collected file path or empty channel
+ * @param valueFallback If true, returns channel.value([]) when filePath is null; otherwise returns channel.empty() (default: false)
+ * @return Channel with collected file path or fallback channel
  */
-def channelFromPathOrEmpty(filePath) {
-    return filePath ? channel.fromPath(filePath).collect() : channel.empty()
-}
-
-/**
- * Creates a channel from a file path if the parameter is provided, otherwise returns a channel with an empty value
- * @param filePath The path to the file (can be null)
- * @return Channel with collected file path or channel.value([])
- */
-def channelFromPathOrValue(filePath) {
-    return filePath ? channel.fromPath(filePath).collect() : channel.value([])
+def channelFromPath(filePath, valueFallback = false) {
+    if (!filePath) {
+        return valueFallback ? channel.value([]) : channel.empty()
+    }
+    return channel.fromPath(filePath).collect()
 }
 
 /*
