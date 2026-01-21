@@ -46,6 +46,7 @@ workflow NFCORE_RAREDISEASE {
     val_bwamem2
     val_bwameme
     val_cadd_resources
+    val_call_interval
     val_fai
     val_fasta
     val_gens_gnomad_pos
@@ -56,6 +57,7 @@ workflow NFCORE_RAREDISEASE {
     val_intervals_y
     val_known_dbsnp
     val_known_dbsnp_tbi
+    val_ml_model
     val_mobile_element_svdb_annotations
     val_mt_aligner
     val_mt_fasta
@@ -73,6 +75,9 @@ workflow NFCORE_RAREDISEASE {
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
     val_target_bed
+    val_variant_catalog
+    val_variant_consequences_snv
+    val_variant_consequences_sv
     val_vcf2cytosure_blacklist
     val_vcfanno_extra_resources
     val_vcfanno_lua
@@ -170,9 +175,14 @@ workflow NFCORE_RAREDISEASE {
     ch_svdb_bedpedbs            = channelFromPathOrEmpty(val_svdb_query_bedpedbs)
     ch_svdb_dbs                 = channelFromPathOrEmpty(val_svdb_query_dbs)
 
+    // Using channelFromPathWithIdOrDoubleEmpty helper (with simpleName)
+    ch_call_interval            = channelFromPathWithIdOrDoubleEmpty(val_call_interval)
+    ch_ml_model                 = channelFromPathWithIdOrDoubleEmpty(val_ml_model)
+    ch_variant_catalog          = channelFromPathWithIdOrDoubleEmpty(val_variant_catalog)
+    ch_variant_consequences_snv = channelFromPathWithIdOrDoubleEmpty(val_variant_consequences_snv)
+    ch_variant_consequences_sv  = channelFromPathWithIdOrDoubleEmpty(val_variant_consequences_sv)
+
     ch_cadd_header              = channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
-    ch_call_interval            = params.call_interval                      ? channel.fromPath(params.call_interval).map {it -> [[id:it.simpleName], it]}.collect()
-                                                                            : channel.value([[:],[]])
     ch_foundin_header           = channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
     ch_gcnvcaller_model         = params.gcnvcaller_model                   ? channel.fromPath(params.gcnvcaller_model).splitCsv ( header:true )
                                                                             .map { row ->
@@ -185,8 +195,6 @@ workflow NFCORE_RAREDISEASE {
                                                                             : channel.empty()
     ch_me_references            = params.mobile_element_references          ? channel.fromList(samplesheetToList(params.mobile_element_references, "${projectDir}/assets/mobile_element_references_schema.json"))
                                                                             : channel.empty()
-    ch_ml_model                 = params.variant_caller.equals("sentieon")  ? channel.fromPath(params.ml_model).map {it -> [[id:it.simpleName], it]}.collect()
-                                                                            : channel.value([[:],[]])
     ch_ngsbits_method           = channel.value(params.ngsbits_samplegender_method)
     ch_par_bed                  = params.par_bed                            ? channel.fromPath(params.par_bed).map{ it -> [[id:'par_bed'], it] }.collect()
                                                                             : channel.value([[],[]])
@@ -197,12 +205,6 @@ workflow NFCORE_RAREDISEASE {
                                                                             : channel.empty()
     ch_sample_id_map            = params.sample_id_map                      ? channel.fromList(samplesheetToList(params.sample_id_map, "${projectDir}/assets/sample_id_map.json"))
                                                                             : channel.empty()
-    ch_variant_catalog          = params.variant_catalog                    ? channel.fromPath(params.variant_catalog).map { it -> [[id:it.simpleName],it]}.collect()
-                                                                            : channel.value([[],[]])
-    ch_variant_consequences_snv = params.variant_consequences_snv           ? channel.fromPath(params.variant_consequences_snv).map { it -> [[id:it.simpleName],it]}.collect()
-                                                                            : channel.value([[],[]])
-    ch_variant_consequences_sv  = params.variant_consequences_sv            ? channel.fromPath(params.variant_consequences_sv).map { it -> [[id:it.simpleName],it]}.collect()
-                                                                            : channel.value([[],[]])
     ch_vcfanno_resources        = params.vcfanno_resources                  ? channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
                                                                             : channel.value([])
     ch_vep_filters_std_fmt      = params.vep_filters                        ? channel.fromPath(params.vep_filters).map { it -> [[id:'standard'],it]}.collect()
@@ -466,6 +468,7 @@ workflow {
         params.bwamem2,
         params.bwameme,
         params.cadd_resources,
+        params.call_interval,
         params.fai,
         params.fasta,
         params.gens_gnomad_pos,
@@ -476,6 +479,7 @@ workflow {
         params.intervals_y,
         params.known_dbsnp,
         params.known_dbsnp_tbi,
+        params.ml_model,
         params.mobile_element_svdb_annotations,
         params.mt_aligner,
         params.mt_fasta,
@@ -493,6 +497,9 @@ workflow {
         params.svdb_query_bedpedbs,
         params.svdb_query_dbs,
         params.target_bed,
+        params.variant_catalog,
+        params.variant_consequences_snv,
+        params.variant_consequences_sv,
         params.vcf2cytosure_blacklist,
         params.vcfanno_extra_resources,
         params.vcfanno_lua,
@@ -522,7 +529,6 @@ workflow {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-
 /**
  * Creates a channel from a file path if the parameter is provided, otherwise returns an empty channel
  * @param filePath The path to the file (can be null)
@@ -541,6 +547,22 @@ def channelFromPathOrValue(filePath) {
     return filePath ? channel.fromPath(filePath).collect() : channel.value([])
 }
 
+
+/**
+ * Creates a channel from a file path, maps it to [id, file] format, and collects
+ * Falls back to channel.value([[:], []]) if file path is null
+ * @param filePath The path to the file (can be null)
+ * @param useSimpleName Whether to use simpleName for the id (default: true)
+ * @return Channel with [[id:name], file] format or channel.value([[:], []])
+ */
+def channelFromPathWithIdOrDoubleEmpty(filePath) {
+    if (!filePath) {
+        return channel.value([[:], []])
+    }
+    return channel.fromPath(filePath).map { file ->
+        return [[id: file.simpleName], file]
+    }.collect()
+}
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     THE END
