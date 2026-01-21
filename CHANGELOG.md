@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Feature to subsample mitochondrial alignments based on number of reads [#748](https://github.com/nf-core/raredisease/pull/748)
 - Functionality to generate coverage information using Sambamba depth [#752](https://github.com/nf-core/raredisease/pull/752)
 - Parameter to pass a file containing new sample ids to use with multiqc [#764](https://github.com/nf-core/raredisease/pull/764)
+- A helper function channelFromPathOrValue to create channels in a readable fashion in main.nf []() 
 
 ### `Changed`
 
