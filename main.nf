@@ -17,6 +17,9 @@
 include { samplesheetToList       } from 'plugin/nf-schema'
 include { CREATE_HGNCIDS_FILE     } from './modules/local/create_hgncids_file'
 include { CREATE_PEDIGREE_FILE    } from './modules/local/create_pedigree_file'
+include { channelFromPath         } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { channelFromPathWithMeta } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { channelFromSamplesheet  } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { parseSkipList           } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
@@ -578,56 +581,6 @@ workflow {
     )
 }
 
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    HELPER FUNCTIONS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-/**
- * Creates a channel from a file path if provided, otherwise returns a fallback channel
- * @param filePath The path to the file (can be null)
- * @param valueFallback If true, returns channel.value([]) when filePath is null; otherwise returns channel.empty() (default: false)
- * @return Channel with collected file path or fallback channel
- */
-def channelFromPath(filePath, valueFallback = false) {
-    if (!filePath) {
-        return valueFallback ? channel.value([]) : channel.empty()
-    }
-    return channel.fromPath(filePath).collect()
-}
-
-/**
- * Creates a channel from a file path, maps it to [id, file] format, and collects
- * @param filePath The path to the file (can be null)
- * @param doubleEmpty If true, returns channel.value([[:], []]) when filePath is null; otherwise returns channel.empty() (default: false)
- * @param customId The custom ID to be used in meta.id (default: null)
- * @return Channel with [[id:name], file] format and collected, or fallback channel
- */
-def channelFromPathWithMeta(filePath, doubleEmpty = false, customId = null) {
-    if (!filePath) {
-        return doubleEmpty ? channel.value([[:], []]) : channel.empty()
-    }
-    return channel.fromPath(filePath).map { file ->
-        def meta_id = customId ?: file.simpleName
-        return [[id: meta_id], file]
-    }.collect()
-}
-
-/**
- * Creates a channel from a samplesheet file using samplesheetToList, or returns a fallback channel
- * @param samplesheetPath The path to the samplesheet file (can be null)
- * @param schemaPath The path to the JSON schema file for validation
- * @param collect If true, calls .collect() on the channel (default: true)
- * @return Channel from samplesheet list or channel.empty()
- */
-def channelFromSamplesheet(samplesheetPath, schemaPath, collect = true) {
-    if (!samplesheetPath) {
-        return channel.empty()
-    }
-    def ch_out = channel.fromList(samplesheetToList(samplesheetPath, schemaPath))
-    return collect ? ch_out.collect() : ch_out
-}
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     THE END
