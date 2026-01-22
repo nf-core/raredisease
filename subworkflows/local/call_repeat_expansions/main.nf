@@ -58,13 +58,13 @@ workflow CALL_REPEAT_EXPANSIONS {
 
         SVDB_MERGE_REPEATS ( ch_svdb_merge_input, [], true )
 
-        ch_versions = ch_versions.mix(EXPANSIONHUNTER.out.versions.first())
-        ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_EXP.out.versions.first())
-        ch_versions = ch_versions.mix(RENAMESAMPLE_EXP.out.versions.first()    )
-        ch_versions = ch_versions.mix(TABIX_EXP_RENAME.out.versions.first())
-        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_EXP.out.versions.first())
-        ch_versions = ch_versions.mix(SVDB_MERGE_REPEATS.out.versions.first())
-        ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions.first())
+        ch_versions = ch_versions.mix(EXPANSIONHUNTER.out.versions)
+        ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_EXP.out.versions)
+        ch_versions = ch_versions.mix(RENAMESAMPLE_EXP.out.versions    )
+        ch_versions = ch_versions.mix(TABIX_EXP_RENAME.out.versions)
+        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_EXP.out.versions)
+        ch_versions = ch_versions.mix(SVDB_MERGE_REPEATS.out.versions)
+        ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions)
 
 emit:
         vcf      = SVDB_MERGE_REPEATS.out.vcf  // channel: [ val(meta), path(vcf) ]
