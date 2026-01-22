@@ -183,6 +183,8 @@ workflow NFCORE_RAREDISEASE {
                                                                             : channel.empty()
     ch_me_references            = params.mobile_element_references          ? channel.fromList(samplesheetToList(params.mobile_element_references, "${projectDir}/assets/mobile_element_references_schema.json"))
                                                                             : channel.empty()
+    ch_me_svdb_resources        = val_mobile_element_svdb_annotations       ? channel.fromList(samplesheetToList(val_mobile_element_svdb_annotations, "assets/svdb_query_vcf_schema.json")).collect()
+                                                                            : channel.empty()
     ch_ml_model                 = params.variant_caller.equals("sentieon")  ? channel.fromPath(params.ml_model).map {it -> [[id:it.simpleName], it]}.collect()
                                                                             : channel.value([[:],[]])
     ch_ngsbits_method           = channel.value(params.ngsbits_samplegender_method)
