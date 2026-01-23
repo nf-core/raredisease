@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A helper function channelFromPathWithMeta to create channels in a readable fashion in main.nf [#767](https://github.com/nf-core/raredisease/pull/767)
 - A helper function channelFromSamplesheet to create channels in a readable fashion in main.nf [#767](https://github.com/nf-core/raredisease/pull/767)
 
+
 ### `Changed`
 
 - Use distinct output filenames for bcfools (in call_mobile_elements subworkflow) and svdb (in call_sv_tiddit subworkflow) [#716](https://github.com/nf-core/raredisease/pull/716)
