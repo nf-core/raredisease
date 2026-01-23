@@ -1,5 +1,6 @@
 include { ENSEMBLVEP_FILTERVEP } from '../../../modules/nf-core/ensemblvep/filtervep/main'
 include { BCFTOOLS_VIEW        } from '../../../modules/nf-core/bcftools/view/main'
+include { BCFTOOLS_PLUGINSETGT } from '../../../modules/nf-core/bcftools/pluginsetgt/main'
 include { TABIX_BGZIPTABIX     } from '../../../modules/nf-core/tabix/bgziptabix/main'
 // Please note this subworkflow requires the options for bcftools_view that are included in the nextflow.config
 workflow VCF_FILTER_BCFTOOLS_ENSEMBLVEP {
@@ -9,10 +10,11 @@ workflow VCF_FILTER_BCFTOOLS_ENSEMBLVEP {
     ch_filter_vep_feature_file // channel: [ val(meta), path(txt) ]
     filter_with_bcftools       //    bool: should bcftools view be run
     filter_with_filter_vep     //    bool: should filter_vep be run
+    homoplasmy_gt_threshold    //   float: 0-1
 
     main:
-    ch_versions = Channel.empty()
-    ch_tbi = Channel.empty()
+    ch_versions = channel.empty()
+    ch_tbi      = channel.empty()
 
     // Since bcftools is likely much faster than filter_vep,
     // we run it first to reduce the number of variants that filter_vep has to process.
@@ -25,9 +27,22 @@ workflow VCF_FILTER_BCFTOOLS_ENSEMBLVEP {
             []
         )
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
+        ch_vcf      = BCFTOOLS_VIEW.out.vcf
+        ch_tbi      = BCFTOOLS_VIEW.out.tbi
 
-        ch_vcf = BCFTOOLS_VIEW.out.vcf
-        ch_tbi = BCFTOOLS_VIEW.out.tbi
+        if (homoplasmy_gt_threshold<1) {
+            BCFTOOLS_PLUGINSETGT (
+                BCFTOOLS_VIEW.out.vcf.map { meta, vcf -> return [meta, vcf, []] },
+                channel.value('q'),
+                channel.value("c:'1/1'"),
+                [],
+                []
+            )
+            ch_vcf = BCFTOOLS_PLUGINSETGT.out.vcf
+            ch_tbi = BCFTOOLS_PLUGINSETGT.out.tbi
+            ch_versions = ch_versions.mix(BCFTOOLS_PLUGINSETGT.out.versions)
+        }
+
     }
 
     if(filter_with_filter_vep) {

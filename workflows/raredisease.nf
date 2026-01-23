@@ -182,6 +182,7 @@ workflow RAREDISEASE {
     val_concatenate_snv_calls
     val_extract_alignments
     val_genome
+    val_homoplasmy_af_threshold
     val_mbuffer_mem
     val_mt_aligner
     val_mt_subsample_approach
@@ -437,7 +438,8 @@ workflow RAREDISEASE {
                     ch_clin_research_snv_vcf.clinical,
                     ch_hgnc_ids,
                     false,
-                    true
+                    true,
+                    null
                 )
                 GENERATE_CLINICAL_SET_SNV.out.vcf
                 .set { ch_clinical_snv_vcf }
@@ -509,7 +511,8 @@ workflow RAREDISEASE {
                     ch_clin_research_mt_vcf.clinical,
                     ch_hgnc_ids,
                     true,
-                    false
+                    false,
+                    val_homoplasmy_af_threshold
                 )
                 GENERATE_CLINICAL_SET_MT.out.vcf
                     .set { ch_clinical_mtsnv_vcf }
@@ -607,7 +610,8 @@ workflow RAREDISEASE {
                     ch_clin_research_sv_vcf.clinical,
                     ch_hgnc_ids,
                     false,
-                    true
+                    true,
+                    null
                 )
                 GENERATE_CLINICAL_SET_SV.out.vcf
                 .set { ch_clinical_sv_vcf }
@@ -685,7 +689,8 @@ workflow RAREDISEASE {
                     ch_clin_research_me_vcf.clinical,
                     ch_hgnc_ids,
                     false,
-                    true
+                    true,
+                    null
                 )
                 GENERATE_CLINICAL_SET_ME.out.vcf
                 .set { ch_clinical_me_vcf }
@@ -768,7 +773,7 @@ workflow RAREDISEASE {
     GENS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if (!skip_gens && analysis_type.equals("wgs")) {
+    if (!skip_gens && val_analysis_type.equals("wgs")) {
         GENS (
             ch_mapped.genome_marked_bam_bai,
             ch_genome_dictionary,
