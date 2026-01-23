@@ -543,8 +543,8 @@
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "homoplasmy_af_threshold": {
-                    "type": "float",
-                    "default": 1.0,
+                    "type": "number",
+                    "default": 1,
                     "description": "Allele frequency threshold for mitochondrial variants. Variants with an AF above this threshold will be treated as homooplasmic and assigned a 1/1 genotype. Range 0-1.0.",
                     "fa_icon": "fas fa-less-than"
                 },
