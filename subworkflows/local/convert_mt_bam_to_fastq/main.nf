@@ -28,9 +28,9 @@ workflow CONVERT_MT_BAM_TO_FASTQ {
         // Outputs fastq files
         GATK4_SAMTOFASTQ_MT ( GATK4_REVERTSAM_MT.out.bam )
 
-        ch_versions = ch_versions.mix(GATK4_PRINTREADS_MT.out.versions.first())
-        ch_versions = ch_versions.mix(GATK4_REVERTSAM_MT.out.versions.first())
-        ch_versions = ch_versions.mix(GATK4_SAMTOFASTQ_MT.out.versions.first())
+        ch_versions = ch_versions.mix(GATK4_PRINTREADS_MT.out.versions)
+        ch_versions = ch_versions.mix(GATK4_REVERTSAM_MT.out.versions)
+        ch_versions = ch_versions.mix(GATK4_SAMTOFASTQ_MT.out.versions)
 
     emit:
         bam_bai  = ch_bam_bai                    // channel: [ val(meta), path(bam), path(bai) ]

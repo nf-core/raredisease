@@ -29,7 +29,7 @@ workflow CALL_SV_TIDDIT {
 
         SVDB_MERGE_TIDDIT ( merge_input_vcfs, [], true )
 
-        ch_versions = TIDDIT_SV.out.versions.first()
+        ch_versions = TIDDIT_SV.out.versions
         ch_versions = ch_versions.mix(SVDB_MERGE_TIDDIT.out.versions)
         ch_versions = ch_versions.mix(INDEX_TIDDIT.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW_TIDDIT.out.versions)

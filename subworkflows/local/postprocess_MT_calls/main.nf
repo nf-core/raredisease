@@ -121,11 +121,11 @@ workflow POSTPROCESS_MT_CALLS {
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 
-        ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions.first())
-        ch_versions = ch_versions.mix(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.versions.first())
-        ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION_MT.out.versions.first())
-        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_MT.out.versions.first())
-        ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions.first())
+        ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions)
+        ch_versions = ch_versions.mix(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.versions)
+        ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION_MT.out.versions)
+        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_MT.out.versions)
+        ch_versions = ch_versions.mix(REMOVE_DUPLICATES_MT.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_MERGE_MT.out.versions)
         ch_versions = ch_versions.mix(ADD_VARCALLER_TO_BED.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_ANNOTATE.out.versions)
