@@ -40,7 +40,6 @@ workflow VCF_FILTER_BCFTOOLS_ENSEMBLVEP {
             )
             ch_vcf = BCFTOOLS_PLUGINSETGT.out.vcf
             ch_tbi = BCFTOOLS_PLUGINSETGT.out.tbi
-            ch_versions = ch_versions.mix(BCFTOOLS_PLUGINSETGT.out.versions)
         }
 
     }
