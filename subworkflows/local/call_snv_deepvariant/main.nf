@@ -83,7 +83,7 @@ workflow CALL_SNV_DEEPVARIANT {
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 
-        ch_versions = ch_versions.mix(DEEPVARIANT.out.versions.first())
+        ch_versions = ch_versions.mix(DEEPVARIANT.out.versions)
         ch_versions = ch_versions.mix(GLNEXUS.out.versions)
         ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_GL.out.versions)
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_GL.out.versions)
