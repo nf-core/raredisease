@@ -124,7 +124,6 @@ workflow CALL_MOBILE_ELEMENTS {
         ch_versions = ch_versions.mix(ME_SPLIT_ALIGNMENT.out.versions)
         ch_versions = ch_versions.mix(RETROSEQ_DISCOVER.out.versions)
         ch_versions = ch_versions.mix(RETROSEQ_CALL.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_ME.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_SORT_ME.out.versions)
         ch_versions = ch_versions.mix(TABIX_ME_SPLIT.out.versions)
         ch_versions = ch_versions.mix(SVDB_MERGE_ME.out.versions)
