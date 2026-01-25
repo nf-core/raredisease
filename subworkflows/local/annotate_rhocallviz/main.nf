@@ -57,7 +57,6 @@ workflow ANNOTATE_RHOCALLVIZ {
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW_RHOCALL.out.versions)
         ch_versions = ch_versions.mix(CHROMOGRAPH_AUTOZYG.out.versions)
         ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions)
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW_UNCOMPRESS.out.versions)
         ch_versions = ch_versions.mix(RHOCALL_VIZ.out.versions)
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions)

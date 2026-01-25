@@ -196,7 +196,6 @@ workflow ANNOTATE_GENOME_SNVS {
         //rhocall_viz
         ANNOTATE_RHOCALLVIZ(ch_genome_chrsizes, ch_samples, ch_vep_ann_index )
 
-        ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions)
         ch_versions = ch_versions.mix(RHOCALL_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_ROHCALL.out.versions)
         ch_versions = ch_versions.mix(VCFANNO.out.versions)
