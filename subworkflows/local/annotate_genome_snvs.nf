@@ -204,7 +204,6 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_versions = ch_versions.mix(CHROMOGRAPH_SITES.out.versions)
         ch_versions = ch_versions.mix(CHROMOGRAPH_REGIONS.out.versions)
         ch_versions = ch_versions.mix(ZIP_TABIX_VCFANNO.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
         ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions)
         ch_versions = ch_versions.mix(TABIX_VEP.out.versions)

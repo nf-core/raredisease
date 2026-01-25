@@ -63,7 +63,7 @@
                     },
                     "bcftools/view": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "6383d8fe58f9498eecd5aa303e71a4a932d1e9f6",
                         "installed_by": [
                             "modules",
                             "vcf_filter_bcftools_ensemblvep"

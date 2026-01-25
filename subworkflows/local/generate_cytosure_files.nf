@@ -89,7 +89,6 @@ workflow GENERATE_CYTOSURE_FILES {
         )
 
         ch_versions = ch_versions.mix(TIDDIT_COV_VCF2CYTOSURE.out.versions)
-        ch_versions = ch_versions.mix(SPLIT_AND_FILTER_SV_VCF.out.versions)
         ch_versions = ch_versions.mix(VCF2CYTOSURE.out.versions)
 
     emit:

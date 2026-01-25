@@ -49,7 +49,6 @@ workflow CALL_SV_MANTA {
         BCFTOOLS_VIEW_MANTA (ch_filter_in, [], [], [])
 
         ch_versions = MANTA.out.versions
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW_MANTA.out.versions)
 
     emit:
         candidate_small_indels_vcf     = MANTA.out.candidate_small_indels_vcf     // channel: [ val(meta), path(vcf) ]

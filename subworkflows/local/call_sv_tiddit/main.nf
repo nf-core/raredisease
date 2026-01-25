@@ -32,7 +32,6 @@ workflow CALL_SV_TIDDIT {
         ch_versions = TIDDIT_SV.out.versions
         ch_versions = ch_versions.mix(SVDB_MERGE_TIDDIT.out.versions)
         ch_versions = ch_versions.mix(INDEX_TIDDIT.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW_TIDDIT.out.versions)
 
     emit:
         vcf      = SVDB_MERGE_TIDDIT.out.vcf // channel: [ val(meta), path(vcf) ]

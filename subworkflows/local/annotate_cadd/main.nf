@@ -71,7 +71,6 @@ workflow ANNOTATE_CADD {
 
         TABIX_ANNOTATE (BCFTOOLS_ANNOTATE.out.vcf)
 
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(TABIX_VIEW.out.versions)
         ch_versions = ch_versions.mix(CADD.out.versions)
         ch_versions = ch_versions.mix(TABIX_CADD.out.versions)
