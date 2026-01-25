@@ -111,7 +111,6 @@ workflow PREPARE_REFERENCES {
             }
             if (val_aligner.equals("sentieon") || val_mtaligner.equals("sentieon")) {
                 ch_bwa      = SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.collect()
-                ch_versions = ch_versions.mix(SENTIEON_BWAINDEX_GENOME.out.versions)
             }
         } else if (val_bwa) {
             ch_bwa = channel.fromPath(val_bwa).map {it -> [[id:it.simpleName], it]}.collect()
@@ -181,7 +180,6 @@ workflow PREPARE_REFERENCES {
         if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("sentieon")) {
             ch_mt_bwa_index          = SENTIEON_BWAINDEX_MT(ch_mt_fasta).index.collect()
             ch_mtshift_bwa_index     = SENTIEON_BWAINDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
-            ch_versions              = ch_versions.mix(SENTIEON_BWAINDEX_MT.out.versions, SENTIEON_BWAINDEX_MT_SHIFT.out.versions)
         }
         //
         // Vcf, tab and bed indices

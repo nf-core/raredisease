@@ -108,8 +108,6 @@ workflow CALL_SNV_SENTIEON {
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 
-        ch_versions = ch_versions.mix(SENTIEON_DNASCOPE.out.versions)
-        ch_versions = ch_versions.mix(SENTIEON_DNAMODELAPPLY.out.versions)
         ch_versions = ch_versions.mix(TABIX_SEN.out.versions)
         ch_versions = ch_versions.mix(ADD_VARCALLER_TO_BED.out.versions)
         ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)

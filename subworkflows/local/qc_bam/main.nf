@@ -88,7 +88,6 @@ workflow QC_BAM {
                 SENTIEON_WGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y.map{ interval -> [[:], interval]} )
                 ch_cov      = SENTIEON_WGSMETRICS_WG.out.wgs_metrics
                 ch_cov_y    = SENTIEON_WGSMETRICS_Y.out.wgs_metrics
-                ch_versions = ch_versions.mix(SENTIEON_WGSMETRICS_WG.out.versions, SENTIEON_WGSMETRICS_Y.out.versions)
             }
         }
         // Check sex

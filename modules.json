@@ -607,56 +607,56 @@
                     },
                     "sentieon/bwaindex": {
                         "branch": "master",
-                        "git_sha": "6b36f8e5427ec38911565398de57656ca3a2606a",
+                        "git_sha": "77fc71f9384035ef6259e0e0519d3406b0cda012",
                         "installed_by": [
                             "modules"
                         ]
                     },
                     "sentieon/bwamem": {
                         "branch": "master",
-                        "git_sha": "6b36f8e5427ec38911565398de57656ca3a2606a",
+                        "git_sha": "77fc71f9384035ef6259e0e0519d3406b0cda012",
                         "installed_by": [
                             "modules"
                         ]
                     },
                     "sentieon/datametrics": {
                         "branch": "master",
-                        "git_sha": "6b36f8e5427ec38911565398de57656ca3a2606a",
+                        "git_sha": "d9c84ed4564744313bb586928885ebf05f40ad98",
                         "installed_by": [
                             "modules"
                         ]
                     },
                     "sentieon/dedup": {
                         "branch": "master",
-                        "git_sha": "6b36f8e5427ec38911565398de57656ca3a2606a",
+                        "git_sha": "77fc71f9384035ef6259e0e0519d3406b0cda012",
                         "installed_by": [
                             "modules"
                         ]
                     },
                     "sentieon/dnamodelapply": {
                         "branch": "master",
-                        "git_sha": "6b36f8e5427ec38911565398de57656ca3a2606a",
+                        "git_sha": "d9c84ed4564744313bb586928885ebf05f40ad98",
                         "installed_by": [
                             "modules"
                         ]
                     },
                     "sentieon/dnascope": {
                         "branch": "master",
-                        "git_sha": "6b36f8e5427ec38911565398de57656ca3a2606a",
+                        "git_sha": "d9c84ed4564744313bb586928885ebf05f40ad98",
                         "installed_by": [
                             "modules"
                         ]
                     },
                     "sentieon/readwriter": {
                         "branch": "master",
-                        "git_sha": "6b36f8e5427ec38911565398de57656ca3a2606a",
+                        "git_sha": "d9c84ed4564744313bb586928885ebf05f40ad98",
                         "installed_by": [
                             "modules"
                         ]
                     },
                     "sentieon/wgsmetrics": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "git_sha": "77fc71f9384035ef6259e0e0519d3406b0cda012",
                         "installed_by": [
                             "modules"
                         ]

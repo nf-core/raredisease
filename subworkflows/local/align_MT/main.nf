@@ -31,7 +31,6 @@ workflow ALIGN_MT {
         } else if (val_mt_aligner.equals("sentieon")) {
             SENTIEON_BWAMEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, ch_fai )
             ch_align       = SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, _bai -> [meta, bam] }
-            ch_versions    = ch_versions.mix(SENTIEON_BWAMEM_MT.out.versions)
         } else if (val_mt_aligner.equals("bwa")) {
             BWA_MEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, true )
             ch_align       = BWA_MEM_MT.out.bam

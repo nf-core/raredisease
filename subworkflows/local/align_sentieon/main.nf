@@ -18,7 +18,6 @@ workflow ALIGN_SENTIEON {
         val_platform           //  string: [mandatory] default: illumina
 
     main:
-        ch_versions = channel.empty()
 
         SENTIEON_BWAMEM ( ch_input_reads, ch_bwa_index, ch_genome_fasta, ch_genome_fai )
 
@@ -49,11 +48,6 @@ workflow ALIGN_SENTIEON {
 
         SENTIEON_DEDUP ( ch_bam_bai, ch_genome_fasta, ch_genome_fai )
 
-        ch_versions = ch_versions.mix(SENTIEON_BWAMEM.out.versions)
-        ch_versions = ch_versions.mix(SENTIEON_DATAMETRICS.out.versions)
-        ch_versions = ch_versions.mix(SENTIEON_READWRITER.out.versions)
-        ch_versions = ch_versions.mix(SENTIEON_DEDUP.out.versions)
-
     emit:
         marked_bam  = SENTIEON_DEDUP.out.bam                             // channel: [ val(meta), path(bam) ]
         marked_bai  = SENTIEON_DEDUP.out.bai                             // channel: [ val(meta), path(bai) ]
@@ -63,5 +57,4 @@ workflow ALIGN_SENTIEON {
         gc_summary  = SENTIEON_DATAMETRICS.out.gc_summary.ifEmpty(null)  // channel: [ val(meta), path(gc_summary) ]
         aln_metrics = SENTIEON_DATAMETRICS.out.aln_metrics.ifEmpty(null) // channel: [ val(meta), path(aln_metrics) ]
         is_metrics  = SENTIEON_DATAMETRICS.out.is_metrics.ifEmpty(null)  // channel: [ val(meta), path(is_metrics) ]
-        versions    = ch_versions                                        // channel: [ path(versions.yml) ]
 }
