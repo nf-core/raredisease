@@ -121,7 +121,6 @@ workflow CALL_MOBILE_ELEMENTS {
         SVDB_MERGE_ME ( ch_svdb_merge_me_input, [], true )
         TABIX_ME ( SVDB_MERGE_ME.out.vcf )
 
-        ch_versions = ch_versions.mix(ME_SPLIT_ALIGNMENT.out.versions)
         ch_versions = ch_versions.mix(RETROSEQ_DISCOVER.out.versions)
         ch_versions = ch_versions.mix(RETROSEQ_CALL.out.versions)
         ch_versions = ch_versions.mix(TABIX_ME_SPLIT.out.versions)
