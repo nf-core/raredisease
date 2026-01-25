@@ -46,8 +46,6 @@ workflow ANNOTATE_CADD {
                 [],
                 REFERENCE_TO_CADD_CHRNAMES.out.output.map { _meta, txt -> txt }
             )
-            ch_versions = ch_versions.mix(RENAME_CHRNAMES.out.versions)
-
 
             RENAME_CHRNAMES.out.vcf
                 .map { meta, vcf -> [ meta, vcf, [] ] }
@@ -77,7 +75,6 @@ workflow ANNOTATE_CADD {
         ch_versions = ch_versions.mix(TABIX_VIEW.out.versions)
         ch_versions = ch_versions.mix(CADD.out.versions)
         ch_versions = ch_versions.mix(TABIX_CADD.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)
 
     emit:

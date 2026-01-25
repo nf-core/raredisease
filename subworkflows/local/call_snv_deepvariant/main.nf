@@ -89,7 +89,6 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_versions = ch_versions.mix(REMOVE_DUPLICATES_GL.out.versions)
         ch_versions = ch_versions.mix(TABIX_GL.out.versions)
         ch_versions = ch_versions.mix(ADD_VARCALLER_TO_BED.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_ANNOTATE.out.versions)
         ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)
 
     emit:
