@@ -89,7 +89,6 @@ workflow PREPARE_REFERENCES {
         //
         if (!val_fai) {
             ch_genome_fai = SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[],[]]).fai.collect()
-            ch_versions   = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
         } else {
             ch_genome_fai = channel.fromPath(val_fai).map {it -> [[id:it.simpleName], it]}.collect()
         }
@@ -163,8 +162,7 @@ workflow PREPARE_REFERENCES {
                 }
                 .set {ch_shiftfasta_mtintervals}
 
-            ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_MT.out.versions,
-                                            GATK_SD_MT.out.versions,
+            ch_versions = ch_versions.mix(GATK_SD_MT.out.versions,
                                             GATK_SHIFTFASTA.out.versions)
         }
         //

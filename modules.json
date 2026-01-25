@@ -565,7 +565,7 @@
                     },
                     "samtools/faidx": {
                         "branch": "master",
-                        "git_sha": "b13f07be4c508d6ff6312d354d09f2493243e208",
+                        "git_sha": "9a48bce39a67e2cb34b8f125fc1d50f0ad98b616",
                         "installed_by": [
                             "modules"
                         ]
