@@ -106,7 +106,6 @@ workflow QC_BAM {
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions)
         ch_versions = ch_versions.mix(TIDDIT_COV.out.versions)
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions)
-        ch_versions = ch_versions.mix(MOSDEPTH.out.versions)
         ch_versions = ch_versions.mix(VERIFYBAMID_VERIFYBAMID2.out.versions)
         ch_versions = ch_versions.mix(SAMBAMBA_DEPTH.out.versions)
 
