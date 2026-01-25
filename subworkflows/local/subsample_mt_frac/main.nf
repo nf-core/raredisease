@@ -34,7 +34,6 @@ workflow SUBSAMPLE_MT_FRAC {
 
         SAMTOOLS_VIEW(ch_subsample_in, [[:],[]], [], 'bai')
 
-        ch_versions = ch_versions.mix(BEDTOOLS_GENOMECOV.out.versions)
         ch_versions = ch_versions.mix(CALCULATE_SEED_FRACTION.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_VIEW.out.versions)
 

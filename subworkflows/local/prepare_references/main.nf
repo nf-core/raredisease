@@ -234,8 +234,7 @@ workflow PREPARE_REFERENCES {
 
             ch_bait_intervals = CAT_CAT_BAIT ( ch_bait_intervals_cat_in ).file_out.map {_meta, inter -> inter}.collect().ifEmpty([[]])
 
-            ch_versions = ch_versions.mix(BEDTOOLS_PAD_TARGET_BED.out.versions,
-                                            TABIX_BGZIPINDEX_PADDED_BED.out.versions,
+            ch_versions = ch_versions.mix(TABIX_BGZIPINDEX_PADDED_BED.out.versions,
                                             GATK_BILT.out.versions,
                                             GATK_ILT.out.versions,
                                             CAT_CAT_BAIT.out.versions)
