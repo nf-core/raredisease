@@ -467,7 +467,7 @@
                     },
                     "picard/collecthsmetrics": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "git_sha": "976ed20e328a92cb24ab6c63a8983ed31bf48469",
                         "installed_by": [
                             "modules"
                         ]

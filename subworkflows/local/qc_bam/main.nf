@@ -57,7 +57,6 @@ workflow QC_BAM {
 
         if (val_target_bed) {
             ch_hsmetrics = PICARD_COLLECTHSMETRICS (ch_hsmetrics_in, ch_genome_fasta, ch_genome_fai, [[],[]]).metrics
-            ch_versions  = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions)
         }
         if (!skip_qualimap) {
             ch_qualimap = QUALIMAP_BAMQC (ch_bam, []).results
