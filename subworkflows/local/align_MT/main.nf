@@ -52,7 +52,6 @@ workflow ALIGN_MT {
         ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions)
         ch_versions = ch_versions.mix(PICARD_ADDORREPLACEREADGROUPS_MT.out.versions)
         ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions)
-        ch_versions = ch_versions.mix(SAMTOOLS_SORT_MT.out.versions)
 
     emit:
         marked_bai  = SAMTOOLS_SORT_MT.out.bai   // channel: [ val(meta), path(bai) ]
