@@ -21,7 +21,6 @@ workflow ANNOTATE_CSQ_PLI {
 
         if (val_index) {
             TABIX_TABIX(CUSTOM_ADDMOSTSEVEREPLI.out.vcf)
-            ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
         }
 
         ch_versions = ch_versions.mix(CUSTOM_ADDMOSTSEVERECONSEQUENCE.out.versions)

@@ -677,7 +677,7 @@
                     },
                     "stranger": {
                         "branch": "master",
-                        "git_sha": "ffe458cbd1208b82e33e607fa43fbe80df191047",
+                        "git_sha": "72717e1f3feabaa57a6a71ba5a85d9c4ceeba514",
                         "installed_by": [
                             "modules"
                         ]
@@ -713,7 +713,7 @@
                     },
                     "tabix/tabix": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "git_sha": "524a7d5ef99a0cbfb4feec8bf7062eb6a531931a",
                         "installed_by": [
                             "modules"
                         ]

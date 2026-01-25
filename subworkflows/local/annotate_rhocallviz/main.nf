@@ -55,7 +55,6 @@ workflow ANNOTATE_RHOCALLVIZ {
         UCSC_WIGTOBIGWIG(RHOCALL_VIZ.out.wig, ch_genome_chrsizes)
 
         ch_versions = ch_versions.mix(CHROMOGRAPH_AUTOZYG.out.versions)
-        ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
         ch_versions = ch_versions.mix(RHOCALL_VIZ.out.versions)
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions)
 

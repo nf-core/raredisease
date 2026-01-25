@@ -126,9 +126,6 @@ workflow POSTPROCESS_MT_CALLS {
         ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION_MT.out.versions)
         ch_versions = ch_versions.mix(ADD_VARCALLER_TO_BED.out.versions)
         ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)
-        ch_versions = ch_versions.mix(TABIX_TABIX_MERGE.out.versions)
-        ch_versions = ch_versions.mix(TABIX_TABIX_MT.out.versions)
-        ch_versions = ch_versions.mix(TABIX_TABIX_MT2.out.versions)
 
     emit:
         tbi       = TABIX_ANNOTATE.out.tbi      // channel: [ val(meta), path(tbi) ]

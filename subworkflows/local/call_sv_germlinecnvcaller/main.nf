@@ -80,7 +80,6 @@ workflow CALL_SV_GERMLINECNVCALLER {
         ch_versions = ch_versions.mix(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.versions)
         ch_versions = ch_versions.mix(GATK4_GERMLINECNVCALLER.out.versions)
         ch_versions = ch_versions.mix(GATK4_POSTPROCESSGERMLINECNVCALLS.out.versions)
-        ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
         ch_versions = ch_versions.mix(SVDB_MERGE_GCNVCALLER.out.versions)
 
     emit:

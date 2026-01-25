@@ -60,7 +60,6 @@ workflow CALL_REPEAT_EXPANSIONS {
 
         ch_versions = ch_versions.mix(EXPANSIONHUNTER.out.versions)
         ch_versions = ch_versions.mix(RENAMESAMPLE_EXP.out.versions    )
-        ch_versions = ch_versions.mix(TABIX_EXP_RENAME.out.versions)
         ch_versions = ch_versions.mix(SVDB_MERGE_REPEATS.out.versions)
 
 emit:

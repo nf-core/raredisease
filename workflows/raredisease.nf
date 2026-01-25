@@ -351,7 +351,6 @@ workflow RAREDISEASE {
                 CALL_REPEAT_EXPANSIONS.out.vcf,
                 ch_variant_catalog
             )
-            ch_versions = ch_versions.mix(STRANGER.out.versions)
         }
     }
 

@@ -190,7 +190,6 @@ workflow PREPARE_REFERENCES {
                 ch_dbsnp_tbi = channel.fromPath(val_known_dbsnp_tbi).map{ it -> [[id:it.simpleName], it] }.collect()
             } else {
                 ch_dbsnp_tbi = TABIX_DBSNP(ch_dbsnp).tbi.collect()
-                ch_versions  = ch_versions.mix(TABIX_DBSNP.out.versions)
             }
         }
 
@@ -200,7 +199,6 @@ workflow PREPARE_REFERENCES {
                 ch_gnomad_idx = channel.fromPath(val_gnomad_af_idx).map{ it -> [[id:it.simpleName], it] }.collect()
             } else {
                 ch_gnomad_idx = TABIX_GNOMAD_AF(ch_gnomad_af).tbi.collect()
-                ch_versions  = ch_versions.mix(TABIX_GNOMAD_AF.out.versions)
             }
             ch_gnomad_af_idx = ch_gnomad_af.join(ch_gnomad_idx).map {_meta, tab, idx -> [tab,idx]}.collect()
         }
@@ -245,7 +243,6 @@ workflow PREPARE_REFERENCES {
                     .join(ch_vcfanno_tabix_in)
                     .map { _meta, tbi, vcf -> return [[vcf,tbi]]}
                     .set {ch_vcfanno_extra}
-                ch_versions = ch_versions.mix(TABIX_VCFANNOEXTRA.out.versions)
             } else {
                 TABIX_BGZIPINDEX_VCFANNOEXTRA(ch_vcfanno_tabix_in)
                 channel.empty()
