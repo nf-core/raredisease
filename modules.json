@@ -21,7 +21,7 @@
                     },
                     "bcftools/filter": {
                         "branch": "master",
-                        "git_sha": "f85dbddd7a335fc0f5ac331e8d22ca94123b654b",
+                        "git_sha": "6383d8fe58f9498eecd5aa303e71a4a932d1e9f6",
                         "installed_by": [
                             "modules"
                         ]
