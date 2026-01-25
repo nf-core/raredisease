@@ -191,7 +191,7 @@
                     },
                     "ensemblvep/filtervep": {
                         "branch": "master",
-                        "git_sha": "6e3585d9ad20b41adc7d271009f8cb5e191ecab4",
+                        "git_sha": "f50d3c606dbc7e5af367cce070d824b796872ed2",
                         "installed_by": [
                             "modules",
                             "vcf_filter_bcftools_ensemblvep"
@@ -199,7 +199,7 @@
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
-                        "git_sha": "9f9e1fc31cb35876922070c0e601ae05abae5cae",
+                        "git_sha": "51d2d20973eca80048a9490339e8b421db122908",
                         "installed_by": [
                             "modules"
                         ],

@@ -101,7 +101,6 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         TABIX_VEP (ENSEMBLVEP_SV.out.vcf)
 
         ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
-        ch_versions = ch_versions.mix(ENSEMBLVEP_SV.out.versions)
         ch_versions = ch_versions.mix(TABIX_VEP.out.versions)
 
     emit:

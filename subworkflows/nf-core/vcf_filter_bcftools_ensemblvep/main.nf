@@ -36,7 +36,6 @@ workflow VCF_FILTER_BCFTOOLS_ENSEMBLVEP {
             ch_vcf,
             ch_filter_vep_feature_file.map { _meta, file -> file }
         )
-        ch_versions = ch_versions.mix(ENSEMBLVEP_FILTERVEP.out.versions)
 
         TABIX_BGZIPTABIX (
             ENSEMBLVEP_FILTERVEP.out.output
