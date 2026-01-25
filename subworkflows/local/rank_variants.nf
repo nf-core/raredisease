@@ -40,11 +40,6 @@ workflow RANK_VARIANTS {
             ch_versions = ch_versions.mix(TABIX_BGZIPTABIX.out.versions)
         }
 
-        ch_versions = ch_versions.mix(GENMOD_ANNOTATE.out.versions)
-        ch_versions = ch_versions.mix(GENMOD_MODELS.out.versions)
-        ch_versions = ch_versions.mix(GENMOD_SCORE.out.versions)
-        ch_versions = ch_versions.mix(GENMOD_COMPOUND.out.versions)
-
     emit:
         vcf      = ch_vcf       // channel: [ val(meta), path(vcf) ]
         versions = ch_versions  // channel: [ path(versions.yml) ]

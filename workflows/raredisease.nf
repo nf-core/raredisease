@@ -234,7 +234,6 @@ workflow RAREDISEASE {
     if (!skip_fastqc) {
         FASTQC (ch_input_fastqs)
         fastqc_report = FASTQC.out.zip
-        ch_versions   = ch_versions.mix(FASTQC.out.versions)
     }
 
 /*

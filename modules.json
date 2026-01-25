@@ -214,14 +214,14 @@
                     },
                     "fastp": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "a331ecfd1aa48b2b2298aab23bb4516c800e410b",
                         "installed_by": [
                             "modules"
                         ]
                     },
                     "fastqc": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "git_sha": "5bdb098216aaf5df9c3b6343e6204cd932503c16",
                         "installed_by": [
                             "modules"
                         ]
@@ -368,28 +368,28 @@
                     },
                     "genmod/annotate": {
                         "branch": "master",
-                        "git_sha": "91a84f951358143e93dc9e03470db4e6a4a7105c",
+                        "git_sha": "7557033683e4016e7d474a23445f75deae2fb729",
                         "installed_by": [
                             "modules"
                         ]
                     },
                     "genmod/compound": {
                         "branch": "master",
-                        "git_sha": "91a84f951358143e93dc9e03470db4e6a4a7105c",
+                        "git_sha": "7557033683e4016e7d474a23445f75deae2fb729",
                         "installed_by": [
                             "modules"
                         ]
                     },
                     "genmod/models": {
                         "branch": "master",
-                        "git_sha": "f888300c726e1f817a9f93a680866ff7e6c669f6",
+                        "git_sha": "7557033683e4016e7d474a23445f75deae2fb729",
                         "installed_by": [
                             "modules"
                         ]
                     },
                     "genmod/score": {
                         "branch": "master",
-                        "git_sha": "f888300c726e1f817a9f93a680866ff7e6c669f6",
+                        "git_sha": "7557033683e4016e7d474a23445f75deae2fb729",
                         "installed_by": [
                             "modules"
                         ]

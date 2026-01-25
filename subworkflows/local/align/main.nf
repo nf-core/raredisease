@@ -56,7 +56,6 @@ workflow ALIGN {
         if (!skip_fastp) {
             FASTP (ch_input_reads, [], false, false, false)
             ch_input_reads = FASTP.out.reads
-            ch_versions    = ch_versions.mix(FASTP.out.versions)
             ch_fastp_json  = FASTP.out.json
         }
 
