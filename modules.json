@@ -425,7 +425,7 @@
                     },
                     "manta/germline": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "3485512d3930df1fcb66b5f92af639179bdfe4be",
                         "installed_by": [
                             "modules"
                         ]
