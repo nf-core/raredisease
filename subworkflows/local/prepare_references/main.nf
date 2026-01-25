@@ -236,8 +236,7 @@ workflow PREPARE_REFERENCES {
 
             ch_versions = ch_versions.mix(TABIX_BGZIPINDEX_PADDED_BED.out.versions,
                                             GATK_BILT.out.versions,
-                                            GATK_ILT.out.versions,
-                                            CAT_CAT_BAIT.out.versions)
+                                            GATK_ILT.out.versions)
         }
         //
         // Prepare vcfanno extra files
