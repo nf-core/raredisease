@@ -3,6 +3,7 @@
 //
 
 include { REPLACE_SPACES_IN_VCFINFO                      } from '../../modules/local/replace_spaces_in_vcfinfo'
+include { BCFTOOLS_PLUGINSETGT                           } from '../../modules/nf-core/bcftools/pluginsetgt'
 include { TABIX_TABIX as TABIX_TABIX_VEP_MT              } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_HMTNOTE_MT       } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_MT                } from '../../modules/nf-core/ensemblvep/vep/main'
@@ -14,21 +15,22 @@ include { HMTNOTE_ANNOTATE                               } from '../../modules/n
 
 workflow ANNOTATE_MT_SNVS {
     take:
-        ch_cadd_header         // channel: [mandatory] [ path(txt) ]
-        ch_cadd_resources      // channel: [mandatory] [ path(annotation) ]
-        ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_fai                 // channel: [mandatory] [ path(fai) ]
-        ch_mt_vcf              // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_vcfanno_extra       // channel: [mandatory] [ [path(vcf),path(index)] ]
-        ch_vcfanno_lua         // channel: [mandatory] [ path(lua) ]
-        ch_vcfanno_resources   // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
-        ch_vcfanno_toml        // channel: [mandatory] [ path(toml) ]
-        ch_vep_cache           // channel: [mandatory] [ path(cache) ]
-        ch_vep_extra_files     // channel: [mandatory] [ path(files) ]
-        skip_haplogrep3        // boolean
-        val_cadd_resources     // string:  path to cadd resources file
-        val_genome             // string:  GRCh37 or GRCh38
-        val_vep_cache_version  // string:  vep version ex: 107
+        ch_cadd_header              // channel: [mandatory] [ path(txt) ]
+        ch_cadd_resources           // channel: [mandatory] [ path(annotation) ]
+        ch_genome_fasta             // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_fai                      // channel: [mandatory] [ path(fai) ]
+        ch_mt_vcf                   // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_vcfanno_extra            // channel: [mandatory] [ [path(vcf),path(index)] ]
+        ch_vcfanno_lua              // channel: [mandatory] [ path(lua) ]
+        ch_vcfanno_resources        // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
+        ch_vcfanno_toml             // channel: [mandatory] [ path(toml) ]
+        ch_vep_cache                // channel: [mandatory] [ path(cache) ]
+        ch_vep_extra_files          // channel: [mandatory] [ path(files) ]
+        skip_haplogrep3             // boolean
+        val_cadd_resources          // string:  path to cadd resources file
+        val_genome                  // string:  GRCh37 or GRCh38
+        val_homoplasmy_af_threshold //   float: 0-1
+        val_vep_cache_version       // string:  vep version ex: 107
 
     main:
         ch_versions     = channel.empty()
@@ -100,10 +102,25 @@ workflow ANNOTATE_MT_SNVS {
 
         TABIX_TABIX_VEP_MT(ENSEMBLVEP_MT.out.vcf)
 
+        ch_vcf = ENSEMBLVEP_MT.out.vcf
+        ch_tbi = TABIX_TABIX_VEP_MT.out.tbi
+
         // Running haplogrep3
         if (!skip_haplogrep3) {
             HAPLOGREP3_CLASSIFY_MT(ch_haplogrep_in)
             ch_haplog   = HAPLOGREP3_CLASSIFY_MT.out.txt
+        }
+
+        if (val_homoplasmy_af_threshold<1) {
+            BCFTOOLS_PLUGINSETGT (
+                ENSEMBLVEP_MT.out.vcf.map { meta, vcf -> return [meta, vcf, []] },
+                channel.value('q'),
+                channel.value("c:'1/1'"),
+                [],
+                []
+            )
+            ch_vcf = BCFTOOLS_PLUGINSETGT.out.vcf
+            ch_tbi = BCFTOOLS_PLUGINSETGT.out.tbi
         }
 
         ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
@@ -115,9 +132,9 @@ workflow ANNOTATE_MT_SNVS {
         ch_versions = ch_versions.mix(REPLACE_SPACES_IN_VCFINFO.out.versions)
 
     emit:
-        haplog    = ch_haplog                   // channel: [ val(meta), path(txt) ]
-        report    = ENSEMBLVEP_MT.out.report    // channel: [ path(html) ]
-        tbi       = TABIX_TABIX_VEP_MT.out.tbi  // channel: [ val(meta), path(tbi) ]
-        vcf_ann   = ENSEMBLVEP_MT.out.vcf       // channel: [ val(meta), path(vcf) ]
-        versions  = ch_versions                 // channel: [ path(versions.yml) ]
+        haplog    = ch_haplog                // channel: [ val(meta), path(txt) ]
+        report    = ENSEMBLVEP_MT.out.report // channel: [ path(html) ]
+        tbi       = ch_tbi                   // channel: [ val(meta), path(tbi) ]
+        vcf_ann   = ch_vcf                   // channel: [ val(meta), path(vcf) ]
+        versions  = ch_versions              // channel: [ path(versions.yml) ]
 }

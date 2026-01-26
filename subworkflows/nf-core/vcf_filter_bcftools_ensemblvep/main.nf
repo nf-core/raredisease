@@ -10,7 +10,6 @@ workflow VCF_FILTER_BCFTOOLS_ENSEMBLVEP {
     ch_filter_vep_feature_file // channel: [ val(meta), path(txt) ]
     filter_with_bcftools       //    bool: should bcftools view be run
     filter_with_filter_vep     //    bool: should filter_vep be run
-    homoplasmy_af_threshold    //   float: 0-1
 
     main:
     ch_versions = channel.empty()
@@ -29,18 +28,6 @@ workflow VCF_FILTER_BCFTOOLS_ENSEMBLVEP {
         ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
         ch_vcf      = BCFTOOLS_VIEW.out.vcf
         ch_tbi      = BCFTOOLS_VIEW.out.tbi
-
-        if (homoplasmy_af_threshold<1) {
-            BCFTOOLS_PLUGINSETGT (
-                BCFTOOLS_VIEW.out.vcf.map { meta, vcf -> return [meta, vcf, []] },
-                channel.value('q'),
-                channel.value("c:'1/1'"),
-                [],
-                []
-            )
-            ch_vcf = BCFTOOLS_PLUGINSETGT.out.vcf
-            ch_tbi = BCFTOOLS_PLUGINSETGT.out.tbi
-        }
 
     }
 

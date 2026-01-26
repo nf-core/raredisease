@@ -438,8 +438,7 @@ workflow RAREDISEASE {
                     ch_clin_research_snv_vcf.clinical,
                     ch_hgnc_ids,
                     false,
-                    true,
-                    null
+                    true
                 )
                 GENERATE_CLINICAL_SET_SNV.out.vcf
                 .set { ch_clinical_snv_vcf }
@@ -494,6 +493,7 @@ workflow RAREDISEASE {
                 skip_haplogrep3,
                 val_cadd_resources,
                 val_genome,
+                val_homoplasmy_af_threshold,
                 val_vep_cache_version
             ).set { ch_mt_annotate }
             ch_versions = ch_versions.mix(ch_mt_annotate.versions)
@@ -511,8 +511,7 @@ workflow RAREDISEASE {
                     ch_clin_research_mt_vcf.clinical,
                     ch_hgnc_ids,
                     true,
-                    false,
-                    val_homoplasmy_af_threshold
+                    false
                 )
                 GENERATE_CLINICAL_SET_MT.out.vcf
                     .set { ch_clinical_mtsnv_vcf }
@@ -610,8 +609,7 @@ workflow RAREDISEASE {
                     ch_clin_research_sv_vcf.clinical,
                     ch_hgnc_ids,
                     false,
-                    true,
-                    null
+                    true
                 )
                 GENERATE_CLINICAL_SET_SV.out.vcf
                 .set { ch_clinical_sv_vcf }
@@ -689,8 +687,7 @@ workflow RAREDISEASE {
                     ch_clin_research_me_vcf.clinical,
                     ch_hgnc_ids,
                     false,
-                    true,
-                    null
+                    true
                 )
                 GENERATE_CLINICAL_SET_ME.out.vcf
                 .set { ch_clinical_me_vcf }
