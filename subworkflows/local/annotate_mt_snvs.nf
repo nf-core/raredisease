@@ -113,9 +113,9 @@ workflow ANNOTATE_MT_SNVS {
         ch_versions = ch_versions.mix(REPLACE_SPACES_IN_VCFINFO.out.versions)
 
     emit:
-        haplog    = ch_haplog                   // channel: [ val(meta), path(txt) ]
-        report    = ENSEMBLVEP_MT.out.report    // channel: [ path(html) ]
-        tbi       = TABIX_TABIX_VEP_MT.out.tbi  // channel: [ val(meta), path(tbi) ]
-        vcf_ann   = ENSEMBLVEP_MT.out.vcf       // channel: [ val(meta), path(vcf) ]
-        versions  = ch_versions                 // channel: [ path(versions.yml) ]
+        haplog    = ch_haplog                    // channel: [ val(meta), path(txt) ]
+        report    = ENSEMBLVEP_MT.out.report     // channel: [ path(html) ]
+        tbi       = TABIX_TABIX_VEP_MT.out.index // channel: [ val(meta), path(tbi) ]
+        vcf_ann   = ENSEMBLVEP_MT.out.vcf        // channel: [ val(meta), path(vcf) ]
+        versions  = ch_versions                  // channel: [ path(versions.yml) ]
 }

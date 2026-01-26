@@ -61,7 +61,7 @@ workflow POSTPROCESS_MT_CALLS {
 
         // Removing duplicates and merging if there is more than one sample
         SPLIT_MULTIALLELICS_MT.out.vcf
-            .join(TABIX_TABIX_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .join(TABIX_TABIX_MT.out.index, failOnMismatch:true, failOnDuplicate:true)
             .set { ch_in_remdup }
         REMOVE_DUPLICATES_MT(ch_in_remdup, ch_genome_fasta)
         TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
@@ -72,7 +72,7 @@ workflow POSTPROCESS_MT_CALLS {
             .toList()
             .set { file_list_vcf }
 
-        TABIX_TABIX_MT2.out.tbi
+        TABIX_TABIX_MT2.out.index
             .map{ _meta, vcf -> vcf}
             .toSortedList{a, b -> a.name <=> b.name}
             .toList()
@@ -113,7 +113,7 @@ workflow POSTPROCESS_MT_CALLS {
             .set{ch_varcallerbed}
 
         ch_addfoundintag_in
-            .join(TABIX_TABIX_MERGE.out.tbi)
+            .join(TABIX_TABIX_MERGE.out.index)
             .combine(ch_varcallerbed)
             .set { ch_annotate_in }
 
@@ -125,10 +125,9 @@ workflow POSTPROCESS_MT_CALLS {
         ch_versions = ch_versions.mix(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.versions)
         ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION_MT.out.versions)
         ch_versions = ch_versions.mix(ADD_VARCALLER_TO_BED.out.versions)
-        ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)
 
     emit:
-        tbi       = TABIX_ANNOTATE.out.tbi      // channel: [ val(meta), path(tbi) ]
+        tbi       = TABIX_ANNOTATE.out.index    // channel: [ val(meta), path(tbi) ]
         vcf       = BCFTOOLS_ANNOTATE.out.vcf   // channel: [ val(meta), path(vcf) ]
         versions  = ch_versions                 // channel: [ path(versions.yml) ]
 }

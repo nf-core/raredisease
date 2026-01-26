@@ -41,7 +41,7 @@ workflow CALL_REPEAT_EXPANSIONS {
 
         // Split multi allelelic
         SPLIT_MULTIALLELICS_EXP (
-            RENAMESAMPLE_EXP.out.vcf.join(TABIX_EXP_RENAME.out.tbi, failOnMismatch:true, failOnDuplicate:true),
+            RENAMESAMPLE_EXP.out.vcf.join(TABIX_EXP_RENAME.out.index, failOnMismatch:true, failOnDuplicate:true),
             ch_genome_fasta
         )
 

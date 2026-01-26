@@ -75,7 +75,7 @@ workflow CALL_SNV_DEEPVARIANT {
             .set{ch_varcallerbed}
 
         REMOVE_DUPLICATES_GL.out.vcf
-            .join(TABIX_GL.out.tbi)
+            .join(TABIX_GL.out.index)
             .combine(ch_varcallerbed)
             .set { ch_annotate_in }
 
@@ -90,7 +90,7 @@ workflow CALL_SNV_DEEPVARIANT {
     emit:
         gvcf       = DEEPVARIANT.out.gvcf       // channel: [ val(meta), path(gvcf)]
         gvcf_tabix = DEEPVARIANT.out.gvcf_tbi   // channel: [ val(meta), path(gvcf_tbi)]
-        tabix      = TABIX_ANNOTATE.out.tbi     // channel: [ val(meta), path(tbi) ]
+        tabix      = TABIX_ANNOTATE.out.index   // channel: [ val(meta), path(tbi) ]
         vcf        = BCFTOOLS_ANNOTATE.out.vcf  // channel: [ val(meta), path(vcf) ]
         versions   = ch_versions                // channel: [ path(versions.yml) ]
 }

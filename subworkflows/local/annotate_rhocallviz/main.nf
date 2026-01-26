@@ -30,7 +30,7 @@ workflow ANNOTATE_RHOCALLVIZ {
         TABIX_TABIX(BCFTOOLS_VIEW_RHOCALL.out.vcf)
 
         BCFTOOLS_VIEW_RHOCALL.out.vcf
-            .join(TABIX_TABIX.out.tbi)
+            .join(TABIX_TABIX.out.index)
             .set {ch_roh_in }
 
         BCFTOOLS_ROH(ch_roh_in, [[],[]], [], [], [], [])

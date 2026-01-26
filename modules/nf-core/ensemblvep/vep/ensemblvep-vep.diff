@@ -1,4 +1,4 @@
-Changes in module 'nf-core/ensemblvep/vep'
+Changes in component 'nf-core/ensemblvep/vep'
 'modules/nf-core/ensemblvep/vep/meta.yml' is unchanged
 Changes in 'ensemblvep/vep/main.nf':
 --- modules/nf-core/ensemblvep/vep/main.nf

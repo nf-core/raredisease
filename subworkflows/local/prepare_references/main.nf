@@ -88,7 +88,7 @@ workflow PREPARE_REFERENCES {
         // Genome indices
         //
         if (!val_fai) {
-            ch_genome_fai = SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[],[]]).fai.collect()
+            ch_genome_fai = SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[:],[]], false).fai.collect()
         } else {
             ch_genome_fai = channel.fromPath(val_fai).map {it -> [[id:it.simpleName], it]}.collect()
         }
@@ -134,13 +134,12 @@ workflow PREPARE_REFERENCES {
         //
         if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
             if (!val_mtfasta) {
-                ch_mt_fasta = SAMTOOLS_EXTRACT_MT(ch_genome_fasta, ch_genome_fai).fa.collect()
-                ch_versions = ch_versions.mix(SAMTOOLS_EXTRACT_MT.out.versions)
+                ch_mt_fasta = SAMTOOLS_EXTRACT_MT(ch_genome_fasta, ch_genome_fai, false).fa.collect()
             } else {
                 ch_mt_fasta = channel.fromPath(val_mtfasta).map { it -> [[id:it.simpleName], it] }.collect()
             }
 
-            ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta, [[],[]]).fai.collect()
+            ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta, [[:],[]], false).fai.collect()
             ch_mt_dict = GATK_SD_MT(ch_mt_fasta).dict.collect()
 
             GATK_SHIFTFASTA(ch_mt_fasta, ch_mt_fai, ch_mt_dict)
@@ -189,7 +188,7 @@ workflow PREPARE_REFERENCES {
             if (val_known_dbsnp_tbi) {
                 ch_dbsnp_tbi = channel.fromPath(val_known_dbsnp_tbi).map{ it -> [[id:it.simpleName], it] }.collect()
             } else {
-                ch_dbsnp_tbi = TABIX_DBSNP(ch_dbsnp).tbi.collect()
+                ch_dbsnp_tbi = TABIX_DBSNP(ch_dbsnp).index.collect()
             }
         }
 
@@ -198,7 +197,7 @@ workflow PREPARE_REFERENCES {
             if (val_gnomad_af_idx) {
                 ch_gnomad_idx = channel.fromPath(val_gnomad_af_idx).map{ it -> [[id:it.simpleName], it] }.collect()
             } else {
-                ch_gnomad_idx = TABIX_GNOMAD_AF(ch_gnomad_af).tbi.collect()
+                ch_gnomad_idx = TABIX_GNOMAD_AF(ch_gnomad_af).index.collect()
             }
             ch_gnomad_af_idx = ch_gnomad_af.join(ch_gnomad_idx).map {_meta, tab, idx -> [tab,idx]}.collect()
         }
@@ -239,7 +238,7 @@ workflow PREPARE_REFERENCES {
             ch_vcfanno_tabix_in = channel.fromPath(val_vcfanno_extra).map { it -> [[id:it.baseName], it] }
 
             if (val_vcfanno_extra.endsWith(".gz")) {
-                TABIX_VCFANNOEXTRA(ch_vcfanno_tabix_in).tbi
+                TABIX_VCFANNOEXTRA(ch_vcfanno_tabix_in).index
                     .join(ch_vcfanno_tabix_in)
                     .map { _meta, tbi, vcf -> return [[vcf,tbi]]}
                     .set {ch_vcfanno_extra}
