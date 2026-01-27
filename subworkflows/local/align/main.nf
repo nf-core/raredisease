@@ -54,7 +54,7 @@ workflow ALIGN {
         ch_versions                  = channel.empty()
 
         if (!skip_fastp) {
-            FASTP (ch_input_reads, [], false, false, false)
+            FASTP (ch_input_reads.map {meta, reads -> return [meta, reads, []] }, false, false, false)
             ch_input_reads = FASTP.out.reads
             ch_fastp_json  = FASTP.out.json
         }
