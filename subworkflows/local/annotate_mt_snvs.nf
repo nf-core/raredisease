@@ -27,10 +27,10 @@ workflow ANNOTATE_MT_SNVS {
         ch_vep_cache                // channel: [mandatory] [ path(cache) ]
         ch_vep_extra_files          // channel: [mandatory] [ path(files) ]
         skip_haplogrep3             // boolean
-        val_cadd_resources          // string:  path to cadd resources file
-        val_genome                  // string:  GRCh37 or GRCh38
+        val_cadd_resources          //  string:  path to cadd resources file
+        val_genome                  //  string:  GRCh37 or GRCh38
         val_homoplasmy_af_threshold //   float: 0-1
-        val_vep_cache_version       // string:  vep version ex: 107
+        val_vep_cache_version       //  string:  vep version ex: 107
 
     main:
         ch_versions     = channel.empty()
