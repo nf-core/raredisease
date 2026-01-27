@@ -14,7 +14,7 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_dedup.bam:md5,eecb176fcd4ba3862cd8a87584d29d7f"
+                        "test_dedup.bam:md5,489a7a6b515bfeb9e22b10732d7586e4"
                     ]
                 ],
                 "1": [
@@ -29,7 +29,7 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_dedup.bam.bai:md5,2c3892c0b7dd38008f812936f19edcfd"
+                        "test_dedup.bam.bai:md5,14bc034b61e9f46cc0c0224b8915d7aa"
                     ]
                 ],
                 "2": [
@@ -44,7 +44,7 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_datametrics_mq_metrics.txt:md5,d924101f16a609cfe2381fb2904c1157"
+                        "test_datametrics_mq_metrics.txt:md5,a0ee4d2b9970df49fed3f262c10b5e16"
                     ]
                 ],
                 "3": [
@@ -59,7 +59,7 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_datametrics_qd_metrics.txt:md5,5d823326eaf59b00e31b7a10b8e1a09e"
+                        "test_datametrics_qd_metrics.txt:md5,8192ba26ccf5cea0778e9ed2cf187430"
                     ]
                 ],
                 "4": [
@@ -74,7 +74,7 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_datametrics_gc_metrics.txt:md5,6d373e38fcaa29620eb2c1c62bd9ece9"
+                        "test_datametrics_gc_metrics.txt:md5,003ed2dae28d295e5005fc2be942fd24"
                     ]
                 ],
                 "5": [
@@ -89,7 +89,7 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_datametrics_gc_summary.txt:md5,123abd2c83e7df6f141a30c7d38bff27"
+                        "test_datametrics_gc_summary.txt:md5,c238cb8240e7145ea62fd7bc26787cf5"
                     ]
                 ],
                 "6": [
@@ -104,7 +104,7 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_datametrics_aln_metrics.txt:md5,609454bf43dd880e347da719e1868432"
+                        "test_datametrics_aln_metrics.txt:md5,e016dd74f156d0b31a787903b8fef29c"
                     ]
                 ],
                 "7": [
@@ -119,13 +119,8 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_datametrics_is_metrics.txt:md5,04eb7da7a2b7acea2bf02f860535c2e8"
+                        "test_datametrics_is_metrics.txt:md5,47dec263ece77d2f5816012a345e8531"
                     ]
-                ],
-                "8": [
-                    "versions.yml:md5,081d0fd598d1279f3025f39626df5a10",
-                    "versions.yml:md5,9f88074c5a7336a02eeb30461af26fd1",
-                    "versions.yml:md5,f084363cb6d662d82d09a289b6b68346"
                 ],
                 "aln_metrics": [
                     [
@@ -139,7 +134,7 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_datametrics_aln_metrics.txt:md5,609454bf43dd880e347da719e1868432"
+                        "test_datametrics_aln_metrics.txt:md5,e016dd74f156d0b31a787903b8fef29c"
                     ]
                 ],
                 "gc_metrics": [
@@ -154,7 +149,7 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_datametrics_gc_metrics.txt:md5,6d373e38fcaa29620eb2c1c62bd9ece9"
+                        "test_datametrics_gc_metrics.txt:md5,003ed2dae28d295e5005fc2be942fd24"
                     ]
                 ],
                 "gc_summary": [
@@ -169,7 +164,7 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_datametrics_gc_summary.txt:md5,123abd2c83e7df6f141a30c7d38bff27"
+                        "test_datametrics_gc_summary.txt:md5,c238cb8240e7145ea62fd7bc26787cf5"
                     ]
                 ],
                 "is_metrics": [
@@ -184,7 +179,7 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_datametrics_is_metrics.txt:md5,04eb7da7a2b7acea2bf02f860535c2e8"
+                        "test_datametrics_is_metrics.txt:md5,47dec263ece77d2f5816012a345e8531"
                     ]
                 ],
                 "marked_bai": [
@@ -199,7 +194,7 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_dedup.bam.bai:md5,2c3892c0b7dd38008f812936f19edcfd"
+                        "test_dedup.bam.bai:md5,14bc034b61e9f46cc0c0224b8915d7aa"
                     ]
                 ],
                 "marked_bam": [
@@ -214,7 +209,7 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_dedup.bam:md5,eecb176fcd4ba3862cd8a87584d29d7f"
+                        "test_dedup.bam:md5,489a7a6b515bfeb9e22b10732d7586e4"
                     ]
                 ],
                 "mq_metrics": [
@@ -229,7 +224,7 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_datametrics_mq_metrics.txt:md5,d924101f16a609cfe2381fb2904c1157"
+                        "test_datametrics_mq_metrics.txt:md5,a0ee4d2b9970df49fed3f262c10b5e16"
                     ]
                 ],
                 "qd_metrics": [
@@ -244,20 +239,15 @@
                                 "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                             }
                         },
-                        "test_datametrics_qd_metrics.txt:md5,5d823326eaf59b00e31b7a10b8e1a09e"
+                        "test_datametrics_qd_metrics.txt:md5,8192ba26ccf5cea0778e9ed2cf187430"
                     ]
-                ],
-                "versions": [
-                    "versions.yml:md5,081d0fd598d1279f3025f39626df5a10",
-                    "versions.yml:md5,9f88074c5a7336a02eeb30461af26fd1",
-                    "versions.yml:md5,f084363cb6d662d82d09a289b6b68346"
                 ]
             }
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.3"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
         },
-        "timestamp": "2025-06-25T17:05:48.914189124"
+        "timestamp": "2026-01-26T23:22:09.03170299"
     }
 }
