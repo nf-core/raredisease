@@ -2,7 +2,7 @@
 // Run ExpansionHunter and Stranger
 //
 
-include { BCFTOOLS_FIXEXPANSIONHUNTERHEADER            } from '../../modules/local/bcftools/fixexpansionhunterheader/main'
+include { BCFTOOLS_FIXEXPANSIONHUNTERHEADER            } from '../../modules/local/fix_expansionhunter_header/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_EXP     } from '../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_REHEADER as BCFTOOLS_REHEADER_EXP   } from '../../modules/nf-core/bcftools/reheader/main'
 include { EXPANSIONHUNTER                              } from '../../modules/nf-core/expansionhunter/main'
@@ -43,7 +43,7 @@ workflow CALL_REPEAT_EXPANSIONS {
         // Fix missing INFO headers from ExpansionHunter
         BCFTOOLS_FIXEXPANSIONHUNTERHEADER ( BCFTOOLS_REHEADER_EXP.out.vcf )
 
-        RENAMESAMPLE_EXP ( BCFTOOLS_REHEADER_EXP.out.vcf )
+        RENAMESAMPLE_EXP ( BCFTOOLS_FIXEXPANSIONHUNTERHEADER.out.vcf )
         TABIX_EXP_RENAME ( RENAMESAMPLE_EXP.out.vcf )
 
         // Split multi allelelic

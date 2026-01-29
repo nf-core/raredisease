@@ -28,11 +28,14 @@ process CREATE_HGNCIDS_FILE {
                 for line in input:
                     if not line.startswith("#") and line.strip():
                         spl = line.strip().split("\\t")
-                        output.write(spl[3]+"\\n")
+                        output.write("HGNC:" + spl[3] + "\\n")
             else:
                 for line in input:
-                    if not line.startswith("#"):
-                        output.write(line)
+                    if not line.startswith("#") and line.strip():
+                        hgnc_id = line.strip()
+                        if not hgnc_id.startswith("HGNC:"):
+                            hgnc_id = "HGNC:" + hgnc_id
+                        output.write(hgnc_id + "\\n")
     CODE
 
     cat <<-END_VERSIONS > versions.yml

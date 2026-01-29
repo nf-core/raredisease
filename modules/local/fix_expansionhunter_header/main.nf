@@ -21,13 +21,19 @@ process BCFTOOLS_FIXEXPANSIONHUNTERHEADER {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    # Create header file with missing INFO fields from ExpansionHunter
+    # Create header file with missing INFO and FORMAT fields from ExpansionHunter
     cat > expansionhunter_headers.txt << 'EOF'
     ##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the variant">
     ##INFO=<ID=REF,Number=1,Type=Integer,Description="Reference copy number">
     ##INFO=<ID=REPID,Number=1,Type=String,Description="Repeat identifier from the variant catalog">
     ##INFO=<ID=RL,Number=1,Type=Integer,Description="Reference length in bp">
     ##INFO=<ID=RU,Number=1,Type=String,Description="Repeat unit in the reference orientation">
+    ##FORMAT=<ID=SO,Number=1,Type=String,Description="Type of reads that support the allele; can be SPANNING, FLANKING, or INREPEAT">
+    ##FORMAT=<ID=REPCN,Number=1,Type=String,Description="Number of repeat units spanned by the allele">
+    ##FORMAT=<ID=REPCI,Number=1,Type=String,Description="Confidence interval for REPCN">
+    ##FORMAT=<ID=ADSP,Number=1,Type=String,Description="Number of spanning reads consistent with the allele">
+    ##FORMAT=<ID=ADFL,Number=1,Type=String,Description="Number of flanking reads consistent with the allele">
+    ##FORMAT=<ID=ADIR,Number=1,Type=String,Description="Number of in-repeat reads consistent with the allele">
     EOF
 
     # Add missing headers to VCF
