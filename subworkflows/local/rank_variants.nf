@@ -36,8 +36,7 @@ workflow RANK_VARIANTS {
         if (process_with_sort) {
             ch_vcf = BCFTOOLS_SORT(GENMOD_COMPOUND.out.vcf).vcf // SV file needs to be sorted before indexing
         } else {
-            ch_vcf = TABIX_BGZIPTABIX(GENMOD_COMPOUND.out.vcf).gz_tbi.map {meta, vcf, _tbi -> return [meta, vcf]} //run only for SNVs
-            ch_versions = ch_versions.mix(TABIX_BGZIPTABIX.out.versions)
+            ch_vcf = TABIX_BGZIPTABIX(GENMOD_COMPOUND.out.vcf).gz_index.map {meta, vcf, _tbi -> return [meta, vcf]} //run only for SNVs
         }
 
     emit:

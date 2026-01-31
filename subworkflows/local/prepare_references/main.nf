@@ -211,7 +211,7 @@ workflow PREPARE_REFERENCES {
                 ch_target_bed,
                 ch_genome_fai.map { _meta, fai -> return fai }
             )
-            ch_target_bed_gz_tbi = TABIX_BGZIPINDEX_PADDED_BED(BEDTOOLS_PAD_TARGET_BED.out.bed).gz_tbi
+            ch_target_bed_gz_tbi = TABIX_BGZIPINDEX_PADDED_BED(BEDTOOLS_PAD_TARGET_BED.out.bed).gz_index
 
             ch_target_intervals = GATK_BILT(ch_target_bed, ch_genome_dict).interval_list.map{ _meta, inter -> inter}.collect()
 
@@ -227,9 +227,7 @@ workflow PREPARE_REFERENCES {
 
             ch_bait_intervals = CAT_CAT_BAIT ( ch_bait_intervals_cat_in ).file_out.map {_meta, inter -> inter}.collect().ifEmpty([[]])
 
-            ch_versions = ch_versions.mix(TABIX_BGZIPINDEX_PADDED_BED.out.versions,
-                                            GATK_BILT.out.versions,
-                                            GATK_ILT.out.versions)
+            ch_versions = ch_versions.mix(GATK_BILT.out.versions, GATK_ILT.out.versions)
         }
         //
         // Prepare vcfanno extra files
@@ -245,10 +243,9 @@ workflow PREPARE_REFERENCES {
             } else {
                 TABIX_BGZIPINDEX_VCFANNOEXTRA(ch_vcfanno_tabix_in)
                 channel.empty()
-                    .mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_tbi, TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_csi)
+                    .mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_index, TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_csi)
                     .map { _meta, vcf, index -> return [[vcf,index]] }
                     .set {ch_vcfanno_extra}
-                ch_versions = ch_versions.mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.versions)
             }
         }
         //

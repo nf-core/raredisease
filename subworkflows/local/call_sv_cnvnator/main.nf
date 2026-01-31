@@ -29,7 +29,7 @@ workflow CALL_SV_CNVNATOR {
         CNVNATOR_CALL ( [[:],[],[]], CNVNATOR_PARTITION.out.root, [[:],[]], [[:],[]], "call" )
         CNVNATOR_CONVERT2VCF (CNVNATOR_CALL.out.tab)
         INDEX_CNVNATOR (CNVNATOR_CONVERT2VCF.out.vcf)
-        BCFTOOLS_VIEW_CNVNATOR (INDEX_CNVNATOR.out.gz_tbi, [], [], []).vcf
+        BCFTOOLS_VIEW_CNVNATOR (INDEX_CNVNATOR.out.gz_index, [], [], []).vcf
             .collect{_meta, vcf -> vcf}
             .toList()
             .set { vcf_file_list }
@@ -47,7 +47,6 @@ workflow CALL_SV_CNVNATOR {
         ch_versions = ch_versions.mix(CNVNATOR_CALL.out.versions)
         ch_versions = ch_versions.mix(CNVNATOR_CONVERT2VCF.out.versions)
         ch_versions = ch_versions.mix(SVDB_MERGE_CNVNATOR.out.versions)
-        ch_versions = ch_versions.mix(INDEX_CNVNATOR.out.versions)
 
     emit:
         vcf        = SVDB_MERGE_CNVNATOR.out.vcf  // channel: [ val(meta), path(*.tar.gz) ]
