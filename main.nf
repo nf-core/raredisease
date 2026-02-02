@@ -97,6 +97,7 @@ workflow NFCORE_RAREDISEASE {
     val_sequence_dictionary
     val_skip_tools
     val_skip_subworkflows
+    val_subdepth
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
     val_target_bed
@@ -191,6 +192,7 @@ workflow NFCORE_RAREDISEASE {
     ch_score_config_mt          = channelFromPath(val_score_config_mt, true)
     ch_score_config_snv         = channelFromPath(val_score_config_snv, true)
     ch_score_config_sv          = channelFromPath(val_score_config_sv, true)
+    ch_subdepth                 = channelFromPath(val_subdepth, true)
     ch_vcf2cytosure_blacklist   = channelFromPath(val_vcf2cytosure_blacklist, true)
     ch_vcfanno_lua              = channelFromPath(val_vcfanno_lua, true)
     ch_vcfanno_toml             = channelFromPath(val_vcfanno_toml, true)
@@ -551,6 +553,7 @@ workflow {
         params.skip_subworkflows,
         params.svdb_query_bedpedbs,
         params.svdb_query_dbs,
+        params.mitosalt_depth,
         params.target_bed,
         params.variant_caller,
         params.variant_catalog,
