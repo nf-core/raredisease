@@ -62,6 +62,7 @@ workflow NFCORE_RAREDISEASE {
     val_gens_pon_male
     val_gnomad_af
     val_gnomad_af_idx
+    val_homoplasmy_af_threshold
     val_intervals_wgs
     val_intervals_y
     val_known_dbsnp
@@ -442,6 +443,7 @@ workflow NFCORE_RAREDISEASE {
         val_concatenate_snv_calls,
         val_extract_alignments,
         val_genome,
+        val_homoplasmy_af_threshold,
         val_mbuffer_mem,
         val_mt_aligner,
         val_mt_subsample_approach,
@@ -511,6 +513,7 @@ workflow {
         params.gens_pon_male,
         params.gnomad_af,
         params.gnomad_af_idx,
+        params.homoplasmy_af_threshold,
         params.intervals_wgs,
         params.intervals_y,
         params.known_dbsnp,

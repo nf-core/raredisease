@@ -182,6 +182,7 @@ workflow RAREDISEASE {
     val_concatenate_snv_calls
     val_extract_alignments
     val_genome
+    val_homoplasmy_af_threshold
     val_mbuffer_mem
     val_mt_aligner
     val_mt_subsample_approach
@@ -492,6 +493,7 @@ workflow RAREDISEASE {
                 skip_haplogrep3,
                 val_cadd_resources,
                 val_genome,
+                val_homoplasmy_af_threshold,
                 val_vep_cache_version
             ).set { ch_mt_annotate }
             ch_versions = ch_versions.mix(ch_mt_annotate.versions)
@@ -768,7 +770,7 @@ workflow RAREDISEASE {
     GENS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if (!skip_gens && analysis_type.equals("wgs")) {
+    if (!skip_gens && val_analysis_type.equals("wgs")) {
         GENS (
             ch_mapped.genome_marked_bam_bai,
             ch_genome_dictionary,
