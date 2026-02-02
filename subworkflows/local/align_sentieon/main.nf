@@ -43,17 +43,17 @@ workflow ALIGN_SENTIEON {
         if (val_extract_alignments) {
             EXTRACT_ALIGNMENTS( ch_bam_bai, ch_genome_fasta, [], 'bai')
             ch_bam_bai = EXTRACT_ALIGNMENTS.out.bam.join(EXTRACT_ALIGNMENTS.out.bai, failOnMismatch:true, failOnDuplicate:true)
-            ch_versions = ch_versions.mix(EXTRACT_ALIGNMENTS.out.versions.first())
+            ch_versions = ch_versions.mix(EXTRACT_ALIGNMENTS.out.versions)
         }
 
         SENTIEON_DATAMETRICS ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, false )
 
         SENTIEON_DEDUP ( ch_bam_bai, ch_genome_fasta, ch_genome_fai )
 
-        ch_versions = ch_versions.mix(SENTIEON_BWAMEM.out.versions.first())
-        ch_versions = ch_versions.mix(SENTIEON_DATAMETRICS.out.versions.first())
-        ch_versions = ch_versions.mix(SENTIEON_READWRITER.out.versions.first())
-        ch_versions = ch_versions.mix(SENTIEON_DEDUP.out.versions.first())
+        ch_versions = ch_versions.mix(SENTIEON_BWAMEM.out.versions)
+        ch_versions = ch_versions.mix(SENTIEON_DATAMETRICS.out.versions)
+        ch_versions = ch_versions.mix(SENTIEON_READWRITER.out.versions)
+        ch_versions = ch_versions.mix(SENTIEON_DEDUP.out.versions)
 
     emit:
         marked_bam  = SENTIEON_DEDUP.out.bam                             // channel: [ val(meta), path(bam) ]

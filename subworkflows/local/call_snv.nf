@@ -109,7 +109,7 @@ workflow CALL_SNV {
         ch_genome_tabix     = GATK4_SELECTVARIANTS.out.tbi
         ch_genome_vcf_tabix = ch_genome_vcf.join(ch_genome_tabix, failOnMismatch:true, failOnDuplicate:true)
 
-        if (val_analysis_type.matches("wgs|mito") || run_mt_for_wes) {
+        if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
             CALL_SNV_MT(
                 ch_mt_bam_bai,
                 ch_mt_dictionary,

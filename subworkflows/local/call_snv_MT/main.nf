@@ -22,7 +22,7 @@ workflow CALL_SNV_MT {
         GATK4_MUTECT2_MT (ch_bam_bai_int, ch_fasta, ch_fai, ch_dict, [], [], [],[])
 
         HAPLOCHECK_MT (GATK4_MUTECT2_MT.out.vcf)
-        ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions.first())
+        ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions)
 
         // Filter Mutect2 calls
         ch_mutect_vcf = GATK4_MUTECT2_MT.out.vcf.join(GATK4_MUTECT2_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
@@ -34,8 +34,8 @@ workflow CALL_SNV_MT {
 
         GATK4_FILTERMUTECTCALLS_MT (ch_to_filt, ch_fasta, ch_fai, ch_dict)
 
-        ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions.first())
-        ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions.first())
+        ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions)
+        ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions)
 
     emit:
         filt_stats     = GATK4_FILTERMUTECTCALLS_MT.out.stats // channel: [ val(meta), path(tsv) ]

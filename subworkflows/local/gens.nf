@@ -65,12 +65,12 @@ workflow GENS {
 
         GENS_GENERATE_COV_INDEX (GENS_GENERATE.out.cov)
 
-        ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions.first())
-        ch_versions = ch_versions.mix(DENOISEREADCOUNTS_FEMALE.out.versions.first())
-        ch_versions = ch_versions.mix(DENOISEREADCOUNTS_MALE.out.versions.first())
-        ch_versions = ch_versions.mix(GENS_GENERATE.out.versions.first())
-        ch_versions = ch_versions.mix(GENS_GENERATE_BAF_INDEX.out.versions.first())
-        ch_versions = ch_versions.mix(GENS_GENERATE_COV_INDEX.out.versions.first())
+        ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions)
+        ch_versions = ch_versions.mix(DENOISEREADCOUNTS_FEMALE.out.versions)
+        ch_versions = ch_versions.mix(DENOISEREADCOUNTS_MALE.out.versions)
+        ch_versions = ch_versions.mix(GENS_GENERATE.out.versions)
+        ch_versions = ch_versions.mix(GENS_GENERATE_BAF_INDEX.out.versions)
+        ch_versions = ch_versions.mix(GENS_GENERATE_COV_INDEX.out.versions)
 
     emit:
         gens_baf_bed_gz = GENS_GENERATE.out.baf // channel: [ val(meta), path(bed) ]

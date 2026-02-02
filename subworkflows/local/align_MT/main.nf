@@ -27,15 +27,15 @@ workflow ALIGN_MT {
         if (val_mt_aligner.equals("bwamem2")) {
             BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, ch_fasta, true)
             ch_align       = BWAMEM2_MEM_MT.out.bam
-            ch_versions    = ch_versions.mix(BWAMEM2_MEM_MT.out.versions.first())
+            ch_versions    = ch_versions.mix(BWAMEM2_MEM_MT.out.versions)
         } else if (val_mt_aligner.equals("sentieon")) {
             SENTIEON_BWAMEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, ch_fai )
             ch_align       = SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, _bai -> [meta, bam] }
-            ch_versions    = ch_versions.mix(SENTIEON_BWAMEM_MT.out.versions.first())
+            ch_versions    = ch_versions.mix(SENTIEON_BWAMEM_MT.out.versions)
         } else if (val_mt_aligner.equals("bwa")) {
             BWA_MEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, true )
             ch_align       = BWA_MEM_MT.out.bam
-            ch_versions    = ch_versions.mix(BWA_MEM_MT.out.versions.first())
+            ch_versions    = ch_versions.mix(BWA_MEM_MT.out.versions)
         }
         ch_align
             .join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)
@@ -49,10 +49,10 @@ workflow ALIGN_MT {
 
         SAMTOOLS_SORT_MT (PICARD_MARKDUPLICATES_MT.out.bam, [[:],[]], 'bai')
 
-        ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions.first())
-        ch_versions = ch_versions.mix(PICARD_ADDORREPLACEREADGROUPS_MT.out.versions.first())
-        ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions.first())
-        ch_versions = ch_versions.mix(SAMTOOLS_SORT_MT.out.versions.first())
+        ch_versions = ch_versions.mix(GATK4_MERGEBAMALIGNMENT_MT.out.versions)
+        ch_versions = ch_versions.mix(PICARD_ADDORREPLACEREADGROUPS_MT.out.versions)
+        ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES_MT.out.versions)
+        ch_versions = ch_versions.mix(SAMTOOLS_SORT_MT.out.versions)
 
     emit:
         marked_bai  = SAMTOOLS_SORT_MT.out.bai   // channel: [ val(meta), path(bai) ]
