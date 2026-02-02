@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            795,
+            823,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "tabix": 1.12
@@ -66,6 +66,10 @@
                 "BWAMEM2_INDEX_MT_SHIFT": {
                     "bwamem2": "2.2.1"
                 },
+                "BWAMEM2_MEM": {
+                    "bwamem2": "2.2.1",
+                    "samtools": "1.19.2"
+                },
                 "BWAMEM2_MEM_MT": {
                     "bwamem2": "2.2.1",
                     "samtools": "1.19.2"
@@ -121,9 +125,6 @@
                 "DEEPVARIANT": {
                     "deepvariant": "1.8.0"
                 },
-                "EKLIPSE": {
-                    "eklipse": 1.8
-                },
                 "ENSEMBLVEP_FILTERVEP": {
                     "ensemblvep": 110.0
                 },
@@ -142,6 +143,12 @@
                 "EXPANSIONHUNTER": {
                     "expansionhunter": "5.0.0",
                     "bgzip": 1.18
+                },
+                "FASTP": {
+                    "fastp": "0.23.4"
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
                 },
                 "GATK4_FILTERMUTECTCALLS_MT": {
                     "gatk4": "4.5.0.0"
@@ -212,6 +219,9 @@
                 "HAPLOGREP3_CLASSIFY_MT": {
                     "haplogrep3": "3.2.2"
                 },
+                "HISAT2_INDEX_GENOME": {
+                    "hisat2": "2.2.1"
+                },
                 "HMTNOTE_ANNOTATE": {
                     "hmtnote": "0.7.2"
                 },
@@ -221,11 +231,20 @@
                 "INDEX_TIDDIT": {
                     "tabix": 1.2
                 },
+                "LAST_INDEX_MT": {
+                    "last": 1611
+                },
                 "MANTA": {
                     "manta": "1.6.0"
                 },
+                "MARKDUPLICATES": {
+                    "picard": "3.3.0"
+                },
                 "ME_SPLIT_ALIGNMENT": {
                     "samtools": "1.22.1"
+                },
+                "MITOSALT": {
+                    "mitosalt": "1.1.1"
                 },
                 "MOSDEPTH": {
                     "mosdepth": "0.3.10"
@@ -306,17 +325,29 @@
                 "SAMTOOLS_FAIDX_MT": {
                     "samtools": 1.21
                 },
+                "SAMTOOLS_INDEX_ALIGN": {
+                    "samtools": 1.21
+                },
+                "SAMTOOLS_INDEX_MARKDUP": {
+                    "samtools": 1.21
+                },
                 "SAMTOOLS_SORT": {
                     "samtools": "1.22.1"
                 },
                 "SAMTOOLS_SORT_MT": {
                     "samtools": "1.22.1"
                 },
+                "SAMTOOLS_STATS": {
+                    "samtools": 1.21
+                },
                 "SAMTOOLS_VIEW": {
                     "samtools": "1.22.1"
                 },
                 "SAM_TO_BAM": {
                     "samtools": "1.22.1"
+                },
+                "SEQTK_SAMPLE": {
+                    "seqtk": "1.4-r122"
                 },
                 "SMNCOPYNUMBERCALLER": {
                     "SMNCopyNumberCaller": "1.1.2"
@@ -332,6 +363,9 @@
                 },
                 "SPLIT_MULTIALLELICS_MT": {
                     "bcftools": 1.21
+                },
+                "SPRING_DECOMPRESS_TO_FQ_PAIR": {
+                    "spring": "1.1.1"
                 },
                 "STRANGER": {
                     "stranger": "0.9.4",
@@ -458,10 +492,19 @@
                 "alignment",
                 "alignment/earlycasualcaiman_mt_subsample.bam",
                 "alignment/earlycasualcaiman_mt_subsample.bam.bai",
+                "alignment/earlycasualcaiman_sorted_md.MarkDuplicates.metrics.txt",
+                "alignment/earlycasualcaiman_sorted_md.bam",
+                "alignment/earlycasualcaiman_sorted_md.bam.bai",
                 "alignment/hugelymodelbat_mt_subsample.bam",
                 "alignment/hugelymodelbat_mt_subsample.bam.bai",
+                "alignment/hugelymodelbat_sorted_md.MarkDuplicates.metrics.txt",
+                "alignment/hugelymodelbat_sorted_md.bam",
+                "alignment/hugelymodelbat_sorted_md.bam.bai",
                 "alignment/slowlycivilbuck_mt_subsample.bam",
                 "alignment/slowlycivilbuck_mt_subsample.bam.bai",
+                "alignment/slowlycivilbuck_sorted_md.MarkDuplicates.metrics.txt",
+                "alignment/slowlycivilbuck_sorted_md.bam",
+                "alignment/slowlycivilbuck_sorted_md.bam.bai",
                 "annotate_mobile_elements",
                 "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz",
                 "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz.csi",
@@ -520,18 +563,25 @@
                 "call_sv/genome/justhusky_sv.vcf.gz.csi",
                 "call_sv/genome/justhusky_sv.vcf.gz.tbi",
                 "call_sv/mitochondria",
-                "call_sv/mitochondria/eKLIPse_earlycasualcaiman.png",
-                "call_sv/mitochondria/eKLIPse_earlycasualcaiman_deletions.csv",
-                "call_sv/mitochondria/eKLIPse_earlycasualcaiman_genes.csv",
-                "call_sv/mitochondria/eKLIPse_hugelymodelbat.png",
-                "call_sv/mitochondria/eKLIPse_hugelymodelbat_deletions.csv",
-                "call_sv/mitochondria/eKLIPse_hugelymodelbat_genes.csv",
-                "call_sv/mitochondria/eKLIPse_slowlycivilbuck.png",
-                "call_sv/mitochondria/eKLIPse_slowlycivilbuck_deletions.csv",
-                "call_sv/mitochondria/eKLIPse_slowlycivilbuck_genes.csv",
+                "call_sv/mitochondria/earlycasualcaiman_LNUMBER1.breakpoint",
+                "call_sv/mitochondria/earlycasualcaiman_LNUMBER1.cluster",
                 "call_sv/mitochondria/earlycasualcaiman_mitochondria_deletions.txt",
+                "call_sv/mitochondria/hugelymodelbat_LNUMBER3.breakpoint",
+                "call_sv/mitochondria/hugelymodelbat_LNUMBER3.cluster",
                 "call_sv/mitochondria/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/mitochondria/slowlycivilbuck_LNUMBER2.breakpoint",
+                "call_sv/mitochondria/slowlycivilbuck_LNUMBER2.cluster",
                 "call_sv/mitochondria/slowlycivilbuck_mitochondria_deletions.txt",
+                "fastqc",
+                "fastqc/earlycasualcaiman_LNUMBER1",
+                "fastqc/earlycasualcaiman_LNUMBER1/earlycasualcaiman_LNUMBER1.html",
+                "fastqc/earlycasualcaiman_LNUMBER1/earlycasualcaiman_LNUMBER1.zip",
+                "fastqc/hugelymodelbat_LNUMBER3",
+                "fastqc/hugelymodelbat_LNUMBER3/hugelymodelbat_LNUMBER3.html",
+                "fastqc/hugelymodelbat_LNUMBER3/hugelymodelbat_LNUMBER3.zip",
+                "fastqc/slowlycivilbuck_LNUMBER2",
+                "fastqc/slowlycivilbuck_LNUMBER2/slowlycivilbuck_LNUMBER2.html",
+                "fastqc/slowlycivilbuck_LNUMBER2/slowlycivilbuck_LNUMBER2.zip",
                 "haplocheck",
                 "haplocheck/earlycasualcaiman.raw.txt",
                 "haplocheck/hugelymodelbat.raw.txt",
@@ -834,6 +884,22 @@
                 "smncopynumbercaller/out",
                 "smncopynumbercaller/out/justhusky_smncopynumbercaller.json",
                 "smncopynumbercaller/out/justhusky_smncopynumbercaller.tsv",
+                "trimming",
+                "trimming/earlycasualcaiman_LNUMBER1.fastp.html",
+                "trimming/earlycasualcaiman_LNUMBER1.fastp.json",
+                "trimming/earlycasualcaiman_LNUMBER1.fastp.log",
+                "trimming/earlycasualcaiman_LNUMBER1_1.fastp.fastq.gz",
+                "trimming/earlycasualcaiman_LNUMBER1_2.fastp.fastq.gz",
+                "trimming/hugelymodelbat_LNUMBER3.fastp.html",
+                "trimming/hugelymodelbat_LNUMBER3.fastp.json",
+                "trimming/hugelymodelbat_LNUMBER3.fastp.log",
+                "trimming/hugelymodelbat_LNUMBER3_1.fastp.fastq.gz",
+                "trimming/hugelymodelbat_LNUMBER3_2.fastp.fastq.gz",
+                "trimming/slowlycivilbuck_LNUMBER2.fastp.html",
+                "trimming/slowlycivilbuck_LNUMBER2.fastp.json",
+                "trimming/slowlycivilbuck_LNUMBER2.fastp.log",
+                "trimming/slowlycivilbuck_LNUMBER2_1.fastp.fastq.gz",
+                "trimming/slowlycivilbuck_LNUMBER2_2.fastp.fastq.gz",
                 "vcf2cytosure",
                 "vcf2cytosure/earlycasualcaiman.cgh",
                 "vcf2cytosure/hugelymodelbat.cgh",
@@ -844,6 +910,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-18T17:30:21.579519047"
+        "timestamp": "2026-02-02T07:58:42.049734691"
     }
 }

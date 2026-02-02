@@ -124,9 +124,6 @@
                 "DEEPVARIANT": {
                     "deepvariant": "1.8.0"
                 },
-                "EKLIPSE": {
-                    "eklipse": 1.8
-                },
                 "ENSEMBLVEP_FILTERVEP": {
                     "ensemblvep": 110.0
                 },
@@ -221,6 +218,9 @@
                 "HAPLOGREP3_CLASSIFY_MT": {
                     "haplogrep3": "3.2.2"
                 },
+                "HISAT2_INDEX_GENOME": {
+                    "hisat2": "2.2.1"
+                },
                 "HMTNOTE_ANNOTATE": {
                     "hmtnote": "0.7.2"
                 },
@@ -230,6 +230,9 @@
                 "INDEX_TIDDIT": {
                     "tabix": 1.2
                 },
+                "LAST_INDEX_MT": {
+                    "last": 1611
+                },
                 "MANTA": {
                     "manta": "1.6.0"
                 },
@@ -238,6 +241,9 @@
                 },
                 "ME_SPLIT_ALIGNMENT": {
                     "samtools": "1.22.1"
+                },
+                "MITOSALT": {
+                    "mitosalt": "1.1.1"
                 },
                 "MOSDEPTH": {
                     "mosdepth": "0.3.10"
@@ -338,6 +344,9 @@
                 },
                 "SAM_TO_BAM": {
                     "samtools": "1.22.1"
+                },
+                "SEQTK_SAMPLE": {
+                    "seqtk": "1.4-r122"
                 },
                 "SMNCOPYNUMBERCALLER": {
                     "SMNCopyNumberCaller": "1.1.2"
@@ -553,17 +562,14 @@
                 "call_sv/genome/justhusky_sv.vcf.gz.csi",
                 "call_sv/genome/justhusky_sv.vcf.gz.tbi",
                 "call_sv/mitochondria",
-                "call_sv/mitochondria/eKLIPse_earlycasualcaiman.png",
-                "call_sv/mitochondria/eKLIPse_earlycasualcaiman_deletions.csv",
-                "call_sv/mitochondria/eKLIPse_earlycasualcaiman_genes.csv",
-                "call_sv/mitochondria/eKLIPse_hugelymodelbat.png",
-                "call_sv/mitochondria/eKLIPse_hugelymodelbat_deletions.csv",
-                "call_sv/mitochondria/eKLIPse_hugelymodelbat_genes.csv",
-                "call_sv/mitochondria/eKLIPse_slowlycivilbuck.png",
-                "call_sv/mitochondria/eKLIPse_slowlycivilbuck_deletions.csv",
-                "call_sv/mitochondria/eKLIPse_slowlycivilbuck_genes.csv",
+                "call_sv/mitochondria/earlycasualcaiman_LNUMBER1.breakpoint",
+                "call_sv/mitochondria/earlycasualcaiman_LNUMBER1.cluster",
                 "call_sv/mitochondria/earlycasualcaiman_mitochondria_deletions.txt",
+                "call_sv/mitochondria/hugelymodelbat_LNUMBER3.breakpoint",
+                "call_sv/mitochondria/hugelymodelbat_LNUMBER3.cluster",
                 "call_sv/mitochondria/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/mitochondria/slowlycivilbuck_LNUMBER2.breakpoint",
+                "call_sv/mitochondria/slowlycivilbuck_LNUMBER2.cluster",
                 "call_sv/mitochondria/slowlycivilbuck_mitochondria_deletions.txt",
                 "fastqc",
                 "fastqc/earlycasualcaiman_LNUMBER1",
@@ -903,6 +909,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-18T17:13:55.314547424"
+        "timestamp": "2026-02-02T07:56:08.820059386"
     }
 }

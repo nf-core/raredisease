@@ -3,10 +3,6 @@ process MITOSALT {
     label "process_low"
 
     conda "${moduleDir}/environment.yml"
-//    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-//        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/03/0311c283e73736be01c2cbd1ca93ae826c209d9733ffa6d2d4d2caa31e7464cc/data':
-//        'community.wave.seqera.io/library/bbmap_bedtools_bioconductor-biostrings_bioconductor-pwalign_pruned:11434f3b6a01596d' }"
-
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         '/home/proj/production/dropbox/RN/mitosalt.sif':
         'community.wave.seqera.io/library/bbmap_bedtools_bioconductor-biostrings_bioconductor-pwalign_pruned:11434f3b6a01596d' }"
@@ -49,6 +45,7 @@ process MITOSALT {
     """
     cat $msconfig | sed "s/threads = 1/threads = ${task.cpus}/" > new-${msconfig}
     touch ${prefix}.breakpoint
+    touch ${prefix}.cluster
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
