@@ -38,7 +38,7 @@ process MITOSALT {
         mitosalt: $VERSION
     END_VERSIONS
     """
-    
+
     stub:
     def VERSION = "1.1.1"
     def prefix = task.ext.prefix ?: "${meta.id}"
