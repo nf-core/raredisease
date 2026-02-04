@@ -51,13 +51,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | ----------------------------------- | ----------- | ----------- |
 | bcftools                            | 1.20        | 1.21        |
 | htslib                              | 1.20        | 1.21        |
-| mosdepth                            | 0.3.8       | 0.3.10      |
+| mosdepth                            | 0.3.8       | 0.3.11      |
 | ngs-bits                            | 2023_02     | 2024_11     |
 | gatk4/determinegermlinecontigploidy | 4.5.0.0     | 4.6.2.0     |
 | gatk4/germlinecnvcaller             | 4.5.0.0     | 4.6.2.0     |
 | gens-preproc                        | 1.0.11      | 1.1.2       |
-| samtools (sort & view)              | 1.21        | 1.22.1      |
+| pigz                                | 2.3.4       | 2.8         |
+| samtools                            | 1.21        | 1.22.1      |
 | sambamba                            |             | 1.0.1       |
+| ensemblverp/filtervep               | 113         | 115.2       |
+| fastp                               | 0.23.4      | 1.0.1       |
+| genmod                              | 3.9         | 3.10.2      |
+| multiqc                             | 1.32        | 1.33        |
+| picard                              | 3.3.0       | 3.4.0       |
+| sentieon                            | 202503      | 202503.02   |
+| stranger                            | 0.9.4       | 0.10.0      |
 
 ## 2.6.0 - Cacofonix [2025-06-25]
 
