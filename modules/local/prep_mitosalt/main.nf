@@ -24,7 +24,7 @@ process PREP_MITOSALT {
     val sizelimit
     val split_distance_threshold
     val split_length
-   
+
     output:
     path "mitosalt_config.txt", emit: msconfig
 

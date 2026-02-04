@@ -149,7 +149,7 @@ workflow PREPARE_REFERENCES {
             ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta, [[],[]]).fai.collect()
             ch_mt_dict = GATK_SD_MT(ch_mt_fasta).dict.collect()
 
-            ch_genome_hisat2_index = HISAT2_INDEX_GENOME(ch_genome_fasta,[[:],[]], [[:],[]]).index.collect() 
+            ch_genome_hisat2_index = HISAT2_INDEX_GENOME(ch_genome_fasta,[[:],[]], [[:],[]]).index.collect()
             ch_mt_last_index       = LAST_INDEX_MT(ch_mt_fasta).index.collect()
 
             GATK_SHIFTFASTA(ch_mt_fasta, ch_mt_fai, ch_mt_dict)

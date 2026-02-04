@@ -45,30 +45,30 @@ workflow CALL_SV_MT {
 
             PREP_MITOSALT(
                 ch_genome_chrsizes,
-                ch_genome_fai,              
-                ch_genome_hisat2index,      
-                ch_mt_fai,                  
+                ch_genome_fai,
+                ch_genome_hisat2index,
+                ch_mt_fai,
                 ch_mt_fasta,
-                ch_mt_lastdb,               
-                val_breakspan,               
-                val_breakthreshold,          
-                val_cluster_threshold,       
-                val_deletion_threshold_max,  
-                val_deletion_threshold_min,  
-                val_evalue_threshold,        
-                val_exclude,                
-                val_flank,                   
-                val_hplimit,                 
+                ch_mt_lastdb,
+                val_breakspan,
+                val_breakthreshold,
+                val_cluster_threshold,
+                val_deletion_threshold_max,
+                val_deletion_threshold_min,
+                val_evalue_threshold,
+                val_exclude,
+                val_flank,
+                val_hplimit,
                 val_mito_name,
-                val_paired_distance,         
-                val_score_threshold,         
-                val_sizelimit,               
+                val_paired_distance,
+                val_score_threshold,
+                val_sizelimit,
                 val_split_distance_threshold,
-                val_split_length            
-            ) 
+                val_split_length
+            )
 
-            MITOSALT( 
-                SEQTK_SAMPLE.out.reads, 
+            MITOSALT(
+                SEQTK_SAMPLE.out.reads,
                 PREP_MITOSALT.out.msconfig,
                 ch_genome_chrsizes,
                 ch_genome_fai,
