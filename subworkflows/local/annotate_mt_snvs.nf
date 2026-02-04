@@ -103,7 +103,7 @@ workflow ANNOTATE_MT_SNVS {
         TABIX_TABIX_VEP_MT(ENSEMBLVEP_MT.out.vcf)
 
         ch_vcf = ENSEMBLVEP_MT.out.vcf
-        ch_tbi = TABIX_TABIX_VEP_MT.out.tbi
+        ch_tbi = TABIX_TABIX_VEP_MT.out.index
 
         // Running haplogrep3
         if (!skip_haplogrep3) {
