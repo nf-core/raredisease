@@ -56,8 +56,7 @@ workflow QC_BAM {
             .set { ch_hsmetrics_in}
 
         if (val_target_bed) {
-            ch_hsmetrics = PICARD_COLLECTHSMETRICS (ch_hsmetrics_in, ch_genome_fasta, ch_genome_fai, [[],[]]).metrics
-            ch_versions  = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions)
+            ch_hsmetrics = PICARD_COLLECTHSMETRICS (ch_hsmetrics_in, ch_genome_fasta, ch_genome_fai, [[:],[]], [[:],[]]).metrics
         }
         if (!skip_qualimap) {
             ch_qualimap = QUALIMAP_BAMQC (ch_bam, []).results
@@ -89,7 +88,6 @@ workflow QC_BAM {
                 SENTIEON_WGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y.map{ interval -> [[:], interval]} )
                 ch_cov      = SENTIEON_WGSMETRICS_WG.out.wgs_metrics
                 ch_cov_y    = SENTIEON_WGSMETRICS_Y.out.wgs_metrics
-                ch_versions = ch_versions.mix(SENTIEON_WGSMETRICS_WG.out.versions, SENTIEON_WGSMETRICS_Y.out.versions)
             }
         }
         // Check sex
@@ -106,7 +104,6 @@ workflow QC_BAM {
         ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions)
         ch_versions = ch_versions.mix(TIDDIT_COV.out.versions)
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions)
-        ch_versions = ch_versions.mix(MOSDEPTH.out.versions)
         ch_versions = ch_versions.mix(VERIFYBAMID_VERIFYBAMID2.out.versions)
         ch_versions = ch_versions.mix(SAMBAMBA_DEPTH.out.versions)
 

@@ -18,7 +18,7 @@ workflow CALL_SV_TIDDIT {
         TIDDIT_SV ( ch_bam_bai, ch_genome_fasta, ch_bwa_index )
 
         INDEX_TIDDIT (TIDDIT_SV.out.vcf)
-        BCFTOOLS_VIEW_TIDDIT (INDEX_TIDDIT.out.gz_tbi, [], [], []).vcf
+        BCFTOOLS_VIEW_TIDDIT (INDEX_TIDDIT.out.gz_index, [], [], []).vcf
             .collect{ _meta, vcf -> vcf}
             .toList()
             .set { vcf_file_list }
@@ -31,8 +31,6 @@ workflow CALL_SV_TIDDIT {
 
         ch_versions = TIDDIT_SV.out.versions
         ch_versions = ch_versions.mix(SVDB_MERGE_TIDDIT.out.versions)
-        ch_versions = ch_versions.mix(INDEX_TIDDIT.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW_TIDDIT.out.versions)
 
     emit:
         vcf      = SVDB_MERGE_TIDDIT.out.vcf // channel: [ val(meta), path(vcf) ]

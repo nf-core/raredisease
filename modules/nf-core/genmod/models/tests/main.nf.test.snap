@@ -1,0 +1,64 @@
+{
+    "genmod_models - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test_models.vcf:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        "GENMOD_MODELS",
+                        "genmod",
+                        "3.10.2"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test_models.vcf:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions_genmod": [
+                    [
+                        "GENMOD_MODELS",
+                        "genmod",
+                        "3.10.2"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.2"
+        },
+        "timestamp": "2025-12-22T14:14:58.376387801"
+    },
+    "genmod_models": {
+        "content": [
+            "VcfFile [chromosomes=[1], sampleCount=3, variantCount=57, phased=false, phasedAutodetect=false]",
+            {
+                "versions_genmod": [
+                    [
+                        "GENMOD_MODELS",
+                        "genmod",
+                        "3.10.2"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.04.2"
+        },
+        "timestamp": "2025-12-22T14:47:59.960270364"
+    }
+}

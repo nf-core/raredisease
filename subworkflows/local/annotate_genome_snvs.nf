@@ -62,7 +62,7 @@ workflow ANNOTATE_GENOME_SNVS {
         ZIP_TABIX_ROHCALL (RHOCALL_ANNOTATE.out.vcf)
 
         ch_vcf
-            .join(ZIP_TABIX_ROHCALL.out.gz_tbi, remainder: true)
+            .join(ZIP_TABIX_ROHCALL.out.gz_index, remainder: true)
             .combine(ch_split_intervals)
             .map { it ->
                     def meta = it[0]
@@ -104,14 +104,14 @@ workflow ANNOTATE_GENOME_SNVS {
 
         ZIP_TABIX_VCFANNO (VCFANNO.out.vcf)
 
-        BCFTOOLS_VIEW(ZIP_TABIX_VCFANNO.out.gz_tbi, [], [], [])  // filter on frequencies
+        BCFTOOLS_VIEW(ZIP_TABIX_VCFANNO.out.gz_index, [], [], [])  // filter on frequencies
 
         // Annotating with CADD
         if (!val_cadd_resources.equals(null)) {
             TABIX_BCFTOOLS_VIEW (BCFTOOLS_VIEW.out.vcf)
 
             BCFTOOLS_VIEW.out.vcf
-                .join(TABIX_BCFTOOLS_VIEW.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+                .join(TABIX_BCFTOOLS_VIEW.out.index, failOnMismatch:true, failOnDuplicate:true)
                 .set { ch_cadd_in }
 
             ANNOTATE_CADD (
@@ -123,7 +123,6 @@ workflow ANNOTATE_GENOME_SNVS {
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
             ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
-            ch_versions = ch_versions.mix(TABIX_BCFTOOLS_VIEW.out.versions)
         }
 
         BCFTOOLS_VIEW.out.vcf
@@ -158,7 +157,7 @@ workflow ANNOTATE_GENOME_SNVS {
         TABIX_VEP (ch_vep_out)
 
         ch_vep_out
-            .join(TABIX_VEP.out.tbi, failOnMismatch:true)
+            .join(TABIX_VEP.out.index, failOnMismatch:true)
             .groupTuple()
             .map { meta, vcfs, tbis ->
                 def sortedvcfs = vcfs.sort { vcf -> vcf.baseName }
@@ -183,7 +182,6 @@ workflow ANNOTATE_GENOME_SNVS {
         CHROMOGRAPH_SITES([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_SITES.out.bed)
         CHROMOGRAPH_REGIONS([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_REGIONS.out.bed, [[],[]])
 
-
         BCFTOOLS_CONCAT.out.vcf
             .map { meta, vcf -> [meta - meta.subMap('prefix'), vcf] }
             .set { ch_concat_out }
@@ -191,26 +189,18 @@ workflow ANNOTATE_GENOME_SNVS {
         TABIX_BCFTOOLS_CONCAT (ch_concat_out)
 
         ch_vep_ann       = ch_concat_out
-        ch_vep_index     = TABIX_BCFTOOLS_CONCAT.out.tbi
-        ch_vep_ann_index = ch_concat_out.join(TABIX_BCFTOOLS_CONCAT.out.tbi)
+        ch_vep_index     = TABIX_BCFTOOLS_CONCAT.out.index
+        ch_vep_ann_index = ch_concat_out.join(TABIX_BCFTOOLS_CONCAT.out.index)
         //rhocall_viz
         ANNOTATE_RHOCALLVIZ(ch_genome_chrsizes, ch_samples, ch_vep_ann_index )
 
-        ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions)
         ch_versions = ch_versions.mix(RHOCALL_ANNOTATE.out.versions)
-        ch_versions = ch_versions.mix(ZIP_TABIX_ROHCALL.out.versions)
         ch_versions = ch_versions.mix(VCFANNO.out.versions)
         ch_versions = ch_versions.mix(UPD_SITES.out.versions)
         ch_versions = ch_versions.mix(UPD_REGIONS.out.versions)
         ch_versions = ch_versions.mix(CHROMOGRAPH_SITES.out.versions)
         ch_versions = ch_versions.mix(CHROMOGRAPH_REGIONS.out.versions)
-        ch_versions = ch_versions.mix(ZIP_TABIX_VCFANNO.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
         ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
-        ch_versions = ch_versions.mix(ENSEMBLVEP_SNV.out.versions)
-        ch_versions = ch_versions.mix(TABIX_VEP.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
-        ch_versions = ch_versions.mix(TABIX_BCFTOOLS_CONCAT.out.versions)
         ch_versions = ch_versions.mix(ANNOTATE_RHOCALLVIZ.out.versions)
 
     emit:

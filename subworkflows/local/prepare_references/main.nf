@@ -88,8 +88,7 @@ workflow PREPARE_REFERENCES {
         // Genome indices
         //
         if (!val_fai) {
-            ch_genome_fai = SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[],[]]).fai.collect()
-            ch_versions   = ch_versions.mix(SAMTOOLS_FAIDX_GENOME.out.versions)
+            ch_genome_fai = SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[:],[]], false).fai.collect()
         } else {
             ch_genome_fai = channel.fromPath(val_fai).map {it -> [[id:it.simpleName], it]}.collect()
         }
@@ -112,7 +111,6 @@ workflow PREPARE_REFERENCES {
             }
             if (val_aligner.equals("sentieon") || val_mtaligner.equals("sentieon")) {
                 ch_bwa      = SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.collect()
-                ch_versions = ch_versions.mix(SENTIEON_BWAINDEX_GENOME.out.versions)
             }
         } else if (val_bwa) {
             ch_bwa = channel.fromPath(val_bwa).map {it -> [[id:it.simpleName], it]}.collect()
@@ -136,13 +134,12 @@ workflow PREPARE_REFERENCES {
         //
         if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
             if (!val_mtfasta) {
-                ch_mt_fasta = SAMTOOLS_EXTRACT_MT(ch_genome_fasta, ch_genome_fai).fa.collect()
-                ch_versions = ch_versions.mix(SAMTOOLS_EXTRACT_MT.out.versions)
+                ch_mt_fasta = SAMTOOLS_EXTRACT_MT(ch_genome_fasta, ch_genome_fai, false).fa.collect()
             } else {
                 ch_mt_fasta = channel.fromPath(val_mtfasta).map { it -> [[id:it.simpleName], it] }.collect()
             }
 
-            ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta, [[],[]]).fai.collect()
+            ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta, [[:],[]], false).fai.collect()
             ch_mt_dict = GATK_SD_MT(ch_mt_fasta).dict.collect()
 
             GATK_SHIFTFASTA(ch_mt_fasta, ch_mt_fai, ch_mt_dict)
@@ -163,8 +160,7 @@ workflow PREPARE_REFERENCES {
                 }
                 .set {ch_shiftfasta_mtintervals}
 
-            ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_MT.out.versions,
-                                            GATK_SD_MT.out.versions,
+            ch_versions = ch_versions.mix(GATK_SD_MT.out.versions,
                                             GATK_SHIFTFASTA.out.versions)
         }
         //
@@ -183,7 +179,6 @@ workflow PREPARE_REFERENCES {
         if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("sentieon")) {
             ch_mt_bwa_index          = SENTIEON_BWAINDEX_MT(ch_mt_fasta).index.collect()
             ch_mtshift_bwa_index     = SENTIEON_BWAINDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
-            ch_versions              = ch_versions.mix(SENTIEON_BWAINDEX_MT.out.versions, SENTIEON_BWAINDEX_MT_SHIFT.out.versions)
         }
         //
         // Vcf, tab and bed indices
@@ -193,8 +188,7 @@ workflow PREPARE_REFERENCES {
             if (val_known_dbsnp_tbi) {
                 ch_dbsnp_tbi = channel.fromPath(val_known_dbsnp_tbi).map{ it -> [[id:it.simpleName], it] }.collect()
             } else {
-                ch_dbsnp_tbi = TABIX_DBSNP(ch_dbsnp).tbi.collect()
-                ch_versions  = ch_versions.mix(TABIX_DBSNP.out.versions)
+                ch_dbsnp_tbi = TABIX_DBSNP(ch_dbsnp).index.collect()
             }
         }
 
@@ -203,8 +197,7 @@ workflow PREPARE_REFERENCES {
             if (val_gnomad_af_idx) {
                 ch_gnomad_idx = channel.fromPath(val_gnomad_af_idx).map{ it -> [[id:it.simpleName], it] }.collect()
             } else {
-                ch_gnomad_idx = TABIX_GNOMAD_AF(ch_gnomad_af).tbi.collect()
-                ch_versions  = ch_versions.mix(TABIX_GNOMAD_AF.out.versions)
+                ch_gnomad_idx = TABIX_GNOMAD_AF(ch_gnomad_af).index.collect()
             }
             ch_gnomad_af_idx = ch_gnomad_af.join(ch_gnomad_idx).map {_meta, tab, idx -> [tab,idx]}.collect()
         }
@@ -218,7 +211,7 @@ workflow PREPARE_REFERENCES {
                 ch_target_bed,
                 ch_genome_fai.map { _meta, fai -> return fai }
             )
-            ch_target_bed_gz_tbi = TABIX_BGZIPINDEX_PADDED_BED(BEDTOOLS_PAD_TARGET_BED.out.bed).gz_tbi
+            ch_target_bed_gz_tbi = TABIX_BGZIPINDEX_PADDED_BED(BEDTOOLS_PAD_TARGET_BED.out.bed).gz_index
 
             ch_target_intervals = GATK_BILT(ch_target_bed, ch_genome_dict).interval_list.map{ _meta, inter -> inter}.collect()
 
@@ -234,11 +227,7 @@ workflow PREPARE_REFERENCES {
 
             ch_bait_intervals = CAT_CAT_BAIT ( ch_bait_intervals_cat_in ).file_out.map {_meta, inter -> inter}.collect().ifEmpty([[]])
 
-            ch_versions = ch_versions.mix(BEDTOOLS_PAD_TARGET_BED.out.versions,
-                                            TABIX_BGZIPINDEX_PADDED_BED.out.versions,
-                                            GATK_BILT.out.versions,
-                                            GATK_ILT.out.versions,
-                                            CAT_CAT_BAIT.out.versions)
+            ch_versions = ch_versions.mix(GATK_BILT.out.versions, GATK_ILT.out.versions)
         }
         //
         // Prepare vcfanno extra files
@@ -247,18 +236,16 @@ workflow PREPARE_REFERENCES {
             ch_vcfanno_tabix_in = channel.fromPath(val_vcfanno_extra).map { it -> [[id:it.baseName], it] }
 
             if (val_vcfanno_extra.endsWith(".gz")) {
-                TABIX_VCFANNOEXTRA(ch_vcfanno_tabix_in).tbi
+                TABIX_VCFANNOEXTRA(ch_vcfanno_tabix_in).index
                     .join(ch_vcfanno_tabix_in)
                     .map { _meta, tbi, vcf -> return [[vcf,tbi]]}
                     .set {ch_vcfanno_extra}
-                ch_versions = ch_versions.mix(TABIX_VCFANNOEXTRA.out.versions)
             } else {
                 TABIX_BGZIPINDEX_VCFANNOEXTRA(ch_vcfanno_tabix_in)
                 channel.empty()
-                    .mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_tbi, TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_csi)
+                    .mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_index, TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_csi)
                     .map { _meta, vcf, index -> return [[vcf,index]] }
                     .set {ch_vcfanno_extra}
-                ch_versions = ch_versions.mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.versions)
             }
         }
         //

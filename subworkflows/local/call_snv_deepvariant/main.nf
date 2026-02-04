@@ -32,7 +32,6 @@ workflow CALL_SNV_DEEPVARIANT {
             ch_bam_bai
                 .combine (TABIX_BGZIP.out.output.map {_meta, bed -> return bed})
                 .set { ch_deepvar_in }
-            ch_versions = ch_versions.mix(TABIX_BGZIP.out.versions)
         } else if (val_analysis_type.equals("wgs")) {
             ch_bam_bai
                 .map { meta, bam, bai ->
@@ -75,7 +74,7 @@ workflow CALL_SNV_DEEPVARIANT {
             .set{ch_varcallerbed}
 
         REMOVE_DUPLICATES_GL.out.vcf
-            .join(TABIX_GL.out.tbi)
+            .join(TABIX_GL.out.index)
             .combine(ch_varcallerbed)
             .set { ch_annotate_in }
 
@@ -85,17 +84,12 @@ workflow CALL_SNV_DEEPVARIANT {
 
         ch_versions = ch_versions.mix(DEEPVARIANT.out.versions)
         ch_versions = ch_versions.mix(GLNEXUS.out.versions)
-        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_GL.out.versions)
-        ch_versions = ch_versions.mix(REMOVE_DUPLICATES_GL.out.versions)
-        ch_versions = ch_versions.mix(TABIX_GL.out.versions)
         ch_versions = ch_versions.mix(ADD_VARCALLER_TO_BED.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_ANNOTATE.out.versions)
-        ch_versions = ch_versions.mix(TABIX_ANNOTATE.out.versions)
 
     emit:
         gvcf       = DEEPVARIANT.out.gvcf       // channel: [ val(meta), path(gvcf)]
         gvcf_tabix = DEEPVARIANT.out.gvcf_tbi   // channel: [ val(meta), path(gvcf_tbi)]
-        tabix      = TABIX_ANNOTATE.out.tbi     // channel: [ val(meta), path(tbi) ]
+        tabix      = TABIX_ANNOTATE.out.index   // channel: [ val(meta), path(tbi) ]
         vcf        = BCFTOOLS_ANNOTATE.out.vcf  // channel: [ val(meta), path(vcf) ]
         versions   = ch_versions                // channel: [ path(versions.yml) ]
 }

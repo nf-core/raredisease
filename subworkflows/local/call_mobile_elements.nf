@@ -91,13 +91,13 @@ workflow CALL_MOBILE_ELEMENTS {
             }
             .set { ch_vcfs }
 
-        TABIX_ME_SPLIT.out.tbi
-            .map { meta, vcf ->
-                [ groupKey( meta - meta.subMap('interval'), meta.nr_of_intervals ), vcf ]
+        TABIX_ME_SPLIT.out.index
+            .map { meta, tbi ->
+                [ groupKey( meta - meta.subMap('interval'), meta.nr_of_intervals ), tbi ]
             }
             .groupTuple()
-            .map { meta, vcf ->
-                [ meta - meta.subMap('nr_of_intervals'), vcf ]
+            .map { meta, tbi ->
+                [ meta - meta.subMap('nr_of_intervals'), tbi ]
             }
             .set { ch_tbis }
 
@@ -121,18 +121,12 @@ workflow CALL_MOBILE_ELEMENTS {
         SVDB_MERGE_ME ( ch_svdb_merge_me_input, [], true )
         TABIX_ME ( SVDB_MERGE_ME.out.vcf )
 
-        ch_versions = ch_versions.mix(ME_SPLIT_ALIGNMENT.out.versions)
         ch_versions = ch_versions.mix(RETROSEQ_DISCOVER.out.versions)
         ch_versions = ch_versions.mix(RETROSEQ_CALL.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_ME.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_SORT_ME.out.versions)
-        ch_versions = ch_versions.mix(TABIX_ME_SPLIT.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_CONCAT_ME.out.versions)
         ch_versions = ch_versions.mix(SVDB_MERGE_ME.out.versions)
-        ch_versions = ch_versions.mix(TABIX_ME.out.versions)
 
     emit:
-        tbi      = TABIX_ME.out.tbi      // channel: [ val(meta), path(tbi) ]
+        tbi      = TABIX_ME.out.index    // channel: [ val(meta), path(tbi) ]
         vcf      = SVDB_MERGE_ME.out.vcf // channel: [ val(meta), path(vcf) ]
         versions = ch_versions           // channel: [ path(versions.yml) ]
 }

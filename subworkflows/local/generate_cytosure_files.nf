@@ -58,7 +58,6 @@ workflow GENERATE_CYTOSURE_FILES {
             BCFTOOLS_REHEADER_SV_VCF ( ch_reheader_in, [[:],[]] ).vcf
                 .set {ch_reheader_out}
 
-            ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_SV_VCF.out.versions)
         }
 
         SPLIT_AND_FILTER_SV_VCF.out.vcf
@@ -90,7 +89,6 @@ workflow GENERATE_CYTOSURE_FILES {
         )
 
         ch_versions = ch_versions.mix(TIDDIT_COV_VCF2CYTOSURE.out.versions)
-        ch_versions = ch_versions.mix(SPLIT_AND_FILTER_SV_VCF.out.versions)
         ch_versions = ch_versions.mix(VCF2CYTOSURE.out.versions)
 
     emit:

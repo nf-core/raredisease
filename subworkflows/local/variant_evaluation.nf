@@ -42,7 +42,6 @@ workflow VARIANT_EVALUATION {
 
         RTGTOOLS_VCFEVAL ( ch_vcfeval_in, ch_sdf )
 
-        ch_versions = ch_versions.mix(BCFTOOLS_REHEADER.out.versions)
         ch_versions = ch_versions.mix(TABIX_TRUTHVCF.out.versions)
         ch_versions = ch_versions.mix(RTGTOOLS_VCFEVAL.out.versions)
 

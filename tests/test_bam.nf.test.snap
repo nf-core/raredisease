@@ -10,49 +10,49 @@
                     "bcftools": 1.22
                 },
                 "BCFTOOLS_CONCAT": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_CONCAT_ME": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_MERGE_MT": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_REHEADER_EXP": {
-                    "bcftools": 1.21
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_REHEADER_ME": {
-                    "bcftools": 1.21
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_ROH": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_SORT": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_SORT_ME": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_VIEW": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_VIEW_CNVNATOR": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_VIEW_FILTER": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_VIEW_MANTA": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_VIEW_RHOCALL": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_VIEW_TIDDIT": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BCFTOOLS_VIEW_UNCOMPRESS": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "BEDTOOLS_PAD_TARGET_BED": {
                     "bedtools": "2.31.1"
@@ -74,7 +74,7 @@
                     "bwa": "0.7.18-r1243-dirty"
                 },
                 "CAT_CAT_BAIT": {
-                    "pigz": "2.3.4"
+                    "pigz": 2.8
                 },
                 "CHROMOGRAPH_AUTOZYG": {
                     "chromograph": "1.3.1"
@@ -189,16 +189,16 @@
                     "gawk": "5.3.0"
                 },
                 "GENMOD_ANNOTATE": {
-                    "genmod": 3.9
+                    "genmod": "3.10.2"
                 },
                 "GENMOD_COMPOUND": {
-                    "genmod": 3.9
+                    "genmod": "3.10.2"
                 },
                 "GENMOD_MODELS": {
-                    "genmod": 3.9
+                    "genmod": "3.10.2"
                 },
                 "GENMOD_SCORE": {
-                    "genmod": 3.9
+                    "genmod": "3.10.2"
                 },
                 "GET_CHROM_SIZES": {
                     "coreutils": 8.31
@@ -216,10 +216,12 @@
                     "hmtnote": "0.7.2"
                 },
                 "INDEX_CNVNATOR": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "INDEX_TIDDIT": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "MANTA": {
                     "manta": "1.6.0"
@@ -228,7 +230,7 @@
                     "samtools": "1.22.1"
                 },
                 "MOSDEPTH": {
-                    "mosdepth": "0.3.10"
+                    "mosdepth": "0.3.11"
                 },
                 "MT_DELETION": {
                     "samtools": "1.19.2"
@@ -243,7 +245,7 @@
                     "picard": "3.3.0"
                 },
                 "PICARD_COLLECTHSMETRICS": {
-                    "picard": "3.3.0"
+                    "picard": "3.4.0"
                 },
                 "PICARD_COLLECTMULTIPLEMETRICS": {
                     "picard": "3.3.0"
@@ -267,10 +269,10 @@
                     "qualimap": 2.3
                 },
                 "REMOVE_DUPLICATES_GL": {
-                    "bcftools": 1.21
+                    "bcftools": 1.22
                 },
                 "REMOVE_DUPLICATES_MT": {
-                    "bcftools": 1.21
+                    "bcftools": 1.22
                 },
                 "RENAMESAMPLE_EXP": {
                     "picard": "3.3.0"
@@ -301,10 +303,10 @@
                     "samtools": "1.22.1"
                 },
                 "SAMTOOLS_EXTRACT_MT": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_FAIDX_MT": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_SORT": {
                     "samtools": "1.22.1"
@@ -322,20 +324,20 @@
                     "SMNCopyNumberCaller": "1.1.2"
                 },
                 "SPLIT_AND_FILTER_SV_VCF": {
-                    "bcftools": 1.2
+                    "bcftools": 1.22
                 },
                 "SPLIT_MULTIALLELICS_EXP": {
-                    "bcftools": 1.21
+                    "bcftools": 1.22
                 },
                 "SPLIT_MULTIALLELICS_GL": {
-                    "bcftools": 1.21
+                    "bcftools": 1.22
                 },
                 "SPLIT_MULTIALLELICS_MT": {
-                    "bcftools": 1.21
+                    "bcftools": 1.22
                 },
                 "STRANGER": {
-                    "stranger": "0.9.4",
-                    "tabix": 1.21
+                    "stranger": "0.10.0",
+                    "tabix": "1.22.1"
                 },
                 "SVDB_MERGE": {
                     "svdb": "2.8.2",
@@ -367,10 +369,12 @@
                     "tabix": 1.21
                 },
                 "TABIX_BGZIPINDEX_PADDED_BED": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "TABIX_BGZIPTABIX": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "TABIX_DBSNP": {
                     "tabix": 1.21
@@ -442,16 +446,20 @@
                     "nf-core/raredisease": "v2.7.0dev"
                 },
                 "ZIP_TABIX_HMTNOTE_MT": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "ZIP_TABIX_ROHCALL": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "ZIP_TABIX_VCFANNO": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "ZIP_TABIX_VCFANNO_MT": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 }
             },
             [
@@ -464,10 +472,8 @@
                 "alignment/slowlycivilbuck_mt_subsample.bam.bai",
                 "annotate_mobile_elements",
                 "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz",
-                "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz.csi",
                 "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz.tbi",
                 "annotate_mobile_elements/justhusky_me_pli_research.vcf.gz",
-                "annotate_mobile_elements/justhusky_me_pli_research.vcf.gz.csi",
                 "annotate_mobile_elements/justhusky_me_pli_research.vcf.gz.tbi",
                 "annotate_snv",
                 "annotate_snv/genome",
@@ -484,7 +490,6 @@
                 "annotate_snv/genome/hugelymodelbat_rhocallviz/hugelymodelbat_rhocallviz.wig",
                 "annotate_snv/genome/hugelymodelbat_rhocallviz_autozyg_chromograph",
                 "annotate_snv/genome/justhusky_rhocall_filter_vep.vcf.gz",
-                "annotate_snv/genome/justhusky_rhocall_filter_vep.vcf.gz.csi",
                 "annotate_snv/genome/justhusky_rhocall_filter_vep.vcf.gz.tbi",
                 "annotate_snv/genome/slowlycivilbuck_rhocallviz",
                 "annotate_snv/genome/slowlycivilbuck_rhocallviz/slowlycivilbuck_rhocallviz.bed",
@@ -500,11 +505,9 @@
                 "annotate_sv/justhusky_svdbquery_vep.summary.html",
                 "annotate_sv/justhusky_svdbquery_vep.tab.gz",
                 "annotate_sv/justhusky_svdbquery_vep.vcf.gz",
-                "annotate_sv/justhusky_svdbquery_vep.vcf.gz.csi",
                 "annotate_sv/justhusky_svdbquery_vep.vcf.gz.tbi",
                 "call_mobile_elements",
                 "call_mobile_elements/justhusky_mobile_elements.vcf.gz",
-                "call_mobile_elements/justhusky_mobile_elements.vcf.gz.csi",
                 "call_mobile_elements/justhusky_mobile_elements.vcf.gz.tbi",
                 "call_snv",
                 "call_snv/genome",
@@ -512,12 +515,10 @@
                 "call_snv/genome/justhusky_snv.vcf.gz.tbi",
                 "call_snv/mitochondria",
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz",
-                "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.csi",
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
                 "call_sv/genome",
                 "call_sv/genome/justhusky_sv.vcf.gz",
-                "call_sv/genome/justhusky_sv.vcf.gz.csi",
                 "call_sv/genome/justhusky_sv.vcf.gz.tbi",
                 "call_sv/mitochondria",
                 "call_sv/mitochondria/eKLIPse_earlycasualcaiman.png",
@@ -538,6 +539,7 @@
                 "haplocheck/slowlycivilbuck.raw.txt",
                 "multiqc",
                 "multiqc/multiqc_data",
+                "multiqc/multiqc_data/.stub",
                 "multiqc/multiqc_plots",
                 "multiqc/multiqc_report.html",
                 "ngsbits_samplegender",
@@ -844,6 +846,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-01-24T00:30:08.403574148"
+        "timestamp": "2026-01-31T22:23:45.894751961"
     }
 }
