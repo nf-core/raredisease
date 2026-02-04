@@ -1086,5 +1086,5 @@
         {
             "$ref": "#/$defs/generic_options"
         }
-    ],
+    ]
 }
