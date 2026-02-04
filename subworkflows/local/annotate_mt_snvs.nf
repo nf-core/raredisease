@@ -123,7 +123,6 @@ workflow ANNOTATE_MT_SNVS {
             ch_tbi = BCFTOOLS_PLUGINSETGT.out.tbi
         }
 
-        ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
         ch_versions = ch_versions.mix(TABIX_TABIX_VEP_MT.out.versions)
         ch_versions = ch_versions.mix(VCFANNO_MT.out.versions)
         ch_versions = ch_versions.mix(HMTNOTE_ANNOTATE.out.versions)
