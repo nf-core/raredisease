@@ -84,7 +84,6 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         SAMTOOLS_INDEX_MARKDUP ( MARKDUPLICATES.out.bam )
 
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX_ALIGN.out.versions)
-        ch_versions = ch_versions.mix(MARKDUPLICATES.out.versions)
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MARKDUP.out.versions)
 
     emit:

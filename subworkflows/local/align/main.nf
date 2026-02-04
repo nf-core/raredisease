@@ -152,7 +152,7 @@ workflow ALIGN {
             ch_mtshift_bam_bai_gatksubwf = ALIGN_MT_SHIFT.out.marked_bam
                                             .join(ALIGN_MT_SHIFT.out.marked_bai, failOnMismatch:true, failOnDuplicate:true) // Only for SNV calling
             ch_versions                  = ch_versions
-                                            .mix(ALIGN_MT.out.versions, ALIGN_MT_SHIFT.out.versions, CONVERT_MT_BAM_TO_FASTQ.out.versions)
+                                            .mix(ALIGN_MT.out.versions, ALIGN_MT_SHIFT.out.versions)
         }
 
         if (val_save_mapped_as_cram) {

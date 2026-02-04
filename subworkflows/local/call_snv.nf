@@ -143,8 +143,6 @@ workflow CALL_SNV {
             ch_mt_txt       = CALL_SNV_MT.out.txt
             ch_versions     = ch_versions.mix(CALL_SNV_MT.out.versions)
             ch_versions     = ch_versions.mix(CALL_SNV_MT_SHIFT.out.versions)
-            ch_versions     = ch_versions.mix(POSTPROCESS_MT_CALLS.out.versions)
-            ch_versions     = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
         }
 
         if (val_concatenate_snv_calls) {

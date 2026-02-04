@@ -34,9 +34,6 @@ workflow CALL_SNV_MT {
 
         GATK4_FILTERMUTECTCALLS_MT (ch_to_filt, ch_fasta, ch_fai, ch_dict)
 
-        ch_versions = ch_versions.mix(GATK4_MUTECT2_MT.out.versions)
-        ch_versions = ch_versions.mix(GATK4_FILTERMUTECTCALLS_MT.out.versions)
-
     emit:
         filt_stats     = GATK4_FILTERMUTECTCALLS_MT.out.stats // channel: [ val(meta), path(tsv) ]
         html           = HAPLOCHECK_MT.out.html               // channel: [ val(meta), path(html) ]

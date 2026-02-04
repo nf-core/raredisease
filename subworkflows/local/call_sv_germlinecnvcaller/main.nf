@@ -22,7 +22,6 @@ workflow CALL_SV_GERMLINECNVCALLER {
         ch_case_info           // channel: [mandatory] [ val(case_info) ]
 
     main:
-        ch_versions = channel.empty()
 
         input = ch_bam_bai.combine( ch_readcount_intervals )
 
@@ -76,16 +75,9 @@ workflow CALL_SV_GERMLINECNVCALLER {
 
         SVDB_MERGE_GCNVCALLER ( merge_input_vcfs, [], true )
 
-        ch_versions = ch_versions.mix(GATK4_COLLECTREADCOUNTS.out.versions)
-        ch_versions = ch_versions.mix(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.versions)
-        ch_versions = ch_versions.mix(GATK4_GERMLINECNVCALLER.out.versions)
-        ch_versions = ch_versions.mix(GATK4_POSTPROCESSGERMLINECNVCALLS.out.versions)
-        ch_versions = ch_versions.mix(SVDB_MERGE_GCNVCALLER.out.versions)
-
     emit:
         genotyped_intervals_vcf          = GATK4_POSTPROCESSGERMLINECNVCALLS.out.intervals  // channel: [ val(meta), path(*.vcf.gz) ]
         genotyped_segments_vcf           = GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments   // channel: [ val(meta), path(*.vcf.gz) ]
         genotyped_filtered_segments_vcf  = SVDB_MERGE_GCNVCALLER.out.vcf                    // channel: [ val(meta), path(*.vcf.gz) ]
         denoised_vcf                     = GATK4_POSTPROCESSGERMLINECNVCALLS.out.denoised   // channel: [ val(meta), path(*.vcf.gz) ]
-        versions                         = ch_versions                                      // channel: [ versions.yml ]
 }

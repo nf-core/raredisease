@@ -109,7 +109,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
             TABIX_TABIX (SVDB_MERGE.out.vcf)
             ch_merged_svs = SVDB_MERGE.out.vcf
             ch_merged_tbi = TABIX_TABIX.out.index
-            ch_versions = ch_versions.mix(SVDB_MERGE.out.versions)
         }
 
     emit:

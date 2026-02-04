@@ -1,4 +1,45 @@
 {
+    "test_gatk4_bedtointervallist - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        "GATK4_BEDTOINTERVALLIST",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ],
+                "interval_list": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions_gatk4": [
+                    [
+                        "GATK4_BEDTOINTERVALLIST",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
+        },
+        "timestamp": "2026-01-22T09:52:55.698969373"
+    },
     "test_gatk4_bedtointervallist": {
         "content": [
             {
@@ -11,7 +52,11 @@
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,29a18c36f27584eb5a5f2f5457088b3b"
+                    [
+                        "GATK4_BEDTOINTERVALLIST",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ],
                 "interval_list": [
                     [
@@ -21,15 +66,19 @@
                         "test.interval_list:md5,e51101c9357fb2d59fd30e370eefa39c"
                     ]
                 ],
-                "versions": [
-                    "versions.yml:md5,29a18c36f27584eb5a5f2f5457088b3b"
+                "versions_gatk4": [
+                    [
+                        "GATK4_BEDTOINTERVALLIST",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ]
             }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
         },
-        "timestamp": "2024-03-19T14:20:12.168775"
+        "timestamp": "2026-01-22T09:52:46.629308651"
     }
 }

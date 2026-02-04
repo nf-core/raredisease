@@ -49,7 +49,6 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             )
 
             ch_vcf      = SVDB_QUERY_DB.out.vcf
-            ch_versions = ch_versions.mix(SVDB_QUERY_DB.out.versions)
         }
 
         if (val_svdb_query_bedpedbs) {
@@ -74,7 +73,6 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             )
 
             ch_vcf      = SVDB_QUERY_BEDPE.out.vcf
-            ch_versions = ch_versions.mix(SVDB_QUERY_BEDPE.out.versions)
         }
 
         PICARD_SORTVCF(ch_vcf, ch_genome_fasta, ch_genome_dictionary)
@@ -99,8 +97,6 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         )
 
         TABIX_VEP (ENSEMBLVEP_SV.out.vcf)
-
-        ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
 
     emit:
         tbi      = TABIX_VEP.out.index   // channel: [ val(meta), path(tbi) ]

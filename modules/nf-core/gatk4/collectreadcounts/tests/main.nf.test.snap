@@ -15,7 +15,11 @@
                     ]
                 ],
                 "2": [
-                    "versions.yml:md5,ebf23f4ab63948ba97df07035f8d2659"
+                    [
+                        "GATK4_COLLECTREADCOUNTS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ],
                 "hdf5": [
                     
@@ -29,16 +33,20 @@
                         "test.tsv:md5,d9a32039b7a84f5bb74e8382e5427670"
                     ]
                 ],
-                "versions": [
-                    "versions.yml:md5,ebf23f4ab63948ba97df07035f8d2659"
+                "versions_gatk4": [
+                    [
+                        "GATK4_COLLECTREADCOUNTS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ]
             }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-08-26T12:58:19.610687"
+        "timestamp": "2026-02-03T11:04:47.877494"
     },
     "test-gatk4-collectreadcounts-hdf5": {
         "content": [
@@ -69,7 +77,11 @@
                     ]
                 ],
                 "2": [
-                    "versions.yml:md5,ebf23f4ab63948ba97df07035f8d2659"
+                    [
+                        "GATK4_COLLECTREADCOUNTS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ],
                 "hdf5": [
                     
@@ -83,15 +95,19 @@
                         "test.tsv:md5,8e45a6164916c303387f39f02ce45841"
                     ]
                 ],
-                "versions": [
-                    "versions.yml:md5,ebf23f4ab63948ba97df07035f8d2659"
+                "versions_gatk4": [
+                    [
+                        "GATK4_COLLECTREADCOUNTS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ]
             }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-08-26T12:58:07.500024"
+        "timestamp": "2026-02-03T11:04:25.535499"
     }
 }
