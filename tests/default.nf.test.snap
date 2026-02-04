@@ -127,6 +127,21 @@
                 "EKLIPSE": {
                     "eklipse": 1.8
                 },
+                "ENSEMBLVEP_FILTERVEP": {
+                    "ensemblvep": 110.0
+                },
+                "ENSEMBLVEP_ME": {
+                    "ensemblvep": 110.0
+                },
+                "ENSEMBLVEP_MT": {
+                    "ensemblvep": 110.0
+                },
+                "ENSEMBLVEP_SNV": {
+                    "ensemblvep": 110.0
+                },
+                "ENSEMBLVEP_SV": {
+                    "ensemblvep": 110.0
+                },
                 "EXPANSIONHUNTER": {
                     "expansionhunter": "5.0.0",
                     "bgzip": 1.18
@@ -210,10 +225,12 @@
                     "hmtnote": "0.7.2"
                 },
                 "INDEX_CNVNATOR": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "INDEX_TIDDIT": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "MANTA": {
                     "manta": "1.6.0"
@@ -376,10 +393,12 @@
                     "tabix": 1.21
                 },
                 "TABIX_BGZIPINDEX_PADDED_BED": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "TABIX_BGZIPTABIX": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "TABIX_DBSNP": {
                     "tabix": 1.21
@@ -451,16 +470,20 @@
                     "nf-core/raredisease": "v2.7.0dev"
                 },
                 "ZIP_TABIX_HMTNOTE_MT": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "ZIP_TABIX_ROHCALL": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "ZIP_TABIX_VCFANNO": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "ZIP_TABIX_VCFANNO_MT": {
-                    "tabix": 1.2
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 }
             },
             [
@@ -882,6 +905,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-01-27T09:27:15.497975481"
+        "timestamp": "2026-01-31T20:55:04.269156792"
     }
 }
