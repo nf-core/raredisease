@@ -55,7 +55,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .vcf
                 .collect{ _meta, vcf -> vcf }
                 .set { cnvnator_vcf }
-            ch_versions = ch_versions.mix(CALL_SV_CNVNATOR.out.versions)
         }
 
         if (!skip_germlinecnvcaller) {

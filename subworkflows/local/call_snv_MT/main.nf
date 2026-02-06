@@ -19,7 +19,7 @@ workflow CALL_SNV_MT {
 
         ch_bam_bai_int = ch_bam_bai.combine(ch_intervals)
 
-        GATK4_MUTECT2_MT (ch_bam_bai_int, ch_fasta, ch_fai, ch_dict, [], [], [],[])
+        GATK4_MUTECT2_MT (ch_bam_bai_int, ch_fasta, ch_fai.map{meta, fai -> return [meta,fai,[]]}, ch_dict, [], [], [], [], [],[])
 
         HAPLOCHECK_MT (GATK4_MUTECT2_MT.out.vcf)
         ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions)
