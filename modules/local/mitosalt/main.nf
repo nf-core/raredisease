@@ -4,7 +4,7 @@ process MITOSALT {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        '/home/proj/production/dropbox/RN/mitosalt.sif':
+        'https://depot.galaxyproject.org/singularity/mitosalt%3A1.1.1--hdfd78af_3':
         'community.wave.seqera.io/library/bbmap_bedtools_bioconductor-biostrings_bioconductor-pwalign_pruned:11434f3b6a01596d' }"
 
 
