@@ -112,9 +112,8 @@
                     },
                     "cnvnator/cnvnator": {
                         "branch": "master",
-                        "git_sha": "e657cdd0198cc26f2e501325eb7f70fbd740b6ee",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/cnvnator/cnvnator/cnvnator-cnvnator.diff"
+                        "git_sha": "dfe412ff862fdafd658b0d7beca1e084800ba5b2",
+                        "installed_by": ["modules"]
                     },
                     "cnvnator/convert2vcf": {
                         "branch": "master",
