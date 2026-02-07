@@ -73,8 +73,7 @@
                     ]
                 ],
                 "2": [
-                    "versions.yml:md5,005c9777d9befd3821945bc05709dfc8",
-                    "versions.yml:md5,27694de4c876f5d1aeb42639252e73ea"
+                    "versions.yml:md5,005c9777d9befd3821945bc05709dfc8"
                 ],
                 "bed": [
                     [
@@ -147,15 +146,14 @@
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,005c9777d9befd3821945bc05709dfc8",
-                    "versions.yml:md5,27694de4c876f5d1aeb42639252e73ea"
+                    "versions.yml:md5,005c9777d9befd3821945bc05709dfc8"
                 ]
             }
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "24.10.5"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
         },
-        "timestamp": "2025-03-31T11:51:27.737317"
+        "timestamp": "2026-02-06T18:19:24.751974831"
     }
 }
