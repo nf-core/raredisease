@@ -20,11 +20,11 @@ process REPLACE_SPACES_IN_VCFINFO {
 
     script:
     """
-    replace_space_in_vcfinfo.py --input ${input}
+    replace_spaces_in_vcfinfo.py --input ${input}
     """
 
     stub:
     """
-    replace_space_in_vcfinfo.py --input ${input}
+    replace_spaces_in_vcfinfo.py --input ${input}
     """
 }

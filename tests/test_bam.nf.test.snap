@@ -4,7 +4,8 @@
             795,
             {
                 "ADD_VARCALLER_TO_BED": {
-                    "tabix": 1.12
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "BCFTOOLS_ANNOTATE": {
                     "bcftools": 1.22
@@ -106,9 +107,12 @@
                 "CNVNATOR_STAT": {
                     "cnvnator": "0.4.1"
                 },
+                "CREATE_HGNCIDS_FILE": {
+                    "create_hgncids_file": 1.0,
+                    "python": "3.14.3"
+                },
                 "CREATE_PEDIGREE_FILE": {
-                    "create_pedigree_file": "v1.0",
-                    "python": "3.8.3"
+                    "coreutils": 9.5
                 },
                 "CUSTOM_ADDMOSTSEVERECONSEQUENCE": {
                     "add_most_severe_consequence": 1.1,
@@ -120,9 +124,6 @@
                 },
                 "DEEPVARIANT": {
                     "deepvariant": "1.9.0"
-                },
-                "EKLIPSE": {
-                    "eklipse": 1.8
                 },
                 "ENSEMBLVEP_FILTERVEP": {
                     "ensemblvep": 110.0
@@ -204,7 +205,7 @@
                     "genmod": "3.10.2"
                 },
                 "GET_CHROM_SIZES": {
-                    "coreutils": 8.31
+                    "coreutils": 9.5
                 },
                 "GLNEXUS": {
                     "glnexus": "1.4.1-0-g68e25e5"
@@ -236,7 +237,8 @@
                     "mosdepth": "0.3.11"
                 },
                 "MT_DELETION": {
-                    "samtools": "1.19.2"
+                    "mitodel": 1.0,
+                    "samtools": 1.23
                 },
                 "NGSBITS_SAMPLEGENDER": {
                     "ngs-bits": 202411
@@ -281,20 +283,20 @@
                     "picard": "3.4.0"
                 },
                 "RENAME_BAI": {
-                    "coreutils": 8.31
+                    "coreutils": 9.5
                 },
                 "RENAME_BAM": {
-                    "coreutils": 8.31
+                    "coreutils": 9.5
                 },
                 "REPLACE_SPACES_IN_VCFINFO": {
-                    "replace_spaces_in_vcfinfo": 1.0,
-                    "python": "3.8.3"
+                    "python": "3.14.3",
+                    "replace_spaces_in_vcfinfo": 1.0
                 },
                 "RETROSEQ_CALL": {
-                    "retroseq_call": 1.5
+                    "retroseq": 1.5
                 },
                 "RETROSEQ_DISCOVER": {
-                    "retroseq_discover": 1.5
+                    "retroseq": 1.5
                 },
                 "RHOCALL_ANNOTATE": {
                     "rhocall": "0.5.1"
@@ -1039,8 +1041,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-07T12:27:20.306676608"
+        "timestamp": "2026-02-09T23:20:06.096281265"
     }
 }
