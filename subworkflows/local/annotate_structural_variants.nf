@@ -101,12 +101,9 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         TABIX_VEP (ENSEMBLVEP_SV.out.vcf)
 
         ch_versions = ch_versions.mix(PICARD_SORTVCF.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
-        ch_versions = ch_versions.mix(ENSEMBLVEP_SV.out.versions)
-        ch_versions = ch_versions.mix(TABIX_VEP.out.versions)
 
     emit:
-        tbi      = TABIX_VEP.out.tbi     // channel: [ val(meta), path(tbi) ]
+        tbi      = TABIX_VEP.out.index   // channel: [ val(meta), path(tbi) ]
         vcf_ann  = ENSEMBLVEP_SV.out.vcf // channel: [ val(meta), path(vcf) ]
         versions = ch_versions           // channel: [ path(versions.yml) ]
 }

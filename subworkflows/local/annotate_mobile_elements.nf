@@ -73,8 +73,6 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
 
         ch_versions = ch_versions.mix( SVDB_QUERY_DB.out.versions )
         ch_versions = ch_versions.mix( PICARD_SORTVCF.out.versions )
-        ch_versions = ch_versions.mix( ENSEMBLVEP_ME.out.versions )
-        ch_versions = ch_versions.mix( BCFTOOLS_VIEW_FILTER.out.versions )
 
     emit:
         vcf_ann  = BCFTOOLS_VIEW_FILTER.out.vcf     // channel: [ val(meta), path(vcf) ]

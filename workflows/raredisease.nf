@@ -238,7 +238,6 @@ workflow RAREDISEASE {
     if (!skip_fastqc) {
         FASTQC (ch_input_fastqs)
         fastqc_report = FASTQC.out.zip
-        ch_versions   = ch_versions.mix(FASTQC.out.versions)
     }
 
 /*
@@ -356,7 +355,6 @@ workflow RAREDISEASE {
                 CALL_REPEAT_EXPANSIONS.out.vcf,
                 ch_variant_catalog
             )
-            ch_versions = ch_versions.mix(STRANGER.out.versions)
         }
     }
 
@@ -445,7 +443,6 @@ workflow RAREDISEASE {
                 )
                 GENERATE_CLINICAL_SET_SNV.out.vcf
                 .set { ch_clinical_snv_vcf }
-                ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SNV.out.versions)
             }
 
             ch_ann_csq_snv_in = ch_clinical_snv_vcf.mix(ch_clin_research_snv_vcf.research)
@@ -518,8 +515,6 @@ workflow RAREDISEASE {
                 )
                 GENERATE_CLINICAL_SET_MT.out.vcf
                     .set { ch_clinical_mtsnv_vcf }
-
-                ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_MT.out.versions)
             }
 
             ch_ann_csq_mtsnv_in = ch_clinical_mtsnv_vcf.mix(ch_clin_research_mt_vcf.research)
@@ -615,7 +610,6 @@ workflow RAREDISEASE {
                 )
                 GENERATE_CLINICAL_SET_SV.out.vcf
                 .set { ch_clinical_sv_vcf }
-                ch_versions = ch_versions.mix(GENERATE_CLINICAL_SET_SV.out.versions)
             }
 
             ch_ann_csq_sv_in = ch_clinical_sv_vcf.mix(ch_clin_research_sv_vcf.research)
@@ -728,7 +722,6 @@ workflow RAREDISEASE {
                 )
                 GENERATE_CLINICAL_SET_ME.out.vcf
                 .set { ch_clinical_me_vcf }
-                ch_versions = ch_versions.mix( GENERATE_CLINICAL_SET_ME.out.versions )
             }
 
             ch_ann_csq_me_in = ch_clinical_me_vcf.mix(ch_clin_research_me_vcf.research)

@@ -49,7 +49,7 @@ workflow ANNOTATE_MT_SNVS {
         ZIP_TABIX_HMTNOTE_MT(REPLACE_SPACES_IN_VCFINFO.out.vcf)
 
         // Vcfanno
-        ZIP_TABIX_HMTNOTE_MT.out.gz_tbi
+        ZIP_TABIX_HMTNOTE_MT.out.gz_index
             .combine(ch_vcfanno_extra)
             .map { meta, vcf, tbi, resources -> return [meta + [prefix: meta.prefix + "_vcfanno"], vcf, tbi, resources]}
             .set { ch_in_vcfanno }
@@ -57,7 +57,7 @@ workflow ANNOTATE_MT_SNVS {
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
         ZIP_TABIX_VCFANNO_MT(VCFANNO_MT.out.vcf)
 
-        ch_vcfanno_vcf = ZIP_TABIX_VCFANNO_MT.out.gz_tbi.map{meta, vcf, _tbi -> return [meta, vcf]}
+        ch_vcfanno_vcf = ZIP_TABIX_VCFANNO_MT.out.gz_index.map{meta, vcf, _tbi -> return [meta, vcf]}
 
         // Annotating with CADD
         if (!val_cadd_resources.equals(null)) {
@@ -65,7 +65,7 @@ workflow ANNOTATE_MT_SNVS {
                 ch_cadd_resources,
                 ch_fai,
                 ch_cadd_header,
-                ZIP_TABIX_VCFANNO_MT.out.gz_tbi,
+                ZIP_TABIX_VCFANNO_MT.out.gz_index,
                 val_genome
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
@@ -103,7 +103,7 @@ workflow ANNOTATE_MT_SNVS {
         TABIX_TABIX_VEP_MT(ENSEMBLVEP_MT.out.vcf)
 
         ch_vcf = ENSEMBLVEP_MT.out.vcf
-        ch_tbi = TABIX_TABIX_VEP_MT.out.tbi
+        ch_tbi = TABIX_TABIX_VEP_MT.out.index
 
         // Running haplogrep3
         if (!skip_haplogrep3) {
@@ -123,12 +123,8 @@ workflow ANNOTATE_MT_SNVS {
             ch_tbi = BCFTOOLS_PLUGINSETGT.out.tbi
         }
 
-        ch_versions = ch_versions.mix(ENSEMBLVEP_MT.out.versions)
-        ch_versions = ch_versions.mix(TABIX_TABIX_VEP_MT.out.versions)
         ch_versions = ch_versions.mix(VCFANNO_MT.out.versions)
         ch_versions = ch_versions.mix(HMTNOTE_ANNOTATE.out.versions)
-        ch_versions = ch_versions.mix(ZIP_TABIX_VCFANNO_MT.out.versions)
-        ch_versions = ch_versions.mix(ZIP_TABIX_HMTNOTE_MT.out.versions)
         ch_versions = ch_versions.mix(REPLACE_SPACES_IN_VCFINFO.out.versions)
 
     emit:

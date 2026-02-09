@@ -12,7 +12,7 @@
                 "earlycasualcaiman_hsmetrics.CollectHsMetrics.coverage_metrics"
             ],
             [
-                "earlycasualcaiman_mosdepth.per-base.d4"
+                
             ],
             [
                 "earlycasualcaiman_wgsmetrics.CollectWgsMetrics.coverage_metrics"
@@ -74,9 +74,9 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.0"
+            "nextflow": "25.10.2"
         },
-        "timestamp": "2025-12-05T11:04:56.134850832"
+        "timestamp": "2026-01-27T10:15:41.947673274"
     },
     "QC_BAM - test, sentieon": {
         "content": [
@@ -91,7 +91,7 @@
                 "earlycasualcaiman_hsmetrics.CollectHsMetrics.coverage_metrics"
             ],
             [
-                "earlycasualcaiman_mosdepth.per-base.d4"
+                
             ],
             [
                 "earlycasualcaiman_wgsmetrics.txt"
@@ -155,6 +155,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-01-23T11:05:48.291219333"
+        "timestamp": "2026-01-27T10:17:32.616739257"
     }
 }

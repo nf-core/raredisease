@@ -40,7 +40,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .filtered_diploid_sv_vcf
                 .collect{ _meta, vcf -> vcf }
                 .set{ manta_vcf }
-            ch_versions = ch_versions.mix(CALL_SV_MANTA.out.versions)
         }
 
         if (val_analysis_type.equals("wgs")) {
@@ -102,8 +101,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
             TABIX_TABIX (SVDB_MERGE.out.vcf)
             ch_merged_svs = SVDB_MERGE.out.vcf
-            ch_merged_tbi = TABIX_TABIX.out.tbi
-            ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
+            ch_merged_tbi = TABIX_TABIX.out.index
             ch_versions = ch_versions.mix(SVDB_MERGE.out.versions)
         }
 

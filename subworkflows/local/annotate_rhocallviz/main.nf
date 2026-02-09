@@ -30,7 +30,7 @@ workflow ANNOTATE_RHOCALLVIZ {
         TABIX_TABIX(BCFTOOLS_VIEW_RHOCALL.out.vcf)
 
         BCFTOOLS_VIEW_RHOCALL.out.vcf
-            .join(TABIX_TABIX.out.tbi)
+            .join(TABIX_TABIX.out.index)
             .set {ch_roh_in }
 
         BCFTOOLS_ROH(ch_roh_in, [[],[]], [], [], [], [])
@@ -54,11 +54,7 @@ workflow ANNOTATE_RHOCALLVIZ {
 
         UCSC_WIGTOBIGWIG(RHOCALL_VIZ.out.wig, ch_genome_chrsizes)
 
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW_RHOCALL.out.versions)
         ch_versions = ch_versions.mix(CHROMOGRAPH_AUTOZYG.out.versions)
-        ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_ROH.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW_UNCOMPRESS.out.versions)
         ch_versions = ch_versions.mix(RHOCALL_VIZ.out.versions)
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions)
 

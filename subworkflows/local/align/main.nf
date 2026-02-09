@@ -54,9 +54,8 @@ workflow ALIGN {
         ch_versions                  = channel.empty()
 
         if (!skip_fastp) {
-            FASTP (ch_input_reads, [], false, false, false)
+            FASTP (ch_input_reads.map {meta, reads -> return [meta, reads, []] }, false, false, false)
             ch_input_reads = FASTP.out.reads
-            ch_versions    = ch_versions.mix(FASTP.out.versions)
             ch_fastp_json  = FASTP.out.json
         }
 
@@ -158,7 +157,6 @@ workflow ALIGN {
 
         if (val_save_mapped_as_cram) {
             SAMTOOLS_VIEW( ch_genome_marked_bam_bai, ch_genome_fasta, [], 'crai' )
-            ch_versions   = ch_versions.mix(SAMTOOLS_VIEW.out.versions)
         }
 
     emit:

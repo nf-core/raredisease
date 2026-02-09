@@ -48,9 +48,6 @@ workflow CALL_SV_MANTA {
             .set {ch_filter_in}
         BCFTOOLS_VIEW_MANTA (ch_filter_in, [], [], [])
 
-        ch_versions = MANTA.out.versions
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW_MANTA.out.versions)
-
     emit:
         candidate_small_indels_vcf     = MANTA.out.candidate_small_indels_vcf     // channel: [ val(meta), path(vcf) ]
         candidate_small_indels_vcf_tbi = MANTA.out.candidate_small_indels_vcf_tbi // channel: [ val(meta), path(tbi) ]
@@ -59,5 +56,4 @@ workflow CALL_SV_MANTA {
         diploid_sv_vcf                 = MANTA.out.diploid_sv_vcf                 // channel: [ val(meta), path(vcf) ]
         diploid_sv_vcf_tbi             = MANTA.out.diploid_sv_vcf_tbi             // channel: [ val(meta), path(tbi) ]
         filtered_diploid_sv_vcf        = BCFTOOLS_VIEW_MANTA.out.vcf              // channel: [ val(meta), path(vcf) ]
-        versions                       = ch_versions
 }

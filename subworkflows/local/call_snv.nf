@@ -152,7 +152,6 @@ workflow CALL_SNV {
             BCFTOOLS_CONCAT (
                 ch_concat_vcf_in
             )
-            ch_versions    = ch_versions.mix(BCFTOOLS_CONCAT.out.versions)
         }
 
     emit:
