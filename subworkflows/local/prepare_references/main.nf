@@ -167,11 +167,8 @@ workflow PREPARE_REFERENCES {
                 }
                 .set {ch_shiftfasta_mtintervals}
 
-            ch_versions = ch_versions.mix(SAMTOOLS_FAIDX_MT.out.versions,
-                                            GATK_SD_MT.out.versions,
-                                            HISAT2_INDEX_GENOME.out.versions,
-                                            LAST_INDEX_MT.out.versions,
-                                            GATK_SHIFTFASTA.out.versions)
+            ch_versions = ch_versions.mix (HISAT2_INDEX_GENOME.out.versions,
+                                           LAST_INDEX_MT.out.versions)
         }
         //
         // MT alignment indices

@@ -145,7 +145,7 @@
                     "bgzip": 1.18
                 },
                 "FASTP": {
-                    "fastp": "0.23.4"
+                    "fastp": "1.0.1"
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
@@ -184,12 +184,6 @@
                     "gatk4": "4.5.0.0"
                 },
                 "GATK_SD": {
-                    "gatk4": "4.5.0.0"
-                },
-                "GATK_SD_MT": {
-                    "gatk4": "4.5.0.0"
-                },
-                "GATK_SHIFTFASTA": {
                     "gatk4": "4.5.0.0"
                 },
                 "GAWK": {
@@ -340,7 +334,7 @@
                     "samtools": "1.22.1"
                 },
                 "SAMTOOLS_STATS": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_VIEW": {
                     "samtools": "1.22.1"
@@ -890,18 +884,18 @@
                 "trimming/earlycasualcaiman_LNUMBER1.fastp.html",
                 "trimming/earlycasualcaiman_LNUMBER1.fastp.json",
                 "trimming/earlycasualcaiman_LNUMBER1.fastp.log",
-                "trimming/earlycasualcaiman_LNUMBER1_1.fastp.fastq.gz",
-                "trimming/earlycasualcaiman_LNUMBER1_2.fastp.fastq.gz",
+                "trimming/earlycasualcaiman_LNUMBER1_R1.fastp.fastq.gz",
+                "trimming/earlycasualcaiman_LNUMBER1_R2.fastp.fastq.gz",
                 "trimming/hugelymodelbat_LNUMBER3.fastp.html",
                 "trimming/hugelymodelbat_LNUMBER3.fastp.json",
                 "trimming/hugelymodelbat_LNUMBER3.fastp.log",
-                "trimming/hugelymodelbat_LNUMBER3_1.fastp.fastq.gz",
-                "trimming/hugelymodelbat_LNUMBER3_2.fastp.fastq.gz",
+                "trimming/hugelymodelbat_LNUMBER3_R1.fastp.fastq.gz",
+                "trimming/hugelymodelbat_LNUMBER3_R2.fastp.fastq.gz",
                 "trimming/slowlycivilbuck_LNUMBER2.fastp.html",
                 "trimming/slowlycivilbuck_LNUMBER2.fastp.json",
                 "trimming/slowlycivilbuck_LNUMBER2.fastp.log",
-                "trimming/slowlycivilbuck_LNUMBER2_1.fastp.fastq.gz",
-                "trimming/slowlycivilbuck_LNUMBER2_2.fastp.fastq.gz",
+                "trimming/slowlycivilbuck_LNUMBER2_R1.fastp.fastq.gz",
+                "trimming/slowlycivilbuck_LNUMBER2_R2.fastp.fastq.gz",
                 "vcf2cytosure",
                 "vcf2cytosure/earlycasualcaiman.cgh",
                 "vcf2cytosure/hugelymodelbat.cgh",
@@ -912,6 +906,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-02-06T10:46:03.189728524"
+        "timestamp": "2026-02-09T10:07:25.308697516"
     }
 }
