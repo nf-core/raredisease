@@ -12,7 +12,6 @@ workflow CALL_SV_MT {
         skip_eklipse // boolean
 
     main:
-        ch_versions       = channel.empty()
         ch_eklipse_del    = channel.empty()
         ch_eklipse_genes  = channel.empty()
         ch_eklipse_circos = channel.empty()
@@ -22,16 +21,12 @@ workflow CALL_SV_MT {
             ch_eklipse_del    = EKLIPSE.out.deletions
             ch_eklipse_genes  = EKLIPSE.out.genes
             ch_eklipse_circos = EKLIPSE.out.circos
-            ch_versions = ch_versions.mix(EKLIPSE.out.versions)
         }
         MT_DELETION(ch_bam_bai, ch_fasta)
-
-        ch_versions = ch_versions.mix(MT_DELETION.out.versions)
 
     emit:
         eklipse_del    = ch_eklipse_del                // channel: [ val(meta), path(csv) ]
         eklipse_genes  = ch_eklipse_genes              // channel: [ val(meta), path(csv) ]
         eklipse_circos = ch_eklipse_circos             // channel: [ val(meta), path(png) ]
         mt_del_result  = MT_DELETION.out.mt_del_result // channel: [ val(meta), path(txt) ]
-        versions       = ch_versions                   // channel: [ path(versions.yml) ]
 }

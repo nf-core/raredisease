@@ -68,7 +68,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
         if (val_analysis_type.matches("wgs|mito") || run_mt_for_wes) {
             CALL_SV_MT (ch_mt_bam_bai, ch_genome_fasta, skip_eklipse)
-            ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
         }
 
         //merge

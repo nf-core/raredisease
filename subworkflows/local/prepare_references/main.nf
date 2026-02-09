@@ -267,9 +267,6 @@ workflow PREPARE_REFERENCES {
             ch_versions = ch_versions.mix(RTGTOOLS_FORMAT.out.versions)
         }
 
-        // Gather versions
-        ch_versions = ch_versions.mix(GET_CHROM_SIZES.out.versions)
-
     emit:
         bait_intervals        = ch_bait_intervals                                   // channel:[ path(intervals) ]
         dbsnp                 = ch_dbsnp                                            // channel:[ val(meta), path(dbsnp) ]
