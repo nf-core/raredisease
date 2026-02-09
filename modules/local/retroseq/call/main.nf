@@ -2,9 +2,10 @@ process RETROSEQ_CALL {
     tag "$meta.id"
     label 'process_low'
 
-    conda "bioconda::perl-retroseq=1.5=pl5321hdfd78af_1"
+    conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-    'docker.io/clinicalgenomics/retroseq:1.5_9d4f3b5-1' : 'docker.io/clinicalgenomics/retroseq:1.5_9d4f3b5-1' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/73/73188352f5d5762376ee86bb739902750cc7197398f09c1b6a2b8fe3d71e22fc/data':
+        'community.wave.seqera.io/library/perl-retroseq:1.5--e825fb294f7eb523' }"
 
 
     input:
@@ -14,7 +15,7 @@ process RETROSEQ_CALL {
 
     output:
     tuple val(meta), path("*.vcf"), emit: vcf
-    path "versions.yml"           , emit: versions
+    tuple val("${task.process}"), val('retroseq'), val("1.5"), topic: versions, emit: versions_retroseq
 
     when:
     task.ext.when == null || task.ext.when
@@ -22,8 +23,6 @@ process RETROSEQ_CALL {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def VERSION = "1.5"
-
     """
     retroseq.pl \\
         -call \\
@@ -32,22 +31,11 @@ process RETROSEQ_CALL {
         -input $tab \\
         -ref $fasta \\
         -output ${prefix}.vcf
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        retroseq_call: $VERSION
-    END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def VERSION = "1.5"
     """
     touch ${prefix}.vcf
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        retroseq_call: $VERSION
-    END_VERSIONS
     """
 }
