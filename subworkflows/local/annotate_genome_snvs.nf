@@ -198,9 +198,6 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_versions = ch_versions.mix(VCFANNO.out.versions)
         ch_versions = ch_versions.mix(UPD_SITES.out.versions)
         ch_versions = ch_versions.mix(UPD_REGIONS.out.versions)
-        ch_versions = ch_versions.mix(CHROMOGRAPH_SITES.out.versions)
-        ch_versions = ch_versions.mix(CHROMOGRAPH_REGIONS.out.versions)
-        ch_versions = ch_versions.mix(GATK4_SELECTVARIANTS.out.versions)
         ch_versions = ch_versions.mix(ANNOTATE_RHOCALLVIZ.out.versions)
 
     emit:

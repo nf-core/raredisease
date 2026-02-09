@@ -14,7 +14,11 @@
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,384addd364fb36fdac7593eba22fcdb7"
+                    [
+                        "GATK4_SPLITINTERVALS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ],
                 "split_intervals": [
                     [
@@ -27,16 +31,20 @@
                         ]
                     ]
                 ],
-                "versions": [
-                    "versions.yml:md5,384addd364fb36fdac7593eba22fcdb7"
+                "versions_gatk4": [
+                    [
+                        "GATK4_SPLITINTERVALS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ]
             }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-08-26T11:06:41.633105"
+        "timestamp": "2026-02-04T10:27:38.084533"
     },
     "test-gatk4-splitintervals-bed": {
         "content": [
@@ -53,7 +61,11 @@
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,384addd364fb36fdac7593eba22fcdb7"
+                    [
+                        "GATK4_SPLITINTERVALS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ],
                 "split_intervals": [
                     [
@@ -66,16 +78,20 @@
                         ]
                     ]
                 ],
-                "versions": [
-                    "versions.yml:md5,384addd364fb36fdac7593eba22fcdb7"
+                "versions_gatk4": [
+                    [
+                        "GATK4_SPLITINTERVALS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ]
             }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-08-26T11:06:28.504041"
+        "timestamp": "2026-02-04T10:27:18.658962"
     },
     "test-gatk4-splitintervals-intervals-stub": {
         "content": [
@@ -92,7 +108,11 @@
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,384addd364fb36fdac7593eba22fcdb7"
+                    [
+                        "GATK4_SPLITINTERVALS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ],
                 "split_intervals": [
                     [
@@ -105,15 +125,19 @@
                         ]
                     ]
                 ],
-                "versions": [
-                    "versions.yml:md5,384addd364fb36fdac7593eba22fcdb7"
+                "versions_gatk4": [
+                    [
+                        "GATK4_SPLITINTERVALS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ]
             }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-08-27T10:56:46.243594"
+        "timestamp": "2026-02-04T10:27:55.618457"
     }
 }

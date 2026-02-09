@@ -82,7 +82,6 @@ workflow QC_BAM {
                 PICARD_COLLECTWGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y )
                 ch_cov      = PICARD_COLLECTWGSMETRICS_WG.out.metrics
                 ch_cov_y    = PICARD_COLLECTWGSMETRICS_Y.out.metrics
-                ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_WG.out.versions, PICARD_COLLECTWGSMETRICS_Y.out.versions)
             } else if (val_aligner.equals("sentieon")) {
                 SENTIEON_WGSMETRICS_WG ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs.map{ interval -> [[:], interval]} )
                 SENTIEON_WGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y.map{ interval -> [[:], interval]} )
@@ -100,8 +99,6 @@ workflow QC_BAM {
         ch_svd_in = ch_svd_ud.combine(ch_svd_mu).combine(ch_svd_bed).collect()
         VERIFYBAMID_VERIFYBAMID2(ch_bam_bai, ch_svd_in, [], ch_genome_fasta.map {_meta, fasta-> fasta})
 
-        ch_versions = ch_versions.mix(CHROMOGRAPH_COV.out.versions)
-        ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions)
         ch_versions = ch_versions.mix(TIDDIT_COV.out.versions)
         ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions)
         ch_versions = ch_versions.mix(VERIFYBAMID_VERIFYBAMID2.out.versions)

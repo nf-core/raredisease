@@ -123,7 +123,6 @@ workflow CALL_MOBILE_ELEMENTS {
 
         ch_versions = ch_versions.mix(RETROSEQ_DISCOVER.out.versions)
         ch_versions = ch_versions.mix(RETROSEQ_CALL.out.versions)
-        ch_versions = ch_versions.mix(SVDB_MERGE_ME.out.versions)
 
     emit:
         tbi      = TABIX_ME.out.index    // channel: [ val(meta), path(tbi) ]

@@ -19,7 +19,6 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
 
     main:
-        ch_versions = channel.empty()
 
         EXPANSIONHUNTER (
             ch_bam,
@@ -58,11 +57,6 @@ workflow CALL_REPEAT_EXPANSIONS {
 
         SVDB_MERGE_REPEATS ( ch_svdb_merge_input, [], true )
 
-        ch_versions = ch_versions.mix(EXPANSIONHUNTER.out.versions)
-        ch_versions = ch_versions.mix(RENAMESAMPLE_EXP.out.versions    )
-        ch_versions = ch_versions.mix(SVDB_MERGE_REPEATS.out.versions)
-
 emit:
         vcf      = SVDB_MERGE_REPEATS.out.vcf  // channel: [ val(meta), path(vcf) ]
-        versions = ch_versions                 // channel: [ path(versions.yml) ]
 }

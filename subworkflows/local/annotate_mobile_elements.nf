@@ -21,7 +21,6 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
         ch_vep_extra_files      // channel: [mandatory] [ path(files) ]
 
     main:
-        ch_versions = channel.empty()
         ch_svdb_dbs = channel.empty()
 
         ch_me_svdb_resources
@@ -71,10 +70,6 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
 
         BCFTOOLS_VIEW_FILTER( ch_bcftools_filter_input, [], [], [] )
 
-        ch_versions = ch_versions.mix( SVDB_QUERY_DB.out.versions )
-        ch_versions = ch_versions.mix( PICARD_SORTVCF.out.versions )
-
     emit:
         vcf_ann  = BCFTOOLS_VIEW_FILTER.out.vcf     // channel: [ val(meta), path(vcf) ]
-        versions = ch_versions                      // channel: [ path(versions.yml) ]
 }

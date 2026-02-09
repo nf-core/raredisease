@@ -30,7 +30,6 @@ workflow CALL_SV_TIDDIT {
         SVDB_MERGE_TIDDIT ( merge_input_vcfs, [], true )
 
         ch_versions = TIDDIT_SV.out.versions
-        ch_versions = ch_versions.mix(SVDB_MERGE_TIDDIT.out.versions)
 
     emit:
         vcf      = SVDB_MERGE_TIDDIT.out.vcf // channel: [ val(meta), path(vcf) ]

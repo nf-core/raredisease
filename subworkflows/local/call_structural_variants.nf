@@ -53,7 +53,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .vcf
                 .collect{ _meta, vcf -> vcf }
                 .set { cnvnator_vcf }
-            ch_versions = ch_versions.mix(CALL_SV_CNVNATOR.out.versions)
         }
 
         if (!skip_germlinecnvcaller) {
@@ -102,7 +101,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
             TABIX_TABIX (SVDB_MERGE.out.vcf)
             ch_merged_svs = SVDB_MERGE.out.vcf
             ch_merged_tbi = TABIX_TABIX.out.index
-            ch_versions = ch_versions.mix(SVDB_MERGE.out.versions)
         }
 
     emit:

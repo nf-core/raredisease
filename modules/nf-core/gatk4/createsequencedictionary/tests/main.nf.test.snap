@@ -11,7 +11,11 @@
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,e60dd34a71fc2029d81dc67ccb5d6be6"
+                    [
+                        "GATK4_CREATESEQUENCEDICTIONARY",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ],
                 "dict": [
                     [
@@ -21,16 +25,20 @@
                         "genome.dict:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "versions": [
-                    "versions.yml:md5,e60dd34a71fc2029d81dc67ccb5d6be6"
+                "versions_gatk4": [
+                    [
+                        "GATK4_CREATESEQUENCEDICTIONARY",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ]
             }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.0"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-05-16T10:16:16.34453"
+        "timestamp": "2026-02-03T11:24:16.167358"
     },
     "sarscov2 - fasta": {
         "content": [
@@ -44,7 +52,11 @@
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,e60dd34a71fc2029d81dc67ccb5d6be6"
+                    [
+                        "GATK4_CREATESEQUENCEDICTIONARY",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ],
                 "dict": [
                     [
@@ -54,15 +66,19 @@
                         "genome.dict:md5,7362679f176e0f52add03c08f457f646"
                     ]
                 ],
-                "versions": [
-                    "versions.yml:md5,e60dd34a71fc2029d81dc67ccb5d6be6"
+                "versions_gatk4": [
+                    [
+                        "GATK4_CREATESEQUENCEDICTIONARY",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ]
             }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.0"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-05-16T13:58:25.822068"
+        "timestamp": "2026-02-03T11:24:00.222321"
     }
 }
