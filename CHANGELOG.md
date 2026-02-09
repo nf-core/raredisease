@@ -65,7 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | picard                | 3.3.0       | 3.4.0       |
 | sentieon              | 202503      | 202503.02   |
 | stranger              | 0.9.4       | 0.10.0      |
-| deepvarian            | 1.8.0       | 1.9.0       |
+| deepvariant           | 1.8.0       | 1.9.0       |
 
 ## 2.6.0 - Cacofonix [2025-06-25]
 
