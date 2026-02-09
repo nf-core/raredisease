@@ -93,7 +93,7 @@ workflow PREPARE_REFERENCES {
             ch_chrom_sizes = SAMTOOLS_FAIDX_GENOME.out.sizes.map {_meta, sizes -> sizes}.collect()
         } else {
             ch_genome_fai  = channel.fromPath(val_fai).map {fai -> [[id:fai.simpleName], fai]}.collect()
-            ch_chrom_sizes = GET_CHROM_SIZES( ch_genome_fai ).out.sizes.collect()
+            ch_chrom_sizes = GET_CHROM_SIZES( ch_genome_fai ).sizes.collect()
         }
 
 
