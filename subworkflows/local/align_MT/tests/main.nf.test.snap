@@ -67,7 +67,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,3f1d065d74ead7620a1fa3fe66404811"
+                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,751b43aa7e76f1e5e4915069dce08b95"
                     ],
                     [
                         {
@@ -83,7 +83,7 @@
                             "maternal": "slowlycivilbuck",
                             "case_id": "justhusky"
                         },
-                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,4ad1f7b8172388d7ab801de09a58aa8e"
+                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,c3f5d414669eb47dcca97528c1700786"
                     ],
                     [
                         {
@@ -99,22 +99,13 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,53f26c6136de14bddb7392a737db457a"
+                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,dce10a8f97e471f907785244842eae51"
                     ]
                 ],
                 "2": [
-                    "versions.yml:md5,7ab78da5d9523074122d0c961d3bdb89",
-                    "versions.yml:md5,7ab78da5d9523074122d0c961d3bdb89",
-                    "versions.yml:md5,7ab78da5d9523074122d0c961d3bdb89",
                     "versions.yml:md5,84869ed38f4bfecb303ea73297f03a04",
                     "versions.yml:md5,84869ed38f4bfecb303ea73297f03a04",
-                    "versions.yml:md5,84869ed38f4bfecb303ea73297f03a04",
-                    "versions.yml:md5,ca3c0437f05cbf946185cd80b16744ef",
-                    "versions.yml:md5,ca3c0437f05cbf946185cd80b16744ef",
-                    "versions.yml:md5,ca3c0437f05cbf946185cd80b16744ef",
-                    "versions.yml:md5,ee160a842ca6cba016914a1d7a69e970",
-                    "versions.yml:md5,ee160a842ca6cba016914a1d7a69e970",
-                    "versions.yml:md5,ee160a842ca6cba016914a1d7a69e970"
+                    "versions.yml:md5,84869ed38f4bfecb303ea73297f03a04"
                 ],
                 "marked_bai": [
                     [
@@ -181,7 +172,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,3f1d065d74ead7620a1fa3fe66404811"
+                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,751b43aa7e76f1e5e4915069dce08b95"
                     ],
                     [
                         {
@@ -197,7 +188,7 @@
                             "maternal": "slowlycivilbuck",
                             "case_id": "justhusky"
                         },
-                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,4ad1f7b8172388d7ab801de09a58aa8e"
+                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,c3f5d414669eb47dcca97528c1700786"
                     ],
                     [
                         {
@@ -213,22 +204,13 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,53f26c6136de14bddb7392a737db457a"
+                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,dce10a8f97e471f907785244842eae51"
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,7ab78da5d9523074122d0c961d3bdb89",
-                    "versions.yml:md5,7ab78da5d9523074122d0c961d3bdb89",
-                    "versions.yml:md5,7ab78da5d9523074122d0c961d3bdb89",
                     "versions.yml:md5,84869ed38f4bfecb303ea73297f03a04",
                     "versions.yml:md5,84869ed38f4bfecb303ea73297f03a04",
-                    "versions.yml:md5,84869ed38f4bfecb303ea73297f03a04",
-                    "versions.yml:md5,ca3c0437f05cbf946185cd80b16744ef",
-                    "versions.yml:md5,ca3c0437f05cbf946185cd80b16744ef",
-                    "versions.yml:md5,ca3c0437f05cbf946185cd80b16744ef",
-                    "versions.yml:md5,ee160a842ca6cba016914a1d7a69e970",
-                    "versions.yml:md5,ee160a842ca6cba016914a1d7a69e970",
-                    "versions.yml:md5,ee160a842ca6cba016914a1d7a69e970"
+                    "versions.yml:md5,84869ed38f4bfecb303ea73297f03a04"
                 ]
             }
         ],
@@ -236,7 +218,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-01-25T21:20:12.412575747"
+        "timestamp": "2026-02-06T17:37:55.606130634"
     },
     "align mt - bwa": {
         "content": [
@@ -306,7 +288,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,06cebfd2ccd12a52d53196b71b633ba2"
+                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,0ec18ff7aaec000bebe1297d4bf0ebe1"
                     ],
                     [
                         {
@@ -322,7 +304,7 @@
                             "maternal": "slowlycivilbuck",
                             "case_id": "justhusky"
                         },
-                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,d1484f44f615bfa8eb0097307870c7de"
+                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,2ab1645a9c7ada8c8b16ae4764a11065"
                     ],
                     [
                         {
@@ -338,22 +320,13 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,866d2992afa71e50f5978244ef6a5b2b"
+                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,2e37db7571195ad7c38a4ab0cc73f923"
                     ]
                 ],
                 "2": [
                     "versions.yml:md5,74b9e9afccf630be329f7c6cbd9e077c",
                     "versions.yml:md5,74b9e9afccf630be329f7c6cbd9e077c",
-                    "versions.yml:md5,74b9e9afccf630be329f7c6cbd9e077c",
-                    "versions.yml:md5,7ab78da5d9523074122d0c961d3bdb89",
-                    "versions.yml:md5,7ab78da5d9523074122d0c961d3bdb89",
-                    "versions.yml:md5,7ab78da5d9523074122d0c961d3bdb89",
-                    "versions.yml:md5,ca3c0437f05cbf946185cd80b16744ef",
-                    "versions.yml:md5,ca3c0437f05cbf946185cd80b16744ef",
-                    "versions.yml:md5,ca3c0437f05cbf946185cd80b16744ef",
-                    "versions.yml:md5,ee160a842ca6cba016914a1d7a69e970",
-                    "versions.yml:md5,ee160a842ca6cba016914a1d7a69e970",
-                    "versions.yml:md5,ee160a842ca6cba016914a1d7a69e970"
+                    "versions.yml:md5,74b9e9afccf630be329f7c6cbd9e077c"
                 ],
                 "marked_bai": [
                     [
@@ -420,7 +393,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,06cebfd2ccd12a52d53196b71b633ba2"
+                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,0ec18ff7aaec000bebe1297d4bf0ebe1"
                     ],
                     [
                         {
@@ -436,7 +409,7 @@
                             "maternal": "slowlycivilbuck",
                             "case_id": "justhusky"
                         },
-                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,d1484f44f615bfa8eb0097307870c7de"
+                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,2ab1645a9c7ada8c8b16ae4764a11065"
                     ],
                     [
                         {
@@ -452,22 +425,13 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,866d2992afa71e50f5978244ef6a5b2b"
+                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,2e37db7571195ad7c38a4ab0cc73f923"
                     ]
                 ],
                 "versions": [
                     "versions.yml:md5,74b9e9afccf630be329f7c6cbd9e077c",
                     "versions.yml:md5,74b9e9afccf630be329f7c6cbd9e077c",
-                    "versions.yml:md5,74b9e9afccf630be329f7c6cbd9e077c",
-                    "versions.yml:md5,7ab78da5d9523074122d0c961d3bdb89",
-                    "versions.yml:md5,7ab78da5d9523074122d0c961d3bdb89",
-                    "versions.yml:md5,7ab78da5d9523074122d0c961d3bdb89",
-                    "versions.yml:md5,ca3c0437f05cbf946185cd80b16744ef",
-                    "versions.yml:md5,ca3c0437f05cbf946185cd80b16744ef",
-                    "versions.yml:md5,ca3c0437f05cbf946185cd80b16744ef",
-                    "versions.yml:md5,ee160a842ca6cba016914a1d7a69e970",
-                    "versions.yml:md5,ee160a842ca6cba016914a1d7a69e970",
-                    "versions.yml:md5,ee160a842ca6cba016914a1d7a69e970"
+                    "versions.yml:md5,74b9e9afccf630be329f7c6cbd9e077c"
                 ]
             }
         ],
@@ -475,6 +439,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-01-25T21:22:23.024924094"
+        "timestamp": "2026-02-06T17:44:37.818378883"
     }
 }
