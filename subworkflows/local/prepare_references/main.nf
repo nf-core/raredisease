@@ -88,12 +88,14 @@ workflow PREPARE_REFERENCES {
         // Genome indices
         //
         if (!val_fai) {
-            ch_genome_fai = SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[:],[]], false).fai.collect()
+            SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[:],[]], true)
+            ch_genome_fai  = SAMTOOLS_FAIDX_GENOME.out.fai.collect()
+            ch_chrom_sizes = SAMTOOLS_FAIDX_GENOME.out.sizes.map {_meta, sizes -> sizes}.collect()
         } else {
-            ch_genome_fai = channel.fromPath(val_fai).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_fai  = channel.fromPath(val_fai).map {fai -> [[id:fai.simpleName], fai]}.collect()
+            ch_chrom_sizes = GET_CHROM_SIZES( ch_genome_fai ).out.sizes.collect()
         }
 
-        GET_CHROM_SIZES( ch_genome_fai )
 
         if (!val_genome_dict) {
             ch_genome_dict = GATK_SD(ch_genome_fasta).dict.collect()
@@ -275,7 +277,7 @@ workflow PREPARE_REFERENCES {
         genome_bwa_index      = ch_bwa                                              // channel:[ val(meta), path(index) ]
         genome_bwamem2_index  = ch_genome_bwamem2_index                             // channel:[ val(meta), path(index) ]
         genome_bwameme_index  = ch_genome_bwameme_index                             // channel:[ val(meta), path(index) ]
-        genome_chrom_sizes    = GET_CHROM_SIZES.out.sizes.collect()                 // channel:[ path(sizes) ]
+        genome_chrom_sizes    = ch_chrom_sizes                                      // channel:[ path(sizes) ]
         genome_fai            = ch_genome_fai                                       // channel:[ val(meta), path(fai) ]
         genome_fasta          = ch_genome_fasta                                     // channel:[ val(meta), path(fasta) ]
         genome_dict           = ch_genome_dict                                      // channel:[ val(meta), path(dict) ]

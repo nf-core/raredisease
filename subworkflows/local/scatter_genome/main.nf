@@ -2,7 +2,7 @@
 // A subworkflow to create genome interval files necessary for bam/vcf scatter operations.
 //
 
-include { BUILD_BED            } from '../../../modules/local/create_bed_from_fai'
+include { GAWK                 } from '../../../modules/nf-core/gawk'
 include { GATK4_SPLITINTERVALS } from '../../../modules/nf-core/gatk4/splitintervals/main'
 
 workflow SCATTER_GENOME {
@@ -13,16 +13,12 @@ workflow SCATTER_GENOME {
         ch_genome_fasta  // channel: [mandatory] [ val(meta), path(fasta) ]
 
     main:
-        ch_versions = channel.empty()
 
-        BUILD_BED (ch_genome_fai)
+        GAWK (ch_genome_fai, [], false)
 
-        GATK4_SPLITINTERVALS(BUILD_BED.out.bed, ch_genome_fasta, ch_genome_fai, ch_genome_dictionary)
-
-        ch_versions = ch_versions.mix(BUILD_BED.out.versions)
+        GATK4_SPLITINTERVALS(GAWK.out.output, ch_genome_fasta, ch_genome_fai, ch_genome_dictionary)
 
     emit:
-        bed             = BUILD_BED.out.bed.collect()   // channel: [ val(meta), path(bed) ]
+        bed             = GAWK.out.output.collect()   // channel: [ val(meta), path(bed) ]
         split_intervals = GATK4_SPLITINTERVALS.out.split_intervals.map { _meta, it -> it }.flatten().collate(1) // channel: [ val(meta), [ path(interval_lists) ] ]
-        versions        = ch_versions                   // channel: [ path(versions.yml) ]
 }
