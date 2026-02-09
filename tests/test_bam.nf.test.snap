@@ -243,7 +243,7 @@
                     "manta": "1.6.0"
                 },
                 "MARKDUPLICATES": {
-                    "picard": "3.3.0"
+                    "picard": "3.4.0"
                 },
                 "ME_SPLIT_ALIGNMENT": {
                     "samtools": "1.22.1"
@@ -1107,6 +1107,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-02-09T10:07:25.308697516"
+        "timestamp": "2026-02-09T13:01:02.446698103"
     }
 }
