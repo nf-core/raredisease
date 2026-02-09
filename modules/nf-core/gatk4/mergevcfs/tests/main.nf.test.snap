@@ -1,35 +1,62 @@
 {
     "test_gatk4_mergevcfs_no_dict_stub": {
         "content": [
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_MERGEVCFS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            },
             "test.vcf.gz",
             "test.vcf.gz.tbi"
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
         },
-        "timestamp": "2024-02-14T14:57:40.784590995"
+        "timestamp": "2026-02-03T20:51:23.679671657"
     },
     "test_gatk4_mergevcfs": {
         "content": [
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_MERGEVCFS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            },
             "test.vcf.gz",
             "test.vcf.gz.tbi"
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
         },
-        "timestamp": "2024-02-14T14:56:42.178255913"
+        "timestamp": "2026-02-03T20:49:37.159554677"
     },
     "test_gatk4_mergevcfs_no_dict": {
         "content": [
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_MERGEVCFS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            },
             "test.vcf.gz",
             "test.vcf.gz.tbi"
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
         },
-        "timestamp": "2024-02-14T14:57:11.404322124"
+        "timestamp": "2026-02-03T20:50:41.376990748"
     }
 }

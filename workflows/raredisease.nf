@@ -345,7 +345,6 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_genome_fai
         )
-        ch_versions = ch_versions.mix(CALL_REPEAT_EXPANSIONS.out.versions)
 
         if (!skip_repeat_annotation) {
             STRANGER (
@@ -666,7 +665,6 @@ workflow RAREDISEASE {
                 val_vep_cache_version,
                 ch_vep_extra_files
             ).set { ch_me_annotate }
-            ch_versions = ch_versions.mix(ANNOTATE_MOBILE_ELEMENTS.out.versions)
 
             ch_me_annotate.vcf_ann
                 .multiMap { meta, vcf ->

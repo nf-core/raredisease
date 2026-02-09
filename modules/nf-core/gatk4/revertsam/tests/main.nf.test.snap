@@ -2,15 +2,21 @@
     "test-gatk4-revertsam": {
         "content": [
             "e3cfa46b13cc4fc425cccae944f43b10",
-            [
-                "versions.yml:md5,ee8dfa21abb49349e4865984cc122b9e"
-            ]
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_REVERTSAM",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-08-26T11:45:39.712635"
+        "timestamp": "2026-02-04T10:08:17.497786"
     },
     "test-gatk4-revertsam-stubs": {
         "content": [
@@ -24,7 +30,11 @@
                     ]
                 ],
                 "1": [
-                    "versions.yml:md5,ee8dfa21abb49349e4865984cc122b9e"
+                    [
+                        "GATK4_REVERTSAM",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ],
                 "bam": [
                     [
@@ -34,15 +44,19 @@
                         "test.reverted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "versions": [
-                    "versions.yml:md5,ee8dfa21abb49349e4865984cc122b9e"
+                "versions_gatk4": [
+                    [
+                        "GATK4_REVERTSAM",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ]
             }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-08-26T11:45:46.856318"
+        "timestamp": "2026-02-04T10:08:32.702485"
     }
 }

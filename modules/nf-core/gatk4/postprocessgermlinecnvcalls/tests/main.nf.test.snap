@@ -1,0 +1,44 @@
+{
+    "homo sapiens - counts - stub": {
+        "content": [
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_POSTPROCESSGERMLINECNVCALLS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            },
+            "test_genotyped_intervals.vcf.gz",
+            "test_genotyped_segments.vcf.gz",
+            "test_denoised.vcf.gz"
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
+        },
+        "timestamp": "2026-02-03T22:29:17.166798377"
+    },
+    "homo sapiens - counts": {
+        "content": [
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_POSTPROCESSGERMLINECNVCALLS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            },
+            "test_genotyped_intervals.vcf.gz",
+            "test_genotyped_segments.vcf.gz",
+            "test_denoised.vcf.gz"
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
+        },
+        "timestamp": "2026-02-03T22:26:44.628515186"
+    }
+}

@@ -65,9 +65,6 @@ workflow GENS {
 
         GENS_GENERATE_COV_INDEX (GENS_GENERATE.out.cov)
 
-        ch_versions = ch_versions.mix(COLLECTREADCOUNTS.out.versions)
-        ch_versions = ch_versions.mix(DENOISEREADCOUNTS_FEMALE.out.versions)
-        ch_versions = ch_versions.mix(DENOISEREADCOUNTS_MALE.out.versions)
         ch_versions = ch_versions.mix(GENS_GENERATE.out.versions)
         ch_versions = ch_versions.mix(GENS_GENERATE_BAF_INDEX.out.versions)
         ch_versions = ch_versions.mix(GENS_GENERATE_COV_INDEX.out.versions)

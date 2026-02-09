@@ -50,7 +50,7 @@ workflow POSTPROCESS_MT_CALLS {
         GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf
             .join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
             .set { ch_filt_vcf }
-        GATK4_VARIANTFILTRATION_MT (ch_filt_vcf, ch_genome_fasta, ch_genome_fai, ch_genome_dictionary)
+        GATK4_VARIANTFILTRATION_MT (ch_filt_vcf, ch_genome_fasta, ch_genome_fai, ch_genome_dictionary, [[:],[]])
 
         // Spliting multiallelic calls
         GATK4_VARIANTFILTRATION_MT.out.vcf
@@ -121,9 +121,6 @@ workflow POSTPROCESS_MT_CALLS {
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 
-        ch_versions = ch_versions.mix(PICARD_LIFTOVERVCF.out.versions)
-        ch_versions = ch_versions.mix(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.versions)
-        ch_versions = ch_versions.mix(GATK4_VARIANTFILTRATION_MT.out.versions)
         ch_versions = ch_versions.mix(ADD_VARCALLER_TO_BED.out.versions)
 
     emit:

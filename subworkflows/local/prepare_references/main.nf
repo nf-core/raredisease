@@ -97,7 +97,6 @@ workflow PREPARE_REFERENCES {
 
         if (!val_genome_dict) {
             ch_genome_dict = GATK_SD(ch_genome_fasta).dict.collect()
-            ch_versions    = ch_versions.mix(GATK_SD.out.versions)
         } else {
             ch_genome_dict = channel.fromPath(val_genome_dict).map {it -> [[id:it.simpleName], it]}.collect()
         }
@@ -160,8 +159,6 @@ workflow PREPARE_REFERENCES {
                 }
                 .set {ch_shiftfasta_mtintervals}
 
-            ch_versions = ch_versions.mix(GATK_SD_MT.out.versions,
-                                            GATK_SHIFTFASTA.out.versions)
         }
         //
         // MT alignment indices
@@ -227,7 +224,6 @@ workflow PREPARE_REFERENCES {
 
             ch_bait_intervals = CAT_CAT_BAIT ( ch_bait_intervals_cat_in ).file_out.map {_meta, inter -> inter}.collect().ifEmpty([[]])
 
-            ch_versions = ch_versions.mix(GATK_BILT.out.versions, GATK_ILT.out.versions)
         }
         //
         // Prepare vcfanno extra files

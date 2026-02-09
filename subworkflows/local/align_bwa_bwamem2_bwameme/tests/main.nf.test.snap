@@ -13,7 +13,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "13f1d6d13abf640bc42f5692510b9a7a"
+                    "da588ff12491da491e3059326ffef0de"
                 ]
             ],
             [
@@ -34,7 +34,6 @@
             [
                 "versions.yml:md5,6046f0e9edf48b8d3bd335da75134ee4",
                 "versions.yml:md5,952f0145e6a0a3d1dbd70aac2edf4ced",
-                "versions.yml:md5,9d7492d23e5995a4955de5f751df05af",
                 "versions.yml:md5,dea31a20732d740f0c824b01226c1dab",
                 "versions.yml:md5,f56a243ff21d59d873e0d0a3d3ee441d"
             ]
@@ -43,7 +42,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-01-26T23:20:05.423583715"
+        "timestamp": "2026-02-06T17:47:53.965738943"
     },
     "align bwameme": {
         "content": [
@@ -59,7 +58,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "2b9969e02527b37fdfb5852fc2583bc5"
+                    "91efdc668b5f6e075743e414c7afd0f8"
                 ]
             ],
             [
@@ -80,7 +79,6 @@
             [
                 "versions.yml:md5,390a09ae83280da84de93856149cc3a1",
                 "versions.yml:md5,952f0145e6a0a3d1dbd70aac2edf4ced",
-                "versions.yml:md5,9d7492d23e5995a4955de5f751df05af",
                 "versions.yml:md5,dea31a20732d740f0c824b01226c1dab",
                 "versions.yml:md5,f56a243ff21d59d873e0d0a3d3ee441d"
             ]
@@ -89,6 +87,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-01-26T23:21:26.123323889"
+        "timestamp": "2026-02-06T17:50:27.94216545"
     }
 }

@@ -82,7 +82,6 @@ workflow CALL_SNV_DEEPVARIANT {
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 
-        ch_versions = ch_versions.mix(DEEPVARIANT.out.versions)
         ch_versions = ch_versions.mix(GLNEXUS.out.versions)
         ch_versions = ch_versions.mix(ADD_VARCALLER_TO_BED.out.versions)
 
