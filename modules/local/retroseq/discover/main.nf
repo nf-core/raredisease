@@ -2,11 +2,7 @@ process RETROSEQ_DISCOVER {
     tag "$meta.id"
     label 'process_low'
 
-    conda "${moduleDir}/environment.yml"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/73/73188352f5d5762376ee86bb739902750cc7197398f09c1b6a2b8fe3d71e22fc/data':
-        'community.wave.seqera.io/library/perl-retroseq:1.5--e825fb294f7eb523' }"
-
+    container 'docker.io/clinicalgenomics/retroseq:1.5_9d4f3b5-1'
 
     input:
     tuple val(meta), path(bam), path(bai)
