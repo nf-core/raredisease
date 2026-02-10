@@ -112,7 +112,6 @@ workflow PREPARE_REFERENCES {
         if (!val_bwa) {
             if (!val_aligner.equals("sentieon") || val_mtaligner.equals("bwa")) {
                 ch_bwa      = BWA_INDEX_GENOME(ch_genome_fasta).index.collect()
-                ch_versions = ch_versions.mix(BWA_INDEX_GENOME.out.versions)
             }
             if (val_aligner.equals("sentieon") || val_mtaligner.equals("sentieon")) {
                 ch_bwa      = SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.collect()
@@ -123,7 +122,6 @@ workflow PREPARE_REFERENCES {
 
         if (!val_bwamem2 && (val_aligner.equals("bwamem2") || val_mtaligner.equals("bwamem2"))) {
             ch_genome_bwamem2_index = BWAMEM2_INDEX_GENOME(ch_genome_fasta).index.collect()
-            ch_versions             = ch_versions.mix(BWAMEM2_INDEX_GENOME.out.versions)
         } else if (val_bwamem2) {
             ch_genome_bwamem2_index = channel.fromPath(val_bwamem2).map {it -> [[id:it.simpleName], it]}.collect()
         }
@@ -177,12 +175,10 @@ workflow PREPARE_REFERENCES {
         if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("bwamem2")) {
             ch_mt_bwamem2_index      = BWAMEM2_INDEX_MT(ch_mt_fasta).index.collect()
             ch_mtshift_bwamem2_index = BWAMEM2_INDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
-            ch_versions              = ch_versions.mix(BWAMEM2_INDEX_MT.out.versions, BWAMEM2_INDEX_MT_SHIFT.out.versions)
         }
         if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("bwa")) {
             ch_mt_bwa_index          = BWA_INDEX_MT(ch_mt_fasta).index.collect()
             ch_mtshift_bwa_index     = BWA_INDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
-            ch_versions              = ch_versions.mix(BWA_INDEX_MT.out.versions, BWA_INDEX_MT_SHIFT.out.versions)
         }
         if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("sentieon")) {
             ch_mt_bwa_index          = SENTIEON_BWAINDEX_MT(ch_mt_fasta).index.collect()
@@ -261,7 +257,6 @@ workflow PREPARE_REFERENCES {
         if (val_vep_cache) {
             if (val_vep_cache.endsWith("tar.gz")) {
                 ch_vep_resources = UNTAR_VEP_CACHE (channel.fromPath(val_vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()).untar.map{ _meta, files -> [files]}.collect()
-                ch_versions      = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
             } else {
                 ch_vep_resources = channel.fromPath(val_vep_cache).collect()
             }

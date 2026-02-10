@@ -14,8 +14,6 @@ workflow SUBSAMPLE_MT_READS {
         ch_mt_bam_bai             // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
 
     main:
-        ch_versions = channel.empty()
-
         SAMTOOLS_VIEW(ch_mt_bam_bai, [[:],[]], [], '')
 
         SAMTOOLS_COLLATE(SAMTOOLS_VIEW.out.bam, [[:],[]])
@@ -28,9 +26,4 @@ workflow SUBSAMPLE_MT_READS {
 
         SAMTOOLS_SORT(SAM_TO_BAM.out.bam, [[:],[]], 'bai')
 
-        ch_versions = ch_versions.mix(SAMTOOLS_COLLATE.out.versions)
-        ch_versions = ch_versions.mix(GAWK.out.versions)
-
-    emit:
-        versions = ch_versions  // channel: [ path(versions.yml) ]
 }
