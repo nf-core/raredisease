@@ -195,9 +195,6 @@ workflow ANNOTATE_GENOME_SNVS {
         ANNOTATE_RHOCALLVIZ(ch_genome_chrsizes, ch_samples, ch_vep_ann_index )
 
         ch_versions = ch_versions.mix(RHOCALL_ANNOTATE.out.versions)
-        ch_versions = ch_versions.mix(VCFANNO.out.versions)
-        ch_versions = ch_versions.mix(UPD_SITES.out.versions)
-        ch_versions = ch_versions.mix(UPD_REGIONS.out.versions)
         ch_versions = ch_versions.mix(ANNOTATE_RHOCALLVIZ.out.versions)
 
     emit:

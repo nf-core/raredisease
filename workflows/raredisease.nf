@@ -288,7 +288,6 @@ workflow RAREDISEASE {
             SUBSAMPLE_MT_READS(
                 ch_mapped.mt_bam_bai,
             )
-            ch_versions   = ch_versions.mix(SUBSAMPLE_MT_READS.out.versions)
         }
     }
 

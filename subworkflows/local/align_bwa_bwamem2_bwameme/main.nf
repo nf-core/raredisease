@@ -43,7 +43,6 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         } else {
             BWAMEM2_MEM ( ch_input_reads, ch_bwamem2_index, ch_genome_fasta, true )
             ch_align    = BWAMEM2_MEM.out.bam
-            ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions)
         }
 
         SAMTOOLS_INDEX_ALIGN ( ch_align )
@@ -76,15 +75,11 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
             extract_bam_sorted_indexed = prepared_bam.join(SAMTOOLS_INDEX_EXTRACT.out.bai, failOnMismatch:true, failOnDuplicate:true)
             EXTRACT_ALIGNMENTS( extract_bam_sorted_indexed, ch_genome_fasta, [], '')
             prepared_bam = EXTRACT_ALIGNMENTS.out.bam
-            ch_versions = ch_versions.mix(SAMTOOLS_INDEX_EXTRACT.out.versions)
         }
 
         // Marking duplicates
         MARKDUPLICATES ( prepared_bam , ch_genome_fasta, ch_genome_fai )
         SAMTOOLS_INDEX_MARKDUP ( MARKDUPLICATES.out.bam )
-
-        ch_versions = ch_versions.mix(SAMTOOLS_INDEX_ALIGN.out.versions)
-        ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MARKDUP.out.versions)
 
     emit:
         marked_bai  = SAMTOOLS_INDEX_MARKDUP.out.bai // channel: [ val(meta), path(bai) ]

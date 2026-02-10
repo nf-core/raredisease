@@ -67,7 +67,7 @@
                     },
                     "bwa/index": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "966ba9887e2b04d89d64db06c01508873bde13b1",
                         "installed_by": ["modules"]
                     },
                     "bwa/mem": {
@@ -77,12 +77,12 @@
                     },
                     "bwamem2/index": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "5dd46a36fca68d6ad1a6b22ec47adc8c6863717d",
                         "installed_by": ["modules"]
                     },
                     "bwamem2/mem": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "5dd46a36fca68d6ad1a6b22ec47adc8c6863717d",
                         "installed_by": ["modules"]
                     },
                     "bwameme/index": {
@@ -117,7 +117,7 @@
                     },
                     "cnvnator/convert2vcf": {
                         "branch": "master",
-                        "git_sha": "9d43cc3f4b065a99d62dcd58f10d5f4e9feb4bd8",
+                        "git_sha": "dfe412ff862fdafd658b0d7beca1e084800ba5b2",
                         "installed_by": ["modules"]
                     },
                     "custom/addmostsevereconsequence": {
@@ -173,97 +173,97 @@
                     },
                     "gatk4/collectreadcounts": {
                         "branch": "master",
-                        "git_sha": "8fd24bb3fd2c54b8837813c9e7c0d2e8aa3f2fde",
+                        "git_sha": "86308d628760125908c5c77540517effe0f8880f",
                         "installed_by": ["modules"]
                     },
                     "gatk4/createsequencedictionary": {
                         "branch": "master",
-                        "git_sha": "8fd24bb3fd2c54b8837813c9e7c0d2e8aa3f2fde",
+                        "git_sha": "86308d628760125908c5c77540517effe0f8880f",
                         "installed_by": ["modules"]
                     },
                     "gatk4/denoisereadcounts": {
                         "branch": "master",
-                        "git_sha": "8fd24bb3fd2c54b8837813c9e7c0d2e8aa3f2fde",
+                        "git_sha": "86308d628760125908c5c77540517effe0f8880f",
                         "installed_by": ["modules"]
                     },
                     "gatk4/determinegermlinecontigploidy": {
                         "branch": "master",
-                        "git_sha": "c0f2c49d596cb63ab16b88e0dbc85fbc8c425456",
+                        "git_sha": "86308d628760125908c5c77540517effe0f8880f",
                         "installed_by": ["modules"]
                     },
                     "gatk4/filtermutectcalls": {
                         "branch": "master",
-                        "git_sha": "c0f2c49d596cb63ab16b88e0dbc85fbc8c425456",
+                        "git_sha": "86308d628760125908c5c77540517effe0f8880f",
                         "installed_by": ["modules"]
                     },
                     "gatk4/germlinecnvcaller": {
                         "branch": "master",
-                        "git_sha": "c0f2c49d596cb63ab16b88e0dbc85fbc8c425456",
+                        "git_sha": "86308d628760125908c5c77540517effe0f8880f",
                         "installed_by": ["modules"]
                     },
                     "gatk4/intervallisttools": {
                         "branch": "master",
-                        "git_sha": "c0f2c49d596cb63ab16b88e0dbc85fbc8c425456",
+                        "git_sha": "52b7843bd92ccf833cc12e71cd84aeccf2583852",
                         "installed_by": ["modules"]
                     },
                     "gatk4/mergebamalignment": {
                         "branch": "master",
-                        "git_sha": "a3f854ee60b2d8b129f03a0848362ea7aaa1aeb5",
+                        "git_sha": "52b7843bd92ccf833cc12e71cd84aeccf2583852",
                         "installed_by": ["modules"]
                     },
                     "gatk4/mergevcfs": {
                         "branch": "master",
-                        "git_sha": "a3f854ee60b2d8b129f03a0848362ea7aaa1aeb5",
+                        "git_sha": "6881702b1f6671b9471e69f4a75ea4e49a0d0349",
                         "installed_by": ["modules"]
                     },
                     "gatk4/mutect2": {
                         "branch": "master",
-                        "git_sha": "a3f854ee60b2d8b129f03a0848362ea7aaa1aeb5",
+                        "git_sha": "52b7843bd92ccf833cc12e71cd84aeccf2583852",
                         "installed_by": ["modules"]
                     },
                     "gatk4/postprocessgermlinecnvcalls": {
                         "branch": "master",
-                        "git_sha": "a3f854ee60b2d8b129f03a0848362ea7aaa1aeb5",
+                        "git_sha": "52b7843bd92ccf833cc12e71cd84aeccf2583852",
                         "installed_by": ["modules"]
                     },
                     "gatk4/printreads": {
                         "branch": "master",
-                        "git_sha": "abc869e0c3d8aaa9c73f6f28726062a7f91fb505",
+                        "git_sha": "52b7843bd92ccf833cc12e71cd84aeccf2583852",
                         "installed_by": ["modules"]
                     },
                     "gatk4/revertsam": {
                         "branch": "master",
-                        "git_sha": "abc869e0c3d8aaa9c73f6f28726062a7f91fb505",
+                        "git_sha": "52b7843bd92ccf833cc12e71cd84aeccf2583852",
                         "installed_by": ["modules"]
                     },
                     "gatk4/samtofastq": {
                         "branch": "master",
-                        "git_sha": "abc869e0c3d8aaa9c73f6f28726062a7f91fb505",
+                        "git_sha": "52b7843bd92ccf833cc12e71cd84aeccf2583852",
                         "installed_by": ["modules"]
                     },
                     "gatk4/selectvariants": {
                         "branch": "master",
-                        "git_sha": "abc869e0c3d8aaa9c73f6f28726062a7f91fb505",
+                        "git_sha": "52b7843bd92ccf833cc12e71cd84aeccf2583852",
                         "installed_by": ["modules"]
                     },
                     "gatk4/shiftfasta": {
                         "branch": "master",
-                        "git_sha": "abc869e0c3d8aaa9c73f6f28726062a7f91fb505",
+                        "git_sha": "52b7843bd92ccf833cc12e71cd84aeccf2583852",
                         "installed_by": ["modules"]
                     },
                     "gatk4/splitintervals": {
                         "branch": "master",
-                        "git_sha": "abc869e0c3d8aaa9c73f6f28726062a7f91fb505",
+                        "git_sha": "52b7843bd92ccf833cc12e71cd84aeccf2583852",
                         "installed_by": ["modules"]
                     },
                     "gatk4/variantfiltration": {
                         "branch": "master",
-                        "git_sha": "abc869e0c3d8aaa9c73f6f28726062a7f91fb505",
+                        "git_sha": "52b7843bd92ccf833cc12e71cd84aeccf2583852",
                         "installed_by": ["modules"]
                     },
                     "gawk": {
                         "branch": "master",
-                        "git_sha": "5ee4d69ed992c3ce81cfbbdd0bef932fcb81c75a",
+                        "git_sha": "76b1f53edcf72798d8515c82f4728ad44b3dd902",
                         "installed_by": ["modules"]
                     },
                     "genmod/annotate": {
@@ -288,7 +288,7 @@
                     },
                     "glnexus": {
                         "branch": "master",
-                        "git_sha": "bcf36bc95e3e5605e9859b8e9a49648841e04fe8",
+                        "git_sha": "9b696bde5b422831751df1a4f2ba728567ec51fd",
                         "installed_by": ["modules"]
                     },
                     "haplocheck": {
@@ -298,7 +298,7 @@
                     },
                     "haplogrep3/classify": {
                         "branch": "master",
-                        "git_sha": "c95c60597ce23da23ac21f4e6c5d7c0cdb711b8f",
+                        "git_sha": "5cb9a8694da0a0e550921636bb60bc8c56445fd7",
                         "installed_by": ["modules"]
                     },
                     "hmtnote/annotate": {
@@ -319,7 +319,7 @@
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "80cba9452fb1e9bb79884976fa1ca0e671949aa2",
+                        "git_sha": "575e1a4b51a9bad7a8cd1316a88fb85684ef7c7b",
                         "installed_by": ["modules"]
                     },
                     "ngsbits/samplegender": {
@@ -399,12 +399,12 @@
                     },
                     "sambamba/depth": {
                         "branch": "master",
-                        "git_sha": "b093f74ddc3ada57a84a209f0e4fb3871bacf2ad",
+                        "git_sha": "ca6da11b05740de461b1e2714037345c0f856201",
                         "installed_by": ["modules"]
                     },
                     "samtools/collate": {
                         "branch": "master",
-                        "git_sha": "c8be52dba1166c678e74cda9c3a3c221635c8bb1",
+                        "git_sha": "a77125b43fb8973f37c36e2ff137626657de3b21",
                         "installed_by": ["modules"]
                     },
                     "samtools/faidx": {
@@ -414,7 +414,7 @@
                     },
                     "samtools/index": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "git_sha": "1d2fbdcbca677bbe8da0f9d0d2bb7c02f2cab1c9",
                         "installed_by": ["modules"]
                     },
                     "samtools/merge": {
@@ -434,7 +434,7 @@
                     },
                     "samtools/view": {
                         "branch": "master",
-                        "git_sha": "5cb9a8694da0a0e550921636bb60bc8c56445fd7",
+                        "git_sha": "d2ceed2ec5fccf922638f116a15e02f6458288fb",
                         "installed_by": ["modules"]
                     },
                     "sentieon/bwaindex": {
@@ -534,27 +534,27 @@
                     },
                     "untar": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "447f7bc0fa41dfc2400c8cad4c0291880dc060cf",
                         "installed_by": ["modules"]
                     },
                     "upd": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "2ad28db4a5a82972c1210dfa7c85f035bb80c4de",
                         "installed_by": ["modules"]
                     },
                     "vcf2cytosure": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "2ad28db4a5a82972c1210dfa7c85f035bb80c4de",
                         "installed_by": ["modules"]
                     },
                     "vcfanno": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "2ad28db4a5a82972c1210dfa7c85f035bb80c4de",
                         "installed_by": ["modules"]
                     },
                     "verifybamid/verifybamid2": {
                         "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "git_sha": "2ad28db4a5a82972c1210dfa7c85f035bb80c4de",
                         "installed_by": ["modules"]
                     }
                 }
