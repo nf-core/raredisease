@@ -319,7 +319,7 @@
                     "rhocall": "0.5.1"
                 },
                 "RHOCALL_VIZ": {
-                    "rhocall": "0.5.1"
+                    "rhocall": "Matplotlib is building the font cache; this may take a moment. 0.5.1"
                 },
                 "SAMTOOLS_COLLATE": {
                     "samtools": "1.22.1"
@@ -377,7 +377,7 @@
                     "tabix": 1.23
                 },
                 "SVDB_MERGE": {
-                    "bcftools": 1.23,
+                    "bcftools": null,
                     "svdb": "2.8.3"
                 },
                 "SVDB_MERGE_CNVNATOR": {
@@ -1105,8 +1105,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-09T13:01:02.446698103"
+        "timestamp": "2026-02-11T04:38:31.369480108"
     }
 }
