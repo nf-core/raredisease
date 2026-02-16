@@ -303,7 +303,7 @@
                     "rhocall": "0.5.1"
                 },
                 "RHOCALL_VIZ": {
-                    "rhocall": "Matplotlib is building the font cache; this may take a moment. 0.5.1"
+                    "rhocall": "0.5.1"
                 },
                 "SAMTOOLS_COLLATE": {
                     "samtools": "1.22.1"
@@ -1035,6 +1035,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-11T15:35:13.393755104"
+        "timestamp": "2026-02-16T22:08:02.449482922"
     }
 }
