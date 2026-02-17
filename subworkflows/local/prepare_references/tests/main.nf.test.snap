@@ -17,11 +17,19 @@
                 ],
                 "10": [
                     [
+                        {
+                            "id": "reference"
+                        },
+                        "reference.dict:md5,81abd0fc051c084405024e0927f7b436"
+                    ]
+                ],
+                "11": [
+                    [
                         "/nf-core/test-datasets/raredisease/reference/gnomad_reformated.tab.gz",
                         "gnomad_reformated.tab.gz.tbi:md5,854afcf42d656c3d00a39dd9b69f66f7"
                     ]
                 ],
-                "11": [
+                "12": [
                     [
                         {
                             "id": "reference"
@@ -35,10 +43,10 @@
                         ]
                     ]
                 ],
-                "12": [
+                "13": [
                     
                 ],
-                "13": [
+                "14": [
                     [
                         {
                             "id": "reference"
@@ -46,7 +54,7 @@
                         "reference_mt.dict:md5,9b0db3306084213d47d83aa994b219f6"
                     ]
                 ],
-                "14": [
+                "15": [
                     [
                         {
                             "id": "reference"
@@ -54,7 +62,7 @@
                         "reference_mt.fa.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
                     ]
                 ],
-                "15": [
+                "16": [
                     [
                         {
                             "id": "reference"
@@ -62,17 +70,9 @@
                         "reference_mt.fa:md5,dcff3c6dd92e01b11edf7586ca4f5a78"
                     ]
                 ],
-                "16": [
-                    [
-                        "reference_mt.intervals:md5,0930dafc5645246542112ae3d62573a3"
-                    ]
-                ],
                 "17": [
                     [
-                        {
-                            "id": "reference"
-                        },
-                        "reference_shift.back_chain:md5,25d682d73a9bae009f4a38b3ede5dbc8"
+                        "reference_mt.intervals:md5,0930dafc5645246542112ae3d62573a3"
                     ]
                 ],
                 "18": [
@@ -81,16 +81,23 @@
                             "id": "reference"
                         },
                         [
-                            "reference_shift.amb:md5,ad1d6545efc080e69ad54ecdbcd0720c",
-                            "reference_shift.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
-                            "reference_shift.bwt:md5,c13d3e8c5ac29b56b31e1882e2111491",
-                            "reference_shift.pac:md5,0ead764b2f8fa112e3351ca517d2e125",
-                            "reference_shift.sa:md5,9ef1b52de302c6957f4dc82ed2f21bd1"
+                            "reference.bck:md5,cb2ea69e38f2f48b0e9fd86511f00efa",
+                            "reference.des:md5,d9189e49407ad59a8d15e527a5262d88",
+                            "reference.prj:md5,afb6ee4759a4ccd9edb52fdb8e5a3a26",
+                            "reference.sds:md5,503e83c0d24f5ea38d9d6c013d9777d1",
+                            "reference.ssp:md5,5c62ddb0bd75481784efb7120045bf42",
+                            "reference.suf:md5,b2180a9a2d85be97f896808c05b0e38c",
+                            "reference.tis:md5,c4167c6aebb2139c3dc9b07a65830c3d"
                         ]
                     ]
                 ],
                 "19": [
-                    
+                    [
+                        {
+                            "id": "reference"
+                        },
+                        "reference_shift.back_chain:md5,25d682d73a9bae009f4a38b3ede5dbc8"
+                    ]
                 ],
                 "2": [
                     [
@@ -105,10 +112,27 @@
                         {
                             "id": "reference"
                         },
-                        "reference_shift.dict:md5,a714408661d0f6403f417304342574fc"
+                        [
+                            "reference_shift.amb:md5,ad1d6545efc080e69ad54ecdbcd0720c",
+                            "reference_shift.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
+                            "reference_shift.bwt:md5,c13d3e8c5ac29b56b31e1882e2111491",
+                            "reference_shift.pac:md5,0ead764b2f8fa112e3351ca517d2e125",
+                            "reference_shift.sa:md5,9ef1b52de302c6957f4dc82ed2f21bd1"
+                        ]
                     ]
                 ],
                 "21": [
+                    
+                ],
+                "22": [
+                    [
+                        {
+                            "id": "reference"
+                        },
+                        "reference_shift.dict:md5,a714408661d0f6403f417304342574fc"
+                    ]
+                ],
+                "23": [
                     [
                         {
                             "id": "reference"
@@ -116,7 +140,7 @@
                         "reference_shift.fasta.fai:md5,fa8117aab64eeceb3f0800d473bd2a2b"
                     ]
                 ],
-                "22": [
+                "24": [
                     [
                         {
                             "id": "reference"
@@ -124,15 +148,15 @@
                         "reference_shift.fasta:md5,3bb4de5911acad2dd87e8a183251d0dc"
                     ]
                 ],
-                "23": [
+                "25": [
                     [
                         "reference_mt.shifted.intervals:md5,083d8f782fd4228dd9f6948ddbc64fd0"
                     ]
                 ],
-                "24": [
+                "26": [
                     
                 ],
-                "25": [
+                "27": [
                     [
                         {
                             "id": "target"
@@ -141,19 +165,33 @@
                         "target_pad100.bed.gz.tbi:md5,dc41277c9c9be1203643b9192260f9ac"
                     ]
                 ],
-                "26": [
+                "28": [
                     [
                         "target_target.interval_list:md5,2959b7b0e1b298fe84ad708f447d6703"
                     ]
                 ],
-                "27": [
+                "29": [
                     [
                         [
                             
                         ]
                     ]
                 ],
-                "28": [
+                "3": [
+                    [
+                        {
+                            "id": "reference"
+                        },
+                        [
+                            "reference.amb:md5,0a85644af00f9a856d874381d24e7803",
+                            "reference.ann:md5,8fdb46970ca95a4ef54f5f1a02d233cd",
+                            "reference.bwt:md5,0d1ba8d4e0229df6abb869a69f621dc8",
+                            "reference.pac:md5,96b449e1316067fdfba91b1399687bc2",
+                            "reference.sa:md5,c5c99cdc7a3cb6224841131b4b4285fe"
+                        ]
+                    ]
+                ],
+                "30": [
                     [
                         [
                             "LoFtool_scores.txt:md5,d9abd640ef22c790583b4b15d144ea6f",
@@ -384,26 +422,14 @@
                         ]
                     ]
                 ],
-                "29": [
+                "31": [
                     "versions.yml:md5,12e18a91d3ec0da87543f9fded01f1c1",
+                    "versions.yml:md5,1b3327823f65f68efc82043fc802a384",
                     "versions.yml:md5,447a22450289bba28dd03ae4f4f92774",
                     "versions.yml:md5,7479477c0c4b6eb043c58bc40ee41198",
                     "versions.yml:md5,b9ba5dac48d896837b097c56bcdd768c",
+                    "versions.yml:md5,bdda7848a0b1aaf27939782b868ad9c5",
                     "versions.yml:md5,f5568ab78d420d74714985cdae832a6e"
-                ],
-                "3": [
-                    [
-                        {
-                            "id": "reference"
-                        },
-                        [
-                            "reference.amb:md5,0a85644af00f9a856d874381d24e7803",
-                            "reference.ann:md5,8fdb46970ca95a4ef54f5f1a02d233cd",
-                            "reference.bwt:md5,0d1ba8d4e0229df6abb869a69f621dc8",
-                            "reference.pac:md5,96b449e1316067fdfba91b1399687bc2",
-                            "reference.sa:md5,c5c99cdc7a3cb6224841131b4b4285fe"
-                        ]
-                    ]
                 ],
                 "4": [
                     [
@@ -448,7 +474,16 @@
                         {
                             "id": "reference"
                         },
-                        "reference.dict:md5,81abd0fc051c084405024e0927f7b436"
+                        [
+                            "reference.1.ht2:md5,f1f1779341ba9a0ab7078e358f6efdde",
+                            "reference.2.ht2:md5,09f0021a3a29a0e4aee96083ea4d4020",
+                            "reference.3.ht2:md5,3b641d6168aa70fe864844bb02ef39f2",
+                            "reference.4.ht2:md5,2dd52cfb372404a3619c0f9367fc4012",
+                            "reference.5.ht2:md5,999891dff8303f7c576f5a1ad4be5036",
+                            "reference.6.ht2:md5,e1a25310dabfaeb7f0fa200785bad49f",
+                            "reference.7.ht2:md5,9013eccd91ad614d7893c739275a394f",
+                            "reference.8.ht2:md5,33cdeccccebe80329f1fdbee7f5874cb"
+                        ]
                     ]
                 ],
                 "bait_intervals": [
@@ -532,6 +567,23 @@
                         "/nf-core/test-datasets/raredisease/reference/reference.fasta"
                     ]
                 ],
+                "genome_hisat2_index": [
+                    [
+                        {
+                            "id": "reference"
+                        },
+                        [
+                            "reference.1.ht2:md5,f1f1779341ba9a0ab7078e358f6efdde",
+                            "reference.2.ht2:md5,09f0021a3a29a0e4aee96083ea4d4020",
+                            "reference.3.ht2:md5,3b641d6168aa70fe864844bb02ef39f2",
+                            "reference.4.ht2:md5,2dd52cfb372404a3619c0f9367fc4012",
+                            "reference.5.ht2:md5,999891dff8303f7c576f5a1ad4be5036",
+                            "reference.6.ht2:md5,e1a25310dabfaeb7f0fa200785bad49f",
+                            "reference.7.ht2:md5,9013eccd91ad614d7893c739275a394f",
+                            "reference.8.ht2:md5,33cdeccccebe80329f1fdbee7f5874cb"
+                        ]
+                    ]
+                ],
                 "gnomad_af_idx": [
                     [
                         "/nf-core/test-datasets/raredisease/reference/gnomad_reformated.tab.gz",
@@ -582,6 +634,22 @@
                 "mt_intervals": [
                     [
                         "reference_mt.intervals:md5,0930dafc5645246542112ae3d62573a3"
+                    ]
+                ],
+                "mt_last_index": [
+                    [
+                        {
+                            "id": "reference"
+                        },
+                        [
+                            "reference.bck:md5,cb2ea69e38f2f48b0e9fd86511f00efa",
+                            "reference.des:md5,d9189e49407ad59a8d15e527a5262d88",
+                            "reference.prj:md5,afb6ee4759a4ccd9edb52fdb8e5a3a26",
+                            "reference.sds:md5,503e83c0d24f5ea38d9d6c013d9777d1",
+                            "reference.ssp:md5,5c62ddb0bd75481784efb7120045bf42",
+                            "reference.suf:md5,b2180a9a2d85be97f896808c05b0e38c",
+                            "reference.tis:md5,c4167c6aebb2139c3dc9b07a65830c3d"
+                        ]
                     ]
                 ],
                 "mtshift_backchain": [
@@ -895,9 +963,11 @@
                 ],
                 "versions": [
                     "versions.yml:md5,12e18a91d3ec0da87543f9fded01f1c1",
+                    "versions.yml:md5,1b3327823f65f68efc82043fc802a384",
                     "versions.yml:md5,447a22450289bba28dd03ae4f4f92774",
                     "versions.yml:md5,7479477c0c4b6eb043c58bc40ee41198",
                     "versions.yml:md5,b9ba5dac48d896837b097c56bcdd768c",
+                    "versions.yml:md5,bdda7848a0b1aaf27939782b868ad9c5",
                     "versions.yml:md5,f5568ab78d420d74714985cdae832a6e"
                 ]
             }
@@ -906,6 +976,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-10T00:25:53.797976413"
+        "timestamp": "2026-02-16T23:13:28.796983269"
     }
 }
