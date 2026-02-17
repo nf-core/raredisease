@@ -7,7 +7,7 @@
                         {
                             "id": "genome"
                         },
-                        "reference.fasta.bed:md5,77b5bd8a06d9f25356c233413bf0318d"
+                        "genome.bed:md5,77b5bd8a06d9f25356c233413bf0318d"
                     ]
                 ],
                 "1": [
@@ -72,15 +72,12 @@
                         "0019-scattered.interval_list:md5,c4e27e8be0b085a4fa4980d756e21c7f"
                     ]
                 ],
-                "2": [
-                    "versions.yml:md5,005c9777d9befd3821945bc05709dfc8"
-                ],
                 "bed": [
                     [
                         {
                             "id": "genome"
                         },
-                        "reference.fasta.bed:md5,77b5bd8a06d9f25356c233413bf0318d"
+                        "genome.bed:md5,77b5bd8a06d9f25356c233413bf0318d"
                     ]
                 ],
                 "split_intervals": [
@@ -144,16 +141,13 @@
                     [
                         "0019-scattered.interval_list:md5,c4e27e8be0b085a4fa4980d756e21c7f"
                     ]
-                ],
-                "versions": [
-                    "versions.yml:md5,005c9777d9befd3821945bc05709dfc8"
                 ]
             }
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-06T18:19:24.751974831"
+        "timestamp": "2026-02-09T10:18:23.261854"
     }
 }

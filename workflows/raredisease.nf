@@ -52,6 +52,7 @@ include { CALL_MOBILE_ELEMENTS                                        } from '..
 include { CALL_REPEAT_EXPANSIONS                                      } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                                                    } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS                                    } from '../subworkflows/local/call_structural_variants'
+include { CALL_SV_MT                                                  } from '../subworkflows/local/call_sv_MT'
 include { GENERATE_CYTOSURE_FILES                                     } from '../subworkflows/local/generate_cytosure_files'
 include { GENS                                                        } from '../subworkflows/local/gens'
 include { PREPARE_REFERENCES                                          } from '../subworkflows/local/prepare_references'
@@ -93,6 +94,7 @@ workflow RAREDISEASE {
     ch_genome_dictionary
     ch_genome_fai
     ch_genome_fasta
+    ch_genome_hisat2index
     ch_gens_gnomad_pos
     ch_gens_interval_list
     ch_gens_pon_female
@@ -110,6 +112,7 @@ workflow RAREDISEASE {
     ch_mt_fai
     ch_mt_fasta
     ch_mt_intervals
+    ch_mt_lastdb
     ch_mtshift_backchain
     ch_mtshift_bwaindex
     ch_mtshift_bwamem2index
@@ -135,6 +138,7 @@ workflow RAREDISEASE {
     ch_score_config_sv
     ch_sdf
     ch_sentieon_pcr_indel_model
+    ch_subdepth
     ch_svcaller_priority
     ch_svd_bed
     ch_svd_mu
@@ -165,7 +169,6 @@ workflow RAREDISEASE {
     skip_sv_annotation
     skip_sv_calling
     skip_generate_clinical_set
-    skip_eklipse
     skip_fastp
     skip_fastqc
     skip_gens
@@ -326,8 +329,6 @@ workflow RAREDISEASE {
     if ( val_analysis_type.equals("wgs") && (!skip_smncopynumbercaller || !skip_repeat_calling)) {
         RENAME_BAM(ch_mapped.genome_marked_bam, "bam")
         RENAME_BAI(ch_mapped.genome_marked_bai, "bam.bai")
-        ch_versions = ch_versions.mix(RENAME_BAM.out.versions)
-        ch_versions = ch_versions.mix(RENAME_BAI.out.versions)
     }
 
 /*
@@ -566,7 +567,6 @@ workflow RAREDISEASE {
             val_analysis_type,
             val_run_mt_for_wes,
             skip_germlinecnvcaller,
-            skip_eklipse
         )
         ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
@@ -636,6 +636,41 @@ workflow RAREDISEASE {
             ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
         }
     }
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    CALL MITOCHONDRIAL SVs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+    if (val_analysis_type.matches("wgs|mito") || run_mt_for_wes) {
+        CALL_SV_MT(
+            ch_mapped.genome_marked_bam_bai,
+            ch_genome_chrsizes,
+            ch_genome_fai,
+            ch_genome_fasta,
+            ch_genome_hisat2index,
+            ch_mt_fai,
+            ch_mt_fasta,
+            ch_mt_lastdb,
+            ch_input_fastqs,
+            ch_subdepth,
+            params.breakspan,
+            params.breakthreshold,
+            params.cluster_threshold,
+            params.deletion_threshold_max,
+            params.deletion_threshold_min,
+            params.evalue_threshold,
+            params.exclude,
+            params.flank,
+            params.hplimit,
+            params.mito_name,
+            params.paired_distance,
+            params.score_threshold,
+            params.sizelimit,
+            params.split_distance_threshold,
+            params.split_length
+        )
+        ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
+    }
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -651,7 +686,6 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_me_references
         )
-        ch_versions = ch_versions.mix(CALL_MOBILE_ELEMENTS.out.versions)
 
         if (!skip_me_annotation) {
             ANNOTATE_MOBILE_ELEMENTS(
@@ -772,7 +806,6 @@ workflow RAREDISEASE {
             ch_gens_pon_female,
             ch_gens_pon_male
         )
-        ch_versions = ch_versions.mix(GENS.out.versions)
     }
 
 /*

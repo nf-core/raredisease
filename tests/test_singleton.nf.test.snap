@@ -1,10 +1,11 @@
 {
     "-profile test_singleton": {
         "content": [
-            361,
+            365,
             {
                 "ADD_VARCALLER_TO_BED": {
-                    "tabix": 1.12
+                    "bgzip": 1.21,
+                    "tabix": 1.21
                 },
                 "BCFTOOLS_ANNOTATE": {
                     "bcftools": 1.22
@@ -101,9 +102,12 @@
                 "CNVNATOR_STAT": {
                     "cnvnator": "0.4.1"
                 },
+                "CREATE_HGNCIDS_FILE": {
+                    "create_hgncids_file": 1.0,
+                    "python": "3.14.3"
+                },
                 "CREATE_PEDIGREE_FILE": {
-                    "create_pedigree_file": "v1.0",
-                    "python": "3.8.3"
+                    "coreutils": 9.5
                 },
                 "CUSTOM_ADDMOSTSEVERECONSEQUENCE": {
                     "add_most_severe_consequence": 1.1,
@@ -115,9 +119,6 @@
                 },
                 "DEEPVARIANT": {
                     "deepvariant": "1.9.0"
-                },
-                "EKLIPSE": {
-                    "eklipse": 1.8
                 },
                 "ENSEMBLVEP_FILTERVEP": {
                     "ensemblvep": 110.0
@@ -205,7 +206,7 @@
                     "genmod": "3.10.2"
                 },
                 "GET_CHROM_SIZES": {
-                    "coreutils": 8.31
+                    "coreutils": 9.5
                 },
                 "GLNEXUS": {
                     "glnexus": "1.4.1-0-g68e25e5"
@@ -215,6 +216,9 @@
                 },
                 "HAPLOGREP3_CLASSIFY_MT": {
                     "haplogrep3": "3.2.2"
+                },
+                "HISAT2_INDEX_GENOME": {
+                    "hisat2": "2.2.1"
                 },
                 "HMTNOTE_ANNOTATE": {
                     "hmtnote": "0.7.2"
@@ -227,6 +231,9 @@
                     "bgzip": 1.21,
                     "tabix": 1.21
                 },
+                "LAST_INDEX_MT": {
+                    "last": 1611
+                },
                 "MANTA": {
                     "manta": "1.6.0"
                 },
@@ -236,11 +243,15 @@
                 "ME_SPLIT_ALIGNMENT": {
                     "samtools": "1.22.1"
                 },
+                "MITOSALT": {
+                    "mitosalt": "1.1.1"
+                },
                 "MOSDEPTH": {
                     "mosdepth": "0.3.11"
                 },
                 "MT_DELETION": {
-                    "samtools": "1.19.2"
+                    "mitodel": 1.0,
+                    "samtools": 1.23
                 },
                 "NGSBITS_SAMPLEGENDER": {
                     "ngs-bits": 202411
@@ -285,20 +296,20 @@
                     "picard": "3.4.0"
                 },
                 "RENAME_BAI": {
-                    "coreutils": 8.31
+                    "coreutils": 9.5
                 },
                 "RENAME_BAM": {
-                    "coreutils": 8.31
+                    "coreutils": 9.5
                 },
                 "REPLACE_SPACES_IN_VCFINFO": {
-                    "replace_spaces_in_vcfinfo": 1.0,
-                    "python": "3.8.3"
+                    "python": "3.14.3",
+                    "replace_spaces_in_vcfinfo": 1.0
                 },
                 "RETROSEQ_CALL": {
-                    "retroseq_call": 1.5
+                    "retroseq": 1.5
                 },
                 "RETROSEQ_DISCOVER": {
-                    "retroseq_discover": 1.5
+                    "retroseq": 1.5
                 },
                 "RHOCALL_ANNOTATE": {
                     "rhocall": "0.5.1"
@@ -335,6 +346,9 @@
                 },
                 "SAM_TO_BAM": {
                     "samtools": "1.22.1"
+                },
+                "SEQTK_SAMPLE": {
+                    "seqtk": "1.4-r122"
                 },
                 "SMNCOPYNUMBERCALLER": {
                     "SMNCopyNumberCaller": "1.1.2"
@@ -542,9 +556,8 @@
                 "call_sv/genome/justhusky_sv.vcf.gz",
                 "call_sv/genome/justhusky_sv.vcf.gz.tbi",
                 "call_sv/mitochondria",
-                "call_sv/mitochondria/eKLIPse_hugelymodelbat.png",
-                "call_sv/mitochondria/eKLIPse_hugelymodelbat_deletions.csv",
-                "call_sv/mitochondria/eKLIPse_hugelymodelbat_genes.csv",
+                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.breakpoint",
+                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.cluster",
                 "call_sv/mitochondria/hugelymodelbat_mitochondria_deletions.txt",
                 "fastqc",
                 "fastqc/hugelymodelbat_LNUMBER1",
@@ -713,8 +726,8 @@
         ],
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2026-02-07T12:48:58.554399668"
+        "timestamp": "2026-02-11T19:08:15.435078959"
     }
 }

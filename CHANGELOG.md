@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A helper function channelFromPathWithMeta to create channels in a readable fashion in main.nf [#767](https://github.com/nf-core/raredisease/pull/767)
 - A helper function channelFromSamplesheet to create channels in a readable fashion in main.nf [#767](https://github.com/nf-core/raredisease/pull/767)
 - A parameter `homoplasmy_af_threshold` to set genotypes of MT SNVs to 1/1 (homoplasmic) when AF >=`homoplasmy_af_threshold` [#768](https://github.com/nf-core/raredisease/pull/768)
+- Topic channels to local modules to caputure versions [#774](https://github.com/nf-core/raredisease/pull/774)
+- MitoSalt to detect mitochondrial deletions [#743](https://github.com/nf-core/raredisease/pull/743)
 
 ### `Changed`
 
@@ -27,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update gens-preproc script [#747](https://github.com/nf-core/raredisease/pull/747)
 - Removed parameter `bwa_as_fallback` [#763](https://github.com/nf-core/raredisease/pull/763)
 - Sambamba depth now filters on not duplicates and not failed_quality_control [#768](https://github.com/nf-core/raredisease/pull/768)
+- Removed eKLIPse [#743](https://github.com/nf-core/raredisease/pull/743)
 
 ### `Fixed`
 
@@ -66,6 +69,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | sentieon              | 202503      | 202503.02   |
 | stranger              | 0.9.4       | 0.10.0      |
 | deepvariant           | 1.8.0       | 1.9.0       |
+| MitoSalt              |             | 1.1.1       |
+| eKLIPse               | 1.8         |             |
 
 ## 2.6.0 - Cacofonix [2025-06-25]
 

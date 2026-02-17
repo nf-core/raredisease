@@ -124,7 +124,6 @@ workflow ANNOTATE_MT_SNVS {
         }
 
         ch_versions = ch_versions.mix(HMTNOTE_ANNOTATE.out.versions)
-        ch_versions = ch_versions.mix(REPLACE_SPACES_IN_VCFINFO.out.versions)
 
     emit:
         haplog    = ch_haplog                // channel: [ val(meta), path(txt) ]
