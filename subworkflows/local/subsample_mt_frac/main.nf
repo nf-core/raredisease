@@ -30,6 +30,6 @@ workflow SUBSAMPLE_MT_FRAC {
         }
         .set { ch_subsample_in }
 
-        SAMTOOLS_VIEW(ch_subsample_in, [[:],[]], [], 'bai')
+        SAMTOOLS_VIEW(ch_subsample_in, [[:],[],[]], [], 'bai')
 
 }

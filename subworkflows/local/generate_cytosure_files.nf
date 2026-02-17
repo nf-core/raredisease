@@ -17,7 +17,6 @@ workflow GENERATE_CYTOSURE_FILES {
         val_sample_id_map // string: path to sample_id_map file
 
     main:
-        ch_versions     = channel.empty()
         ch_reheader_out = channel.empty()
 
         TIDDIT_COV_VCF2CYTOSURE (ch_bam, [[],[]])
@@ -87,9 +86,4 @@ workflow GENERATE_CYTOSURE_FILES {
             [[:], []], [[:], []],
             ch_blacklist
         )
-
-        ch_versions = ch_versions.mix(TIDDIT_COV_VCF2CYTOSURE.out.versions)
-
-    emit:
-        versions = ch_versions // channel: [ versions.yml ]
 }

@@ -82,8 +82,6 @@ workflow CALL_SNV_DEEPVARIANT {
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 
-        ch_versions = ch_versions.mix(GLNEXUS.out.versions)
-
     emit:
         gvcf       = DEEPVARIANT.out.gvcf       // channel: [ val(meta), path(gvcf)]
         gvcf_tabix = DEEPVARIANT.out.gvcf_tbi   // channel: [ val(meta), path(gvcf_tbi)]
