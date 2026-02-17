@@ -21,10 +21,9 @@ process MITOSALT {
     output:
     tuple val(meta), path("*breakpoint") , emit: breakpoint
     tuple val(meta), path("*cluster")    , emit: cluster
-    path "versions.yml"                  , emit: versions
+    tuple val("${task.process}"), val('mitosalt'), val("1.1.1"), topic: versions, emit: versions_mitosalt
 
     script:
-    def VERSION = "1.1.1" // from perl script, unlikely to be updated
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     cat $msconfig | sed "s/threads = 1/threads = ${task.cpus}/" > new-${msconfig}
@@ -32,25 +31,14 @@ process MITOSALT {
     mitosalt new-${msconfig} $reads $prefix
     mv indel/*.breakpoint ${prefix}.breakpoint
     mv indel/*.cluster ${prefix}.cluster
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        mitosalt: $VERSION
-    END_VERSIONS
     """
 
     stub:
-    def VERSION = "1.1.1"
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     cat $msconfig | sed "s/threads = 1/threads = ${task.cpus}/" > new-${msconfig}
     touch ${prefix}.breakpoint
     touch ${prefix}.cluster
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        mitosalt: $VERSION
-    END_VERSIONS
     """
 
 }

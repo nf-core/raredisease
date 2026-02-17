@@ -78,7 +78,6 @@ workflow CALL_SV_MT {
                 ch_mt_lastdb
             )
 
-            ch_versions = ch_versions.mix(MITOSALT.out.versions)
             ch_versions = ch_versions.mix(SEQTK_SAMPLE.out.versions)
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
