@@ -156,7 +156,7 @@ workflow ALIGN {
         }
 
         if (val_save_mapped_as_cram) {
-            SAMTOOLS_VIEW( ch_genome_marked_bam_bai, ch_genome_fasta, [], 'crai' )
+            SAMTOOLS_VIEW( ch_genome_marked_bam_bai, ch_genome_fasta.map{meta, fasta -> return [meta, fasta, []]}, [], 'crai' )
         }
 
     emit:

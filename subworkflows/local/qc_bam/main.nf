@@ -43,7 +43,6 @@ workflow QC_BAM {
     main:
         ch_cov       = channel.empty()
         ch_cov_y     = channel.empty()
-        ch_versions  = channel.empty()
         ch_hsmetrics = channel.empty()
         ch_qualimap  = channel.empty()
         ch_ngsbits   = channel.empty()
@@ -60,7 +59,6 @@ workflow QC_BAM {
         }
         if (!skip_qualimap) {
             ch_qualimap = QUALIMAP_BAMQC (ch_bam, []).results
-            ch_versions = ch_versions.mix(QUALIMAP_BAMQC.out.versions)
         }
 
         TIDDIT_COV (ch_bam, [[],[]]) // 2nd pos. arg is req. only for cram input
@@ -93,14 +91,10 @@ workflow QC_BAM {
         if (!skip_ngsbits) {
             NGSBITS_SAMPLEGENDER(ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_ngsbits_method)
             ch_ngsbits  = NGSBITS_SAMPLEGENDER.out.tsv
-            ch_versions = ch_versions.mix(NGSBITS_SAMPLEGENDER.out.versions)
         }
         // Check contamination
         ch_svd_in = ch_svd_ud.combine(ch_svd_mu).combine(ch_svd_bed).collect()
         VERIFYBAMID_VERIFYBAMID2(ch_bam_bai, ch_svd_in, [], ch_genome_fasta.map {_meta, fasta-> fasta})
-
-        ch_versions = ch_versions.mix(TIDDIT_COV.out.versions)
-        ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions)
 
     emit:
         multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]
@@ -114,5 +108,4 @@ workflow QC_BAM {
         self_sm          = VERIFYBAMID_VERIFYBAMID2.out.self_sm      // channel: [ val(meta), path(selfSM) ]
         cov              = ch_cov                                    // channel: [ val(meta), path(metrics) ]
         cov_y            = ch_cov_y                                  // channel: [ val(meta), path(metrics) ]
-        versions         = ch_versions                               // channel: [ path(versions.yml) ]
 }

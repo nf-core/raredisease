@@ -14,15 +14,15 @@ workflow SUBSAMPLE_MT_READS {
         ch_mt_bam_bai             // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
 
     main:
-        SAMTOOLS_VIEW(ch_mt_bam_bai, [[:],[]], [], '')
+        SAMTOOLS_VIEW(ch_mt_bam_bai, [[:],[],[]], [], '')
 
-        SAMTOOLS_COLLATE(SAMTOOLS_VIEW.out.bam, [[:],[]])
+        SAMTOOLS_COLLATE(SAMTOOLS_VIEW.out.bam, [[:],[],[]])
 
         GAWK(SAMTOOLS_COLLATE.out.sam, [], false)
 
         GAWK.out.output.map {meta, sam -> return [meta, sam, []] }.set {ch_convert_to_bam}
 
-        SAM_TO_BAM(ch_convert_to_bam, [[:],[]], [], '')
+        SAM_TO_BAM(ch_convert_to_bam, [[:],[],[]], [], '')
 
         SAMTOOLS_SORT(SAM_TO_BAM.out.bam, [[:],[]], 'bai')
 

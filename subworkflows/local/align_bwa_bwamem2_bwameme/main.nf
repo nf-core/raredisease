@@ -39,7 +39,6 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         } else if (val_aligner.equals("bwameme")) {
             BWAMEME_MEM ( ch_input_reads, ch_bwameme_index, ch_genome_fasta, true, val_mbuffer_mem, val_sort_threads )
             ch_align = BWAMEME_MEM.out.bam
-            ch_versions = ch_versions.mix(BWAMEME_MEM.out.versions)
         } else {
             BWAMEM2_MEM ( ch_input_reads, ch_bwamem2_index, ch_genome_fasta, true )
             ch_align    = BWAMEM2_MEM.out.bam
@@ -66,14 +65,14 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
             .set{ bams }
 
         // If there are no samples to merge, skip the process
-        SAMTOOLS_MERGE ( bams.multiple, ch_genome_fasta, ch_genome_fai, [[:], []] )
+        SAMTOOLS_MERGE ( bams.multiple, ch_genome_fasta.join(ch_genome_fai).map{meta,fasta,fai-> return[meta,fasta,fai,[]]})
         prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
 
         // GET ALIGNMENT FROM SELECTED CONTIGS
         if (val_extract_alignments) {
             SAMTOOLS_INDEX_EXTRACT ( prepared_bam )
             extract_bam_sorted_indexed = prepared_bam.join(SAMTOOLS_INDEX_EXTRACT.out.bai, failOnMismatch:true, failOnDuplicate:true)
-            EXTRACT_ALIGNMENTS( extract_bam_sorted_indexed, ch_genome_fasta, [], '')
+            EXTRACT_ALIGNMENTS( extract_bam_sorted_indexed, ch_genome_fasta.join(ch_genome_fai), [], '')
             prepared_bam = EXTRACT_ALIGNMENTS.out.bam
         }
 
