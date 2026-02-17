@@ -2,17 +2,18 @@ process ADD_VARCALLER_TO_BED {
     tag "$meta.id"
     label 'process_single'
 
-    conda "bioconda::tabix=1.11"
+    conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/tabix:1.11--hdfd78af_0' :
-        'biocontainers/tabix:1.11--hdfd78af_0' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/92/92859404d861ae01afb87e2b789aebc71c0ab546397af890c7df74e4ee22c8dd/data' :
+        'community.wave.seqera.io/library/htslib:1.21--ff8e28a189fbecaa' }"
 
     input:
     tuple val(meta), path(chromsizes)
 
     output:
     tuple val(meta), path("*.gz"), path("*.tbi"), emit: gz_tbi
-    path  "versions.yml" ,                        emit: versions
+    tuple val("${task.process}"), val('tabix'), eval("tabix -h 2>&1 | grep -oP 'Version:\\s*\\K[^\\s]+'")   , topic: versions   , emit: versions_tabix
+    tuple val("${task.process}"), val('bgzip'), eval("bgzip --version | sed '1!d;s/.* //'"), topic: versions, emit: versions_bgzip
 
     when:
     task.ext.when == null || task.ext.when
@@ -26,11 +27,6 @@ process ADD_VARCALLER_TO_BED {
     awk '{print \$1"\t0\t"\$2"\t$variant_caller\"}' $chromsizes > ${variant_caller}.bed
     bgzip --threads ${task.cpus} -c $args ${variant_caller}.bed > ${prefix}.bed.gz
     tabix $args2 ${prefix}.bed.gz
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        tabix: \$(echo \$(tabix -h 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
-    END_VERSIONS
     """
 
     stub:
@@ -38,10 +34,5 @@ process ADD_VARCALLER_TO_BED {
     """
     touch ${prefix}.bed.gz
     touch ${prefix}.bed.gz.tbi
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        tabix: \$(echo \$(tabix -h 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
-    END_VERSIONS
     """
 }

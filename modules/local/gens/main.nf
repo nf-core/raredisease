@@ -12,7 +12,8 @@ process GENS {
     output:
     tuple val(meta), path('*.cov.bed')    , emit: cov
     tuple val(meta), path('*.baf.bed')    , emit: baf
-    path  "versions.yml"                  , emit: versions
+    tuple val("${task.process}"), val('generate_gens_data'), eval("generate_gens_data.py --version"), topic: versions, emit: versions_generate_gens_data
+    tuple val("${task.process}"), val('python'), eval("python -V | sed 's/Python //'"), topic: versions, emit: versions_python
 
     script:
     // Exit if running this module with -profile conda / -profile mamba
@@ -27,11 +28,6 @@ process GENS {
         --label $prefix \\
         --baf_positions $gnomad_positions \\
         --outdir \$PWD
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        generate_gens_data.py: \$(echo \$(generate_gens_data.py --version))
-    END_VERSIONS
     """
 
     stub:
@@ -39,10 +35,5 @@ process GENS {
     """
     touch ${prefix}.baf.bed
     touch ${prefix}.cov.bed
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        generate_gens_data.py: \$(echo \$(generate_gens_data.py --version))
-    END_VERSIONS
     """
 }

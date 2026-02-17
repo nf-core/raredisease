@@ -82,8 +82,6 @@ workflow CALL_SV_MT {
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
 
-        ch_versions = ch_versions.mix(MT_DELETION.out.versions)
-
     emit:
         mitosalt_breakpoint = MITOSALT.out.breakpoint       // channel: [ val(meta), path(breakpoint) ]
         mitosalt_cluster    = MITOSALT.out.cluster          // channel: [ val(meta), path(cluster) ]

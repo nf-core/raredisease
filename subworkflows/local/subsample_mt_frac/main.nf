@@ -14,8 +14,6 @@ workflow SUBSAMPLE_MT_FRAC {
         val_mt_subsample_seed  // channel: [mandatory] [ val(seed) ]
 
     main:
-        ch_versions = channel.empty()
-
         ch_mt_bam_bai.map {meta, bam, _bai -> return [meta, bam, -1]}.set {ch_genomecov_in}
 
         BEDTOOLS_GENOMECOV (ch_genomecov_in, [], "genomecov", false)
@@ -34,8 +32,4 @@ workflow SUBSAMPLE_MT_FRAC {
 
         SAMTOOLS_VIEW(ch_subsample_in, [[:],[]], [], 'bai')
 
-        ch_versions = ch_versions.mix(CALCULATE_SEED_FRACTION.out.versions)
-
-    emit:
-        versions = ch_versions  // channel: [ path(versions.yml) ]
 }

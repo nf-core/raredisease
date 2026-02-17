@@ -2,17 +2,17 @@ process CREATE_PEDIGREE_FILE {
     tag "pedigree"
     label 'process_single'
 
-    conda "conda-forge::python=3.8.3"
+    conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/python:3.8.3' :
-        'biocontainers/python:3.8.3' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/c2/c262fc09eca59edb5a724080eeceb00fb06396f510aefb229c2d2c6897e63975/data' :
+        'community.wave.seqera.io/library/coreutils:9.5--ae99c88a9b28c264' }"
 
     input:
     val(samples)
 
     output:
     path("*.ped"),       emit: ped
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('coreutils'), val("9.5"), topic: versions, emit: versions_coreutils
 
     when:
     task.ext.when == null || task.ext.when
@@ -30,23 +30,11 @@ process CREATE_PEDIGREE_FILE {
     }
     """
     echo -e "$outfile_text" >${case_name}.ped
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        create_pedigree_file: v1.0
-        python: \$(python --version | sed 's/Python //g')
-    END_VERSIONS
     """
 
     stub:
     def case_name = samples[0].case_id
     """
     touch ${case_name}.ped
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        create_pedigree_file: v1.0
-        python: \$(python --version | sed 's/Python //g')
-    END_VERSIONS
     """
 }

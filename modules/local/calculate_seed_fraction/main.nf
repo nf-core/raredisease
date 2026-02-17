@@ -2,10 +2,10 @@ process CALCULATE_SEED_FRACTION {
     tag "$meta.id"
     label 'process_low'
 
-    conda "conda-forge::python=3.8.3"
+    conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/python:3.8.3' :
-        'biocontainers/python:3.8.3' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/2f/2fdb3ffa4bac62e98ec062e991217df2ab96e67bbd45a502bd25ff2effecb96e/data':
+        'community.wave.seqera.io/library/htslib_python:d1e4474cbf76f4e9' }"
 
     input:
     tuple val(meta), path(cov)
@@ -14,7 +14,8 @@ process CALCULATE_SEED_FRACTION {
 
     output:
     tuple val(meta), path("seedfrac.csv"), emit: csv
-    path "versions.yml"                  , emit: versions
+    tuple val("${task.process}"), val('calculate_seed_fraction'), val("1.0"), topic: versions, emit: versions_tabix
+    tuple val("${task.process}"), val('python'), eval("python -V | sed 's/Python //'"), topic: versions, emit: versions_python
 
     when:
     task.ext.when == null || task.ext.when
@@ -24,22 +25,10 @@ process CALCULATE_SEED_FRACTION {
     export MT_COVERAGE=`awk '{cov += \$3}END{ if (NR > 0) print cov / NR }' $cov`
 
     python -c "import os;print('%0.6f' % ($seed+ $rd/float(os.environ['MT_COVERAGE'])))" >seedfrac.csv
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        calculate_seed_fraction: v1.0
-        python: \$(python --version | sed 's/Python //g')
-    END_VERSIONS
     """
 
     stub:
     """
     touch seedfrac.csv
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        calculate_seed_fraction: v1.0
-        python: \$(python --version | sed 's/Python //g')
-    END_VERSIONS
     """
 }

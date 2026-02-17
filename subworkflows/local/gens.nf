@@ -22,8 +22,6 @@ workflow GENS {
         ch_pon_male          // channel: [mandatory] [ path(pon) ]
 
     main:
-        ch_versions = channel.empty()
-
         ch_bam_bai
             .combine(ch_interval_list)
             .set { ch_bam_bai_intervals }
@@ -65,12 +63,7 @@ workflow GENS {
 
         GENS_GENERATE_COV_INDEX (GENS_GENERATE.out.cov)
 
-        ch_versions = ch_versions.mix(GENS_GENERATE.out.versions)
-        ch_versions = ch_versions.mix(GENS_GENERATE_BAF_INDEX.out.versions)
-        ch_versions = ch_versions.mix(GENS_GENERATE_COV_INDEX.out.versions)
-
     emit:
         gens_baf_bed_gz = GENS_GENERATE.out.baf // channel: [ val(meta), path(bed) ]
         gens_cov_bed_gz = GENS_GENERATE.out.cov // channel: [ val(meta), path(bed) ]
-        versions        = ch_versions           // channel: [ path(versions.yml) ]
 }

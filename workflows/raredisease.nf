@@ -330,8 +330,6 @@ workflow RAREDISEASE {
     if ( val_analysis_type.equals("wgs") && (!skip_smncopynumbercaller || !skip_repeat_calling)) {
         RENAME_BAM(ch_mapped.genome_marked_bam, "bam")
         RENAME_BAI(ch_mapped.genome_marked_bai, "bam.bai")
-        ch_versions = ch_versions.mix(RENAME_BAM.out.versions)
-        ch_versions = ch_versions.mix(RENAME_BAI.out.versions)
     }
 
 /*
@@ -689,7 +687,6 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_me_references
         )
-        ch_versions = ch_versions.mix(CALL_MOBILE_ELEMENTS.out.versions)
 
         if (!skip_me_annotation) {
             ANNOTATE_MOBILE_ELEMENTS(
@@ -810,7 +807,6 @@ workflow RAREDISEASE {
             ch_gens_pon_female,
             ch_gens_pon_male
         )
-        ch_versions = ch_versions.mix(GENS.out.versions)
     }
 
 /*
