@@ -98,6 +98,7 @@ workflow NFCORE_RAREDISEASE {
     val_sequence_dictionary
     val_skip_tools
     val_skip_subworkflows
+    val_subdepth
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
     val_target_bed
@@ -161,6 +162,7 @@ workflow NFCORE_RAREDISEASE {
     ch_genome_fai               = ch_references.genome_fai
     ch_genome_fasta             = ch_references.genome_fasta
     ch_genome_dictionary        = ch_references.genome_dict
+    ch_genome_hisat2index       = ch_references.genome_hisat2_index
     ch_gnomad_af                = ch_references.gnomad_af_idx
     ch_mt_bwaindex              = ch_references.mt_bwa_index
     ch_mt_bwamem2index          = ch_references.mt_bwamem2_index
@@ -168,6 +170,7 @@ workflow NFCORE_RAREDISEASE {
     ch_mt_fai                   = ch_references.mt_fai
     ch_mt_fasta                 = ch_references.mt_fasta
     ch_mt_intervals             = ch_references.mt_intervals
+    ch_mt_lastdb                = ch_references.mt_last_index
     ch_mtshift_backchain        = ch_references.mtshift_backchain
     ch_mtshift_bwaindex         = ch_references.mtshift_bwa_index
     ch_mtshift_bwamem2index     = ch_references.mtshift_bwamem2_index
@@ -234,6 +237,7 @@ workflow NFCORE_RAREDISEASE {
     ch_foundin_header           = channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
     ch_ngsbits_method           = channel.value(val_ngsbits_samplegender_method)
     ch_sentieon_pcr_indel_model = channel.value(val_sentieon_dnascope_pcr_indel_model)
+    ch_subdepth                 = channel.value(val_subdepth)
     ch_vcfanno_resources        = val_vcfanno_resources ? channel.fromPath(val_vcfanno_resources).splitText().map{it -> it.trim()}.collect()
                                                         : channel.value([])
     ch_gcnvcaller_model         = val_gcnvcaller_model  ? channel.fromPath(val_gcnvcaller_model)
@@ -281,7 +285,6 @@ workflow NFCORE_RAREDISEASE {
     ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
 
     // Tools
-    skip_eklipse               = parseSkipList(val_skip_tools, 'eklipse')
     skip_fastp                 = parseSkipList(val_skip_tools, 'fastp')
     skip_fastqc                = parseSkipList(val_skip_tools, 'fastqc')
     skip_gens                  = parseSkipList(val_skip_tools, 'gens')
@@ -354,6 +357,7 @@ workflow NFCORE_RAREDISEASE {
         ch_genome_dictionary,
         ch_genome_fai,
         ch_genome_fasta,
+        ch_genome_hisat2index,
         ch_gens_gnomad_pos,
         ch_gens_interval_list,
         ch_gens_pon_female,
@@ -371,6 +375,7 @@ workflow NFCORE_RAREDISEASE {
         ch_mt_fai,
         ch_mt_fasta,
         ch_mt_intervals,
+        ch_mt_lastdb,
         ch_mtshift_backchain,
         ch_mtshift_bwaindex,
         ch_mtshift_bwamem2index,
@@ -396,6 +401,7 @@ workflow NFCORE_RAREDISEASE {
         ch_score_config_sv,
         ch_sdf,
         ch_sentieon_pcr_indel_model,
+        ch_subdepth,
         ch_svcaller_priority,
         ch_svd_bed,
         ch_svd_mu,
@@ -426,7 +432,6 @@ workflow NFCORE_RAREDISEASE {
         skip_sv_annotation,
         skip_sv_calling,
         skip_generate_clinical_set,
-        skip_eklipse,
         skip_fastp,
         skip_fastqc,
         skip_gens,
@@ -549,6 +554,7 @@ workflow {
         params.sequence_dictionary,
         params.skip_tools,
         params.skip_subworkflows,
+        params.mitosalt_depth,
         params.svdb_query_bedpedbs,
         params.svdb_query_dbs,
         params.target_bed,

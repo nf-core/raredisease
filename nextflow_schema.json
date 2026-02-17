@@ -544,7 +544,7 @@
                 },
                 "homoplasmy_af_threshold": {
                     "type": "number",
-                    "default": 1,
+                    "default": 1.0,
                     "description": "Allele frequency threshold for mitochondrial variants. Variants with an AF above this threshold will be treated as homoplasmic and assigned a 1/1 genotype. Range 0-1.0.",
                     "fa_icon": "fas fa-less-than"
                 },
@@ -599,7 +599,7 @@
                     "fa_icon": "fas fa-forward",
                     "description": "Disable specified tools.",
                     "help_text": "Multiple tools can be specified, separated by commas.",
-                    "pattern": "^((fastp|gens|germlinecnvcaller|haplogrep3|peddy|smncopynumbercaller|vcf2cytosure|fastqc|qualimap|ngsbits|eklipse)?,?)*(?<!,)$"
+                    "pattern": "^((fastp|gens|germlinecnvcaller|haplogrep3|peddy|smncopynumbercaller|vcf2cytosure|fastqc|qualimap|ngsbits)?,?)*(?<!,)$"
                 }
             }
         },
@@ -744,6 +744,92 @@
                     "default": 112,
                     "description": "Specify the version of the VEP cache provided to the `--vep_cache` option.",
                     "fa_icon": "fas fa-align-center"
+                }
+            }
+        },
+        "mitosalt_options": {
+            "title": "Mitosalt and saltshaker options",
+            "type": "object",
+            "fa_icon": "fas fa-university",
+            "description": "Parameters used to run mitosalt and saltshaker",
+            "properties": {
+                "hisat2": {
+                    "type": "string"
+                },
+                "breakspan": {
+                    "type": "integer",
+                    "default": 15,
+                    "description": "minimum number of bases a non-split read must span either side of a breakpoint to be considered in the heteroplasmy count"
+                },
+                "breakthreshold": {
+                    "type": "integer",
+                    "default": 2,
+                    "description": "the maximum deviation a given set of split read breakpoints can have to be considered within the same cluster"
+                },
+                "cluster_threshold": {
+                    "type": "integer",
+                    "default": 2,
+                    "description": "minimum number of reads supporting a cluster"
+                },
+                "deletion_threshold_max": {
+                    "type": "integer",
+                    "default": 30000,
+                    "description": "the maximum size of the gap between fragments of a split read for the split read to be considered as potentially spanning a deletion"
+                },
+                "deletion_threshold_min": {
+                    "type": "integer",
+                    "default": 30,
+                    "description": "the minimum size of the gap between fragemtns of a split read for the split read to be considered as potentially spanning a deletion"
+                },
+                "evalue_threshold": {
+                    "type": "number",
+                    "default": 1e-5,
+                    "description": "alignment e-value cutoff"
+                },
+                "exclude": {
+                    "type": "integer",
+                    "default": 5,
+                    "description": "filter split reads if both fragments fall within the regions at the start and end to avoid pseudo-gapped alignments due to a circular genome"
+                },
+                "flank": {
+                    "type": "integer",
+                    "default": 15,
+                    "description": "basepairs flanking a deletion"
+                },
+                "hplimit": {
+                    "type": "number",
+                    "default": 0.01,
+                    "description": "detected heteroplasmy threshold"
+                },
+                "mitosalt_depth": {
+                    "type": "integer",
+                    "default": 10000000,
+                    "description": "depth to subsample fastq files to before running mitosalt"
+                },
+                "paired_distance": {
+                    "type": "integer",
+                    "default": 1000,
+                    "description": "the maximum distance of a paired read from its split counterpart for paired support to be considered positive"
+                },
+                "score_threshold": {
+                    "type": "integer",
+                    "default": 80,
+                    "description": "alignemnt score cutoff"
+                },
+                "sizelimit": {
+                    "type": "integer",
+                    "default": 10000,
+                    "description": "maximum size of deletions tolerated, beyond which they are reclassified as potential duplications in the reverse orientation"
+                },
+                "split_distance_threshold": {
+                    "type": "integer",
+                    "default": 5,
+                    "description": "the maximum length of unmapped distance between two fragments of a split read"
+                },
+                "split_length": {
+                    "type": "integer",
+                    "default": 15,
+                    "description": "minimum number of bases in a split read fragment for the read to be considered as potentially spanning a deletion"
                 }
             }
         },
@@ -939,6 +1025,9 @@
         },
         {
             "$ref": "#/$defs/annotation_options"
+        },
+        {
+            "$ref": "#/$defs/mitosalt_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"

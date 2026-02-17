@@ -18,6 +18,8 @@ include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD_MT       } from '../../../mo
 include { GATK4_INTERVALLISTTOOLS as GATK_ILT                } from '../../../modules/nf-core/gatk4/intervallisttools/main'
 include { GATK4_SHIFTFASTA as GATK_SHIFTFASTA                } from '../../../modules/nf-core/gatk4/shiftfasta/main'
 include { GET_CHROM_SIZES                                    } from '../../../modules/local/get_chrom_sizes'
+include { HISAT2_BUILD as HISAT2_INDEX_GENOME                } from '../../../modules/nf-core/hisat2/build'
+include { LAST_LASTDB as LAST_INDEX_MT                       } from '../../../modules/nf-core/last/lastdb'
 include { RTGTOOLS_FORMAT                                    } from '../../../modules/nf-core/rtgtools/format/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_EXTRACT_MT              } from '../../../modules/nf-core/samtools/faidx/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME            } from '../../../modules/nf-core/samtools/faidx/main'
@@ -62,6 +64,8 @@ workflow PREPARE_REFERENCES {
         ch_bwa                    = channel.empty()
         ch_genome_bwameme_index   = channel.empty()
         ch_genome_bwamem2_index   = channel.empty()
+        ch_genome_hisat2_index    = channel.empty()
+        ch_mt_last_index          = channel.empty()
         ch_gnomad_af_idx          = channel.empty()
         ch_dbsnp                  = channel.value([[:],[]])
         ch_dbsnp_tbi              = channel.value([[:],[]])
@@ -141,6 +145,9 @@ workflow PREPARE_REFERENCES {
             ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta, [[:],[]], false).fai.collect()
             ch_mt_dict = GATK_SD_MT(ch_mt_fasta).dict.collect()
 
+            ch_genome_hisat2_index = HISAT2_INDEX_GENOME(ch_genome_fasta,[[:],[]], [[:],[]]).index.collect()
+            ch_mt_last_index       = LAST_INDEX_MT(ch_mt_fasta).index.collect()
+
             GATK_SHIFTFASTA(ch_mt_fasta, ch_mt_fai, ch_mt_dict)
 
             ch_mtshift_backchain     = GATK_SHIFTFASTA.out.shift_back_chain.collect()
@@ -159,6 +166,8 @@ workflow PREPARE_REFERENCES {
                 }
                 .set {ch_shiftfasta_mtintervals}
 
+            ch_versions = ch_versions.mix (HISAT2_INDEX_GENOME.out.versions,
+                                           LAST_INDEX_MT.out.versions)
         }
         //
         // MT alignment indices
@@ -278,6 +287,7 @@ workflow PREPARE_REFERENCES {
         genome_chrom_sizes    = GET_CHROM_SIZES.out.sizes.collect()                 // channel:[ path(sizes) ]
         genome_fai            = ch_genome_fai                                       // channel:[ val(meta), path(fai) ]
         genome_fasta          = ch_genome_fasta                                     // channel:[ val(meta), path(fasta) ]
+        genome_hisat2_index   = ch_genome_hisat2_index                              // channel: [ val(meta), path(index) ]
         genome_dict           = ch_genome_dict                                      // channel:[ val(meta), path(dict) ]
         gnomad_af_idx         = ch_gnomad_af_idx                                    // channel:[ val(gnomad), path(idx) ]
         mt_bwa_index          = ch_mt_bwa_index                                     // channel:[ val(meta), path(index) ]
@@ -286,6 +296,7 @@ workflow PREPARE_REFERENCES {
         mt_fai                = ch_mt_fai                                           // channel:[ val(meta), path(fai) ]
         mt_fasta              = ch_mt_fasta                                         // channel:[ val(meta), path(fasta) ]
         mt_intervals          = ch_shiftfasta_mtintervals.intervals.collect()       // channel:[ path(intervals) ]
+        mt_last_index         = ch_mt_last_index                                    // channel: [ val(meta), path(index) ]
         mtshift_backchain     = ch_mtshift_backchain                                // channel:[ val(meta), path(backchain) ]
         mtshift_bwa_index     = ch_mtshift_bwa_index                                // channel:[ val(meta), path(index) ]
         mtshift_bwamem2_index = ch_mtshift_bwamem2_index                            // channel:[ val(meta), path(index) ]
