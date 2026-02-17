@@ -315,10 +315,10 @@
                     "retroseq_discover": 1.5
                 },
                 "RHOCALL_ANNOTATE": {
-                    "rhocall": "Matplotlib is building the font cache; this may take a moment. 0.5.1"
+                    "rhocall": "0.5.1"
                 },
                 "RHOCALL_VIZ": {
-                    "rhocall": "Matplotlib is building the font cache; this may take a moment. 0.5.1"
+                    "rhocall": "0.5.1"
                 },
                 "SAMTOOLS_COLLATE": {
                     "samtools": "1.22.1"
