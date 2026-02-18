@@ -29,13 +29,10 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         val_sort_threads       // integer: [mandatory] default: 4
 
     main:
-        ch_versions = channel.empty()
-
         // Map, sort, and index
         if (val_aligner.equals("bwa")) {
             BWA ( ch_input_reads, ch_bwa_index, ch_genome_fasta, true )
             ch_align = BWA.out.bam
-            ch_versions = ch_versions.mix(BWA.out.versions)
         } else if (val_aligner.equals("bwameme")) {
             BWAMEME_MEM ( ch_input_reads, ch_bwameme_index, ch_genome_fasta, true, val_mbuffer_mem, val_sort_threads )
             ch_align = BWAMEME_MEM.out.bam
@@ -85,5 +82,4 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         marked_bam  = MARKDUPLICATES.out.bam         // channel: [ val(meta), path(bam) ]
         metrics     = MARKDUPLICATES.out.metrics     // channel: [ val(meta), path(metrics) ]
         stats       = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), path(stats) ]
-        versions    = ch_versions                    // channel: [ path(versions.yml) ]
 }

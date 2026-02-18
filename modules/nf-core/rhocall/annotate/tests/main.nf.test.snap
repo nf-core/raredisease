@@ -1,5 +1,5 @@
 {
-    "sarscov2 - vcf, roh": {
+    "sarscov2 - stub": {
         "content": [
             {
                 "0": [
@@ -7,50 +7,53 @@
                         {
                             "id": "test"
                         },
-                        "test.bed:md5,4579710bbd8e1e4449274d261c439891"
+                        "test_rhocall.vcf:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "1": [
                     [
-                        {
-                            "id": "test"
-                        },
-                        "test.wig:md5,ab2d23269213f6331f18b7ad6ca94a5f"
-                    ]
-                ],
-                "2": [
-                    [
-                        "RHOCALL_VIZ",
+                        "RHOCALL_ANNOTATE",
                         "rhocall",
                         "0.5.1"
                     ]
                 ],
-                "bed": [
+                "vcf": [
                     [
                         {
                             "id": "test"
                         },
-                        "test.bed:md5,4579710bbd8e1e4449274d261c439891"
+                        "test_rhocall.vcf:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "versions_rhocall": [
                     [
-                        "RHOCALL_VIZ",
+                        "RHOCALL_ANNOTATE",
                         "rhocall",
                         "0.5.1"
-                    ]
-                ],
-                "wig": [
-                    [
-                        {
-                            "id": "test"
-                        },
-                        "test.wig:md5,ab2d23269213f6331f18b7ad6ca94a5f"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-02-18T10:11:58.070955",
+        "timestamp": "2026-02-18T10:11:48.513471",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "sarscov2": {
+        "content": [
+            "bc7bf3ee9e8430e064c539eb81e59bf9",
+            {
+                "versions_rhocall": [
+                    [
+                        "RHOCALL_ANNOTATE",
+                        "rhocall",
+                        "0.5.1"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-02-18T10:14:26.928869",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
