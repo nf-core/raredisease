@@ -72,7 +72,7 @@
                     },
                     "bwa/mem": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "707241c72951f24fd89982c4c80c5983a4c437ef",
                         "installed_by": ["modules"]
                     },
                     "bwamem2/index": {
@@ -102,7 +102,7 @@
                     },
                     "cat/cat": {
                         "branch": "master",
-                        "git_sha": "69614d4579a6bd9b8a2ecffb35959809d9c36559",
+                        "git_sha": "7ed72ef972290b93d0bdd7c60ff00a693250f77a",
                         "installed_by": ["modules"]
                     },
                     "chromograph": {
@@ -158,7 +158,7 @@
                     },
                     "fastqc": {
                         "branch": "master",
-                        "git_sha": "5bdb098216aaf5df9c3b6343e6204cd932503c16",
+                        "git_sha": "3009f27c4e4b6e99da4eeebe82799e13924a4a1f",
                         "installed_by": ["modules"]
                     },
                     "gatk4/bedtointervallist": {
@@ -304,7 +304,7 @@
                     },
                     "last/lastdb": {
                         "branch": "master",
-                        "git_sha": "d92ad4055433d66d3e3eb4fd8d729d6ae9f75693",
+                        "git_sha": "a54953d05812af249d40ffaccb5b8ee371a75866",
                         "installed_by": ["modules"]
                     },
                     "manta/germline": {
@@ -329,7 +329,7 @@
                     },
                     "peddy": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "f6cba554dee5a4e180a40f5b1d5df651848d95b9",
                         "installed_by": ["modules"]
                     },
                     "picard/addorreplacereadgroups": {
@@ -379,12 +379,12 @@
                     },
                     "rhocall/annotate": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "f6cba554dee5a4e180a40f5b1d5df651848d95b9",
                         "installed_by": ["modules"]
                     },
                     "rhocall/viz": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "f6cba554dee5a4e180a40f5b1d5df651848d95b9",
                         "installed_by": ["modules"]
                     },
                     "rtgtools/format": {
@@ -499,7 +499,7 @@
                     },
                     "svdb/merge": {
                         "branch": "master",
-                        "git_sha": "7f56b1f1d2e8b7ca92260eb6b3244d26c319a00f",
+                        "git_sha": "b75cf1a894cc2d63a81dc3bd58126de7f023acf9",
                         "installed_by": ["modules"]
                     },
                     "svdb/query": {

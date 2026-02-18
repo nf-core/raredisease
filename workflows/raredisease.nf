@@ -273,7 +273,6 @@ workflow RAREDISEASE {
         val_save_mapped_as_cram
     )
     .set { ch_mapped }
-    ch_versions   = ch_versions.mix(ALIGN.out.versions)
 
     if (!(skip_mt_subsample) && (val_analysis_type.equals("wgs") || val_run_mt_for_wes)) {
         if (val_mt_subsample_approach.equals("fraction")) {
@@ -752,7 +751,6 @@ workflow RAREDISEASE {
             CALL_SNV.out.genome_vcf.join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true),
             ch_pedfile
         )
-        ch_versions = ch_versions.mix(PEDDY.out.versions)
     }
 
 /*
