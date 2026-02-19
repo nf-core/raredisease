@@ -71,7 +71,6 @@ workflow CALL_SNV {
             ch_deepvar_tbi  = CALL_SNV_DEEPVARIANT.out.tabix
             ch_deepvar_gvcf = CALL_SNV_DEEPVARIANT.out.gvcf
             ch_deepvar_gtbi = CALL_SNV_DEEPVARIANT.out.gvcf_tabix
-            ch_versions     = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
         } else if (val_variant_caller.equals("sentieon")) {
             CALL_SNV_SENTIEON(
                 ch_genome_bam_bai,

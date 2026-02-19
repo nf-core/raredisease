@@ -59,7 +59,6 @@ workflow PREPARE_REFERENCES {
 
 
     main:
-        ch_versions               = channel.empty()
         ch_bait_intervals         = channel.empty()
         ch_bwa                    = channel.empty()
         ch_genome_bwameme_index   = channel.empty()
@@ -299,6 +298,4 @@ workflow PREPARE_REFERENCES {
         target_intervals      = ch_target_intervals                                 // channel:[ path(interval_list) ]
         vcfanno_extra         = ch_vcfanno_extra                                    // channel:[ [path(vcf), path(tbi)] ]
         vep_resources         = ch_vep_resources                                    // channel:[ path(cache) ]
-        versions              = ch_versions                                         // channel:[ path(versions.yml) ]
-
 }

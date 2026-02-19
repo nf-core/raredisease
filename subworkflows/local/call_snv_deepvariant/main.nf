@@ -25,7 +25,6 @@ workflow CALL_SNV_DEEPVARIANT {
         val_analysis_type  // boolean
 
     main:
-        ch_versions = channel.empty()
 
         if (val_analysis_type.equals("wes")) {
             TABIX_BGZIP(ch_target_bed.map{meta, gzbed, _index -> return [meta, gzbed]})
@@ -48,6 +47,7 @@ workflow CALL_SNV_DEEPVARIANT {
 
         ch_case_info
             .combine(ch_file_list)
+            .map {meta, gvcf -> return [meta, gvcf, []]}
             .set { ch_gvcfs }
 
         GLNEXUS ( ch_gvcfs, [[:],[]] )
@@ -87,5 +87,4 @@ workflow CALL_SNV_DEEPVARIANT {
         gvcf_tabix = DEEPVARIANT.out.gvcf_tbi   // channel: [ val(meta), path(gvcf_tbi)]
         tabix      = TABIX_ANNOTATE.out.index   // channel: [ val(meta), path(tbi) ]
         vcf        = BCFTOOLS_ANNOTATE.out.vcf  // channel: [ val(meta), path(vcf) ]
-        versions   = ch_versions                // channel: [ path(versions.yml) ]
 }
