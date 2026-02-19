@@ -19,8 +19,6 @@ workflow RANK_VARIANTS {
         process_with_sort     // Boolean
 
     main:
-        ch_versions = channel.empty()
-
         GENMOD_ANNOTATE(ch_vcf)
 
         ch_models_in = GENMOD_ANNOTATE.out.vcf.combine(ch_pedfile)
@@ -41,5 +39,4 @@ workflow RANK_VARIANTS {
 
     emit:
         vcf      = ch_vcf       // channel: [ val(meta), path(vcf) ]
-        versions = ch_versions  // channel: [ path(versions.yml) ]
 }

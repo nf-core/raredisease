@@ -422,15 +422,6 @@
                         ]
                     ]
                 ],
-                "31": [
-                    "versions.yml:md5,12e18a91d3ec0da87543f9fded01f1c1",
-                    "versions.yml:md5,1b3327823f65f68efc82043fc802a384",
-                    "versions.yml:md5,447a22450289bba28dd03ae4f4f92774",
-                    "versions.yml:md5,7479477c0c4b6eb043c58bc40ee41198",
-                    "versions.yml:md5,b9ba5dac48d896837b097c56bcdd768c",
-                    "versions.yml:md5,bdda7848a0b1aaf27939782b868ad9c5",
-                    "versions.yml:md5,f5568ab78d420d74714985cdae832a6e"
-                ],
                 "4": [
                     [
                         {
@@ -960,22 +951,13 @@
                             "spliceai_21_scores_raw_snv_-v1.3-.vcf.gz.tbi:md5,3fab1357156412ca02b2bdf075e97382"
                         ]
                     ]
-                ],
-                "versions": [
-                    "versions.yml:md5,12e18a91d3ec0da87543f9fded01f1c1",
-                    "versions.yml:md5,1b3327823f65f68efc82043fc802a384",
-                    "versions.yml:md5,447a22450289bba28dd03ae4f4f92774",
-                    "versions.yml:md5,7479477c0c4b6eb043c58bc40ee41198",
-                    "versions.yml:md5,b9ba5dac48d896837b097c56bcdd768c",
-                    "versions.yml:md5,bdda7848a0b1aaf27939782b868ad9c5",
-                    "versions.yml:md5,f5568ab78d420d74714985cdae832a6e"
                 ]
             }
         ],
+        "timestamp": "2026-02-17T15:18:47.287844356",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-16T23:13:28.796983269"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     }
 }

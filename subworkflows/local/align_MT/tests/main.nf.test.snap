@@ -103,9 +103,7 @@
                     ]
                 ],
                 "2": [
-                    "versions.yml:md5,84869ed38f4bfecb303ea73297f03a04",
-                    "versions.yml:md5,84869ed38f4bfecb303ea73297f03a04",
-                    "versions.yml:md5,84869ed38f4bfecb303ea73297f03a04"
+                    
                 ],
                 "marked_bai": [
                     [
@@ -208,17 +206,15 @@
                     ]
                 ],
                 "versions": [
-                    "versions.yml:md5,84869ed38f4bfecb303ea73297f03a04",
-                    "versions.yml:md5,84869ed38f4bfecb303ea73297f03a04",
-                    "versions.yml:md5,84869ed38f4bfecb303ea73297f03a04"
+                    
                 ]
             }
         ],
+        "timestamp": "2026-02-17T11:24:25.300014158",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
-        },
-        "timestamp": "2026-02-06T17:37:55.606130634"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     },
     "align mt - bwa": {
         "content": [
@@ -435,10 +431,10 @@
                 ]
             }
         ],
+        "timestamp": "2026-02-06T17:44:37.818378883",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
-        },
-        "timestamp": "2026-02-06T17:44:37.818378883"
+        }
     }
 }

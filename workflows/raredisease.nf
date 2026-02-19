@@ -460,7 +460,6 @@ workflow RAREDISEASE {
                 ch_ranksnv_nuclear_in,
                 false
             )
-            ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
         }
 
         //
@@ -531,7 +530,6 @@ workflow RAREDISEASE {
                 ch_ranksnv_mt_in,
                 false
             )
-            ch_versions = ch_versions.mix(RANK_VARIANTS_MT.out.versions)
         }
     }
 
@@ -580,7 +578,6 @@ workflow RAREDISEASE {
                 val_genome,
                 val_vep_cache_version
             ).set { ch_sv_annotate }
-            ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
             ch_sv_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -625,7 +622,6 @@ workflow RAREDISEASE {
                 ch_ranksnv_sv_in,
                 true
             )
-            ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
         }
     }
 /*
@@ -661,7 +657,6 @@ workflow RAREDISEASE {
             params.split_distance_threshold,
             params.split_length
         )
-        ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
     }
 
 /*
@@ -769,7 +764,7 @@ workflow RAREDISEASE {
 */
     if (!skip_vcf2cytosure && val_analysis_type.equals("wgs") && !skip_sv_calling && !skip_sv_annotation) {
         GENERATE_CYTOSURE_FILES (
-            ch_mapped.genome_marked_bam,
+            ch_mapped.genome_marked_bam_bai,
             ch_vcf2cytosure_blacklist,
             ch_sample_id_map,
             ch_sv_annotate.tbi,

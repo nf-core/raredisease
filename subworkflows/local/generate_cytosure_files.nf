@@ -9,7 +9,7 @@ include { VCF2CYTOSURE                                  } from '../../modules/nf
 
 workflow GENERATE_CYTOSURE_FILES {
     take:
-        ch_bam            // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_bam_bai        // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_blacklist      // channel: [optional] [path(blacklist)]
         ch_sample_id_map  // channel: [optional] [val(id), val(id)]
         ch_tbi            // channel: [mandatory] [ val(meta), path(vcf_index) ]
@@ -19,15 +19,15 @@ workflow GENERATE_CYTOSURE_FILES {
     main:
         ch_reheader_out = channel.empty()
 
-        TIDDIT_COV_VCF2CYTOSURE (ch_bam, [[],[]])
+        TIDDIT_COV_VCF2CYTOSURE (ch_bam_bai, [[],[]])
 
         // Build channel: [val(sample_meta), path(vcf), path(vcf_index)]
         ch_vcf.join( ch_tbi, failOnMismatch: true )
             .set { ch_vcf_tbi }
 
-        ch_bam.combine(ch_vcf_tbi)
+        ch_bam_bai.combine(ch_vcf_tbi)
             .map {
-                meta_sample, _bam, _meta_case, vcf, tbi ->
+                meta_sample, _bam, _bai, _meta_case, vcf, tbi ->
                 def id_meta = ['id':meta_sample.sample]
                 def sex_meta = ['sex':meta_sample.sex]
                 return [ id_meta, sex_meta, vcf, tbi ]

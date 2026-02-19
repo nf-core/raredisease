@@ -13,7 +13,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "da588ff12491da491e3059326ffef0de"
+                    "24b5799be5403926a272596963f9683f"
                 ]
             ],
             [
@@ -30,19 +30,13 @@
                     },
                     "af8628d9df18b2d3d4f6fd47ef2bb872"
                 ]
-            ],
-            [
-                "versions.yml:md5,6046f0e9edf48b8d3bd335da75134ee4",
-                "versions.yml:md5,952f0145e6a0a3d1dbd70aac2edf4ced",
-                "versions.yml:md5,dea31a20732d740f0c824b01226c1dab",
-                "versions.yml:md5,f56a243ff21d59d873e0d0a3d3ee441d"
             ]
         ],
+        "timestamp": "2026-02-17T15:13:51.33678644",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
-        },
-        "timestamp": "2026-02-06T17:47:53.965738943"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     },
     "align bwameme": {
         "content": [
@@ -58,7 +52,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "91efdc668b5f6e075743e414c7afd0f8"
+                    "b9b01b7ac356afa64bc411d6f10e741"
                 ]
             ],
             [
@@ -75,18 +69,12 @@
                     },
                     "af8628d9df18b2d3d4f6fd47ef2bb872"
                 ]
-            ],
-            [
-                "versions.yml:md5,390a09ae83280da84de93856149cc3a1",
-                "versions.yml:md5,952f0145e6a0a3d1dbd70aac2edf4ced",
-                "versions.yml:md5,dea31a20732d740f0c824b01226c1dab",
-                "versions.yml:md5,f56a243ff21d59d873e0d0a3d3ee441d"
             ]
         ],
+        "timestamp": "2026-02-17T15:14:44.637382457",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
-        },
-        "timestamp": "2026-02-06T17:50:27.94216545"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     }
 }

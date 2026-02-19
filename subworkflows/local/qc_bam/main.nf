@@ -61,7 +61,7 @@ workflow QC_BAM {
             ch_qualimap = QUALIMAP_BAMQC (ch_bam, []).results
         }
 
-        TIDDIT_COV (ch_bam, [[],[]]) // 2nd pos. arg is req. only for cram input
+        TIDDIT_COV (ch_bam_bai, [[],[]]) // 2nd pos. arg is req. only for cram input
 
         UCSC_WIGTOBIGWIG (TIDDIT_COV.out.wig, ch_genome_chrsizes)
 

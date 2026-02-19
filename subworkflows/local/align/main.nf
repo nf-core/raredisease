@@ -107,7 +107,6 @@ workflow ALIGN {
             )
             ch_sentieon_bam    = ALIGN_SENTIEON.out.marked_bam
             ch_sentieon_bai    = ALIGN_SENTIEON.out.marked_bai
-            ch_versions     = ch_versions.mix(ALIGN_SENTIEON.out.versions)
         }
 
         ch_genome_marked_bam     = channel.empty().mix(ch_bwamem2_bam, ch_sentieon_bam, ch_input_bam)
