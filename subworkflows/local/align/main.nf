@@ -51,7 +51,6 @@ workflow ALIGN {
         ch_mtshift_bam_bai_gatksubwf = channel.empty()
         ch_sentieon_bam              = channel.empty()
         ch_sentieon_bai              = channel.empty()
-        ch_versions                  = channel.empty()
 
         if (!skip_fastp) {
             FASTP (ch_input_reads.map {meta, reads -> return [meta, reads, []] }, false, false, false)
@@ -95,7 +94,6 @@ workflow ALIGN {
             ch_bwamem2_bam     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bam
             ch_bwamem2_bai     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bai
             ch_markdup_metrics = ALIGN_BWA_BWAMEM2_BWAMEME.out.metrics
-            ch_versions        = ch_versions.mix(ALIGN_BWA_BWAMEM2_BWAMEME.out.versions)
         } else if (val_aligner.equals("sentieon")) {
             ALIGN_SENTIEON (
                 ch_genome_bwaindex,
@@ -150,8 +148,6 @@ workflow ALIGN {
                                             .join(ALIGN_MT.out.marked_bai, failOnMismatch:true, failOnDuplicate:true) // Only for SNV calling
             ch_mtshift_bam_bai_gatksubwf = ALIGN_MT_SHIFT.out.marked_bam
                                             .join(ALIGN_MT_SHIFT.out.marked_bai, failOnMismatch:true, failOnDuplicate:true) // Only for SNV calling
-            ch_versions                  = ch_versions
-                                            .mix(ALIGN_MT.out.versions, ALIGN_MT_SHIFT.out.versions)
         }
 
         if (val_save_mapped_as_cram) {
@@ -167,5 +163,4 @@ workflow ALIGN {
         mt_bam_bai                = ch_mt_bam_bai            // channel: [ val(meta), path(bam), path(bai) ]
         mt_bam_bai_gatksubwf      = ch_mt_bam_bai_gatksubwf      // channel: [ val(meta), path(bam), path(bai) ]
         mtshift_bam_bai_gatksubwf = ch_mtshift_bam_bai_gatksubwf // channel: [ val(meta), path(bam), path(bai) ]
-        versions                  = ch_versions              // channel: [ path(versions.yml) ]
 }
