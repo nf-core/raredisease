@@ -82,7 +82,7 @@
                     },
                     "bwamem2/mem": {
                         "branch": "master",
-                        "git_sha": "5dd46a36fca68d6ad1a6b22ec47adc8c6863717d",
+                        "git_sha": "8325a8155a77a336a613a504b8e4d6cea7a2344a",
                         "installed_by": ["modules"]
                     },
                     "bwameme/index": {
@@ -137,7 +137,7 @@
                     },
                     "ensemblvep/filtervep": {
                         "branch": "master",
-                        "git_sha": "f50d3c606dbc7e5af367cce070d824b796872ed2",
+                        "git_sha": "09ea5d9fcd6eda714f148e0f3b6a4920b2091f41",
                         "installed_by": ["modules", "vcf_filter_bcftools_ensemblvep"]
                     },
                     "ensemblvep/vep": {
@@ -588,7 +588,7 @@
                     },
                     "vcf_filter_bcftools_ensemblvep": {
                         "branch": "master",
-                        "git_sha": "91a902fb32d6717da38a9694eb4ad3fade53a8db",
+                        "git_sha": "95518d261ec0561b3dffb332944bebc5ef85efcf",
                         "installed_by": ["subworkflows"]
                     }
                 }
