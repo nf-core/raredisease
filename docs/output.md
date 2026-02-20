@@ -59,7 +59,6 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
       - [SVDB query](#svdb-query)
       - [VEP](#vep-1)
     - [Mitochondrial analysis](#mitochondrial-analysis)
-      - [Haplocheck](#haplocheck)
       - [Alignment and variant calling](#alignment-and-variant-calling)
         - [MT deletion script](#mt-deletion-script)
         - [eKLIPse](#eklipse)
@@ -460,18 +459,6 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 ### Mitochondrial analysis
 
 Mitochondrial analysis is run by default. If you want to turn off annotations set `--skip_subworkflows mt_annotation`.
-
-#### Haplocheck
-
-[Haplocheck](https://github.com/genepi/haplocheck/) analyses the mitochondrial content to detect contamination in samples. The results are displayed in MultiQC.
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `{outputdir}/haplocheck/`
-  - `<sampleid>.raw.txt`: haplocheck raw output. Read more about the file content [here](https://mitoverse.readthedocs.io/haplocheck/haplocheck/#textual-report-file-raw).
-
-</details>
 
 #### Alignment and variant calling
 

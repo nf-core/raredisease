@@ -286,11 +286,6 @@
                         "git_sha": "bcf36bc95e3e5605e9859b8e9a49648841e04fe8",
                         "installed_by": ["modules"]
                     },
-                    "haplocheck": {
-                        "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
-                        "installed_by": ["modules"]
-                    },
                     "haplogrep3/classify": {
                         "branch": "master",
                         "git_sha": "c95c60597ce23da23ac21f4e6c5d7c0cdb711b8f",
