@@ -206,7 +206,6 @@ workflow RAREDISEASE {
     main:
 
     ch_multiqc_files = channel.empty()
-    ch_mt_txt        = channel.empty()
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
@@ -394,7 +393,6 @@ workflow RAREDISEASE {
             val_variant_caller
         )
         ch_versions = ch_versions.mix(CALL_SNV.out.versions)
-        ch_mt_txt = CALL_SNV.out.mt_txt
 
         //
         // ANNOTATE GENOME SNVs
@@ -894,7 +892,6 @@ workflow RAREDISEASE {
     if (!skip_fastqc) {
         ch_multiqc_files = ch_multiqc_files.mix(fastqc_report.collect{_meta, reports -> reports}.ifEmpty([]))
     }
-    ch_multiqc_files = ch_multiqc_files.mix(ch_mt_txt.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.fastp_json.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.markdup_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.sex_check.map{_meta, reports -> reports}.collect().ifEmpty([]))
