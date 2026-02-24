@@ -282,7 +282,6 @@ workflow NFCORE_RAREDISEASE {
     // Generate pedigree file
     //
     ch_pedfile  = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
-    ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
 
     // Tools
     skip_fastp                 = parseSkipList(val_skip_tools, 'fastp')

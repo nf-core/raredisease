@@ -22,8 +22,6 @@ workflow CALL_MOBILE_ELEMENTS {
         ch_me_references    // channel: [mandatory] [path(tsv)]
 
     main:
-        ch_versions = channel.empty()
-
         // Building chromosome channels based on fasta index
         ch_genome_fai
             .splitCsv( sep: "\t", elem: 1, limit: 24 )
@@ -121,11 +119,7 @@ workflow CALL_MOBILE_ELEMENTS {
         SVDB_MERGE_ME ( ch_svdb_merge_me_input, [], true )
         TABIX_ME ( SVDB_MERGE_ME.out.vcf )
 
-        ch_versions = ch_versions.mix(RETROSEQ_DISCOVER.out.versions)
-        ch_versions = ch_versions.mix(RETROSEQ_CALL.out.versions)
-
     emit:
         tbi      = TABIX_ME.out.index    // channel: [ val(meta), path(tbi) ]
         vcf      = SVDB_MERGE_ME.out.vcf // channel: [ val(meta), path(vcf) ]
-        versions = ch_versions           // channel: [ path(versions.yml) ]
 }

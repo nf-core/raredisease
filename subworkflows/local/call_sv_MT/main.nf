@@ -124,8 +124,6 @@ workflow CALL_SV_MT {
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
 
-        ch_versions = ch_versions.mix(MT_DELETION.out.versions)
-
     emit:
         mitosalt_vcf        = ch_mitosalt_vcf               // channel: [ val(meta), path(vcf) ]
         mitosalt_plot       = ch_mitosalt_plot              // channel: [ val(meta), path(png) ]

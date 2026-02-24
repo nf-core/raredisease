@@ -28,8 +28,6 @@ workflow POSTPROCESS_MT_CALLS {
         ch_mtshift_vcf       // channel: [mandatory] [ val(meta), path(vcf) ]
 
     main:
-        ch_versions = channel.empty()
-
         // LIFTOVER SHIFTED VCF TO REFERENCE MT POSITIONS
         PICARD_LIFTOVERVCF (
             ch_mtshift_vcf,
@@ -121,10 +119,7 @@ workflow POSTPROCESS_MT_CALLS {
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 
-        ch_versions = ch_versions.mix(ADD_VARCALLER_TO_BED.out.versions)
-
     emit:
         tbi       = TABIX_ANNOTATE.out.index    // channel: [ val(meta), path(tbi) ]
         vcf       = BCFTOOLS_ANNOTATE.out.vcf   // channel: [ val(meta), path(vcf) ]
-        versions  = ch_versions                 // channel: [ path(versions.yml) ]
 }
