@@ -4,19 +4,11 @@ use warnings;
 use List::Util qw(first min max sum);
 use Data::Dumper;
 
-#INPUT
+#INPUT 
 my $config_file = $ARGV[0];
 my $p1 = $ARGV[1];
 my $p2 = $ARGV[2];
 my $tag = $ARGV[3];
-
-#CREATE DIRECTORIES -- added by ID
-mkdir "log" unless -d "log";
-mkdir "indel" unless -d "indel";
-mkdir "bam" unless -d "bam";
-mkdir "tab" unless -d "tab";
-mkdir "bw" unless -d "bw";
-mkdir "plot" unless -d "plot";
 
 #LOG
 open (STDOUT, "| tee -ai log/$tag.log");
@@ -44,7 +36,7 @@ while (<CONFIG>) {
     $User_Preferences->{$var} = $value;
     my $line = $_;
     print $line."\n";
-}
+} 
 
 #PROGRAMS
 my $hisat2 = $User_Preferences->{hisat2};
@@ -124,7 +116,7 @@ if($nu_mt eq 'yes' && $enriched eq 'no'){
 
   #EXTRACT READS
   print scalar(localtime).": Extract reads\n";
-  system("$samtools view -@ $threads -bt $faindex tmp_$tag.sam|$samtools sort -@ $threads -o tmp_$tag.bam -");
+  system("$samtools view -@ $threads -bt $faindex tmp_$tag.sam|$samtools sort -@ $threads -o tmp_$tag.bam -"); 
   system("$samtools index tmp_$tag.bam");
   system("$samtools idxstats tmp_$tag.bam > indel/$tag.count.txt");
   system("$samtools view -u -@ $threads -f 12 tmp_$tag.bam > tmp1_$tag.bam"); #flag to extract unmapped reads with mate also unmapped
@@ -158,7 +150,7 @@ if($nu_mt eq 'yes' && $o_mt eq 'yes' && $enriched eq 'no'){
 if($nu_mt eq 'no' && $o_mt eq 'yes' && $enriched eq 'yes'){
   #REMAP ON MT GENOME
   print scalar(localtime).": Map to MT genome\n";
-  system("$reformat in=$p1 in2=$p2 out=tmp_$tag.fq overwrite=true addslash=t trimreaddescription=t spaceslash=f -Xmx100g"); #2>> log/$tag.log");
+  system("$reformat in=$p1 in2=$p2 out=tmp_$tag.fq overwrite=true addslash=t trimreaddescription=t spaceslash=f -Xmx100g 2>> log/$tag.log");
   system("$lastal -Q1 -e80 -P$threads $lastindex tmp_$tag.fq|$lastsp > tmp_$tag.maf");
   system("$mfcv sam -d tmp_$tag.maf|$samtools view -@ $threads -bt $mtfaindex -|$samtools sort -@ $threads -o bam/$tag.bam -");
   system("$samtools index bam/$tag.bam");
@@ -187,7 +179,7 @@ if($i_del eq 'yes'){
   my $bedfile = "indel/$tag.bed";
   my $breakpointfile = "indel/$tag.breakpoint";
   my $clusterfile = "indel/$tag.cluster";
-
+  
   my $check_paired = &check_paired($infile);
   print scalar(localtime).": Build split read hash\n";
     $hash = &build_hash($infile,$check_paired);
@@ -264,7 +256,7 @@ sub build_hash{
     }
     elsif($check_paired == 1){
       my @name = split(/\//,$elements[6]);       $id = $name[0];
-      $mate = $name[1];
+      $mate = $name[1];  
     }
 
     my $strand = $elements[9];
@@ -273,12 +265,12 @@ sub build_hash{
     next if exists $check_hash->{$id}->{$start.$length};
     $check_hash->{$id}->{$start.$length}++;
     $mate = 2 if $mate > 1;
-    #print "$id\t$mate\t$start\t$end\t$strand\t$len\t$score\t$eval\n";
+    #print "$id\t$mate\t$start\t$end\t$strand\t$len\t$score\t$eval\n"; 
 
     #FILTER BY SCORE AND MAP EVALUE
     next if $score < $score_threshold;
     next if $evalue > $evalue_threshold;
-
+    
     push(@{$hash->{$id}->{$mate}->{starts}},$start);
     push(@{$hash->{$id}->{$mate}->{ends}},$end);
     push(@{$hash->{$id}->{$mate}->{rstarts}},$read_start);
@@ -324,7 +316,7 @@ sub remove_duplicates{
 
     my @signatures = ($signature1,$signature2);
     @signatures = sort @signatures;
-    my $signature = join("",@signatures);
+    my $signature = join("",@signatures);    
 
 
     if(exists $check_duplicates->{$signature} && $count1>0 && $count2>0){
@@ -345,17 +337,17 @@ sub print_bed{
   open(ABED,">$filename");
   for my $id (keys %{$hash}){
      #print $id."\n";
-
+ 
     for my $read(keys %{$hash->{$id}}){
       my $name = $id."_".$read;
 
       #CHECK IF READ IS SPLIT ALIGNED
       my $count = @{$hash->{$id}->{$read}->{starts}};
       next if $count > 1;
-      my $start = @{$hash->{$id}->{$read}->{starts}}[0];
+      my $start = @{$hash->{$id}->{$read}->{starts}}[0];    
       my $end = @{$hash->{$id}->{$read}->{ends}}[0];
-      print ABED "$refchr\t$start\t$end\t$name\n";
-    }
+      print ABED "$refchr\t$start\t$end\t$name\n"; 
+    }        
   }
   system("sort -k2,2n $filename -o $filename");
   close(ABED);
@@ -385,7 +377,7 @@ sub process_hash{
       next unless $min_len >= $split_length;
 
       #GET DISTANCE BETWEEN THE FRAGMENTS AND THE BREAKPOINTS
-      my @read_starts = @{$hash->{$id}->{$read}->{starts}};
+      my @read_starts = @{$hash->{$id}->{$read}->{starts}};    
       my @read_ends = @{$hash->{$id}->{$read}->{ends}};
       my @read_strands = @{$hash->{$id}->{$read}->{strands}};
       my @read_lengths = @{$hash->{$id}->{$read}->{lengths}};
@@ -397,11 +389,11 @@ sub process_hash{
       elsif($read_starts[0]>$read_starts[1] && $read_local_starts[0]<$read_local_starts[1]){$read_check = 'yes';}
       elsif($read_starts[0]<=$read_starts[1] && $read_local_starts[0]<$read_local_starts[1] && $read_starts[1]<$read_ends[0] ){$read_check = 'yes';}
       elsif($read_starts[0]>=$read_starts[1] && $read_local_starts[0]>$read_local_starts[1] && $read_ends[1]>$read_starts[0] ){$read_check = 'yes';}
-
+      
       #CHECK IF THE SPLIT READ FRAGMENTS SPAN THE DLOOP
-      my $min_start = min @{$hash->{$id}->{$read}->{starts}};
+      my $min_start = min @{$hash->{$id}->{$read}->{starts}};    
       my $max_end = max @{$hash->{$id}->{$read}->{ends}};
-      next if $min_start <= $dloop1 && $max_end >= $dloop2;
+      next if $min_start <= $dloop1 && $max_end >= $dloop2;   
 
       my ($size,$start,$end) = &get_frag_distance(\@read_starts,\@read_ends,$read_check,$msize);
       next if $size < $deletion_threshold_min;
@@ -410,7 +402,7 @@ sub process_hash{
       #print "$name\t$start\t$end\t$size\n";
 
       $start = 1 if $start == 0;
-      $end = 1 if $end == 0;
+      $end = 1 if $end == 0;   
 
       #CHECK IF PAIRED READ EXISTS AND ITS ALIGNMENT POSITION SUPPORTS THE SPLIT READ
       my $pair = 1 if $read == 2;
@@ -435,7 +427,7 @@ sub process_hash{
       $delhash->{$readid}->{readcheck}=$read_check;
       $delhash->{$readid}->{lenstart}=$len[0];
       $delhash->{$readid}->{lenend}=$len[1];
-
+      
       $start = $len[2];
       $end = $len[3];
       $size = $len[4];
@@ -463,7 +455,7 @@ sub process_hash1{
   my $bpe = shift;
 
   my $delhash;
-
+ 
   open(BP,">$breakpointfile");
   open(BED,">$bedfile");
   open(BPS,">$bps");
@@ -478,7 +470,7 @@ sub process_hash1{
       next unless $count == 3;
 
       #GET DISTANCE BETWEEN THE FRAGMENTS AND THE BREAKPOINTS
-      my @read_starts = @{$hash->{$id}->{$read}->{starts}};
+      my @read_starts = @{$hash->{$id}->{$read}->{starts}};    
       my @read_ends = @{$hash->{$id}->{$read}->{ends}};
       my @read_strands = @{$hash->{$id}->{$read}->{strands}};
       my @read_lengths = @{$hash->{$id}->{$read}->{lengths}};
@@ -548,7 +540,7 @@ sub process_hash1{
         #CHECK IF THE SPLIT READ FRAGMENTS ARE ABOVE LENGTH THRESHOLD
         my $min_len = min @read_lengthsN;
         next unless $min_len >= $split_length;
-
+  
 
         #LOOK FOR SPLIT READS WHICH MAP INVERSELY SPANNING THE D'LOOP
         my $read_check = 'no';
@@ -566,7 +558,7 @@ sub process_hash1{
         $paired_support = 'yes' if $distance_paired_support <= $paired_distance;
 
         $start = 1 if $start == 0;
-        $end = 1 if $end == 0;
+        $end = 1 if $end == 0;   
 
         #LOOK FOR SPLIT READS WITH LARGE UNMAPPED AREA
         my ($split_distance) = &get_split_distance(\@read_local_startsN,\@read_lengthsN);
@@ -582,7 +574,7 @@ sub process_hash1{
         $delhash->{$readid}->{readcheck}=$read_check;
         $delhash->{$readid}->{lenstart}=$len[0];
         $delhash->{$readid}->{lenend}=$len[1];
-
+        
         #$start = $len[2];
         #$end = $len[3];
         #$size = $len[4];
@@ -611,10 +603,10 @@ sub paired_support{
      my $distance1 = 0;
      my $distance2=0;
 
-     my @read_starts = @{$hash->{$id}->{$read}->{starts}};
+     my @read_starts = @{$hash->{$id}->{$read}->{starts}};    
      my @read_ends = @{$hash->{$id}->{$read}->{ends}};
-
-     my $pair_start = @{$hash->{$id}->{$pair}->{starts}}[0];
+    
+     my $pair_start = @{$hash->{$id}->{$pair}->{starts}}[0];    
      my $pair_end = @{$hash->{$id}->{$pair}->{ends}}[0];
 
      $distance1 = $read_starts[0] - $pair_end if $read_starts[0] > $pair_end;
@@ -640,10 +632,10 @@ sub get_frag_distance{
 
   my $frag1_end = @{$ends}[0];
   my $frag2_end = @{$ends}[1];
-
+  
   if($read_check eq 'no'){
     if($frag1_start > $frag2_end){
-      my $size = $frag1_start - $frag2_end;
+      my $size = $frag1_start - $frag2_end; 
       @res = ($size,$frag2_end,$frag1_start);
     }
     elsif($frag2_start > $frag1_end){
@@ -670,7 +662,7 @@ sub get_frag_distance{
 
   if($read_check eq 'yes'){
     if($frag1_start > $frag2_end){
-      my $size = ($msize -$frag1_end) + $frag2_start;
+      my $size = ($msize -$frag1_end) + $frag2_start; 
       @res = ($size,$frag2_start,$frag1_end);
     }
     elsif($frag2_start > $frag1_end){
@@ -708,7 +700,7 @@ sub get_split_distance{
 
   my $local1_length = @{$lengths}[0];
   my $local2_length = @{$lengths}[1];
-
+  
   if($local1_start>$local2_start){
     my $distance = $local1_start - $local2_start - $local2_length;
     @res = ($distance);
@@ -716,7 +708,7 @@ sub get_split_distance{
   if($local2_start>$local1_start){
     my $distance = $local2_start - $local1_start - $local1_length;
     @res = ($distance);
-  }
+  }  
   return @res;
 }
 
@@ -729,7 +721,7 @@ sub generate_bed{
   my $lengths = shift;
   my $scores = shift;
   my $strand = shift;
-
+  
   my $size = shift;
   my $bstart = shift;
   my $bend = shift;
@@ -759,7 +751,7 @@ sub generate_bed{
     $size = $frag1_start - $frag2_end;
     my $block_start=$frag1_start-$start;
     $start = 1 if $start == 0;$end = 1 if $end == 0;$bstart = 1 if $bstart == 0;$bend = 1 if $bend == 0;
-    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag2_length\,$frag1_length\t0\,$block_start\n";
+    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag2_length\,$frag1_length\t0\,$block_start\n";  
     @len = ($frag2_length,$frag1_length,$bstart,$bend,$size);
   }
   elsif($frag1_start > $frag2_end && $strand eq '+'){
@@ -770,53 +762,53 @@ sub generate_bed{
     $size = 1 + $msize- $frag1_end + $frag2_start;
     my $block_start=$frag1_start-$start;
     $start = 1 if $start == 0;$end = 1 if $end == 0;$bstart = 1 if $bstart == 0;$bend = 1 if $bend == 0;
-    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag2_length\,$frag1_length\t0\,$block_start\n";
+    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag2_length\,$frag1_length\t0\,$block_start\n"; 
     @len = ($frag1_length,$frag2_length,$bstart,$bend,$size);
   }
   elsif($frag2_start > $frag1_end && $strand eq '+'){
     $start = $frag1_start;
-    $end = $frag2_end;
+    $end = $frag2_end; 
     $bstart = $frag1_end;
     $bend = $frag2_start;
     $size = $frag2_start - $frag1_end;
     my $block_start=$frag2_start-$start;
     $start = 1 if $start == 0;$end = 1 if $end == 0;$bstart = 1 if $bstart == 0;$bend = 1 if $bend == 0;
-    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag1_length\,$frag2_length\t0\,$block_start\n";
+    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag1_length\,$frag2_length\t0\,$block_start\n";  
     @len = ($frag1_length,$frag2_length,$bstart,$bend,$size);
   }
   elsif($frag2_start > $frag1_end && $strand eq '-'){
     $start = $frag1_start;
-    $end = $frag2_end;
+    $end = $frag2_end; 
     $bstart = $frag1_start;
     $bend = $frag2_end;
     $size = 1 + $msize - $frag2_end + $frag1_start;
     my $block_start=$frag2_start-$start;
     $start = 1 if $start == 0;$end = 1 if $end == 0;$bstart = 1 if $bstart == 0;$bend = 1 if $bend == 0;
-    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag1_length\,$frag2_length\t0\,$block_start\n";
+    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag1_length\,$frag2_length\t0\,$block_start\n";  
     @len = ($frag2_length,$frag1_length,$bstart,$bend,$size);
   }
   elsif($frag2_start < $frag1_end && $strand eq '+'){
     $start = $frag1_start;
-    $end = $frag2_end;
+    $end = $frag2_end; 
     $bstart = $frag2_start;
-    $bend = $frag1_end;
+    $bend = $frag1_end; 
     $size = $msize - $frag1_end + $frag2_start;
     my $block_start=$frag1_end-$start;
     $start = 1 if $start == 0;$end = 1 if $end == 0;$bstart = 1 if $bstart == 0;$bend = 1 if $bend == 0;
-    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag1_length\,$frag2_length\t0\,$block_start\n";
+    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag1_length\,$frag2_length\t0\,$block_start\n";  
     @len = ($frag2_length,$frag1_length,$bstart,$bend,$size);
-  }
+  }  
   elsif($frag1_start < $frag2_end && $strand eq '-'){
     $start = $frag2_start;
-    $end = $frag1_end;
+    $end = $frag1_end; 
     $bstart = $frag1_start;
-    $bend = $frag2_end;
+    $bend = $frag2_end; 
     $size = $msize - $frag2_end + $frag1_start;
     my $block_start=$frag2_end-$start;
     $start = 1 if $start == 0;$end = 1 if $end == 0;$bstart = 1 if $bstart == 0;$bend = 1 if $bend == 0;
-    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag1_length\,$frag2_length\t0\,$block_start\n";
+    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag1_length\,$frag2_length\t0\,$block_start\n";  
     @len = ($frag2_length,$frag1_length,$bstart,$bend,$size);
-  }
+  }  
 
   return @len;
 }
@@ -852,14 +844,14 @@ sub generate_bed1{
     $start = $frag2_start;
     $end = $frag1_end;
     my $block_start=$frag1_start-$start;
-    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag2_length\,$frag1_length\t0\,$block_start\n";
+    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag2_length\,$frag1_length\t0\,$block_start\n";  
     @len = ($frag2_length,$frag1_length);
   }
   elsif($frag2_start > $frag1_end){
     $start = $frag1_start;
-    $end = $frag2_end;
+    $end = $frag2_end; 
     my $block_start=$frag2_start-$start;
-    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag1_length\,$frag2_length\t0\,$block_start\n";
+    print BED "$refchr\t$start\t$end\t$id\_$read\t$score\t$strand\t$start\t$end\t0\t2\t$frag1_length\,$frag2_length\t0\,$block_start\n";  
     @len = ($frag1_length,$frag2_length);
   }
   return @len;
@@ -901,7 +893,7 @@ sub get_cluster{
     $bpe_hash->{$readid} = $clusterid;
   }
   close(BPE);
-
+ 
   for my $readid(keys %{$delhash}){
     next unless exists $bps_hash->{$readid};
     next unless exists $bpe_hash->{$readid};
@@ -920,17 +912,17 @@ sub build_results{
   my $refchr = shift;
   my $cluster_read_count_threshold = shift;
   my $tag = shift;
-  my $clustercount;
+  my $clustercount;  
 
   my $nosplitbed_file = "tmp_".$tag."_nosplit.bed";;
   for my $clusterid (keys %{$clusterhash}){
-    my $cluster_read_count = scalar keys %{$clusterhash->{$clusterid}};
-    next if $cluster_read_count < $cluster_read_count_threshold;
+    my $cluster_read_count = scalar keys %{$clusterhash->{$clusterid}}; 
+    next if $cluster_read_count < $cluster_read_count_threshold; 
 
     print "Check $clusterid\n";
     my $clustercheck;
     $clustercount->{$clusterid}->{wt} = 0;
-    $clustercount->{$clusterid}->{mt} = scalar keys %{$clusterhash->{$clusterid}};
+    $clustercount->{$clusterid}->{mt} = scalar keys %{$clusterhash->{$clusterid}};    
 
     my $splitbed_fileS = "tmp_".$tag.".split.start.bed";
     my $splitbed_fileE = "tmp_".$tag.".split.end.bed";
@@ -1041,3 +1033,5 @@ sub print_result{
   }
   close(CF);
 }
+
+

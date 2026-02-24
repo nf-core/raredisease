@@ -53,6 +53,7 @@ process PREP_MITOSALT {
     echo "MT_fasta = ${mtfasta}"                                  >> mitosalt_config.txt
     echo "threads = 1"                                            >> mitosalt_config.txt
     echo "refchr = ${mito_name}"                                  >> mitosalt_config.txt
+    echo "msize = 16569"                                          >> mitosalt_config.txt
     echo "exclude = ${exclude}"                                   >> mitosalt_config.txt
     echo "orihs = 16081"                                          >> mitosalt_config.txt
     echo "orihe = 407"                                            >> mitosalt_config.txt

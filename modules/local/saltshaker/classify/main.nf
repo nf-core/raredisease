@@ -1,0 +1,57 @@
+process SALTSHAKER_CLASSIFY {
+    tag "$meta.id"
+    label "process_low"
+
+    conda "${moduleDir}/environment.yml"
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/e9/e93d703b195dd27cd920cee46669d3f51043216c12fd05168c937e93adf170e8/data':
+        'community.wave.seqera.io/library/pip_saltshaker:e08e38a6d45f8f32' }"
+
+    input:
+    tuple val(meta), path(call)
+    val dom_frac
+    val group_radius
+    val high_het
+    val mult_thresh
+    val noise_thresh
+
+    output:
+    tuple val(meta), path("*_classify_metadata.tsv"), emit: classify
+    tuple val(meta), path("*saltshaker.vcf")        , emit: vcf
+    path "versions.yml"                             , emit: versions
+
+    script:
+    def args   = task.ext.args ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    saltshaker classify \\
+        --prefix $prefix \\
+        --input-dir . \\
+        --vcf \\
+        --dominant-fraction $dom_frac \\
+        --radius $group_radius \\
+        --high-het $high_het \\
+        --multiple-threshold $mult_thresh \\
+        --noise $noise_thresh \\
+        $args
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        saltshaker_classify: \$(echo \$(saltshaker classify 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
+    END_VERSIONS
+    """
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+
+    """
+    touch ${prefix}.vcf
+    touch ${prefix}_call_metadata.tsv
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        saltshaker_classify: \$(echo \$(saltshaker classify 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
+    END_VERSIONS
+    """
+
+}
