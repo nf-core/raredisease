@@ -97,7 +97,7 @@
                     },
                     "cadd": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "1d40acd9f567cea7ccdd4b6211310d4e94356357",
                         "installed_by": ["modules"]
                     },
                     "cat/cat": {
