@@ -286,11 +286,6 @@
                         "git_sha": "824f8012c9ede97642fd23371c8784fb71074c63",
                         "installed_by": ["modules"]
                     },
-                    "haplocheck": {
-                        "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
-                        "installed_by": ["modules"]
-                    },
                     "haplogrep3/classify": {
                         "branch": "master",
                         "git_sha": "5cb9a8694da0a0e550921636bb60bc8c56445fd7",
@@ -303,7 +298,7 @@
                     },
                     "hmtnote/annotate": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/hmtnote/annotate/hmtnote-annotate.diff"
                     },
@@ -339,42 +334,42 @@
                     },
                     "picard/addorreplacereadgroups": {
                         "branch": "master",
-                        "git_sha": "74ec93d00bef147da3fb1f2262e8d31c14108f88",
+                        "git_sha": "a631e12055f6c23ba2c942d3902b3ed1b9eed859",
                         "installed_by": ["modules"]
                     },
                     "picard/collecthsmetrics": {
                         "branch": "master",
-                        "git_sha": "976ed20e328a92cb24ab6c63a8983ed31bf48469",
+                        "git_sha": "a631e12055f6c23ba2c942d3902b3ed1b9eed859",
                         "installed_by": ["modules"]
                     },
                     "picard/collectmultiplemetrics": {
                         "branch": "master",
-                        "git_sha": "74ec93d00bef147da3fb1f2262e8d31c14108f88",
+                        "git_sha": "a631e12055f6c23ba2c942d3902b3ed1b9eed859",
                         "installed_by": ["modules"]
                     },
                     "picard/collectwgsmetrics": {
                         "branch": "master",
-                        "git_sha": "66d5808eaaabd9de8997c4c31a9e8cdd3b56c080",
+                        "git_sha": "a631e12055f6c23ba2c942d3902b3ed1b9eed859",
                         "installed_by": ["modules"]
                     },
                     "picard/liftovervcf": {
                         "branch": "master",
-                        "git_sha": "66d5808eaaabd9de8997c4c31a9e8cdd3b56c080",
+                        "git_sha": "a631e12055f6c23ba2c942d3902b3ed1b9eed859",
                         "installed_by": ["modules"]
                     },
                     "picard/markduplicates": {
                         "branch": "master",
-                        "git_sha": "66d5808eaaabd9de8997c4c31a9e8cdd3b56c080",
+                        "git_sha": "a631e12055f6c23ba2c942d3902b3ed1b9eed859",
                         "installed_by": ["modules"]
                     },
                     "picard/renamesampleinvcf": {
                         "branch": "master",
-                        "git_sha": "66d5808eaaabd9de8997c4c31a9e8cdd3b56c080",
+                        "git_sha": "a631e12055f6c23ba2c942d3902b3ed1b9eed859",
                         "installed_by": ["modules"]
                     },
                     "picard/sortvcf": {
                         "branch": "master",
-                        "git_sha": "66d5808eaaabd9de8997c4c31a9e8cdd3b56c080",
+                        "git_sha": "a631e12055f6c23ba2c942d3902b3ed1b9eed859",
                         "installed_by": ["modules"]
                     },
                     "qualimap/bamqc": {
