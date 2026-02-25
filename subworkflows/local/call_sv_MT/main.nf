@@ -90,41 +90,46 @@ workflow CALL_SV_MT {
                 ch_mt_fasta,
                 ch_mt_lastdb
             )
+            MITOSALT.out.cluster
+                .filter{ meta, out -> out.countLines() > 0 }
+                .set{ch_saltshaker_in}
 
-            SALTSHAKER_CALL(
-                MITOSALT.out.breakpoint,
-                MITOSALT.out.cluster,
-                ch_mt_fasta,
-                val_flank,
-                val_hplimit,
-                val_mito_length,
-                val_ori_h_start,
-                val_ori_h_end,
-                val_ori_l_start,
-                val_ori_l_end
-            )
+            if (ch_saltshaker_in) {
+                SALTSHAKER_CALL(
+                    MITOSALT.out.breakpoint,
+                    ch_saltshaker_in,
+                    ch_mt_fasta,
+                    val_flank,
+                    val_hplimit,
+                    val_mito_length,
+                    val_ori_h_start,
+                    val_ori_h_end,
+                    val_ori_l_start,
+                    val_ori_l_end
+                )
 
-            SALTSHAKER_CLASSIFY(
-                SALTSHAKER_CALL.out.call,
-                val_dom_frac,
-                val_group_radius,
-                val_high_het,
-                val_mult_thresh,
-                val_noise_thresh
-            )
-            ch_mitosalt_vcf = SALTSHAKER_CLASSIFY.out.classify
+                SALTSHAKER_CLASSIFY(
+                    SALTSHAKER_CALL.out.call,
+                    val_dom_frac,
+                    val_group_radius,
+                    val_high_het,
+                    val_mult_thresh,
+                    val_noise_thresh
+                )
+                ch_mitosalt_vcf = SALTSHAKER_CLASSIFY.out.classify
 
-            SALTSHAKER_PLOT(
-                SALTSHAKER_CLASSIFY.out.classify
-            )
-            ch_mitosalt_plot = SALTSHAKER_PLOT.out.plot
-            
+                SALTSHAKER_PLOT(
+                    SALTSHAKER_CLASSIFY.out.classify
+                )
+                ch_mitosalt_plot = SALTSHAKER_PLOT.out.plot
+            }
 
             ch_versions = ch_versions.mix(SEQTK_SAMPLE.out.versions)
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
 
     emit:
+        mitosalt_classify   = SALTSHAKER_CLASSIFY.out.txt   // channel: [ val(meta), path(txt) ]
         mitosalt_vcf        = ch_mitosalt_vcf               // channel: [ val(meta), path(vcf) ]
         mitosalt_plot       = ch_mitosalt_plot              // channel: [ val(meta), path(png) ]
         mt_del_result       = MT_DELETION.out.mt_del_result // channel: [ val(meta), path(txt) ]

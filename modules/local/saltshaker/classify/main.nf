@@ -17,6 +17,7 @@ process SALTSHAKER_CLASSIFY {
 
     output:
     tuple val(meta), path("*_classify_metadata.tsv"), emit: classify
+    tuple val(meta), path("*_classify.txt")         , emit: txt
     tuple val(meta), path("*saltshaker.vcf")        , emit: vcf
     path "versions.yml"                             , emit: versions
 
