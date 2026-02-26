@@ -768,7 +768,7 @@
                 },
                 "cluster_threshold": {
                     "type": "integer",
-                    "default": 2,
+                    "default": 5,
                     "description": "minimum number of reads supporting a cluster"
                 },
                 "deletion_threshold_max": {
@@ -781,9 +781,14 @@
                     "default": 30,
                     "description": "the minimum size of the gap between fragemtns of a split read for the split read to be considered as potentially spanning a deletion"
                 },
+                "dom_frac": {
+                    "type": "number",
+                    "default": 0.5,
+                    "description": "fraction for dominant fraction for saltshaker classification"
+                },
                 "evalue_threshold": {
                     "type": "number",
-                    "default": 1e-5,
+                    "default": 1e-05,
                     "description": "alignment e-value cutoff"
                 },
                 "exclude": {
@@ -796,6 +801,16 @@
                     "default": 15,
                     "description": "basepairs flanking a deletion"
                 },
+                "group_radius": {
+                    "type": "integer",
+                    "default": 600,
+                    "description": "spatial clustering radius for saltshaker grouping"
+                },
+                "high_het": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "high heteroplasmy threshold for saltshaker classification"
+                },
                 "hplimit": {
                     "type": "number",
                     "default": 0.01,
@@ -805,6 +820,41 @@
                     "type": "integer",
                     "default": 10000000,
                     "description": "depth to subsample fastq files to before running mitosalt"
+                },
+                "mito_length": {
+                    "type": "integer",
+                    "default": 16569,
+                    "description": "length of mitochondrial genome"
+                },
+                "mult_thresh": {
+                    "type": "integer",
+                    "default": 5,
+                    "description": "threshold for multiple saltshaker classification"
+                },
+                "noise_thresh": {
+                    "type": "number",
+                    "default": 0.3,
+                    "description": "heteroplasmy threshold for background noise"
+                },
+                "ori_h_start": {
+                    "type": "integer",
+                    "default": 16081,
+                    "description": "start of heavy strand origin"
+                },
+                "ori_h_end": {
+                    "type": "integer",
+                    "default": 407,
+                    "description": "end of heavy strand origin"
+                },
+                "ori_l_start": {
+                    "type": "integer",
+                    "default": 5730,
+                    "description": "start of light strand origin"
+                },
+                "ori_l_end": {
+                    "type": "integer",
+                    "default": 5763,
+                    "description": "end of light strand origin"
                 },
                 "paired_distance": {
                     "type": "integer",

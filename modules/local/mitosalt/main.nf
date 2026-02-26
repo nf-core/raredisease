@@ -4,8 +4,8 @@ process MITOSALT {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/03/0311c283e73736be01c2cbd1ca93ae826c209d9733ffa6d2d4d2caa31e7464cc/data':
-        'community.wave.seqera.io/library/bbmap_bedtools_bioconductor-biostrings_bioconductor-pwalign_pruned:11434f3b6a01596d' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/13/130779a0dd5a8d86441f262a16a5fb1dfe562125edf93646b53c893d982b5519/data':
+        'community.wave.seqera.io/library/bbmap_bedtools_bioconductor-biostrings_bioconductor-pwalign_pruned:856c05081cbd8239' }"
 
     input:
     tuple val(meta), path(reads)
