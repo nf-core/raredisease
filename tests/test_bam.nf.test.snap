@@ -219,6 +219,9 @@
                 "GLNEXUS": {
                     "glnexus": "1.4.1"
                 },
+                "HAPLOCHECK_MT": {
+                    "haplocheck": "1.3.3"
+                },
                 "HAPLOGREP3_CLASSIFY_MT": {
                     "haplogrep3": "3.2.2"
                 },
@@ -651,6 +654,10 @@
                 "call_sv/mitochondria/earlycasualcaiman_mitochondria_deletions.txt",
                 "call_sv/mitochondria/hugelymodelbat_mitochondria_deletions.txt",
                 "call_sv/mitochondria/slowlycivilbuck_mitochondria_deletions.txt",
+                "haplocheck",
+                "haplocheck/earlycasualcaiman.raw.txt",
+                "haplocheck/hugelymodelbat.raw.txt",
+                "haplocheck/slowlycivilbuck.raw.txt",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/.stub",
@@ -1032,7 +1039,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-02-24T23:58:33.320173721",
+        "timestamp": "2026-02-27T12:52:01.429826076",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
