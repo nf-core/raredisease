@@ -13,7 +13,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "24b5799be5403926a272596963f9683f"
+                    "72b312c47e502b8272741a40e435b96"
                 ]
             ],
             [
@@ -32,7 +32,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-02-17T15:13:51.33678644",
+        "timestamp": "2026-02-27T15:46:37.232286266",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -52,7 +52,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "b9b01b7ac356afa64bc411d6f10e741"
+                    "40408ed51d46ab3f1524be98d6b31441"
                 ]
             ],
             [
@@ -71,7 +71,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-02-17T15:14:44.637382457",
+        "timestamp": "2026-02-27T15:47:22.733461874",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
