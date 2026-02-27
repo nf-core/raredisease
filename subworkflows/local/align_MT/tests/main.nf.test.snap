@@ -17,7 +17,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_sorted_merged_md_sorted.bam.bai:md5,f4c756c6781d6af030fbd473fff01fe0"
+                        "earlycasualcaiman_sorted_merged_md_sorted.bam.bai:md5,aa29752265d70e5c2ed10de503fa8b33"
                     ],
                     [
                         {
@@ -33,7 +33,7 @@
                             "maternal": "slowlycivilbuck",
                             "case_id": "justhusky"
                         },
-                        "hugelymodelbat_sorted_merged_md_sorted.bam.bai:md5,1cd5ba90856d1a311477ff6f0159e734"
+                        "hugelymodelbat_sorted_merged_md_sorted.bam.bai:md5,011888be5d5c6e77b48d8b8fd81155a4"
                     ],
                     [
                         {
@@ -49,7 +49,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "slowlycivilbuck_sorted_merged_md_sorted.bam.bai:md5,65af456a3e4ba9b3b5153a921aa3189d"
+                        "slowlycivilbuck_sorted_merged_md_sorted.bam.bai:md5,9934e5e180a1760490bc36aaf23ec10c"
                     ]
                 ],
                 "1": [
@@ -67,7 +67,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,751b43aa7e76f1e5e4915069dce08b95"
+                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,d4ea71dac6170a728c27457e4d042a17"
                     ],
                     [
                         {
@@ -83,7 +83,7 @@
                             "maternal": "slowlycivilbuck",
                             "case_id": "justhusky"
                         },
-                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,c3f5d414669eb47dcca97528c1700786"
+                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,eba491066ead408a1cdfd13fd353fc1d"
                     ],
                     [
                         {
@@ -99,7 +99,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,dce10a8f97e471f907785244842eae51"
+                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,3263f88b4f8987f16b81a5980bf26aad"
                     ]
                 ],
                 "marked_bai": [
@@ -117,7 +117,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_sorted_merged_md_sorted.bam.bai:md5,f4c756c6781d6af030fbd473fff01fe0"
+                        "earlycasualcaiman_sorted_merged_md_sorted.bam.bai:md5,aa29752265d70e5c2ed10de503fa8b33"
                     ],
                     [
                         {
@@ -133,7 +133,7 @@
                             "maternal": "slowlycivilbuck",
                             "case_id": "justhusky"
                         },
-                        "hugelymodelbat_sorted_merged_md_sorted.bam.bai:md5,1cd5ba90856d1a311477ff6f0159e734"
+                        "hugelymodelbat_sorted_merged_md_sorted.bam.bai:md5,011888be5d5c6e77b48d8b8fd81155a4"
                     ],
                     [
                         {
@@ -149,7 +149,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "slowlycivilbuck_sorted_merged_md_sorted.bam.bai:md5,65af456a3e4ba9b3b5153a921aa3189d"
+                        "slowlycivilbuck_sorted_merged_md_sorted.bam.bai:md5,9934e5e180a1760490bc36aaf23ec10c"
                     ]
                 ],
                 "marked_bam": [
@@ -167,7 +167,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,751b43aa7e76f1e5e4915069dce08b95"
+                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,d4ea71dac6170a728c27457e4d042a17"
                     ],
                     [
                         {
@@ -183,7 +183,7 @@
                             "maternal": "slowlycivilbuck",
                             "case_id": "justhusky"
                         },
-                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,c3f5d414669eb47dcca97528c1700786"
+                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,eba491066ead408a1cdfd13fd353fc1d"
                     ],
                     [
                         {
@@ -199,12 +199,12 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,dce10a8f97e471f907785244842eae51"
+                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,3263f88b4f8987f16b81a5980bf26aad"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-02-20T00:15:07.330482228",
+        "timestamp": "2026-02-27T15:43:54.097536585",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -228,7 +228,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_sorted_merged_md_sorted.bam.bai:md5,989cbf1c64cc10b37b6b63c2ef2b069d"
+                        "earlycasualcaiman_sorted_merged_md_sorted.bam.bai:md5,bc1e2296080bc0d6d9878d3784892ee0"
                     ],
                     [
                         {
@@ -244,7 +244,7 @@
                             "maternal": "slowlycivilbuck",
                             "case_id": "justhusky"
                         },
-                        "hugelymodelbat_sorted_merged_md_sorted.bam.bai:md5,c883a94cb4854a44b6b6d98142bf8414"
+                        "hugelymodelbat_sorted_merged_md_sorted.bam.bai:md5,8df5c65448c3c2f20cd8f574182f5593"
                     ],
                     [
                         {
@@ -260,7 +260,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "slowlycivilbuck_sorted_merged_md_sorted.bam.bai:md5,a5294589ebe916c77ccee2db46710f9c"
+                        "slowlycivilbuck_sorted_merged_md_sorted.bam.bai:md5,de7d63cfa5735162d2274d877bf0b85b"
                     ]
                 ],
                 "1": [
@@ -278,7 +278,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,0ec18ff7aaec000bebe1297d4bf0ebe1"
+                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,7ee847d7f586a961a446566f8d473c30"
                     ],
                     [
                         {
@@ -294,7 +294,7 @@
                             "maternal": "slowlycivilbuck",
                             "case_id": "justhusky"
                         },
-                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,2ab1645a9c7ada8c8b16ae4764a11065"
+                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,d294ef713b4f83c621be387294d7937e"
                     ],
                     [
                         {
@@ -310,7 +310,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,2e37db7571195ad7c38a4ab0cc73f923"
+                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,ffe465201f5119c2699a49cd110628d3"
                     ]
                 ],
                 "marked_bai": [
@@ -328,7 +328,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_sorted_merged_md_sorted.bam.bai:md5,989cbf1c64cc10b37b6b63c2ef2b069d"
+                        "earlycasualcaiman_sorted_merged_md_sorted.bam.bai:md5,bc1e2296080bc0d6d9878d3784892ee0"
                     ],
                     [
                         {
@@ -344,7 +344,7 @@
                             "maternal": "slowlycivilbuck",
                             "case_id": "justhusky"
                         },
-                        "hugelymodelbat_sorted_merged_md_sorted.bam.bai:md5,c883a94cb4854a44b6b6d98142bf8414"
+                        "hugelymodelbat_sorted_merged_md_sorted.bam.bai:md5,8df5c65448c3c2f20cd8f574182f5593"
                     ],
                     [
                         {
@@ -360,7 +360,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "slowlycivilbuck_sorted_merged_md_sorted.bam.bai:md5,a5294589ebe916c77ccee2db46710f9c"
+                        "slowlycivilbuck_sorted_merged_md_sorted.bam.bai:md5,de7d63cfa5735162d2274d877bf0b85b"
                     ]
                 ],
                 "marked_bam": [
@@ -378,7 +378,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,0ec18ff7aaec000bebe1297d4bf0ebe1"
+                        "earlycasualcaiman_sorted_merged_md_sorted.bam:md5,7ee847d7f586a961a446566f8d473c30"
                     ],
                     [
                         {
@@ -394,7 +394,7 @@
                             "maternal": "slowlycivilbuck",
                             "case_id": "justhusky"
                         },
-                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,2ab1645a9c7ada8c8b16ae4764a11065"
+                        "hugelymodelbat_sorted_merged_md_sorted.bam:md5,d294ef713b4f83c621be387294d7937e"
                     ],
                     [
                         {
@@ -410,12 +410,12 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,2e37db7571195ad7c38a4ab0cc73f923"
+                        "slowlycivilbuck_sorted_merged_md_sorted.bam:md5,ffe465201f5119c2699a49cd110628d3"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-02-20T00:32:17.118099572",
+        "timestamp": "2026-02-27T15:45:57.190438488",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
