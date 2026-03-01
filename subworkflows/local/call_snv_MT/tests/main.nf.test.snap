@@ -1,0 +1,17 @@
+{
+    "CALL_SNV_MT - stub": {
+        "content": [
+            [
+                "earlycasualcaiman_filtered.vcf.gz"
+            ],
+            [
+                "earlycasualcaiman_filtered.vcf.gz.tbi"
+            ]
+        ],
+        "timestamp": "2026-03-01T17:35:07.245240789",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}
