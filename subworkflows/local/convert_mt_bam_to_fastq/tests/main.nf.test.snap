@@ -1,0 +1,129 @@
+{
+    "CONVERT_MT_BAM_TO_FASTQ": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman.bam:md5,424fcb1e097f4a0423e83e5af2c16ccf",
+                        "earlycasualcaiman.bam.bai:md5,0c6f0728a82e2c893f2106b92e280648"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        [
+                            "earlycasualcaiman_1.fastq.gz:md5,e22db895fb1dd8bc4673f2a70fc87260",
+                            "earlycasualcaiman_2.fastq.gz:md5,a4f49dbd116ebaec797c7beea82696db"
+                        ]
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman.reverted.bam:md5,11a20cf34d72d3b8b4abf753099bbb90"
+                    ]
+                ],
+                "bam_bai": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman.bam:md5,424fcb1e097f4a0423e83e5af2c16ccf",
+                        "earlycasualcaiman.bam.bai:md5,0c6f0728a82e2c893f2106b92e280648"
+                    ]
+                ],
+                "fastq": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        [
+                            "earlycasualcaiman_1.fastq.gz:md5,e22db895fb1dd8bc4673f2a70fc87260",
+                            "earlycasualcaiman_2.fastq.gz:md5,a4f49dbd116ebaec797c7beea82696db"
+                        ]
+                    ]
+                ],
+                "ubam": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman.reverted.bam:md5,11a20cf34d72d3b8b4abf753099bbb90"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-03-01T22:25:34.791929735",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}
