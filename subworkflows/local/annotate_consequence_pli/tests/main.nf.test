@@ -1,0 +1,68 @@
+nextflow_workflow {
+
+    name "Test Workflow ANNOTATE_CSQ_PLI"
+    script "subworkflows/local/annotate_consequence_pli/main.nf"
+    workflow "ANNOTATE_CSQ_PLI"
+    tag "subworkflows"
+    tag "annotate_consequence_pli"
+
+    config './nextflow.config'
+
+    test("ANNOTATE_CSQ_PLI - no index") {
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    [id:'var_csq'],
+                    file(params.pipelines_testdata_base_path + 'reference/variant_consequences_v2.txt', checkIfExists: true)
+                ]).collect()
+                input[1] = channel.of([
+                    [id:'justhusky'],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/genmod_compound.vcf', checkIfExists: true)
+                ])
+                input[2] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(workflow.out.vcf_ann[0][1].toString()).vcf.variantsMD5,
+                    path(workflow.out.vcf_ann[0][1].toString()).vcf.summary
+                ).match() }
+            )
+        }
+    }
+
+    test("ANNOTATE_CSQ_PLI - with index") {
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    [id:'var_csq'],
+                    file(params.pipelines_testdata_base_path + 'reference/variant_consequences_v2.txt', checkIfExists: true)
+                ]).collect()
+                input[1] = channel.of([
+                    [id:'justhusky'],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/genmod_compound.vcf', checkIfExists: true)
+                ])
+                input[2] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(workflow.out.vcf_ann[0][1].toString()).vcf.variantsMD5,
+                    path(workflow.out.vcf_ann[0][1].toString()).vcf.summary
+                ).match() }
+            )
+        }
+    }
+}

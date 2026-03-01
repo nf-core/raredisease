@@ -1,0 +1,24 @@
+{
+    "ANNOTATE_CSQ_PLI - with index": {
+        "content": [
+            "58d9c7a329ee86094acc0826b671652c",
+            "VcfFile [chromosomes=[MT], sampleCount=3, variantCount=22, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-03-01T17:08:30.607457875",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "ANNOTATE_CSQ_PLI - no index": {
+        "content": [
+            "58d9c7a329ee86094acc0826b671652c",
+            "VcfFile [chromosomes=[MT], sampleCount=3, variantCount=22, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-03-01T17:08:08.450262918",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}
