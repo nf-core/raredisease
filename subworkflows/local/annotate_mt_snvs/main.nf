@@ -2,16 +2,16 @@
 // Annotate MT
 //
 
-include { REPLACE_SPACES_IN_VCFINFO                      } from '../../modules/local/replace_spaces_in_vcfinfo'
-include { BCFTOOLS_PLUGINSETGT                           } from '../../modules/nf-core/bcftools/pluginsetgt'
-include { TABIX_TABIX as TABIX_TABIX_VEP_MT              } from '../../modules/nf-core/tabix/tabix/main'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_HMTNOTE_MT       } from '../../modules/nf-core/tabix/bgziptabix/main'
-include { ENSEMBLVEP_VEP as ENSEMBLVEP_MT                } from '../../modules/nf-core/ensemblvep/vep/main'
-include { HAPLOGREP3_CLASSIFY as HAPLOGREP3_CLASSIFY_MT  } from '../../modules/nf-core/haplogrep3/classify/main'
-include { VCFANNO as VCFANNO_MT                          } from '../../modules/nf-core/vcfanno/main'
-include { ANNOTATE_CADD                                  } from './annotate_cadd'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO_MT       } from '../../modules/nf-core/tabix/bgziptabix/main'
-include { HMTNOTE_ANNOTATE                               } from '../../modules/nf-core/hmtnote/annotate/main'
+include { REPLACE_SPACES_IN_VCFINFO                      } from '../../../modules/local/replace_spaces_in_vcfinfo'
+include { BCFTOOLS_PLUGINSETGT                           } from '../../../modules/nf-core/bcftools/pluginsetgt'
+include { TABIX_TABIX as TABIX_TABIX_VEP_MT              } from '../../../modules/nf-core/tabix/tabix/main'
+include { TABIX_BGZIPTABIX as ZIP_TABIX_HMTNOTE_MT       } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { ENSEMBLVEP_VEP as ENSEMBLVEP_MT                } from '../../../modules/nf-core/ensemblvep/vep/main'
+include { HAPLOGREP3_CLASSIFY as HAPLOGREP3_CLASSIFY_MT  } from '../../../modules/nf-core/haplogrep3/classify/main'
+include { VCFANNO as VCFANNO_MT                          } from '../../../modules/nf-core/vcfanno/main'
+include { ANNOTATE_CADD                                  } from '../annotate_cadd'
+include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO_MT       } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { HMTNOTE_ANNOTATE                               } from '../../../modules/nf-core/hmtnote/annotate/main'
 
 workflow ANNOTATE_MT_SNVS {
     take:

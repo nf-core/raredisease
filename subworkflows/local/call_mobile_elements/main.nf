@@ -2,15 +2,15 @@
 // A subworkflow to call mobile elements in the genome
 //
 
-include { BCFTOOLS_REHEADER as BCFTOOLS_REHEADER_ME  } from '../../modules/nf-core/bcftools/reheader/main'
-include { BCFTOOLS_CONCAT as BCFTOOLS_CONCAT_ME      } from '../../modules/nf-core/bcftools/concat/main'
-include { BCFTOOLS_SORT as BCFTOOLS_SORT_ME          } from '../../modules/nf-core/bcftools/sort/main'
-include { RETROSEQ_CALL as RETROSEQ_CALL             } from '../../modules/local/retroseq/call/main'
-include { RETROSEQ_DISCOVER as RETROSEQ_DISCOVER     } from '../../modules/local/retroseq/discover/main'
-include { SAMTOOLS_VIEW as ME_SPLIT_ALIGNMENT        } from '../../modules/nf-core/samtools/view/main'
-include { TABIX_TABIX as TABIX_ME                    } from '../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_ME_SPLIT              } from '../../modules/nf-core/tabix/tabix/main'
-include { SVDB_MERGE as SVDB_MERGE_ME                } from '../../modules/nf-core/svdb/merge/main'
+include { BCFTOOLS_REHEADER as BCFTOOLS_REHEADER_ME  } from '../../../modules/nf-core/bcftools/reheader/main'
+include { BCFTOOLS_CONCAT as BCFTOOLS_CONCAT_ME      } from '../../../modules/nf-core/bcftools/concat/main'
+include { BCFTOOLS_SORT as BCFTOOLS_SORT_ME          } from '../../../modules/nf-core/bcftools/sort/main'
+include { RETROSEQ_CALL as RETROSEQ_CALL             } from '../../../modules/local/retroseq/call/main'
+include { RETROSEQ_DISCOVER as RETROSEQ_DISCOVER     } from '../../../modules/local/retroseq/discover/main'
+include { SAMTOOLS_VIEW as ME_SPLIT_ALIGNMENT        } from '../../../modules/nf-core/samtools/view/main'
+include { TABIX_TABIX as TABIX_ME                    } from '../../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_ME_SPLIT              } from '../../../modules/nf-core/tabix/tabix/main'
+include { SVDB_MERGE as SVDB_MERGE_ME                } from '../../../modules/nf-core/svdb/merge/main'
 
 workflow CALL_MOBILE_ELEMENTS {
 
