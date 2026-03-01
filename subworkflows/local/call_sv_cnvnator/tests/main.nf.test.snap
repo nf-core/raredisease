@@ -1,0 +1,26 @@
+{
+    "CALL_SV_CNVNATOR": {
+        "content": [
+            [
+                "justhusky_cnvnator.vcf.gz"
+            ]
+        ],
+        "timestamp": "2026-03-01T20:36:50.087101237",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "CALL_SV_CNVNATOR - stub": {
+        "content": [
+            [
+                "justhusky_cnvnator.vcf.gz"
+            ]
+        ],
+        "timestamp": "2026-03-01T20:22:17.821272901",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}
