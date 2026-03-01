@@ -1,0 +1,17 @@
+{
+    "CALL_MOBILE_ELEMENTS - stub": {
+        "content": [
+            [
+                "justhusky_mobile_elements.vcf.gz"
+            ],
+            [
+                "justhusky_mobile_elements.vcf.gz.tbi"
+            ]
+        ],
+        "timestamp": "2026-03-01T17:14:06.948018519",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}
