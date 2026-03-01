@@ -1,0 +1,43 @@
+nextflow_workflow {
+
+    name "Test Workflow CALL_SV_GERMLINECNVCALLER"
+    script "subworkflows/local/call_sv_germlinecnvcaller/main.nf"
+    workflow "CALL_SV_GERMLINECNVCALLER"
+    tag "subworkflows"
+    tag "call_sv_germlinecnvcaller"
+
+    config "./nextflow.config"
+
+    test("CALL_SV_GERMLINECNVCALLER - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of(
+                    [[id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
+                )
+                input[1] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[2] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[3] = channel.of(file('https://raw.githubusercontent.com/nf-core/test-datasets/refs/heads/raredisease/reference/target.interval_list', checkIfExists: true)).collect()
+                input[4] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
+                input[5] = channel.of([[id:'ploidy'], []])
+                input[6] = channel.of([[id:'gcnvcaller'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)])//Just a placeholder
+                input[7] = channel.of([id:'justhusky'])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.genotyped_filtered_segments_vcf.collect { meta, vcf -> file(vcf).name }
+                ).match() }
+            )
+        }
+    }
+}

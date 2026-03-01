@@ -1,0 +1,14 @@
+{
+    "CALL_SV_GERMLINECNVCALLER - stub": {
+        "content": [
+            [
+                "justhusky_gcnvcaller.vcf.gz"
+            ]
+        ],
+        "timestamp": "2026-03-01T22:17:21.509267479",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}
