@@ -59,7 +59,7 @@ workflow RANK_VARIANTS {
 
         // Merge Genmod and MIVMIR-GICAM scores
         if (rank_with_mivmir_gicam) {
-            ch_vcf.join(TABIX_BGZIPTABIX_GICAM.out.gz_tbi, failOnMismatch: true)
+            ch_vcf.join(TABIX_BGZIPTABIX_GICAM.out.gz_index, failOnMismatch: true)
             .map {meta, vcf_genmod, vcf_gicam, vcf_index_gicam -> return [ meta, vcf_genmod, [], vcf_gicam, vcf_index_gicam ]}
             .set {ch_merge_genmod_gicam}
             BCFTOOLS_MERGE_GENMOD_GICAM(ch_merge_genmod_gicam, [], [], [])
