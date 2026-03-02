@@ -591,7 +591,6 @@ workflow RAREDISEASE {
                 val_genome,
                 val_vep_cache_version
             ).set { ch_sv_annotate }
-            ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
             ch_sv_annotate.vcf_ann
                 .multiMap { meta, vcf ->
