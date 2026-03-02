@@ -25,6 +25,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         val_vep_cache_version   // string: [mandatory] default: 107
 
     main:
+        ch_versions      = channel.empty()
 
         if (val_svdb_query_dbs) {
             ch_svdb_dbs
@@ -100,4 +101,5 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
     emit:
         tbi      = TABIX_VEP.out.index   // channel: [ val(meta), path(tbi) ]
         vcf_ann  = ENSEMBLVEP_SV.out.vcf // channel: [ val(meta), path(vcf) ]
+        versions = ch_versions           // channel: [ path(versions.yml) ]
 }
