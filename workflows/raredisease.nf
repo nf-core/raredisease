@@ -221,14 +221,11 @@ workflow RAREDISEASE {
 
     // Just one fastq.gz.spring-file with both R1 and R2
     ch_one_fastq_gz_pair_from_spring = SPRING_DECOMPRESS_TO_FQ_PAIR(ch_input_by_sample_type.interleaved_spring, false).fastq
-    ch_versions                      = ch_versions.mix(SPRING_DECOMPRESS_TO_FQ_PAIR.out.versions)
 
     // Two fastq.gz.spring-files - one for R1 and one for R2
     ch_r1_fastq_gz_from_spring  = SPRING_DECOMPRESS_TO_R1_FQ(ch_input_by_sample_type.separate_spring.map{ meta, files -> [meta, files[0] ]}, true).fastq
     ch_r2_fastq_gz_from_spring  = SPRING_DECOMPRESS_TO_R2_FQ(ch_input_by_sample_type.separate_spring.map{ meta, files -> [meta, files[1] ]}, true).fastq
     ch_two_fastq_gz_from_spring = ch_r1_fastq_gz_from_spring.join(ch_r2_fastq_gz_from_spring).map{ meta, fastq_1, fastq_2 -> [meta, [fastq_1, fastq_2]]}
-    ch_versions                 = ch_versions.mix(SPRING_DECOMPRESS_TO_R1_FQ.out.versions)
-    ch_versions                 = ch_versions.mix(SPRING_DECOMPRESS_TO_R2_FQ.out.versions)
 
     ch_input_fastqs = ch_input_by_sample_type.fastq_gz.mix(ch_one_fastq_gz_pair_from_spring).mix(ch_two_fastq_gz_from_spring)
 
@@ -278,7 +275,6 @@ workflow RAREDISEASE {
         val_save_mapped_as_cram
     )
     .set { ch_mapped }
-    ch_versions   = ch_versions.mix(ALIGN.out.versions)
 
     if (!(skip_mt_subsample) && (val_analysis_type.equals("wgs") || val_run_mt_for_wes)) {
         if (val_mt_subsample_approach.equals("fraction")) {
@@ -287,12 +283,10 @@ workflow RAREDISEASE {
                 val_mt_subsample_rd,
                 val_mt_subsample_seed
             )
-            ch_versions   = ch_versions.mix(SUBSAMPLE_MT_FRAC.out.versions)
         } else {
             SUBSAMPLE_MT_READS(
                 ch_mapped.mt_bam_bai,
             )
-            ch_versions   = ch_versions.mix(SUBSAMPLE_MT_READS.out.versions)
         }
     }
 
@@ -320,7 +314,6 @@ workflow RAREDISEASE {
         skip_ngsbits,
         skip_qualimap
     )
-    ch_versions = ch_versions.mix(QC_BAM.out.versions)
 
 
 /*
@@ -394,7 +387,6 @@ workflow RAREDISEASE {
             val_run_mt_for_wes,
             val_variant_caller
         )
-        ch_versions = ch_versions.mix(CALL_SNV.out.versions)
         ch_mt_txt = CALL_SNV.out.mt_txt
 
         //
@@ -422,7 +414,6 @@ workflow RAREDISEASE {
                 val_genome,
                 val_vep_cache_version
             ).set { ch_snv_annotate }
-            ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 
             ch_snv_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -450,7 +441,6 @@ workflow RAREDISEASE {
                 ch_ann_csq_snv_in,
                 false
             )
-            ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)
 
             ANN_CSQ_PLI_SNV.out.vcf_ann
                 .filter { meta, _vcf ->
@@ -470,7 +460,6 @@ workflow RAREDISEASE {
                 false,
                 true
             )
-            ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
         }
 
         //
@@ -496,7 +485,6 @@ workflow RAREDISEASE {
                 val_homoplasmy_af_threshold,
                 val_vep_cache_version
             ).set { ch_mt_annotate }
-            ch_versions = ch_versions.mix(ch_mt_annotate.versions)
 
             ch_mt_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -524,7 +512,6 @@ workflow RAREDISEASE {
                 ch_ann_csq_mtsnv_in,
                 false
             )
-            ch_versions = ch_versions.mix(ANN_CSQ_PLI_MT.out.versions)
 
             ANN_CSQ_PLI_MT.out.vcf_ann
                 .filter { meta, _vcf ->
@@ -544,7 +531,6 @@ workflow RAREDISEASE {
                 false,
                 false
             )
-            ch_versions = ch_versions.mix(RANK_VARIANTS_MT.out.versions)
         }
     }
 
@@ -574,7 +560,6 @@ workflow RAREDISEASE {
             val_run_mt_for_wes,
             skip_germlinecnvcaller,
         )
-        ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
 
         //
         // ANNOTATE STRUCTURAL VARIANTS
@@ -593,7 +578,6 @@ workflow RAREDISEASE {
                 val_genome,
                 val_vep_cache_version
             ).set { ch_sv_annotate }
-            ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
             ch_sv_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -621,7 +605,6 @@ workflow RAREDISEASE {
                 ch_ann_csq_sv_in,
                 false
             )
-            ch_versions = ch_versions.mix(ANN_CSQ_PLI_SV.out.versions)
 
             ANN_CSQ_PLI_SV.out.vcf_ann
                 .filter { meta, _vcf ->
@@ -641,7 +624,6 @@ workflow RAREDISEASE {
                 true,
                 false
             )
-            ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
         }
     }
 /*
@@ -677,7 +659,6 @@ workflow RAREDISEASE {
             params.split_distance_threshold,
             params.split_length
         )
-        ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
     }
 
 /*
@@ -733,7 +714,6 @@ workflow RAREDISEASE {
                 ch_ann_csq_me_in,
                 true
             )
-            ch_versions = ch_versions.mix( ANN_CSQ_PLI_ME.out.versions )
 
         }
     }
@@ -764,7 +744,6 @@ workflow RAREDISEASE {
         SMNCOPYNUMBERCALLER (
             ch_bams_bais
         )
-        ch_versions = ch_versions.mix(SMNCOPYNUMBERCALLER.out.versions)
     }
 
 /*
@@ -777,7 +756,6 @@ workflow RAREDISEASE {
             CALL_SNV.out.genome_vcf.join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true),
             ch_pedfile
         )
-        ch_versions = ch_versions.mix(PEDDY.out.versions)
     }
 
 /*
@@ -794,7 +772,6 @@ workflow RAREDISEASE {
             ch_sv_annotate.vcf_ann,
             val_sample_id_map
         )
-        ch_versions = ch_versions.mix(GENERATE_CYTOSURE_FILES.out.versions)
     }
 
 /*
@@ -828,7 +805,6 @@ workflow RAREDISEASE {
             ch_sdf,
             CALL_SNV.out.genome_vcf_tabix
         )
-        ch_versions = ch_versions.mix(VARIANT_EVALUATION.out.versions)
     }
 
 /*
@@ -927,7 +903,6 @@ workflow RAREDISEASE {
     )
 
     emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
 
 }
 
