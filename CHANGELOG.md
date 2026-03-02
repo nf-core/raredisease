@@ -51,32 +51,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Tool updates
 
-| Tool                  | Old version | New version |
-| --------------------- | ----------- | ----------- |
-| bcftools              | 1.20        | 1.21        |
-| bwa                   | 0.7.18      | 0.7.19      |
-| deepvariant           | 1.8.0       | 1.9.0       |
-| eKLIPse               | 1.8         |             |
-| ensemblverp/filtervep | 113         | 115.2       |
-| fastp                 | 0.23.4      | 1.0.1       |
-| gatk4                 | 4.5.0.0     | 4.6.2.0     |
-| genmod                | 3.9         | 3.10.2      |
-| gens-preproc          | 1.0.11      | 1.1.2       |
-| htslib                | 1.20        | 1.21        |
-| MitoSalt              |             | 1.1.1       |
-| mosdepth              | 0.3.8       | 0.3.11      |
-| multiqc               | 1.32        | 1.33        |
-| ngsbits               | 202411      | 202512      |
-| picard                | 3.3.0       | 3.4.0       |
-| pigz                  | 2.3.4       | 2.8         |
-| sambamba              |             | 1.0.1       |
-| samtools              | 1.21        | 1.22.1      |
-| sentieon              | 202503      | 202503.02   |
-| stranger              | 0.9.4       | 0.10.0      |
-| tiddit                | 3.6.1       | 3.9.4       |
-| ucsc                  | 447         | 482         |
-| vcfanno               | 0.3.5       | 0.3.7       |
-| vcf2cytosure          | 0.9.1       | 0.9.3       |
+| Tool                 | Old version | New version |
+| -------------------- | ----------- | ----------- |
+| bcftools             | 1.20        | 1.21        |
+| bwa                  | 0.7.18      | 0.7.19      |
+| deepvariant          | 1.8.0       | 1.9.0       |
+| eKLIPse              | 1.8         |             |
+| ensemblvep/vep       | 110         | 110.1       |
+| ensemblvep/filtervep | 113         | 115.2       |
+| fastp                | 0.23.4      | 1.0.1       |
+| gatk4                | 4.5.0.0     | 4.6.2.0     |
+| genmod               | 3.9         | 3.10.2      |
+| gens-preproc         | 1.0.11      | 1.1.2       |
+| htslib               | 1.20        | 1.21        |
+| MitoSalt             |             | 1.1.1       |
+| mosdepth             | 0.3.8       | 0.3.11      |
+| multiqc              | 1.32        | 1.33        |
+| ngsbits              | 202411      | 202512      |
+| picard               | 3.3.0       | 3.4.0       |
+| pigz                 | 2.3.4       | 2.8         |
+| sambamba             |             | 1.0.1       |
+| samtools             | 1.21        | 1.22.1      |
+| sentieon             | 202503      | 202503.02   |
+| stranger             | 0.9.4       | 0.10.0      |
+| tiddit               | 3.6.1       | 3.9.4       |
+| ucsc                 | 447         | 482         |
+| vcfanno              | 0.3.5       | 0.3.7       |
+| vcf2cytosure         | 0.9.1       | 0.9.3       |
 
 ## 2.6.0 - Cacofonix [2025-06-25]
 
