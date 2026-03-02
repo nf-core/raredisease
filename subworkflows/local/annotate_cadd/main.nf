@@ -72,6 +72,6 @@ workflow ANNOTATE_CADD {
         TABIX_ANNOTATE (BCFTOOLS_ANNOTATE.out.vcf)
 
     emit:
-        tbi  = TABIX_ANNOTATE.out.tbi    // channel: [ val(meta), path(tbi) ]
+        tbi  = TABIX_ANNOTATE.out.index    // channel: [ val(meta), path(tbi) ]
         vcf  = BCFTOOLS_ANNOTATE.out.vcf // channel: [ val(meta), path(vcf) ]
 }
