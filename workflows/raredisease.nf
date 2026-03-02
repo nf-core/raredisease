@@ -628,7 +628,7 @@ workflow RAREDISEASE {
     CALL MITOCHONDRIAL SVs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if (val_analysis_type.matches("wgs|mito") || run_mt_for_wes) {
+    if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
         CALL_SV_MT(
             ch_mapped.genome_marked_bam_bai,
             ch_genome_chrsizes,
