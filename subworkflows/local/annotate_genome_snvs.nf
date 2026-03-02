@@ -196,4 +196,5 @@ workflow ANNOTATE_GENOME_SNVS {
     emit:
         tbi      = ch_vep_index // channel: [ val(meta), path(tbi) ]
         vcf_ann  = ch_vep_ann   // channel: [ val(meta), path(vcf) ]
+        versions = ch_versions  // channel: [ path(versions.yml) ]
 }
