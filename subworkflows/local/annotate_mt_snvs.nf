@@ -69,6 +69,7 @@ workflow ANNOTATE_MT_SNVS {
                 val_genome
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
+            ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
         } else {
             ch_cadd_vcf = channel.empty()
         }
@@ -121,6 +122,9 @@ workflow ANNOTATE_MT_SNVS {
             ch_vcf = BCFTOOLS_PLUGINSETGT.out.vcf
             ch_tbi = BCFTOOLS_PLUGINSETGT.out.tbi
         }
+
+        ch_versions = ch_versions.mix(VCFANNO_MT.out.versions)
+        ch_versions = ch_versions.mix(HMTNOTE_ANNOTATE.out.versions)
 
     emit:
         haplog    = ch_haplog                // channel: [ val(meta), path(txt) ]
