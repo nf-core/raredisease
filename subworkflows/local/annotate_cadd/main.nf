@@ -63,7 +63,7 @@ workflow ANNOTATE_CADD {
 
         ch_vcf
             .join(CADD.out.tsv)
-            .join(TABIX_CADD.out.tbi)
+            .join(TABIX_CADD.out.index)
             .map { meta, vcf, annotations, annotations_index -> [ meta, vcf, [], annotations, annotations_index ] }
             .set { ch_annotate_in }
 
