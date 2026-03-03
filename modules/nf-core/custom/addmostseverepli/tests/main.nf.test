@@ -1,24 +1,25 @@
-
+// nf-core modules test custom/addmostseverepli
 nextflow_process {
 
-    name "Test Process HAPLOCHECK"
+    name "Test Process CUSTOM_ADDMOSTSEVEREPLI"
     script "../main.nf"
-    process "HAPLOCHECK"
+    process "CUSTOM_ADDMOSTSEVEREPLI"
 
     tag "modules"
     tag "modules_nfcore"
-    tag "haplocheck"
+    tag "custom"
+    tag "custom/addmostseverepli"
+    config "./nextflow.config"
 
-    test("test-haplocheck") {
+    test("vcf") {
 
         when {
             process {
                 """
                 input[0] = [
-				    [ id:'test' ], // meta map
-				    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/NA12878_chrM.vcf.gz', checkIfExists: true)
-				]
-
+                    [ id: 'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/genmod_compound.vcf', checkIfExists: true)
+                ]
                 """
             }
         }
@@ -29,18 +30,20 @@ nextflow_process {
                 { assert snapshot(process.out).match() }
             )
         }
+
     }
 
-    test("test-haplocheck-stub") {
-        options '-stub'
+    test("vcf - stub") {
+
+        options "-stub"
+
         when {
             process {
                 """
                 input[0] = [
-				    [ id:'test' ], // meta map
-				    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/NA12878_chrM.vcf.gz', checkIfExists: true)
-				]
-
+                    [ id: 'test' ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/genmod_compound.vcf', checkIfExists: true)
+                ]
                 """
             }
         }
@@ -51,6 +54,7 @@ nextflow_process {
                 { assert snapshot(process.out).match() }
             )
         }
+
     }
 
 }

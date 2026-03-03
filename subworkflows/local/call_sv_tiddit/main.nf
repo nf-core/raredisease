@@ -29,9 +29,6 @@ workflow CALL_SV_TIDDIT {
 
         SVDB_MERGE_TIDDIT ( merge_input_vcfs, [], true )
 
-        ch_versions = TIDDIT_SV.out.versions
-
     emit:
         vcf      = SVDB_MERGE_TIDDIT.out.vcf // channel: [ val(meta), path(vcf) ]
-        versions = ch_versions               // channel: [ path(versions.yml) ]
 }

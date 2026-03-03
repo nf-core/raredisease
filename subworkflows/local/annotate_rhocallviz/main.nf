@@ -18,8 +18,6 @@ workflow ANNOTATE_RHOCALLVIZ {
         ch_vcf_tbi         // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
 
     main:
-        ch_versions       = channel.empty()
-
         ch_vcf_tbi
             .combine(ch_samples)
             .map {_meta, vcf, tbi, meta2 -> return [meta2,vcf,tbi]}
@@ -54,9 +52,4 @@ workflow ANNOTATE_RHOCALLVIZ {
 
         UCSC_WIGTOBIGWIG(RHOCALL_VIZ.out.wig, ch_genome_chrsizes)
 
-        ch_versions = ch_versions.mix(RHOCALL_VIZ.out.versions)
-        ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions)
-
-    emit:
-        versions = ch_versions  // channel: [ path(versions.yml) ]
 }

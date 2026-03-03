@@ -2,7 +2,6 @@
 // Call SNV MT
 //
 
-include { HAPLOCHECK as HAPLOCHECK_MT                                       } from '../../../modules/nf-core/haplocheck/main'
 include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } from '../../../modules/nf-core/gatk4/mutect2/main'
 include { GATK4_FILTERMUTECTCALLS as  GATK4_FILTERMUTECTCALLS_MT            } from '../../../modules/nf-core/gatk4/filtermutectcalls/main'
 
@@ -21,9 +20,6 @@ workflow CALL_SNV_MT {
 
         GATK4_MUTECT2_MT (ch_bam_bai_int, ch_fasta, ch_fai.map{meta, fai -> return [meta,fai,[]]}, ch_dict, [], [], [], [], [],[])
 
-        HAPLOCHECK_MT (GATK4_MUTECT2_MT.out.vcf)
-        ch_versions = ch_versions.mix(HAPLOCHECK_MT.out.versions)
-
         // Filter Mutect2 calls
         ch_mutect_vcf = GATK4_MUTECT2_MT.out.vcf.join(GATK4_MUTECT2_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
         ch_mutect_out = ch_mutect_vcf.join(GATK4_MUTECT2_MT.out.stats, failOnMismatch:true, failOnDuplicate:true)
@@ -36,10 +32,8 @@ workflow CALL_SNV_MT {
 
     emit:
         filt_stats     = GATK4_FILTERMUTECTCALLS_MT.out.stats // channel: [ val(meta), path(tsv) ]
-        html           = HAPLOCHECK_MT.out.html               // channel: [ val(meta), path(html) ]
         stats          = GATK4_MUTECT2_MT.out.stats           // channel: [ val(meta), path(stats) ]
         tbi            = GATK4_FILTERMUTECTCALLS_MT.out.tbi   // channel: [ val(meta), path(tbi) ]
-        txt            = HAPLOCHECK_MT.out.txt                // channel: [ val(meta), path(txt) ]
         vcf            = GATK4_FILTERMUTECTCALLS_MT.out.vcf   // channel: [ val(meta), path(vcf) ]
         versions       = ch_versions                          // channel: [ path(versions.yml) ]
 }

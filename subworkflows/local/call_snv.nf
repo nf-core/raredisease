@@ -50,7 +50,6 @@ workflow CALL_SNV {
         ch_mt_vcf        = channel.empty()
         ch_mt_tabix      = channel.empty()
         ch_mt_vcf_tabix  = channel.empty()
-        ch_mt_txt        = channel.empty()
         ch_sentieon_vcf  = channel.empty()
         ch_sentieon_tbi  = channel.empty()
         ch_sentieon_gvcf = channel.empty()
@@ -72,7 +71,6 @@ workflow CALL_SNV {
             ch_deepvar_tbi  = CALL_SNV_DEEPVARIANT.out.tabix
             ch_deepvar_gvcf = CALL_SNV_DEEPVARIANT.out.gvcf
             ch_deepvar_gtbi = CALL_SNV_DEEPVARIANT.out.gvcf_tabix
-            ch_versions     = ch_versions.mix(CALL_SNV_DEEPVARIANT.out.versions)
         } else if (val_variant_caller.equals("sentieon")) {
             CALL_SNV_SENTIEON(
                 ch_genome_bam_bai,
@@ -139,7 +137,6 @@ workflow CALL_SNV {
             ch_mt_vcf       = POSTPROCESS_MT_CALLS.out.vcf
             ch_mt_tabix     = POSTPROCESS_MT_CALLS.out.tbi
             ch_mt_vcf_tabix = ch_mt_vcf.join(ch_mt_tabix, failOnMismatch:true, failOnDuplicate:true)
-            ch_mt_txt       = CALL_SNV_MT.out.txt
             ch_versions     = ch_versions.mix(CALL_SNV_MT.out.versions)
             ch_versions     = ch_versions.mix(CALL_SNV_MT_SHIFT.out.versions)
         }
@@ -159,6 +156,5 @@ workflow CALL_SNV {
         genome_vcf_tabix = ch_genome_vcf_tabix // channel: [ val(meta), path(vcf), path(tbi) ]
         mt_tabix         = ch_mt_tabix         // channel: [ val(meta), path(tbi) ]
         mt_vcf           = ch_mt_vcf           // channel: [ val(meta), path(vcf) ]
-        mt_txt           = ch_mt_txt           // channel: [ val(meta), path(txt) ]
         versions         = ch_versions         // channel: [ path(versions.yml) ]
 }

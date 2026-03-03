@@ -206,7 +206,6 @@ workflow RAREDISEASE {
     main:
 
     ch_multiqc_files = channel.empty()
-    ch_mt_txt        = channel.empty()
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
@@ -220,14 +219,11 @@ workflow RAREDISEASE {
 
     // Just one fastq.gz.spring-file with both R1 and R2
     ch_one_fastq_gz_pair_from_spring = SPRING_DECOMPRESS_TO_FQ_PAIR(ch_input_by_sample_type.interleaved_spring, false).fastq
-    ch_versions                      = ch_versions.mix(SPRING_DECOMPRESS_TO_FQ_PAIR.out.versions)
 
     // Two fastq.gz.spring-files - one for R1 and one for R2
     ch_r1_fastq_gz_from_spring  = SPRING_DECOMPRESS_TO_R1_FQ(ch_input_by_sample_type.separate_spring.map{ meta, files -> [meta, files[0] ]}, true).fastq
     ch_r2_fastq_gz_from_spring  = SPRING_DECOMPRESS_TO_R2_FQ(ch_input_by_sample_type.separate_spring.map{ meta, files -> [meta, files[1] ]}, true).fastq
     ch_two_fastq_gz_from_spring = ch_r1_fastq_gz_from_spring.join(ch_r2_fastq_gz_from_spring).map{ meta, fastq_1, fastq_2 -> [meta, [fastq_1, fastq_2]]}
-    ch_versions                 = ch_versions.mix(SPRING_DECOMPRESS_TO_R1_FQ.out.versions)
-    ch_versions                 = ch_versions.mix(SPRING_DECOMPRESS_TO_R2_FQ.out.versions)
 
     ch_input_fastqs = ch_input_by_sample_type.fastq_gz.mix(ch_one_fastq_gz_pair_from_spring).mix(ch_two_fastq_gz_from_spring)
 
@@ -277,7 +273,6 @@ workflow RAREDISEASE {
         val_save_mapped_as_cram
     )
     .set { ch_mapped }
-    ch_versions   = ch_versions.mix(ALIGN.out.versions)
 
     if (!(skip_mt_subsample) && (val_analysis_type.equals("wgs") || val_run_mt_for_wes)) {
         if (val_mt_subsample_approach.equals("fraction")) {
@@ -291,7 +286,6 @@ workflow RAREDISEASE {
             SUBSAMPLE_MT_READS(
                 ch_mapped.mt_bam_bai,
             )
-            ch_versions   = ch_versions.mix(SUBSAMPLE_MT_READS.out.versions)
         }
     }
 
@@ -319,8 +313,6 @@ workflow RAREDISEASE {
         skip_ngsbits,
         skip_qualimap
     )
-    ch_versions = ch_versions.mix(QC_BAM.out.versions)
-
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -394,7 +386,6 @@ workflow RAREDISEASE {
             val_variant_caller
         )
         ch_versions = ch_versions.mix(CALL_SNV.out.versions)
-        ch_mt_txt = CALL_SNV.out.mt_txt
 
         //
         // ANNOTATE GENOME SNVs
@@ -449,7 +440,6 @@ workflow RAREDISEASE {
                 ch_ann_csq_snv_in,
                 false
             )
-            ch_versions = ch_versions.mix(ANN_CSQ_PLI_SNV.out.versions)
 
             ANN_CSQ_PLI_SNV.out.vcf_ann
                 .filter { meta, _vcf ->
@@ -467,7 +457,6 @@ workflow RAREDISEASE {
                 ch_ranksnv_nuclear_in,
                 false
             )
-            ch_versions = ch_versions.mix(RANK_VARIANTS_SNV.out.versions)
         }
 
         //
@@ -521,7 +510,6 @@ workflow RAREDISEASE {
                 ch_ann_csq_mtsnv_in,
                 false
             )
-            ch_versions = ch_versions.mix(ANN_CSQ_PLI_MT.out.versions)
 
             ANN_CSQ_PLI_MT.out.vcf_ann
                 .filter { meta, _vcf ->
@@ -539,7 +527,6 @@ workflow RAREDISEASE {
                 ch_ranksnv_mt_in,
                 false
             )
-            ch_versions = ch_versions.mix(RANK_VARIANTS_MT.out.versions)
         }
     }
 
@@ -554,7 +541,6 @@ workflow RAREDISEASE {
             ch_mapped.genome_marked_bam,
             ch_mapped.genome_marked_bai,
             ch_mapped.genome_marked_bam_bai,
-            ch_mapped.mt_bam_bai,
             ch_genome_bwaindex,
             ch_genome_fasta,
             ch_genome_fai,
@@ -566,7 +552,6 @@ workflow RAREDISEASE {
             ch_ploidy_model,
             ch_gcnvcaller_model,
             val_analysis_type,
-            val_run_mt_for_wes,
             skip_germlinecnvcaller,
         )
         ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
@@ -588,7 +573,6 @@ workflow RAREDISEASE {
                 val_genome,
                 val_vep_cache_version
             ).set { ch_sv_annotate }
-            ch_versions = ch_versions.mix(ch_sv_annotate.versions)
 
             ch_sv_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -616,7 +600,6 @@ workflow RAREDISEASE {
                 ch_ann_csq_sv_in,
                 false
             )
-            ch_versions = ch_versions.mix(ANN_CSQ_PLI_SV.out.versions)
 
             ANN_CSQ_PLI_SV.out.vcf_ann
                 .filter { meta, _vcf ->
@@ -634,7 +617,6 @@ workflow RAREDISEASE {
                 ch_ranksnv_sv_in,
                 true
             )
-            ch_versions = ch_versions.mix(RANK_VARIANTS_SV.out.versions)
         }
     }
 /*
@@ -642,7 +624,7 @@ workflow RAREDISEASE {
     CALL MITOCHONDRIAL SVs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if (val_analysis_type.matches("wgs|mito") || run_mt_for_wes) {
+    if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
         CALL_SV_MT(
             ch_mapped.genome_marked_bam_bai,
             ch_genome_chrsizes,
@@ -681,7 +663,6 @@ workflow RAREDISEASE {
             params.saltshaker_noise_threshold
 
         )
-        ch_versions = ch_versions.mix(CALL_SV_MT.out.versions)
     }
 
 /*
@@ -737,7 +718,6 @@ workflow RAREDISEASE {
                 ch_ann_csq_me_in,
                 true
             )
-            ch_versions = ch_versions.mix( ANN_CSQ_PLI_ME.out.versions )
 
         }
     }
@@ -768,7 +748,6 @@ workflow RAREDISEASE {
         SMNCOPYNUMBERCALLER (
             ch_bams_bais
         )
-        ch_versions = ch_versions.mix(SMNCOPYNUMBERCALLER.out.versions)
     }
 
 /*
@@ -779,9 +758,9 @@ workflow RAREDISEASE {
     if (!skip_peddy) {
         PEDDY (
             CALL_SNV.out.genome_vcf.join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true),
-            ch_pedfile
+            ch_pedfile.map{ped -> return[[id:"pedigree"], ped]},
+            [[:],[]]
         )
-        ch_versions = ch_versions.mix(PEDDY.out.versions)
     }
 
 /*
@@ -791,14 +770,13 @@ workflow RAREDISEASE {
 */
     if (!skip_vcf2cytosure && val_analysis_type.equals("wgs") && !skip_sv_calling && !skip_sv_annotation) {
         GENERATE_CYTOSURE_FILES (
-            ch_mapped.genome_marked_bam,
+            ch_mapped.genome_marked_bam_bai,
             ch_vcf2cytosure_blacklist,
             ch_sample_id_map,
             ch_sv_annotate.tbi,
             ch_sv_annotate.vcf_ann,
             val_sample_id_map
         )
-        ch_versions = ch_versions.mix(GENERATE_CYTOSURE_FILES.out.versions)
     }
 
 /*
@@ -832,7 +810,6 @@ workflow RAREDISEASE {
             ch_sdf,
             CALL_SNV.out.genome_vcf_tabix
         )
-        ch_versions = ch_versions.mix(VARIANT_EVALUATION.out.versions)
     }
 
 /*
@@ -905,7 +882,6 @@ workflow RAREDISEASE {
     if (!skip_fastqc) {
         ch_multiqc_files = ch_multiqc_files.mix(fastqc_report.collect{_meta, reports -> reports}.ifEmpty([]))
     }
-    ch_multiqc_files = ch_multiqc_files.mix(ch_mt_txt.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.fastp_json.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.markdup_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.sex_check.map{_meta, reports -> reports}.collect().ifEmpty([]))
@@ -918,7 +894,9 @@ workflow RAREDISEASE {
 
     if (!skip_peddy) {
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{_meta, reports -> reports}.collect().ifEmpty([]))
-        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.csv.map{_meta, reports -> reports}.collect().ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.het_check_csv.map{_meta, reports -> reports}.collect().ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped_check_csv.map{_meta, reports -> reports}.collect().ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.sex_check_csv.map{_meta, reports -> reports}.collect().ifEmpty([]))
     }
 
     MULTIQC (

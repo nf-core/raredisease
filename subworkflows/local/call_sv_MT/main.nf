@@ -49,7 +49,6 @@ workflow CALL_SV_MT {
         val_saltshaker_noise_threshold        // string: [mandatory] saltshaker_noise_threshold
 
     main:
-        ch_versions = channel.empty()
 
         if (!(params.skip_tools && params.skip_tools.split(',').contains('mitosalt'))) {
             ch_reads_subdepth      = ch_reads.combine(ch_subdepth)
@@ -124,7 +123,6 @@ workflow CALL_SV_MT {
                 ch_mitosalt_plot = SALTSHAKER_PLOT.out.plot
             }
 
-            ch_versions = ch_versions.mix(SEQTK_SAMPLE.out.versions)
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
 
@@ -133,5 +131,4 @@ workflow CALL_SV_MT {
         mitosalt_vcf        = ch_mitosalt_vcf               // channel: [ val(meta), path(vcf) ]
         mitosalt_plot       = ch_mitosalt_plot              // channel: [ val(meta), path(png) ]
         mt_del_result       = MT_DELETION.out.mt_del_result // channel: [ val(meta), path(txt) ]
-        versions            = ch_versions                   // channel: [ path(versions.yml) ]
 }

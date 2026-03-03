@@ -22,19 +22,16 @@ workflow ALIGN_MT {
         val_mt_aligner   // string:  'bwa', 'bwamem2', or 'sentieon'
 
     main:
-        ch_versions     = channel.empty()
 
         if (val_mt_aligner.equals("bwamem2")) {
             BWAMEM2_MEM_MT (ch_fastq, ch_bwamem2index, ch_fasta, true)
             ch_align       = BWAMEM2_MEM_MT.out.bam
-            ch_versions    = ch_versions.mix(BWAMEM2_MEM_MT.out.versions)
         } else if (val_mt_aligner.equals("sentieon")) {
             SENTIEON_BWAMEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, ch_fai )
             ch_align       = SENTIEON_BWAMEM_MT.out.bam_and_bai.map{ meta, bam, _bai -> [meta, bam] }
         } else if (val_mt_aligner.equals("bwa")) {
             BWA_MEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, true )
             ch_align       = BWA_MEM_MT.out.bam
-            ch_versions    = ch_versions.mix(BWA_MEM_MT.out.versions)
         }
         ch_align
             .join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)
@@ -51,5 +48,4 @@ workflow ALIGN_MT {
     emit:
         marked_bai  = SAMTOOLS_SORT_MT.out.bai   // channel: [ val(meta), path(bai) ]
         marked_bam  = SAMTOOLS_SORT_MT.out.bam   // channel: [ val(meta), path(bam) ]
-        versions    = ch_versions                // channel: [ path(versions.yml) ]
 }

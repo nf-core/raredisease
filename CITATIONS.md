@@ -72,10 +72,6 @@
 
   > Yun T, Li H, Chang PC, Lin MF, Carroll A, McLean CY. Accurate, scalable cohort variant calls using DeepVariant and GLnexus. Robinson P, ed. Bioinformatics. 2021;36(24):5582-5589. doi:10.1093/bioinformatics/btaa1081
 
-- [Haplocheck](https://genome.cshlp.org/content/31/2/309.long)
-
-  > Weissensteiner H, Forer L, Fendt L, et al. Contamination detection in sequencing studies using the mitochondrial phylogeny. Genome Res. 2021;31(2):309-316. doi:10.1101/gr.256545.119
-
 - [HaploGrep 2](https://academic.oup.com/nar/article/44/W1/W58/2499296)
 
   > Weissensteiner H, Pacher D, Kloss-Brandstätter A, et al. HaploGrep 2: mitochondrial haplogroup classification in the era of high-throughput sequencing. Nucleic Acids Res. 2016;44(W1):W58-W63. doi:10.1093/nar/gkw233

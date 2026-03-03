@@ -4,10 +4,10 @@
             "5f06dccb7fc4ad3758bc23e3232f9abb",
             "VcfFile [chromosomes=[21], sampleCount=1, variantCount=2, phased=false, phasedAutodetect=false]"
         ],
+        "timestamp": "2025-10-14T14:06:58.984015651",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.04.8"
-        },
-        "timestamp": "2025-10-14T14:06:58.984015651"
+        }
     }
 }
