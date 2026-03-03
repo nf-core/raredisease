@@ -29,21 +29,16 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         val_sort_threads       // integer: [mandatory] default: 4
 
     main:
-        ch_versions = channel.empty()
-
         // Map, sort, and index
         if (val_aligner.equals("bwa")) {
             BWA ( ch_input_reads, ch_bwa_index, ch_genome_fasta, true )
             ch_align = BWA.out.bam
-            ch_versions = ch_versions.mix(BWA.out.versions)
         } else if (val_aligner.equals("bwameme")) {
             BWAMEME_MEM ( ch_input_reads, ch_bwameme_index, ch_genome_fasta, true, val_mbuffer_mem, val_sort_threads )
             ch_align = BWAMEME_MEM.out.bam
-            ch_versions = ch_versions.mix(BWAMEME_MEM.out.versions)
         } else {
             BWAMEM2_MEM ( ch_input_reads, ch_bwamem2_index, ch_genome_fasta, true )
             ch_align    = BWAMEM2_MEM.out.bam
-            ch_versions = ch_versions.mix(BWAMEM2_MEM.out.versions)
         }
 
         SAMTOOLS_INDEX_ALIGN ( ch_align )
@@ -67,29 +62,24 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
             .set{ bams }
 
         // If there are no samples to merge, skip the process
-        SAMTOOLS_MERGE ( bams.multiple, ch_genome_fasta, ch_genome_fai, [[:], []] )
+        SAMTOOLS_MERGE ( bams.multiple, ch_genome_fasta.join(ch_genome_fai).map{meta,fasta,fai-> return [meta,fasta,fai,[]]})
         prepared_bam = bams.single.mix(SAMTOOLS_MERGE.out.bam)
 
         // GET ALIGNMENT FROM SELECTED CONTIGS
         if (val_extract_alignments) {
             SAMTOOLS_INDEX_EXTRACT ( prepared_bam )
             extract_bam_sorted_indexed = prepared_bam.join(SAMTOOLS_INDEX_EXTRACT.out.bai, failOnMismatch:true, failOnDuplicate:true)
-            EXTRACT_ALIGNMENTS( extract_bam_sorted_indexed, ch_genome_fasta, [], '')
+            EXTRACT_ALIGNMENTS( extract_bam_sorted_indexed, ch_genome_fasta.join(ch_genome_fai), [], '')
             prepared_bam = EXTRACT_ALIGNMENTS.out.bam
-            ch_versions = ch_versions.mix(SAMTOOLS_INDEX_EXTRACT.out.versions)
         }
 
         // Marking duplicates
         MARKDUPLICATES ( prepared_bam , ch_genome_fasta, ch_genome_fai )
         SAMTOOLS_INDEX_MARKDUP ( MARKDUPLICATES.out.bam )
 
-        ch_versions = ch_versions.mix(SAMTOOLS_INDEX_ALIGN.out.versions)
-        ch_versions = ch_versions.mix(SAMTOOLS_INDEX_MARKDUP.out.versions)
-
     emit:
         marked_bai  = SAMTOOLS_INDEX_MARKDUP.out.bai // channel: [ val(meta), path(bai) ]
         marked_bam  = MARKDUPLICATES.out.bam         // channel: [ val(meta), path(bam) ]
         metrics     = MARKDUPLICATES.out.metrics     // channel: [ val(meta), path(metrics) ]
         stats       = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), path(stats) ]
-        versions    = ch_versions                    // channel: [ path(versions.yml) ]
 }

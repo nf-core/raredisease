@@ -15,7 +15,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_genome_bam          // channel: [mandatory] [ val(meta), path(bam) ]
         ch_genome_bai          // channel: [mandatory] [ val(meta), path(bai) ]
         ch_genome_bam_bai      // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_mt_bam_bai          // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_bwa_index           // channel: [mandatory] [ val(meta), path(index)]
         ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai          // channel: [mandatory] [ val(meta), path(fai) ]
@@ -27,7 +26,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_ploidy_model        // channel: [optional; used by mandatory for GATK's cnvcaller][ path(ploidy_model) ]
         ch_gcnvcaller_model    // channel: [optional; used by mandatory for GATK's cnvcaller][ path(gcnvcaller_model) ]
         val_analysis_type      // string: "wes", "wgs", or "mito"
-        run_mt_for_wes         // boolean
         skip_germlinecnvcaller // boolean
 
     main:
@@ -47,7 +45,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .vcf
                 .collect{ _meta, vcf -> vcf }
                 .set { tiddit_vcf }
-            ch_versions = ch_versions.mix(CALL_SV_TIDDIT.out.versions)
 
             CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_case_info)
                 .vcf

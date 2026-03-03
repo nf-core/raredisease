@@ -40,7 +40,7 @@ workflow CALL_MOBILE_ELEMENTS {
             .set { ch_genome_bam_bai_interval }
 
         // Split bam file on chromosome and index
-        ME_SPLIT_ALIGNMENT ( ch_genome_bam_bai_interval, [[:], []], [], 'bai' )
+        ME_SPLIT_ALIGNMENT ( ch_genome_bam_bai_interval, [[:], [], []], [], 'bai' )
 
         ME_SPLIT_ALIGNMENT.out.bam
             .join( ME_SPLIT_ALIGNMENT.out.bai, failOnMismatch: true, failOnDuplicate: true )

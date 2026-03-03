@@ -59,7 +59,6 @@ workflow PREPARE_REFERENCES {
 
 
     main:
-        ch_versions               = channel.empty()
         ch_bait_intervals         = channel.empty()
         ch_bwa                    = channel.empty()
         ch_genome_bwameme_index   = channel.empty()
@@ -92,7 +91,7 @@ workflow PREPARE_REFERENCES {
         // Genome indices
         //
         if (!val_fai) {
-            SAMTOOLS_FAIDX_GENOME(ch_genome_fasta, [[:],[]], true)
+            SAMTOOLS_FAIDX_GENOME(ch_genome_fasta.map{meta, fasta -> return [meta,fasta,[]]}, true)
             ch_genome_fai  = SAMTOOLS_FAIDX_GENOME.out.fai.collect()
             ch_chrom_sizes = SAMTOOLS_FAIDX_GENOME.out.sizes.map {_meta, sizes -> sizes}.collect()
         } else {
@@ -112,7 +111,6 @@ workflow PREPARE_REFERENCES {
         if (!val_bwa) {
             if (!val_aligner.equals("sentieon") || val_mtaligner.equals("bwa")) {
                 ch_bwa      = BWA_INDEX_GENOME(ch_genome_fasta).index.collect()
-                ch_versions = ch_versions.mix(BWA_INDEX_GENOME.out.versions)
             }
             if (val_aligner.equals("sentieon") || val_mtaligner.equals("sentieon")) {
                 ch_bwa      = SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.collect()
@@ -123,14 +121,12 @@ workflow PREPARE_REFERENCES {
 
         if (!val_bwamem2 && (val_aligner.equals("bwamem2") || val_mtaligner.equals("bwamem2"))) {
             ch_genome_bwamem2_index = BWAMEM2_INDEX_GENOME(ch_genome_fasta).index.collect()
-            ch_versions             = ch_versions.mix(BWAMEM2_INDEX_GENOME.out.versions)
         } else if (val_bwamem2) {
             ch_genome_bwamem2_index = channel.fromPath(val_bwamem2).map {it -> [[id:it.simpleName], it]}.collect()
         }
 
         if (!val_bwamem2 && val_aligner.equals("bwameme")) {
             ch_genome_bwameme_index = BWAMEME_INDEX_GENOME(ch_genome_fasta).index.collect()
-            ch_versions             = ch_versions.mix(BWAMEME_INDEX_GENOME.out.versions)
         } else if (val_bwameme) {
             ch_genome_bwameme_index = channel.fromPath(val_bwameme).map {it -> [[id:it.simpleName], it]}.collect()
         }
@@ -139,12 +135,12 @@ workflow PREPARE_REFERENCES {
         //
         if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
             if (!val_mtfasta) {
-                ch_mt_fasta = SAMTOOLS_EXTRACT_MT(ch_genome_fasta, ch_genome_fai, false).fa.collect()
+                ch_mt_fasta = SAMTOOLS_EXTRACT_MT(ch_genome_fasta.join(ch_genome_fai), false).fa.collect()
             } else {
                 ch_mt_fasta = channel.fromPath(val_mtfasta).map { it -> [[id:it.simpleName], it] }.collect()
             }
 
-            ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta, [[:],[]], false).fai.collect()
+            ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta.map{meta, fasta -> return [meta, fasta,[]]}, false).fai.collect()
             ch_mt_dict = GATK_SD_MT(ch_mt_fasta).dict.collect()
 
             ch_genome_hisat2_index = HISAT2_INDEX_GENOME(ch_genome_fasta,[[:],[]], [[:],[]]).index.collect()
@@ -168,8 +164,6 @@ workflow PREPARE_REFERENCES {
                 }
                 .set {ch_shiftfasta_mtintervals}
 
-            ch_versions = ch_versions.mix (HISAT2_INDEX_GENOME.out.versions,
-                                           LAST_INDEX_MT.out.versions)
         }
         //
         // MT alignment indices
@@ -177,12 +171,10 @@ workflow PREPARE_REFERENCES {
         if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("bwamem2")) {
             ch_mt_bwamem2_index      = BWAMEM2_INDEX_MT(ch_mt_fasta).index.collect()
             ch_mtshift_bwamem2_index = BWAMEM2_INDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
-            ch_versions              = ch_versions.mix(BWAMEM2_INDEX_MT.out.versions, BWAMEM2_INDEX_MT_SHIFT.out.versions)
         }
         if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("bwa")) {
             ch_mt_bwa_index          = BWA_INDEX_MT(ch_mt_fasta).index.collect()
             ch_mtshift_bwa_index     = BWA_INDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
-            ch_versions              = ch_versions.mix(BWA_INDEX_MT.out.versions, BWA_INDEX_MT_SHIFT.out.versions)
         }
         if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("sentieon")) {
             ch_mt_bwa_index          = SENTIEON_BWAINDEX_MT(ch_mt_fasta).index.collect()
@@ -261,7 +253,6 @@ workflow PREPARE_REFERENCES {
         if (val_vep_cache) {
             if (val_vep_cache.endsWith("tar.gz")) {
                 ch_vep_resources = UNTAR_VEP_CACHE (channel.fromPath(val_vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()).untar.map{ _meta, files -> [files]}.collect()
-                ch_versions      = ch_versions.mix(UNTAR_VEP_CACHE.out.versions)
             } else {
                 ch_vep_resources = channel.fromPath(val_vep_cache).collect()
             }
@@ -273,7 +264,6 @@ workflow PREPARE_REFERENCES {
             ch_genome_fasta.map { meta, fasta -> return [meta, fasta, [], [] ] }
                 .set {ch_rtgformat_in}
             ch_sdf      = RTGTOOLS_FORMAT(ch_rtgformat_in).out.sdf
-            ch_versions = ch_versions.mix(RTGTOOLS_FORMAT.out.versions)
         }
 
     emit:
@@ -308,6 +298,4 @@ workflow PREPARE_REFERENCES {
         target_intervals      = ch_target_intervals                                 // channel:[ path(interval_list) ]
         vcfanno_extra         = ch_vcfanno_extra                                    // channel:[ [path(vcf), path(tbi)] ]
         vep_resources         = ch_vep_resources                                    // channel:[ path(cache) ]
-        versions              = ch_versions                                         // channel:[ path(versions.yml) ]
-
 }

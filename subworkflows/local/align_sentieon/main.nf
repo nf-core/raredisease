@@ -40,7 +40,7 @@ workflow ALIGN_SENTIEON {
 
         // GET ALIGNMENT FROM SELECTED CONTIGS
         if (val_extract_alignments) {
-            EXTRACT_ALIGNMENTS( ch_bam_bai, ch_genome_fasta, [], 'bai')
+            EXTRACT_ALIGNMENTS( ch_bam_bai, ch_genome_fasta.join(ch_genome_fai), [], 'bai')
             ch_bam_bai = EXTRACT_ALIGNMENTS.out.bam.join(EXTRACT_ALIGNMENTS.out.bai, failOnMismatch:true, failOnDuplicate:true)
         }
 
