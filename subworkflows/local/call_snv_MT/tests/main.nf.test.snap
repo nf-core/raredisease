@@ -13,5 +13,20 @@
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
+    },
+    "CALL_SNV_MT": {
+        "content": [
+            [
+                "earlycasualcaiman_filtered.vcf.gz"
+            ],
+            [
+                "earlycasualcaiman_filtered.vcf.gz.tbi"
+            ]
+        ],
+        "timestamp": "2026-03-03T20:17:50.085712628",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     }
 }

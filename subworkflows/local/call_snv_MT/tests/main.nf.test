@@ -6,7 +6,7 @@ nextflow_workflow {
     tag "subworkflows"
     tag "call_snv_MT"
 
-    test("CALL_SNV_MT - stub") {
+    test("CALL_SNV_MT") {
 
         when {
             workflow {

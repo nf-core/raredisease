@@ -1,4 +1,22 @@
 {
+    "CALL_SNV - deepvariant wgs": {
+        "content": [
+            [
+                "justhusky_snv.vcf.gz"
+            ],
+            [
+                "justhusky_snv.vcf.gz.tbi"
+            ],
+            [
+                "justhusky_mitochondria.vcf.gz"
+            ]
+        ],
+        "timestamp": "2026-03-03T19:48:35.971369089",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
     "CALL_SNV - deepvariant wgs, stub": {
         "content": [
             [
