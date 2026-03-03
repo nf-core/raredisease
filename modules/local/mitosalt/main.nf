@@ -37,7 +37,7 @@ process MITOSALT {
     """
     cat $msconfig | sed "s/threads = 1/threads = ${task.cpus}/" > new-${msconfig}
     touch ${prefix}.breakpoint
-    touch ${prefix}.cluster
+    echo 'cluster' > ${prefix}.cluster
     """
 
 }

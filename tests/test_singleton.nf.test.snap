@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            365,
+            368,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -317,6 +317,15 @@
                 "RHOCALL_VIZ": {
                     "rhocall": "0.5.1"
                 },
+                "SALTSHAKER_CALL": {
+                    "saltshaker": "1.0.0"
+                },
+                "SALTSHAKER_CLASSIFY": {
+                    "saltshaker": "1.0.0"
+                },
+                "SALTSHAKER_PLOT": {
+                    "saltshaker": "1.0.0"
+                },
                 "SAMTOOLS_COLLATE": {
                     "samtools": "1.22.1"
                 },
@@ -558,6 +567,10 @@
                 "call_sv/mitochondria",
                 "call_sv/mitochondria/hugelymodelbat_LNUMBER1.breakpoint",
                 "call_sv/mitochondria/hugelymodelbat_LNUMBER1.cluster",
+                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.saltshaker.png",
+                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.saltshaker.vcf",
+                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.saltshaker_classify.txt",
+                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.saltshaker_classify_metadata.tsv",
                 "call_sv/mitochondria/hugelymodelbat_mitochondria_deletions.txt",
                 "fastqc",
                 "fastqc/hugelymodelbat_LNUMBER1",
@@ -728,6 +741,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
         },
-        "timestamp": "2026-02-27T10:14:31.323250611"
+        "timestamp": "2026-03-03T16:11:07.735178695"
     }
 }
