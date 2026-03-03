@@ -543,7 +543,6 @@ workflow RAREDISEASE {
             ch_mapped.genome_marked_bam,
             ch_mapped.genome_marked_bai,
             ch_mapped.genome_marked_bam_bai,
-            ch_mapped.mt_bam_bai,
             ch_genome_bwaindex,
             ch_genome_fasta,
             ch_genome_fai,
@@ -555,7 +554,6 @@ workflow RAREDISEASE {
             ch_ploidy_model,
             ch_gcnvcaller_model,
             val_analysis_type,
-            val_run_mt_for_wes,
             skip_germlinecnvcaller,
         )
         ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
@@ -628,7 +626,7 @@ workflow RAREDISEASE {
     CALL MITOCHONDRIAL SVs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if (val_analysis_type.matches("wgs|mito") || run_mt_for_wes) {
+    if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
         CALL_SV_MT(
             ch_mapped.genome_marked_bam_bai,
             ch_genome_chrsizes,

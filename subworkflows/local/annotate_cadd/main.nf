@@ -55,7 +55,7 @@ workflow ANNOTATE_CADD {
 
         TABIX_VIEW(BCFTOOLS_VIEW.out.vcf)
 
-        CADD(BCFTOOLS_VIEW.out.vcf, ch_cadd_resources)
+        CADD(BCFTOOLS_VIEW.out.vcf, ch_cadd_resources, [[:], []])
 
         TABIX_CADD(CADD.out.tsv)
 
