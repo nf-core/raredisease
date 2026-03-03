@@ -66,14 +66,14 @@
                 },
                 "BWAMEM2_MEM": {
                     "bwamem2": "2.2.1",
-                    "samtools": "1.19.2"
+                    "samtools": "1.22.1"
                 },
                 "BWAMEM2_MEM_MT": {
                     "bwamem2": "2.2.1",
-                    "samtools": "1.19.2"
+                    "samtools": "1.22.1"
                 },
                 "BWA_INDEX_GENOME": {
-                    "bwa": "0.7.18-r1243-dirty"
+                    "bwa": "0.7.19-r1273"
                 },
                 "CAT_CAT_BAIT": {
                     "pigz": 2.8
@@ -110,30 +110,39 @@
                     "coreutils": 9.5
                 },
                 "CUSTOM_ADDMOSTSEVERECONSEQUENCE": {
-                    "add_most_severe_consequence": 1.1,
+                    "addmostsevereconsequence": 1.1,
                     "bgzip": 1.21
                 },
                 "CUSTOM_ADDMOSTSEVEREPLI": {
-                    "add_most_severe_pli": 1.1,
+                    "addmostseverepli": 1.1,
                     "bgzip": 1.21
                 },
                 "DEEPVARIANT": {
                     "deepvariant": "1.9.0"
                 },
                 "ENSEMBLVEP_FILTERVEP": {
-                    "ensemblvep": 110.0
+                    "ensemblvep": 115.2,
+                    "perl-math-cdf": 0.1
                 },
                 "ENSEMBLVEP_ME": {
-                    "ensemblvep": 110.0
+                    "ensemblvep": 110.1,
+                    "perl-math-cdf": 0.1,
+                    "tabix": 1.21
                 },
                 "ENSEMBLVEP_MT": {
-                    "ensemblvep": 110.0
+                    "ensemblvep": 110.1,
+                    "perl-math-cdf": 0.1,
+                    "tabix": 1.21
                 },
                 "ENSEMBLVEP_SNV": {
-                    "ensemblvep": 110.0
+                    "ensemblvep": 110.1,
+                    "perl-math-cdf": 0.1,
+                    "tabix": 1.21
                 },
                 "ENSEMBLVEP_SV": {
-                    "ensemblvep": 110.0
+                    "ensemblvep": 110.1,
+                    "perl-math-cdf": 0.1,
+                    "tabix": 1.21
                 },
                 "EXPANSIONHUNTER": {
                     "bgzip": "1.22.1",
@@ -209,7 +218,7 @@
                     "coreutils": 9.5
                 },
                 "GLNEXUS": {
-                    "glnexus": "1.4.1-0-g68e25e5"
+                    "glnexus": "1.4.1"
                 },
                 "HAPLOCHECK_MT": {
                     "haplocheck": "1.3.3"
@@ -254,7 +263,7 @@
                     "samtools": 1.23
                 },
                 "NGSBITS_SAMPLEGENDER": {
-                    "ngs-bits": 202411
+                    "ngsbits": 202512
                 },
                 "PEDDY": {
                     "peddy": "0.4.8"
@@ -327,10 +336,13 @@
                     "samtools": "1.22.1"
                 },
                 "SAMTOOLS_INDEX_ALIGN": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_INDEX_MARKDUP": {
-                    "samtools": 1.21
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_INDEX_MT": {
+                    "samtools": "1.22.1"
                 },
                 "SAMTOOLS_SORT": {
                     "samtools": "1.22.1"
@@ -351,7 +363,7 @@
                     "seqtk": "1.4-r122"
                 },
                 "SMNCOPYNUMBERCALLER": {
-                    "SMNCopyNumberCaller": "1.1.2"
+                    "smncopynumbercaller": "1.1.2"
                 },
                 "SPLIT_AND_FILTER_SV_VCF": {
                     "bcftools": 1.22
@@ -443,28 +455,28 @@
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
-                    "tiddit": "3.6.1"
+                    "tiddit": "3.9.4"
                 },
                 "TIDDIT_COV_VCF2CYTOSURE": {
-                    "tiddit": "3.6.1"
+                    "tiddit": "3.9.4"
                 },
                 "TIDDIT_SV": {
-                    "tiddit": "3.6.1"
+                    "tiddit": "3.9.4"
                 },
                 "UCSC_WIGTOBIGWIG": {
-                    "ucsc": 447
+                    "ucsc": 482
                 },
                 "UNTAR_VEP_CACHE": {
                     "untar": 1.34
                 },
                 "VCF2CYTOSURE": {
-                    "vcf2cytosure": "0.9.1"
+                    "vcf2cytosure": "0.9.3"
                 },
                 "VCFANNO": {
-                    "vcfanno": "0.3.5"
+                    "vcfanno": "0.3.7"
                 },
                 "VCFANNO_MT": {
-                    "vcfanno": "0.3.5"
+                    "vcfanno": "0.3.7"
                 },
                 "Workflow": {
                     "nf-core/raredisease": "v2.7.0dev"
@@ -490,9 +502,9 @@
                 "alignment",
                 "alignment/hugelymodelbat_mt_subsample.bam",
                 "alignment/hugelymodelbat_mt_subsample.bam.bai",
-                "alignment/hugelymodelbat_sorted_md.MarkDuplicates.metrics.txt",
                 "alignment/hugelymodelbat_sorted_md.bam",
                 "alignment/hugelymodelbat_sorted_md.bam.bai",
+                "alignment/hugelymodelbat_sorted_md.metrics.txt",
                 "annotate_mobile_elements",
                 "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz",
                 "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz.tbi",
@@ -536,11 +548,9 @@
                 "annotate_snv/mitochondria/justhusky_mitochondria_hmtnote_vcfanno_vep.vcf.gz.tbi",
                 "annotate_snv/mitochondria/justhusky_mitochondria_hmtnote_vcfanno_vep_haplogrep.txt",
                 "annotate_sv",
-                "annotate_sv/justhusky_svdbquery_vep.json.gz",
-                "annotate_sv/justhusky_svdbquery_vep.summary.html",
-                "annotate_sv/justhusky_svdbquery_vep.tab.gz",
                 "annotate_sv/justhusky_svdbquery_vep.vcf.gz",
                 "annotate_sv/justhusky_svdbquery_vep.vcf.gz.tbi",
+                "annotate_sv/justhusky_svdbquery_vep_summary.html",
                 "call_mobile_elements",
                 "call_mobile_elements/justhusky_mobile_elements.vcf.gz",
                 "call_mobile_elements/justhusky_mobile_elements.vcf.gz.tbi",
@@ -574,10 +584,14 @@
                 "ngsbits_samplegender/hugelymodelbat_ngsbits_sex.tsv",
                 "peddy",
                 "peddy/justhusky.het_check.csv",
+                "peddy/justhusky.het_check.png",
                 "peddy/justhusky.html",
                 "peddy/justhusky.ped_check.csv",
+                "peddy/justhusky.ped_check.png",
+                "peddy/justhusky.ped_check.rel-difference.csv",
                 "peddy/justhusky.peddy.ped",
                 "peddy/justhusky.sex_check.csv",
+                "peddy/justhusky.sex_check.png",
                 "peddy/justhusky.vs.html",
                 "pedigree",
                 "pedigree/justhusky.ped",
@@ -724,10 +738,10 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
+        "timestamp": "2026-02-27T12:55:52.928711503",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
-        },
-        "timestamp": "2026-02-11T19:08:15.435078959"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     }
 }

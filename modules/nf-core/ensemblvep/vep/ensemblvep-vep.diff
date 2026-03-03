@@ -1,51 +1,34 @@
 Changes in component 'nf-core/ensemblvep/vep'
+Changes in 'ensemblvep/vep/environment.yml':
+--- modules/nf-core/ensemblvep/vep/environment.yml
++++ modules/nf-core/ensemblvep/vep/environment.yml
+@@ -4,5 +4,5 @@
+   - conda-forge
+   - bioconda
+ dependencies:
+-  - bioconda::ensembl-vep=115.2
++  - bioconda::ensembl-vep=110.1
+   - bioconda::perl-math-cdf=0.1
+
 'modules/nf-core/ensemblvep/vep/meta.yml' is unchanged
 Changes in 'ensemblvep/vep/main.nf':
 --- modules/nf-core/ensemblvep/vep/main.nf
 +++ modules/nf-core/ensemblvep/vep/main.nf
 @@ -4,8 +4,8 @@
  
-     conda "bioconda::ensembl-vep=110.0"
-     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
--        'https://depot.galaxyproject.org/singularity/ensembl-vep:110.0--pl5321h2a3209d_0' :
--        'biocontainers/ensembl-vep:110.0--pl5321h2a3209d_0' }"
-+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/f7/f79e4fcf077482a6f17596bd68f7ba5a8c1972a439a5b7899549bc33baed8c9d/data' :
-+        'community.wave.seqera.io/library/ensembl-vep:110.0--cf66340b49c82813' }"
+     conda "${moduleDir}/environment.yml"
+     container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+-        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/3d/3da6e21cbf9803529421d7e136d1ebec5ff71ec50e0d996eda2ce11ec2c19bf9/data'
+-        : 'community.wave.seqera.io/library/ensembl-vep_perl-math-cdf:1e13f65f931a6954'}"
++        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/48/486485f638979d64bfff7634647833ecfd9fff050c1c2ed17cb65174d7f94c53/data'
++        : 'community.wave.seqera.io/library/ensembl-vep_perl-math-cdf:3ebe91ef7d23400f'}"
  
      input:
      tuple val(meta), path(vcf), path(custom_extra_files)
-@@ -20,8 +20,8 @@
-     tuple val(meta), path("*.vcf.gz")  , optional:true, emit: vcf
-     tuple val(meta), path("*.tab.gz")  , optional:true, emit: tab
-     tuple val(meta), path("*.json.gz") , optional:true, emit: json
--    path "*.summary.html"              , emit: report
--    path "versions.yml"                , emit: versions
-+    tuple val(meta), val("${task.process}"), val('ensemblvep'), path("*.html"), topic: multiqc_files, emit: report, optional: true
-+    tuple val("${task.process}"), val('ensemblvep'), eval("vep --help | sed -n '/ensembl-vep/s/.*: //p'"), topic: versions, emit: versions_ensemblvep
- 
-     when:
-     task.ext.when == null || task.ext.when
-@@ -48,11 +48,6 @@
-         --fork $task.cpus \\
-         --stats_file ${prefix}.summary.html \\
- 
--
--    cat <<-END_VERSIONS > versions.yml
--    "${task.process}":
--        ensemblvep: \$( echo \$(vep --help 2>&1) | sed 's/^.*Versions:.*ensembl-vep : //;s/ .*\$//')
--    END_VERSIONS
-     """
- 
-     stub:
-@@ -63,9 +58,5 @@
-     touch ${prefix}.json.gz
-     touch ${prefix}.summary.html
- 
--    cat <<-END_VERSIONS > versions.yml
--    "${task.process}":
--        ensemblvep: \$( echo \$(vep --help 2>&1) | sed 's/^.*Versions:.*ensembl-vep : //;s/ .*\$//')
--    END_VERSIONS
-     """
- }
 
+'modules/nf-core/ensemblvep/vep/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/ensemblvep/vep/tests/tab.gz.config' is unchanged
+'modules/nf-core/ensemblvep/vep/tests/vcf.config' is unchanged
+'modules/nf-core/ensemblvep/vep/tests/nextflow.config' is unchanged
+'modules/nf-core/ensemblvep/vep/tests/main.nf.test' is unchanged
 ************************************************************

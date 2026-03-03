@@ -14,8 +14,6 @@ workflow VARIANT_EVALUATION {
         ch_snv_vcf_tbi     // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
 
     main:
-        ch_versions = channel.empty()
-
         ch_rtg_truthvcfs
             .splitCsv ( header:true )
             .map { row ->
@@ -42,9 +40,4 @@ workflow VARIANT_EVALUATION {
 
         RTGTOOLS_VCFEVAL ( ch_vcfeval_in, ch_sdf )
 
-        ch_versions = ch_versions.mix(TABIX_TRUTHVCF.out.versions)
-        ch_versions = ch_versions.mix(RTGTOOLS_VCFEVAL.out.versions)
-
-    emit:
-        versions        = ch_versions // channel: [ path(versions.yml) ]
 }

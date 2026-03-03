@@ -183,7 +183,6 @@ workflow NFCORE_RAREDISEASE {
     ch_target_intervals         = ch_references.target_intervals
     ch_vcfanno_extra            = ch_references.vcfanno_extra
     ch_vep_cache                = ch_references.vep_resources
-    ch_versions                 = ch_versions.mix(ch_references.versions)
 
     // Using channelFromPath helper (val_x ? channel.fromPath(val_x).collect() : channel.value([]))
     ch_cadd_resources           = channelFromPath(val_cadd_resources, true)
