@@ -12,7 +12,7 @@ process SALTSHAKER_PLOT {
 
     output:
     tuple val(meta), path("*saltshaker.png"), emit: plot
-    path "versions.yml"                     , emit: versions
+    tuple val("${task.process}"), val('saltshaker'), val("1.0.0"), topic: versions, emit: versions_saltshaker
 
     script:
     def args   = task.ext.args ?: ''
@@ -23,22 +23,14 @@ process SALTSHAKER_PLOT {
         --input-dir . \\
         $args
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        saltshaker_plot: \$(echo \$(saltshaker plot 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
-    END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
-    touch ${prefix}.png
+    touch ${prefix}.saltshaker.png
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        saltshaker_plot: \$(echo \$(saltshaker plot 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
-    END_VERSIONS
     """
 
 }

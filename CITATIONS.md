@@ -42,10 +42,6 @@
 
   > Poplin R, Chang PC, Alexander D, et al. A universal SNP and small-indel variant caller using deep neural networks. Nat Biotechnol. 2018;36(10):983-987. doi:10.1038/nbt.4235
 
-- [eKLIPse](https://www.nature.com/articles/s41436-018-0350-8)
-
-  > Goudenège D, Bris C, Hoffmann V, et al. eKLIPse: a sensitive tool for the detection and quantification of mitochondrial DNA deletions from next-generation sequencing data. Genet Med 21, 1407–1416 (2019). doi:10.1038/s41436-018-0350-8
-
 - [Ensembl VEP](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4)
 
   > McLaren W, Gil L, Hunt SE, et al. The Ensembl Variant Effect Predictor. Genome Biol. 2016;17(1):122. doi:10.1186/s13059-016-0974-4
@@ -92,6 +88,10 @@
 
   > Chen X, Schulz-Trieglaff O, Shaw R, et al. Manta: rapid detection of structural variants and indels for germline and cancer sequencing applications. Bioinformatics. 2016;32(8):1220-1222. doi:10.1093/bioinformatics/btv710
 
+- [Mitosalt](https://sourceforge.net/projects/mitosalt/)
+
+  > Basu S, Xie X, Uhler JP, et al. Accurate mapping of mitochondrial DNA deletions and duplications using deep sequencing. PLoS Genet. 2020;16(12):e1009242. doi: 10.1371/journal.pgen.1009242
+
 - [Mosdepth](https://academic.oup.com/bioinformatics/article/34/5/867/4583630?login=true)
 
   > Pedersen BS, Quinlan AR. Mosdepth: quick coverage calculation for genomes and exomes. Hancock J, ed. Bioinformatics. 2018;34(5):867-868. doi:10.1093/bioinformatics/btx699
@@ -121,6 +121,8 @@
 - [RTG Tools (vcfeval)](https://github.com/RealTimeGenomics/rtg-tools)
 
   > John G. Cleary, Ross Braithwaite, Kurt Gaastra, Brian S. Hilbush, Stuart Inglis, Sean A. Irvine, Alan Jackson, Richard Littin, Mehul Rathod, David Ware, Justin M. Zook, Len Trigg, and Francisco M. De La Vega. "Comparing Variant Call Files for Performance Benchmarking of Next-Generation Sequencing Variant Calling Pipelines." bioRxiv, 2015. doi:10.1101/023754.
+
+- [saltshaker](https://pypi.org/project/saltshaker/)
 
 - [Sentieon DNAscope](https://www.biorxiv.org/content/10.1101/2022.05.20.492556v1.abstract)
 

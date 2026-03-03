@@ -19,7 +19,7 @@ process SALTSHAKER_CLASSIFY {
     tuple val(meta), path("*_classify_metadata.tsv"), emit: classify
     tuple val(meta), path("*_classify.txt")         , emit: txt
     tuple val(meta), path("*saltshaker.vcf")        , emit: vcf
-    path "versions.yml"                             , emit: versions
+    tuple val("${task.process}"), val('saltshaker'), val("1.0.0"), topic: versions, emit: versions_saltshaker
 
     script:
     def args   = task.ext.args ?: ''
@@ -36,23 +36,16 @@ process SALTSHAKER_CLASSIFY {
         --noise $noise_thresh \\
         $args
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        saltshaker_classify: \$(echo \$(saltshaker classify 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
-    END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
-    touch ${prefix}.vcf
-    touch ${prefix}_call_metadata.tsv
+    touch ${prefix}.saltshaker.vcf
+    touch ${prefix}.saltshaker_classify.txt
+    touch ${prefix}.saltshaker_classify_metadata.tsv
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        saltshaker_classify: \$(echo \$(saltshaker classify 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
-    END_VERSIONS
     """
 
 }

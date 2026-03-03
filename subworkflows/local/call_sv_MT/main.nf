@@ -12,44 +12,44 @@ include { SALTSHAKER_PLOT     } from '../../../modules/local/saltshaker/plot/mai
 
 workflow CALL_SV_MT {
     take:
-        ch_bam_bai                   // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_genome_chrsizes           // channel: [mandatory] [ path(chrsizes) ]
-        ch_genome_fai                // channel: [mandatory] [ val(meta), path(genomefai) ]
-        ch_genome_fasta              // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_hisat2index        // channel: [mandatory] [ val(meta), path(hisat2index) ]
-        ch_mt_fai                    // channel: [mandatory] [ val(meta), path(mtfai) ]
-        ch_mt_fasta                  // channel: [mandatory] [ val(meta), path(mtfasta) ]
-        ch_mt_lastdb                 // channel: [mandatory] [ val(meta), path(lastindex) ]
-        ch_reads                     // channel: [mandatory] [ val(meta), [path(reads)] ]
-        ch_subdepth                  // channel: [mandatory] [ val(mitosalt_depth) ]
-        val_breakspan                // string: [mandatory] mitosalt_break_span
-        val_breakthreshold           // string: [mandatory] mitosalt_break_threshold
-        val_cluster_threshold        // string: [mandatory] mitosalt_cluster_threshold
-        val_deletion_threshold_max   // string: [mandatory] mitosalt_del_threshold_max
-        val_deletion_threshold_min   // string: [mandatory] mitosalt_del_threshold_min
-        val_dom_frac                 // string: [mandatory] saltshaker_dominant_fraction
-        val_evalue_threshold         // string: [mandatory] mitosalt_evalue_threshold
-        val_exclude                  // string: [mandatory] mitosalt_exclude
-        val_flank                    // string: [mandatory] mitosalt_flank
-        val_group_radius             // string: [mandatory] saltshaker_group_radius
-        val_high_het                 // string: [mandatory] saltshaker_high_heteroplasmy
-        val_hplimit                  // string: [mandatory] mitosalt_hp_limit
-        val_mito_length              // string: [mandatory] mito_length
-        val_mito_name                // string: [mandatory] mito_name
-        val_mult_thresh              // string: [mandatory] saltshaker_multi_threshold
-        val_noise_thresh             // string: [mandatory] saltshaker_noise_threshold
-        val_ori_h_start              // string: [mandatory] mito_ori_h_start
-        val_ori_h_end                // string: [mandatory] mito_ori_h_end
-        val_ori_l_start              // string: [mandatory] mito_ori_l_start
-        val_ori_l_end                // string: [mandatory] mito_ori_l_end
-        val_paired_distance          // string: [mandatory] mitosalt_paired_distance
-        val_score_threshold          // string: [mandatory] mitosalt_score_threshold
-        val_sizelimit                // string: [mandatory] mitosalt_size_limit
-        val_split_distance_threshold // string: [mandatory] mitosalt_split_dist_threshold
-        val_split_length             // string: [mandatory] mitosalt_split_length
+        ch_bam_bai                            // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_genome_chrsizes                    // channel: [mandatory] [ path(chrsizes) ]
+        ch_genome_fai                         // channel: [mandatory] [ val(meta), path(genomefai) ]
+        ch_genome_fasta                       // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_hisat2index                 // channel: [mandatory] [ val(meta), path(hisat2index) ]
+        ch_mt_fai                             // channel: [mandatory] [ val(meta), path(mtfai) ]
+        ch_mt_fasta                           // channel: [mandatory] [ val(meta), path(mtfasta) ]
+        ch_mt_lastdb                          // channel: [mandatory] [ val(meta), path(lastindex) ]
+        ch_reads                              // channel: [mandatory] [ val(meta), [path(reads)] ]
+        ch_subdepth                           // channel: [mandatory] [ val(mitosalt_depth) ]
+        val_heavy_strand_origin_start         // string: [mandatory] mitochondira_heavy_strand_origin_start
+        val_heavy_strand_origin_end           // string: [mandatory] mitochondira_heavy_strand_origin_end
+        val_light_strand_origin_start         // string: [mandatory] mitochondira_light_strand_origin_start
+        val_light_strand_origin_end           // string: [mandatory] mitochondira_light_strand_origin_end
+        val_mito_length                       // string: [mandatory] mito_length
+        val_mito_name                         // string: [mandatory] mito_name
+        val_mitosalt_breakspan                // string: [mandatory] mitosalt_breakspan
+        val_mitosalt_breakthreshold           // string: [mandatory] mitosalt_breakthreshold
+        val_mitosalt_cluster_threshold        // string: [mandatory] mitosalt_cluster_threshold
+        val_mitosalt_deletion_threshold_max   // string: [mandatory] mitosalt_deletion_threshold_max
+        val_mitosalt_deletion_threshold_min   // string: [mandatory] mitosalt_deletion_threshold_min
+        val_mitosalt_evalue_threshold         // string: [mandatory] mitosalt_evalue_threshold
+        val_mitosalt_exclude                  // string: [mandatory] mitosalt_exclude
+        val_mitosalt_flank                    // string: [mandatory] mitosalt_flank
+        val_mitosalt_heteroplasmy_limit       // string: [mandatory] mitosalt_heteroplasmy_limit
+        val_mitosalt_paired_distance          // string: [mandatory] mitosalt_paired_distance
+        val_mitosalt_score_threshold          // string: [mandatory] mitosalt_score_threshold
+        val_mitosalt_sizelimit                // string: [mandatory] mitosalt_sizelimit
+        val_mitosalt_split_distance_threshold // string: [mandatory] mitosalt_split_distance_threshold
+        val_mitosalt_split_length             // string: [mandatory] mitosalt_split_length
+        val_saltshaker_dominant_fraction      // string: [mandatory] saltshaker_dominant_fraction
+        val_saltshaker_group_radius           // string: [mandatory] saltshaker_group_radius
+        val_saltshaker_high_heteroplasmy      // string: [mandatory] saltshaker_high_heteroplasmy
+        val_saltshaker_multiple_threshold     // string: [mandatory] saltshaker_multiple_threshold
+        val_saltshaker_noise_threshold        // string: [mandatory] saltshaker_noise_threshold
 
     main:
-        ch_versions = Channel.empty()
+        ch_versions = channel.empty()
 
         if (!(params.skip_tools && params.skip_tools.split(',').contains('mitosalt'))) {
             ch_reads_subdepth      = ch_reads.combine(ch_subdepth)
@@ -63,21 +63,21 @@ workflow CALL_SV_MT {
                 ch_mt_fai,
                 ch_mt_fasta,
                 ch_mt_lastdb,
-                val_breakspan,
-                val_breakthreshold,
-                val_cluster_threshold,
-                val_deletion_threshold_max,
-                val_deletion_threshold_min,
-                val_evalue_threshold,
-                val_exclude,
-                val_flank,
-                val_hplimit,
+                val_mitosalt_breakspan,
+                val_mitosalt_breakthreshold,
+                val_mitosalt_cluster_threshold,
+                val_mitosalt_deletion_threshold_max,
+                val_mitosalt_deletion_threshold_min,
+                val_mitosalt_evalue_threshold,
+                val_mitosalt_exclude,
+                val_mitosalt_flank,
+                val_mitosalt_heteroplasmy_limit,
                 val_mito_name,
-                val_paired_distance,
-                val_score_threshold,
-                val_sizelimit,
-                val_split_distance_threshold,
-                val_split_length
+                val_mitosalt_paired_distance,
+                val_mitosalt_score_threshold,
+                val_mitosalt_sizelimit,
+                val_mitosalt_split_distance_threshold,
+                val_mitosalt_split_length
             )
 
             MITOSALT(
@@ -99,27 +99,27 @@ workflow CALL_SV_MT {
                     MITOSALT.out.breakpoint,
                     ch_saltshaker_in,
                     ch_mt_fasta,
-                    val_flank,
-                    val_hplimit,
+                    val_mitosalt_flank,
+                    val_mitosalt_heteroplasmy_limit,
                     val_mito_length,
-                    val_ori_h_start,
-                    val_ori_h_end,
-                    val_ori_l_start,
-                    val_ori_l_end
+                    val_heavy_strand_origin_start,
+                    val_heavy_strand_origin_end,
+                    val_light_strand_origin_start,
+                    val_light_strand_origin_end
                 )
 
                 SALTSHAKER_CLASSIFY(
                     SALTSHAKER_CALL.out.call,
-                    val_dom_frac,
-                    val_group_radius,
-                    val_high_het,
-                    val_mult_thresh,
-                    val_noise_thresh
+                    val_saltshaker_dominant_fraction,
+                    val_saltshaker_group_radius,
+                    val_saltshaker_high_heteroplasmy,
+                    val_saltshaker_multiple_threshold,
+                    val_saltshaker_noise_threshold
                 )
                 ch_mitosalt_vcf = SALTSHAKER_CLASSIFY.out.classify
 
                 SALTSHAKER_PLOT(
-                    SALTSHAKER_CLASSIFY.out.classify
+                    ch_mitosalt_vcf
                 )
                 ch_mitosalt_plot = SALTSHAKER_PLOT.out.plot
             }

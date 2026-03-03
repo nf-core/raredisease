@@ -9,19 +9,19 @@ process SALTSHAKER_CALL {
 
     input:
     tuple val(meta), path(breakpoint)
-    tuple val(meta), path(cluster)
-    tuple val(meta2), path(mtfasta)
+    tuple val(meta2), path(cluster)
+    tuple val(meta3), path(mtfasta)
     val flank
-    val hplimit
+    val heteroplasmy_limit
     val mito_length
-    val ori_h_start
-    val ori_h_end
-    val ori_l_start
-    val ori_l_end
+    val heavy_strand_origin_start
+    val heavy_strand_origin_end
+    val light_strand_origin_start
+    val light_strand_origin_end
 
     output:
     tuple val(meta), path("*_call_metadata.tsv"), emit: call
-    path "versions.yml"                         , emit: versions
+    tuple val("${task.process}"), val('saltshaker'), val("1.0.0"), topic: versions, emit: versions_saltshaker
 
     script:
     def args   = task.ext.args ?: ''
@@ -34,30 +34,22 @@ process SALTSHAKER_CALL {
         --cluster $cluster \\
         --breakpoint $breakpoint \\
         --flank-size $flank \\
-        --het-limit $hplimit \\
+        --het-limit $heteroplasmy_limit \\
         --genome-length $mito_length \\
-        --ori-h-start $ori_h_start \\
-        --ori-h-end $ori_h_end \\
-        --ori-l-start $ori_l_start \\
-        --ori-l-end $ori_l_end \\
+        --ori-h-start $heavy_strand_origin_start \\
+        --ori-h-end $heavy_strand_origin_end \\
+        --ori-l-start $light_strand_origin_start \\
+        --ori-l-end $light_strand_origin_end \\
         $args
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        saltshaker_call: \$(echo \$(saltshaker call 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
-    END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
-    touch ${prefix}_call_metadata.tsv
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        saltshaker_call: \$(echo \$(saltshaker call 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
-    END_VERSIONS
+    touch ${prefix}.saltshaker_call_metadata.tsv
+    
     """
 
 }
