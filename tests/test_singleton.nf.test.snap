@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            363,
+            364,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -210,9 +210,6 @@
                 },
                 "GLNEXUS": {
                     "glnexus": "1.4.1-0-g68e25e5"
-                },
-                "HAPLOCHECK_MT": {
-                    "haplocheck": "1.3.3"
                 },
                 "HAPLOGREP3_CLASSIFY_MT": {
                     "haplogrep3": "3.2.2"
@@ -552,8 +549,6 @@
                 "fastqc/hugelymodelbat_LNUMBER1",
                 "fastqc/hugelymodelbat_LNUMBER1/hugelymodelbat_LNUMBER1.html",
                 "fastqc/hugelymodelbat_LNUMBER1/hugelymodelbat_LNUMBER1.zip",
-                "haplocheck",
-                "haplocheck/hugelymodelbat.raw.txt",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/.stub",
@@ -713,7 +708,7 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-03-03T16:00:11.328624107",
+        "timestamp": "2026-03-03T10:31:17.265377549",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
