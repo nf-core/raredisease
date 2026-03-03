@@ -76,6 +76,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
       - [Annotating mobile elements](#annotating-mobile-elements)
     - [Variant evaluation](#variant-evaluation)
     - [Gens](#gens)
+    - [Peddy](#peddy)
     - [Pipeline information](#pipeline-information)
 
 ### Alignment
@@ -453,6 +454,7 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 - `annotate_sv/`
   - `<case_id>_svdbquery_vep.vcf.gz`: file containing svdb query, and vep annotations.
   - `<case_id>_svdbquery_vep.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, and vep annotations.
+  - `<case_id>_svdbquery_vep_summary.html`: vep summary.
 
 </details>
 
@@ -627,6 +629,26 @@ The sequencing data can be prepared for visualization of CNVs in [Gens](https://
   - `<sample_id>_gens.cov.bed.gz.tbi`: index of the \*cov.bed.gz file.
 
 </details>
+
+### Peddy
+
+[Peddy](https://github.com/brentp/peddy) compares familial-relationships and sexes as reported in a PED file with those inferred from a VCF.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `peddy/`
+  - `*.het_check.csv`
+  - `*.het_check.png`
+  - `*.html`
+  - `*.pca_check.png`
+  - `*.ped_check.csv`
+  - `*.ped_check.png`
+  - `*.ped_check.rel-difference.csv`
+  - `*.peddy.ped`
+  - `*.sex_check.csv`
+  - `*.sex_check.png`
+  - `*.vs.html`
 
 ### Pipeline information
 
