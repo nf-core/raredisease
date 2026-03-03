@@ -1,9 +1,9 @@
 {
     "CALL_SV_TIDDIT": {
         "content": [
-            "140ce993561670b54ecb907561e3a417"
+            "VcfFile [chromosomes=[MT, 21], sampleCount=3, variantCount=178, phased=false, phasedAutodetect=false]"
         ],
-        "timestamp": "2026-03-01T21:41:21.445553341",
+        "timestamp": "2026-03-03T22:37:56.960203544",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
