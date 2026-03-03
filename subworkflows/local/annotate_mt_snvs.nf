@@ -2,17 +2,15 @@
 // Annotate MT
 //
 
-//include { REPLACE_SPACES_IN_VCFINFO                      } from '../../modules/local/replace_spaces_in_vcfinfo'
+
 include { BCFTOOLS_PLUGINSETGT                           } from '../../modules/nf-core/bcftools/pluginsetgt'
 include { TABIX_TABIX as TABIX_TABIX_MT                  } from '../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_TABIX_VEP_MT              } from '../../modules/nf-core/tabix/tabix/main'
-//include { TABIX_BGZIPTABIX as ZIP_TABIX_HMTNOTE_MT       } from '../../modules/nf-core/tabix/bgziptabix/main'
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_MT                } from '../../modules/nf-core/ensemblvep/vep/main'
 include { HAPLOGREP3_CLASSIFY as HAPLOGREP3_CLASSIFY_MT  } from '../../modules/nf-core/haplogrep3/classify/main'
 include { VCFANNO as VCFANNO_MT                          } from '../../modules/nf-core/vcfanno/main'
 include { ANNOTATE_CADD                                  } from './annotate_cadd'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO_MT       } from '../../modules/nf-core/tabix/bgziptabix/main'
-//include { HMTNOTE_ANNOTATE                               } from '../../modules/nf-core/hmtnote/annotate/main'
 
 workflow ANNOTATE_MT_SNVS {
     take:
@@ -37,27 +35,14 @@ workflow ANNOTATE_MT_SNVS {
         ch_versions     = channel.empty()
         ch_haplog       = channel.empty()
 
-/*        // add prefix to meta
-        ch_mt_vcf
-            .map { meta, vcf  ->
-                return [meta+ [prefix: vcf.simpleName + "_hmtnote"], vcf]
-            }
-            .set { ch_hmtnote_in }
-
-        // HMTNOTE ANNOTATE
-        HMTNOTE_ANNOTATE(ch_hmtnote_in)
-        REPLACE_SPACES_IN_VCFINFO(HMTNOTE_ANNOTATE.out.vcf)
-        ZIP_TABIX_HMTNOTE_MT(REPLACE_SPACES_IN_VCFINFO.out.vcf) */
-        TABIX_TABIX_MT(ch_mt_vcf) // meta, tbi 
-        // => TABIX_TABIX_MT(ch_mt_vcf) a associer avec ch_mt_vcf [meta, vcf] pour avoir [meta, vcf, tbi]
-
+        // Index vcf
+        TABIX_TABIX_MT(ch_mt_vcf) 
         ch_mt_vcf_index = ch_mt_vcf.join(TABIX_TABIX_MT.out.index)
 
         // Vcfanno
-        //ZIP_TABIX_HMTNOTE_MT.out.gz_index // = meta, vcf, tbi
         ch_mt_vcf_index
             .combine(ch_vcfanno_extra)
-            .map { meta, vcf, tbi, resources -> return [meta + [prefix: vcf.simpleName + "_vcfanno"], vcf, tbi, resources]}
+            .map { meta, vcf, tbi, resources -> return [meta + [prefix: meta.prefix + "_vcfanno"], vcf, tbi, resources]}
             .set { ch_in_vcfanno }
 
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
@@ -128,9 +113,6 @@ workflow ANNOTATE_MT_SNVS {
             ch_vcf = BCFTOOLS_PLUGINSETGT.out.vcf
             ch_tbi = BCFTOOLS_PLUGINSETGT.out.tbi
         }
-
-        ch_versions = ch_versions.mix(VCFANNO_MT.out.versions)
-        //ch_versions = ch_versions.mix(HMTNOTE_ANNOTATE.out.versions)
 
     emit:
         haplog    = ch_haplog                // channel: [ val(meta), path(txt) ]
