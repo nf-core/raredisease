@@ -1,6 +1,6 @@
 process SALTSHAKER_CALL {
     tag "$meta.id"
-    label "process_low"
+    label "process_single"
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -30,12 +30,12 @@ process SALTSHAKER_CALL {
     saltshaker call \\
         --prefix $prefix \\
         --output-dir . \\
-        -r $mtfasta \\
-        -c $cluster \\
-        -p $breakpoint \\
-        -f $flank \\
-        -H $hplimit \\
-        -g $mito_length \\
+        --reference $mtfasta \\
+        --cluster $cluster \\
+        --breakpoint $breakpoint \\
+        --flank-size $flank \\
+        --het-limit $hplimit \\
+        --genome-length $mito_length \\
         --ori-h-start $ori_h_start \\
         --ori-h-end $ori_h_end \\
         --ori-l-start $ori_l_start \\
