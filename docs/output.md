@@ -66,7 +66,6 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
         - [HaploGrep2](#haplogrep2)
         - [vcfanno](#vcfanno-1)
         - [CADD](#cadd-1)
-        - [Hmtnote](#hmtnote)
         - [VEP](#vep-2)
     - [Filtering and ranking](#filtering-and-ranking)
       - [Filter_vep](#filter_vep)
@@ -512,10 +511,6 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 
 [CADD](https://cadd.gs.washington.edu/) is a tool for scoring the deleteriousness of single nucleotide variants as well as insertion/deletions variants in the human genome. In nf-core/raredisease, SNVs can be annotated with precomputed CADD scores using vcfanno. However, for small indels they will be calculated on the fly by CADD. The output files are not published in the output folder, and is passed to VEP for further annotation.
 
-##### Hmtnote
-
-[HmtNote](https://github.com/robertopreste/HmtNote) annotates vcf containing human mitochondrial variants with HmtVar. It will run offline by default with a database within the container.
-
 ##### VEP
 
 [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html) determines the effect of your variants on genes, transcripts, and protein sequence, as well as regulatory regions.
@@ -524,8 +519,8 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 <summary>Output files</summary>
 
 - `annotate_snv/mitochondria`
-  - `<case_id>_mitochondria_hmtnote_vcfanno_<cadd_vep|vep>.vcf.gz`: file containing mitochondrial annotations.
-  - `<case_id>_mitochondria_hmtnote_vcfanno_<cadd_vep|vep>.vcf.gz.tbi`: index of the file containing mitochondrial annotations.
+  - `<case_id>_mitochondria_vcfanno_<cadd_vep|vep>.vcf.gz`: file containing mitochondrial annotations.
+  - `<case_id>_mitochondria_vcfanno_<cadd_vep|vep>.vcf.gz.tbi`: index of the file containing mitochondrial annotations.
 
 </details>
 

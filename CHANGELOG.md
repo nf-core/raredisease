@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sambamba depth now filters on not duplicates and not failed_quality_control [#768](https://github.com/nf-core/raredisease/pull/768)
 - Removed eKLIPse [#743](https://github.com/nf-core/raredisease/pull/743)
 - Removed haplocheck [#778](https://github.com/nf-core/raredisease/pull/778)
+- Removed HmtNote [#779](https://github.com/nf-core/raredisease/pull/779)
 
 ### `Fixed`
 
