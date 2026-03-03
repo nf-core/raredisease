@@ -57,7 +57,7 @@ workflow ANNOTATE_MT_SNVS {
         //ZIP_TABIX_HMTNOTE_MT.out.gz_index // = meta, vcf, tbi
         ch_mt_vcf_index
             .combine(ch_vcfanno_extra)
-            .map { meta, vcf, tbi, resources -> return [meta + [prefix: meta.prefix + "_vcfanno"], vcf, tbi, resources]}
+            .map { meta, vcf, tbi, resources -> return [meta + [prefix: vcf.simpleName + "_vcfanno"], vcf, tbi, resources]}
             .set { ch_in_vcfanno }
 
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
