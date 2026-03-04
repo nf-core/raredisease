@@ -48,7 +48,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    path(workflow.out.vcf[0][1]).vcf.summary
+                    path(workflow.out.vcf[0][1]).vcf.chromosomes == ['MT', '21'] as Set
                 ).match() }
             )
         }

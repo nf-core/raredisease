@@ -40,7 +40,7 @@ nextflow_workflow {
         }
     }
 
-    test("CALL_SNV_DEEPVARIANT - wgs") {
+    test("CALL_SNV_DEEPVARIANT - wgs, stub") {
 
         when {
             workflow {

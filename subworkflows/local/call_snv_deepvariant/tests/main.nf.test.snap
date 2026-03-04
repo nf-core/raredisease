@@ -1,4 +1,119 @@
 {
+    "CALL_SNV_DEEPVARIANT - wgs, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_deepvar.g.vcf.gz:md5,6e2498db92386f06f95c5f5ea5e7c2f8"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_deepvar.g.vcf.gz.tbi:md5,1c4a347d20d354e38353bca7d9282522"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_split_rmdup_info.vcf.gz.tbi:md5,8283021466e07e50c03a3baba5a195b8"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_split_rmdup_info.vcf.gz:md5,9db1287686ce5b732273da892d8e4613"
+                    ]
+                ],
+                "gvcf": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_deepvar.g.vcf.gz:md5,6e2498db92386f06f95c5f5ea5e7c2f8"
+                    ]
+                ],
+                "gvcf_tabix": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_deepvar.g.vcf.gz.tbi:md5,1c4a347d20d354e38353bca7d9282522"
+                    ]
+                ],
+                "tabix": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_split_rmdup_info.vcf.gz.tbi:md5,8283021466e07e50c03a3baba5a195b8"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_split_rmdup_info.vcf.gz:md5,9db1287686ce5b732273da892d8e4613"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-03-04T20:01:54.517768538",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
     "CALL_SNV_DEEPVARIANT - wgs": {
         "content": [
             "e4e9e39859d7df52fd955fb32796fdb2",
