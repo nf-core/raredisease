@@ -24,9 +24,6 @@ nextflow_workflow {
         }
 
         when {
-            params {
-                outdir = "$outputDir"
-            }
             workflow {
                 """
                 input[0] = channel.of(

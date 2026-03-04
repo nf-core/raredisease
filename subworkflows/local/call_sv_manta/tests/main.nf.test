@@ -10,9 +10,6 @@ nextflow_workflow {
     test("CALL_SV_MANTA - wgs") {
 
         when {
-            params {
-                outdir = "$outputDir"
-            }
             workflow {
                 """
                 input[0] = channel.of(

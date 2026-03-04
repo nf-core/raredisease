@@ -1,14 +1,42 @@
 {
     "CALL_MOBILE_ELEMENTS - stub": {
         "content": [
-            [
-                "justhusky_mobile_elements.vcf.gz"
-            ],
-            [
-                "justhusky_mobile_elements.vcf.gz.tbi"
-            ]
+            {
+                "0": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mobile_elements.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mobile_elements.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "tbi": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mobile_elements.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mobile_elements.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
         ],
-        "timestamp": "2026-03-01T17:14:06.948018519",
+        "timestamp": "2026-03-04T15:43:58.250066806",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

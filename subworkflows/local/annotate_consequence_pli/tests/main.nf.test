@@ -30,8 +30,8 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    path(workflow.out.vcf_ann[0][1].toString()).vcf.variantsMD5,
-                    path(workflow.out.vcf_ann[0][1].toString()).vcf.summary
+                    path(workflow.out.vcf_ann[0][1]).vcf.variantsMD5,
+                    path(workflow.out.vcf_ann[0][1]).vcf.summary
                 ).match() }
             )
         }
@@ -59,8 +59,8 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    path(workflow.out.vcf_ann[0][1].toString()).vcf.variantsMD5,
-                    path(workflow.out.vcf_ann[0][1].toString()).vcf.summary
+                    path(workflow.out.vcf_ann[0][1]).vcf.variantsMD5,
+                    path(workflow.out.vcf_ann[0][1]).vcf.summary
                 ).match() }
             )
         }
