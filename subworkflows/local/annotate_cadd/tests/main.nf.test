@@ -30,10 +30,7 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(
-                    workflow.out.vcf.collect { meta, vcf -> file(vcf).name },
-                    workflow.out.tbi.collect { meta, tbi -> file(tbi).name }
-                ).match() }
+                { assert snapshot(workflow.out).match() }
             )
         }
     }
@@ -62,9 +59,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.out.vcf.collect { meta, vcf -> file(vcf).name },
-                    workflow.out.tbi.collect { meta, tbi -> file(tbi).name }
-                ).match() }
+                    workflow.out).match() }
             )
         }
     }
