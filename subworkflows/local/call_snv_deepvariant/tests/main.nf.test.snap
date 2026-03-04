@@ -17,7 +17,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_deepvar.g.vcf.gz:md5,6e2498db92386f06f95c5f5ea5e7c2f8"
+                        "earlycasualcaiman_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
                     ]
                 ],
                 "1": [
@@ -35,7 +35,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_deepvar.g.vcf.gz.tbi:md5,1c4a347d20d354e38353bca7d9282522"
+                        "earlycasualcaiman_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
                     ]
                 ],
                 "2": [
@@ -43,7 +43,7 @@
                         {
                             "id": "justhusky"
                         },
-                        "justhusky_split_rmdup_info.vcf.gz.tbi:md5,8283021466e07e50c03a3baba5a195b8"
+                        "justhusky_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "3": [
@@ -51,7 +51,7 @@
                         {
                             "id": "justhusky"
                         },
-                        "justhusky_split_rmdup_info.vcf.gz:md5,9db1287686ce5b732273da892d8e4613"
+                        "justhusky_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "gvcf": [
@@ -69,7 +69,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_deepvar.g.vcf.gz:md5,6e2498db92386f06f95c5f5ea5e7c2f8"
+                        "earlycasualcaiman_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
                     ]
                 ],
                 "gvcf_tabix": [
@@ -87,7 +87,7 @@
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_deepvar.g.vcf.gz.tbi:md5,1c4a347d20d354e38353bca7d9282522"
+                        "earlycasualcaiman_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
                     ]
                 ],
                 "tabix": [
@@ -95,7 +95,7 @@
                         {
                             "id": "justhusky"
                         },
-                        "justhusky_split_rmdup_info.vcf.gz.tbi:md5,8283021466e07e50c03a3baba5a195b8"
+                        "justhusky_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "vcf": [
@@ -103,12 +103,12 @@
                         {
                             "id": "justhusky"
                         },
-                        "justhusky_split_rmdup_info.vcf.gz:md5,9db1287686ce5b732273da892d8e4613"
+                        "justhusky_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-03-04T20:01:54.517768538",
+        "timestamp": "2026-03-04T21:10:26.381980616",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
