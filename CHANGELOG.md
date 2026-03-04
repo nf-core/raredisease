@@ -77,6 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | samtools             | 1.21        | 1.22.1      |
 | sentieon             | 202503      | 202503.02   |
 | stranger             | 0.9.4       | 0.10.0      |
+| svdb                 | 2.8.3       | 2.8.4       |
 | tiddit               | 3.6.1       | 3.9.4       |
 | ucsc                 | 447         | 482         |
 | vcfanno              | 0.3.5       | 0.3.7       |
