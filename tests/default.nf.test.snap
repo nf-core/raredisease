@@ -234,9 +234,6 @@
                 "HISAT2_INDEX_GENOME": {
                     "hisat2": "2.2.1"
                 },
-                "HMTNOTE_ANNOTATE": {
-                    "hmtnote": "0.7.2"
-                },
                 "INDEX_CNVNATOR": {
                     "bgzip": 1.21,
                     "tabix": 1.21
@@ -314,10 +311,6 @@
                 },
                 "RENAME_BAM": {
                     "coreutils": 9.5
-                },
-                "REPLACE_SPACES_IN_VCFINFO": {
-                    "python": "3.14.3",
-                    "replace_spaces_in_vcfinfo": 1.0
                 },
                 "RETROSEQ_CALL": {
                     "retroseq": 1.5
@@ -494,10 +487,6 @@
                 },
                 "Workflow": {
                     "nf-core/raredisease": "v2.7.0dev"
-                },
-                "ZIP_TABIX_HMTNOTE_MT": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
@@ -676,9 +665,9 @@
                 "annotate_snv/genome/slowlycivilbuck_rhocallviz/slowlycivilbuck_rhocallviz.bw",
                 "annotate_snv/genome/slowlycivilbuck_rhocallviz/slowlycivilbuck_rhocallviz.wig",
                 "annotate_snv/mitochondria",
-                "annotate_snv/mitochondria/justhusky_mitochondria_hmtnote_vcfanno_vep.vcf.gz",
-                "annotate_snv/mitochondria/justhusky_mitochondria_hmtnote_vcfanno_vep.vcf.gz.tbi",
-                "annotate_snv/mitochondria/justhusky_mitochondria_hmtnote_vcfanno_vep_haplogrep.txt",
+                "annotate_snv/mitochondria/justhusky_mitochondria_vcfanno_vep.vcf.gz",
+                "annotate_snv/mitochondria/justhusky_mitochondria_vcfanno_vep.vcf.gz.tbi",
+                "annotate_snv/mitochondria/justhusky_mitochondria_vcfanno_vep_haplogrep.txt",
                 "annotate_sv",
                 "annotate_sv/justhusky_svdbquery_vep.vcf.gz",
                 "annotate_sv/justhusky_svdbquery_vep.vcf.gz.tbi",

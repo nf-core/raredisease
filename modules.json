@@ -296,12 +296,6 @@
                         "git_sha": "66391ca86ea6a081d288afe6a93d242fefcd8c2c",
                         "installed_by": ["modules"]
                     },
-                    "hmtnote/annotate": {
-                        "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/hmtnote/annotate/hmtnote-annotate.diff"
-                    },
                     "last/lastdb": {
                         "branch": "master",
                         "git_sha": "a54953d05812af249d40ffaccb5b8ee371a75866",
