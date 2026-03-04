@@ -1,7 +1,7 @@
 channels:
-- conda-forge
-- bioconda
+  - conda-forge
+  - bioconda
 dependencies:
-- pip
-- pip:
-  - saltshaker==1.0.0
+  - pip
+  - pip:
+      - saltshaker==1.0.0
