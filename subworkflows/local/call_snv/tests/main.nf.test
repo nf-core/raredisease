@@ -70,6 +70,8 @@ nextflow_workflow {
 
     test("CALL_SNV - deepvariant wgs, stub") {
 
+        options "-stub"
+
         when {
             workflow {
                 """
