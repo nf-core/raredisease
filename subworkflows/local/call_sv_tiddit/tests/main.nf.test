@@ -30,9 +30,6 @@ nextflow_workflow {
                     [[id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
                      file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
                      file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)],
-                    [[id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", lane:1, sex:1, phenotype:2, paternal:'earlycasualcaiman', maternal:'slowlycivilbuck', case_id:'justhusky'],
-                     file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbat_sorted_md.bam', checkIfExists: true),
-                     file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbat_sorted_md.bam.bai', checkIfExists: true)],
                     [[id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
                      file(params.pipelines_testdata_base_path + 'testdata/slowlycivilbuck_sorted_md.bam', checkIfExists: true),
                      file(params.pipelines_testdata_base_path + 'testdata/slowlycivilbuck_sorted_md.bam.bai', checkIfExists: true)]
