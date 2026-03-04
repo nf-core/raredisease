@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            792,
+            790,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,

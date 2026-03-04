@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            364,
+            362,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
