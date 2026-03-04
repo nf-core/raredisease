@@ -1,0 +1,72 @@
+nextflow_workflow {
+
+    name "Test Workflow ANNOTATE_CADD"
+    script "subworkflows/local/annotate_cadd/main.nf"
+    workflow "ANNOTATE_CADD"
+    tag "subworkflows"
+    tag "annotate_cadd"
+    config "./nextflow.config"
+
+    test("ANNOTATE_CADD - GRCh37, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.from("\$PWD").map { dir -> [ [ id: 'cadd_resources' ], dir ] }
+                input[1] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[2] = channel.of([[id:'resources'], file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/cadd_to_vcf_header_-1.0-.txt', checkIfExists: true)]).collect()
+                input[3] = channel.of([
+                    [id:'test', single_end: false],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[4] = 'GRCh37'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.vcf.collect { meta, vcf -> file(vcf).name },
+                    workflow.out.tbi.collect { meta, tbi -> file(tbi).name }
+                ).match() }
+            )
+        }
+    }
+
+    test("ANNOTATE_CADD - GRCh38, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.from("\$PWD").map { dir -> [ [ id: 'cadd_resources' ], dir ] }
+                input[1] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[2] = channel.of([[id:'resources'], file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/cadd_to_vcf_header_-1.0-.txt', checkIfExists: true)]).collect()
+                input[3] = channel.of([
+                    [id:'test', single_end: false],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[4] = 'GRCh38'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.vcf.collect { meta, vcf -> file(vcf).name },
+                    workflow.out.tbi.collect { meta, tbi -> file(tbi).name }
+                ).match() }
+            )
+        }
+    }
+
+}
