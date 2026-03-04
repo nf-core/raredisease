@@ -36,7 +36,7 @@ workflow ANNOTATE_MT_SNVS {
         ch_haplog       = channel.empty()
 
         // Index vcf
-        TABIX_TABIX_MT(ch_mt_vcf) 
+        TABIX_TABIX_MT(ch_mt_vcf)
         ch_mt_vcf_index = ch_mt_vcf.join(TABIX_TABIX_MT.out.index)
 
         // Vcfanno
