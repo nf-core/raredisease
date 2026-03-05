@@ -2,12 +2,12 @@
 // A preprocessing workflow for Gens
 //
 
-include { GATK4_COLLECTREADCOUNTS as COLLECTREADCOUNTS        } from '../../modules/nf-core/gatk4/collectreadcounts/main'
-include { GATK4_DENOISEREADCOUNTS as DENOISEREADCOUNTS_FEMALE } from '../../modules/nf-core/gatk4/denoisereadcounts/main'
-include { GATK4_DENOISEREADCOUNTS as DENOISEREADCOUNTS_MALE   } from '../../modules/nf-core/gatk4/denoisereadcounts/main'
-include { GENS as GENS_GENERATE                               } from '../../modules/local/gens/main'
-include { TABIX_BGZIPTABIX as GENS_GENERATE_BAF_INDEX         } from '../../modules/nf-core/tabix/bgziptabix/main'
-include { TABIX_BGZIPTABIX as GENS_GENERATE_COV_INDEX         } from '../../modules/nf-core/tabix/bgziptabix/main'
+include { GATK4_COLLECTREADCOUNTS as COLLECTREADCOUNTS        } from '../../../modules/nf-core/gatk4/collectreadcounts/main'
+include { GATK4_DENOISEREADCOUNTS as DENOISEREADCOUNTS_FEMALE } from '../../../modules/nf-core/gatk4/denoisereadcounts/main'
+include { GATK4_DENOISEREADCOUNTS as DENOISEREADCOUNTS_MALE   } from '../../../modules/nf-core/gatk4/denoisereadcounts/main'
+include { GENS as GENS_GENERATE                               } from '../../../modules/local/gens/main'
+include { TABIX_BGZIPTABIX as GENS_GENERATE_BAF_INDEX         } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { TABIX_BGZIPTABIX as GENS_GENERATE_COV_INDEX         } from '../../../modules/nf-core/tabix/bgziptabix/main'
 
 workflow GENS {
     take:

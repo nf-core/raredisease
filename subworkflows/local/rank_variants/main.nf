@@ -2,12 +2,12 @@
 // A subworkflow to score and rank variants.
 //
 
-include { GENMOD_ANNOTATE  } from '../../modules/nf-core/genmod/annotate/main'
-include { GENMOD_MODELS    } from '../../modules/nf-core/genmod/models/main'
-include { GENMOD_SCORE     } from '../../modules/nf-core/genmod/score/main'
-include { GENMOD_COMPOUND  } from '../../modules/nf-core/genmod/compound/main'
-include { BCFTOOLS_SORT    } from '../../modules/nf-core/bcftools/sort/main'
-include { TABIX_BGZIPTABIX } from '../../modules/nf-core/tabix/bgziptabix/main'
+include { GENMOD_ANNOTATE  } from '../../../modules/nf-core/genmod/annotate/main'
+include { GENMOD_MODELS    } from '../../../modules/nf-core/genmod/models/main'
+include { GENMOD_SCORE     } from '../../../modules/nf-core/genmod/score/main'
+include { GENMOD_COMPOUND  } from '../../../modules/nf-core/genmod/compound/main'
+include { BCFTOOLS_SORT    } from '../../../modules/nf-core/bcftools/sort/main'
+include { TABIX_BGZIPTABIX } from '../../../modules/nf-core/tabix/bgziptabix/main'
 
 workflow RANK_VARIANTS {
 

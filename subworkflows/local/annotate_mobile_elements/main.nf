@@ -2,10 +2,10 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_FILTER } from '../../modules/nf-core/bcftools/view/main'
-include { ENSEMBLVEP_VEP as ENSEMBLVEP_ME       } from '../../modules/nf-core/ensemblvep/vep/main'
-include { PICARD_SORTVCF                        } from '../../modules/nf-core/picard/sortvcf/main'
-include { SVDB_QUERY as SVDB_QUERY_DB           } from '../../modules/nf-core/svdb/query/main'
+include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_FILTER } from '../../../modules/nf-core/bcftools/view/main'
+include { ENSEMBLVEP_VEP as ENSEMBLVEP_ME       } from '../../../modules/nf-core/ensemblvep/vep/main'
+include { PICARD_SORTVCF                        } from '../../../modules/nf-core/picard/sortvcf/main'
+include { SVDB_QUERY as SVDB_QUERY_DB           } from '../../../modules/nf-core/svdb/query/main'
 
 
 workflow ANNOTATE_MOBILE_ELEMENTS {
