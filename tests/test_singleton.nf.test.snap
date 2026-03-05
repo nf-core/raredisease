@@ -200,7 +200,7 @@
                     "gatk4": "4.6.2.0"
                 },
                 "GAWK": {
-                    "gawk": "5.3.0"
+                    "gawk": "5.3.1"
                 },
                 "GENMOD_ANNOTATE": {
                     "genmod": "3.10.2"
@@ -722,7 +722,7 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-03-03T10:31:17.265377549",
+        "timestamp": "2026-03-05T15:31:47.943426601",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
