@@ -1,4 +1,31 @@
 {
+    "CALL_SV_TIDDIT, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_svdb_tiddit.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_svdb_tiddit.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-03-05T13:01:06.562601729",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
     "CALL_SV_TIDDIT": {
         "content": [
             true
