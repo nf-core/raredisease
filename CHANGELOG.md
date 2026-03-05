@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed eKLIPse [#743](https://github.com/nf-core/raredisease/pull/743)
 - Removed haplocheck [#778](https://github.com/nf-core/raredisease/pull/778)
 - Removed HmtNote [#779](https://github.com/nf-core/raredisease/pull/779)
+- Updated svbd module [#781](https://github.com/nf-core/raredisease/pull/781)
 
 ### `Fixed`
 
@@ -77,6 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | samtools             | 1.21        | 1.22.1      |
 | sentieon             | 202503      | 202503.02   |
 | stranger             | 0.9.4       | 0.10.0      |
+| svdb                 | 2.8.3       | 2.8.4       |
 | tiddit               | 3.6.1       | 3.9.4       |
 | ucsc                 | 447         | 482         |
 | vcfanno              | 0.3.5       | 0.3.7       |

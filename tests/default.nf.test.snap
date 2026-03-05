@@ -384,26 +384,26 @@
                 },
                 "SVDB_MERGE": {
                     "bcftools": 1.23,
-                    "svdb": "2.8.3"
+                    "svdb": "2.8.4"
                 },
                 "SVDB_MERGE_CNVNATOR": {
                     "bcftools": 1.23,
-                    "svdb": "2.8.3"
+                    "svdb": "2.8.4"
                 },
                 "SVDB_MERGE_ME": {
                     "bcftools": 1.23,
-                    "svdb": "2.8.3"
+                    "svdb": "2.8.4"
                 },
                 "SVDB_MERGE_REPEATS": {
                     "bcftools": 1.23,
-                    "svdb": "2.8.3"
+                    "svdb": "2.8.4"
                 },
                 "SVDB_MERGE_TIDDIT": {
                     "bcftools": 1.23,
-                    "svdb": "2.8.3"
+                    "svdb": "2.8.4"
                 },
                 "SVDB_QUERY_DB": {
-                    "svdb": "2.8.3"
+                    "svdb": "2.8.4"
                 },
                 "TABIX_ANNOTATE": {
                     "tabix": 1.21
