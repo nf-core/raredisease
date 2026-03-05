@@ -20,5 +20,32 @@
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
+    },
+    "ANNOTATE_CSQ_PLI - with index, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "severepli.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "vcf_ann": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "severepli.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-03-05T12:55:16.985254117",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     }
 }

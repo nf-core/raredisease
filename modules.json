@@ -296,12 +296,6 @@
                         "git_sha": "66391ca86ea6a081d288afe6a93d242fefcd8c2c",
                         "installed_by": ["modules"]
                     },
-                    "hmtnote/annotate": {
-                        "branch": "master",
-                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/hmtnote/annotate/hmtnote-annotate.diff"
-                    },
                     "last/lastdb": {
                         "branch": "master",
                         "git_sha": "a54953d05812af249d40ffaccb5b8ee371a75866",
@@ -499,12 +493,12 @@
                     },
                     "svdb/merge": {
                         "branch": "master",
-                        "git_sha": "b75cf1a894cc2d63a81dc3bd58126de7f023acf9",
+                        "git_sha": "7d09b5f86908bdd951e42aef9994ad5bb0f6c307",
                         "installed_by": ["modules"]
                     },
                     "svdb/query": {
                         "branch": "master",
-                        "git_sha": "7f56b1f1d2e8b7ca92260eb6b3244d26c319a00f",
+                        "git_sha": "7d09b5f86908bdd951e42aef9994ad5bb0f6c307",
                         "installed_by": ["modules"]
                     },
                     "tabix/bgzip": {

@@ -1,5 +1,5 @@
 {
-    "CALL_SNV_MT - stub": {
+    "CALL_SNV_MT, stub": {
         "content": [
             [
                 "earlycasualcaiman_filtered.vcf.gz"
@@ -8,7 +8,7 @@
                 "earlycasualcaiman_filtered.vcf.gz.tbi"
             ]
         ],
-        "timestamp": "2026-03-01T17:35:07.245240789",
+        "timestamp": "2026-03-04T17:12:30.676957964",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
