@@ -3,7 +3,6 @@
 //
 
 include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_RHOCALL    } from '../../../modules/nf-core/bcftools/view/main'
-include { TABIX_TABIX                               } from '../../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_ROH                              } from '../../../modules/nf-core/bcftools/roh/main'
 include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_UNCOMPRESS } from '../../../modules/nf-core/bcftools/view/main'
 include { RHOCALL_VIZ                               } from '../../../modules/nf-core/rhocall/viz/main'
@@ -25,10 +24,8 @@ workflow ANNOTATE_RHOCALLVIZ {
 
         BCFTOOLS_VIEW_RHOCALL(ch_rhocall_viz, [],[],[])
 
-        TABIX_TABIX(BCFTOOLS_VIEW_RHOCALL.out.vcf)
-
         BCFTOOLS_VIEW_RHOCALL.out.vcf
-            .join(TABIX_TABIX.out.index)
+            .join(BCFTOOLS_VIEW_RHOCALL.out.tbi)
             .set {ch_roh_in }
 
         BCFTOOLS_ROH(ch_roh_in, [[],[]], [], [], [], [])
