@@ -7,11 +7,9 @@ include { SENTIEON_DNAMODELAPPLY                     } from '../../../modules/nf
 include { BCFTOOLS_MERGE                             } from '../../../modules/nf-core/bcftools/merge/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_SEN   } from '../../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_SEN     } from '../../../modules/nf-core/bcftools/norm/main'
-include { TABIX_TABIX as TABIX_SEN                   } from '../../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_FILTER as BCF_FILTER_ONE          } from '../../../modules/nf-core/bcftools/filter/main'
 include { BCFTOOLS_FILTER as BCF_FILTER_TWO          } from '../../../modules/nf-core/bcftools/filter/main'
 include { BCFTOOLS_ANNOTATE                          } from '../../../modules/nf-core/bcftools/annotate/main'
-include { TABIX_TABIX as TABIX_ANNOTATE              } from '../../../modules/nf-core/tabix/tabix/main'
 include { ADD_VARCALLER_TO_BED                       } from '../../../modules/local/add_varcallername_to_bed'
 
 workflow CALL_SNV_SENTIEON {
@@ -70,7 +68,10 @@ workflow CALL_SNV_SENTIEON {
             }
             .set{ ch_vcf_idx_merge_in }
 
-        BCFTOOLS_MERGE(ch_vcf_idx_merge_in.multiple, ch_genome_fasta, ch_genome_fai, [[:],[]])
+        BCFTOOLS_MERGE(
+            ch_vcf_idx_merge_in.multiple.map { it -> it + [[]] }, 
+            ch_genome_fasta.join(ch_genome_fai, failOnMismatch:true, failOnDuplicate:true)
+            )
 
         ch_split_multi_in = BCFTOOLS_MERGE.out.vcf
                     .map{meta, bcf ->
@@ -86,8 +87,6 @@ workflow CALL_SNV_SENTIEON {
 
         REMOVE_DUPLICATES_SEN(ch_remove_dup_in, ch_genome_fasta)
 
-        TABIX_SEN(REMOVE_DUPLICATES_SEN.out.vcf)
-
         ch_genome_chrsizes.flatten().map{chromsizes ->
             return [[id:'sentieon_dnascope'], chromsizes]
             }
@@ -98,17 +97,18 @@ workflow CALL_SNV_SENTIEON {
             .set{ch_varcallerbed}
 
         REMOVE_DUPLICATES_SEN.out.vcf
-            .join(TABIX_SEN.out.tbi)
+            .join(REMOVE_DUPLICATES_SEN.out.tbi)
             .combine(ch_varcallerbed)
+            .map { it -> it + [[]] }
+            .combine(ch_foundin_header)
+            .map { it -> it + [[]] }
             .set { ch_annotate_in }
 
-        BCFTOOLS_ANNOTATE(ch_annotate_in, [], ch_foundin_header, [])
-
-        TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
+        BCFTOOLS_ANNOTATE(ch_annotate_in)
 
     emit:
         gvcf     = SENTIEON_DNASCOPE.out.gvcf     // channel: [ val(meta), path(gvcf) ]
         gvcf_tbi = SENTIEON_DNASCOPE.out.gvcf_tbi // channel: [ val(meta), path(gvcf_tbi) ]
-        tabix    = TABIX_ANNOTATE.out.tbi         // channel: [ val(meta), path(tbi) ]
+        tabix    = BCFTOOLS_ANNOTATE.out.tbi      // channel: [ val(meta), path(tbi) ]
         vcf      = BCFTOOLS_ANNOTATE.out.vcf      // channel: [ val(meta), path(vcf) ]
 }
