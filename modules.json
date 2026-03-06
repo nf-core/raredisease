@@ -7,7 +7,7 @@
                 "nf-core": {
                     "bcftools/annotate": {
                         "branch": "master",
-                        "git_sha": "6383d8fe58f9498eecd5aa303e71a4a932d1e9f6",
+                        "git_sha": "3d9c2f4beaa4f62b3f006928fd9095a496d1e5a8",
                         "installed_by": ["modules"]
                     },
                     "bcftools/concat": {
@@ -22,7 +22,7 @@
                     },
                     "bcftools/merge": {
                         "branch": "master",
-                        "git_sha": "6383d8fe58f9498eecd5aa303e71a4a932d1e9f6",
+                        "git_sha": "3d9c2f4beaa4f62b3f006928fd9095a496d1e5a8",
                         "installed_by": ["modules"]
                     },
                     "bcftools/norm": {
@@ -313,7 +313,7 @@
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "575e1a4b51a9bad7a8cd1316a88fb85684ef7c7b",
+                        "git_sha": "2c73cc8fa92cf48de3da0b643fdf357a8a290b36",
                         "installed_by": ["modules"]
                     },
                     "ngsbits/samplegender": {
@@ -413,7 +413,7 @@
                     },
                     "samtools/merge": {
                         "branch": "master",
-                        "git_sha": "b2e78932ef01165fd85829513eaca29eff8e640a",
+                        "git_sha": "440edf75d8782913115a7b72a88392a227f72cc1",
                         "installed_by": ["modules"]
                     },
                     "samtools/sort": {
