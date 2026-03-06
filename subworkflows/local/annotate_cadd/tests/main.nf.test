@@ -12,6 +12,9 @@ nextflow_workflow {
         options "-stub"
 
         when {
+            params {
+                genome = "GRCh37"
+            }
             workflow {
                 """
                 input[0] = Channel.from("\$PWD").map { dir -> [ [ id: 'cadd_resources' ], dir ] }
@@ -40,6 +43,9 @@ nextflow_workflow {
         options "-stub"
 
         when {
+            params {
+                genome = "GRCh38"
+            }
             workflow {
                 """
                 input[0] = Channel.from("\$PWD").map { dir -> [ [ id: 'cadd_resources' ], dir ] }

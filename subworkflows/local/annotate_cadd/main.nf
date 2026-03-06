@@ -20,7 +20,7 @@ workflow ANNOTATE_CADD {
         val_genome        //  string: GRCh37 or GRCh37
 
     main:
-        ch_rename_chrs    = channel.empty()
+        ch_rename_chrs    = channel.value([])
 
         if (val_genome.equals('GRCh38')) {
 
