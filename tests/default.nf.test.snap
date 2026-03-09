@@ -425,9 +425,6 @@
                 "TABIX_EXP_RENAME": {
                     "tabix": 1.21
                 },
-                "TABIX_GL": {
-                    "tabix": 1.21
-                },
                 "TABIX_GNOMAD_AF": {
                     "tabix": 1.21
                 },
@@ -1103,7 +1100,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-03-05T15:21:47.257080881",
+        "timestamp": "2026-03-09T10:37:30.038838422",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            362,
+            360,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -414,9 +414,6 @@
                 "TABIX_EXP_RENAME": {
                     "tabix": 1.21
                 },
-                "TABIX_GL": {
-                    "tabix": 1.21
-                },
                 "TABIX_GNOMAD_AF": {
                     "tabix": 1.21
                 },
@@ -722,7 +719,7 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-03-05T15:31:47.943426601",
+        "timestamp": "2026-03-09T10:47:21.755360364",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
