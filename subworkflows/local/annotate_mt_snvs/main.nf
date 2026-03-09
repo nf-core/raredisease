@@ -32,7 +32,6 @@ workflow ANNOTATE_MT_SNVS {
         val_vep_cache_version       //  string:  vep version ex: 107
 
     main:
-        ch_versions     = channel.empty()
         ch_haplog       = channel.empty()
 
         // Index vcf
@@ -60,7 +59,6 @@ workflow ANNOTATE_MT_SNVS {
                 val_genome
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
-            ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
         } else {
             ch_cadd_vcf = channel.empty()
         }
@@ -119,5 +117,4 @@ workflow ANNOTATE_MT_SNVS {
         report    = ENSEMBLVEP_MT.out.report // channel: [ path(html) ]
         tbi       = ch_tbi                   // channel: [ val(meta), path(tbi) ]
         vcf_ann   = ch_vcf                   // channel: [ val(meta), path(vcf) ]
-        versions  = ch_versions              // channel: [ path(versions.yml) ]
 }

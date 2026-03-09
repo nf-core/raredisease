@@ -45,7 +45,6 @@ workflow ANNOTATE_GENOME_SNVS {
 
     main:
         ch_cadd_vcf       = channel.empty()
-        ch_versions       = channel.empty()
         ch_vcf_scatter_in = channel.empty()
         ch_vep_in         = channel.empty()
 
@@ -122,7 +121,6 @@ workflow ANNOTATE_GENOME_SNVS {
                 val_genome
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
-            ch_versions = ch_versions.mix(ANNOTATE_CADD.out.versions)
         }
 
         BCFTOOLS_VIEW.out.vcf
@@ -197,5 +195,4 @@ workflow ANNOTATE_GENOME_SNVS {
     emit:
         tbi      = ch_vep_index // channel: [ val(meta), path(tbi) ]
         vcf_ann  = ch_vep_ann   // channel: [ val(meta), path(vcf) ]
-        versions = ch_versions  // channel: [ path(versions.yml) ]
 }
