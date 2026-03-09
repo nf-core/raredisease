@@ -89,7 +89,7 @@ workflow POSTPROCESS_MT_CALLS {
                     return [meta, vcf, tbi]
             }.set { ch_case_vcf }
 
-        BCFTOOLS_MERGE_MT( 
+        BCFTOOLS_MERGE_MT(
             ch_case_vcf.multiple.map { it -> it + [[]] },
             ch_genome_fasta.join(ch_genome_fai, failOnMismatch:true, failOnDuplicate:true)
         )
