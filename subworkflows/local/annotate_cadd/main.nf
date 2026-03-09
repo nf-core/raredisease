@@ -17,10 +17,10 @@ workflow ANNOTATE_CADD {
         ch_fai            // channel: [optional]  [ path(fai) ]
         ch_header         // channel: [mandatory] [ path(txt) ]
         ch_vcf            // channel: [mandatory] [ val(meta), path(vcfs), path(idx) ]
-        val_genome        //  string: GRCh37 or GRCh37
+        val_genome        //  string: GRCh37 or GRCh38
 
     main:
-        ch_rename_chrs    = channel.value([])
+        ch_rename_chrs    = channel.value([[]])
 
         if (val_genome.equals('GRCh38')) {
 
