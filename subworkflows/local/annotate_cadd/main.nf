@@ -17,10 +17,10 @@ workflow ANNOTATE_CADD {
         ch_fai            // channel: [optional]  [ path(fai) ]
         ch_header         // channel: [mandatory] [ path(txt) ]
         ch_vcf            // channel: [mandatory] [ val(meta), path(vcfs), path(idx) ]
-        val_genome        //  string: GRCh37 or GRCh37
+        val_genome        //  string: GRCh37 or GRCh38
 
     main:
-        ch_rename_chrs    = channel.empty()
+        ch_rename_chrs    = channel.value([[]])
 
         if (val_genome.equals('GRCh38')) {
 
@@ -32,15 +32,11 @@ workflow ANNOTATE_CADD {
                 .set { ch_rename_chrs }
 
             ch_vcf
-                .map { meta, vcf, tbi -> [ meta, vcf, tbi, [], [] ] }
+                .map { meta, vcf, tbi -> [ meta, vcf, tbi, [], [], [], [] ] }
+                .combine(REFERENCE_TO_CADD_CHRNAMES.out.output.map { _meta, txt -> txt })
                 .set { ch_rename_chrnames_in }
 
-            RENAME_CHRNAMES (
-                ch_rename_chrnames_in,
-                [],
-                [],
-                REFERENCE_TO_CADD_CHRNAMES.out.output.map { _meta, txt -> txt }
-            )
+            RENAME_CHRNAMES ( ch_rename_chrnames_in )
 
             RENAME_CHRNAMES.out.vcf
                 .map { meta, vcf -> [ meta, vcf, [] ] }
@@ -56,9 +52,12 @@ workflow ANNOTATE_CADD {
         ch_vcf
             .join(CADD.out.tsv)
             .join(TABIX_CADD.out.index)
+            .map { meta, vcf, tbi, ann, ann_tbi  -> [ meta, vcf, tbi, ann, ann_tbi, [] ] }
+            .combine(ch_header.map { _meta, header -> header })
+            .combine(ch_rename_chrs)
             .set { ch_annotate_in }
 
-        BCFTOOLS_ANNOTATE(ch_annotate_in, [], ch_header.map { _meta, header -> header }, ch_rename_chrs)
+        BCFTOOLS_ANNOTATE(ch_annotate_in)
 
     emit:
         tbi  = BCFTOOLS_ANNOTATE.out.tbi // channel: [ val(meta), path(tbi) ]

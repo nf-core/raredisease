@@ -65,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | ensemblvep/filtervep | 113         | 115.2       |
 | fastp                | 0.23.4      | 1.0.1       |
 | gatk4                | 4.5.0.0     | 4.6.2.0     |
+| gawk                 | 5.3.0       | 5.3.1       |
 | genmod               | 3.9         | 3.10.2      |
 | gens-preproc         | 1.0.11      | 1.1.2       |
 | haplocheck           | 1.3.3       |             |

@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            790,
+            788,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -393,9 +393,6 @@
                     "tabix": 1.21
                 },
                 "TABIX_EXP_RENAME": {
-                    "tabix": 1.21
-                },
-                "TABIX_GL": {
                     "tabix": 1.21
                 },
                 "TABIX_GNOMAD_AF": {
@@ -1032,7 +1029,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-03-05T15:28:02.779912134",
+        "timestamp": "2026-03-09T10:43:36.178146121",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
