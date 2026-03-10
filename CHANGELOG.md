@@ -18,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A parameter `homoplasmy_af_threshold` to set genotypes of MT SNVs to 1/1 (homoplasmic) when AF >=`homoplasmy_af_threshold` [#768](https://github.com/nf-core/raredisease/pull/768)
 - Topic channels to local modules to caputure versions [#774](https://github.com/nf-core/raredisease/pull/774)
 - MitoSalt to detect mitochondrial deletions [#743](https://github.com/nf-core/raredisease/pull/743)
-- Tests to some of the subworkflows [#780](https://github.com/nf-core/raredisease/pull/780)
+- Tests for some of the subworkflows [#780](https://github.com/nf-core/raredisease/pull/780)
+- Tests for some of the subworkflows [#782](https://github.com/nf-core/raredisease/pull/782)
 
 ### `Changed`
 
@@ -64,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | ensemblvep/filtervep | 113         | 115.2       |
 | fastp                | 0.23.4      | 1.0.1       |
 | gatk4                | 4.5.0.0     | 4.6.2.0     |
+| gawk                 | 5.3.0       | 5.3.1       |
 | genmod               | 3.9         | 3.10.2      |
 | gens-preproc         | 1.0.11      | 1.1.2       |
 | haplocheck           | 1.3.3       |             |

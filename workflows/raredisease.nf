@@ -281,7 +281,6 @@ workflow RAREDISEASE {
                 val_mt_subsample_rd,
                 val_mt_subsample_seed
             )
-            ch_versions   = ch_versions.mix(SUBSAMPLE_MT_FRAC.out.versions)
         } else {
             SUBSAMPLE_MT_READS(
                 ch_mapped.mt_bam_bai,
@@ -385,7 +384,6 @@ workflow RAREDISEASE {
             val_run_mt_for_wes,
             val_variant_caller
         )
-        ch_versions = ch_versions.mix(CALL_SNV.out.versions)
 
         //
         // ANNOTATE GENOME SNVs
@@ -554,8 +552,6 @@ workflow RAREDISEASE {
             val_analysis_type,
             skip_germlinecnvcaller,
         )
-        ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
-
         //
         // ANNOTATE STRUCTURAL VARIANTS
         //

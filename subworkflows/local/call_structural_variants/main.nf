@@ -29,7 +29,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
         skip_germlinecnvcaller // boolean
 
     main:
-        ch_versions   = channel.empty()
         ch_merged_svs = channel.empty()
         ch_merged_tbi = channel.empty()
 
@@ -58,7 +57,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .collect{ _meta, vcf -> vcf }
                 .set { gcnvcaller_vcf }
 
-            ch_versions = ch_versions.mix(CALL_SV_GERMLINECNVCALLER.out.versions)
         }
 
         //merge
@@ -103,5 +101,4 @@ workflow CALL_STRUCTURAL_VARIANTS {
     emit:
         vcf      = ch_merged_svs // channel: [ val(meta), path(vcf)]
         tbi      = ch_merged_tbi // channel: [ val(meta), path(tbi)]
-        versions = ch_versions   // channel: [ path(versions.yml) ]
 }

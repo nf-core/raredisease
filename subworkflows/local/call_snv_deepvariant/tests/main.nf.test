@@ -6,9 +6,14 @@ nextflow_workflow {
     tag "subworkflows"
     tag "call_snv_deepvariant"
 
+    config "./nextflow.config"
+
     test("CALL_SNV_DEEPVARIANT - wgs") {
 
         when {
+            params {
+                bcftools_args = "--write-index=tbi --output-type z"
+            }
             workflow {
                 """
                 input[0] = channel.of(

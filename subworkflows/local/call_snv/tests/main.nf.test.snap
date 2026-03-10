@@ -96,9 +96,6 @@
                         "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
-                "7": [
-                    
-                ],
                 "genome_gtabix": [
                     [
                         {
@@ -175,13 +172,10 @@
                         },
                         "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
-                ],
-                "versions": [
-                    
                 ]
             }
         ],
-        "timestamp": "2026-03-05T00:25:20.084209813",
+        "timestamp": "2026-03-09T11:14:37.035323634",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
