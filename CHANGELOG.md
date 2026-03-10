@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MitoSalt to detect mitochondrial deletions [#743](https://github.com/nf-core/raredisease/pull/743)
 - Tests for some of the subworkflows [#780](https://github.com/nf-core/raredisease/pull/780)
 - Tests for some of the subworkflows [#782](https://github.com/nf-core/raredisease/pull/782)
+- Tests for some of the subworkflows [#783](https://github.com/nf-core/raredisease/pull/783)
 
 ### `Changed`
 
