@@ -44,9 +44,6 @@
                         "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
-                "4": [
-                    
-                ],
                 "haplog": [
                     [
                         {
@@ -88,13 +85,10 @@
                         },
                         "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
-                ],
-                "versions": [
-                    
                 ]
             }
         ],
-        "timestamp": "2026-03-05T16:20:14.293268403",
+        "timestamp": "2026-03-10T15:10:49.596531529",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
