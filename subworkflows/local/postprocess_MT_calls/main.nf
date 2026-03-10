@@ -90,8 +90,8 @@ workflow POSTPROCESS_MT_CALLS {
             }.set { ch_case_vcf }
 
         BCFTOOLS_MERGE_MT(
-            ch_case_vcf.multiple.map { it -> it + [[]] },
-            ch_genome_fasta.join(ch_genome_fai, failOnMismatch:true, failOnDuplicate:true)
+            ch_case_vcf.multiple.map { meta, vcf, tbi -> return [meta, vcf, tbi, []] },
+            ch_genome_fasta.join(ch_genome_fai, failOnMismatch:true, failOnDuplicate:true).collect()
         )
 
         BCFTOOLS_MERGE_MT.out.vcf
@@ -112,9 +112,8 @@ workflow POSTPROCESS_MT_CALLS {
         ch_addfoundintag_in
             .join(TABIX_TABIX_MERGE.out.index)
             .combine(ch_varcallerbed)
-            .map { it -> it + [[]] }
             .combine(ch_foundin_header)
-            .map { it -> it + [[]] }
+            .map { meta, vcf, vcf_tbi, bed, bed_tbi, hdr -> return [meta, vcf, vcf_tbi, bed, bed_tbi, [], hdr, []] }
             .set { ch_annotate_in }
 
         BCFTOOLS_ANNOTATE(ch_annotate_in)
