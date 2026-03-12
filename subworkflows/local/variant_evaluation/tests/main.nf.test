@@ -1,0 +1,31 @@
+nextflow_workflow {
+
+    name "Test Workflow VARIANT_EVALUATION"
+    script "subworkflows/local/variant_evaluation/main.nf"
+    workflow "VARIANT_EVALUATION"
+    tag "subworkflows"
+    tag "variant_evaluation"
+
+    test("VARIANT_EVALUATION - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of(file("${projectDir}/subworkflows/local/variant_evaluation/tests/rtg_truthvcfs.csv", checkIfExists: true)).collect()
+                input[1] = channel.value([[id:'genome'], file("${projectDir}/subworkflows/local/variant_evaluation/tests")])
+                input[2] = channel.of([
+                    [id:'earlycasualcaiman', case_id:'justhusky'],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gatk/haplotypecaller_calls/test2_haplotc.vcf.gz', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/gatk/haplotypecaller_calls/test2_haplotc.vcf.gz.tbi', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+        }
+    }
+}
