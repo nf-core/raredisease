@@ -8,8 +8,6 @@ include { BCFTOOLS_NORM as REMOVE_DUPLICATES_GL      } from '../../../modules/nf
 include { DEEPVARIANT_RUNDEEPVARIANT as DEEPVARIANT  } from '../../../modules/nf-core/deepvariant/rundeepvariant/main'
 include { GLNEXUS                                    } from '../../../modules/nf-core/glnexus/main'
 include { TABIX_BGZIP                                } from '../../../modules/nf-core/tabix/bgzip/main'
-include { TABIX_TABIX as TABIX_GL                    } from '../../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_ANNOTATE              } from '../../../modules/nf-core/tabix/tabix/main'
 include { ADD_VARCALLER_TO_BED                       } from '../../../modules/local/add_varcallername_to_bed'
 
 workflow CALL_SNV_DEEPVARIANT {
@@ -62,8 +60,6 @@ workflow CALL_SNV_DEEPVARIANT {
                                     return [meta, vcf, []] }
         REMOVE_DUPLICATES_GL (ch_remove_dup_in, ch_genome_fasta)
 
-        TABIX_GL (REMOVE_DUPLICATES_GL.out.vcf)
-
         ch_genome_chrsizes.flatten().map{chromsizes ->
             return [[id:'deepvariant'], chromsizes]
             }
@@ -74,17 +70,17 @@ workflow CALL_SNV_DEEPVARIANT {
             .set{ch_varcallerbed}
 
         REMOVE_DUPLICATES_GL.out.vcf
-            .join(TABIX_GL.out.index)
+            .join(REMOVE_DUPLICATES_GL.out.tbi)
             .combine(ch_varcallerbed)
+            .combine(ch_foundin_header)
+            .map { meta, vcf, vcf_tbi, bed, bed_tbi, hdr -> return [meta, vcf, vcf_tbi, bed, bed_tbi, [], hdr, []] }
             .set { ch_annotate_in }
 
-        BCFTOOLS_ANNOTATE(ch_annotate_in, [], ch_foundin_header, [])
-
-        TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
+        BCFTOOLS_ANNOTATE(ch_annotate_in)
 
     emit:
         gvcf       = DEEPVARIANT.out.gvcf       // channel: [ val(meta), path(gvcf)]
         gvcf_tabix = DEEPVARIANT.out.gvcf_tbi   // channel: [ val(meta), path(gvcf_tbi)]
-        tabix      = TABIX_ANNOTATE.out.index   // channel: [ val(meta), path(tbi) ]
+        tabix      = BCFTOOLS_ANNOTATE.out.tbi  // channel: [ val(meta), path(tbi) ]
         vcf        = BCFTOOLS_ANNOTATE.out.vcf  // channel: [ val(meta), path(vcf) ]
 }
