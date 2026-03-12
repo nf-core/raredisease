@@ -36,6 +36,7 @@ workflow CALL_SV_MT {
         val_split_length             // string: [mandatory] mitosalt_split_length
 
     main:
+        ch_mitosalt_publish = channel.empty()
 
         if (!(params.skip_tools && params.skip_tools.split(',').contains('mitosalt'))) {
             ch_reads_subdepth      = ch_reads.combine(ch_subdepth)
@@ -76,12 +77,19 @@ workflow CALL_SV_MT {
                 ch_mt_fasta,
                 ch_mt_lastdb
             )
+            ch_mitosalt_publish = MITOSALT.out.breakpoint
+                .mix(MITOSALT.out.cluster)
 
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
+
+        ch_publish = ch_mitosalt_publish
+            .mix(MT_DELETION.out.mt_del_result)
+            .map { meta, value -> ['call_sv/mitochondria/', [meta, value]] }
 
     emit:
         mitosalt_breakpoint = MITOSALT.out.breakpoint       // channel: [ val(meta), path(breakpoint) ]
         mitosalt_cluster    = MITOSALT.out.cluster          // channel: [ val(meta), path(cluster) ]
         mt_del_result       = MT_DELETION.out.mt_del_result // channel: [ val(meta), path(txt) ]
+        ch_publish                                          // channel: [ val(destination), val(value) ]
 }

@@ -77,9 +77,16 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         MARKDUPLICATES ( prepared_bam , ch_genome_fasta, ch_genome_fai )
         SAMTOOLS_INDEX_MARKDUP ( MARKDUPLICATES.out.bam )
 
+        ch_publish = MARKDUPLICATES.out.bam
+            .mix(MARKDUPLICATES.out.metrics)
+            .mix(SAMTOOLS_INDEX_MARKDUP.out.bai)
+            .mix(SAMTOOLS_INDEX_MARKDUP.out.csi)
+            .map { meta, value -> ['alignment/', [meta, value]] }
+
     emit:
         marked_bai  = SAMTOOLS_INDEX_MARKDUP.out.bai // channel: [ val(meta), path(bai) ]
         marked_bam  = MARKDUPLICATES.out.bam         // channel: [ val(meta), path(bam) ]
         metrics     = MARKDUPLICATES.out.metrics     // channel: [ val(meta), path(metrics) ]
         stats       = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), path(stats) ]
+        ch_publish                                   // channel: [ val(destination), val(value) ]
 }

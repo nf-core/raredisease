@@ -205,7 +205,12 @@ workflow RAREDISEASE {
 
     main:
 
-    ch_multiqc_files = channel.empty()
+    ch_multiqc_files                    = channel.empty()
+    ch_call_snv_publish                 = channel.empty()
+    ch_call_sv_publish                  = channel.empty()
+    ch_call_sv_mt_publish               = channel.empty()
+    ch_call_repeat_expansions_publish   = channel.empty()
+    ch_call_mobile_elements_publish     = channel.empty()
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
@@ -337,6 +342,7 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_genome_fai
         )
+        ch_call_repeat_expansions_publish = CALL_REPEAT_EXPANSIONS.out.ch_publish
 
         if (!skip_repeat_annotation) {
             STRANGER (
@@ -384,6 +390,7 @@ workflow RAREDISEASE {
             val_run_mt_for_wes,
             val_variant_caller
         )
+        ch_call_snv_publish = CALL_SNV.out.ch_publish
 
         //
         // ANNOTATE GENOME SNVs
@@ -550,6 +557,8 @@ workflow RAREDISEASE {
             val_analysis_type,
             skip_germlinecnvcaller,
         )
+        ch_call_sv_publish = CALL_STRUCTURAL_VARIANTS.out.ch_publish
+
         //
         // ANNOTATE STRUCTURAL VARIANTS
         //
@@ -646,6 +655,7 @@ workflow RAREDISEASE {
             params.split_distance_threshold,
             params.split_length
         )
+        ch_call_sv_mt_publish = CALL_SV_MT.out.ch_publish
     }
 
 /*
@@ -662,6 +672,7 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_me_references
         )
+        ch_call_mobile_elements_publish = CALL_MOBILE_ELEMENTS.out.ch_publish
 
         if (!skip_me_annotation) {
             ANNOTATE_MOBILE_ELEMENTS(
@@ -893,6 +904,13 @@ workflow RAREDISEASE {
 
     emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
+    ch_publish     = ALIGN.out.ch_publish
+                       .mix(QC_BAM.out.ch_publish)
+                       .mix(ch_call_snv_publish)
+                       .mix(ch_call_sv_publish)
+                       .mix(ch_call_sv_mt_publish)
+                       .mix(ch_call_repeat_expansions_publish)
+                       .mix(ch_call_mobile_elements_publish) // channel: [ val(destination), val(value) ]
 
 }
 
