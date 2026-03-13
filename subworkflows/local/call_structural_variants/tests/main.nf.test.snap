@@ -2,13 +2,33 @@
     "CALL_STRUCTURAL_VARIANTS - wgs, stub": {
         "content": [
             [
+                [
+                    "call_sv/genome/",
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_sv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                [
+                    "call_sv/genome/",
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_sv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            ],
+            [
                 "justhusky_sv.vcf.gz"
             ],
             [
                 "justhusky_sv.vcf.gz.tbi"
             ]
         ],
-        "timestamp": "2026-03-01T18:18:21.549692378",
+        "timestamp": "2026-03-13T09:44:18.163494369",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

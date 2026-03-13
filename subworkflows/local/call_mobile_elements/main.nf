@@ -126,5 +126,5 @@ workflow CALL_MOBILE_ELEMENTS {
     emit:
         tbi      = TABIX_ME.out.index    // channel: [ val(meta), path(tbi) ]
         vcf      = SVDB_MERGE_ME.out.vcf // channel: [ val(meta), path(vcf) ]
-        ch_publish                       // channel: [ val(destination), val(value) ]
+        publish = ch_publish             // channel: [ val(destination), val(value) ]
 }

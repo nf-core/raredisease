@@ -169,9 +169,9 @@ workflow ALIGN {
         ch_bam_publish = channel.empty()
         if (!val_save_mapped_as_cram) {
             if (val_aligner.matches("bwamem2|bwa|bwameme")) {
-                ch_bam_publish = ALIGN_BWA_BWAMEM2_BWAMEME.out.ch_publish
+                ch_bam_publish = ALIGN_BWA_BWAMEM2_BWAMEME.out.publish
             } else if (val_aligner.equals("sentieon")) {
-                ch_bam_publish = ALIGN_SENTIEON.out.ch_publish
+                ch_bam_publish = ALIGN_SENTIEON.out.publish
             }
         }
 
@@ -188,5 +188,5 @@ workflow ALIGN {
         mt_bam_bai                = ch_mt_bam_bai            // channel: [ val(meta), path(bam), path(bai) ]
         mt_bam_bai_gatksubwf      = ch_mt_bam_bai_gatksubwf      // channel: [ val(meta), path(bam), path(bai) ]
         mtshift_bam_bai_gatksubwf = ch_mtshift_bam_bai_gatksubwf // channel: [ val(meta), path(bam), path(bai) ]
-        ch_publish                                               // channel: [ val(destination), val(value) ]
+        publish = ch_publish                                     // channel: [ val(destination), val(value) ]
 }

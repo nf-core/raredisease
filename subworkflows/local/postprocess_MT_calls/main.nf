@@ -127,5 +127,5 @@ workflow POSTPROCESS_MT_CALLS {
     emit:
         tbi       = TABIX_ANNOTATE.out.index    // channel: [ val(meta), path(tbi) ]
         vcf       = BCFTOOLS_ANNOTATE.out.vcf   // channel: [ val(meta), path(vcf) ]
-        ch_publish                              // channel: [ val(destination), val(value) ]
+        publish = ch_publish                    // channel: [ val(destination), val(value) ]
 }

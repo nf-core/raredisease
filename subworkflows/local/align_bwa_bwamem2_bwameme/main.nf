@@ -88,5 +88,5 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         marked_bam  = MARKDUPLICATES.out.bam         // channel: [ val(meta), path(bam) ]
         metrics     = MARKDUPLICATES.out.metrics     // channel: [ val(meta), path(metrics) ]
         stats       = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), path(stats) ]
-        ch_publish                                   // channel: [ val(destination), val(value) ]
+        publish = ch_publish                         // channel: [ val(destination), val(value) ]
 }

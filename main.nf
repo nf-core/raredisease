@@ -466,7 +466,7 @@ workflow NFCORE_RAREDISEASE {
     )
     emit:
     multiqc_report = RAREDISEASE.out.multiqc_report // channel: /path/to/multiqc_report.html
-    ch_publish     = RAREDISEASE.out.ch_publish      // channel: [ val(destination), val(value) ]
+    publish        = RAREDISEASE.out.publish          // channel: [ val(destination), val(value) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -589,7 +589,7 @@ workflow {
     )
 
     publish:
-    subworkflow_results = NFCORE_RAREDISEASE.out.ch_publish
+    subworkflow_results = NFCORE_RAREDISEASE.out.publish
 }
 
 output {

@@ -59,6 +59,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
+                    workflow.out.publish,
                     path(workflow.out.genome_vcf[0][1]).vcf.variantsMD5,
                     path(workflow.out.genome_vcf[0][1]).vcf.summary,
                     workflow.out.genome_tabix.collect { meta, tbi -> file(tbi).name },

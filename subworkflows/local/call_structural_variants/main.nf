@@ -105,5 +105,5 @@ workflow CALL_STRUCTURAL_VARIANTS {
     emit:
         vcf      = ch_merged_svs // channel: [ val(meta), path(vcf)]
         tbi      = ch_merged_tbi // channel: [ val(meta), path(tbi)]
-        ch_publish               // channel: [ val(destination), val(value) ]
+        publish = ch_publish     // channel: [ val(destination), val(value) ]
 }

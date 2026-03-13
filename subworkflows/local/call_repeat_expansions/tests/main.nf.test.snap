@@ -1,13 +1,72 @@
 {
     "CALL_REPEAT_EXPANSIONS": {
         "content": [
+            [
+                [
+                    "repeat_expansions/",
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_repeat_expansion.vcf:md5,9e2d2ec1df32e12dc2e043f7f5dae61c"
+                    ]
+                ],
+                [
+                    "repeat_expansions/",
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_exphunter_sorted.bam:md5,32e22328efec8cdd3c818e18568f2108"
+                    ]
+                ],
+                [
+                    "repeat_expansions/",
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_exphunter_sorted.bam.bai:md5,7cdcf4e866373d4aa0e762acfe0f5d5a"
+                    ]
+                ]
+            ],
             "5f06dccb7fc4ad3758bc23e3232f9abb",
             "VcfFile [chromosomes=[21], sampleCount=1, variantCount=2, phased=false, phasedAutodetect=false]"
         ],
-        "timestamp": "2025-10-14T14:06:58.984015651",
+        "timestamp": "2026-03-13T09:28:35.853691152",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.04.8"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
         }
     }
 }

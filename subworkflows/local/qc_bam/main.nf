@@ -141,5 +141,5 @@ workflow QC_BAM {
         self_sm          = VERIFYBAMID_VERIFYBAMID2.out.self_sm      // channel: [ val(meta), path(selfSM) ]
         cov              = ch_cov                                    // channel: [ val(meta), path(metrics) ]
         cov_y            = ch_cov_y                                  // channel: [ val(meta), path(metrics) ]
-        ch_publish                                                   // channel: [ val(destination), val(value) ]
+        publish = ch_publish                                         // channel: [ val(destination), val(value) ]
 }

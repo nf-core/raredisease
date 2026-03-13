@@ -64,5 +64,5 @@ workflow ALIGN_SENTIEON {
         gc_summary  = SENTIEON_DATAMETRICS.out.gc_summary.ifEmpty(null)  // channel: [ val(meta), path(gc_summary) ]
         aln_metrics = SENTIEON_DATAMETRICS.out.aln_metrics.ifEmpty(null) // channel: [ val(meta), path(aln_metrics) ]
         is_metrics  = SENTIEON_DATAMETRICS.out.is_metrics.ifEmpty(null)  // channel: [ val(meta), path(is_metrics) ]
-        ch_publish                                                        // channel: [ val(destination), val(value) ]
+        publish = ch_publish                                              // channel: [ val(destination), val(value) ]
 }

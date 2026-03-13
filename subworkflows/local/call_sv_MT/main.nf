@@ -91,5 +91,5 @@ workflow CALL_SV_MT {
         mitosalt_breakpoint = MITOSALT.out.breakpoint       // channel: [ val(meta), path(breakpoint) ]
         mitosalt_cluster    = MITOSALT.out.cluster          // channel: [ val(meta), path(cluster) ]
         mt_del_result       = MT_DELETION.out.mt_del_result // channel: [ val(meta), path(txt) ]
-        ch_publish                                          // channel: [ val(destination), val(value) ]
+        publish = ch_publish                                // channel: [ val(destination), val(value) ]
 }

@@ -54,6 +54,7 @@ nextflow_workflow {
             assertAll (
                 { assert workflow.success },
                 { assert snapshot(
+                        workflow.out.publish,
                         workflow.out.multiple_metrics
                             .collect {it[1]}
                             .flatten()
@@ -132,6 +133,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert workflow.success },
                 { assert snapshot(
+                        workflow.out.publish,
                         workflow.out.multiple_metrics
                             .collect {it[1]}
                             .flatten()

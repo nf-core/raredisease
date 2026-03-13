@@ -64,5 +64,5 @@ workflow CALL_REPEAT_EXPANSIONS {
 
     emit:
         vcf        = SVDB_MERGE_REPEATS.out.vcf // channel: [ val(meta), path(vcf) ]
-        ch_publish                              // channel: [ val(destination), val(value) ]
+        publish = ch_publish                    // channel: [ val(destination), val(value) ]
 }

@@ -3,6 +3,56 @@
         "content": [
             [
                 [
+                    "alignment/",
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam:md5,171423ac03499a00c4677f8b53771570"
+                    ]
+                ],
+                [
+                    "alignment/",
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.metrics.txt:md5,4730bcc5e26e8f3c29b8fa58f68d43e6"
+                    ]
+                ],
+                [
+                    "alignment/",
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam.bai:md5,b8976cf366140eeee478ee2e9c1cadc9"
+                    ]
+                ]
+            ],
+            [
+                [
                     {
                         "groupSize": 1,
                         "groupTarget": {
@@ -32,7 +82,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-02-27T15:46:37.232286266",
+        "timestamp": "2026-03-13T09:21:28.631120006",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -40,6 +90,56 @@
     },
     "align bwameme": {
         "content": [
+            [
+                [
+                    "alignment/",
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam:md5,ca247f01365899e07c77c3479fa721b2"
+                    ]
+                ],
+                [
+                    "alignment/",
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.metrics.txt:md5,f5b5580ca2b1035f0cac8ba1db7ab55e"
+                    ]
+                ],
+                [
+                    "alignment/",
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam.bai:md5,e1e422e8da8ae8f2fbf0221d29919be0"
+                    ]
+                ]
+            ],
             [
                 [
                     {
@@ -71,7 +171,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-02-27T15:47:22.733461874",
+        "timestamp": "2026-03-13T09:22:14.004999114",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
