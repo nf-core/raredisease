@@ -125,7 +125,7 @@ workflow POSTPROCESS_MT_CALLS {
             .map { meta, value -> ['call_snv/mitochondria/', [meta, value]] }
 
     emit:
-        tbi       = TABIX_ANNOTATE.out.index    // channel: [ val(meta), path(tbi) ]
-        vcf       = BCFTOOLS_ANNOTATE.out.vcf   // channel: [ val(meta), path(vcf) ]
-        publish = ch_publish                    // channel: [ val(destination), val(value) ]
+        tbi     = TABIX_ANNOTATE.out.index    // channel: [ val(meta), path(tbi) ]
+        vcf     = BCFTOOLS_ANNOTATE.out.vcf   // channel: [ val(meta), path(vcf) ]
+        publish = ch_publish                  // channel: [ val(destination), val(value) ]
 }
