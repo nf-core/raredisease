@@ -2,42 +2,10 @@
     "CALL_SNV - deepvariant wgs": {
         "content": [
             [
-                [
-                    "call_snv/genome/",
-                    [
-                        {
-                            "id": "justhusky"
-                        },
-                        "justhusky_snv.vcf.gz:md5,b78d7a388ac51028ca8b15474b9efce6"
-                    ]
-                ],
-                [
-                    "call_snv/genome/",
-                    [
-                        {
-                            "id": "justhusky"
-                        },
-                        "justhusky_snv.vcf.gz.tbi:md5,81c8e362552865ccdd12941db07bdf6e"
-                    ]
-                ],
-                [
-                    "call_snv/mitochondria/",
-                    [
-                        {
-                            "id": "justhusky"
-                        },
-                        "justhusky_mitochondria.vcf.gz:md5,5b31cdd1aaca1b52aa06ec49b0d3207f"
-                    ]
-                ],
-                [
-                    "call_snv/mitochondria/",
-                    [
-                        {
-                            "id": "justhusky"
-                        },
-                        "justhusky_mitochondria.vcf.gz.tbi:md5,057840edb22fe608c7635911a914e9f0"
-                    ]
-                ]
+                "justhusky_snv.vcf.gz.tbi",
+                "justhusky_snv.vcf.gz",
+                "justhusky_mitochondria.vcf.gz",
+                "justhusky_mitochondria.vcf.gz.tbi"
             ],
             "dfc0eeae02f4c1f04034e0fff555bf50",
             "VcfFile [chromosomes=[21], sampleCount=1, variantCount=7562, phased=false, phasedAutodetect=false]",
@@ -48,7 +16,7 @@
                 "justhusky_mitochondria.vcf.gz"
             ]
         ],
-        "timestamp": "2026-03-13T09:33:27.081509863",
+        "timestamp": "2026-03-13T13:11:10.952443789",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

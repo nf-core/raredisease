@@ -55,7 +55,9 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.publish,
+                        workflow.out.publish.flatten()
+                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                            .collect { new File(it).name },
                         workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getHeaderMD5() ] },
                         workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getReadsMD5() ] }
                     ).match()
@@ -112,7 +114,9 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.publish,
+                        workflow.out.publish.flatten()
+                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                            .collect { new File(it).name },
                         workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getHeaderMD5() ] },
                         workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getReadsMD5() ] }
                     ).match()

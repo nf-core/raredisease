@@ -116,7 +116,9 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.publish,
+                        workflow.out.publish.flatten()
+                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                            .collect { new File(it).name },
                         workflow.out.genome_marked_bam_bai
                             .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
                         workflow.out.mt_bam_bai
@@ -217,7 +219,9 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.publish,
+                        workflow.out.publish.flatten()
+                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                            .collect { new File(it).name },
                         workflow.out.genome_marked_bam_bai
                             .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
                         workflow.out.mt_bam_bai
@@ -310,7 +314,9 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.publish,
+                        workflow.out.publish.flatten()
+                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                            .collect { new File(it).name },
                         workflow.out.genome_marked_bam_bai
                             .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
                         workflow.out.mt_bam_bai

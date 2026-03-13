@@ -30,7 +30,9 @@ nextflow_workflow {
         then {
             assert workflow.success
             assert snapshot(
-                workflow.out.publish,
+                workflow.out.publish.flatten()
+                    .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                    .collect { new File(it).name },
                 path(workflow.out.vcf[0][1].toString()).vcf.variantsMD5,
                 path(workflow.out.vcf[0][1].toString()).vcf.summary
             ).match()

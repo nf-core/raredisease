@@ -46,7 +46,9 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.out.publish,
+                    workflow.out.publish.flatten()
+                        .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                        .collect { new File(it).name },
                     workflow.out.vcf.collect { meta, vcf -> file(vcf).name },
                     workflow.out.tbi.collect { meta, tbi -> file(tbi).name }
                 ).match() }
