@@ -48,7 +48,8 @@ nextflow_workflow {
                 { assert snapshot(
                     workflow.out.publish.flatten()
                         .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                        .collect { new File(it).name },
+                        .collect { new File(it).name }
+                        .sort(),
                     workflow.out.vcf.collect { meta, vcf -> file(vcf).name },
                     workflow.out.tbi.collect { meta, tbi -> file(tbi).name }
                 ).match() }

@@ -56,7 +56,8 @@ nextflow_workflow {
                 { assert snapshot(
                         workflow.out.publish.flatten()
                             .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                            .collect { new File(it).name },
+                            .collect { new File(it).name }
+                            .sort(),
                         workflow.out.multiple_metrics
                             .collect {it[1]}
                             .flatten()
@@ -137,7 +138,8 @@ nextflow_workflow {
                 { assert snapshot(
                         workflow.out.publish.flatten()
                             .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                            .collect { new File(it).name },
+                            .collect { new File(it).name }
+                            .sort(),
                         workflow.out.multiple_metrics
                             .collect {it[1]}
                             .flatten()
