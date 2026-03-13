@@ -2,12 +2,24 @@
     "QC_BAM - test, bwamem2": {
         "content": [
             [
-                "earlycasualcaiman_mosdepth.mosdepth.summary.txt",
+                "earlycasualcaiman_hsmetrics.CollectHsMetrics.coverage_metrics",
                 "earlycasualcaiman_mosdepth.mosdepth.global.dist.txt",
-                "earlycasualcaiman_mosdepth.per-base.bed.gz.csi",
+                "earlycasualcaiman_mosdepth.mosdepth.summary.txt",
                 "earlycasualcaiman_mosdepth.per-base.bed.gz",
-                "earlycasualcaiman_tidditcov.wig",
+                "earlycasualcaiman_mosdepth.per-base.bed.gz.csi",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf",
+                "earlycasualcaiman_qualimap",
                 "earlycasualcaiman_tidditcov.bw",
+                "earlycasualcaiman_tidditcov.wig",
                 "earlycasualcaiman_tidditcov_1.png",
                 "earlycasualcaiman_tidditcov_10.png",
                 "earlycasualcaiman_tidditcov_11.png",
@@ -33,18 +45,6 @@
                 "earlycasualcaiman_tidditcov_M.png",
                 "earlycasualcaiman_tidditcov_X.png",
                 "earlycasualcaiman_tidditcov_Y.png",
-                "earlycasualcaiman_qualimap",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf",
-                "earlycasualcaiman_hsmetrics.CollectHsMetrics.coverage_metrics",
                 "earlycasualcaiman_wgsmetrics.CollectWgsMetrics.coverage_metrics"
             ],
             [
@@ -118,7 +118,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T14:12:57.09777024",
+        "timestamp": "2026-03-13T15:34:21.197802663",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -127,13 +127,24 @@
     "QC_BAM - test, sentieon": {
         "content": [
             [
+                "earlycasualcaiman_hsmetrics.CollectHsMetrics.coverage_metrics",
+                "earlycasualcaiman_mosdepth.mosdepth.global.dist.txt",
                 "earlycasualcaiman_mosdepth.mosdepth.summary.txt",
                 "earlycasualcaiman_mosdepth.per-base.bed.gz",
-                "earlycasualcaiman_mosdepth.mosdepth.global.dist.txt",
                 "earlycasualcaiman_mosdepth.per-base.bed.gz.csi",
-                "earlycasualcaiman_tidditcov.wig",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics",
+                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf",
+                "earlycasualcaiman_qualimap",
                 "earlycasualcaiman_tidditcov.bw",
-                "earlycasualcaiman_wgsmetrics.txt",
+                "earlycasualcaiman_tidditcov.wig",
                 "earlycasualcaiman_tidditcov_1.png",
                 "earlycasualcaiman_tidditcov_10.png",
                 "earlycasualcaiman_tidditcov_11.png",
@@ -159,18 +170,7 @@
                 "earlycasualcaiman_tidditcov_M.png",
                 "earlycasualcaiman_tidditcov_X.png",
                 "earlycasualcaiman_tidditcov_Y.png",
-                "earlycasualcaiman_qualimap",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
-                "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf",
-                "earlycasualcaiman_hsmetrics.CollectHsMetrics.coverage_metrics"
+                "earlycasualcaiman_wgsmetrics.txt"
             ],
             [
                 "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
@@ -243,7 +243,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T14:13:47.258652619",
+        "timestamp": "2026-03-13T15:35:09.991615599",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

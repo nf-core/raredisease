@@ -184,7 +184,7 @@
                                     "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                                 }
                             },
-                            "test_dedup.bam:md5,489a7a6b515bfeb9e22b10732d7586e4"
+                            "test_dedup.bam.bai:md5,14bc034b61e9f46cc0c0224b8915d7aa"
                         ]
                     ],
                     [
@@ -200,7 +200,7 @@
                                     "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                                 }
                             },
-                            "test_dedup.bam.bai:md5,14bc034b61e9f46cc0c0224b8915d7aa"
+                            "test_dedup.bam:md5,489a7a6b515bfeb9e22b10732d7586e4"
                         ]
                     ]
                 ],
@@ -371,7 +371,7 @@
                                     "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                                 }
                             },
-                            "test_dedup.bam:md5,489a7a6b515bfeb9e22b10732d7586e4"
+                            "test_dedup.bam.bai:md5,14bc034b61e9f46cc0c0224b8915d7aa"
                         ]
                     ],
                     [
@@ -387,7 +387,7 @@
                                     "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                                 }
                             },
-                            "test_dedup.bam.bai:md5,14bc034b61e9f46cc0c0224b8915d7aa"
+                            "test_dedup.bam:md5,489a7a6b515bfeb9e22b10732d7586e4"
                         ]
                     ]
                 ],
@@ -408,7 +408,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-13T14:06:49.285440618",
+        "timestamp": "2026-03-13T15:03:01.128235963",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
