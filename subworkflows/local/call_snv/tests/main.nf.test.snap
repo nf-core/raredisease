@@ -2,10 +2,10 @@
     "CALL_SNV - deepvariant wgs": {
         "content": [
             [
-                "justhusky_snv.vcf.gz.tbi",
-                "justhusky_snv.vcf.gz",
                 "justhusky_mitochondria.vcf.gz",
-                "justhusky_mitochondria.vcf.gz.tbi"
+                "justhusky_mitochondria.vcf.gz.tbi",
+                "justhusky_snv.vcf.gz",
+                "justhusky_snv.vcf.gz.tbi"
             ],
             "dfc0eeae02f4c1f04034e0fff555bf50",
             "VcfFile [chromosomes=[21], sampleCount=1, variantCount=7562, phased=false, phasedAutodetect=false]",
@@ -16,7 +16,7 @@
                 "justhusky_mitochondria.vcf.gz"
             ]
         ],
-        "timestamp": "2026-03-13T13:11:10.952443789",
+        "timestamp": "2026-03-13T15:46:57.105465403",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -109,7 +109,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ],
                     [
@@ -118,7 +118,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ],
                     [
@@ -224,7 +224,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ],
                     [
@@ -233,7 +233,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ],
                     [
@@ -257,7 +257,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-13T09:34:33.930010907",
+        "timestamp": "2026-03-13T15:48:00.031080535",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

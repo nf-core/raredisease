@@ -3,8 +3,8 @@
         "content": [
             [
                 "test_sorted_md.bam",
-                "test_sorted_md.metrics.txt",
-                "test_sorted_md.bam.bai"
+                "test_sorted_md.bam.bai",
+                "test_sorted_md.metrics.txt"
             ],
             [
                 [
@@ -37,7 +37,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T13:02:30.573936764",
+        "timestamp": "2026-03-13T15:04:33.885203481",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -47,8 +47,8 @@
         "content": [
             [
                 "test_sorted_md.bam",
-                "test_sorted_md.metrics.txt",
-                "test_sorted_md.bam.bai"
+                "test_sorted_md.bam.bai",
+                "test_sorted_md.metrics.txt"
             ],
             [
                 [
@@ -81,7 +81,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T13:03:18.075557991",
+        "timestamp": "2026-03-13T15:05:20.75721248",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
