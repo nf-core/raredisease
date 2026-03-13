@@ -122,6 +122,88 @@
                         "test_datametrics_is_metrics.txt:md5,47dec263ece77d2f5816012a345e8531"
                     ]
                 ],
+                "8": [
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_dedup.bam.metrics.multiqc.tsv:md5,67c42dfe156b0613d30966768d01b55c"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_dedup.bam.metrics:md5,67c42dfe156b0613d30966768d01b55c"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_dedup.score:md5,107725946bfe75d63c82d4f330872833"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_dedup.bam.bai:md5,14bc034b61e9f46cc0c0224b8915d7aa"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_dedup.bam:md5,489a7a6b515bfeb9e22b10732d7586e4"
+                        ]
+                    ]
+                ],
                 "aln_metrics": [
                     [
                         {
@@ -227,6 +309,88 @@
                         "test_datametrics_mq_metrics.txt:md5,a0ee4d2b9970df49fed3f262c10b5e16"
                     ]
                 ],
+                "publish": [
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_dedup.bam.metrics.multiqc.tsv:md5,67c42dfe156b0613d30966768d01b55c"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_dedup.bam.metrics:md5,67c42dfe156b0613d30966768d01b55c"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_dedup.score:md5,107725946bfe75d63c82d4f330872833"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_dedup.bam.bai:md5,14bc034b61e9f46cc0c0224b8915d7aa"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_dedup.bam:md5,489a7a6b515bfeb9e22b10732d7586e4"
+                        ]
+                    ]
+                ],
                 "qd_metrics": [
                     [
                         {
@@ -244,10 +408,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-01-26T23:22:09.03170299",
+        "timestamp": "2026-03-13T11:07:38.099732631",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
         }
     }
 }
