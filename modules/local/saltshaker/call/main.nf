@@ -49,7 +49,7 @@ process SALTSHAKER_CALL {
 
     """
     touch ${prefix}.saltshaker_call_metadata.tsv
-    
+
     """
 
 }

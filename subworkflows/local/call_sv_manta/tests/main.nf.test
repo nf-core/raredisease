@@ -1,0 +1,89 @@
+nextflow_workflow {
+
+    name "Test Workflow CALL_SV_MANTA"
+    script "subworkflows/local/call_sv_manta/main.nf"
+    workflow "CALL_SV_MANTA"
+    tag "subworkflows"
+    tag "call_sv_manta"
+    config "./nextflow.config"
+
+    test("CALL_SV_MANTA - wgs") {
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of(
+                    [[id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
+                    [[id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", lane:1, sex:1, phenotype:2, paternal:'earlycasualcaiman', maternal:'slowlycivilbuck', case_id:'justhusky'],
+                     file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbat_sorted_md.bam', checkIfExists: true)],
+                    [[id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                     file(params.pipelines_testdata_base_path + 'testdata/slowlycivilbuck_sorted_md.bam', checkIfExists: true)]
+                )
+                input[1] = channel.of(
+                    [[id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)],
+                    [[id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", lane:1, sex:1, phenotype:2, paternal:'earlycasualcaiman', maternal:'slowlycivilbuck', case_id:'justhusky'],
+                     file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbat_sorted_md.bam.bai', checkIfExists: true)],
+                    [[id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                     file(params.pipelines_testdata_base_path + 'testdata/slowlycivilbuck_sorted_md.bam.bai', checkIfExists: true)]
+                )
+                input[2] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[3] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4] = channel.of([id:'justhusky'])
+                input[5] = channel.of([[id:'target'], [], []])
+                input[6] = 'wgs'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(workflow.out.diploid_sv_vcf[0][1]).vcf.variantsMD5,
+                    path(workflow.out.filtered_diploid_sv_vcf[0][1]).vcf.variantsMD5
+                ).match() }
+            )
+        }
+    }
+    test("CALL_SV_MANTA - wgs, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of(
+                    [[id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
+                    [[id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", lane:1, sex:1, phenotype:2, paternal:'earlycasualcaiman', maternal:'slowlycivilbuck', case_id:'justhusky'],
+                     file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbat_sorted_md.bam', checkIfExists: true)],
+                    [[id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                     file(params.pipelines_testdata_base_path + 'testdata/slowlycivilbuck_sorted_md.bam', checkIfExists: true)]
+                )
+                input[1] = channel.of(
+                    [[id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)],
+                    [[id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", lane:1, sex:1, phenotype:2, paternal:'earlycasualcaiman', maternal:'slowlycivilbuck', case_id:'justhusky'],
+                     file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbat_sorted_md.bam.bai', checkIfExists: true)],
+                    [[id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                     file(params.pipelines_testdata_base_path + 'testdata/slowlycivilbuck_sorted_md.bam.bai', checkIfExists: true)]
+                )
+                input[2] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[3] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4] = channel.of([id:'justhusky'])
+                input[5] = channel.of([[id:'target'], [], []])
+                input[6] = 'wgs'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}

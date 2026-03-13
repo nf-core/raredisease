@@ -40,7 +40,7 @@ include { RENAME_ALIGN_FILES as RENAME_BAI } from '../modules/local/rename_align
 //
 
 include { ALIGN                                                       } from '../subworkflows/local/align'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_ME                          } from '../subworkflows/local/annotate_consequence_pli.nf'
+include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_ME                          } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_MT                          } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV                         } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV                          } from '../subworkflows/local/annotate_consequence_pli'
@@ -281,7 +281,6 @@ workflow RAREDISEASE {
                 val_mt_subsample_rd,
                 val_mt_subsample_seed
             )
-            ch_versions   = ch_versions.mix(SUBSAMPLE_MT_FRAC.out.versions)
         } else {
             SUBSAMPLE_MT_READS(
                 ch_mapped.mt_bam_bai,
@@ -385,7 +384,6 @@ workflow RAREDISEASE {
             val_run_mt_for_wes,
             val_variant_caller
         )
-        ch_versions = ch_versions.mix(CALL_SNV.out.versions)
 
         //
         // ANNOTATE GENOME SNVs
@@ -412,7 +410,6 @@ workflow RAREDISEASE {
                 val_genome,
                 val_vep_cache_version
             ).set { ch_snv_annotate }
-            ch_versions = ch_versions.mix(ch_snv_annotate.versions)
 
             ch_snv_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -482,7 +479,6 @@ workflow RAREDISEASE {
                 val_homoplasmy_af_threshold,
                 val_vep_cache_version
             ).set { ch_mt_annotate }
-            ch_versions = ch_versions.mix(ch_mt_annotate.versions)
 
             ch_mt_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -532,7 +528,7 @@ workflow RAREDISEASE {
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    CALL AND ANNOTATE NUCLEAR SVs
+    CALL AND ANNOTATE NUCLEAR AND MITOCHONDRIAL SVs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
@@ -553,9 +549,41 @@ workflow RAREDISEASE {
             ch_gcnvcaller_model,
             val_analysis_type,
             skip_germlinecnvcaller,
+            ch_mapped.genome_marked_bam_bai,
+            ch_genome_chrsizes,
+            ch_genome_hisat2index,
+            ch_mt_fai,
+            ch_mt_fasta,
+            ch_mt_lastdb,
+            ch_input_fastqs,
+            ch_subdepth,
+            params.heavy_strand_origin_start,
+            params.heavy_strand_origin_end,
+            params.light_strand_origin_start,
+            params.light_strand_origin_end,
+            params.mito_length,
+            params.mito_name,
+            params.mitosalt_breakspan,
+            params.mitosalt_breakthreshold,
+            params.mitosalt_cluster_threshold,
+            params.mitosalt_deletion_threshold_max,
+            params.mitosalt_deletion_threshold_min,
+            params.mitosalt_evalue_threshold,
+            params.mitosalt_exclude,
+            params.mitosalt_flank,
+            params.mitosalt_heteroplasmy_limit,
+            params.mitosalt_paired_distance,
+            params.mitosalt_score_threshold,
+            params.mitosalt_sizelimit,
+            params.mitosalt_split_distance_threshold,
+            params.mitosalt_split_length,
+            params.saltshaker_dominant_fraction,
+            params.saltshaker_group_radius,
+            params.saltshaker_high_heteroplasmy,
+            params.saltshaker_multiple_threshold,
+            params.saltshaker_noise_threshold,
+            val_run_mt_for_wes
         )
-        ch_versions = ch_versions.mix(CALL_STRUCTURAL_VARIANTS.out.versions)
-
         //
         // ANNOTATE STRUCTURAL VARIANTS
         //
@@ -620,52 +648,7 @@ workflow RAREDISEASE {
         }
     }
 /*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    CALL MITOCHONDRIAL SVs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-    if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
-        CALL_SV_MT(
-            ch_mapped.genome_marked_bam_bai,
-            ch_genome_chrsizes,
-            ch_genome_fai,
-            ch_genome_fasta,
-            ch_genome_hisat2index,
-            ch_mt_fai,
-            ch_mt_fasta,
-            ch_mt_lastdb,
-            ch_input_fastqs,
-            ch_subdepth,
-            params.heavy_strand_origin_start,
-            params.heavy_strand_origin_end,
-            params.light_strand_origin_start,
-            params.light_strand_origin_end,
-            params.mito_length,
-            params.mito_name,
-            params.mitosalt_breakspan,
-            params.mitosalt_breakthreshold,
-            params.mitosalt_cluster_threshold,
-            params.mitosalt_deletion_threshold_max,
-            params.mitosalt_deletion_threshold_min,
-            params.mitosalt_evalue_threshold,
-            params.mitosalt_exclude,
-            params.mitosalt_flank,
-            params.mitosalt_heteroplasmy_limit,
-            params.mitosalt_paired_distance,
-            params.mitosalt_score_threshold,
-            params.mitosalt_sizelimit,
-            params.mitosalt_split_distance_threshold,
-            params.mitosalt_split_length,
-            params.saltshaker_dominant_fraction,
-            params.saltshaker_group_radius,
-            params.saltshaker_high_heteroplasmy,
-            params.saltshaker_multiple_threshold,
-            params.saltshaker_noise_threshold
 
-        )
-    }
-
-/*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CALL AND ANNOTATE MOBILE ELEMENTS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

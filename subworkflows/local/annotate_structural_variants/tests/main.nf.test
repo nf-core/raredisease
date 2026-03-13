@@ -1,0 +1,85 @@
+nextflow_workflow {
+
+    name "Test Workflow ANNOTATE_STRUCTURAL_VARIANTS"
+    script "subworkflows/local/annotate_structural_variants/main.nf"
+    workflow "ANNOTATE_STRUCTURAL_VARIANTS"
+    tag "subworkflows"
+    tag "annotate_structural_variants"
+    config "./nextflow.config"
+
+    test("ANNOTATE_STRUCTURAL_VARIANTS - no SVDB queries, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                bcftools_view = "--output-type z"
+                vep           = "--compress_output bgzip --format vcf --vcf"
+            }
+            workflow {
+                """
+                input[0]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
+                input[1]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[2]  = channel.empty()
+                input[3]  = channel.empty()
+                input[4]  = channel.of([
+                    [id:'test'],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/sv_query.vcf.gz', checkIfExists: true)
+                ])
+                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
+                input[6]  = channel.value([])
+                input[7]  = null
+                input[8]  = null
+                input[9]  = 'GRCh37'
+                input[10] = 107
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+
+    test("ANNOTATE_STRUCTURAL_VARIANTS - with SVDB_QUERY_DB, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
+                input[1]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[2]  = channel.empty()
+                input[3]  = channel.of([
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/gnomAD.r2.1.1-sv.vcf.gz', checkIfExists: true),
+                    'AC',
+                    'AF',
+                    'gnomad_svAC',
+                    'gnomad_svAF'
+                ])
+                input[4]  = channel.of([
+                    [id:'test'],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/sv_query.vcf.gz', checkIfExists: true)
+                ])
+                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
+                input[6]  = channel.value([])
+                input[7]  = null
+                input[8]  = 'gnomAD.r2.1.1-sv.vcf.gz'
+                input[9]  = 'GRCh37'
+                input[10] = 107
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}

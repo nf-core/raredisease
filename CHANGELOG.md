@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A parameter `homoplasmy_af_threshold` to set genotypes of MT SNVs to 1/1 (homoplasmic) when AF >=`homoplasmy_af_threshold` [#768](https://github.com/nf-core/raredisease/pull/768)
 - Topic channels to local modules to caputure versions [#774](https://github.com/nf-core/raredisease/pull/774)
 - MitoSalt to detect mitochondrial deletions [#743](https://github.com/nf-core/raredisease/pull/743)
+- Tests for some of the subworkflows [#780](https://github.com/nf-core/raredisease/pull/780)
+- Tests for some of the subworkflows [#782](https://github.com/nf-core/raredisease/pull/782)
+- Tests for some of the subworkflows [#783](https://github.com/nf-core/raredisease/pull/783)
 
 ### `Changed`
 
@@ -31,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sambamba depth now filters on not duplicates and not failed_quality_control [#768](https://github.com/nf-core/raredisease/pull/768)
 - Removed eKLIPse [#743](https://github.com/nf-core/raredisease/pull/743)
 - Removed haplocheck [#778](https://github.com/nf-core/raredisease/pull/778)
+- Removed HmtNote [#779](https://github.com/nf-core/raredisease/pull/779)
+- Updated svbd module [#781](https://github.com/nf-core/raredisease/pull/781)
 
 ### `Fixed`
 
@@ -61,9 +66,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | ensemblvep/filtervep | 113         | 115.2       |
 | fastp                | 0.23.4      | 1.0.1       |
 | gatk4                | 4.5.0.0     | 4.6.2.0     |
+| gawk                 | 5.3.0       | 5.3.1       |
 | genmod               | 3.9         | 3.10.2      |
 | gens-preproc         | 1.0.11      | 1.1.2       |
 | haplocheck           | 1.3.3       |             |
+| hmtnote              | 0.7.2       |             |
 | htslib               | 1.20        | 1.21        |
 | MitoSalt             |             | 1.1.1       |
 | mosdepth             | 0.3.8       | 0.3.11      |
@@ -75,6 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | samtools             | 1.21        | 1.22.1      |
 | sentieon             | 202503      | 202503.02   |
 | stranger             | 0.9.4       | 0.10.0      |
+| svdb                 | 2.8.3       | 2.8.4       |
 | tiddit               | 3.6.1       | 3.9.4       |
 | ucsc                 | 447         | 482         |
 | vcfanno              | 0.3.5       | 0.3.7       |

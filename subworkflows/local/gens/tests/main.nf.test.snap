@@ -1,0 +1,136 @@
+{
+    "GENS - female sample, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "slowlycivilbuck_gens.baf.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "slowlycivilbuck_gens.cov.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "gens_baf_bed_gz": [
+                    [
+                        {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "slowlycivilbuck_gens.baf.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "gens_cov_bed_gz": [
+                    [
+                        {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "slowlycivilbuck_gens.cov.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-03-06T06:32:00.117867897",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "GENS - male sample, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_gens.baf.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_gens.cov.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "gens_baf_bed_gz": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_gens.baf.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "gens_cov_bed_gz": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_gens.cov.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-03-06T06:31:24.998017159",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}
