@@ -34,9 +34,6 @@
                         "justhusky_rhocall_filter_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
-                "2": [
-                    
-                ],
                 "tbi": [
                     [
                         {
@@ -68,13 +65,10 @@
                         },
                         "justhusky_rhocall_filter_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
-                ],
-                "versions": [
-                    
                 ]
             }
         ],
-        "timestamp": "2026-03-04T23:37:13.141316008",
+        "timestamp": "2026-03-10T15:10:07.607984855",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

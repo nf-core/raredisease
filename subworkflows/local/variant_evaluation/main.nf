@@ -28,7 +28,7 @@ workflow VARIANT_EVALUATION {
         TABIX_TRUTHVCF (BCFTOOLS_REHEADER.out.vcf)
 
         BCFTOOLS_REHEADER.out.vcf
-            .join(TABIX_TRUTHVCF.out.tbi)
+            .join(TABIX_TRUTHVCF.out.index)
             .set { ch_truthvcf_tbi }
 
         ch_snv_vcf_tbi
