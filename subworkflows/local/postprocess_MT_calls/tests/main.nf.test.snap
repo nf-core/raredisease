@@ -38,7 +38,7 @@
                         ]
                     ]
                 ],
-                "ch_publish": [
+                "publish": [
                     [
                         "call_snv/mitochondria/",
                         [
@@ -76,7 +76,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-12T23:41:04.472222425",
+        "timestamp": "2026-03-13T22:07:26.775535698",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
