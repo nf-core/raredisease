@@ -10,7 +10,6 @@ include { ENSEMBLVEP_VEP as ENSEMBLVEP_MT                } from '../../../module
 include { HAPLOGREP3_CLASSIFY as HAPLOGREP3_CLASSIFY_MT  } from '../../../modules/nf-core/haplogrep3/classify/main'
 include { VCFANNO as VCFANNO_MT                          } from '../../../modules/nf-core/vcfanno/main'
 include { ANNOTATE_CADD                                  } from '../annotate_cadd'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO_MT       } from '../../../modules/nf-core/tabix/bgziptabix/main'
 
 workflow ANNOTATE_MT_SNVS {
     take:
@@ -45,9 +44,8 @@ workflow ANNOTATE_MT_SNVS {
             .set { ch_in_vcfanno }
 
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
-        ZIP_TABIX_VCFANNO_MT(VCFANNO_MT.out.vcf)
 
-        ch_vcfanno_vcf = ZIP_TABIX_VCFANNO_MT.out.gz_index.map{meta, vcf, _tbi -> return [meta, vcf]}
+        ch_vcfanno_vcf = VCFANNO_MT.out.vcf 
 
         // Annotating with CADD
         if (!val_cadd_resources.equals(null)) {
