@@ -14,6 +14,7 @@ process SALTSHAKER_CLASSIFY {
     val high_het
     val mult_thresh
     val noise_thresh
+    val mito_name
 
     output:
     tuple val(meta), path("*_classify_metadata.tsv"), emit: classify
@@ -35,6 +36,9 @@ process SALTSHAKER_CLASSIFY {
         --multiple-threshold $mult_thresh \\
         --noise $noise_thresh \\
         $args
+
+    cat ${prefix}.saltshaker.vcf | sed 's/chrM/${mito_name}/g' > ${prefix}.saltshaker.tmp.vcf
+    mv ${prefix}.saltshaker.tmp.vcf ${prefix}.saltshaker.vcf
 
     """
 

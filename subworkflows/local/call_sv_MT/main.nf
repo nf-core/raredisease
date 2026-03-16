@@ -106,7 +106,7 @@ workflow CALL_SV_MT {
                     val_light_strand_origin_start,
                     val_light_strand_origin_end
                 )
-
+    
                 SALTSHAKER_CLASSIFY(
                     SALTSHAKER_CALL.out.call,
                     val_saltshaker_dominant_fraction,
@@ -114,6 +114,7 @@ workflow CALL_SV_MT {
                     val_saltshaker_high_heteroplasmy,
                     val_saltshaker_multiple_threshold,
                     val_saltshaker_noise_threshold
+                    val_mito_name
                 )
                 ch_mitosalt_vcf = SALTSHAKER_CLASSIFY.out.classify
 

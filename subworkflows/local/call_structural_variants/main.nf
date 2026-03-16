@@ -28,7 +28,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_gcnvcaller_model                   // channel: [optional; used by mandatory for GATK's cnvcaller][ path(gcnvcaller_model) ]
         val_analysis_type                     // string: "wes", "wgs", or "mito"
         skip_germlinecnvcaller                // boolean
-        ch_bam_bai                            // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_mt_bam_bai                         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_genome_chrsizes                    // channel: [mandatory] [ path(chrsizes) ]
         ch_genome_hisat2index                 // channel: [mandatory] [ val(meta), path(hisat2index) ]
         ch_mt_fai                             // channel: [mandatory] [ val(meta), path(mtfai) ]
@@ -96,7 +96,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
         if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
             CALL_SV_MT(
-                ch_bam_bai,
+                ch_mt_bam_bai,
                 ch_genome_chrsizes,
                 ch_genome_fai,
                 ch_genome_fasta,

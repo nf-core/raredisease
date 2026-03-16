@@ -549,7 +549,7 @@ workflow RAREDISEASE {
             ch_gcnvcaller_model,
             val_analysis_type,
             skip_germlinecnvcaller,
-            ch_mapped.genome_marked_bam_bai,
+            ch_mapped.mt_bam_bai,
             ch_genome_chrsizes,
             ch_genome_hisat2index,
             ch_mt_fai,
