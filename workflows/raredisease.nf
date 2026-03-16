@@ -797,6 +797,7 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_gens_gnomad_pos,
             CALL_SNV.out.genome_gvcf,
+            CALL_SNV.out.genome_gtabix,
             ch_gens_interval_list,
             ch_gens_pon_female,
             ch_gens_pon_male
