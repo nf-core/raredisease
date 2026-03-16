@@ -70,7 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | gawk                  | 5.3.0       | 5.3.1       |
 | genmod                | 3.9         | 3.10.2      |
 | gens-preproc          | 1.0.11      |             |
-| gens/preparecovandbaf |             | 2.0.1       |
+| gens/preparecovandbaf |             | 1.1.5       |
 | haplocheck            | 1.3.3       |             |
 | hmtnote               | 0.7.2       |             |
 | htslib                | 1.20        | 1.21        |
