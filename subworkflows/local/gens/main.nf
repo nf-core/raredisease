@@ -55,8 +55,7 @@ workflow GENS {
         GENS_GENERATE (
             ch_denoisereadcounts_out
                 .join(ch_gvcf)
-                .join(ch_gvcf_tbi)
-                .map { meta, counts, gvcf, gvcf_tbi -> tuple(meta, counts, gvcf, gvcf_tbi) },
+                .join(ch_gvcf_tbi),
             ch_gnomad_pos
         )
 
