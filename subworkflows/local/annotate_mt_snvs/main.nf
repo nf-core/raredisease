@@ -45,7 +45,7 @@ workflow ANNOTATE_MT_SNVS {
 
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
 
-        ch_vcfanno_vcf = VCFANNO_MT.out.vcf 
+        ch_vcfanno_vcf = VCFANNO_MT.out.vcf
 
         // Annotating with CADD
         if (!val_cadd_resources.equals(null)) {
@@ -53,7 +53,7 @@ workflow ANNOTATE_MT_SNVS {
                 ch_cadd_resources,
                 ch_fai,
                 ch_cadd_header,
-                ZIP_TABIX_VCFANNO_MT.out.gz_index,
+                VCFANNO_MT.out.tbi,
                 val_genome
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf

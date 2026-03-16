@@ -13,7 +13,6 @@ include { CHROMOGRAPH as CHROMOGRAPH_SITES      } from '../../../modules/nf-core
 include { CHROMOGRAPH as CHROMOGRAPH_REGIONS    } from '../../../modules/nf-core/chromograph/main'
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_SNV      } from '../../../modules/nf-core/ensemblvep/vep/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL } from '../../../modules/nf-core/tabix/bgziptabix/main'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO } from '../../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_TABIX as TABIX_VEP              } from '../../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_BCFTOOLS_CONCAT  } from '../../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_BCFTOOLS_VIEW    } from '../../../modules/nf-core/tabix/tabix/main'
@@ -101,9 +100,7 @@ workflow ANNOTATE_GENOME_SNVS {
 
         VCFANNO (ch_vcfanno_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
 
-        ZIP_TABIX_VCFANNO (VCFANNO.out.vcf)
-
-        BCFTOOLS_VIEW(ZIP_TABIX_VCFANNO.out.gz_index, [], [], [])  // filter on frequencies
+        BCFTOOLS_VIEW(VCFANNO.out.tbi, [], [], [])  // filter on frequencies
 
         // Annotating with CADD
         if (!val_cadd_resources.equals(null)) {

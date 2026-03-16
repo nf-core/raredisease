@@ -37,21 +37,31 @@ nextflow_workflow {
                     ]
                 ])
                 input[9]  = channel.value(10000000)
-                input[10] = 15
-                input[11] = 2
-                input[12] = 2
-                input[13] = 30000
-                input[14] = 30
-                input[15] = 0.00001
-                input[16] = 5
-                input[17] = 15
-                input[18] = 0.01
-                input[19] = 'chrM'
-                input[20] = 1000
-                input[21] = 80
-                input[22] = 10000
-                input[23] = 5
-                input[24] = 15
+                input[10] = 16081
+                input[11] = 407
+                input[12] = 5730
+                input[13] = 5763
+                input[14] = 16569
+                input[15] = 'chrM'
+                input[16] = 15
+                input[17] = 2
+                input[18] = 2
+                input[19] = 30000
+                input[20] = 30
+                input[21] = 0.00001
+                input[22] = 5
+                input[23] = 15
+                input[24] = 0.01
+                input[25] = 1000
+                input[26] = 80
+                input[27] = 10000
+                input[28] = 5
+                input[29] = 15
+                input[30] = 0.5
+                input[31] = 600
+                input[32] = 10
+                input[33] = 5
+                input[34] = 0.3
                 """
             }
         }
