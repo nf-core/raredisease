@@ -213,6 +213,7 @@ workflow RAREDISEASE {
     ch_call_sv_mt_publish               = channel.empty()
     ch_call_repeat_expansions_publish   = channel.empty()
     ch_call_mobile_elements_publish     = channel.empty()
+    ch_subsample_publish                = channel.empty()
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
@@ -289,10 +290,12 @@ workflow RAREDISEASE {
                 val_mt_subsample_rd,
                 val_mt_subsample_seed
             )
+            ch_subsample_publish = SUBSAMPLE_MT_FRAC.out.publish
         } else {
             SUBSAMPLE_MT_READS(
                 ch_mapped.mt_bam_bai,
             )
+            ch_subsample_publish = SUBSAMPLE_MT_READS.out.publish
         }
     }
 
@@ -353,6 +356,10 @@ workflow RAREDISEASE {
                 CALL_REPEAT_EXPANSIONS.out.vcf,
                 ch_variant_catalog
             )
+            ch_call_repeat_expansions_publish = ch_call_repeat_expansions_publish
+                .mix(STRANGER.out.vcf
+                    .mix(STRANGER.out.tbi)
+                    .map { meta, value -> ['repeat_expansions/', [meta, value]] })
         }
     }
 
@@ -910,6 +917,7 @@ workflow RAREDISEASE {
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
     publish        = ch_align_publish
                        .mix(ch_qc_bam_publish)
+                       .mix(ch_subsample_publish)
                        .mix(ch_call_snv_publish)
                        .mix(ch_call_sv_publish)
                        .mix(ch_call_sv_mt_publish)

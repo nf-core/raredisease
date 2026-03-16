@@ -499,13 +499,6 @@
                 }
             },
             [
-                "alignment",
-                "alignment/earlycasualcaiman_mt_subsample.bam",
-                "alignment/earlycasualcaiman_mt_subsample.bam.bai",
-                "alignment/hugelymodelbat_mt_subsample.bam",
-                "alignment/hugelymodelbat_mt_subsample.bam.bai",
-                "alignment/slowlycivilbuck_mt_subsample.bam",
-                "alignment/slowlycivilbuck_mt_subsample.bam.bai",
                 "annotate_mobile_elements",
                 "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz",
                 "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz.tbi",
@@ -703,9 +696,6 @@
                 "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz.tbi",
                 "rank_and_filter/justhusky_sv_ranked_research.vcf.gz",
                 "rank_and_filter/justhusky_sv_ranked_research.vcf.gz.tbi",
-                "repeat_expansions",
-                "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz",
-                "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz.tbi",
                 "smncopynumbercaller",
                 "smncopynumbercaller/out",
                 "smncopynumbercaller/out/justhusky_smncopynumbercaller.json",
@@ -716,7 +706,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-03-12T22:37:05.921453831",
+        "timestamp": "2026-03-16T14:20:06.249313916",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

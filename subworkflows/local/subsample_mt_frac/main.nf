@@ -32,4 +32,10 @@ workflow SUBSAMPLE_MT_FRAC {
 
         SAMTOOLS_VIEW(ch_subsample_in, [[:],[],[]], [], 'bai')
 
+        ch_publish = SAMTOOLS_VIEW.out.bam
+            .mix(SAMTOOLS_VIEW.out.bai)
+            .map { meta, value -> ['alignment/', [meta, value]] }
+
+    emit:
+        publish = ch_publish // channel: [ val(destination), val(value) ]
 }
