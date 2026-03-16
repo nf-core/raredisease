@@ -38,42 +38,48 @@ nextflow_workflow {
                 input[12] = channel.of([[id:'gcnvcaller'], []])
                 input[13] = 'wgs'
                 input[14] = true
-                inpul[15] = channel.of([
+                input[15] = channel.of([
                     [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman
-ch_genome_chrsizes                   
-ch_genome_hisat2index                
-ch_mt_fai                            
-ch_mt_fasta                          
-ch_mt_lastdb                         
-ch_reads                             
-ch_subdepth                          
-val_heavy_strand_origin_start        
-val_heavy_strand_origin_end          
-val_light_strand_origin_start        
-val_light_strand_origin_end          
-val_mito_length                      
-val_mito_name                        
-val_mitosalt_breakspan               
-val_mitosalt_breakthreshold          
-val_mitosalt_cluster_threshold       
-val_mitosalt_deletion_threshold_max  
-val_mitosalt_deletion_threshold_min  
-val_mitosalt_evalue_threshold        
-val_mitosalt_exclude                 
-val_mitosalt_flank                   
-val_mitosalt_heteroplasmy_limit      
-val_mitosalt_paired_distance         
-val_mitosalt_score_threshold         
-val_mitosalt_sizelimit               
-val_mitosalt_split_distance_threshold
-val_mitosalt_split_length            
-val_saltshaker_dominant_fraction     
-val_saltshaker_group_radius          
-val_saltshaker_high_heteroplasmy     
-val_saltshaker_multiple_threshold    
-val_saltshaker_noise_threshold       
-val_run_mt_for_wes                   
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mtreverted.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mtreverted.bam.bai', checkIfExists: true)
+                ])
+                input[16] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.chrsizes', checkIfExists: true)]).collect()
+                input[17] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/hisat2', checkIfExists: true)]).collect()
+                input[18] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fai', checkIfExists: true)]).collect()
+                input[19] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]).collect()
+                input[20] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/lastdb', checkIfExists: true)]).collect()
+                input[21] = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    [file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_1.fastq.gz', checkIfExists: true), 
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_2.fastq.gz', checkIfExists: true)]
+                ])
+                input[22] = 10000000
+                input[23] = 16081
+                input[24] = 407
+                input[25] = 5730
+                input[26] = 5763
+                input[27] = 16569
+                input[28] = 'MT'
+                input[29] = 15
+                input[30] = 2
+                input[31] = 5
+                input[32] = 30000
+                input[33] = 30
+                input[34] = 0.00001
+                input[35] = 5
+                input[36] = 15
+                input[37] = 0.01
+                input[38] = 1000
+                input[39] = 80
+                input[40] = 10000
+                input[41] = 5
+                input[42] = 15
+                input[43] = 0.5
+                input[44] = 600
+                input[45] = 10
+                input[46] = 5
+                input[47] = 0.3
+                input[48] = true                  
 
                 """
             }

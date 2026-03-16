@@ -106,14 +106,14 @@ workflow CALL_SV_MT {
                     val_light_strand_origin_start,
                     val_light_strand_origin_end
                 )
-    
+
                 SALTSHAKER_CLASSIFY(
                     SALTSHAKER_CALL.out.call,
                     val_saltshaker_dominant_fraction,
                     val_saltshaker_group_radius,
                     val_saltshaker_high_heteroplasmy,
                     val_saltshaker_multiple_threshold,
-                    val_saltshaker_noise_threshold
+                    val_saltshaker_noise_threshold,
                     val_mito_name
                 )
 
