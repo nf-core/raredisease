@@ -453,7 +453,8 @@ workflow RAREDISEASE {
             ANN_CSQ_PLI_SNV (
                 ch_variant_consequences_snv,
                 ch_ann_csq_snv_in,
-                false
+                false,
+                ''
             )
 
             ANN_CSQ_PLI_SNV.out.vcf_ann
@@ -522,7 +523,8 @@ workflow RAREDISEASE {
             ANN_CSQ_PLI_MT(
                 ch_variant_consequences_snv,
                 ch_ann_csq_mtsnv_in,
-                false
+                false,
+                ''
             )
 
             ANN_CSQ_PLI_MT.out.vcf_ann
@@ -612,7 +614,8 @@ workflow RAREDISEASE {
             ANN_CSQ_PLI_SV (
                 ch_variant_consequences_sv,
                 ch_ann_csq_sv_in,
-                false
+                false,
+                ''
             )
 
             ANN_CSQ_PLI_SV.out.vcf_ann
@@ -721,8 +724,11 @@ workflow RAREDISEASE {
             ANN_CSQ_PLI_ME(
                 ch_variant_consequences_sv,
                 ch_ann_csq_me_in,
-                true
+                true,
+                'annotate_mobile_elements/'
             )
+            ch_call_mobile_elements_publish = ch_call_mobile_elements_publish
+                .mix(ANN_CSQ_PLI_ME.out.publish)
 
         }
     }
