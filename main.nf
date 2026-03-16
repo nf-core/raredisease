@@ -327,14 +327,17 @@ workflow NFCORE_RAREDISEASE {
     //
     // Create chromosome bed and intervals for splitting and gathering operations
     //
-    ch_scatter_split_intervals = channel.empty()
+    ch_scatter_split_intervals  = channel.empty()
+    ch_scatter_genome_publish   = channel.empty()
     if (!skip_snv_annotation) {
         SCATTER_GENOME (
             ch_genome_dictionary,
             ch_genome_fai,
-            ch_genome_fasta
-        ).split_intervals
-        .set { ch_scatter_split_intervals }
+            ch_genome_fasta,
+            params.save_reference
+        )
+        ch_scatter_split_intervals = SCATTER_GENOME.out.split_intervals
+        ch_scatter_genome_publish  = SCATTER_GENOME.out.publish
     }
 
     RAREDISEASE (
@@ -465,8 +468,9 @@ workflow NFCORE_RAREDISEASE {
         val_vep_cache_version
     )
     emit:
-    multiqc_report = RAREDISEASE.out.multiqc_report // channel: /path/to/multiqc_report.html
-    publish        = RAREDISEASE.out.publish          // channel: [ val(destination), val(value) ]
+    multiqc_report = RAREDISEASE.out.multiqc_report                        // channel: /path/to/multiqc_report.html
+    publish        = RAREDISEASE.out.publish
+                       .mix(ch_scatter_genome_publish)                     // channel: [ val(destination), val(value) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
