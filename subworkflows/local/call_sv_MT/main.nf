@@ -116,10 +116,9 @@ workflow CALL_SV_MT {
                     val_saltshaker_noise_threshold
                     val_mito_name
                 )
-                ch_mitosalt_vcf = SALTSHAKER_CLASSIFY.out.classify
 
                 SALTSHAKER_PLOT(
-                    ch_mitosalt_vcf
+                    SALTSHAKER_CLASSIFY.out.classify
                 )
                 ch_mitosalt_plot = SALTSHAKER_PLOT.out.plot
             }
@@ -129,7 +128,7 @@ workflow CALL_SV_MT {
 
     emit:
         mitosalt_classify   = SALTSHAKER_CLASSIFY.out.txt   // channel: [ val(meta), path(txt) ]
-        mitosalt_vcf        = ch_mitosalt_vcf               // channel: [ val(meta), path(vcf) ]
+        mitosalt_vcf        = SALTSHAKER_CLASSIFY.out.vcf   // channel: [ val(meta), path(vcf) ]
         mitosalt_plot       = ch_mitosalt_plot              // channel: [ val(meta), path(png) ]
         mt_del_result       = MT_DELETION.out.mt_del_result // channel: [ val(meta), path(txt) ]
 }

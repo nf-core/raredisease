@@ -176,7 +176,12 @@ workflow CALL_STRUCTURAL_VARIANTS {
             TABIX_TABIX (SVDB_MERGE.out.vcf)
             ch_merged_svs = SVDB_MERGE.out.vcf
             ch_merged_tbi = TABIX_TABIX.out.index
+        } else {
+            TABIX_TABIX (mitosalt_vcf)
+            ch_merged_svs = mitosalt_vcf
+            ch_merged_tbi = TABIX_TABIX.out.index
         }
+
 
     emit:
         vcf      = ch_merged_svs // channel: [ val(meta), path(vcf)]

@@ -732,10 +732,7 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-<<<<<<< HEAD
-=======
         "timestamp": "2026-03-10T15:15:02.654289867",
->>>>>>> e21520c9e47486b83bbbfd46e3bff18f6883013d
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"
