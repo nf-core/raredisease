@@ -5,9 +5,7 @@
 include { GATK4_COLLECTREADCOUNTS as COLLECTREADCOUNTS        } from '../../../modules/nf-core/gatk4/collectreadcounts/main'
 include { GATK4_DENOISEREADCOUNTS as DENOISEREADCOUNTS_FEMALE } from '../../../modules/nf-core/gatk4/denoisereadcounts/main'
 include { GATK4_DENOISEREADCOUNTS as DENOISEREADCOUNTS_MALE   } from '../../../modules/nf-core/gatk4/denoisereadcounts/main'
-include { GENS as GENS_GENERATE                               } from '../../../modules/local/gens/main'
-include { TABIX_BGZIPTABIX as GENS_GENERATE_BAF_INDEX         } from '../../../modules/nf-core/tabix/bgziptabix/main'
-include { TABIX_BGZIPTABIX as GENS_GENERATE_COV_INDEX         } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { PREPARECOVANDBAF as GENS_GENERATE                   } from '../../../modules/nf-core/gens/preparecovandbaf/main'
 
 workflow GENS {
     take:
@@ -17,6 +15,7 @@ workflow GENS {
         ch_genome_fasta      // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_gnomad_pos        // channel: [mandatory] [ path(gnomad_pos) ]
         ch_gvcf              // channel: [mandatory] [ val(meta), path(gvcf) ]
+        ch_gvcf_tbi          // channel: [mandatory] [ val(meta), path(gvcf.tbi) ]
         ch_interval_list     // channel: [mandatory] [ path(interval_list) ]
         ch_pon_female        // channel: [mandatory] [ path(pon) ]
         ch_pon_male          // channel: [mandatory] [ path(pon) ]
@@ -54,16 +53,15 @@ workflow GENS {
             .set { ch_denoisereadcounts_out }
 
         GENS_GENERATE (
-            ch_denoisereadcounts_out,
-            ch_gvcf,
+            ch_denoisereadcounts_out
+                .join(ch_gvcf)
+                .join(ch_gvcf_tbi),
             ch_gnomad_pos
         )
 
-        GENS_GENERATE_BAF_INDEX (GENS_GENERATE.out.baf)
-
-        GENS_GENERATE_COV_INDEX (GENS_GENERATE.out.cov)
-
     emit:
-        gens_baf_bed_gz = GENS_GENERATE.out.baf // channel: [ val(meta), path(bed) ]
-        gens_cov_bed_gz = GENS_GENERATE.out.cov // channel: [ val(meta), path(bed) ]
+        gens_baf_bed_gz  = GENS_GENERATE.out.baf_gz  // channel: [ val(meta), path(bed.gz) ]
+        gens_baf_bed_tbi = GENS_GENERATE.out.baf_tbi // channel: [ val(meta), path(tbi) ]
+        gens_cov_bed_gz  = GENS_GENERATE.out.cov_gz  // channel: [ val(meta), path(bed.gz) ]
+        gens_cov_bed_tbi = GENS_GENERATE.out.cov_tbi // channel: [ val(meta), path(tbi) ]
 }

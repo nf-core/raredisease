@@ -281,6 +281,11 @@
                         "git_sha": "7557033683e4016e7d474a23445f75deae2fb729",
                         "installed_by": ["modules"]
                     },
+                    "gens/preparecovandbaf": {
+                        "branch": "master",
+                        "git_sha": "8220217c9ccad60dc5b395bd76de4d1ddfb7cd80",
+                        "installed_by": ["modules"]
+                    },
                     "glnexus": {
                         "branch": "master",
                         "git_sha": "824f8012c9ede97642fd23371c8784fb71074c63",
