@@ -192,7 +192,15 @@ workflow ANNOTATE_GENOME_SNVS {
         //rhocall_viz
         ANNOTATE_RHOCALLVIZ(ch_genome_chrsizes, ch_samples, ch_vep_ann_index )
 
+        ch_publish = CHROMOGRAPH_SITES.out.plots
+            .mix(CHROMOGRAPH_REGIONS.out.plots)
+            .mix(BCFTOOLS_CONCAT.out.vcf)
+            .mix(TABIX_BCFTOOLS_CONCAT.out.index)
+            .map { meta, value -> ['annotate_snv/genome/', [meta, value]] }
+            .mix(ANNOTATE_RHOCALLVIZ.out.publish)
+
     emit:
         tbi      = ch_vep_index // channel: [ val(meta), path(tbi) ]
         vcf_ann  = ch_vep_ann   // channel: [ val(meta), path(vcf) ]
+        publish  = ch_publish   // channel: [ val(destination), val(value) ]
 }

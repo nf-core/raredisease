@@ -214,6 +214,7 @@ workflow RAREDISEASE {
     ch_call_repeat_expansions_publish   = channel.empty()
     ch_call_mobile_elements_publish     = channel.empty()
     ch_subsample_publish                = channel.empty()
+    ch_annotate_genome_snvs_publish     = channel.empty()
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
@@ -428,6 +429,7 @@ workflow RAREDISEASE {
                 val_genome,
                 val_vep_cache_version
             ).set { ch_snv_annotate }
+            ch_annotate_genome_snvs_publish = ANNOTATE_GENOME_SNVS.out.publish
 
             ch_snv_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -928,7 +930,8 @@ workflow RAREDISEASE {
                        .mix(ch_call_sv_publish)
                        .mix(ch_call_sv_mt_publish)
                        .mix(ch_call_repeat_expansions_publish)
-                       .mix(ch_call_mobile_elements_publish) // channel: [ val(destination), val(value) ]
+                       .mix(ch_call_mobile_elements_publish)
+                       .mix(ch_annotate_genome_snvs_publish) // channel: [ val(destination), val(value) ]
 
 }
 
