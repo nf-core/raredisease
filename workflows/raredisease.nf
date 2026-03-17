@@ -488,7 +488,7 @@ workflow RAREDISEASE {
                 ch_cadd_resources,
                 ch_genome_fasta,
                 ch_genome_fai,
-                CALL_SNV.out.mt_vcf,
+                CALL_SNV.out.mt_vcf_tbi,
                 ch_vcfanno_extra,
                 ch_vcfanno_lua,
                 ch_vcfanno_resources,

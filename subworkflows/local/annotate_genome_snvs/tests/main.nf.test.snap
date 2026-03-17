@@ -47,10 +47,9 @@
                                     
                                 ],
                                 "mother": "",
-                                "father": "",
-                                "prefix": "justhusky_rhocall_filter"
+                                "father": ""
                             },
-                            "justhusky_rhocall_filter_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "justhusky_rhocall_filter_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ],
                     [
@@ -67,22 +66,7 @@
                                 "mother": "",
                                 "father": ""
                             },
-                            "justhusky_rhocall_filter_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "annotate_snv/genome/",
-                        [
-                            {
-                                "id": "earlycasualcaiman",
-                                "sample": "earlycasualcaiman",
-                                "sex": 1,
-                                "phenotype": 2,
-                                "paternal": 0,
-                                "maternal": 0,
-                                "case_id": "justhusky"
-                            },
-                            "earlycasualcaiman_rhocallviz.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "justhusky_rhocall_filter_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ],
                     [
@@ -98,6 +82,21 @@
                                 "case_id": "justhusky"
                             },
                             "earlycasualcaiman_rhocallviz.wig:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "annotate_snv/genome/",
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_rhocallviz.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ],
                     [
@@ -170,10 +169,9 @@
                                     
                                 ],
                                 "mother": "",
-                                "father": "",
-                                "prefix": "justhusky_rhocall_filter"
+                                "father": ""
                             },
-                            "justhusky_rhocall_filter_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "justhusky_rhocall_filter_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ],
                     [
@@ -190,22 +188,7 @@
                                 "mother": "",
                                 "father": ""
                             },
-                            "justhusky_rhocall_filter_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "annotate_snv/genome/",
-                        [
-                            {
-                                "id": "earlycasualcaiman",
-                                "sample": "earlycasualcaiman",
-                                "sex": 1,
-                                "phenotype": 2,
-                                "paternal": 0,
-                                "maternal": 0,
-                                "case_id": "justhusky"
-                            },
-                            "earlycasualcaiman_rhocallviz.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "justhusky_rhocall_filter_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ],
                     [
@@ -221,6 +204,21 @@
                                 "case_id": "justhusky"
                             },
                             "earlycasualcaiman_rhocallviz.wig:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "annotate_snv/genome/",
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_rhocallviz.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ],
                     [
@@ -314,7 +312,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-16T23:12:33.480389323",
+        "timestamp": "2026-03-17T17:25:23.200645941",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

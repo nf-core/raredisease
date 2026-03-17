@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            785,
+            773,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -378,9 +378,6 @@
                 "TABIX_ANNOTATE": {
                     "tabix": 1.21
                 },
-                "TABIX_BCFTOOLS_CONCAT": {
-                    "tabix": 1.21
-                },
                 "TABIX_BGZIPINDEX_PADDED_BED": {
                     "bgzip": 1.21,
                     "tabix": 1.21
@@ -414,12 +411,6 @@
                     "tabix": 1.21
                 },
                 "TABIX_TABIX_MT": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_VEP_MT": {
-                    "tabix": 1.21
-                },
-                "TABIX_VEP": {
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
@@ -1029,7 +1020,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-03-16T18:18:03.478560166",
+        "timestamp": "2026-03-17T16:58:22.361988613",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

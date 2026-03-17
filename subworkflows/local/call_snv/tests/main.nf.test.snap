@@ -104,12 +104,21 @@
                 ],
                 "7": [
                     [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "8": [
+                    [
                         "call_snv/genome/",
                         [
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ],
                     [
@@ -118,7 +127,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ],
                     [
@@ -217,6 +226,15 @@
                         "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
+                "mt_vcf_tbi": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
                 "publish": [
                     [
                         "call_snv/genome/",
@@ -224,7 +242,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ],
                     [
@@ -233,7 +251,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ],
                     [
@@ -257,7 +275,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-13T15:48:00.031080535",
+        "timestamp": "2026-03-17T17:37:11.970412775",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

@@ -528,7 +528,7 @@
                     },
                     "tiddit/sv": {
                         "branch": "master",
-                        "git_sha": "d0afa49c7c23c9e99a47af9bafb4cee449853560",
+                        "git_sha": "7d7b05291926e7bce86096a0ed49499c200924a5",
                         "installed_by": ["modules"]
                     },
                     "ucsc/wigtobigwig": {

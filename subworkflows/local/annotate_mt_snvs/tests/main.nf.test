@@ -20,7 +20,8 @@ nextflow_workflow {
                 input[3]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]).collect()
                 input[4]  = channel.of([
                     [id:'justhusky', case_id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'reference/vcfanno_gnomad_mt.vcf.gz', checkIfExists: true)
+                    file(params.pipelines_testdata_base_path + 'reference/vcfanno_gnomad_mt.vcf.gz', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'reference/vcfanno_gnomad_mt.vcf.gz.tbi', checkIfExists: true),
                 ])
                 input[5]  = channel.value([[]])
                 input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_functions.lua', checkIfExists: true)).collect()

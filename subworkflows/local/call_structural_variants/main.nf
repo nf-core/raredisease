@@ -40,7 +40,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         }
 
         if (val_analysis_type.equals("wgs")) {
-            CALL_SV_TIDDIT (ch_genome_bam_bai, ch_genome_fasta, ch_bwa_index, ch_case_info)
+            CALL_SV_TIDDIT (ch_genome_bam_bai, ch_genome_fai, ch_genome_fasta, ch_bwa_index, ch_case_info)
                 .vcf
                 .collect{ _meta, vcf -> vcf }
                 .set { tiddit_vcf }

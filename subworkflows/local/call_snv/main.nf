@@ -166,5 +166,6 @@ workflow CALL_SNV {
         genome_vcf_tabix = ch_genome_vcf_tabix // channel: [ val(meta), path(vcf), path(tbi) ]
         mt_tabix         = ch_mt_tabix         // channel: [ val(meta), path(tbi) ]
         mt_vcf           = ch_mt_vcf           // channel: [ val(meta), path(vcf) ]
+        mt_vcf_tbi       = ch_mt_vcf_tabix     // channel: [ val(meta), path(vcf), path(tbi)]
         publish = ch_publish                   // channel: [ val(destination), val(value) ]
 }

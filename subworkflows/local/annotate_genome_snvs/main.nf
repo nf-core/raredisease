@@ -14,9 +14,6 @@ include { CHROMOGRAPH as CHROMOGRAPH_REGIONS    } from '../../../modules/nf-core
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_SNV      } from '../../../modules/nf-core/ensemblvep/vep/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL } from '../../../modules/nf-core/tabix/bgziptabix/main'
 include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO } from '../../../modules/nf-core/tabix/bgziptabix/main'
-include { TABIX_TABIX as TABIX_VEP              } from '../../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_BCFTOOLS_CONCAT  } from '../../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_BCFTOOLS_VIEW    } from '../../../modules/nf-core/tabix/tabix/main'
 include { GATK4_SELECTVARIANTS                  } from '../../../modules/nf-core/gatk4/selectvariants/main'
 include { ANNOTATE_CADD                         } from '../annotate_cadd'
 include { ANNOTATE_RHOCALLVIZ                   } from '../annotate_rhocallviz'
@@ -107,10 +104,9 @@ workflow ANNOTATE_GENOME_SNVS {
 
         // Annotating with CADD
         if (!val_cadd_resources.equals(null)) {
-            TABIX_BCFTOOLS_VIEW (BCFTOOLS_VIEW.out.vcf)
 
             BCFTOOLS_VIEW.out.vcf
-                .join(TABIX_BCFTOOLS_VIEW.out.index, failOnMismatch:true, failOnDuplicate:true)
+                .join(BCFTOOLS_VIEW.out.tbi, failOnMismatch:true, failOnDuplicate:true)
                 .set { ch_cadd_in }
 
             ANNOTATE_CADD (
@@ -150,12 +146,13 @@ workflow ANNOTATE_GENOME_SNVS {
 
         ENSEMBLVEP_SNV.out.vcf
             .map { meta, vcf -> [meta - meta.subMap('scatterid'), vcf] }
-            .set { ch_vep_out }
+            .set { ch_vep_vcf_out }
+        ENSEMBLVEP_SNV.out.tbi
+            .map { meta, tbi -> [meta - meta.subMap('scatterid'), tbi] }
+            .set { ch_vep_tbi_out }
 
-        TABIX_VEP (ch_vep_out)
-
-        ch_vep_out
-            .join(TABIX_VEP.out.index, failOnMismatch:true)
+        ch_vep_vcf_out
+            .join(ch_vep_tbi_out, failOnMismatch:true)
             .groupTuple()
             .map { meta, vcfs, tbis ->
                 def sortedvcfs = vcfs.sort { vcf -> vcf.baseName }
@@ -182,25 +179,25 @@ workflow ANNOTATE_GENOME_SNVS {
 
         BCFTOOLS_CONCAT.out.vcf
             .map { meta, vcf -> [meta - meta.subMap('prefix'), vcf] }
-            .set { ch_concat_out }
+            .set { ch_concat_vcf_out }
 
-        TABIX_BCFTOOLS_CONCAT (ch_concat_out)
+        BCFTOOLS_CONCAT.out.tbi
+            .map { meta, tbi -> [meta - meta.subMap('prefix'), tbi] }
+            .set { ch_concat_tbi_out }
 
-        ch_vep_ann       = ch_concat_out
-        ch_vep_index     = TABIX_BCFTOOLS_CONCAT.out.index
-        ch_vep_ann_index = ch_concat_out.join(TABIX_BCFTOOLS_CONCAT.out.index)
+        ch_vep_ann_index = ch_concat_vcf_out.join(ch_concat_tbi_out, failOnMismatch:true, failOnDuplicate:true)
         //rhocall_viz
         ANNOTATE_RHOCALLVIZ(ch_genome_chrsizes, ch_samples, ch_vep_ann_index )
 
         ch_publish = CHROMOGRAPH_SITES.out.plots
             .mix(CHROMOGRAPH_REGIONS.out.plots)
-            .mix(BCFTOOLS_CONCAT.out.vcf)
-            .mix(TABIX_BCFTOOLS_CONCAT.out.index)
+            .mix(ch_concat_vcf_out)
+            .mix(ch_concat_tbi_out)
             .map { meta, value -> ['annotate_snv/genome/', [meta, value]] }
             .mix(ANNOTATE_RHOCALLVIZ.out.publish)
 
     emit:
-        tbi      = ch_vep_index // channel: [ val(meta), path(tbi) ]
-        vcf_ann  = ch_vep_ann   // channel: [ val(meta), path(vcf) ]
+        tbi      = ch_concat_tbi_out // channel: [ val(meta), path(tbi) ]
+        vcf_ann  = ch_concat_vcf_out // channel: [ val(meta), path(vcf) ]
         publish  = ch_publish   // channel: [ val(destination), val(value) ]
 }
