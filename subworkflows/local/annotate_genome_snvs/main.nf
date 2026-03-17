@@ -98,7 +98,9 @@ workflow ANNOTATE_GENOME_SNVS {
             .combine(ch_vcfanno_extra)
             .set { ch_vcfanno_in }
 
-        VCFANNO (ch_vcfanno_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources).out.vcf
+        VCFANNO (ch_vcfanno_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
+
+        VCFANNO.out.vcf
             .join(VCFANNO.out.tbi)
             .set { ch_vcfanno_out }
 
