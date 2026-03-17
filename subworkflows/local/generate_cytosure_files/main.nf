@@ -86,4 +86,10 @@ workflow GENERATE_CYTOSURE_FILES {
             [[:], []], [[:], []],
             ch_blacklist
         )
+
+        ch_publish = VCF2CYTOSURE.out.cgh
+            .map { meta, value -> ['vcf2cytosure/', [meta, value]] }
+
+    emit:
+        publish = ch_publish // channel: [ val(destination), val(value) ]
 }

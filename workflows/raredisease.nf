@@ -214,6 +214,8 @@ workflow RAREDISEASE {
     ch_call_repeat_expansions_publish   = channel.empty()
     ch_call_mobile_elements_publish     = channel.empty()
     ch_subsample_publish                = channel.empty()
+    ch_annotate_genome_snvs_publish     = channel.empty()
+    ch_generate_cytosure_files_publish  = channel.empty()
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
@@ -428,6 +430,7 @@ workflow RAREDISEASE {
                 val_genome,
                 val_vep_cache_version
             ).set { ch_snv_annotate }
+            ch_annotate_genome_snvs_publish = ANNOTATE_GENOME_SNVS.out.publish
 
             ch_snv_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -453,7 +456,8 @@ workflow RAREDISEASE {
             ANN_CSQ_PLI_SNV (
                 ch_variant_consequences_snv,
                 ch_ann_csq_snv_in,
-                false
+                false,
+                ''
             )
 
             ANN_CSQ_PLI_SNV.out.vcf_ann
@@ -522,7 +526,8 @@ workflow RAREDISEASE {
             ANN_CSQ_PLI_MT(
                 ch_variant_consequences_snv,
                 ch_ann_csq_mtsnv_in,
-                false
+                false,
+                ''
             )
 
             ANN_CSQ_PLI_MT.out.vcf_ann
@@ -612,7 +617,8 @@ workflow RAREDISEASE {
             ANN_CSQ_PLI_SV (
                 ch_variant_consequences_sv,
                 ch_ann_csq_sv_in,
-                false
+                false,
+                ''
             )
 
             ANN_CSQ_PLI_SV.out.vcf_ann
@@ -721,8 +727,11 @@ workflow RAREDISEASE {
             ANN_CSQ_PLI_ME(
                 ch_variant_consequences_sv,
                 ch_ann_csq_me_in,
-                true
+                true,
+                'annotate_mobile_elements/'
             )
+            ch_call_mobile_elements_publish = ch_call_mobile_elements_publish
+                .mix(ANN_CSQ_PLI_ME.out.publish)
 
         }
     }
@@ -782,6 +791,7 @@ workflow RAREDISEASE {
             ch_sv_annotate.vcf_ann,
             val_sample_id_map
         )
+        ch_generate_cytosure_files_publish = GENERATE_CYTOSURE_FILES.out.publish
     }
 
 /*
@@ -923,7 +933,9 @@ workflow RAREDISEASE {
                        .mix(ch_call_sv_publish)
                        .mix(ch_call_sv_mt_publish)
                        .mix(ch_call_repeat_expansions_publish)
-                       .mix(ch_call_mobile_elements_publish) // channel: [ val(destination), val(value) ]
+                       .mix(ch_call_mobile_elements_publish)
+                       .mix(ch_annotate_genome_snvs_publish)
+                       .mix(ch_generate_cytosure_files_publish) // channel: [ val(destination), val(value) ]
 
 }
 
