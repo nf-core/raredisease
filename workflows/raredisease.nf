@@ -215,7 +215,18 @@ workflow RAREDISEASE {
     ch_call_mobile_elements_publish     = channel.empty()
     ch_subsample_publish                = channel.empty()
     ch_annotate_genome_snvs_publish     = channel.empty()
+    ch_annotate_mt_snvs_publish         = channel.empty()
+    ch_annotate_sv_publish              = channel.empty()
     ch_generate_cytosure_files_publish  = channel.empty()
+    ch_gens_publish                     = channel.empty()
+    ch_fastqc_publish                   = channel.empty()
+    ch_smncopynumbercaller_publish      = channel.empty()
+    ch_peddy_publish                    = channel.empty()
+    ch_multiqc_publish                  = channel.empty()
+    ch_rank_snv_publish                 = channel.empty()
+    ch_rank_mt_publish                  = channel.empty()
+    ch_rank_sv_publish                  = channel.empty()
+    ch_variant_evaluation_publish       = channel.empty()
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
@@ -244,6 +255,9 @@ workflow RAREDISEASE {
     if (!skip_fastqc) {
         FASTQC (ch_input_fastqs)
         fastqc_report = FASTQC.out.zip
+        ch_fastqc_publish = FASTQC.out.html
+            .mix(FASTQC.out.zip)
+            .map { meta, value -> ["fastqc/${meta.id}/", [meta, value]] }
     }
 
 /*
@@ -476,6 +490,7 @@ workflow RAREDISEASE {
                 ch_ranksnv_nuclear_in,
                 false
             )
+            ch_rank_snv_publish = RANK_VARIANTS_SNV.out.publish
         }
 
         //
@@ -501,6 +516,7 @@ workflow RAREDISEASE {
                 val_homoplasmy_af_threshold,
                 val_vep_cache_version
             ).set { ch_mt_annotate }
+            ch_annotate_mt_snvs_publish = ch_mt_annotate.publish
 
             ch_mt_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -546,6 +562,7 @@ workflow RAREDISEASE {
                 ch_ranksnv_mt_in,
                 false
             )
+            ch_rank_mt_publish = RANK_VARIANTS_MT.out.publish
         }
     }
 
@@ -592,6 +609,7 @@ workflow RAREDISEASE {
                 val_genome,
                 val_vep_cache_version
             ).set { ch_sv_annotate }
+            ch_annotate_sv_publish = ch_sv_annotate.publish
 
             ch_sv_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -637,6 +655,7 @@ workflow RAREDISEASE {
                 ch_ranksnv_sv_in,
                 true
             )
+            ch_rank_sv_publish = RANK_VARIANTS_SV.out.publish
         }
     }
 /*
@@ -762,6 +781,9 @@ workflow RAREDISEASE {
         SMNCOPYNUMBERCALLER (
             ch_bams_bais
         )
+        ch_smncopynumbercaller_publish = SMNCOPYNUMBERCALLER.out.smncopynumber
+            .mix(SMNCOPYNUMBERCALLER.out.run_metrics)
+            .map { meta, value -> ['smncopynumbercaller/', [meta, value]] }
     }
 
 /*
@@ -775,6 +797,17 @@ workflow RAREDISEASE {
             ch_pedfile.map{ped -> return[[id:"pedigree"], ped]},
             [[:],[]]
         )
+        ch_peddy_publish = PEDDY.out.vs_html
+            .mix(PEDDY.out.html)
+            .mix(PEDDY.out.ped)
+            .mix(PEDDY.out.het_check_png)
+            .mix(PEDDY.out.ped_check_png)
+            .mix(PEDDY.out.sex_check_png)
+            .mix(PEDDY.out.het_check_csv)
+            .mix(PEDDY.out.ped_check_csv)
+            .mix(PEDDY.out.sex_check_csv)
+            .mix(PEDDY.out.ped_check_rel_difference_csv)
+            .map { meta, value -> ['peddy/', [meta, value]] }
     }
 
 /*
@@ -812,6 +845,7 @@ workflow RAREDISEASE {
             ch_gens_pon_female,
             ch_gens_pon_male
         )
+        ch_gens_publish = GENS.out.publish
     }
 
 /*
@@ -826,6 +860,7 @@ workflow RAREDISEASE {
             ch_sdf,
             CALL_SNV.out.genome_vcf_tabix
         )
+        ch_variant_evaluation_publish = VARIANT_EVALUATION.out.publish
     }
 
 /*
@@ -923,6 +958,10 @@ workflow RAREDISEASE {
         [],
         ch_multiqc_samples
     )
+    ch_multiqc_publish = MULTIQC.out.report
+        .mix(MULTIQC.out.data)
+        .mix(MULTIQC.out.plots)
+        .map { value -> ['multiqc/', [value]] }
 
     emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
@@ -935,7 +974,18 @@ workflow RAREDISEASE {
                        .mix(ch_call_repeat_expansions_publish)
                        .mix(ch_call_mobile_elements_publish)
                        .mix(ch_annotate_genome_snvs_publish)
-                       .mix(ch_generate_cytosure_files_publish) // channel: [ val(destination), val(value) ]
+                       .mix(ch_annotate_mt_snvs_publish)
+                       .mix(ch_annotate_sv_publish)
+                       .mix(ch_generate_cytosure_files_publish)
+                       .mix(ch_gens_publish)
+                       .mix(ch_fastqc_publish)
+                       .mix(ch_smncopynumbercaller_publish)
+                       .mix(ch_peddy_publish)
+                       .mix(ch_multiqc_publish)
+                       .mix(ch_rank_snv_publish)
+                       .mix(ch_rank_mt_publish)
+                       .mix(ch_rank_sv_publish)
+                       .mix(ch_variant_evaluation_publish) // channel: [ val(destination), val(value) ]
 
 }
 

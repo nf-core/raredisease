@@ -39,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migrate file publishing from publishDir to a centralized output {} block for some workflows [#784](https://github.com/nf-core/raredisease/pull/784)
 - Replace local gens module with nf-core module [#785](https://github.com/nf-core/raredisease/pull/785)
 - Migrate file publishing from publishDir to a centralized output {} block for some workflows [#787](https://github.com/nf-core/raredisease/pull/787)
+- Migrate file publishing from publishDir to a centralized output {} block for some workflows [#788](https://github.com/nf-core/raredisease/pull/788)
+- Migrate file publishing from publishDir to a centralized output {} block for some workflows [#789](https://github.com/nf-core/raredisease/pull/789)
 
 ### `Fixed`
 

@@ -4,10 +4,31 @@
             {
                 "0": [
                     [
-                        {
-                            "id": "test"
-                        },
-                        "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ],
+                    [
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
                     ]
                 ],
                 "1": [
@@ -15,7 +36,44 @@
                         {
                             "id": "test"
                         },
+                        "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "test"
+                        },
                         "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "publish": [
+                    [
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ],
+                    [
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
                     ]
                 ],
                 "tbi": [
@@ -36,7 +94,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-06T05:42:03.69156986",
+        "timestamp": "2026-03-17T11:59:48.286796435",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -47,10 +105,31 @@
             {
                 "0": [
                     [
-                        {
-                            "id": "test"
-                        },
-                        "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ],
+                    [
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
                     ]
                 ],
                 "1": [
@@ -58,7 +137,44 @@
                         {
                             "id": "test"
                         },
+                        "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "test"
+                        },
                         "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "publish": [
+                    [
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ],
+                    [
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
                     ]
                 ],
                 "tbi": [
@@ -79,7 +195,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-06T05:42:35.988656634",
+        "timestamp": "2026-03-17T12:00:18.702004904",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

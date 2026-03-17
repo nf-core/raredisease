@@ -14,6 +14,41 @@
                 ],
                 "1": [
                     [
+                        "annotate_snv/mitochondria/",
+                        [
+                            {
+                                "id": "justhusky",
+                                "case_id": "justhusky",
+                                "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                            },
+                            "vcfanno_gnomad_mt_vcfanno_vep_haplogrep.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "annotate_snv/mitochondria/",
+                        [
+                            {
+                                "id": "justhusky",
+                                "case_id": "justhusky",
+                                "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                            },
+                            "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ],
+                    [
+                        "annotate_snv/mitochondria/",
+                        [
+                            {
+                                "id": "justhusky",
+                                "case_id": "justhusky",
+                                "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                            },
+                            "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "2": [
+                    [
                         {
                             "id": "justhusky",
                             "case_id": "justhusky",
@@ -24,7 +59,7 @@
                         "vcfanno_gnomad_mt_vcfanno_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "2": [
+                "3": [
                     [
                         {
                             "id": "justhusky",
@@ -34,7 +69,7 @@
                         "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "3": [
+                "4": [
                     [
                         {
                             "id": "justhusky",
@@ -52,6 +87,41 @@
                             "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
                         },
                         "vcfanno_gnomad_mt_vcfanno_vep_haplogrep.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "publish": [
+                    [
+                        "annotate_snv/mitochondria/",
+                        [
+                            {
+                                "id": "justhusky",
+                                "case_id": "justhusky",
+                                "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                            },
+                            "vcfanno_gnomad_mt_vcfanno_vep_haplogrep.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "annotate_snv/mitochondria/",
+                        [
+                            {
+                                "id": "justhusky",
+                                "case_id": "justhusky",
+                                "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                            },
+                            "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ],
+                    [
+                        "annotate_snv/mitochondria/",
+                        [
+                            {
+                                "id": "justhusky",
+                                "case_id": "justhusky",
+                                "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                            },
+                            "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
                     ]
                 ],
                 "report": [
@@ -88,7 +158,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-10T15:10:49.596531529",
+        "timestamp": "2026-03-17T09:41:21.295801257",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

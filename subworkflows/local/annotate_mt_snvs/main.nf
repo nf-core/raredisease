@@ -88,9 +88,11 @@ workflow ANNOTATE_MT_SNVS {
         ch_tbi = ENSEMBLVEP_MT.out.tbi
 
         // Running haplogrep3
+        ch_haplog_publish = channel.empty()
         if (!skip_haplogrep3) {
             HAPLOGREP3_CLASSIFY_MT(ch_haplogrep_in)
-            ch_haplog   = HAPLOGREP3_CLASSIFY_MT.out.txt
+            ch_haplog         = HAPLOGREP3_CLASSIFY_MT.out.txt
+            ch_haplog_publish = HAPLOGREP3_CLASSIFY_MT.out.txt
         }
 
         if (val_homoplasmy_af_threshold<1) {
@@ -105,8 +107,14 @@ workflow ANNOTATE_MT_SNVS {
             ch_tbi = BCFTOOLS_PLUGINSETGT.out.tbi
         }
 
+        ch_publish = ENSEMBLVEP_MT.out.vcf
+            .mix(TABIX_TABIX_VEP_MT.out.index)
+            .mix(ch_haplog_publish)
+            .map { meta, value -> ['annotate_snv/mitochondria/', [meta, value]] }
+
     emit:
         haplog    = ch_haplog                // channel: [ val(meta), path(txt) ]
+        publish   = ch_publish               // channel: [ val(destination), val(value) ]
         report    = ENSEMBLVEP_MT.out.report // channel: [ path(html) ]
         tbi       = ch_tbi                   // channel: [ val(meta), path(tbi) ]
         vcf_ann   = ch_vcf                   // channel: [ val(meta), path(vcf) ]

@@ -31,12 +31,23 @@ workflow RANK_VARIANTS {
 
         GENMOD_COMPOUND(GENMOD_SCORE.out.vcf)
 
+        ch_sort_publish  = channel.empty()
+        ch_tabix_publish = channel.empty()
+
         if (process_with_sort) {
             ch_vcf = BCFTOOLS_SORT(GENMOD_COMPOUND.out.vcf).vcf // SV file needs to be sorted before indexing
+            ch_sort_publish = BCFTOOLS_SORT.out.vcf
+                .mix(BCFTOOLS_SORT.out.tbi)
+                .map { meta, value -> ['rank_and_filter/', [meta, value]] }
         } else {
             ch_vcf = TABIX_BGZIPTABIX(GENMOD_COMPOUND.out.vcf).gz_index.map {meta, vcf, _tbi -> return [meta, vcf]} //run only for SNVs
+            ch_tabix_publish = TABIX_BGZIPTABIX.out.gz_index
+                .map { meta, gz, tbi -> ['rank_and_filter/', [meta, gz, tbi]] }
         }
 
+        ch_publish = ch_sort_publish.mix(ch_tabix_publish)
+
     emit:
+        publish  = ch_publish   // channel: [ val(destination), val(value) ]
         vcf      = ch_vcf       // channel: [ val(meta), path(vcf) ]
 }
