@@ -1,20 +1,10 @@
 {
     "ANNOTATE_MT_SNVS - GRCh37, stub": {
         "content": [
-            {
-                "0": [
+            [
+                [
+                    "0",
                     [
-                        {
-                            "id": "justhusky",
-                            "case_id": "justhusky",
-                            "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
-                        },
-                        "vcfanno_gnomad_mt_vcfanno_vep_haplogrep.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "1": [
-                    [
-                        "annotate_snv/mitochondria/",
                         [
                             {
                                 "id": "justhusky",
@@ -23,20 +13,64 @@
                             },
                             "vcfanno_gnomad_mt_vcfanno_vep_haplogrep.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
-                    ],
+                    ]
+                ],
+                [
+                    "1",
                     [
-                        "annotate_snv/mitochondria/",
+                        [
+                            "annotate_snv/mitochondria/",
+                            [
+                                {
+                                    "id": "justhusky",
+                                    "case_id": "justhusky",
+                                    "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                                },
+                                "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "annotate_snv/mitochondria/",
+                            [
+                                {
+                                    "id": "justhusky",
+                                    "case_id": "justhusky",
+                                    "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                                },
+                                "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            ]
+                        ],
+                        [
+                            "annotate_snv/mitochondria/",
+                            [
+                                {
+                                    "id": "justhusky",
+                                    "case_id": "justhusky",
+                                    "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                                },
+                                "vcfanno_gnomad_mt_vcfanno_vep_haplogrep.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "2",
+                    [
                         [
                             {
                                 "id": "justhusky",
                                 "case_id": "justhusky",
                                 "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
                             },
-                            "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "ANNOTATE_MT_SNVS:ENSEMBLVEP_MT",
+                            "ensemblvep",
+                            "vcfanno_gnomad_mt_vcfanno_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
-                    ],
+                    ]
+                ],
+                [
+                    "3",
                     [
-                        "annotate_snv/mitochondria/",
                         [
                             {
                                 "id": "justhusky",
@@ -47,62 +81,9 @@
                         ]
                     ]
                 ],
-                "2": [
+                [
+                    "4",
                     [
-                        {
-                            "id": "justhusky",
-                            "case_id": "justhusky",
-                            "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
-                        },
-                        "ANNOTATE_MT_SNVS:ENSEMBLVEP_MT",
-                        "ensemblvep",
-                        "vcfanno_gnomad_mt_vcfanno_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "3": [
-                    [
-                        {
-                            "id": "justhusky",
-                            "case_id": "justhusky",
-                            "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
-                        },
-                        "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "4": [
-                    [
-                        {
-                            "id": "justhusky",
-                            "case_id": "justhusky",
-                            "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
-                        },
-                        "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                    ]
-                ],
-                "haplog": [
-                    [
-                        {
-                            "id": "justhusky",
-                            "case_id": "justhusky",
-                            "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
-                        },
-                        "vcfanno_gnomad_mt_vcfanno_vep_haplogrep.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "publish": [
-                    [
-                        "annotate_snv/mitochondria/",
-                        [
-                            {
-                                "id": "justhusky",
-                                "case_id": "justhusky",
-                                "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
-                            },
-                            "vcfanno_gnomad_mt_vcfanno_vep_haplogrep.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "annotate_snv/mitochondria/",
                         [
                             {
                                 "id": "justhusky",
@@ -111,9 +92,77 @@
                             },
                             "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
-                    ],
+                    ]
+                ],
+                [
+                    "haplog",
                     [
-                        "annotate_snv/mitochondria/",
+                        [
+                            {
+                                "id": "justhusky",
+                                "case_id": "justhusky",
+                                "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                            },
+                            "vcfanno_gnomad_mt_vcfanno_vep_haplogrep.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "publish",
+                    [
+                        [
+                            "annotate_snv/mitochondria/",
+                            [
+                                {
+                                    "id": "justhusky",
+                                    "case_id": "justhusky",
+                                    "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                                },
+                                "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "annotate_snv/mitochondria/",
+                            [
+                                {
+                                    "id": "justhusky",
+                                    "case_id": "justhusky",
+                                    "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                                },
+                                "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            ]
+                        ],
+                        [
+                            "annotate_snv/mitochondria/",
+                            [
+                                {
+                                    "id": "justhusky",
+                                    "case_id": "justhusky",
+                                    "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                                },
+                                "vcfanno_gnomad_mt_vcfanno_vep_haplogrep.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "report",
+                    [
+                        [
+                            {
+                                "id": "justhusky",
+                                "case_id": "justhusky",
+                                "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                            },
+                            "ANNOTATE_MT_SNVS:ENSEMBLVEP_MT",
+                            "ensemblvep",
+                            "vcfanno_gnomad_mt_vcfanno_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "tbi",
+                    [
                         [
                             {
                                 "id": "justhusky",
@@ -124,41 +173,22 @@
                         ]
                     ]
                 ],
-                "report": [
+                [
+                    "vcf_ann",
                     [
-                        {
-                            "id": "justhusky",
-                            "case_id": "justhusky",
-                            "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
-                        },
-                        "ANNOTATE_MT_SNVS:ENSEMBLVEP_MT",
-                        "ensemblvep",
-                        "vcfanno_gnomad_mt_vcfanno_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "tbi": [
-                    [
-                        {
-                            "id": "justhusky",
-                            "case_id": "justhusky",
-                            "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
-                        },
-                        "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "vcf_ann": [
-                    [
-                        {
-                            "id": "justhusky",
-                            "case_id": "justhusky",
-                            "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
-                        },
-                        "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        [
+                            {
+                                "id": "justhusky",
+                                "case_id": "justhusky",
+                                "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
+                            },
+                            "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
                     ]
                 ]
-            }
+            ]
         ],
-        "timestamp": "2026-03-17T09:41:21.295801257",
+        "timestamp": "2026-03-17T21:00:26.870834221",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
