@@ -215,7 +215,10 @@ workflow RAREDISEASE {
     ch_call_mobile_elements_publish     = channel.empty()
     ch_subsample_publish                = channel.empty()
     ch_annotate_genome_snvs_publish     = channel.empty()
+    ch_annotate_mt_snvs_publish         = channel.empty()
+    ch_annotate_sv_publish              = channel.empty()
     ch_generate_cytosure_files_publish  = channel.empty()
+    ch_gens_publish                     = channel.empty()
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
@@ -501,6 +504,7 @@ workflow RAREDISEASE {
                 val_homoplasmy_af_threshold,
                 val_vep_cache_version
             ).set { ch_mt_annotate }
+            ch_annotate_mt_snvs_publish = ch_mt_annotate.publish
 
             ch_mt_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -592,6 +596,7 @@ workflow RAREDISEASE {
                 val_genome,
                 val_vep_cache_version
             ).set { ch_sv_annotate }
+            ch_annotate_sv_publish = ch_sv_annotate.publish
 
             ch_sv_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -812,6 +817,7 @@ workflow RAREDISEASE {
             ch_gens_pon_female,
             ch_gens_pon_male
         )
+        ch_gens_publish = GENS.out.publish
     }
 
 /*
@@ -935,7 +941,10 @@ workflow RAREDISEASE {
                        .mix(ch_call_repeat_expansions_publish)
                        .mix(ch_call_mobile_elements_publish)
                        .mix(ch_annotate_genome_snvs_publish)
-                       .mix(ch_generate_cytosure_files_publish) // channel: [ val(destination), val(value) ]
+                       .mix(ch_annotate_mt_snvs_publish)
+                       .mix(ch_annotate_sv_publish)
+                       .mix(ch_generate_cytosure_files_publish)
+                       .mix(ch_gens_publish) // channel: [ val(destination), val(value) ]
 
 }
 
