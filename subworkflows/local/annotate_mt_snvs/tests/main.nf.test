@@ -43,10 +43,12 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert snapshot(
                     workflow.out.collect { name, channel ->
-                        def sorted_channel = channel.toList().sort { a, b ->
-                            def a_file = a instanceof List ? a[-1].toString() : a.toString()
-                            def b_file = b instanceof List ? b[-1].toString() : b.toString()
-                            a_file <=> b_file
+                        def sorted_channel = channel.toList().sort { item ->
+                            def sortKey = item
+                            while (sortKey instanceof List) {
+                                sortKey = sortKey[-1]
+                            }
+                            sortKey.toString().split(':md5,')[0].tokenize('/')[-1]
                         }
                         [name, sorted_channel]
                     }.sort { it[0] }  // Sort by channel name

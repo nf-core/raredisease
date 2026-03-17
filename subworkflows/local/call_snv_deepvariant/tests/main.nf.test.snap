@@ -132,7 +132,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-17T21:18:23.06423637",
+        "timestamp": "2026-03-17T23:21:43.293315837",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -148,7 +148,7 @@
                 "earlycasualcaiman_deepvar.g.vcf.gz"
             ]
         ],
-        "timestamp": "2026-03-01T18:14:03.103819136",
+        "timestamp": "2026-03-17T23:21:13.603834111",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

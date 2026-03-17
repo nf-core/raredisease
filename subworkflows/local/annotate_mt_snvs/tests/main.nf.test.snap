@@ -26,7 +26,7 @@
                                     "case_id": "justhusky",
                                     "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
                                 },
-                                "vcfanno_gnomad_mt_vcfanno_vep_haplogrep.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                                "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                             ]
                         ],
                         [
@@ -48,7 +48,7 @@
                                     "case_id": "justhusky",
                                     "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
                                 },
-                                "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                                "vcfanno_gnomad_mt_vcfanno_vep_haplogrep.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                             ]
                         ]
                     ]
@@ -118,7 +118,7 @@
                                     "case_id": "justhusky",
                                     "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
                                 },
-                                "vcfanno_gnomad_mt_vcfanno_vep_haplogrep.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                                "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                             ]
                         ],
                         [
@@ -140,7 +140,7 @@
                                     "case_id": "justhusky",
                                     "prefix": "vcfanno_gnomad_mt_vcfanno_vep"
                                 },
-                                "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                                "vcfanno_gnomad_mt_vcfanno_vep_haplogrep.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                             ]
                         ]
                     ]
@@ -188,7 +188,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-17T21:33:10.709529628",
+        "timestamp": "2026-03-17T22:54:47.201373396",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
