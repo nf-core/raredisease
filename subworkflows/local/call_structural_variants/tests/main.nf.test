@@ -40,8 +40,8 @@ nextflow_workflow {
                 input[14] = true
                 input[15] = channel.of([
                     [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mtreverted.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mtreverted.bam.bai', checkIfExists: true)
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
                 ])
                 input[16] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.chrsizes', checkIfExists: true)]).collect()
                 input[17] = Channel.from("\$PWD").map { dir -> [[id:'genome'], file(dir)] }
