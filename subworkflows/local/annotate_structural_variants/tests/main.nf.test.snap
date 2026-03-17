@@ -18,6 +18,15 @@
                             {
                                 "id": "test"
                             },
+                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
                             "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
@@ -54,6 +63,15 @@
                             {
                                 "id": "test"
                             },
+                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
                             "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
@@ -76,7 +94,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-17T09:42:05.850413808",
+        "timestamp": "2026-03-17T11:59:48.286796435",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -101,6 +119,15 @@
                             {
                                 "id": "test"
                             },
+                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
                             "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
@@ -137,6 +164,15 @@
                             {
                                 "id": "test"
                             },
+                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "annotate_sv/",
+                        [
+                            {
+                                "id": "test"
+                            },
                             "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
@@ -159,7 +195,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-17T09:42:34.500199452",
+        "timestamp": "2026-03-17T12:00:18.702004904",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
