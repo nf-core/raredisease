@@ -98,7 +98,12 @@ workflow CALL_STRUCTURAL_VARIANTS {
             ch_merged_tbi = TABIX_TABIX.out.index
         }
 
+        ch_publish = ch_merged_svs
+            .mix(ch_merged_tbi)
+            .map { meta, value -> ['call_sv/genome/', [meta, value]] }
+
     emit:
         vcf      = ch_merged_svs // channel: [ val(meta), path(vcf)]
         tbi      = ch_merged_tbi // channel: [ val(meta), path(tbi)]
+        publish = ch_publish     // channel: [ val(destination), val(value) ]
 }

@@ -2,6 +2,11 @@
     "align bwamem2": {
         "content": [
             [
+                "test_sorted_md.bam",
+                "test_sorted_md.bam.bai",
+                "test_sorted_md.metrics.txt"
+            ],
+            [
                 [
                     {
                         "groupSize": 1,
@@ -32,7 +37,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-02-27T15:46:37.232286266",
+        "timestamp": "2026-03-13T15:04:33.885203481",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -40,6 +45,11 @@
     },
     "align bwameme": {
         "content": [
+            [
+                "test_sorted_md.bam",
+                "test_sorted_md.bam.bai",
+                "test_sorted_md.metrics.txt"
+            ],
             [
                 [
                     {
@@ -71,7 +81,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-02-27T15:47:22.733461874",
+        "timestamp": "2026-03-13T15:05:20.75721248",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

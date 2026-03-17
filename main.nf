@@ -466,6 +466,7 @@ workflow NFCORE_RAREDISEASE {
     )
     emit:
     multiqc_report = RAREDISEASE.out.multiqc_report // channel: /path/to/multiqc_report.html
+    publish        = RAREDISEASE.out.publish          // channel: [ val(destination), val(value) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -586,6 +587,15 @@ workflow {
         params.hook_url,
         NFCORE_RAREDISEASE.out.multiqc_report
     )
+
+    publish:
+    subworkflow_results = NFCORE_RAREDISEASE.out.publish
+}
+
+output {
+    subworkflow_results {
+        path { destination, value -> destination }
+    }
 }
 
 /*
