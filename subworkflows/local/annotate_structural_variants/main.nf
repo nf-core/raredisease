@@ -97,6 +97,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         TABIX_VEP (ENSEMBLVEP_SV.out.vcf)
 
         ch_publish = ENSEMBLVEP_SV.out.vcf
+            .mix(ENSEMBLVEP_SV.out.report.map{ meta, process, vep, html -> return [meta, html] })
             .mix(TABIX_VEP.out.index)
             .map { meta, value -> ['annotate_sv/', [meta, value]] }
 
