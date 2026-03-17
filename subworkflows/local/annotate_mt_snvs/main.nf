@@ -108,7 +108,7 @@ workflow ANNOTATE_MT_SNVS {
         }
 
         ch_publish = ENSEMBLVEP_MT.out.vcf
-            .mix(TABIX_TABIX_VEP_MT.out.index)
+            .mix(ENSEMBLVEP_MT.out.tbi)
             .mix(ch_haplog_publish)
             .map { meta, value -> ['annotate_snv/mitochondria/', [meta, value]] }
 
