@@ -280,7 +280,9 @@ workflow NFCORE_RAREDISEASE {
     //
     // Generate pedigree file
     //
-    ch_pedfile  = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
+    ch_pedfile            = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
+    ch_pedfile_publish    = CREATE_PEDIGREE_FILE.out.ped
+        .map { ped -> ['pedigree/', [ped]] }
 
     // Tools
     skip_fastp                 = parseSkipList(val_skip_tools, 'fastp')
@@ -470,7 +472,8 @@ workflow NFCORE_RAREDISEASE {
     emit:
     multiqc_report = RAREDISEASE.out.multiqc_report                        // channel: /path/to/multiqc_report.html
     publish        = RAREDISEASE.out.publish
-                       .mix(ch_scatter_genome_publish)                     // channel: [ val(destination), val(value) ]
+                       .mix(ch_scatter_genome_publish)
+                       .mix(ch_pedfile_publish)                            // channel: [ val(destination), val(value) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
