@@ -96,7 +96,12 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
         TABIX_VEP (ENSEMBLVEP_SV.out.vcf)
 
+        ch_publish = ENSEMBLVEP_SV.out.vcf
+            .mix(TABIX_VEP.out.index)
+            .map { meta, value -> ['annotate_sv/', [meta, value]] }
+
     emit:
+        publish  = ch_publish            // channel: [ val(destination), val(value) ]
         tbi      = TABIX_VEP.out.index   // channel: [ val(meta), path(tbi) ]
         vcf_ann  = ENSEMBLVEP_SV.out.vcf // channel: [ val(meta), path(vcf) ]
 }
