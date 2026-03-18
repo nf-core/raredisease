@@ -35,13 +35,31 @@ nextflow_workflow {
                 input[17] = params.pipelines_testdata_base_path + 'reference/target.bed'
                 input[18] = null
                 input[19] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                input[20] = true
                 """
             }
         }
 
         then {
-            assert workflow.success
-            assert snapshot(workflow.out).match()
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.collect { name, channel ->
+                        def sorted_channel = channel.toList().sort { item ->
+                            // Unwrap nested lists to get the filename
+                            def sortKey = item
+                            while (sortKey instanceof List && !sortKey.isEmpty()) {
+                                sortKey = sortKey[-1]
+                            }
+                            // Extract filename: strip :md5, suffix then take basename only
+                            // (sortKey may be a raw Path with an absolute work-dir prefix)
+                            def parts = sortKey.toString().split(':md5,')[0].tokenize('/')
+                            parts ? parts[-1] : ''
+                        }
+                        [name, sorted_channel]
+                    }.sort { it[0] }
+                ).match() }
+            )
         }
 
     }
