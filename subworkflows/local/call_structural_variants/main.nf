@@ -136,7 +136,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .set { mitosalt_vcf }
         }
 
-
         //merge
         if (skip_germlinecnvcaller) {
             if (val_analysis_type.equals("wgs")) {
@@ -167,6 +166,9 @@ workflow CALL_STRUCTURAL_VARIANTS {
         }
 
         if (!val_analysis_type.equals("mito")) {
+            ch_case_info.view()
+            ch_svcaller_priority.view()
+            vcf_list.view()
             ch_case_info
                 .combine(vcf_list)
                 .set { merge_input_vcfs }

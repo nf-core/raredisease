@@ -320,7 +320,7 @@ workflow NFCORE_RAREDISEASE {
         }
     } else {
         if (val_analysis_type.equals("wgs")) {
-            ch_svcaller_priority = channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
+            ch_svcaller_priority = channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator", "mitosalt"])
         } else if (val_run_mt_for_wes) {
             ch_svcaller_priority = channel.value(["manta", "gcnvcaller", "mitosalt"])        
         } else {
