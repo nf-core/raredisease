@@ -90,7 +90,6 @@ workflow NFCORE_RAREDISEASE {
     val_sample_id_map
     val_samtools_sort_threads
     val_save_mapped_as_cram
-    val_save_reference
     val_score_config_mt
     val_score_config_snv
     val_score_config_sv
@@ -149,8 +148,7 @@ workflow NFCORE_RAREDISEASE {
         val_sequence_dictionary,
         val_target_bed,
         val_vcfanno_extra_resources,
-        val_vep_cache,
-        val_save_reference
+        val_vep_cache
     )
     .set { ch_references }
 
@@ -475,8 +473,7 @@ workflow NFCORE_RAREDISEASE {
     multiqc_report = RAREDISEASE.out.multiqc_report                        // channel: /path/to/multiqc_report.html
     publish        = RAREDISEASE.out.publish
                        .mix(ch_scatter_genome_publish)
-                       .mix(ch_pedfile_publish)
-                       .mix(ch_references.publish)                         // channel: [ val(destination), val(value) ]
+                       .mix(ch_pedfile_publish)                            // channel: [ val(destination), val(value) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -555,7 +552,6 @@ workflow {
         params.sample_id_map,
         params.samtools_sort_threads,
         params.save_mapped_as_cram,
-        params.save_reference,
         params.score_config_mt,
         params.score_config_snv,
         params.score_config_sv,
