@@ -46,13 +46,20 @@ nextflow_workflow {
                 { assert snapshot(
                     workflow.out.collect { name, channel ->
                         def sorted_channel = channel.toList().sort { item ->
-                            // Unwrap nested lists to get the filename
                             def sortKey = item
                             while (sortKey instanceof List && !sortKey.isEmpty()) {
-                                sortKey = sortKey[-1]
+                                def next = sortKey[-1]
+                                if (next instanceof List && next.every { !(it instanceof List) }) {
+                                    // Leaf file list (e.g. BWA index [amb,ann,bwt,pac,sa]).
+                                    // File order inside this list is non-deterministic, so sort
+                                    // basenames and join to produce a stable, environment-independent key.
+                                    return next.findAll { !(it instanceof Map) }
+                                        .collect { it.toString().split(':md5,')[0].tokenize('/').last() ?: '' }
+                                        .sort()
+                                        .join(',')
+                                }
+                                sortKey = next
                             }
-                            // Extract filename: strip :md5, suffix then take basename only
-                            // (sortKey may be a raw Path with an absolute work-dir prefix)
                             def parts = sortKey.toString().split(':md5,')[0].tokenize('/')
                             parts ? parts[-1] : ''
                         }
