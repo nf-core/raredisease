@@ -1,6 +1,6 @@
 process SALTSHAKER_CALL {
     tag "$meta.id"
-    label "process_single"
+    label 'process_single'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -8,9 +8,8 @@ process SALTSHAKER_CALL {
         'community.wave.seqera.io/library/pip_saltshaker:e08e38a6d45f8f32' }"
 
     input:
-    tuple val(meta), path(breakpoint)
-    tuple val(meta2), path(cluster)
-    tuple val(meta3), path(mtfasta)
+    tuple val(meta), path(breakpoint), path(cluster)
+    tuple val(meta2), path(mtfasta)
     val flank
     val heteroplasmy_limit
     val mito_length
@@ -23,9 +22,13 @@ process SALTSHAKER_CALL {
     tuple val(meta), path("*_call_metadata.tsv"), emit: call
     tuple val("${task.process}"), val('saltshaker'), val("1.0.0"), topic: versions, emit: versions_saltshaker
 
+    when:
+    task.ext.when == null || task.ext.when
+
     script:
-    def args   = task.ext.args ?: ''
+    def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+
     """
     saltshaker call \\
         --prefix $prefix \\
@@ -41,15 +44,15 @@ process SALTSHAKER_CALL {
         --ori-l-start $light_strand_origin_start \\
         --ori-l-end $light_strand_origin_end \\
         $args
-
     """
 
     stub:
+    def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
+    echo $args
+
     touch ${prefix}.saltshaker_call_metadata.tsv
-
     """
-
 }

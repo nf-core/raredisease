@@ -1,6 +1,6 @@
 process SALTSHAKER_PLOT {
     tag "$meta.id"
-    label "process_single"
+    label 'process_single'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -14,9 +14,13 @@ process SALTSHAKER_PLOT {
     tuple val(meta), path("*saltshaker.png"), emit: plot
     tuple val("${task.process}"), val('saltshaker'), val("1.0.0"), topic: versions, emit: versions_saltshaker
 
+    when:
+    task.ext.when == null || task.ext.when
+
     script:
-    def args   = task.ext.args ?: ''
+    def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+
     """
     saltshaker plot \\
         --prefix $prefix \\
@@ -26,11 +30,12 @@ process SALTSHAKER_PLOT {
     """
 
     stub:
+    def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
+    echo $args
+
     touch ${prefix}.saltshaker.png
-
     """
-
 }

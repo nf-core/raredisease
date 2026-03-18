@@ -6,9 +6,9 @@ include { MT_DELETION         } from '../../../modules/local/mt_deletion_script'
 include { PREP_MITOSALT       } from '../../../modules/local/prep_mitosalt/main'
 include { MITOSALT            } from '../../../modules/local/mitosalt/main'
 include { SEQTK_SAMPLE        } from '../../../modules/nf-core/seqtk/sample/main'
-include { SALTSHAKER_CALL     } from '../../../modules/local/saltshaker/call/main'
-include { SALTSHAKER_CLASSIFY } from '../../../modules/local/saltshaker/classify/main'
-include { SALTSHAKER_PLOT     } from '../../../modules/local/saltshaker/plot/main'
+include { SALTSHAKER_CALL     } from '../../../modules/nf-core/saltshaker/call/main'
+include { SALTSHAKER_CLASSIFY } from '../../../modules/nf-core/saltshaker/classify/main'
+include { SALTSHAKER_PLOT     } from '../../../modules/nf-core/saltshaker/plot/main'
 
 workflow CALL_SV_MT {
     take:
@@ -90,10 +90,14 @@ workflow CALL_SV_MT {
                 ch_mt_lastdb
             )
             MITOSALT.out.cluster
-                .filter{ meta, out -> out.countLines() > 0 }
-                .set{ch_saltshaker_in}
+                .filter{ _meta, out -> out.countLines() > 0 }
+                .set{ch_cluster}
 
-            if (ch_saltshaker_in) {
+            if (ch_cluster) {
+                MITOSALT.out.breakpoint
+                    .join(ch_cluster)
+                    .set{ch_saltshaker_in}
+
                 SALTSHAKER_CALL(
                     MITOSALT.out.breakpoint,
                     ch_saltshaker_in,
