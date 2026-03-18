@@ -50,11 +50,25 @@ nextflow_workflow {
                             while (sortKey instanceof List && !sortKey.isEmpty()) {
                                 def next = sortKey[-1]
                                 if (next instanceof List && next.every { !(it instanceof List) }) {
-                                    // Leaf file list (e.g. BWA index [amb,ann,bwt,pac,sa]).
-                                    // File order inside this list is non-deterministic, so sort
-                                    // basenames and join to produce a stable, environment-independent key.
+                                    // Leaf list: could be [meta, path] or [file1, file2, ...].
+                                    // For directory outputs (e.g. BWA/BWAMEM2/HISAT2 index folders),
+                                    // nf-test represents the value as a Path at sort time rather than
+                                    // expanding it to a file list. List the directory contents to
+                                    // produce a stable, unique sort key across same-named directories.
                                     return next.findAll { !(it instanceof Map) }
-                                        .collect { it.toString().split(':md5,')[0].tokenize('/').last() ?: '' }
+                                        .collect { v ->
+                                            def s = v.toString()
+                                            if (s.contains(':md5,')) {
+                                                return s.split(':md5,')[0].tokenize('/').last() ?: ''
+                                            }
+                                            try {
+                                                def f = new File(s)
+                                                if (f.isDirectory()) {
+                                                    return f.listFiles()?.collect { it.name }?.sort()?.join(',') ?: s.tokenize('/').last() ?: ''
+                                                }
+                                            } catch (e) {}
+                                            return s.tokenize('/').last() ?: ''
+                                        }
                                         .sort()
                                         .join(',')
                                 }
