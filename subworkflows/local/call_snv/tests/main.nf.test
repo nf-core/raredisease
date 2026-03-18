@@ -126,7 +126,18 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(workflow.out).match() }
+                { assert snapshot(
+                    workflow.out.collect { name, channel ->
+                        def sorted_channel = channel.toList().sort { item ->
+                            def sortKey = item
+                            while (sortKey instanceof List) {
+                                sortKey = sortKey[-1]
+                            }
+                            sortKey.toString().split(':md5,')[0].tokenize('/')[-1]
+                        }
+                        [name, sorted_channel]
+                    }.sort { it[0] }  // Sort by channel name
+                ).match() }
             )
         }
     }
