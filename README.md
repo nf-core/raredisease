@@ -48,16 +48,10 @@ On release, automated continuous integration tests run the pipeline on a full-si
     <img alt="nf-core/raredisease workflow" src="docs/images/raredisease_metromap_light.png">
   </picture>
 
-**1. Metrics:**
+**1. Preprocessing:**
 
-- [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
-- [Mosdepth](https://github.com/brentp/mosdepth)
-- [MultiQC](http://multiqc.info/)
-- [Picard's CollectMutipleMetrics, CollectHsMetrics, and CollectWgsMetrics](https://broadinstitute.github.io/picard/)
-- [Qualimap](http://qualimap.conesalab.org/)
-- [Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/)
-- [TIDDIT's cov](https://github.com/J35P312/)
-- [VerifyBamID2](https://github.com/Griffan/VerifyBamID)
+- [fastp](https://github.com/OpenGene/fastp)
+- [Spring](https://github.com/shubhamchandak94/Spring)
 
 **2. Alignment:**
 
@@ -66,7 +60,24 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [BWA](https://github.com/lh3/bwa)
 - [Sentieon DNAseq](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/)
 
-**3. Variant calling - SNV:**
+**3. Metrics:**
+
+- [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+- [Mosdepth](https://github.com/brentp/mosdepth)
+- [MultiQC](http://multiqc.info/)
+- [Picard's CollectMultipleMetrics, CollectHsMetrics, and CollectWgsMetrics](https://broadinstitute.github.io/picard/)
+- [Qualimap](http://qualimap.conesalab.org/)
+- [Sambamba](https://github.com/biod/sambamba)
+- [Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/)
+- [TIDDIT's cov](https://github.com/J35P312/)
+- [VerifyBamID2](https://github.com/Griffan/VerifyBamID)
+
+**4. Sex check:**
+
+- [NGSbits SampleGender](https://github.com/imgag/ngs-bits)
+- [Peddy](https://github.com/brentp/peddy)
+
+**5. Variant calling - SNV:**
 
 - [DeepVariant](https://github.com/google/deepvariant)
 - [Sentieon DNAscope](https://support.sentieon.com/manual/DNAscope_usage/dnascope/)
@@ -78,6 +89,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - Copy number variant calling:
   - [CNVnator](https://github.com/abyzovlab/CNVnator)
   - [GATK GermlineCNVCaller](https://github.com/broadinstitute/gatk)
+  - [SMNCopyNumberCaller](https://github.com/Illumina/SMNCopyNumberCaller)
 
 **5. Annotation - SNV:**
 
@@ -96,10 +108,8 @@ On release, automated continuous integration tests run the pipeline on a full-si
 **7. Mitochondrial analysis:**
 
 - [Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline ](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-)
-- [eKLIPse](https://github.com/dooguypapua/eKLIPse/tree/master)
 - Annotation:
-  - [HaploGrep2](https://github.com/seppinho/haplogrep-cmd)
-  - [Hmtnote](https://github.com/robertopreste/HmtNote)
+  - [HaploGrep3](https://github.com/genepi/haplogrep3)
   - [vcfanno](https://github.com/brentp/vcfanno)
   - [CADD](https://cadd.gs.washington.edu/)
   - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
