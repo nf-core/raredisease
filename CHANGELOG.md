@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migrate file publishing from publishDir to a centralized output {} block for some workflows [#788](https://github.com/nf-core/raredisease/pull/788)
 - Migrate file publishing from publishDir to a centralized output {} block for some workflows [#789](https://github.com/nf-core/raredisease/pull/789)
 - Remove redundant TABIX processes, and update configs for nf-test [#790](https://github.com/nf-core/raredisease/pull/790)
+- Migrate file publishing from publishDir to a centralized output {} block for some workflows [#791](https://github.com/nf-core/raredisease/pull/791)
 
 ### `Fixed`
 
