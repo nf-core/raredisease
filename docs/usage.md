@@ -133,16 +133,16 @@ If you would like to see more examples of what a typical samplesheet looks like 
 
 The nf-core/raredisease pipeline can handle duplicate-marked BAM files as input. In such cases, samplesheet should contain the following columns:
 
-| Fields        | Description                                                                                                                    |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.                  |
-| `bam`         | Absolute path to a duplicate-marked BAM file.                                                                                  |
-| `bai`         | Absolute path to the BAM index file (.bai).                                                                                    |
-| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                                      |
-| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                            |
-| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.          |
-| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.          |
-| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                   |
+| Fields        | Description                                                                                                           |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.         |
+| `bam`         | Absolute path to a duplicate-marked BAM file.                                                                         |
+| `bai`         | Absolute path to the BAM index file (.bai).                                                                           |
+| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                             |
+| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                   |
+| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband. |
+| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband. |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                          |
 
 If you would like to see an example of what a typical samplesheet looks like in this case, follow this [link.](https://github.com/nf-core/test-datasets/blob/raredisease/testdata/samplesheet_bam.csv)
 
@@ -171,12 +171,12 @@ Note that the pipeline is modular in architecture. It offers you the flexibility
 
 The pipeline is modular — individual tools and subworkflows can be skipped using `--skip_tools` and `--skip_subworkflows` (comma-separated). The valid values are:
 
-| `--skip_tools`                                                                                  |
-| ----------------------------------------------------------------------------------------------- |
+| `--skip_tools`                                                                                                                      |
+| ----------------------------------------------------------------------------------------------------------------------------------- |
 | `fastp`, `fastqc`, `gens`, `germlinecnvcaller`, `haplogrep3`, `ngsbits`, `peddy`, `qualimap`, `smncopynumbercaller`, `vcf2cytosure` |
 
-| `--skip_subworkflows`                                                                                                                       |
-| ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--skip_subworkflows`                                                                                                                                                                          |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `generate_clinical_set`, `me_annotation`, `me_calling`, `mt_annotation`, `mt_subsample`, `repeat_annotation`, `repeat_calling`, `snv_annotation`, `snv_calling`, `sv_annotation`, `sv_calling` |
 
 nf-core/raredisease consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
