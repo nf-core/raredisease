@@ -56,6 +56,7 @@ workflow PREPARE_REFERENCES {
         val_target_bed               // String: path to target bed file
         val_vcfanno_extra            // String: path to additional annotation files used by vcfanno
         val_vep_cache                // String: path to vep cache folder
+        val_save_reference           // Boolean: whether to save generated reference files
 
 
     main:
@@ -266,6 +267,48 @@ workflow PREPARE_REFERENCES {
             ch_sdf      = RTGTOOLS_FORMAT(ch_rtgformat_in).out.sdf
         }
 
+        ch_publish = channel.empty()
+        if (val_save_reference) {
+            ch_publish = ch_dbsnp
+                .mix(ch_dbsnp_tbi)
+                .mix(ch_bwa)
+                .mix(ch_genome_bwamem2_index)
+                .mix(ch_genome_bwameme_index)
+                .mix(ch_genome_fai)
+                .mix(ch_genome_fasta)
+                .mix(ch_genome_hisat2_index)
+                .mix(ch_genome_dict)
+                .mix(ch_mt_bwa_index)
+                .mix(ch_mt_bwamem2_index)
+                .mix(ch_mt_dict)
+                .mix(ch_mt_fai)
+                .mix(ch_mt_fasta)
+                .mix(ch_mt_last_index)
+                .mix(ch_mtshift_backchain)
+                .mix(ch_mtshift_bwa_index)
+                .mix(ch_mtshift_bwamem2_index)
+                .mix(ch_mtshift_dict)
+                .mix(ch_mtshift_fai)
+                .mix(ch_mtshift_fasta)
+                .mix(ch_sdf)
+                .map { meta, value -> ['references/', [meta, value]] }
+                .mix(
+                    ch_target_bed_gz_tbi
+                        .map { meta, gz, index -> ['references/', [meta, gz, index]] }
+                )
+                .mix(
+                    ch_bait_intervals
+                        .mix(ch_chrom_sizes)
+                        .mix(ch_shiftfasta_mtintervals.intervals)
+                        .mix(ch_shiftfasta_mtintervals.shift_intervals)
+                        .mix(ch_target_intervals)
+                        .mix(ch_gnomad_af_idx)
+                        .mix(ch_vcfanno_extra)
+                        .mix(ch_vep_resources)
+                        .map { value -> ['references/', [value]] }
+                )
+        }
+
     emit:
         bait_intervals        = ch_bait_intervals                                   // channel:[ path(intervals) ]
         dbsnp                 = ch_dbsnp                                            // channel:[ val(meta), path(dbsnp) ]
@@ -298,4 +341,5 @@ workflow PREPARE_REFERENCES {
         target_intervals      = ch_target_intervals                                 // channel:[ path(interval_list) ]
         vcfanno_extra         = ch_vcfanno_extra                                    // channel:[ [path(vcf), path(tbi)] ]
         vep_resources         = ch_vep_resources                                    // channel:[ path(cache) ]
+        publish               = ch_publish                                          // channel: [ val(destination), val(value) ]
 }
