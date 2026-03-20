@@ -75,7 +75,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         }
 
         if (val_analysis_type.equals("wgs")) {
-            CALL_SV_TIDDIT (ch_genome_bam_bai, ch_genome_fasta, ch_bwa_index, ch_case_info)
+            CALL_SV_TIDDIT (ch_genome_bam_bai, ch_genome_fai, ch_genome_fasta, ch_bwa_index, ch_case_info)
                 .vcf
                 .collect{ _meta, vcf -> vcf }
                 .set { tiddit_vcf }
@@ -184,8 +184,12 @@ workflow CALL_STRUCTURAL_VARIANTS {
             ch_merged_tbi = TABIX_TABIX.out.index
         }
 
+        ch_publish = ch_merged_svs
+            .mix(ch_merged_tbi)
+            .map { meta, value -> ['call_sv/genome/', [meta, value]] }
 
     emit:
         vcf      = ch_merged_svs // channel: [ val(meta), path(vcf)]
         tbi      = ch_merged_tbi // channel: [ val(meta), path(tbi)]
+        publish = ch_publish     // channel: [ val(destination), val(value) ]
 }

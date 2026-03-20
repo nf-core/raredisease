@@ -7,7 +7,6 @@ include { SVDB_QUERY as SVDB_QUERY_BEDPE  } from '../../../modules/nf-core/svdb/
 include { PICARD_SORTVCF                  } from '../../../modules/nf-core/picard/sortvcf/main'
 include { BCFTOOLS_VIEW                   } from '../../../modules/nf-core/bcftools/view/main'
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_SV } from '../../../modules/nf-core/ensemblvep/vep/main'
-include { TABIX_TABIX as TABIX_VEP        } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
@@ -94,9 +93,13 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             ch_vep_extra_files
         )
 
-        TABIX_VEP (ENSEMBLVEP_SV.out.vcf)
+        ch_publish = ENSEMBLVEP_SV.out.vcf
+            .mix(ENSEMBLVEP_SV.out.tbi)
+            .mix(ENSEMBLVEP_SV.out.report.map{ meta, process, vep, html -> return [meta, html] })
+            .map { meta, value -> ['annotate_sv/', [meta, value]] }
 
     emit:
-        tbi      = TABIX_VEP.out.index   // channel: [ val(meta), path(tbi) ]
+        publish  = ch_publish            // channel: [ val(destination), val(value) ]
+        tbi      = ENSEMBLVEP_SV.out.tbi // channel: [ val(meta), path(tbi) ]
         vcf_ann  = ENSEMBLVEP_SV.out.vcf // channel: [ val(meta), path(vcf) ]
 }

@@ -26,4 +26,10 @@ workflow SUBSAMPLE_MT_READS {
 
         SAMTOOLS_SORT(SAM_TO_BAM.out.bam, [[:],[]], 'bai')
 
+        ch_publish = SAMTOOLS_SORT.out.bam
+            .mix(SAMTOOLS_SORT.out.bai)
+            .map { meta, value -> ['alignment/', [meta, value]] }
+
+    emit:
+        publish = ch_publish // channel: [ val(destination), val(value) ]
 }

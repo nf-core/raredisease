@@ -50,7 +50,7 @@ nf-core/raredisease is a bioinformatics best-practice analysis pipeline to call,
 
 ## Prerequisites
 
-1. Install Nextflow (>=24.04.2) using the instructions [here.](https://nextflow.io/docs/latest/getstarted.html#installation)
+1. Install Nextflow (>=25.10.4) using the instructions [here.](https://nextflow.io/docs/latest/getstarted.html#installation)
 2. Install one of the following technologies for full pipeline reproducibility: Docker, Singularity, Podman, Shifter or Charliecloud.
    > Almost all nf-core pipelines give you the option to use conda as well. However, some tools used in the raredisease pipeline do not have a conda package so we do not support conda at the moment.
 
@@ -133,16 +133,16 @@ If you would like to see more examples of what a typical samplesheet looks like 
 
 The nf-core/raredisease pipeline can handle duplicate-marked BAM files as input. In such cases, samplesheet should contain the following columns:
 
-| Fields        | Description                                                                                                                    |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.                  |
-| `bam`         | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz". |
-| `bai`         | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz". |
-| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                                      |
-| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                            |
-| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.          |
-| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.          |
-| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                   |
+| Fields        | Description                                                                                                           |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.         |
+| `bam`         | Absolute path to a duplicate-marked BAM file.                                                                         |
+| `bai`         | Absolute path to the BAM index file (.bai).                                                                           |
+| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                             |
+| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                   |
+| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband. |
+| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband. |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                          |
 
 If you would like to see an example of what a typical samplesheet looks like in this case, follow this [link.](https://github.com/nf-core/test-datasets/blob/raredisease/testdata/samplesheet_bam.csv)
 
@@ -168,6 +168,16 @@ genome: "GRCh37"
 ```
 
 Note that the pipeline is modular in architecture. It offers you the flexibility to choose between different tools. For example, you can align with bwamem2 or bwa or Sentieon BWA mem and call SNVs with either DeepVariant or Sentieon DNAscope. You also have the option to turn off sections of the pipeline if you do not want to run the. For example, snv annotation can be turned off by adding `--skip_subworkflows snv_annotation` flag in the command line, or by setting it to true in a parameter file. This flexibility means that in any given analysis run, a combination of tools included in the pipeline will not be executed. So the pipeline is written in a way that can account for these differences while working with reference parameters. If a tool is not going to be executed during the course of a run, parameters used only by that tool need not be provided. For example, for SNV calling if you use DeepVariant as your variant caller, you need not provide the parameter `--ml_model`, which is only used by Sentieon DNAscope.
+
+The pipeline is modular — individual tools and subworkflows can be skipped using `--skip_tools` and `--skip_subworkflows` (comma-separated). The valid values are:
+
+| `--skip_tools`                                                                                                                      |
+| ----------------------------------------------------------------------------------------------------------------------------------- |
+| `fastp`, `fastqc`, `gens`, `germlinecnvcaller`, `haplogrep3`, `ngsbits`, `peddy`, `qualimap`, `smncopynumbercaller`, `vcf2cytosure` |
+
+| `--skip_subworkflows`                                                                                                                                                                          |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `generate_clinical_set`, `me_annotation`, `me_calling`, `mt_annotation`, `mt_subsample`, `repeat_annotation`, `repeat_calling`, `snv_annotation`, `snv_calling`, `sv_annotation`, `sv_calling` |
 
 nf-core/raredisease consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
 
@@ -293,7 +303,7 @@ no header and the following columns: `CHROM POS REF_ALLELE,ALT_ALLELE AF`. Sampl
 <sup>7</sup>File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic and mitochondrial SNVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/variant_consequences_v2.txt). You can learn more about these terms [here](https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html).
 <sup>8</sup>A CSV file that describes the files used by VEP's named and custom plugins. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vep_files.csv). <br />
 <sup>9</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
-<sup>10</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into canditate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt). Not required if `--skip_subworkflows generate_clinical_set` is set.<br />
+<sup>10</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into candidate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt). Not required if `--skip_subworkflows generate_clinical_set` is set. To skip this splitting entirely, add `generate_clinical_set` to `--skip_subworkflows`.<br />
 <sup>11</sup>Path to a folder containing cadd annotations. Equivalent of the data/annotations/ folder described [here](https://github.com/kircherlab/CADD-scripts/#manual-installation), and it is used to calculate CADD scores for small indels. <br />
 
 :::note
@@ -316,16 +326,20 @@ We use CADD only to annotate small indels. To annotate SNVs with precomputed CAD
 
 ##### 9. Mitochondrial annotation
 
+Mitochondrial analysis runs automatically for `wgs` and `mito` analysis types. For WES runs, set `--run_mt_for_wes true` to enable it.
+
 | Mandatory                | Optional                          |
 | ------------------------ | --------------------------------- |
-| genome                   | vep_filters/vep_filters_scout_fmt |
-| mito_name                | vep_plugin_files                  |
-| vcfanno_resources        |                                   |
+| genome                   | run_mt_for_wes<sup>1</sup>        |
+| mito_name                | vep_filters/vep_filters_scout_fmt |
+| vcfanno_resources        | vep_plugin_files                  |
 | vcfanno_toml             |                                   |
 | vep_cache_version        |                                   |
 | vep_cache                |                                   |
 | score_config_mt          |                                   |
 | variant_consequences_snv |                                   |
+
+<sup>1</sup>Set to `true` to enable mitochondrial analysis for WES runs. Default is `false`.<br />
 
 ##### 10. Mobile element calling
 
@@ -443,7 +457,6 @@ with:
 input: './samplesheet.csv'
 outdir: './results/'
 genome: 'GRCh37'
-input: 'data'
 <...>
 ```
 

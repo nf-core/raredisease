@@ -417,9 +417,6 @@
                 "TABIX_ANNOTATE": {
                     "tabix": 1.21
                 },
-                "TABIX_BCFTOOLS_CONCAT": {
-                    "tabix": 1.21
-                },
                 "TABIX_BGZIPINDEX_PADDED_BED": {
                     "bgzip": 1.21,
                     "tabix": 1.21
@@ -453,12 +450,6 @@
                     "tabix": 1.21
                 },
                 "TABIX_TABIX_MT": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_VEP_MT": {
-                    "tabix": 1.21
-                },
-                "TABIX_VEP": {
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
@@ -1121,7 +1112,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-03-09T10:37:30.038838422",
+        "timestamp": "2026-03-17T16:52:17.64647915",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"

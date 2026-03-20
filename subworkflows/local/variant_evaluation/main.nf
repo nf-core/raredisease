@@ -40,4 +40,21 @@ workflow VARIANT_EVALUATION {
 
         RTGTOOLS_VCFEVAL ( ch_vcfeval_in, ch_sdf )
 
+        ch_publish = RTGTOOLS_VCFEVAL.out.tp_vcf
+            .mix(RTGTOOLS_VCFEVAL.out.tp_tbi)
+            .mix(RTGTOOLS_VCFEVAL.out.fn_vcf)
+            .mix(RTGTOOLS_VCFEVAL.out.fn_tbi)
+            .mix(RTGTOOLS_VCFEVAL.out.fp_vcf)
+            .mix(RTGTOOLS_VCFEVAL.out.fp_tbi)
+            .mix(RTGTOOLS_VCFEVAL.out.baseline_vcf)
+            .mix(RTGTOOLS_VCFEVAL.out.baseline_tbi)
+            .mix(RTGTOOLS_VCFEVAL.out.snp_roc)
+            .mix(RTGTOOLS_VCFEVAL.out.non_snp_roc)
+            .mix(RTGTOOLS_VCFEVAL.out.weighted_roc)
+            .mix(RTGTOOLS_VCFEVAL.out.summary)
+            .mix(RTGTOOLS_VCFEVAL.out.phasing)
+            .map { meta, value -> ['rtgvcfeval/', [meta, value]] }
+
+    emit:
+        publish = ch_publish // channel: [ val(destination), val(value) ]
 }

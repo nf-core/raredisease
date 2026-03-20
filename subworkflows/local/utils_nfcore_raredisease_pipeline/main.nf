@@ -263,6 +263,10 @@ def channelFromSamplesheet(samplesheetPath, schemaPath, collect = true) {
     return collect ? ch_out.collect() : ch_out
 }
 
+def boolean hasSpringInput() {
+    return file(params.input).readLines().any { line -> line.contains('.spring') }
+}
+
 def generateReadGroupLine(file, meta, params) {
     return "\'@RG\\tID:" + file.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"
 }
@@ -497,8 +501,7 @@ def toolCitationText() {
         sv_calls_text = [
             params.analysis_type.equals("wgs") ? "CNVnator (Abyzov et al., 2011)," : "",
             params.analysis_type.equals("wgs") ? "TIDDIT (Eisfeldt et al., 2017)," : "",
-            "Manta (Chen et al., 2016),",
-            params.analysis_type.equals("wgs") ? "eKLIPse (Goudenge et al., 2019)," : ""
+            "Manta (Chen et al., 2016),"
         ]
     }
     if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('mt_annotation')) && (params.analysis_type.equals("wgs") || params.run_mt_for_wes)) {
@@ -506,7 +509,6 @@ def toolCitationText() {
             "CADD (Rentzsch et al., 2019, 2021),",
             "VEP (McLaren et al., 2016),",
             "Vcfanno (Pedersen et al., 2016),",
-            "Hmtnote (Preste et al., 2019),",
             "Genmod (Magnusson et al., 2018),"
         ]
         if (!(params.skip_tools && params.skip_tools.split(',').contains('haplogrep3'))) {
@@ -531,6 +533,7 @@ def toolCitationText() {
     qc_bam_text = [
         "Picard (Broad Institute, 2023)",
         "Qualimap (Okonechnikov et al., 2016),",
+        "Sambamba (Tarasov et al., 2015),",
         "TIDDIT (Eisfeldt et al., 2017),",
         "UCSC Bigwig and Bigbed (Kent et al., 2010),",
         (params.verifybamid_svd_bed && params.verifybamid_svd_mu && params.verifybamid_svd_ud) ? "VerifyBamID2 (Zhang et al., 2020)," : "",
@@ -538,7 +541,8 @@ def toolCitationText() {
     ]
     preprocessing_text = [
         "FastQC (Andrews 2010),",
-        (params.skip_tools && params.skip_tools.split(',').contains('fastp')) ? "" : "Fastp (Chen, 2023),"
+        (params.skip_tools && params.skip_tools.split(',').contains('fastp')) ? "" : "Fastp (Chen, 2023),",
+        hasSpringInput() ? "Spring (Chandak et al., 2019)," : ""
     ]
     other_citation_text = [
         "BCFtools (Danecek et al., 2021),",
@@ -625,8 +629,7 @@ def toolBibliographyText() {
         sv_calls_text = [
             params.analysis_type.equals("wgs") ? "<li>Abyzov, A., Urban, A. E., Snyder, M., & Gerstein, M. (2011). CNVnator: An approach to discover, genotype, and characterize typical and atypical CNVs from family and population genome sequencing. Genome Research, 21(6), 974–984. https://doi.org/10.1101/gr.114876.110</li>" : "",
             params.analysis_type.equals("wgs") ? "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>" : "",
-            "<li>Chen, X., Schulz-Trieglaff, O., Shaw, R., Barnes, B., Schlesinger, F., Källberg, M., Cox, A. J., Kruglyak, S., & Saunders, C. T. (2016). Manta: Rapid detection of structural variants and indels for germline and cancer sequencing applications. Bioinformatics, 32(8), 1220–1222. https://doi.org/10.1093/bioinformatics/btv710</li>",
-            "<li>Goudenège, D., Bris, C., Hoffmann, V., Desquiret-Dumas, V., Jardel, C., Rucheton, B., Bannwarth, S., Paquis-Flucklinger, V., Lebre, A. S., Colin, E., Amati-Bonneau, P., Bonneau, D., Reynier, P., Lenaers, G., & Procaccio, V. (2019). eKLIPse: A sensitive tool for the detection and quantification of mitochondrial DNA deletions from next-generation sequencing data. Genetics in Medicine, 21(6), 1407–1416. https://doi.org/10.1038/s41436-018-0350-8</li>"
+            "<li>Chen, X., Schulz-Trieglaff, O., Shaw, R., Barnes, B., Schlesinger, F., Källberg, M., Cox, A. J., Kruglyak, S., & Saunders, C. T. (2016). Manta: Rapid detection of structural variants and indels for germline and cancer sequencing applications. Bioinformatics, 32(8), 1220–1222. https://doi.org/10.1093/bioinformatics/btv710</li>"
         ]
     }
 
@@ -636,7 +639,6 @@ def toolBibliographyText() {
             "<li>Rentzsch, P., Witten, D., Cooper, G. M., Shendure, J., & Kircher, M. (2019). CADD: Predicting the deleteriousness of variants throughout the human genome. Nucleic Acids Research, 47(D1), D886–D894. https://doi.org/10.1093/nar/gky1016</li>",
             "<li>Pedersen, B. S., Layer, R. M., & Quinlan, A. R. (2016). Vcfanno: Fast, flexible annotation of genetic variants. Genome Biology, 17(1), 118. https://doi.org/10.1186/s13059-016-0973-5</li>",
             "<li>McLaren, W., Gil, L., Hunt, S. E., Riat, H. S., Ritchie, G. R. S., Thormann, A., Flicek, P., & Cunningham, F. (2016). The Ensembl Variant Effect Predictor. Genome Biology, 17(1), 122. https://doi.org/10.1186/s13059-016-0974-4</li>",
-            "<li>Preste, R., Clima, R., & Attimonelli, M. (2019). Human mitochondrial variant annotation with HmtNote [Preprint]. Bioinformatics. https://doi.org/10.1101/600619</li>",
             "<li>Magnusson, M., Hughes, T., Glabilloy, & Bitdeli Chef. (2018). genmod: Version 3.7.3 (3.7.3) [Computer software]. Zenodo. https://doi.org/10.5281/ZENODO.3841142</li>"
         ]
         if (!(params.skip_tools && params.skip_tools.split(',').contains('haplogrep3'))) {
@@ -660,6 +662,7 @@ def toolBibliographyText() {
     qc_bam_text = [
         "<li>Broad Institute. (2023). Picard Tools. In Broad Institute, GitHub repository. http://broadinstitute.github.io/picard/</li>",
         "<li>Okonechnikov, K., Conesa, A., & García-Alcalde, F. (2016). Qualimap 2: Advanced multi-sample quality control for high-throughput sequencing data. Bioinformatics, 32(2), 292–294. https://doi.org/10.1093/bioinformatics/btv566</li>",
+        "<li>Tarasov, A., Vilella, A. J., Cuppen, E., Nijman, I. J., & Prins, P. (2015). Sambamba: Fast processing of NGS alignment formats. Bioinformatics, 31(12), 2032–2034. https://doi.org/10.1093/bioinformatics/btv098</li>",
         "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>",
         "<li>Kent, W. J., Zweig, A. S., Barber, G., Hinrichs, A. S., & Karolchik, D. (2010). BigWig and BigBed: Enabling browsing of large distributed datasets. Bioinformatics, 26(17), 2204–2207. https://doi.org/10.1093/bioinformatics/btq351</li>",
         (params.verifybamid_svd_bed && params.verifybamid_svd_mu && params.verifybamid_svd_ud) ? "<li>Zhang, F., Flickinger, M., Taliun, S. A. G., Consortium, I. P. G., Abecasis, G. R., Scott, L. J., McCaroll, S. A., Pato, C. N., Boehnke, M., & Kang, H. M. (2020). Ancestry-agnostic estimation of DNA sample contamination from sequence reads. Genome Research, 30(2), 185–194. https://doi.org/10.1101/gr.246934.118</li>" : "",
@@ -667,7 +670,8 @@ def toolBibliographyText() {
     ]
     preprocessing_text = [
         "<li>Andrews S, (2010) FastQC, URL: https://www.bioinformatics.babraham.ac.uk/projects/fastqc/</li>",
-        (params.skip_tools && params.skip_tools.split(',').contains('fastp')) ? "" : "<li>Chen, S. (2023). Ultrafast one-pass FASTQ data preprocessing, quality control, and deduplication using fastp. iMeta, 2(2), e107. https://doi.org/10.1002/imt2.107</li>"
+        (params.skip_tools && params.skip_tools.split(',').contains('fastp')) ? "" : "<li>Chen, S. (2023). Ultrafast one-pass FASTQ data preprocessing, quality control, and deduplication using fastp. iMeta, 2(2), e107. https://doi.org/10.1002/imt2.107</li>",
+        hasSpringInput() ? "<li>Chandak, S., Tatwawadi, K., Ochoa, I., Hernaez, M., & Weissman, T. (2019). SPRING: A next-generation compressor for FASTQ data. Bioinformatics, 35(15), 2674–2676. https://doi.org/10.1093/bioinformatics/bty1015</li>" : ""
     ]
 
     other_citation_text = [

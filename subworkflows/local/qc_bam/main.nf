@@ -96,6 +96,39 @@ workflow QC_BAM {
         ch_svd_in = ch_svd_ud.combine(ch_svd_mu).combine(ch_svd_bed).collect()
         VERIFYBAMID_VERIFYBAMID2(ch_bam_bai, ch_svd_in, [], ch_genome_fasta.map {_meta, fasta-> fasta})
 
+        ch_publish = PICARD_COLLECTMULTIPLEMETRICS.out.metrics
+            .mix(PICARD_COLLECTMULTIPLEMETRICS.out.pdf)
+            .mix(TIDDIT_COV.out.wig)
+            .mix(TIDDIT_COV.out.cov)
+            .mix(UCSC_WIGTOBIGWIG.out.bw)
+            .mix(CHROMOGRAPH_COV.out.plots)
+            .mix(MOSDEPTH.out.global_txt)
+            .mix(MOSDEPTH.out.summary_txt)
+            .mix(MOSDEPTH.out.per_base_d4)
+            .mix(MOSDEPTH.out.regions_txt)
+            .mix(MOSDEPTH.out.per_base_bed)
+            .mix(MOSDEPTH.out.per_base_csi)
+            .mix(MOSDEPTH.out.regions_bed)
+            .mix(MOSDEPTH.out.regions_csi)
+            .mix(MOSDEPTH.out.quantized_bed)
+            .mix(MOSDEPTH.out.quantized_csi)
+            .mix(MOSDEPTH.out.thresholds_bed)
+            .mix(MOSDEPTH.out.thresholds_csi)
+            .mix(SAMBAMBA_DEPTH.out.bed)
+            .mix(VERIFYBAMID_VERIFYBAMID2.out.self_sm)
+            .mix(VERIFYBAMID_VERIFYBAMID2.out.log)
+            .mix(VERIFYBAMID_VERIFYBAMID2.out.ud)
+            .mix(VERIFYBAMID_VERIFYBAMID2.out.bed)
+            .mix(VERIFYBAMID_VERIFYBAMID2.out.mu)
+            .mix(VERIFYBAMID_VERIFYBAMID2.out.ancestry)
+            .mix(ch_hsmetrics)
+            .mix(ch_qualimap)
+            .mix(ch_cov)
+            .mix(ch_cov_y)
+            .map { meta, value -> ['qc_bam/', [meta, value]] }
+            .mix(ch_ngsbits
+                .map { meta, tsv -> ['ngsbits_samplegender/', [meta, tsv]] })
+
     emit:
         multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]
         hs_metrics       = ch_hsmetrics                              // channel: [ val(meta), path(metrics) ]
@@ -108,4 +141,5 @@ workflow QC_BAM {
         self_sm          = VERIFYBAMID_VERIFYBAMID2.out.self_sm      // channel: [ val(meta), path(selfSM) ]
         cov              = ch_cov                                    // channel: [ val(meta), path(metrics) ]
         cov_y            = ch_cov_y                                  // channel: [ val(meta), path(metrics) ]
+        publish = ch_publish                                         // channel: [ val(destination), val(value) ]
 }

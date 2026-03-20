@@ -45,17 +45,26 @@ workflow ALIGN {
         ch_bwamem2_bam               = channel.empty()
         ch_bwamem2_bai               = channel.empty()
         ch_fastp_json                = channel.empty()
+        ch_fastp_publish             = channel.empty()
         ch_markdup_metrics           = channel.empty()
         ch_mt_bam_bai                = channel.empty()
         ch_mt_bam_bai_gatksubwf      = channel.empty()
         ch_mtshift_bam_bai_gatksubwf = channel.empty()
         ch_sentieon_bam              = channel.empty()
         ch_sentieon_bai              = channel.empty()
+        ch_cram_publish              = channel.empty()
 
         if (!skip_fastp) {
             FASTP (ch_input_reads.map {meta, reads -> return [meta, reads, []] }, false, false, false)
-            ch_input_reads = FASTP.out.reads
-            ch_fastp_json  = FASTP.out.json
+            ch_input_reads   = FASTP.out.reads
+            ch_fastp_json    = FASTP.out.json
+            ch_fastp_publish = FASTP.out.json
+                .mix(FASTP.out.html)
+                .mix(FASTP.out.log)
+                .mix(FASTP.out.reads)
+                .mix(FASTP.out.reads_fail)
+                .mix(FASTP.out.reads_merged)
+                .map { meta, value -> ['trimming/', [meta, value]] }
         }
 
         //
@@ -152,7 +161,23 @@ workflow ALIGN {
 
         if (val_save_mapped_as_cram) {
             SAMTOOLS_VIEW( ch_genome_marked_bam_bai, ch_genome_fasta.map{meta, fasta -> return [meta, fasta, []]}, [], 'crai' )
+            ch_cram_publish = SAMTOOLS_VIEW.out.cram
+                .mix(SAMTOOLS_VIEW.out.crai)
+                .map { meta, value -> ['alignment/', [meta, value]] }
         }
+
+        ch_bam_publish = channel.empty()
+        if (!val_save_mapped_as_cram) {
+            if (val_aligner.matches("bwamem2|bwa|bwameme")) {
+                ch_bam_publish = ALIGN_BWA_BWAMEM2_BWAMEME.out.publish
+            } else if (val_aligner.equals("sentieon")) {
+                ch_bam_publish = ALIGN_SENTIEON.out.publish
+            }
+        }
+
+        ch_publish = ch_fastp_publish
+            .mix(ch_bam_publish)
+            .mix(ch_cram_publish)
 
     emit:
         fastp_json                = ch_fastp_json            // channel: [ val(meta), path(json) ]
@@ -163,4 +188,5 @@ workflow ALIGN {
         mt_bam_bai                = ch_mt_bam_bai            // channel: [ val(meta), path(bam), path(bai) ]
         mt_bam_bai_gatksubwf      = ch_mt_bam_bai_gatksubwf      // channel: [ val(meta), path(bam), path(bai) ]
         mtshift_bam_bai_gatksubwf = ch_mtshift_bam_bai_gatksubwf // channel: [ val(meta), path(bam), path(bai) ]
+        publish = ch_publish                                     // channel: [ val(destination), val(value) ]
 }

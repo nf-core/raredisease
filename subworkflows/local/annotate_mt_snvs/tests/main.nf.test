@@ -15,12 +15,13 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of([[id:'resources'], file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/cadd_to_vcf_header_-1.0-.txt', checkIfExists: true)]).collect()
-                input[1]  = Channel.from("\$PWD").map { dir -> [ [ id: 'cadd_resources' ], dir ] }
+                input[1]  = Channel.from(env("PWD")).map { dir -> [ [ id: 'cadd_resources' ], dir ] }
                 input[2]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]).collect()
                 input[3]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]).collect()
                 input[4]  = channel.of([
                     [id:'justhusky', case_id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'reference/vcfanno_gnomad_mt.vcf.gz', checkIfExists: true)
+                    file(params.pipelines_testdata_base_path + 'reference/vcfanno_gnomad_mt.vcf.gz', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'reference/vcfanno_gnomad_mt.vcf.gz.tbi', checkIfExists: true),
                 ])
                 input[5]  = channel.value([[]])
                 input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_functions.lua', checkIfExists: true)).collect()
@@ -40,7 +41,18 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(workflow.out).match() }
+                { assert snapshot(
+                    workflow.out.collect { name, channel ->
+                        def sorted_channel = channel.toList().sort { item ->
+                            def sortKey = item
+                            while (sortKey instanceof List) {
+                                sortKey = sortKey[-1]
+                            }
+                            sortKey.toString().split(':md5,')[0].tokenize('/')[-1]
+                        }
+                        [name, sorted_channel]
+                    }.sort { it[0] }  // Sort by channel name
+                ).match() }
             )
         }
     }
