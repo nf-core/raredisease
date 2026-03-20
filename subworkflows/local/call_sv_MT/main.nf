@@ -89,6 +89,11 @@ workflow CALL_SV_MT {
                 .filter{ _meta, out -> out.countLines() > 0 }
                 .set{ch_cluster}
 
+            ch_saltshaker_txt = channel.empty()
+            ch_saltshaker_vcf = channel.empty()
+            ch_saltshaker_plot = channel.empty()
+            ch_mitosalt_publish = channel.empty()
+
             if (ch_cluster) {
                 MITOSALT.out.breakpoint
                     .join(ch_cluster)
@@ -111,15 +116,18 @@ workflow CALL_SV_MT {
                     SALTSHAKER_CALL.out.call,
                     val_mito_name
                 )
+                ch_saltshaker_txt = SALTSHAKER_CLASSIFY.out.txt
+                ch_saltshaker_vcf = SALTSHAKER_CLASSIFY.out.vcf
 
                 SALTSHAKER_PLOT(
                     SALTSHAKER_CLASSIFY.out.classify
                 )
-            }
-            ch_mitosalt_publish = SALTSHAKER_CLASSIFY.out.txt
-                .mix(SALTSHAKER_CLASSIFY.out.vcf)
-                .mix(SALTSHAKER_PLOT.out.plot)
+                ch_saltshaker_plot = SALTSHAKER_PLOT.out.plot
 
+                ch_mitosalt_publish = ch_saltshaker_txt
+                    .mix(ch_saltshaker_vcf)
+                    .mix(ch_saltshaker_plot)
+            }
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
 
@@ -128,9 +136,9 @@ workflow CALL_SV_MT {
             .map { meta, value -> ['call_sv/mitochondria/', [meta, value]] }
 
     emit:
-        mitosalt_classify   = SALTSHAKER_CLASSIFY.out.txt   // channel: [ val(meta), path(txt) ]
-        mitosalt_vcf        = SALTSHAKER_CLASSIFY.out.vcf   // channel: [ val(meta), path(vcf) ]
-        mitosalt_plot       = SALTSHAKER_PLOT.out.plot      // channel: [ val(meta), path(png) ]
+        mitosalt_classify   = ch_saltshaker_txt             // channel: [ val(meta), path(txt) ]
+        mitosalt_vcf        = ch_saltshaker_vcf             // channel: [ val(meta), path(vcf) ]
+        mitosalt_plot       = ch_saltshaker_plot            // channel: [ val(meta), path(png) ]
         mt_del_result       = MT_DELETION.out.mt_del_result // channel: [ val(meta), path(txt) ]
         publish = ch_publish                                // channel: [ val(destination), val(value) ]
 }
