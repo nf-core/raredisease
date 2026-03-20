@@ -2,6 +2,29 @@
     "align bwamem2 - wgs": {
         "content": [
             [
+                "earlycasualcaiman.fastp.html",
+                "earlycasualcaiman.fastp.json",
+                "earlycasualcaiman.fastp.log",
+                "earlycasualcaiman_R1.fastp.fastq.gz",
+                "earlycasualcaiman_R2.fastp.fastq.gz",
+                "earlycasualcaiman_sort_md.cram",
+                "earlycasualcaiman_sort_md.cram.crai",
+                "hugelymodelbat.fastp.html",
+                "hugelymodelbat.fastp.json",
+                "hugelymodelbat.fastp.log",
+                "hugelymodelbat_R1.fastp.fastq.gz",
+                "hugelymodelbat_R2.fastp.fastq.gz",
+                "hugelymodelbat_sort_md.cram",
+                "hugelymodelbat_sort_md.cram.crai",
+                "slowlycivilbuck.fastp.html",
+                "slowlycivilbuck.fastp.json",
+                "slowlycivilbuck.fastp.log",
+                "slowlycivilbuck_R1.fastp.fastq.gz",
+                "slowlycivilbuck_R2.fastp.fastq.gz",
+                "slowlycivilbuck_sort_md.cram",
+                "slowlycivilbuck_sort_md.cram.crai"
+            ],
+            [
                 [
                     {
                         "groupSize": 1,
@@ -238,7 +261,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-02-17T14:52:33.087126495",
+        "timestamp": "2026-03-13T14:53:02.154281647",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -246,6 +269,14 @@
     },
     "align bwameme - wgs": {
         "content": [
+            [
+                "earlycasualcaiman_sort_md.cram",
+                "earlycasualcaiman_sort_md.cram.crai",
+                "hugelymodelbat_sort_md.cram",
+                "hugelymodelbat_sort_md.cram.crai",
+                "slowlycivilbuck_sort_md.cram",
+                "slowlycivilbuck_sort_md.cram.crai"
+            ],
             [
                 [
                     {
@@ -368,7 +399,7 @@
                 
             ]
         ],
-        "timestamp": "2026-02-17T15:06:13.790400908",
+        "timestamp": "2026-03-13T14:59:34.430725854",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -376,6 +407,32 @@
     },
     "align bwamem2 - wes": {
         "content": [
+            [
+                "earlycasualcaiman.fastp.html",
+                "earlycasualcaiman.fastp.json",
+                "earlycasualcaiman.fastp.log",
+                "earlycasualcaiman_R1.fastp.fastq.gz",
+                "earlycasualcaiman_R2.fastp.fastq.gz",
+                "earlycasualcaiman_sorted_md.bam",
+                "earlycasualcaiman_sorted_md.bam.bai",
+                "earlycasualcaiman_sorted_md.metrics.txt",
+                "hugelymodelbat.fastp.html",
+                "hugelymodelbat.fastp.json",
+                "hugelymodelbat.fastp.log",
+                "hugelymodelbat_R1.fastp.fastq.gz",
+                "hugelymodelbat_R2.fastp.fastq.gz",
+                "hugelymodelbat_sorted_md.bam",
+                "hugelymodelbat_sorted_md.bam.bai",
+                "hugelymodelbat_sorted_md.metrics.txt",
+                "slowlycivilbuck.fastp.html",
+                "slowlycivilbuck.fastp.json",
+                "slowlycivilbuck.fastp.log",
+                "slowlycivilbuck_R1.fastp.fastq.gz",
+                "slowlycivilbuck_R2.fastp.fastq.gz",
+                "slowlycivilbuck_sorted_md.bam",
+                "slowlycivilbuck_sorted_md.bam.bai",
+                "slowlycivilbuck_sorted_md.metrics.txt"
+            ],
             [
                 [
                     {
@@ -445,7 +502,7 @@
                 
             ]
         ],
-        "timestamp": "2026-02-17T14:53:17.634008549",
+        "timestamp": "2026-03-13T14:53:37.576915277",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

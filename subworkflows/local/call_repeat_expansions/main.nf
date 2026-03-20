@@ -57,6 +57,12 @@ workflow CALL_REPEAT_EXPANSIONS {
 
         SVDB_MERGE_REPEATS ( ch_svdb_merge_input, [], true )
 
-emit:
-        vcf      = SVDB_MERGE_REPEATS.out.vcf  // channel: [ val(meta), path(vcf) ]
+        ch_publish = SAMTOOLS_SORT.out.bam
+            .mix(SAMTOOLS_SORT.out.bai)
+            .mix(BCFTOOLS_REHEADER_EXP.out.vcf)
+            .map { meta, value -> ['repeat_expansions/', [meta, value]] }
+
+    emit:
+        vcf        = SVDB_MERGE_REPEATS.out.vcf // channel: [ val(meta), path(vcf) ]
+        publish = ch_publish                    // channel: [ val(destination), val(value) ]
 }

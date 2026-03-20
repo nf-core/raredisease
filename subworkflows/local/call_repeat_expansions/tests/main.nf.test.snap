@@ -1,13 +1,18 @@
 {
     "CALL_REPEAT_EXPANSIONS": {
         "content": [
+            [
+                "earlycasualcaiman_exphunter_sorted.bam",
+                "earlycasualcaiman_exphunter_sorted.bam.bai",
+                "earlycasualcaiman_repeat_expansion.vcf"
+            ],
             "5f06dccb7fc4ad3758bc23e3232f9abb",
             "VcfFile [chromosomes=[21], sampleCount=1, variantCount=2, phased=false, phasedAutodetect=false]"
         ],
-        "timestamp": "2025-10-14T14:06:58.984015651",
+        "timestamp": "2026-03-13T15:42:01.510910485",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.04.8"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
         }
     }
 }

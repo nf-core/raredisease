@@ -34,9 +34,10 @@ nextflow_workflow {
                      file(params.pipelines_testdata_base_path + 'testdata/slowlycivilbuck_sorted_md.bam', checkIfExists: true),
                      file(params.pipelines_testdata_base_path + 'testdata/slowlycivilbuck_sorted_md.bam.bai', checkIfExists: true)]
                 )
-                input[1] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
-                input[2] = BWA_INDEX.out.index.collect()
-                input[3] = channel.of([id:'justhusky'])
+                input[1] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[2] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[3] = BWA_INDEX.out.index.collect()
+                input[4] = channel.of([id:'justhusky'])
                 """
             }
         }
@@ -79,9 +80,10 @@ nextflow_workflow {
                      file(params.pipelines_testdata_base_path + 'testdata/slowlycivilbuck_sorted_md.bam', checkIfExists: true),
                      file(params.pipelines_testdata_base_path + 'testdata/slowlycivilbuck_sorted_md.bam.bai', checkIfExists: true)]
                 )
-                input[1] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
-                input[2] = BWA_INDEX.out.index.collect()
-                input[3] = channel.of([id:'justhusky'])
+                input[1] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[2] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[3] = BWA_INDEX.out.index.collect()
+                input[4] = channel.of([id:'justhusky'])
                 """
             }
         }

@@ -15,7 +15,7 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of([[id:'resources'], file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/cadd_to_vcf_header_-1.0-.txt', checkIfExists: true)]).collect()
-                input[1]  = Channel.from("\$PWD").map { dir -> [ [ id: 'cadd_resources' ], dir ] }
+                input[1]  = Channel.from(env('PWD')).map { dir -> [ [ id: 'cadd_resources' ], dir ] }
                 input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
                 input[3]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
                 input[4]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
@@ -43,7 +43,21 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(workflow.out).match() }
+                { assert snapshot(
+                    workflow.out.collect { name, channel ->
+                        def sorted_channel = channel.toList().sort { item ->
+                            // Unwrap nested lists to get the filename
+                            def sortKey = item
+                            while (sortKey instanceof List) {
+                                sortKey = sortKey[-1]
+                            }
+                            // Extract filename: strip :md5, suffix then take basename only
+                            // (sortKey may be a raw Path with an absolute work-dir prefix)
+                            sortKey.toString().split(':md5,')[0].tokenize('/')[-1]
+                        }
+                        [name, sorted_channel]
+                    }.sort { it[0] }
+                ).match() }
             )
         }
     }

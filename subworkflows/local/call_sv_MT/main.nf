@@ -49,6 +49,7 @@ workflow CALL_SV_MT {
         val_saltshaker_noise_threshold        // string: [mandatory] saltshaker_noise_threshold
 
     main:
+        ch_mitosalt_publish = channel.empty()
 
         if (!(params.skip_tools && params.skip_tools.split(',').contains('mitosalt'))) {
             ch_reads_subdepth      = ch_reads.combine(ch_subdepth)
@@ -122,13 +123,21 @@ workflow CALL_SV_MT {
                 )
                 ch_mitosalt_plot = SALTSHAKER_PLOT.out.plot
             }
+            ch_mitosalt_publish = SALTSHAKER_CLASSIFY.out.txt
+                .mix(SALTSHAKER_CLASSIFY.out.vcf)
+                .mix(SALTSHAKER_PLOT.out.plot
 
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
 
+        ch_publish = ch_mitosalt_publish
+            .mix(MT_DELETION.out.mt_del_result)
+            .map { meta, value -> ['call_sv/mitochondria/', [meta, value]] }
+
     emit:
         mitosalt_classify   = SALTSHAKER_CLASSIFY.out.txt   // channel: [ val(meta), path(txt) ]
         mitosalt_vcf        = SALTSHAKER_CLASSIFY.out.vcf   // channel: [ val(meta), path(vcf) ]
-        mitosalt_plot       = ch_mitosalt_plot              // channel: [ val(meta), path(png) ]
+        mitosalt_plot       = SALTSHAKER_PLOT.out.plot      // channel: [ val(meta), path(png) ]
         mt_del_result       = MT_DELETION.out.mt_del_result // channel: [ val(meta), path(txt) ]
+        publish = ch_publish                                // channel: [ val(destination), val(value) ]
 }

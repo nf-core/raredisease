@@ -4,7 +4,6 @@
 
 
 include { BCFTOOLS_PLUGINSETGT                           } from '../../../modules/nf-core/bcftools/pluginsetgt'
-include { TABIX_TABIX as TABIX_TABIX_MT                  } from '../../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_TABIX_VEP_MT              } from '../../../modules/nf-core/tabix/tabix/main'
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_MT                } from '../../../modules/nf-core/ensemblvep/vep/main'
 include { HAPLOGREP3_CLASSIFY as HAPLOGREP3_CLASSIFY_MT  } from '../../../modules/nf-core/haplogrep3/classify/main'
@@ -17,7 +16,7 @@ workflow ANNOTATE_MT_SNVS {
         ch_cadd_resources           // channel: [mandatory] [ path(annotation) ]
         ch_genome_fasta             // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_fai                      // channel: [mandatory] [ path(fai) ]
-        ch_mt_vcf                   // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_mt_vcf_tbi               // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
         ch_vcfanno_extra            // channel: [mandatory] [ [path(vcf),path(index)] ]
         ch_vcfanno_lua              // channel: [mandatory] [ path(lua) ]
         ch_vcfanno_resources        // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
@@ -33,12 +32,8 @@ workflow ANNOTATE_MT_SNVS {
     main:
         ch_haplog       = channel.empty()
 
-        // Index vcf
-        TABIX_TABIX_MT(ch_mt_vcf)
-        ch_mt_vcf_index = ch_mt_vcf.join(TABIX_TABIX_MT.out.index)
-
         // Vcfanno
-        ch_mt_vcf_index
+        ch_mt_vcf_tbi
             .combine(ch_vcfanno_extra)
             .map { meta, vcf, tbi, resources -> return [meta + [prefix: vcf.simpleName + "_vcfanno"], vcf, tbi, resources]}
             .set { ch_in_vcfanno }
@@ -87,15 +82,15 @@ workflow ANNOTATE_MT_SNVS {
             ch_vep_extra_files
         )
 
-        TABIX_TABIX_VEP_MT(ENSEMBLVEP_MT.out.vcf)
-
         ch_vcf = ENSEMBLVEP_MT.out.vcf
-        ch_tbi = TABIX_TABIX_VEP_MT.out.index
+        ch_tbi = ENSEMBLVEP_MT.out.tbi
 
         // Running haplogrep3
+        ch_haplog_publish = channel.empty()
         if (!skip_haplogrep3) {
             HAPLOGREP3_CLASSIFY_MT(ch_haplogrep_in)
-            ch_haplog   = HAPLOGREP3_CLASSIFY_MT.out.txt
+            ch_haplog         = HAPLOGREP3_CLASSIFY_MT.out.txt
+            ch_haplog_publish = HAPLOGREP3_CLASSIFY_MT.out.txt
         }
 
         if (val_homoplasmy_af_threshold<1) {
@@ -110,8 +105,14 @@ workflow ANNOTATE_MT_SNVS {
             ch_tbi = BCFTOOLS_PLUGINSETGT.out.tbi
         }
 
+        ch_publish = ENSEMBLVEP_MT.out.vcf
+            .mix(ENSEMBLVEP_MT.out.tbi)
+            .mix(ch_haplog_publish)
+            .map { meta, value -> ['annotate_snv/mitochondria/', [meta, value]] }
+
     emit:
         haplog    = ch_haplog                // channel: [ val(meta), path(txt) ]
+        publish   = ch_publish               // channel: [ val(destination), val(value) ]
         report    = ENSEMBLVEP_MT.out.report // channel: [ path(html) ]
         tbi       = ch_tbi                   // channel: [ val(meta), path(tbi) ]
         vcf_ann   = ch_vcf                   // channel: [ val(meta), path(vcf) ]

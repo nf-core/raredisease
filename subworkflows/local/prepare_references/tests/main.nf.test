@@ -35,13 +35,52 @@ nextflow_workflow {
                 input[17] = params.pipelines_testdata_base_path + 'reference/target.bed'
                 input[18] = null
                 input[19] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                input[20] = true
                 """
             }
         }
 
         then {
-            assert workflow.success
-            assert snapshot(workflow.out).match()
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.collect { name, channel ->
+                        def sorted_channel = channel.toList().sort { item ->
+                            def sortKey = item
+                            while (sortKey instanceof List && !sortKey.isEmpty()) {
+                                def next = sortKey[-1]
+                                if (next instanceof List && next.every { !(it instanceof List) }) {
+                                    // Leaf list: could be [meta, path] or [file1, file2, ...].
+                                    // For directory outputs (e.g. BWA/BWAMEM2/HISAT2 index folders),
+                                    // nf-test represents the value as a Path at sort time rather than
+                                    // expanding it to a file list. List the directory contents to
+                                    // produce a stable, unique sort key across same-named directories.
+                                    return next.findAll { !(it instanceof Map) }
+                                        .collect { v ->
+                                            def s = v.toString()
+                                            if (s.contains(':md5,')) {
+                                                return s.split(':md5,')[0].tokenize('/').last() ?: ''
+                                            }
+                                            try {
+                                                def f = new File(s)
+                                                if (f.isDirectory()) {
+                                                    return f.listFiles()?.collect { it.name }?.sort()?.join(',') ?: s.tokenize('/').last() ?: ''
+                                                }
+                                            } catch (e) {}
+                                            return s.tokenize('/').last() ?: ''
+                                        }
+                                        .sort()
+                                        .join(',')
+                                }
+                                sortKey = next
+                            }
+                            def parts = sortKey.toString().split(':md5,')[0].tokenize('/')
+                            parts ? parts[-1] : ''
+                        }
+                        [name, sorted_channel]
+                    }.sort { it[0] }
+                ).match() }
+            )
         }
 
     }

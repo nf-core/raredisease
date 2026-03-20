@@ -42,6 +42,8 @@
 
   > Poplin R, Chang PC, Alexander D, et al. A universal SNP and small-indel variant caller using deep neural networks. Nat Biotechnol. 2018;36(10):983-987. doi:10.1038/nbt.4235
 
+- [Chromograph](https://github.com/Clinical-Genomics/chromograph)
+
 - [Ensembl VEP](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0974-4)
 
   > McLaren W, Gil L, Hunt SE, et al. The Ensembl Variant Effect Predictor. Genome Biol. 2016;17(1):122. doi:10.1186/s13059-016-0974-4
@@ -72,13 +74,9 @@
 
   > Yun T, Li H, Chang PC, Lin MF, Carroll A, McLean CY. Accurate, scalable cohort variant calls using DeepVariant and GLnexus. Robinson P, ed. Bioinformatics. 2021;36(24):5582-5589. doi:10.1093/bioinformatics/btaa1081
 
-- [HaploGrep 2](https://academic.oup.com/nar/article/44/W1/W58/2499296)
+- [HaploGrep 3](https://academic.oup.com/nar/article/51/W1/W263/7177898)
 
-  > Weissensteiner H, Pacher D, Kloss-Brandstätter A, et al. HaploGrep 2: mitochondrial haplogroup classification in the era of high-throughput sequencing. Nucleic Acids Res. 2016;44(W1):W58-W63. doi:10.1093/nar/gkw233
-
-- [Hmtnote](https://doi.org/10.1101/600619)
-
-  > Preste R, Clima R, Attimonelli M. Human mitochondrial variant annotation with HmtNote. bioRxiv 600619; doi:10.1101/600619
+  > Schönherr S, Weissensteiner H, Kronenberg F, Forer L. Haplogrep 3 an interactive haplogroup classification and analysis platform. Nucleic Acids Res. 2023;51(W1):W263-W268. doi:10.1093/nar/gkad284
 
 - [Manta](https://academic.oup.com/bioinformatics/article/32/8/1220/1743909?login=true)
 
@@ -120,6 +118,10 @@
 
 - [saltshaker](https://pypi.org/project/saltshaker/)
 
+- [Sambamba](https://academic.oup.com/bioinformatics/article/31/12/2032/213831)
+
+  > Tarasov A, Vilella AJ, Cuppen E, Nijman IJ, Prins P. Sambamba: fast processing of NGS alignment formats. Bioinformatics. 2015;31(12):2032-2034. doi:10.1093/bioinformatics/btv098
+
 - [Sentieon DNAscope](https://www.biorxiv.org/content/10.1101/2022.05.20.492556v1.abstract)
 
   > Freed D, Pan R, Chen H, Li Z, Hu J, Aldana R. DNAscope: High Accuracy Small Variant Calling Using Machine Learning. Bioinformatics; 2022. doi:10.1101/2022.05.20.492556
@@ -131,6 +133,10 @@
 - [SMNCopyNumberCaller](https://www.nature.com/articles/s41436-020-0754-0)
 
   > Chen X, Sanchis-Juan A, French CE, Connel AJ, Delon I, Kingsbury Z, Chawla A, Halpern AL, Taft RJ, NIHR BioResource, Bentley DR, Butchbach MER, Raymond FL, Eberle MA. Spinal muscular atrophy diagnosis and carrier screening from genome sequencing data. Genet Med. February 2020:1-9. doi:10.1038/s41436-020-0754-0
+
+- [Spring](https://academic.oup.com/bioinformatics/article/35/15/2674/5232998)
+
+  > Chandak S, Tatwawadi K, Ochoa I, Hernaez M, Weissman T. SPRING: a next-generation compressor for FASTQ data. Bioinformatics. 2019;35(15):2674-2676. doi:10.1093/bioinformatics/bty1015
 
 - [stranger](https://github.com/Clinical-Genomics/stranger)
 
@@ -148,6 +154,8 @@
 
   > Eisfeldt J, Vezzi F, Olason P, Nilsson D, Lindstrand A. TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Res. 2017;6:664. doi:10.12688/f1000research.11168.2
 
+- [UPD](https://github.com/bjhall/upd)
+
 - [UCSC Bigwig and Bigbed](https://academic.oup.com/bioinformatics/article/26/17/2204/199001?login=true)
 
   > Kent WJ, Zweig AS, Barber G, Hinrichs AS, Karolchik D. BigWig and BigBed: enabling browsing of large distributed datasets. Bioinformatics. 2010;26(17):2204-2207. doi:10.1093/bioinformatics/btq351
@@ -158,7 +166,7 @@
 
   > Pedersen BS, Layer RM, Quinlan AR. Vcfanno: fast, flexible annotation of genetic variants. Genome Biol. 2016;17(1):118. doi:10.1186/s13059-016-0973-5
 
-- [VerifyBamID2]()
+- [VerifyBamID2](https://genome.cshlp.org/content/30/2/185)
 
   > Zhang F, Flickinger M, Taliun SAG, Consortium IPG, Abecasis GR, Scott LJ, McCaroll SA, Pato CN, Boehnke M, & Kang HM. (2020). Ancestry-agnostic estimation of DNA sample contamination from sequence reads. Genome Research, 30(2), 185–194. https://doi.org/10.1101/gr.246934.118
 

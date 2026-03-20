@@ -1,8 +1,8 @@
 {
     "-profile test_singleton": {
         "content": [
-            367,
-           {
+            353,
+            {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
                     "tabix": 1.21
@@ -406,9 +406,6 @@
                 "TABIX_ANNOTATE": {
                     "tabix": 1.21
                 },
-                "TABIX_BCFTOOLS_CONCAT": {
-                    "tabix": 1.21
-                },
                 "TABIX_BGZIPINDEX_PADDED_BED": {
                     "bgzip": 1.21,
                     "tabix": 1.21
@@ -442,12 +439,6 @@
                     "tabix": 1.21
                 },
                 "TABIX_TABIX_MT": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_VEP_MT": {
-                    "tabix": 1.21
-                },
-                "TABIX_VEP": {
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
@@ -732,7 +723,7 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-03-10T15:15:02.654289867",
+        "timestamp": "2026-03-17T17:02:07.664289531",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.2"

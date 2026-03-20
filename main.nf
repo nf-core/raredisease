@@ -90,6 +90,7 @@ workflow NFCORE_RAREDISEASE {
     val_sample_id_map
     val_samtools_sort_threads
     val_save_mapped_as_cram
+    val_save_reference
     val_score_config_mt
     val_score_config_snv
     val_score_config_sv
@@ -148,7 +149,8 @@ workflow NFCORE_RAREDISEASE {
         val_sequence_dictionary,
         val_target_bed,
         val_vcfanno_extra_resources,
-        val_vep_cache
+        val_vep_cache,
+        val_save_reference
     )
     .set { ch_references }
 
@@ -280,7 +282,9 @@ workflow NFCORE_RAREDISEASE {
     //
     // Generate pedigree file
     //
-    ch_pedfile  = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
+    ch_pedfile            = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
+    ch_pedfile_publish    = CREATE_PEDIGREE_FILE.out.ped
+        .map { ped -> ['pedigree/', [ped]] }
 
     // Tools
     skip_fastp                 = parseSkipList(val_skip_tools, 'fastp')
@@ -331,14 +335,17 @@ workflow NFCORE_RAREDISEASE {
     //
     // Create chromosome bed and intervals for splitting and gathering operations
     //
-    ch_scatter_split_intervals = channel.empty()
+    ch_scatter_split_intervals  = channel.empty()
+    ch_scatter_genome_publish   = channel.empty()
     if (!skip_snv_annotation) {
         SCATTER_GENOME (
             ch_genome_dictionary,
             ch_genome_fai,
-            ch_genome_fasta
-        ).split_intervals
-        .set { ch_scatter_split_intervals }
+            ch_genome_fasta,
+            params.save_reference
+        )
+        ch_scatter_split_intervals = SCATTER_GENOME.out.split_intervals
+        ch_scatter_genome_publish  = SCATTER_GENOME.out.publish
     }
 
     RAREDISEASE (
@@ -469,7 +476,11 @@ workflow NFCORE_RAREDISEASE {
         val_vep_cache_version
     )
     emit:
-    multiqc_report = RAREDISEASE.out.multiqc_report // channel: /path/to/multiqc_report.html
+    multiqc_report = RAREDISEASE.out.multiqc_report                        // channel: /path/to/multiqc_report.html
+    publish        = RAREDISEASE.out.publish
+                       .mix(ch_scatter_genome_publish)
+                       .mix(ch_pedfile_publish)
+                       .mix(ch_references.publish)                         // channel: [ val(destination), val(value) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -548,6 +559,7 @@ workflow {
         params.sample_id_map,
         params.samtools_sort_threads,
         params.save_mapped_as_cram,
+        params.save_reference,
         params.score_config_mt,
         params.score_config_snv,
         params.score_config_sv,
@@ -590,6 +602,15 @@ workflow {
         params.hook_url,
         NFCORE_RAREDISEASE.out.multiqc_report
     )
+
+    publish:
+    subworkflow_results = NFCORE_RAREDISEASE.out.publish
+}
+
+output {
+    subworkflow_results {
+        path { destination, value -> destination }
+    }
 }
 
 /*

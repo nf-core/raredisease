@@ -2,13 +2,17 @@
     "CALL_STRUCTURAL_VARIANTS - wgs, stub": {
         "content": [
             [
+                "justhusky_sv.vcf.gz",
+                "justhusky_sv.vcf.gz.tbi"
+            ],
+            [
                 "justhusky_sv.vcf.gz"
             ],
             [
                 "justhusky_sv.vcf.gz.tbi"
             ]
         ],
-        "timestamp": "2026-03-01T18:18:21.549692378",
+        "timestamp": "2026-03-13T13:21:51.525587168",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
