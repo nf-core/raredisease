@@ -403,12 +403,12 @@
                     },
                     "saltshaker/classify": {
                         "branch": "master",
-                        "git_sha": "659c65b93278533f1a29c4d4235851b4f29242da",
+                        "git_sha": "ff5f2ad4481a4a1e1769a1fad922681e7f7fd176",
                         "installed_by": ["modules"]
                     },
                     "saltshaker/plot": {
                         "branch": "master",
-                        "git_sha": "95fc5183fd3a798ea4ff0978bc10c526e87a49cc",
+                        "git_sha": "ff5f2ad4481a4a1e1769a1fad922681e7f7fd176",
                         "installed_by": ["modules"]
                     },
                     "sambamba/depth": {
