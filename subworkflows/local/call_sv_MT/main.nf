@@ -42,11 +42,6 @@ workflow CALL_SV_MT {
         val_mitosalt_sizelimit                // string: [mandatory] mitosalt_sizelimit
         val_mitosalt_split_distance_threshold // string: [mandatory] mitosalt_split_distance_threshold
         val_mitosalt_split_length             // string: [mandatory] mitosalt_split_length
-        val_saltshaker_dominant_fraction      // string: [mandatory] saltshaker_dominant_fraction
-        val_saltshaker_group_radius           // string: [mandatory] saltshaker_group_radius
-        val_saltshaker_high_heteroplasmy      // string: [mandatory] saltshaker_high_heteroplasmy
-        val_saltshaker_multiple_threshold     // string: [mandatory] saltshaker_multiple_threshold
-        val_saltshaker_noise_threshold        // string: [mandatory] saltshaker_noise_threshold
 
     main:
         ch_mitosalt_publish = channel.empty()
@@ -114,22 +109,16 @@ workflow CALL_SV_MT {
 
                 SALTSHAKER_CLASSIFY(
                     SALTSHAKER_CALL.out.call,
-                    val_saltshaker_dominant_fraction,
-                    val_saltshaker_group_radius,
-                    val_saltshaker_high_heteroplasmy,
-                    val_saltshaker_multiple_threshold,
-                    val_saltshaker_noise_threshold,
                     val_mito_name
                 )
 
                 SALTSHAKER_PLOT(
                     SALTSHAKER_CLASSIFY.out.classify
                 )
-                ch_mitosalt_plot = SALTSHAKER_PLOT.out.plot
             }
             ch_mitosalt_publish = SALTSHAKER_CLASSIFY.out.txt
                 .mix(SALTSHAKER_CLASSIFY.out.vcf)
-                .mix(SALTSHAKER_PLOT.out.plot
+                .mix(SALTSHAKER_PLOT.out.plot)
 
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)

@@ -616,11 +616,6 @@ workflow RAREDISEASE {
             params.mitosalt_sizelimit,
             params.mitosalt_split_distance_threshold,
             params.mitosalt_split_length,
-            params.saltshaker_dominant_fraction,
-            params.saltshaker_group_radius,
-            params.saltshaker_high_heteroplasmy,
-            params.saltshaker_multiple_threshold,
-            params.saltshaker_noise_threshold,
             val_run_mt_for_wes
         )
         ch_call_sv_publish = CALL_STRUCTURAL_VARIANTS.out.publish

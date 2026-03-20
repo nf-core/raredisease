@@ -56,11 +56,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
         val_mitosalt_sizelimit                // string: [mandatory] mitosalt_sizelimit
         val_mitosalt_split_distance_threshold // string: [mandatory] mitosalt_split_distance_threshold
         val_mitosalt_split_length             // string: [mandatory] mitosalt_split_length
-        val_saltshaker_dominant_fraction      // string: [mandatory] saltshaker_dominant_fraction
-        val_saltshaker_group_radius           // string: [mandatory] saltshaker_group_radius
-        val_saltshaker_high_heteroplasmy      // string: [mandatory] saltshaker_high_heteroplasmy
-        val_saltshaker_multiple_threshold     // string: [mandatory] saltshaker_multiple_threshold
-        val_saltshaker_noise_threshold        // string: [mandatory] saltshaker_noise_threshold
         val_run_mt_for_wes                    // boolean: [mandatory] run_mt_for_wes
 
     main:
@@ -125,12 +120,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 val_mitosalt_score_threshold,
                 val_mitosalt_sizelimit,
                 val_mitosalt_split_distance_threshold,
-                val_mitosalt_split_length,
-                val_saltshaker_dominant_fraction,
-                val_saltshaker_group_radius,
-                val_saltshaker_high_heteroplasmy,
-                val_saltshaker_multiple_threshold,
-                val_saltshaker_noise_threshold)
+                val_mitosalt_split_length)
                 .mitosalt_vcf
                 .collect{ _meta, vcf -> vcf }
                 .set { mitosalt_vcf }
