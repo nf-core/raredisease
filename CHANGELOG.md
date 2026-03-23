@@ -3,19 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
 
-### Added
-
-- Added GATK contamination check for WES/WGS samples as complement to VerifyBamID2
-- New parameters: `run_contamination`, `contamination_sites`, `contamination_sites_tbi`
-- CONTAMINATION_CHECK subworkflow using GATK4 GetPileupSummaries and CalculateContamination
-- PARSE_CONTAMINATION module for MultiQC integration
-- Contamination results displayed in MultiQC with color-coded thresholds
-
-### Changed
-
-- Updated MultiQC configuration to include GATK contamination metrics
 ## 2.7.0dev - Semiautomatix [xxxx-xx-xx]
 
 ### `Added`
@@ -24,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tests for call_repeat_expansions and qc_bam subworkflows [#713](https://github.com/nf-core/raredisease/pull/713)
 - Feature to subsample mitochondrial alignments based on number of reads [#748](https://github.com/nf-core/raredisease/pull/748)
 - Functionality to generate coverage information using Sambamba depth [#752](https://github.com/nf-core/raredisease/pull/752)
+- Added GATK contamination check for WES/WGS samples as complement to VerifyBamID2 [#758](https://github.com/nf-core/raredisease/pull/758)
+- GATK Contamination results displayed in MultiQC with color-coded thresholds [#758](https://github.com/nf-core/raredisease/pull/758)
 
 ### `Changed`
 
@@ -44,9 +34,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter | New parameter    |
-| ------------- | ---------------- |
-|               | sambamba_regions |
+| Old parameter | New parameter           |
+| ------------- | ----------------------- |
+|               | sambamba_regions        |
+|               | run_contamination       |
+|               | contamination_sites     |
+|               | contamination_sites_tbi |
 
 ### Tool updates
 
@@ -61,6 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | gens-preproc                        | 1.0.11      | 1.1.2       |
 | samtools (sort & view)              | 1.21        | 1.22.1      |
 | sambamba                            |             | 1.0.1       |
+| gatk4/calculatecontamination        |             | 4.6.2.0     |
+| gatk4/getpileupsummaries            |             | 4.6.2.0     |
 
 ## 2.6.0 - Cacofonix [2025-06-25]
 
