@@ -132,7 +132,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 tiddit_vcf
                     .combine(manta_vcf)
                     .combine(cnvnator_vcf)
-                    .combine(mitosalt_vcf)
                     .toList()
                     .set { vcf_list }
             } else if (!val_analysis_type.equals("mito")) {
@@ -145,7 +144,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .combine(manta_vcf)
                 .combine(gcnvcaller_vcf)
                 .combine(cnvnator_vcf)
-                .combine(mitosalt_vcf)
                 .toList()
                 .set { vcf_list }
         } else if (!val_analysis_type.equals("mito")) {
@@ -156,19 +154,28 @@ workflow CALL_STRUCTURAL_VARIANTS {
         }
 
         if (!val_analysis_type.equals("mito")) {
-            ch_case_info.view()
-            ch_svcaller_priority.view()
-            vcf_list.view()
+            if (!mitosalt_vcf.equals(null) && val_analysis_type.equals("wgs")) {
+                channel.of(ch_svcaller_priority, "mitosalt")
+                    .collect()
+                    .set { ch_svcaller_priority }
+                channel.of(vcf_list, mitosalt_vcf)
+                    .collect()
+                    .set { vcf_list }
+            }
+
             ch_case_info
                 .combine(vcf_list)
                 .set { merge_input_vcfs }
 
+            ch_case_info.view()
+            ch_svcaller_priority.view()
+            vcf_list.view()
             SVDB_MERGE (merge_input_vcfs, ch_svcaller_priority, true)
 
             TABIX_TABIX (SVDB_MERGE.out.vcf)
             ch_merged_svs = SVDB_MERGE.out.vcf
             ch_merged_tbi = TABIX_TABIX.out.index
-        } else {
+        } else if (!mitosalt_vcf.equals(null)) {
             TABIX_TABIX (mitosalt_vcf)
             ch_merged_svs = mitosalt_vcf
             ch_merged_tbi = TABIX_TABIX.out.index

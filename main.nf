@@ -316,17 +316,13 @@ workflow NFCORE_RAREDISEASE {
     //
     if (skip_germlinecnvcaller) {
         if (val_analysis_type.equals("wgs")) {
-            ch_svcaller_priority = channel.value(["tiddit", "manta", "cnvnator", "mitosalt"])
-        } else if (val_run_mt_for_wes) {
-            ch_svcaller_priority = channel.value(["mitosalt"])
+            ch_svcaller_priority = channel.value(["tiddit", "manta", "cnvnator"])
         } else {
             ch_svcaller_priority = channel.value([])
         }
     } else {
         if (val_analysis_type.equals("wgs")) {
-            ch_svcaller_priority = channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator", "mitosalt"])
-        } else if (val_run_mt_for_wes) {
-            ch_svcaller_priority = channel.value(["manta", "gcnvcaller", "mitosalt"])        
+            ch_svcaller_priority = channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
         } else {
             ch_svcaller_priority = channel.value(["manta", "gcnvcaller"])
         }

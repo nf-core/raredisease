@@ -135,9 +135,9 @@ workflow CALL_SV_MT {
             .map { meta, value -> ['call_sv/mitochondria/', [meta, value]] }
 
     emit:
-        mitosalt_classify   = ch_saltshaker_txt             // channel: [ val(meta), path(txt) ]
-        mitosalt_vcf        = ch_saltshaker_vcf             // channel: [ val(meta), path(vcf) ]
-        mitosalt_plot       = ch_saltshaker_plot            // channel: [ val(meta), path(png) ]
-        mt_del_result       = MT_DELETION.out.mt_del_result // channel: [ val(meta), path(txt) ]
-        publish = ch_publish                                // channel: [ val(destination), val(value) ]
+        mitosalt_classify   = ch_saltshaker_txt                // channel: [ val(meta), path(txt) ]
+        mitosalt_vcf        = ch_saltshaker_vcf.ifEmpty(null)  // channel: [ val(meta), path(vcf) ]
+        mitosalt_plot       = ch_saltshaker_plot               // channel: [ val(meta), path(png) ]
+        mt_del_result       = MT_DELETION.out.mt_del_result    // channel: [ val(meta), path(txt) ]
+        publish = ch_publish                                   // channel: [ val(destination), val(value) ]
 }
