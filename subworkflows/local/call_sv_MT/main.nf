@@ -95,7 +95,6 @@ workflow CALL_SV_MT {
                     .set{ch_saltshaker_in}
 
                 SALTSHAKER_CALL(
-                    MITOSALT.out.breakpoint,
                     ch_saltshaker_in,
                     ch_mt_fasta,
                     val_mitosalt_flank,

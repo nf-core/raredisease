@@ -57,11 +57,6 @@ nextflow_workflow {
                 input[27] = 10000
                 input[28] = 5
                 input[29] = 15
-                input[30] = 0.5
-                input[31] = 600
-                input[32] = 10
-                input[33] = 5
-                input[34] = 0.3
                 """
             }
         }
