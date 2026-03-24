@@ -45,7 +45,7 @@ nextflow_workflow {
                 ])
                 input[16] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)]).collect()
                 input[17] = Channel.from("\$PWD").map { dir -> [[id:'genome'], file(dir)] }
-                input[18] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fai', checkIfExists: true)]).collect()
+                input[18] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]).collect()
                 input[19] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]).collect()
                 input[20] = Channel.from("${projectDir}/subworkflows/local/variant_evaluation/tests").map { dir -> [[id:'mt'], file(dir)] }
                 input[21] = channel.of([
