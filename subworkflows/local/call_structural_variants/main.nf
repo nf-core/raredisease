@@ -132,45 +132,38 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 tiddit_vcf
                     .combine(manta_vcf)
                     .combine(cnvnator_vcf)
-                    .toList()
-                    .set { vcf_list }
+                    .set { vcf_paths }
             } else if (!val_analysis_type.equals("mito")) {
                 manta_vcf
-                    .toList()
-                    .set { vcf_list }
+                    .set { vcf_paths }
             }
         } else if (val_analysis_type.equals("wgs")) {
             tiddit_vcf
                 .combine(manta_vcf)
                 .combine(gcnvcaller_vcf)
                 .combine(cnvnator_vcf)
-                .toList()
-                .set { vcf_list }
+                .set { vcf_paths }
         } else if (!val_analysis_type.equals("mito")) {
             manta_vcf
                 .combine(gcnvcaller_vcf)
-                .toList()
-                .set { vcf_list }
+                .set { vcf_paths }
         }
 
         if (!val_analysis_type.equals("mito")) {
             if (!mitosalt_vcf.equals(null) && val_analysis_type.equals("wgs")) {
-                channel.of(ch_svcaller_priority, "mitosalt")
+                ch_svcaller_priority.combine(["mitosalt"])
                     .collect()
                     .set { ch_svcaller_priority }
-                channel.of(vcf_list, mitosalt_vcf)
-                    .collect()
-                    .set { vcf_list }
+                vcf_paths.combine(mitosalt_vcf)
+                    .set { vcf_paths }
             }
 
+            vcf_list = vcf_paths.toList()
             ch_case_info
                 .combine(vcf_list)
-                .set { merge_input_vcfs }
+                .set { merge_vcfs_in }
 
-            ch_case_info.view()
-            ch_svcaller_priority.view()
-            vcf_list.view()
-            SVDB_MERGE (merge_input_vcfs, ch_svcaller_priority, true)
+            SVDB_MERGE (merge_vcfs_in, ch_svcaller_priority, true)
 
             TABIX_TABIX (SVDB_MERGE.out.vcf)
             ch_merged_svs = SVDB_MERGE.out.vcf
@@ -184,9 +177,11 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_publish = ch_merged_svs
             .mix(ch_merged_tbi)
             .map { meta, value -> ['call_sv/genome/', [meta, value]] }
+        ch_publish_mt = CALL_SV_MT.out.publish
 
     emit:
-        vcf      = ch_merged_svs // channel: [ val(meta), path(vcf)]
-        tbi      = ch_merged_tbi // channel: [ val(meta), path(tbi)]
-        publish = ch_publish     // channel: [ val(destination), val(value) ]
+        vcf        = ch_merged_svs // channel: [ val(meta), path(vcf)]
+        tbi        = ch_merged_tbi // channel: [ val(meta), path(tbi)]
+        publish    = ch_publish    // channel: [ val(destination), val(value) ]
+        publish_mt = ch_publish_mt // channel: [ val(destination), val(value) ]
 }
