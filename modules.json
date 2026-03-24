@@ -265,6 +265,8 @@
                     "gatk4/getpileupsummaries": {
                         "branch": "master",
                         "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "installed_by": ["modules"]
+                    },
                     "gawk": {
                         "branch": "master",
                         "git_sha": "5ee4d69ed992c3ce81cfbbdd0bef932fcb81c75a",
