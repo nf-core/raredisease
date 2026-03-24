@@ -70,4 +70,42 @@ nextflow_workflow {
         }
     }
 
+    test("ANNOTATE_CADD - GRCh37") {
+
+        when {
+            params {
+                genome = "GRCh37"
+            }
+            workflow {
+                """
+                input[0] = channel.of(file(params.pipelines_testdata_base_path + 'cadd/test_cadd/', checkIfExists: true))
+
+                input[1] = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true))
+
+                input[2] = channel.of([[id:'resources'], file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/cadd_to_vcf_header_-1.0-.txt', checkIfExists: true)]).collect()
+
+                input[3] = channel.of([
+                    [id:'test', single_end: false],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
+                ])
+
+                input[4] = 'GRCh37'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.vcf },
+                { assert workflow.out.tbi },
+                { assert snapshot(
+                    path(workflow.out.vcf[0][1]).vcf.variantsMD5,
+                    path(workflow.out.vcf[0][1]).vcf.summary
+                ).match() }
+            )
+        }
+    }
+
 }
