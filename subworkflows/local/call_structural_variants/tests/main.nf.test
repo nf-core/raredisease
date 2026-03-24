@@ -43,7 +43,7 @@ nextflow_workflow {
                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
                 ])
-                input[16] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.chrsizes', checkIfExists: true)]).collect()
+                input[16] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)]).collect()
                 input[17] = Channel.from("\$PWD").map { dir -> [[id:'genome'], file(dir)] }
                 input[18] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fai', checkIfExists: true)]).collect()
                 input[19] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]).collect()

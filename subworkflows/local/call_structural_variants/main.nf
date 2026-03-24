@@ -150,7 +150,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         }
 
         if (!val_analysis_type.equals("mito")) {
-            if (!mitosalt_vcf.equals(null) && val_analysis_type.equals("wgs")) {
+            if (!mitosalt_vcf.equals('none') && val_analysis_type.equals("wgs")) {
                 ch_svcaller_priority.combine(["mitosalt"])
                     .collect()
                     .set { ch_svcaller_priority }
@@ -168,7 +168,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
             TABIX_TABIX (SVDB_MERGE.out.vcf)
             ch_merged_svs = SVDB_MERGE.out.vcf
             ch_merged_tbi = TABIX_TABIX.out.index
-        } else if (!mitosalt_vcf.equals(null)) {
+        } else if (!mitosalt_vcf.equals('none')) {
             TABIX_TABIX (mitosalt_vcf)
             ch_merged_svs = mitosalt_vcf
             ch_merged_tbi = TABIX_TABIX.out.index
