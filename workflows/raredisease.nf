@@ -619,7 +619,6 @@ workflow RAREDISEASE {
             val_run_mt_for_wes
         )
         ch_call_sv_publish = CALL_STRUCTURAL_VARIANTS.out.publish
-        ch_call_sv_mt_publish = CALL_STRUCTURAL_VARIANTS.out.publish_mt
 
         //
         // ANNOTATE STRUCTURAL VARIANTS
@@ -964,7 +963,6 @@ workflow RAREDISEASE {
                        .mix(ch_subsample_publish)
                        .mix(ch_call_snv_publish)
                        .mix(ch_call_sv_publish)
-                       .mix(ch_call_sv_mt_publish)
                        .mix(ch_call_repeat_expansions_publish)
                        .mix(ch_call_mobile_elements_publish)
                        .mix(ch_annotate_genome_snvs_publish)
