@@ -22,41 +22,43 @@ nextflow_workflow {
                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
                 ])
-                input[1]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
-                input[2]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
-                input[3]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
-                input[4]  = Channel.from("\$PWD").map { dir -> [[id:'genome'], file(dir)] }
-                input[5]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]).collect()
-                input[6]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]).collect()
-                input[7]  = Channel.from("${projectDir}/subworkflows/local/variant_evaluation/tests").map { dir -> [[id:'mt'], file(dir)] }
-                input[8]  = channel.of([
+                input[1]  = channel.of([id:'justhusky'])
+                input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[4]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[5]  = Channel.from("\$PWD").map { dir -> [[id:'genome'], file(dir)] }
+                input[6]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]).collect()
+                input[8]  = Channel.from("${projectDir}/subworkflows/local/variant_evaluation/tests").map { dir -> [[id:'mt'], file(dir)] }
+                input[9]  = channel.of([
                     [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
                     [
                         file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_1.fastq.gz', checkIfExists: true),
                         file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)
                     ]
                 ])
-                input[9]  = channel.value(10000000)
-                input[10] = 16081
-                input[11] = 407
-                input[12] = 5730
-                input[13] = 5763
-                input[14] = 16569
-                input[15] = 'chrM'
-                input[16] = 15
-                input[17] = 2
-                input[18] = 2
-                input[19] = 30000
-                input[20] = 30
-                input[21] = 0.00001
-                input[22] = 5
-                input[23] = 15
-                input[24] = 0.01
-                input[25] = 1000
-                input[26] = 80
-                input[27] = 10000
-                input[28] = 5
-                input[29] = 15
+                input[10]  = channel.value(10000000)
+                input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[12] = 16081
+                input[13] = 407
+                input[14] = 5730
+                input[15] = 5763
+                input[16] = 16569
+                input[17] = 'chrM'
+                input[18] = 15
+                input[19] = 2
+                input[20] = 2
+                input[21] = 30000
+                input[22] = 30
+                input[23] = 0.00001
+                input[24] = 5
+                input[25] = 15
+                input[26] = 0.01
+                input[27] = 1000
+                input[28] = 80
+                input[29] = 10000
+                input[30] = 5
+                input[31] = 15
                 """
             }
         }
