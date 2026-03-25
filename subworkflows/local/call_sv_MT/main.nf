@@ -130,6 +130,7 @@ workflow CALL_SV_MT {
 
             ch_case_info
                 .combine(ch_vcf_file_list)
+                .filter{ it -> it.size() == 2}
                 .set { ch_merge_input_vcfs }
 
             SVDB_MERGE ( ch_merge_input_vcfs, [], true ).vcf
@@ -138,7 +139,6 @@ workflow CALL_SV_MT {
             ch_svcaller_priority = ch_svcaller_priority
                 .concat(ch_saltshaker_vcf.map{ _ -> ["mitosalt"] })
                 .collect()
-                .dump(tag:'updatedprio')
 
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)

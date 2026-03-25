@@ -135,7 +135,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
             ch_sv_mt_out.saltshaker_vcf
                 .collect{ _meta, vcf -> vcf }
                 .set { ch_saltshaker_vcf }
-
+            ch_saltshaker_vcf.view()
             ch_publish_mt = ch_sv_mt_out.publish
             ch_svcaller_priority = ch_sv_mt_out.updated_priority
         }
@@ -152,11 +152,9 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .collect()
                 .map { vcf_list -> [vcf_list] }  //
                 .set { ch_vcf_paths }
-
             ch_case_info
                 .combine(ch_vcf_paths)
                 .set { ch_merge_vcfs_in }
-
             SVDB_MERGE (ch_merge_vcfs_in, ch_svcaller_priority, true)
 
             TABIX_TABIX (SVDB_MERGE.out.vcf)

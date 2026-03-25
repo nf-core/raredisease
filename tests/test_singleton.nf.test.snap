@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            353,
+            354,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -320,7 +320,7 @@
                     "saltshaker": "1.0.0"
                 },
                 "SALTSHAKER_CLASSIFY": {
-                    "saltshaker": "1.0.0"
+                    "saltshaker": "1.0.1"
                 },
                 "SALTSHAKER_PLOT": {
                     "saltshaker": "1.0.0"
@@ -471,14 +471,6 @@
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
                     "tabix": 1.21
-                },
-                "ZIP_TABIX_VCFANNO": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
-                },
-                "ZIP_TABIX_VCFANNO_MT": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
                 }
             },
             [
@@ -545,17 +537,12 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz",
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
-                "call_sv/genome",
-                "call_sv/genome/justhusky_sv.vcf.gz",
-                "call_sv/genome/justhusky_sv.vcf.gz.tbi",
-                "call_sv/mitochondria",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.breakpoint",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.cluster",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.saltshaker.png",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.saltshaker.vcf",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.saltshaker_classify.txt",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.saltshaker_classify_metadata.tsv",
-                "call_sv/mitochondria/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/hugelymodelbat_LNUMBER1.saltshaker.png",
+                "call_sv/hugelymodelbat_LNUMBER1.saltshaker_classify.txt",
+                "call_sv/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/justhusky_saltshaker.vcf.gz",
+                "call_sv/justhusky_sv.vcf.gz",
+                "call_sv/justhusky_sv.vcf.gz.tbi",
                 "fastqc",
                 "fastqc/hugelymodelbat_LNUMBER1",
                 "fastqc/hugelymodelbat_LNUMBER1/hugelymodelbat_LNUMBER1.html",
@@ -723,11 +710,10 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-03-17T17:02:07.664289531",
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-03-04T08:25:27.608017744"
+        "timestamp": "2026-03-25T12:48:18.971209768"
     }
 }

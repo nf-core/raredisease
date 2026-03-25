@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            773,
+            770,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -449,14 +449,6 @@
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
                     "tabix": 1.21
-                },
-                "ZIP_TABIX_VCFANNO": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
-                },
-                "ZIP_TABIX_VCFANNO_MT": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
                 }
             },
             [
@@ -632,13 +624,11 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz",
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
-                "call_sv/genome",
-                "call_sv/genome/justhusky_sv.vcf.gz",
-                "call_sv/genome/justhusky_sv.vcf.gz.tbi",
-                "call_sv/mitochondria",
-                "call_sv/mitochondria/earlycasualcaiman_mitochondria_deletions.txt",
-                "call_sv/mitochondria/hugelymodelbat_mitochondria_deletions.txt",
-                "call_sv/mitochondria/slowlycivilbuck_mitochondria_deletions.txt",
+                "call_sv/earlycasualcaiman_mitochondria_deletions.txt",
+                "call_sv/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/justhusky_sv.vcf.gz",
+                "call_sv/justhusky_sv.vcf.gz.tbi",
+                "call_sv/slowlycivilbuck_mitochondria_deletions.txt",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/.stub",
@@ -1020,11 +1010,10 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-03-17T16:58:22.361988613",
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-02-27T09:07:42.308738867"
+        "timestamp": "2026-03-25T13:30:33.907974648"
     }
 }

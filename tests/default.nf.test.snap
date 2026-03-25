@@ -328,7 +328,7 @@
                     "saltshaker": "1.0.0"
                 },
                 "SALTSHAKER_CLASSIFY": {
-                    "saltshaker": "1.0.0"
+                    "saltshaker": "1.0.1"
                 },
                 "SALTSHAKER_PLOT": {
                     "saltshaker": "1.0.0"
@@ -486,14 +486,6 @@
                     "nf-core/raredisease": "v2.7.0dev"
                 },
                 "ZIP_TABIX_ROHCALL": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
-                },
-                "ZIP_TABIX_VCFANNO": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
-                },
-                "ZIP_TABIX_VCFANNO_MT": {
                     "bgzip": 1.21,
                     "tabix": 1.21
                 }
@@ -680,31 +672,18 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz",
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
-                "call_sv/genome",
-                "call_sv/genome/justhusky_sv.vcf.gz",
-                "call_sv/genome/justhusky_sv.vcf.gz.tbi",
-                "call_sv/mitochondria",
-                "call_sv/mitochondria/earlycasualcaiman_LNUMBER1.breakpoint",
-                "call_sv/mitochondria/earlycasualcaiman_LNUMBER1.cluster",
-                "call_sv/mitochondria/earlycasualcaiman_LNUMBER1.saltshaker.png",
-                "call_sv/mitochondria/earlycasualcaiman_LNUMBER1.saltshaker.vcf",
-                "call_sv/mitochondria/earlycasualcaiman_LNUMBER1.saltshaker_classify.txt",
-                "call_sv/mitochondria/earlycasualcaiman_LNUMBER1.saltshaker_classify_metadata.tsv",
-                "call_sv/mitochondria/earlycasualcaiman_mitochondria_deletions.txt",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER3.breakpoint",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER3.cluster",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER3.saltshaker.png",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER3.saltshaker.vcf",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER3.saltshaker_classify.txt",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER3.saltshaker_classify_metadata.tsv",
-                "call_sv/mitochondria/hugelymodelbat_mitochondria_deletions.txt",
-                "call_sv/mitochondria/slowlycivilbuck_LNUMBER2.breakpoint",
-                "call_sv/mitochondria/slowlycivilbuck_LNUMBER2.cluster",
-                "call_sv/mitochondria/slowlycivilbuck_LNUMBER2.saltshaker.png",
-                "call_sv/mitochondria/slowlycivilbuck_LNUMBER2.saltshaker.vcf",
-                "call_sv/mitochondria/slowlycivilbuck_LNUMBER2.saltshaker_classify.txt",
-                "call_sv/mitochondria/slowlycivilbuck_LNUMBER2.saltshaker_classify_metadata.tsv",
-                "call_sv/mitochondria/slowlycivilbuck_mitochondria_deletions.txt",
+                "call_sv/earlycasualcaiman_LNUMBER1.saltshaker.png",
+                "call_sv/earlycasualcaiman_LNUMBER1.saltshaker_classify.txt",
+                "call_sv/earlycasualcaiman_mitochondria_deletions.txt",
+                "call_sv/hugelymodelbat_LNUMBER3.saltshaker.png",
+                "call_sv/hugelymodelbat_LNUMBER3.saltshaker_classify.txt",
+                "call_sv/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/justhusky_saltshaker.vcf.gz",
+                "call_sv/justhusky_sv.vcf.gz",
+                "call_sv/justhusky_sv.vcf.gz.tbi",
+                "call_sv/slowlycivilbuck_LNUMBER2.saltshaker.png",
+                "call_sv/slowlycivilbuck_LNUMBER2.saltshaker_classify.txt",
+                "call_sv/slowlycivilbuck_mitochondria_deletions.txt",
                 "fastqc",
                 "fastqc/earlycasualcaiman_LNUMBER1",
                 "fastqc/earlycasualcaiman_LNUMBER1/earlycasualcaiman_LNUMBER1.html",
@@ -1112,11 +1091,10 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-03-17T16:52:17.64647915",
         "meta": {
             "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.4"
         },
-        "timestamp": "2026-03-03T15:58:44.610805525"
+        "timestamp": "2026-03-25T12:44:18.757225141"
     }
 }
