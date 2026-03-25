@@ -970,6 +970,7 @@ workflow RAREDISEASE {
                        .mix(ch_subsample_publish)
                        .mix(ch_call_snv_publish)
                        .mix(ch_call_sv_publish)
+                       .mix(ch_call_sv_mt_publish)
                        .mix(ch_call_repeat_expansions_publish)
                        .mix(ch_call_mobile_elements_publish)
                        .mix(ch_annotate_genome_snvs_publish)
