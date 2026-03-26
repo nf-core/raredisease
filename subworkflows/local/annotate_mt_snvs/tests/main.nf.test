@@ -3,8 +3,18 @@ nextflow_workflow {
     name "Test Workflow ANNOTATE_MT_SNVS"
     script "subworkflows/local/annotate_mt_snvs/main.nf"
     workflow "ANNOTATE_MT_SNVS"
+
     tag "subworkflows"
     tag "annotate_mt_snvs"
+    tag "annotate_cadd"
+
+    tag "bcftools/pluginsetgt"
+    tag "tabix/tabix"
+    tag "ensemblvep/vep"
+    tag "haplogrep3/classify"
+    tag "vcfanno"
+    tag "tabix/bgziptabix"
+
     config "./nextflow.config"
 
     test("ANNOTATE_MT_SNVS - GRCh37, stub") {

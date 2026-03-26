@@ -3,8 +3,17 @@ nextflow_workflow {
     name "Test Workflow CALL_SNV"
     script "subworkflows/local/call_snv/main.nf"
     workflow "CALL_SNV"
+
     tag "subworkflows"
     tag "call_snv"
+    tag "call_snv_deepvariant"
+    tag "call_snv_sentieon"
+    tag "call_snv_MT"
+    tag "postprocess_MT_calls"
+ 
+    tag "gatk4_selectvariants"
+    tag "bcftools_concat"
+
 
     test("CALL_SNV - deepvariant wgs") {
 

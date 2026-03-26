@@ -3,8 +3,15 @@ nextflow_workflow {
     name "Test Workflow ANNOTATE_STRUCTURAL_VARIANTS"
     script "subworkflows/local/annotate_structural_variants/main.nf"
     workflow "ANNOTATE_STRUCTURAL_VARIANTS"
+
     tag "subworkflows"
     tag "annotate_structural_variants"
+    
+    tag "svdb/query"
+    tag "picard/sortvcf"
+    tag "bcftools/view"
+    tag "ensemblvep/vep"
+
     config "./nextflow.config"
 
     test("ANNOTATE_STRUCTURAL_VARIANTS - no SVDB queries, stub") {

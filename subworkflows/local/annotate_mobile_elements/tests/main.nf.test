@@ -3,8 +3,15 @@ nextflow_workflow {
     name "Test Workflow ANNOTATE_MOBILE_ELEMENTS"
     script "subworkflows/local/annotate_mobile_elements/main.nf"
     workflow "ANNOTATE_MOBILE_ELEMENTS"
+
     tag "subworkflows"
     tag "annotate_mobile_elements"
+
+    tag"bcftools/view"
+    tag "ensemblvep/vep"
+    tag "picard/sortvcf"
+    tag "svdb/query"
+
     config "./nextflow.config"
 
     test("ANNOTATE_MOBILE_ELEMENTS - GRCh37, stub") {

@@ -3,8 +3,18 @@ nextflow_workflow {
     name "Test Workflow CALL_MOBILE_ELEMENTS"
     script "subworkflows/local/call_mobile_elements/main.nf"
     workflow "CALL_MOBILE_ELEMENTS"
+
     tag "subworkflows"
     tag "call_mobile_elements"
+
+    tag "bcftools/reheader"
+    tag "bcftools/concat"
+    tag "bcftools/sort"
+    tag "retroseq/discover"
+    tag "retroseq/call"
+    tag "samtools/view"
+    tag "tabix/tabix"
+    tag "svdb/merge" 
 
     test("CALL_MOBILE_ELEMENTS - stub") {
 
