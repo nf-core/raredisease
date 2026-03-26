@@ -105,6 +105,11 @@
                         "git_sha": "7ed72ef972290b93d0bdd7c60ff00a693250f77a",
                         "installed_by": ["modules"]
                     },
+                    "cat/fastq": {
+                        "branch": "master",
+                        "git_sha": "5d28ea7cfaebcfae6f74d1067ea766d8ff19dff3",
+                        "installed_by": ["modules"]
+                    },
                     "chromograph": {
                         "branch": "master",
                         "git_sha": "f2b138ee1d91f67d31c187317d7e83e429bf0309",
@@ -122,12 +127,12 @@
                     },
                     "custom/addmostsevereconsequence": {
                         "branch": "master",
-                        "git_sha": "0f04646a9282049b16b3eb35b042e94dfb3340a0",
+                        "git_sha": "0e225fbda197093af4d54a88b9a2908c14ce660b",
                         "installed_by": ["modules"]
                     },
                     "custom/addmostseverepli": {
                         "branch": "master",
-                        "git_sha": "0f04646a9282049b16b3eb35b042e94dfb3340a0",
+                        "git_sha": "0e225fbda197093af4d54a88b9a2908c14ce660b",
                         "installed_by": ["modules"]
                     },
                     "deepvariant/rundeepvariant": {
