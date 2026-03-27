@@ -114,7 +114,8 @@ workflow CALL_SV_MT {
 
             SVDB_MERGE ( ch_merge_input_vcfs, [], true ).vcf
                 .set {ch_saltshaker_vcf}
-                // Update priority list when we know saltshaker will run
+            // Update priority list when we know saltshaker will run (ie saltshaker vcf is created)
+            // Updated priority list will be used when saltshaker vcf is merged with other SV vcfs
             ch_svcaller_priority = ch_svcaller_priority
                 .concat(ch_saltshaker_vcf.map{ _ -> ["mitosalt"] })
                 .collect()
