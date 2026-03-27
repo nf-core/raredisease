@@ -29,11 +29,10 @@ nextflow_workflow {
                 input[8]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_config.toml', checkIfExists: true)).collect()
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
                 input[10] = channel.value([])
-                input[11] = false
-                input[12] = null
-                input[13] = 'GRCh37'
-                input[14] = 1.0
-                input[15] = 107
+                input[11] = null
+                input[12] = 'GRCh37'
+                input[13] = 1.0
+                input[14] = 107
                 """
             }
         }

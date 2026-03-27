@@ -291,11 +291,6 @@
                         "git_sha": "824f8012c9ede97642fd23371c8784fb71074c63",
                         "installed_by": ["modules"]
                     },
-                    "haplogrep3/classify": {
-                        "branch": "master",
-                        "git_sha": "5cb9a8694da0a0e550921636bb60bc8c56445fd7",
-                        "installed_by": ["modules"]
-                    },
                     "hisat2/build": {
                         "branch": "master",
                         "git_sha": "66391ca86ea6a081d288afe6a93d242fefcd8c2c",
@@ -369,11 +364,6 @@
                     "picard/sortvcf": {
                         "branch": "master",
                         "git_sha": "a631e12055f6c23ba2c942d3902b3ed1b9eed859",
-                        "installed_by": ["modules"]
-                    },
-                    "qualimap/bamqc": {
-                        "branch": "master",
-                        "git_sha": "aa50b51492f79e0bf3ca9ca6e34640e3435b60ba",
                         "installed_by": ["modules"]
                     },
                     "rhocall/annotate": {
