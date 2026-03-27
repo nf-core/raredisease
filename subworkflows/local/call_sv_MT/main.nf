@@ -116,7 +116,7 @@ workflow CALL_SV_MT {
                 .set {ch_saltshaker_vcf}
                 // Update priority list when we know saltshaker will run
             ch_svcaller_priority = ch_svcaller_priority
-                .concat(ch_saltshaker_vcf.map{ _meta -> ["mitosalt"] })
+                .concat(ch_saltshaker_vcf.map{ _ -> ["mitosalt"] })
                 .collect()
 
         }

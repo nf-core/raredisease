@@ -636,7 +636,6 @@ workflow RAREDISEASE {
             val_light_strand_origin_end,
             val_mito_length,
             val_mito_name,
-            val_mitosalt_breakspan,
             val_mitosalt_flank,
             val_mitosalt_heteroplasmy_limit,
             val_run_mt_for_wes
