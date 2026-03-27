@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tests for some of the subworkflows [#780](https://github.com/nf-core/raredisease/pull/780)
 - Tests for some of the subworkflows [#782](https://github.com/nf-core/raredisease/pull/782)
 - Tests for some of the subworkflows [#783](https://github.com/nf-core/raredisease/pull/783)
+- Add CAT_FASTQ before SEQTK_SAMPLE in call_sv_MT to merge reads across lanes before subsampling for MitoSalt [#799](https://github.com/nf-core/raredisease/pull/799)
+- Add new local SPLIT_CHR module to split reference FASTA by chromosome for CNVnator, and pass genome flag to all CNVnator steps [#799](https://github.com/nf-core/raredisease/pull/799)
+- Add peddy --sites hg38 argument when running with GRCh38 [#799](https://github.com/nf-core/raredisease/pull/799)
 
 ### `Changed`
 
@@ -43,6 +46,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migrate file publishing from publishDir to a centralized output {} block for some workflows [#789](https://github.com/nf-core/raredisease/pull/789)
 - Remove redundant TABIX processes, and update configs for nf-test [#790](https://github.com/nf-core/raredisease/pull/790)
 - Migrate file publishing from publishDir to a centralized output {} block for some workflows [#791](https://github.com/nf-core/raredisease/pull/791)
+- Remove redundant ZIP_TABIX steps after VCFANNO in annotate_genome_snvs and annotate_mt_snvs by using VCFANNO's direct tbi output [#799](https://github.com/nf-core/raredisease/pull/799)
+- Collect genome fasta/fai channel in call_sv_tiddit to prevent per-sample re-emission [#799](https://github.com/nf-core/raredisease/pull/799)
+- Update cadd_resources channel to use channelFromPathWithMeta and set channelFromSamplesheet calls for svdb/ME resources as non-mandatory [#799](https://github.com/nf-core/raredisease/pull/799)
 
 ### `Fixed`
 
@@ -91,7 +97,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | sentieon              | 202503      | 202503.02   |
 | stranger              | 0.9.4       | 0.10.0      |
 | svdb                  | 2.8.3       | 2.8.4       |
-| tiddit                | 3.6.1       | 3.9.4       |
+| tiddit                | 3.6.1       | 3.9.5       |
 | ucsc                  | 447         | 482         |
 | vcfanno               | 0.3.5       | 0.3.7       |
 | vcf2cytosure          | 0.9.1       | 0.9.3       |
