@@ -591,19 +591,18 @@ workflow RAREDISEASE {
 */
 
     if (!skip_sv_calling) {
-        val_mitosalt_breakspan
-            .concat(val_mitosalt_breakthreshold)
-            .concat(val_mitosalt_cluster_threshold)
-            .concat(val_mitosalt_deletion_threshold_max)
-            .concat(val_mitosalt_deletion_threshold_min)
-            .concat(val_mitosalt_evalue_threshold)
-            .concat(val_mitosalt_exclude)
-            .concat(val_mitosalt_paired_distance)
-            .concat(val_mitosalt_score_threshold)
-            .concat(val_mitosalt_sizelimit)
-            .concat(val_mitosalt_split_distance_threshold)
-            .concat(val_mitosalt_split_length)
-            .collect()
+        channel.of(val_mitosalt_breakspan,
+            val_mitosalt_breakthreshold,
+            val_mitosalt_cluster_threshold,
+            val_mitosalt_deletion_threshold_max,
+            val_mitosalt_deletion_threshold_min,
+            val_mitosalt_evalue_threshold,
+            val_mitosalt_exclude,
+            val_mitosalt_paired_distance,
+            val_mitosalt_score_threshold,
+            val_mitosalt_sizelimit,
+            val_mitosalt_split_distance_threshold,
+            val_mitosalt_split_length)
             .set{ ch_mitosalt_config }
 
         CALL_STRUCTURAL_VARIANTS (
