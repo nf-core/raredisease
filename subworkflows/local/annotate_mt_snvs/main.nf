@@ -40,8 +40,6 @@ workflow ANNOTATE_MT_SNVS {
 
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
 
-        ch_vcfanno_vcf = VCFANNO_MT.out.vcf
-
         // Annotating with CADD
         if (!val_cadd_resources.equals(null)) {
             ANNOTATE_CADD (
@@ -56,7 +54,7 @@ workflow ANNOTATE_MT_SNVS {
             ch_cadd_vcf = channel.empty()
         }
 
-        ch_vcfanno_vcf
+        VCFANNO_MT.out.vcf
             .join(ch_cadd_vcf, remainder: true)
             .branch { meta, vcfanno, cadd  ->
                 vcfanno: cadd.equals(null)

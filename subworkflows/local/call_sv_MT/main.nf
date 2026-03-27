@@ -25,26 +25,15 @@ workflow CALL_SV_MT {
         ch_reads                              // channel: [mandatory] [ val(meta), [path(reads)] ]
         ch_subdepth                           // channel: [mandatory] [ val(mitosalt_depth) ]
         ch_svcaller_priority                  // channel: [mandatory] [ val(["var caller tag 1", ...]) ]
+        ch_mitosalt_config                    // channel: [mandatory] [val(mitosalt_breakspan),val(mitosalt_breakthreshold),...,val(mitosalt_split_length)]
         val_heavy_strand_origin_start         // string: [mandatory] mitochondira_heavy_strand_origin_start
         val_heavy_strand_origin_end           // string: [mandatory] mitochondira_heavy_strand_origin_end
         val_light_strand_origin_start         // string: [mandatory] mitochondira_light_strand_origin_start
         val_light_strand_origin_end           // string: [mandatory] mitochondira_light_strand_origin_end
-        val_mito_length                       // string: [mandatory] mito_length
-        val_mito_name                         // string: [mandatory] mito_name
-        val_mitosalt_breakspan                // string: [mandatory] mitosalt_breakspan
-        val_mitosalt_breakthreshold           // string: [mandatory] mitosalt_breakthreshold
-        val_mitosalt_cluster_threshold        // string: [mandatory] mitosalt_cluster_threshold
-        val_mitosalt_deletion_threshold_max   // string: [mandatory] mitosalt_deletion_threshold_max
-        val_mitosalt_deletion_threshold_min   // string: [mandatory] mitosalt_deletion_threshold_min
-        val_mitosalt_evalue_threshold         // string: [mandatory] mitosalt_evalue_threshold
-        val_mitosalt_exclude                  // string: [mandatory] mitosalt_exclude
+        val_mitochondria_length               // string: [mandatory] mito_length
+        val_mitochondria_name                 // string: [mandatory] mito_name
         val_mitosalt_flank                    // string: [mandatory] mitosalt_flank
         val_mitosalt_heteroplasmy_limit       // string: [mandatory] mitosalt_heteroplasmy_limit
-        val_mitosalt_paired_distance          // string: [mandatory] mitosalt_paired_distance
-        val_mitosalt_score_threshold          // string: [mandatory] mitosalt_score_threshold
-        val_mitosalt_sizelimit                // string: [mandatory] mitosalt_sizelimit
-        val_mitosalt_split_distance_threshold // string: [mandatory] mitosalt_split_distance_threshold
-        val_mitosalt_split_length             // string: [mandatory] mitosalt_split_length
 
     main:
         ch_saltshaker_txt   = channel.empty()
@@ -60,24 +49,13 @@ workflow CALL_SV_MT {
                 ch_genome_chrsizes,
                 ch_genome_fai,
                 ch_genome_hisat2index,
+                ch_mitosalt_config,
                 ch_mt_fai,
                 ch_mt_fasta,
                 ch_mt_lastdb,
-                val_mitosalt_breakspan,
-                val_mitosalt_breakthreshold,
-                val_mitosalt_cluster_threshold,
-                val_mitosalt_deletion_threshold_max,
-                val_mitosalt_deletion_threshold_min,
-                val_mitosalt_evalue_threshold,
-                val_mitosalt_exclude,
                 val_mitosalt_flank,
                 val_mitosalt_heteroplasmy_limit,
-                val_mito_name,
-                val_mitosalt_paired_distance,
-                val_mitosalt_score_threshold,
-                val_mitosalt_sizelimit,
-                val_mitosalt_split_distance_threshold,
-                val_mitosalt_split_length
+                val_mitochondria_name
             )
 
             MITOSALT(
@@ -93,18 +71,18 @@ workflow CALL_SV_MT {
 
             MITOSALT.out.cluster
                 .filter{ _meta, out -> out.countLines() > 0 }
-                .set{ch_cluster}
+                .set{ ch_cluster }
 
             MITOSALT.out.breakpoint
                 .join(ch_cluster)
-                .set{ch_saltshaker_in}
+                .set{ ch_saltshaker_in }
 
             SALTSHAKER_CALL(
                 ch_saltshaker_in,
                 ch_mt_fasta,
                 val_mitosalt_flank,
                 val_mitosalt_heteroplasmy_limit,
-                val_mito_length,
+                val_mitochondria_length,
                 val_heavy_strand_origin_start,
                 val_heavy_strand_origin_end,
                 val_light_strand_origin_start,
@@ -113,7 +91,7 @@ workflow CALL_SV_MT {
 
             SALTSHAKER_CLASSIFY(
                 SALTSHAKER_CALL.out.call,
-                val_mito_name
+                val_mitochondria_name
             )
             ch_saltshaker_txt = SALTSHAKER_CLASSIFY.out.txt
             ch_saltshaker_vcf = SALTSHAKER_CLASSIFY.out.vcf
@@ -124,10 +102,11 @@ workflow CALL_SV_MT {
             ch_saltshaker_plot = SALTSHAKER_PLOT.out.plot
 
             SALTSHAKER_CLASSIFY.out.vcf
-                .collect{_meta, vcf -> vcf}
+                .collect{ _meta, vcf -> vcf }
                 .toList()
                 .set { ch_vcf_file_list }
 
+            // Only set the channel if ch_vcf_file_list was made (ie combined channel has two elements)
             ch_case_info
                 .combine(ch_vcf_file_list)
                 .filter{ it -> it.size() == 2}
@@ -137,7 +116,7 @@ workflow CALL_SV_MT {
                 .set {ch_saltshaker_vcf}
                 // Update priority list when we know saltshaker will run
             ch_svcaller_priority = ch_svcaller_priority
-                .concat(ch_saltshaker_vcf.map{ _ -> ["mitosalt"] })
+                .concat(ch_saltshaker_vcf.map{ _meta -> ["mitosalt"] })
                 .collect()
 
         }

@@ -4,26 +4,18 @@ process PREP_MITOSALT {
 
     input:
     path chrsizes
-    tuple val(meta2), path(genomefai)
-    tuple val(meta), path(hisat2index)
-    tuple val(meta4), path(mtfai)
-    tuple val(meta5), path(mtfasta)
-    tuple val(meta3), path(lastindex)
-    val breakspan
-    val breakthreshold
-    val cluster_threshold
-    val deletion_threshold_max
-    val deletion_threshold_min
-    val evalue_threshold
-    val exclude
+    tuple val(meta), path(genomefai)
+    tuple val(meta2), path(hisat2index)
+    tuple val(breakspan), val(breakthreshold), val(cluster_threshold),
+        val(deletion_threshold_max), val(deletion_threshold_min), val(evalue_threshold),
+        val(exclude), val(paired_distance), val(score_threshold),
+        val(sizelimit), val(split_distance_threshold), val(split_length)
+    tuple val(meta3), path(mtfai)
+    tuple val(meta4), path(mtfasta)
+    tuple val(meta5), path(lastindex)
     val flank
-    val hplimit
-    val mito_name
-    val paired_distance
-    val score_threshold
-    val sizelimit
-    val split_distance_threshold
-    val split_length
+    val heteroplasmy_limit
+    val mitochondria_name
 
     output:
     path "mitosalt_config.txt", emit: msconfig
@@ -52,7 +44,7 @@ process PREP_MITOSALT {
     echo "gsize = ${chrsizes}"                                    >> mitosalt_config.txt
     echo "MT_fasta = ${mtfasta}"                                  >> mitosalt_config.txt
     echo "threads = 1"                                            >> mitosalt_config.txt
-    echo "refchr = ${mito_name}"                                  >> mitosalt_config.txt
+    echo "refchr = ${mitochondria_name}"                          >> mitosalt_config.txt
     echo "msize = 16569"                                          >> mitosalt_config.txt
     echo "exclude = ${exclude}"                                   >> mitosalt_config.txt
     echo "orihs = 16081"                                          >> mitosalt_config.txt
@@ -69,7 +61,7 @@ process PREP_MITOSALT {
     echo "cluster_threshold = ${cluster_threshold}"               >> mitosalt_config.txt
     echo "breakspan = ${breakspan}"                               >> mitosalt_config.txt
     echo "sizelimit = ${sizelimit}"                               >> mitosalt_config.txt
-    echo "hplimit = ${hplimit}"                                   >> mitosalt_config.txt
+    echo "hplimit = ${heteroplasmy_limit}"                        >> mitosalt_config.txt
     echo "flank = ${flank}"                                       >> mitosalt_config.txt
     echo "split_distance_threshold = ${split_distance_threshold}" >> mitosalt_config.txt
     echo "dna = yes"                                              >> mitosalt_config.txt

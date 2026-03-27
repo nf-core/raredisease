@@ -56,27 +56,16 @@ nextflow_workflow {
                     ]
                 ])
                 input[22] = channel.value(10000000)
-                input[23] = 16081
-                input[24] = 407
-                input[25] = 5730
-                input[26] = 5763
-                input[27] = 16569
-                input[28] = 'MT'
-                input[29] = 15
-                input[30] = 2
-                input[31] = 5
-                input[32] = 30000
-                input[33] = 30
-                input[34] = 0.00001
-                input[35] = 5
-                input[36] = 15
-                input[37] = 0.01
-                input[38] = 1000
-                input[39] = 80
-                input[40] = 10000
-                input[41] = 5
-                input[42] = 15
-                input[43] = true
+                input[23] = channel.of([15, 2, 5, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
+                input[24] = 16081
+                input[25] = 407
+                input[26] = 5730
+                input[27] = 5763
+                input[28] = 16569
+                input[29] = 'MT'
+                input[30] = 15
+                input[31] = 0.01
+                input[32] = true
 
                 """
             }

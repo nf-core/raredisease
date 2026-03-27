@@ -36,26 +36,15 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_mt_lastdb                          // channel: [mandatory] [ val(meta), path(lastindex) ]
         ch_reads                              // channel: [mandatory] [ val(meta), [path(reads)] ]
         ch_subdepth                           // channel: [mandatory] [ val(mitosalt_depth) ]
+        ch_mitosalt_config                    // channel: [mandatory] [val(mitosalt_breakspan),val(mitosalt_breakthreshold),...,val(mitosalt_split_length)]
         val_heavy_strand_origin_start         // string: [mandatory] mitochondira_heavy_strand_origin_start
         val_heavy_strand_origin_end           // string: [mandatory] mitochondira_heavy_strand_origin_end
         val_light_strand_origin_start         // string: [mandatory] mitochondira_light_strand_origin_start
         val_light_strand_origin_end           // string: [mandatory] mitochondira_light_strand_origin_end
-        val_mito_length                       // string: [mandatory] mito_length
-        val_mito_name                         // string: [mandatory] mito_name
-        val_mitosalt_breakspan                // string: [mandatory] mitosalt_breakspan
-        val_mitosalt_breakthreshold           // string: [mandatory] mitosalt_breakthreshold
-        val_mitosalt_cluster_threshold        // string: [mandatory] mitosalt_cluster_threshold
-        val_mitosalt_deletion_threshold_max   // string: [mandatory] mitosalt_deletion_threshold_max
-        val_mitosalt_deletion_threshold_min   // string: [mandatory] mitosalt_deletion_threshold_min
-        val_mitosalt_evalue_threshold         // string: [mandatory] mitosalt_evalue_threshold
-        val_mitosalt_exclude                  // string: [mandatory] mitosalt_exclude
+        val_mitochondria_length               // string: [mandatory] mito_length
+        val_mitochondria_name                 // string: [mandatory] mito_name
         val_mitosalt_flank                    // string: [mandatory] mitosalt_flank
         val_mitosalt_heteroplasmy_limit       // string: [mandatory] mitosalt_heteroplasmy_limit
-        val_mitosalt_paired_distance          // string: [mandatory] mitosalt_paired_distance
-        val_mitosalt_score_threshold          // string: [mandatory] mitosalt_score_threshold
-        val_mitosalt_sizelimit                // string: [mandatory] mitosalt_sizelimit
-        val_mitosalt_split_distance_threshold // string: [mandatory] mitosalt_split_distance_threshold
-        val_mitosalt_split_length             // string: [mandatory] mitosalt_split_length
         val_run_mt_for_wes                    // boolean: [mandatory] run_mt_for_wes
 
     main:
@@ -109,33 +98,21 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 ch_reads,
                 ch_subdepth,
                 ch_svcaller_priority,
+                ch_mitosalt_config,
                 val_heavy_strand_origin_start,
                 val_heavy_strand_origin_end,
                 val_light_strand_origin_start,
                 val_light_strand_origin_end,
-                val_mito_length,
-                val_mito_name,
-                val_mitosalt_breakspan,
-                val_mitosalt_breakthreshold,
-                val_mitosalt_cluster_threshold,
-                val_mitosalt_deletion_threshold_max,
-                val_mitosalt_deletion_threshold_min,
-                val_mitosalt_evalue_threshold,
-                val_mitosalt_exclude,
+                val_mitochondria_length,
+                val_mitochondria_name,
                 val_mitosalt_flank,
                 val_mitosalt_heteroplasmy_limit,
-                val_mitosalt_paired_distance,
-                val_mitosalt_score_threshold,
-                val_mitosalt_sizelimit,
-                val_mitosalt_split_distance_threshold,
-                val_mitosalt_split_length
             )
-            .set {ch_sv_mt_out}
+            .set { ch_sv_mt_out }
 
             ch_sv_mt_out.saltshaker_vcf
                 .collect{ _meta, vcf -> vcf }
                 .set { ch_saltshaker_vcf }
-            ch_saltshaker_vcf.view()
             ch_publish_mt = ch_sv_mt_out.publish
             ch_svcaller_priority = ch_sv_mt_out.updated_priority
         }

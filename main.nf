@@ -62,12 +62,32 @@ workflow NFCORE_RAREDISEASE {
     val_gens_pon_male
     val_gnomad_af
     val_gnomad_af_idx
+    val_heavy_strand_origin_end
+    val_heavy_strand_origin_start
     val_homoplasmy_af_threshold
     val_intervals_wgs
     val_intervals_y
     val_known_dbsnp
     val_known_dbsnp_tbi
+    val_light_strand_origin_end
+    val_light_strand_origin_start
     val_mbuffer_mem
+    val_mito_length
+    val_mito_name
+    val_mitosalt_breakspan
+    val_mitosalt_breakthreshold
+    val_mitosalt_cluster_threshold
+    val_mitosalt_deletion_threshold_max
+    val_mitosalt_deletion_threshold_min
+    val_mitosalt_evalue_threshold
+    val_mitosalt_exclude
+    val_mitosalt_flank
+    val_mitosalt_heteroplasmy_limit
+    val_mitosalt_paired_distance
+    val_mitosalt_score_threshold
+    val_mitosalt_sizelimit
+    val_mitosalt_split_distance_threshold
+    val_mitosalt_split_length
     val_ml_model
     val_mobile_element_references
     val_mobile_element_svdb_annotations
@@ -453,8 +473,28 @@ workflow NFCORE_RAREDISEASE {
         val_concatenate_snv_calls,
         val_extract_alignments,
         val_genome,
+        val_heavy_strand_origin_end,
+        val_heavy_strand_origin_start,
         val_homoplasmy_af_threshold,
+        val_light_strand_origin_end,
+        val_light_strand_origin_start,
         val_mbuffer_mem,
+        val_mito_length,
+        val_mito_name,
+        val_mitosalt_breakspan,
+        val_mitosalt_breakthreshold,
+        val_mitosalt_cluster_threshold,
+        val_mitosalt_deletion_threshold_max,
+        val_mitosalt_deletion_threshold_min,
+        val_mitosalt_evalue_threshold,
+        val_mitosalt_exclude,
+        val_mitosalt_flank,
+        val_mitosalt_heteroplasmy_limit,
+        val_mitosalt_paired_distance,
+        val_mitosalt_score_threshold,
+        val_mitosalt_sizelimit,
+        val_mitosalt_split_distance_threshold,
+        val_mitosalt_split_length,
         val_mt_aligner,
         val_mt_subsample_approach,
         val_mt_subsample_rd,
@@ -527,12 +567,32 @@ workflow {
         params.gens_pon_male,
         params.gnomad_af,
         params.gnomad_af_idx,
+        params.heavy_strand_origin_end,
+        params.heavy_strand_origin_start,
         params.homoplasmy_af_threshold,
         params.intervals_wgs,
         params.intervals_y,
         params.known_dbsnp,
         params.known_dbsnp_tbi,
+        params.light_strand_origin_end,
+        params.light_strand_origin_start,
         params.mbuffer_mem,
+        params.mito_length,
+        params.mito_name,
+        params.mitosalt_breakspan,
+        params.mitosalt_breakthreshold,
+        params.mitosalt_cluster_threshold,
+        params.mitosalt_deletion_threshold_max,
+        params.mitosalt_deletion_threshold_min,
+        params.mitosalt_evalue_threshold,
+        params.mitosalt_exclude,
+        params.mitosalt_flank,
+        params.mitosalt_heteroplasmy_limit,
+        params.mitosalt_paired_distance,
+        params.mitosalt_score_threshold,
+        params.mitosalt_sizelimit,
+        params.mitosalt_split_distance_threshold,
+        params.mitosalt_split_length,
         params.ml_model,
         params.mobile_element_references,
         params.mobile_element_svdb_annotations,

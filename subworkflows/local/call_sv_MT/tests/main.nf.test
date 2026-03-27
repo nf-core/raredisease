@@ -39,26 +39,15 @@ nextflow_workflow {
                 ])
                 input[10]  = channel.value(10000000)
                 input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
-                input[12] = 16081
-                input[13] = 407
-                input[14] = 5730
-                input[15] = 5763
-                input[16] = 16569
-                input[17] = 'chrM'
-                input[18] = 15
-                input[19] = 2
-                input[20] = 2
-                input[21] = 30000
-                input[22] = 30
-                input[23] = 0.00001
-                input[24] = 5
-                input[25] = 15
-                input[26] = 0.01
-                input[27] = 1000
-                input[28] = 80
-                input[29] = 10000
-                input[30] = 5
-                input[31] = 15
+                input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
+                input[13] = 16081
+                input[14] = 407
+                input[15] = 5730
+                input[16] = 5763
+                input[17] = 16569
+                input[18] = 'chrM'
+                input[19] = 15
+                input[20] = 0.01
                 """
             }
         }
