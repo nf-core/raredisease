@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            353,
+            352,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -78,6 +78,9 @@
                 "CAT_CAT_BAIT": {
                     "pigz": 2.8
                 },
+                "CAT_FASTQ": {
+                    "cat": 9.5
+                },
                 "CHROMOGRAPH_AUTOZYG": {
                     "chromograph": "1.3.1"
                 },
@@ -110,11 +113,11 @@
                     "coreutils": 9.5
                 },
                 "CUSTOM_ADDMOSTSEVERECONSEQUENCE": {
-                    "addmostsevereconsequence": 1.1,
+                    "addmostsevereconsequence": "1.2.0",
                     "bgzip": 1.21
                 },
                 "CUSTOM_ADDMOSTSEVEREPLI": {
-                    "addmostseverepli": 1.1,
+                    "addmostseverepli": "1.2.0",
                     "bgzip": 1.21
                 },
                 "DEEPVARIANT": {
@@ -358,6 +361,9 @@
                 "SPLIT_AND_FILTER_SV_VCF": {
                     "bcftools": 1.22
                 },
+                "SPLIT_CHR": {
+                    "bioawk": 1.0
+                },
                 "SPLIT_MULTIALLELICS_EXP": {
                     "bcftools": 1.22
                 },
@@ -433,13 +439,13 @@
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
-                    "tiddit": "3.9.4"
+                    "tiddit": "3.9.5"
                 },
                 "TIDDIT_COV_VCF2CYTOSURE": {
-                    "tiddit": "3.9.4"
+                    "tiddit": "3.9.5"
                 },
                 "TIDDIT_SV": {
-                    "tiddit": "3.9.4"
+                    "tiddit": "3.9.5"
                 },
                 "UCSC_WIGTOBIGWIG": {
                     "ucsc": 482
@@ -460,14 +466,6 @@
                     "nf-core/raredisease": "v2.7.0dev"
                 },
                 "ZIP_TABIX_ROHCALL": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
-                },
-                "ZIP_TABIX_VCFANNO": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
-                },
-                "ZIP_TABIX_VCFANNO_MT": {
                     "bgzip": 1.21,
                     "tabix": 1.21
                 }
@@ -540,8 +538,8 @@
                 "call_sv/genome/justhusky_sv.vcf.gz",
                 "call_sv/genome/justhusky_sv.vcf.gz.tbi",
                 "call_sv/mitochondria",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.breakpoint",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.cluster",
+                "call_sv/mitochondria/hugelymodelbat.breakpoint",
+                "call_sv/mitochondria/hugelymodelbat.cluster",
                 "call_sv/mitochondria/hugelymodelbat_mitochondria_deletions.txt",
                 "fastqc",
                 "fastqc/hugelymodelbat_LNUMBER1",
@@ -710,7 +708,7 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-03-17T17:02:07.664289531",
+        "timestamp": "2026-03-27T14:23:26.834404268",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

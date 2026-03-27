@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            773,
+            777,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -115,11 +115,11 @@
                     "coreutils": 9.5
                 },
                 "CUSTOM_ADDMOSTSEVERECONSEQUENCE": {
-                    "addmostsevereconsequence": 1.1,
+                    "addmostsevereconsequence": "1.2.0",
                     "bgzip": 1.21
                 },
                 "CUSTOM_ADDMOSTSEVEREPLI": {
-                    "addmostseverepli": 1.1,
+                    "addmostseverepli": "1.2.0",
                     "bgzip": 1.21
                 },
                 "DEEPVARIANT": {
@@ -339,6 +339,9 @@
                 "SPLIT_AND_FILTER_SV_VCF": {
                     "bcftools": 1.22
                 },
+                "SPLIT_CHR": {
+                    "bioawk": 1.0
+                },
                 "SPLIT_MULTIALLELICS_EXP": {
                     "bcftools": 1.22
                 },
@@ -414,13 +417,13 @@
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
-                    "tiddit": "3.9.4"
+                    "tiddit": "3.9.5"
                 },
                 "TIDDIT_COV_VCF2CYTOSURE": {
-                    "tiddit": "3.9.4"
+                    "tiddit": "3.9.5"
                 },
                 "TIDDIT_SV": {
-                    "tiddit": "3.9.4"
+                    "tiddit": "3.9.5"
                 },
                 "UCSC_WIGTOBIGWIG": {
                     "ucsc": 482
@@ -447,14 +450,6 @@
                     "nf-core/raredisease": "v2.7.0dev"
                 },
                 "ZIP_TABIX_ROHCALL": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
-                },
-                "ZIP_TABIX_VCFANNO": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
-                },
-                "ZIP_TABIX_VCFANNO_MT": {
                     "bgzip": 1.21,
                     "tabix": 1.21
                 }
@@ -1020,7 +1015,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-03-17T16:58:22.361988613",
+        "timestamp": "2026-03-27T14:19:45.963121816",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
