@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tests for some of the subworkflows [#780](https://github.com/nf-core/raredisease/pull/780)
 - Tests for some of the subworkflows [#782](https://github.com/nf-core/raredisease/pull/782)
 - Tests for some of the subworkflows [#783](https://github.com/nf-core/raredisease/pull/783)
+- Saltshaker for downstream processing of mitochondrial SV calls from MitoSAlt [#775](https://github.com/nf-core/raredisease/pull/775)
 
 ### `Changed`
 
@@ -43,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migrate file publishing from publishDir to a centralized output {} block for some workflows [#789](https://github.com/nf-core/raredisease/pull/789)
 - Remove redundant TABIX processes, and update configs for nf-test [#790](https://github.com/nf-core/raredisease/pull/790)
 - Migrate file publishing from publishDir to a centralized output {} block for some workflows [#791](https://github.com/nf-core/raredisease/pull/791)
+- Include mitochonrdial SV calls in combined SV vcf, change call_sv output directory structure to remove /mitochondria and /genome [#775](https://github.com/nf-core/raredisease/pull/775)
 
 ### `Fixed`
 
