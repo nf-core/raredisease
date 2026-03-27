@@ -6,7 +6,7 @@ nextflow_workflow {
 
     tag "subworkflows"
     tag "align_mt"
-    
+
     tag "bwa/mem"
     tag "bwamem2/mem"
     tag "sentieon/bwamem"
@@ -14,7 +14,7 @@ nextflow_workflow {
     tag "picard/addorreplacereadgroups"
     tag "picard/markduplicates"
     tag "samtools/sort"
-    
+
     config "./nextflow.config"
 
     test("align mt - bwamem2") {

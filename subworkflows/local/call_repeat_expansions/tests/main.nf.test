@@ -14,7 +14,7 @@ nextflow_workflow {
     tag "samtools/sort"
     tag "svdb/merge"
     tag "tabix/tabix"
-    
+
     config "./nextflow.config"
 
     test("CALL_REPEAT_EXPANSIONS") {

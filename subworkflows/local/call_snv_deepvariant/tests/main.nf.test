@@ -3,7 +3,7 @@ nextflow_workflow {
     name "Test Workflow CALL_SNV_DEEPVARIANT"
     script "subworkflows/local/call_snv_deepvariant/main.nf"
     workflow "CALL_SNV_DEEPVARIANT"
-    
+
     tag "subworkflows"
     tag "call_snv_deepvariant"
 

@@ -6,7 +6,7 @@ nextflow_workflow {
 
     tag "subworkflows"
     tag "annotate_structural_variants"
-    
+
     tag "svdb/query"
     tag "picard/sortvcf"
     tag "bcftools/view"

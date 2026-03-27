@@ -6,7 +6,7 @@ nextflow_workflow {
 
     tag "subworkflows"
     tag "scatter_genome"
- 
+
     tag "gawk"
     tag "gatk4_splitintervals"
 

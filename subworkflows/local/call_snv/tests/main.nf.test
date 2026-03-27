@@ -10,7 +10,7 @@ nextflow_workflow {
     tag "call_snv_sentieon"
     tag "call_snv_MT"
     tag "postprocess_MT_calls"
- 
+
     tag "gatk4_selectvariants"
     tag "bcftools_concat"
 
