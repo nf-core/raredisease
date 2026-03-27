@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            770,
+            781,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -1014,6 +1014,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-03-25T13:30:33.907974648"
+        "timestamp": "2026-03-27T13:49:42.531336219"
     }
 }

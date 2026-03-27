@@ -77,6 +77,7 @@ workflow CALL_SV_MT {
                 .join(ch_cluster)
                 .set{ ch_saltshaker_in }
 
+            // Saltshaker modules will only run if mitosalt called SVs and created a cluster file
             SALTSHAKER_CALL(
                 ch_saltshaker_in,
                 ch_mt_fasta,
@@ -106,7 +107,8 @@ workflow CALL_SV_MT {
                 .toList()
                 .set { ch_vcf_file_list }
 
-            // Only set the channel if ch_vcf_file_list was made (ie combined channel has two elements)
+            // Saltshaker only runs if there are mitosalt calls, so we only merge in that case (ie vcfs 
+            // exist, combined channel has two elements) to avoid a merge error
             ch_case_info
                 .combine(ch_vcf_file_list)
                 .filter{ it -> it.size() == 2}
@@ -114,8 +116,8 @@ workflow CALL_SV_MT {
 
             SVDB_MERGE ( ch_merge_input_vcfs, [], true ).vcf
                 .set {ch_saltshaker_vcf}
-            // Update priority list when we know saltshaker will run (ie saltshaker vcf is created)
-            // Updated priority list will be used when saltshaker vcf is merged with other SV vcfs
+            // Saltshaker only runs if there are mitosalt calls. We update priority list when the 
+            // saltshaker vcf is created so the priority matches the list of vcfs that will be merged later
             ch_svcaller_priority = ch_svcaller_priority
                 .concat(ch_saltshaker_vcf.map{ _ -> ["mitosalt"] })
                 .collect()
