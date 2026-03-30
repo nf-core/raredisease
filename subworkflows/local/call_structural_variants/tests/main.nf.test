@@ -3,8 +3,16 @@ nextflow_workflow {
     name "Test Workflow CALL_STRUCTURAL_VARIANTS"
     script "subworkflows/local/call_structural_variants/main.nf"
     workflow "CALL_STRUCTURAL_VARIANTS"
+
     tag "subworkflows"
     tag "call_structural_variants"
+    tag "call_sv_manta"
+    tag "call_sv_tiddit"
+    tag "call_sv_germlinecnvcaller"
+    tag "call_sv_cnvnator"
+
+    tag "svdb/merge"
+    tag "tabix/tabix"
 
     test("CALL_STRUCTURAL_VARIANTS - wgs, stub") {
 
@@ -38,6 +46,35 @@ nextflow_workflow {
                 input[12] = channel.of([[id:'gcnvcaller'], []])
                 input[13] = 'wgs'
                 input[14] = true
+                input[15] = false
+                input[16] = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[17] = channel.from(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true))
+                input[18] = Channel.from("\$PWD").map { dir -> [[id:'genome'], file(dir)] }
+                input[19] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]).collect()
+                input[20] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]).collect()
+                input[21] = Channel.from("${projectDir}/subworkflows/local/variant_evaluation/tests").map { dir -> [[id:'mt'], file(dir)] }
+                input[22] = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    [
+                        file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_1.fastq.gz', checkIfExists: true),
+                        file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)
+                    ]
+                ])
+                input[23] = channel.value(10000000)
+                input[24] = channel.of([15, 2, 5, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
+                input[25] = 16081
+                input[26] = 407
+                input[27] = 5730
+                input[28] = 5763
+                input[29] = 16569
+                input[30] = 'MT'
+                input[31] = 15
+                input[32] = 0.01
+                input[33] = true
                 """
             }
         }

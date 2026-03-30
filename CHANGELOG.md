@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add CAT_FASTQ before SEQTK_SAMPLE in call_sv_MT to merge reads across lanes before subsampling for MitoSalt [#799](https://github.com/nf-core/raredisease/pull/799)
 - Add new local SPLIT_CHR module to split reference FASTA by chromosome for CNVnator, and pass genome flag to all CNVnator steps [#799](https://github.com/nf-core/raredisease/pull/799)
 - Add peddy --sites hg38 argument when running with GRCh38 [#799](https://github.com/nf-core/raredisease/pull/799)
+- Saltshaker for downstream processing of mitochondrial SV calls from MitoSAlt [#775](https://github.com/nf-core/raredisease/pull/775)
+- Env variable NXF_SINGULARITY_NEW_PID_NAMESPACE = false to accommodate hisat2 running with latest Nextflow and Singularity [#775](https://github.com/nf-core/raredisease/pull/775)
 
 ### `Changed`
 
@@ -49,6 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove redundant ZIP_TABIX steps after VCFANNO in annotate_genome_snvs and annotate_mt_snvs by using VCFANNO's direct tbi output [#799](https://github.com/nf-core/raredisease/pull/799)
 - Collect genome fasta/fai channel in call_sv_tiddit to prevent per-sample re-emission [#799](https://github.com/nf-core/raredisease/pull/799)
 - Update cadd_resources channel to use channelFromPathWithMeta and set channelFromSamplesheet calls for svdb/ME resources as non-mandatory [#799](https://github.com/nf-core/raredisease/pull/799)
+- Run MitoSAlt.pl from bin rather than within container [#775](https://github.com/nf-core/raredisease/pull/775)
+- Include mitochonrdial SV calls in combined SV vcf, change call_sv output directory structure to remove mitochondria/ and genome/ [#775](https://github.com/nf-core/raredisease/pull/775)
 - Remove Qualimap and Haplogrep3 as they were made redundant by Picard and VerifyBamID2 [#801](https://github.com/nf-core/raredisease/pull/801)
 
 ### `Fixed`

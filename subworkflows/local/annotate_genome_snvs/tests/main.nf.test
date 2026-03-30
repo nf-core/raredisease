@@ -3,8 +3,23 @@ nextflow_workflow {
     name "Test Workflow ANNOTATE_GENOME_SNVS"
     script "subworkflows/local/annotate_genome_snvs/main.nf"
     workflow "ANNOTATE_GENOME_SNVS"
+
     tag "subworkflows"
     tag "annotate_genome_snvs"
+    tag "annotate_cadd"
+    tag "annotate_rhocallviz"
+
+    tag "vcfanno"
+    tag "bcftools/concat"
+    tag "bcftools/roh"
+    tag "bcftools/view"
+    tag "rhocall/annotate"
+    tag "upd"
+    tag "chromograph"
+    tag "ensemblvep/vep"
+    tag "tabix/bgziptabix"
+    tag "gatk4/selectvariants"
+
     config "./nextflow.config"
 
     test("ANNOTATE_GENOME_SNVS - GRCh37, stub") {

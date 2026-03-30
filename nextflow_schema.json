@@ -756,47 +756,62 @@
                 "hisat2": {
                     "type": "string"
                 },
-                "breakspan": {
+                "mitosalt_breakspan": {
                     "type": "integer",
                     "default": 15,
                     "description": "minimum number of bases a non-split read must span either side of a breakpoint to be considered in the heteroplasmy count"
                 },
-                "breakthreshold": {
+                "mitosalt_breakthreshold": {
                     "type": "integer",
                     "default": 2,
                     "description": "the maximum deviation a given set of split read breakpoints can have to be considered within the same cluster"
                 },
-                "cluster_threshold": {
+                "mitosalt_cluster_threshold": {
                     "type": "integer",
-                    "default": 2,
+                    "default": 5,
                     "description": "minimum number of reads supporting a cluster"
                 },
-                "deletion_threshold_max": {
+                "mitosalt_deletion_threshold_max": {
                     "type": "integer",
                     "default": 30000,
                     "description": "the maximum size of the gap between fragments of a split read for the split read to be considered as potentially spanning a deletion"
                 },
-                "deletion_threshold_min": {
+                "mitosalt_deletion_threshold_min": {
                     "type": "integer",
                     "default": 30,
-                    "description": "the minimum size of the gap between fragemtns of a split read for the split read to be considered as potentially spanning a deletion"
+                    "description": "the minimum size of the gap between fragments of a split read for the split read to be considered as potentially spanning a deletion"
                 },
-                "evalue_threshold": {
+                "saltshaker_dominant_fraction": {
+                    "type": "number",
+                    "default": 0.5,
+                    "description": "fraction for dominant fraction for saltshaker classification"
+                },
+                "mitosalt_evalue_threshold": {
                     "type": "number",
                     "default": 1e-5,
                     "description": "alignment e-value cutoff"
                 },
-                "exclude": {
+                "mitosalt_exclude": {
                     "type": "integer",
                     "default": 5,
                     "description": "filter split reads if both fragments fall within the regions at the start and end to avoid pseudo-gapped alignments due to a circular genome"
                 },
-                "flank": {
+                "mitosalt_flank": {
                     "type": "integer",
                     "default": 15,
                     "description": "basepairs flanking a deletion"
                 },
-                "hplimit": {
+                "saltshaker_group_radius": {
+                    "type": "integer",
+                    "default": 600,
+                    "description": "spatial clustering radius for saltshaker grouping"
+                },
+                "saltshaker_high_heteroplasmy": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "high heteroplasmy threshold for saltshaker classification"
+                },
+                "mitosalt_heteroplasmy_limit": {
                     "type": "number",
                     "default": 0.01,
                     "description": "detected heteroplasmy threshold"
@@ -806,27 +821,62 @@
                     "default": 10000000,
                     "description": "depth to subsample fastq files to before running mitosalt"
                 },
-                "paired_distance": {
+                "mito_length": {
+                    "type": "integer",
+                    "default": 16569,
+                    "description": "length of mitochondrial genome"
+                },
+                "saltshaker_multiple_threshold": {
+                    "type": "integer",
+                    "default": 5,
+                    "description": "threshold for multiple saltshaker classification"
+                },
+                "saltshaker_noise_threshold": {
+                    "type": "number",
+                    "default": 0.3,
+                    "description": "heteroplasmy threshold for background noise"
+                },
+                "heavy_strand_origin_start": {
+                    "type": "integer",
+                    "default": 16081,
+                    "description": "start of heavy strand origin"
+                },
+                "heavy_strand_origin_end": {
+                    "type": "integer",
+                    "default": 407,
+                    "description": "end of heavy strand origin"
+                },
+                "light_strand_origin_start": {
+                    "type": "integer",
+                    "default": 5730,
+                    "description": "start of light strand origin"
+                },
+                "light_strand_origin_end": {
+                    "type": "integer",
+                    "default": 5763,
+                    "description": "end of light strand origin"
+                },
+                "mitosalt_paired_distance": {
                     "type": "integer",
                     "default": 1000,
                     "description": "the maximum distance of a paired read from its split counterpart for paired support to be considered positive"
                 },
-                "score_threshold": {
+                "mitosalt_score_threshold": {
                     "type": "integer",
                     "default": 80,
-                    "description": "alignemnt score cutoff"
+                    "description": "alignment score cutoff"
                 },
-                "sizelimit": {
+                "mitosalt_sizelimit": {
                     "type": "integer",
                     "default": 10000,
                     "description": "maximum size of deletions tolerated, beyond which they are reclassified as potential duplications in the reverse orientation"
                 },
-                "split_distance_threshold": {
+                "mitosalt_split_distance_threshold": {
                     "type": "integer",
                     "default": 5,
                     "description": "the maximum length of unmapped distance between two fragments of a split read"
                 },
-                "split_length": {
+                "mitosalt_split_length": {
                     "type": "integer",
                     "default": 15,
                     "description": "minimum number of bases in a split read fragment for the read to be considered as potentially spanning a deletion"

@@ -391,6 +391,21 @@
                         "git_sha": "0f04646a9282049b16b3eb35b042e94dfb3340a0",
                         "installed_by": ["modules"]
                     },
+                    "saltshaker/call": {
+                        "branch": "master",
+                        "git_sha": "9d051963759dda1a424374e23f4f22aaa2b0bd60",
+                        "installed_by": ["modules"]
+                    },
+                    "saltshaker/classify": {
+                        "branch": "master",
+                        "git_sha": "ff5f2ad4481a4a1e1769a1fad922681e7f7fd176",
+                        "installed_by": ["modules"]
+                    },
+                    "saltshaker/plot": {
+                        "branch": "master",
+                        "git_sha": "ff5f2ad4481a4a1e1769a1fad922681e7f7fd176",
+                        "installed_by": ["modules"]
+                    },
                     "sambamba/depth": {
                         "branch": "master",
                         "git_sha": "ca6da11b05740de461b1e2714037345c0f856201",

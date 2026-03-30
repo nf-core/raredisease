@@ -3,8 +3,18 @@ nextflow_workflow {
     name "Test Workflow CALL_SNV_SENTIEON"
     script "subworkflows/local/call_snv_sentieon/main.nf"
     workflow "CALL_SNV_SENTIEON"
+
     tag "subworkflows"
     tag "call_snv_sentieon"
+
+    tag "sentieon/dnascope"
+    tag "sentieon/dnamodelapply"
+    tag "bcftools/merge"
+    tag "bcftools/norm"
+    tag "bcftools/filter"
+    tag "bcftools/annotate"
+    tag "add_varcallername_to_bed"
+
     config "./nextflow.config"
 
     test("CALL_SNV_SENTIEON - single sample, stub") {

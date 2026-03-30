@@ -3,6 +3,29 @@ nextflow_workflow {
     name "Test Workflow PREPARE_REFERENCES"
     script "subworkflows/local/prepare_references/main.nf"
     workflow "PREPARE_REFERENCES"
+
+    tag "subworkflows"
+    tag "prepare_references"
+
+    tag "bedtools/slop"
+    tag "bwa/index"
+    tag "bwamem2/index"
+    tag "bwameme/index"
+    tag "cat/cat"
+    tag "gatk4/bedtointervallist"
+    tag "gatk4/createsequencedictionary"
+    tag "gatk4/intervallisttools"
+    tag "gatk4/shiftfasta"
+    tag "get_chrom_sizes"
+    tag "hisat2/build"
+    tag "last/lastdb"
+    tag "rtgtools/format"
+    tag "samtools/faidx"
+    tag "sentieon/bwaindex"
+    tag "tabix/bgziptabix"
+    tag "tabix/tabix"
+    tag "untar"
+
     config "./nextflow.config"
 
     test("Should run without failures") {

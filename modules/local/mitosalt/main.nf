@@ -4,9 +4,8 @@ process MITOSALT {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/dc/dc2631dac526622d28ea1109b0f714d536606d0e5b3b85fe24407c8206e7e6b6/data':
-        'community.wave.seqera.io/library/mitosalt:1.1.1--5fd87ac48a683358' }"
-
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/13/130779a0dd5a8d86441f262a16a5fb1dfe562125edf93646b53c893d982b5519/data':
+        'community.wave.seqera.io/library/bbmap_bedtools_bioconductor-biostrings_bioconductor-pwalign_pruned:856c05081cbd8239' }"
 
     input:
     tuple val(meta), path(reads)
@@ -28,7 +27,7 @@ process MITOSALT {
     """
     cat $msconfig | sed "s/threads = 1/threads = ${task.cpus}/" > new-${msconfig}
     mkdir -p log indel bam tab bw plot
-    mitosalt new-${msconfig} $reads $prefix
+    MitoSAlt1.1.1.pl new-${msconfig} $reads $prefix
     mv indel/*.breakpoint ${prefix}.breakpoint
     mv indel/*.cluster ${prefix}.cluster
     """
@@ -38,7 +37,7 @@ process MITOSALT {
     """
     cat $msconfig | sed "s/threads = 1/threads = ${task.cpus}/" > new-${msconfig}
     touch ${prefix}.breakpoint
-    touch ${prefix}.cluster
+    echo 'cluster' > ${prefix}.cluster
     """
 
 }

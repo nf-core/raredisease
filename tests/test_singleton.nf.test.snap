@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            350,
+            365,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -313,6 +313,15 @@
                 "RHOCALL_VIZ": {
                     "rhocall": "0.5.1"
                 },
+                "SALTSHAKER_CALL": {
+                    "saltshaker": "1.0.0"
+                },
+                "SALTSHAKER_CLASSIFY": {
+                    "saltshaker": "1.0.1"
+                },
+                "SALTSHAKER_PLOT": {
+                    "saltshaker": "1.0.0"
+                },
                 "SAMTOOLS_COLLATE": {
                     "samtools": "1.22.1"
                 },
@@ -527,13 +536,12 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz",
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
-                "call_sv/genome",
-                "call_sv/genome/justhusky_sv.vcf.gz",
-                "call_sv/genome/justhusky_sv.vcf.gz.tbi",
-                "call_sv/mitochondria",
-                "call_sv/mitochondria/hugelymodelbat.breakpoint",
-                "call_sv/mitochondria/hugelymodelbat.cluster",
-                "call_sv/mitochondria/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/hugelymodelbat.saltshaker.png",
+                "call_sv/hugelymodelbat.saltshaker_classify.txt",
+                "call_sv/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/justhusky_saltshaker.vcf.gz",
+                "call_sv/justhusky_sv.vcf.gz",
+                "call_sv/justhusky_sv.vcf.gz.tbi",
                 "fastqc",
                 "fastqc/hugelymodelbat_LNUMBER1",
                 "fastqc/hugelymodelbat_LNUMBER1/hugelymodelbat_LNUMBER1.html",
@@ -647,7 +655,7 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-03-30T12:08:12.06881462",
+        "timestamp": "2026-03-30T19:01:02.542705551",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
