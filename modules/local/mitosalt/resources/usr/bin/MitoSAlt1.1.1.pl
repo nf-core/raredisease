@@ -10,14 +10,6 @@ my $p1 = $ARGV[1];
 my $p2 = $ARGV[2];
 my $tag = $ARGV[3];
 
-#CREATE DIRECTORIES -- added by ID
-mkdir "log" unless -d "log";
-mkdir "indel" unless -d "indel";
-mkdir "bam" unless -d "bam";
-mkdir "tab" unless -d "tab";
-mkdir "bw" unless -d "bw";
-mkdir "plot" unless -d "plot";
-
 #LOG
 open (STDOUT, "| tee -ai log/$tag.log");
 
@@ -158,7 +150,7 @@ if($nu_mt eq 'yes' && $o_mt eq 'yes' && $enriched eq 'no'){
 if($nu_mt eq 'no' && $o_mt eq 'yes' && $enriched eq 'yes'){
   #REMAP ON MT GENOME
   print scalar(localtime).": Map to MT genome\n";
-  system("$reformat in=$p1 in2=$p2 out=tmp_$tag.fq overwrite=true addslash=t trimreaddescription=t spaceslash=f -Xmx100g"); #2>> log/$tag.log");
+  system("$reformat in=$p1 in2=$p2 out=tmp_$tag.fq overwrite=true addslash=t trimreaddescription=t spaceslash=f -Xmx100g 2>> log/$tag.log");
   system("$lastal -Q1 -e80 -P$threads $lastindex tmp_$tag.fq|$lastsp > tmp_$tag.maf");
   system("$mfcv sam -d tmp_$tag.maf|$samtools view -@ $threads -bt $mtfaindex -|$samtools sort -@ $threads -o bam/$tag.bam -");
   system("$samtools index bam/$tag.bam");

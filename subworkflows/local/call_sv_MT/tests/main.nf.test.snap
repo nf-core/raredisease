@@ -19,7 +19,7 @@
                                 "maternal": 0,
                                 "case_id": "justhusky"
                             },
-                            "earlycasualcaiman.breakpoint:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "earlycasualcaiman.saltshaker_classify.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -28,19 +28,9 @@
                     [
                         [
                             {
-                                "id": "earlycasualcaiman",
-                                "sample": "earlycasualcaiman",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
-                                "lane": 1,
-                                "sex": 1,
-                                "phenotype": 1,
-                                "paternal": 0,
-                                "maternal": 0,
-                                "case_id": "justhusky"
+                                "id": "justhusky"
                             },
-                            "earlycasualcaiman.cluster:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ]
                 ],
@@ -61,7 +51,7 @@
                                 "maternal": 0,
                                 "case_id": "justhusky"
                             },
-                            "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -69,7 +59,39 @@
                     "3",
                     [
                         [
-                            "call_sv/mitochondria/",
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "4",
+                    [
+                        [
+                            "manta",
+                            "tiddit",
+                            "cnvnator",
+                            "mitosalt"
+                        ]
+                    ]
+                ],
+                [
+                    "5",
+                    [
+                        [
+                            "call_sv/",
                             [
                                 {
                                     "id": "earlycasualcaiman",
@@ -84,11 +106,11 @@
                                     "maternal": 0,
                                     "case_id": "justhusky"
                                 },
-                                "earlycasualcaiman.breakpoint:md5,d41d8cd98f00b204e9800998ecf8427e"
+                                "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                             ]
                         ],
                         [
-                            "call_sv/mitochondria/",
+                            "call_sv/",
                             [
                                 {
                                     "id": "earlycasualcaiman",
@@ -103,11 +125,11 @@
                                     "maternal": 0,
                                     "case_id": "justhusky"
                                 },
-                                "earlycasualcaiman.cluster:md5,d41d8cd98f00b204e9800998ecf8427e"
+                                "earlycasualcaiman.saltshaker_classify.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                             ]
                         ],
                         [
-                            "call_sv/mitochondria/",
+                            "call_sv/",
                             [
                                 {
                                     "id": "earlycasualcaiman",
@@ -124,48 +146,15 @@
                                 },
                                 "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                             ]
-                        ]
-                    ]
-                ],
-                [
-                    "mitosalt_breakpoint",
-                    [
+                        ],
                         [
-                            {
-                                "id": "earlycasualcaiman",
-                                "sample": "earlycasualcaiman",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
-                                "lane": 1,
-                                "sex": 1,
-                                "phenotype": 1,
-                                "paternal": 0,
-                                "maternal": 0,
-                                "case_id": "justhusky"
-                            },
-                            "earlycasualcaiman.breakpoint:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ]
-                ],
-                [
-                    "mitosalt_cluster",
-                    [
-                        [
-                            {
-                                "id": "earlycasualcaiman",
-                                "sample": "earlycasualcaiman",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
-                                "lane": 1,
-                                "sex": 1,
-                                "phenotype": 1,
-                                "paternal": 0,
-                                "maternal": 0,
-                                "case_id": "justhusky"
-                            },
-                            "earlycasualcaiman.cluster:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "justhusky"
+                                },
+                                "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            ]
                         ]
                     ]
                 ],
@@ -194,7 +183,7 @@
                     "publish",
                     [
                         [
-                            "call_sv/mitochondria/",
+                            "call_sv/",
                             [
                                 {
                                     "id": "earlycasualcaiman",
@@ -209,11 +198,11 @@
                                     "maternal": 0,
                                     "case_id": "justhusky"
                                 },
-                                "earlycasualcaiman.breakpoint:md5,d41d8cd98f00b204e9800998ecf8427e"
+                                "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                             ]
                         ],
                         [
-                            "call_sv/mitochondria/",
+                            "call_sv/",
                             [
                                 {
                                     "id": "earlycasualcaiman",
@@ -228,11 +217,11 @@
                                     "maternal": 0,
                                     "case_id": "justhusky"
                                 },
-                                "earlycasualcaiman.cluster:md5,d41d8cd98f00b204e9800998ecf8427e"
+                                "earlycasualcaiman.saltshaker_classify.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                             ]
                         ],
                         [
-                            "call_sv/mitochondria/",
+                            "call_sv/",
                             [
                                 {
                                     "id": "earlycasualcaiman",
@@ -249,14 +238,87 @@
                                 },
                                 "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                             ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "justhusky"
+                                },
+                                "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "saltshaker_plot",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "saltshaker_txt",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman.saltshaker_classify.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "saltshaker_vcf",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "updated_priority",
+                    [
+                        [
+                            "manta",
+                            "tiddit",
+                            "cnvnator",
+                            "mitosalt"
                         ]
                     ]
                 ]
             ]
         ],
-        "timestamp": "2026-03-17T23:49:47.786799067",
+        "timestamp": "2026-03-25T15:53:51.569932008",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         }
     }

@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            351,
+            363,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -310,6 +310,15 @@
                 "RHOCALL_VIZ": {
                     "rhocall": "0.5.1"
                 },
+                "SALTSHAKER_CALL": {
+                    "saltshaker": "1.0.0"
+                },
+                "SALTSHAKER_CLASSIFY": {
+                    "saltshaker": "1.0.1"
+                },
+                "SALTSHAKER_PLOT": {
+                    "saltshaker": "1.0.0"
+                },
                 "SAMTOOLS_COLLATE": {
                     "samtools": "1.22.1"
                 },
@@ -456,14 +465,6 @@
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
                     "tabix": 1.21
-                },
-                "ZIP_TABIX_VCFANNO": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
-                },
-                "ZIP_TABIX_VCFANNO_MT": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
                 }
             },
             [
@@ -529,13 +530,12 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz",
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
-                "call_sv/genome",
-                "call_sv/genome/justhusky_sv.vcf.gz",
-                "call_sv/genome/justhusky_sv.vcf.gz.tbi",
-                "call_sv/mitochondria",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.breakpoint",
-                "call_sv/mitochondria/hugelymodelbat_LNUMBER1.cluster",
-                "call_sv/mitochondria/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/hugelymodelbat_LNUMBER1.saltshaker.png",
+                "call_sv/hugelymodelbat_LNUMBER1.saltshaker_classify.txt",
+                "call_sv/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/justhusky_saltshaker.vcf.gz",
+                "call_sv/justhusky_sv.vcf.gz",
+                "call_sv/justhusky_sv.vcf.gz.tbi",
                 "fastqc",
                 "fastqc/hugelymodelbat_LNUMBER1",
                 "fastqc/hugelymodelbat_LNUMBER1/hugelymodelbat_LNUMBER1.html",
@@ -649,7 +649,7 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-03-27T15:32:27.001538758",
+        "timestamp": "2026-03-30T17:02:07.692317187",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

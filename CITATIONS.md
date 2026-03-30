@@ -78,6 +78,10 @@
 
   > Chen X, Schulz-Trieglaff O, Shaw R, et al. Manta: rapid detection of structural variants and indels for germline and cancer sequencing applications. Bioinformatics. 2016;32(8):1220-1222. doi:10.1093/bioinformatics/btv710
 
+- [Mitosalt](https://sourceforge.net/projects/mitosalt/)
+
+  > Basu S, Xie X, Uhler JP, et al. Accurate mapping of mitochondrial DNA deletions and duplications using deep sequencing. PLoS Genet. 2020;16(12):e1009242. doi: 10.1371/journal.pgen.1009242
+
 - [Mosdepth](https://academic.oup.com/bioinformatics/article/34/5/867/4583630?login=true)
 
   > Pedersen BS, Quinlan AR. Mosdepth: quick coverage calculation for genomes and exomes. Hancock J, ed. Bioinformatics. 2018;34(5):867-868. doi:10.1093/bioinformatics/btx699
@@ -103,6 +107,8 @@
 - [RTG Tools (vcfeval)](https://github.com/RealTimeGenomics/rtg-tools)
 
   > John G. Cleary, Ross Braithwaite, Kurt Gaastra, Brian S. Hilbush, Stuart Inglis, Sean A. Irvine, Alan Jackson, Richard Littin, Mehul Rathod, David Ware, Justin M. Zook, Len Trigg, and Francisco M. De La Vega. "Comparing Variant Call Files for Performance Benchmarking of Next-Generation Sequencing Variant Calling Pipelines." bioRxiv, 2015. doi:10.1101/023754.
+
+- [saltshaker](https://pypi.org/project/saltshaker/)
 
 - [Sambamba](https://academic.oup.com/bioinformatics/article/31/12/2032/213831)
 

@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tests for some of the subworkflows [#783](https://github.com/nf-core/raredisease/pull/783)
 - Test tags for dependent modules in subworkflow tests [#800](https://github.com/nf-core/raredisease/pull/800)
 - Stub test for scatter_genome subworkflow [#802](https://github.com/nf-core/raredisease/pull/802)
+- Saltshaker for downstream processing of mitochondrial SV calls from MitoSAlt [#775](https://github.com/nf-core/raredisease/pull/775)
+- Env variable NXF_SINGULARITY_NEW_PID_NAMESPACE = false to accommodate hisat2 running with latest Nextflow and Singularity [#775](https://github.com/nf-core/raredisease/pull/775)
 
 ### `Changed`
 
@@ -45,6 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migrate file publishing from publishDir to a centralized output {} block for some workflows [#789](https://github.com/nf-core/raredisease/pull/789)
 - Remove redundant TABIX processes, and update configs for nf-test [#790](https://github.com/nf-core/raredisease/pull/790)
 - Migrate file publishing from publishDir to a centralized output {} block for some workflows [#791](https://github.com/nf-core/raredisease/pull/791)
+- Run MitoSAlt.pl from bin rather than within container [#775](https://github.com/nf-core/raredisease/pull/775)
+- Include mitochonrdial SV calls in combined SV vcf, change call_sv output directory structure to remove mitochondria/ and genome/ [#775](https://github.com/nf-core/raredisease/pull/775)
 - Remove Qualimap and Haplogrep3 as they were made redundant by Picard and VerifyBamID2 [#801](https://github.com/nf-core/raredisease/pull/801)
 
 ### `Fixed`
