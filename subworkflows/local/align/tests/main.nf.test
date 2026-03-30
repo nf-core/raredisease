@@ -3,8 +3,17 @@ nextflow_workflow {
     name "Test Workflow ALIGN"
     script "subworkflows/local/align/main.nf"
     workflow "ALIGN"
+
     tag "subworkflows"
     tag "align"
+    tag "align_bwa_bwamem2_bwameme"
+    tag "align_sentieon"
+    tag "align_MT"
+    tag "convert_mt_bam_to_fastq"
+
+    tag "fastp"
+    tag "samtools/view"
+
     config "./nextflow.config"
 
     setup {

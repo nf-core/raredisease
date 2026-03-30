@@ -5,7 +5,6 @@
 include { PICARD_COLLECTMULTIPLEMETRICS                            } from '../../../modules/nf-core/picard/collectmultiplemetrics/main'
 include { PICARD_COLLECTHSMETRICS                                  } from '../../../modules/nf-core/picard/collecthsmetrics/main'
 include { CHROMOGRAPH as CHROMOGRAPH_COV                           } from '../../../modules/nf-core/chromograph/main'
-include { QUALIMAP_BAMQC                                           } from '../../../modules/nf-core/qualimap/bamqc/main'
 include { TIDDIT_COV                                               } from '../../../modules/nf-core/tiddit/cov/main'
 include { MOSDEPTH                                                 } from '../../../modules/nf-core/mosdepth/main'
 include { SAMBAMBA_DEPTH                                           } from '../../../modules/nf-core/sambamba/depth/main'
@@ -38,13 +37,11 @@ workflow QC_BAM {
         val_aligner                     // string: "bwa", "bwamem2", "bwameme", or "sentieon"
         val_target_bed                  // string: path to target bed file
         skip_ngsbits                    // boolean
-        skip_qualimap                   // boolean
 
     main:
         ch_cov       = channel.empty()
         ch_cov_y     = channel.empty()
         ch_hsmetrics = channel.empty()
-        ch_qualimap  = channel.empty()
         ch_ngsbits   = channel.empty()
 
         PICARD_COLLECTMULTIPLEMETRICS (ch_bam_bai, ch_genome_fasta, ch_genome_fai)
@@ -56,9 +53,6 @@ workflow QC_BAM {
 
         if (val_target_bed) {
             ch_hsmetrics = PICARD_COLLECTHSMETRICS (ch_hsmetrics_in, ch_genome_fasta, ch_genome_fai, [[:],[]], [[:],[]]).metrics
-        }
-        if (!skip_qualimap) {
-            ch_qualimap = QUALIMAP_BAMQC (ch_bam, []).results
         }
 
         TIDDIT_COV (ch_bam_bai, [[],[]]) // 2nd pos. arg is req. only for cram input
@@ -122,7 +116,6 @@ workflow QC_BAM {
             .mix(VERIFYBAMID_VERIFYBAMID2.out.mu)
             .mix(VERIFYBAMID_VERIFYBAMID2.out.ancestry)
             .mix(ch_hsmetrics)
-            .mix(ch_qualimap)
             .mix(ch_cov)
             .mix(ch_cov_y)
             .map { meta, value -> ['qc_bam/', [meta, value]] }
@@ -132,7 +125,6 @@ workflow QC_BAM {
     emit:
         multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]
         hs_metrics       = ch_hsmetrics                              // channel: [ val(meta), path(metrics) ]
-        qualimap_results = ch_qualimap                               // channel: [ val(meta), path(qualimap_dir) ]
         tiddit_wig       = TIDDIT_COV.out.wig                        // channel: [ val(meta), path(wig) ]
         bigwig           = UCSC_WIGTOBIGWIG.out.bw                   // channel: [ val(meta), path(bw) ]
         d4               = MOSDEPTH.out.per_base_d4                  // channel: [ val(meta), path(d4) ]

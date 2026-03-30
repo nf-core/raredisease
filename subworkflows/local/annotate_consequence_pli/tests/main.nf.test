@@ -3,6 +3,11 @@ nextflow_workflow {
     name "Test Workflow ANNOTATE_CSQ_PLI"
     script "subworkflows/local/annotate_consequence_pli/main.nf"
     workflow "ANNOTATE_CSQ_PLI"
+
+    tag "custom/addmostsevereconsequence"
+    tag "custom/addmostseverepli"
+    tag "tabix/tabix"
+
     tag "subworkflows"
     tag "annotate_consequence_pli"
 

@@ -3,8 +3,16 @@ nextflow_workflow {
     name "Test Workflow CALL_SNV_DEEPVARIANT"
     script "subworkflows/local/call_snv_deepvariant/main.nf"
     workflow "CALL_SNV_DEEPVARIANT"
+
     tag "subworkflows"
     tag "call_snv_deepvariant"
+
+    tag "bcftools/annotate"
+    tag "bcftools/norm"
+    tag "deepvariant/rundeepvariant"
+    tag "glnexus"
+    tag "tabix/bgzip"
+    tag "local/add_varcallername_to_bed"
 
     config "./nextflow.config"
 

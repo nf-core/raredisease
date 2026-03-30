@@ -28,7 +28,6 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
         - [FastQC](#fastqc)
         - [Mosdepth](#mosdepth)
         - [Picard tools](#picard-tools)
-        - [Qualimap](#qualimap)
         - [Chromograph coverage](#chromograph-coverage)
         - [Sention WgsMetricsAlgo](#sention-wgsmetricsalgo)
         - [TIDDIT's cov and UCSC WigToBigWig](#tiddits-cov-and-ucsc-wigtobigwig)
@@ -63,7 +62,6 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
         - [MT deletion script](#mt-deletion-script)
         - [eKLIPse](#eklipse)
       - [Annotation](#annotation)
-        - [HaploGrep2](#haplogrep2)
         - [vcfanno](#vcfanno-1)
         - [CADD](#cadd-1)
         - [VEP](#vep-2)
@@ -183,7 +181,7 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 <details markdown="1">
 <summary>Output files</summary>
 
-- `{outputdir}/qc_bam/<sampleid>_qualimap/`
+- `{outputdir}/qc_bam/`
   - `<sampleid>_hsmetrics.CollectHsMetrics.coverage_metrics`:
   - `<sampleid>_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics`:
   - `<sampleid>_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics`:
@@ -192,21 +190,6 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
   - `<sampleid>_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics`:
   - `<sampleid>_wgsmetrics.CollectWgsMetrics.coverage_metrics`:
   - `<sampleid>_wgsmetrics_y.CollectWgsMetrics.coverage_metrics`:
-  </details>
-
-##### Qualimap
-
-[Qualimap](http://qualimap.conesalab.org/) also allows you to assess the alignment coverage. Qualimap results are used by MultiQC to generate the following plots.
-
-- Coverage histogram
-- Cumulative genome coverage
-- Insert size histogram
-- GC content distribution
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `{outputdir}/qc_bam/<sampleid>_qualimap/` this directory includes a qualimap report and associated raw statistic files. You can open the .html file in your internet browser to see the in-depth report.
   </details>
 
 ##### Chromograph coverage
@@ -488,18 +471,6 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
   - `eKLIPse_<sample_id>.png`: circos plot.
 
 #### Annotation
-
-##### HaploGrep2
-
-[HaploGrep2](https://github.com/seppinho/haplogrep-cmd) allows detecting artificial recombinants and missing variants as well as annotating rare and phantom mutations in mitochondria. Haplogrep generates a text report, which is published by default.
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `annotate_snv/mitochondria`
-  - `<case_id>*haplogrep.txt`: file containing haplogroup information.
-
-</details>
 
 ##### vcfanno
 
