@@ -17,7 +17,6 @@
                 "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
                 "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics",
                 "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf",
-                "earlycasualcaiman_qualimap",
                 "earlycasualcaiman_tidditcov.bw",
                 "earlycasualcaiman_tidditcov.wig",
                 "earlycasualcaiman_tidditcov_1.png",
@@ -118,7 +117,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T15:34:21.197802663",
+        "timestamp": "2026-03-27T16:45:40.990778813",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -142,7 +141,6 @@
                 "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
                 "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics",
                 "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf",
-                "earlycasualcaiman_qualimap",
                 "earlycasualcaiman_tidditcov.bw",
                 "earlycasualcaiman_tidditcov.wig",
                 "earlycasualcaiman_tidditcov_1.png",
@@ -243,7 +241,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T15:35:09.991615599",
+        "timestamp": "2026-03-27T17:07:36.836738984",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

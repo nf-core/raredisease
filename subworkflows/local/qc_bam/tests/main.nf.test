@@ -60,7 +60,6 @@ nextflow_workflow {
                 input[15] = 'bwamem2'
                 input[16] = params.pipelines_testdata_base_path + 'reference/target.bed'
                 input[17] = true
-                input[18] = false
                 """
             }
         }
@@ -141,7 +140,6 @@ nextflow_workflow {
                 input[15] = 'sentieon'
                 input[16] = params.pipelines_testdata_base_path + 'reference/target.bed'
                 input[17] = true
-                input[18] = false
                 """
             }
         }
