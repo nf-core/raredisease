@@ -3,8 +3,14 @@ nextflow_workflow {
     name "Test Workflow VARIANT_EVALUATION"
     script "subworkflows/local/variant_evaluation/main.nf"
     workflow "VARIANT_EVALUATION"
+
     tag "subworkflows"
     tag "variant_evaluation"
+
+    tag "rtgtools/vcfeval"
+    tag "bcftools/reheader"
+    tag "tabix/tabix"
+
 
     test("VARIANT_EVALUATION - stub") {
 

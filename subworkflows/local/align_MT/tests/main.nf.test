@@ -3,8 +3,18 @@ nextflow_workflow {
     name "Test Workflow ALIGN_MT"
     script "subworkflows/local/align_MT/main.nf"
     workflow "ALIGN_MT"
+
     tag "subworkflows"
     tag "align_mt"
+
+    tag "bwa/mem"
+    tag "bwamem2/mem"
+    tag "sentieon/bwamem"
+    tag "gatk4/mergebamalignment"
+    tag "picard/addorreplacereadgroups"
+    tag "picard/markduplicates"
+    tag "samtools/sort"
+
     config "./nextflow.config"
 
     test("align mt - bwamem2") {

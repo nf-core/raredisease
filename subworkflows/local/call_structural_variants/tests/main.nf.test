@@ -3,8 +3,16 @@ nextflow_workflow {
     name "Test Workflow CALL_STRUCTURAL_VARIANTS"
     script "subworkflows/local/call_structural_variants/main.nf"
     workflow "CALL_STRUCTURAL_VARIANTS"
+
     tag "subworkflows"
     tag "call_structural_variants"
+    tag "call_sv_manta"
+    tag "call_sv_tiddit"
+    tag "call_sv_germlinecnvcaller"
+    tag "call_sv_cnvnator"
+
+    tag "svdb/merge"
+    tag "tabix/tabix"
 
     test("CALL_STRUCTURAL_VARIANTS - wgs, stub") {
 

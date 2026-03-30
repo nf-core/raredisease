@@ -3,8 +3,19 @@ nextflow_workflow {
     name "Test Workflow ALIGN_BWA_BWAMEM2_BWAMEME"
     script "subworkflows/local/align_bwa_bwamem2_bwameme/main.nf"
     workflow "ALIGN_BWA_BWAMEM2_BWAMEME"
+
     tag "subworkflows"
     tag "align_bwa_bwamem2_bwameme"
+
+    tag "bwa/mem"
+    tag "bwamem2/mem"
+    tag "bwameme/mem"
+    tag "samtools/index"
+    tag "samtools/stats"
+    tag "samtools/merge"
+    tag "samtools/view"
+    tag "picard/markduplicates"
+
     config "./nextflow.config"
 
     test("align bwamem2") {

@@ -3,8 +3,15 @@ nextflow_workflow {
     name "Test Workflow CALL_SV_MT"
     script "subworkflows/local/call_sv_MT/main.nf"
     workflow "CALL_SV_MT"
+
     tag "subworkflows"
     tag "call_sv_mt"
+
+    tag "mt_deletion_script"
+    tag "prep_mitosalt"
+    tag "mitosalt"
+    tag "seqtk/sample"
+
     config "./nextflow.config"
 
     test("CALL_SV_MT - stub") {

@@ -3,8 +3,16 @@ nextflow_workflow {
     name "Test Workflow ANNOTATE_RHOCALLVIZ"
     script "subworkflows/local/annotate_rhocallviz/main.nf"
     workflow "ANNOTATE_RHOCALLVIZ"
+
     tag "subworkflows"
     tag "annotate_rhocallviz"
+
+    tag "bcftools/view"
+    tag "bcftools/roh"
+    tag "rhocall/viz"
+    tag "ucsc/wigtobigwig"
+    tag "chromograph"
+
     config "./nextflow.config"
 
     test("ANNOTATE_RHOCALLVIZ - stub") {

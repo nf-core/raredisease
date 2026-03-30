@@ -3,8 +3,16 @@ nextflow_workflow {
     name "Test Workflow ANNOTATE_CADD"
     script "subworkflows/local/annotate_cadd/main.nf"
     workflow "ANNOTATE_CADD"
+
     tag "subworkflows"
     tag "annotate_cadd"
+
+    tag "bcftools/annotate"
+    tag "bcftools/view"
+    tag "cadd"
+    tag "gawk"
+    tag "tabix/tabix"
+
     config "./nextflow.config"
 
     test("ANNOTATE_CADD - GRCh37, stub") {
