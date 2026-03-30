@@ -42,7 +42,7 @@ workflow ANNOTATE_MT_SNVS {
                 ch_cadd_resources,
                 ch_fai,
                 ch_cadd_header,
-                VCFANNO_MT.out.tbi,
+                VCFANNO_MT.out.vcf.join(VCFANNO_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true),
                 val_genome
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf

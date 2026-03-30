@@ -243,7 +243,7 @@ workflow PREPARE_REFERENCES {
             } else {
                 TABIX_BGZIPINDEX_VCFANNOEXTRA(ch_vcfanno_tabix_in)
                 channel.empty()
-                    .mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_index, TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_csi)
+                    .mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_index)
                     .map { _meta, vcf, index -> return [[vcf,index]] }
                     .set {ch_vcfanno_extra}
             }

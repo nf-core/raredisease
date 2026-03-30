@@ -80,6 +80,9 @@
                 "CAT_CAT_BAIT": {
                     "pigz": 2.8
                 },
+                "CAT_FASTQ": {
+                    "cat": 9.5
+                },
                 "CHROMOGRAPH_AUTOZYG": {
                     "chromograph": "1.3.1"
                 },
@@ -118,11 +121,11 @@
                     "coreutils": 9.5
                 },
                 "CUSTOM_ADDMOSTSEVERECONSEQUENCE": {
-                    "addmostsevereconsequence": 1.1,
+                    "addmostsevereconsequence": "1.2.0",
                     "bgzip": 1.21
                 },
                 "CUSTOM_ADDMOSTSEVEREPLI": {
-                    "addmostseverepli": 1.1,
+                    "addmostseverepli": "1.2.0",
                     "bgzip": 1.21
                 },
                 "DEEPVARIANT": {
@@ -369,6 +372,9 @@
                 "SPLIT_AND_FILTER_SV_VCF": {
                     "bcftools": 1.22
                 },
+                "SPLIT_CHR": {
+                    "bioawk": 1.0
+                },
                 "SPLIT_MULTIALLELICS_EXP": {
                     "bcftools": 1.22
                 },
@@ -447,13 +453,13 @@
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
-                    "tiddit": "3.9.4"
+                    "tiddit": "3.9.5"
                 },
                 "TIDDIT_COV_VCF2CYTOSURE": {
-                    "tiddit": "3.9.4"
+                    "tiddit": "3.9.5"
                 },
                 "TIDDIT_SV": {
-                    "tiddit": "3.9.4"
+                    "tiddit": "3.9.5"
                 },
                 "UCSC_WIGTOBIGWIG": {
                     "ucsc": 482
@@ -665,17 +671,17 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz",
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
-                "call_sv/earlycasualcaiman_LNUMBER1.saltshaker.png",
-                "call_sv/earlycasualcaiman_LNUMBER1.saltshaker_classify.txt",
+                "call_sv/earlycasualcaiman.saltshaker.png",
+                "call_sv/earlycasualcaiman.saltshaker_classify.txt",
                 "call_sv/earlycasualcaiman_mitochondria_deletions.txt",
-                "call_sv/hugelymodelbat_LNUMBER3.saltshaker.png",
-                "call_sv/hugelymodelbat_LNUMBER3.saltshaker_classify.txt",
+                "call_sv/hugelymodelbat.saltshaker.png",
+                "call_sv/hugelymodelbat.saltshaker_classify.txt",
                 "call_sv/hugelymodelbat_mitochondria_deletions.txt",
                 "call_sv/justhusky_saltshaker.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz.tbi",
-                "call_sv/slowlycivilbuck_LNUMBER2.saltshaker.png",
-                "call_sv/slowlycivilbuck_LNUMBER2.saltshaker_classify.txt",
+                "call_sv/slowlycivilbuck.saltshaker.png",
+                "call_sv/slowlycivilbuck.saltshaker_classify.txt",
                 "call_sv/slowlycivilbuck_mitochondria_deletions.txt",
                 "fastqc",
                 "fastqc/earlycasualcaiman_LNUMBER1",
@@ -922,9 +928,9 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-03-25T12:44:18.757225141",
+        "timestamp": "2026-03-30T18:50:54.008055201",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
     }

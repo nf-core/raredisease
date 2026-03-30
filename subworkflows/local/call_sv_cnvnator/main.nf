@@ -2,6 +2,7 @@
 // A subworkflow to call CNVs using cnvnator
 //
 
+include { SPLIT_CHR                               } from '../../../modules/local/split_chr/main.nf'
 include { CNVNATOR_CNVNATOR as CNVNATOR_RD        } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
 include { CNVNATOR_CNVNATOR as CNVNATOR_HIST      } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
 include { CNVNATOR_CNVNATOR as CNVNATOR_STAT      } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
@@ -21,8 +22,9 @@ workflow CALL_SV_CNVNATOR {
 
     main:
 
+        SPLIT_CHR (ch_fasta)
         CNVNATOR_RD ( ch_bam_bai, [[:],[]], [[:],[]], [[:],[]], "rd" )
-        CNVNATOR_HIST ( [[:],[],[]], CNVNATOR_RD.out.root, ch_fasta, ch_fai, "his" )
+        CNVNATOR_HIST ( [[:],[],[]], CNVNATOR_RD.out.root, SPLIT_CHR.out.output, [[:],[]], "his" )
         CNVNATOR_STAT ( [[:],[],[]], CNVNATOR_HIST.out.root, [[:],[]], [[:],[]], "stat" )
         CNVNATOR_PARTITION ( [[:],[],[]], CNVNATOR_STAT.out.root, [[:],[]], [[:],[]], "partition" )
         CNVNATOR_CALL ( [[:],[],[]], CNVNATOR_PARTITION.out.root, [[:],[]], [[:],[]], "call" )

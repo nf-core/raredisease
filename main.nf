@@ -207,7 +207,6 @@ workflow NFCORE_RAREDISEASE {
     ch_vep_cache                = ch_references.vep_resources
 
     // Using channelFromPath helper (val_x ? channel.fromPath(val_x).collect() : channel.value([]))
-    ch_cadd_resources           = channelFromPath(val_cadd_resources, true)
     ch_multiqc_samples          = channelFromPath(val_multiqc_samples, true)
     ch_reduced_penetrance       = channelFromPath(val_reduced_penetrance, true)
     ch_rtg_truthvcfs            = channelFromPath(val_rtg_truthvcfs, true)
@@ -230,6 +229,7 @@ workflow NFCORE_RAREDISEASE {
     ch_svd_ud                   = channelFromPath(val_verifybamid_svd_ud)
 
     // Using channelFromPathWithMeta helper (with simpleName). If filepath is null, returns, [[:],[]]
+    ch_cadd_resources           = channelFromPathWithMeta(val_cadd_resources, true)
     ch_call_interval            = channelFromPathWithMeta(val_call_interval, true)
     ch_ml_model                 = channelFromPathWithMeta(val_ml_model, true)
     ch_variant_catalog          = channelFromPathWithMeta(val_variant_catalog, true)
@@ -249,10 +249,10 @@ workflow NFCORE_RAREDISEASE {
 
     // Using channelFromSamplesheet helper. Returns either an empty channel or validated channel.
     ch_me_references            = channelFromSamplesheet(val_mobile_element_references, "${projectDir}/assets/mobile_element_references_schema.json", false)
-    ch_me_svdb_resources        = channelFromSamplesheet(val_mobile_element_svdb_annotations, "${projectDir}/assets/svdb_query_vcf_schema.json")
+    ch_me_svdb_resources        = channelFromSamplesheet(val_mobile_element_svdb_annotations, "${projectDir}/assets/svdb_query_vcf_schema.json", false)
     ch_sample_id_map            = channelFromSamplesheet(val_sample_id_map, "${projectDir}/assets/sample_id_map.json")
-    ch_svdb_bedpedbs            = channelFromSamplesheet(val_svdb_query_bedpedbs, "${projectDir}/assets/svdb_query_bedpe_schema.json")
-    ch_svdb_dbs                 = channelFromSamplesheet(val_svdb_query_dbs, "${projectDir}/assets/svdb_query_vcf_schema.json")
+    ch_svdb_bedpedbs            = channelFromSamplesheet(val_svdb_query_bedpedbs, "${projectDir}/assets/svdb_query_bedpe_schema.json", false)
+    ch_svdb_dbs                 = channelFromSamplesheet(val_svdb_query_dbs, "${projectDir}/assets/svdb_query_vcf_schema.json", false)
 
     ch_cadd_header              = channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_foundin_header           = channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
