@@ -247,8 +247,6 @@
                                 "sample": "earlycasualcaiman",
                                 "single_end": false,
                                 "num_lanes": 1,
-                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
-                                "lane": 1,
                                 "sex": 1,
                                 "phenotype": 1,
                                 "paternal": 0,
@@ -268,8 +266,6 @@
                                 "sample": "earlycasualcaiman",
                                 "single_end": false,
                                 "num_lanes": 1,
-                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
-                                "lane": 1,
                                 "sex": 1,
                                 "phenotype": 1,
                                 "paternal": 0,
@@ -304,9 +300,9 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-25T15:53:51.569932008",
+        "timestamp": "2026-03-30T20:20:40.266229001",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
     }
