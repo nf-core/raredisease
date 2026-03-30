@@ -1,5 +1,6 @@
 //
-// Call SV MT
+// Calls SV MT, concatenates FASTQs per sample, then runs MitoSalt and SaltShaker.
+// Also detects the number of discordant pairs using the mitodel script.
 //
 
 include { MT_DELETION   } from '../../../modules/local/mt_deletion_script'
@@ -43,10 +44,10 @@ workflow CALL_SV_MT {
 
             ch_reads
                 .map { meta, reads ->
-                        def groupKey = meta.sample
-                        return [groupKey, meta, reads]
+                        def sample_group_key = meta.sample
+                        return [sample_group_key, meta, reads]
                 }
-                .groupTuple(by: 0)
+                .groupTuple()
                 .map { sample_id, meta_list, reads_list ->
                     def combined_meta = meta_list[0].clone()
                     combined_meta.id = sample_id

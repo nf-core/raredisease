@@ -101,9 +101,10 @@ workflow ANNOTATE_GENOME_SNVS {
             .join(VCFANNO.out.tbi, failOnMismatch:true, failOnDuplicate:true)
             .set { ch_bcftools_view_in }
 
+        // filter on frequencies
         BCFTOOLS_VIEW(
             ch_bcftools_view_in,
-            [], [], [])  // filter on frequencies
+            [], [], [])
 
         // Annotating with CADD
         if (!val_cadd_resources.equals(null)) {
