@@ -66,7 +66,6 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [Mosdepth](https://github.com/brentp/mosdepth)
 - [MultiQC](http://multiqc.info/)
 - [Picard's CollectMultipleMetrics, CollectHsMetrics, and CollectWgsMetrics](https://broadinstitute.github.io/picard/)
-- [Qualimap](http://qualimap.conesalab.org/)
 - [Sambamba](https://github.com/biod/sambamba)
 - [Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/)
 - [TIDDIT's cov](https://github.com/J35P312/)
@@ -112,7 +111,6 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 - [Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline ](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-)
 - Annotation:
-  - [HaploGrep3](https://github.com/genepi/haplogrep3)
   - [vcfanno](https://github.com/brentp/vcfanno)
   - [CADD](https://cadd.gs.washington.edu/)
   - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)

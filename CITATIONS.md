@@ -74,10 +74,6 @@
 
   > Yun T, Li H, Chang PC, Lin MF, Carroll A, McLean CY. Accurate, scalable cohort variant calls using DeepVariant and GLnexus. Robinson P, ed. Bioinformatics. 2021;36(24):5582-5589. doi:10.1093/bioinformatics/btaa1081
 
-- [HaploGrep 3](https://academic.oup.com/nar/article/51/W1/W263/7177898)
-
-  > Schönherr S, Weissensteiner H, Kronenberg F, Forer L. Haplogrep 3 an interactive haplogroup classification and analysis platform. Nucleic Acids Res. 2023;51(W1):W263-W268. doi:10.1093/nar/gkad284
-
 - [Manta](https://academic.oup.com/bioinformatics/article/32/8/1220/1743909?login=true)
 
   > Chen X, Schulz-Trieglaff O, Shaw R, et al. Manta: rapid detection of structural variants and indels for germline and cancer sequencing applications. Bioinformatics. 2016;32(8):1220-1222. doi:10.1093/bioinformatics/btv710
@@ -101,10 +97,6 @@
   > Pedersen BS, Quinlan AR. Who’s Who? Detecting and Resolving Sample Anomalies in Human DNA Sequencing Studies with Peddy. The American Journal of Human Genetics. 2017;100(3):406-413. doi:10.1016/j.ajhg.2017.01.017
 
 - [Picard](https://broadinstitute.github.io/picard/)
-
-- [Qualimap](https://academic.oup.com/bioinformatics/article/32/2/292/1744356?login=true)
-
-  > Okonechnikov K, Conesa A, García-Alcalde F. Qualimap 2: advanced multi-sample quality control for high-throughput sequencing data. Bioinformatics. 2016;32(2):292-294. doi:10.1093/bioinformatics/btv566
 
 - [RetroSeq](https://academic.oup.com/bioinformatics/article/29/3/389/257479)
 

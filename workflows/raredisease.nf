@@ -172,10 +172,8 @@ workflow RAREDISEASE {
     skip_fastqc
     skip_gens
     skip_germlinecnvcaller
-    skip_haplogrep3
     skip_ngsbits
     skip_peddy
-    skip_qualimap
     skip_smncopynumbercaller
     skip_vcf2cytosure
     val_aligner
@@ -354,8 +352,7 @@ workflow RAREDISEASE {
         val_analysis_type,
         val_aligner,
         val_target_bed,
-        skip_ngsbits,
-        skip_qualimap
+        skip_ngsbits
     )
     ch_qc_bam_publish = QC_BAM.out.publish
 
@@ -528,7 +525,6 @@ workflow RAREDISEASE {
                 ch_vcfanno_toml,
                 ch_vep_cache,
                 ch_vep_extra_files,
-                skip_haplogrep3,
                 val_cadd_resources,
                 val_genome,
                 val_homoplasmy_af_threshold,
@@ -953,7 +949,6 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.sex_check.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.multiple_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.hs_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.qualimap_results.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.self_sm.map{_meta, reports -> reports}.collect().ifEmpty([]))
