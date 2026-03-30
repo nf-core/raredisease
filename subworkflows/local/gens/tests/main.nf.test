@@ -3,8 +3,14 @@ nextflow_workflow {
     name "Test Workflow GENS"
     script "subworkflows/local/gens/main.nf"
     workflow "GENS"
+
     tag "subworkflows"
     tag "gens"
+
+    tag "gatk4/collectreadcounts"
+    tag "gatk4/denoisereadcounts"
+    tag "gens/preparecovandbaf"
+
     config "./nextflow.config"
 
     test("GENS - male sample, stub") {

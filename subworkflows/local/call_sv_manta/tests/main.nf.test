@@ -3,8 +3,13 @@ nextflow_workflow {
     name "Test Workflow CALL_SV_MANTA"
     script "subworkflows/local/call_sv_manta/main.nf"
     workflow "CALL_SV_MANTA"
+
     tag "subworkflows"
     tag "call_sv_manta"
+
+    tag "manta/germline"
+    tag "bcftools/view"
+
     config "./nextflow.config"
 
     test("CALL_SV_MANTA - wgs") {

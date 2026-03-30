@@ -5,6 +5,11 @@ nextflow_workflow {
     workflow "SUBSAMPLE_MT_FRAC"
     tag "subworkflows"
     tag "subsample_mt_frac"
+
+    tag "bedtools/genomecov"
+    tag "calculate_seed_fraction"
+    tag "samtools/view"
+
     config "./nextflow.config"
 
     test("SUBSAMPLE_MT_FRAC") {

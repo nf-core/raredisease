@@ -3,8 +3,15 @@ nextflow_workflow {
     name "Test Workflow CALL_SV_TIDDIT"
     script "subworkflows/local/call_sv_tiddit/main.nf"
     workflow "CALL_SV_TIDDIT"
+
     tag "subworkflows"
     tag "call_sv_tiddit"
+
+    tag "tiddit/sv"
+    tag "svdb/merge"
+    tag "tabix/bgziptabix"
+    tag "bcftools/view"
+
     config "./nextflow.config"
 
     test("CALL_SV_TIDDIT") {

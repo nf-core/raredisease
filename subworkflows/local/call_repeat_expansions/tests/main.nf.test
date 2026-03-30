@@ -3,8 +3,18 @@ nextflow_workflow {
     name "Test Workflow CALL_REPEAT_EXPANSIONS"
     script "subworkflows/local/call_repeat_expansions/main.nf"
     workflow "CALL_REPEAT_EXPANSIONS"
+
     tag "subworkflows"
     tag "call_repeat_expansions"
+
+    tag "bcftools/norm"
+    tag "bcftools/reheader"
+    tag "expansionhunter"
+    tag "picard/renamesampleinvcf"
+    tag "samtools/sort"
+    tag "svdb/merge"
+    tag "tabix/tabix"
+
     config "./nextflow.config"
 
     test("CALL_REPEAT_EXPANSIONS") {
