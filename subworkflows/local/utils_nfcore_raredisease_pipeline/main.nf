@@ -511,12 +511,6 @@ def toolCitationText() {
             "Vcfanno (Pedersen et al., 2016),",
             "Genmod (Magnusson et al., 2018),"
         ]
-        if (!(params.skip_tools && params.skip_tools.split(',').contains('haplogrep3'))) {
-            mt_annotation_text += [
-                "HaploGrep3 (Schönherr et al., 2023),"
-            ]
-
-        }
     }
     if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_annotation')) && params.analysis_type.equals("wgs")) {
         me_annotation_text = [
@@ -532,7 +526,6 @@ def toolCitationText() {
     }
     qc_bam_text = [
         "Picard (Broad Institute, 2023)",
-        "Qualimap (Okonechnikov et al., 2016),",
         "Sambamba (Tarasov et al., 2015),",
         "TIDDIT (Eisfeldt et al., 2017),",
         "UCSC Bigwig and Bigbed (Kent et al., 2010),",
@@ -641,11 +634,6 @@ def toolBibliographyText() {
             "<li>McLaren, W., Gil, L., Hunt, S. E., Riat, H. S., Ritchie, G. R. S., Thormann, A., Flicek, P., & Cunningham, F. (2016). The Ensembl Variant Effect Predictor. Genome Biology, 17(1), 122. https://doi.org/10.1186/s13059-016-0974-4</li>",
             "<li>Magnusson, M., Hughes, T., Glabilloy, & Bitdeli Chef. (2018). genmod: Version 3.7.3 (3.7.3) [Computer software]. Zenodo. https://doi.org/10.5281/ZENODO.3841142</li>"
         ]
-        if (!(params.skip_tools && params.skip_tools.split(',').contains('haplogrep3'))) {
-            mt_annotation_text += [
-                "<li>Schönherr, S., Weissensteiner, H., Kronenberg, F., & Forer, L. (2023). Haplogrep 3 an interactive haplogroup classification and analysis platform. Nucleic Acids Research, 51(W1), W263-W268. https://doi.org/10.1093/nar/gkad284</li>"
-            ]
-        }
     }
     if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('me_annotation')) && params.analysis_type.equals("wgs")) {
         me_annotation_text = [
@@ -661,7 +649,6 @@ def toolBibliographyText() {
     }
     qc_bam_text = [
         "<li>Broad Institute. (2023). Picard Tools. In Broad Institute, GitHub repository. http://broadinstitute.github.io/picard/</li>",
-        "<li>Okonechnikov, K., Conesa, A., & García-Alcalde, F. (2016). Qualimap 2: Advanced multi-sample quality control for high-throughput sequencing data. Bioinformatics, 32(2), 292–294. https://doi.org/10.1093/bioinformatics/btv566</li>",
         "<li>Tarasov, A., Vilella, A. J., Cuppen, E., Nijman, I. J., & Prins, P. (2015). Sambamba: Fast processing of NGS alignment formats. Bioinformatics, 31(12), 2032–2034. https://doi.org/10.1093/bioinformatics/btv098</li>",
         "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>",
         "<li>Kent, W. J., Zweig, A. S., Barber, G., Hinrichs, A. S., & Karolchik, D. (2010). BigWig and BigBed: Enabling browsing of large distributed datasets. Bioinformatics, 26(17), 2204–2207. https://doi.org/10.1093/bioinformatics/btq351</li>",
