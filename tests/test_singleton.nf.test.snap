@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            352,
+            350,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -223,9 +223,6 @@
                 "GLNEXUS": {
                     "glnexus": "1.4.1"
                 },
-                "HAPLOGREP3_CLASSIFY_MT": {
-                    "haplogrep3": "3.2.2"
-                },
                 "HISAT2_INDEX_GENOME": {
                     "hisat2": "2.2.1"
                 },
@@ -288,9 +285,6 @@
                 },
                 "PICARD_SORTVCF": {
                     "picard": "3.4.0"
-                },
-                "QUALIMAP_BAMQC": {
-                    "qualimap": 2.3
                 },
                 "REMOVE_DUPLICATES_GL": {
                     "bcftools": 1.22
@@ -518,7 +512,6 @@
                 "annotate_snv/mitochondria",
                 "annotate_snv/mitochondria/justhusky_mitochondria_vcfanno_vep.vcf.gz",
                 "annotate_snv/mitochondria/justhusky_mitochondria_vcfanno_vep.vcf.gz.tbi",
-                "annotate_snv/mitochondria/justhusky_mitochondria_vcfanno_vep_haplogrep.txt",
                 "annotate_sv",
                 "annotate_sv/justhusky_svdbquery_vep.vcf.gz",
                 "annotate_sv/justhusky_svdbquery_vep.vcf.gz.tbi",
@@ -568,60 +561,6 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_raredisease_software_mqc_versions.yml",
                 "qc_bam",
-                "qc_bam/hugelymodelbat",
-                "qc_bam/hugelymodelbat/css",
-                "qc_bam/hugelymodelbat/css/agogo.css",
-                "qc_bam/hugelymodelbat/css/ajax-loader.gif",
-                "qc_bam/hugelymodelbat/css/basic.css",
-                "qc_bam/hugelymodelbat/css/bgfooter.png",
-                "qc_bam/hugelymodelbat/css/bgtop.png",
-                "qc_bam/hugelymodelbat/css/comment-bright.png",
-                "qc_bam/hugelymodelbat/css/comment-close.png",
-                "qc_bam/hugelymodelbat/css/comment.png",
-                "qc_bam/hugelymodelbat/css/doctools.js",
-                "qc_bam/hugelymodelbat/css/down-pressed.png",
-                "qc_bam/hugelymodelbat/css/down.png",
-                "qc_bam/hugelymodelbat/css/file.png",
-                "qc_bam/hugelymodelbat/css/jquery.js",
-                "qc_bam/hugelymodelbat/css/minus.png",
-                "qc_bam/hugelymodelbat/css/plus.png",
-                "qc_bam/hugelymodelbat/css/pygments.css",
-                "qc_bam/hugelymodelbat/css/qualimap_logo_small.png",
-                "qc_bam/hugelymodelbat/css/report.css",
-                "qc_bam/hugelymodelbat/css/searchtools.js",
-                "qc_bam/hugelymodelbat/css/underscore.js",
-                "qc_bam/hugelymodelbat/css/up-pressed.png",
-                "qc_bam/hugelymodelbat/css/up.png",
-                "qc_bam/hugelymodelbat/css/websupport.js",
-                "qc_bam/hugelymodelbat/genome_results.txt",
-                "qc_bam/hugelymodelbat/images_qualimapReport",
-                "qc_bam/hugelymodelbat/images_qualimapReport/genome_coverage_0to50_histogram.png",
-                "qc_bam/hugelymodelbat/images_qualimapReport/genome_coverage_across_reference.png",
-                "qc_bam/hugelymodelbat/images_qualimapReport/genome_coverage_histogram.png",
-                "qc_bam/hugelymodelbat/images_qualimapReport/genome_coverage_quotes.png",
-                "qc_bam/hugelymodelbat/images_qualimapReport/genome_gc_content_per_window.png",
-                "qc_bam/hugelymodelbat/images_qualimapReport/genome_homopolymer_indels.png",
-                "qc_bam/hugelymodelbat/images_qualimapReport/genome_insert_size_across_reference.png",
-                "qc_bam/hugelymodelbat/images_qualimapReport/genome_insert_size_histogram.png",
-                "qc_bam/hugelymodelbat/images_qualimapReport/genome_mapping_quality_across_reference.png",
-                "qc_bam/hugelymodelbat/images_qualimapReport/genome_mapping_quality_histogram.png",
-                "qc_bam/hugelymodelbat/images_qualimapReport/genome_reads_clipping_profile.png",
-                "qc_bam/hugelymodelbat/images_qualimapReport/genome_reads_content_per_read_position.png",
-                "qc_bam/hugelymodelbat/images_qualimapReport/genome_uniq_read_starts_histogram.png",
-                "qc_bam/hugelymodelbat/qualimapReport.html",
-                "qc_bam/hugelymodelbat/raw_data_qualimapReport",
-                "qc_bam/hugelymodelbat/raw_data_qualimapReport/coverage_across_reference.txt",
-                "qc_bam/hugelymodelbat/raw_data_qualimapReport/coverage_histogram.txt",
-                "qc_bam/hugelymodelbat/raw_data_qualimapReport/duplication_rate_histogram.txt",
-                "qc_bam/hugelymodelbat/raw_data_qualimapReport/genome_fraction_coverage.txt",
-                "qc_bam/hugelymodelbat/raw_data_qualimapReport/homopolymer_indels.txt",
-                "qc_bam/hugelymodelbat/raw_data_qualimapReport/insert_size_across_reference.txt",
-                "qc_bam/hugelymodelbat/raw_data_qualimapReport/insert_size_histogram.txt",
-                "qc_bam/hugelymodelbat/raw_data_qualimapReport/mapped_reads_clipping_profile.txt",
-                "qc_bam/hugelymodelbat/raw_data_qualimapReport/mapped_reads_gc-content_distribution.txt",
-                "qc_bam/hugelymodelbat/raw_data_qualimapReport/mapped_reads_nucleotide_content.txt",
-                "qc_bam/hugelymodelbat/raw_data_qualimapReport/mapping_quality_across_reference.txt",
-                "qc_bam/hugelymodelbat/raw_data_qualimapReport/mapping_quality_histogram.txt",
                 "qc_bam/hugelymodelbat_hsmetrics.CollectHsMetrics.coverage_metrics",
                 "qc_bam/hugelymodelbat_mosdepth.global.dist.txt",
                 "qc_bam/hugelymodelbat_mosdepth.per-base.bed.gz",
@@ -708,7 +647,7 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-03-27T14:23:26.834404268",
+        "timestamp": "2026-03-30T12:08:12.06881462",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

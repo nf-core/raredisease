@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove redundant ZIP_TABIX steps after VCFANNO in annotate_genome_snvs and annotate_mt_snvs by using VCFANNO's direct tbi output [#799](https://github.com/nf-core/raredisease/pull/799)
 - Collect genome fasta/fai channel in call_sv_tiddit to prevent per-sample re-emission [#799](https://github.com/nf-core/raredisease/pull/799)
 - Update cadd_resources channel to use channelFromPathWithMeta and set channelFromSamplesheet calls for svdb/ME resources as non-mandatory [#799](https://github.com/nf-core/raredisease/pull/799)
+- Remove Qualimap and Haplogrep3 as they were made redundant by Picard and VerifyBamID2 [#801](https://github.com/nf-core/raredisease/pull/801)
 
 ### `Fixed`
 
@@ -84,6 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | gens-preproc          | 1.0.11      |             |
 | gens/preparecovandbaf |             | 1.1.5       |
 | haplocheck            | 1.3.3       |             |
+| haplogrep3            | 3.2.2       |             |
 | hmtnote               | 0.7.2       |             |
 | htslib                | 1.20        | 1.21        |
 | MitoSalt              |             | 1.1.1       |
@@ -92,6 +94,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | ngsbits               | 202411      | 202512      |
 | picard                | 3.3.0       | 3.4.0       |
 | pigz                  | 2.3.4       | 2.8         |
+| qualimap              | 2.3         |             |
 | sambamba              |             | 1.0.1       |
 | samtools              | 1.21        | 1.22.1      |
 | sentieon              | 202503      | 202503.02   |
