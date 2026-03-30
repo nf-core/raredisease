@@ -52,7 +52,6 @@ include { CALL_MOBILE_ELEMENTS                                        } from '..
 include { CALL_REPEAT_EXPANSIONS                                      } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                                                    } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS                                    } from '../subworkflows/local/call_structural_variants'
-include { CALL_SV_MT                                                  } from '../subworkflows/local/call_sv_MT'
 include { GENERATE_CYTOSURE_FILES                                     } from '../subworkflows/local/generate_cytosure_files'
 include { GENS                                                        } from '../subworkflows/local/gens'
 include { PREPARE_REFERENCES                                          } from '../subworkflows/local/prepare_references'
@@ -173,6 +172,7 @@ workflow RAREDISEASE {
     skip_fastqc
     skip_gens
     skip_germlinecnvcaller
+    skip_mitosalt
     skip_ngsbits
     skip_peddy
     skip_smncopynumbercaller
@@ -183,8 +183,28 @@ workflow RAREDISEASE {
     val_concatenate_snv_calls
     val_extract_alignments
     val_genome
+    val_heavy_strand_origin_end
+    val_heavy_strand_origin_start
     val_homoplasmy_af_threshold
+    val_light_strand_origin_end
+    val_light_strand_origin_start
     val_mbuffer_mem
+    val_mito_length
+    val_mito_name
+    val_mitosalt_breakspan
+    val_mitosalt_breakthreshold
+    val_mitosalt_cluster_threshold
+    val_mitosalt_deletion_threshold_max
+    val_mitosalt_deletion_threshold_min
+    val_mitosalt_evalue_threshold
+    val_mitosalt_exclude
+    val_mitosalt_flank
+    val_mitosalt_heteroplasmy_limit
+    val_mitosalt_paired_distance
+    val_mitosalt_score_threshold
+    val_mitosalt_sizelimit
+    val_mitosalt_split_distance_threshold
+    val_mitosalt_split_length
     val_mt_aligner
     val_mt_subsample_approach
     val_mt_subsample_rd
@@ -208,7 +228,6 @@ workflow RAREDISEASE {
     ch_qc_bam_publish                   = channel.empty()
     ch_call_snv_publish                 = channel.empty()
     ch_call_sv_publish                  = channel.empty()
-    ch_call_sv_mt_publish               = channel.empty()
     ch_call_repeat_expansions_publish   = channel.empty()
     ch_call_mobile_elements_publish     = channel.empty()
     ch_subsample_publish                = channel.empty()
@@ -564,11 +583,25 @@ workflow RAREDISEASE {
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    CALL AND ANNOTATE NUCLEAR SVs
+    CALL AND ANNOTATE NUCLEAR AND MITOCHONDRIAL SVs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
     if (!skip_sv_calling) {
+        channel.of(val_mitosalt_breakspan,
+            val_mitosalt_breakthreshold,
+            val_mitosalt_cluster_threshold,
+            val_mitosalt_deletion_threshold_max,
+            val_mitosalt_deletion_threshold_min,
+            val_mitosalt_evalue_threshold,
+            val_mitosalt_exclude,
+            val_mitosalt_paired_distance,
+            val_mitosalt_score_threshold,
+            val_mitosalt_sizelimit,
+            val_mitosalt_split_distance_threshold,
+            val_mitosalt_split_length)
+            .set{ ch_mitosalt_config }
+
         CALL_STRUCTURAL_VARIANTS (
             ch_mapped.genome_marked_bam,
             ch_mapped.genome_marked_bai,
@@ -585,6 +618,25 @@ workflow RAREDISEASE {
             ch_gcnvcaller_model,
             val_analysis_type,
             skip_germlinecnvcaller,
+            skip_mitosalt,
+            ch_mapped.mt_bam_bai,
+            ch_genome_chrsizes,
+            ch_genome_hisat2index,
+            ch_mt_fai,
+            ch_mt_fasta,
+            ch_mt_lastdb,
+            ch_input_fastqs,
+            ch_subdepth,
+            ch_mitosalt_config,
+            val_heavy_strand_origin_start,
+            val_heavy_strand_origin_end,
+            val_light_strand_origin_start,
+            val_light_strand_origin_end,
+            val_mito_length,
+            val_mito_name,
+            val_mitosalt_flank,
+            val_mitosalt_heteroplasmy_limit,
+            val_run_mt_for_wes
         )
         ch_call_sv_publish = CALL_STRUCTURAL_VARIANTS.out.publish
 
@@ -655,42 +707,7 @@ workflow RAREDISEASE {
         }
     }
 /*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    CALL MITOCHONDRIAL SVs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-    if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
-        CALL_SV_MT(
-            ch_mapped.genome_marked_bam_bai,
-            ch_genome_chrsizes,
-            ch_genome_fai,
-            ch_genome_fasta,
-            ch_genome_hisat2index,
-            ch_mt_fai,
-            ch_mt_fasta,
-            ch_mt_lastdb,
-            ch_input_fastqs,
-            ch_subdepth,
-            params.breakspan,
-            params.breakthreshold,
-            params.cluster_threshold,
-            params.deletion_threshold_max,
-            params.deletion_threshold_min,
-            params.evalue_threshold,
-            params.exclude,
-            params.flank,
-            params.hplimit,
-            params.mito_name,
-            params.paired_distance,
-            params.score_threshold,
-            params.sizelimit,
-            params.split_distance_threshold,
-            params.split_length
-        )
-        ch_call_sv_mt_publish = CALL_SV_MT.out.publish
-    }
 
-/*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     CALL AND ANNOTATE MOBILE ELEMENTS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -965,7 +982,6 @@ workflow RAREDISEASE {
                        .mix(ch_subsample_publish)
                        .mix(ch_call_snv_publish)
                        .mix(ch_call_sv_publish)
-                       .mix(ch_call_sv_mt_publish)
                        .mix(ch_call_repeat_expansions_publish)
                        .mix(ch_call_mobile_elements_publish)
                        .mix(ch_annotate_genome_snvs_publish)

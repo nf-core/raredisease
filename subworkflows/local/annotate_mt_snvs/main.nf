@@ -8,7 +8,6 @@ include { TABIX_TABIX as TABIX_TABIX_VEP_MT              } from '../../../module
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_MT                } from '../../../modules/nf-core/ensemblvep/vep/main'
 include { VCFANNO as VCFANNO_MT                          } from '../../../modules/nf-core/vcfanno/main'
 include { ANNOTATE_CADD                                  } from '../annotate_cadd'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_VCFANNO_MT       } from '../../../modules/nf-core/tabix/bgziptabix/main'
 
 workflow ANNOTATE_MT_SNVS {
     take:
@@ -36,9 +35,6 @@ workflow ANNOTATE_MT_SNVS {
             .set { ch_in_vcfanno }
 
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
-        ZIP_TABIX_VCFANNO_MT(VCFANNO_MT.out.vcf)
-
-        ch_vcfanno_vcf = ZIP_TABIX_VCFANNO_MT.out.gz_index.map{meta, vcf, _tbi -> return [meta, vcf]}
 
         // Annotating with CADD
         if (!val_cadd_resources.equals(null)) {
@@ -46,7 +42,7 @@ workflow ANNOTATE_MT_SNVS {
                 ch_cadd_resources,
                 ch_fai,
                 ch_cadd_header,
-                ZIP_TABIX_VCFANNO_MT.out.gz_index,
+                VCFANNO_MT.out.tbi,
                 val_genome
             )
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
@@ -54,7 +50,7 @@ workflow ANNOTATE_MT_SNVS {
             ch_cadd_vcf = channel.empty()
         }
 
-        ch_vcfanno_vcf
+        VCFANNO_MT.out.vcf
             .join(ch_cadd_vcf, remainder: true)
             .branch { meta, vcfanno, cadd  ->
                 vcfanno: cadd.equals(null)

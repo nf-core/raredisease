@@ -458,17 +458,17 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 
 [MT deletion script](https://github.com/dnil/mitosign/blob/master/run_mt_del_check.sh) lists the fraction of mitochondrially aligning read pairs (per 1000) that appear discordant, as defined by an insert size of more than 1.2 kb (and less than 15 kb due to the circular nature of the genome) using samtools.
 
-- `call_sv/mitochondria`
+- `call_sv`
   - `<sample_id>_mitochondria_deletions.txt`: file containing deletions.
 
-##### eKLIPse
+##### Saltshaker
 
-[eKLIPse](https://github.com/dooguypapua/eKLIPse) allows the detection and quantification of large mtDNA rearrangements.
+[MitoSAlt](https://mitosalt.sourceforge.io/) allows the detection and quantification of mtDNA strucutral variants.
+[Saltshaker](https://github.com/aksenia/saltshaker) allows for downstream clustering and classification of mtDNA strucutral variants. Called variants are combined with structural variants called in the nuclear genome.
 
-- `call_sv/mitochondria`
-  - `eKLIPse_<sample_id>_deletions.csv`: file containing all predicted deletions.
-  - `eKLIPse_<sample_id>_genes.csv`: file summarizing cumulated deletions per mtDNA gene.
-  - `eKLIPse_<sample_id>.png`: circos plot.
+- `call_sv`
+  - `<sample_id>.saltshaker_classify.txt`: report containing case-level classification of mitochondrial deletions.
+  - `<sample_id>.saltshaker.png`: circos plot.
 
 #### Annotation
 
