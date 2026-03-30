@@ -3,8 +3,12 @@ nextflow_workflow {
     name "Test Workflow CALL_SNV_MT"
     script "subworkflows/local/call_snv_MT/main.nf"
     workflow "CALL_SNV_MT"
+
     tag "subworkflows"
     tag "call_snv_MT"
+
+    tag "gatk4/mutect2"
+    tag "gatk4/filtermutectcalls"
 
     test("CALL_SNV_MT") {
 

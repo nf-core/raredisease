@@ -3,8 +3,15 @@ nextflow_workflow {
     name "Test Workflow GENERATE_CYTOSURE_FILES"
     script "subworkflows/local/generate_cytosure_files/main.nf"
     workflow "GENERATE_CYTOSURE_FILES"
+
     tag "subworkflows"
     tag "generate_cytosure_files"
+
+    tag "bcftools/view"
+    tag "bcftools/reheader"
+    tag "tiddit/cov"
+    tag "vcf2cytosure"
+
     config "./nextflow.config"
 
     test("GENERATE_CYTOSURE_FILES - no sample_id_map, stub") {

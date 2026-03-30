@@ -3,8 +3,18 @@ nextflow_workflow {
     name "Test Workflow ANNOTATE_MT_SNVS"
     script "subworkflows/local/annotate_mt_snvs/main.nf"
     workflow "ANNOTATE_MT_SNVS"
+
     tag "subworkflows"
     tag "annotate_mt_snvs"
+    tag "annotate_cadd"
+
+    tag "bcftools/pluginsetgt"
+    tag "tabix/tabix"
+    tag "ensemblvep/vep"
+    tag "haplogrep3/classify"
+    tag "vcfanno"
+    tag "tabix/bgziptabix"
+
     config "./nextflow.config"
 
     test("ANNOTATE_MT_SNVS - GRCh37, stub") {
@@ -29,11 +39,10 @@ nextflow_workflow {
                 input[8]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_config.toml', checkIfExists: true)).collect()
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
                 input[10] = channel.value([])
-                input[11] = false
-                input[12] = null
-                input[13] = 'GRCh37'
-                input[14] = 1.0
-                input[15] = 107
+                input[11] = null
+                input[12] = 'GRCh37'
+                input[13] = 1.0
+                input[14] = 107
                 """
             }
         }

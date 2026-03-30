@@ -5,6 +5,12 @@ nextflow_workflow {
     workflow "SUBSAMPLE_MT_READS"
     tag "subworkflows"
     tag "subsample_mt_reads"
+
+    tag "samtools/view"
+    tag "samtools/collate"
+    tag "samtools/sort"
+    tag "gawk"
+
     config "./nextflow.config"
 
     test("SUBSAMPLE_MT_READS") {

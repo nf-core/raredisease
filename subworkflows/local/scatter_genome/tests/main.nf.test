@@ -3,6 +3,13 @@ nextflow_workflow {
     name "Test Workflow SCATTER_GENOME"
     script "subworkflows/local/scatter_genome/main.nf"
     workflow "SCATTER_GENOME"
+
+    tag "subworkflows"
+    tag "scatter_genome"
+
+    tag "gawk"
+    tag "gatk4_splitintervals"
+
     config "./nextflow.config"
 
     test("Should run without failures") {

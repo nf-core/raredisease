@@ -3,8 +3,17 @@ nextflow_workflow {
     name "Test Workflow CALL_SV_GERMLINECNVCALLER"
     script "subworkflows/local/call_sv_germlinecnvcaller/main.nf"
     workflow "CALL_SV_GERMLINECNVCALLER"
+
     tag "subworkflows"
     tag "call_sv_germlinecnvcaller"
+
+    tag "gatk4/collectreadcounts"
+    tag "gatk4/determinegermlinecontigploidy"
+    tag "gatk4/germlinecnvcaller"
+    tag "gatk4/postprocessgermlinecnvcalls"
+    tag "bcftools/view"
+    tag "tabix/tabix"
+    tag "svdb/merge"
 
     config "./nextflow.config"
 

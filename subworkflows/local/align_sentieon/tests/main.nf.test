@@ -3,8 +3,16 @@ nextflow_workflow {
     name "Test Workflow ALIGN_SENTIEON"
     script "subworkflows/local/align_sentieon/main.nf"
     workflow "ALIGN_SENTIEON"
+
     tag "subworkflows"
     tag "align_sentieon"
+
+    tag "sentieon/bwamem"
+    tag "sentieon/datametrics"
+    tag "sentieon/dedup"
+    tag "sentieon/readwriter"
+    tag "samtools/view"
+
     config "./nextflow.config"
 
     test("align sentieon") {

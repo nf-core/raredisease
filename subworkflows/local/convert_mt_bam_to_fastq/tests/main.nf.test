@@ -3,8 +3,14 @@ nextflow_workflow {
     name "Test Workflow CONVERT_MT_BAM_TO_FASTQ"
     script "subworkflows/local/convert_mt_bam_to_fastq/main.nf"
     workflow "CONVERT_MT_BAM_TO_FASTQ"
+
     tag "subworkflows"
     tag "convert_mt_bam_to_fastq"
+
+    tag "gatk4/printreads"
+    tag "gatk4/revertsam"
+    tag "gatk4/samtofastq"
+    tag "samtools/index"
 
     test("CONVERT_MT_BAM_TO_FASTQ") {
 
