@@ -26,6 +26,7 @@ workflow CALL_SV_MT {
         ch_subdepth                           // channel: [mandatory] [ val(mitosalt_depth) ]
         ch_svcaller_priority                  // channel: [mandatory] [ val(["var caller tag 1", ...]) ]
         ch_mitosalt_config                    // channel: [mandatory] [val(mitosalt_breakspan),val(mitosalt_breakthreshold),...,val(mitosalt_split_length)]
+        skip_mitosalt                         // Boolean
         val_heavy_strand_origin_start         // string: [mandatory] mitochondira_heavy_strand_origin_start
         val_heavy_strand_origin_end           // string: [mandatory] mitochondira_heavy_strand_origin_end
         val_light_strand_origin_start         // string: [mandatory] mitochondira_light_strand_origin_start
@@ -40,7 +41,7 @@ workflow CALL_SV_MT {
         ch_saltshaker_vcf   = channel.empty()
         ch_saltshaker_plot  = channel.empty()
 
-        if (!(params.skip_tools && params.skip_tools.split(',').contains('mitosalt'))) {
+        if (!skip_mitosalt) {
             ch_reads_subdepth      = ch_reads.combine(ch_subdepth)
 
             SEQTK_SAMPLE (ch_reads_subdepth)

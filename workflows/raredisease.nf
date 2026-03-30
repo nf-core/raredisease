@@ -172,6 +172,7 @@ workflow RAREDISEASE {
     skip_fastqc
     skip_gens
     skip_germlinecnvcaller
+    skip_mitosalt
     skip_ngsbits
     skip_peddy
     skip_smncopynumbercaller
@@ -617,6 +618,7 @@ workflow RAREDISEASE {
             ch_gcnvcaller_model,
             val_analysis_type,
             skip_germlinecnvcaller,
+            skip_mitosalt,
             ch_mapped.mt_bam_bai,
             ch_genome_chrsizes,
             ch_genome_hisat2index,

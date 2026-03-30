@@ -28,6 +28,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_gcnvcaller_model                   // channel: [optional; used by mandatory for GATK's cnvcaller][ path(gcnvcaller_model) ]
         val_analysis_type                     // string: "wes", "wgs", or "mito"
         skip_germlinecnvcaller                // boolean
+        skip_mitosalt                         // boolean
         ch_mt_bam_bai                         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_genome_chrsizes                    // channel: [mandatory] [ path(chrsizes) ]
         ch_genome_hisat2index                 // channel: [mandatory] [ val(meta), path(hisat2index) ]
@@ -99,6 +100,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 ch_subdepth,
                 ch_svcaller_priority,
                 ch_mitosalt_config,
+                skip_mitosalt,
                 val_heavy_strand_origin_start,
                 val_heavy_strand_origin_end,
                 val_light_strand_origin_start,

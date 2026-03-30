@@ -311,6 +311,7 @@ workflow NFCORE_RAREDISEASE {
     skip_fastqc                = parseSkipList(val_skip_tools, 'fastqc')
     skip_gens                  = parseSkipList(val_skip_tools, 'gens')
     skip_germlinecnvcaller     = parseSkipList(val_skip_tools, 'germlinecnvcaller')
+    skip_mitosalt              = parseSkipList(val_skip_tools, 'mitosalt')
     skip_ngsbits               = parseSkipList(val_skip_tools, 'ngsbits')
     skip_peddy                 = parseSkipList(val_skip_tools, 'peddy')
     skip_smncopynumbercaller   = parseSkipList(val_skip_tools, 'smncopynumbercaller')
@@ -459,6 +460,7 @@ workflow NFCORE_RAREDISEASE {
         skip_fastqc,
         skip_gens,
         skip_germlinecnvcaller,
+        skip_mitosalt,
         skip_ngsbits,
         skip_peddy,
         skip_smncopynumbercaller,
