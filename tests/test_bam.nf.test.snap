@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            769,
+            777,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -841,11 +841,10 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-03-27T15:28:24.531728352",
+        "timestamp": "2026-03-30T16:58:17.703462431",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-03-27T13:49:42.531336219"
+        }
     }
 }
