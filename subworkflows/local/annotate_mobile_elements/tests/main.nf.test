@@ -7,7 +7,7 @@ nextflow_workflow {
     tag "subworkflows"
     tag "annotate_mobile_elements"
 
-    tag"bcftools/view"
+    tag "bcftools/view"
     tag "ensemblvep/vep"
     tag "picard/sortvcf"
     tag "svdb/query"
