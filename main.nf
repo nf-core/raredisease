@@ -250,7 +250,7 @@ workflow NFCORE_RAREDISEASE {
     // Using channelFromSamplesheet helper. Returns either an empty channel or validated channel.
     ch_me_references            = channelFromSamplesheet(val_mobile_element_references, "${projectDir}/assets/mobile_element_references_schema.json", false)
     ch_me_svdb_resources        = channelFromSamplesheet(val_mobile_element_svdb_annotations, "${projectDir}/assets/svdb_query_vcf_schema.json", false)
-    ch_sample_id_map            = channelFromSamplesheet(val_sample_id_map, "${projectDir}/assets/sample_id_map.json")
+    ch_sample_id_map            = channelFromSamplesheet(val_sample_id_map, "${projectDir}/assets/sample_id_map.json", false)
     ch_svdb_bedpedbs            = channelFromSamplesheet(val_svdb_query_bedpedbs, "${projectDir}/assets/svdb_query_bedpe_schema.json", false)
     ch_svdb_dbs                 = channelFromSamplesheet(val_svdb_query_dbs, "${projectDir}/assets/svdb_query_vcf_schema.json", false)
 
