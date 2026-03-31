@@ -1,14 +1,16 @@
 //
-// Call SV MT
+// Calls SV MT, concatenates FASTQs per sample, then runs MitoSalt and SaltShaker.
+// Also detects the number of discordant pairs using the mitodel script.
 //
 
 include { MT_DELETION         } from '../../../modules/local/mt_deletion_script'
 include { PREP_MITOSALT       } from '../../../modules/local/prep_mitosalt/main'
 include { MITOSALT            } from '../../../modules/local/mitosalt/main'
-include { SEQTK_SAMPLE        } from '../../../modules/nf-core/seqtk/sample/main'
+include { CAT_FASTQ           } from '../../../modules/nf-core/cat/fastq/main'
 include { SALTSHAKER_CALL     } from '../../../modules/nf-core/saltshaker/call/main'
 include { SALTSHAKER_CLASSIFY } from '../../../modules/nf-core/saltshaker/classify/main'
 include { SALTSHAKER_PLOT     } from '../../../modules/nf-core/saltshaker/plot/main'
+include { SEQTK_SAMPLE        } from '../../../modules/nf-core/seqtk/sample/main'
 include { SVDB_MERGE          } from '../../../modules/nf-core/svdb/merge/main'
 
 workflow CALL_SV_MT {
@@ -42,7 +44,27 @@ workflow CALL_SV_MT {
         ch_saltshaker_plot  = channel.empty()
 
         if (!skip_mitosalt) {
-            ch_reads_subdepth      = ch_reads.combine(ch_subdepth)
+            ch_reads
+                .map { meta, reads ->
+                        def sample_group_key = meta.sample
+                        return [sample_group_key, meta, reads]
+                }
+                .groupTuple()
+                .map { sample_id, meta_list, reads_list ->
+                    def combined_meta = meta_list[0].clone()
+                    combined_meta.id = sample_id
+                    combined_meta.remove('lane')
+                    combined_meta.remove('read_group')
+
+                    def all_reads = reads_list.flatten()
+
+                    [combined_meta, all_reads]
+                }
+                .set {ch_cat_fastq}
+
+            CAT_FASTQ(ch_cat_fastq)
+
+            ch_reads_subdepth = CAT_FASTQ.out.reads.combine(ch_subdepth)
 
             SEQTK_SAMPLE (ch_reads_subdepth)
 

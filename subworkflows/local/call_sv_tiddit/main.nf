@@ -16,7 +16,8 @@ workflow CALL_SV_TIDDIT {
         ch_case_info    // channel: [mandatory] [ val(case_info) ]
 
     main:
-        TIDDIT_SV ( ch_bam_bai, ch_genome_fasta.join(ch_genome_fai), ch_bwa_index )
+        ch_genome_fa_fai = ch_genome_fasta.join(ch_genome_fai).collect()
+        TIDDIT_SV ( ch_bam_bai, ch_genome_fa_fai, ch_bwa_index )
 
         INDEX_TIDDIT (TIDDIT_SV.out.vcf)
         BCFTOOLS_VIEW_TIDDIT (INDEX_TIDDIT.out.gz_index, [], [], []).vcf

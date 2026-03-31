@@ -98,10 +98,13 @@ workflow ANNOTATE_GENOME_SNVS {
         VCFANNO (ch_vcfanno_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
 
         VCFANNO.out.vcf
-            .join(VCFANNO.out.tbi)
-            .set { ch_vcfanno_out }
+            .join(VCFANNO.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .set { ch_bcftools_view_in }
 
-        BCFTOOLS_VIEW(ch_vcfanno_out, [], [], [])  // filter on frequencies
+        // filter on frequencies
+        BCFTOOLS_VIEW(
+            ch_bcftools_view_in,
+            [], [], [])
 
         // Annotating with CADD
         if (!val_cadd_resources.equals(null)) {

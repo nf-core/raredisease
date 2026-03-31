@@ -53,7 +53,7 @@ workflow ANNOTATE_CADD {
             .join(CADD.out.tsv)
             .join(TABIX_CADD.out.index)
             .map { meta, vcf, tbi, ann, ann_tbi  -> [ meta, vcf, tbi, ann, ann_tbi, [] ] }
-            .combine(ch_header.map { _meta, header -> header })
+            .combine(ch_header)
             .combine(ch_rename_chrs)
             .set { ch_annotate_in }
 
