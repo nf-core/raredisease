@@ -1,4 +1,75 @@
 {
+    "Should run without failures, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        "0000-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ],
+                    [
+                        "0001-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        "processed_references/",
+                        [
+                            {
+                                "id": "genome"
+                            },
+                            [
+                                "0000-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "0001-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                "bed": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "publish": [
+                    [
+                        "processed_references/",
+                        [
+                            {
+                                "id": "genome"
+                            },
+                            [
+                                "0000-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "0001-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                "split_intervals": [
+                    [
+                        "0000-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ],
+                    [
+                        "0001-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-03-30T10:55:18.112519",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
     "Should run without failures": {
         "content": [
             {

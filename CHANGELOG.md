@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tests for some of the subworkflows [#780](https://github.com/nf-core/raredisease/pull/780)
 - Tests for some of the subworkflows [#782](https://github.com/nf-core/raredisease/pull/782)
 - Tests for some of the subworkflows [#783](https://github.com/nf-core/raredisease/pull/783)
+- Test tags for dependent modules in subworkflow tests [#800](https://github.com/nf-core/raredisease/pull/800)
+- Stub test for scatter_genome subworkflow [#802](https://github.com/nf-core/raredisease/pull/802)
 - Add CAT_FASTQ before SEQTK_SAMPLE in call_sv_MT to merge reads across lanes before subsampling for MitoSalt [#799](https://github.com/nf-core/raredisease/pull/799)
 - Add new local SPLIT_CHR module to split reference FASTA by chromosome for CNVnator, and pass genome flag to all CNVnator steps [#799](https://github.com/nf-core/raredisease/pull/799)
 - Add peddy --sites hg38 argument when running with GRCh38 [#799](https://github.com/nf-core/raredisease/pull/799)
