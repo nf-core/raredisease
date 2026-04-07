@@ -13,6 +13,7 @@ nextflow_workflow {
 
     tag "fastp"
     tag "samtools/view"
+    tag "samtools/view_exclude_alt"
 
     config "./nextflow.config"
 
@@ -60,6 +61,8 @@ nextflow_workflow {
         when {
             params {
                 pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
+                exclude_alt         = true
+                genome              = "GRCh38"
                 platform            = "illumina"
                 min_trimmed_length  = 50
                 mito_name           = "MT"
@@ -110,13 +113,14 @@ nextflow_workflow {
                 input[18] = false
                 input[19] = "bwamem2"
                 input[20] = "wgs"
-                input[21] = false
-                input[22] = 3072
-                input[23] = "bwamem2"
-                input[24] = "illumina"
-                input[25] = false
-                input[26] = 4
-                input[27] = true
+                input[21] = true
+                input[22] = false
+                input[23] = 3072
+                input[24] = "bwamem2"
+                input[25] = "illumina"
+                input[26] = false
+                input[27] = 4
+                input[28] = true
                 """
             }
         }
@@ -215,12 +219,13 @@ nextflow_workflow {
                 input[19] = "bwamem2"
                 input[20] = "wes"
                 input[21] = false
-                input[22] = 3072
-                input[23] = "bwamem2"
-                input[24] = "illumina"
-                input[25] = false
-                input[26] = 4
-                input[27] = false
+                input[22] = false
+                input[23] = 3072
+                input[24] = "bwamem2"
+                input[25] = "illumina"
+                input[26] = false
+                input[27] = 4
+                input[28] = false
                 """
             }
         }
@@ -311,12 +316,13 @@ nextflow_workflow {
                 input[19] = "bwameme"
                 input[20] = "wgs"
                 input[21] = false
-                input[22] = 3072
-                input[23] = "bwamem2"
-                input[24] = "illumina"
-                input[25] = false
-                input[26] = 4
-                input[27] = true
+                input[22] = false
+                input[23] = 3072
+                input[24] = "bwamem2"
+                input[25] = "illumina"
+                input[26] = false
+                input[27] = 4
+                input[28] = true
                 """
             }
         }
