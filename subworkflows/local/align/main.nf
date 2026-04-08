@@ -140,18 +140,6 @@ workflow ALIGN {
         ch_genome_marked_bai     = val_exclude_alt ? SAMTOOLS_VIEW_EXCLUDE_ALT.out.bai : ch_branched.keep_all.map { meta, _bam, bai -> [meta, bai] }
         ch_genome_marked_bam_bai = ch_genome_marked_bam.join(ch_genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
 
-        if (val_exclude_alt) {
-            SAMTOOLS_VIEW_EXCLUDE_ALT(
-                ch_genome_marked_bam_bai,
-                ch_genome_fasta.map { meta, fasta -> [meta, fasta, []] },
-                [],
-                'bai'
-            )
-            ch_genome_marked_bam     = SAMTOOLS_VIEW_EXCLUDE_ALT.out.bam
-            ch_genome_marked_bai     = SAMTOOLS_VIEW_EXCLUDE_ALT.out.bai
-            ch_genome_marked_bam_bai = ch_genome_marked_bam.join(ch_genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
-        }
-
         // PREPARING READS FOR MT ALIGNMENT
 
         if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
