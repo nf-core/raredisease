@@ -761,6 +761,11 @@
                 "hisat2": {
                     "type": "string"
                 },
+                "hisat2_build_memory": {
+                    "type": "string",
+                    "description": "Minimum memory required to build HISAT2 index with splice sites and exons. If available memory is below this threshold, a simpler index is built without splice sites.",
+                    "fa_icon": "fas fa-memory"
+                },
                 "mitosalt_breakspan": {
                     "type": "integer",
                     "default": 15,

@@ -590,7 +590,7 @@ workflow RAREDISEASE {
 */
 
     if (!skip_sv_calling) {
-        channel.of(val_mitosalt_breakspan,
+        channel.of([val_mitosalt_breakspan,
             val_mitosalt_breakthreshold,
             val_mitosalt_cluster_threshold,
             val_mitosalt_deletion_threshold_max,
@@ -601,7 +601,7 @@ workflow RAREDISEASE {
             val_mitosalt_score_threshold,
             val_mitosalt_sizelimit,
             val_mitosalt_split_distance_threshold,
-            val_mitosalt_split_length)
+            val_mitosalt_split_length])
             .set{ ch_mitosalt_config }
 
         CALL_STRUCTURAL_VARIANTS (
