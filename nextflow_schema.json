@@ -536,6 +536,11 @@
                     "description": "Specifies whether to generate a concatenated VCF file containing both nuclear & mitochondrial snv calls",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "exclude_alt": {
+                    "type": "boolean",
+                    "description": "After aligning the reads to a reference, remove alignments to alt contigs using samtools view, retaining only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM).",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "extract_alignments": {
                     "type": "boolean",
                     "description": "After aligning the reads to a reference, extract alignments from specific regions/contigs and restrict the analysis to those regions/contigs.",

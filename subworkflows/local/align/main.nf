@@ -5,7 +5,8 @@
 include { FASTP                      } from '../../../modules/nf-core/fastp/main'
 include { ALIGN_BWA_BWAMEM2_BWAMEME  } from '../align_bwa_bwamem2_bwameme'
 include { ALIGN_SENTIEON             } from '../align_sentieon'
-include { SAMTOOLS_VIEW              } from '../../../modules/nf-core/samtools/view/main'
+include { SAMTOOLS_VIEW as SAMTOOLS_VIEW_CONVERTTOCRAM  } from '../../../modules/nf-core/samtools/view/main'
+include { SAMTOOLS_VIEW as SAMTOOLS_VIEW_EXCLUDE_ALT    } from '../../../modules/nf-core/samtools/view/main'
 include { ALIGN_MT                   } from '../align_MT'
 include { ALIGN_MT as ALIGN_MT_SHIFT } from '../align_MT'
 include { CONVERT_MT_BAM_TO_FASTQ    } from '../convert_mt_bam_to_fastq'
@@ -33,6 +34,7 @@ workflow ALIGN {
         skip_fastp                // boolean
         val_aligner               //  string:  'bwa', 'bwamem2', 'bwameme', or 'sentieon'
         val_analysis_type         //  string:  'wgs', 'wes', or 'mito'
+        val_exclude_alt           // boolean
         val_extract_alignments    // boolean
         val_mbuffer_mem           // integer: [mandatory] memory in megabytes
         val_mt_aligner            //  string:  'bwa', 'bwamem2', or 'sentieon'
@@ -120,6 +122,18 @@ workflow ALIGN {
         ch_genome_marked_bai     = channel.empty().mix(ch_bwamem2_bai, ch_sentieon_bai, ch_input_bai)
         ch_genome_marked_bam_bai = ch_genome_marked_bam.join(ch_genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
 
+        if (val_exclude_alt) {
+            SAMTOOLS_VIEW_EXCLUDE_ALT(
+                ch_genome_marked_bam_bai,
+                ch_genome_fasta.map { meta, fasta -> [meta, fasta, []] },
+                [],
+                'bai'
+            )
+            ch_genome_marked_bam     = SAMTOOLS_VIEW_EXCLUDE_ALT.out.bam
+            ch_genome_marked_bai     = SAMTOOLS_VIEW_EXCLUDE_ALT.out.bai
+            ch_genome_marked_bam_bai = ch_genome_marked_bam.join(ch_genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
+        }
+
         // PREPARING READS FOR MT ALIGNMENT
 
         if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
@@ -160,9 +174,9 @@ workflow ALIGN {
         }
 
         if (val_save_mapped_as_cram) {
-            SAMTOOLS_VIEW( ch_genome_marked_bam_bai, ch_genome_fasta.map{meta, fasta -> return [meta, fasta, []]}, [], 'crai' )
-            ch_cram_publish = SAMTOOLS_VIEW.out.cram
-                .mix(SAMTOOLS_VIEW.out.crai)
+            SAMTOOLS_VIEW_CONVERTTOCRAM( ch_genome_marked_bam_bai, ch_genome_fasta.map{meta, fasta -> return [meta, fasta, []]}, [], 'crai' )
+            ch_cram_publish = SAMTOOLS_VIEW_CONVERTTOCRAM.out.cram
+                .mix(SAMTOOLS_VIEW_CONVERTTOCRAM.out.crai)
                 .map { meta, value -> ['alignment/', [meta, value]] }
         }
 
