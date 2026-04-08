@@ -106,7 +106,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <summary>Output files from Alignment</summary>
 
 - `{outputdir}/alignment/`
-  - `*.bam|*.cram`: Alignment file in bam/cram format.
+  - `*.bam|*.cram`: Alignment file in bam/cram format. When `--exclude_alt` is set, the file is filtered to primary chromosomes only (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM), which will also restrict variant calling to those chromosomes.
   - `*.bai|*.crai`: Index of the corresponding bam/cram file.
   - `*.txt`: Text file containing the dedup metrics.
   </details>
@@ -119,7 +119,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <summary>Output files from Alignment</summary>
 
 - `{outputdir}/alignment/`
-  - `*.bam|*.cram`: Alignment file in bam/cram format.
+  - `*.bam|*.cram`: Alignment file in bam/cram format. When `--exclude_alt` is set, the file is filtered to primary chromosomes only (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM), which will also restrict variant calling to those chromosomes.
   - `*.bai|*.crai`: Index of the corresponding bam/cram file.
   - `*.metrics`: Text file containing the dedup metrics.
   </details>

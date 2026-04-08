@@ -62,7 +62,7 @@ nextflow_workflow {
             params {
                 pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
                 exclude_alt         = true
-                genome              = "GRCh38"
+                genome              = "GRCh37"
                 platform            = "illumina"
                 min_trimmed_length  = 50
                 mito_name           = "MT"
