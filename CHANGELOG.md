@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add peddy --sites hg38 argument when running with GRCh38 [#799](https://github.com/nf-core/raredisease/pull/799)
 - Saltshaker for downstream processing of mitochondrial SV calls from MitoSAlt [#775](https://github.com/nf-core/raredisease/pull/775)
 - Env variable NXF_SINGULARITY_NEW_PID_NAMESPACE = false to accommodate hisat2 running with latest Nextflow and Singularity [#775](https://github.com/nf-core/raredisease/pull/775)
+- Parameter `exclude_alt` to filter alignments to alt/unplaced contigs after alignment using samtools view, retaining only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM). Note that enabling this will restrict variant calling to these chromosomes [#803](https://github.com/nf-core/raredisease/pull/803)]
 
 ### `Changed`
 
@@ -72,6 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | bwa_as_fallback |                         |
 |                 | multiqc_samples         |
 |                 | homoplasmy_af_threshold |
+|                 | exclude_alt             |
 
 ### Tool updates
 
