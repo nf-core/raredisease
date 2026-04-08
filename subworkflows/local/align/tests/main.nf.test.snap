@@ -7,22 +7,22 @@
                 "earlycasualcaiman.fastp.log",
                 "earlycasualcaiman_R1.fastp.fastq.gz",
                 "earlycasualcaiman_R2.fastp.fastq.gz",
-                "earlycasualcaiman_sort_md.cram",
-                "earlycasualcaiman_sort_md.cram.crai",
+                "earlycasualcaiman_sort_md_primary_contigs.cram",
+                "earlycasualcaiman_sort_md_primary_contigs.cram.crai",
                 "hugelymodelbat.fastp.html",
                 "hugelymodelbat.fastp.json",
                 "hugelymodelbat.fastp.log",
                 "hugelymodelbat_R1.fastp.fastq.gz",
                 "hugelymodelbat_R2.fastp.fastq.gz",
-                "hugelymodelbat_sort_md.cram",
-                "hugelymodelbat_sort_md.cram.crai",
+                "hugelymodelbat_sort_md_primary_contigs.cram",
+                "hugelymodelbat_sort_md_primary_contigs.cram.crai",
                 "slowlycivilbuck.fastp.html",
                 "slowlycivilbuck.fastp.json",
                 "slowlycivilbuck.fastp.log",
                 "slowlycivilbuck_R1.fastp.fastq.gz",
                 "slowlycivilbuck_R2.fastp.fastq.gz",
-                "slowlycivilbuck_sort_md.cram",
-                "slowlycivilbuck_sort_md.cram.crai"
+                "slowlycivilbuck_sort_md_primary_contigs.cram",
+                "slowlycivilbuck_sort_md_primary_contigs.cram.crai"
             ],
             [
                 [
@@ -41,8 +41,8 @@
                             "case_id": "justhusky"
                         }
                     },
-                    "d948b0bd18f6f6526f5d8832465e1542",
-                    "earlycasualcaiman_sorted_md.bam.bai"
+                    "bb547b29eca1afded4229826c774fc90",
+                    "earlycasualcaiman_sort_md_primary_contigs.bam.bai"
                 ],
                 [
                     {
@@ -60,8 +60,8 @@
                             "case_id": "justhusky"
                         }
                     },
-                    "2530fd24192b09084f45011703bd4954",
-                    "hugelymodelbat_sorted_md.bam.bai"
+                    "6f48b21e58c7450dd4db0bfc1268d687",
+                    "hugelymodelbat_sort_md_primary_contigs.bam.bai"
                 ],
                 [
                     {
@@ -79,8 +79,8 @@
                             "case_id": "justhusky"
                         }
                     },
-                    "cc1385671a27d394f628d2d7868eba80",
-                    "slowlycivilbuck_sorted_md.bam.bai"
+                    "e8431e5dc096f9636efd37ebfe9a5883",
+                    "slowlycivilbuck_sort_md_primary_contigs.bam.bai"
                 ]
             ],
             [
@@ -261,7 +261,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T14:53:02.154281647",
+        "timestamp": "2026-04-08T13:33:51.233648996",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
