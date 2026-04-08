@@ -338,7 +338,6 @@ workflow RAREDISEASE {
     // BAM QUALITY CHECK
     //
     QC_BAM (
-        ch_mapped.genome_marked_bam,
         ch_mapped.genome_marked_bam_bai,
         ch_bait_intervals,
         ch_genome_chrsizes,

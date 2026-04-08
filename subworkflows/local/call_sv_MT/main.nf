@@ -142,7 +142,7 @@ workflow CALL_SV_MT {
             // Saltshaker only runs if there are mitosalt calls. We update priority list when the
             // saltshaker vcf is created so the priority matches the list of vcfs that will be merged later
             ch_svcaller_priority = ch_svcaller_priority
-                .concat(ch_saltshaker_vcf.map{ _ -> ["mitosalt"] })
+                .concat(ch_saltshaker_vcf.map{ _it -> ["mitosalt"] })
                 .collect()
 
         }

@@ -666,7 +666,7 @@ workflow {
 
 output {
     subworkflow_results {
-        path { destination, value -> destination }
+        path { destination, _value -> destination }
     }
 }
 

@@ -136,8 +136,8 @@ workflow ALIGN {
             'bai'
         )
 
-        ch_genome_marked_bam     = val_exclude_alt ? SAMTOOLS_VIEW_EXCLUDE_ALT.out.bam : ch_branched.keep_all.map { meta, bam, bai -> [meta, bam] }
-        ch_genome_marked_bai     = val_exclude_alt ? SAMTOOLS_VIEW_EXCLUDE_ALT.out.bai : ch_branched.keep_all.map { meta, bam, bai -> [meta, bai] }
+        ch_genome_marked_bam     = val_exclude_alt ? SAMTOOLS_VIEW_EXCLUDE_ALT.out.bam : ch_branched.keep_all.map { meta, bam, _bai -> [meta, bam] }
+        ch_genome_marked_bai     = val_exclude_alt ? SAMTOOLS_VIEW_EXCLUDE_ALT.out.bai : ch_branched.keep_all.map { meta, _bam, bai -> [meta, bai] }
         ch_genome_marked_bam_bai = ch_genome_marked_bam.join(ch_genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
 
         if (val_exclude_alt) {

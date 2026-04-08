@@ -71,7 +71,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .collect{ _meta, vcf -> vcf }
                 .set { ch_tiddit_vcf }
 
-            CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_case_info)
+            CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_case_info)
                 .vcf
                 .collect{ _meta, vcf -> vcf }
                 .set { ch_cnvnator_vcf }
