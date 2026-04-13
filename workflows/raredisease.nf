@@ -457,6 +457,7 @@ workflow RAREDISEASE {
                 ch_vcfanno_toml,
                 ch_vep_cache,
                 ch_vep_extra_files,
+                val_analysis_type,
                 val_cadd_resources,
                 val_genome,
                 val_vep_cache_version

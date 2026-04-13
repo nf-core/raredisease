@@ -35,14 +35,16 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_vcfanno_toml       // channel: [mandatory] [ path(toml) ]
         ch_vep_cache          // channel: [mandatory] [ path(cache) ]
         ch_vep_extra_files    // channel: [mandatory] [ path(files) ]
+        val_analysis_type     // string: wgs, wes, or mito
         val_cadd_resources    // string: path to cadd resources file
         val_genome            // string: GRCh37 or GRCh38
         val_vep_cache_version // string:  vep version ex: 107
 
     main:
-        ch_cadd_vcf       = channel.empty()
-        ch_vcf_scatter_in = channel.empty()
-        ch_vep_in         = channel.empty()
+        ch_cadd_vcf            = channel.empty()
+        ch_vcf_scatter_in      = channel.empty()
+        ch_vep_in              = channel.empty()
+        ch_chromograph_publish = channel.empty()
 
         ch_vcf
             .filter { meta, _vcf, _tbi ->
@@ -176,10 +178,14 @@ workflow ANNOTATE_GENOME_SNVS {
             }
             .set { ch_upd_in }
 
-        UPD_SITES(ch_upd_in)
-        UPD_REGIONS(ch_upd_in)
-        CHROMOGRAPH_SITES([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_SITES.out.bed)
-        CHROMOGRAPH_REGIONS([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_REGIONS.out.bed, [[],[]])
+        if (val_analysis_type.equals("wgs")) {
+            UPD_SITES(ch_upd_in)
+            UPD_REGIONS(ch_upd_in)
+            CHROMOGRAPH_SITES([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_SITES.out.bed)
+            CHROMOGRAPH_REGIONS([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_REGIONS.out.bed, [[],[]])
+            ch_chromograph_publish = CHROMOGRAPH_SITES.out.plots
+                .mix(CHROMOGRAPH_REGIONS.out.plots)
+        }
 
         BCFTOOLS_CONCAT.out.vcf
             .map { meta, vcf -> [meta - meta.subMap('prefix'), vcf] }
@@ -193,8 +199,7 @@ workflow ANNOTATE_GENOME_SNVS {
         //rhocall_viz
         ANNOTATE_RHOCALLVIZ(ch_genome_chrsizes, ch_samples, ch_vep_ann_index )
 
-        ch_publish = CHROMOGRAPH_SITES.out.plots
-            .mix(CHROMOGRAPH_REGIONS.out.plots)
+        ch_publish = ch_chromograph_publish
             .mix(ch_concat_vcf_out)
             .mix(ch_concat_tbi_out)
             .map { meta, value -> ['annotate_snv/genome/', [meta, value]] }
