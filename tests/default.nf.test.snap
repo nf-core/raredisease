@@ -674,14 +674,10 @@
                 "call_sv/earlycasualcaiman.saltshaker.png",
                 "call_sv/earlycasualcaiman.saltshaker_classify.txt",
                 "call_sv/earlycasualcaiman_mitochondria_deletions.txt",
-                "call_sv/hugelymodelbat.saltshaker.png",
-                "call_sv/hugelymodelbat.saltshaker_classify.txt",
                 "call_sv/hugelymodelbat_mitochondria_deletions.txt",
                 "call_sv/justhusky_saltshaker.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz.tbi",
-                "call_sv/slowlycivilbuck.saltshaker.png",
-                "call_sv/slowlycivilbuck.saltshaker_classify.txt",
                 "call_sv/slowlycivilbuck_mitochondria_deletions.txt",
                 "fastqc",
                 "fastqc/earlycasualcaiman_LNUMBER1",
@@ -928,7 +924,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-04-07T22:49:04.94908105",
+        "timestamp": "2026-04-13T14:02:49.746679555",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
