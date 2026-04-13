@@ -110,7 +110,8 @@ workflow NFCORE_RAREDISEASE {
     val_sambamba_regions
     val_sample_id_map
     val_samtools_sort_threads
-    val_save_mapped_as_cram
+    val_save_all_mapped_as_cram
+    val_save_noalt_mapped_as_cram
     val_save_reference
     val_score_config_mt
     val_score_config_snv
@@ -332,6 +333,13 @@ workflow NFCORE_RAREDISEASE {
     skip_generate_clinical_set = parseSkipList(val_skip_subworkflows, 'generate_clinical_set')
 
     //
+    // Validate parameter combinations
+    //
+    if (val_save_noalt_mapped_as_cram && !val_exclude_alt) {
+        error("save_noalt_mapped_as_cram requires exclude_alt to be set to true")
+    }
+
+    //
     // SV caller priority
     //
     if (skip_germlinecnvcaller) {
@@ -504,7 +512,8 @@ workflow NFCORE_RAREDISEASE {
         val_run_rtgvcfeval,
         val_sample_id_map,
         val_samtools_sort_threads,
-        val_save_mapped_as_cram,
+        val_save_all_mapped_as_cram,
+        val_save_noalt_mapped_as_cram,
         val_svdb_query_bedpedbs,
         val_svdb_query_dbs,
         val_target_bed,
@@ -615,7 +624,8 @@ workflow {
         params.sambamba_regions,
         params.sample_id_map,
         params.samtools_sort_threads,
-        params.save_mapped_as_cram,
+        params.save_all_mapped_as_cram,
+        params.save_noalt_mapped_as_cram,
         params.save_reference,
         params.score_config_mt,
         params.score_config_snv,

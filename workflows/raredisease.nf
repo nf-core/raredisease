@@ -215,7 +215,8 @@ workflow RAREDISEASE {
     val_run_rtgvcfeval
     val_sample_id_map
     val_samtools_sort_threads
-    val_save_mapped_as_cram
+    val_save_all_mapped_as_cram
+    val_save_noalt_mapped_as_cram
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
     val_target_bed
@@ -313,7 +314,8 @@ workflow RAREDISEASE {
         val_platform,
         val_run_mt_for_wes,
         val_samtools_sort_threads,
-        val_save_mapped_as_cram
+        val_save_all_mapped_as_cram,
+        val_save_noalt_mapped_as_cram
     )
     .set { ch_mapped }
     ch_align_publish = ALIGN.out.publish

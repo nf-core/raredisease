@@ -581,9 +581,14 @@
                     "description": "Specifies whether to run rtgtools' vcfeval",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "save_mapped_as_cram": {
+                "save_all_mapped_as_cram": {
                     "type": "boolean",
-                    "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
+                    "description": "Specifies whether to generate and publish all (unfiltered) alignment files as cram instead of bam",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "save_noalt_mapped_as_cram": {
+                    "type": "boolean",
+                    "description": "Specifies whether to generate and publish alt-filtered alignment files as cram instead of bam. Requires exclude_alt to be set to true.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "scatter_count": {

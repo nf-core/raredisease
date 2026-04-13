@@ -100,7 +100,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ##### Picard's MarkDuplicates
 
-[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2, bwameme and bwa are processed by this tool. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
+[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2, bwameme and bwa are processed by this tool. By default, alignment files are published in bam format. To publish cram files instead, use `--save_all_mapped_as_cram` for the full (unfiltered) alignment, or `--save_noalt_mapped_as_cram` for the alt-filtered alignment (requires `--exclude_alt`).
 
 <details markdown="1">
 <summary>Output files from Alignment</summary>
@@ -113,7 +113,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ##### Sentieon Dedup
 
-[Sentieon Dedup](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#remove-or-mark-duplicates) is the algorithm used by Sentieon's driver to remove duplicate reads. Only reads aligned by Sentieon's implementation of bwa are processed by this algorithm. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
+[Sentieon Dedup](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#remove-or-mark-duplicates) is the algorithm used by Sentieon's driver to remove duplicate reads. Only reads aligned by Sentieon's implementation of bwa are processed by this algorithm. By default, alignment files are published in bam format. To publish cram files instead, use `--save_all_mapped_as_cram` for the full (unfiltered) alignment, or `--save_noalt_mapped_as_cram` for the alt-filtered alignment (requires `--exclude_alt`).
 
 <details markdown="1">
 <summary>Output files from Alignment</summary>
