@@ -15,15 +15,14 @@ process SALTSHAKER_TO_HTML {
     def saltshaker_txt_to_html(txt_file):
         with open(txt_file) as f:
             content = f.read()
-        html_content = re.sub(r'\\t', '</td><td>', content)
-        html_content = re.sub(r'\\n', '</td></tr><tr><td>', html_content)
+        html_content = re.sub(r'\\n', '<br>', content)
         return html_content
 
     html = saltshaker_txt_to_html("${classify}")
     with open("${classify.baseName}.html", 'w') as f:
-        f.write('<html><body><table border="1">')
-        f.write(html)
-        f.write('</table></body></html>')
+        f.write('<html><body>')
+        f.write(f'<pre style="padding: 15px; border-radius: 5px; overflow-x: auto;">{html}</pre>')
+        f.write('</body></html>')
     EOF
     """
 }
