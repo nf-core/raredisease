@@ -69,16 +69,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter   | New parameter           |
-| --------------- | ----------------------- |
-|                 | sambamba_regions        |
-| bwa_as_fallback |                         |
-|                 | multiqc_samples         |
-|                 | homoplasmy_af_threshold |
-|                 | exclude_alt             |
-| save_mapped_as_cram |                     |
-|                 | save_all_mapped_as_cram |
-|                 | save_noalt_mapped_as_cram |
+| Old parameter       | New parameter             |
+| ------------------- | ------------------------- |
+|                     | sambamba_regions          |
+| bwa_as_fallback     |                           |
+|                     | multiqc_samples           |
+|                     | homoplasmy_af_threshold   |
+|                     | exclude_alt               |
+| save_mapped_as_cram |                           |
+|                     | save_all_mapped_as_cram   |
+|                     | save_noalt_mapped_as_cram |
 
 ### Tool updates
 
