@@ -7,6 +7,17 @@
                     [
                         [
                             {
+                                "id": "justhusky"
+                            },
+                            "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "1",
+                    [
+                        [
+                            {
                                 "id": "earlycasualcaiman",
                                 "sample": "earlycasualcaiman",
                                 "single_end": false,
@@ -17,18 +28,7 @@
                                 "maternal": 0,
                                 "case_id": "justhusky"
                             },
-                            "earlycasualcaiman.saltshaker_classify.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ]
-                ],
-                [
-                    "1",
-                    [
-                        [
-                            {
-                                "id": "justhusky"
-                            },
-                            "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "earlycasualcaiman.saltshaker_classify.html:md5,5ec112032a61697ad6e447fc71573522"
                         ]
                     ]
                 ],
@@ -117,7 +117,7 @@
                                     "maternal": 0,
                                     "case_id": "justhusky"
                                 },
-                                "earlycasualcaiman.saltshaker_classify.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                                "earlycasualcaiman.saltshaker_classify.html:md5,5ec112032a61697ad6e447fc71573522"
                             ]
                         ],
                         [
@@ -205,7 +205,7 @@
                                     "maternal": 0,
                                     "case_id": "justhusky"
                                 },
-                                "earlycasualcaiman.saltshaker_classify.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                                "earlycasualcaiman.saltshaker_classify.html:md5,5ec112032a61697ad6e447fc71573522"
                             ]
                         ],
                         [
@@ -239,6 +239,25 @@
                     ]
                 ],
                 [
+                    "saltshaker_html",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman.saltshaker_classify.html:md5,5ec112032a61697ad6e447fc71573522"
+                        ]
+                    ]
+                ],
+                [
                     "saltshaker_plot",
                     [
                         [
@@ -254,25 +273,6 @@
                                 "case_id": "justhusky"
                             },
                             "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ]
-                ],
-                [
-                    "saltshaker_txt",
-                    [
-                        [
-                            {
-                                "id": "earlycasualcaiman",
-                                "sample": "earlycasualcaiman",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "sex": 1,
-                                "phenotype": 1,
-                                "paternal": 0,
-                                "maternal": 0,
-                                "case_id": "justhusky"
-                            },
-                            "earlycasualcaiman.saltshaker_classify.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -300,10 +300,10 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-30T20:20:40.266229001",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-14T15:53:31.425509861"
     }
 }
