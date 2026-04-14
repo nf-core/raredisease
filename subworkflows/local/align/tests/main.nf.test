@@ -121,7 +121,7 @@ nextflow_workflow {
                 input[26] = false
                 input[27] = 4
                 input[28] = true
-                input[29] = false
+                input[29] = true
                 """
             }
         }
