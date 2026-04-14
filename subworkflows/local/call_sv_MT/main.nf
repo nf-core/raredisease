@@ -154,15 +154,13 @@ workflow CALL_SV_MT {
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
 
-        ch_publish = ch_saltshaker_txt
-                        .mix(ch_saltshaker_html)
+        ch_publish = ch_saltshaker_html
                         .mix(ch_saltshaker_vcf)
                         .mix(ch_saltshaker_plot)
                         .mix(MT_DELETION.out.mt_del_result)
                         .map { meta, value -> ['call_sv/', [meta, value]] }
 
     emit:
-        saltshaker_txt   = ch_saltshaker_txt             // channel: [ val(meta), path(txt) ]
         saltshaker_vcf   = ch_saltshaker_vcf             // channel: [ val(meta), path(vcf) ]
         saltshaker_html  = ch_saltshaker_html            // channel: [ val(meta), path(html) ]
         saltshaker_plot  = ch_saltshaker_plot            // channel: [ val(meta), path(png) ]
