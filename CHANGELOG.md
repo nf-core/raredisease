@@ -59,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove Qualimap and Haplogrep3 as they were made redundant by Picard and VerifyBamID2 [#801](https://github.com/nf-core/raredisease/pull/801)
 - Remove env variable NXF_SINGULARITY_NEW_PID_NAMESPACE from the config since this has to be set outside the subworkflow [#804](https://github.com/nf-core/raredisease/pull/804)
 - Run UPD_SITES, UPD_REGIONS, and CHROMOGRAPH for UPD only when analysis type is WGS [#806](https://github.com/nf-core/raredisease/pull/806)
+- Change saltshaker classification output from txt to html [#808](https://github.com/nf-core/raredisease/pull/808)
 
 ### `Fixed`
 

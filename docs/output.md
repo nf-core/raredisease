@@ -60,7 +60,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
     - [Mitochondrial analysis](#mitochondrial-analysis)
       - [Alignment and variant calling](#alignment-and-variant-calling)
         - [MT deletion script](#mt-deletion-script)
-        - [eKLIPse](#eklipse)
+        - [MitoSAlt](#mitosalt)
+        - [saltshaker](#saltshaker)
       - [Annotation](#annotation)
         - [vcfanno](#vcfanno-1)
         - [CADD](#cadd-1)
@@ -469,7 +470,7 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 [Saltshaker](https://github.com/aksenia/saltshaker) allows for downstream clustering and classification of mtDNA strucutral variants. Called variants are combined with structural variants called in the nuclear genome.
 
 - `call_sv`
-  - `<sample_id>.saltshaker_classify.txt`: report containing case-level classification of mitochondrial deletions.
+  - `<sample_id>.saltshaker_classify.html`: report containing case-level classification of mitochondrial deletions.
   - `<sample_id>.saltshaker.png`: circos plot.
 
 #### Annotation

@@ -10,6 +10,7 @@ include { CAT_FASTQ           } from '../../../modules/nf-core/cat/fastq/main'
 include { SALTSHAKER_CALL     } from '../../../modules/nf-core/saltshaker/call/main'
 include { SALTSHAKER_CLASSIFY } from '../../../modules/nf-core/saltshaker/classify/main'
 include { SALTSHAKER_PLOT     } from '../../../modules/nf-core/saltshaker/plot/main'
+include { SALTSHAKER_TO_HTML  } from '../../../modules/local/saltshaker_to_html/main'
 include { SEQTK_SAMPLE        } from '../../../modules/nf-core/seqtk/sample/main'
 include { SVDB_MERGE          } from '../../../modules/nf-core/svdb/merge/main'
 
@@ -120,6 +121,11 @@ workflow CALL_SV_MT {
             ch_saltshaker_txt = SALTSHAKER_CLASSIFY.out.txt
             ch_saltshaker_vcf = SALTSHAKER_CLASSIFY.out.vcf
 
+            SALTSHAKER_TO_HTML(
+                ch_saltshaker_txt,
+            )
+            ch_saltshaker_html = SALTSHAKER_TO_HTML.out.classify_html
+
             SALTSHAKER_PLOT(
                 SALTSHAKER_CLASSIFY.out.classify
             )
@@ -148,15 +154,15 @@ workflow CALL_SV_MT {
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
 
-        ch_publish = ch_saltshaker_txt
+        ch_publish = ch_saltshaker_html
                         .mix(ch_saltshaker_vcf)
                         .mix(ch_saltshaker_plot)
                         .mix(MT_DELETION.out.mt_del_result)
                         .map { meta, value -> ['call_sv/', [meta, value]] }
 
     emit:
-        saltshaker_txt   = ch_saltshaker_txt             // channel: [ val(meta), path(txt) ]
         saltshaker_vcf   = ch_saltshaker_vcf             // channel: [ val(meta), path(vcf) ]
+        saltshaker_html  = ch_saltshaker_html            // channel: [ val(meta), path(html) ]
         saltshaker_plot  = ch_saltshaker_plot            // channel: [ val(meta), path(png) ]
         mt_del_result    = MT_DELETION.out.mt_del_result // channel: [ val(meta), path(txt) ]
         updated_priority = ch_svcaller_priority          // channel: [ val(["caller1", "caller2", ...]) ] - includes "mitosalt" if it ran
