@@ -75,4 +75,53 @@ nextflow_workflow {
 
     }
 
+    test("align sentieon, stub") {
+
+        setup {
+            run("SENTIEON_BWAINDEX") {
+                script "modules/nf-core/sentieon/bwaindex/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'sarscov2'],
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+        
+        options "-stub"
+
+        when {
+            params {
+                aligner = "sentieon"
+                sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                save_mapped_as_cram = true
+            }
+            workflow {
+                """
+                input[0] = SENTIEON_BWAINDEX.out.index
+                input[1] = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
+                input[2] = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
+                input[3] = channel.of([
+                    [ id:'test', sample:'test', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test'"  ], // meta map
+                    [
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
+                    ]
+                ])
+                input[4] = false
+                input[5] = "illumina"
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
 }
