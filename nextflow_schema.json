@@ -600,6 +600,34 @@
                     "description": "Disable specified tools.",
                     "help_text": "Multiple tools can be specified, separated by commas.",
                     "pattern": "^((fastp|gens|germlinecnvcaller|peddy|smncopynumbercaller|vcf2cytosure|fastqc|ngsbits)?,?)*(?<!,)$"
+                },
+                "filter_expansionhunter_htt": {
+                    "type": "boolean",
+                    "default": false,
+                    "fa_icon": "fas fa-filter",
+                    "description": "Filter out HTT (Huntington) records from ExpansionHunter output. Mirrors WOPR behaviour."
+                },
+                "filter_sv_to_manta": {
+                    "type": "boolean",
+                    "default": false,
+                    "fa_icon": "fas fa-filter",
+                    "description": "Exclude TIDDIT variants from SV merge, keeping only Manta variants."
+                },
+                "skip_vep_sv": {
+                    "type": "boolean",
+                    "default": false,
+                    "fa_icon": "fas fa-forward",
+                    "description": "Skip VEP annotation of structural variants. SVDB_QUERY still runs."
+                },
+                "sv_freq_threshold": {
+                    "type": "number",
+                    "fa_icon": "fas fa-filter",
+                    "description": "Filter SVs with SWEFRQ >= this value (e.g. 0.02). Null disables the filter."
+                },
+                "sv_size_threshold": {
+                    "type": "integer",
+                    "fa_icon": "fas fa-filter",
+                    "description": "Filter Manta SVs larger than this value in bp before merge (e.g. 1000000). Null disables the filter."
                 }
             }
         },

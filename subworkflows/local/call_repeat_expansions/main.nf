@@ -4,6 +4,8 @@
 
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_EXP     } from '../../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_REHEADER as BCFTOOLS_REHEADER_EXP   } from '../../../modules/nf-core/bcftools/reheader/main'
+include { BCFTOOLS_VIEW as BCFTOOLS_FILTER_HTT         } from '../../../modules/nf-core/bcftools/view/main'
+include { BCFTOOLS_VIEW as BCFTOOLS_DECOMPRESS_MERGE  } from '../../../modules/nf-core/bcftools/view/main'
 include { EXPANSIONHUNTER                              } from '../../../modules/nf-core/expansionhunter/main'
 include { PICARD_RENAMESAMPLEINVCF as RENAMESAMPLE_EXP } from '../../../modules/nf-core/picard/renamesampleinvcf/main'
 include { SAMTOOLS_SORT                                } from '../../../modules/nf-core/samtools/sort/main'
@@ -44,8 +46,21 @@ workflow CALL_REPEAT_EXPANSIONS {
             ch_genome_fasta
         )
 
+        // Optionally filter out HTT records (set params.filter_expansionhunter_htt = true to enable)
+        if (params.filter_expansionhunter_htt) {
+            BCFTOOLS_FILTER_HTT (
+                SPLIT_MULTIALLELICS_EXP.out.vcf.map { meta, vcf -> [ meta, vcf, [] ] },
+                [],
+                [],
+                []
+            )
+            ch_exp_vcfs_pre_merge = BCFTOOLS_FILTER_HTT.out.vcf
+        } else {
+            ch_exp_vcfs_pre_merge = SPLIT_MULTIALLELICS_EXP.out.vcf
+        }
+
         // Merge indiviual repeat expansions
-        SPLIT_MULTIALLELICS_EXP.out.vcf
+        ch_exp_vcfs_pre_merge
             .collect{_meta, vcf -> vcf}
             .toList()
             .collect()
@@ -57,9 +72,14 @@ workflow CALL_REPEAT_EXPANSIONS {
 
         SVDB_MERGE_REPEATS ( ch_svdb_merge_input, [], true )
 
+        BCFTOOLS_DECOMPRESS_MERGE(
+            SVDB_MERGE_REPEATS.out.vcf.map { meta, vcf -> [meta, vcf, []] },
+            [], [], []
+        )
+
         ch_publish = SAMTOOLS_SORT.out.bam
             .mix(SAMTOOLS_SORT.out.bai)
-            .mix(BCFTOOLS_REHEADER_EXP.out.vcf)
+            .mix(BCFTOOLS_DECOMPRESS_MERGE.out.vcf)
             .map { meta, value -> ['repeat_expansions/', [meta, value]] }
 
     emit:

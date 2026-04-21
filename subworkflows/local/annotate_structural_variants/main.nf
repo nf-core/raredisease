@@ -2,11 +2,12 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SVDB_QUERY as SVDB_QUERY_DB     } from '../../../modules/nf-core/svdb/query/main'
-include { SVDB_QUERY as SVDB_QUERY_BEDPE  } from '../../../modules/nf-core/svdb/query/main'
-include { PICARD_SORTVCF                  } from '../../../modules/nf-core/picard/sortvcf/main'
-include { BCFTOOLS_VIEW                   } from '../../../modules/nf-core/bcftools/view/main'
-include { ENSEMBLVEP_VEP as ENSEMBLVEP_SV } from '../../../modules/nf-core/ensemblvep/vep/main'
+include { SVDB_QUERY as SVDB_QUERY_DB          } from '../../../modules/nf-core/svdb/query/main'
+include { SVDB_QUERY as SVDB_QUERY_BEDPE       } from '../../../modules/nf-core/svdb/query/main'
+include { PICARD_SORTVCF                       } from '../../../modules/nf-core/picard/sortvcf/main'
+include { BCFTOOLS_VIEW                        } from '../../../modules/nf-core/bcftools/view/main'
+include { BCFTOOLS_VIEW as BCFTOOLS_FILTER_SV  } from '../../../modules/nf-core/bcftools/view/main'
+include { ENSEMBLVEP_VEP as ENSEMBLVEP_SV      } from '../../../modules/nf-core/ensemblvep/vep/main'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
@@ -72,34 +73,55 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             ch_vcf      = SVDB_QUERY_BEDPE.out.vcf
         }
 
-        PICARD_SORTVCF(ch_vcf, ch_genome_fasta, ch_genome_dictionary)
-
-        PICARD_SORTVCF.out.vcf
-            .map { meta, vcf -> return [meta,vcf,[]] }
-            .set { ch_sortvcf }
-
-        BCFTOOLS_VIEW(ch_sortvcf, [], [], [])
-            .vcf
-            .map { meta, vcf -> return [meta, vcf, []]}
-            .set { ch_vep_in }
-
-        ENSEMBLVEP_SV(
-            ch_vep_in,
-            val_genome,
-            "homo_sapiens",
-            val_vep_cache_version,
-            ch_vep_cache,
-            ch_genome_fasta,
-            ch_vep_extra_files
+        // Optionally filter SVs by population frequency (SWEFRQ).
+        // Threshold controlled via params.sv_freq_threshold.
+        // SVLEN filter is applied earlier, Manta-specifically, in CALL_SV_MANTA:BCFTOOLS_VIEW_MANTA.
+        // Configured via ext.args in profile config. Without ext.args this is a passthrough.
+        BCFTOOLS_FILTER_SV(
+            ch_vcf.map { meta, vcf -> [meta, vcf, []] },
+            [], [], []
         )
+        ch_vcf = BCFTOOLS_FILTER_SV.out.vcf
 
-        ch_publish = ENSEMBLVEP_SV.out.vcf
-            .mix(ENSEMBLVEP_SV.out.tbi)
-            .mix(ENSEMBLVEP_SV.out.report.map{ meta, process, vep, html -> return [meta, html] })
-            .map { meta, value -> ['annotate_sv/', [meta, value]] }
+        // Optionally skip VEP annotation (set params.skip_vep_sv = true to enable).
+        // SVDB_QUERY still runs; only PICARD_SORTVCF, BCFTOOLS_VIEW and ENSEMBLVEP_SV are skipped.
+        if (!params.skip_vep_sv) {
+            PICARD_SORTVCF(ch_vcf, ch_genome_fasta, ch_genome_dictionary)
+
+            PICARD_SORTVCF.out.vcf
+                .map { meta, vcf -> return [meta,vcf,[]] }
+                .set { ch_sortvcf }
+
+            BCFTOOLS_VIEW(ch_sortvcf, [], [], [])
+                .vcf
+                .map { meta, vcf -> return [meta, vcf, []]}
+                .set { ch_vep_in }
+
+            ENSEMBLVEP_SV(
+                ch_vep_in,
+                val_genome,
+                "homo_sapiens",
+                val_vep_cache_version,
+                ch_vep_cache,
+                ch_genome_fasta,
+                ch_vep_extra_files
+            )
+
+            ch_vcf_ann = ENSEMBLVEP_SV.out.vcf
+            ch_tbi_ann = ENSEMBLVEP_SV.out.tbi
+            ch_publish = ENSEMBLVEP_SV.out.vcf
+                .mix(ENSEMBLVEP_SV.out.tbi)
+                .mix(ENSEMBLVEP_SV.out.report.map{ meta, process, vep, html -> return [meta, html] })
+                .map { meta, value -> ['annotate_sv/', [meta, value]] }
+        } else {
+            ch_vcf_ann = ch_vcf
+            ch_tbi_ann = Channel.empty()
+            ch_publish = BCFTOOLS_FILTER_SV.out.vcf
+                .map { meta, vcf -> ['annotate_sv/', [meta, vcf]] }
+        }
 
     emit:
-        publish  = ch_publish            // channel: [ val(destination), val(value) ]
-        tbi      = ENSEMBLVEP_SV.out.tbi // channel: [ val(meta), path(tbi) ]
-        vcf_ann  = ENSEMBLVEP_SV.out.vcf // channel: [ val(meta), path(vcf) ]
+        publish  = ch_publish  // channel: [ val(destination), val(value) ]
+        tbi      = ch_tbi_ann  // channel: [ val(meta), path(tbi) ]
+        vcf_ann  = ch_vcf_ann  // channel: [ val(meta), path(vcf) ]
 }

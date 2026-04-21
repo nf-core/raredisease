@@ -70,11 +70,12 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .vcf
                 .collect{ _meta, vcf -> vcf }
                 .set { ch_tiddit_vcf }
-
-            CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_case_info)
-                .vcf
-                .collect{ _meta, vcf -> vcf }
-                .set { ch_cnvnator_vcf }
+		
+            // CNVnator disabled - broken container (assert.h missing)
+            //CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_case_info)
+            //    .vcf
+            //    .collect{ _meta, vcf -> vcf }
+            //    .set { ch_cnvnator_vcf }
         }
 
         if (!skip_germlinecnvcaller) {
@@ -121,20 +122,25 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
         // Merge - with consistent ordering using concat
         if (!val_analysis_type.equals("mito")) {
+            // When filter_sv_to_manta = true: exclude TIDDIT from merge and drop priority
+            // (clinic has only validated Manta; set params.filter_sv_to_manta = false to include TIDDIT)
+            ch_tiddit_vcf_for_merge = params.filter_sv_to_manta ? Channel.empty() : ch_tiddit_vcf
+            ch_priority_for_merge   = params.filter_sv_to_manta ? [] : ch_svcaller_priority
+
             // Concatenate in specific order: tiddit -> manta -> gcnvcaller -> cnvnator -> mitosalt
             // Empty channels won't contribute any items
-            ch_tiddit_vcf
+            ch_tiddit_vcf_for_merge
                 .concat(ch_manta_vcf)
                 .concat(ch_gcnvcaller_vcf)
                 .concat(ch_cnvnator_vcf)
                 .concat(ch_saltshaker_vcf)
                 .collect()
-                .map { vcf_list -> [vcf_list] }  //
+                .map { vcf_list -> [vcf_list] }
                 .set { ch_vcf_paths }
             ch_case_info
                 .combine(ch_vcf_paths)
                 .set { ch_merge_vcfs_in }
-            SVDB_MERGE (ch_merge_vcfs_in, ch_svcaller_priority, true)
+            SVDB_MERGE (ch_merge_vcfs_in, ch_priority_for_merge, true)
 
             TABIX_TABIX (SVDB_MERGE.out.vcf)
             ch_merged_svs = SVDB_MERGE.out.vcf

@@ -680,30 +680,32 @@ workflow RAREDISEASE {
 
             ch_ann_csq_sv_in = ch_clinical_sv_vcf.mix(ch_clin_research_sv_vcf.research)
 
-            ANN_CSQ_PLI_SV (
-                ch_variant_consequences_sv,
-                ch_ann_csq_sv_in,
-                false,
-                ''
-            )
+            if (!params.skip_vep_sv) {
+                ANN_CSQ_PLI_SV (
+                    ch_variant_consequences_sv,
+                    ch_ann_csq_sv_in,
+                    false,
+                    ''
+                )
 
-            ANN_CSQ_PLI_SV.out.vcf_ann
-                .filter { meta, _vcf ->
-                    if (meta.probands.size()==0) {
-                        log.warn("Skipping SV ranking since no affected samples are detected in the case")
+                ANN_CSQ_PLI_SV.out.vcf_ann
+                    .filter { meta, _vcf ->
+                        if (meta.probands.size()==0) {
+                            log.warn("Skipping SV ranking since no affected samples are detected in the case")
+                        }
+                        meta.probands.size()>0
                     }
-                    meta.probands.size()>0
-                }
-                .set {ch_ranksnv_sv_in}
+                    .set {ch_ranksnv_sv_in}
 
-            RANK_VARIANTS_SV (
-                ch_pedfile,
-                ch_reduced_penetrance,
-                ch_score_config_sv,
-                ch_ranksnv_sv_in,
-                true
-            )
-            ch_rank_sv_publish = RANK_VARIANTS_SV.out.publish
+                RANK_VARIANTS_SV (
+                    ch_pedfile,
+                    ch_reduced_penetrance,
+                    ch_score_config_sv,
+                    ch_ranksnv_sv_in,
+                    true
+                )
+                ch_rank_sv_publish = RANK_VARIANTS_SV.out.publish
+            }
         }
     }
 /*
