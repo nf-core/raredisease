@@ -210,6 +210,7 @@ The mandatory and optional parameters for each category are tabulated below.
 |                                | min_trimmed_length<sup>6</sup>  |
 |                                | extract_alignments              |
 |                                | restrict_to_contigs<sup>7</sup> |
+|                                | exclude_alt<sup>8</sup>         |
 
 <sup>1</sup>Default value is bwamem2. Other alternatives are bwa, bwameme and sentieon (requires valid Sentieon license ).<br />
 <sup>2</sup>Analysis set reference genome in fasta format, first 25 contigs need to be chromosome 1-22, X, Y and the mitochondria.<br />
@@ -218,6 +219,7 @@ The mandatory and optional parameters for each category are tabulated below.
 <sup>5</sup>Used only by Sentieon.<br />
 <sup>6</sup>Default value is 40. Used only by fastp.<br />
 <sup>7</sup>Used to limit your analysis to specific contigs. Can be used to remove alignments to unplaced contigs to minimize potential errors. This parameter should be used in conjunction with the `extract_alignments` parameter.<br />
+<sup>8</sup>When set to true, alignments to alt/unplaced contigs are removed after alignment using samtools view, retaining only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM). Note that this will affect all downstream variant calling, as variants will only be called on these primary chromosomes.<br />
 
 ##### 2. QC stats from the alignment files
 

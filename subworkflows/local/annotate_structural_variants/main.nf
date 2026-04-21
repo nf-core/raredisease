@@ -95,7 +95,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
         ch_publish = ENSEMBLVEP_SV.out.vcf
             .mix(ENSEMBLVEP_SV.out.tbi)
-            .mix(ENSEMBLVEP_SV.out.report.map{ meta, process, vep, html -> return [meta, html] })
+            .mix(ENSEMBLVEP_SV.out.report.map{ meta, _process, _vep, html -> return [meta, html] })
             .map { meta, value -> ['annotate_sv/', [meta, value]] }
 
     emit:
