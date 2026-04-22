@@ -16,11 +16,13 @@ workflow CALL_SV_MANTA {
         val_analysis_type // string: "wes", "wgs", or "mito"
 
     main:
-        ch_bam.collect{_meta, bam -> bam}
+        ch_bam.map{ _meta, bam -> bam }
+            .collect(sort: { a, b -> a.getName() <=> b.getName() })
             .toList()
             .set { bam_file_list }
 
-        ch_bai.collect{_meta, bai -> bai}
+        ch_bai.map{ _meta, bai -> bai }
+            .collect(sort: { a, b -> a.getName() <=> b.getName() })
             .toList()
             .set { bai_file_list }
 
