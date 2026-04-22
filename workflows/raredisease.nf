@@ -181,6 +181,7 @@ workflow RAREDISEASE {
     val_analysis_type
     val_cadd_resources
     val_concatenate_snv_calls
+    val_exclude_alt
     val_extract_alignments
     val_genome
     val_heavy_strand_origin_end
@@ -214,7 +215,8 @@ workflow RAREDISEASE {
     val_run_rtgvcfeval
     val_sample_id_map
     val_samtools_sort_threads
-    val_save_mapped_as_cram
+    val_save_all_mapped_as_cram
+    val_save_noalt_mapped_as_cram
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
     val_target_bed
@@ -305,13 +307,15 @@ workflow RAREDISEASE {
         skip_fastp,
         val_aligner,
         val_analysis_type,
+        val_exclude_alt,
         val_extract_alignments,
         val_mbuffer_mem,
         val_mt_aligner,
         val_platform,
         val_run_mt_for_wes,
         val_samtools_sort_threads,
-        val_save_mapped_as_cram
+        val_save_all_mapped_as_cram,
+        val_save_noalt_mapped_as_cram
     )
     .set { ch_mapped }
     ch_align_publish = ALIGN.out.publish
@@ -336,7 +340,6 @@ workflow RAREDISEASE {
     // BAM QUALITY CHECK
     //
     QC_BAM (
-        ch_mapped.genome_marked_bam,
         ch_mapped.genome_marked_bam_bai,
         ch_bait_intervals,
         ch_genome_chrsizes,
@@ -456,6 +459,7 @@ workflow RAREDISEASE {
                 ch_vcfanno_toml,
                 ch_vep_cache,
                 ch_vep_extra_files,
+                val_analysis_type,
                 val_cadd_resources,
                 val_genome,
                 val_vep_cache_version
@@ -588,7 +592,7 @@ workflow RAREDISEASE {
 */
 
     if (!skip_sv_calling) {
-        channel.of(val_mitosalt_breakspan,
+        channel.of([val_mitosalt_breakspan,
             val_mitosalt_breakthreshold,
             val_mitosalt_cluster_threshold,
             val_mitosalt_deletion_threshold_max,
@@ -599,39 +603,39 @@ workflow RAREDISEASE {
             val_mitosalt_score_threshold,
             val_mitosalt_sizelimit,
             val_mitosalt_split_distance_threshold,
-            val_mitosalt_split_length)
+            val_mitosalt_split_length])
             .set{ ch_mitosalt_config }
 
         CALL_STRUCTURAL_VARIANTS (
-            ch_mapped.genome_marked_bam,
-            ch_mapped.genome_marked_bai,
-            ch_mapped.genome_marked_bam_bai,
             ch_genome_bwaindex,
-            ch_genome_fasta,
-            ch_genome_fai,
             ch_case_info,
-            ch_target_bed,
-            ch_genome_dictionary,
-            ch_svcaller_priority,
-            ch_readcount_intervals,
-            ch_ploidy_model,
             ch_gcnvcaller_model,
-            val_analysis_type,
-            skip_germlinecnvcaller,
-            skip_mitosalt,
-            ch_mapped.mt_bam_bai,
+            ch_mapped.genome_marked_bai,
+            ch_mapped.genome_marked_bam,
+            ch_mapped.genome_marked_bam_bai,
             ch_genome_chrsizes,
+            ch_genome_dictionary,
+            ch_genome_fai,
+            ch_genome_fasta,
             ch_genome_hisat2index,
+            ch_mitosalt_config,
+            ch_mapped.mt_bam_bai,
             ch_mt_fai,
             ch_mt_fasta,
             ch_mt_lastdb,
+            ch_ploidy_model,
+            ch_readcount_intervals,
             ch_input_fastqs,
             ch_subdepth,
-            ch_mitosalt_config,
-            val_heavy_strand_origin_start,
+            ch_svcaller_priority,
+            ch_target_bed,
+            skip_germlinecnvcaller,
+            skip_mitosalt,
+            val_analysis_type,
             val_heavy_strand_origin_end,
-            val_light_strand_origin_start,
+            val_heavy_strand_origin_start,
             val_light_strand_origin_end,
+            val_light_strand_origin_start,
             val_mito_length,
             val_mito_name,
             val_mitosalt_flank,

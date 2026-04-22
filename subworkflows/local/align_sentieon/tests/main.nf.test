@@ -35,7 +35,8 @@ nextflow_workflow {
             params {
                 aligner = "sentieon"
                 sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
-                save_mapped_as_cram = true
+                save_noalt_mapped_as_cram = false
+                save_all_mapped_as_cram   = true
             }
             workflow {
                 """
