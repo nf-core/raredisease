@@ -226,7 +226,7 @@ nextflow_workflow {
     test("QC_BAM - test, sentieon, stub") {
 
         options "-stub"
-        
+
         when {
             params {
                 outdir     = "$outputDir"
