@@ -19,7 +19,6 @@ include { VERIFYBAMID_VERIFYBAMID2                                 } from '../..
 workflow QC_BAM {
 
     take:
-        ch_bam                          // channel: [mandatory] [ val(meta), path(bam) ]
         ch_bam_bai                      // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_bait_intervals               // channel: [mandatory] [ path(intervals_list) ]
         ch_genome_chrsizes              // channel: [mandatory] [ path(sizes) ]

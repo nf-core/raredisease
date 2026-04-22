@@ -60,7 +60,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
     - [Mitochondrial analysis](#mitochondrial-analysis)
       - [Alignment and variant calling](#alignment-and-variant-calling)
         - [MT deletion script](#mt-deletion-script)
-        - [eKLIPse](#eklipse)
+        - [MitoSAlt](#mitosalt)
+        - [saltshaker](#saltshaker)
       - [Annotation](#annotation)
         - [vcfanno](#vcfanno-1)
         - [CADD](#cadd-1)
@@ -100,26 +101,28 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ##### Picard's MarkDuplicates
 
-[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2, bwameme and bwa are processed by this tool. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
+[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2, bwameme and bwa are processed by this tool. By default, alignment files are published in bam format. To publish cram files instead, use `--save_all_mapped_as_cram` for the full (unfiltered) alignment, or `--save_noalt_mapped_as_cram` for the alt-filtered alignment (requires `--exclude_alt`).
 
 <details markdown="1">
 <summary>Output files from Alignment</summary>
 
 - `{outputdir}/alignment/`
-  - `*.bam|*.cram`: Alignment file in bam/cram format.
+  - `*_sorted_md.bam|*_sorted_md.cram`: Full (unfiltered) alignment file. Published as bam by default, or as cram when `--save_all_mapped_as_cram` is set.
+  - `*_sorted_md_primary_contigs.cram`: Alt-filtered alignment file in cram format. Published when `--save_noalt_mapped_as_cram` is set (requires `--exclude_alt`). Contains only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM).
   - `*.bai|*.crai`: Index of the corresponding bam/cram file.
   - `*.txt`: Text file containing the dedup metrics.
   </details>
 
 ##### Sentieon Dedup
 
-[Sentieon Dedup](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#remove-or-mark-duplicates) is the algorithm used by Sentieon's driver to remove duplicate reads. Only reads aligned by Sentieon's implementation of bwa are processed by this algorithm. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
+[Sentieon Dedup](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#remove-or-mark-duplicates) is the algorithm used by Sentieon's driver to remove duplicate reads. Only reads aligned by Sentieon's implementation of bwa are processed by this algorithm. By default, alignment files are published in bam format. To publish cram files instead, use `--save_all_mapped_as_cram` for the full (unfiltered) alignment, or `--save_noalt_mapped_as_cram` for the alt-filtered alignment (requires `--exclude_alt`).
 
 <details markdown="1">
 <summary>Output files from Alignment</summary>
 
 - `{outputdir}/alignment/`
-  - `*.bam|*.cram`: Alignment file in bam/cram format.
+  - `*_sorted_md.bam|*_sorted_md.cram`: Full (unfiltered) alignment file. Published as bam by default, or as cram when `--save_all_mapped_as_cram` is set.
+  - `*_sorted_md_primary_contigs.cram`: Alt-filtered alignment file in cram format. Published when `--save_noalt_mapped_as_cram` is set (requires `--exclude_alt`). Contains only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM).
   - `*.bai|*.crai`: Index of the corresponding bam/cram file.
   - `*.metrics`: Text file containing the dedup metrics.
   </details>
@@ -467,7 +470,7 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 [Saltshaker](https://github.com/aksenia/saltshaker) allows for downstream clustering and classification of mtDNA strucutral variants. Called variants are combined with structural variants called in the nuclear genome.
 
 - `call_sv`
-  - `<sample_id>.saltshaker_classify.txt`: report containing case-level classification of mitochondrial deletions.
+  - `<sample_id>.saltshaker_classify.html`: report containing case-level classification of mitochondrial deletions.
   - `<sample_id>.saltshaker.png`: circos plot.
 
 #### Annotation
