@@ -14,7 +14,7 @@
                 "errorMessage": "Sample name must be provided and must be a string that cannot contain spaces"
             },
             "lane": {
-                "oneOf": [
+                "anyOf": [
                     {
                         "type": "integer"
                     },
@@ -69,7 +69,7 @@
                 "exists": true
             },
             "sex": {
-                "oneOf": [
+                "anyOf": [
                     {
                         "type": "integer",
                         "enum": [0, 1, 2]
