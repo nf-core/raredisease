@@ -239,7 +239,7 @@ nextflow_workflow {
         }
 
         options "-stub"
-        
+
         when {
             params {
                 outdir                       = "$outputDir"

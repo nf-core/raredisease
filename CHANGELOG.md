@@ -28,9 +28,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add peddy --sites hg38 argument when running with GRCh38 [#799](https://github.com/nf-core/raredisease/pull/799)
 - Saltshaker for downstream processing of mitochondrial SV calls from MitoSAlt [#775](https://github.com/nf-core/raredisease/pull/775)
 - Env variable NXF_SINGULARITY_NEW_PID_NAMESPACE = false to accommodate hisat2 running with latest Nextflow and Singularity [#775](https://github.com/nf-core/raredisease/pull/775)
+- Parameter `exclude_alt` to filter alignments to alt/unplaced contigs after alignment using samtools view, retaining only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM). Note that enabling this will restrict variant calling to these chromosomes [#803](https://github.com/nf-core/raredisease/pull/803)]
+- Parameters `save_all_mapped_as_cram` and `save_noalt_mapped_as_cram` to replace `save_mapped_as_cram`, allowing independent control over publishing unfiltered and alt-filtered alignment files as CRAM [#807](https://github.com/nf-core/raredisease/pull/807)
 
 ### `Changed`
 
+- Sort parameters of `CALL_STRUCTURAL_VARIANTS` and `CALL_SV_MANTA` alphabetically [[#](https://github.com/nf-core/raredisease/pull/)]
 - Use distinct output filenames for bcfools (in call_mobile_elements subworkflow) and svdb (in call_sv_tiddit subworkflow) [#716](https://github.com/nf-core/raredisease/pull/716)
 - Use nf-core's most severe consequence & pli scripts instead of local ones [#732](https://github.com/nf-core/raredisease/pull/732)
 - Use nf-core's VCF_FILTER_BCFTOOLS_ENSEMBLVEP subworkflow to generate clinical set instead of a local subworkflow [#727](https://github.com/nf-core/raredisease/pull/727)
@@ -56,9 +59,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Run MitoSAlt.pl from bin rather than within container [#775](https://github.com/nf-core/raredisease/pull/775)
 - Include mitochonrdial SV calls in combined SV vcf, change call_sv output directory structure to remove mitochondria/ and genome/ [#775](https://github.com/nf-core/raredisease/pull/775)
 - Remove Qualimap and Haplogrep3 as they were made redundant by Picard and VerifyBamID2 [#801](https://github.com/nf-core/raredisease/pull/801)
+- Remove env variable NXF_SINGULARITY_NEW_PID_NAMESPACE from the config since this has to be set outside the subworkflow [#804](https://github.com/nf-core/raredisease/pull/804)
+- Run UPD_SITES, UPD_REGIONS, and CHROMOGRAPH for UPD only when analysis type is WGS [#806](https://github.com/nf-core/raredisease/pull/806)
+- Change saltshaker classification output from txt to html [#808](https://github.com/nf-core/raredisease/pull/808)
 
 ### `Fixed`
 
+- Ensure deterministic sample ordering in Manta SV output by sorting BAM/BAI channel inputs [#815](https://github.com/nf-core/raredisease/pull/815)
 - Fixed inconsistencies in JSON schema [#714](https://github.com/nf-core/raredisease/pull/714)
 - Fixed conda declaration in the add_varcallername_to_bed module [#733](https://github.com/nf-core/raredisease/pull/733)
 - Fixed CADD annotation to support chr prefix [#745](https://github.com/nf-core/raredisease/pull/745)
@@ -67,12 +74,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter   | New parameter           |
-| --------------- | ----------------------- |
-|                 | sambamba_regions        |
-| bwa_as_fallback |                         |
-|                 | multiqc_samples         |
-|                 | homoplasmy_af_threshold |
+| Old parameter       | New parameter             |
+| ------------------- | ------------------------- |
+|                     | sambamba_regions          |
+| bwa_as_fallback     |                           |
+|                     | multiqc_samples           |
+|                     | homoplasmy_af_threshold   |
+|                     | exclude_alt               |
+| save_mapped_as_cram |                           |
+|                     | save_all_mapped_as_cram   |
+|                     | save_noalt_mapped_as_cram |
 
 ### Tool updates
 

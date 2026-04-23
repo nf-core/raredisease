@@ -207,7 +207,7 @@ nextflow_workflow {
         }
 
         options "-stub"
-        
+
         when {
             params {
                 sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
