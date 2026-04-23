@@ -7,7 +7,7 @@
                 "justhusky_snv.vcf.gz",
                 "justhusky_snv.vcf.gz.tbi"
             ],
-            "dfc0eeae02f4c1f04034e0fff555bf50",
+            "dc179c28435ffe6d3127fde7ca401337",
             "VcfFile [chromosomes=[21], sampleCount=1, variantCount=7562, phased=false, phasedAutodetect=false]",
             [
                 "justhusky_snv.vcf.gz.tbi"
@@ -16,9 +16,9 @@
                 "justhusky_mitochondria.vcf.gz"
             ]
         ],
-        "timestamp": "2026-03-17T23:03:58.765265498",
+        "timestamp": "2026-04-22T18:04:13.466587948",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     },
