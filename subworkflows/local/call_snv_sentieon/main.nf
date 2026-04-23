@@ -21,8 +21,8 @@ workflow CALL_SNV_SENTIEON {
         ch_dbsnp_index     // channel: [mandatory] [ val(meta), path(tbi) ]
         ch_foundin_header  // channel: [mandatory] [ path(header) ]
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
-        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_ml_model        // channel: [mandatory] [ val(meta), path(model) ]
         ch_pcr_indel_model // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
 
