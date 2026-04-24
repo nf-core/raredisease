@@ -581,6 +581,11 @@
                     "description": "Specifies whether to run rtgtools' vcfeval",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "run_vcfanno_db_sanity_check": {
+                    "type": "boolean",
+                    "description": "Specifies whether to check vcfanno database files for zero records and remove the corresponding annotation blocks from the TOML config before running vcfanno",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "save_all_mapped_as_cram": {
                     "type": "boolean",
                     "description": "Specifies whether to generate and publish all (unfiltered) alignment files as cram instead of bam",

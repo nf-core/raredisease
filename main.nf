@@ -107,6 +107,7 @@ workflow NFCORE_RAREDISEASE {
     val_rtg_truthvcfs
     val_run_mt_for_wes
     val_run_rtgvcfeval
+    val_run_vcfanno_db_sanity_check
     val_sambamba_regions
     val_sample_id_map
     val_samtools_sort_threads
@@ -510,6 +511,7 @@ workflow NFCORE_RAREDISEASE {
         val_platform,
         val_run_mt_for_wes,
         val_run_rtgvcfeval,
+        val_run_vcfanno_db_sanity_check,
         val_sample_id_map,
         val_samtools_sort_threads,
         val_save_all_mapped_as_cram,
@@ -621,6 +623,7 @@ workflow {
         params.rtg_truthvcfs,
         params.run_mt_for_wes,
         params.run_rtgvcfeval,
+        params.run_vcfanno_db_sanity_check,
         params.sambamba_regions,
         params.sample_id_map,
         params.samtools_sort_threads,
