@@ -629,10 +629,17 @@
                     "fa_icon": "fas fa-forward",
                     "description": "Skip VEP annotation of structural variants. SVDB_QUERY still runs."
                 },
-                "sv_freq_threshold": {
-                    "type": "number",
+                "sv_freq_filter_expression": {
+                    "type": "string",
                     "fa_icon": "fas fa-filter",
-                    "description": "Filter SVs with SWEFRQ >= this value (e.g. 0.02). Null disables the filter."
+                    "description": "bcftools -e expression to filter SVs by population frequency (e.g. 'INFO/SWEFRQ >= 0.02'). Null disables the filter.",
+                    "help_text": "Full bcftools exclude expression, supporting any INFO field. Variants matching the expression are removed. Example: 'INFO/SWEFRQ >= 0.02 || INFO/AF >= 0.02'."
+                },
+                "normalize_multiallelics": {
+                    "type": "boolean",
+                    "default": false,
+                    "fa_icon": "fas fa-code-branch",
+                    "description": "If true, add --multiallelics -both to bcftools norm (SPLIT_MULTIALLELICS). Disabled by default to avoid ~4% indel precision loss verified with GIAB."
                 },
                 "sv_size_threshold": {
                     "type": "integer",
@@ -756,6 +763,20 @@
                     "description": "Specifies the variant types for sentieon variant caller.",
                     "fa_icon": "fas fa-align-center",
                     "enum": ["snp", "indel", "snp,indel"]
+                },
+                "ml_prob_threshold": {
+                    "type": "number",
+                    "fa_icon": "fas fa-sliders-h",
+                    "description": "ML_PROB threshold for Sentieon DNAscope variant filtering (e.g. 0.6). Null uses Sentieon's MLrejected flag instead.",
+                    "help_text": "When set, variants with INFO/ML_PROB <= threshold are tagged ML_FAIL. When null, variants already tagged MLrejected by Sentieon are tagged ML_FAIL. Both cases then keep only PASS variants in BCF_FILTER_TWO."
+                },
+                "manta_call_regions": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "fa_icon": "fas fa-map-marker-alt",
+                    "description": "BED.gz file (with .tbi index) restricting Manta SV calling to specific genomic regions.",
+                    "help_text": "Passed to Manta via --callRegions. Used to restrict calling to e.g. capture regions in WES, or to known high-confidence regions."
                 }
             }
         },

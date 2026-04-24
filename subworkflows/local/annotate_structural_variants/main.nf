@@ -73,10 +73,10 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             ch_vcf      = SVDB_QUERY_BEDPE.out.vcf
         }
 
-        // Optionally filter SVs by population frequency (SWEFRQ).
-        // Threshold controlled via params.sv_freq_threshold.
+        // Optionally filter SVs by population frequency.
+        // Filter expression set via params.sv_freq_filter_expression (bcftools -e syntax).
         // SVLEN filter is applied earlier, Manta-specifically, in CALL_SV_MANTA:BCFTOOLS_VIEW_MANTA.
-        // Configured via ext.args in profile config. Without ext.args this is a passthrough.
+        // Configured via ext.args in module config. Without a filter expression this is a passthrough.
         BCFTOOLS_FILTER_SV(
             ch_vcf.map { meta, vcf -> [meta, vcf, []] },
             [], [], []
