@@ -16,29 +16,31 @@ include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL } from '../../../modules/nf-core
 include { GATK4_SELECTVARIANTS                  } from '../../../modules/nf-core/gatk4/selectvariants/main'
 include { ANNOTATE_CADD                         } from '../annotate_cadd'
 include { ANNOTATE_RHOCALLVIZ                   } from '../annotate_rhocallviz'
+include { SANITY_CHECK_VCFANNO_DATABASES        } from '../../../modules/local/sanity_check_vcfanno_databases/main'
 
 workflow ANNOTATE_GENOME_SNVS {
 
     take:
-        ch_cadd_header        // channel: [mandatory] [ path(txt) ]
-        ch_cadd_resources     // channel: [mandatory] [ path(annotation) ]
-        ch_genome_chrsizes    // channel: [mandatory] [ path(sizes) ]
-        ch_genome_fai         // channel: [mandatory] [ path(fai) ]
-        ch_genome_fasta       // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_gnomad_af          // channel: [optional] [ path(tab), path(tbi) ]
-        ch_samples            // channel: [mandatory] [ val(sample_meta) ]
-        ch_split_intervals    // channel: [mandatory] [ path(intervals) ]
-        ch_vcf                // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
-        ch_vcfanno_extra      // channel: [mandatory] [ [path(vcf),path(index)] ]
-        ch_vcfanno_lua        // channel: [mandatory] [ path(lua) ]
-        ch_vcfanno_resources  // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
-        ch_vcfanno_toml       // channel: [mandatory] [ path(toml) ]
-        ch_vep_cache          // channel: [mandatory] [ path(cache) ]
-        ch_vep_extra_files    // channel: [mandatory] [ path(files) ]
-        val_analysis_type     // string: wgs, wes, or mito
-        val_cadd_resources    // string: path to cadd resources file
-        val_genome            // string: GRCh37 or GRCh38
-        val_vep_cache_version // string:  vep version ex: 107
+        ch_cadd_header                  // channel: [mandatory] [ path(txt) ]
+        ch_cadd_resources               // channel: [mandatory] [ path(annotation) ]
+        ch_genome_chrsizes              // channel: [mandatory] [ path(sizes) ]
+        ch_genome_fai                   // channel: [mandatory] [ path(fai) ]
+        ch_genome_fasta                 // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_gnomad_af                    // channel: [optional] [ path(tab), path(tbi) ]
+        ch_samples                      // channel: [mandatory] [ val(sample_meta) ]
+        ch_split_intervals              // channel: [mandatory] [ path(intervals) ]
+        ch_vcf                          // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
+        ch_vcfanno_extra                // channel: [mandatory] [ [path(vcf),path(index)] ]
+        ch_vcfanno_lua                  // channel: [mandatory] [ path(lua) ]
+        ch_vcfanno_resources            // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
+        ch_vcfanno_toml                 // channel: [mandatory] [ path(toml) ]
+        ch_vep_cache                    // channel: [mandatory] [ path(cache) ]
+        ch_vep_extra_files              // channel: [mandatory] [ path(files) ]
+        val_analysis_type               // string: wgs, wes, or mito
+        val_cadd_resources              // string: path to cadd resources file
+        val_genome                      // string: GRCh37 or GRCh38
+        val_run_vcfanno_db_sanity_check // boolean: run sanity check on vcfanno databases
+        val_vep_cache_version           // string:  vep version ex: 107
 
     main:
         ch_cadd_vcf            = channel.empty()
@@ -97,7 +99,14 @@ workflow ANNOTATE_GENOME_SNVS {
             .combine(ch_vcfanno_extra)
             .set { ch_vcfanno_in }
 
-        VCFANNO (ch_vcfanno_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
+        if (val_run_vcfanno_db_sanity_check) {
+            SANITY_CHECK_VCFANNO_DATABASES (ch_vcfanno_toml, ch_vcfanno_resources)
+            ch_vcfanno_toml_final = SANITY_CHECK_VCFANNO_DATABASES.out.toml
+        } else {
+            ch_vcfanno_toml_final = ch_vcfanno_toml
+        }
+
+        VCFANNO (ch_vcfanno_in, ch_vcfanno_toml_final, ch_vcfanno_lua, ch_vcfanno_resources)
 
         VCFANNO.out.vcf
             .join(VCFANNO.out.tbi, failOnMismatch:true, failOnDuplicate:true)

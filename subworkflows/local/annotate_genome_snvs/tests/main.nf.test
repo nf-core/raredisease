@@ -19,6 +19,7 @@ nextflow_workflow {
     tag "ensemblvep/vep"
     tag "tabix/bgziptabix"
     tag "gatk4/selectvariants"
+    tag "sanity_check_vcfanno_databases"
 
     config "./nextflow.config"
 
@@ -51,7 +52,8 @@ nextflow_workflow {
                 input[15] = 'wgs'
                 input[16] = null
                 input[17] = 'GRCh37'
-                input[18] = 107
+                input[18] = true
+                input[19] = 107
                 """
             }
         }
@@ -107,7 +109,8 @@ nextflow_workflow {
                 input[15] = 'wes'
                 input[16] = null
                 input[17] = 'GRCh37'
-                input[18] = 107
+                input[18] = true
+                input[19] = 107
                 """
             }
         }
