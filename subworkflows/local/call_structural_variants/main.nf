@@ -7,7 +7,7 @@ include { CALL_SV_TIDDIT                 } from '../call_sv_tiddit'
 include { CALL_SV_MT                     } from '../call_sv_MT'
 include { SVDB_MERGE                     } from '../../../modules/nf-core/svdb/merge/main'
 include { CALL_SV_GERMLINECNVCALLER      } from '../call_sv_germlinecnvcaller'
-include { CALL_SV_CNVNATOR               } from '../call_sv_cnvnator'
+// include { CALL_SV_CNVNATOR               } from '../call_sv_cnvnator'  // disabled: container broken (assert.h not found)
 include { TABIX_TABIX                    } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_STRUCTURAL_VARIANTS {
@@ -71,10 +71,8 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .collect{ _meta, vcf -> vcf }
                 .set { ch_tiddit_vcf }
 
-            CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_case_info)
-                .vcf
-                .collect{ _meta, vcf -> vcf }
-                .set { ch_cnvnator_vcf }
+            // CALL_SV_CNVNATOR disabled: container missing C headers (assert.h not found, exit 140)
+            // ch_cnvnator_vcf stays as channel.empty() defined above
         }
 
         if (!skip_germlinecnvcaller) {
