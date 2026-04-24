@@ -51,6 +51,7 @@ workflow NFCORE_RAREDISEASE {
     val_cadd_resources
     val_call_interval
     val_concatenate_snv_calls
+    val_exclude_alt
     val_extract_alignments
     val_fai
     val_fasta
@@ -109,7 +110,8 @@ workflow NFCORE_RAREDISEASE {
     val_sambamba_regions
     val_sample_id_map
     val_samtools_sort_threads
-    val_save_mapped_as_cram
+    val_save_all_mapped_as_cram
+    val_save_noalt_mapped_as_cram
     val_save_reference
     val_score_config_mt
     val_score_config_snv
@@ -250,7 +252,7 @@ workflow NFCORE_RAREDISEASE {
     // Using channelFromSamplesheet helper. Returns either an empty channel or validated channel.
     ch_me_references            = channelFromSamplesheet(val_mobile_element_references, "${projectDir}/assets/mobile_element_references_schema.json", false)
     ch_me_svdb_resources        = channelFromSamplesheet(val_mobile_element_svdb_annotations, "${projectDir}/assets/svdb_query_vcf_schema.json", false)
-    ch_sample_id_map            = channelFromSamplesheet(val_sample_id_map, "${projectDir}/assets/sample_id_map.json")
+    ch_sample_id_map            = channelFromSamplesheet(val_sample_id_map, "${projectDir}/assets/sample_id_map.json", false)
     ch_svdb_bedpedbs            = channelFromSamplesheet(val_svdb_query_bedpedbs, "${projectDir}/assets/svdb_query_bedpe_schema.json", false)
     ch_svdb_dbs                 = channelFromSamplesheet(val_svdb_query_dbs, "${projectDir}/assets/svdb_query_vcf_schema.json", false)
 
@@ -331,17 +333,24 @@ workflow NFCORE_RAREDISEASE {
     skip_generate_clinical_set = parseSkipList(val_skip_subworkflows, 'generate_clinical_set')
 
     //
+    // Validate parameter combinations
+    //
+    if (val_save_noalt_mapped_as_cram && !val_exclude_alt) {
+        error("save_noalt_mapped_as_cram requires exclude_alt to be set to true")
+    }
+
+    //
     // SV caller priority
     //
     if (skip_germlinecnvcaller) {
         if (val_analysis_type.equals("wgs")) {
-            ch_svcaller_priority = channel.value(["tiddit", "manta"])
+            ch_svcaller_priority = channel.value(["tiddit", "manta", "cnvnator"])
         } else {
             ch_svcaller_priority = channel.value([])
         }
     } else {
         if (val_analysis_type.equals("wgs")) {
-            ch_svcaller_priority = channel.value(["tiddit", "manta", "gcnvcaller"])
+            ch_svcaller_priority = channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
         } else {
             ch_svcaller_priority = channel.value(["manta", "gcnvcaller"])
         }
@@ -469,6 +478,7 @@ workflow NFCORE_RAREDISEASE {
         val_analysis_type,
         val_cadd_resources,
         val_concatenate_snv_calls,
+        val_exclude_alt,
         val_extract_alignments,
         val_genome,
         val_heavy_strand_origin_end,
@@ -502,7 +512,8 @@ workflow NFCORE_RAREDISEASE {
         val_run_rtgvcfeval,
         val_sample_id_map,
         val_samtools_sort_threads,
-        val_save_mapped_as_cram,
+        val_save_all_mapped_as_cram,
+        val_save_noalt_mapped_as_cram,
         val_svdb_query_bedpedbs,
         val_svdb_query_dbs,
         val_target_bed,
@@ -554,6 +565,7 @@ workflow {
         params.cadd_resources,
         params.call_interval,
         params.concatenate_snv_calls,
+        params.exclude_alt,
         params.extract_alignments,
         params.fai,
         params.fasta,
@@ -612,7 +624,8 @@ workflow {
         params.sambamba_regions,
         params.sample_id_map,
         params.samtools_sort_threads,
-        params.save_mapped_as_cram,
+        params.save_all_mapped_as_cram,
+        params.save_noalt_mapped_as_cram,
         params.save_reference,
         params.score_config_mt,
         params.score_config_snv,
@@ -663,7 +676,7 @@ workflow {
 
 output {
     subworkflow_results {
-        path { destination, value -> destination }
+        path { destination, _value -> destination }
     }
 }
 

@@ -536,6 +536,11 @@
                     "description": "Specifies whether to generate a concatenated VCF file containing both nuclear & mitochondrial snv calls",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "exclude_alt": {
+                    "type": "boolean",
+                    "description": "After aligning the reads to a reference, remove alignments to alt contigs using samtools view, retaining only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM).",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "extract_alignments": {
                     "type": "boolean",
                     "description": "After aligning the reads to a reference, extract alignments from specific regions/contigs and restrict the analysis to those regions/contigs.",
@@ -576,9 +581,14 @@
                     "description": "Specifies whether to run rtgtools' vcfeval",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "save_mapped_as_cram": {
+                "save_all_mapped_as_cram": {
                     "type": "boolean",
-                    "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
+                    "description": "Specifies whether to generate and publish all (unfiltered) alignment files as cram instead of bam",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "save_noalt_mapped_as_cram": {
+                    "type": "boolean",
+                    "description": "Specifies whether to generate and publish alt-filtered alignment files as cram instead of bam. Requires exclude_alt to be set to true.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "scatter_count": {
@@ -783,6 +793,11 @@
             "properties": {
                 "hisat2": {
                     "type": "string"
+                },
+                "hisat2_build_memory": {
+                    "type": "string",
+                    "description": "Minimum memory required to build HISAT2 index with splice sites and exons. If available memory is below this threshold, a simpler index is built without splice sites.",
+                    "fa_icon": "fas fa-memory"
                 },
                 "mitosalt_breakspan": {
                     "type": "integer",

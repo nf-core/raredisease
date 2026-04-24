@@ -111,7 +111,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             ch_tbi_ann = ENSEMBLVEP_SV.out.tbi
             ch_publish = ENSEMBLVEP_SV.out.vcf
                 .mix(ENSEMBLVEP_SV.out.tbi)
-                .mix(ENSEMBLVEP_SV.out.report.map{ meta, process, vep, html -> return [meta, html] })
+                .mix(ENSEMBLVEP_SV.out.report.map{ meta, _process, _vep, html -> return [meta, html] })
                 .map { meta, value -> ['annotate_sv/', [meta, value]] }
         } else {
             ch_vcf_ann = ch_vcf
@@ -119,6 +119,10 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             ch_publish = BCFTOOLS_FILTER_SV.out.vcf
                 .map { meta, vcf -> ['annotate_sv/', [meta, vcf]] }
         }
+        ch_publish = ENSEMBLVEP_SV.out.vcf
+            .mix(ENSEMBLVEP_SV.out.tbi)
+            .mix(ENSEMBLVEP_SV.out.report.map{ meta, _process, _vep, html -> return [meta, html] })
+            .map { meta, value -> ['annotate_sv/', [meta, value]] }
 
     emit:
         publish  = ch_publish  // channel: [ val(destination), val(value) ]

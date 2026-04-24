@@ -17,7 +17,6 @@ workflow CALL_SV_CNVNATOR {
     take:
         ch_bam_bai   // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_fasta     // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_fai       // channel: [mandatory] [ val(meta), path(fai) ]
         ch_case_info // channel: [mandatory] [ val(case_info) ]
 
     main:

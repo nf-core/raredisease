@@ -13,35 +13,35 @@ include { TABIX_TABIX                    } from '../../../modules/nf-core/tabix/
 workflow CALL_STRUCTURAL_VARIANTS {
 
     take:
-        ch_genome_bam                         // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_genome_bai                         // channel: [mandatory] [ val(meta), path(bai) ]
-        ch_genome_bam_bai                     // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_bwa_index                          // channel: [mandatory] [ val(meta), path(index)]
-        ch_genome_fasta                       // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai                         // channel: [mandatory] [ val(meta), path(fai) ]
         ch_case_info                          // channel: [mandatory] [ val(case_info) ]
-        ch_target_bed                         // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
-        ch_genome_dictionary                  // channel: [optional; used by mandatory for GATK's cnvcaller][ val(meta), path(dict) ]
-        ch_svcaller_priority                  // channel: [mandatory] [ val(["var caller tag 1", ...]) ]
-        ch_readcount_intervals                // channel: [optional; used by mandatory for GATK's cnvcaller][ path(intervals) ]
-        ch_ploidy_model                       // channel: [optional; used by mandatory for GATK's cnvcaller][ path(ploidy_model) ]
         ch_gcnvcaller_model                   // channel: [optional; used by mandatory for GATK's cnvcaller][ path(gcnvcaller_model) ]
-        val_analysis_type                     // string: "wes", "wgs", or "mito"
-        skip_germlinecnvcaller                // boolean
-        skip_mitosalt                         // boolean
-        ch_mt_bam_bai                         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_bai                         // channel: [mandatory] [ val(meta), path(bai) ]
+        ch_genome_bam                         // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_genome_bam_bai                     // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_genome_chrsizes                    // channel: [mandatory] [ path(chrsizes) ]
+        ch_genome_dictionary                  // channel: [optional; used by mandatory for GATK's cnvcaller][ val(meta), path(dict) ]
+        ch_genome_fai                         // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_fasta                       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_hisat2index                 // channel: [mandatory] [ val(meta), path(hisat2index) ]
+        ch_mitosalt_config                    // channel: [mandatory] [val(mitosalt_breakspan),val(mitosalt_breakthreshold),...,val(mitosalt_split_length)]
+        ch_mt_bam_bai                         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_mt_fai                             // channel: [mandatory] [ val(meta), path(mtfai) ]
         ch_mt_fasta                           // channel: [mandatory] [ val(meta), path(mtfasta) ]
         ch_mt_lastdb                          // channel: [mandatory] [ val(meta), path(lastindex) ]
+        ch_ploidy_model                       // channel: [optional; used by mandatory for GATK's cnvcaller][ path(ploidy_model) ]
+        ch_readcount_intervals                // channel: [optional; used by mandatory for GATK's cnvcaller][ path(intervals) ]
         ch_reads                              // channel: [mandatory] [ val(meta), [path(reads)] ]
         ch_subdepth                           // channel: [mandatory] [ val(mitosalt_depth) ]
-        ch_mitosalt_config                    // channel: [mandatory] [val(mitosalt_breakspan),val(mitosalt_breakthreshold),...,val(mitosalt_split_length)]
-        val_heavy_strand_origin_start         // string: [mandatory] mitochondira_heavy_strand_origin_start
+        ch_svcaller_priority                  // channel: [mandatory] [ val(["var caller tag 1", ...]) ]
+        ch_target_bed                         // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
+        skip_germlinecnvcaller                // boolean
+        skip_mitosalt                         // boolean
+        val_analysis_type                     // string: "wes", "wgs", or "mito"
         val_heavy_strand_origin_end           // string: [mandatory] mitochondira_heavy_strand_origin_end
-        val_light_strand_origin_start         // string: [mandatory] mitochondira_light_strand_origin_start
+        val_heavy_strand_origin_start         // string: [mandatory] mitochondira_heavy_strand_origin_start
         val_light_strand_origin_end           // string: [mandatory] mitochondira_light_strand_origin_end
+        val_light_strand_origin_start         // string: [mandatory] mitochondira_light_strand_origin_start
         val_mitochondria_length               // string: [mandatory] mito_length
         val_mitochondria_name                 // string: [mandatory] mito_name
         val_mitosalt_flank                    // string: [mandatory] mitosalt_flank
@@ -70,12 +70,11 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .vcf
                 .collect{ _meta, vcf -> vcf }
                 .set { ch_tiddit_vcf }
-		
-            // CNVnator disabled - broken container (assert.h missing)
-            //CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_case_info)
-            //    .vcf
-            //    .collect{ _meta, vcf -> vcf }
-            //    .set { ch_cnvnator_vcf }
+
+            CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_case_info)
+                .vcf
+                .collect{ _meta, vcf -> vcf }
+                .set { ch_cnvnator_vcf }
         }
 
         if (!skip_germlinecnvcaller) {
