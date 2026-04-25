@@ -155,8 +155,8 @@ workflow CALL_SNV {
         }
 
         ch_publish = GATK4_SELECTVARIANTS.out.vcf
-            .mix(GATK4_SELECTVARIANTS.out.tbi
-            .mix(ch_deepvar_report)
+            .mix(GATK4_SELECTVARIANTS.out.tbi)
+            .mix(ch_deepvar_publish)
             .map { meta, value -> ['call_snv/genome/', [meta, value]] }
             .mix(ch_concat_publish)
             .mix(ch_mt_snv_publish)
