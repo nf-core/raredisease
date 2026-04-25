@@ -834,7 +834,7 @@ workflow RAREDISEASE {
     Generate CGH files from sequencing data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if (!skip_vcf2cytosure && val_analysis_type.equals("wgs") && !skip_sv_calling && !skip_sv_annotation) {
+    if (!skip_vcf2cytosure && val_analysis_type.equals("wgs") && !skip_sv_calling && !skip_sv_annotation && !params.skip_vep_sv) {
         GENERATE_CYTOSURE_FILES (
             ch_mapped.genome_marked_bam_bai,
             ch_vcf2cytosure_blacklist,

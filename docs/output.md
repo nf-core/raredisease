@@ -442,7 +442,7 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 
 [SVDB query](https://github.com/J35P312/SVDB#Query) allows you to quickly annotate your VCF with data from one or more structural variant databases. The output files are not published in the output folder, and is passed to a frequency filter step and then to VEP for further annotation.
 
-After SVDB query, SVs can optionally be filtered by population frequency using `--sv_freq_filter_expression`. This parameter accepts a full [bcftools -e expression](https://samtools.github.io/bcftools/bcftools.html#expressions), for example `'INFO/SWEFRQ >= 0.02'`. Multiple conditions can be combined, e.g. `'INFO/SWEFRQ >= 0.02 || INFO/AF >= 0.02'`. When not set, no frequency filtering is applied.
+After SVDB query, SVs can optionally be filtered by population frequency using `--sv_freq_filter_expression`. This parameter accepts a full [bcftools -e expression](https://samtools.github.io/bcftools/bcftools.html#expressions), for example `'INFO/SWEFRQ >= 0.02'`. Multiple conditions can be combined, e.g. `'INFO/SWEFRQ >= 0.02 || INFO/AF >= 0.02'`. When not set, the filtering step is skipped entirely.
 
 #### VEP
 

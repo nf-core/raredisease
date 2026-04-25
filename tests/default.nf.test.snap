@@ -15,6 +15,9 @@
                 "BCFTOOLS_CONCAT_ME": {
                     "bcftools": 1.22
                 },
+                "BCFTOOLS_DECOMPRESS_MERGE": {
+                    "bcftools": 1.22
+                },
                 "BCFTOOLS_MERGE_MT": {
                     "bcftools": 1.22
                 },
@@ -34,9 +37,6 @@
                     "bcftools": 1.22
                 },
                 "BCFTOOLS_VIEW": {
-                    "bcftools": 1.22
-                },
-                "BCFTOOLS_VIEW_CNVNATOR": {
                     "bcftools": 1.22
                 },
                 "BCFTOOLS_VIEW_FILTER": {
@@ -94,24 +94,6 @@
                 },
                 "CHROMOGRAPH_SITES": {
                     "chromograph": "1.3.1"
-                },
-                "CNVNATOR_CALL": {
-                    "cnvnator": "0.4.1"
-                },
-                "CNVNATOR_CONVERT2VCF": {
-                    "cnvnator": "0.4.1"
-                },
-                "CNVNATOR_HIST": {
-                    "cnvnator": "0.4.1"
-                },
-                "CNVNATOR_PARTITION": {
-                    "cnvnator": "0.4.1"
-                },
-                "CNVNATOR_RD": {
-                    "cnvnator": "0.4.1"
-                },
-                "CNVNATOR_STAT": {
-                    "cnvnator": "0.4.1"
                 },
                 "CREATE_HGNCIDS_FILE": {
                     "create_hgncids_file": 1.0,
@@ -233,10 +215,6 @@
                 },
                 "HISAT2_INDEX_GENOME": {
                     "hisat2": "2.2.1"
-                },
-                "INDEX_CNVNATOR": {
-                    "bgzip": 1.21,
-                    "tabix": 1.21
                 },
                 "INDEX_TIDDIT": {
                     "bgzip": 1.21,
@@ -372,9 +350,6 @@
                 "SPLIT_AND_FILTER_SV_VCF": {
                     "bcftools": 1.22
                 },
-                "SPLIT_CHR": {
-                    "bioawk": 1.0
-                },
                 "SPLIT_MULTIALLELICS_EXP": {
                     "bcftools": 1.22
                 },
@@ -392,10 +367,6 @@
                     "tabix": 1.23
                 },
                 "SVDB_MERGE": {
-                    "bcftools": 1.23,
-                    "svdb": "2.8.4"
-                },
-                "SVDB_MERGE_CNVNATOR": {
                     "bcftools": 1.23,
                     "svdb": "2.8.4"
                 },
@@ -671,9 +642,9 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz",
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
-                "call_sv/earlycasualcaiman.saltshaker.png",
-                "call_sv/earlycasualcaiman.saltshaker_classify.html",
                 "call_sv/earlycasualcaiman_mitochondria_deletions.txt",
+                "call_sv/hugelymodelbat.saltshaker.png",
+                "call_sv/hugelymodelbat.saltshaker_classify.html",
                 "call_sv/hugelymodelbat_mitochondria_deletions.txt",
                 "call_sv/justhusky_saltshaker.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz",
@@ -889,15 +860,13 @@
                 "repeat_expansions",
                 "repeat_expansions/earlycasualcaiman_exphunter_sorted.bam",
                 "repeat_expansions/earlycasualcaiman_exphunter_sorted.bam.bai",
-                "repeat_expansions/earlycasualcaiman_repeat_expansion.vcf",
                 "repeat_expansions/hugelymodelbat_exphunter_sorted.bam",
                 "repeat_expansions/hugelymodelbat_exphunter_sorted.bam.bai",
-                "repeat_expansions/hugelymodelbat_repeat_expansion.vcf",
+                "repeat_expansions/justhusky_filtered_htt_exphunter.vcf",
                 "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz",
                 "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz.tbi",
                 "repeat_expansions/slowlycivilbuck_exphunter_sorted.bam",
                 "repeat_expansions/slowlycivilbuck_exphunter_sorted.bam.bai",
-                "repeat_expansions/slowlycivilbuck_repeat_expansion.vcf",
                 "smncopynumbercaller",
                 "smncopynumbercaller/out",
                 "smncopynumbercaller/out/justhusky_smncopynumbercaller.json",
@@ -924,10 +893,10 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
+        "timestamp": "2026-04-25T14:25:15.854419489",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-04-14T14:58:54.280831107"
+        }
     }
 }

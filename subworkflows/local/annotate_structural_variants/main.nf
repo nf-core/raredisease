@@ -76,12 +76,13 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         // Optionally filter SVs by population frequency.
         // Filter expression set via params.sv_freq_filter_expression (bcftools -e syntax).
         // SVLEN filter is applied earlier, Manta-specifically, in CALL_SV_MANTA:BCFTOOLS_VIEW_MANTA.
-        // Configured via ext.args in module config. Without a filter expression this is a passthrough.
-        BCFTOOLS_FILTER_SV(
-            ch_vcf.map { meta, vcf -> [meta, vcf, []] },
-            [], [], []
-        )
-        ch_vcf = BCFTOOLS_FILTER_SV.out.vcf
+        if (params.sv_freq_filter_expression) {
+            BCFTOOLS_FILTER_SV(
+                ch_vcf.map { meta, vcf -> [meta, vcf, []] },
+                [], [], []
+            )
+            ch_vcf = BCFTOOLS_FILTER_SV.out.vcf
+        }
 
         // Optionally skip VEP annotation (set params.skip_vep_sv = true to enable).
         // SVDB_QUERY still runs; only PICARD_SORTVCF, BCFTOOLS_VIEW and ENSEMBLVEP_SV are skipped.
@@ -116,7 +117,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         } else {
             ch_vcf_ann = ch_vcf
             ch_tbi_ann = Channel.empty()
-            ch_publish = BCFTOOLS_FILTER_SV.out.vcf
+            ch_publish = ch_vcf
                 .map { meta, vcf -> ['annotate_sv/', [meta, vcf]] }
         }
     emit:
