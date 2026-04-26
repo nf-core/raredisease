@@ -30,10 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Env variable NXF_SINGULARITY_NEW_PID_NAMESPACE = false to accommodate hisat2 running with latest Nextflow and Singularity [#775](https://github.com/nf-core/raredisease/pull/775)
 - Parameter `exclude_alt` to filter alignments to alt/unplaced contigs after alignment using samtools view, retaining only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM). Note that enabling this will restrict variant calling to these chromosomes [#803](https://github.com/nf-core/raredisease/pull/803)]
 - Parameters `save_all_mapped_as_cram` and `save_noalt_mapped_as_cram` to replace `save_mapped_as_cram`, allowing independent control over publishing unfiltered and alt-filtered alignment files as CRAM [#807](https://github.com/nf-core/raredisease/pull/807)
+- Parameter `run_vcfanno_db_sanity_check` to check vcfanno database files for zero records and remove the corresponding annotation blocks from the TOML config before running vcfanno [#802](https://github.com/nf-core/raredisease/pull/821)
 
 ### `Changed`
 
-- Sort parameters of `CALL_STRUCTURAL_VARIANTS` and `CALL_SV_MANTA` alphabetically [[#](https://github.com/nf-core/raredisease/pull/)]
 - Use distinct output filenames for bcfools (in call_mobile_elements subworkflow) and svdb (in call_sv_tiddit subworkflow) [#716](https://github.com/nf-core/raredisease/pull/716)
 - Use nf-core's most severe consequence & pli scripts instead of local ones [#732](https://github.com/nf-core/raredisease/pull/732)
 - Use nf-core's VCF_FILTER_BCFTOOLS_ENSEMBLVEP subworkflow to generate clinical set instead of a local subworkflow [#727](https://github.com/nf-core/raredisease/pull/727)
@@ -62,6 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove env variable NXF_SINGULARITY_NEW_PID_NAMESPACE from the config since this has to be set outside the subworkflow [#804](https://github.com/nf-core/raredisease/pull/804)
 - Run UPD_SITES, UPD_REGIONS, and CHROMOGRAPH for UPD only when analysis type is WGS [#806](https://github.com/nf-core/raredisease/pull/806)
 - Change saltshaker classification output from txt to html [#808](https://github.com/nf-core/raredisease/pull/808)
+- Sort parameters of `CALL_STRUCTURAL_VARIANTS` and `CALL_SV_MANTA` alphabetically [#821](https://github.com/nf-core/raredisease/pull/821)
 
 ### `Fixed`
 
@@ -75,16 +76,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter       | New parameter             |
-| ------------------- | ------------------------- |
-|                     | sambamba_regions          |
-| bwa_as_fallback     |                           |
-|                     | multiqc_samples           |
-|                     | homoplasmy_af_threshold   |
-|                     | exclude_alt               |
-| save_mapped_as_cram |                           |
-|                     | save_all_mapped_as_cram   |
-|                     | save_noalt_mapped_as_cram |
+| Old parameter       | New parameter               |
+| ------------------- | --------------------------- |
+|                     | sambamba_regions            |
+| bwa_as_fallback     |                             |
+|                     | multiqc_samples             |
+|                     | homoplasmy_af_threshold     |
+|                     | exclude_alt                 |
+| save_mapped_as_cram |                             |
+|                     | save_all_mapped_as_cram     |
+|                     | save_noalt_mapped_as_cram   |
+|                     | run_vcfanno_db_sanity_check |
 
 ### Tool updates
 
