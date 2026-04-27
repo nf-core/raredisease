@@ -342,7 +342,8 @@ The optional parameter `--filter_expansionhunter_htt` removes HTT (Huntington's 
 <summary>Output files</summary>
 
 - `repeat_expansions/`
-  - `<sample_id>_repeat_expansion.vcf`: file containing variant calls.
+  - `<case_id>_repeat_expansion.vcf`: file containing variant calls (default).
+  - `<case_id>_filtered_htt_exphunter.vcf`: file containing variant calls with HTT records removed (when `--filter_expansionhunter_htt` is set).
   - `<sample_id>_exphunter_sorted.bam`: A BAMlet containing alignments of reads that overlap or located in close proximity to each variant identified by ExpansionHunter
   - `<sample_id>_exphunter_sorted.bam.bai`: Index of the BAMlet file
 

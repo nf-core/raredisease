@@ -32,6 +32,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parameter `exclude_alt` to filter alignments to alt/unplaced contigs after alignment using samtools view, retaining only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM). Note that enabling this will restrict variant calling to these chromosomes [#803](https://github.com/nf-core/raredisease/pull/803)]
 - Parameters `save_all_mapped_as_cram` and `save_noalt_mapped_as_cram` to replace `save_mapped_as_cram`, allowing independent control over publishing unfiltered and alt-filtered alignment files as CRAM [#807](https://github.com/nf-core/raredisease/pull/807)
 
+### `Fixed`
+
+- Remove `imNotification` import and call from `utils_nfcore_raredisease_pipeline` after it was removed in the updated `utils_nfcore_pipeline` subworkflow [#](https://github.com/nf-core/raredisease/pull/)
+- Use conditional output prefix for `BCFTOOLS_DECOMPRESS_MERGE` in `call_repeat_expansions` so that the file is named `<case_id>_repeat_expansion.vcf` by default and `<case_id>_filtered_htt_exphunter.vcf` only when `--filter_expansionhunter_htt` is set [#](https://github.com/nf-core/raredisease/pull/)
+
 ### `Changed`
 
 - Sort parameters of `CALL_STRUCTURAL_VARIANTS` and `CALL_SV_MANTA` alphabetically [[#](https://github.com/nf-core/raredisease/pull/)]

@@ -642,9 +642,9 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz",
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
+                "call_sv/earlycasualcaiman.saltshaker.png",
+                "call_sv/earlycasualcaiman.saltshaker_classify.html",
                 "call_sv/earlycasualcaiman_mitochondria_deletions.txt",
-                "call_sv/hugelymodelbat.saltshaker.png",
-                "call_sv/hugelymodelbat.saltshaker_classify.html",
                 "call_sv/hugelymodelbat_mitochondria_deletions.txt",
                 "call_sv/justhusky_saltshaker.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz",
@@ -862,7 +862,7 @@
                 "repeat_expansions/earlycasualcaiman_exphunter_sorted.bam.bai",
                 "repeat_expansions/hugelymodelbat_exphunter_sorted.bam",
                 "repeat_expansions/hugelymodelbat_exphunter_sorted.bam.bai",
-                "repeat_expansions/justhusky_filtered_htt_exphunter.vcf",
+                "repeat_expansions/justhusky_repeat_expansion.vcf",
                 "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz",
                 "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz.tbi",
                 "repeat_expansions/slowlycivilbuck_exphunter_sorted.bam",
@@ -893,7 +893,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-04-25T14:25:15.854419489",
+        "timestamp": "2026-04-27T08:49:50.206595757",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
