@@ -602,6 +602,12 @@
                     "description": "Number of intervals to split your genome into (used to parallelize annotations)",
                     "fa_icon": "fas fa-less-than"
                 },
+                "skip_split_multiallelics": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-forward",
+                    "description": "Skip the split multiallelics step in SNV calling.",
+                    "help_text": "Skips bcftools norm --multiallelics -both in CALL_SNV_SENTIEON and CALL_SNV_DEEPVARIANT. Useful for single-interval runs where the step is unnecessary and can degrade indel quality."
+                },
                 "skip_subworkflows": {
                     "type": "string",
                     "fa_icon": "fas fa-forward",

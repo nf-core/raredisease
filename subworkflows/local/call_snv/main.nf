@@ -36,10 +36,11 @@ workflow CALL_SNV {
         ch_par_bed                // channel: [optional] [ val(meta), path(bed) ]
         ch_pcr_indel_model        // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
         ch_target_bed             // channel: [mandatory] [ val(meta), path(bed), path(index) ]
-        val_analysis_type         // string:  'wgs', 'wes', or 'mito'
-        val_concatenate_snv_calls // boolean
-        val_run_mt_for_wes        // boolean
-        val_variant_caller        // string:  'deepvariant' or 'sentieon'
+        val_analysis_type             // string:  'wgs', 'wes', or 'mito'
+        val_concatenate_snv_calls     // boolean
+        val_run_mt_for_wes            // boolean
+        val_skip_split_multiallelics  // boolean
+        val_variant_caller            // string:  'deepvariant' or 'sentieon'
 
     main:
         ch_concat_publish  = channel.empty()
@@ -67,7 +68,8 @@ workflow CALL_SNV {
                 ch_genome_fasta,
                 ch_par_bed,
                 ch_target_bed,
-                val_analysis_type
+                val_analysis_type,
+                val_skip_split_multiallelics
             )
             ch_deepvar_vcf     = CALL_SNV_DEEPVARIANT.out.vcf
             ch_deepvar_tbi     = CALL_SNV_DEEPVARIANT.out.tabix
@@ -86,7 +88,8 @@ workflow CALL_SNV {
                 ch_genome_fai,
                 ch_genome_fasta,
                 ch_ml_model,
-                ch_pcr_indel_model
+                ch_pcr_indel_model,
+                val_skip_split_multiallelics
             )
             ch_sentieon_vcf  = CALL_SNV_SENTIEON.out.vcf
             ch_sentieon_tbi  = CALL_SNV_SENTIEON.out.tabix
