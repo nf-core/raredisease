@@ -181,6 +181,7 @@ workflow RAREDISEASE {
     val_analysis_type
     val_cadd_resources
     val_concatenate_snv_calls
+    val_skip_split_multiallelics
     val_exclude_alt
     val_extract_alignments
     val_genome
@@ -434,6 +435,7 @@ workflow RAREDISEASE {
             ch_target_bed,
             val_analysis_type,
             val_concatenate_snv_calls,
+            val_skip_split_multiallelics,
             val_run_mt_for_wes,
             val_variant_caller
         )

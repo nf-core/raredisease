@@ -34,7 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
-- Sort parameters of `CALL_STRUCTURAL_VARIANTS` and `CALL_SV_MANTA` alphabetically [[#](https://github.com/nf-core/raredisease/pull/)]
 - Use distinct output filenames for bcfools (in call_mobile_elements subworkflow) and svdb (in call_sv_tiddit subworkflow) [#716](https://github.com/nf-core/raredisease/pull/716)
 - Use nf-core's most severe consequence & pli scripts instead of local ones [#732](https://github.com/nf-core/raredisease/pull/732)
 - Use nf-core's VCF_FILTER_BCFTOOLS_ENSEMBLVEP subworkflow to generate clinical set instead of a local subworkflow [#727](https://github.com/nf-core/raredisease/pull/727)
@@ -67,6 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed`
 
 - Fixed argument order of `ch_genome_fai` and `ch_genome_fasta` in the `CALL_SNV_SENTIEON` subworkflow [#811](https://github.com/nf-core/raredisease/pull/811)
+- Added `--skip_split_multiallelics` parameter to allow users to skip the `bcftools norm --multiallelics -both` step in SNV calling (DeepVariant and Sentieon), which can cause indel quality degradation in single-interval runs [#8](https://github.com/nf-core/raredisease/pull/8)
 - Ensure deterministic sample ordering in Manta SV output by sorting BAM/BAI channel inputs [#815](https://github.com/nf-core/raredisease/pull/815)
 - Fixed inconsistencies in JSON schema [#714](https://github.com/nf-core/raredisease/pull/714)
 - Fixed conda declaration in the add_varcallername_to_bed module [#733](https://github.com/nf-core/raredisease/pull/733)
@@ -76,17 +76,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter       | New parameter             |
-| ------------------- | ------------------------- |
-|                     | sambamba_regions          |
-| bwa_as_fallback     |                           |
-|                     | multiqc_samples           |
-|                     | homoplasmy_af_threshold   |
-|                     | exclude_alt               |
-| save_mapped_as_cram |                           |
-|                     | save_all_mapped_as_cram        |
-|                     | save_noalt_mapped_as_cram      |
-|                     | run_vcfanno_db_sanity_check    |
+| Old parameter       | New parameter               |
+| ------------------- | --------------------------- |
+|                     | sambamba_regions            |
+| bwa_as_fallback     |                             |
+|                     | multiqc_samples             |
+|                     | homoplasmy_af_threshold     |
+|                     | exclude_alt                 |
+| save_mapped_as_cram |                             |
+|                     | save_all_mapped_as_cram     |
+|                     | save_noalt_mapped_as_cram   |
+|                     | run_vcfanno_db_sanity_check |
+|                     | skip_split_multiallelics    |
 
 ### Tool updates
 

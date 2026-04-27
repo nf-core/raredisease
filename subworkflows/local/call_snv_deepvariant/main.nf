@@ -18,9 +18,10 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
         ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_par_bed         // channel: [optional] [ val(meta), path(bed) ]
-        ch_target_bed      // channel: [mandatory] [ val(meta), path(bed), path(index) ]
-        val_analysis_type  // boolean
+        ch_par_bed                   // channel: [optional] [ val(meta), path(bed) ]
+        ch_target_bed                // channel: [mandatory] [ val(meta), path(bed), path(index) ]
+        val_analysis_type            // boolean
+        val_skip_split_multiallelics // boolean
 
     main:
 
@@ -55,11 +56,15 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_split_multi_in = GLNEXUS.out.bcf
                             .map{ meta, bcf ->
                                     return [meta, bcf, []] }
-        SPLIT_MULTIALLELICS_GL (ch_split_multi_in, ch_genome_fasta)
 
-        ch_remove_dup_in = SPLIT_MULTIALLELICS_GL.out.vcf
-                            .map{ meta, vcf ->
-                                    return [meta, vcf, []] }
+        if (!val_skip_split_multiallelics) {
+            SPLIT_MULTIALLELICS_GL (ch_split_multi_in, ch_genome_fasta)
+            ch_remove_dup_in = SPLIT_MULTIALLELICS_GL.out.vcf
+                                .map{ meta, vcf ->
+                                        return [meta, vcf, []] }
+        } else {
+            ch_remove_dup_in = ch_split_multi_in
+        }
         REMOVE_DUPLICATES_GL (ch_remove_dup_in, ch_genome_fasta)
 
         ch_genome_chrsizes.flatten().map{chromsizes ->
