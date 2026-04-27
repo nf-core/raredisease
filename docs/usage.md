@@ -246,14 +246,14 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 4. Variant calling - SNV
 
-| Mandatory                  | Optional                              |
-| -------------------------- | ------------------------------------- |
-| variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>               |
-| ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup>           |
-| analysis_type<sup>3</sup>  | call_interval<sup>2</sup>             |
-|                            | known_dbsnp_tbi<sup>2</sup>           |
-|                            | par_bed<sup>4</sup>                   |
-|                            | skip_split_multiallelics<sup>5</sup>  |
+| Mandatory                  | Optional                             |
+| -------------------------- | ------------------------------------ |
+| variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>              |
+| ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup>          |
+| analysis_type<sup>3</sup>  | call_interval<sup>2</sup>            |
+|                            | known_dbsnp_tbi<sup>2</sup>          |
+|                            | par_bed<sup>4</sup>                  |
+|                            | skip_split_multiallelics<sup>5</sup> |
 
 <sup>1</sup>Default variant caller is DeepVariant, but you have the option to use Sentieon as well.<br />
 <sup>2</sup>These parameters are only used by Sentieon.<br />
