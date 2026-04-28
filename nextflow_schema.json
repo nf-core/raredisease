@@ -581,6 +581,11 @@
                     "description": "Specifies whether to run rtgtools' vcfeval",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "run_vcfanno_db_sanity_check": {
+                    "type": "boolean",
+                    "description": "Specifies whether to check vcfanno database files for zero records and remove the corresponding annotation blocks from the TOML config before running vcfanno",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "save_all_mapped_as_cram": {
                     "type": "boolean",
                     "description": "Specifies whether to generate and publish all (unfiltered) alignment files as cram instead of bam",
@@ -596,6 +601,12 @@
                     "default": 20,
                     "description": "Number of intervals to split your genome into (used to parallelize annotations)",
                     "fa_icon": "fas fa-less-than"
+                },
+                "skip_split_multiallelics": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-forward",
+                    "description": "Skip the split multiallelics step in SNV calling.",
+                    "help_text": "Skips bcftools norm --multiallelics -both in CALL_SNV_SENTIEON and CALL_SNV_DEEPVARIANT. Useful for single-interval runs where the step is unnecessary and can degrade indel quality."
                 },
                 "skip_subworkflows": {
                     "type": "string",

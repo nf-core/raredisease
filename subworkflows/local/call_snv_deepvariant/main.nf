@@ -18,11 +18,14 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
         ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_par_bed         // channel: [optional] [ val(meta), path(bed) ]
-        ch_target_bed      // channel: [mandatory] [ val(meta), path(bed), path(index) ]
-        val_analysis_type  // boolean
+        ch_par_bed                   // channel: [optional] [ val(meta), path(bed) ]
+        ch_target_bed                // channel: [mandatory] [ val(meta), path(bed), path(index) ]
+        val_analysis_type            // boolean
+        val_skip_split_multiallelics // boolean
 
     main:
+
+        ch_publish = channel.empty()
 
         if (val_analysis_type.equals("wes")) {
             TABIX_BGZIP(ch_target_bed.map{meta, gzbed, _index -> return [meta, gzbed]})
@@ -53,11 +56,15 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_split_multi_in = GLNEXUS.out.bcf
                             .map{ meta, bcf ->
                                     return [meta, bcf, []] }
-        SPLIT_MULTIALLELICS_GL (ch_split_multi_in, ch_genome_fasta)
 
-        ch_remove_dup_in = SPLIT_MULTIALLELICS_GL.out.vcf
-                            .map{ meta, vcf ->
-                                    return [meta, vcf, []] }
+        if (!val_skip_split_multiallelics) {
+            SPLIT_MULTIALLELICS_GL (ch_split_multi_in, ch_genome_fasta)
+            ch_remove_dup_in = SPLIT_MULTIALLELICS_GL.out.vcf
+                                .map{ meta, vcf ->
+                                        return [meta, vcf, []] }
+        } else {
+            ch_remove_dup_in = ch_split_multi_in
+        }
         REMOVE_DUPLICATES_GL (ch_remove_dup_in, ch_genome_fasta)
 
         ch_genome_chrsizes.flatten().map{chromsizes ->
@@ -78,9 +85,12 @@ workflow CALL_SNV_DEEPVARIANT {
 
         BCFTOOLS_ANNOTATE(ch_annotate_in)
 
+        ch_publish = DEEPVARIANT.out.report
+
     emit:
         gvcf       = DEEPVARIANT.out.gvcf       // channel: [ val(meta), path(gvcf)]
         gvcf_tabix = DEEPVARIANT.out.gvcf_tbi   // channel: [ val(meta), path(gvcf_tbi)]
+        publish    = ch_publish                 // channel: [ val(meta), path(report) ]
         tabix      = BCFTOOLS_ANNOTATE.out.tbi  // channel: [ val(meta), path(tbi) ]
         vcf        = BCFTOOLS_ANNOTATE.out.vcf  // channel: [ val(meta), path(vcf) ]
 }

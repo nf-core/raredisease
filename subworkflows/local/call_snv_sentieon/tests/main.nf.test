@@ -39,6 +39,7 @@ nextflow_workflow {
                 input[8] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
                 input[9] = channel.of([[id:'model'], []])
                 input[10] = channel.value([])
+                input[11] = false
                 """
             }
         }
@@ -80,6 +81,7 @@ nextflow_workflow {
                 input[8] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
                 input[9] = channel.of([[id:'model'], []])
                 input[10] = channel.value([])
+                input[11] = false
                 """
             }
         }
