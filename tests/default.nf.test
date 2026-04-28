@@ -127,22 +127,4 @@ nextflow_pipeline {
         }
     }
 
-    test("-profile test -- normalize_multiallelics") {
-
-        options "-stub"
-
-        when {
-            params {
-                outdir                  = "$outputDir"
-                skip_tools              = "germlinecnvcaller,gens"
-                normalize_multiallelics = true
-            }
-        }
-
-        then {
-            assertAll(
-                { assert workflow.success }
-            )
-        }
-    }
 }

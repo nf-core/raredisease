@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- Parameters `manta_call_regions`, `ml_prob_threshold`, `normalize_multiallelics`, `sv_freq_filter_expression`, `filter_expansionhunter_htt`, `filter_sv_to_manta`, `skip_vep_sv`, and `sv_size_threshold` to expose optional filtering and calling controls as pipeline parameters [#](https://github.com/nf-core/raredisease/pull/)
+- Parameters `manta_call_regions`, `ml_prob_threshold`, `sv_freq_filter_expression`, `filter_expansionhunter_htt`, `filter_sv_to_manta`, `skip_vep_sv`, and `sv_size_threshold` to expose optional filtering and calling controls as pipeline parameters [#](https://github.com/nf-core/raredisease/pull/)
 - Interval parameter in the default retroseq call [#717](https://github.com/nf-core/raredisease/pull/717)
 - Tests for call_repeat_expansions and qc_bam subworkflows [#713](https://github.com/nf-core/raredisease/pull/713)
 - Feature to subsample mitochondrial alignments based on number of reads [#748](https://github.com/nf-core/raredisease/pull/748)

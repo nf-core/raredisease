@@ -635,12 +635,6 @@
                     "description": "bcftools -e expression to filter SVs by population frequency (e.g. 'INFO/SWEFRQ >= 0.02'). Null disables the filter.",
                     "help_text": "Full bcftools exclude expression, supporting any INFO field. Variants matching the expression are removed. Example: 'INFO/SWEFRQ >= 0.02 || INFO/AF >= 0.02'."
                 },
-                "normalize_multiallelics": {
-                    "type": "boolean",
-                    "default": false,
-                    "fa_icon": "fas fa-code-branch",
-                    "description": "If true, add --multiallelics -both to bcftools norm (SPLIT_MULTIALLELICS). Disabled by default to avoid ~4% indel precision loss verified with GIAB."
-                },
                 "sv_size_threshold": {
                     "type": "integer",
                     "fa_icon": "fas fa-filter",

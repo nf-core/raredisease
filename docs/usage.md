@@ -255,13 +255,11 @@ The mandatory and optional parameters for each category are tabulated below.
 |                            | known_dbsnp_tbi<sup>2</sup>           |
 |                            | par_bed<sup>4</sup>                   |
 |                            | ml_prob_threshold<sup>2</sup>         |
-|                            | normalize_multiallelics<sup>5</sup>   |
 
 <sup>1</sup>Default variant caller is DeepVariant, but you have the option to use Sentieon as well.<br />
 <sup>2</sup>These parameters are only used by Sentieon.<br />
 <sup>3</sup>Default is `WGS`, but you have the option to choose `WES` and `mito` as well.<br />
 <sup>4</sup>This parameter is only used by Deepvariant.<br />
-<sup>5</sup>When `true`, adds `--multiallelics -both` to the bcftools norm step. Disabled by default to avoid a ~4% indel precision loss. Applies to both Sentieon and ExpansionHunter normalisation steps.<br />
 
 ##### 5. Variant calling - Structural variants
 
