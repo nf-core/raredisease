@@ -26,7 +26,6 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
         ch_me_svdb_resources.dump(tag: 'ME_ch_me_svdb_resources')
         ch_vcf.dump(tag: 'ME_ch_vcf')
         ch_vep_cache.dump(tag: 'ME_ch_vep_cache')
-        val_genome.dump(tag: 'ME_val_genome')
         ch_vep_extra_files.dump(tag: 'ME_ch_vep_extra_files')
         
         ch_svdb_dbs = channel.empty()
