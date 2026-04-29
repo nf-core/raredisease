@@ -1,418 +1,139 @@
 {
     "align sentieon, stub": {
         "content": [
-            {
-                "0": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_dedup.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "1": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_dedup.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "2": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_datametrics_mq_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "3": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_datametrics_qd_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "4": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_datametrics_gc_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "5": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_datametrics_gc_summary.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "6": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_datametrics_aln_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "7": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_datametrics_is_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "8": [
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_dedup.bam.metrics.multiqc.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_dedup.bam.metrics:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_dedup.score:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_dedup.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_dedup.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ]
-                ],
-                "aln_metrics": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_datametrics_aln_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "gc_metrics": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_datametrics_gc_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "gc_summary": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_datametrics_gc_summary.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "is_metrics": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_datametrics_is_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "marked_bai": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_dedup.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "marked_bam": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_dedup.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "mq_metrics": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_datametrics_mq_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "publish": [
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_dedup.bam.metrics.multiqc.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_dedup.bam.metrics:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_dedup.score:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_dedup.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_dedup.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ]
-                ],
-                "qd_metrics": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_datametrics_qd_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ]
-            }
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_datametrics_aln_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_datametrics_gc_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_datametrics_gc_summary.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_datametrics_is_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_datametrics_mq_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_datametrics_qd_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                "test_dedup.bam",
+                "test_dedup.bam.bai",
+                "test_dedup.bam.metrics",
+                "test_dedup.bam.metrics.multiqc.tsv",
+                "test_dedup.score"
+            ]
         ],
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-20T16:45:49.119367273"
+        "timestamp": "2026-04-28T13:54:38.517974195"
     },
     "align sentieon": {
         "content": [

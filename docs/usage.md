@@ -246,18 +246,20 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 4. Variant calling - SNV
 
-| Mandatory                  | Optional                    |
-| -------------------------- | --------------------------- |
-| variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>     |
-| ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup> |
-| analysis_type<sup>3</sup>  | call_interval<sup>2</sup>   |
-|                            | known_dbsnp_tbi<sup>2</sup> |
-|                            | par_bed<sup>4</sup>         |
+| Mandatory                  | Optional                             |
+| -------------------------- | ------------------------------------ |
+| variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>              |
+| ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup>          |
+| analysis_type<sup>3</sup>  | call_interval<sup>2</sup>            |
+|                            | known_dbsnp_tbi<sup>2</sup>          |
+|                            | par_bed<sup>4</sup>                  |
+|                            | skip_split_multiallelics<sup>5</sup> |
 
 <sup>1</sup>Default variant caller is DeepVariant, but you have the option to use Sentieon as well.<br />
 <sup>2</sup>These parameters are only used by Sentieon.<br />
 <sup>3</sup>Default is `WGS`, but you have the option to choose `WES` and `mito` as well.<br />
 <sup>4</sup>This parameter is only used by Deepvariant.<br />
+<sup>5</sup>Skips `bcftools norm --multiallelics -both` in both DeepVariant and Sentieon SNV calling. Recommended for single-interval runs to avoid indel quality degradation. See [#813](https://github.com/nf-core/raredisease/issues/813) for details.<br />
 
 ##### 5. Variant calling - Structural variants
 
@@ -287,7 +289,7 @@ The mandatory and optional parameters for each category are tabulated below.
 | vcfanno_resources<sup>2</sup>        | vcfanno_lua                                    |
 | vcfanno_toml<sup>3</sup>             | vep_filters/vep_filters_scout_fmt<sup>10</sup> |
 | vep_cache_version                    | cadd_resources<sup>11</sup>                    |
-| vep_cache<sup>4</sup>                |                                                |
+| vep_cache<sup>4</sup>                | run_vcfanno_db_sanity_check<sup>12</sup>       |
 | gnomad_af<sup>5</sup>                |                                                |
 | score_config_snv<sup>6</sup>         |                                                |
 | variant_consequences_snv<sup>7</sup> |                                                |
@@ -307,6 +309,7 @@ no header and the following columns: `CHROM POS REF_ALLELE,ALT_ALLELE AF`. Sampl
 <sup>9</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
 <sup>10</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into candidate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt). Not required if `--skip_subworkflows generate_clinical_set` is set. To skip this splitting entirely, add `generate_clinical_set` to `--skip_subworkflows`.<br />
 <sup>11</sup>Path to a folder containing cadd annotations. Equivalent of the data/annotations/ folder described [here](https://github.com/kircherlab/CADD-scripts/#manual-installation), and it is used to calculate CADD scores for small indels. <br />
+<sup>12</sup>When set to `true`, each vcfanno database file listed in `vcfanno_resources` is checked for records (non-header lines). Any database with zero records is removed from the vcfanno TOML config before annotation runs. Default: `false`.<br />
 
 :::note
 We use CADD only to annotate small indels. To annotate SNVs with precomputed CADD scores, pass the file containing CADD scores as a resource to vcfanno instead. Files containing the precomputed CADD scores for SNVs can be downloaded from [here](https://cadd.gs.washington.edu/download) (download files listed under the description: "All possible SNVs of GRCh3<7/8>/hg3<7/8>")

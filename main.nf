@@ -51,6 +51,7 @@ workflow NFCORE_RAREDISEASE {
     val_cadd_resources
     val_call_interval
     val_concatenate_snv_calls
+    val_skip_split_multiallelics
     val_exclude_alt
     val_extract_alignments
     val_fai
@@ -107,6 +108,7 @@ workflow NFCORE_RAREDISEASE {
     val_rtg_truthvcfs
     val_run_mt_for_wes
     val_run_rtgvcfeval
+    val_run_vcfanno_db_sanity_check
     val_sambamba_regions
     val_sample_id_map
     val_samtools_sort_threads
@@ -478,6 +480,7 @@ workflow NFCORE_RAREDISEASE {
         val_analysis_type,
         val_cadd_resources,
         val_concatenate_snv_calls,
+        val_skip_split_multiallelics,
         val_exclude_alt,
         val_extract_alignments,
         val_genome,
@@ -510,6 +513,7 @@ workflow NFCORE_RAREDISEASE {
         val_platform,
         val_run_mt_for_wes,
         val_run_rtgvcfeval,
+        val_run_vcfanno_db_sanity_check,
         val_sample_id_map,
         val_samtools_sort_threads,
         val_save_all_mapped_as_cram,
@@ -565,6 +569,7 @@ workflow {
         params.cadd_resources,
         params.call_interval,
         params.concatenate_snv_calls,
+        params.skip_split_multiallelics,
         params.exclude_alt,
         params.extract_alignments,
         params.fai,
@@ -621,6 +626,7 @@ workflow {
         params.rtg_truthvcfs,
         params.run_mt_for_wes,
         params.run_rtgvcfeval,
+        params.run_vcfanno_db_sanity_check,
         params.sambamba_regions,
         params.sample_id_map,
         params.samtools_sort_threads,

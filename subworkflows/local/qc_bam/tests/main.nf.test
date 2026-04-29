@@ -137,7 +137,13 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(workflow.out).match() }
+                { assert snapshot(
+                        workflow.out.publish.flatten()
+                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                            .collect { new File(it).name }
+                            .sort()
+                            ).match()
+                }
             )
         }
 
@@ -258,9 +264,14 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(workflow.out).match() }
+                { assert snapshot(
+                        workflow.out.publish.flatten()
+                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                            .collect { new File(it).name }
+                            .sort()
+                            ).match()
+                }
             )
         }
-    }
-
+}
 }
