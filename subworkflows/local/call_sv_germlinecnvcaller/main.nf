@@ -2,13 +2,13 @@
 // A variant caller workflow for GATK's GermlinceCNVCaller
 //
 
+include { BCFTOOLS_VIEW                       } from '../../../modules/nf-core/bcftools/view/main'
 include { GATK4_COLLECTREADCOUNTS             } from '../../../modules/nf-core/gatk4/collectreadcounts/main.nf'
 include { GATK4_DETERMINEGERMLINECONTIGPLOIDY } from '../../../modules/nf-core/gatk4/determinegermlinecontigploidy/main.nf'
 include { GATK4_GERMLINECNVCALLER             } from '../../../modules/nf-core/gatk4/germlinecnvcaller/main.nf'
 include { GATK4_POSTPROCESSGERMLINECNVCALLS   } from '../../../modules/nf-core/gatk4/postprocessgermlinecnvcalls/main.nf'
-include { BCFTOOLS_VIEW                       } from '../../../modules/nf-core/bcftools/view/main'
-include { TABIX_TABIX                         } from '../../../modules/nf-core/tabix/tabix/main'
 include { SVDB_MERGE as SVDB_MERGE_GCNVCALLER } from '../../../modules/nf-core/svdb/merge/main'
+include { TABIX_TABIX                         } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_SV_GERMLINECNVCALLER {
     take:

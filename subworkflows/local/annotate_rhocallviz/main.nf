@@ -2,12 +2,12 @@
 // A subworkflow to plot binned zygosity and RHO-regions.
 //
 
-include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_RHOCALL    } from '../../../modules/nf-core/bcftools/view/main'
 include { BCFTOOLS_ROH                              } from '../../../modules/nf-core/bcftools/roh/main'
+include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_RHOCALL    } from '../../../modules/nf-core/bcftools/view/main'
 include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_UNCOMPRESS } from '../../../modules/nf-core/bcftools/view/main'
+include { CHROMOGRAPH as CHROMOGRAPH_AUTOZYG        } from '../../../modules/nf-core/chromograph/main'
 include { RHOCALL_VIZ                               } from '../../../modules/nf-core/rhocall/viz/main'
 include { UCSC_WIGTOBIGWIG                          } from '../../../modules/nf-core/ucsc/wigtobigwig/main'
-include { CHROMOGRAPH as CHROMOGRAPH_AUTOZYG        } from '../../../modules/nf-core/chromograph/main'
 
 workflow ANNOTATE_RHOCALLVIZ {
 

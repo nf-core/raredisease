@@ -2,11 +2,11 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SENTIEON_BWAMEM                          } from '../../../modules/nf-core/sentieon/bwamem/main'
-include { SENTIEON_DATAMETRICS                     } from '../../../modules/nf-core/sentieon/datametrics/main'
-include { SENTIEON_DEDUP                           } from '../../../modules/nf-core/sentieon/dedup/main'
-include { SENTIEON_READWRITER                      } from '../../../modules/nf-core/sentieon/readwriter/main'
-include { SAMTOOLS_VIEW as EXTRACT_ALIGNMENTS      } from '../../../modules/nf-core/samtools/view/main'
+include { SAMTOOLS_VIEW as EXTRACT_ALIGNMENTS } from '../../../modules/nf-core/samtools/view/main'
+include { SENTIEON_BWAMEM                     } from '../../../modules/nf-core/sentieon/bwamem/main'
+include { SENTIEON_DATAMETRICS                } from '../../../modules/nf-core/sentieon/datametrics/main'
+include { SENTIEON_DEDUP                      } from '../../../modules/nf-core/sentieon/dedup/main'
+include { SENTIEON_READWRITER                 } from '../../../modules/nf-core/sentieon/readwriter/main'
 
 workflow ALIGN_SENTIEON {
     take:

@@ -2,15 +2,15 @@
 // A subworkflow to call SNVs by sentieon dnascope with a machine learning model.
 //
 
-include { SENTIEON_DNASCOPE                          } from '../../../modules/nf-core/sentieon/dnascope/main'
-include { SENTIEON_DNAMODELAPPLY                     } from '../../../modules/nf-core/sentieon/dnamodelapply/main'
-include { BCFTOOLS_MERGE                             } from '../../../modules/nf-core/bcftools/merge/main'
-include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_SEN   } from '../../../modules/nf-core/bcftools/norm/main'
-include { BCFTOOLS_NORM as REMOVE_DUPLICATES_SEN     } from '../../../modules/nf-core/bcftools/norm/main'
-include { BCFTOOLS_FILTER as BCF_FILTER_ONE          } from '../../../modules/nf-core/bcftools/filter/main'
-include { BCFTOOLS_FILTER as BCF_FILTER_TWO          } from '../../../modules/nf-core/bcftools/filter/main'
-include { BCFTOOLS_ANNOTATE                          } from '../../../modules/nf-core/bcftools/annotate/main'
-include { ADD_VARCALLER_TO_BED                       } from '../../../modules/local/add_varcallername_to_bed'
+include { ADD_VARCALLER_TO_BED                     } from '../../../modules/local/add_varcallername_to_bed'
+include { BCFTOOLS_ANNOTATE                        } from '../../../modules/nf-core/bcftools/annotate/main'
+include { BCFTOOLS_FILTER as BCF_FILTER_ONE        } from '../../../modules/nf-core/bcftools/filter/main'
+include { BCFTOOLS_FILTER as BCF_FILTER_TWO        } from '../../../modules/nf-core/bcftools/filter/main'
+include { BCFTOOLS_MERGE                           } from '../../../modules/nf-core/bcftools/merge/main'
+include { BCFTOOLS_NORM as REMOVE_DUPLICATES_SEN   } from '../../../modules/nf-core/bcftools/norm/main'
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_SEN } from '../../../modules/nf-core/bcftools/norm/main'
+include { SENTIEON_DNAMODELAPPLY                   } from '../../../modules/nf-core/sentieon/dnamodelapply/main'
+include { SENTIEON_DNASCOPE                        } from '../../../modules/nf-core/sentieon/dnascope/main'
 
 workflow CALL_SNV_SENTIEON {
     take:

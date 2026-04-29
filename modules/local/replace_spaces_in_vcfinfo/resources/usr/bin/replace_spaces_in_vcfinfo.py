@@ -29,7 +29,7 @@ def main():
             else:
                 spl = line.rstrip("\n").split("\t")
                 if len(spl) > 7:
-                    spl[7] = spl[7].replace(" ", "_")
+                    spl[7] = spl[7].replace(" ", "_") #update INFO column
                 output.write("\t".join(spl) + "\n")
 
 

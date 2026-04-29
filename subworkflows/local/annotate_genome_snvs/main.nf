@@ -2,21 +2,21 @@
 // A subworkflow to annotate snvs in the genome
 //
 
-include { VCFANNO                               } from '../../../modules/nf-core/vcfanno/main'
+include { ANNOTATE_CADD                         } from '../annotate_cadd'
+include { ANNOTATE_RHOCALLVIZ                   } from '../annotate_rhocallviz'
 include { BCFTOOLS_CONCAT                       } from '../../../modules/nf-core/bcftools/concat/main'
 include { BCFTOOLS_ROH                          } from '../../../modules/nf-core/bcftools/roh/main'
 include { BCFTOOLS_VIEW                         } from '../../../modules/nf-core/bcftools/view/main'
-include { RHOCALL_ANNOTATE                      } from '../../../modules/nf-core/rhocall/annotate/main'
-include { UPD as UPD_SITES                      } from '../../../modules/nf-core/upd/main'
-include { UPD as UPD_REGIONS                    } from '../../../modules/nf-core/upd/main'
-include { CHROMOGRAPH as CHROMOGRAPH_SITES      } from '../../../modules/nf-core/chromograph/main'
 include { CHROMOGRAPH as CHROMOGRAPH_REGIONS    } from '../../../modules/nf-core/chromograph/main'
+include { CHROMOGRAPH as CHROMOGRAPH_SITES      } from '../../../modules/nf-core/chromograph/main'
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_SNV      } from '../../../modules/nf-core/ensemblvep/vep/main'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL } from '../../../modules/nf-core/tabix/bgziptabix/main'
 include { GATK4_SELECTVARIANTS                  } from '../../../modules/nf-core/gatk4/selectvariants/main'
-include { ANNOTATE_CADD                         } from '../annotate_cadd'
-include { ANNOTATE_RHOCALLVIZ                   } from '../annotate_rhocallviz'
+include { RHOCALL_ANNOTATE                      } from '../../../modules/nf-core/rhocall/annotate/main'
 include { SANITY_CHECK_VCFANNO_DATABASES        } from '../../../modules/local/sanity_check_vcfanno_databases/main'
+include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { UPD as UPD_REGIONS                    } from '../../../modules/nf-core/upd/main'
+include { UPD as UPD_SITES                      } from '../../../modules/nf-core/upd/main'
+include { VCFANNO                               } from '../../../modules/nf-core/vcfanno/main'
 
 workflow ANNOTATE_GENOME_SNVS {
 
