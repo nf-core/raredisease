@@ -37,7 +37,457 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T15:04:33.885203481",
+        "timestamp": "2026-04-08T14:47:44.537374",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "align bwamem2, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        },
+                        "test.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "4": [
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "marked_bai": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "marked_bam": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "metrics": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "publish": [
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "stats": [
+                    [
+                        {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        },
+                        "test.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-04-08T14:48:42.172404",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "align bwameme, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        },
+                        "test.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "4": [
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "marked_bai": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "marked_bam": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "metrics": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "publish": [
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ],
+                    [
+                        "alignment/",
+                        [
+                            {
+                                "groupSize": 1,
+                                "groupTarget": {
+                                    "id": "test",
+                                    "sample": "test",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                                }
+                            },
+                            "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "stats": [
+                    [
+                        {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        },
+                        "test.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-04-08T14:49:01.39982",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -81,7 +531,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T15:05:20.75721248",
+        "timestamp": "2026-04-08T14:48:21.046802",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
