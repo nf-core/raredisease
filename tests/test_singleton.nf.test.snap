@@ -538,8 +538,8 @@
                 "call_sv",
                 "call_sv/hugelymodelbat.saltshaker.png",
                 "call_sv/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/justhusky.saltshaker_classify.html",
                 "call_sv/justhusky_saltshaker.vcf.gz",
-                "call_sv/justhusky_saltshaker_classify.html",
                 "call_sv/justhusky_sv.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz.tbi",
                 "fastqc",
@@ -659,6 +659,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-29T11:23:42.947508416"
+        "timestamp": "2026-04-29T14:49:58.807870905"
     }
 }
