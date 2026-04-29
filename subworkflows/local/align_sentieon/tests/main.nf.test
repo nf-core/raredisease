@@ -133,7 +133,7 @@ nextflow_workflow {
                 .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
                 .collect { new File(it).name }
                 .sort()
-                )
+                ).match()
         }
 
     }
