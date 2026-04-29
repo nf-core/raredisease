@@ -10,6 +10,6 @@ process CONCAT_SALTSHAKER {
 
     script:
     """
-    cat ${txts.join(' ')} > ${meta.id}_saltshaker_classify.txt
+    cat ${txts.join(' ')} > ${meta.id}.saltshaker_classify.txt
     """
 }
