@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            773,
+            775,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -622,6 +622,7 @@
                 "call_sv",
                 "call_sv/earlycasualcaiman_mitochondria_deletions.txt",
                 "call_sv/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/justhusky_saltshaker_classify.html",
                 "call_sv/justhusky_sv.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz.tbi",
                 "call_sv/slowlycivilbuck_mitochondria_deletions.txt",
@@ -848,6 +849,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-14T14:47:13.174933057"
+        "timestamp": "2026-04-29T11:21:47.405969864"
     }
 }
