@@ -9,6 +9,7 @@ include { MITOSALT            } from '../../../modules/local/mitosalt/main'
 include { CAT_FASTQ           } from '../../../modules/nf-core/cat/fastq/main'
 include { SALTSHAKER_CALL     } from '../../../modules/nf-core/saltshaker/call/main'
 include { SALTSHAKER_CLASSIFY } from '../../../modules/nf-core/saltshaker/classify/main'
+include { CONCAT_SALTSHAKER   } from '../../../modules/local/concat_saltshaker/main'
 include { SALTSHAKER_PLOT     } from '../../../modules/nf-core/saltshaker/plot/main'
 include { SALTSHAKER_TO_HTML  } from '../../../modules/local/saltshaker_to_html/main'
 include { SEQTK_SAMPLE        } from '../../../modules/nf-core/seqtk/sample/main'
@@ -118,8 +119,22 @@ workflow CALL_SV_MT {
                 SALTSHAKER_CALL.out.call,
                 val_mitochondria_name
             )
-            ch_saltshaker_txt = SALTSHAKER_CLASSIFY.out.txt
             ch_saltshaker_vcf = SALTSHAKER_CLASSIFY.out.vcf
+
+            SALTSHAKER_CLASSIFY.out.txt
+                .map{ _meta, txt -> txt }
+                .toSortedList{ a, b -> a.name <=> b.name }
+                .toList()
+                .set{ ch_saltshaker_files }
+
+            ch_case_info
+                .combine(ch_saltshaker_files)
+                .set { ch_saltshaker_txts }
+
+            CONCAT_SALTSHAKER(
+                ch_saltshaker_txts
+            )
+            ch_saltshaker_txt = CONCAT_SALTSHAKER.out.txt
 
             SALTSHAKER_TO_HTML(
                 ch_saltshaker_txt,
