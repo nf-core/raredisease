@@ -29,14 +29,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Saltshaker for downstream processing of mitochondrial SV calls from MitoSAlt [#775](https://github.com/nf-core/raredisease/pull/775)
 - Env variable NXF_SINGULARITY_NEW_PID_NAMESPACE = false to accommodate hisat2 running with latest Nextflow and Singularity [#775](https://github.com/nf-core/raredisease/pull/775)
 - Parameter `exclude_alt` to filter alignments to alt/unplaced contigs after alignment using samtools view, retaining only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM). Note that enabling this will restrict variant calling to these chromosomes [#803](https://github.com/nf-core/raredisease/pull/803)]
-<<<<<<< HEAD
-- Parameters `save_all_mapped_as_cram` and `save_noalt_mapped_as_cram` to replace `save_mapped_as_cram`, allowing independent control over publishing unfiltered and alt-filtered alignment files as CRAM [#807](https://github.com/nf-core/raredisease/pull/807), 
-- Stub test for all the remaning subworkflows that were lacking it: align_bwa_bwamem2_bwameme, align_MT, align (bwameme - wes), align_sentieon, call_repeat_expansions, prepare_references, qc_bam [#820](https://github.com/nf-core/raredisease/pull/820)
-=======
+  <<<<<<< HEAD
+- Parameters `save_all_mapped_as_cram` and `save_noalt_mapped_as_cram` to replace `save_mapped_as_cram`, allowing independent control over publishing unfiltered and alt-filtered alignment files as CRAM [#807](https://github.com/nf-core/raredisease/pull/807),
+- # Stub test for all the remaning subworkflows that were lacking it: align_bwa_bwamem2_bwameme, align_MT, align (bwameme - wes), align_sentieon, call_repeat_expansions, prepare_references, qc_bam [#820](https://github.com/nf-core/raredisease/pull/820)
 - Parameters `save_all_mapped_as_cram` and `save_noalt_mapped_as_cram` to replace `save_mapped_as_cram`, allowing independent control over publishing unfiltered and alt-filtered alignment files as CRAM [#807](https://github.com/nf-core/raredisease/pull/807)
 - Parameter `run_vcfanno_db_sanity_check` to check vcfanno database files for zero records and remove the corresponding annotation blocks from the TOML config before running vcfanno [#821](https://github.com/nf-core/raredisease/pull/821)
 - Added `--skip_split_multiallelics` parameter to allow users to skip the `bcftools norm --multiallelics -both` step in SNV calling (DeepVariant and Sentieon), which can cause indel quality degradation in single-interval runs [#823](https://github.com/nf-core/raredisease/pull/823)
->>>>>>> f200370c6cbf22d4cdf487440ab53734fa6979b7
+  > > > > > > > f200370c6cbf22d4cdf487440ab53734fa6979b7
 
 ### `Changed`
 
