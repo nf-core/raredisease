@@ -21,6 +21,14 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
         ch_vep_extra_files      // channel: [mandatory] [ path(files) ]
 
     main:
+        ch_genome_dictionary.dump(tag: 'ME_ch_genome_dictionary')
+        ch_genome_fasta.dump(tag: 'ME_ch_genome_fasta')
+        ch_me_svdb_resources.dump(tag: 'ME_ch_me_svdb_resources')
+        ch_vcf.dump(tag: 'ME_ch_vcf')
+        ch_vep_cache.dump(tag: 'ME_ch_vep_cache')
+        val_genome.dump(tag: 'ME_val_genome')
+        ch_vep_extra_files.dump(tag: 'ME_ch_vep_extra_files')
+        
         ch_svdb_dbs = channel.empty()
 
         ch_me_svdb_resources
@@ -32,6 +40,8 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
                 out_occs: out_allele_count_info_key
             }
             .set { ch_svdb_dbs }
+
+        ch_svdb_dbs.vcf_dbs.dump(tag: 'ME_svdb_vcf_dbs')
 
         SVDB_QUERY_DB (
             ch_vcf,
