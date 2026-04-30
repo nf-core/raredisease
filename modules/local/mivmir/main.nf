@@ -57,6 +57,8 @@ process MIVMIR_INTERNAL_UNIT_TEST {
     -o log_cli=true \
     -x \
     --full-trace \
+    # Using pytest cache is important for reproducible testing, by recreating the model, libs into the same state for
+    # every fixture permutation. Point cache_dir to writable path in RunsOn workers.
     -o cache_dir=/tmp/pycache \
     variant_rank_score \
     -k test_inference
