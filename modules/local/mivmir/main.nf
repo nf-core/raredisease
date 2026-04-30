@@ -48,6 +48,6 @@ process MIVMIR_INTERNAL_UNIT_TEST {
     """
     . /opt/pyenv/bin/activate
     export PYTHONPATH=/rdds/src
-    PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -p no:cacheprovider --full-trace /rdds/src/tests/variant_rank_score -k test_inference
+    PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -v -s -o log_cli=true -p no:cacheprovider --full-trace /rdds/src/tests/variant_rank_score -k test_inference
     """
 }
