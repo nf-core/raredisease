@@ -9,7 +9,7 @@ include { MITOSALT            } from '../../../modules/local/mitosalt/main'
 include { CAT_FASTQ           } from '../../../modules/nf-core/cat/fastq/main'
 include { SALTSHAKER_CALL     } from '../../../modules/nf-core/saltshaker/call/main'
 include { SALTSHAKER_CLASSIFY } from '../../../modules/nf-core/saltshaker/classify/main'
-include { CONCAT_SALTSHAKER   } from '../../../modules/local/concat_saltshaker/main'
+include { FIND_CONCATENATE    } from '../../../modules/nf-core/find/concatenate/main'
 include { SALTSHAKER_PLOT     } from '../../../modules/nf-core/saltshaker/plot/main'
 include { SALTSHAKER_TO_HTML  } from '../../../modules/local/saltshaker_to_html/main'
 include { SEQTK_SAMPLE        } from '../../../modules/nf-core/seqtk/sample/main'
@@ -133,10 +133,10 @@ workflow CALL_SV_MT {
                 .combine(ch_saltshaker_files)
                 .set { ch_saltshaker_txts }
 
-            CONCAT_SALTSHAKER(
+            FIND_CONCATENATE(
                 ch_saltshaker_txts
             )
-            ch_saltshaker_txt = CONCAT_SALTSHAKER.out.txt
+            ch_saltshaker_txt = FIND_CONCATENATE.out.file_out
 
             SALTSHAKER_TO_HTML(
                 ch_saltshaker_txt,
