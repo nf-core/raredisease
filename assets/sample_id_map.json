@@ -8,13 +8,27 @@
         "type": "object",
         "properties": {
             "customer_id": {
-                "type": "string",
-                "pattern": "^\\S+$",
+                "anyOf": [
+                    {
+                        "type": "integer"
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    }
+                ],
                 "errorMessage": "Customer id cannot contain spaces"
             },
             "internal_id": {
-                "type": "string",
-                "pattern": "^\\S+$",
+                "anyOf": [
+                    {
+                        "type": "integer"
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    }
+                ],
                 "errorMessage": "Internal id cannot contain spaces",
                 "meta": ["id"]
             }

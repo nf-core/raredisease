@@ -181,6 +181,7 @@ workflow RAREDISEASE {
     val_analysis_type
     val_cadd_resources
     val_concatenate_snv_calls
+    val_skip_split_multiallelics
     val_exclude_alt
     val_extract_alignments
     val_genome
@@ -213,6 +214,7 @@ workflow RAREDISEASE {
     val_platform
     val_run_mt_for_wes
     val_run_rtgvcfeval
+    val_run_vcfanno_db_sanity_check
     val_sample_id_map
     val_samtools_sort_threads
     val_save_all_mapped_as_cram
@@ -433,6 +435,7 @@ workflow RAREDISEASE {
             ch_target_bed,
             val_analysis_type,
             val_concatenate_snv_calls,
+            val_skip_split_multiallelics,
             val_run_mt_for_wes,
             val_variant_caller
         )
@@ -462,6 +465,7 @@ workflow RAREDISEASE {
                 val_analysis_type,
                 val_cadd_resources,
                 val_genome,
+                val_run_vcfanno_db_sanity_check,
                 val_vep_cache_version
             ).set { ch_snv_annotate }
             ch_annotate_genome_snvs_publish = ANNOTATE_GENOME_SNVS.out.publish

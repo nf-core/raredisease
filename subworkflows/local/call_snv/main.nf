@@ -36,25 +36,27 @@ workflow CALL_SNV {
         ch_par_bed                // channel: [optional] [ val(meta), path(bed) ]
         ch_pcr_indel_model        // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
         ch_target_bed             // channel: [mandatory] [ val(meta), path(bed), path(index) ]
-        val_analysis_type         // string:  'wgs', 'wes', or 'mito'
-        val_concatenate_snv_calls // boolean
-        val_run_mt_for_wes        // boolean
-        val_variant_caller        // string:  'deepvariant' or 'sentieon'
+        val_analysis_type             // string:  'wgs', 'wes', or 'mito'
+        val_concatenate_snv_calls     // boolean
+        val_run_mt_for_wes            // boolean
+        val_skip_split_multiallelics  // boolean
+        val_variant_caller            // string:  'deepvariant' or 'sentieon'
 
     main:
-        ch_deepvar_vcf   = channel.empty()
-        ch_deepvar_tbi   = channel.empty()
-        ch_deepvar_gvcf  = channel.empty()
-        ch_deepvar_gtbi  = channel.empty()
-        ch_mt_vcf        = channel.empty()
-        ch_mt_tabix      = channel.empty()
-        ch_mt_vcf_tabix  = channel.empty()
-        ch_sentieon_vcf  = channel.empty()
-        ch_sentieon_tbi  = channel.empty()
-        ch_sentieon_gvcf = channel.empty()
-        ch_sentieon_gtbi = channel.empty()
         ch_concat_publish  = channel.empty()
+        ch_deepvar_vcf     = channel.empty()
+        ch_deepvar_tbi     = channel.empty()
+        ch_deepvar_gvcf    = channel.empty()
+        ch_deepvar_gtbi    = channel.empty()
+        ch_deepvar_publish = channel.empty()
         ch_mt_snv_publish  = channel.empty()
+        ch_mt_tabix        = channel.empty()
+        ch_mt_vcf          = channel.empty()
+        ch_mt_vcf_tabix    = channel.empty()
+        ch_sentieon_vcf    = channel.empty()
+        ch_sentieon_tbi    = channel.empty()
+        ch_sentieon_gvcf   = channel.empty()
+        ch_sentieon_gtbi   = channel.empty()
 
         if (val_variant_caller.equals("deepvariant") && !val_analysis_type.equals("mito")) {
             CALL_SNV_DEEPVARIANT (
@@ -66,12 +68,14 @@ workflow CALL_SNV {
                 ch_genome_fasta,
                 ch_par_bed,
                 ch_target_bed,
-                val_analysis_type
+                val_analysis_type,
+                val_skip_split_multiallelics
             )
-            ch_deepvar_vcf  = CALL_SNV_DEEPVARIANT.out.vcf
-            ch_deepvar_tbi  = CALL_SNV_DEEPVARIANT.out.tabix
-            ch_deepvar_gvcf = CALL_SNV_DEEPVARIANT.out.gvcf
-            ch_deepvar_gtbi = CALL_SNV_DEEPVARIANT.out.gvcf_tabix
+            ch_deepvar_vcf     = CALL_SNV_DEEPVARIANT.out.vcf
+            ch_deepvar_tbi     = CALL_SNV_DEEPVARIANT.out.tabix
+            ch_deepvar_gvcf    = CALL_SNV_DEEPVARIANT.out.gvcf
+            ch_deepvar_gtbi    = CALL_SNV_DEEPVARIANT.out.gvcf_tabix
+            ch_deepvar_publish = CALL_SNV_DEEPVARIANT.out.publish
         } else if (val_variant_caller.equals("sentieon")) {
             CALL_SNV_SENTIEON(
                 ch_genome_bam_bai,
@@ -84,7 +88,8 @@ workflow CALL_SNV {
                 ch_genome_fai,
                 ch_genome_fasta,
                 ch_ml_model,
-                ch_pcr_indel_model
+                ch_pcr_indel_model,
+                val_skip_split_multiallelics
             )
             ch_sentieon_vcf  = CALL_SNV_SENTIEON.out.vcf
             ch_sentieon_tbi  = CALL_SNV_SENTIEON.out.tabix
@@ -135,9 +140,9 @@ workflow CALL_SNV {
                 ch_mtshift_backchain,
                 CALL_SNV_MT_SHIFT.out.vcf
             )
-            ch_mt_vcf       = POSTPROCESS_MT_CALLS.out.vcf
-            ch_mt_tabix     = POSTPROCESS_MT_CALLS.out.tbi
-            ch_mt_vcf_tabix = ch_mt_vcf.join(ch_mt_tabix, failOnMismatch:true, failOnDuplicate:true)
+            ch_mt_vcf         = POSTPROCESS_MT_CALLS.out.vcf
+            ch_mt_tabix       = POSTPROCESS_MT_CALLS.out.tbi
+            ch_mt_vcf_tabix   = ch_mt_vcf.join(ch_mt_tabix, failOnMismatch:true, failOnDuplicate:true)
             ch_mt_snv_publish = POSTPROCESS_MT_CALLS.out.publish
         }
 
@@ -154,6 +159,7 @@ workflow CALL_SNV {
 
         ch_publish = GATK4_SELECTVARIANTS.out.vcf
             .mix(GATK4_SELECTVARIANTS.out.tbi)
+            .mix(ch_deepvar_publish)
             .map { meta, value -> ['call_snv/genome/', [meta, value]] }
             .mix(ch_concat_publish)
             .mix(ch_mt_snv_publish)
@@ -167,5 +173,5 @@ workflow CALL_SNV {
         mt_tabix         = ch_mt_tabix         // channel: [ val(meta), path(tbi) ]
         mt_vcf           = ch_mt_vcf           // channel: [ val(meta), path(vcf) ]
         mt_vcf_tbi       = ch_mt_vcf_tabix     // channel: [ val(meta), path(vcf), path(tbi)]
-        publish = ch_publish                   // channel: [ val(destination), val(value) ]
+        publish          = ch_publish          // channel: [ val(destination), val(value) ]
 }
