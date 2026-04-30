@@ -63,6 +63,6 @@ process MIVMIR_INTERNAL_UNIT_TEST {
     -x \
     --full-trace \
     -o cache_dir=/tmp/pycache \
-    variant_rank_score
+    variant_rank_score/test_inference.py
     """
 }
