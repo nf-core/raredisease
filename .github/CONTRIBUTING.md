@@ -170,6 +170,17 @@ Devcontainer specs:
 
 ### Style
 
+- Sort `include` statements alphabetically by the name inside the braces. Right-pad each name with spaces so all closing `}` align to the same column (the longest name in the block sets the width):
+
+  ```groovy
+  include { ALIGN_BWA_BWAMEM2_BWAMEME                 } from '../align_bwa_bwamem2_bwameme'
+  include { ALIGN_MT                                   } from '../align_MT'
+  include { ALIGN_MT as ALIGN_MT_SHIFT                 } from '../align_MT'
+  include { SAMTOOLS_VIEW as CONVERTTOCRAM_ALTFILTERED } from '../../../modules/nf-core/samtools/view/main'
+  include { SAMTOOLS_VIEW as CONVERTTOCRAM_UNFILTERED  } from '../../../modules/nf-core/samtools/view/main'
+  include { SAMTOOLS_VIEW as SAMTOOLS_VIEW_EXCLUDE_ALT } from '../../../modules/nf-core/samtools/view/main'
+  ```
+
 - Both `take:` and `emit:` block entries require an inline type comment. Use `name // type: [mandatory|optional] description` for `take:` and `name = value // channel: [type description]` for `emit:`. Always include the comment — never leave an entry uncommented.
 
   ```groovy
