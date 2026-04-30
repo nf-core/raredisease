@@ -36,6 +36,10 @@ process MIVMIR_INTERNAL_UNIT_TEST {
     // Test inference API and numerical reproducibility
     container "docker.io/clinicalgenomics/rdds_mivmir:v1.12.0-rc6"
 
+    cache false
+
+    debug true
+
     beforeScript "mkdir ${task.workDir}/rdds-tmp"
     afterScript "rm -r ${task.workDir}/rdds-tmp"
     containerOptions {[
@@ -52,13 +56,12 @@ process MIVMIR_INTERNAL_UNIT_TEST {
     PYTHONDONTWRITEBYTECODE=1 \
     python3 \
     -m pytest \
+    -rA \
     -v \
     -s \
     -o log_cli=true \
     -x \
     --full-trace \
-    # Using pytest cache is important for reproducible testing, by recreating the model, libs into the same state for
-    # every fixture permutation. Point cache_dir to writable path in RunsOn workers.
     -o cache_dir=/tmp/pycache \
     variant_rank_score \
     -k test_inference
