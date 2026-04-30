@@ -49,6 +49,6 @@ process MIVMIR_INTERNAL_UNIT_TEST {
     . /opt/pyenv/bin/activate
     export PYTHONPATH=/rdds/src
     cd /rdds/src/tests
-    PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -v -s -o log_cli=true -x --cache-dir=/tmp/pycache --full-trace variant_rank_score -k test_inference
+    PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -v -s -o log_cli=true -x --full-trace -o --cache-dir=/tmp/pycache variant_rank_score -k test_inference
     """
 }
