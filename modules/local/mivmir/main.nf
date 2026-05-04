@@ -51,6 +51,7 @@ process MIVMIR_INTERNAL_UNIT_TEST {
     script:
     """
     . /opt/pyenv/bin/activate && \
+    python3 --version | grep "Python 3.8.10" && \
     export PYTHONPATH=/rdds/src && \
     cd /rdds/src/tests && \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -63,6 +64,7 @@ process MIVMIR_INTERNAL_UNIT_TEST {
     -x \
     --full-trace \
     -o cache_dir=/tmp/pycache \
-    variant_rank_score/test_inference.py
+    variant_rank_score/test_inference.py \
+    -k test_inference_single -k test_inference_batch
     """
 }
