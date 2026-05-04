@@ -131,6 +131,7 @@ workflow CALL_SV_MT {
 
             ch_case_info
                 .combine(ch_saltshaker_files)
+                .filter { _meta, files -> files.size() > 0 }
                 .set { ch_saltshaker_txts }
 
             FIND_CONCATENATE(

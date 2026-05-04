@@ -165,6 +165,11 @@
                 "FASTQC": {
                     "fastqc": "0.12.1"
                 },
+                "FIND_CONCATENATE": {
+                    "coreutils": 9.4,
+                    "find": "4.6.0",
+                    "pigz": 2.8
+                },
                 "GATK4_FILTERMUTECTCALLS_MT": {
                     "gatk4": "4.6.2.0"
                 },
@@ -675,7 +680,7 @@
                 "call_sv/earlycasualcaiman_mitochondria_deletions.txt",
                 "call_sv/hugelymodelbat.saltshaker.png",
                 "call_sv/hugelymodelbat_mitochondria_deletions.txt",
-                "call_sv/justhusky.saltshaker_classify.html",
+                "call_sv/justhusky.html",
                 "call_sv/justhusky_saltshaker.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz.tbi",
@@ -930,6 +935,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"
         },
-        "timestamp": "2026-04-30T13:22:59.360128566"
+        "timestamp": "2026-04-30T14:28:57.614342021"
     }
 }
