@@ -66,6 +66,9 @@ jobs:
           sudo apt-get update && \
           sudo apt-get install -y --no-install-recommends build-essential
 
+      - name: Clean up Disk space
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+
       - name: Run Mivmir docker test
         run: |
           docker run --rm --entrypoint bash docker.io/clinicalgenomics/rdds_mivmir:v1.12.0-rc6 -c \
