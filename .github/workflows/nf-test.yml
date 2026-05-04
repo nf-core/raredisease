@@ -57,6 +57,36 @@ jobs:
           echo ${{ steps.set-shards.outputs.shard }}
           echo ${{ steps.set-shards.outputs.total_shards }}
 
+  job-run-custom-test-for-mivmir:
+    timeout-minutes: 45
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Runner Build Tooling
+        run: |
+          sudo apt-get update && \
+          sudo apt-get install -y --no-install-recommends build-essential
+
+      - name: Run Mivmir docker test
+        run: |
+          docker run --rm --entrypoint bash docker.io/clinicalgenomics/rdds_mivmir:v1.12.0-rc6 -c \
+          " \
+          . /opt/pyenv/bin/activate && \
+          python3 --version | grep 'Python 3.8.10' && \
+          export PYTHONPATH=/rdds/src && \
+          cd /rdds/src/tests && \
+          PYTHONDONTWRITEBYTECODE=1 \
+          python3 \
+          -m pytest \
+          -rA \
+          -v \
+          -s \
+          -o log_cli=true \
+          -x \
+          --full-trace \
+          -o cache_dir=/tmp/pycache \
+          variant_rank_score/test_inference.py \
+          "
+
   nf-test:
     name: "${{ matrix.profile }} | ${{ matrix.NXF_VER }} | ${{ matrix.shard }}/${{ needs.nf-test-changes.outputs.total_shards }}"
     needs: [nf-test-changes]
@@ -90,6 +120,27 @@ jobs:
 
       - name: Clean up Disk space
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+
+      - name: Run Mivmir docker test
+        run: |
+          docker run --rm --entrypoint bash docker.io/clinicalgenomics/rdds_mivmir:v1.12.0-rc6 -c \
+          " \
+          . /opt/pyenv/bin/activate && \
+          python3 --version | grep 'Python 3.8.10' && \
+          export PYTHONPATH=/rdds/src && \
+          cd /rdds/src/tests && \
+          PYTHONDONTWRITEBYTECODE=1 \
+          python3 \
+          -m pytest \
+          -rA \
+          -v \
+          -s \
+          -o log_cli=true \
+          -x \
+          --full-trace \
+          -o cache_dir=/tmp/pycache \
+          variant_rank_score/test_inference.py \
+          "
 
       - name: Run nf-test
         id: run_nf_test
