@@ -126,7 +126,6 @@ workflow CALL_SV_MT {
             SALTSHAKER_CLASSIFY.out.txt
                 .map{ _meta, txt -> txt }
                 .toSortedList{ a, b -> a.name <=> b.name }
-                .toList()
                 .set{ ch_saltshaker_files }
 
             ch_case_info
