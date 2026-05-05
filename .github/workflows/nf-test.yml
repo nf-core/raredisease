@@ -59,8 +59,10 @@ jobs:
 
   job-run-custom-test-for-mivmir:
     timeout-minutes: 45
-    # Try running on the base version of runsOn
-    runs-on: ubuntu-22.04
+    runs-on: # use self-hosted runners
+      - runs-on=ubuntu-latest
+      - runner=4cpu-linux-x64
+      - volume=80gb
     steps:
       - name: Setup Runner Build Tooling
         run: |
