@@ -95,7 +95,7 @@ jobs:
           -x \
           --full-trace \
           -o cache_dir=/tmp/pycache \
-          variant_rank_score/test_inference.py \
+          lib/determinism variant_rank_score/test_inference.py \
           "
 
   nf-test:
