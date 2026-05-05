@@ -2,8 +2,8 @@
 // A subworkflow to create genome interval files necessary for bam/vcf scatter operations.
 //
 
-include { GAWK                 } from '../../../modules/nf-core/gawk'
 include { GATK4_SPLITINTERVALS } from '../../../modules/nf-core/gatk4/splitintervals/main'
+include { GAWK                 } from '../../../modules/nf-core/gawk'
 
 workflow SCATTER_GENOME {
 

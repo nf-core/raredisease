@@ -2,15 +2,15 @@
 // Map to reference
 //
 
-include { FASTP                      } from '../../../modules/nf-core/fastp/main'
-include { ALIGN_BWA_BWAMEM2_BWAMEME  } from '../align_bwa_bwamem2_bwameme'
-include { ALIGN_SENTIEON             } from '../align_sentieon'
-include { SAMTOOLS_VIEW as CONVERTTOCRAM_ALTFILTERED  } from '../../../modules/nf-core/samtools/view/main'
-include { SAMTOOLS_VIEW as CONVERTTOCRAM_UNFILTERED   } from '../../../modules/nf-core/samtools/view/main'
-include { SAMTOOLS_VIEW as SAMTOOLS_VIEW_EXCLUDE_ALT  } from '../../../modules/nf-core/samtools/view/main'
-include { ALIGN_MT                   } from '../align_MT'
-include { ALIGN_MT as ALIGN_MT_SHIFT } from '../align_MT'
-include { CONVERT_MT_BAM_TO_FASTQ    } from '../convert_mt_bam_to_fastq'
+include { ALIGN_BWA_BWAMEM2_BWAMEME                  } from '../align_bwa_bwamem2_bwameme'
+include { ALIGN_MT                                   } from '../align_MT'
+include { ALIGN_MT as ALIGN_MT_SHIFT                 } from '../align_MT'
+include { ALIGN_SENTIEON                             } from '../align_sentieon'
+include { CONVERT_MT_BAM_TO_FASTQ                    } from '../convert_mt_bam_to_fastq'
+include { FASTP                                      } from '../../../modules/nf-core/fastp/main'
+include { SAMTOOLS_VIEW as CONVERTTOCRAM_ALTFILTERED } from '../../../modules/nf-core/samtools/view/main'
+include { SAMTOOLS_VIEW as CONVERTTOCRAM_UNFILTERED  } from '../../../modules/nf-core/samtools/view/main'
+include { SAMTOOLS_VIEW as SAMTOOLS_VIEW_EXCLUDE_ALT } from '../../../modules/nf-core/samtools/view/main'
 
 workflow ALIGN {
     take:

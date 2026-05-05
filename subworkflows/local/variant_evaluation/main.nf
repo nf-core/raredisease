@@ -2,9 +2,9 @@
 // A subworkflow to evaluate variants using truth vcfs.
 //
 
-include { RTGTOOLS_VCFEVAL                 } from '../../../modules/nf-core/rtgtools/vcfeval/main'
-include { BCFTOOLS_REHEADER                } from '../../../modules/nf-core/bcftools/reheader/main'
-include { TABIX_TABIX as TABIX_TRUTHVCF    } from '../../../modules/nf-core/tabix/tabix/main'
+include { BCFTOOLS_REHEADER             } from '../../../modules/nf-core/bcftools/reheader/main'
+include { RTGTOOLS_VCFEVAL              } from '../../../modules/nf-core/rtgtools/vcfeval/main'
+include { TABIX_TABIX as TABIX_TRUTHVCF } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow VARIANT_EVALUATION {
 
