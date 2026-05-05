@@ -2,8 +2,8 @@
 // Call SNV MT
 //
 
-include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                                 } from '../../../modules/nf-core/gatk4/mutect2/main'
-include { GATK4_FILTERMUTECTCALLS as  GATK4_FILTERMUTECTCALLS_MT            } from '../../../modules/nf-core/gatk4/filtermutectcalls/main'
+include { GATK4_FILTERMUTECTCALLS as  GATK4_FILTERMUTECTCALLS_MT } from '../../../modules/nf-core/gatk4/filtermutectcalls/main'
+include { GATK4_MUTECT2 as GATK4_MUTECT2_MT                      } from '../../../modules/nf-core/gatk4/mutect2/main'
 
 workflow CALL_SNV_MT {
     take:

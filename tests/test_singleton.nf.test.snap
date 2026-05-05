@@ -466,7 +466,7 @@
                     "vcfanno": "0.3.7"
                 },
                 "Workflow": {
-                    "nf-core/raredisease": "v2.7.0dev"
+                    "nf-core/raredisease": "v3.0.0"
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
@@ -655,10 +655,10 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
+        "timestamp": "2026-04-29T22:30:32.111448817",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-04-14T15:03:52.559527073"
+        }
     }
 }

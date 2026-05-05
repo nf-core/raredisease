@@ -81,7 +81,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [DeepVariant](https://github.com/google/deepvariant)
 - [Sentieon DNAscope](https://support.sentieon.com/manual/DNAscope_usage/dnascope/)
 
-**4. Variant calling - SV:**
+**6. Variant calling - SV:**
 
 - [Manta](https://github.com/Illumina/manta)
 - [TIDDIT's sv](https://github.com/SciLifeLab/TIDDIT)
@@ -91,9 +91,9 @@ On release, automated continuous integration tests run the pipeline on a full-si
   - [SMNCopyNumberCaller](https://github.com/Illumina/SMNCopyNumberCaller)
 - Mitochondrial SV calling:
   - [MitoSAlt](https://mitosalt.sourceforge.io/)
-  - [Saltshaker](https://github.com/aksenia/saltshaker)
+  - [Saltshaker](https://gitlab.com/genomedx/annotation/saltshaker)
 
-**5. Annotation - SNV:**
+**7. Annotation - SNV:**
 
 - [bcftools roh](https://samtools.github.io/bcftools/bcftools.html#roh)
 - [vcfanno](https://github.com/brentp/vcfanno)
@@ -102,12 +102,12 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [UPD](https://github.com/bjhall/upd)
 - [Chromograph](https://github.com/Clinical-Genomics/chromograph)
 
-**6. Annotation - SV:**
+**8. Annotation - SV:**
 
 - [SVDB query](https://github.com/J35P312/SVDB#Query)
 - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
 
-**7. Mitochondrial analysis:**
+**9. Mitochondrial analysis:**
 
 - [Alignment and variant calling - GATK Mitochondrial short variant discovery pipeline ](https://gatk.broadinstitute.org/hc/en-us/articles/4403870837275-Mitochondrial-short-variant-discovery-SNVs-Indels-)
 - Annotation:
@@ -115,20 +115,20 @@ On release, automated continuous integration tests run the pipeline on a full-si
   - [CADD](https://cadd.gs.washington.edu/)
   - [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html)
 
-**8. Variant calling - repeat expansions:**
+**10. Variant calling - repeat expansions:**
 
 - [Expansion Hunter](https://github.com/Illumina/ExpansionHunter)
 - [Stranger](https://github.com/Clinical-Genomics/stranger)
 
-**9. Variant calling - mobile elements:**
+**11. Variant calling - mobile elements:**
 
 - [RetroSeq](https://github.com/tk2/RetroSeq)
 
-**10. Rank variants - SV and SNV:**
+**12. Rank variants - SV and SNV:**
 
 - [GENMOD](https://github.com/Clinical-Genomics/genmod)
 
-**11. Variant evaluation:**
+**13. Variant evaluation:**
 
 - [RTG Tools](https://github.com/RealTimeGenomics/rtg-tools)
 

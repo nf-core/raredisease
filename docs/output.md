@@ -467,7 +467,7 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 ##### Saltshaker
 
 [MitoSAlt](https://mitosalt.sourceforge.io/) allows the detection and quantification of mtDNA strucutral variants.
-[Saltshaker](https://github.com/aksenia/saltshaker) allows for downstream clustering and classification of mtDNA strucutral variants. Called variants are combined with structural variants called in the nuclear genome.
+[Saltshaker](https://gitlab.com/genomedx/annotation/saltshaker) allows for downstream clustering and classification of mtDNA strucutral variants. Called variants are combined with structural variants called in the nuclear genome.
 
 - `call_sv`
   - `<sample_id>.saltshaker_classify.html`: report containing case-level classification of mitochondrial deletions.
@@ -607,17 +607,16 @@ The sequencing data can be prepared for visualization of CNVs in [Gens](https://
 <summary>Output files</summary>
 
 - `peddy/`
-  - `*.het_check.csv`
-  - `*.het_check.png`
-  - `*.html`
-  - `*.pca_check.png`
-  - `*.ped_check.csv`
-  - `*.ped_check.png`
-  - `*.ped_check.rel-difference.csv`
-  - `*.peddy.ped`
-  - `*.sex_check.csv`
-  - `*.sex_check.png`
-  - `*.vs.html`
+  - `*.het_check.csv`: CSV file containing heterozygosity check results — rate of het calls, allele-balance at het calls, mean and median depth, and a PCA projection onto 1000 Genomes.
+  - `*.het_check.png`: PNG plot of heterozygosity check results — rate of het calls, allele-balance at het calls, mean and median depth, and a PCA projection onto 1000 Genomes.
+  - `*.html`: interactive HTML report with plots for sex check (HET rate on chrX), depth and heterozygosity, and pedigree relatedness, plus an interactive pedigree table.
+  - `*.ped_check.csv`: CSV file containing pedigree check results — pairwise relatedness statistics comparing reported vs. inferred relationships.
+  - `*.ped_check.png`: PNG plot of pedigree check results — comparison between reported and inferred relatedness.
+  - `*.ped_check.rel-difference.csv`: CSV file with the comparison between inferred and reported relatedness for sample pairs where they differ.
+  - `*.peddy.ped`: extended PED file augmented with key columns from the het-check and sex-check results.
+  - `*.sex_check.csv`: CSV file with sex check results — comparison between the sex reported in the PED file and that inferred from genotypes on the non-PAR regions of the X chromosome.
+  - `*.sex_check.png`: PNG plot of sex check results — comparison between reported and inferred sex.
+  - `*.vs.html`: interactive scatter plot of observed vs. expected (pedigree-reported) relatedness for all sample pairs.
 
 ### Pipeline information
 

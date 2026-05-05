@@ -2,16 +2,16 @@
 // A subworkflow to call CNVs using cnvnator
 //
 
-include { SPLIT_CHR                               } from '../../../modules/local/split_chr/main.nf'
-include { CNVNATOR_CNVNATOR as CNVNATOR_RD        } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
-include { CNVNATOR_CNVNATOR as CNVNATOR_HIST      } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
-include { CNVNATOR_CNVNATOR as CNVNATOR_STAT      } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
-include { CNVNATOR_CNVNATOR as CNVNATOR_PARTITION } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
-include { CNVNATOR_CNVNATOR as CNVNATOR_CALL      } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
-include { CNVNATOR_CONVERT2VCF                    } from '../../../modules/nf-core/cnvnator/convert2vcf/main.nf'
-include { TABIX_BGZIPTABIX as INDEX_CNVNATOR      } from '../../../modules/nf-core/tabix/bgziptabix/main'
 include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_CNVNATOR } from '../../../modules/nf-core/bcftools/view/main.nf'
+include { CNVNATOR_CNVNATOR as CNVNATOR_CALL      } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
+include { CNVNATOR_CNVNATOR as CNVNATOR_HIST      } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
+include { CNVNATOR_CNVNATOR as CNVNATOR_PARTITION } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
+include { CNVNATOR_CNVNATOR as CNVNATOR_RD        } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
+include { CNVNATOR_CNVNATOR as CNVNATOR_STAT      } from '../../../modules/nf-core/cnvnator/cnvnator/main.nf'
+include { CNVNATOR_CONVERT2VCF                    } from '../../../modules/nf-core/cnvnator/convert2vcf/main.nf'
+include { SPLIT_CHR                               } from '../../../modules/local/split_chr/main.nf'
 include { SVDB_MERGE as SVDB_MERGE_CNVNATOR       } from '../../../modules/nf-core/svdb/merge/main'
+include { TABIX_BGZIPTABIX as INDEX_CNVNATOR      } from '../../../modules/nf-core/tabix/bgziptabix/main'
 
 workflow CALL_SV_CNVNATOR {
     take:
