@@ -32,7 +32,7 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_vcfanno_extra                // channel: [mandatory] [ [path(vcf),path(index)] ]
         ch_vcfanno_lua                  // channel: [mandatory] [ path(lua) ]
         ch_vcfanno_resources            // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
-        ch_vcfanno_toml_final           // channel: [mandatory] [ path(toml) ]
+        ch_vcfanno_toml                 // channel: [mandatory] [ path(toml) ]
         ch_vep_cache                    // channel: [mandatory] [ path(cache) ]
         ch_vep_extra_files              // channel: [mandatory] [ path(files) ]
         val_analysis_type               // string: wgs, wes, or mito
@@ -97,7 +97,7 @@ workflow ANNOTATE_GENOME_SNVS {
             .combine(ch_vcfanno_extra)
             .set { ch_vcfanno_in }
 
-        VCFANNO (ch_vcfanno_in, ch_vcfanno_toml_final, ch_vcfanno_lua, ch_vcfanno_resources)
+        VCFANNO (ch_vcfanno_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
 
         VCFANNO.out.vcf
             .join(VCFANNO.out.tbi, failOnMismatch:true, failOnDuplicate:true)
