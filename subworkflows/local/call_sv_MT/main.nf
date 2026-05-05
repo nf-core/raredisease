@@ -123,8 +123,10 @@ workflow CALL_SV_MT {
             )
             ch_saltshaker_vcf = SALTSHAKER_CLASSIFY.out.vcf
 
+            // Gather all saltshaker classify txt files in a double list so the full list will be combined with case meta once
             SALTSHAKER_CLASSIFY.out.txt
                 .map{ _meta, txt -> txt }
+                .toList()
                 .toList()
                 .set{ ch_saltshaker_files }
 
