@@ -2,8 +2,8 @@
 // Convert VCF with structural variations to the “.CGH” format used by the CytoSure Interpret Software
 //
 
-include { BCFTOOLS_VIEW as SPLIT_AND_FILTER_SV_VCF      } from '../../../modules/nf-core/bcftools/view/main'
 include { BCFTOOLS_REHEADER as BCFTOOLS_REHEADER_SV_VCF } from '../../../modules/nf-core/bcftools/reheader/main'
+include { BCFTOOLS_VIEW as SPLIT_AND_FILTER_SV_VCF      } from '../../../modules/nf-core/bcftools/view/main'
 include { TIDDIT_COV as TIDDIT_COV_VCF2CYTOSURE         } from '../../../modules/nf-core/tiddit/cov/main'
 include { VCF2CYTOSURE                                  } from '../../../modules/nf-core/vcf2cytosure/main'
 
