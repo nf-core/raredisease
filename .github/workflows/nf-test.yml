@@ -57,6 +57,17 @@ jobs:
           echo ${{ steps.set-shards.outputs.shard }}
           echo ${{ steps.set-shards.outputs.total_shards }}
 
+  disable-accelerator:
+    timeout-minutes: 45
+    runs-on: # use self-hosted runners
+      - runs-on=${{ github.run_id }}-dsa-test
+      - runner=4cpu-linux-x64
+      - volume=80gb
+    steps:
+      - name: Disable DSA
+        run: |
+          accel-config
+
   job-run-custom-test-for-mivmir:
     timeout-minutes: 45
     runs-on: # use self-hosted runners
