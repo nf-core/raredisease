@@ -3,10 +3,10 @@
 // Also detects the number of discordant pairs using the mitodel script.
 //
 
+include { CAT_FASTQ           } from '../../../modules/nf-core/cat/fastq/main'
+include { MITOSALT            } from '../../../modules/local/mitosalt/main'
 include { MT_DELETION         } from '../../../modules/local/mt_deletion_script'
 include { PREP_MITOSALT       } from '../../../modules/local/prep_mitosalt/main'
-include { MITOSALT            } from '../../../modules/local/mitosalt/main'
-include { CAT_FASTQ           } from '../../../modules/nf-core/cat/fastq/main'
 include { SALTSHAKER_CALL     } from '../../../modules/nf-core/saltshaker/call/main'
 include { SALTSHAKER_CLASSIFY } from '../../../modules/nf-core/saltshaker/classify/main'
 include { FIND_CONCATENATE    } from '../../../modules/nf-core/find/concatenate/main'

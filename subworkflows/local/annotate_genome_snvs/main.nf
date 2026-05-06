@@ -2,21 +2,20 @@
 // A subworkflow to annotate snvs in the genome
 //
 
-include { VCFANNO                               } from '../../../modules/nf-core/vcfanno/main'
+include { ANNOTATE_CADD                         } from '../annotate_cadd'
+include { ANNOTATE_RHOCALLVIZ                   } from '../annotate_rhocallviz'
 include { BCFTOOLS_CONCAT                       } from '../../../modules/nf-core/bcftools/concat/main'
 include { BCFTOOLS_ROH                          } from '../../../modules/nf-core/bcftools/roh/main'
 include { BCFTOOLS_VIEW                         } from '../../../modules/nf-core/bcftools/view/main'
-include { RHOCALL_ANNOTATE                      } from '../../../modules/nf-core/rhocall/annotate/main'
-include { UPD as UPD_SITES                      } from '../../../modules/nf-core/upd/main'
-include { UPD as UPD_REGIONS                    } from '../../../modules/nf-core/upd/main'
-include { CHROMOGRAPH as CHROMOGRAPH_SITES      } from '../../../modules/nf-core/chromograph/main'
 include { CHROMOGRAPH as CHROMOGRAPH_REGIONS    } from '../../../modules/nf-core/chromograph/main'
+include { CHROMOGRAPH as CHROMOGRAPH_SITES      } from '../../../modules/nf-core/chromograph/main'
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_SNV      } from '../../../modules/nf-core/ensemblvep/vep/main'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL } from '../../../modules/nf-core/tabix/bgziptabix/main'
 include { GATK4_SELECTVARIANTS                  } from '../../../modules/nf-core/gatk4/selectvariants/main'
-include { ANNOTATE_CADD                         } from '../annotate_cadd'
-include { ANNOTATE_RHOCALLVIZ                   } from '../annotate_rhocallviz'
-include { SANITY_CHECK_VCFANNO_DATABASES        } from '../../../modules/local/sanity_check_vcfanno_databases/main'
+include { RHOCALL_ANNOTATE                      } from '../../../modules/nf-core/rhocall/annotate/main'
+include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { UPD as UPD_REGIONS                    } from '../../../modules/nf-core/upd/main'
+include { UPD as UPD_SITES                      } from '../../../modules/nf-core/upd/main'
+include { VCFANNO                               } from '../../../modules/nf-core/vcfanno/main'
 
 workflow ANNOTATE_GENOME_SNVS {
 
@@ -39,7 +38,6 @@ workflow ANNOTATE_GENOME_SNVS {
         val_analysis_type               // string: wgs, wes, or mito
         val_cadd_resources              // string: path to cadd resources file
         val_genome                      // string: GRCh37 or GRCh38
-        val_run_vcfanno_db_sanity_check // boolean: run sanity check on vcfanno databases
         val_vep_cache_version           // string:  vep version ex: 107
 
     main:
@@ -99,14 +97,7 @@ workflow ANNOTATE_GENOME_SNVS {
             .combine(ch_vcfanno_extra)
             .set { ch_vcfanno_in }
 
-        if (val_run_vcfanno_db_sanity_check) {
-            SANITY_CHECK_VCFANNO_DATABASES (ch_vcfanno_toml, ch_vcfanno_resources)
-            ch_vcfanno_toml_final = SANITY_CHECK_VCFANNO_DATABASES.out.toml
-        } else {
-            ch_vcfanno_toml_final = ch_vcfanno_toml
-        }
-
-        VCFANNO (ch_vcfanno_in, ch_vcfanno_toml_final, ch_vcfanno_lua, ch_vcfanno_resources)
+        VCFANNO (ch_vcfanno_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
 
         VCFANNO.out.vcf
             .join(VCFANNO.out.tbi, failOnMismatch:true, failOnDuplicate:true)
