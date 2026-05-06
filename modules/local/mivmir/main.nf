@@ -49,6 +49,7 @@ process MIVMIR_INTERNAL_UNIT_TEST {
     . /opt/pyenv/bin/activate
     export PYTHONPATH=/rdds/src
     export TF_ENABLE_ONEDNN_OPTS=0
-    python3 -m pytest -x -v -s -o log_cli=true --full-trace /rdds/src/tests/variant_rank_score -k test_inference
+    cd /rdds/src/tests
+    python3 -m pytest -x -v -s -o log_cli=true --full-trace lib/determinism variant_rank_score/test_inference.py
     """
 }
