@@ -67,7 +67,11 @@ jobs:
       - name: Disable DSA
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends build-essential asciidoc xmlto libuuid-devel json-c-devel zlib-devel openssl-devel
+          sudo apt-get install -y --no-install-recommends build-essential \
+          autoconf automake autotools-dev libtool pkgconf asciidoc xmlto \
+          uuid-dev libjson-c-dev libkeyutils-dev libz-dev libssl-dev \
+          debhelper devscripts debmake quilt fakeroot lintian asciidoctor \
+          file gnupg patch patchutils
           git clone git@github.com:intel/idxd-config.git idxd
           cd idxd
           ./autogen.sh
