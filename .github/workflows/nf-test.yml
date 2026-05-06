@@ -66,7 +66,16 @@ jobs:
     steps:
       - name: Disable DSA
         run: |
-          accel-config
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential asciidoc xmlto libuuid-devel json-c-devel zlib-devel openssl-devel
+          git clone git@github.com:intel/idxd-config.git idxd
+          cd idxd
+          ./autogen.sh
+          ./configure CFLAGS='-g -O2' --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib64 --enable-test=yes
+          make
+          make check
+          sudo make install
+          accel-config list
 
   job-run-custom-test-for-mivmir:
     timeout-minutes: 45
