@@ -72,8 +72,9 @@ jobs:
           uuid-dev libjson-c-dev libkeyutils-dev libz-dev libssl-dev \
           debhelper devscripts debmake quilt fakeroot lintian asciidoctor \
           file gnupg patch patchutils
-          git clone git@github.com:intel/idxd-config.git idxd
-          cd idxd
+          wget https://github.com/intel/idxd-config/archive/refs/heads/stable.zip
+          unzip stable.zip
+          cd idxd-config-stable
           ./autogen.sh
           ./configure CFLAGS='-g -O2' --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib64 --enable-test=yes
           make
