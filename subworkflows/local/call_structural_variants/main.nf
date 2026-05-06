@@ -141,9 +141,10 @@ workflow CALL_STRUCTURAL_VARIANTS {
             ch_merged_tbi = TABIX_TABIX.out.index
 
         } else {
-            // For mito-only analysis, use mitosalt_vcf directly
-            TABIX_TABIX (ch_saltshaker_vcf)
-            ch_merged_svs = ch_saltshaker_vcf
+            // For mito-only analysis, use saltshaker_vcf with meta directly (ch_saltshaker_vcf
+            // holds collected paths only, ch_sv_mt_out.saltshaker_vcf holds [meta, vcf] tuples)
+            TABIX_TABIX (ch_sv_mt_out.saltshaker_vcf)
+            ch_merged_svs = ch_sv_mt_out.saltshaker_vcf
             ch_merged_tbi = TABIX_TABIX.out.index
         }
 

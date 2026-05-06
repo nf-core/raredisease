@@ -446,7 +446,7 @@ workflow RAREDISEASE {
         if (val_run_vcfanno_db_sanity_check && (!skip_snv_annotation || (!skip_mt_annotation && (val_run_mt_for_wes || val_analysis_type.matches("wgs|mito"))))) {
             ch_vcfanno_resources
                 .combine(ch_vcfanno_extra)
-                .map { resources, extra -> [resources, extra].flatten() }
+                .map { files -> files.flatten() }
                 .set { ch_all_vcfanno_dbs }
             SANITY_CHECK_VCFANNO_DATABASES (ch_vcfanno_toml, ch_all_vcfanno_dbs)
             ch_vcfanno_toml_final = SANITY_CHECK_VCFANNO_DATABASES.out.toml
