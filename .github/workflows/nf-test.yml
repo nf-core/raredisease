@@ -57,31 +57,6 @@ jobs:
           echo ${{ steps.set-shards.outputs.shard }}
           echo ${{ steps.set-shards.outputs.total_shards }}
 
-  disable-accelerator:
-    timeout-minutes: 45
-    runs-on: # use self-hosted runners
-      - runs-on=${{ github.run_id }}-dsa-test
-      - runner=4cpu-linux-x64
-      - volume=80gb
-    steps:
-      - name: Disable DSA
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends build-essential \
-          autoconf automake autotools-dev libtool pkgconf asciidoc xmlto \
-          uuid-dev libjson-c-dev libkeyutils-dev libz-dev libssl-dev \
-          debhelper devscripts debmake quilt fakeroot lintian asciidoctor \
-          file gnupg patch patchutils
-          wget https://github.com/intel/idxd-config/archive/refs/heads/stable.zip
-          unzip stable.zip
-          cd idxd-config-stable
-          ./autogen.sh
-          ./configure CFLAGS='-g -O2' --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib64 --enable-test=yes
-          make
-          make check
-          sudo make install
-          accel-config list
-
   job-run-custom-test-for-mivmir:
     timeout-minutes: 45
     runs-on: # use self-hosted runners
