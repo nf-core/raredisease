@@ -15,9 +15,9 @@ workflow CALL_SNV_MT {
 
     main:
 
-    ch_bam_bai_int = ch_bam_bai.combine(ch_intervals)
+        ch_bam_bai_intervals = ch_bam_bai.combine(ch_intervals)
 
-        GATK4_MUTECT2_MT (ch_bam_bai_int, ch_fasta, ch_fai.map{meta, fai -> return [meta,fai,[]]}, ch_dict, [], [], [], [], [],[])
+        GATK4_MUTECT2_MT (ch_bam_bai_intervals, ch_fasta, ch_fai.map{meta, fai -> return [meta,fai,[]]}, ch_dict, [], [], [], [], [],[])
 
         // Filter Mutect2 calls
         ch_mutect_vcf = GATK4_MUTECT2_MT.out.vcf.join(GATK4_MUTECT2_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
