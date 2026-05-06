@@ -48,6 +48,7 @@ process MIVMIR_INTERNAL_UNIT_TEST {
     """
     . /opt/pyenv/bin/activate
     export PYTHONPATH=/rdds/src
-    TF_ENABLE_ONEDNN_OPTS=0 python3 -m pytest /rdds/src/tests/variant_rank_score -k test_inference
+    export TF_ENABLE_ONEDNN_OPTS=0
+    python3 -m pytest -x -v -s -o log_cli=true --full-trace /rdds/src/tests/variant_rank_score -k test_inference
     """
 }
