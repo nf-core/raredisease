@@ -109,6 +109,7 @@ jobs:
           . /opt/pyenv/bin/activate && \
           python3 --version | grep 'Python 3.8.10' && \
           export PYTHONPATH=/rdds/src && \
+          export OPENBLAS_CORETYPE=Haswell && \
           cd /rdds/src/tests && \
           PYTHONDONTWRITEBYTECODE=1 \
           python3 \
