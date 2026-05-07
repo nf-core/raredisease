@@ -124,21 +124,17 @@ workflow CALL_SV_MT {
             )
             ch_saltshaker_vcf = SALTSHAKER_CLASSIFY.out.vcf
 
-            // Gather all saltshaker classify txt files in a double list so the full list will be combined with case meta once
-            SALTSHAKER_CLASSIFY.out.txt
-                .map{ _meta, txt -> txt }
-                .toList()
-                .toList()
-                .set{ ch_saltshaker_files }
+            SALTSHAKER_CLASSIFY.out.txt.view()
 
-            ch_case_info
-                .combine(ch_saltshaker_files)
-                .filter { _meta, files -> files.size() > 0 }
+            SALTSHAKER_CLASSIFY.out.txt
+                .map { meta, txt -> meta.id = meta.case_id
+                    return [meta, txt] }
+                .groupTuple()
                 .set { ch_saltshaker_txts }
 
             FIND_CONCATENATE(
                 ch_saltshaker_txts
-            )
+                    )
             ch_saltshaker_txt = FIND_CONCATENATE.out.file_out
 
             SALTSHAKER_TO_HTML(
