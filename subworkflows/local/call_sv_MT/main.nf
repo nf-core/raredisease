@@ -63,13 +63,13 @@ workflow CALL_SV_MT {
 
                     [combined_meta, all_reads]
                 }
-                .set {ch_cat_fastq}
+                .set { ch_cat_fastq }
 
             CAT_FASTQ(ch_cat_fastq)
 
             ch_reads_subdepth = CAT_FASTQ.out.reads.combine(ch_subdepth)
 
-            SEQTK_SAMPLE (ch_reads_subdepth)
+            SEQTK_SAMPLE(ch_reads_subdepth)
 
             PREP_MITOSALT(
                 ch_genome_chrsizes,
@@ -98,12 +98,12 @@ workflow CALL_SV_MT {
             )
 
             MITOSALT.out.cluster
-                .filter{ _meta, out -> out.countLines() > 0 }
-                .set{ ch_cluster }
+                .filter { _meta, out -> out.countLines() > 0 }
+                .set { ch_cluster }
 
             MITOSALT.out.breakpoint
                 .join(ch_cluster)
-                .set{ ch_saltshaker_in }
+                .set { ch_saltshaker_in }
 
             // Saltshaker modules will only run if mitosalt called SVs and created a cluster file
             SALTSHAKER_CALL(
@@ -124,21 +124,20 @@ workflow CALL_SV_MT {
             )
             ch_saltshaker_vcf = SALTSHAKER_CLASSIFY.out.vcf
 
-            SALTSHAKER_CLASSIFY.out.txt.view()
-
             SALTSHAKER_CLASSIFY.out.txt
-                .map { meta, txt -> meta.id = meta.case_id
-                    return [meta, txt] }
+                .map { meta, txt ->
+                    return [['id': meta.case_id], txt]
+                    }
                 .groupTuple()
                 .set { ch_saltshaker_txts }
 
             FIND_CONCATENATE(
                 ch_saltshaker_txts
-                    )
+            )
             ch_saltshaker_txt = FIND_CONCATENATE.out.file_out
 
             SALTSHAKER_TO_HTML(
-                ch_saltshaker_txt,
+                ch_saltshaker_txt
             )
             ch_saltshaker_html = SALTSHAKER_TO_HTML.out.classify_html
 
@@ -151,16 +150,16 @@ workflow CALL_SV_MT {
             // combine never sees an empty-spread issue (combining case_info with [[]] would produce
             // a 1-element channel item that breaks 2-param destructuring closures downstream).
             SALTSHAKER_CLASSIFY.out.vcf
-                .collect{ _meta, vcf -> vcf }
-                .filter{ !it.isEmpty() }
-                .map{ vcf_list -> [vcf_list] }
+                .collect { _meta, vcf -> vcf }
+                .filter { !it.isEmpty() }
+                .map { vcf_list -> [vcf_list] }
                 .set { ch_vcf_file_list }
 
             ch_case_info
                 .combine(ch_vcf_file_list)
                 .set { ch_merge_input_vcfs }
 
-            SVDB_MERGE ( ch_merge_input_vcfs, [], true ).vcf
+            SVDB_MERGE( ch_merge_input_vcfs, [], true ).vcf
                 .set {ch_saltshaker_vcf}
             // Saltshaker only runs if there are mitosalt calls. We update priority list when the
             // saltshaker vcf is created so the priority matches the list of vcfs that will be merged later
