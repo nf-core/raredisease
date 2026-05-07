@@ -61,7 +61,7 @@ workflow PREPARE_REFERENCES {
 
     main:
         ch_bait_intervals              = channel.empty()
-        ch_bwa                         = channel.empty()
+        ch_genome_bwa_index            = channel.empty()
         ch_genome_bwameme_index        = channel.empty()
         ch_genome_bwamem2_index        = channel.empty()
         ch_genome_hisat2_index         = channel.empty()
@@ -112,13 +112,13 @@ workflow PREPARE_REFERENCES {
         //
         if (!val_bwa) {
             if (!val_aligner.equals("sentieon") || val_mtaligner.equals("bwa")) {
-                ch_bwa      = BWA_INDEX_GENOME(ch_genome_fasta).index.collect()
+                ch_genome_bwa_index = BWA_INDEX_GENOME(ch_genome_fasta).index.collect()
             }
             if (val_aligner.equals("sentieon") || val_mtaligner.equals("sentieon")) {
-                ch_bwa      = SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.collect()
+                ch_genome_bwa_index = SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.collect()
             }
         } else if (val_bwa) {
-            ch_bwa = channel.fromPath(val_bwa).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_bwa_index = channel.fromPath(val_bwa).map {it -> [[id:it.simpleName], it]}.collect()
         }
 
         if (!val_bwamem2 && (val_aligner.equals("bwamem2") || val_mtaligner.equals("bwamem2"))) {
@@ -225,6 +225,8 @@ workflow PREPARE_REFERENCES {
             GATK_ILT.out.interval_list
                 .collect{ _meta, list -> list }
                 .map { list ->
+                    // list is e.g. [/path/mybed_split_0001.interval_list, ...]; strip the _split suffix
+                    // and directory to get the base name (e.g. "mybed"), then build the merged output name
                     def meta = list.toString().split("_split")[0].split("/")[-1] + "_bait.intervals_list"
                     return [[id:meta], list]
                 }
@@ -275,7 +277,7 @@ workflow PREPARE_REFERENCES {
         if (val_save_reference) {
             ch_publish = ch_dbsnp
                 .mix(ch_dbsnp_tbi)
-                .mix(ch_bwa)
+                .mix(ch_genome_bwa_index)
                 .mix(ch_genome_bwamem2_index)
                 .mix(ch_genome_bwameme_index)
                 .mix(ch_genome_fai)
@@ -317,7 +319,7 @@ workflow PREPARE_REFERENCES {
         bait_intervals        = ch_bait_intervals              // channel:[ path(intervals) ]
         dbsnp                 = ch_dbsnp                       // channel:[ val(meta), path(dbsnp) ]
         dbsnp_tbi             = ch_dbsnp_tbi                   // channel:[ val(meta), path(dbsnp_idx) ]
-        genome_bwa_index      = ch_bwa                         // channel:[ val(meta), path(index) ]
+        genome_bwa_index      = ch_genome_bwa_index            // channel:[ val(meta), path(index) ]
         genome_bwamem2_index  = ch_genome_bwamem2_index        // channel:[ val(meta), path(index) ]
         genome_bwameme_index  = ch_genome_bwameme_index        // channel:[ val(meta), path(index) ]
         genome_chrom_sizes    = ch_chrom_sizes                 // channel:[ path(sizes) ]

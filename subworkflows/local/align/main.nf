@@ -76,21 +76,20 @@ workflow ALIGN {
         //
         // If input is bam
         //
-        ch_alignments.map { meta, files ->
-                    def new_id   = meta.sample
-                    def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
-                    return [new_meta, files].flatten()
-                }
-                .map { meta, bam, _bai -> [meta, bam] }
-                .set{ch_input_bam}
+        ch_alignments
+            .map { meta, files ->
+                def new_id   = meta.sample
+                def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
+                return [new_meta, files].flatten()
+            }
+            .multiMap { meta, bam, bai ->
+                bam: [meta, bam]
+                bai: [meta, bai]
+            }
+            .set { ch_input_aligned }
 
-        ch_alignments.map { meta, files ->
-                    def new_id   = meta.sample
-                    def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
-                    return [new_meta, files].flatten()
-                }
-                .map { meta, _bam, bai -> [meta, bai] }
-                .set{ch_input_bai}
+        ch_input_bam = ch_input_aligned.bam
+        ch_input_bai = ch_input_aligned.bai
 
         if (val_aligner.matches("bwamem2|bwa|bwameme")) {
             ALIGN_BWA_BWAMEM2_BWAMEME (

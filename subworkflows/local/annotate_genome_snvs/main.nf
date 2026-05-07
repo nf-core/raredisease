@@ -58,6 +58,10 @@ workflow ANNOTATE_GENOME_SNVS {
 
         ZIP_TABIX_ROHCALL (RHOCALL_ANNOTATE.out.vcf)
 
+        // BCFTOOLS_ROH and RHOCALL_ANNOTATE only run when probands are present (filtered above).
+        // The remainder:true join pads cases without rohcall output with a single null, giving
+        // tuples of length 4 (no rohcall) vs 5 (rohcall). After combining with an interval both
+        // grow by one, so size==6 means this case has probands and a rohcall-annotated VCF.
         ch_vcf
             .join(ZIP_TABIX_ROHCALL.out.gz_index, remainder: true)
             .combine(ch_split_intervals)
@@ -160,11 +164,6 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_vep_vcf_out
             .join(ch_vep_tbi_out, failOnMismatch:true)
             .groupTuple()
-            .map { meta, vcfs, tbis ->
-                def sortedvcfs = vcfs.sort { vcf -> vcf.baseName }
-                def sortedtbis = tbis.sort { tbi -> tbi.baseName }
-                return [ meta, sortedvcfs, sortedtbis ]
-            }
             .set { ch_concat_in }
 
         BCFTOOLS_CONCAT (ch_concat_in)
