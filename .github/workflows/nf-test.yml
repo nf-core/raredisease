@@ -81,12 +81,11 @@ jobs:
           docker image inspect docker.io/clinicalgenomics/rdds_mivmir:v1.12.0-rc6
           echo cpuinfo
           cat /proc/cpuinfo
-          docker run --rm --entrypoint bash docker.io/clinicalgenomics/rdds_mivmir:v1.12.0-rc6 -c \
+          docker run --rm --entrypoint bash docker.io/clinicalgenomics/rdds_mivmir:openblasfix -c \
           " \
           . /opt/pyenv/bin/activate && \
           python3 --version | grep 'Python 3.8.10' && \
           export PYTHONPATH=/rdds/src && \
-          export OPENBLAS_VERBOSE=2 && \
           cd /rdds/src/tests && \
           PYTHONDONTWRITEBYTECODE=1 \
           python3 \
@@ -137,7 +136,7 @@ jobs:
 
       - name: Run Mivmir docker test
         run: |
-          docker run --rm --entrypoint bash docker.io/clinicalgenomics/rdds_mivmir:v1.12.0-rc6 -c \
+          docker run --rm --entrypoint bash docker.io/clinicalgenomics/rdds_mivmir:openblasfix -c \
           " \
           . /opt/pyenv/bin/activate && \
           python3 --version | grep 'Python 3.8.10' && \
