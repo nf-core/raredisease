@@ -77,6 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed pipeline to run variant calling even with bait_padding set to 0 [#757](https://github.com/nf-core/raredisease/pull/757)
 - Fixed runtime errors in `call_sv_MT` and `call_structural_variants` when MitoSAlt produces no structural variant calls [#837](https://github.com/nf-core/raredisease/pull/837)
 - Fixed vcfanno sanity check map closure to handle `ch_vcfanno_resources` emitting a list of paths [#837](https://github.com/nf-core/raredisease/pull/837)
+- Fixed `PREP_MITOSALT` msconfig output being consumed as a queue channel by converting it to a value channel with `.collect()` before passing to `MITOSALT` [#837](https://github.com/nf-core/raredisease/pull/843)
 
 ### Parameters
 
