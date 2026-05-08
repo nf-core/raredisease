@@ -450,7 +450,7 @@ workflow RAREDISEASE {
                 .map { files -> files.flatten() }
                 .set { ch_all_vcfanno_dbs }
             SANITY_CHECK_VCFANNO_DATABASES (ch_vcfanno_toml, ch_all_vcfanno_dbs)
-            ch_vcfanno_toml_final = SANITY_CHECK_VCFANNO_DATABASES.out.toml
+            ch_vcfanno_toml_final = SANITY_CHECK_VCFANNO_DATABASES.out.toml.collect()
         }
 
         //
