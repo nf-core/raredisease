@@ -83,9 +83,10 @@ workflow CALL_SV_MT {
                 val_mitochondria_name
             )
 
+            ch_prepmitosalt_config = PREP_MITOSALT.out.msconfig.collect()
             MITOSALT(
                 SEQTK_SAMPLE.out.reads,
-                PREP_MITOSALT.out.msconfig,
+                ch_prepmitosalt_config,
                 ch_genome_chrsizes,
                 ch_genome_fai,
                 ch_genome_hisat2index,
