@@ -125,16 +125,6 @@
                         "git_sha": "dfe412ff862fdafd658b0d7beca1e084800ba5b2",
                         "installed_by": ["modules"]
                     },
-                    "custom/addmostsevereconsequence": {
-                        "branch": "master",
-                        "git_sha": "0e225fbda197093af4d54a88b9a2908c14ce660b",
-                        "installed_by": ["modules"]
-                    },
-                    "custom/addmostseverepli": {
-                        "branch": "master",
-                        "git_sha": "0e225fbda197093af4d54a88b9a2908c14ce660b",
-                        "installed_by": ["modules"]
-                    },
                     "deepvariant/rundeepvariant": {
                         "branch": "master",
                         "git_sha": "f2b138ee1d91f67d31c187317d7e83e429bf0309",
