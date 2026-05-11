@@ -2,34 +2,61 @@
     "test_gatk4_mergevcfs_no_dict_stub": {
         "content": [
             "test.vcf.gz",
-            "test.vcf.gz.tbi"
+            "test.vcf.gz.tbi",
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_MERGEVCFS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-02-14T14:57:40.784590995"
+        "timestamp": "2026-02-05T16:40:17.349813218"
     },
     "test_gatk4_mergevcfs": {
         "content": [
             "test.vcf.gz",
-            "test.vcf.gz.tbi"
+            "test.vcf.gz.tbi",
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_MERGEVCFS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-02-14T14:56:42.178255913"
+        "timestamp": "2026-02-05T16:40:03.274024419"
     },
     "test_gatk4_mergevcfs_no_dict": {
         "content": [
             "test.vcf.gz",
-            "test.vcf.gz.tbi"
+            "test.vcf.gz.tbi",
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_MERGEVCFS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-02-14T14:57:11.404322124"
+        "timestamp": "2026-02-05T16:40:10.948156303"
     }
 }

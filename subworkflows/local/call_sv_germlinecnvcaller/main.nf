@@ -2,13 +2,13 @@
 // A variant caller workflow for GATK's GermlinceCNVCaller
 //
 
+include { BCFTOOLS_VIEW                       } from '../../../modules/nf-core/bcftools/view/main'
 include { GATK4_COLLECTREADCOUNTS             } from '../../../modules/nf-core/gatk4/collectreadcounts/main.nf'
 include { GATK4_DETERMINEGERMLINECONTIGPLOIDY } from '../../../modules/nf-core/gatk4/determinegermlinecontigploidy/main.nf'
 include { GATK4_GERMLINECNVCALLER             } from '../../../modules/nf-core/gatk4/germlinecnvcaller/main.nf'
 include { GATK4_POSTPROCESSGERMLINECNVCALLS   } from '../../../modules/nf-core/gatk4/postprocessgermlinecnvcalls/main.nf'
-include { BCFTOOLS_VIEW                       } from '../../../modules/nf-core/bcftools/view/main'
-include { TABIX_TABIX                         } from '../../../modules/nf-core/tabix/tabix/main'
 include { SVDB_MERGE as SVDB_MERGE_GCNVCALLER } from '../../../modules/nf-core/svdb/merge/main'
+include { TABIX_TABIX                         } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_SV_GERMLINECNVCALLER {
     take:
@@ -22,7 +22,6 @@ workflow CALL_SV_GERMLINECNVCALLER {
         ch_case_info           // channel: [mandatory] [ val(case_info) ]
 
     main:
-        ch_versions = Channel.empty()
 
         input = ch_bam_bai.combine( ch_readcount_intervals )
 
@@ -37,7 +36,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
         GATK4_COLLECTREADCOUNTS.out.tsv
                 .join(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls)
                 .combine(ch_gcnvcaller_model)
-                .map({ meta, tsv, calls, meta2, model -> return [meta, tsv, [], calls, model ]})
+                .map({ meta, tsv, calls, _meta2, model -> return [meta, tsv, [], calls, model ]})
                 .set{ch_gcnvc_in}
 
         GATK4_GERMLINECNVCALLER ( ch_gcnvc_in )
@@ -47,12 +46,12 @@ workflow CALL_SV_GERMLINECNVCALLER {
                 return [meta.sample, meta, model_calls]
             }
             .groupTuple(by: 0)
-            .map { sample, metas, model_calls ->
+            .map { _sample, metas, model_calls ->
                 def meta = metas[0] // All metas should be the same for a given sample
-                def models = model_calls.collect { it.toString() }
+                def models = model_calls.collect { file -> file.toString() }
                 return [meta, models]
             }
-            .combine(ch_gcnvcaller_model.collect{it[1]}.toList())
+            .combine(ch_gcnvcaller_model.collect{_meta, model -> model}.toList())
             .join(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls)
             .set {ch_postproc_in}
 
@@ -60,13 +59,13 @@ workflow CALL_SV_GERMLINECNVCALLER {
 
         TABIX_TABIX(GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments)
         GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments
-            .join(TABIX_TABIX.out.tbi, failOnMismatch:true)
+            .join(TABIX_TABIX.out.index, failOnMismatch:true)
             .set {ch_segments_in}
         // Filter out reference only (0/0) segments
         BCFTOOLS_VIEW (ch_segments_in , [], [], [] )
 
         BCFTOOLS_VIEW.out.vcf
-            .collect{it[1]}
+            .collect{_meta, vcf -> vcf}
             .toList()
             .set { vcf_file_list }
 
@@ -76,18 +75,9 @@ workflow CALL_SV_GERMLINECNVCALLER {
 
         SVDB_MERGE_GCNVCALLER ( merge_input_vcfs, [], true )
 
-        ch_versions = ch_versions.mix(GATK4_COLLECTREADCOUNTS.out.versions)
-        ch_versions = ch_versions.mix(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.versions)
-        ch_versions = ch_versions.mix(GATK4_GERMLINECNVCALLER.out.versions)
-        ch_versions = ch_versions.mix(GATK4_POSTPROCESSGERMLINECNVCALLS.out.versions)
-        ch_versions = ch_versions.mix(TABIX_TABIX.out.versions)
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW.out.versions)
-        ch_versions = ch_versions.mix(SVDB_MERGE_GCNVCALLER.out.versions)
-
     emit:
         genotyped_intervals_vcf          = GATK4_POSTPROCESSGERMLINECNVCALLS.out.intervals  // channel: [ val(meta), path(*.vcf.gz) ]
         genotyped_segments_vcf           = GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments   // channel: [ val(meta), path(*.vcf.gz) ]
         genotyped_filtered_segments_vcf  = SVDB_MERGE_GCNVCALLER.out.vcf                    // channel: [ val(meta), path(*.vcf.gz) ]
         denoised_vcf                     = GATK4_POSTPROCESSGERMLINECNVCALLS.out.denoised   // channel: [ val(meta), path(*.vcf.gz) ]
-        versions                         = ch_versions                                      // channel: [ versions.yml ]
 }

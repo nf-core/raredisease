@@ -2,58 +2,29 @@ process REPLACE_SPACES_IN_VCFINFO {
     tag "$meta.id"
     label 'process_single'
 
-    conda "conda-forge::python=3.8.3"
+    conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/python:3.8.3' :
-        'biocontainers/python:3.8.3' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/2f/2fdb3ffa4bac62e98ec062e991217df2ab96e67bbd45a502bd25ff2effecb96e/data':
+        'community.wave.seqera.io/library/htslib_python:d1e4474cbf76f4e9' }"
 
     input:
     tuple val(meta), path(input)
 
     output:
     tuple val(meta), path("*_reformatted.vcf"), emit: vcf
-    path "versions.yml",                        emit: versions
+    tuple val("${task.process}"), val('replace_spaces_in_vcfinfo'), val("1.0"), topic: versions, emit: versions_replace_spaces_in_vcfinfo
+    tuple val("${task.process}"), val('python'), eval("python -V | sed 's/Python //'"), topic: versions, emit: versions_python
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
     """
-    python3 <<CODE
-    from pathlib import Path
-    with open("${input}") as input:
-        output_fn = Path("${input}").stem + "_reformatted.vcf"
-        with open(output_fn,'w') as output:
-            for line in input:
-                if line.startswith("#"):
-                    output.write(line)
-                else:
-                    spl = line.strip().split("\\t")
-                    spl[7] = spl[7].replace(" ","_")
-                    output.write(("\\t").join(spl)+"\\n")
-    CODE
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        replace_spaces_in_vcfinfo: v1.0
-        python: \$(python --version | sed 's/Python //g')
-    END_VERSIONS
+    replace_spaces_in_vcfinfo.py --input ${input}
     """
 
     stub:
     """
-    python3 <<CODE
-    from pathlib import Path
-    with open("${input}") as input:
-        output_fn = Path("${input}").stem + "_reformatted.vcf"
-        with open(output_fn,'w') as output:
-            pass
-    CODE
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        replace_spaces_in_vcfinfo: v1.0
-        python: \$(python --version | sed 's/Python //g')
-    END_VERSIONS
+    replace_spaces_in_vcfinfo.py --input ${input}
     """
 }

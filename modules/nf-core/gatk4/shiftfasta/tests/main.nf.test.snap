@@ -60,7 +60,11 @@
                     ]
                 ],
                 "6": [
-                    "versions.yml:md5,afdffb5981aa10bdf40af3a50323fd54"
+                    [
+                        "GATK4_SHIFTFASTA",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ],
                 "dict": [
                     [
@@ -119,15 +123,19 @@
                         "test.shifted.intervals:md5,6d8d74cd94813e56ec9f09933884f45d"
                     ]
                 ],
-                "versions": [
-                    "versions.yml:md5,afdffb5981aa10bdf40af3a50323fd54"
+                "versions_gatk4": [
+                    [
+                        "GATK4_SHIFTFASTA",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
                 ]
             }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-08-26T11:11:50.342225"
+        "timestamp": "2026-02-05T17:51:13.969347846"
     }
 }

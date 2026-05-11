@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/raredisease/master/assets/mobile_element_references_schema.json",
+    "$id": "https://raw.githubusercontent.com/nf-core/raredisease/master/assets/vep_plugin_files_schema.json",
     "title": "Schema for VEP plugin files and their indices",
     "description": "Schema for VEP plugin files and their indices",
     "type": "array",

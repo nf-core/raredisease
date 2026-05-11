@@ -2,60 +2,31 @@ process CREATE_HGNCIDS_FILE {
     tag "$meta.id"
     label 'process_single'
 
-    conda "conda-forge::python=3.8.3"
+    conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/python:3.8.3' :
-        'biocontainers/python:3.8.3' }"
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/2f/2fdb3ffa4bac62e98ec062e991217df2ab96e67bbd45a502bd25ff2effecb96e/data':
+        'community.wave.seqera.io/library/htslib_python:d1e4474cbf76f4e9' }"
 
     input:
     tuple val(meta), path(input)
 
     output:
-    path("*_reformatted.txt"), emit: txt
-    path "versions.yml"      , emit: versions
+    tuple val(meta), path("*_reformatted.txt"), emit: txt
+    tuple val("${task.process}"), val('create_hgncids_file'), val("1.0"), topic: versions, emit: versions_create_hgncids_file
+    tuple val("${task.process}"), val('python'), eval("python -V | sed 's/Python //'"), topic: versions, emit: versions_python
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
     """
-    python3 <<CODE
-    from pathlib import Path
-    with open("${input}") as input:
-        output_fn = Path("${input}").stem + "_reformatted.txt"
-        with open(output_fn,'w') as output:
-            if "scout" == "${meta.id}":
-                for line in input:
-                    if not line.startswith("#") and line.strip():
-                        spl = line.strip().split("\\t")
-                        output.write(spl[3]+"\\n")
-            else:
-                for line in input:
-                    if not line.startswith("#"):
-                        output.write(line)
-    CODE
+    create_hgncids_file.py --input ${input} --meta-id ${meta.id}
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        create_hgncids_file: v1.0
-        python: \$(python --version | sed 's/Python //g')
-    END_VERSIONS
     """
 
     stub:
     """
-    python3 <<CODE
-    from pathlib import Path
-    with open("${input}") as input:
-        output_fn = Path("${input}").stem + "_reformatted.txt"
-        with open(output_fn,'w') as output:
-            pass
-    CODE
+    create_hgncids_file.py --input ${input} --meta-id ${meta.id}
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        create_hgncids_file: v1.0
-        python: \$(python --version | sed 's/Python //g')
-    END_VERSIONS
     """
 }

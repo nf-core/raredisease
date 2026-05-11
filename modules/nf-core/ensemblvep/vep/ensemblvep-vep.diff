@@ -1,16 +1,35 @@
-Changes in module 'nf-core/ensemblvep/vep'
+Changes in component 'nf-core/ensemblvep/vep'
 'modules/nf-core/ensemblvep/vep/meta.yml' is unchanged
 Changes in 'ensemblvep/vep/main.nf':
 --- modules/nf-core/ensemblvep/vep/main.nf
 +++ modules/nf-core/ensemblvep/vep/main.nf
-@@ -20,7 +20,7 @@
-     tuple val(meta), path("*.vcf.gz")  , optional:true, emit: vcf
-     tuple val(meta), path("*.tab.gz")  , optional:true, emit: tab
-     tuple val(meta), path("*.json.gz") , optional:true, emit: json
--    path "*.summary.html"              , emit: report
-+    path "*.summary.html"              , optional:true, emit: report
-     path "versions.yml"                , emit: versions
+@@ -4,8 +4,8 @@
  
-     when:
+     conda "${moduleDir}/environment.yml"
+     container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+-        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/3d/3da6e21cbf9803529421d7e136d1ebec5ff71ec50e0d996eda2ce11ec2c19bf9/data'
+-        : 'community.wave.seqera.io/library/ensembl-vep_perl-math-cdf:1e13f65f931a6954'}"
++        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/da/da2ef7e58823df3fc9d6c0a9927e219435329a52173f871a6fa2b5302679f7b2/data'
++        : 'community.wave.seqera.io/library/ensembl-vep_perl-list-moreutils_perl-math-cdf:3c62f15be110ccc2'}"
+ 
+     input:
+     tuple val(meta), path(vcf), path(custom_extra_files)
 
+Changes in 'ensemblvep/vep/environment.yml':
+--- modules/nf-core/ensemblvep/vep/environment.yml
++++ modules/nf-core/ensemblvep/vep/environment.yml
+@@ -4,5 +4,6 @@
+   - conda-forge
+   - bioconda
+ dependencies:
+-  - bioconda::ensembl-vep=115.2
++  - bioconda::ensembl-vep=110.1
++  - bioconda::perl-list-moreutils=0.430
+   - bioconda::perl-math-cdf=0.1
+
+'modules/nf-core/ensemblvep/vep/tests/tab.gz.config' is unchanged
+'modules/nf-core/ensemblvep/vep/tests/vcf.config' is unchanged
+'modules/nf-core/ensemblvep/vep/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/ensemblvep/vep/tests/nextflow.config' is unchanged
+'modules/nf-core/ensemblvep/vep/tests/main.nf.test' is unchanged
 ************************************************************

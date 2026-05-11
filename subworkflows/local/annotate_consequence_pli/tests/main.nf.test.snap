@@ -1,0 +1,95 @@
+{
+    "ANNOTATE_CSQ_PLI - with index": {
+        "content": [
+            [
+                "severepli.vcf.gz",
+                "severepli.vcf.gz.tbi"
+            ],
+            "58d9c7a329ee86094acc0826b671652c",
+            "VcfFile [chromosomes=[MT], sampleCount=3, variantCount=22, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-03-16T22:58:51.504628424",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "ANNOTATE_CSQ_PLI - no index": {
+        "content": [
+            "58d9c7a329ee86094acc0826b671652c",
+            "VcfFile [chromosomes=[MT], sampleCount=3, variantCount=22, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-03-01T17:08:08.450262918",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "ANNOTATE_CSQ_PLI - with index, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "severepli.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "1": [
+                    [
+                        "ann_csq",
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "severepli.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ],
+                    [
+                        "ann_csq",
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "severepli.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "publish": [
+                    [
+                        "ann_csq",
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "severepli.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ],
+                    [
+                        "ann_csq",
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "severepli.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "vcf_ann": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "severepli.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-03-16T22:56:18.385999497",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

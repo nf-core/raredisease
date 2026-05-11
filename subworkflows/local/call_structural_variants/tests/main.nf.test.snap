@@ -1,0 +1,25 @@
+{
+    "CALL_STRUCTURAL_VARIANTS - wgs, stub": {
+        "content": [
+            [
+                "earlycasualcaiman.saltshaker.png",
+                "earlycasualcaiman.saltshaker_classify.html",
+                "earlycasualcaiman_mitochondria_deletions.txt",
+                "justhusky_saltshaker.vcf.gz",
+                "justhusky_sv.vcf.gz",
+                "justhusky_sv.vcf.gz.tbi"
+            ],
+            [
+                "justhusky_sv.vcf.gz"
+            ],
+            [
+                "justhusky_sv.vcf.gz.tbi"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.4"
+        },
+        "timestamp": "2026-04-14T15:51:47.077800376"
+    }
+}

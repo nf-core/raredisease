@@ -1,12 +1,5 @@
 name: Run nf-test
 on:
-  push:
-    paths-ignore:
-      - "docs/**"
-      - "**/meta.yml"
-      - "**/*.md"
-      - "**/*.png"
-      - "**/*.svg"
   pull_request:
     paths-ignore:
       - "docs/**"
@@ -25,7 +18,7 @@ concurrency:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  NFT_VER: "0.9.2"
+  NFT_VER: "0.9.3"
   NFT_WORKDIR: "~"
   NXF_ANSI_LOG: false
   NXF_SINGULARITY_CACHEDIR: ${{ github.workspace }}/.singularity
@@ -35,7 +28,7 @@ jobs:
   nf-test-changes:
     name: nf-test-changes
     runs-on: # use self-hosted runners
-      - runs-on=$-nf-test-changes
+      - runs-on=${{ github.run_id }}-nf-test-changes
       - runner=4cpu-linux-x64
     outputs:
       shard: ${{ steps.set-shards.outputs.shard }}
@@ -47,7 +40,7 @@ jobs:
           rm -rf ./* || true
           rm -rf ./.??* || true
           ls -la ./
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
           fetch-depth: 0
 
@@ -57,7 +50,7 @@ jobs:
         env:
           NFT_VER: ${{ env.NFT_VER }}
         with:
-          max_shards: 7
+          max_shards: 20
 
       - name: debug
         run: |
@@ -69,9 +62,9 @@ jobs:
     needs: [nf-test-changes]
     if: ${{ needs.nf-test-changes.outputs.total_shards != '0' }}
     runs-on: # use self-hosted runners
-      - runs-on=$-nf-test
+      - runs-on=${{ github.run_id }}-nf-test
       - runner=4cpu-linux-x64
-      - disk=large
+      - volume=80gb
     strategy:
       fail-fast: false
       matrix:
@@ -84,14 +77,14 @@ jobs:
           - isMain: false
             profile: "singularity"
         NXF_VER:
-          - "24.04.2"
+          - "25.10.4"
           - "latest-everything"
     env:
       NXF_ANSI_LOG: false
       TOTAL_SHARDS: ${{ needs.nf-test-changes.outputs.total_shards }}
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
         with:
           fetch-depth: 0
 
@@ -99,21 +92,44 @@ jobs:
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
 
       - name: Run nf-test
+        id: run_nf_test
         uses: ./.github/actions/nf-test
+        continue-on-error: ${{ matrix.NXF_VER == 'latest-everything' }}
         env:
           NFT_WORKDIR: ${{ env.NFT_WORKDIR }}
+          NXF_VERSION: ${{ matrix.NXF_VER }}
+          SENTIEON_AUTH_MECH: "GitHub Actions - token"
+          SENTIEON_ENCRYPTION_KEY: ${{ secrets.SENTIEON_ENCRYPTION_KEY }}
+          SENTIEON_LICENSE_MESSAGE: ${{ secrets.SENTIEON_LICENSE_MESSAGE }}
+          SENTIEON_LICSRVR_IP: ${{ secrets.SENTIEON_LICSRVR_IP }}
         with:
           profile: ${{ matrix.profile }}
           shard: ${{ matrix.shard }}
           total_shards: ${{ env.TOTAL_SHARDS }}
+
+      - name: Report test status
+        if: ${{ always() }}
+        run: |
+          if [[ "${{ steps.run_nf_test.outcome }}" == "failure" ]]; then
+            echo "::error::Test with ${{ matrix.NXF_VER }} failed"
+            # Add to workflow summary
+            echo "## ❌ Test failed: ${{ matrix.profile }} | ${{ matrix.NXF_VER }} | Shard ${{ matrix.shard }}/${{ env.TOTAL_SHARDS }}" >> $GITHUB_STEP_SUMMARY
+            if [[ "${{ matrix.NXF_VER }}" == "latest-everything" ]]; then
+              echo "::warning::Test with latest-everything failed but will not cause workflow failure. Please check if the error is expected or if it needs fixing."
+            fi
+            if [[ "${{ matrix.NXF_VER }}" != "latest-everything" ]]; then
+              exit 1
+            fi
+          fi
+
   confirm-pass:
     needs: [nf-test]
     if: always()
     runs-on: # use self-hosted runners
-      - runs-on=$-confirm-pass
+      - runs-on=${{ github.run_id }}-confirm-pass
       - runner=2cpu-linux-x64
     steps:
-      - name: One or more tests failed
+      - name: One or more tests failed (excluding latest-everything)
         if: ${{ contains(needs.*.result, 'failure') }}
         run: exit 1
 
@@ -132,11 +148,3 @@ jobs:
           echo "DEBUG: toJSON(needs) = ${{ toJSON(needs) }}"
           echo "DEBUG: toJSON(needs.*.result) = ${{ toJSON(needs.*.result) }}"
           echo "::endgroup::"
-
-      - name: Clean Workspace # Purge the workspace in case it's running on a self-hosted runner
-        if: always()
-        run: |
-          ls -la ./
-          rm -rf ./* || true
-          rm -rf ./.??* || true
-          ls -la ./

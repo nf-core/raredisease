@@ -8,33 +8,45 @@
             [
                 
             ],
-            [
-                "versions.yml:md5,9b368270d802ed95c530a7f0105f6453"
-            ]
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_PRINTREADS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-08-26T11:48:53.871683"
+        "timestamp": "2026-02-05T17:13:29.864614856"
     },
     "test-gatk4-printreads-cram": {
         "content": [
             [
                 
             ],
-            "591299d00e262474250c5ccc241bba59",
+            "b1319b92694dfa02102224820fcc1ada",
             [
                 
             ],
-            [
-                "versions.yml:md5,9b368270d802ed95c530a7f0105f6453"
-            ]
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_PRINTREADS",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.4"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-08-26T13:42:29.968056"
+        "timestamp": "2026-02-05T17:13:38.337993548"
     }
 }

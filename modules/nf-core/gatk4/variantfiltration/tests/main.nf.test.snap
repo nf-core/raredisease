@@ -1,30 +1,62 @@
 {
-    "test_gatk4_variantfiltration_gz_input": {
+    "gatk4_variantfiltration - human - vcf - fasta.gz": {
         "content": [
-            [
-                "versions.yml:md5,96943659275ba62de1f0d283a2f6e97b"
-            ],
-            "test.vcf.gz",
-            "test.vcf.gz.tbi"
+            "cf0477cc14953b16caacbf5be507b88",
+            "test.vcf.gz.tbi",
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_VARIANTFILTRATION",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.04.2"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-05-22T22:43:27.609784"
+        "timestamp": "2026-02-05T18:03:01.467326216"
     },
-    "test_gatk4_variantfiltration_vcf_input": {
+    "gatk4_variantfiltration - human - vcf.gz - fasta": {
         "content": [
-            [
-                "versions.yml:md5,96943659275ba62de1f0d283a2f6e97b"
-            ],
-            "test.vcf.gz",
-            "test.vcf.gz.tbi"
+            "cf0477cc14953b16caacbf5be507b88",
+            "test.vcf.gz.tbi",
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_VARIANTFILTRATION",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            }
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.04.2"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
-        "timestamp": "2024-05-22T22:42:55.316294"
+        "timestamp": "2026-02-05T18:03:09.049097033"
+    },
+    "gatk4_variantfiltration - human - vcf - fasta": {
+        "content": [
+            "cf0477cc14953b16caacbf5be507b88",
+            "test.vcf.gz.tbi",
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_VARIANTFILTRATION",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-05T18:02:52.913618285"
     }
 }

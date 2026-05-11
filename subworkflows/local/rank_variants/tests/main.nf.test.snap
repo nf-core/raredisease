@@ -1,0 +1,110 @@
+{
+    "RANK_VARIANTS - SV (process_with_sort = true), stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "rank_and_filter/",
+                        [
+                            {
+                                "id": "justhusky",
+                                "single_end": false
+                            },
+                            "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "single_end": false
+                        },
+                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "publish": [
+                    [
+                        "rank_and_filter/",
+                        [
+                            {
+                                "id": "justhusky",
+                                "single_end": false
+                            },
+                            "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "single_end": false
+                        },
+                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-03-17T13:09:47.357626106",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "RANK_VARIANTS - SNV (process_with_sort = false), stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "rank_and_filter/",
+                        [
+                            {
+                                "id": "justhusky",
+                                "single_end": false
+                            },
+                            "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                            "justhusky.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "single_end": false
+                        },
+                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "publish": [
+                    [
+                        "rank_and_filter/",
+                        [
+                            {
+                                "id": "justhusky",
+                                "single_end": false
+                            },
+                            "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                            "justhusky.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "single_end": false
+                        },
+                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-03-17T13:09:21.870979671",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}
