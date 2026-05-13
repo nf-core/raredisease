@@ -33,6 +33,7 @@ workflow PIPELINE_INITIALISATION {
     input             //  string: Path to input samplesheet
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
+    monochrome_logs   // boolean: Disable ANSI colour codes in log output
     show_hidden       // boolean: Show hidden parameters in the help message
 
     main:

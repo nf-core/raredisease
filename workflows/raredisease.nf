@@ -120,7 +120,6 @@ workflow RAREDISEASE {
     ch_mtshift_fai
     ch_mtshift_fasta
     ch_mtshift_intervals
-    ch_multiqc_samples
     ch_ngsbits_method
     ch_par_bed
     ch_pedfile
@@ -215,6 +214,8 @@ workflow RAREDISEASE {
     val_multiqc_config
     val_multiqc_logo
     val_multiqc_methods_description
+    val_multiqc_samples
+    val_outdir
     val_platform
     val_run_mt_for_wes
     val_run_rtgvcfeval
@@ -927,7 +928,7 @@ workflow RAREDISEASE {
     def ch_collated_versions = softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
         .mix(topic_versions_string)
         .collectFile(
-            storeDir: "${outdir}/pipeline_info",
+            storeDir: "${val_outdir}/pipeline_info",
             name: 'nf_core_'  +  'raredisease_software_'  + 'mqc_'  + 'versions.yml',
             sort: true,
             newLine: true
@@ -982,14 +983,22 @@ workflow RAREDISEASE {
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.sex_check_csv.map{_meta, reports -> reports}.collect().ifEmpty([]))
     }
 
+    // config: custom config if provided, otherwise the default pipeline config
+    // logo: custom logo if provided, otherwise omitted
+    // sample_names: optional TSV for MultiQC --sample-names
     MULTIQC (
-        ch_multiqc_files.flatten().collect()
-            .combine(ch_multiqc_config.mix(ch_multiqc_custom_config).collect().toList())
-            .combine(ch_multiqc_logo.toList())
-            .combine(ch_multiqc_samples.toList())
-            .map { files, configs, logo, sample_names ->
-                [ [id: 'raredisease'], files, configs, logo, [], sample_names ]
-            }
+        ch_multiqc_files.flatten().collect().map { files ->
+            [
+                [id: 'raredisease'],
+                files,
+                val_multiqc_config
+                    ? file(val_multiqc_config, checkIfExists: true)
+                    : file("${projectDir}/assets/multiqc_config.yml", checkIfExists: true),
+                val_multiqc_logo ? file(val_multiqc_logo, checkIfExists: true) : [],
+                [],
+                val_multiqc_samples ? file(val_multiqc_samples) : [],
+            ]
+        }
     )
     ch_multiqc_publish = MULTIQC.out.report
         .mix(MULTIQC.out.data)
