@@ -1,0 +1,31 @@
+{
+    "ANNOTATE_MOBILE_ELEMENTS - GRCh37, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "single_end": false
+                        },
+                        "justhusky_filter.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "vcf_ann": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "single_end": false
+                        },
+                        "justhusky_filter.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-03-05T00:16:05.837537418",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

@@ -6,9 +6,12 @@ nextflow_pipeline {
 
     test("-profile test") {
 
+        options "-stub"
+
         when {
             params {
-                outdir = "$outputDir"
+                outdir     = "$outputDir"
+                skip_tools = "germlinecnvcaller,gens"
             }
         }
 

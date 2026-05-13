@@ -1,0 +1,111 @@
+nextflow_workflow {
+
+    name "Test Workflow PREPARE_REFERENCES"
+    script "subworkflows/local/prepare_references/main.nf"
+    workflow "PREPARE_REFERENCES"
+
+    tag "subworkflows"
+    tag "prepare_references"
+
+    tag "bedtools/slop"
+    tag "bwa/index"
+    tag "bwamem2/index"
+    tag "bwameme/index"
+    tag "cat/cat"
+    tag "gatk4/bedtointervallist"
+    tag "gatk4/createsequencedictionary"
+    tag "gatk4/intervallisttools"
+    tag "gatk4/shiftfasta"
+    tag "get_chrom_sizes"
+    tag "hisat2/build"
+    tag "last/lastdb"
+    tag "rtgtools/format"
+    tag "samtools/faidx"
+    tag "sentieon/bwaindex"
+    tag "tabix/bgziptabix"
+    tag "tabix/tabix"
+    tag "untar"
+
+    config "./nextflow.config"
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                variant_caller     = "deepvariant"
+                mito_name          = "MT"
+                bait_padding       = 100
+            }
+            workflow {
+                """
+                input[0]  = "bwamem2"
+                input[1]  = "wgs"
+                input[2]  = null
+                input[3]  = null
+                input[4]  = null
+                input[5]  = null
+                input[6]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
+                input[7]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
+                input[8]  = null
+                input[9]  = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
+                input[10] = null
+                input[11] = "bwa"
+                input[12] = null
+                input[13] = false
+                input[14] = false
+                input[15] = null
+                input[16] = null
+                input[17] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[18] = null
+                input[19] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                input[20] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.collect { name, channel ->
+                        def sorted_channel = channel.toList().sort { item ->
+                            def sortKey = item
+                            while (sortKey instanceof List && !sortKey.isEmpty()) {
+                                def next = sortKey[-1]
+                                if (next instanceof List && next.every { !(it instanceof List) }) {
+                                    // Leaf list: could be [meta, path] or [file1, file2, ...].
+                                    // For directory outputs (e.g. BWA/BWAMEM2/HISAT2 index folders),
+                                    // nf-test represents the value as a Path at sort time rather than
+                                    // expanding it to a file list. List the directory contents to
+                                    // produce a stable, unique sort key across same-named directories.
+                                    return next.findAll { !(it instanceof Map) }
+                                        .collect { v ->
+                                            def s = v.toString()
+                                            if (s.contains(':md5,')) {
+                                                return s.split(':md5,')[0].tokenize('/').last() ?: ''
+                                            }
+                                            try {
+                                                def f = new File(s)
+                                                if (f.isDirectory()) {
+                                                    return f.listFiles()?.collect { it.name }?.sort()?.join(',') ?: s.tokenize('/').last() ?: ''
+                                                }
+                                            } catch (e) {}
+                                            return s.tokenize('/').last() ?: ''
+                                        }
+                                        .sort()
+                                        .join(',')
+                                }
+                                sortKey = next
+                            }
+                            def parts = sortKey.toString().split(':md5,')[0].tokenize('/')
+                            parts ? parts[-1] : ''
+                        }
+                        [name, sorted_channel]
+                    }.sort { it[0] }
+                ).match() }
+            )
+        }
+
+    }
+
+}

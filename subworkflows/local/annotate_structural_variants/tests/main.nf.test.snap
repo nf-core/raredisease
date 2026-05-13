@@ -1,0 +1,240 @@
+{
+    "ANNOTATE_STRUCTURAL_VARIANTS - no SVDB queries, stub": {
+        "content": [
+            [
+                [
+                    "0",
+                    [
+                        [
+                            "annotate_sv/",
+                            [
+                                {
+                                    "id": "test"
+                                },
+                                "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            ]
+                        ],
+                        [
+                            "annotate_sv/",
+                            [
+                                {
+                                    "id": "test"
+                                },
+                                "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "annotate_sv/",
+                            [
+                                {
+                                    "id": "test"
+                                },
+                                "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "1",
+                    [
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "2",
+                    [
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "publish",
+                    [
+                        [
+                            "annotate_sv/",
+                            [
+                                {
+                                    "id": "test"
+                                },
+                                "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            ]
+                        ],
+                        [
+                            "annotate_sv/",
+                            [
+                                {
+                                    "id": "test"
+                                },
+                                "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "annotate_sv/",
+                            [
+                                {
+                                    "id": "test"
+                                },
+                                "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "tbi",
+                    [
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "vcf_ann",
+                    [
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        "timestamp": "2026-03-17T22:56:56.445250387",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "ANNOTATE_STRUCTURAL_VARIANTS - with SVDB_QUERY_DB, stub": {
+        "content": [
+            [
+                [
+                    "0",
+                    [
+                        [
+                            "annotate_sv/",
+                            [
+                                {
+                                    "id": "test"
+                                },
+                                "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            ]
+                        ],
+                        [
+                            "annotate_sv/",
+                            [
+                                {
+                                    "id": "test"
+                                },
+                                "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "annotate_sv/",
+                            [
+                                {
+                                    "id": "test"
+                                },
+                                "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "1",
+                    [
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "2",
+                    [
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "publish",
+                    [
+                        [
+                            "annotate_sv/",
+                            [
+                                {
+                                    "id": "test"
+                                },
+                                "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            ]
+                        ],
+                        [
+                            "annotate_sv/",
+                            [
+                                {
+                                    "id": "test"
+                                },
+                                "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "annotate_sv/",
+                            [
+                                {
+                                    "id": "test"
+                                },
+                                "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "tbi",
+                    [
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "vcf_ann",
+                    [
+                        [
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        "timestamp": "2026-03-17T22:57:23.293047427",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

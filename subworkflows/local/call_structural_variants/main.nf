@@ -1,0 +1,160 @@
+//
+// A nested subworkflow to call structural variants.
+//
+
+include { CALL_SV_CNVNATOR          } from '../call_sv_cnvnator'
+include { CALL_SV_GERMLINECNVCALLER } from '../call_sv_germlinecnvcaller'
+include { CALL_SV_MANTA             } from '../call_sv_manta'
+include { CALL_SV_MT                } from '../call_sv_MT'
+include { CALL_SV_TIDDIT            } from '../call_sv_tiddit'
+include { SVDB_MERGE                } from '../../../modules/nf-core/svdb/merge/main'
+include { TABIX_TABIX               } from '../../../modules/nf-core/tabix/tabix/main'
+
+workflow CALL_STRUCTURAL_VARIANTS {
+
+    take:
+        ch_bwa_index                          // channel: [mandatory] [ val(meta), path(index)]
+        ch_case_info                          // channel: [mandatory] [ val(case_info) ]
+        ch_gcnvcaller_model                   // channel: [optional; used by mandatory for GATK's cnvcaller][ path(gcnvcaller_model) ]
+        ch_genome_bai                         // channel: [mandatory] [ val(meta), path(bai) ]
+        ch_genome_bam                         // channel: [mandatory] [ val(meta), path(bam) ]
+        ch_genome_bam_bai                     // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_chrsizes                    // channel: [mandatory] [ path(chrsizes) ]
+        ch_genome_dictionary                  // channel: [optional; used by mandatory for GATK's cnvcaller][ val(meta), path(dict) ]
+        ch_genome_fai                         // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_fasta                       // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_hisat2index                 // channel: [mandatory] [ val(meta), path(hisat2index) ]
+        ch_mitosalt_config                    // channel: [mandatory] [val(mitosalt_breakspan),val(mitosalt_breakthreshold),...,val(mitosalt_split_length)]
+        ch_mt_bam_bai                         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_mt_fai                             // channel: [mandatory] [ val(meta), path(mtfai) ]
+        ch_mt_fasta                           // channel: [mandatory] [ val(meta), path(mtfasta) ]
+        ch_mt_lastdb                          // channel: [mandatory] [ val(meta), path(lastindex) ]
+        ch_ploidy_model                       // channel: [optional; used by mandatory for GATK's cnvcaller][ path(ploidy_model) ]
+        ch_readcount_intervals                // channel: [optional; used by mandatory for GATK's cnvcaller][ path(intervals) ]
+        ch_reads                              // channel: [mandatory] [ val(meta), [path(reads)] ]
+        ch_subdepth                           // channel: [mandatory] [ val(mitosalt_depth) ]
+        ch_svcaller_priority                  // channel: [mandatory] [ val(["var caller tag 1", ...]) ]
+        ch_target_bed                         // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
+        skip_germlinecnvcaller                // boolean
+        skip_mitosalt                         // boolean
+        val_analysis_type                     // string: "wes", "wgs", or "mito"
+        val_heavy_strand_origin_end           // string: [mandatory] mitochondira_heavy_strand_origin_end
+        val_heavy_strand_origin_start         // string: [mandatory] mitochondira_heavy_strand_origin_start
+        val_light_strand_origin_end           // string: [mandatory] mitochondira_light_strand_origin_end
+        val_light_strand_origin_start         // string: [mandatory] mitochondira_light_strand_origin_start
+        val_mitochondria_length               // string: [mandatory] mito_length
+        val_mitochondria_name                 // string: [mandatory] mito_name
+        val_mitosalt_flank                    // string: [mandatory] mitosalt_flank
+        val_mitosalt_heteroplasmy_limit       // string: [mandatory] mitosalt_heteroplasmy_limit
+        val_run_mt_for_wes                    // boolean: [mandatory] run_mt_for_wes
+
+    main:
+        ch_cnvnator_vcf   = channel.empty()
+        ch_gcnvcaller_vcf = channel.empty()
+        ch_manta_vcf      = channel.empty()
+        ch_merged_svs     = channel.empty()
+        ch_merged_tbi     = channel.empty()
+        ch_publish_mt     = channel.empty()
+        ch_saltshaker_vcf = channel.empty()
+        ch_tiddit_vcf     = channel.empty()
+
+        if (!val_analysis_type.equals("mito")) {
+            CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_target_bed, val_analysis_type)
+                .filtered_diploid_sv_vcf
+                .collect{ _meta, vcf -> vcf }
+                .set{ ch_manta_vcf }
+        }
+
+        if (val_analysis_type.equals("wgs")) {
+            CALL_SV_TIDDIT (ch_genome_bam_bai, ch_genome_fai, ch_genome_fasta, ch_bwa_index, ch_case_info)
+                .vcf
+                .collect{ _meta, vcf -> vcf }
+                .set { ch_tiddit_vcf }
+
+            CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_case_info)
+                .vcf
+                .collect{ _meta, vcf -> vcf }
+                .set { ch_cnvnator_vcf }
+        }
+
+        if (!skip_germlinecnvcaller) {
+            CALL_SV_GERMLINECNVCALLER (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model, ch_case_info)
+                .genotyped_filtered_segments_vcf
+                .collect{ _meta, vcf -> vcf }
+                .set { ch_gcnvcaller_vcf }
+
+        }
+
+        if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
+            CALL_SV_MT(
+                ch_mt_bam_bai,
+                ch_case_info,
+                ch_genome_chrsizes,
+                ch_genome_fai,
+                ch_genome_fasta,
+                ch_genome_hisat2index,
+                ch_mt_fai,
+                ch_mt_fasta,
+                ch_mt_lastdb,
+                ch_reads,
+                ch_subdepth,
+                ch_svcaller_priority,
+                ch_mitosalt_config,
+                skip_mitosalt,
+                val_heavy_strand_origin_start,
+                val_heavy_strand_origin_end,
+                val_light_strand_origin_start,
+                val_light_strand_origin_end,
+                val_mitochondria_length,
+                val_mitochondria_name,
+                val_mitosalt_flank,
+                val_mitosalt_heteroplasmy_limit,
+            )
+            .set { ch_sv_mt_out }
+
+            ch_sv_mt_out.saltshaker_vcf
+                .collect{ _meta, vcf -> vcf }
+                .set { ch_saltshaker_vcf }
+            ch_publish_mt = ch_sv_mt_out.publish
+            ch_svcaller_priority = ch_sv_mt_out.updated_priority
+        }
+
+        // Merge - with consistent ordering using concat
+        if (!val_analysis_type.equals("mito")) {
+            // Concatenate in specific order: tiddit -> manta -> gcnvcaller -> cnvnator -> mitosalt
+            // Empty channels won't contribute any items
+            ch_tiddit_vcf
+                .concat(ch_manta_vcf)
+                .concat(ch_gcnvcaller_vcf)
+                .concat(ch_cnvnator_vcf)
+                .concat(ch_saltshaker_vcf)
+                .collect()
+                .map { vcf_list -> [vcf_list] }
+                .set { ch_vcf_paths }
+            ch_case_info
+                .combine(ch_vcf_paths)
+                .set { ch_merge_vcfs_in }
+            SVDB_MERGE (ch_merge_vcfs_in, ch_svcaller_priority, true)
+
+            TABIX_TABIX (SVDB_MERGE.out.vcf)
+            ch_merged_svs = SVDB_MERGE.out.vcf
+            ch_merged_tbi = TABIX_TABIX.out.index
+
+        } else {
+            // For mito-only analysis, use saltshaker_vcf with meta directly (ch_saltshaker_vcf
+            // holds collected paths only, ch_sv_mt_out.saltshaker_vcf holds [meta, vcf] tuples)
+            TABIX_TABIX (ch_sv_mt_out.saltshaker_vcf)
+            ch_merged_svs = ch_sv_mt_out.saltshaker_vcf
+            ch_merged_tbi = TABIX_TABIX.out.index
+        }
+
+        ch_publish = ch_merged_svs
+            .mix(ch_merged_tbi)
+            .mix(ch_publish_mt)
+            .map { meta, value -> ['call_sv/', [meta, value]] }
+
+    emit:
+        vcf        = ch_merged_svs // channel: [ val(meta), path(vcf)]
+        tbi        = ch_merged_tbi // channel: [ val(meta), path(tbi)]
+        publish    = ch_publish    // channel: [ val(destination), val(value) ]
+}

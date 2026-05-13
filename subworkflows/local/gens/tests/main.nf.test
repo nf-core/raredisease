@@ -1,0 +1,115 @@
+nextflow_workflow {
+
+    name "Test Workflow GENS"
+    script "subworkflows/local/gens/main.nf"
+    workflow "GENS"
+
+    tag "subworkflows"
+    tag "gens"
+
+    tag "gatk4/collectreadcounts"
+    tag "gatk4/denoisereadcounts"
+    tag "gens/preparecovandbaf"
+
+    config "./nextflow.config"
+
+    test("GENS - male sample, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                countreadcounts = "--format HDF5"
+            }
+            workflow {
+                """
+                input[0] = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
+                input[2] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[4] = channel.of(file(params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz', checkIfExists: true))
+                input[5] = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true)
+                ])
+                input[6] = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[7] = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true))
+                input[8] = channel.of([[id:'pon_female'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)])
+                input[9] = channel.of([[id:'pon_male'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.gens_baf_bed_gz,
+                    workflow.out.gens_baf_bed_tbi,
+                    workflow.out.gens_cov_bed_gz,
+                    workflow.out.gens_cov_bed_tbi,
+                    workflow.out.publish.flatten()
+                        .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                        .collect { new File(it).name }
+                        .sort()
+                    ).match() }
+            )
+        }
+    }
+
+    test("GENS - female sample, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    [id:'slowlycivilbuck', sample:'slowlycivilbuck', sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/slowlycivilbuck_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/slowlycivilbuck_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
+                input[2] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[4] = channel.of(file(params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz', checkIfExists: true))
+                input[5] = channel.of([
+                    [id:'slowlycivilbuck', sample:'slowlycivilbuck', sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true)
+                ])
+                input[6] = channel.of([
+                    [id:'slowlycivilbuck', sample:'slowlycivilbuck', sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[7] = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true))
+                input[8] = channel.of([[id:'pon_female'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)])
+                input[9] = channel.of([[id:'pon_male'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.gens_baf_bed_gz,
+                    workflow.out.gens_baf_bed_tbi,
+                    workflow.out.gens_cov_bed_gz,
+                    workflow.out.gens_cov_bed_tbi,
+                    workflow.out.publish.flatten()
+                        .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                        .collect { new File(it).name }
+                        .sort()
+                    ).match()
+                }
+            )
+        }
+    }
+}

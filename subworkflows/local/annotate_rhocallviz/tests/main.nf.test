@@ -1,0 +1,48 @@
+nextflow_workflow {
+
+    name "Test Workflow ANNOTATE_RHOCALLVIZ"
+    script "subworkflows/local/annotate_rhocallviz/main.nf"
+    workflow "ANNOTATE_RHOCALLVIZ"
+
+    tag "subworkflows"
+    tag "annotate_rhocallviz"
+
+    tag "bcftools/view"
+    tag "bcftools/roh"
+    tag "rhocall/viz"
+    tag "ucsc/wigtobigwig"
+    tag "chromograph"
+
+    config "./nextflow.config"
+
+    test("ANNOTATE_RHOCALLVIZ - stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                bcftools_view_rhocall      = "--output-type z --write-index=tbi --min-ac 1 --samples test_sample"
+                bcftools_roh               = "--AF-tag GNOMADAF --skip-indels"
+                bcftools_view_uncompressed = "--output-type v"
+                rhocall_viz                = "--aftag GNOMADAF --wig"
+                chromograph_autozyg        = "--euploid"
+                ucsc_wigtobigwig           = "-clip"
+            }
+            workflow {
+                """
+                input[0] = channel.of(file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.sizes', checkIfExists: true)).collect()
+                input[1] = channel.of([id:'test_sample', sample:'test_sample', sex:1, phenotype:2, paternal:0, maternal:0, case_id:'test_case'])
+                input[2] = channel.of([
+                    [id:'test_case', sample:'test_sample'],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+                assert workflow.success
+        }
+    }
+}

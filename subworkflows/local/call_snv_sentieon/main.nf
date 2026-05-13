@@ -1,0 +1,119 @@
+//
+// A subworkflow to call SNVs by sentieon dnascope with a machine learning model.
+//
+
+include { ADD_VARCALLER_TO_BED                     } from '../../../modules/local/add_varcallername_to_bed'
+include { BCFTOOLS_ANNOTATE                        } from '../../../modules/nf-core/bcftools/annotate/main'
+include { BCFTOOLS_FILTER as BCF_FILTER_ONE        } from '../../../modules/nf-core/bcftools/filter/main'
+include { BCFTOOLS_FILTER as BCF_FILTER_TWO        } from '../../../modules/nf-core/bcftools/filter/main'
+include { BCFTOOLS_MERGE                           } from '../../../modules/nf-core/bcftools/merge/main'
+include { BCFTOOLS_NORM as REMOVE_DUPLICATES_SEN   } from '../../../modules/nf-core/bcftools/norm/main'
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_SEN } from '../../../modules/nf-core/bcftools/norm/main'
+include { SENTIEON_DNAMODELAPPLY                   } from '../../../modules/nf-core/sentieon/dnamodelapply/main'
+include { SENTIEON_DNASCOPE                        } from '../../../modules/nf-core/sentieon/dnascope/main'
+
+workflow CALL_SNV_SENTIEON {
+    take:
+        ch_bam_bai         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_call_interval   // channel: [mandatory] [ val(meta), path(interval) ]
+        ch_case_info       // channel: [mandatory] [ val(case_info) ]
+        ch_dbsnp           // channel: [mandatory] [ val(meta), path(vcf) ]
+        ch_dbsnp_index     // channel: [mandatory] [ val(meta), path(tbi) ]
+        ch_foundin_header  // channel: [mandatory] [ path(header) ]
+        ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
+        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_ml_model                  // channel: [mandatory] [ val(meta), path(model) ]
+        ch_pcr_indel_model           // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
+        val_skip_split_multiallelics // boolean
+
+    main:
+        // Combine bam and intervals
+        bam_bai_intervals = ch_bam_bai.combine(ch_call_interval)
+            .map{
+                meta, bam, bai, _meta2, interval -> [meta, bam, bai, interval]
+            }
+
+        SENTIEON_DNASCOPE(
+            bam_bai_intervals,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_dbsnp,
+            ch_dbsnp_index,
+            ch_ml_model,
+            ch_pcr_indel_model,
+            'VARIANT',
+            true
+        )
+
+        ch_dnamodelapply_in = SENTIEON_DNASCOPE.out.vcf.join(SENTIEON_DNASCOPE.out.vcf_tbi)
+
+        SENTIEON_DNAMODELAPPLY ( ch_dnamodelapply_in, ch_genome_fasta, ch_genome_fai, ch_ml_model )
+
+        ch_bcffilterone_in = SENTIEON_DNAMODELAPPLY.out.vcf.join(SENTIEON_DNAMODELAPPLY.out.tbi, failOnMismatch: true)
+        BCF_FILTER_ONE (ch_bcffilterone_in)
+
+        ch_bcffiltertwo_in = BCF_FILTER_ONE.out.vcf.join(BCF_FILTER_ONE.out.tbi, failOnMismatch: true)
+        BCF_FILTER_TWO ( ch_bcffiltertwo_in )
+
+        BCF_FILTER_TWO.out.vcf.join(BCF_FILTER_TWO.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .map { _meta, vcf, tbi -> return [vcf, tbi] }
+            .set { ch_vcf_idx }
+
+        ch_case_info
+            .combine(ch_vcf_idx)
+            .groupTuple()
+            .branch{ _meta, vcfs, _idx ->                                                                                                    // branch the channel into multiple channels (single, multiple) depending on size of list
+                single: vcfs.size() == 1
+                multiple: vcfs.size() > 1
+            }
+            .set{ ch_vcf_idx_merge_in }
+
+        BCFTOOLS_MERGE(
+            ch_vcf_idx_merge_in.multiple.map { meta, vcf, idx ->  return [meta, vcf, idx, []] },
+            ch_genome_fasta.join(ch_genome_fai, failOnMismatch:true, failOnDuplicate:true).collect()
+            )
+
+        ch_split_multi_in = BCFTOOLS_MERGE.out.vcf
+                    .map{meta, bcf ->
+                        return [meta, bcf, []]}
+
+        ch_vcf_idx_case =  ch_vcf_idx_merge_in.single.mix(ch_split_multi_in)
+
+        if (!val_skip_split_multiallelics) {
+            SPLIT_MULTIALLELICS_SEN(ch_vcf_idx_case, ch_genome_fasta)
+            ch_remove_dup_in = SPLIT_MULTIALLELICS_SEN.out.vcf
+                                .map{meta, vcf ->
+                                        return [meta, vcf, []]}
+        } else {
+            ch_remove_dup_in = ch_vcf_idx_case
+                                .map{meta, vcf, _idx ->
+                                        return [meta, vcf, []]}
+        }
+
+        REMOVE_DUPLICATES_SEN(ch_remove_dup_in, ch_genome_fasta)
+
+        ch_genome_chrsizes.flatten().map{chromsizes ->
+            return [[id:'sentieon_dnascope'], chromsizes]
+            }
+            .set { ch_varcallerinfo }
+
+        ADD_VARCALLER_TO_BED (ch_varcallerinfo).gz_tbi
+            .map{_meta, bed, tbi -> return [bed, tbi]}
+            .set{ch_varcallerbed}
+
+        REMOVE_DUPLICATES_SEN.out.vcf
+            .join(REMOVE_DUPLICATES_SEN.out.tbi)
+            .combine(ch_varcallerbed)
+            .combine(ch_foundin_header)
+            .map { meta, vcf, vcf_tbi, bed, bed_tbi, hdr -> return [meta, vcf, vcf_tbi, bed, bed_tbi, [], hdr, []] }
+            .set { ch_annotate_in }
+
+        BCFTOOLS_ANNOTATE(ch_annotate_in)
+
+    emit:
+        gvcf     = SENTIEON_DNASCOPE.out.gvcf     // channel: [ val(meta), path(gvcf) ]
+        gvcf_tbi = SENTIEON_DNASCOPE.out.gvcf_tbi // channel: [ val(meta), path(gvcf_tbi) ]
+        tabix    = BCFTOOLS_ANNOTATE.out.tbi      // channel: [ val(meta), path(tbi) ]
+        vcf      = BCFTOOLS_ANNOTATE.out.vcf      // channel: [ val(meta), path(vcf) ]
+}

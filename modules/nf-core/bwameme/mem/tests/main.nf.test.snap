@@ -1,0 +1,143 @@
+{
+    "sarscov2 - [fastq1, fastq2], index, fasta, false, 0, 4": {
+        "content": [
+            "b537f2936bcb8c120127251ab44d917b",
+            "57aeef88ed701a8ebc8e2f0a381b2a6",
+            null
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-13T19:51:39.510097"
+    },
+    "sarscov2 - fastq, index, fasta, true, 2048, 4": {
+        "content": [
+            "91c0b36a7aa238cca2acbce1997d94e8",
+            "94fcf617f5b994584c4e8d4044e16b4f",
+            null
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-13T19:51:19.196468"
+    },
+    "sarscov2 - [fastq1, fastq2], index, fasta, true, 2048, ''": {
+        "content": [
+            "ffc18373a0992612ccb5df41a245947b",
+            "af8628d9df18b2d3d4f6fd47ef2bb872",
+            null
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-13T19:52:00.628046"
+    },
+    "sarscov2 - fastq, index, fasta, false, 0, 4": {
+        "content": [
+            "585cc3d6cdff0dce2e30b6e8c1542669",
+            "798439cbd7fd81cbcc5078022dc5479d",
+            null
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-13T19:50:58.198221"
+    },
+    "sarscov2 - [fastq1, fastq2], index, fasta, true, 2048, 4 - stub": {
+        "content": [
+            {
+                "0": [
+                    
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    
+                ],
+                "3": [
+                    
+                ],
+                "4": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "5": [
+                    [
+                        "BWAMEME_MEM",
+                        "bwameme",
+                        "1.0.6"
+                    ]
+                ],
+                "6": [
+                    [
+                        "BWAMEME_MEM",
+                        "samtools",
+                        "1.21"
+                    ]
+                ],
+                "bam": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "crai": [
+                    
+                ],
+                "cram": [
+                    
+                ],
+                "csi": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "sam": [
+                    
+                ],
+                "versions_bwameme": [
+                    [
+                        "BWAMEME_MEM",
+                        "bwameme",
+                        "1.0.6"
+                    ]
+                ],
+                "versions_samtools": [
+                    [
+                        "BWAMEME_MEM",
+                        "samtools",
+                        "1.21"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-13T19:52:05.913267"
+    }
+}

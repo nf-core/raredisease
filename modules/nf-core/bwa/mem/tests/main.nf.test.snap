@@ -1,0 +1,375 @@
+{
+    "Single-End": {
+        "content": [
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ],
+            {
+                "versions_bwa": [
+                    [
+                        "BWA_MEM",
+                        "bwa",
+                        "0.7.19-r1273"
+                    ]
+                ],
+                "versions_samtools": [
+                    [
+                        "BWA_MEM",
+                        "samtools",
+                        "1.22.1"
+                    ]
+                ]
+            },
+            "798439cbd7fd81cbcc5078022dc5479d"
+        ],
+        "timestamp": "2026-02-18T12:42:52.901827",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Single-End Sort": {
+        "content": [
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ],
+            {
+                "versions_bwa": [
+                    [
+                        "BWA_MEM",
+                        "bwa",
+                        "0.7.19-r1273"
+                    ]
+                ],
+                "versions_samtools": [
+                    [
+                        "BWA_MEM",
+                        "samtools",
+                        "1.22.1"
+                    ]
+                ]
+            },
+            "94fcf617f5b994584c4e8d4044e16b4f"
+        ],
+        "timestamp": "2026-02-18T12:43:01.149915",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Paired-End": {
+        "content": [
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ],
+            {
+                "versions_bwa": [
+                    [
+                        "BWA_MEM",
+                        "bwa",
+                        "0.7.19-r1273"
+                    ]
+                ],
+                "versions_samtools": [
+                    [
+                        "BWA_MEM",
+                        "samtools",
+                        "1.22.1"
+                    ]
+                ]
+            },
+            "57aeef88ed701a8ebc8e2f0a381b2a6"
+        ],
+        "timestamp": "2026-02-18T12:43:09.528042",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Paired-End Sort": {
+        "content": [
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ],
+            {
+                "versions_bwa": [
+                    [
+                        "BWA_MEM",
+                        "bwa",
+                        "0.7.19-r1273"
+                    ]
+                ],
+                "versions_samtools": [
+                    [
+                        "BWA_MEM",
+                        "samtools",
+                        "1.22.1"
+                    ]
+                ]
+            },
+            "af8628d9df18b2d3d4f6fd47ef2bb872"
+        ],
+        "timestamp": "2026-02-18T12:43:17.876121",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Single-end - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.crai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "4": [
+                    [
+                        "BWA_MEM",
+                        "bwa",
+                        "0.7.19-r1273"
+                    ]
+                ],
+                "5": [
+                    [
+                        "BWA_MEM",
+                        "samtools",
+                        "1.22.1"
+                    ]
+                ],
+                "bam": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "crai": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.crai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "cram": [
+                    
+                ],
+                "csi": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions_bwa": [
+                    [
+                        "BWA_MEM",
+                        "bwa",
+                        "0.7.19-r1273"
+                    ]
+                ],
+                "versions_samtools": [
+                    [
+                        "BWA_MEM",
+                        "samtools",
+                        "1.22.1"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-02-18T12:43:33.853248",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Paired-End - no fasta": {
+        "content": [
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ],
+            {
+                "versions_bwa": [
+                    [
+                        "BWA_MEM",
+                        "bwa",
+                        "0.7.19-r1273"
+                    ]
+                ],
+                "versions_samtools": [
+                    [
+                        "BWA_MEM",
+                        "samtools",
+                        "1.22.1"
+                    ]
+                ]
+            },
+            "57aeef88ed701a8ebc8e2f0a381b2a6"
+        ],
+        "timestamp": "2026-02-18T12:43:26.121474",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "Paired-end - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.crai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "4": [
+                    [
+                        "BWA_MEM",
+                        "bwa",
+                        "0.7.19-r1273"
+                    ]
+                ],
+                "5": [
+                    [
+                        "BWA_MEM",
+                        "samtools",
+                        "1.22.1"
+                    ]
+                ],
+                "bam": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "crai": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.crai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "cram": [
+                    
+                ],
+                "csi": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions_bwa": [
+                    [
+                        "BWA_MEM",
+                        "bwa",
+                        "0.7.19-r1273"
+                    ]
+                ],
+                "versions_samtools": [
+                    [
+                        "BWA_MEM",
+                        "samtools",
+                        "1.22.1"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-02-18T12:43:42.119907",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

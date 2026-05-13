@@ -1,0 +1,79 @@
+nextflow_workflow {
+
+    name "Test Workflow ALIGN_SENTIEON"
+    script "subworkflows/local/align_sentieon/main.nf"
+    workflow "ALIGN_SENTIEON"
+
+    tag "subworkflows"
+    tag "align_sentieon"
+
+    tag "sentieon/bwamem"
+    tag "sentieon/datametrics"
+    tag "sentieon/dedup"
+    tag "sentieon/readwriter"
+    tag "samtools/view"
+
+    config "./nextflow.config"
+
+    test("align sentieon") {
+
+        setup {
+            run("SENTIEON_BWAINDEX") {
+                script "modules/nf-core/sentieon/bwaindex/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'sarscov2'],
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
+        when {
+            params {
+                aligner = "sentieon"
+                sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                save_noalt_mapped_as_cram = false
+                save_all_mapped_as_cram   = true
+            }
+            workflow {
+                """
+                input[0] = SENTIEON_BWAINDEX.out.index
+                input[1] = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
+                input[2] = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
+                input[3] = channel.of([
+                    [ id:'test', sample:'test', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test'"  ], // meta map
+                    [
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
+                    ]
+                ])
+                input[4] = false
+                input[5] = "illumina"
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(
+                    workflow.out.marked_bam,
+                    workflow.out.marked_bai,
+                    workflow.out.aln_metrics,
+                    workflow.out.gc_metrics,
+                    workflow.out.gc_summary,
+                    workflow.out.is_metrics,
+                    workflow.out.mq_metrics,
+                    workflow.out.qd_metrics,
+                    workflow.out.publish.flatten()
+                        .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                        .collect { new File(it).name }
+                        .sort(),
+                ).match()
+        }
+
+    }
+
+}
