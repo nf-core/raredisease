@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Parameters `manta_call_regions`, `ml_prob_threshold`, `sv_freq_filter_expression`, `filter_expansionhunter_htt`, `filter_sv_to_manta`, `skip_vep_sv`, and `sv_size_threshold` to expose optional filtering and calling controls as pipeline parameters [#](https://github.com/nf-core/raredisease/pull/)
 - Interval parameter in the default retroseq call [#717](https://github.com/nf-core/raredisease/pull/717)
 - Tests for call_repeat_expansions and qc_bam subworkflows [#713](https://github.com/nf-core/raredisease/pull/713)
 - Feature to subsample mitochondrial alignments based on number of reads [#748](https://github.com/nf-core/raredisease/pull/748)
@@ -51,6 +52,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parameter `run_vcfanno_db_sanity_check` to check vcfanno database files for zero records and remove the corresponding annotation blocks from the TOML config before running vcfanno [#821](https://github.com/nf-core/raredisease/pull/821)
 - Added `--skip_split_multiallelics` parameter to allow users to skip the `bcftools norm --multiallelics -both` step in SNV calling (DeepVariant and Sentieon), which can cause indel quality degradation in single-interval runs [#823](https://github.com/nf-core/raredisease/pull/823)
 - Extended vcfanno database sanity check to include extra vcfanno resources (`vcfanno_extra`) alongside the main resources, and moved the check upstream to `raredisease.nf` so it covers both genome and mitochondrial SNV annotation subworkflows [#834](https://github.com/nf-core/raredisease/pull/834)
+
+### `Fixed`
+
+- Remove `imNotification` import and call from `utils_nfcore_raredisease_pipeline` after it was removed in the updated `utils_nfcore_pipeline` subworkflow [#](https://github.com/nf-core/raredisease/pull/)
+- Use conditional output prefix for `BCFTOOLS_DECOMPRESS_MERGE` in `call_repeat_expansions` so that the file is named `<case_id>_repeat_expansion.vcf` by default and `<case_id>_filtered_htt_exphunter.vcf` only when `--filter_expansionhunter_htt` is set [#](https://github.com/nf-core/raredisease/pull/)
 
 ### `Changed`
 

@@ -3,6 +3,7 @@
 //
 
 include { BCFTOOLS_VIEW                   } from '../../../modules/nf-core/bcftools/view/main'
+include { BCFTOOLS_VIEW as BCFTOOLS_FILTER_SV  } from '../../../modules/nf-core/bcftools/view/main'
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_SV } from '../../../modules/nf-core/ensemblvep/vep/main'
 include { PICARD_SORTVCF                  } from '../../../modules/nf-core/picard/sortvcf/main'
 include { SVDB_QUERY as SVDB_QUERY_BEDPE  } from '../../../modules/nf-core/svdb/query/main'
@@ -72,34 +73,55 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             ch_vcf      = SVDB_QUERY_BEDPE.out.vcf
         }
 
-        PICARD_SORTVCF(ch_vcf, ch_genome_fasta, ch_genome_dictionary)
+        // Optionally filter SVs by population frequency.
+        // Filter expression set via params.sv_freq_filter_expression (bcftools -e syntax).
+        // SVLEN filter is applied earlier, Manta-specifically, in CALL_SV_MANTA:BCFTOOLS_VIEW_MANTA.
+        if (params.sv_freq_filter_expression) {
+            BCFTOOLS_FILTER_SV(
+                ch_vcf.map { meta, vcf -> [meta, vcf, []] },
+                [], [], []
+            )
+            ch_vcf = BCFTOOLS_FILTER_SV.out.vcf
+        }
 
-        PICARD_SORTVCF.out.vcf
-            .map { meta, vcf -> return [meta,vcf,[]] }
-            .set { ch_sortvcf }
+        // Optionally skip VEP annotation (set params.skip_vep_sv = true to enable).
+        // SVDB_QUERY still runs; only PICARD_SORTVCF, BCFTOOLS_VIEW and ENSEMBLVEP_SV are skipped.
+        if (!params.skip_vep_sv) {
+            PICARD_SORTVCF(ch_vcf, ch_genome_fasta, ch_genome_dictionary)
 
-        BCFTOOLS_VIEW(ch_sortvcf, [], [], [])
-            .vcf
-            .map { meta, vcf -> return [meta, vcf, []]}
-            .set { ch_vep_in }
+            PICARD_SORTVCF.out.vcf
+                .map { meta, vcf -> return [meta,vcf,[]] }
+                .set { ch_sortvcf }
 
-        ENSEMBLVEP_SV(
-            ch_vep_in,
-            val_genome,
-            "homo_sapiens",
-            val_vep_cache_version,
-            ch_vep_cache,
-            ch_genome_fasta,
-            ch_vep_extra_files
-        )
+            BCFTOOLS_VIEW(ch_sortvcf, [], [], [])
+                .vcf
+                .map { meta, vcf -> return [meta, vcf, []]}
+                .set { ch_vep_in }
 
-        ch_publish = ENSEMBLVEP_SV.out.vcf
-            .mix(ENSEMBLVEP_SV.out.tbi)
-            .mix(ENSEMBLVEP_SV.out.report.map{ meta, _process, _vep, html -> return [meta, html] })
-            .map { meta, value -> ['annotate_sv/', [meta, value]] }
+            ENSEMBLVEP_SV(
+                ch_vep_in,
+                val_genome,
+                "homo_sapiens",
+                val_vep_cache_version,
+                ch_vep_cache,
+                ch_genome_fasta,
+                ch_vep_extra_files
+            )
 
+            ch_vcf_ann = ENSEMBLVEP_SV.out.vcf
+            ch_tbi_ann = ENSEMBLVEP_SV.out.tbi
+            ch_publish = ENSEMBLVEP_SV.out.vcf
+                .mix(ENSEMBLVEP_SV.out.tbi)
+                .mix(ENSEMBLVEP_SV.out.report.map{ meta, _process, _vep, html -> return [meta, html] })
+                .map { meta, value -> ['annotate_sv/', [meta, value]] }
+        } else {
+            ch_vcf_ann = ch_vcf
+            ch_tbi_ann = Channel.empty()
+            ch_publish = ch_vcf
+                .map { meta, vcf -> ['annotate_sv/', [meta, vcf]] }
+        }
     emit:
-        publish  = ch_publish            // channel: [ val(destination), val(value) ]
-        tbi      = ENSEMBLVEP_SV.out.tbi // channel: [ val(meta), path(tbi) ]
-        vcf_ann  = ENSEMBLVEP_SV.out.vcf // channel: [ val(meta), path(vcf) ]
+        publish  = ch_publish  // channel: [ val(destination), val(value) ]
+        tbi      = ch_tbi_ann  // channel: [ val(meta), path(tbi) ]
+        vcf_ann  = ch_vcf_ann  // channel: [ val(meta), path(vcf) ]
 }

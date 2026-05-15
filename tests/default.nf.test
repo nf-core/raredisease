@@ -31,4 +31,100 @@ nextflow_pipeline {
             )
         }
     }
+
+    test("-profile test -- filter_expansionhunter_htt") {
+
+        options "-stub"
+
+        when {
+            params {
+                outdir                     = "$outputDir"
+                skip_tools                 = "germlinecnvcaller,gens"
+                filter_expansionhunter_htt = true
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success }
+            )
+        }
+    }
+
+    test("-profile test -- filter_sv_to_manta") {
+
+        options "-stub"
+
+        when {
+            params {
+                outdir             = "$outputDir"
+                skip_tools         = "germlinecnvcaller,gens"
+                filter_sv_to_manta = true
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success }
+            )
+        }
+    }
+
+    test("-profile test -- skip_vep_sv") {
+
+        options "-stub"
+
+        when {
+            params {
+                outdir      = "$outputDir"
+                skip_tools  = "germlinecnvcaller,gens"
+                skip_vep_sv = true
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success }
+            )
+        }
+    }
+
+    test("-profile test -- sv_size_threshold") {
+
+        options "-stub"
+
+        when {
+            params {
+                outdir            = "$outputDir"
+                skip_tools        = "germlinecnvcaller,gens"
+                sv_size_threshold = 1000000
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success }
+            )
+        }
+    }
+
+    test("-profile test -- sv_freq_filter_expression") {
+
+        options "-stub"
+
+        when {
+            params {
+                outdir                    = "$outputDir"
+                skip_tools                = "germlinecnvcaller,gens"
+                sv_freq_filter_expression = "INFO/SWEFRQ >= 0.02"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success }
+            )
+        }
+    }
+
 }

@@ -238,14 +238,23 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 3. Repeat expansions
 
-| Mandatory                   | Optional |
-| --------------------------- | -------- |
-| variant_catalog<sup>1</sup> |          |
+| Mandatory                   | Optional                             |
+| --------------------------- | ------------------------------------ |
+| variant_catalog<sup>1</sup> | filter_expansionhunter_htt<sup>2</sup> |
 
-<sup>1</sup> We reccomend using the catalogs found [here](https://github.com/Clinical-Genomics/reference-files/tree/master/rare-disease/disease_loci/ExpansionHunter-v5.0.0). These catalogs have been extended from the illumina ones to include information on pathogenicity, which is neccesarry for the workflow.
+<sup>1</sup> We reccomend using the catalogs found [here](https://github.com/Clinical-Genomics/reference-files/tree/master/rare-disease/disease_loci/ExpansionHunter-v5.0.0). These catalogs have been extended from the illumina ones to include information on pathogenicity, which is neccesarry for the workflow.<br />
+<sup>2</sup> Set to `true` to remove HTT (Huntington's disease) records from ExpansionHunter output before downstream processing. Default is `false`.
 
 ##### 4. Variant calling - SNV
 
+| Mandatory                  | Optional                              |
+| -------------------------- | ------------------------------------- |
+| variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>               |
+| ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup>           |
+| analysis_type<sup>3</sup>  | call_interval<sup>2</sup>             |
+|                            | known_dbsnp_tbi<sup>2</sup>           |
+|                            | par_bed<sup>4</sup>                   |
+|                            | ml_prob_threshold<sup>2</sup>         |
 | Mandatory                  | Optional                             |
 | -------------------------- | ------------------------------------ |
 | variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>              |
@@ -263,10 +272,17 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 5. Variant calling - Structural variants
 
-| Mandatory | Optional   |
-| --------- | ---------- |
-|           | target_bed |
-|           | bwa        |
+| Mandatory | Optional                          |
+| --------- | --------------------------------- |
+|           | target_bed                        |
+|           | bwa                               |
+|           | manta_call_regions<sup>1</sup>    |
+|           | sv_size_threshold<sup>2</sup>     |
+|           | filter_sv_to_manta<sup>3</sup>    |
+
+<sup>1</sup> BED.gz file (with `.tbi` index) restricting Manta SV calling to specific regions. Useful for WES, targeted panels, or to exclude decoy and unplaced sequences.<br />
+<sup>2</sup> Filter Manta SVs larger than this value (in bp) before SVDB merge. For example, `--sv_size_threshold 1000000` removes SVs larger than 1 Mb. Default is `null` (no filter).<br />
+<sup>3</sup> Set to `true` to include only Manta variants in the SVDB merge step, excluding TIDDIT. Default is `false`.<br />
 
 ##### 6. Copy number variant calling
 
@@ -317,17 +333,19 @@ We use CADD only to annotate small indels. To annotate SNVs with precomputed CAD
 
 ##### 8. SV annotation & Ranking
 
-| Mandatory                                      | Optional                          |
-| ---------------------------------------------- | --------------------------------- |
-| genome                                         | reduced_penetrance                |
-| svdb_query_dbs/svdb_query_bedpedbs<sup>1</sup> |                                   |
-| vep_cache_version                              | vep_filters/vep_filters_scout_fmt |
-| vep_cache                                      | vep_plugin_files                  |
-| score_config_sv                                |                                   |
-| variant_consequences_sv<sup>2</sup>            |                                   |
+| Mandatory                                      | Optional                              |
+| ---------------------------------------------- | ------------------------------------- |
+| genome                                         | reduced_penetrance                    |
+| svdb_query_dbs/svdb_query_bedpedbs<sup>1</sup> | vep_filters/vep_filters_scout_fmt     |
+| vep_cache_version                              | vep_plugin_files                      |
+| vep_cache                                      | sv_freq_filter_expression<sup>3</sup> |
+| score_config_sv                                | skip_vep_sv<sup>4</sup>               |
+| variant_consequences_sv<sup>2</sup>            |                                       |
 
-<sup>1</sup> A CSV file that describes the databases (VCFs or BEDPEs) used by SVDB for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
-<sup>2</sup> File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic SVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/variant_consequences_v2.txt). You can learn more about these terms [here](https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html).
+<sup>1</sup> A CSV file that describes the databases (VCFs or BEDPEs) used by SVDB for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).<br />
+<sup>2</sup> File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic SVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/variant_consequences_v2.txt). You can learn more about these terms [here](https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html).<br />
+<sup>3</sup> A bcftools `-e` expression to filter SVs by population frequency after SVDB query, e.g. `'INFO/SWEFRQ >= 0.02'`. Supports any INFO field and multiple conditions. Default is `null` (no filter).<br />
+<sup>4</sup> Set to `true` to skip VEP annotation of structural variants. SVDB query and frequency filtering still run. Default is `false`.<br />
 
 ##### 9. Mitochondrial annotation
 
