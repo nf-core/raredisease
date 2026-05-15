@@ -2,15 +2,15 @@
 // Map to reference
 //
 
-include { FASTP                      } from '../../../modules/nf-core/fastp/main'
-include { ALIGN_BWA_BWAMEM2_BWAMEME  } from '../align_bwa_bwamem2_bwameme'
-include { ALIGN_SENTIEON             } from '../align_sentieon'
-include { SAMTOOLS_VIEW as CONVERTTOCRAM_ALTFILTERED  } from '../../../modules/nf-core/samtools/view/main'
-include { SAMTOOLS_VIEW as CONVERTTOCRAM_UNFILTERED   } from '../../../modules/nf-core/samtools/view/main'
-include { SAMTOOLS_VIEW as SAMTOOLS_VIEW_EXCLUDE_ALT  } from '../../../modules/nf-core/samtools/view/main'
-include { ALIGN_MT                   } from '../align_MT'
-include { ALIGN_MT as ALIGN_MT_SHIFT } from '../align_MT'
-include { CONVERT_MT_BAM_TO_FASTQ    } from '../convert_mt_bam_to_fastq'
+include { ALIGN_BWA_BWAMEM2_BWAMEME                  } from '../align_bwa_bwamem2_bwameme'
+include { ALIGN_MT                                   } from '../align_MT'
+include { ALIGN_MT as ALIGN_MT_SHIFT                 } from '../align_MT'
+include { ALIGN_SENTIEON                             } from '../align_sentieon'
+include { CONVERT_MT_BAM_TO_FASTQ                    } from '../convert_mt_bam_to_fastq'
+include { FASTP                                      } from '../../../modules/nf-core/fastp/main'
+include { SAMTOOLS_VIEW as CONVERTTOCRAM_ALTFILTERED } from '../../../modules/nf-core/samtools/view/main'
+include { SAMTOOLS_VIEW as CONVERTTOCRAM_UNFILTERED  } from '../../../modules/nf-core/samtools/view/main'
+include { SAMTOOLS_VIEW as SAMTOOLS_VIEW_EXCLUDE_ALT } from '../../../modules/nf-core/samtools/view/main'
 
 workflow ALIGN {
     take:
@@ -76,21 +76,20 @@ workflow ALIGN {
         //
         // If input is bam
         //
-        ch_alignments.map { meta, files ->
-                    def new_id   = meta.sample
-                    def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
-                    return [new_meta, files].flatten()
-                }
-                .map { meta, bam, _bai -> [meta, bam] }
-                .set{ch_input_bam}
+        ch_alignments
+            .map { meta, files ->
+                def new_id   = meta.sample
+                def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
+                return [new_meta, files].flatten()
+            }
+            .multiMap { meta, bam, bai ->
+                bam: [meta, bam]
+                bai: [meta, bai]
+            }
+            .set { ch_input_aligned }
 
-        ch_alignments.map { meta, files ->
-                    def new_id   = meta.sample
-                    def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
-                    return [new_meta, files].flatten()
-                }
-                .map { meta, _bam, bai -> [meta, bai] }
-                .set{ch_input_bai}
+        ch_input_bam = ch_input_aligned.bam
+        ch_input_bai = ch_input_aligned.bai
 
         if (val_aligner.matches("bwamem2|bwa|bwameme")) {
             ALIGN_BWA_BWAMEM2_BWAMEME (

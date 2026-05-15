@@ -486,7 +486,7 @@
                     "vcfanno": "0.3.7"
                 },
                 "Workflow": {
-                    "nf-core/raredisease": "v2.7.0dev"
+                    "nf-core/raredisease": "v3.1.0dev"
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
@@ -675,6 +675,8 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
                 "call_sv/earlycasualcaiman_mitochondria_deletions.txt",
+                "call_sv/hugelymodelbat.saltshaker.png",
+                "call_sv/hugelymodelbat.saltshaker_classify.html",
                 "call_sv/hugelymodelbat_mitochondria_deletions.txt",
                 "call_sv/justhusky_saltshaker.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz",
@@ -925,7 +927,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-04-28T08:08:53.177897845",
+        "timestamp": "2026-05-13T17:08:05.423400617",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

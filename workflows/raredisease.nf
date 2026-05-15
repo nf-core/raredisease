@@ -34,6 +34,7 @@ include { STRANGER                                          } from '../modules/n
 
 include { RENAME_ALIGN_FILES as RENAME_BAM } from '../modules/local/rename_align_files'
 include { RENAME_ALIGN_FILES as RENAME_BAI } from '../modules/local/rename_align_files'
+include { SANITY_CHECK_VCFANNO_DATABASES   } from '../modules/local/sanity_check_vcfanno_databases/main'
 
 //
 // SUBWORKFLOWS
@@ -441,6 +442,17 @@ workflow RAREDISEASE {
         )
         ch_call_snv_publish = CALL_SNV.out.publish
 
+        // Removes vcfanno resource with empty records to keep vcfanno from crashing on those files
+        ch_vcfanno_toml_final = ch_vcfanno_toml
+        if (val_run_vcfanno_db_sanity_check && (!skip_snv_annotation || (!skip_mt_annotation && (val_run_mt_for_wes || val_analysis_type.matches("wgs|mito"))))) {
+            ch_vcfanno_resources
+                .combine(ch_vcfanno_extra)
+                .map { files -> files.flatten() }
+                .set { ch_all_vcfanno_dbs }
+            SANITY_CHECK_VCFANNO_DATABASES (ch_vcfanno_toml, ch_all_vcfanno_dbs)
+            ch_vcfanno_toml_final = SANITY_CHECK_VCFANNO_DATABASES.out.toml.collect()
+        }
+
         //
         // ANNOTATE GENOME SNVs
         //
@@ -459,13 +471,12 @@ workflow RAREDISEASE {
                 ch_vcfanno_extra,
                 ch_vcfanno_lua,
                 ch_vcfanno_resources,
-                ch_vcfanno_toml,
+                ch_vcfanno_toml_final,
                 ch_vep_cache,
                 ch_vep_extra_files,
                 val_analysis_type,
                 val_cadd_resources,
                 val_genome,
-                val_run_vcfanno_db_sanity_check,
                 val_vep_cache_version
             ).set { ch_snv_annotate }
             ch_annotate_genome_snvs_publish = ANNOTATE_GENOME_SNVS.out.publish
@@ -531,7 +542,7 @@ workflow RAREDISEASE {
                 ch_vcfanno_extra,
                 ch_vcfanno_lua,
                 ch_vcfanno_resources,
-                ch_vcfanno_toml,
+                ch_vcfanno_toml_final,
                 ch_vep_cache,
                 ch_vep_extra_files,
                 val_cadd_resources,

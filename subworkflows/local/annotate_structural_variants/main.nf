@@ -2,12 +2,12 @@
 // A subworkflow to annotate structural variants.
 //
 
-include { SVDB_QUERY as SVDB_QUERY_DB          } from '../../../modules/nf-core/svdb/query/main'
-include { SVDB_QUERY as SVDB_QUERY_BEDPE       } from '../../../modules/nf-core/svdb/query/main'
-include { PICARD_SORTVCF                       } from '../../../modules/nf-core/picard/sortvcf/main'
-include { BCFTOOLS_VIEW                        } from '../../../modules/nf-core/bcftools/view/main'
+include { BCFTOOLS_VIEW                   } from '../../../modules/nf-core/bcftools/view/main'
 include { BCFTOOLS_VIEW as BCFTOOLS_FILTER_SV  } from '../../../modules/nf-core/bcftools/view/main'
-include { ENSEMBLVEP_VEP as ENSEMBLVEP_SV      } from '../../../modules/nf-core/ensemblvep/vep/main'
+include { ENSEMBLVEP_VEP as ENSEMBLVEP_SV } from '../../../modules/nf-core/ensemblvep/vep/main'
+include { PICARD_SORTVCF                  } from '../../../modules/nf-core/picard/sortvcf/main'
+include { SVDB_QUERY as SVDB_QUERY_BEDPE  } from '../../../modules/nf-core/svdb/query/main'
+include { SVDB_QUERY as SVDB_QUERY_DB     } from '../../../modules/nf-core/svdb/query/main'
 
 workflow ANNOTATE_STRUCTURAL_VARIANTS {
 

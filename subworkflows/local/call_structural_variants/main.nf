@@ -2,13 +2,13 @@
 // A nested subworkflow to call structural variants.
 //
 
-include { CALL_SV_MANTA                  } from '../call_sv_manta'
-include { CALL_SV_TIDDIT                 } from '../call_sv_tiddit'
-include { CALL_SV_MT                     } from '../call_sv_MT'
-include { SVDB_MERGE                     } from '../../../modules/nf-core/svdb/merge/main'
-include { CALL_SV_GERMLINECNVCALLER      } from '../call_sv_germlinecnvcaller'
-include { CALL_SV_CNVNATOR               } from '../call_sv_cnvnator'  // disabled: container broken (assert.h not found)
-include { TABIX_TABIX                    } from '../../../modules/nf-core/tabix/tabix/main'
+include { CALL_SV_CNVNATOR          } from '../call_sv_cnvnator'
+include { CALL_SV_GERMLINECNVCALLER } from '../call_sv_germlinecnvcaller'
+include { CALL_SV_MANTA             } from '../call_sv_manta'
+include { CALL_SV_MT                } from '../call_sv_MT'
+include { CALL_SV_TIDDIT            } from '../call_sv_tiddit'
+include { SVDB_MERGE                } from '../../../modules/nf-core/svdb/merge/main'
+include { TABIX_TABIX               } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_STRUCTURAL_VARIANTS {
 
@@ -147,9 +147,10 @@ workflow CALL_STRUCTURAL_VARIANTS {
             ch_merged_tbi = TABIX_TABIX.out.index
 
         } else {
-            // For mito-only analysis, use mitosalt_vcf directly
-            TABIX_TABIX (ch_saltshaker_vcf)
-            ch_merged_svs = ch_saltshaker_vcf
+            // For mito-only analysis, use saltshaker_vcf with meta directly (ch_saltshaker_vcf
+            // holds collected paths only, ch_sv_mt_out.saltshaker_vcf holds [meta, vcf] tuples)
+            TABIX_TABIX (ch_sv_mt_out.saltshaker_vcf)
+            ch_merged_svs = ch_sv_mt_out.saltshaker_vcf
             ch_merged_tbi = TABIX_TABIX.out.index
         }
 

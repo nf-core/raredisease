@@ -650,6 +650,7 @@
                     "type": "integer",
                     "fa_icon": "fas fa-filter",
                     "description": "Filter Manta SVs larger than this value in bp before merge (e.g. 1000000). Null disables the filter."
+                    "pattern": "^((fastp|gens|germlinecnvcaller|peddy|smncopynumbercaller|vcf2cytosure|fastqc|ngsbits|mitosalt)?,?)*(?<!,)$"
                 }
             }
         },

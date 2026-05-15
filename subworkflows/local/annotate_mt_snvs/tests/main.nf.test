@@ -22,6 +22,9 @@ nextflow_workflow {
         options "-stub"
 
         when {
+            params {
+                homoplasmy_af_threshold = 0.95
+            }
             workflow {
                 """
                 input[0]  = channel.of([[id:'resources'], file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/cadd_to_vcf_header_-1.0-.txt', checkIfExists: true)]).collect()
