@@ -442,6 +442,7 @@ workflow RAREDISEASE {
         )
         ch_call_snv_publish = CALL_SNV.out.publish
 
+        // Removes vcfanno resource with empty records to keep vcfanno from crashing on those files
         ch_vcfanno_toml_final = ch_vcfanno_toml
         if (val_run_vcfanno_db_sanity_check && (!skip_snv_annotation || (!skip_mt_annotation && (val_run_mt_for_wes || val_analysis_type.matches("wgs|mito"))))) {
             ch_vcfanno_resources
@@ -449,7 +450,7 @@ workflow RAREDISEASE {
                 .map { files -> files.flatten() }
                 .set { ch_all_vcfanno_dbs }
             SANITY_CHECK_VCFANNO_DATABASES (ch_vcfanno_toml, ch_all_vcfanno_dbs)
-            ch_vcfanno_toml_final = SANITY_CHECK_VCFANNO_DATABASES.out.toml
+            ch_vcfanno_toml_final = SANITY_CHECK_VCFANNO_DATABASES.out.toml.collect()
         }
 
         //

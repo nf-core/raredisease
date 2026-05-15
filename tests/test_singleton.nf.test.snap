@@ -471,7 +471,7 @@
                     "vcfanno": "0.3.7"
                 },
                 "Workflow": {
-                    "nf-core/raredisease": "v3.0.0"
+                    "nf-core/raredisease": "v3.1.0dev"
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,

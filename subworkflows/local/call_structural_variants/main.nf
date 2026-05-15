@@ -129,7 +129,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .concat(ch_cnvnator_vcf)
                 .concat(ch_saltshaker_vcf)
                 .collect()
-                .map { vcf_list -> [vcf_list] }  //
+                .map { vcf_list -> [vcf_list] }
                 .set { ch_vcf_paths }
             ch_case_info
                 .combine(ch_vcf_paths)

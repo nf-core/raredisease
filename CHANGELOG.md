@@ -3,7 +3,25 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 3.0.0 - Mario [xxxx-xx-xx]
+## 3.1.0 - Luigi [XXXX-XX-XX]
+
+### `Added`
+
+### `Changed`
+
+### `Fixed`
+
+| Old parameter | New parameter |
+| ------------- | ------------- |
+|               |               |
+
+### Tool updates
+
+| Tool | Old version | New version |
+| ---- | ----------- | ----------- |
+|      |             |             |
+
+## 3.0.0 - Mario [2026-05-12]
 
 ### `Added`
 
@@ -79,6 +97,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed mitosalt channel handling so it runs on all samples in a trio [#826](https://github.com/nf-core/raredisease/pull/826)
 - Fixed runtime errors in `call_sv_MT` and `call_structural_variants` when MitoSAlt produces no structural variant calls [#837](https://github.com/nf-core/raredisease/pull/837)
 - Fixed vcfanno sanity check map closure to handle `ch_vcfanno_resources` emitting a list of paths [#837](https://github.com/nf-core/raredisease/pull/837)
+- Fixed `PREP_MITOSALT` msconfig output being consumed as a queue channel by converting it to a value channel with `.collect()` before passing to `MITOSALT` [#837](https://github.com/nf-core/raredisease/pull/843)
 
 ### Parameters
 
