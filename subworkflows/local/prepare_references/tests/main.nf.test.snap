@@ -17,7 +17,7 @@
                             {
                                 "id": "dbsnp_-138-"
                             },
-                            "/nf-core/test-datasets/refs/heads/raredisease/reference/dbsnp_-138-.vcf.gz"
+                            "/nf-core/test-datasets/raredisease/reference/dbsnp_-138-.vcf.gz"
                         ]
                     ]
                 ],
@@ -36,7 +36,7 @@
                     "11",
                     [
                         [
-                            "/nf-core/test-datasets/refs/heads/raredisease/reference/gnomad_reformated.tab.gz",
+                            "/nf-core/test-datasets/raredisease/reference/gnomad_reformated.tab.gz",
                             "gnomad_reformated.tab.gz.tbi:md5,854afcf42d656c3d00a39dd9b69f66f7"
                         ]
                     ]
@@ -750,7 +750,7 @@
                                 {
                                     "id": "dbsnp_-138-"
                                 },
-                                "/nf-core/test-datasets/refs/heads/raredisease/reference/dbsnp_-138-.vcf.gz"
+                                "/nf-core/test-datasets/raredisease/reference/dbsnp_-138-.vcf.gz"
                             ]
                         ],
                         [
@@ -766,7 +766,7 @@
                             "references/",
                             [
                                 [
-                                    "/nf-core/test-datasets/refs/heads/raredisease/reference/gnomad_reformated.tab.gz",
+                                    "/nf-core/test-datasets/raredisease/reference/gnomad_reformated.tab.gz",
                                     "gnomad_reformated.tab.gz.tbi:md5,854afcf42d656c3d00a39dd9b69f66f7"
                                 ]
                             ]
@@ -836,7 +836,7 @@
                                 {
                                     "id": "reference"
                                 },
-                                "/nf-core/test-datasets/refs/heads/raredisease/reference/reference.fasta"
+                                "/nf-core/test-datasets/raredisease/reference/reference.fasta"
                             ]
                         ],
                         [
@@ -1057,7 +1057,7 @@
                             {
                                 "id": "reference"
                             },
-                            "/nf-core/test-datasets/refs/heads/raredisease/reference/reference.fasta"
+                            "/nf-core/test-datasets/raredisease/reference/reference.fasta"
                         ]
                     ]
                 ],
@@ -1096,7 +1096,7 @@
                             {
                                 "id": "dbsnp_-138-"
                             },
-                            "/nf-core/test-datasets/refs/heads/raredisease/reference/dbsnp_-138-.vcf.gz"
+                            "/nf-core/test-datasets/raredisease/reference/dbsnp_-138-.vcf.gz"
                         ]
                     ]
                 ],
@@ -1188,7 +1188,7 @@
                             {
                                 "id": "reference"
                             },
-                            "/nf-core/test-datasets/refs/heads/raredisease/reference/reference.fasta"
+                            "/nf-core/test-datasets/raredisease/reference/reference.fasta"
                         ]
                     ]
                 ],
@@ -1216,7 +1216,7 @@
                     "gnomad_af_idx",
                     [
                         [
-                            "/nf-core/test-datasets/refs/heads/raredisease/reference/gnomad_reformated.tab.gz",
+                            "/nf-core/test-datasets/raredisease/reference/gnomad_reformated.tab.gz",
                             "gnomad_reformated.tab.gz.tbi:md5,854afcf42d656c3d00a39dd9b69f66f7"
                         ]
                     ]
@@ -1632,7 +1632,7 @@
                                 {
                                     "id": "dbsnp_-138-"
                                 },
-                                "/nf-core/test-datasets/refs/heads/raredisease/reference/dbsnp_-138-.vcf.gz"
+                                "/nf-core/test-datasets/raredisease/reference/dbsnp_-138-.vcf.gz"
                             ]
                         ],
                         [
@@ -1648,7 +1648,7 @@
                             "references/",
                             [
                                 [
-                                    "/nf-core/test-datasets/refs/heads/raredisease/reference/gnomad_reformated.tab.gz",
+                                    "/nf-core/test-datasets/raredisease/reference/gnomad_reformated.tab.gz",
                                     "gnomad_reformated.tab.gz.tbi:md5,854afcf42d656c3d00a39dd9b69f66f7"
                                 ]
                             ]
@@ -1718,7 +1718,7 @@
                                 {
                                     "id": "reference"
                                 },
-                                "/nf-core/test-datasets/refs/heads/raredisease/reference/reference.fasta"
+                                "/nf-core/test-datasets/raredisease/reference/reference.fasta"
                             ]
                         ],
                         [
@@ -2162,7 +2162,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-05-18T11:32:42.39661125",
+        "timestamp": "2026-05-18T13:51:28.575024127",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
