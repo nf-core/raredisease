@@ -629,6 +629,7 @@
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/.stub",
                 "multiqc/multiqc_plots",
+                "multiqc/multiqc_plots/.stub",
                 "multiqc/multiqc_report.html",
                 "ngsbits_samplegender",
                 "ngsbits_samplegender/earlycasualcaiman_ngsbits_sex.tsv",
@@ -844,7 +845,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-05-13T17:14:03.036891427",
+        "timestamp": "2026-05-18T09:13:39.46322688",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

@@ -98,8 +98,12 @@ workflow NFCORE_RAREDISEASE {
     val_mt_subsample_approach
     val_mt_subsample_rd
     val_mt_subsample_seed
+    val_multiqc_config
+    val_multiqc_logo
+    val_multiqc_methods_description
     val_multiqc_samples
     val_ngsbits_samplegender_method
+    val_outdir
     val_par_bed
     val_platform
     val_ploidy_model
@@ -211,7 +215,6 @@ workflow NFCORE_RAREDISEASE {
     ch_vep_cache                = ch_references.vep_resources
 
     // Using channelFromPath helper (val_x ? channel.fromPath(val_x).collect() : channel.value([]))
-    ch_multiqc_samples          = channelFromPath(val_multiqc_samples, true)
     ch_reduced_penetrance       = channelFromPath(val_reduced_penetrance, true)
     ch_rtg_truthvcfs            = channelFromPath(val_rtg_truthvcfs, true)
     ch_score_config_mt          = channelFromPath(val_score_config_mt, true)
@@ -418,7 +421,6 @@ workflow NFCORE_RAREDISEASE {
         ch_mtshift_fai,
         ch_mtshift_fasta,
         ch_mtshift_intervals,
-        ch_multiqc_samples,
         ch_ngsbits_method,
         ch_par_bed,
         ch_pedfile,
@@ -510,6 +512,11 @@ workflow NFCORE_RAREDISEASE {
         val_mt_subsample_approach,
         val_mt_subsample_rd,
         val_mt_subsample_seed,
+        val_multiqc_config,
+        val_multiqc_logo,
+        val_multiqc_methods_description,
+        val_multiqc_samples,
+        val_outdir,
         val_platform,
         val_run_mt_for_wes,
         val_run_rtgvcfeval,
@@ -551,6 +558,7 @@ workflow {
         params.input,
         params.help,
         params.help_full,
+        params.monochrome_logs,
         params.show_hidden
     )
     //
@@ -616,8 +624,12 @@ workflow {
         params.mt_subsample_approach,
         params.mt_subsample_rd,
         params.mt_subsample_seed,
+        params.multiqc_config,
+        params.multiqc_logo,
+        params.multiqc_methods_description,
         params.multiqc_samples,
         params.ngsbits_samplegender_method,
+        params.outdir,
         params.par_bed,
         params.platform,
         params.ploidy_model,
@@ -672,7 +684,6 @@ workflow {
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        params.hook_url,
         NFCORE_RAREDISEASE.out.multiqc_report
     )
 
