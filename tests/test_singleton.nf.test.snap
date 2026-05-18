@@ -550,6 +550,7 @@
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/.stub",
                 "multiqc/multiqc_plots",
+                "multiqc/multiqc_plots/.stub",
                 "multiqc/multiqc_report.html",
                 "ngsbits_samplegender",
                 "ngsbits_samplegender/hugelymodelbat_ngsbits_sex.tsv",
@@ -655,7 +656,7 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-05-13T17:17:41.421517958",
+        "timestamp": "2026-05-18T09:17:23.560290017",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
