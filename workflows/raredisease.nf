@@ -120,7 +120,6 @@ workflow RAREDISEASE {
     ch_mtshift_fai
     ch_mtshift_fasta
     ch_mtshift_intervals
-    ch_multiqc_samples
     ch_ngsbits_method
     ch_par_bed
     ch_pedfile
@@ -212,6 +211,11 @@ workflow RAREDISEASE {
     val_mt_subsample_approach
     val_mt_subsample_rd
     val_mt_subsample_seed
+    val_multiqc_config
+    val_multiqc_logo
+    val_multiqc_methods_description
+    val_multiqc_samples
+    val_outdir
     val_platform
     val_run_mt_for_wes
     val_run_rtgvcfeval
@@ -921,40 +925,38 @@ workflow RAREDISEASE {
             "${process}:\n${tool_versions.join('\n')}"
         }
 
-    softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+    def ch_collated_versions = softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
         .mix(topic_versions_string)
         .collectFile(
-            storeDir: "${params.outdir}/pipeline_info",
+            storeDir: "${val_outdir}/pipeline_info",
             name: 'nf_core_'  +  'raredisease_software_'  + 'mqc_'  + 'versions.yml',
             sort: true,
             newLine: true
-        ).set { ch_collated_versions }
+        )
 
     //
     // MODULE: MultiQC
     //
     ch_multiqc_config        = channel.fromPath(
         "$projectDir/assets/multiqc_config.yml", checkIfExists: true)
-    ch_multiqc_custom_config = params.multiqc_config ?
-        channel.fromPath(params.multiqc_config, checkIfExists: true) :
+    ch_multiqc_custom_config = val_multiqc_config ?
+        channel.fromPath(val_multiqc_config, checkIfExists: true) :
         channel.empty()
-    ch_multiqc_logo          = params.multiqc_logo ?
-        channel.fromPath(params.multiqc_logo, checkIfExists: true) :
+    ch_multiqc_logo          = val_multiqc_logo ?
+        channel.fromPath(val_multiqc_logo, checkIfExists: true) :
         channel.fromPath("$projectDir/docs/images/nf-core-raredisease_logo_light.png", checkIfExists: true)
-
 
     summary_params      = paramsSummaryMap(
         workflow, parameters_schema: "nextflow_schema.json")
     ch_workflow_summary = channel.value(paramsSummaryMultiqc(summary_params))
+    ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
     ch_multiqc_files = ch_multiqc_files.mix(
         ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    ch_multiqc_custom_methods_description = params.multiqc_methods_description ?
-        file(params.multiqc_methods_description, checkIfExists: true) :
+    ch_multiqc_custom_methods_description = val_multiqc_methods_description ?
+        file(val_multiqc_methods_description, checkIfExists: true) :
         file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
-    ch_methods_description                = channel.value(
+    ch_methods_description = channel.value(
         methodsDescriptionText(ch_multiqc_custom_methods_description))
-
-    ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
     ch_multiqc_files = ch_multiqc_files.mix(
         ch_methods_description.collectFile(
             name: 'methods_description_mqc.yaml',
@@ -981,21 +983,31 @@ workflow RAREDISEASE {
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.sex_check_csv.map{_meta, reports -> reports}.collect().ifEmpty([]))
     }
 
+    // config: custom config if provided, otherwise the default pipeline config
+    // logo: custom logo if provided, otherwise omitted
+    // sample_names: optional TSV for MultiQC --sample-names
     MULTIQC (
-        ch_multiqc_files.collect(),
-        ch_multiqc_config.toList(),
-        ch_multiqc_custom_config.toList(),
-        ch_multiqc_logo.toList(),
-        [],
-        ch_multiqc_samples
+        ch_multiqc_files.flatten().collect().map { files ->
+            [
+                [id: 'raredisease'],
+                files,
+                val_multiqc_config
+                    ? file(val_multiqc_config, checkIfExists: true)
+                    : file("${projectDir}/assets/multiqc_config.yml", checkIfExists: true),
+                val_multiqc_logo ? file(val_multiqc_logo, checkIfExists: true) : [],
+                [],
+                val_multiqc_samples ? file(val_multiqc_samples) : [],
+            ]
+        }
     )
     ch_multiqc_publish = MULTIQC.out.report
         .mix(MULTIQC.out.data)
         .mix(MULTIQC.out.plots)
-        .map { value -> ['multiqc/', [value]] }
+        .map { _meta, value -> ['multiqc/', value] }
 
-    emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
+    emit:
+    multiqc_report = MULTIQC.out.report.map { _meta, report -> report }.toList()
+    versions       = ch_versions
     publish        = ch_align_publish
                        .mix(ch_qc_bam_publish)
                        .mix(ch_subsample_publish)
@@ -1015,8 +1027,7 @@ workflow RAREDISEASE {
                        .mix(ch_rank_snv_publish)
                        .mix(ch_rank_mt_publish)
                        .mix(ch_rank_sv_publish)
-                       .mix(ch_variant_evaluation_publish) // channel: [ val(destination), val(value) ]
-
+                       .mix(ch_variant_evaluation_publish)
 }
 
 
