@@ -532,11 +532,19 @@ workflow NFCORE_RAREDISEASE {
         val_vep_cache_version
     )
     emit:
-    multiqc_report = RAREDISEASE.out.multiqc_report                        // channel: /path/to/multiqc_report.html
-    publish        = RAREDISEASE.out.publish
-                       .mix(ch_scatter_genome_publish)
-                       .mix(ch_pedfile_publish)
-                       .mix(ch_references.publish)                         // channel: [ val(destination), val(value) ]
+    align_fastp_out              = RAREDISEASE.out.align_fastp_out              // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
+    align_genome_marked_bam      = RAREDISEASE.out.align_genome_marked_bam      // channel: [ val(meta), path(bam) ]
+    align_genome_marked_bai      = RAREDISEASE.out.align_genome_marked_bai      // channel: [ val(meta), path(bai) ]
+    align_genome_marked_cram     = RAREDISEASE.out.align_genome_marked_cram     // channel: [ val(meta), path(cram) ]
+    align_genome_marked_crai     = RAREDISEASE.out.align_genome_marked_crai     // channel: [ val(meta), path(crai) ]
+    align_markdup_metrics        = RAREDISEASE.out.align_markdup_metrics        // channel: [ val(meta), path(metrics) ]
+    multiqc_report               = RAREDISEASE.out.multiqc_report               // channel: /path/to/multiqc_report.html
+    subsample_mt_bai             = RAREDISEASE.out.subsample_mt_bai             // channel: [ val(meta), path(bai) ]
+    subsample_mt_bam             = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
+    publish                      = RAREDISEASE.out.publish
+                                     .mix(ch_scatter_genome_publish)
+                                     .mix(ch_pedfile_publish)
+                                     .mix(ch_references.publish)               // channel: [ val(destination), val(value) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -688,10 +696,24 @@ workflow {
     )
 
     publish:
+    alignment           = NFCORE_RAREDISEASE.out.align_genome_marked_bam
+                            .mix(NFCORE_RAREDISEASE.out.align_genome_marked_bai)
+                            .mix(NFCORE_RAREDISEASE.out.align_genome_marked_cram)
+                            .mix(NFCORE_RAREDISEASE.out.align_genome_marked_crai)
+                            .mix(NFCORE_RAREDISEASE.out.align_markdup_metrics)
+                            .mix(NFCORE_RAREDISEASE.out.subsample_mt_bam)
+                            .mix(NFCORE_RAREDISEASE.out.subsample_mt_bai)
+    fastp               = NFCORE_RAREDISEASE.out.align_fastp_out
     subworkflow_results = NFCORE_RAREDISEASE.out.publish
 }
 
 output {
+    alignment {
+        path { _meta, _file -> "alignment/" }
+    }
+    fastp {
+        path { _meta, _file -> "trimming/" }
+    }
     subworkflow_results {
         path { destination, _value -> destination }
     }

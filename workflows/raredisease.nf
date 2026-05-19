@@ -233,13 +233,19 @@ workflow RAREDISEASE {
     main:
 
     ch_multiqc_files                    = channel.empty()
-    ch_align_publish                    = channel.empty()
+    ch_align_fastp_out                  = channel.empty()
+    ch_align_genome_marked_cram         = channel.empty()
+    ch_align_genome_marked_crai         = channel.empty()
+    ch_align_genome_marked_bam          = channel.empty()
+    ch_align_genome_marked_bai          = channel.empty()
+    ch_align_markdup_metrics            = channel.empty()
+    ch_subsample_mt_bam                 = channel.empty()
+    ch_subsample_mt_bai                 = channel.empty()
     ch_qc_bam_publish                   = channel.empty()
     ch_call_snv_publish                 = channel.empty()
     ch_call_sv_publish                  = channel.empty()
     ch_call_repeat_expansions_publish   = channel.empty()
     ch_call_mobile_elements_publish     = channel.empty()
-    ch_subsample_publish                = channel.empty()
     ch_annotate_genome_snvs_publish     = channel.empty()
     ch_annotate_mt_snvs_publish         = channel.empty()
     ch_annotate_sv_publish              = channel.empty()
@@ -325,7 +331,12 @@ workflow RAREDISEASE {
         val_save_noalt_mapped_as_cram
     )
     .set { ch_mapped }
-    ch_align_publish = ALIGN.out.publish
+    ch_align_fastp_out              = ALIGN.out.fastp_out
+    ch_align_genome_marked_bam      = ALIGN.out.genome_marked_bam
+    ch_align_genome_marked_bai      = ALIGN.out.genome_marked_bai
+    ch_align_genome_marked_cram     = ALIGN.out.genome_marked_cram
+    ch_align_genome_marked_crai     = ALIGN.out.genome_marked_crai
+    ch_align_markdup_metrics        = ALIGN.out.markdup_metrics
 
     if (!(skip_mt_subsample) && (val_analysis_type.equals("wgs") || val_run_mt_for_wes)) {
         if (val_mt_subsample_approach.equals("fraction")) {
@@ -334,12 +345,14 @@ workflow RAREDISEASE {
                 val_mt_subsample_rd,
                 val_mt_subsample_seed
             )
-            ch_subsample_publish = SUBSAMPLE_MT_FRAC.out.publish
+            ch_subsample_mt_bam = SUBSAMPLE_MT_FRAC.out.bam
+            ch_subsample_mt_bai = SUBSAMPLE_MT_FRAC.out.bai
         } else {
             SUBSAMPLE_MT_READS(
                 ch_mapped.mt_bam_bai,
             )
-            ch_subsample_publish = SUBSAMPLE_MT_READS.out.publish
+            ch_subsample_mt_bam = SUBSAMPLE_MT_READS.out.bam
+            ch_subsample_mt_bai = SUBSAMPLE_MT_READS.out.bai
         }
     }
 
@@ -1006,11 +1019,17 @@ workflow RAREDISEASE {
         .map { _meta, value -> ['multiqc/', value] }
 
     emit:
-    multiqc_report = MULTIQC.out.report.map { _meta, report -> report }.toList()
-    versions       = ch_versions
-    publish        = ch_align_publish
-                       .mix(ch_qc_bam_publish)
-                       .mix(ch_subsample_publish)
+    align_fastp_out              = ch_align_fastp_out              // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
+    align_genome_marked_bam      = ch_align_genome_marked_bam      // channel: [ val(meta), path(bam) ]
+    align_genome_marked_bai      = ch_align_genome_marked_bai      // channel: [ val(meta), path(bai) ]
+    align_genome_marked_cram     = ch_align_genome_marked_cram     // channel: [ val(meta), path(cram) ]
+    align_genome_marked_crai     = ch_align_genome_marked_crai     // channel: [ val(meta), path(crai) ]
+    align_markdup_metrics        = ch_align_markdup_metrics        // channel: [ val(meta), path(metrics) ]
+    multiqc_report               = MULTIQC.out.report.map { _meta, report -> report }.toList()
+    subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
+    subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
+    versions                     = ch_versions
+    publish                      = ch_qc_bam_publish
                        .mix(ch_call_snv_publish)
                        .mix(ch_call_sv_publish)
                        .mix(ch_call_repeat_expansions_publish)
