@@ -67,10 +67,9 @@ nextflow_workflow {
                     workflow.out.is_metrics,
                     workflow.out.mq_metrics,
                     workflow.out.qd_metrics,
-                    workflow.out.publish.flatten()
-                        .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                        .collect { new File(it).name }
-                        .sort(),
+                    workflow.out.dedup_metrics,
+                    workflow.out.dedup_metrics_multiqc,
+                    workflow.out.score,
                 ).match()
         }
 

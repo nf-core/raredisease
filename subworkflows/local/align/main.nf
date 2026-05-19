@@ -66,7 +66,7 @@ workflow ALIGN {
             ch_fastp_out   = FASTP.out.json
                 .mix(FASTP.out.html)
                 .mix(FASTP.out.log)
-                .mix(FASTP.out.reads)
+                .mix(FASTP.out.reads.transpose())
                 .mix(FASTP.out.reads_fail)
                 .mix(FASTP.out.reads_merged)
         }
