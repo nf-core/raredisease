@@ -1,54 +1,51 @@
 {
-    "RANK_VARIANTS - SV (process_with_sort = true), stub": {
+    "MIVMIR_GICAM-21-32863228-MivmirScore": {
         "content": [
-            {
-                "0": [
-                    [
-                        "rank_and_filter/",
-                        [
-                            {
-                                "id": "justhusky",
-                                "single_end": false
-                            },
-                            "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                        ]
-                    ]
-                ],
-                "1": [
-                    [
-                        {
-                            "id": "justhusky",
-                            "single_end": false
-                        },
-                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                    ]
-                ],
-                "publish": [
-                    [
-                        "rank_and_filter/",
-                        [
-                            {
-                                "id": "justhusky",
-                                "single_end": false
-                            },
-                            "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                        ]
-                    ]
-                ],
-                "vcf": [
-                    [
-                        {
-                            "id": "justhusky",
-                            "single_end": false
-                        },
-                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                    ]
-                ]
-            }
+            "0.00239"
         ],
-        "timestamp": "2026-03-17T13:09:47.357626106",
+        "timestamp": "2026-04-28T16:47:04.194256866",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863305-MivmirExplanation": {
+        "content": [
+            "[]"
+        ],
+        "timestamp": "2026-04-28T16:47:04.228825631",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863233-GicamScore": {
+        "content": [
+            "0.00239"
+        ],
+        "timestamp": "2026-04-28T16:47:04.207766789",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863244-MivmirExplanation": {
+        "content": [
+            "[]"
+        ],
+        "timestamp": "2026-04-28T16:47:04.213435435",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863253-MivmirScore": {
+        "content": [
+            "0.00239"
+        ],
+        "timestamp": "2026-04-28T16:47:04.218931403",
+        "meta": {
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     },
@@ -104,6 +101,189 @@
         "timestamp": "2026-03-17T13:09:21.870979671",
         "meta": {
             "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863233-MivmirScore": {
+        "content": [
+            "0.00239"
+        ],
+        "timestamp": "2026-04-28T16:47:04.202751209",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863244-MivmirScore": {
+        "content": [
+            "0.00239"
+        ],
+        "timestamp": "2026-04-28T16:47:04.210715839",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863220-GicamScore": {
+        "content": [
+            "0.00239"
+        ],
+        "timestamp": "2026-04-28T16:47:04.183010674",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863228-MivmirExplanation": {
+        "content": [
+            "[]"
+        ],
+        "timestamp": "2026-04-28T16:47:04.196990189",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863253-GicamScore": {
+        "content": [
+            "0.00239"
+        ],
+        "timestamp": "2026-04-28T16:47:04.223845885",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863253-MivmirExplanation": {
+        "content": [
+            "[]"
+        ],
+        "timestamp": "2026-04-28T16:47:04.221524987",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863305-GicamScore": {
+        "content": [
+            "0.00239"
+        ],
+        "timestamp": "2026-04-28T16:47:04.231341672",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863220-MivmirExplanation": {
+        "content": [
+            "[]"
+        ],
+        "timestamp": "2026-04-28T16:47:04.174974311",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863233-MivmirExplanation": {
+        "content": [
+            "[]"
+        ],
+        "timestamp": "2026-04-28T16:47:04.205147188",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863228-GicamScore": {
+        "content": [
+            "0.00239"
+        ],
+        "timestamp": "2026-04-28T16:47:04.19987609",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863244-GicamScore": {
+        "content": [
+            "0.00239"
+        ],
+        "timestamp": "2026-04-28T16:47:04.216546153",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "RANK_VARIANTS - SV (process_with_sort = true), stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "rank_and_filter/",
+                        [
+                            {
+                                "id": "justhusky",
+                                "single_end": false
+                            },
+                            "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "single_end": false
+                        },
+                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "publish": [
+                    [
+                        "rank_and_filter/",
+                        [
+                            {
+                                "id": "justhusky",
+                                "single_end": false
+                            },
+                            "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "single_end": false
+                        },
+                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-03-17T13:09:47.357626106",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863220-MivmirScore": {
+        "content": [
+            "0.00239"
+        ],
+        "timestamp": "2026-04-28T16:47:04.167275806",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "MIVMIR_GICAM-21-32863305-MivmirScore": {
+        "content": [
+            "0.00239"
+        ],
+        "timestamp": "2026-04-28T16:47:04.226184722",
+        "meta": {
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     }

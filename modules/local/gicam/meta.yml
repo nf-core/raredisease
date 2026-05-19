@@ -1,0 +1,64 @@
+name: gicam
+description: "Machine learning tool to improve precision for duo, trio, ... analysis"
+keywords:
+  - score
+  - ranking
+  - gicam
+tools:
+  - mivmir:
+      description: Refer to the docs/ section for more information.
+      homepage: https://github.com/clinicalgenomics/rdds
+      documentation: https://github.com/Clinical-Genomics/rdds/tree/master/src/rdds/gicam
+      doi: ""
+      licence: ["MIT"]
+      identifier: ""
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. [ id:'test', single_end:false ]
+    - input_vcf:
+        type: file
+        description: vcf file
+        pattern: "*.{vcf}"
+        ontologies: []
+output:
+  vcf:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. [ id:'test', single_end:false ]
+      - "*-predictions.vcf":
+          type: file
+          description: Scored output VCF file
+          pattern: "*.{vcf}"
+          ontologies: []
+  versions_gicam:
+    - - "${task.process}":
+          type: string
+          description: The process the versions were collected from
+      - "gicam":
+          type: string
+          description: The tool name
+      - "version":
+          type: string
+          description: Tool version
+
+topics:
+  versions:
+    - - "${task.process}":
+          type: string
+          description: The process the versions were collected from
+      - "gicam":
+          type: string
+          description: The tool name
+      - "version":
+          type: eval
+          description: Tool version
+
+authors:
+  - "@torbjorgen"
+maintainers:
+  - "@torbjorgen"
