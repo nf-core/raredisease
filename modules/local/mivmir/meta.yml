@@ -6,43 +6,7 @@ keywords:
   - mivmir
 tools:
   - mivmir:
-      description: Deep neural network regression type model trained on ClinVar pathogenic variants
-        and a Ashkenazim trio negative background.
-        Model is optimized to generalize well on Scilifelab Clinical Genomics Stockholm cohort.
-
-        It relies on the following VCF annotations/keys
-        - CSQ/PolyPhen
-        - CSQ/SIFT
-        - CSQ/CLINVAR_CLNREVSTAT
-        - CSQ/CLINVAR_CLNSIG
-        - CSQ/MaxEntScan_alt
-        - CSQ/MaxEntScan_diff
-        - CSQ/MES-SWA_acceptor_alt
-        - CSQ/MES-SWA_donor_alt
-        - CSQ/MES-SWA_donor_diff
-        - CSQ/SpliceAI_pred_DS_AL
-        - CSQ/SpliceAI_pred_DS_DG
-        - CSQ/SpliceAI_pred_DS_DL
-        - CSQ/REVEL_score
-        - CSQ/LoFtool
-        - CSQ/GERP++_RS
-        - CSQ/phastCons100way_vertebrate
-        - CSQ/phyloP100way_vertebrate
-        - CSQ/SpliceAI_pred_DS_AG
-        - most_severe_consequence
-        - CADD
-        - SWEGENAF
-        - GNOMADAF_popmax
-        - Frq (variant frequency from local database)
-
-        If any annotation is missing, it will be _silently_ interpreted as '' or 0.0 depending on data type
-        with negative effects on performance.
-
-        The tool adds two keys to the VCF
-        - MivmirScore, a score in range (0, 1) where 1.0 inferred pathogenic.
-        - MivmirExplanation, a key value array type str-float explaining the additive contribution of each annotation
-        to the final variant score. The explanations are sorted in decreasing order, the largest input feature
-        contributor is listed first.
+      description: Refer to the docs/ section for more information.
       homepage: https://github.com/clinicalgenomics/rdds
       documentation: https://github.com/Clinical-Genomics/rdds/tree/master/src/rdds/variant_rank_score
       doi: ""

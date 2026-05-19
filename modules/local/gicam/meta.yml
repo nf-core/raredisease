@@ -6,21 +6,7 @@ keywords:
   - gicam
 tools:
   - mivmir:
-      description: Model for SNV ranking in conjunction with MIVMIR.
-        This model improves precision for duo, trio, ... analysis situations by reducing MIVMIR scores for variants that's
-        not following the appropriate GENMOD genetic inheritance model.
-        Applied to MIVMIR scores as a post-processing step.
-
-        VCF key inputs to the model are
-        - MivmirScore, (0, 1)
-        - RankScoreNormalized, (0, 1) as produced by GENMOD using rank_model_genmod_gicam.ini custom scoring config
-
-        The tool adds one key to the VCF
-        - GicamScore (0, 1) where 1.0 inferred pathogenic.
-
-        !NOTE! GICAM is optimized for the GENMOD scoring config present in this directory, that
-        generates RankScoreNormalized. Changing the GENMOD scoring config will break inference
-        (unless GICAM is first retrained on the new config).
+      description: Refer to the docs/ section for more information.
       homepage: https://github.com/clinicalgenomics/rdds
       documentation: https://github.com/Clinical-Genomics/rdds/tree/master/src/rdds/gicam
       doi: ""
