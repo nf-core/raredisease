@@ -1,0 +1,28 @@
+nextflow_process {
+
+    name "Test Process GICAM_INFER"
+    script "modules/local/gicam/main.nf"
+    process "GICAM_INFER"
+
+    test("Test GICAM inference on annotated VCF") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test', single_end:false ], // meta map
+                    // VCF as annotated by rank_variants subworkflow (including mivmir and genmod custom inheritance config), prior to gicam inference call
+                    file(params.pipelines_testdata_base_path + 'testdata/justhusky_snv_gicam.vcf', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+}

@@ -1,0 +1,64 @@
+name: mivmir
+description: Machine learning tool to score SNVs for inferring pathogenicity for ranking purposes
+keywords:
+  - score
+  - ranking
+  - mivmir
+tools:
+  - mivmir:
+      description: Refer to the docs/ section for more information.
+      homepage: https://github.com/clinicalgenomics/rdds
+      documentation: https://github.com/Clinical-Genomics/rdds/tree/master/src/rdds/variant_rank_score
+      doi: ""
+      licence: ["MIT"]
+      identifier: ""
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. [ id:'test', single_end:false ]
+    - input_vcf:
+        type: file
+        description: vcf file
+        pattern: "*.{vcf}"
+        ontologies: []
+output:
+  vcf:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. [ id:'test', single_end:false ]
+      - "*-predictions.vcf":
+          type: file
+          description: Scored output VCF file
+          pattern: "*.{vcf}"
+          ontologies: []
+  versions_mivmir:
+    - - "${task.process}":
+          type: string
+          description: The process the versions were collected from
+      - "mivmir":
+          type: string
+          description: The tool name
+      - "version":
+          type: string
+          description: Tool version
+
+topics:
+  versions:
+    - - "${task.process}":
+          type: string
+          description: The process the versions were collected from
+      - "mivmir":
+          type: string
+          description: The tool name
+      - "version":
+          type: eval
+          description: Tool version
+
+authors:
+  - "@torbjorgen"
+maintainers:
+  - "@torbjorgen"

@@ -768,6 +768,19 @@
                 }
             }
         },
+        "ranking_options": {
+            "title": "Variant ranking options",
+            "type": "object",
+            "fa_icon": "fas fa-star-half-alt",
+            "description": "Options related to variant ranking.",
+            "properties": {
+                "rank_with_mivmir_gicam": {
+                    "type": "boolean",
+                    "description": "Enable ranking by MIVMIR, GICAM models",
+                    "fa_icon": "fas fa-robot"
+                }
+            }
+        },
         "mitosalt_options": {
             "title": "Mitosalt and saltshaker options",
             "type": "object",
@@ -1094,6 +1107,9 @@
         },
         {
             "$ref": "#/$defs/annotation_options"
+        },
+        {
+            "$ref": "#/$defs/ranking_options"
         },
         {
             "$ref": "#/$defs/mitosalt_options"
