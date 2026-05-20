@@ -19,7 +19,7 @@ process SALTSHAKER_TO_HTML {
         return html_content
 
     html = saltshaker_txt_to_html("${classify}")
-    with open("${classify.baseName}.html", 'w') as f:
+    with open("${classify.baseName}.saltshaker_classify.html", 'w') as f:
         f.write('<html><body>')
         f.write(f'<pre style="padding: 15px; border-radius: 5px; overflow-x: auto;">{html}</pre>')
         f.write('</body></html>')

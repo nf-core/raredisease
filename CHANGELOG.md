@@ -9,9 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
-- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for alignment and subsample-MT subworkflows [[#TODO](https://github.com/nf-core/raredisease/pull/TODO)]
+- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for alignment and subsample-MT subworkflows [#850](https://github.com/nf-core/raredisease/pull/850)
 
 ### `Fixed`
+
+- Fix intermittent `CALL_SNV_DEEPVARIANT - wgs` test failure caused by non-deterministic GLnexus quality scores by replacing `variantsMD5` with `vcf.summary` [#850](https://github.com/nf-core/raredisease/pull/850)
 
 ### Parameters
 
@@ -54,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parameters `save_all_mapped_as_cram` and `save_noalt_mapped_as_cram` to replace `save_mapped_as_cram`, allowing independent control over publishing unfiltered and alt-filtered alignment files as CRAM [#807](https://github.com/nf-core/raredisease/pull/807)
 - Parameter `run_vcfanno_db_sanity_check` to check vcfanno database files for zero records and remove the corresponding annotation blocks from the TOML config before running vcfanno [#821](https://github.com/nf-core/raredisease/pull/821)
 - Added `--skip_split_multiallelics` parameter to allow users to skip the `bcftools norm --multiallelics -both` step in SNV calling (DeepVariant and Sentieon), which can cause indel quality degradation in single-interval runs [#823](https://github.com/nf-core/raredisease/pull/823)
+- Add find/concatenate step to concatenate saltshaker classification files before creating the html report, so the final report is case-level. [#826](https://github.com/nf-core/raredisease/pull/826)
 - Extended vcfanno database sanity check to include extra vcfanno resources (`vcfanno_extra`) alongside the main resources, and moved the check upstream to `raredisease.nf` so it covers both genome and mitochondrial SNV annotation subworkflows [#834](https://github.com/nf-core/raredisease/pull/834)
 
 ### `Changed`
@@ -97,6 +100,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed CADD annotation to support chr prefix [#745](https://github.com/nf-core/raredisease/pull/745)
 - Fixed mismatch between VCF and ROH calls when analysing multiple samples [#755](https://github.com/nf-core/raredisease/pull/755)
 - Fixed pipeline to run variant calling even with bait_padding set to 0 [#757](https://github.com/nf-core/raredisease/pull/757)
+- Fixed mitosalt channel handling so it runs on all samples in a trio [#826](https://github.com/nf-core/raredisease/pull/826)
 - Fixed runtime errors in `call_sv_MT` and `call_structural_variants` when MitoSAlt produces no structural variant calls [#837](https://github.com/nf-core/raredisease/pull/837)
 - Fixed vcfanno sanity check map closure to handle `ch_vcfanno_resources` emitting a list of paths [#837](https://github.com/nf-core/raredisease/pull/837)
 - Fixed `PREP_MITOSALT` msconfig output being consumed as a queue channel by converting it to a value channel with `.collect()` before passing to `MITOSALT` [#837](https://github.com/nf-core/raredisease/pull/843)
