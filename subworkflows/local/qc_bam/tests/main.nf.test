@@ -79,7 +79,9 @@ nextflow_workflow {
                         workflow.out.global_dist
                             .collect { meta, f -> [meta, file(f).name] },
                         workflow.out.self_sm
-                            .collect { meta, f -> [meta, file(f).name] }
+                            .collect { meta, f -> [meta, file(f).name] },
+                        workflow.out.qc_bam_files
+                            .collect { meta, f -> file(f).name }.sort()
                     ).match()
                 }
             )
