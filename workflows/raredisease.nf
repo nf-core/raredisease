@@ -241,7 +241,8 @@ workflow RAREDISEASE {
     ch_align_markdup_metrics            = channel.empty()
     ch_subsample_mt_bam                 = channel.empty()
     ch_subsample_mt_bai                 = channel.empty()
-    ch_qc_bam_publish                   = channel.empty()
+    ch_qc_bam_files                     = channel.empty()
+    ch_qc_sex_check                     = channel.empty()
     ch_call_snv_publish                 = channel.empty()
     ch_call_sv_publish                  = channel.empty()
     ch_call_repeat_expansions_publish   = channel.empty()
@@ -378,7 +379,8 @@ workflow RAREDISEASE {
         val_target_bed,
         skip_ngsbits
     )
-    ch_qc_bam_publish = QC_BAM.out.publish
+    ch_qc_bam_files = QC_BAM.out.qc_bam_files
+    ch_qc_sex_check = QC_BAM.out.sex_check
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1026,11 +1028,12 @@ workflow RAREDISEASE {
     align_genome_marked_crai     = ch_align_genome_marked_crai     // channel: [ val(meta), path(crai) ]
     align_markdup_metrics        = ch_align_markdup_metrics        // channel: [ val(meta), path(metrics) ]
     multiqc_report               = MULTIQC.out.report.map { _meta, report -> report }.toList()
+    qc_bam_files                 = ch_qc_bam_files                 // channel: [ val(meta), path(file) ]
+    qc_sex_check                 = ch_qc_sex_check                 // channel: [ val(meta), path(tsv) ]
     subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     versions                     = ch_versions
-    publish                      = ch_qc_bam_publish
-                       .mix(ch_call_snv_publish)
+    publish                      = ch_call_snv_publish
                        .mix(ch_call_sv_publish)
                        .mix(ch_call_repeat_expansions_publish)
                        .mix(ch_call_mobile_elements_publish)

@@ -62,33 +62,24 @@ nextflow_workflow {
             assertAll (
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.publish.flatten()
-                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                            .collect { new File(it).name }
-                            .sort(),
                         workflow.out.multiple_metrics
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
+                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file(it).name }.sort() : file(files).name] },
                         workflow.out.hs_metrics
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
+                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file(it).name }.sort() : file(files).name] },
                         workflow.out.d4
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
+                            .collect { meta, f -> [meta, file(f).name] },
                         workflow.out.cov
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
-                        workflow.out.tiddit_wig,
-                        workflow.out.bigwig,
+                            .collect { meta, f -> [meta, file(f).name] },
+                        workflow.out.cov_y
+                            .collect { meta, f -> [meta, file(f).name] },
+                        workflow.out.tiddit_wig
+                            .collect { meta, f -> [meta, file(f).name] },
+                        workflow.out.bigwig
+                            .collect { meta, f -> [meta, file(f).name] },
                         workflow.out.global_dist
+                            .collect { meta, f -> [meta, file(f).name] },
+                        workflow.out.self_sm
+                            .collect { meta, f -> [meta, file(f).name] }
                     ).match()
                 }
             )
@@ -135,35 +126,25 @@ nextflow_workflow {
         then {
             assertAll (
                 { assert workflow.success },
-                { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.publish.flatten()
-                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                            .collect { new File(it).name }
-                            .sort(),
                         workflow.out.multiple_metrics
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
+                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file(it).name }.sort() : file(files).name] },
                         workflow.out.hs_metrics
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
+                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file(it).name }.sort() : file(files).name] },
                         workflow.out.d4
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
+                            .collect { meta, f -> [meta, file(f).name] },
                         workflow.out.cov
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
-                        workflow.out.tiddit_wig,
-                        workflow.out.bigwig,
+                            .collect { meta, f -> [meta, file(f).name] },
+                        workflow.out.cov_y
+                            .collect { meta, f -> [meta, file(f).name] },
+                        workflow.out.tiddit_wig
+                            .collect { meta, f -> [meta, file(f).name] },
+                        workflow.out.bigwig
+                            .collect { meta, f -> [meta, file(f).name] },
                         workflow.out.global_dist
+                            .collect { meta, f -> [meta, file(f).name] },
+                        workflow.out.self_sm
+                            .collect { meta, f -> [meta, file(f).name] }
                     ).match()
                 }
             )

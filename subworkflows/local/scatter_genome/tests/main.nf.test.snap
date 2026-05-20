@@ -20,15 +20,12 @@
                 ],
                 "2": [
                     [
-                        "processed_references/",
+                        {
+                            "id": "genome"
+                        },
                         [
-                            {
-                                "id": "genome"
-                            },
-                            [
-                                "0000-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e",
-                                "0001-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
+                            "0000-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "0001-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -40,20 +37,6 @@
                         "genome.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "publish": [
-                    [
-                        "processed_references/",
-                        [
-                            {
-                                "id": "genome"
-                            },
-                            [
-                                "0000-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e",
-                                "0001-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
-                        ]
-                    ]
-                ],
                 "split_intervals": [
                     [
                         "0000-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -61,12 +44,23 @@
                     [
                         "0001-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
+                ],
+                "split_intervals_publish": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        [
+                            "0000-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "0001-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
                 ]
             }
         ],
-        "timestamp": "2026-03-30T10:55:18.112519",
+        "timestamp": "2026-05-20T17:15:58.636121358",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     },
@@ -145,33 +139,30 @@
                 ],
                 "2": [
                     [
-                        "processed_references/",
+                        {
+                            "id": "genome"
+                        },
                         [
-                            {
-                                "id": "genome"
-                            },
-                            [
-                                "0000-scattered.interval_list:md5,91c71c99e1a0777d96ed2ed35977fe68",
-                                "0001-scattered.interval_list:md5,8084a75ace330aaa6b5baedcbc408e73",
-                                "0002-scattered.interval_list:md5,61a7e1852764653287dfcca76b177646",
-                                "0003-scattered.interval_list:md5,9f817fda35d09c8d449d7d91bc57d5a2",
-                                "0004-scattered.interval_list:md5,6f023cded659d4cfc8edb96706c3b319",
-                                "0005-scattered.interval_list:md5,91c3bca4311e2cc9bf55d4ef22281dd4",
-                                "0006-scattered.interval_list:md5,8f2a2f98ac6994859350580a8161cd91",
-                                "0007-scattered.interval_list:md5,5541b78eee72200b98be6af5e4544ed0",
-                                "0008-scattered.interval_list:md5,9f7f7b6f58ec47a73317e3fd64f53bac",
-                                "0009-scattered.interval_list:md5,0bd63474d5fb5284cb8bbb0a202f2e1e",
-                                "0010-scattered.interval_list:md5,c2ff40fe4d17059d38cf40b9b031cb88",
-                                "0011-scattered.interval_list:md5,dd86a813319aa10ca2694505799b8fbe",
-                                "0012-scattered.interval_list:md5,b9424bc405dac67b220e212a749844e0",
-                                "0013-scattered.interval_list:md5,60eee5b05fa8e3d4ff7f026071c4d0e4",
-                                "0014-scattered.interval_list:md5,8c35fb4f332a8bfe56a5d12269def003",
-                                "0015-scattered.interval_list:md5,3fff10ccee5d170b92804ed116f41760",
-                                "0016-scattered.interval_list:md5,c36e542cad7d5b534bde590ce26f356e",
-                                "0017-scattered.interval_list:md5,40c5de97da683709819f0c7404ea6411",
-                                "0018-scattered.interval_list:md5,81820b1a9b029868c58e1abc41c3dc03",
-                                "0019-scattered.interval_list:md5,c4e27e8be0b085a4fa4980d756e21c7f"
-                            ]
+                            "0000-scattered.interval_list:md5,91c71c99e1a0777d96ed2ed35977fe68",
+                            "0001-scattered.interval_list:md5,8084a75ace330aaa6b5baedcbc408e73",
+                            "0002-scattered.interval_list:md5,61a7e1852764653287dfcca76b177646",
+                            "0003-scattered.interval_list:md5,9f817fda35d09c8d449d7d91bc57d5a2",
+                            "0004-scattered.interval_list:md5,6f023cded659d4cfc8edb96706c3b319",
+                            "0005-scattered.interval_list:md5,91c3bca4311e2cc9bf55d4ef22281dd4",
+                            "0006-scattered.interval_list:md5,8f2a2f98ac6994859350580a8161cd91",
+                            "0007-scattered.interval_list:md5,5541b78eee72200b98be6af5e4544ed0",
+                            "0008-scattered.interval_list:md5,9f7f7b6f58ec47a73317e3fd64f53bac",
+                            "0009-scattered.interval_list:md5,0bd63474d5fb5284cb8bbb0a202f2e1e",
+                            "0010-scattered.interval_list:md5,c2ff40fe4d17059d38cf40b9b031cb88",
+                            "0011-scattered.interval_list:md5,dd86a813319aa10ca2694505799b8fbe",
+                            "0012-scattered.interval_list:md5,b9424bc405dac67b220e212a749844e0",
+                            "0013-scattered.interval_list:md5,60eee5b05fa8e3d4ff7f026071c4d0e4",
+                            "0014-scattered.interval_list:md5,8c35fb4f332a8bfe56a5d12269def003",
+                            "0015-scattered.interval_list:md5,3fff10ccee5d170b92804ed116f41760",
+                            "0016-scattered.interval_list:md5,c36e542cad7d5b534bde590ce26f356e",
+                            "0017-scattered.interval_list:md5,40c5de97da683709819f0c7404ea6411",
+                            "0018-scattered.interval_list:md5,81820b1a9b029868c58e1abc41c3dc03",
+                            "0019-scattered.interval_list:md5,c4e27e8be0b085a4fa4980d756e21c7f"
                         ]
                     ]
                 ],
@@ -181,38 +172,6 @@
                             "id": "genome"
                         },
                         "genome.bed:md5,77b5bd8a06d9f25356c233413bf0318d"
-                    ]
-                ],
-                "publish": [
-                    [
-                        "processed_references/",
-                        [
-                            {
-                                "id": "genome"
-                            },
-                            [
-                                "0000-scattered.interval_list:md5,91c71c99e1a0777d96ed2ed35977fe68",
-                                "0001-scattered.interval_list:md5,8084a75ace330aaa6b5baedcbc408e73",
-                                "0002-scattered.interval_list:md5,61a7e1852764653287dfcca76b177646",
-                                "0003-scattered.interval_list:md5,9f817fda35d09c8d449d7d91bc57d5a2",
-                                "0004-scattered.interval_list:md5,6f023cded659d4cfc8edb96706c3b319",
-                                "0005-scattered.interval_list:md5,91c3bca4311e2cc9bf55d4ef22281dd4",
-                                "0006-scattered.interval_list:md5,8f2a2f98ac6994859350580a8161cd91",
-                                "0007-scattered.interval_list:md5,5541b78eee72200b98be6af5e4544ed0",
-                                "0008-scattered.interval_list:md5,9f7f7b6f58ec47a73317e3fd64f53bac",
-                                "0009-scattered.interval_list:md5,0bd63474d5fb5284cb8bbb0a202f2e1e",
-                                "0010-scattered.interval_list:md5,c2ff40fe4d17059d38cf40b9b031cb88",
-                                "0011-scattered.interval_list:md5,dd86a813319aa10ca2694505799b8fbe",
-                                "0012-scattered.interval_list:md5,b9424bc405dac67b220e212a749844e0",
-                                "0013-scattered.interval_list:md5,60eee5b05fa8e3d4ff7f026071c4d0e4",
-                                "0014-scattered.interval_list:md5,8c35fb4f332a8bfe56a5d12269def003",
-                                "0015-scattered.interval_list:md5,3fff10ccee5d170b92804ed116f41760",
-                                "0016-scattered.interval_list:md5,c36e542cad7d5b534bde590ce26f356e",
-                                "0017-scattered.interval_list:md5,40c5de97da683709819f0c7404ea6411",
-                                "0018-scattered.interval_list:md5,81820b1a9b029868c58e1abc41c3dc03",
-                                "0019-scattered.interval_list:md5,c4e27e8be0b085a4fa4980d756e21c7f"
-                            ]
-                        ]
                     ]
                 ],
                 "split_intervals": [
@@ -276,12 +235,41 @@
                     [
                         "0019-scattered.interval_list:md5,c4e27e8be0b085a4fa4980d756e21c7f"
                     ]
+                ],
+                "split_intervals_publish": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        [
+                            "0000-scattered.interval_list:md5,91c71c99e1a0777d96ed2ed35977fe68",
+                            "0001-scattered.interval_list:md5,8084a75ace330aaa6b5baedcbc408e73",
+                            "0002-scattered.interval_list:md5,61a7e1852764653287dfcca76b177646",
+                            "0003-scattered.interval_list:md5,9f817fda35d09c8d449d7d91bc57d5a2",
+                            "0004-scattered.interval_list:md5,6f023cded659d4cfc8edb96706c3b319",
+                            "0005-scattered.interval_list:md5,91c3bca4311e2cc9bf55d4ef22281dd4",
+                            "0006-scattered.interval_list:md5,8f2a2f98ac6994859350580a8161cd91",
+                            "0007-scattered.interval_list:md5,5541b78eee72200b98be6af5e4544ed0",
+                            "0008-scattered.interval_list:md5,9f7f7b6f58ec47a73317e3fd64f53bac",
+                            "0009-scattered.interval_list:md5,0bd63474d5fb5284cb8bbb0a202f2e1e",
+                            "0010-scattered.interval_list:md5,c2ff40fe4d17059d38cf40b9b031cb88",
+                            "0011-scattered.interval_list:md5,dd86a813319aa10ca2694505799b8fbe",
+                            "0012-scattered.interval_list:md5,b9424bc405dac67b220e212a749844e0",
+                            "0013-scattered.interval_list:md5,60eee5b05fa8e3d4ff7f026071c4d0e4",
+                            "0014-scattered.interval_list:md5,8c35fb4f332a8bfe56a5d12269def003",
+                            "0015-scattered.interval_list:md5,3fff10ccee5d170b92804ed116f41760",
+                            "0016-scattered.interval_list:md5,c36e542cad7d5b534bde590ce26f356e",
+                            "0017-scattered.interval_list:md5,40c5de97da683709819f0c7404ea6411",
+                            "0018-scattered.interval_list:md5,81820b1a9b029868c58e1abc41c3dc03",
+                            "0019-scattered.interval_list:md5,c4e27e8be0b085a4fa4980d756e21c7f"
+                        ]
+                    ]
                 ]
             }
         ],
-        "timestamp": "2026-03-17T00:19:06.789641139",
+        "timestamp": "2026-05-20T17:15:35.25891204",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     }

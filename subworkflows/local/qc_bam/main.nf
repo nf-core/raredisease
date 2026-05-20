@@ -89,12 +89,12 @@ workflow QC_BAM {
         ch_svd_in = ch_svd_ud.combine(ch_svd_mu).combine(ch_svd_bed).collect()
         VERIFYBAMID_VERIFYBAMID2(ch_bam_bai, ch_svd_in, [], ch_genome_fasta.map {_meta, fasta-> fasta})
 
-        ch_publish = PICARD_COLLECTMULTIPLEMETRICS.out.metrics
-            .mix(PICARD_COLLECTMULTIPLEMETRICS.out.pdf)
+        ch_qc_bam_files = PICARD_COLLECTMULTIPLEMETRICS.out.metrics.transpose()
+            .mix(PICARD_COLLECTMULTIPLEMETRICS.out.pdf.transpose())
             .mix(TIDDIT_COV.out.wig)
             .mix(TIDDIT_COV.out.cov)
             .mix(UCSC_WIGTOBIGWIG.out.bw)
-            .mix(CHROMOGRAPH_COV.out.plots)
+            .mix(CHROMOGRAPH_COV.out.plots.transpose())
             .mix(MOSDEPTH.out.global_txt)
             .mix(MOSDEPTH.out.summary_txt)
             .mix(MOSDEPTH.out.per_base_d4)
@@ -117,20 +117,17 @@ workflow QC_BAM {
             .mix(ch_hsmetrics)
             .mix(ch_cov)
             .mix(ch_cov_y)
-            .map { meta, value -> ['qc_bam/', [meta, value]] }
-            .mix(ch_ngsbits
-                .map { meta, tsv -> ['ngsbits_samplegender/', [meta, tsv]] })
 
     emit:
-        multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]
-        hs_metrics       = ch_hsmetrics                              // channel: [ val(meta), path(metrics) ]
-        tiddit_wig       = TIDDIT_COV.out.wig                        // channel: [ val(meta), path(wig) ]
         bigwig           = UCSC_WIGTOBIGWIG.out.bw                   // channel: [ val(meta), path(bw) ]
-        d4               = MOSDEPTH.out.per_base_d4                  // channel: [ val(meta), path(d4) ]
-        global_dist      = MOSDEPTH.out.global_txt                   // channel: [ val(meta), path(txt) ]
-        sex_check        = ch_ngsbits                                // channel: [ val(meta), path(tsv) ]
-        self_sm          = VERIFYBAMID_VERIFYBAMID2.out.self_sm      // channel: [ val(meta), path(selfSM) ]
         cov              = ch_cov                                    // channel: [ val(meta), path(metrics) ]
         cov_y            = ch_cov_y                                  // channel: [ val(meta), path(metrics) ]
-        publish = ch_publish                                         // channel: [ val(destination), val(value) ]
+        d4               = MOSDEPTH.out.per_base_d4                  // channel: [ val(meta), path(d4) ]
+        global_dist      = MOSDEPTH.out.global_txt                   // channel: [ val(meta), path(txt) ]
+        hs_metrics       = ch_hsmetrics                              // channel: [ val(meta), path(metrics) ]
+        multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]
+        qc_bam_files     = ch_qc_bam_files                           // channel: [ val(meta), path(file) ]
+        self_sm          = VERIFYBAMID_VERIFYBAMID2.out.self_sm      // channel: [ val(meta), path(selfSM) ]
+        sex_check        = ch_ngsbits                                // channel: [ val(meta), path(tsv) ]
+        tiddit_wig       = TIDDIT_COV.out.wig                        // channel: [ val(meta), path(wig) ]
 }
