@@ -49,28 +49,26 @@ workflow ALIGN {
         ch_bwamem2_bam               = channel.empty()
         ch_bwamem2_bai               = channel.empty()
         ch_fastp_json                = channel.empty()
-        ch_fastp_publish             = channel.empty()
+        ch_fastp_out                 = channel.empty()
+        ch_genome_marked_cram        = channel.empty()
+        ch_genome_marked_crai        = channel.empty()
         ch_markdup_metrics           = channel.empty()
         ch_mt_bam_bai                = channel.empty()
         ch_mt_bam_bai_gatksubwf      = channel.empty()
         ch_mtshift_bam_bai_gatksubwf = channel.empty()
         ch_sentieon_bam              = channel.empty()
         ch_sentieon_bai              = channel.empty()
-        ch_cram_altfiltered          = channel.empty()
-        ch_cram_publish              = channel.empty()
-        ch_cram_unfiltered           = channel.empty()
 
         if (!skip_fastp) {
             FASTP (ch_input_reads.map {meta, reads -> return [meta, reads, []] }, false, false, false)
-            ch_input_reads   = FASTP.out.reads
-            ch_fastp_json    = FASTP.out.json
-            ch_fastp_publish = FASTP.out.json
+            ch_input_reads = FASTP.out.reads
+            ch_fastp_json  = FASTP.out.json
+            ch_fastp_out   = FASTP.out.json
                 .mix(FASTP.out.html)
                 .mix(FASTP.out.log)
-                .mix(FASTP.out.reads)
+                .mix(FASTP.out.reads.transpose())
                 .mix(FASTP.out.reads_fail)
                 .mix(FASTP.out.reads_merged)
-                .map { meta, value -> ['trimming/', [meta, value]] }
         }
 
         //
@@ -107,7 +105,7 @@ workflow ALIGN {
             )
             ch_bwamem2_bam     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bam
             ch_bwamem2_bai     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bai
-            ch_markdup_metrics = ALIGN_BWA_BWAMEM2_BWAMEME.out.metrics
+            ch_markdup_metrics = ALIGN_BWA_BWAMEM2_BWAMEME.out.markdup_metrics
         } else if (val_aligner.equals("sentieon")) {
             ALIGN_SENTIEON (
                 ch_genome_bwaindex,
@@ -119,6 +117,9 @@ workflow ALIGN {
             )
             ch_sentieon_bam    = ALIGN_SENTIEON.out.marked_bam
             ch_sentieon_bai    = ALIGN_SENTIEON.out.marked_bai
+            ch_markdup_metrics = ALIGN_SENTIEON.out.dedup_metrics
+                .mix(ALIGN_SENTIEON.out.dedup_metrics_multiqc)
+                .mix(ALIGN_SENTIEON.out.score)
         }
 
         ch_genome_marked_bam_initial     = channel.empty().mix(ch_bwamem2_bam, ch_sentieon_bam, ch_input_bam)
@@ -184,41 +185,26 @@ workflow ALIGN {
 
         if (val_save_noalt_mapped_as_cram) {
             CONVERTTOCRAM_ALTFILTERED( ch_genome_marked_bam_bai, ch_genome_fasta.map{meta, fasta -> return [meta, fasta, []]}, [], 'crai' )
-            ch_cram_altfiltered = CONVERTTOCRAM_ALTFILTERED.out.cram
-                .mix(CONVERTTOCRAM_ALTFILTERED.out.crai)
+            ch_genome_marked_cram = ch_genome_marked_cram.mix(CONVERTTOCRAM_ALTFILTERED.out.cram)
+            ch_genome_marked_crai = ch_genome_marked_crai.mix(CONVERTTOCRAM_ALTFILTERED.out.crai)
         }
 
         if (val_save_all_mapped_as_cram) {
             CONVERTTOCRAM_UNFILTERED( ch_genome_marked_bam_bai_initial, ch_genome_fasta.map{meta, fasta -> return [meta, fasta, []]}, [], 'crai' )
-            ch_cram_unfiltered = CONVERTTOCRAM_UNFILTERED.out.cram
-                .mix(CONVERTTOCRAM_UNFILTERED.out.crai)
+            ch_genome_marked_cram = ch_genome_marked_cram.mix(CONVERTTOCRAM_UNFILTERED.out.cram)
+            ch_genome_marked_crai = ch_genome_marked_crai.mix(CONVERTTOCRAM_UNFILTERED.out.crai)
         }
-
-        ch_cram_publish = ch_cram_altfiltered
-            .mix(ch_cram_unfiltered)
-            .map { meta, value -> ['alignment/', [meta, value]] }
-
-        ch_bam_publish = channel.empty()
-        if (!val_save_noalt_mapped_as_cram && !val_save_all_mapped_as_cram) {
-            if (val_aligner.matches("bwamem2|bwa|bwameme")) {
-                ch_bam_publish = ALIGN_BWA_BWAMEM2_BWAMEME.out.publish
-            } else if (val_aligner.equals("sentieon")) {
-                ch_bam_publish = ALIGN_SENTIEON.out.publish
-            }
-        }
-
-        ch_publish = ch_fastp_publish
-            .mix(ch_bam_publish)
-            .mix(ch_cram_publish)
 
     emit:
-        fastp_json                = ch_fastp_json            // channel: [ val(meta), path(json) ]
-        genome_marked_bam         = ch_genome_marked_bam     // channel: [ val(meta), path(bam) ]
-        genome_marked_bai         = ch_genome_marked_bai     // channel: [ val(meta), path(bai) ]
-        genome_marked_bam_bai     = ch_genome_marked_bam_bai // channel: [ val(meta), path(bam), path(bai) ]
-        markdup_metrics           = ch_markdup_metrics       // channel: [ val(meta), path(txt) ]
-        mt_bam_bai                = ch_mt_bam_bai            // channel: [ val(meta), path(bam), path(bai) ]
+        fastp_json                = ch_fastp_json                // channel: [ val(meta), path(json) ]
+        fastp_out                 = ch_fastp_out                 // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
+        genome_marked_cram        = ch_genome_marked_cram        // channel: [ val(meta), path(cram) ]
+        genome_marked_crai        = ch_genome_marked_crai        // channel: [ val(meta), path(crai) ]
+        genome_marked_bam         = ch_genome_marked_bam         // channel: [ val(meta), path(bam) ]
+        genome_marked_bai         = ch_genome_marked_bai         // channel: [ val(meta), path(bai) ]
+        genome_marked_bam_bai     = ch_genome_marked_bam_bai     // channel: [ val(meta), path(bam), path(bai) ]
+        markdup_metrics           = ch_markdup_metrics           // channel: [ val(meta), path(metrics) ]
+        mt_bam_bai                = ch_mt_bam_bai                // channel: [ val(meta), path(bam), path(bai) ]
         mt_bam_bai_gatksubwf      = ch_mt_bam_bai_gatksubwf      // channel: [ val(meta), path(bam), path(bai) ]
         mtshift_bam_bai_gatksubwf = ch_mtshift_bam_bai_gatksubwf // channel: [ val(meta), path(bam), path(bai) ]
-        publish = ch_publish                                     // channel: [ val(destination), val(value) ]
 }

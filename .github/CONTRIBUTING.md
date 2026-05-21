@@ -147,11 +147,12 @@ Devcontainer specs:
 
 ### Publishing
 
-- Build a single `ch_publish` channel inside each subworkflow by mixing all publishable outputs into `[destination, value]` tuples.
-- The emit name must always be `publish = ch_publish` — never the bare shorthand.
-- Group channels that share a destination with `mix` first, then apply **one** `.map` per destination group — never one map per channel.
-- If your subworkflow calls inner subworkflows, always mix their `.out.publish` into the outer `ch_publish`. Never discard it.
-- Remove the corresponding `publishDir` entry from `conf/modules/` when adding a process to `ch_publish`.
+The pipeline uses Nextflow's `publish:` block and `output {}` API for file publishing. Each subworkflow exposes its outputs as named typed channel emits; the top-level `publish:` block in `main.nf` mixes them into destination-named entries.
+
+- Emit every publishable output as a named typed channel — no `ch_publish` tuple wrapping.
+- Group outputs that share the same destination directory under **one** `publish:` entry and **one** `output {}` entry in `main.nf`; mix them together with `.mix()`.
+
+> **Note:** Some subworkflows still use the legacy `ch_publish`/`subworkflow_results` pattern and are being migrated incrementally. Until a subworkflow is migrated, follow the existing pattern for that subworkflow so it continues to publish correctly via `subworkflow_results`.
 
 ### Configuration
 
@@ -191,12 +192,8 @@ Devcontainer specs:
       process_with_sort     // Boolean
 
   emit:
-      vcf     = ch_vcf      // channel: [ val(meta), path(vcf) ]
-      publish = ch_publish  // channel: [ val(destination), val(value) ]
+      vcf = ch_vcf // channel: [ val(meta), path(vcf) ]
   ```
-
-- Intermediate publish channels in `workflows/raredisease.nf` follow the `ch_<subworkflow_name>_publish` naming convention and are assigned immediately after the subworkflow call, not inline in the emit block.
-- Initialize all `ch_*_publish` variables at the top of the `main:` block alongside `ch_multiqc_files`.
 
 ### Adding citations
 

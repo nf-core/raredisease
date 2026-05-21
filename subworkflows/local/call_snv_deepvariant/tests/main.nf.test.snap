@@ -152,7 +152,7 @@
     },
     "CALL_SNV_DEEPVARIANT - wgs": {
         "content": [
-            "e4e9e39859d7df52fd955fb32796fdb2",
+            "VcfFile [chromosomes=[MT, 21], sampleCount=1, variantCount=7601, phased=false, phasedAutodetect=false]",
             [
                 "justhusky_split_rmdup_info.vcf.gz.tbi"
             ],
@@ -160,7 +160,7 @@
                 "earlycasualcaiman_deepvar.g.vcf.gz"
             ]
         ],
-        "timestamp": "2026-03-17T23:21:13.603834111",
+        "timestamp": "2026-05-20T16:02:09.449313235",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

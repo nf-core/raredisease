@@ -2,9 +2,19 @@
     "align bwamem2": {
         "content": [
             [
-                "test_sorted_md.bam",
-                "test_sorted_md.bam.bai",
                 "test_sorted_md.metrics.txt"
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "sample": "test",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                    },
+                    "test.stats:md5,f0914a56ae73007ebd242cab27861700"
+                ]
             ],
             [
                 [
@@ -37,7 +47,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T15:04:33.885203481",
+        "timestamp": "2026-05-20T10:42:39.715894878",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -46,9 +56,19 @@
     "align bwameme": {
         "content": [
             [
-                "test_sorted_md.bam",
-                "test_sorted_md.bam.bai",
                 "test_sorted_md.metrics.txt"
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "sample": "test",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                    },
+                    "test.stats:md5,f0914a56ae73007ebd242cab27861700"
+                ]
             ],
             [
                 [
@@ -81,7 +101,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T15:05:20.75721248",
+        "timestamp": "2026-05-20T10:43:22.366256053",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

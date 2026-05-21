@@ -130,10 +130,11 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.publish.flatten()
-                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                            .collect { new File(it).name }
-                            .sort(),
+                        workflow.out.fastp_json,
+                        workflow.out.genome_marked_cram
+                            .collect { meta, cramfile -> [ meta, cram(cramfile, params.pipelines_testdata_base_path + 'reference/reference.fasta').getReadsMD5() ] },
+                        workflow.out.genome_marked_crai
+                            .collect { meta, craifile -> [meta, file(craifile).name] },
                         workflow.out.genome_marked_bam_bai
                             .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
                         workflow.out.mt_bam_bai
@@ -237,10 +238,11 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.publish.flatten()
-                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                            .collect { new File(it).name }
-                            .sort(),
+                        workflow.out.fastp_json,
+                        workflow.out.genome_marked_cram
+                            .collect { meta, cramfile -> [ meta, cram(cramfile, params.pipelines_testdata_base_path + 'reference/reference.fasta').getReadsMD5() ] },
+                        workflow.out.genome_marked_crai
+                            .collect { meta, craifile -> [meta, file(craifile).name] },
                         workflow.out.genome_marked_bam_bai
                             .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
                         workflow.out.mt_bam_bai
@@ -248,7 +250,7 @@ nextflow_workflow {
                         workflow.out.mt_bam_bai_gatksubwf
                             .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
                         workflow.out.mtshift_bam_bai_gatksubwf
-                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] }
                     ).match()
                 }
             )
@@ -335,15 +337,15 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.publish.flatten()
-                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                            .collect { new File(it).name }
-                            .sort(),
+                        workflow.out.genome_marked_cram
+                            .collect { meta, cramfile -> [ meta, cram(cramfile, params.pipelines_testdata_base_path + 'reference/reference.fasta').getReadsMD5() ] },
+                        workflow.out.genome_marked_crai
+                            .collect { meta, craifile -> [meta, file(craifile).name] },
                         workflow.out.genome_marked_bam_bai
                             .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
                         workflow.out.mt_bam_bai
                             .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
-                        workflow.out.mtshift_bam_bai
+                        workflow.out.mtshift_bam_bai_gatksubwf
                             .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] }
                     ).match()
                 }
