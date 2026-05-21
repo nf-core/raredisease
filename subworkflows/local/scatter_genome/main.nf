@@ -19,10 +19,14 @@ workflow SCATTER_GENOME {
 
         GATK4_SPLITINTERVALS(GAWK.out.output, ch_genome_fasta, ch_genome_fai, ch_genome_dictionary)
 
-        ch_split_intervals_publish = val_save_reference ? GATK4_SPLITINTERVALS.out.split_intervals : channel.empty()
+        ch_publish = channel.empty()
+        if (val_save_reference) {
+            ch_publish = GATK4_SPLITINTERVALS.out.split_intervals
+                .map { meta, value -> ['processed_references/', [meta, value]] }
+        }
 
     emit:
-        bed                     = GAWK.out.output.collect()                                                         // channel: [ val(meta), path(bed) ]
-        split_intervals         = GATK4_SPLITINTERVALS.out.split_intervals.map { _meta, it -> it }.flatten().collate(1) // channel: [ path(interval_list) ]
-        split_intervals_publish = ch_split_intervals_publish                                                        // channel: [ val(meta), path(intervals) ]
+        bed             = GAWK.out.output.collect()   // channel: [ val(meta), path(bed) ]
+        split_intervals = GATK4_SPLITINTERVALS.out.split_intervals.map { _meta, it -> it }.flatten().collate(1) // channel: [ val(meta), [ path(interval_lists) ] ]
+        publish         = ch_publish                  // channel: [ val(destination), val(value) ]
 }

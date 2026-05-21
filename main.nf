@@ -364,8 +364,8 @@ workflow NFCORE_RAREDISEASE {
     //
     // Create chromosome bed and intervals for splitting and gathering operations
     //
-    ch_scatter_split_intervals         = channel.empty()
-    ch_scatter_split_intervals_publish = channel.empty()
+    ch_scatter_split_intervals  = channel.empty()
+    ch_scatter_genome_publish   = channel.empty()
     if (!skip_snv_annotation) {
         SCATTER_GENOME (
             ch_genome_dictionary,
@@ -373,8 +373,8 @@ workflow NFCORE_RAREDISEASE {
             ch_genome_fasta,
             params.save_reference
         )
-        ch_scatter_split_intervals         = SCATTER_GENOME.out.split_intervals
-        ch_scatter_split_intervals_publish = SCATTER_GENOME.out.split_intervals_publish
+        ch_scatter_split_intervals = SCATTER_GENOME.out.split_intervals
+        ch_scatter_genome_publish  = SCATTER_GENOME.out.publish
     }
 
     RAREDISEASE (
@@ -541,12 +541,12 @@ workflow NFCORE_RAREDISEASE {
     multiqc_report                   = RAREDISEASE.out.multiqc_report               // channel: /path/to/multiqc_report.html
     qc_bam_files                     = RAREDISEASE.out.qc_bam_files                 // channel: [ val(meta), path(file) ]
     qc_sex_check                     = RAREDISEASE.out.qc_sex_check                 // channel: [ val(meta), path(tsv) ]
-    scatter_split_intervals_publish  = ch_scatter_split_intervals_publish            // channel: [ val(meta), path(intervals) ]
     subsample_mt_bai                 = RAREDISEASE.out.subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam                 = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
-    publish                          = RAREDISEASE.out.publish
-                                         .mix(ch_pedfile_publish)
-                                         .mix(ch_references.publish)               // channel: [ val(destination), val(value) ]
+    publish        = RAREDISEASE.out.publish
+                       .mix(ch_scatter_genome_publish)
+                       .mix(ch_pedfile_publish)
+                       .mix(ch_references.publish)                         // channel: [ val(destination), val(value) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -707,7 +707,6 @@ workflow {
                             .mix(NFCORE_RAREDISEASE.out.subsample_mt_bai)
     fastp                = NFCORE_RAREDISEASE.out.align_fastp_out
     ngsbits_samplegender = NFCORE_RAREDISEASE.out.qc_sex_check
-    processed_references = NFCORE_RAREDISEASE.out.scatter_split_intervals_publish
     qc_bam               = NFCORE_RAREDISEASE.out.qc_bam_files
     subworkflow_results  = NFCORE_RAREDISEASE.out.publish
 }
@@ -721,9 +720,6 @@ output {
     }
     ngsbits_samplegender {
         path { _meta, _file -> "ngsbits_samplegender/" }
-    }
-    processed_references {
-        path { _meta, _file -> "processed_references/" }
     }
     qc_bam {
         path { _meta, _file -> "qc_bam/" }
