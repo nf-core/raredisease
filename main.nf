@@ -534,7 +534,7 @@ workflow NFCORE_RAREDISEASE {
     emit:
     align_fastp_out                  = RAREDISEASE.out.align_fastp_out              // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
     align_genome_marked_bam          = RAREDISEASE.out.align_genome_marked_bam      // channel: [ val(meta), path(bam) ]
-    align_genome_marked_bai.         = RAREDISEASE.out.align_genome_marked_bai      // channel: [ val(meta), path(bai) ]
+    align_genome_marked_bai          = RAREDISEASE.out.align_genome_marked_bai      // channel: [ val(meta), path(bai) ]
     align_genome_marked_cram         = RAREDISEASE.out.align_genome_marked_cram     // channel: [ val(meta), path(cram) ]
     align_genome_marked_crai         = RAREDISEASE.out.align_genome_marked_crai     // channel: [ val(meta), path(crai) ]
     align_markdup_metrics            = RAREDISEASE.out.align_markdup_metrics        // channel: [ val(meta), path(metrics) ]
