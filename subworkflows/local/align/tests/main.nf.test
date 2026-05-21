@@ -132,7 +132,7 @@ nextflow_workflow {
                 { assert snapshot(
                         workflow.out.fastp_json,
                         workflow.out.genome_marked_cram
-                            .collect { meta, cramfile -> [ meta, cram(cramfile, "${params.pipelines_testdata_base_path}reference/reference.fasta").getReadsMD5() ] },
+                            .collect { meta, cramfile -> [ meta, cram(cramfile, params.pipelines_testdata_base_path + 'reference/reference.fasta').getReadsMD5() ] },
                         workflow.out.genome_marked_crai
                             .collect { meta, craifile -> [meta, file(craifile).name] },
                         workflow.out.genome_marked_bam_bai
@@ -240,7 +240,7 @@ nextflow_workflow {
                 { assert snapshot(
                         workflow.out.fastp_json,
                         workflow.out.genome_marked_cram
-                            .collect { meta, cramfile -> [ meta, cram(cramfile, "${params.pipelines_testdata_base_path}reference/reference.fasta").getReadsMD5() ] },
+                            .collect { meta, cramfile -> [ meta, cram(cramfile, params.pipelines_testdata_base_path + 'reference/reference.fasta').getReadsMD5() ] },
                         workflow.out.genome_marked_crai
                             .collect { meta, craifile -> [meta, file(craifile).name] },
                         workflow.out.genome_marked_bam_bai
@@ -338,7 +338,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert snapshot(
                         workflow.out.genome_marked_cram
-                            .collect { meta, cramfile -> [ meta, cram(cramfile, "${params.pipelines_testdata_base_path}reference/reference.fasta").getReadsMD5() ] },
+                            .collect { meta, cramfile -> [ meta, cram(cramfile, params.pipelines_testdata_base_path + 'reference/reference.fasta').getReadsMD5() ] },
                         workflow.out.genome_marked_crai
                             .collect { meta, craifile -> [meta, file(craifile).name] },
                         workflow.out.genome_marked_bam_bai
