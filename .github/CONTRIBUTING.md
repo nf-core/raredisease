@@ -149,8 +149,25 @@ Devcontainer specs:
 
 The pipeline uses Nextflow's `publish:` block and `output {}` API for file publishing. Each subworkflow exposes its outputs as named typed channel emits; the top-level `publish:` block in `main.nf` mixes them into destination-named entries.
 
-- Emit every publishable output as a named typed channel — no `ch_publish` tuple wrapping.
-- Group outputs that share the same destination directory under **one** `publish:` entry and **one** `output {}` entry in `main.nf`; mix them together with `.mix()`.
+- Emit every publishable output as its own named typed channel — one emit per file type, no `ch_publish` tuple wrapping and no grouped mix inside the subworkflow.
+- In `main.nf`, mix all channels that share a destination into **one** `publish:` entry and **one** `output {}` entry. The mixing belongs at the routing layer, not inside the subworkflow.
+- Channels consumed by downstream processes (e.g. MultiQC) and also published are emitted once; the caller wires the same channel to both consumers.
+
+#### Emit naming convention
+
+Use `<process_or_alias>_<emit_name>` (lowercase, underscored) inside the subworkflow's `emit:` block:
+
+- Use the **alias name** as the prefix when a process is imported with `as` — the alias already encodes the distinction (e.g. `PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_WG` → prefix `picard_collectwgsmetrics_wg`).
+- Append the **module's emit name** verbatim.
+- Drop obvious redundancy when the emit name exactly repeats a word already in the process/alias name (e.g. `sentieon_wgsmetrics_wg_wgs_metrics` → `sentieon_wgsmetrics_wg_metrics`). Do not rename to describe the file format — always use the emit name.
+- For `VERIFYBAMID_VERIFYBAMID2`, drop the repetition: use prefix `verifybamid_`.
+
+| Layer | Convention | Example |
+|---|---|---|
+| Subworkflow `emit:` | `<process_or_alias>_<emit_name>` | `mosdepth_global_txt` |
+| `raredisease.nf` variable | `ch_<subworkflow>_<emit_name>` | `ch_qc_bam_mosdepth_global_txt` |
+| `NFCORE_RAREDISEASE` emit | `<subworkflow>_<emit_name>` | `qc_bam_mosdepth_global_txt` |
+| `publish:` entry | one entry per destination, mixing all channels for that destination | `qc_bam = NFCORE_RAREDISEASE.out.qc_bam_mosdepth_global_txt.mix(...)` |
 
 > **Note:** Some subworkflows still use the legacy `ch_publish`/`subworkflow_results` pattern and are being migrated incrementally. Until a subworkflow is migrated, follow the existing pattern for that subworkflow so it continues to publish correctly via `subworkflow_results`.
 

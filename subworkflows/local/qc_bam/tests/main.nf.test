@@ -62,26 +62,40 @@ nextflow_workflow {
             assertAll (
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.multiple_metrics
-                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file(it).name }.sort() : file(files).name] },
-                        workflow.out.hs_metrics
-                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file(it).name }.sort() : file(files).name] },
-                        workflow.out.d4
-                            .collect { meta, f -> [meta, file(f).name] },
-                        workflow.out.cov
-                            .collect { meta, f -> [meta, file(f).name] },
-                        workflow.out.cov_y
-                            .collect { meta, f -> [meta, file(f).name] },
-                        workflow.out.tiddit_wig
-                            .collect { meta, f -> [meta, file(f).name] },
-                        workflow.out.bigwig
-                            .collect { meta, f -> [meta, file(f).name] },
-                        workflow.out.global_dist
-                            .collect { meta, f -> [meta, file(f).name] },
-                        workflow.out.self_sm
-                            .collect { meta, f -> [meta, file(f).name] },
-                        workflow.out.qc_bam_files
-                            .collect { meta, f -> file(f).name }.sort()
+                        workflow.out.picard_collectmultiplemetrics_metrics
+                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file_path -> file(file_path).name }.sort() : file(files).name] },
+                        workflow.out.picard_collectmultiplemetrics_pdf
+                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file_path -> file(file_path).name }.sort() : file(files).name] },
+                        workflow.out.picard_collecthsmetrics_metrics
+                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file_path -> file(file_path).name }.sort() : file(files).name] },
+                        workflow.out.mosdepth_global_txt
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.mosdepth_summary_txt
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.mosdepth_per_base_bed
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.mosdepth_per_base_csi
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.mosdepth_per_base_d4
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.wgsmetrics_wg
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.wgsmetrics_y
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.tiddit_cov_wig
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.tiddit_cov_cov
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.ucsc_wigtobigwig_bw
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.chromograph_cov_plots
+                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file_path -> file(file_path).name }.sort() : file(files).name] },
+                        workflow.out.sambamba_depth_bed
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.verifybamid_self_sm
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.ngsbits_samplegender_tsv
+                            .collect { meta, files -> [meta, file(files).name] }
                     ).match()
                 }
             )
@@ -129,26 +143,40 @@ nextflow_workflow {
             assertAll (
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.multiple_metrics
-                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file(it).name }.sort() : file(files).name] },
-                        workflow.out.hs_metrics
-                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file(it).name }.sort() : file(files).name] },
-                        workflow.out.d4
-                            .collect { meta, f -> [meta, file(f).name] },
-                        workflow.out.cov
-                            .collect { meta, f -> [meta, file(f).name] },
-                        workflow.out.cov_y
-                            .collect { meta, f -> [meta, file(f).name] },
-                        workflow.out.tiddit_wig
-                            .collect { meta, f -> [meta, file(f).name] },
-                        workflow.out.bigwig
-                            .collect { meta, f -> [meta, file(f).name] },
-                        workflow.out.global_dist
-                            .collect { meta, f -> [meta, file(f).name] },
-                        workflow.out.self_sm
-                            .collect { meta, f -> [meta, file(f).name] },
-                        workflow.out.qc_bam_files
-                            .collect { meta, f -> file(f).name }.sort()
+                        workflow.out.picard_collectmultiplemetrics_metrics
+                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file_path -> file(file_path).name }.sort() : file(files).name] },
+                        workflow.out.picard_collectmultiplemetrics_pdf
+                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file_path -> file(file_path).name }.sort() : file(files).name] },
+                        workflow.out.picard_collecthsmetrics_metrics
+                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file_path -> file(file_path).name }.sort() : file(files).name] },
+                        workflow.out.mosdepth_global_txt
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.mosdepth_summary_txt
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.mosdepth_per_base_bed
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.mosdepth_per_base_csi
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.mosdepth_per_base_d4
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.wgsmetrics_wg
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.wgsmetrics_y
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.tiddit_cov_wig
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.tiddit_cov_cov
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.ucsc_wigtobigwig_bw
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.chromograph_cov_plots
+                            .collect { meta, files -> [meta, files instanceof List ? files.collect { file_path -> file(file_path).name }.sort() : file(files).name] },
+                        workflow.out.sambamba_depth_bed
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.verifybamid_self_sm
+                            .collect { meta, files -> [meta, file(files).name] },
+                        workflow.out.ngsbits_samplegender_tsv
+                            .collect { meta, files -> [meta, file(files).name] }
                     ).match()
                 }
             )
