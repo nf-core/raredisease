@@ -162,12 +162,12 @@ Use `<process_or_alias>_<emit_name>` (lowercase, underscored) inside the subwork
 - Drop obvious redundancy when the emit name exactly repeats a word already in the process/alias name (e.g. `sentieon_wgsmetrics_wg_wgs_metrics` → `sentieon_wgsmetrics_wg_metrics`). Do not rename to describe the file format — always use the emit name.
 - For `VERIFYBAMID_VERIFYBAMID2`, drop the repetition: use prefix `verifybamid_`.
 
-| Layer | Convention | Example |
-|---|---|---|
-| Subworkflow `emit:` | `<process_or_alias>_<emit_name>` | `mosdepth_global_txt` |
-| `raredisease.nf` variable | `ch_<subworkflow>_<emit_name>` | `ch_qc_bam_mosdepth_global_txt` |
-| `NFCORE_RAREDISEASE` emit | `<subworkflow>_<emit_name>` | `qc_bam_mosdepth_global_txt` |
-| `publish:` entry | one entry per destination, mixing all channels for that destination | `qc_bam = NFCORE_RAREDISEASE.out.qc_bam_mosdepth_global_txt.mix(...)` |
+| Layer                     | Convention                                                          | Example                                                               |
+| ------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Subworkflow `emit:`       | `<process_or_alias>_<emit_name>`                                    | `mosdepth_global_txt`                                                 |
+| `raredisease.nf` variable | `ch_<subworkflow>_<emit_name>`                                      | `ch_qc_bam_mosdepth_global_txt`                                       |
+| `NFCORE_RAREDISEASE` emit | `<subworkflow>_<emit_name>`                                         | `qc_bam_mosdepth_global_txt`                                          |
+| `publish:` entry          | one entry per destination, mixing all channels for that destination | `qc_bam = NFCORE_RAREDISEASE.out.qc_bam_mosdepth_global_txt.mix(...)` |
 
 > **Note:** Some subworkflows still use the legacy `ch_publish`/`subworkflow_results` pattern and are being migrated incrementally. Until a subworkflow is migrated, follow the existing pattern for that subworkflow so it continues to publish correctly via `subworkflow_results`.
 
