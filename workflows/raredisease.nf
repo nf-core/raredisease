@@ -658,6 +658,7 @@ workflow RAREDISEASE {
             ch_ploidy_model,
             ch_readcount_intervals,
             ch_input_fastqs,
+            ch_sample_id_map,
             ch_subdepth,
             ch_svcaller_priority,
             ch_target_bed,

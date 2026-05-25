@@ -32,6 +32,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_ploidy_model                       // channel: [optional; used by mandatory for GATK's cnvcaller][ path(ploidy_model) ]
         ch_readcount_intervals                // channel: [optional; used by mandatory for GATK's cnvcaller][ path(intervals) ]
         ch_reads                              // channel: [mandatory] [ val(meta), [path(reads)] ]
+        ch_sample_id_map                      // channel: [optional] [val(id), val(id)]
         ch_subdepth                           // channel: [mandatory] [ val(mitosalt_depth) ]
         ch_svcaller_priority                  // channel: [mandatory] [ val(["var caller tag 1", ...]) ]
         ch_target_bed                         // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
@@ -97,6 +98,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 ch_mt_fasta,
                 ch_mt_lastdb,
                 ch_reads,
+                ch_sample_id_map,
                 ch_subdepth,
                 ch_svcaller_priority,
                 ch_mitosalt_config,
