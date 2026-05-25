@@ -27,7 +27,7 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_genome_fasta                 // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_gnomad_af                    // channel: [optional] [ path(tab), path(tbi) ]
         ch_samples                      // channel: [mandatory] [ val(sample_meta) ]
-        ch_split_intervals              // channel: [mandatory] [ path(intervals) ]
+        ch_split_intervals              // channel: [mandatory] [ val(meta), path(interval_list) ]
         ch_vcf                          // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
         ch_vcfanno_extra                // channel: [mandatory] [ [path(vcf),path(index)] ]
         ch_vcfanno_lua                  // channel: [mandatory] [ path(lua) ]
@@ -62,9 +62,15 @@ workflow ANNOTATE_GENOME_SNVS {
         // The remainder:true join pads cases without rohcall output with a single null, giving
         // tuples of length 4 (no rohcall) vs 5 (rohcall). After combining with an interval both
         // grow by one, so size==6 means this case has probands and a rohcall-annotated VCF.
+        ch_split_intervals
+            .map { _meta, intervals -> intervals }
+            .flatten()
+            .collate(1)
+            .set { ch_split_intervals_flat }
+
         ch_vcf
             .join(ZIP_TABIX_ROHCALL.out.gz_index, remainder: true)
-            .combine(ch_split_intervals)
+            .combine(ch_split_intervals_flat)
             .map { it ->
                     def meta = it[0]
                     def vcf  = it[1]
