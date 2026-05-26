@@ -156,11 +156,6 @@
                         "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
                         "installed_by": ["modules"]
                     },
-                    "find/concatenate": {
-                        "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
-                    },
                     "gatk4/bedtointervallist": {
                         "branch": "master",
                         "git_sha": "a89928b3f8b4fa91e4c783e769dbc10f91c89b32",
