@@ -1,5 +1,5 @@
 process SALTSHAKER_TO_HTML {
-    tag "$meta.caseid"
+    tag "$meta.id"
     label "process_low"
 
     conda "${moduleDir}/environment.yml"
@@ -14,7 +14,7 @@ process SALTSHAKER_TO_HTML {
     tuple val(meta), path("*.saltshaker_classify.html"), emit: classify_html
 
     script:
-    def prefix = task.ext.prefix ?: "${meta.caseid}"
+    def prefix = task.ext.prefix ?: "${meta.id}"
     def args = task.ext.args ?: ""
     """
     saltshaker_to_html.py \

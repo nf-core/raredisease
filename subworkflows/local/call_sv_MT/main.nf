@@ -128,15 +128,14 @@ workflow CALL_SV_MT {
             SALTSHAKER_CLASSIFY.out.txt
                 .map { meta, txt ->
                     def sample_meta = ['id':meta.sample]
-                    def case_meta = ['caseid':meta.case_id]
-                    return [sample_meta, case_meta, txt]
+                    return [sample_meta, meta.case_id, txt]
                 }
                 .join(ch_sample_id_map, remainder: true)
-                .branch { sample_meta, case_meta, txt, samplemap  ->
+                .branch { sample_meta, caseid, txt, samplemap  ->
                     id: samplemap.equals(null)
-                        return [case_meta, txt, sample_meta.id]
+                        return [['id':caseid], txt, sample_meta.id]
                     custid: !(samplemap.equals(null))
-                        return [case_meta, txt, samplemap]
+                        return [['id':caseid], txt, samplemap]
                 }
                 .set { ch_for_mix }
 
