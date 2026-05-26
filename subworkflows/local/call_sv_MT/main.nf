@@ -141,6 +141,12 @@ workflow CALL_SV_MT {
             channel.empty()
                 .mix(ch_for_mix.id, ch_for_mix.custid)
                 .groupTuple()
+                .map { meta, paths, ids ->
+                    def sorted_paths = paths.sort { a, b -> a.getName() <=> b.getName() }
+                    def sorted_ids = ids.sort()
+                    return [meta, sorted_paths, sorted_ids]
+                    }
+                .dump('tag': 'saltshaker_html_input')
                 .set { ch_saltshaker_html_input }
 
             SALTSHAKER_TO_HTML(

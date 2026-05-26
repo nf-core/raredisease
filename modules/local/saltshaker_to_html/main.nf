@@ -8,7 +8,7 @@ process SALTSHAKER_TO_HTML {
         'community.wave.seqera.io/library/typer:0.25.1--25ea8a9ce34456a3' }"
 
     input:
-    tuple val(meta), path(files_in, stageAs: 'to_combine/*', arity: '1..*'), val(ids)
+    tuple val(meta), path(files_in), val(ids)
 
     output:
     tuple val(meta), path("*.saltshaker_classify.html"), emit: classify_html
