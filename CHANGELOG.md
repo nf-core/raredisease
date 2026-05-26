@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for qc_bam subworkflow [#853](https://github.com/nf-core/raredisease/pull/853)
 - Refactor scatter_genome subworkflow: alias GAWK as `GENOME_FAI_TO_BED`, remove `val_save_reference` parameter, move interval flattening into `annotate_genome_snvs` [#xxx](https://github.com/nf-core/raredisease/pull/xxx)
+- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for annotate_rhocallviz and annotate_genome_snvs subworkflows [#xxx](https://github.com/nf-core/raredisease/pull/xxx)
+- Expand annotate_rhocallviz test with snapshot assertions [#xxx](https://github.com/nf-core/raredisease/pull/xxx)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for alignment and subsample-MT subworkflows [#850](https://github.com/nf-core/raredisease/pull/850)
 
 ### `Fixed`

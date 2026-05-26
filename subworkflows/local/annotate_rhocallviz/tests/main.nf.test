@@ -42,7 +42,19 @@ nextflow_workflow {
         }
 
         then {
-                assert workflow.success
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.rhocall_viz_bed
+                        .collect { meta, bedfile -> [file(bedfile)] },
+                    workflow.out.rhocall_viz_wig
+                        .collect { meta, wigfile -> [file(wigfile)] },
+                    workflow.out.ucsc_wigtobigwig_bw
+                        .collect { meta, bwfile -> [file(bwfile)] },
+                    workflow.out.chromograph_autozyg_plots
+                        .collect { meta, plots -> [plots.collect { png -> file(png) }.sort()] }
+                ).match() }
+            )
         }
     }
 }
