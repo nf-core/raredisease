@@ -9,7 +9,6 @@ include { MT_DELETION          } from '../../../modules/local/mt_deletion_script
 include { PREP_MITOSALT        } from '../../../modules/local/prep_mitosalt/main'
 include { SALTSHAKER_CALL      } from '../../../modules/nf-core/saltshaker/call/main'
 include { SALTSHAKER_CLASSIFY  } from '../../../modules/nf-core/saltshaker/classify/main'
-include { FIND_CONCATENATE     } from '../../../modules/nf-core/find/concatenate/main'
 include { SALTSHAKER_PLOT      } from '../../../modules/nf-core/saltshaker/plot/main'
 include { SALTSHAKER_TO_HTML   } from '../../../modules/local/saltshaker_to_html/main'
 include { SEQTK_SAMPLE         } from '../../../modules/nf-core/seqtk/sample/main'
