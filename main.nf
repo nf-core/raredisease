@@ -769,9 +769,9 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_y)
     annotate_snv_genome               = NFCORE_RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_vcf
                                             .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_tbi)
-                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_chromograph_autozyg_plots.transpose())
-                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_chromograph_regions_plots.transpose())
-                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_chromograph_sites_plots.transpose())
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_chromograph_autozyg_plots)
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_chromograph_regions_plots)
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_chromograph_sites_plots)
                                             .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_bed)
                                             .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_wig)
     annotate_snv_genome_rhocallviz_bw = NFCORE_RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw
