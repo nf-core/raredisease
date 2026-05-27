@@ -28,6 +28,10 @@ nextflow_workflow {
                     [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ],
+                    [id:'hugelymodelbath', sample:'hugelymodelbath', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbath\\\\tPL:illumina\\\\tSM:hugelymodelbath'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbath_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbath_sorted_md.bam.bai', checkIfExists: true)
                 ])
                 input[1]  = channel.of([id:'justhusky'])
                 input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
@@ -43,8 +47,14 @@ nextflow_workflow {
                         file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_1.fastq.gz', checkIfExists: true),
                         file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)
                     ]
+                ],
+                    [id:'hugelymodelbath', sample:'hugelymodelbath', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbath\\\\tPL:illumina\\\\tSM:hugelymodelbath'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    [
+                        file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbath_mt_1.fastq.gz', checkIfExists: true),
+                        file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbath_mt_2.fastq.gz', checkIfExists: true)
+                    ]
                 ])
-                input[10] = channel.of(['cust_ecc', 'earlycasualcaiman'])
+                input[10] = channel.of(['cust_ecc', ['id':'earlycasualcaiman']], ['cust_hmb', ['id':'hugelymodelbath']])
                 input[11] = channel.value(10000000)
                 input[12] = channel.value(['manta', 'tiddit', 'cnvnator'])
                 input[13] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
@@ -94,6 +104,10 @@ nextflow_workflow {
                     [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ],
+                    [id:'hugelymodelbath', sample:'hugelymodelbath', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbath\\\\tPL:illumina\\\\tSM:hugelymodelbath'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbath_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbath_sorted_md.bam.bai', checkIfExists: true
                 ])
                 input[1]  = channel.of([id:'justhusky'])
                 input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
@@ -108,6 +122,12 @@ nextflow_workflow {
                     [
                         file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_1.fastq.gz', checkIfExists: true),
                         file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)
+                    ]
+                ],
+                    [id:'hugelymodelbath', sample:'hugelymodelbath', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbath\\\\tPL:illumina\\\\tSM:hugelymodelbath'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    [
+                        file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbath_mt_1.fastq.gz', checkIfExists: true),
+                        file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbath_mt_2.fastq.gz', checkIfExists: true)
                     ]
                 ])
                 input[10] = channel.empty()
