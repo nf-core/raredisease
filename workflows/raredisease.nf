@@ -131,7 +131,7 @@ workflow RAREDISEASE {
     ch_sambamba_bed
     ch_sample_id_map
     ch_samples
-    ch_scatter_split_intervals
+    ch_scatter_genome_split_intervals
     ch_score_config_mt
     ch_score_config_snv
     ch_score_config_sv
@@ -480,7 +480,7 @@ workflow RAREDISEASE {
                 ch_genome_fasta,
                 ch_gnomad_af,
                 ch_samples,
-                ch_scatter_split_intervals,
+                ch_scatter_genome_split_intervals,
                 CALL_SNV.out.genome_vcf_tabix,
                 ch_vcfanno_extra,
                 ch_vcfanno_lua,
