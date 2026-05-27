@@ -536,7 +536,7 @@ workflow NFCORE_RAREDISEASE {
     align_genome_marked_crai                            = RAREDISEASE.out.align_genome_marked_crai     // channel: [ val(meta), path(crai) ]
     align_markdup_metrics                               = RAREDISEASE.out.align_markdup_metrics        // channel: [ val(meta), path(metrics) ]
     multiqc_report                                      = RAREDISEASE.out.multiqc_report               // channel: /path/to/multiqc_report.html
-    scatter_genome_gatk4_splitintervals_split_intervals = skip_snv_annotation ? channel.empty() : SCATTER_GENOME.out.gatk4_splitintervals_split_intervals // channel: [ val(meta), path(interval_list) ]
+    scatter_genome_split_intervals                     = ch_scatter_genome_split_intervals // channel: [ val(meta), path(interval_list) ]
     qc_bam_chromograph_cov_plots                        = RAREDISEASE.out.qc_bam_chromograph_cov_plots // channel: [ val(meta), path(png) ]
     qc_bam_mosdepth_global_txt                          = RAREDISEASE.out.qc_bam_mosdepth_global_txt   // channel: [ val(meta), path(txt) ]
     qc_bam_mosdepth_per_base_bed                        = RAREDISEASE.out.qc_bam_mosdepth_per_base_bed // channel: [ val(meta), path(bed.gz) ]
@@ -775,9 +775,7 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_bed)
                                             .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_wig)
     annotate_snv_genome_rhocallviz_bw = NFCORE_RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw
-    processed_references              = params.save_reference
-                                            ? NFCORE_RAREDISEASE.out.scatter_genome_gatk4_splitintervals_split_intervals
-                                            : channel.empty()
+    processed_references              = NFCORE_RAREDISEASE.out.scatter_genome_split_intervals
     subworkflow_results               = NFCORE_RAREDISEASE.out.publish
 }
 
@@ -802,6 +800,7 @@ output {
     }
     processed_references {
         path { _meta, _file -> "processed_references/" }
+        enabled params.save_reference
     }
     subworkflow_results {
         path { destination, _value -> destination }

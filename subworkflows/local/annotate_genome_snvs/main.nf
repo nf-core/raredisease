@@ -64,9 +64,7 @@ workflow ANNOTATE_GENOME_SNVS {
         // tuples of length 4 (no rohcall) vs 5 (rohcall). After combining with an interval both
         // grow by one, so size==6 means this case has probands and a rohcall-annotated VCF.
         ch_split_intervals
-            .map { _meta, intervals -> intervals }
-            .flatten()
-            .collate(1)
+            .flatMap { _meta, intervals -> intervals.collect{ interval -> [interval] } }
             .set { ch_split_intervals_flat }
 
         ch_vcf
