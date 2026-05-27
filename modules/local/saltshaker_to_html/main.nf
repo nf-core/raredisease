@@ -8,10 +8,10 @@ process SALTSHAKER_TO_HTML {
         'community.wave.seqera.io/library/typer:0.25.1--25ea8a9ce34456a3' }"
 
     input:
-    tuple val(meta), path(files_in), val(ids)
+    tuple val(meta), path(saltshaker_classify_reports), val(sample_ids)
 
     output:
-    tuple val(meta), path("*.saltshaker_classify.html"), emit: classify_html
+    tuple val(meta), path("*.html"), emit: classify_html
 
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
@@ -19,8 +19,8 @@ process SALTSHAKER_TO_HTML {
     """
     saltshaker_to_html.py \
         $args \
-        --input ${files_in.join(' --input ')} \
-        --sample ${ids.join(' --sample ')} \
-        --output ${prefix}.saltshaker_classify.html
+        --input ${saltshaker_classify_reports.join(' --input ')} \
+        --sample ${sample_ids.join(' --sample ')} \
+        --output ${prefix}.html
     """
 }

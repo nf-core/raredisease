@@ -26,7 +26,7 @@ workflow CALL_SV_MT {
         ch_mt_fasta                           // channel: [mandatory] [ val(meta), path(mtfasta) ]
         ch_mt_lastdb                          // channel: [mandatory] [ val(meta), path(lastindex) ]
         ch_reads                              // channel: [mandatory] [ val(meta), [path(reads)] ]
-        ch_sample_id_map                      // channel: [optional] [val(id), val(id)]
+        ch_sample_id_map                      // channel: [optional] [val(sample_id), val(customer_id)]
         ch_subdepth                           // channel: [mandatory] [ val(mitosalt_depth) ]
         ch_svcaller_priority                  // channel: [mandatory] [ val(["var caller tag 1", ...]) ]
         ch_mitosalt_config                    // channel: [mandatory] [val(mitosalt_breakspan),val(mitosalt_breakthreshold),...,val(mitosalt_split_length)]
@@ -130,23 +130,16 @@ workflow CALL_SV_MT {
                     return [sample_meta, meta.case_id, txt]
                 }
                 .join(ch_sample_id_map, remainder: true)
-                .branch { sample_meta, caseid, txt, samplemap  ->
-                    id: samplemap.equals(null)
-                        return [['id':caseid], txt, sample_meta.id]
-                    custid: !(samplemap.equals(null))
-                        return [['id':caseid], txt, samplemap]
+                .map { sample_meta, case_id, txt, customer_id ->
+                    def report_identifier = customer_id ?: sample_meta.id
+                    return [['id':case_id], txt, report_identifier]
                 }
-                .set { ch_for_mix }
-
-            channel.empty()
-                .mix(ch_for_mix.id, ch_for_mix.custid)
                 .groupTuple()
                 .map { meta, paths, ids ->
                     def sorted_paths = paths.sort { a, b -> a.getName() <=> b.getName() }
                     def sorted_ids = ids.sort()
                     return [meta, sorted_paths, sorted_ids]
                     }
-                .dump('tag': 'saltshaker_html_input')
                 .set { ch_saltshaker_html_input }
 
             SALTSHAKER_TO_HTML(
