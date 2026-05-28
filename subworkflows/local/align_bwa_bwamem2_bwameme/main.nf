@@ -8,7 +8,6 @@ include { BWA_MEM as BWA                           } from '../../../modules/nf-c
 include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-core/picard/markduplicates/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_ALIGN   } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_EXTRACT } from '../../../modules/nf-core/samtools/index/main'
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MARKDUP } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_MERGE                           } from '../../../modules/nf-core/samtools/merge/main'
 include { SAMTOOLS_STATS                           } from '../../../modules/nf-core/samtools/stats/main'
 include { SAMTOOLS_VIEW as EXTRACT_ALIGNMENTS      } from '../../../modules/nf-core/samtools/view/main'
@@ -75,11 +74,10 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
 
         // Marking duplicates
         MARKDUPLICATES ( prepared_bam , ch_genome_fasta, ch_genome_fai )
-        SAMTOOLS_INDEX_MARKDUP ( MARKDUPLICATES.out.bam )
 
     emit:
-        marked_bai      = SAMTOOLS_INDEX_MARKDUP.out.bai // channel: [ val(meta), path(bai) ]
-        marked_bam      = MARKDUPLICATES.out.bam         // channel: [ val(meta), path(bam) ]
+        marked_bai      = MARKDUPLICATES.out.bai // channel: [ val(meta), path(bai) ]
+        marked_bam      = MARKDUPLICATES.out.bam // channel: [ val(meta), path(bam) ]
         markdup_metrics = MARKDUPLICATES.out.metrics     // channel: [ val(meta), path(metrics) ]
         stats           = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), path(stats) ]
 }

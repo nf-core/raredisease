@@ -9,8 +9,6 @@ include { RETROSEQ_CALL as RETROSEQ_CALL            } from '../../../modules/loc
 include { RETROSEQ_DISCOVER as RETROSEQ_DISCOVER    } from '../../../modules/local/retroseq/discover/main'
 include { SAMTOOLS_VIEW as ME_SPLIT_ALIGNMENT       } from '../../../modules/nf-core/samtools/view/main'
 include { SVDB_MERGE as SVDB_MERGE_ME               } from '../../../modules/nf-core/svdb/merge/main'
-include { TABIX_TABIX as TABIX_ME                   } from '../../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_ME_SPLIT             } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_MOBILE_ELEMENTS {
 
@@ -75,7 +73,6 @@ workflow CALL_MOBILE_ELEMENTS {
             ch_genome_fai
         )
         BCFTOOLS_SORT_ME ( BCFTOOLS_REHEADER_ME.out.vcf )
-        TABIX_ME_SPLIT ( BCFTOOLS_SORT_ME.out.vcf )
 
         // Preparing channels for input to bcftools concat
         // resulting channel [ meta, [ vcf_1, vcf_2, ... ], [ tbi_1, tbi_2, ... ] ]
@@ -89,7 +86,7 @@ workflow CALL_MOBILE_ELEMENTS {
             }
             .set { ch_vcfs }
 
-        TABIX_ME_SPLIT.out.index
+        BCFTOOLS_SORT_ME.out.tbi
             .map { meta, tbi ->
                 [ groupKey( meta - meta.subMap('interval'), meta.nr_of_intervals ), tbi ]
             }
@@ -117,14 +114,13 @@ workflow CALL_MOBILE_ELEMENTS {
             .set { ch_svdb_merge_me_input }
 
         SVDB_MERGE_ME ( ch_svdb_merge_me_input, [], true )
-        TABIX_ME ( SVDB_MERGE_ME.out.vcf )
 
         ch_publish = SVDB_MERGE_ME.out.vcf
-            .mix(TABIX_ME.out.index)
+            .mix(SVDB_MERGE_ME.out.tbi)
             .map { meta, value -> ['call_mobile_elements/', [meta, value]] }
 
     emit:
-        tbi      = TABIX_ME.out.index    // channel: [ val(meta), path(tbi) ]
+        tbi      = SVDB_MERGE_ME.out.tbi // channel: [ val(meta), path(tbi) ]
         vcf      = SVDB_MERGE_ME.out.vcf // channel: [ val(meta), path(vcf) ]
         publish = ch_publish             // channel: [ val(destination), val(value) ]
 }

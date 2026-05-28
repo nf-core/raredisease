@@ -12,7 +12,8 @@ nextflow_workflow {
     tag "call_sv_cnvnator"
 
     tag "svdb/merge"
-    tag "tabix/tabix"
+
+    config "./nextflow.config"
 
     test("CALL_STRUCTURAL_VARIANTS - wgs, stub") {
 

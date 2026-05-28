@@ -6,7 +6,6 @@
 include { ANNOTATE_CADD                     } from '../annotate_cadd'
 include { BCFTOOLS_PLUGINSETGT              } from '../../../modules/nf-core/bcftools/pluginsetgt'
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_MT   } from '../../../modules/nf-core/ensemblvep/vep/main'
-include { TABIX_TABIX as TABIX_TABIX_VEP_MT } from '../../../modules/nf-core/tabix/tabix/main'
 include { VCFANNO as VCFANNO_MT             } from '../../../modules/nf-core/vcfanno/main'
 
 workflow ANNOTATE_MT_SNVS {

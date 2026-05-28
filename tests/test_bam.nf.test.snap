@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            773,
+            691,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -375,9 +375,6 @@
                 "SVDB_QUERY_DB": {
                     "svdb": "2.8.4"
                 },
-                "TABIX_ANNOTATE": {
-                    "tabix": 1.21
-                },
                 "TABIX_BGZIPINDEX_PADDED_BED": {
                     "bgzip": 1.21,
                     "tabix": 1.21
@@ -395,22 +392,7 @@
                 "TABIX_GNOMAD_AF": {
                     "tabix": 1.21
                 },
-                "TABIX_ME": {
-                    "tabix": 1.21
-                },
-                "TABIX_ME_SPLIT": {
-                    "tabix": 1.21
-                },
                 "TABIX_TABIX": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_MERGE": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_MT2": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_MT": {
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
@@ -848,7 +830,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-05-27T15:22:23.152275002",
+        "timestamp": "2026-05-28T13:36:00.190819009",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            356,
+            325,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -342,9 +342,6 @@
                 "SAMTOOLS_INDEX_ALIGN": {
                     "samtools": "1.22.1"
                 },
-                "SAMTOOLS_INDEX_MARKDUP": {
-                    "samtools": "1.22.1"
-                },
                 "SAMTOOLS_INDEX_MT": {
                     "samtools": "1.22.1"
                 },
@@ -411,9 +408,6 @@
                 "SVDB_QUERY_DB": {
                     "svdb": "2.8.4"
                 },
-                "TABIX_ANNOTATE": {
-                    "tabix": 1.21
-                },
                 "TABIX_BGZIPINDEX_PADDED_BED": {
                     "bgzip": 1.21,
                     "tabix": 1.21
@@ -431,22 +425,7 @@
                 "TABIX_GNOMAD_AF": {
                     "tabix": 1.21
                 },
-                "TABIX_ME": {
-                    "tabix": 1.21
-                },
-                "TABIX_ME_SPLIT": {
-                    "tabix": 1.21
-                },
                 "TABIX_TABIX": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_MERGE": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_MT2": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_MT": {
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
@@ -664,7 +643,7 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-05-27T15:26:36.71307935",
+        "timestamp": "2026-05-28T13:39:23.121591561",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

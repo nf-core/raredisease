@@ -4,8 +4,6 @@
 
 include { BCFTOOLS_REHEADER             } from '../../../modules/nf-core/bcftools/reheader/main'
 include { RTGTOOLS_VCFEVAL              } from '../../../modules/nf-core/rtgtools/vcfeval/main'
-include { TABIX_TABIX as TABIX_TRUTHVCF } from '../../../modules/nf-core/tabix/tabix/main'
-
 workflow VARIANT_EVALUATION {
 
     take:
@@ -25,10 +23,8 @@ workflow VARIANT_EVALUATION {
 
         BCFTOOLS_REHEADER (ch_rtgvcfs_dbs, [[:],[]])
 
-        TABIX_TRUTHVCF (BCFTOOLS_REHEADER.out.vcf)
-
         BCFTOOLS_REHEADER.out.vcf
-            .join(TABIX_TRUTHVCF.out.index)
+            .join(BCFTOOLS_REHEADER.out.index, failOnMismatch:true, failOnDuplicate:true)
             .set { ch_truthvcf_tbi }
 
         ch_snv_vcf_tbi

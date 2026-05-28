@@ -136,9 +136,8 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .set { ch_merge_vcfs_in }
             SVDB_MERGE (ch_merge_vcfs_in, ch_svcaller_priority, true)
 
-            TABIX_TABIX (SVDB_MERGE.out.vcf)
             ch_merged_svs = SVDB_MERGE.out.vcf
-            ch_merged_tbi = TABIX_TABIX.out.index
+            ch_merged_tbi = SVDB_MERGE.out.tbi
 
         } else {
             // For mito-only analysis, use saltshaker_vcf with meta directly (ch_saltshaker_vcf

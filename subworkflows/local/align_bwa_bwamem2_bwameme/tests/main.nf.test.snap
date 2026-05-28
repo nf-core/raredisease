@@ -28,7 +28,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "72b312c47e502b8272741a40e435b96"
+                    "3d92874571b87b37115d09bdf486b43c"
                 ]
             ],
             [
@@ -47,9 +47,9 @@
                 ]
             ]
         ],
-        "timestamp": "2026-05-20T10:42:39.715894878",
+        "timestamp": "2026-05-28T13:13:41.167363041",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     },
@@ -82,7 +82,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "40408ed51d46ab3f1524be98d6b31441"
+                    "eb1e0324070280f460a858ee072ddf36"
                 ]
             ],
             [
@@ -101,9 +101,9 @@
                 ]
             ]
         ],
-        "timestamp": "2026-05-20T10:43:22.366256053",
+        "timestamp": "2026-05-28T13:14:27.309722124",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     }
