@@ -20,7 +20,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_saltshaker.classify.html:md5,4bf48ea2b072462c9e4416eda94ffd4c"
+                            "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
                         ]
                     ]
                 ],
@@ -155,7 +155,7 @@
                                 {
                                     "id": "justhusky"
                                 },
-                                "justhusky_saltshaker.classify.html:md5,4bf48ea2b072462c9e4416eda94ffd4c"
+                                "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
                             ]
                         ],
                         [
@@ -270,7 +270,7 @@
                                 {
                                     "id": "justhusky"
                                 },
-                                "justhusky_saltshaker.classify.html:md5,4bf48ea2b072462c9e4416eda94ffd4c"
+                                "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
                             ]
                         ],
                         [
@@ -291,7 +291,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_saltshaker.classify.html:md5,4bf48ea2b072462c9e4416eda94ffd4c"
+                            "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
                         ]
                     ]
                 ],
@@ -338,7 +338,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-05-27T14:54:56.327412606",
+        "timestamp": "2026-05-28T08:43:45.522212667",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
@@ -361,7 +361,12 @@
                 [
                     "1",
                     [
-                        
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
+                        ]
                     ]
                 ],
                 [
@@ -495,6 +500,15 @@
                                 {
                                     "id": "justhusky"
                                 },
+                                "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "justhusky"
+                                },
                                 "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                             ]
                         ]
@@ -601,6 +615,15 @@
                                 {
                                     "id": "justhusky"
                                 },
+                                "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "justhusky"
+                                },
                                 "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                             ]
                         ]
@@ -609,7 +632,12 @@
                 [
                     "saltshaker_html",
                     [
-                        
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
+                        ]
                     ]
                 ],
                 [
@@ -655,7 +683,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-05-27T14:55:13.561636052",
+        "timestamp": "2026-05-28T08:44:01.668006334",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
