@@ -20,7 +20,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
+                            "justhusky.saltshaker_classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
                         ]
                     ]
                 ],
@@ -155,7 +155,7 @@
                                 {
                                     "id": "justhusky"
                                 },
-                                "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
+                                "justhusky.saltshaker_classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
                             ]
                         ],
                         [
@@ -270,7 +270,7 @@
                                 {
                                     "id": "justhusky"
                                 },
-                                "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
+                                "justhusky.saltshaker_classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
                             ]
                         ],
                         [
@@ -291,7 +291,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
+                            "justhusky.saltshaker_classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
                         ]
                     ]
                 ],
@@ -338,7 +338,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-05-28T08:43:45.522212667",
+        "timestamp": "2026-05-28T09:49:15.142259116",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
@@ -365,7 +365,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
+                            "justhusky.saltshaker_classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
                         ]
                     ]
                 ],
@@ -500,7 +500,7 @@
                                 {
                                     "id": "justhusky"
                                 },
-                                "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
+                                "justhusky.saltshaker_classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
                             ]
                         ],
                         [
@@ -615,7 +615,7 @@
                                 {
                                     "id": "justhusky"
                                 },
-                                "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
+                                "justhusky.saltshaker_classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
                             ]
                         ],
                         [
@@ -636,7 +636,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_saltshaker.classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
+                            "justhusky.saltshaker_classify.html:md5,17f591b6b334aadda58f3efef7fe9125"
                         ]
                     ]
                 ],
@@ -683,7 +683,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-05-28T08:44:01.668006334",
+        "timestamp": "2026-05-28T09:49:32.527998006",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
