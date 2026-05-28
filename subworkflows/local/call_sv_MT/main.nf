@@ -122,10 +122,6 @@ workflow CALL_SV_MT {
             )
             ch_saltshaker_vcf = SALTSHAKER_CLASSIFY.out.vcf
 
-            ch_sample_id_map
-                .map { customer_id, sample_id -> [sample_id, customer_id] }
-                .set { ch_sample_id_map_for_join }
-
             // Create case-level channel ch_saltshaker_html_input, consisting of all saltshaker txt reports and all
             // customer IDs (or sample ID if no customer ID) so individual reports have identifers in the final HTML.
             SALTSHAKER_CLASSIFY.out.txt
@@ -133,10 +129,22 @@ workflow CALL_SV_MT {
                     def sample_meta = ['id':meta.sample]
                     return [sample_meta, meta.case_id, txt]
                 }
+                .set { ch_saltshaker_txt }
+
+            ch_sample_id_map
+                .map { customer_id, sample_id -> [sample_id, customer_id] }
+                .set { ch_sample_id_map_for_join }
+
+            ch_saltshaker_txt
                 .join(ch_sample_id_map_for_join)
                 .map { sample_meta, case_id, txt, customer_id ->
-                    def report_identifier = customer_id ?: sample_meta.id
-                    return [['id':case_id], txt, report_identifier]
+                    return [['id':case_id], txt, customer_id]
+                }
+                .groupTuple()
+                .set { ch_saltshaker_html_input } ?:
+            ch_saltshaker_txt
+                .map { sample_meta, case_id, txt ->
+                    return [['id':case_id], txt, sample_meta.id]
                 }
                 .groupTuple()
                 .set { ch_saltshaker_html_input }
