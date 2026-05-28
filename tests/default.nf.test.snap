@@ -225,6 +225,9 @@
                 "GENMOD_SCORE": {
                     "genmod": "3.10.2"
                 },
+                "GENOME_FAI_TO_BED": {
+                    "gawk": "5.3.1"
+                },
                 "GET_CHROM_SIZES": {
                     "coreutils": 9.5
                 },

@@ -36,7 +36,7 @@ nextflow_workflow {
                 input[4]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
                 input[5]  = channel.value([[],[]])
                 input[6]  = channel.of([id:'earlycasualcaiman', sample:'earlycasualcaiman', sex:1, phenotype:2, paternal:0, maternal:0, case_id:'justhusky'])
-                input[7]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true))
+                input[7]  = channel.of([[id:'split_intervals'], [file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)]])
                 input[8]  = channel.of([
                     [id:'justhusky', probands:['earlycasualcaiman'], upd_children:['earlycasualcaiman'], mother:'', father:''],
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
@@ -92,7 +92,7 @@ nextflow_workflow {
                 input[4]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
                 input[5]  = channel.value([[],[]])
                 input[6]  = channel.of([id:'earlycasualcaiman', sample:'earlycasualcaiman', sex:1, phenotype:2, paternal:0, maternal:0, case_id:'justhusky'])
-                input[7]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true))
+                input[7]  = channel.of([[id:'split_intervals'], [file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)]])
                 input[8]  = channel.of([
                     [id:'justhusky', probands:['earlycasualcaiman'], upd_children:['earlycasualcaiman'], mother:'', father:''],
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),

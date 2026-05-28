@@ -213,6 +213,9 @@
                 "GENMOD_SCORE": {
                     "genmod": "3.10.2"
                 },
+                "GENOME_FAI_TO_BED": {
+                    "gawk": "5.3.1"
+                },
                 "GET_CHROM_SIZES": {
                     "coreutils": 9.5
                 },
@@ -845,11 +848,10 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-05-18T09:13:39.46322688",
+        "timestamp": "2026-05-27T15:22:23.152275002",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-06T10:52:22.394678076"
+        }
     }
 }

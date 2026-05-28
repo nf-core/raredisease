@@ -364,17 +364,14 @@ workflow NFCORE_RAREDISEASE {
     //
     // Create chromosome bed and intervals for splitting and gathering operations
     //
-    ch_scatter_split_intervals  = channel.empty()
-    ch_scatter_genome_publish   = channel.empty()
+    ch_scatter_genome_split_intervals  = channel.empty()
     if (!skip_snv_annotation) {
         SCATTER_GENOME (
             ch_genome_dictionary,
             ch_genome_fai,
-            ch_genome_fasta,
-            params.save_reference
+            ch_genome_fasta
         )
-        ch_scatter_split_intervals = SCATTER_GENOME.out.split_intervals
-        ch_scatter_genome_publish  = SCATTER_GENOME.out.publish
+        ch_scatter_genome_split_intervals = SCATTER_GENOME.out.gatk4_splitintervals_split_intervals
     }
 
     RAREDISEASE (
@@ -432,7 +429,7 @@ workflow NFCORE_RAREDISEASE {
         ch_sambamba_bed,
         ch_sample_id_map,
         ch_samples,
-        ch_scatter_split_intervals,
+        ch_scatter_genome_split_intervals,
         ch_score_config_mt,
         ch_score_config_snv,
         ch_score_config_sv,
@@ -532,48 +529,48 @@ workflow NFCORE_RAREDISEASE {
         val_vep_cache_version
     )
     emit:
-    align_fastp_out                  = RAREDISEASE.out.align_fastp_out              // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
-    align_genome_marked_bam          = RAREDISEASE.out.align_genome_marked_bam      // channel: [ val(meta), path(bam) ]
-    align_genome_marked_bai          = RAREDISEASE.out.align_genome_marked_bai      // channel: [ val(meta), path(bai) ]
-    align_genome_marked_cram         = RAREDISEASE.out.align_genome_marked_cram     // channel: [ val(meta), path(cram) ]
-    align_genome_marked_crai         = RAREDISEASE.out.align_genome_marked_crai     // channel: [ val(meta), path(crai) ]
-    align_markdup_metrics            = RAREDISEASE.out.align_markdup_metrics        // channel: [ val(meta), path(metrics) ]
-    multiqc_report                                   = RAREDISEASE.out.multiqc_report                                   // channel: /path/to/multiqc_report.html
-    qc_bam_chromograph_cov_plots                     = RAREDISEASE.out.qc_bam_chromograph_cov_plots                     // channel: [ val(meta), path(png) ]
-    qc_bam_mosdepth_global_txt                       = RAREDISEASE.out.qc_bam_mosdepth_global_txt                       // channel: [ val(meta), path(txt) ]
-    qc_bam_mosdepth_per_base_bed                     = RAREDISEASE.out.qc_bam_mosdepth_per_base_bed                     // channel: [ val(meta), path(bed.gz) ]
-    qc_bam_mosdepth_per_base_csi                     = RAREDISEASE.out.qc_bam_mosdepth_per_base_csi                     // channel: [ val(meta), path(csi) ]
-    qc_bam_mosdepth_per_base_d4                      = RAREDISEASE.out.qc_bam_mosdepth_per_base_d4                      // channel: [ val(meta), path(d4) ]
-    qc_bam_mosdepth_quantized_bed                    = RAREDISEASE.out.qc_bam_mosdepth_quantized_bed                    // channel: [ val(meta), path(bed.gz) ]
-    qc_bam_mosdepth_quantized_csi                    = RAREDISEASE.out.qc_bam_mosdepth_quantized_csi                    // channel: [ val(meta), path(csi) ]
-    qc_bam_mosdepth_regions_bed                      = RAREDISEASE.out.qc_bam_mosdepth_regions_bed                      // channel: [ val(meta), path(bed.gz) ]
-    qc_bam_mosdepth_regions_csi                      = RAREDISEASE.out.qc_bam_mosdepth_regions_csi                      // channel: [ val(meta), path(csi) ]
-    qc_bam_mosdepth_regions_txt                      = RAREDISEASE.out.qc_bam_mosdepth_regions_txt                      // channel: [ val(meta), path(txt) ]
-    qc_bam_mosdepth_summary_txt                      = RAREDISEASE.out.qc_bam_mosdepth_summary_txt                      // channel: [ val(meta), path(txt) ]
-    qc_bam_mosdepth_thresholds_bed                   = RAREDISEASE.out.qc_bam_mosdepth_thresholds_bed                   // channel: [ val(meta), path(bed.gz) ]
-    qc_bam_mosdepth_thresholds_csi                   = RAREDISEASE.out.qc_bam_mosdepth_thresholds_csi                   // channel: [ val(meta), path(csi) ]
-    qc_bam_ngsbits_samplegender_tsv                  = RAREDISEASE.out.qc_bam_ngsbits_samplegender_tsv                  // channel: [ val(meta), path(tsv) ]
-    qc_bam_picard_collecthsmetrics_metrics           = RAREDISEASE.out.qc_bam_picard_collecthsmetrics_metrics           // channel: [ val(meta), path(metrics) ]
-    qc_bam_picard_collectmultiplemetrics_metrics     = RAREDISEASE.out.qc_bam_picard_collectmultiplemetrics_metrics     // channel: [ val(meta), path(metrics) ]
-    qc_bam_picard_collectmultiplemetrics_pdf         = RAREDISEASE.out.qc_bam_picard_collectmultiplemetrics_pdf         // channel: [ val(meta), path(pdf) ]
-    qc_bam_sambamba_depth_bed                        = RAREDISEASE.out.qc_bam_sambamba_depth_bed                        // channel: [ val(meta), path(bed) ]
-    qc_bam_tiddit_cov_cov                            = RAREDISEASE.out.qc_bam_tiddit_cov_cov                            // channel: [ val(meta), path(bed) ]
-    qc_bam_tiddit_cov_wig                            = RAREDISEASE.out.qc_bam_tiddit_cov_wig                            // channel: [ val(meta), path(wig) ]
-    qc_bam_ucsc_wigtobigwig_bw                       = RAREDISEASE.out.qc_bam_ucsc_wigtobigwig_bw                       // channel: [ val(meta), path(bw) ]
-    qc_bam_verifybamid_ancestry                      = RAREDISEASE.out.qc_bam_verifybamid_ancestry                      // channel: [ val(meta), path(ancestry) ]
-    qc_bam_verifybamid_bed                           = RAREDISEASE.out.qc_bam_verifybamid_bed                           // channel: [ val(meta), path(bed) ]
-    qc_bam_verifybamid_log                           = RAREDISEASE.out.qc_bam_verifybamid_log                           // channel: [ val(meta), path(log) ]
-    qc_bam_verifybamid_mu                            = RAREDISEASE.out.qc_bam_verifybamid_mu                            // channel: [ val(meta), path(mu) ]
-    qc_bam_verifybamid_self_sm                       = RAREDISEASE.out.qc_bam_verifybamid_self_sm                       // channel: [ val(meta), path(selfSM) ]
-    qc_bam_verifybamid_ud                            = RAREDISEASE.out.qc_bam_verifybamid_ud                            // channel: [ val(meta), path(ud) ]
-    qc_bam_wgsmetrics_wg                             = RAREDISEASE.out.qc_bam_wgsmetrics_wg                             // channel: [ val(meta), path(metrics) ]
-    qc_bam_wgsmetrics_y                              = RAREDISEASE.out.qc_bam_wgsmetrics_y                              // channel: [ val(meta), path(metrics) ]
-    subsample_mt_bai                 = RAREDISEASE.out.subsample_mt_bai             // channel: [ val(meta), path(bai) ]
-    subsample_mt_bam                 = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
-    publish        = RAREDISEASE.out.publish
-                       .mix(ch_scatter_genome_publish)
-                       .mix(ch_pedfile_publish)
-                       .mix(ch_references.publish)                         // channel: [ val(destination), val(value) ]
+    align_fastp_out                                     = RAREDISEASE.out.align_fastp_out              // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
+    align_genome_marked_bam                             = RAREDISEASE.out.align_genome_marked_bam      // channel: [ val(meta), path(bam) ]
+    align_genome_marked_bai                             = RAREDISEASE.out.align_genome_marked_bai      // channel: [ val(meta), path(bai) ]
+    align_genome_marked_cram                            = RAREDISEASE.out.align_genome_marked_cram     // channel: [ val(meta), path(cram) ]
+    align_genome_marked_crai                            = RAREDISEASE.out.align_genome_marked_crai     // channel: [ val(meta), path(crai) ]
+    align_markdup_metrics                               = RAREDISEASE.out.align_markdup_metrics        // channel: [ val(meta), path(metrics) ]
+    multiqc_report                                      = RAREDISEASE.out.multiqc_report               // channel: /path/to/multiqc_report.html
+    scatter_genome_split_intervals                     = ch_scatter_genome_split_intervals // channel: [ val(meta), path(interval_list) ]
+    qc_bam_chromograph_cov_plots                        = RAREDISEASE.out.qc_bam_chromograph_cov_plots // channel: [ val(meta), path(png) ]
+    qc_bam_mosdepth_global_txt                          = RAREDISEASE.out.qc_bam_mosdepth_global_txt   // channel: [ val(meta), path(txt) ]
+    qc_bam_mosdepth_per_base_bed                        = RAREDISEASE.out.qc_bam_mosdepth_per_base_bed // channel: [ val(meta), path(bed.gz) ]
+    qc_bam_mosdepth_per_base_csi                        = RAREDISEASE.out.qc_bam_mosdepth_per_base_csi // channel: [ val(meta), path(csi) ]
+    qc_bam_mosdepth_per_base_d4                         = RAREDISEASE.out.qc_bam_mosdepth_per_base_d4  // channel: [ val(meta), path(d4) ]
+    qc_bam_mosdepth_quantized_bed                       = RAREDISEASE.out.qc_bam_mosdepth_quantized_bed // channel: [ val(meta), path(bed.gz) ]
+    qc_bam_mosdepth_quantized_csi                       = RAREDISEASE.out.qc_bam_mosdepth_quantized_csi // channel: [ val(meta), path(csi) ]
+    qc_bam_mosdepth_regions_bed                         = RAREDISEASE.out.qc_bam_mosdepth_regions_bed  // channel: [ val(meta), path(bed.gz) ]
+    qc_bam_mosdepth_regions_csi                         = RAREDISEASE.out.qc_bam_mosdepth_regions_csi  // channel: [ val(meta), path(csi) ]
+    qc_bam_mosdepth_regions_txt                         = RAREDISEASE.out.qc_bam_mosdepth_regions_txt  // channel: [ val(meta), path(txt) ]
+    qc_bam_mosdepth_summary_txt                         = RAREDISEASE.out.qc_bam_mosdepth_summary_txt  // channel: [ val(meta), path(txt) ]
+    qc_bam_mosdepth_thresholds_bed                      = RAREDISEASE.out.qc_bam_mosdepth_thresholds_bed // channel: [ val(meta), path(bed.gz) ]
+    qc_bam_mosdepth_thresholds_csi                      = RAREDISEASE.out.qc_bam_mosdepth_thresholds_csi // channel: [ val(meta), path(csi) ]
+    qc_bam_ngsbits_samplegender_tsv                     = RAREDISEASE.out.qc_bam_ngsbits_samplegender_tsv // channel: [ val(meta), path(tsv) ]
+    qc_bam_picard_collecthsmetrics_metrics              = RAREDISEASE.out.qc_bam_picard_collecthsmetrics_metrics // channel: [ val(meta), path(metrics) ]
+    qc_bam_picard_collectmultiplemetrics_metrics        = RAREDISEASE.out.qc_bam_picard_collectmultiplemetrics_metrics // channel: [ val(meta), path(metrics) ]
+    qc_bam_picard_collectmultiplemetrics_pdf            = RAREDISEASE.out.qc_bam_picard_collectmultiplemetrics_pdf // channel: [ val(meta), path(pdf) ]
+    qc_bam_sambamba_depth_bed                           = RAREDISEASE.out.qc_bam_sambamba_depth_bed    // channel: [ val(meta), path(bed) ]
+    qc_bam_tiddit_cov_cov                               = RAREDISEASE.out.qc_bam_tiddit_cov_cov        // channel: [ val(meta), path(bed) ]
+    qc_bam_tiddit_cov_wig                               = RAREDISEASE.out.qc_bam_tiddit_cov_wig        // channel: [ val(meta), path(wig) ]
+    qc_bam_ucsc_wigtobigwig_bw                          = RAREDISEASE.out.qc_bam_ucsc_wigtobigwig_bw   // channel: [ val(meta), path(bw) ]
+    qc_bam_verifybamid_ancestry                         = RAREDISEASE.out.qc_bam_verifybamid_ancestry  // channel: [ val(meta), path(ancestry) ]
+    qc_bam_verifybamid_bed                              = RAREDISEASE.out.qc_bam_verifybamid_bed       // channel: [ val(meta), path(bed) ]
+    qc_bam_verifybamid_log                              = RAREDISEASE.out.qc_bam_verifybamid_log       // channel: [ val(meta), path(log) ]
+    qc_bam_verifybamid_mu                               = RAREDISEASE.out.qc_bam_verifybamid_mu        // channel: [ val(meta), path(mu) ]
+    qc_bam_verifybamid_self_sm                          = RAREDISEASE.out.qc_bam_verifybamid_self_sm   // channel: [ val(meta), path(selfSM) ]
+    qc_bam_verifybamid_ud                               = RAREDISEASE.out.qc_bam_verifybamid_ud        // channel: [ val(meta), path(ud) ]
+    qc_bam_wgsmetrics_wg                                = RAREDISEASE.out.qc_bam_wgsmetrics_wg         // channel: [ val(meta), path(metrics) ]
+    qc_bam_wgsmetrics_y                                 = RAREDISEASE.out.qc_bam_wgsmetrics_y          // channel: [ val(meta), path(metrics) ]
+    subsample_mt_bai                                    = RAREDISEASE.out.subsample_mt_bai             // channel: [ val(meta), path(bai) ]
+    subsample_mt_bam                                    = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
+    publish                                             = RAREDISEASE.out.publish
+                                                            .mix(ch_pedfile_publish)
+                                                            .mix(ch_references.publish) // channel: [ val(destination), val(value) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -762,6 +759,7 @@ workflow {
                             .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_ud)
                             .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_wg)
                             .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_y)
+    processed_references = NFCORE_RAREDISEASE.out.scatter_genome_split_intervals
     subworkflow_results  = NFCORE_RAREDISEASE.out.publish
 }
 
@@ -777,6 +775,10 @@ output {
     }
     qc_bam {
         path { _meta, _file -> "qc_bam/" }
+    }
+    processed_references {
+        path { _meta, _file -> "processed_references/" }
+        enabled params.save_reference
     }
     subworkflow_results {
         path { destination, _value -> destination }
