@@ -646,7 +646,7 @@
                         }
                     },
                     "9266e8231917cc16ff9845e50ed22801",
-                    "earlycasualcaiman_sorted_md.bam.bai"
+                    "earlycasualcaiman_sorted_md.bai"
                 ],
                 [
                     {
@@ -665,7 +665,7 @@
                         }
                     },
                     "1df3c2e109a79ba4e7b8293aefbad8",
-                    "hugelymodelbat_sorted_md.bam.bai"
+                    "hugelymodelbat_sorted_md.bai"
                 ],
                 [
                     {
@@ -684,7 +684,7 @@
                         }
                     },
                     "645db4b1d55d6d42cba2b55eee1a630",
-                    "slowlycivilbuck_sorted_md.bam.bai"
+                    "slowlycivilbuck_sorted_md.bai"
                 ]
             ],
             [
@@ -806,7 +806,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-05-19T23:39:15.518562527",
+        "timestamp": "2026-05-29T09:32:22.526419171",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
