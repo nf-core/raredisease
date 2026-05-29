@@ -573,7 +573,7 @@ workflow NFCORE_RAREDISEASE {
     call_snv_genome_tabix                               = RAREDISEASE.out.call_snv_genome_tabix                          // channel: [ val(meta), path(tbi) ]
     call_snv_genome_vcf                                 = RAREDISEASE.out.call_snv_genome_vcf                            // channel: [ val(meta), path(vcf) ]
     call_snv_mt_tabix                                   = RAREDISEASE.out.call_snv_mt_tabix                              // channel: [ val(meta), path(tbi) ]
-    call_snv_mt_vcf                                     = RAREDISEASE.out.call_snv_mt_vcf.                               // channel: [ val(meta), path(vcf) ]
+    call_snv_mt_vcf                                     = RAREDISEASE.out.call_snv_mt_vcf                                // channel: [ val(meta), path(vcf) ]
     annotate_genome_snvs_bcftools_concat_tbi            = RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_tbi       // channel: [ val(meta), path(tbi) ]
     annotate_genome_snvs_bcftools_concat_vcf            = RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_vcf       // channel: [ val(meta), path(vcf) ]
     annotate_genome_snvs_chromograph_autozyg_plots      = RAREDISEASE.out.annotate_genome_snvs_chromograph_autozyg_plots // channel: [ val(meta), path(png) ]
