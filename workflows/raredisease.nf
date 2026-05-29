@@ -245,7 +245,14 @@ workflow RAREDISEASE {
     ch_call_sv_publish                  = channel.empty()
     ch_call_repeat_expansions_publish   = channel.empty()
     ch_call_mobile_elements_publish     = channel.empty()
-    ch_annotate_genome_snvs_publish     = channel.empty()
+    ch_annotate_genome_snvs_bcftools_concat_tbi       = channel.empty()
+    ch_annotate_genome_snvs_bcftools_concat_vcf       = channel.empty()
+    ch_annotate_genome_snvs_chromograph_autozyg_plots = channel.empty()
+    ch_annotate_genome_snvs_chromograph_regions_plots = channel.empty()
+    ch_annotate_genome_snvs_chromograph_sites_plots   = channel.empty()
+    ch_annotate_genome_snvs_rhocall_viz_bed           = channel.empty()
+    ch_annotate_genome_snvs_rhocall_viz_wig           = channel.empty()
+    ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       = channel.empty()
     ch_annotate_mt_snvs_publish         = channel.empty()
     ch_annotate_sv_publish              = channel.empty()
     ch_generate_cytosure_files_publish  = channel.empty()
@@ -492,10 +499,17 @@ workflow RAREDISEASE {
                 val_cadd_resources,
                 val_genome,
                 val_vep_cache_version
-            ).set { ch_snv_annotate }
-            ch_annotate_genome_snvs_publish = ANNOTATE_GENOME_SNVS.out.publish
+            )
+            ch_annotate_genome_snvs_bcftools_concat_tbi       = ANNOTATE_GENOME_SNVS.out.bcftools_concat_tbi
+            ch_annotate_genome_snvs_bcftools_concat_vcf       = ANNOTATE_GENOME_SNVS.out.bcftools_concat_vcf
+            ch_annotate_genome_snvs_chromograph_autozyg_plots = ANNOTATE_GENOME_SNVS.out.chromograph_autozyg_plots
+            ch_annotate_genome_snvs_chromograph_regions_plots = ANNOTATE_GENOME_SNVS.out.chromograph_regions_plots
+            ch_annotate_genome_snvs_chromograph_sites_plots   = ANNOTATE_GENOME_SNVS.out.chromograph_sites_plots
+            ch_annotate_genome_snvs_rhocall_viz_bed           = ANNOTATE_GENOME_SNVS.out.rhocall_viz_bed
+            ch_annotate_genome_snvs_rhocall_viz_wig           = ANNOTATE_GENOME_SNVS.out.rhocall_viz_wig
+            ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       = ANNOTATE_GENOME_SNVS.out.ucsc_wigtobigwig_bw
 
-            ch_snv_annotate.vcf_ann
+            ch_annotate_genome_snvs_bcftools_concat_vcf
                 .multiMap { meta, vcf ->
                     clinical: [ meta + [ set: "clinical" ], vcf ]
                     research: [ meta + [ set: "research" ], vcf ]
@@ -1052,6 +1066,14 @@ workflow RAREDISEASE {
     qc_bam_verifybamid_ud                            = QC_BAM.out.verifybamid_ud                           // channel: [ val(meta), path(ud) ]
     qc_bam_wgsmetrics_wg                             = QC_BAM.out.wgsmetrics_wg                            // channel: [ val(meta), path(metrics) ]
     qc_bam_wgsmetrics_y                              = QC_BAM.out.wgsmetrics_y                             // channel: [ val(meta), path(metrics) ]
+    annotate_genome_snvs_bcftools_concat_tbi         = ch_annotate_genome_snvs_bcftools_concat_tbi       // channel: [ val(meta), path(tbi) ]
+    annotate_genome_snvs_bcftools_concat_vcf         = ch_annotate_genome_snvs_bcftools_concat_vcf       // channel: [ val(meta), path(vcf) ]
+    annotate_genome_snvs_chromograph_autozyg_plots   = ch_annotate_genome_snvs_chromograph_autozyg_plots // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_chromograph_regions_plots   = ch_annotate_genome_snvs_chromograph_regions_plots // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_chromograph_sites_plots     = ch_annotate_genome_snvs_chromograph_sites_plots   // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_rhocall_viz_bed             = ch_annotate_genome_snvs_rhocall_viz_bed           // channel: [ val(meta), path(bed) ]
+    annotate_genome_snvs_rhocall_viz_wig             = ch_annotate_genome_snvs_rhocall_viz_wig           // channel: [ val(meta), path(wig) ]
+    annotate_genome_snvs_ucsc_wigtobigwig_bw         = ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       // channel: [ val(meta), path(bw) ]
     subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     versions                     = ch_versions
@@ -1059,7 +1081,6 @@ workflow RAREDISEASE {
                        .mix(ch_call_sv_publish)
                        .mix(ch_call_repeat_expansions_publish)
                        .mix(ch_call_mobile_elements_publish)
-                       .mix(ch_annotate_genome_snvs_publish)
                        .mix(ch_annotate_mt_snvs_publish)
                        .mix(ch_annotate_sv_publish)
                        .mix(ch_generate_cytosure_files_publish)

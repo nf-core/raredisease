@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - Remove redundant indexing processes by enabling native index creation: use `--CREATE_INDEX true` in Picard MarkDuplicates, `--write-index=tbi` in bcftools tools (`SPLIT_MULTIALLELICS_MT`, `REMOVE_DUPLICATES_MT`, `BCFTOOLS_MERGE_MT`, `BCFTOOLS_ANNOTATE`, `BCFTOOLS_REHEADER`, `BCFTOOLS_SORT_ME`) and SVDB_MERGE; eliminate downstream `SAMTOOLS_INDEX` and `TABIX_TABIX` steps across `align_bwa_bwamem2_bwameme`, `postprocess_MT_calls`, `call_mobile_elements`, `call_structural_variants`, and `variant_evaluation` subworkflows [#859](https://github.com/nf-core/raredisease/pull/859)
+- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for annotate_rhocallviz and annotate_genome_snvs subworkflows [#858](https://github.com/nf-core/raredisease/pull/858)
+- Expand annotate_rhocallviz test with snapshot assertions [#858](https://github.com/nf-core/raredisease/pull/858)
 - Refactor scatter_genome subworkflow: alias GAWK as `GENOME_FAI_TO_BED`, remove `val_save_reference` parameter, move interval flattening into `annotate_genome_snvs` [#857](https://github.com/nf-core/raredisease/pull/857)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for qc_bam subworkflow [#853](https://github.com/nf-core/raredisease/pull/853)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for alignment and subsample-MT subworkflows [#850](https://github.com/nf-core/raredisease/pull/850)
