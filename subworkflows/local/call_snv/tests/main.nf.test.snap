@@ -29,6 +29,53 @@
                 [
                     "0",
                     [
+                        
+                    ]
+                ],
+                [
+                    "1",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "10",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "11",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                            "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "2",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "3",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "4",
+                    [
                         [
                             {
                                 "id": "earlycasualcaiman",
@@ -48,7 +95,7 @@
                     ]
                 ],
                 [
-                    "1",
+                    "5",
                     [
                         [
                             {
@@ -69,7 +116,7 @@
                     ]
                 ],
                 [
-                    "2",
+                    "6",
                     [
                         [
                             {
@@ -80,7 +127,7 @@
                     ]
                 ],
                 [
-                    "3",
+                    "7",
                     [
                         [
                             {
@@ -91,7 +138,7 @@
                     ]
                 ],
                 [
-                    "4",
+                    "8",
                     [
                         [
                             {
@@ -103,7 +150,7 @@
                     ]
                 ],
                 [
-                    "5",
+                    "9",
                     [
                         [
                             {
@@ -114,67 +161,27 @@
                     ]
                 ],
                 [
-                    "6",
+                    "bcftools_concat_csi",
                     [
-                        [
-                            {
-                                "id": "justhusky"
-                            },
-                            "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                        ]
+                        
                     ]
                 ],
                 [
-                    "7",
+                    "bcftools_concat_tbi",
                     [
-                        [
-                            {
-                                "id": "justhusky"
-                            },
-                            "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
-                            "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
+                        
                     ]
                 ],
                 [
-                    "8",
+                    "bcftools_concat_vcf",
                     [
-                        [
-                            "call_snv/mitochondria/",
-                            [
-                                {
-                                    "id": "justhusky"
-                                },
-                                "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                            ]
-                        ],
-                        [
-                            "call_snv/mitochondria/",
-                            [
-                                {
-                                    "id": "justhusky"
-                                },
-                                "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
-                        ],
-                        [
-                            "call_snv/genome/",
-                            [
-                                {
-                                    "id": "justhusky"
-                                },
-                                "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                            ]
-                        ],
-                        [
-                            "call_snv/genome/",
-                            [
-                                {
-                                    "id": "justhusky"
-                                },
-                                "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
-                        ]
+                        
+                    ]
+                ],
+                [
+                    "deepvariant_report",
+                    [
+                        
                     ]
                 ],
                 [
@@ -286,51 +293,10 @@
                             "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
-                ],
-                [
-                    "publish",
-                    [
-                        [
-                            "call_snv/mitochondria/",
-                            [
-                                {
-                                    "id": "justhusky"
-                                },
-                                "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                            ]
-                        ],
-                        [
-                            "call_snv/mitochondria/",
-                            [
-                                {
-                                    "id": "justhusky"
-                                },
-                                "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
-                        ],
-                        [
-                            "call_snv/genome/",
-                            [
-                                {
-                                    "id": "justhusky"
-                                },
-                                "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                            ]
-                        ],
-                        [
-                            "call_snv/genome/",
-                            [
-                                {
-                                    "id": "justhusky"
-                                },
-                                "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
-                        ]
-                    ]
                 ]
             ]
         ],
-        "timestamp": "2026-03-17T23:05:05.226361531",
+        "timestamp": "2026-05-29T20:52:18.39128556",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

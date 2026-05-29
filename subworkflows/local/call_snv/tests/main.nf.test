@@ -75,6 +75,7 @@ nextflow_workflow {
                         .sort(),
                     path(workflow.out.genome_vcf[0][1]).vcf.variantsMD5,
                     path(workflow.out.genome_vcf[0][1]).vcf.summary,
+                    workflow.out.deepvariant_report.collect { meta, report -> file(report).name },
                     workflow.out.genome_tabix.collect { meta, tbi -> file(tbi).name },
                     workflow.out.mt_vcf.collect { meta, vcf -> file(vcf).name }
                 ).match() }
