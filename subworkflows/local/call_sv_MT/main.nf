@@ -26,7 +26,7 @@ workflow CALL_SV_MT {
         ch_mt_fasta                           // channel: [mandatory] [ val(meta), path(mtfasta) ]
         ch_mt_lastdb                          // channel: [mandatory] [ val(meta), path(lastindex) ]
         ch_reads                              // channel: [mandatory] [ val(meta), [path(reads)] ]
-        ch_sample_id_map                      // channel: [optional] [ val(customer_id), val(sample_id) ]
+        ch_sample_id_map                      // channel: [optional] [ val(sample_id), val(customer_id) ]
         ch_subdepth                           // channel: [mandatory] [ val(mitosalt_depth) ]
         ch_svcaller_priority                  // channel: [mandatory] [ val(["var caller tag 1", ...]) ]
         ch_mitosalt_config                    // channel: [mandatory] [val(mitosalt_breakspan),val(mitosalt_breakthreshold),...,val(mitosalt_split_length)]
@@ -125,28 +125,19 @@ workflow CALL_SV_MT {
             // Create case-level channel ch_saltshaker_html_input, consisting of all saltshaker txt reports and all
             // customer IDs (or sample ID if no customer ID) so individual reports have identifers in the final HTML.
             SALTSHAKER_CLASSIFY.out.txt
-                .map { meta, txt ->
-                    def sample_meta = ['id':meta.sample]
-                    return [sample_meta, meta.case_id, txt]
-                }
-                .set { ch_saltshaker_txt }
-
-            ch_sample_id_map
-                .map { customer_id, sample_id -> [sample_id, customer_id] }
-                .set { ch_sample_id_map_for_join }
-
-            ch_saltshaker_txt
-                .join(ch_sample_id_map_for_join)
-                .map { sample_meta, case_id, txt, customer_id ->
-                    return [['id':case_id], txt, customer_id]
+                .map { meta, txt -> [['id':meta.sample], meta.case_id, txt] }
+                .join(ch_sample_id_map, remainder: true)
+                .map { sample_meta, case_id, txt, cust_id ->
+                    cust_id ? [['id':case_id], txt, cust_id] : [['id':case_id], txt, sample_meta.id]
                 }
                 .groupTuple()
-                .set { ch_saltshaker_html_input } ?:
-            ch_saltshaker_txt
-                .map { sample_meta, case_id, txt ->
-                    return [['id':case_id], txt, sample_meta.id]
+                .map { meta, paths, ids ->
+                    def zipped = [paths, ids].transpose()
+                    def sorted = zipped.sort { a, b -> a[0].getName() <=> b[0].getName() }
+                    def sorted_paths = sorted.collect { it[0] }
+                    def sorted_ids = sorted.collect { it[1] }
+                    return [meta, sorted_paths, sorted_ids]
                 }
-                .groupTuple()
                 .set { ch_saltshaker_html_input }
 
             SALTSHAKER_TO_HTML(
