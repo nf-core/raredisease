@@ -1,25 +1,24 @@
 {
     "CALL_SNV - deepvariant wgs": {
         "content": [
-            [
-                "earlycasualcaiman_deepvar.visual_report.html",
-                "justhusky_mitochondria.vcf.gz",
-                "justhusky_mitochondria.vcf.gz.tbi",
-                "justhusky_snv.vcf.gz",
-                "justhusky_snv.vcf.gz.tbi"
-            ],
             "dfc0eeae02f4c1f04034e0fff555bf50",
             "VcfFile [chromosomes=[21], sampleCount=1, variantCount=7562, phased=false, phasedAutodetect=false]",
+            [
+                "earlycasualcaiman_deepvar.visual_report.html"
+            ],
             [
                 "justhusky_snv.vcf.gz.tbi"
             ],
             [
                 "justhusky_mitochondria.vcf.gz"
+            ],
+            [
+                "justhusky_mitochondria.vcf.gz.tbi"
             ]
         ],
-        "timestamp": "2026-04-26T11:22:45.301474135",
+        "timestamp": "2026-05-30T00:18:20.446833954",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     },

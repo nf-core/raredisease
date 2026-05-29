@@ -69,15 +69,12 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.out.publish.flatten()
-                        .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                        .collect { new File(it).name }
-                        .sort(),
                     path(workflow.out.genome_vcf[0][1]).vcf.variantsMD5,
                     path(workflow.out.genome_vcf[0][1]).vcf.summary,
                     workflow.out.deepvariant_report.collect { meta, report -> file(report).name },
                     workflow.out.genome_tabix.collect { meta, tbi -> file(tbi).name },
-                    workflow.out.mt_vcf.collect { meta, vcf -> file(vcf).name }
+                    workflow.out.mt_vcf.collect { meta, vcf -> file(vcf).name },
+                    workflow.out.mt_tabix.collect { meta, tbi -> file(tbi).name }
                 ).match() }
             )
         }
