@@ -165,9 +165,16 @@ Use `<process_or_alias>_<emit_name>` (lowercase, underscored) inside the subwork
 | Layer                     | Convention                                                          | Example                                                               |
 | ------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | Subworkflow `emit:`       | `<process_or_alias>_<emit_name>`                                    | `mosdepth_global_txt`                                                 |
-| `raredisease.nf` variable | `ch_<subworkflow>_<emit_name>`                                      | `ch_qc_bam_mosdepth_global_txt`                                       |
+| `raredisease.nf` variable | `ch_<subworkflow>_<semantic_suffix>`                                | `ch_qc_bam_mosdepth_global_txt`                                       |
 | `NFCORE_RAREDISEASE` emit | `<subworkflow>_<emit_name>`                                         | `qc_bam_mosdepth_global_txt`                                          |
 | `publish:` entry          | one entry per destination, mixing all channels for that destination | `qc_bam = NFCORE_RAREDISEASE.out.qc_bam_mosdepth_global_txt.mix(...)` |
+
+The **semantic suffix** is the part of the emit name that describes what the data is, not which tool produced it. When the subworkflow emit name starts with a process/module name, drop that prefix in the `raredisease.nf` variable if the remainder is unambiguous within the subworkflow's outputs:
+
+- `scatter_genome` emits `gatk4_splitintervals_split_intervals` → variable is `ch_scatter_genome_split_intervals` (drop `gatk4_splitintervals_`)
+- `qc_bam` emits `mosdepth_global_txt` → variable stays `ch_qc_bam_mosdepth_global_txt` (`global_txt` alone would be ambiguous among the many txt outputs in that subworkflow)
+
+When in doubt, keep enough of the process name to remain unambiguous.
 
 > **Note:** Some subworkflows still use the legacy `ch_publish`/`subworkflow_results` pattern and are being migrated incrementally. Until a subworkflow is migrated, follow the existing pattern for that subworkflow so it continues to publish correctly via `subworkflow_results`.
 
