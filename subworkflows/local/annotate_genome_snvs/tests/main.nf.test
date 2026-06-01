@@ -30,28 +30,29 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of([[id:'resources'], file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/cadd_to_vcf_header_-1.0-.txt', checkIfExists: true)]).collect()
-                input[1]  = Channel.from(env('PWD')).map { dir -> [ [ id: 'cadd_resources' ], dir ] }
-                input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
-                input[3]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
-                input[4]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
-                input[5]  = channel.value([[],[]])
-                input[6]  = channel.of([id:'earlycasualcaiman', sample:'earlycasualcaiman', sex:1, phenotype:2, paternal:0, maternal:0, case_id:'justhusky'])
-                input[7]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true))
-                input[8]  = channel.of([
+                input[1]  = channel.value([[:], []])
+                input[2]  = Channel.from(env('PWD')).map { dir -> [ [ id: 'cadd_resources' ], dir ] }
+                input[3]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[4]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[5]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[6]  = channel.value([[],[]])
+                input[7]  = channel.of([id:'earlycasualcaiman', sample:'earlycasualcaiman', sex:1, phenotype:2, paternal:0, maternal:0, case_id:'justhusky'])
+                input[8]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true))
+                input[9]  = channel.of([
                     [id:'justhusky', probands:['earlycasualcaiman'], upd_children:['earlycasualcaiman'], mother:'', father:''],
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
                 ])
-                input[9]  = channel.value([[]])
-                input[10] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_functions.lua', checkIfExists: true)).collect()
-                input[11] = channel.value(file(params.pipelines_testdata_base_path + 'reference/grch38_gnomad_reformated_-r3.1.1-.vcf.gz', checkIfExists: true))
-                input[12] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_config.toml', checkIfExists: true)).collect()
-                input[13] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
-                input[14] = channel.value([])
-                input[15] = 'wgs'
-                input[16] = null
-                input[17] = 'GRCh37'
-                input[18] = 107
+                input[10] = channel.value([[]])
+                input[11] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_functions.lua', checkIfExists: true)).collect()
+                input[12] = channel.value(file(params.pipelines_testdata_base_path + 'reference/grch38_gnomad_reformated_-r3.1.1-.vcf.gz', checkIfExists: true))
+                input[13] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_config.toml', checkIfExists: true)).collect()
+                input[14] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
+                input[15] = channel.value([])
+                input[16] = 'wgs'
+                input[17] = null
+                input[18] = 'GRCh37'
+                input[19] = 107
                 """
             }
         }
@@ -86,28 +87,29 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of([[id:'resources'], file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/cadd_to_vcf_header_-1.0-.txt', checkIfExists: true)]).collect()
-                input[1]  = Channel.from(env('PWD')).map { dir -> [ [ id: 'cadd_resources' ], dir ] }
-                input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
-                input[3]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
-                input[4]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
-                input[5]  = channel.value([[],[]])
-                input[6]  = channel.of([id:'earlycasualcaiman', sample:'earlycasualcaiman', sex:1, phenotype:2, paternal:0, maternal:0, case_id:'justhusky'])
-                input[7]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true))
-                input[8]  = channel.of([
+                input[1]  = channel.value([[:], []])
+                input[2]  = Channel.from(env('PWD')).map { dir -> [ [ id: 'cadd_resources' ], dir ] }
+                input[3]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[4]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[5]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[6]  = channel.value([[],[]])
+                input[7]  = channel.of([id:'earlycasualcaiman', sample:'earlycasualcaiman', sex:1, phenotype:2, paternal:0, maternal:0, case_id:'justhusky'])
+                input[8]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true))
+                input[9]  = channel.of([
                     [id:'justhusky', probands:['earlycasualcaiman'], upd_children:['earlycasualcaiman'], mother:'', father:''],
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
                 ])
-                input[9]  = channel.value([[]])
-                input[10] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_functions.lua', checkIfExists: true)).collect()
-                input[11] = channel.value(file(params.pipelines_testdata_base_path + 'reference/grch38_gnomad_reformated_-r3.1.1-.vcf.gz', checkIfExists: true))
-                input[12] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_config.toml', checkIfExists: true)).collect()
-                input[13] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
-                input[14] = channel.value([])
-                input[15] = 'wes'
-                input[16] = null
-                input[17] = 'GRCh37'
-                input[18] = 107
+                input[10] = channel.value([[]])
+                input[11] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_functions.lua', checkIfExists: true)).collect()
+                input[12] = channel.value(file(params.pipelines_testdata_base_path + 'reference/grch38_gnomad_reformated_-r3.1.1-.vcf.gz', checkIfExists: true))
+                input[13] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_config.toml', checkIfExists: true)).collect()
+                input[14] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
+                input[15] = channel.value([])
+                input[16] = 'wes'
+                input[17] = null
+                input[18] = 'GRCh37'
+                input[19] = 107
                 """
             }
         }

@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 3.0.1 - Mario-patch [2026-05-25]
 
+### `Added`
+
+- Parameter `cadd_prescored` to pass a directory of pre-scored CADD indel annotations to the CADD process in genome and mitochondrial SNV annotation subworkflows
+
 ### `Fixed`
 
 - Add a bcftools norm split-multiallelics step after merging standard and shifted MT calls to handle new multiallelic sites introduced by bcftools merge [#854](https://github.com/nf-core/raredisease/pull/854)

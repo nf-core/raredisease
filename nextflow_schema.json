@@ -81,6 +81,14 @@
                     "help_text": "If none provided, will be generated automatically from the FASTA reference.",
                     "fa_icon": "fas fa-folder-open"
                 },
+                "cadd_prescored": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-folder-open",
+                    "description": "Path to the directory containing pre-scored CADD indel annotations.",
+                    "help_text": "This folder contains the pre-scored indel files that would otherwise be in data/prescored folder as described in https://github.com/kircherlab/CADD-scripts/#manual-installation."
+                },
                 "cadd_resources": {
                     "type": "string",
                     "exists": true,

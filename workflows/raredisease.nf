@@ -80,6 +80,7 @@ workflow RAREDISEASE {
     ch_alignments
     ch_bait_intervals
     ch_cadd_header
+    ch_cadd_prescored
     ch_cadd_resources
     ch_call_interval
     ch_case_info
@@ -460,6 +461,7 @@ workflow RAREDISEASE {
 
             ANNOTATE_GENOME_SNVS (
                 ch_cadd_header,
+                ch_cadd_prescored,
                 ch_cadd_resources,
                 ch_genome_chrsizes,
                 ch_genome_fai,
@@ -535,6 +537,7 @@ workflow RAREDISEASE {
 
             ANNOTATE_MT_SNVS (
                 ch_cadd_header,
+                ch_cadd_prescored,
                 ch_cadd_resources,
                 ch_genome_fasta,
                 ch_genome_fai,
