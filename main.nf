@@ -48,6 +48,7 @@ workflow NFCORE_RAREDISEASE {
     val_bwa
     val_bwamem2
     val_bwameme
+    val_cadd_prescored
     val_cadd_resources
     val_call_interval
     val_concatenate_snv_calls
@@ -233,6 +234,7 @@ workflow NFCORE_RAREDISEASE {
     ch_svd_ud                   = channelFromPath(val_verifybamid_svd_ud)
 
     // Using channelFromPathWithMeta helper (with simpleName). If filepath is null, returns, [[:],[]]
+    ch_cadd_prescored           = channelFromPathWithMeta(val_cadd_prescored, true)
     ch_cadd_resources           = channelFromPathWithMeta(val_cadd_resources, true)
     ch_call_interval            = channelFromPathWithMeta(val_call_interval, true)
     ch_ml_model                 = channelFromPathWithMeta(val_ml_model, true)
@@ -378,6 +380,7 @@ workflow NFCORE_RAREDISEASE {
         ch_alignments,
         ch_bait_intervals,
         ch_cadd_header,
+        ch_cadd_prescored,
         ch_cadd_resources,
         ch_call_interval,
         ch_case_info,
@@ -566,6 +569,7 @@ workflow {
         params.bwa,
         params.bwamem2,
         params.bwameme,
+        params.cadd_prescored,
         params.cadd_resources,
         params.call_interval,
         params.concatenate_snv_calls,
