@@ -128,7 +128,7 @@ workflow CALL_SV_MT {
                 .map { meta, txt -> [['id':meta.sample], meta.case_id, txt] }
                 .join(ch_sample_id_map, remainder: true)
                 .map { sample_meta, case_id, txt, cust_id ->
-                    cust_id ? [['id':case_id], txt, cust_id] : [['id':case_id], txt, sample_meta.id]
+                    txt ? (cust_id ? [['id':case_id], txt, cust_id] : [['id':case_id], txt, sample_meta.id]) : [[],[],[]]
                 }
                 .groupTuple()
                 .map { meta, paths, ids ->

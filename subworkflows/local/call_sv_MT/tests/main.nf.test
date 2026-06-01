@@ -60,7 +60,7 @@ nextflow_workflow {
                         ]
                     ]
                 )
-                input[10] = channel.of([['id':'earlycasualcaiman'], 'cust_ecc'], [['id':'hugelymodelbat'], 'cust_hmb'])
+                input[10] = channel.of([[id:'earlycasualcaiman'], 'cust_ecc'], [[id:'hugelymodelbat'], 'cust_hmb'])
                 input[11] = channel.value(10000000)
                 input[12] = channel.value(['manta', 'tiddit', 'cnvnator'])
                 input[13] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
