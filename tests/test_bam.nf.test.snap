@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            773,
+            774,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -343,6 +343,9 @@
                     "bcftools": 1.22
                 },
                 "SPLIT_MULTIALLELICS_MT": {
+                    "bcftools": 1.22
+                },
+                "SPLIT_MULTIALLELICS_POSTMERGE_MT": {
                     "bcftools": 1.22
                 },
                 "STRANGER": {
@@ -844,7 +847,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-04-29T22:26:48.082490207",
+        "timestamp": "2026-06-01T14:15:55.418513656",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

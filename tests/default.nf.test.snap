@@ -384,6 +384,9 @@
                 "SPLIT_MULTIALLELICS_MT": {
                     "bcftools": 1.22
                 },
+                "SPLIT_MULTIALLELICS_POSTMERGE_MT": {
+                    "bcftools": 1.22
+                },
                 "SPRING_DECOMPRESS_TO_FQ_PAIR": {
                     "spring": "1.1.1"
                 },
@@ -928,7 +931,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-05-08T16:30:33.887641119",
+        "timestamp": "2026-06-01T14:09:20.631591498",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
