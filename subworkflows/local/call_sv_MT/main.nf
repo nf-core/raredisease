@@ -95,12 +95,8 @@ workflow CALL_SV_MT {
                 ch_mt_lastdb
             )
 
-            MITOSALT.out.cluster
-                .filter { _meta, out -> out.countLines() > 0 }
-                .set { ch_cluster }
-
             MITOSALT.out.breakpoint
-                .join(ch_cluster)
+                .join(MITOSALT.out.cluster)
                 .set { ch_saltshaker_in }
 
             // Saltshaker modules will only run if mitosalt called SVs and created a cluster file
@@ -128,7 +124,7 @@ workflow CALL_SV_MT {
                 .map { meta, txt -> [['id':meta.sample], meta.case_id, txt] }
                 .join(ch_sample_id_map, remainder: true)
                 .map { sample_meta, case_id, txt, cust_id ->
-                    txt ? (cust_id ? [['id':case_id], txt, cust_id] : [['id':case_id], txt, sample_meta.id]) : [[],[],[]]
+                    cust_id ? [['id':case_id], txt, cust_id] : [['id':case_id], txt, sample_meta.id]
                 }
                 .groupTuple()
                 .map { meta, paths, ids ->
@@ -174,8 +170,8 @@ workflow CALL_SV_MT {
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
 
-        ch_publish = ch_saltshaker_html
-                        .mix(ch_saltshaker_vcf)
+        ch_publish = ch_saltshaker_vcf
+                        .mix(ch_saltshaker_html)
                         .mix(ch_saltshaker_plot)
                         .mix(MT_DELETION.out.mt_del_result)
                         .map { meta, value -> ['call_sv/', [meta, value]] }
