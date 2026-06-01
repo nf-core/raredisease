@@ -263,11 +263,11 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 5. Variant calling - Structural variants
 
-| Mandatory | Optional                          |
-| --------- | --------------------------------- |
-|           | target_bed                        |
-|           | bwa                               |
-|           | manta_call_regions<sup>1</sup>    |
+| Mandatory | Optional                       |
+| --------- | ------------------------------ |
+|           | target_bed                     |
+|           | bwa                            |
+|           | manta_call_regions<sup>1</sup> |
 
 <sup>1</sup> A bgzipped, tabix-indexed BED file (`.bed.gz` + `.bed.gz.tbi`) restricting Manta's SV calling to specific regions. Only applied for WGS; for WES, Manta always uses `target_bed` and this parameter has no effect. Useful for reducing runtime on references with many short contigs such as GRCh38 by limiting analysis to primary chromosomes.
 
