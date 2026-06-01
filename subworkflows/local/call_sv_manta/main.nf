@@ -12,8 +12,9 @@ workflow CALL_SV_MANTA {
         ch_genome_fasta   // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai     // channel: [mandatory] [ val(meta), path(fai) ]
         ch_case_info      // channel: [mandatory] [ val(case_info) ]
-        ch_bed            // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
-        val_analysis_type // string: "wes", "wgs", or "mito"
+        ch_bed                // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
+        ch_manta_call_regions // channel: [optional]  [ path(bed), path(tbi) ]
+        val_analysis_type     // string: "wes", "wgs", or "mito"
 
     main:
         ch_bam.map{ _meta, bam -> bam }
@@ -34,7 +35,7 @@ workflow CALL_SV_MANTA {
         if (val_analysis_type.equals("wgs")) {
             ch_case_info.combine(bam_file_list)
                 .combine(bai_file_list)
-                .map { meta, input, index -> [meta, input, index] + [ [], [] ] }
+                .combine(ch_manta_call_regions)
                 .set { manta_input }
             MANTA ( manta_input, ch_genome_fasta, ch_genome_fai, [] )
         } else {

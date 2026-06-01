@@ -37,7 +37,8 @@ nextflow_workflow {
                 input[3] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
                 input[4] = channel.of([id:'justhusky'])
                 input[5] = channel.of([[id:'target'], [], []])
-                input[6] = 'wgs'
+                input[6] = channel.value([[], []])
+                input[7] = 'wgs'
                 """
             }
         }
@@ -79,7 +80,8 @@ nextflow_workflow {
                 input[3] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
                 input[4] = channel.of([id:'justhusky'])
                 input[5] = channel.of([[id:'target'], [], []])
-                input[6] = 'wgs'
+                input[6] = channel.value([[], []])
+                input[7] = 'wgs'
                 """
             }
         }

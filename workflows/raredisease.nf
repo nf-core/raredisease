@@ -104,6 +104,7 @@ workflow RAREDISEASE {
     ch_hgnc_ids
     ch_intervals_wgs
     ch_intervals_y
+    ch_manta_call_regions
     ch_me_references
     ch_me_svdb_resources
     ch_ml_model
@@ -636,6 +637,7 @@ workflow RAREDISEASE {
             ch_genome_fai,
             ch_genome_fasta,
             ch_genome_hisat2index,
+            ch_manta_call_regions,
             ch_mitosalt_config,
             ch_mapped.mt_bam_bai,
             ch_mt_fai,

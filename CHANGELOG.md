@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Parameter `cadd_prescored` to pass a directory of pre-scored CADD indel annotations to the CADD process in genome and mitochondrial SNV annotation subworkflows
+- Parameter `manta_call_regions` to restrict Manta SV calling to specified regions (e.g. primary chromosomes) via a bgzipped, tabix-indexed BED file, reducing runtime without affecting other callers
 
 ### `Fixed`
 

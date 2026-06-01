@@ -243,6 +243,15 @@
                     "description": "Local directory base for genome references that map to the config.",
                     "help_text": "This folder is a flat structure with file names that map to the config."
                 },
+                "manta_call_regions": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.bed\\.gz$",
+                    "description": "Path to a bgzipped, tabix-indexed BED file restricting Manta SV calling to specific regions (e.g. primary chromosomes). Only applied for WGS; for WES, Manta always uses target_bed instead.",
+                    "help_text": "A tabix index (.bed.gz.tbi) must exist alongside the file. Only used when analysis_type is wgs — for wes, Manta uses the target_bed supplied via --target_bed and this parameter has no effect. Useful for reducing runtime on references with many short contigs such as GRCh38."
+                },
                 "mito_name": {
                     "type": "string",
                     "description": "Name of the mitochondrial contig in the reference fasta file",
