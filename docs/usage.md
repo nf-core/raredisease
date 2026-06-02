@@ -268,8 +268,9 @@ The mandatory and optional parameters for each category are tabulated below.
 |           | target_bed                        |
 |           | bwa                               |
 |           | manta_call_regions<sup>1</sup>    |
+|           | manta_call_regions_tbi<sup>1</sup> |
 
-<sup>1</sup> A bgzipped, tabix-indexed BED file (`.bed.gz` + `.bed.gz.tbi`) restricting Manta's SV calling to specific regions. Only applied for WGS; for WES, Manta always uses `target_bed` and this parameter has no effect. Useful for reducing runtime on references with many short contigs such as GRCh38 by limiting analysis to primary chromosomes.
+<sup>1</sup> A bgzipped BED file (`.bed.gz`) and its tabix index (`.bed.gz.tbi`) restricting Manta's SV calling to specific regions. Both parameters must be supplied together. Only applied for WGS; for WES, Manta always uses `target_bed` and these parameters have no effect. Useful for reducing runtime on references with many short contigs such as GRCh38 by limiting analysis to primary chromosomes.
 
 ##### 6. Copy number variant calling
 
