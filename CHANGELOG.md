@@ -14,6 +14,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add a bcftools norm split-multiallelics step after merging standard and shifted MT calls to handle new multiallelic sites introduced by bcftools merge [#855](https://github.com/nf-core/raredisease/pull/855)
 
+### Parameters
+
+| Old parameter | New parameter          |
+| ------------- | ---------------------- |
+|               | cadd_prescored         |
+|               | manta_call_regions     |
+|               | manta_call_regions_tbi |
+
 ## 3.0.0 - Mario [2026-05-12]
 
 ### `Added`
