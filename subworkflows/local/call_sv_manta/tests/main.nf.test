@@ -12,7 +12,7 @@ nextflow_workflow {
 
     config "./nextflow.config"
 
-    test("CALL_SV_MANTA - wgs") {
+    test("CALL_SV_MANTA") {
 
         when {
             workflow {
@@ -36,8 +36,7 @@ nextflow_workflow {
                 input[2] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
                 input[3] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
                 input[4] = channel.of([id:'justhusky'])
-                input[5] = channel.of([[id:'target'], [], []])
-                input[6] = 'wgs'
+                input[5] = channel.value([[], []])
                 """
             }
         }
@@ -52,7 +51,7 @@ nextflow_workflow {
             )
         }
     }
-    test("CALL_SV_MANTA - wgs, stub") {
+    test("CALL_SV_MANTA - stub") {
 
         options "-stub"
 
@@ -78,8 +77,7 @@ nextflow_workflow {
                 input[2] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
                 input[3] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
                 input[4] = channel.of([id:'justhusky'])
-                input[5] = channel.of([[id:'target'], [], []])
-                input[6] = 'wgs'
+                input[5] = channel.value([[], []])
                 """
             }
         }
