@@ -24,7 +24,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_genome_fai                         // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_fasta                       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_hisat2index                 // channel: [mandatory] [ val(meta), path(hisat2index) ]
-        ch_manta_call_regions                 // channel: [optional]  [ path(bed), path(tbi) ]
+        ch_manta_regions                      // channel: [mandatory] [ path(bed), path(tbi) ]
         ch_mitosalt_config                    // channel: [mandatory] [val(mitosalt_breakspan),val(mitosalt_breakthreshold),...,val(mitosalt_split_length)]
         ch_mt_bam_bai                         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_mt_fai                             // channel: [mandatory] [ val(meta), path(mtfai) ]
@@ -35,7 +35,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_reads                              // channel: [mandatory] [ val(meta), [path(reads)] ]
         ch_subdepth                           // channel: [mandatory] [ val(mitosalt_depth) ]
         ch_svcaller_priority                  // channel: [mandatory] [ val(["var caller tag 1", ...]) ]
-        ch_target_bed                         // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
         skip_germlinecnvcaller                // boolean
         skip_mitosalt                         // boolean
         val_analysis_type                     // string: "wes", "wgs", or "mito"
@@ -60,7 +59,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_tiddit_vcf     = channel.empty()
 
         if (!val_analysis_type.equals("mito")) {
-            CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_target_bed, ch_manta_call_regions, val_analysis_type)
+            CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_manta_regions)
                 .filtered_diploid_sv_vcf
                 .collect{ _meta, vcf -> vcf }
                 .set{ ch_manta_vcf }
