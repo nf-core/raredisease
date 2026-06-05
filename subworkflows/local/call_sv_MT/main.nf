@@ -99,7 +99,6 @@ workflow CALL_SV_MT {
                 .join(MITOSALT.out.cluster)
                 .set { ch_saltshaker_in }
 
-            // Saltshaker modules will only run if mitosalt called SVs and created a cluster file
             SALTSHAKER_CALL(
                 ch_saltshaker_in,
                 ch_mt_fasta,
