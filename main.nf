@@ -566,6 +566,14 @@ workflow NFCORE_RAREDISEASE {
     qc_bam_verifybamid_ud                               = RAREDISEASE.out.qc_bam_verifybamid_ud        // channel: [ val(meta), path(ud) ]
     qc_bam_wgsmetrics_wg                                = RAREDISEASE.out.qc_bam_wgsmetrics_wg         // channel: [ val(meta), path(metrics) ]
     qc_bam_wgsmetrics_y                                 = RAREDISEASE.out.qc_bam_wgsmetrics_y          // channel: [ val(meta), path(metrics) ]
+    annotate_genome_snvs_bcftools_concat_tbi            = RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_tbi       // channel: [ val(meta), path(tbi) ]
+    annotate_genome_snvs_bcftools_concat_vcf            = RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_vcf       // channel: [ val(meta), path(vcf) ]
+    annotate_genome_snvs_chromograph_autozyg_plots      = RAREDISEASE.out.annotate_genome_snvs_chromograph_autozyg_plots // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_chromograph_regions_plots      = RAREDISEASE.out.annotate_genome_snvs_chromograph_regions_plots // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_chromograph_sites_plots        = RAREDISEASE.out.annotate_genome_snvs_chromograph_sites_plots   // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_rhocall_viz_bed                = RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_bed           // channel: [ val(meta), path(bed) ]
+    annotate_genome_snvs_rhocall_viz_wig                = RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_wig           // channel: [ val(meta), path(wig) ]
+    annotate_genome_snvs_ucsc_wigtobigwig_bw            = RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw       // channel: [ val(meta), path(bw) ]
     subsample_mt_bai                                    = RAREDISEASE.out.subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam                                    = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     publish                                             = RAREDISEASE.out.publish
@@ -722,45 +730,53 @@ workflow {
     )
 
     publish:
-    alignment            = NFCORE_RAREDISEASE.out.align_genome_marked_bam
-                            .mix(NFCORE_RAREDISEASE.out.align_genome_marked_bai)
-                            .mix(NFCORE_RAREDISEASE.out.align_genome_marked_cram)
-                            .mix(NFCORE_RAREDISEASE.out.align_genome_marked_crai)
-                            .mix(NFCORE_RAREDISEASE.out.align_markdup_metrics)
-                            .mix(NFCORE_RAREDISEASE.out.subsample_mt_bam)
-                            .mix(NFCORE_RAREDISEASE.out.subsample_mt_bai)
-    fastp                = NFCORE_RAREDISEASE.out.align_fastp_out
-    ngsbits_samplegender = NFCORE_RAREDISEASE.out.qc_bam_ngsbits_samplegender_tsv
-    qc_bam               = NFCORE_RAREDISEASE.out.qc_bam_chromograph_cov_plots.transpose()
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_global_txt)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_per_base_bed)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_per_base_csi)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_per_base_d4)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_quantized_bed)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_quantized_csi)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_regions_bed)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_regions_csi)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_regions_txt)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_summary_txt)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_thresholds_bed)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_thresholds_csi)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_picard_collecthsmetrics_metrics)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_picard_collectmultiplemetrics_metrics.transpose())
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_picard_collectmultiplemetrics_pdf.transpose())
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_sambamba_depth_bed)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_tiddit_cov_cov)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_tiddit_cov_wig)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_ucsc_wigtobigwig_bw)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_ancestry)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_bed)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_log)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_mu)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_self_sm)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_ud)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_wg)
-                            .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_y)
-    processed_references = NFCORE_RAREDISEASE.out.scatter_genome_split_intervals
-    subworkflow_results  = NFCORE_RAREDISEASE.out.publish
+    alignment                         = NFCORE_RAREDISEASE.out.align_genome_marked_bam
+                                            .mix(NFCORE_RAREDISEASE.out.align_genome_marked_bai)
+                                            .mix(NFCORE_RAREDISEASE.out.align_genome_marked_cram)
+                                            .mix(NFCORE_RAREDISEASE.out.align_genome_marked_crai)
+                                            .mix(NFCORE_RAREDISEASE.out.align_markdup_metrics)
+                                            .mix(NFCORE_RAREDISEASE.out.subsample_mt_bam)
+                                            .mix(NFCORE_RAREDISEASE.out.subsample_mt_bai)
+    fastp                             = NFCORE_RAREDISEASE.out.align_fastp_out
+    ngsbits_samplegender              = NFCORE_RAREDISEASE.out.qc_bam_ngsbits_samplegender_tsv
+    qc_bam                            = NFCORE_RAREDISEASE.out.qc_bam_chromograph_cov_plots.transpose()
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_global_txt)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_per_base_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_per_base_csi)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_per_base_d4)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_quantized_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_quantized_csi)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_regions_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_regions_csi)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_regions_txt)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_summary_txt)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_thresholds_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_thresholds_csi)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_picard_collecthsmetrics_metrics)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_picard_collectmultiplemetrics_metrics.transpose())
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_picard_collectmultiplemetrics_pdf.transpose())
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_sambamba_depth_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_tiddit_cov_cov)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_tiddit_cov_wig)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_ucsc_wigtobigwig_bw)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_ancestry)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_log)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_mu)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_self_sm)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_ud)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_wg)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_y)
+    annotate_snv_genome               = NFCORE_RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_vcf
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_chromograph_autozyg_plots)
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_chromograph_regions_plots)
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_chromograph_sites_plots)
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_wig)
+    annotate_snv_genome_rhocallviz_bw = NFCORE_RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw
+    processed_references              = NFCORE_RAREDISEASE.out.scatter_genome_split_intervals
+    subworkflow_results               = NFCORE_RAREDISEASE.out.publish
 }
 
 output {
@@ -775,6 +791,12 @@ output {
     }
     qc_bam {
         path { _meta, _file -> "qc_bam/" }
+    }
+    annotate_snv_genome {
+        path { _meta, _file -> "annotate_snv/genome/" }
+    }
+    annotate_snv_genome_rhocallviz_bw {
+        path { meta, _file -> "annotate_snv/genome/${meta.sample}_rhocallviz/" }
     }
     processed_references {
         path { _meta, _file -> "processed_references/" }
