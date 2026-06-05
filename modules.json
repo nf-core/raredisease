@@ -383,17 +383,17 @@
                     },
                     "saltshaker/call": {
                         "branch": "master",
-                        "git_sha": "9d051963759dda1a424374e23f4f22aaa2b0bd60",
+                        "git_sha": "0932567705843eb10831d31cb200ea3f69a2322e",
                         "installed_by": ["modules"]
                     },
                     "saltshaker/classify": {
                         "branch": "master",
-                        "git_sha": "ff5f2ad4481a4a1e1769a1fad922681e7f7fd176",
+                        "git_sha": "a61c82ad6d255d555aa6c7f1c3c0e90c3735c830",
                         "installed_by": ["modules"]
                     },
                     "saltshaker/plot": {
                         "branch": "master",
-                        "git_sha": "ff5f2ad4481a4a1e1769a1fad922681e7f7fd176",
+                        "git_sha": "a61c82ad6d255d555aa6c7f1c3c0e90c3735c830",
                         "installed_by": ["modules"]
                     },
                     "sambamba/depth": {
