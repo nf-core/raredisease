@@ -469,7 +469,7 @@ def process_cyvcf2(args, out_fh):
         if args.test and line_number > args.test:
             break
 
-        vcf_line = str(var)
+        vcf_line = str(var).rstrip('\n')
         parts    = vcf_line.split('\t')
 
         main_data = {col_names[i]: (parts[i] if i < len(parts) else None)
