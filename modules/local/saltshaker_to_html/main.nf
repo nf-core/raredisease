@@ -23,4 +23,12 @@ process SALTSHAKER_TO_HTML {
         --sample ${sample_ids.join(' --sample ')} \
         --output ${prefix}.html
     """
+
+    stub:
+    def args = task.ext.args ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    echo $args
+    touch ${prefix}.html
+    """
 }
