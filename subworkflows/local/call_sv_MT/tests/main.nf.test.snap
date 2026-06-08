@@ -1,0 +1,692 @@
+{
+    "CALL_SV_MT - stub": {
+        "content": [
+            [
+                [
+                    "0",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "1",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky.saltshaker_classify.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "2",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "3",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ],
+                        [
+                            {
+                                "id": "hugelymodelbat",
+                                "sample": "hugelymodelbat",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "hugelymodelbat_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "4",
+                    [
+                        [
+                            "manta",
+                            "tiddit",
+                            "cnvnator",
+                            "mitosalt"
+                        ]
+                    ]
+                ],
+                [
+                    "5",
+                    [
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "earlycasualcaiman",
+                                    "sample": "earlycasualcaiman",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "sex": 1,
+                                    "phenotype": 1,
+                                    "paternal": 0,
+                                    "maternal": 0,
+                                    "case_id": "justhusky"
+                                },
+                                "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "earlycasualcaiman",
+                                    "sample": "earlycasualcaiman",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                    "lane": 1,
+                                    "sex": 1,
+                                    "phenotype": 1,
+                                    "paternal": 0,
+                                    "maternal": 0,
+                                    "case_id": "justhusky"
+                                },
+                                "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "hugelymodelbat",
+                                    "sample": "hugelymodelbat",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                                    "lane": 1,
+                                    "sex": 1,
+                                    "phenotype": 1,
+                                    "paternal": 0,
+                                    "maternal": 0,
+                                    "case_id": "justhusky"
+                                },
+                                "hugelymodelbat_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "justhusky"
+                                },
+                                "justhusky.saltshaker_classify.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "justhusky"
+                                },
+                                "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "mt_del_result",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ],
+                        [
+                            {
+                                "id": "hugelymodelbat",
+                                "sample": "hugelymodelbat",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "hugelymodelbat_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "publish",
+                    [
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "earlycasualcaiman",
+                                    "sample": "earlycasualcaiman",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "sex": 1,
+                                    "phenotype": 1,
+                                    "paternal": 0,
+                                    "maternal": 0,
+                                    "case_id": "justhusky"
+                                },
+                                "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "earlycasualcaiman",
+                                    "sample": "earlycasualcaiman",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                    "lane": 1,
+                                    "sex": 1,
+                                    "phenotype": 1,
+                                    "paternal": 0,
+                                    "maternal": 0,
+                                    "case_id": "justhusky"
+                                },
+                                "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "hugelymodelbat",
+                                    "sample": "hugelymodelbat",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                                    "lane": 1,
+                                    "sex": 1,
+                                    "phenotype": 1,
+                                    "paternal": 0,
+                                    "maternal": 0,
+                                    "case_id": "justhusky"
+                                },
+                                "hugelymodelbat_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "justhusky"
+                                },
+                                "justhusky.saltshaker_classify.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "justhusky"
+                                },
+                                "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "saltshaker_html",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky.saltshaker_classify.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "saltshaker_plot",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "saltshaker_vcf",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "updated_priority",
+                    [
+                        [
+                            "manta",
+                            "tiddit",
+                            "cnvnator",
+                            "mitosalt"
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        "timestamp": "2026-06-08T13:58:44.211908065",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
+    "CALL_SV_MT - no_sample_map - stub": {
+        "content": [
+            [
+                [
+                    "0",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "1",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky.saltshaker_classify.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "2",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "3",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ],
+                        [
+                            {
+                                "id": "hugelymodelbat",
+                                "sample": "hugelymodelbat",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "hugelymodelbat_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "4",
+                    [
+                        [
+                            "manta",
+                            "tiddit",
+                            "cnvnator",
+                            "mitosalt"
+                        ]
+                    ]
+                ],
+                [
+                    "5",
+                    [
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "earlycasualcaiman",
+                                    "sample": "earlycasualcaiman",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "sex": 1,
+                                    "phenotype": 1,
+                                    "paternal": 0,
+                                    "maternal": 0,
+                                    "case_id": "justhusky"
+                                },
+                                "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "earlycasualcaiman",
+                                    "sample": "earlycasualcaiman",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                    "lane": 1,
+                                    "sex": 1,
+                                    "phenotype": 1,
+                                    "paternal": 0,
+                                    "maternal": 0,
+                                    "case_id": "justhusky"
+                                },
+                                "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "hugelymodelbat",
+                                    "sample": "hugelymodelbat",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                                    "lane": 1,
+                                    "sex": 1,
+                                    "phenotype": 1,
+                                    "paternal": 0,
+                                    "maternal": 0,
+                                    "case_id": "justhusky"
+                                },
+                                "hugelymodelbat_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "justhusky"
+                                },
+                                "justhusky.saltshaker_classify.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "justhusky"
+                                },
+                                "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "mt_del_result",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ],
+                        [
+                            {
+                                "id": "hugelymodelbat",
+                                "sample": "hugelymodelbat",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "hugelymodelbat_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "publish",
+                    [
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "earlycasualcaiman",
+                                    "sample": "earlycasualcaiman",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "sex": 1,
+                                    "phenotype": 1,
+                                    "paternal": 0,
+                                    "maternal": 0,
+                                    "case_id": "justhusky"
+                                },
+                                "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "earlycasualcaiman",
+                                    "sample": "earlycasualcaiman",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                    "lane": 1,
+                                    "sex": 1,
+                                    "phenotype": 1,
+                                    "paternal": 0,
+                                    "maternal": 0,
+                                    "case_id": "justhusky"
+                                },
+                                "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "hugelymodelbat",
+                                    "sample": "hugelymodelbat",
+                                    "single_end": false,
+                                    "num_lanes": 1,
+                                    "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                                    "lane": 1,
+                                    "sex": 1,
+                                    "phenotype": 1,
+                                    "paternal": 0,
+                                    "maternal": 0,
+                                    "case_id": "justhusky"
+                                },
+                                "hugelymodelbat_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "justhusky"
+                                },
+                                "justhusky.saltshaker_classify.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ],
+                        [
+                            "call_sv/",
+                            [
+                                {
+                                    "id": "justhusky"
+                                },
+                                "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "saltshaker_html",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky.saltshaker_classify.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "saltshaker_plot",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "saltshaker_vcf",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "updated_priority",
+                    [
+                        [
+                            "manta",
+                            "tiddit",
+                            "cnvnator",
+                            "mitosalt"
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        "timestamp": "2026-06-08T13:58:59.838677182",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    }
+}
