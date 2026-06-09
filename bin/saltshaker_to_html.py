@@ -100,7 +100,6 @@ def main(
 
     with open(output, 'w') as f:
         f.write(html)
-        
 
 if __name__ == "__main__":
     app()
