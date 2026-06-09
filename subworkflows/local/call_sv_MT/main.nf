@@ -121,7 +121,8 @@ workflow CALL_SV_MT {
             // customer IDs (or sample ID if no customer ID) so individual reports have identifers in the final HTML.
             SALTSHAKER_CLASSIFY.out.txt
                 .map { meta, txt -> [['id':meta.sample], meta.case_id, txt] }
-                .join(ch_sample_id_map, remainder: true)
+                .join(ch_sample_id_map, remainder: true, failOnDuplicate: true)
+                // Only keep entries that have all 4 elements needed by map (for example stub tests without meta fail without this)
                 .filter { it.size() == 4 }
                 .map { sample_meta, case_id, txt, cust_id ->
                     cust_id ? [['id':case_id], txt, cust_id] : [['id':case_id], txt, sample_meta.id]
