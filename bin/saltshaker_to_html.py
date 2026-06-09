@@ -68,6 +68,10 @@ def main(
         help="Path to output .html file"
     )
 ):
+    if len(input) != len(sample):
+        raise typer.BadParameter(
+            "--input and --sample must have the same number of values"
+        )
     tab_buttons = ''.join(create_tab_button(sid) for sid in sample)
     tab_contents = ''.join(create_tab_content(sid, inp) for inp, sid in zip(input, sample))
 
