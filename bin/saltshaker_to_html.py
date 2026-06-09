@@ -4,12 +4,14 @@ import typer
 from pathlib import Path
 from typing import List, Optional
 
+
 CSS = """.tabcontent { display: none; }
 .tabcontent.active { display: block; }
 .tablinks { padding: 12px 20px; cursor: pointer; background-color: #f1f1f1; border: 1px solid #ccc; }
 .tablinks.active { background-color: #4CAF50; color: white; }
 .tablinks:hover { background-color: #ddd; }
 """
+
 
 JS = """
 function openTab(evt, tabName) {
@@ -28,14 +30,17 @@ function openTab(evt, tabName) {
 document.getElementsByClassName("tablinks")[0].click();
 """
 
+
 def txt_to_html(txt_file):
     with open(txt_file) as tf:
         content = tf.read()
     html_content = re.sub(r'\\n', '<br>', content)
     return html_content
 
+
 def create_tab_button(sample_id):
     return f'''<button class="tablinks" onclick="openTab(event, '{sample_id}')">{sample_id}</button>\n'''
+
 
 def create_tab_content(sample_id, txt_file):
     html_content = txt_to_html(txt_file)
@@ -44,6 +49,7 @@ def create_tab_content(sample_id, txt_file):
 \t<pre style="padding: 15px; border-radius: 5px; overflow-x: auto;">{html_content}</pre>
 </div>
 '''
+
 
 app = typer.Typer()
 
@@ -94,6 +100,7 @@ def main(
 
     with open(output, 'w') as f:
         f.write(html)
+        
 
 if __name__ == "__main__":
     app()
