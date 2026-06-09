@@ -30,6 +30,13 @@ function openTab(evt, tabName) {
 document.getElementsByClassName("tablinks")[0].click();
 """
 
+def sort_inputs(inputs, sample_ids):
+    zipped = list(zip(inputs, sample_ids))
+    sorted_zipped = sorted(zipped, key=lambda x: x[0].name)
+    sorted_inputs = [x[0] for x in sorted_zipped]
+    sorted_sample_ids = [x[1] for x in sorted_zipped]
+    return sorted_inputs, sorted_sample_ids
+
 
 def txt_to_html(txt_file):
     with open(txt_file) as tf:
@@ -78,6 +85,7 @@ def main(
         raise typer.BadParameter(
             "--input and --sample must have the same number of values"
         )
+    input, sample = sort_inputs(input, sample)
     tab_buttons = ''.join(create_tab_button(sid) for sid in sample)
     tab_contents = ''.join(create_tab_content(sid, inp) for inp, sid in zip(input, sample))
 

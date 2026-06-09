@@ -128,13 +128,6 @@ workflow CALL_SV_MT {
                     cust_id ? [['id':case_id], txt, cust_id] : [['id':case_id], txt, sample_meta.id]
                 }
                 .groupTuple()
-                .map { meta, paths, ids ->
-                    def zipped = [paths, ids].transpose()
-                    def sorted = zipped.sort { a, b -> a[0].getName() <=> b[0].getName() }
-                    def sorted_paths = sorted.collect { it[0] }
-                    def sorted_ids = sorted.collect { it[1] }
-                    return [meta, sorted_paths, sorted_ids]
-                }
                 .set { ch_saltshaker_html_input }
 
             SALTSHAKER_TO_HTML(
