@@ -1,0 +1,57 @@
+{
+    "ANNOTATE_RHOCALLVIZ - stub": {
+        "content": [
+            [
+                [
+                    "test_sample_rhocallviz.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    "test_sample_rhocallviz.wig:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    "test_sample_rhocallviz.bw:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    [
+                        "test_sample_rhocallviz.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr10.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr11.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr12.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr13.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr14.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr15.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr16.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr17.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr18.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr19.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr2.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr20.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr21.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr22.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr3.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr4.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr5.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr6.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr7.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr8.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chr9.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chrM.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chrX.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "test_sample_rhocallviz.bed_chrY.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            ]
+        ],
+        "timestamp": "2026-05-26T11:46:37.479912106",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

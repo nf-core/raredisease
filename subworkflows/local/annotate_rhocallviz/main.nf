@@ -49,13 +49,9 @@ workflow ANNOTATE_RHOCALLVIZ {
 
         UCSC_WIGTOBIGWIG(RHOCALL_VIZ.out.wig, ch_genome_chrsizes)
 
-        ch_publish = RHOCALL_VIZ.out.bed
-            .mix(RHOCALL_VIZ.out.wig)
-            .mix(CHROMOGRAPH_AUTOZYG.out.plots)
-            .map { meta, value -> ['annotate_snv/genome/', [meta, value]] }
-            .mix(UCSC_WIGTOBIGWIG.out.bw
-                .map { meta, bw -> ["annotate_snv/genome/${meta.sample}_rhocallviz/", [meta, bw]] })
-
     emit:
-        publish = ch_publish // channel: [ val(destination), val(value) ]
+        chromograph_autozyg_plots = CHROMOGRAPH_AUTOZYG.out.plots // channel: [ val(meta), path(png) ]
+        rhocall_viz_bed           = RHOCALL_VIZ.out.bed           // channel: [ val(meta), path(bed) ]
+        rhocall_viz_wig           = RHOCALL_VIZ.out.wig           // channel: [ val(meta), path(wig) ]
+        ucsc_wigtobigwig_bw       = UCSC_WIGTOBIGWIG.out.bw       // channel: [ val(meta), path(bw) ]
 }
