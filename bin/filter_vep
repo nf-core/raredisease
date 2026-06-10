@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-filter_vep_fast - Fast Python reimplementation of Ensembl's filter_vep.
+filter_vep - Fast Python reimplementation of Ensembl's filter_vep.
 
 Fast Python reimplementation of the Perl filter_vep script distributed with
 Ensembl VEP (EMBL-EBI). Validated against VEP 110 and 115.2, which are
@@ -750,7 +750,7 @@ USAGE = """\
 http://www.ensembl.org/info/docs/tools/vep/script/vep_filter.html
 
 Usage:
-./filter_vep_fast.py [arguments]
+./filter_vep [arguments]
 
 --help               -h   Print usage message and exit
 
