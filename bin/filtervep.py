@@ -2,11 +2,16 @@
 """
 filter_vep_fast - Fast Python reimplementation of Ensembl's filter_vep.
 
-Replicates all features of the Perl filter_vep script distributed with Ensembl
-VEP (EMBL-EBI). Validated against VEP 110 and 115.2, which are functionally
-identical for VCF filtering.
+Fast Python reimplementation of the Perl filter_vep script distributed with
+Ensembl VEP (EMBL-EBI). Validated against VEP 110 and 115.2, which are
+functionally identical for VCF filtering.
 Uses cyvcf2 for VCF parsing when available (significant speedup for large
 VCF / bgzipped files via htslib).
+
+All filter operators are supported except is_child, which requires a live
+Ensembl Ontology DB. Use the original filter_vep --ontology for
+ontology-aware filtering, or replace is_child with an explicit 'in' list
+of consequence terms.
 """
 
 import sys
@@ -42,7 +47,7 @@ class FilterSet:
       match / matches / re / regex   regex search (case-insensitive)
       in                    list or file membership
       exists / ex / defined field has a non-null value
-      is_child              SO ontology child (falls back to exact match)
+      is_child              SO ontology child (not supported; see --ontology)
 
     Special value syntax:
       #FieldName            compare against another field's value
@@ -289,8 +294,11 @@ class FilterSet:
             return processed_input in in_set
 
         if operator == 'is_child':
-            processed_input = self._get_input(field_value, value)
-            return processed_input.lower() == str(value or '').lower()
+            raise NotImplementedError(
+                "is_child requires a live Ensembl Ontology DB (--ontology). "
+                "Use the original filter_vep with --ontology, or replace "
+                "is_child with an explicit 'in' list of the consequence terms you need."
+            )
 
         # Ordered comparisons — use _get_input for numeric extraction
         processed_input  = self._get_input(field_value, value)
@@ -772,7 +780,7 @@ Usage:
                             match/matches/re/regex  regex (case-insensitive)
                             in                list or file (one value/line)
                             exists/ex/defined field is present and non-null
-                            is_child          SO ontology child term
+                            is_child          SO ontology child (not supported here)
                           Logical: and  or  not  ( )
                           Value can be #Field to compare two fields.
                           Mixed content (e.g. "deleterious(0.05)") has its
@@ -791,11 +799,12 @@ Usage:
 --soft_filter             Add filter_vep_pass / filter_vep_fail to the VCF
                           FILTER column instead of excluding variants.
 
---ontology           -y   Use Sequence Ontology to match consequence terms
-                          (requires Ensembl API; is_child falls back to
-                          exact match in this implementation).
+--ontology           -y   Accepted for compatibility but not implemented.
+                          is_child requires a live Ensembl Ontology DB; use
+                          the original filter_vep --ontology for that feature,
+                          or replace is_child with an explicit 'in' list.
 --host / --user / --pass / --port / --version / --registry
-                          Database connection options for --ontology.
+                          Database connection options (accepted, not used).
 
 --start [N]          -s   Skip first N passing results (1-based, default 1)
 --limit [N]               Return at most N passing results.
@@ -838,8 +847,9 @@ def main():
 
     if args.ontology:
         sys.stderr.write(
-            "WARNING: --ontology requires Ensembl API; "
-            "is_child will fall back to exact match in this implementation\n"
+            "WARNING: --ontology is accepted for compatibility but is_child is not "
+            "implemented. Use the original filter_vep --ontology for ontology-aware "
+            "filtering, or replace is_child with an explicit 'in' list.\n"
         )
 
     args.filter_set = FilterSet(*(args.filter or []))
