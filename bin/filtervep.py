@@ -77,230 +77,239 @@ class FilterSet:
     _file_cache: dict = {}  # shared across all instances
 
     def __init__(self, *filter_strings):
-        self._parsed = [self._parse(f) for f in filter_strings]
+        self._parsed = [self._parse(filter_string) for filter_string in filter_strings]
 
     # -- tokeniser -----------------------------------------------------------
 
     def _tokenize(self, expr):
-        toks = []
-        i = 0
-        n = len(expr)
-        while i < n:
-            c = expr[i]
-            if c.isspace():
-                i += 1
+        tokens = []
+        char_idx = 0
+        expr_length = len(expr)
+        while char_idx < expr_length:
+            char = expr[char_idx]
+            if char.isspace():
+                char_idx += 1
                 continue
-            if c == '(':
-                toks.append(('LP', None)); i += 1; continue
-            if c == ')':
-                toks.append(('RP', None)); i += 1; continue
-            if c in ('>', '<', '!', '='):
-                two = expr[i:i+2]
-                if two in ('>=', '<=', '!='):
-                    toks.append(('OP', two)); i += 2
+            if char == '(':
+                tokens.append(('LP', None)); char_idx += 1; continue
+            if char == ')':
+                tokens.append(('RP', None)); char_idx += 1; continue
+            if char in ('>', '<', '!', '='):
+                two_char = expr[char_idx:char_idx+2]
+                if two_char in ('>=', '<=', '!='):
+                    tokens.append(('OP', two_char)); char_idx += 2
                 else:
-                    toks.append(('OP', c)); i += 1
+                    tokens.append(('OP', char)); char_idx += 1
                 continue
-            m = re.match(r'[^\s()]+', expr[i:])
-            if m:
-                w = m.group(); lo = w.lower()
-                if   lo == 'and':   toks.append(('AND', None))
-                elif lo == 'or':    toks.append(('OR',  None))
-                elif lo == 'not':   toks.append(('NOT', None))
-                elif lo in self._OP_WORDS:
-                    # Normalise synonyms to canonical op
-                    toks.append(('OP', self._OP_SYNONYMS.get(lo, lo)))
+            word_match = re.match(r'[^\s()]+', expr[char_idx:])
+            if word_match:
+                word = word_match.group()
+                word_lower = word.lower()
+                if   word_lower == 'and':   tokens.append(('AND', None))
+                elif word_lower == 'or':    tokens.append(('OR',  None))
+                elif word_lower == 'not':   tokens.append(('NOT', None))
+                elif word_lower in self._OP_WORDS:
+                    tokens.append(('OP', self._OP_SYNONYMS.get(word_lower, word_lower)))
                 else:
-                    toks.append(('W', w))
-                i += len(w)
+                    tokens.append(('W', word))
+                char_idx += len(word)
                 continue
-            i += 1
-        toks.append(('EOF', None))
-        return toks
+            char_idx += 1
+        tokens.append(('EOF', None))
+        return tokens
 
     # -- recursive-descent parser -> AST -------------------------------------
 
     def _parse(self, expr):
-        toks = self._tokenize(expr)
-        pos  = [0]
+        tokens   = self._tokenize(expr)
+        token_pos = [0]
 
-        def peek(): return toks[pos[0]]
+        def peek():
+            return tokens[token_pos[0]]
+
         def eat():
-            t = toks[pos[0]]; pos[0] += 1; return t
+            token = tokens[token_pos[0]]
+            token_pos[0] += 1
+            return token
 
-        def or_():
-            l = and_()
+        def parse_or():
+            left_node = parse_and()
             while peek()[0] == 'OR':
-                eat(); r = and_(); l = ('or', l, r)
-            return l
+                eat()
+                right_node = parse_and()
+                left_node  = ('or', left_node, right_node)
+            return left_node
 
-        def and_():
-            l = not_()
+        def parse_and():
+            left_node = parse_not()
             while peek()[0] == 'AND':
-                eat(); r = not_(); l = ('and', l, r)
-            return l
+                eat()
+                right_node = parse_not()
+                left_node  = ('and', left_node, right_node)
+            return left_node
 
-        def not_():
+        def parse_not():
             if peek()[0] == 'NOT':
-                eat(); return ('not', atom())
-            return atom()
+                eat()
+                return ('not', parse_atom())
+            return parse_atom()
 
-        def atom():
+        def parse_atom():
             if peek()[0] == 'LP':
-                eat(); node = or_()
-                if peek()[0] == 'RP': eat()
+                eat()
+                node = parse_or()
+                if peek()[0] == 'RP':
+                    eat()
                 return node
             if peek()[0] != 'W':
                 raise SyntaxError(f"Expected field name, got {peek()!r} in: {expr!r}")
             field = eat()[1]
-            t = peek()
-            if t[0] in ('EOF', 'RP', 'AND', 'OR'):
+            next_token = peek()
+            if next_token[0] in ('EOF', 'RP', 'AND', 'OR'):
                 return ('exists', field, None)
-            if t[0] != 'OP':
+            if next_token[0] != 'OP':
                 return ('exists', field, None)
-            op = eat()[1].lower()
-            if op == 'is' and peek()[0] == 'NOT':
-                eat(); op = 'is not'
-            if op == 'exists':
+            operator = eat()[1].lower()
+            if operator == 'is' and peek()[0] == 'NOT':
+                eat()
+                operator = 'is not'
+            if operator == 'exists':
                 return ('exists', field, None)
             if peek()[0] in ('EOF', 'AND', 'OR', 'RP'):
-                val = None
+                value = None
             else:
-                val = eat()[1]
-            return (op, field, val)
+                value = eat()[1]
+            return (operator, field, value)
 
-        return or_()
+        return parse_or()
 
     # -- evaluator -----------------------------------------------------------
 
     def evaluate(self, data):
-        return all(self._eval(ast, data) for ast in self._parsed)
+        return all(self._eval(ast_node, data) for ast_node in self._parsed)
 
-    def _fv(self, data, field):
+    def _fetch_field_value(self, data, field):
         """Fetch field value with case-insensitive fallback."""
-        v = data.get(field)
-        if v is not None:
-            return v
-        fl = field.lower()
-        for k, val in data.items():
-            if k is not None and k.lower() == fl:
-                return val
+        value = data.get(field)
+        if value is not None:
+            return value
+        field_lower = field.lower()
+        for existing_key, existing_value in data.items():
+            if existing_key is not None and existing_key.lower() == field_lower:
+                return existing_value
         return None
 
     @staticmethod
-    def _norm(field, val):
+    def _normalize_missing(field, value):
         """Treat '' and '-' (except for Allele) as missing."""
-        if val is None or val == '':
+        if value is None or value == '':
             return None
-        if field != 'Allele' and val == '-':
+        if field != 'Allele' and value == '-':
             return None
-        return val
+        return value
 
     # Regex for VEP mixed-type field values: e.g. "HGNC:28706", "deleterious(0.05)"
     _MIXED_RE = re.compile(r'^([\w.\-]+)?:?\(?([-\d.e]*)\)?', re.IGNORECASE)
-    _NUM_RE   = re.compile(r'^-?\d+\.?\d*(e-?\d+)?$', re.IGNORECASE)
-    _PURE_NUM = re.compile(r'^[-\d.e]+$', re.IGNORECASE)
+    _NUM_RE   = re.compile(r'^-?\d+\.?\d*(e-?\d+)?$',         re.IGNORECASE)
+    _PURE_NUM = re.compile(r'^[-\d.e]+$',                      re.IGNORECASE)
 
-    def _get_input(self, fval, rep_value):
+    def _get_input(self, field_value, representative_value):
         """Replicate VEP 115 FilterSet.get_input() value-extraction logic.
 
         Given a raw field value and a representative comparison value,
-        returns the part of fval that should be compared.
+        returns the part of field_value that should be compared.
 
-        - If fval has the form TEXT:NUM or TEXT(NUM):
-            - and rep_value is purely numeric → return the NUM part
-            - otherwise                      → return fval unchanged
-        - If fval is plain (no numeric part) → return fval unchanged
+        - If field_value has the form TEXT:NUM or TEXT(NUM):
+            - and representative_value is purely numeric → return the NUM part
+            - otherwise                                 → return field_value unchanged
+        - If field_value is plain (no numeric part)     → return field_value unchanged
         """
-        if fval is None:
+        if field_value is None:
             return None
-        s = str(fval)
-        m = self._MIXED_RE.match(s)
-        if not m:
-            return s
-        text = m.group(1) or ''
-        num  = m.group(2) or ''
-        if not num:
-            return s  # no numeric part; unchanged
-        # Determine whether the comparison side is purely numeric
-        rep = str(rep_value) if rep_value is not None else ''
-        if self._PURE_NUM.match(rep):
-            # comparison is numeric → use num part unless text is already numeric
-            if not self._NUM_RE.match(text):
-                return num
-            return text
-        # comparison is not purely numeric → return value unchanged
-        return s
+        field_str   = str(field_value)
+        mixed_match = self._MIXED_RE.match(field_str)
+        if not mixed_match:
+            return field_str
+        text_part    = mixed_match.group(1) or ''
+        numeric_part = mixed_match.group(2) or ''
+        if not numeric_part:
+            return field_str
+        representative_str = str(representative_value) if representative_value is not None else ''
+        if self._PURE_NUM.match(representative_str):
+            if not self._NUM_RE.match(text_part):
+                return numeric_part
+            return text_part
+        return field_str
 
     def _resolve_value(self, value, data):
         """If value starts with '#', resolve it to the named field's value."""
         if value and value.startswith('#'):
-            return self._norm(value[1:], self._fv(data, value[1:]))
+            field_name = value[1:]
+            return self._normalize_missing(field_name, self._fetch_field_value(data, field_name))
         return value
 
     def _eval(self, node, data):
-        op = node[0]
-        if op == 'and': return self._eval(node[1], data) and self._eval(node[2], data)
-        if op == 'or':  return self._eval(node[1], data) or  self._eval(node[2], data)
-        if op == 'not': return not self._eval(node[1], data)
+        operator = node[0]
+        if operator == 'and': return self._eval(node[1], data) and self._eval(node[2], data)
+        if operator == 'or':  return self._eval(node[1], data) or  self._eval(node[2], data)
+        if operator == 'not': return not self._eval(node[1], data)
 
-        field = node[1]
-        value = self._resolve_value(node[2] if len(node) > 2 else None, data)
-        fval  = self._norm(field, self._fv(data, field))
+        field         = node[1]
+        value         = self._resolve_value(node[2] if len(node) > 2 else None, data)
+        field_value   = self._normalize_missing(field, self._fetch_field_value(data, field))
 
-        if op == 'exists':
-            return fval is not None
+        if operator == 'exists':
+            return field_value is not None
 
-        if op in ('is', '='):
-            if value is None: return fval is None
-            if fval  is None: return False
-            inp = self._get_input(fval, value)
-            return inp.lower() == str(value).lower()
+        if operator in ('is', '='):
+            if value       is None: return field_value is None
+            if field_value is None: return False
+            processed_input = self._get_input(field_value, value)
+            return processed_input.lower() == str(value).lower()
 
-        if op in ('is not', '!='):
-            if value is None: return fval is not None
-            if fval  is None: return True
-            inp = self._get_input(fval, value)
-            return inp.lower() != str(value).lower()
+        if operator in ('is not', '!='):
+            if value       is None: return field_value is not None
+            if field_value is None: return True
+            processed_input = self._get_input(field_value, value)
+            return processed_input.lower() != str(value).lower()
 
-        if fval is None:
+        if field_value is None:
             return False
 
-        if op == 'match':
-            return bool(re.search(str(value or ''), str(fval), re.IGNORECASE))
+        if operator == 'match':
+            return bool(re.search(str(value or ''), str(field_value), re.IGNORECASE))
 
-        if op == 'in':
+        if operator == 'in':
             if value is None: return False
-            in_set = self._in_set(value)
-            # Pick a representative value to determine numeric vs string mode
-            rep = next(iter(in_set), None)
-            inp = self._get_input(fval, rep).lower()
-            return inp in in_set
+            in_set          = self._in_set(value)
+            representative  = next(iter(in_set), None)
+            processed_input = self._get_input(field_value, representative).lower()
+            return processed_input in in_set
 
-        if op == 'is_child':
-            # Ontology lookup not supported; exact match fallback
-            inp = self._get_input(fval, value)
-            return inp.lower() == str(value or '').lower()
+        if operator == 'is_child':
+            processed_input = self._get_input(field_value, value)
+            return processed_input.lower() == str(value or '').lower()
 
         # Ordered comparisons — use _get_input for numeric extraction
-        inp = self._get_input(fval, value)
-        sv  = inp
-        tv  = str(value or '')
+        processed_input  = self._get_input(field_value, value)
+        str_field_val    = processed_input
+        str_target_val   = str(value or '')
         try:
-            fn, tn = float(sv), float(tv)
-            if op == '>':  return fn > tn
-            if op == '<':  return fn < tn
-            if op == '>=': return fn >= tn
-            if op == '<=': return fn <= tn
+            field_num  = float(str_field_val)
+            target_num = float(str_target_val)
+            if operator == '>':  return field_num > target_num
+            if operator == '<':  return field_num < target_num
+            if operator == '>=': return field_num >= target_num
+            if operator == '<=': return field_num <= target_num
         except (ValueError, TypeError):
             pass
-        if op == '>':  return sv > tv
-        if op == '<':  return sv < tv
-        if op == '>=': return sv >= tv
-        if op == '<=': return sv <= tv
+        if operator == '>':  return str_field_val > str_target_val
+        if operator == '<':  return str_field_val < str_target_val
+        if operator == '>=': return str_field_val >= str_target_val
+        if operator == '<=': return str_field_val <= str_target_val
         return False
 
-    def limit_synonym_search(self, _val=True):
+    def limit_synonym_search(self, _value=True):
         """No-op shim (kept for API parity with the Perl module)."""
 
     def _in_set(self, value):
@@ -311,12 +320,12 @@ class FilterSet:
         if value in self._file_cache:
             return self._file_cache[value]
         if os.path.isfile(value):
-            with open(value) as fh:
-                s = {line.strip().lower() for line in fh if line.strip()}
-            self._file_cache[value] = s
-            return s
-        s = {v.strip().lower() for v in value.split(',')}
-        return s
+            with open(value) as file_handle:
+                value_set = {line.strip().lower() for line in file_handle if line.strip()}
+            self._file_cache[value] = value_set
+            return value_set
+        value_set = {item.strip().lower() for item in value.split(',')}
+        return value_set
 
 
 # ---------------------------------------------------------------------------
@@ -325,50 +334,51 @@ class FilterSet:
 
 def parse_headers(raw_headers, vcf_info_field='CSQ'):
     """Return (vep_headers, col_headers, allowed_fields_dict)."""
-    vep_headers = None
-    col_headers = None
-    allowed     = {}
-    for raw in raw_headers:
-        hashes = len(raw) - len(raw.lstrip('#'))
-        line   = raw.lstrip('#')
-        if hashes >= 2:
-            if re.match(r'INFO=<ID=' + re.escape(vcf_info_field) + r',', line):
-                m = re.search(r'Format: (.+?)"', line)
-                if m:
-                    vep_headers = m.group(1).split('|')
+    vep_headers    = None
+    col_headers    = None
+    allowed_fields = {}
+    for raw_header in raw_headers:
+        hash_count     = len(raw_header) - len(raw_header.lstrip('#'))
+        stripped_header = raw_header.lstrip('#')
+        if hash_count >= 2:
+            if re.match(r'INFO=<ID=' + re.escape(vcf_info_field) + r',', stripped_header):
+                regex_match = re.search(r'Format: (.+?)"', stripped_header)
+                if regex_match:
+                    vep_headers = regex_match.group(1).split('|')
             else:
-                m = re.match(r'INFO=<ID=(.+?),', line)
-                if m:
-                    allowed[m.group(1)] = True
+                regex_match = re.match(r'INFO=<ID=(.+?),', stripped_header)
+                if regex_match:
+                    allowed_fields[regex_match.group(1)] = True
                 else:
-                    m = re.search(r' (.+?) :', line)
-                    if m:
-                        allowed[m.group(1)] = True
+                    regex_match = re.search(r' (.+?) :', stripped_header)
+                    if regex_match:
+                        allowed_fields[regex_match.group(1)] = True
         else:
-            col_headers = line.split('\t')
-    return vep_headers, col_headers, allowed
+            col_headers = stripped_header.split('\t')
+    return vep_headers, col_headers, allowed_fields
 
 
 def _expand_extra(data):
     extra = data.get('Extra')
     if not extra:
         return
-    for part in extra.split(';'):
-        if '=' in part:
-            k, v = part.split('=', 1)
-            data[k] = v
+    for kv_pair in extra.split(';'):
+        if '=' in kv_pair:
+            key, value = kv_pair.split('=', 1)
+            data[key] = value
 
 
 def _normalize_data(data):
-    for k in list(data.keys()):
-        v = data[k]
-        if v == '' or (k != 'Allele' and v == '-'):
-            data[k] = None
+    for key in list(data.keys()):
+        value = data[key]
+        if value == '' or (key != 'Allele' and value == '-'):
+            data[key] = None
 
 
 def parse_tab_line(line, headers):
-    parts = line.rstrip('\n').split('\t', len(headers))
-    data  = {h: (parts[i] if i < len(parts) else None) for i, h in enumerate(headers)}
+    fields = line.rstrip('\n').split('\t', len(headers))
+    data   = {header: (fields[idx] if idx < len(fields) else None)
+              for idx, header in enumerate(headers)}
     data['INFO'] = None
     _expand_extra(data)
     _normalize_data(data)
@@ -376,10 +386,10 @@ def parse_tab_line(line, headers):
 
 
 def parse_csq_chunk(chunk, vep_headers, main_data=None):
-    parts = chunk.split('|')
-    data  = dict(main_data) if main_data else {}
-    for i, h in enumerate(vep_headers):
-        data[h] = parts[i] if i < len(parts) else None
+    pipe_fields = chunk.split('|')
+    data        = dict(main_data) if main_data else {}
+    for idx, header in enumerate(vep_headers):
+        data[header] = pipe_fields[idx] if idx < len(pipe_fields) else None
     data['INFO'] = None
     _expand_extra(data)
     _normalize_data(data)
@@ -387,12 +397,12 @@ def parse_csq_chunk(chunk, vep_headers, main_data=None):
 
 
 def detect_format(line):
-    p = line.split('\t')
-    if (len(p) >= 5
-            and re.match(r'(chr)?\w+', p[0])
-            and re.match(r'^\d+$', p[1])
-            and p[3] and re.match(r'^[ACGTN\-.]+$', p[3], re.IGNORECASE)
-            and p[4]):
+    fields = line.split('\t')
+    if (len(fields) >= 5
+            and re.match(r'(chr)?\w+', fields[0])
+            and re.match(r'^\d+$', fields[1])
+            and fields[3] and re.match(r'^[ACGTN\-.]+$', fields[3], re.IGNORECASE)
+            and fields[4]):
         return 'vcf'
     return 'tab'
 
@@ -402,9 +412,9 @@ def open_input(path, force_gz=False):
         return sys.stdin
     if path.endswith('.gz') or force_gz:
         return gzip.open(path, 'rt')
-    with open(path, 'rb') as f:
-        magic = f.read(2)
-    if magic == b'\x1f\x8b':
+    with open(path, 'rb') as file_handle:
+        magic_bytes = file_handle.read(2)
+    if magic_bytes == b'\x1f\x8b':
         return gzip.open(path, 'rt')
     return open(path, 'r')
 
@@ -413,94 +423,95 @@ def open_input(path, force_gz=False):
 # cyvcf2 fast path (VCF only)
 # ---------------------------------------------------------------------------
 
-def process_cyvcf2(args, out_fh):
+def process_cyvcf2(args, output_fh):
     vcf_info_field = args.vcf_info_field
     filter_set     = args.filter_set
 
     vcf = cyvcf2.VCF(args.input_file or '-')
 
-    raw_hdr_lines = vcf.raw_header.rstrip('\n').split('\n')
+    raw_header_lines = vcf.raw_header.rstrip('\n').split('\n')
 
     vep_headers = None
-    for h in raw_hdr_lines:
-        m = re.search(r'ID=' + re.escape(vcf_info_field) + r'.*?Format: (.+?)"', h)
-        if m:
-            vep_headers = m.group(1).split('|')
+    for header_line in raw_header_lines:
+        regex_match = re.search(r'ID=' + re.escape(vcf_info_field) + r'.*?Format: (.+?)"', header_line)
+        if regex_match:
+            vep_headers = regex_match.group(1).split('|')
             break
 
     col_headers = None
-    for h in reversed(raw_hdr_lines):
-        if h.startswith('#') and not h.startswith('##'):
-            col_headers = h.lstrip('#').split('\t')
+    for header_line in reversed(raw_header_lines):
+        if header_line.startswith('#') and not header_line.startswith('##'):
+            col_headers = header_line.lstrip('#').split('\t')
             break
 
     all_fields = set()
     if vep_headers:  all_fields.update(vep_headers)
     if col_headers:  all_fields.update(col_headers)
-    for h in raw_hdr_lines:
-        m = re.match(r'##INFO=<ID=(.+?),', h)
-        if m: all_fields.add(m.group(1))
+    for header_line in raw_header_lines:
+        regex_match = re.match(r'##INFO=<ID=(.+?),', header_line)
+        if regex_match:
+            all_fields.add(regex_match.group(1))
 
     if args.list:
         print("Available fields:\n")
-        for f in sorted(all_fields):
-            print(f)
+        for field_name in sorted(all_fields):
+            print(field_name)
         vcf.close()
         return
 
-    hdr_lines = list(raw_hdr_lines)
+    output_header_lines = list(raw_header_lines)
     if args.soft_filter:
-        for i, h in enumerate(hdr_lines):
-            if h.startswith('#') and not h.startswith('##'):
-                hdr_lines.insert(i, '##FILTER=<ID=filter_vep_fail,Description="Variant fails filter_vep">')
-                hdr_lines.insert(i, '##FILTER=<ID=filter_vep_pass,Description="Variant passes filter_vep">')
+        for idx, header_line in enumerate(output_header_lines):
+            if header_line.startswith('#') and not header_line.startswith('##'):
+                output_header_lines.insert(idx, '##FILTER=<ID=filter_vep_fail,Description="Variant fails filter_vep">')
+                output_header_lines.insert(idx, '##FILTER=<ID=filter_vep_pass,Description="Variant passes filter_vep">')
                 break
 
     if not args.count:
-        out_fh.write('\n'.join(hdr_lines) + '\n')
+        output_fh.write('\n'.join(output_header_lines) + '\n')
 
-    col_names   = col_headers or ['CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO']
-    count       = 0
-    line_number = 0
-    missing_csq = 0
+    column_names = col_headers or ['CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO']
+    count        = 0
+    line_number  = 0
+    missing_csq  = 0
 
-    for var in vcf:
+    for variant in vcf:
         line_number += 1
         if args.test and line_number > args.test:
             break
 
-        vcf_line = str(var).rstrip('\n')
-        parts    = vcf_line.split('\t')
+        vcf_line  = str(variant)
+        vcf_parts = vcf_line.split('\t')
 
-        main_data = {col_names[i]: (parts[i] if i < len(parts) else None)
-                     for i in range(len(col_names))}
-        if len(parts) > 7:
-            for ifield in parts[7].split(';'):
-                if '=' in ifield:
-                    k, v = ifield.split('=', 1)
-                    if k != vcf_info_field:
-                        main_data[k] = v
-                elif ifield:
-                    main_data[ifield] = None  # Flag: Perl sets to undef, so exists-check fails
+        main_data = {column_names[idx]: (vcf_parts[idx] if idx < len(vcf_parts) else None)
+                     for idx in range(len(column_names))}
+        if len(vcf_parts) > 7:
+            for info_field in vcf_parts[7].split(';'):
+                if '=' in info_field:
+                    info_key, info_value = info_field.split('=', 1)
+                    if info_key != vcf_info_field:
+                        main_data[info_key] = info_value
+                elif info_field:
+                    main_data[info_field] = None  # Flag: Perl sets to undef, so exists-check fails
 
-        csq_val = var.INFO.get(vcf_info_field)
+        csq_value = variant.INFO.get(vcf_info_field)
         chunks    = []
         data_list = []
 
-        if csq_val:
-            chunks    = csq_val.split(',')
-            data_list = [parse_csq_chunk(c, vep_headers or [], main_data) for c in chunks]
+        if csq_value:
+            chunks    = csq_value.split(',')
+            data_list = [parse_csq_chunk(chunk, vep_headers or [], main_data) for chunk in chunks]
         else:
             missing_csq += 1
             data_list = [main_data]
 
         line_pass  = 0
         new_chunks = []
-        for i, parsed in enumerate(data_list):
-            if filter_set.evaluate(parsed):
+        for blob_index, parsed_blob in enumerate(data_list):
+            if filter_set.evaluate(parsed_blob):
                 line_pass += 1
-                if i < len(chunks):
-                    new_chunks.append(chunks[i])
+                if blob_index < len(chunks):
+                    new_chunks.append(chunks[blob_index])
 
         count += bool(line_pass)
 
@@ -508,19 +519,19 @@ def process_cyvcf2(args, out_fh):
             continue
 
         if args.soft_filter:
-            tag = 'filter_vep_pass' if line_pass else 'filter_vep_fail'
-            cur = parts[6] if len(parts) > 6 else '.'
-            parts[6] = f"{cur};{tag}" if cur and cur != '.' else tag
-            out_fh.write('\t'.join(parts) + '\n')
+            filter_tag      = 'filter_vep_pass' if line_pass else 'filter_vep_fail'
+            existing_filter = vcf_parts[6] if len(vcf_parts) > 6 else '.'
+            vcf_parts[6]    = f"{existing_filter};{filter_tag}" if existing_filter and existing_filter != '.' else filter_tag
+            output_fh.write('\t'.join(vcf_parts) + '\n')
         elif line_pass and not args.count:
             out_line = vcf_line
             if args.only_matched and new_chunks and len(new_chunks) != len(chunks):
-                new_csq = ','.join(new_chunks)
-                p = out_line.split('\t')
-                p[7] = re.sub(re.escape(vcf_info_field) + r'=[^;]*',
-                               vcf_info_field + '=' + new_csq, p[7], count=1)
-                out_line = '\t'.join(p)
-            out_fh.write(out_line + '\n')
+                new_csq      = ','.join(new_chunks)
+                vcf_parts_rw = out_line.split('\t')
+                vcf_parts_rw[7] = re.sub(re.escape(vcf_info_field) + r'=[^;]*',
+                                          vcf_info_field + '=' + new_csq, vcf_parts_rw[7], count=1)
+                out_line = '\t'.join(vcf_parts_rw)
+            output_fh.write(out_line + '\n')
 
         if not args.soft_filter and count >= args.limit + args.start - 1:
             break
@@ -528,10 +539,10 @@ def process_cyvcf2(args, out_fh):
     vcf.close()
 
     if line_number == 0 and not args.count:
-        out_fh.write('\n'.join(hdr_lines) + '\n')
+        output_fh.write('\n'.join(output_header_lines) + '\n')
 
     if args.count:
-        out_fh.write(f"{count}\n")
+        output_fh.write(f"{count}\n")
 
     if missing_csq:
         sys.stderr.write(
@@ -544,24 +555,24 @@ def process_cyvcf2(args, out_fh):
 # Generic path (tab or VCF without cyvcf2)
 # ---------------------------------------------------------------------------
 
-def process_generic(args, out_fh):
+def process_generic(args, output_fh):
     vcf_info_field = args.vcf_info_field
     filter_set     = args.filter_set
 
-    in_fh = open_input(args.input_file, args.gz)
+    input_fh = open_input(args.input_file, args.gz)
 
-    raw_headers        = []
-    vep_headers        = None
-    col_headers        = None
-    fmt                = args.format
-    count              = 0
-    line_number        = 0
-    missing_csq        = 0
-    headers_initialised = False
+    raw_headers          = []
+    vep_headers          = None
+    col_headers          = None
+    file_format          = args.format
+    count                = 0
+    line_number          = 0
+    missing_csq          = 0
+    headers_initialised  = False
 
     csq_re = re.compile(re.escape(vcf_info_field) + r'=(.+?)(?:;|\s|$)')
 
-    for raw_line in in_fh:
+    for raw_line in input_fh:
         line = raw_line.rstrip('\n')
 
         if line.startswith('#'):
@@ -578,13 +589,13 @@ def process_generic(args, out_fh):
                 sys.exit("ERROR: No headers found in input file")
 
             if args.soft_filter:
-                chrom_hdr = raw_headers.pop()
+                chrom_header = raw_headers.pop()
                 raw_headers.append('##FILTER=<ID=filter_vep_pass,Description="Variant passes filter_vep">')
                 raw_headers.append('##FILTER=<ID=filter_vep_fail,Description="Variant fails filter_vep">')
-                raw_headers.append(chrom_hdr)
+                raw_headers.append(chrom_header)
 
             if not args.count and not args.list:
-                out_fh.write('\n'.join(raw_headers) + '\n')
+                output_fh.write('\n'.join(raw_headers) + '\n')
 
             vep_headers, col_headers, extra_allowed = parse_headers(raw_headers, vcf_info_field)
 
@@ -595,22 +606,22 @@ def process_generic(args, out_fh):
 
             if args.list:
                 print("Available fields:\n")
-                for f in sorted(all_fields):
-                    print(f)
-                if in_fh is not sys.stdin:
-                    in_fh.close()
+                for field_name in sorted(all_fields):
+                    print(field_name)
+                if input_fh is not sys.stdin:
+                    input_fh.close()
                 return
 
             headers_initialised = True
 
         # -- format detection --
-        if not fmt:
-            fmt = detect_format(line)
-        if fmt not in ('vcf', 'tab'):
-            sys.exit(f"ERROR: Unable to parse data in format {fmt}")
-        if fmt != 'vcf' and args.only_matched:
+        if not file_format:
+            file_format = detect_format(line)
+        if file_format not in ('vcf', 'tab'):
+            sys.exit(f"ERROR: Unable to parse data in format {file_format}")
+        if file_format != 'vcf' and args.only_matched:
             sys.exit("ERROR: --only_matched is compatible only with VCF files")
-        if fmt != 'vcf' and args.soft_filter:
+        if file_format != 'vcf' and args.soft_filter:
             sys.exit("ERROR: --soft_filter is compatible only with VCF files")
 
         if args.soft_filter:
@@ -619,33 +630,33 @@ def process_generic(args, out_fh):
         chunks    = []
         data_list = []
 
-        if fmt == 'tab':
-            hdrs = col_headers or vep_headers or []
-            data_list.append(parse_tab_line(line, hdrs))
+        if file_format == 'tab':
+            tab_headers = col_headers or vep_headers or []
+            data_list.append(parse_tab_line(line, tab_headers))
             chunks.append(line)
-            if not any(h == 'Extra' for h in hdrs):
+            if not any(header == 'Extra' for header in tab_headers):
                 filter_set.limit_synonym_search(True)
 
         else:  # vcf
-            parts = line.split('\t')
-            ch    = col_headers or ['CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO']
-            main_data = {ch[i]: (parts[i] if i < len(parts) else None)
-                         for i in range(len(ch))}
+            vcf_parts     = line.split('\t')
+            column_headers = col_headers or ['CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO']
+            main_data = {column_headers[idx]: (vcf_parts[idx] if idx < len(vcf_parts) else None)
+                         for idx in range(len(column_headers))}
 
-            if len(parts) > 7:
-                for ifield in parts[7].split(';'):
-                    if '=' in ifield:
-                        k, v = ifield.split('=', 1)
-                        if k != vcf_info_field:
-                            main_data[k] = v
-                    elif ifield:
-                        main_data[ifield] = None  # Flag: Perl sets to undef, so exists-check fails
+            if len(vcf_parts) > 7:
+                for info_field in vcf_parts[7].split(';'):
+                    if '=' in info_field:
+                        info_key, info_value = info_field.split('=', 1)
+                        if info_key != vcf_info_field:
+                            main_data[info_key] = info_value
+                    elif info_field:
+                        main_data[info_field] = None  # Flag: Perl sets to undef, so exists-check fails
 
-            m = csq_re.search(line)
-            if m:
-                raw_csq   = m.group(1)
-                chunks    = raw_csq.split(',')
-                data_list = [parse_csq_chunk(c, vep_headers or [], main_data) for c in chunks]
+            regex_match = csq_re.search(line)
+            if regex_match:
+                raw_csq_value = regex_match.group(1)
+                chunks        = raw_csq_value.split(',')
+                data_list     = [parse_csq_chunk(chunk, vep_headers or [], main_data) for chunk in chunks]
             else:
                 missing_csq += 1
                 data_list = [main_data]
@@ -655,11 +666,11 @@ def process_generic(args, out_fh):
         # -- evaluate --
         line_pass  = 0
         new_chunks = []
-        for i, parsed in enumerate(data_list):
-            if filter_set.evaluate(parsed):
+        for blob_index, parsed_blob in enumerate(data_list):
+            if filter_set.evaluate(parsed_blob):
                 line_pass += 1
-                if i < len(chunks):
-                    new_chunks.append(chunks[i])
+                if blob_index < len(chunks):
+                    new_chunks.append(chunks[blob_index])
 
         count += bool(line_pass)
 
@@ -668,21 +679,21 @@ def process_generic(args, out_fh):
 
         # -- output --
         if args.soft_filter:
-            sp  = line.split('\t')
-            tag = 'filter_vep_pass' if line_pass else 'filter_vep_fail'
-            cur = sp[6] if len(sp) > 6 else '.'
-            sp[6] = f"{cur};{tag}" if cur and cur != '.' else tag
-            out_fh.write('\t'.join(sp) + '\n')
+            split_parts     = line.split('\t')
+            filter_tag      = 'filter_vep_pass' if line_pass else 'filter_vep_fail'
+            existing_filter = split_parts[6] if len(split_parts) > 6 else '.'
+            split_parts[6]  = f"{existing_filter};{filter_tag}" if existing_filter and existing_filter != '.' else filter_tag
+            output_fh.write('\t'.join(split_parts) + '\n')
 
         elif line_pass and not args.count:
             out_line = line
             if args.only_matched and new_chunks and len(new_chunks) != len(chunks):
-                new_csq = ','.join(new_chunks)
-                p = out_line.split('\t')
-                p[7] = re.sub(re.escape(vcf_info_field) + r'=[^;]*',
-                               vcf_info_field + '=' + new_csq, p[7], count=1)
-                out_line = '\t'.join(p)
-            out_fh.write(out_line + '\n')
+                new_csq      = ','.join(new_chunks)
+                vcf_parts_rw = out_line.split('\t')
+                vcf_parts_rw[7] = re.sub(re.escape(vcf_info_field) + r'=[^;]*',
+                                          vcf_info_field + '=' + new_csq, vcf_parts_rw[7], count=1)
+                out_line = '\t'.join(vcf_parts_rw)
+            output_fh.write(out_line + '\n')
 
         if not args.soft_filter and count >= args.limit + args.start - 1:
             break
@@ -690,22 +701,22 @@ def process_generic(args, out_fh):
     # -- empty file --
     if not line_number:
         if not args.count and not args.list:
-            out_fh.write('\n'.join(raw_headers) + '\n')
+            output_fh.write('\n'.join(raw_headers) + '\n')
         if args.list:
-            v, c, a = parse_headers(raw_headers, vcf_info_field)
-            af = set()
-            if v: af.update(v)
-            if c: af.update(c)
-            af.update(a)
+            vep_headers_parsed, col_headers_parsed, allowed_parsed = parse_headers(raw_headers, vcf_info_field)
+            all_fields = set()
+            if vep_headers_parsed: all_fields.update(vep_headers_parsed)
+            if col_headers_parsed: all_fields.update(col_headers_parsed)
+            all_fields.update(allowed_parsed)
             print("Available fields:\n")
-            for f in sorted(af):
-                print(f)
-            if in_fh is not sys.stdin:
-                in_fh.close()
+            for field_name in sorted(all_fields):
+                print(field_name)
+            if input_fh is not sys.stdin:
+                input_fh.close()
             return
 
     if args.count:
-        out_fh.write(f"{count}\n")
+        output_fh.write(f"{count}\n")
 
     if missing_csq:
         sys.stderr.write(
@@ -713,8 +724,8 @@ def process_generic(args, out_fh):
             f"{vcf_info_field} in {missing_csq} line(s) of the input file\n"
         )
 
-    if in_fh is not sys.stdin:
-        in_fh.close()
+    if input_fh is not sys.stdin:
+        input_fh.close()
 
 
 # ---------------------------------------------------------------------------
@@ -791,31 +802,31 @@ Usage:
 
 
 def main():
-    ap = argparse.ArgumentParser(add_help=False)
-    ap.add_argument('--help',    '-h', action='store_true')
-    ap.add_argument('--test',          type=int)
-    ap.add_argument('--count',   '-c', action='store_true')
-    ap.add_argument('--list',    '-l', action='store_true')
-    ap.add_argument('--input_file',  '-i')
-    ap.add_argument('--output_file', '-o', default='stdout')
-    ap.add_argument('--force_overwrite', action='store_true')
-    ap.add_argument('--format',   choices=['vcf', 'tab'])
-    ap.add_argument('--gz',       action='store_true')
-    ap.add_argument('--only_matched', action='store_true')
-    ap.add_argument('--vcf_info_field', default='CSQ')
-    ap.add_argument('--soft_filter',  action='store_true')
-    ap.add_argument('--ontology', '-y', action='store_true')
-    ap.add_argument('--host',    default='ensembldb.ensembl.org')
-    ap.add_argument('--user',    default='anonymous')
-    ap.add_argument('--pass',    dest='password', default=None)
-    ap.add_argument('--port',    type=int, default=3306)
-    ap.add_argument('--version', type=int)
-    ap.add_argument('--registry')
-    ap.add_argument('--start',   '-s', type=int, default=1)
-    ap.add_argument('--limit',         type=int, default=int(1e12))
-    ap.add_argument('--filter',  '-f', action='append')
+    arg_parser = argparse.ArgumentParser(add_help=False)
+    arg_parser.add_argument('--help',    '-h', action='store_true')
+    arg_parser.add_argument('--test',          type=int)
+    arg_parser.add_argument('--count',   '-c', action='store_true')
+    arg_parser.add_argument('--list',    '-l', action='store_true')
+    arg_parser.add_argument('--input_file',  '-i')
+    arg_parser.add_argument('--output_file', '-o', default='stdout')
+    arg_parser.add_argument('--force_overwrite', action='store_true')
+    arg_parser.add_argument('--format',   choices=['vcf', 'tab'])
+    arg_parser.add_argument('--gz',       action='store_true')
+    arg_parser.add_argument('--only_matched', action='store_true')
+    arg_parser.add_argument('--vcf_info_field', default='CSQ')
+    arg_parser.add_argument('--soft_filter',  action='store_true')
+    arg_parser.add_argument('--ontology', '-y', action='store_true')
+    arg_parser.add_argument('--host',    default='ensembldb.ensembl.org')
+    arg_parser.add_argument('--user',    default='anonymous')
+    arg_parser.add_argument('--pass',    dest='password', default=None)
+    arg_parser.add_argument('--port',    type=int, default=3306)
+    arg_parser.add_argument('--version', type=int)
+    arg_parser.add_argument('--registry')
+    arg_parser.add_argument('--start',   '-s', type=int, default=1)
+    arg_parser.add_argument('--limit',         type=int, default=int(1e12))
+    arg_parser.add_argument('--filter',  '-f', action='append')
 
-    args = ap.parse_args()
+    args = arg_parser.parse_args()
 
     if args.help or (not args.filter and not args.list):
         print(USAGE)
@@ -837,9 +848,9 @@ def main():
                 f"ERROR: Output file {args.output_file} already exists. "
                 "Use --force_overwrite to overwrite."
             )
-        out_fh = open(args.output_file, 'w')
+        output_fh = open(args.output_file, 'w')
     else:
-        out_fh = sys.stdout
+        output_fh = sys.stdout
 
     try:
         use_cyvcf2 = (
@@ -850,12 +861,12 @@ def main():
                      re.search(r'\.vcf(\.gz)?$|\.bcf$', args.input_file, re.IGNORECASE)))
         )
         if use_cyvcf2:
-            process_cyvcf2(args, out_fh)
+            process_cyvcf2(args, output_fh)
         else:
-            process_generic(args, out_fh)
+            process_generic(args, output_fh)
     finally:
-        if out_fh is not sys.stdout:
-            out_fh.close()
+        if output_fh is not sys.stdout:
+            output_fh.close()
 
 
 if __name__ == '__main__':

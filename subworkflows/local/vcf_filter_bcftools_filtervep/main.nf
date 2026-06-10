@@ -7,8 +7,8 @@ workflow VCF_FILTER_BCFTOOLS_FILTERVEP {
     take:
     ch_vcf                     // channel: [ val(meta), path(vcf) ]
     ch_filter_vep_feature_file // channel: [ val(meta), path(txt) ]
-    filter_with_bcftools        //    bool: should bcftools view be run
-    filter_with_filter_vep      //    bool: should filtervep be run
+    filter_with_bcftools       //    bool: should bcftools view be run
+    filter_with_filter_vep     //    bool: should filtervep be run
 
     main:
     ch_tbi = channel.empty()
