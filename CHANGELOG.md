@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Parameter `cadd_prescored` to pass a directory of pre-scored CADD indel annotations to the CADD process in genome and mitochondrial SNV annotation subworkflows
 - Parameter `manta_call_regions` to restrict Manta SV calling to specified regions (e.g. primary chromosomes) via a bgzipped, tabix-indexed BED file, reducing runtime without affecting other callers
+- Local `FILTERVEP` module using a Python reimplementation of Ensembl's `filter_vep`, replacing the `ENSEMBLVEP_FILTERVEP` module with a lighter cyvcf2-based alternative
+
+### `Changed`
+
+- Replace `ENSEMBLVEP_FILTERVEP` with local `FILTERVEP` in the clinical set subworkflow, renamed from `VCF_FILTER_BCFTOOLS_ENSEMBLVEP` to `VCF_FILTER_BCFTOOLS_FILTERVEP`
 
 ### `Fixed`
 
