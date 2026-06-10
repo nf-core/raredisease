@@ -2,7 +2,9 @@
 """
 filter_vep_fast - Fast Python reimplementation of Ensembl's filter_vep.
 
-Replicates all features of the original Perl script.
+Replicates all features of the Perl filter_vep script distributed with Ensembl
+VEP (EMBL-EBI). Validated against VEP 110 and 115.2, which are functionally
+identical for VCF filtering.
 Uses cyvcf2 for VCF parsing when available (significant speedup for large
 VCF / bgzipped files via htslib).
 """
