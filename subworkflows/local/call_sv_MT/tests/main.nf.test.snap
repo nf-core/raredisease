@@ -11,36 +11,7 @@
                     "justhusky.saltshaker_classify.html:md5,ed534bf6ccd5c7a9bb7efd06e32ae064"
                 ]
             ],
-            [
-                [
-                    {
-                        "id": "earlycasualcaiman",
-                        "sample": "earlycasualcaiman",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "sex": 1,
-                        "phenotype": 1,
-                        "paternal": 0,
-                        "maternal": 0,
-                        "case_id": "justhusky"
-                    },
-                    "earlycasualcaiman.saltshaker.png:md5,de7f4f2435992aec5857e3a2c0aa531e"
-                ],
-                [
-                    {
-                        "id": "hugelymodelbat",
-                        "sample": "hugelymodelbat",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "sex": 1,
-                        "phenotype": 1,
-                        "paternal": 0,
-                        "maternal": 0,
-                        "case_id": "justhusky"
-                    },
-                    "hugelymodelbat.saltshaker.png:md5,66d05db7d9e779cb8c4462d6cbdea2be"
-                ]
-            ],
+            "earlycasualcaiman.saltshaker.png",
             [
                 [
                     {
@@ -84,7 +55,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-06-10T13:36:59.253091",
+        "timestamp": "2026-06-10T13:49:04.643753",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

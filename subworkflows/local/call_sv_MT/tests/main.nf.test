@@ -105,7 +105,7 @@ nextflow_workflow {
                     file(workflow.out.saltshaker_vcf.get(0).get(1)).name, // this vcf has a timestamp in it so we just check that the name...
                     path(workflow.out.saltshaker_vcf.get(0).get(1)).linesGzip.size(), // ...and the number of lines match
                     workflow.out.saltshaker_html,
-                    workflow.out.saltshaker_plot,
+                    file(workflow.out.saltshaker_plot.get(0).get(1)).name, // pngs are unstable so we just check that the name matches
                     workflow.out.mt_del_result,
                     workflow.out.updated_priority
                 ).match() }
