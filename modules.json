@@ -75,6 +75,11 @@
                         "git_sha": "707241c72951f24fd89982c4c80c5983a4c437ef",
                         "installed_by": ["modules"]
                     },
+                    "bwafastalign/index": {
+                        "branch": "master",
+                        "git_sha": "4ddd2d28518c7475bc76f0dd0e0451dd0e19df2a",
+                        "installed_by": ["modules"]
+                    },
                     "bwamem2/index": {
                         "branch": "master",
                         "git_sha": "5dd46a36fca68d6ad1a6b22ec47adc8c6863717d",

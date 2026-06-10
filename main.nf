@@ -46,6 +46,7 @@ workflow NFCORE_RAREDISEASE {
     val_aligner
     val_analysis_type
     val_bwa
+    val_bwafastalign
     val_bwamem2
     val_bwameme
     val_cadd_prescored
@@ -160,6 +161,7 @@ workflow NFCORE_RAREDISEASE {
         val_aligner,
         val_analysis_type,
         val_bwa,
+        val_bwafastalign,
         val_bwamem2,
         val_bwameme,
         val_fai,
@@ -575,6 +577,7 @@ workflow {
         params.aligner,
         params.analysis_type,
         params.bwa,
+        params.bwafastalign,
         params.bwamem2,
         params.bwameme,
         params.cadd_prescored,
