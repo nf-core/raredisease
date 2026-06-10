@@ -11,9 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter       | New parameter               |
-| ------------------- | --------------------------- |
-|                     | duplicates_marker           |
+| Old parameter | New parameter     |
+| ------------- | ----------------- |
+|               | duplicates_marker |
 
 ## 3.0.0 - Mario [2026-05-12]
 

@@ -60,7 +60,7 @@ nextflow_workflow {
                 input[9]  = 3072
                 input[10] = "illumina"
                 input[11] = 4
-                
+
                 """
             }
         }
@@ -122,7 +122,7 @@ nextflow_workflow {
                 input[9]  = 3072
                 input[10] = "illumina"
                 input[11] = 4
-                """                
+                """
             }
         }
 

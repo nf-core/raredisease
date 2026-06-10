@@ -85,7 +85,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
             ch_marked_csi = SAMTOOLS_INDEX_MARKDUP.out.csi
             ch_metrics    = MARKDUPLICATES.out.metrics
         } else {
-            FASTDUP ( prepared_bam ) 
+            FASTDUP ( prepared_bam )
             ch_marked_bam = FASTDUP.out.bam
             ch_marked_bai = FASTDUP.out.bai
             ch_marked_csi = FASTDUP.out.csi
@@ -96,7 +96,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
             .mix(ch_metrics)
             .mix(ch_marked_bai)
             .mix(ch_marked_csi)
-            .map {meta, value -> ['alignment/', [meta, value]] }  
+            .map {meta, value -> ['alignment/', [meta, value]] }
 
 
     emit:
