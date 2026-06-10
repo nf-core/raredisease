@@ -183,6 +183,7 @@ workflow RAREDISEASE {
     val_cadd_resources
     val_concatenate_snv_calls
     val_skip_split_multiallelics
+    val_duplicates_marker
     val_exclude_alt
     val_extract_alignments
     val_genome
@@ -310,6 +311,7 @@ workflow RAREDISEASE {
         skip_fastp,
         val_aligner,
         val_analysis_type,
+        val_duplicates_marker,
         val_exclude_alt,
         val_extract_alignments,
         val_mbuffer_mem,

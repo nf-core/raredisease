@@ -10,6 +10,7 @@ nextflow_workflow {
     tag "bwa/mem"
     tag "bwamem2/mem"
     tag "bwameme/mem"
+    tag "fastdup"
     tag "samtools/index"
     tag "samtools/stats"
     tag "samtools/merge"
@@ -54,10 +55,12 @@ nextflow_workflow {
                     ]
                 ])
                 input[6]  = "bwamem2"
-                input[7]  = true
-                input[8]  = 3072
-                input[9]  = "illumina"
-                input[10] = 4
+                input[7]  = "markduplicates"
+                input[8]  = true
+                input[9]  = 3072
+                input[10] = "illumina"
+                input[11] = 4
+                
                 """
             }
         }
@@ -114,10 +117,137 @@ nextflow_workflow {
                     ]
                 ])
                 input[6]  = "bwameme"
-                input[7]  = true
-                input[8]  = 3072
-                input[9]  = "illumina"
-                input[10] = 4
+                input[7]  = "markduplicates"
+                input[8]  = true
+                input[9]  = 3072
+                input[10] = "illumina"
+                input[11] = 4
+                """                
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.publish.flatten()
+                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                            .collect { new File(it).name }
+                            .sort(),
+                        workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getHeaderMD5() ] },
+                        workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getReadsMD5() ] }
+                    ).match()
+                }
+            )
+        }
+    }
+
+
+    test("align bwameme, FASTDUP with bai index") {
+
+        setup {
+            run("BWAMEME_INDEX") {
+                script "modules/nf-core/bwameme/index/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'sarscov2'],
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
+        when {
+            params {
+                sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                restrict_to_contigs = "MT192765.1"
+                fastdup_args = "--create-index"
+            }
+            workflow {
+                """
+                input[0]  = [[:],[]]
+                input[1]  = [[:],[]]
+                input[2]  = BWAMEME_INDEX.out.index
+                input[3]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
+                input[4]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
+                input[5]  = channel.of([
+                    [ id:'test', sample:'test', single_end:false, num_lanes:1, read_group:"\'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test\'"  ], // meta map
+                    [
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
+                    ]
+                ])
+                input[6]  = "bwameme"
+                input[7]  = "fastdup"
+                input[8]  = true
+                input[9]  = 3072
+                input[10] = "illumina"
+                input[11] = 4
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.publish.flatten()
+                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                            .collect { new File(it).name }
+                            .sort(),
+                        workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getHeaderMD5() ] },
+                        workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getReadsMD5() ] }
+                    ).match()
+                }
+            )
+        }
+    }
+
+
+    test("align bwameme, FASTDUP with csi index") {
+
+        setup {
+            run("BWAMEME_INDEX") {
+                script "modules/nf-core/bwameme/index/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'sarscov2'],
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
+        when {
+            params {
+                sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                restrict_to_contigs = "MT192765.1"
+                fastdup_args = "--create-index --index-format CSI"
+            }
+            workflow {
+                """
+                input[0]  = [[:],[]]
+                input[1]  = [[:],[]]
+                input[2]  = BWAMEME_INDEX.out.index
+                input[3]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
+                input[4]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
+                input[5]  = channel.of([
+                    [ id:'test', sample:'test', single_end:false, num_lanes:1, read_group:"\'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test\'"  ], // meta map
+                    [
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
+                    ]
+                ])
+                input[6]  = "bwameme"
+                input[7]  = "fastdup"
+                input[8]  = true
+                input[9]  = 3072
+                input[10] = "illumina"
+                input[11] = 4
                 """
             }
         }

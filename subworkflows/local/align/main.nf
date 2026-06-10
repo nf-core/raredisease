@@ -35,6 +35,7 @@ workflow ALIGN {
         skip_fastp                // boolean
         val_aligner               //  string:  'bwa', 'bwamem2', 'bwameme', or 'sentieon'
         val_analysis_type         //  string:  'wgs', 'wes', or 'mito'
+        val_duplicates_marker       // string:  'markduplicates' or 'fastdup', default: 'markduplicates'
         val_exclude_alt           // boolean
         val_extract_alignments    // boolean
         val_mbuffer_mem           // integer: [mandatory] memory in megabytes
@@ -100,6 +101,7 @@ workflow ALIGN {
                 ch_genome_fasta,
                 ch_input_reads,
                 val_aligner,
+                val_duplicates_marker,
                 val_extract_alignments,
                 val_mbuffer_mem,
                 val_platform,

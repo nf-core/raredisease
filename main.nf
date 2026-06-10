@@ -52,6 +52,7 @@ workflow NFCORE_RAREDISEASE {
     val_call_interval
     val_concatenate_snv_calls
     val_skip_split_multiallelics
+    val_duplicates_marker
     val_exclude_alt
     val_extract_alignments
     val_fai
@@ -481,6 +482,7 @@ workflow NFCORE_RAREDISEASE {
         val_cadd_resources,
         val_concatenate_snv_calls,
         val_skip_split_multiallelics,
+        val_duplicates_marker,
         val_exclude_alt,
         val_extract_alignments,
         val_genome,
@@ -570,6 +572,7 @@ workflow {
         params.call_interval,
         params.concatenate_snv_calls,
         params.skip_split_multiallelics,
+        params.duplicates_marker,
         params.exclude_alt,
         params.extract_alignments,
         params.fai,
