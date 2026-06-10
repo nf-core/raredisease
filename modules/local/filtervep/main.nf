@@ -23,7 +23,7 @@ process FILTERVEP {
     def prefix    = task.ext.prefix ?: "${meta.id}"
     extension     = args.contains("--format tab") ? "txt" : "vcf"
     """
-    filtervep.py \\
+    filter_vep \\
         ${args} \\
         --input_file ${input} \\
         --output_file ${prefix}.${extension} \\
