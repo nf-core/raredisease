@@ -113,54 +113,19 @@
                         "test.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "4": [
+                "markdup_metrics": [
                     [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "marked_bai": [
@@ -193,71 +158,6 @@
                         "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "metrics": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "publish": [
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ]
-                ],
                 "stats": [
                     [
                         {
@@ -272,9 +172,9 @@
                 ]
             }
         ],
-        "timestamp": "2026-04-08T14:48:42.172404",
+        "timestamp": "2026-06-11T16:06:18.512372",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     },
@@ -338,54 +238,19 @@
                         "test.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "4": [
+                "markdup_metrics": [
                     [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "marked_bai": [
@@ -418,71 +283,6 @@
                         "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "metrics": [
-                    [
-                        {
-                            "groupSize": 1,
-                            "groupTarget": {
-                                "id": "test",
-                                "sample": "test",
-                                "single_end": false,
-                                "num_lanes": 1,
-                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                            }
-                        },
-                        "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "publish": [
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ],
-                    [
-                        "alignment/",
-                        [
-                            {
-                                "groupSize": 1,
-                                "groupTarget": {
-                                    "id": "test",
-                                    "sample": "test",
-                                    "single_end": false,
-                                    "num_lanes": 1,
-                                    "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
-                                }
-                            },
-                            "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ]
-                ],
                 "stats": [
                     [
                         {
@@ -497,9 +297,9 @@
                 ]
             }
         ],
-        "timestamp": "2026-04-08T14:49:01.39982",
+        "timestamp": "2026-06-11T16:06:37.969441",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     },
