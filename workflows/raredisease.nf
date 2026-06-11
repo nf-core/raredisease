@@ -842,6 +842,30 @@ workflow RAREDISEASE {
             .map { meta, value -> ['peddy/', [meta, value]] }
     }
 
+    // Somalier extract + relate (requires params.run_somalier and params.somalier_sites_vcf)
+    if (params.run_somalier ?: false) {
+        // prepare VCF channel: [ meta, vcf, tbi, count ] as expected by the subworkflow
+        ch_vcfs_for_somalier = CALL_SNV.out.genome_vcf
+            .join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true)
+            .map { meta, vcf, tbi -> [ meta, vcf, tbi, [] ] }
+
+        // somalier sites VCF supplied via params.somalier_sites_vcf
+        ch_somalier_sites = channel.value( file(params.somalier_sites_vcf) )
+
+        VCF_EXTRACT_RELATE_SOMALIER(
+            ch_vcfs_for_somalier,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_somalier_sites,
+            ch_pedfile.map{ ped -> return[[id:'pedigree'], ped] }
+        )
+
+        ch_somalier_publish = VCF_EXTRACT_RELATE_SOMALIER.out.html
+            .mix(VCF_EXTRACT_RELATE_SOMALIER.out.pairs_tsv)
+            .mix(VCF_EXTRACT_RELATE_SOMALIER.out.samples_tsv)
+            .map { meta, value -> ['somalier/', [meta, value]] }
+    }
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Generate CGH files from sequencing data
