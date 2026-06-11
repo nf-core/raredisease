@@ -322,13 +322,13 @@
                     "rhocall": "0.5.1"
                 },
                 "SALTSHAKER_CALL": {
-                    "saltshaker": "1.0.0"
+                    "saltshaker": "1.1.1"
                 },
                 "SALTSHAKER_CLASSIFY": {
-                    "saltshaker": "1.0.1"
+                    "saltshaker": "1.1.1"
                 },
                 "SALTSHAKER_PLOT": {
-                    "saltshaker": "1.0.0"
+                    "saltshaker": "1.1.1"
                 },
                 "SAMTOOLS_COLLATE": {
                     "samtools": "1.22.1"
@@ -928,10 +928,10 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-05-08T16:30:33.887641119",
+        "timestamp": "2026-06-11T10:20:14.951812109",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.3"
         }
     }
 }
