@@ -38,7 +38,7 @@ nextflow_workflow {
         }
     }
 
-        test("CALL_SV_MT - 2 samples") {
+    test("CALL_SV_MT - 2 samples") {
 
         when {
             params {
