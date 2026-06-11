@@ -330,7 +330,7 @@ workflow PREPARE_REFERENCES {
         dbsnp                     = ch_dbsnp                       // channel:[ val(meta), path(dbsnp) ]
         dbsnp_tbi                 = ch_dbsnp_tbi                   // channel:[ val(meta), path(dbsnp_idx) ]
         genome_bwa_index          = ch_genome_bwa_index            // channel:[ val(meta), path(index) ]
-        genome_bwafastalign_index = ch_genome_bwafastalign_index  // channel:[ val(meta), path(index) ]
+        genome_bwafastalign_index = ch_genome_bwafastalign_index   // channel:[ val(meta), path(index) ]
         genome_bwamem2_index      = ch_genome_bwamem2_index        // channel:[ val(meta), path(index) ]
         genome_bwameme_index      = ch_genome_bwameme_index        // channel:[ val(meta), path(index) ]
         genome_chrom_sizes        = ch_chrom_sizes                 // channel:[ path(sizes) ]
