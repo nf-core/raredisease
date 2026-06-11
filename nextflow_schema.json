@@ -65,6 +65,14 @@
                     "help_text": "If none provided, will be generated automatically from the FASTA reference.",
                     "fa_icon": "fas fa-folder-open"
                 },
+                "bwafastalign": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "directory-path",
+                    "description": "Directory for pre-built bwa-fastalign index.",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open"
+                },
                 "bwamem2": {
                     "type": "string",
                     "exists": true,
@@ -660,7 +668,7 @@
                     "default": "bwamem2",
                     "description": "Specifies the alignment algorithm to use - available options are 'bwamem2', 'bwa', 'bwameme' and 'sentieon'.",
                     "fa_icon": "fas fa-align-center",
-                    "enum": ["bwa", "bwamem2", "bwameme", "sentieon"]
+                    "enum": ["bwa", "bwafastalign", "bwamem2", "bwameme", "sentieon"]
                 },
                 "mt_aligner": {
                     "type": "string",
