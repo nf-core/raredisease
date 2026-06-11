@@ -1,0 +1,885 @@
+#!/usr/bin/env python3
+"""
+filter_vep - Fast Python reimplementation of Ensembl's filter_vep.
+
+Fast Python reimplementation of the Perl filter_vep script distributed with
+Ensembl VEP (EMBL-EBI). Validated against VEP 110 and 115.2, which are
+functionally identical for VCF filtering.
+Uses cyvcf2 for VCF parsing when available (significant speedup for large
+VCF / bgzipped files via htslib).
+
+All filter operators are supported except is_child, which requires a live
+Ensembl Ontology DB. Use the original filter_vep --ontology for
+ontology-aware filtering, or replace is_child with an explicit 'in' list
+of consequence terms.
+"""
+
+import sys
+import re
+import gzip
+import argparse
+import os
+
+try:
+    import cyvcf2
+    HAS_CYVCF2 = True
+except ImportError:
+    HAS_CYVCF2 = False
+
+
+# ---------------------------------------------------------------------------
+# Filter expression parser / evaluator
+# ---------------------------------------------------------------------------
+
+class FilterSet:
+    """Parse and evaluate VEP filter expressions.
+
+    Multiple filter strings are ANDed (all must pass).
+    Within a string: 'and' / 'or' / 'not' and parentheses are supported.
+
+    Operators (with documented synonyms):
+      is / = / eq           case-insensitive equality
+      is not / != / ne      inequality
+      > / gt                greater than
+      < / lt                less than
+      >= / gte              greater than or equal
+      <= / lte              less than or equal
+      match / matches / re / regex   regex search (case-insensitive)
+      in                    list or file membership
+      exists / ex / defined field has a non-null value
+      is_child              SO ontology child (not supported; see --ontology)
+
+    Special value syntax:
+      #FieldName            compare against another field's value
+      bare field name       equivalent to 'exists'
+
+    Numeric extraction:
+      Mixed-content values like "deleterious(0.05)" have the number
+      extracted automatically when a numeric operator is used.
+
+    Source-prefix stripping:
+      "HGNC:28706" matches "28706" for is/in comparisons.
+    """
+
+    # Canonical operator names after synonym normalisation
+    _OP_SYNONYMS = {
+        'eq':      'is',
+        'ne':      '!=',
+        'lt':      '<',
+        'gt':      '>',
+        'lte':     '<=',
+        'gte':     '>=',
+        'matches': 'match',
+        're':      'match',
+        'regex':   'match',
+        'ex':      'exists',
+        'defined': 'exists',
+    }
+    # Words that should be tokenised as OP rather than field names
+    _OP_WORDS = frozenset(
+        ['is', 'match', 'in', 'exists', 'is_child']
+        + list(_OP_SYNONYMS.keys())
+    )
+
+    _file_cache: dict = {}  # shared across all instances
+
+    def __init__(self, *filter_strings):
+        self._parsed = [self._parse(filter_string) for filter_string in filter_strings]
+
+    # -- tokeniser -----------------------------------------------------------
+
+    def _tokenize(self, expr):
+        tokens = []
+        char_idx = 0
+        expr_length = len(expr)
+        while char_idx < expr_length:
+            char = expr[char_idx]
+            if char.isspace():
+                char_idx += 1
+                continue
+            if char == '(':
+                tokens.append(('LP', None)); char_idx += 1; continue
+            if char == ')':
+                tokens.append(('RP', None)); char_idx += 1; continue
+            if char in ('>', '<', '!', '='):
+                two_char = expr[char_idx:char_idx+2]
+                if two_char in ('>=', '<=', '!='):
+                    tokens.append(('OP', two_char)); char_idx += 2
+                else:
+                    tokens.append(('OP', char)); char_idx += 1
+                continue
+            word_match = re.match(r'[^\s()]+', expr[char_idx:])
+            if word_match:
+                word = word_match.group()
+                word_lower = word.lower()
+                if   word_lower == 'and':   tokens.append(('AND', None))
+                elif word_lower == 'or':    tokens.append(('OR',  None))
+                elif word_lower == 'not':   tokens.append(('NOT', None))
+                elif word_lower in self._OP_WORDS:
+                    tokens.append(('OP', self._OP_SYNONYMS.get(word_lower, word_lower)))
+                else:
+                    tokens.append(('W', word))
+                char_idx += len(word)
+                continue
+            char_idx += 1
+        tokens.append(('EOF', None))
+        return tokens
+
+    # -- recursive-descent parser -> AST -------------------------------------
+
+    def _parse(self, expr):
+        tokens   = self._tokenize(expr)
+        token_pos = [0]
+
+        def peek():
+            return tokens[token_pos[0]]
+
+        def eat():
+            token = tokens[token_pos[0]]
+            token_pos[0] += 1
+            return token
+
+        def parse_or():
+            left_node = parse_and()
+            while peek()[0] == 'OR':
+                eat()
+                right_node = parse_and()
+                left_node  = ('or', left_node, right_node)
+            return left_node
+
+        def parse_and():
+            left_node = parse_not()
+            while peek()[0] == 'AND':
+                eat()
+                right_node = parse_not()
+                left_node  = ('and', left_node, right_node)
+            return left_node
+
+        def parse_not():
+            if peek()[0] == 'NOT':
+                eat()
+                return ('not', parse_atom())
+            return parse_atom()
+
+        def parse_atom():
+            if peek()[0] == 'LP':
+                eat()
+                node = parse_or()
+                if peek()[0] == 'RP':
+                    eat()
+                return node
+            if peek()[0] != 'W':
+                raise SyntaxError(f"Expected field name, got {peek()!r} in: {expr!r}")
+            field = eat()[1]
+            next_token = peek()
+            if next_token[0] in ('EOF', 'RP', 'AND', 'OR'):
+                return ('exists', field, None)
+            if next_token[0] != 'OP':
+                return ('exists', field, None)
+            operator = eat()[1].lower()
+            if operator == 'is' and peek()[0] == 'NOT':
+                eat()
+                operator = 'is not'
+            if operator == 'exists':
+                return ('exists', field, None)
+            if peek()[0] in ('EOF', 'AND', 'OR', 'RP'):
+                value = None
+            else:
+                value = eat()[1]
+            return (operator, field, value)
+
+        return parse_or()
+
+    # -- evaluator -----------------------------------------------------------
+
+    def evaluate(self, data):
+        return all(self._eval(ast_node, data) for ast_node in self._parsed)
+
+    def _fetch_field_value(self, data, field):
+        """Fetch field value with case-insensitive fallback."""
+        value = data.get(field)
+        if value is not None:
+            return value
+        field_lower = field.lower()
+        for existing_key, existing_value in data.items():
+            if existing_key is not None and existing_key.lower() == field_lower:
+                return existing_value
+        return None
+
+    @staticmethod
+    def _normalize_missing(field, value):
+        """Treat '' and '-' (except for Allele) as missing."""
+        if value is None or value == '':
+            return None
+        if field != 'Allele' and value == '-':
+            return None
+        return value
+
+    # Regex for VEP mixed-type field values: e.g. "HGNC:28706", "deleterious(0.05)"
+    _MIXED_RE = re.compile(r'^([\w.\-]+)?:?\(?([-\d.e]*)\)?', re.IGNORECASE)
+    _NUM_RE   = re.compile(r'^-?\d+\.?\d*(e-?\d+)?$',         re.IGNORECASE)
+    _PURE_NUM = re.compile(r'^[-\d.e]+$',                      re.IGNORECASE)
+
+    def _get_input(self, field_value, representative_value):
+        """Replicate VEP 115 FilterSet.get_input() value-extraction logic.
+
+        Given a raw field value and a representative comparison value,
+        returns the part of field_value that should be compared.
+
+        - If field_value has the form TEXT:NUM or TEXT(NUM):
+            - and representative_value is purely numeric → return the NUM part
+            - otherwise                                 → return field_value unchanged
+        - If field_value is plain (no numeric part)     → return field_value unchanged
+        """
+        if field_value is None:
+            return None
+        field_str   = str(field_value)
+        mixed_match = self._MIXED_RE.match(field_str)
+        if not mixed_match:
+            return field_str
+        text_part    = mixed_match.group(1) or ''
+        numeric_part = mixed_match.group(2) or ''
+        if not numeric_part:
+            return field_str
+        representative_str = str(representative_value) if representative_value is not None else ''
+        if self._PURE_NUM.match(representative_str):
+            if not self._NUM_RE.match(text_part):
+                return numeric_part
+            return text_part
+        return field_str
+
+    def _resolve_value(self, value, data):
+        """If value starts with '#', resolve it to the named field's value."""
+        if value and value.startswith('#'):
+            field_name = value[1:]
+            return self._normalize_missing(field_name, self._fetch_field_value(data, field_name))
+        return value
+
+    def _eval(self, node, data):
+        operator = node[0]
+        if operator == 'and': return self._eval(node[1], data) and self._eval(node[2], data)
+        if operator == 'or':  return self._eval(node[1], data) or  self._eval(node[2], data)
+        if operator == 'not': return not self._eval(node[1], data)
+
+        field         = node[1]
+        value         = self._resolve_value(node[2] if len(node) > 2 else None, data)
+        field_value   = self._normalize_missing(field, self._fetch_field_value(data, field))
+
+        if operator == 'exists':
+            return field_value is not None
+
+        if operator in ('is', '='):
+            if value       is None: return field_value is None
+            if field_value is None: return False
+            processed_input = self._get_input(field_value, value)
+            return processed_input.lower() == str(value).lower()
+
+        if operator in ('is not', '!='):
+            if value       is None: return field_value is not None
+            if field_value is None: return True
+            processed_input = self._get_input(field_value, value)
+            return processed_input.lower() != str(value).lower()
+
+        if field_value is None:
+            return False
+
+        if operator == 'match':
+            return bool(re.search(str(value or ''), str(field_value), re.IGNORECASE))
+
+        if operator == 'in':
+            if value is None: return False
+            in_set          = self._in_set(value)
+            representative  = next(iter(in_set), None)
+            processed_input = self._get_input(field_value, representative).lower()
+            return processed_input in in_set
+
+        if operator == 'is_child':
+            raise NotImplementedError(
+                "is_child requires a live Ensembl Ontology DB (--ontology). "
+                "Use the original filter_vep with --ontology, or replace "
+                "is_child with an explicit 'in' list of the consequence terms you need."
+            )
+
+        # Ordered comparisons — use _get_input for numeric extraction
+        processed_input  = self._get_input(field_value, value)
+        str_field_val    = processed_input
+        str_target_val   = str(value or '')
+        try:
+            field_num  = float(str_field_val)
+            target_num = float(str_target_val)
+            if operator == '>':  return field_num > target_num
+            if operator == '<':  return field_num < target_num
+            if operator == '>=': return field_num >= target_num
+            if operator == '<=': return field_num <= target_num
+        except (ValueError, TypeError):
+            pass
+        if operator == '>':  return str_field_val > str_target_val
+        if operator == '<':  return str_field_val < str_target_val
+        if operator == '>=': return str_field_val >= str_target_val
+        if operator == '<=': return str_field_val <= str_target_val
+        return False
+
+    def limit_synonym_search(self, _value=True):
+        """No-op shim (kept for API parity with the Perl module)."""
+
+    def _in_set(self, value):
+        """Return a set of lowercase values for the 'in' operator.
+        If value looks like a readable file path, read one value per line.
+        Otherwise split on commas.
+        """
+        if value in self._file_cache:
+            return self._file_cache[value]
+        if os.path.isfile(value):
+            with open(value) as file_handle:
+                value_set = {line.strip().lower() for line in file_handle if line.strip()}
+            self._file_cache[value] = value_set
+            return value_set
+        value_set = {item.strip().lower() for item in value.split(',')}
+        return value_set
+
+
+# ---------------------------------------------------------------------------
+# Parsing helpers
+# ---------------------------------------------------------------------------
+
+def parse_headers(raw_headers, vcf_info_field='CSQ'):
+    """Return (vep_headers, col_headers, allowed_fields_dict)."""
+    vep_headers    = None
+    col_headers    = None
+    allowed_fields = {}
+    for raw_header in raw_headers:
+        hash_count     = len(raw_header) - len(raw_header.lstrip('#'))
+        stripped_header = raw_header.lstrip('#')
+        if hash_count >= 2:
+            if re.match(r'INFO=<ID=' + re.escape(vcf_info_field) + r',', stripped_header):
+                regex_match = re.search(r'Format: (.+?)"', stripped_header)
+                if regex_match:
+                    vep_headers = regex_match.group(1).split('|')
+            else:
+                regex_match = re.match(r'INFO=<ID=(.+?),', stripped_header)
+                if regex_match:
+                    allowed_fields[regex_match.group(1)] = True
+                else:
+                    regex_match = re.search(r' (.+?) :', stripped_header)
+                    if regex_match:
+                        allowed_fields[regex_match.group(1)] = True
+        else:
+            col_headers = stripped_header.split('\t')
+    return vep_headers, col_headers, allowed_fields
+
+
+def _expand_extra(data):
+    extra = data.get('Extra')
+    if not extra:
+        return
+    for kv_pair in extra.split(';'):
+        if '=' in kv_pair:
+            key, value = kv_pair.split('=', 1)
+            data[key] = value
+
+
+def _normalize_data(data):
+    for key in list(data.keys()):
+        value = data[key]
+        if value == '' or (key != 'Allele' and value == '-'):
+            data[key] = None
+
+
+def parse_tab_line(line, headers):
+    fields = line.rstrip('\n').split('\t', len(headers))
+    data   = {header: (fields[idx] if idx < len(fields) else None)
+              for idx, header in enumerate(headers)}
+    data['INFO'] = None
+    _expand_extra(data)
+    _normalize_data(data)
+    return data
+
+
+def parse_csq_chunk(chunk, vep_headers, main_data=None):
+    pipe_fields = chunk.split('|')
+    data        = dict(main_data) if main_data else {}
+    for idx, header in enumerate(vep_headers):
+        data[header] = pipe_fields[idx] if idx < len(pipe_fields) else None
+    data['INFO'] = None
+    _expand_extra(data)
+    _normalize_data(data)
+    return data
+
+
+def detect_format(line):
+    fields = line.split('\t')
+    if (len(fields) >= 5
+            and re.match(r'(chr)?\w+', fields[0])
+            and re.match(r'^\d+$', fields[1])
+            and fields[3] and re.match(r'^[ACGTN\-.]+$', fields[3], re.IGNORECASE)
+            and fields[4]):
+        return 'vcf'
+    return 'tab'
+
+
+def open_input(path, force_gz=False):
+    if path is None:
+        return sys.stdin
+    if path.endswith('.gz') or force_gz:
+        return gzip.open(path, 'rt')
+    with open(path, 'rb') as file_handle:
+        magic_bytes = file_handle.read(2)
+    if magic_bytes == b'\x1f\x8b':
+        return gzip.open(path, 'rt')
+    return open(path, 'r')
+
+
+# ---------------------------------------------------------------------------
+# cyvcf2 fast path (VCF only)
+# ---------------------------------------------------------------------------
+
+def process_cyvcf2(args, output_fh):
+    vcf_info_field = args.vcf_info_field
+    filter_set     = args.filter_set
+
+    vcf = cyvcf2.VCF(args.input_file or '-')
+
+    raw_header_lines = vcf.raw_header.rstrip('\n').split('\n')
+
+    vep_headers = None
+    for header_line in raw_header_lines:
+        regex_match = re.search(r'ID=' + re.escape(vcf_info_field) + r'.*?Format: (.+?)"', header_line)
+        if regex_match:
+            vep_headers = regex_match.group(1).split('|')
+            break
+
+    col_headers = None
+    for header_line in reversed(raw_header_lines):
+        if header_line.startswith('#') and not header_line.startswith('##'):
+            col_headers = header_line.lstrip('#').split('\t')
+            break
+
+    all_fields = set()
+    if vep_headers:  all_fields.update(vep_headers)
+    if col_headers:  all_fields.update(col_headers)
+    for header_line in raw_header_lines:
+        regex_match = re.match(r'##INFO=<ID=(.+?),', header_line)
+        if regex_match:
+            all_fields.add(regex_match.group(1))
+
+    if args.list:
+        print("Available fields:\n")
+        for field_name in sorted(all_fields):
+            print(field_name)
+        vcf.close()
+        return
+
+    output_header_lines = list(raw_header_lines)
+    if args.soft_filter:
+        for idx, header_line in enumerate(output_header_lines):
+            if header_line.startswith('#') and not header_line.startswith('##'):
+                output_header_lines.insert(idx, '##FILTER=<ID=filter_vep_fail,Description="Variant fails filter_vep">')
+                output_header_lines.insert(idx, '##FILTER=<ID=filter_vep_pass,Description="Variant passes filter_vep">')
+                break
+
+    if not args.count:
+        output_fh.write('\n'.join(output_header_lines) + '\n')
+
+    column_names = col_headers or ['CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO']
+    count        = 0
+    line_number  = 0
+    missing_csq  = 0
+
+    for variant in vcf:
+        line_number += 1
+        if args.test and line_number > args.test:
+            break
+
+        vcf_line  = str(variant)
+        vcf_parts = vcf_line.split('\t')
+
+        main_data = {column_names[idx]: (vcf_parts[idx] if idx < len(vcf_parts) else None)
+                     for idx in range(len(column_names))}
+        if len(vcf_parts) > 7:
+            for info_field in vcf_parts[7].split(';'):
+                if '=' in info_field:
+                    info_key, info_value = info_field.split('=', 1)
+                    if info_key != vcf_info_field:
+                        main_data[info_key] = info_value
+                elif info_field:
+                    main_data[info_field] = None  # Flag: Perl sets to undef, so exists-check fails
+
+        csq_value = variant.INFO.get(vcf_info_field)
+        chunks    = []
+        data_list = []
+
+        if csq_value:
+            chunks    = csq_value.split(',')
+            data_list = [parse_csq_chunk(chunk, vep_headers or [], main_data) for chunk in chunks]
+        else:
+            missing_csq += 1
+            data_list = [main_data]
+
+        line_pass  = 0
+        new_chunks = []
+        for blob_index, parsed_blob in enumerate(data_list):
+            if filter_set.evaluate(parsed_blob):
+                line_pass += 1
+                if blob_index < len(chunks):
+                    new_chunks.append(chunks[blob_index])
+
+        count += bool(line_pass)
+
+        if not args.soft_filter and count < args.start:
+            continue
+
+        if args.soft_filter:
+            filter_tag      = 'filter_vep_pass' if line_pass else 'filter_vep_fail'
+            existing_filter = vcf_parts[6] if len(vcf_parts) > 6 else '.'
+            vcf_parts[6]    = f"{existing_filter};{filter_tag}" if existing_filter and existing_filter != '.' else filter_tag
+            output_fh.write('\t'.join(vcf_parts) + '\n')
+        elif line_pass and not args.count:
+            out_line = vcf_line
+            if args.only_matched and new_chunks and len(new_chunks) != len(chunks):
+                new_csq      = ','.join(new_chunks)
+                vcf_parts_rw = out_line.split('\t')
+                vcf_parts_rw[7] = re.sub(re.escape(vcf_info_field) + r'=[^;]*',
+                                          vcf_info_field + '=' + new_csq, vcf_parts_rw[7], count=1)
+                out_line = '\t'.join(vcf_parts_rw)
+            output_fh.write(out_line + '\n')
+
+        if not args.soft_filter and count >= args.limit + args.start - 1:
+            break
+
+    vcf.close()
+
+    if line_number == 0 and not args.count:
+        output_fh.write('\n'.join(output_header_lines) + '\n')
+
+    if args.count:
+        output_fh.write(f"{count}\n")
+
+    if missing_csq:
+        sys.stderr.write(
+            f"WARNING: filter_vep couldn't find VEP annotations field "
+            f"{vcf_info_field} in {missing_csq} line(s) of the input file\n"
+        )
+
+
+# ---------------------------------------------------------------------------
+# Generic path (tab or VCF without cyvcf2)
+# ---------------------------------------------------------------------------
+
+def process_generic(args, output_fh):
+    vcf_info_field = args.vcf_info_field
+    filter_set     = args.filter_set
+
+    input_fh = open_input(args.input_file, args.gz)
+
+    raw_headers          = []
+    vep_headers          = None
+    col_headers          = None
+    file_format          = args.format
+    count                = 0
+    line_number          = 0
+    missing_csq          = 0
+    headers_initialised  = False
+
+    csq_re = re.compile(re.escape(vcf_info_field) + r'=(.+?)(?:;|\s|$)')
+
+    for raw_line in input_fh:
+        line = raw_line.rstrip('\n')
+
+        if line.startswith('#'):
+            raw_headers.append(line)
+            continue
+
+        line_number += 1
+        if args.test and line_number > args.test:
+            break
+
+        # -- initialise on first data line --
+        if not headers_initialised:
+            if not raw_headers:
+                sys.exit("ERROR: No headers found in input file")
+
+            if args.soft_filter:
+                chrom_header = raw_headers.pop()
+                raw_headers.append('##FILTER=<ID=filter_vep_pass,Description="Variant passes filter_vep">')
+                raw_headers.append('##FILTER=<ID=filter_vep_fail,Description="Variant fails filter_vep">')
+                raw_headers.append(chrom_header)
+
+            if not args.count and not args.list:
+                output_fh.write('\n'.join(raw_headers) + '\n')
+
+            vep_headers, col_headers, extra_allowed = parse_headers(raw_headers, vcf_info_field)
+
+            all_fields = set()
+            if vep_headers:  all_fields.update(vep_headers)
+            if col_headers:  all_fields.update(col_headers)
+            all_fields.update(extra_allowed)
+
+            if args.list:
+                print("Available fields:\n")
+                for field_name in sorted(all_fields):
+                    print(field_name)
+                if input_fh is not sys.stdin:
+                    input_fh.close()
+                return
+
+            headers_initialised = True
+
+        # -- format detection --
+        if not file_format:
+            file_format = detect_format(line)
+        if file_format not in ('vcf', 'tab'):
+            sys.exit(f"ERROR: Unable to parse data in format {file_format}")
+        if file_format != 'vcf' and args.only_matched:
+            sys.exit("ERROR: --only_matched is compatible only with VCF files")
+        if file_format != 'vcf' and args.soft_filter:
+            sys.exit("ERROR: --soft_filter is compatible only with VCF files")
+
+        if args.soft_filter:
+            args.start = 0
+
+        chunks    = []
+        data_list = []
+
+        if file_format == 'tab':
+            tab_headers = col_headers or vep_headers or []
+            data_list.append(parse_tab_line(line, tab_headers))
+            chunks.append(line)
+            if not any(header == 'Extra' for header in tab_headers):
+                filter_set.limit_synonym_search(True)
+
+        else:  # vcf
+            vcf_parts     = line.split('\t')
+            column_headers = col_headers or ['CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO']
+            main_data = {column_headers[idx]: (vcf_parts[idx] if idx < len(vcf_parts) else None)
+                         for idx in range(len(column_headers))}
+
+            if len(vcf_parts) > 7:
+                for info_field in vcf_parts[7].split(';'):
+                    if '=' in info_field:
+                        info_key, info_value = info_field.split('=', 1)
+                        if info_key != vcf_info_field:
+                            main_data[info_key] = info_value
+                    elif info_field:
+                        main_data[info_field] = None  # Flag: Perl sets to undef, so exists-check fails
+
+            regex_match = csq_re.search(line)
+            if regex_match:
+                raw_csq_value = regex_match.group(1)
+                chunks        = raw_csq_value.split(',')
+                data_list     = [parse_csq_chunk(chunk, vep_headers or [], main_data) for chunk in chunks]
+            else:
+                missing_csq += 1
+                data_list = [main_data]
+
+            filter_set.limit_synonym_search(True)
+
+        # -- evaluate --
+        line_pass  = 0
+        new_chunks = []
+        for blob_index, parsed_blob in enumerate(data_list):
+            if filter_set.evaluate(parsed_blob):
+                line_pass += 1
+                if blob_index < len(chunks):
+                    new_chunks.append(chunks[blob_index])
+
+        count += bool(line_pass)
+
+        if not args.soft_filter and count < args.start:
+            continue
+
+        # -- output --
+        if args.soft_filter:
+            split_parts     = line.split('\t')
+            filter_tag      = 'filter_vep_pass' if line_pass else 'filter_vep_fail'
+            existing_filter = split_parts[6] if len(split_parts) > 6 else '.'
+            split_parts[6]  = f"{existing_filter};{filter_tag}" if existing_filter and existing_filter != '.' else filter_tag
+            output_fh.write('\t'.join(split_parts) + '\n')
+
+        elif line_pass and not args.count:
+            out_line = line
+            if args.only_matched and new_chunks and len(new_chunks) != len(chunks):
+                new_csq      = ','.join(new_chunks)
+                vcf_parts_rw = out_line.split('\t')
+                vcf_parts_rw[7] = re.sub(re.escape(vcf_info_field) + r'=[^;]*',
+                                          vcf_info_field + '=' + new_csq, vcf_parts_rw[7], count=1)
+                out_line = '\t'.join(vcf_parts_rw)
+            output_fh.write(out_line + '\n')
+
+        if not args.soft_filter and count >= args.limit + args.start - 1:
+            break
+
+    # -- empty file --
+    if not line_number:
+        if not args.count and not args.list:
+            output_fh.write('\n'.join(raw_headers) + '\n')
+        if args.list:
+            vep_headers_parsed, col_headers_parsed, allowed_parsed = parse_headers(raw_headers, vcf_info_field)
+            all_fields = set()
+            if vep_headers_parsed: all_fields.update(vep_headers_parsed)
+            if col_headers_parsed: all_fields.update(col_headers_parsed)
+            all_fields.update(allowed_parsed)
+            print("Available fields:\n")
+            for field_name in sorted(all_fields):
+                print(field_name)
+            if input_fh is not sys.stdin:
+                input_fh.close()
+            return
+
+    if args.count:
+        output_fh.write(f"{count}\n")
+
+    if missing_csq:
+        sys.stderr.write(
+            f"WARNING: filter_vep couldn't find VEP annotations field "
+            f"{vcf_info_field} in {missing_csq} line(s) of the input file\n"
+        )
+
+    if input_fh is not sys.stdin:
+        input_fh.close()
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+
+USAGE = """\
+#------------#
+# filter_vep #
+#------------#
+
+http://www.ensembl.org/info/docs/tools/vep/script/vep_filter.html
+
+Usage:
+./filter_vep [arguments]
+
+--help               -h   Print usage message and exit
+
+--input_file [file]  -i   Input file (VEP results). Reads from STDIN if
+                          not specified. Supports gzip (auto-detected or
+                          force with --gz).
+--format [vcf|tab]        Input format (tab = any tab-delimited format,
+                          including default VEP output format)
+
+--output_file [file] -o   Output file. Defaults to STDOUT.
+--force_overwrite         Overwrite existing output file.
+
+--filter [filters]   -f   Filter expression. Multiple --filter flags are
+                          treated as logical ANDs, e.g.:
+                            -f "Consequence is missense_variant"
+                            -f "AF < 0.01 or not AF"
+                            -f "HGNC_ID in gene_panels.txt"
+                            -f "(AFR_AF gt #EUR_AF) and SIFT lt 0.05"
+
+                          Operators:
+                            is / = / eq       case-insensitive equality
+                            != / ne           inequality
+                            > / gt            greater than
+                            < / lt            less than
+                            >= / gte          greater than or equal
+                            <= / lte          less than or equal
+                            match/matches/re/regex  regex (case-insensitive)
+                            in                list or file (one value/line)
+                            exists/ex/defined field is present and non-null
+                            is_child          SO ontology child (not supported here)
+                          Logical: and  or  not  ( )
+                          Value can be #Field to compare two fields.
+                          Mixed content (e.g. "deleterious(0.05)") has its
+                          number extracted for numeric comparisons.
+                          Source prefixes (e.g. "HGNC:34") are stripped
+                          automatically in is/in comparisons.
+
+--list               -l   List available fields from the input file.
+--count              -c   Print only a count of matched lines.
+
+--only_matched            In VCF files, rewrite the CSQ field to contain
+                          only annotation blobs that passed the filters.
+
+--vcf_info_field [key]    VCF INFO key for VEP annotations (default: CSQ).
+
+--soft_filter             Add filter_vep_pass / filter_vep_fail to the VCF
+                          FILTER column instead of excluding variants.
+
+--ontology           -y   Accepted for compatibility but not implemented.
+                          is_child requires a live Ensembl Ontology DB; use
+                          the original filter_vep --ontology for that feature,
+                          or replace is_child with an explicit 'in' list.
+--host / --user / --pass / --port / --version / --registry
+                          Database connection options (accepted, not used).
+
+--start [N]          -s   Skip first N passing results (1-based, default 1)
+--limit [N]               Return at most N passing results.
+--test [N]                Process only the first N non-header lines.
+"""
+
+
+def main():
+    arg_parser = argparse.ArgumentParser(add_help=False)
+    arg_parser.add_argument('--help',    '-h', action='store_true')
+    arg_parser.add_argument('--test',          type=int)
+    arg_parser.add_argument('--count',   '-c', action='store_true')
+    arg_parser.add_argument('--list',    '-l', action='store_true')
+    arg_parser.add_argument('--input_file',  '-i')
+    arg_parser.add_argument('--output_file', '-o', default='stdout')
+    arg_parser.add_argument('--force_overwrite', action='store_true')
+    arg_parser.add_argument('--format',   choices=['vcf', 'tab'])
+    arg_parser.add_argument('--gz',       action='store_true')
+    arg_parser.add_argument('--only_matched', action='store_true')
+    arg_parser.add_argument('--vcf_info_field', default='CSQ')
+    arg_parser.add_argument('--soft_filter',  action='store_true')
+    arg_parser.add_argument('--ontology', '-y', action='store_true')
+    arg_parser.add_argument('--host',    default='ensembldb.ensembl.org')
+    arg_parser.add_argument('--user',    default='anonymous')
+    arg_parser.add_argument('--pass',    dest='password', default=None)
+    arg_parser.add_argument('--port',    type=int, default=3306)
+    arg_parser.add_argument('--version', type=int)
+    arg_parser.add_argument('--registry')
+    arg_parser.add_argument('--start',   '-s', type=int, default=1)
+    arg_parser.add_argument('--limit',         type=int, default=int(1e12))
+    arg_parser.add_argument('--filter',  '-f', action='append')
+
+    args = arg_parser.parse_args()
+
+    if args.help or (not args.filter and not args.list):
+        print(USAGE)
+        if not args.help:
+            sys.exit("ERROR: No valid filters given")
+        sys.exit(0)
+
+    if args.ontology:
+        sys.stderr.write(
+            "WARNING: --ontology is accepted for compatibility but is_child is not "
+            "implemented. Use the original filter_vep --ontology for ontology-aware "
+            "filtering, or replace is_child with an explicit 'in' list.\n"
+        )
+
+    args.filter_set = FilterSet(*(args.filter or []))
+
+    if args.output_file.lower() != 'stdout':
+        if os.path.exists(args.output_file) and not args.force_overwrite:
+            sys.exit(
+                f"ERROR: Output file {args.output_file} already exists. "
+                "Use --force_overwrite to overwrite."
+            )
+        output_fh = open(args.output_file, 'w')
+    else:
+        output_fh = sys.stdout
+
+    try:
+        use_cyvcf2 = (
+            HAS_CYVCF2
+            and args.format != 'tab'
+            and (args.format == 'vcf'
+                 or (args.input_file and
+                     re.search(r'\.vcf(\.gz)?$|\.bcf$', args.input_file, re.IGNORECASE)))
+        )
+        if use_cyvcf2:
+            process_cyvcf2(args, output_fh)
+        else:
+            process_generic(args, output_fh)
+    finally:
+        if output_fh is not sys.stdout:
+            output_fh.close()
+
+
+if __name__ == '__main__':
+    main()

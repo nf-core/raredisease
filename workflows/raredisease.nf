@@ -63,10 +63,10 @@ include { RANK_VARIANTS as RANK_VARIANTS_SV                           } from '..
 include { SUBSAMPLE_MT_FRAC                                           } from '../subworkflows/local/subsample_mt_frac'
 include { SUBSAMPLE_MT_READS                                          } from '../subworkflows/local/subsample_mt_reads'
 include { VARIANT_EVALUATION                                          } from '../subworkflows/local/variant_evaluation'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
+include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
+include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
+include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -80,6 +80,7 @@ workflow RAREDISEASE {
     ch_alignments
     ch_bait_intervals
     ch_cadd_header
+    ch_cadd_prescored
     ch_cadd_resources
     ch_call_interval
     ch_case_info
@@ -103,6 +104,7 @@ workflow RAREDISEASE {
     ch_hgnc_ids
     ch_intervals_wgs
     ch_intervals_y
+    ch_manta_regions
     ch_me_references
     ch_me_svdb_resources
     ch_ml_model
@@ -460,6 +462,7 @@ workflow RAREDISEASE {
 
             ANNOTATE_GENOME_SNVS (
                 ch_cadd_header,
+                ch_cadd_prescored,
                 ch_cadd_resources,
                 ch_genome_chrsizes,
                 ch_genome_fai,
@@ -535,6 +538,7 @@ workflow RAREDISEASE {
 
             ANNOTATE_MT_SNVS (
                 ch_cadd_header,
+                ch_cadd_prescored,
                 ch_cadd_resources,
                 ch_genome_fasta,
                 ch_genome_fai,
@@ -633,6 +637,7 @@ workflow RAREDISEASE {
             ch_genome_fai,
             ch_genome_fasta,
             ch_genome_hisat2index,
+            ch_manta_regions,
             ch_mitosalt_config,
             ch_mapped.mt_bam_bai,
             ch_mt_fai,
@@ -643,7 +648,6 @@ workflow RAREDISEASE {
             ch_input_fastqs,
             ch_subdepth,
             ch_svcaller_priority,
-            ch_target_bed,
             skip_germlinecnvcaller,
             skip_mitosalt,
             val_analysis_type,

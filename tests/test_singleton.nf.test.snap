@@ -123,10 +123,6 @@
                 "DEEPVARIANT": {
                     "deepvariant": "1.9.0"
                 },
-                "ENSEMBLVEP_FILTERVEP": {
-                    "ensemblvep": 115.2,
-                    "perl-math-cdf": 0.1
-                },
                 "ENSEMBLVEP_ME": {
                     "ensemblvep": 110.1,
                     "perl-math-cdf": 0.1,
@@ -156,6 +152,9 @@
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
+                },
+                "FILTERVEP": {
+                    "filtervep": "1.0.0"
                 },
                 "GATK4_FILTERMUTECTCALLS_MT": {
                     "gatk4": "4.6.2.0"
@@ -655,7 +654,7 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-06-11T10:25:31.455621104",
+        "timestamp": "2026-06-05T00:29:37.176160755",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

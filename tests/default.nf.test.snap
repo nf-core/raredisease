@@ -131,10 +131,6 @@
                 "DEEPVARIANT": {
                     "deepvariant": "1.9.0"
                 },
-                "ENSEMBLVEP_FILTERVEP": {
-                    "ensemblvep": 115.2,
-                    "perl-math-cdf": 0.1
-                },
                 "ENSEMBLVEP_ME": {
                     "ensemblvep": 110.1,
                     "perl-math-cdf": 0.1,
@@ -164,6 +160,9 @@
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
+                },
+                "FILTERVEP": {
+                    "filtervep": "1.0.0"
                 },
                 "GATK4_FILTERMUTECTCALLS_MT": {
                     "gatk4": "4.6.2.0"
@@ -382,6 +381,9 @@
                     "bcftools": 1.22
                 },
                 "SPLIT_MULTIALLELICS_MT": {
+                    "bcftools": 1.22
+                },
+                "SPLIT_MULTIALLELICS_POSTMERGE_MT": {
                     "bcftools": 1.22
                 },
                 "SPRING_DECOMPRESS_TO_FQ_PAIR": {

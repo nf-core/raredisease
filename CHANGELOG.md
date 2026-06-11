@@ -3,6 +3,30 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.0.1 - Mario-patch [2026-05-25]
+
+### `Added`
+
+- Parameter `cadd_prescored` to pass a directory of pre-scored CADD indel annotations to the CADD process in genome and mitochondrial SNV annotation subworkflows
+- Parameter `manta_call_regions` to restrict Manta SV calling to specified regions (e.g. primary chromosomes) via a bgzipped, tabix-indexed BED file, reducing runtime without affecting other callers
+- Local `FILTERVEP` module using a Python reimplementation of Ensembl's `filter_vep`, replacing the `ENSEMBLVEP_FILTERVEP` module with a lighter cyvcf2-based alternative
+
+### `Changed`
+
+- Replace `ENSEMBLVEP_FILTERVEP` with local `FILTERVEP` in the clinical set subworkflow, renamed from `VCF_FILTER_BCFTOOLS_ENSEMBLVEP` to `VCF_FILTER_BCFTOOLS_FILTERVEP`
+
+### `Fixed`
+
+- Add a bcftools norm split-multiallelics step after merging standard and shifted MT calls to handle new multiallelic sites introduced by bcftools merge [#855](https://github.com/nf-core/raredisease/pull/855)
+
+### Parameters
+
+| Old parameter | New parameter          |
+| ------------- | ---------------------- |
+|               | cadd_prescored         |
+|               | manta_call_regions     |
+|               | manta_call_regions_tbi |
+
 ## 3.0.0 - Mario [2026-05-12]
 
 ### `Added`
