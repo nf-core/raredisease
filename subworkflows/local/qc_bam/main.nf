@@ -2,19 +2,19 @@
 // A quality check subworkflow for processed bams.
 //
 
-include { PICARD_COLLECTMULTIPLEMETRICS                            } from '../../../modules/nf-core/picard/collectmultiplemetrics/main'
-include { PICARD_COLLECTHSMETRICS                                  } from '../../../modules/nf-core/picard/collecthsmetrics/main'
-include { CHROMOGRAPH as CHROMOGRAPH_COV                           } from '../../../modules/nf-core/chromograph/main'
-include { TIDDIT_COV                                               } from '../../../modules/nf-core/tiddit/cov/main'
-include { MOSDEPTH                                                 } from '../../../modules/nf-core/mosdepth/main'
-include { SAMBAMBA_DEPTH                                           } from '../../../modules/nf-core/sambamba/depth/main'
-include { UCSC_WIGTOBIGWIG                                         } from '../../../modules/nf-core/ucsc/wigtobigwig/main'
-include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_WG  } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
-include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y   } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
-include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_WG            } from '../../../modules/nf-core/sentieon/wgsmetrics/main'
-include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_Y             } from '../../../modules/nf-core/sentieon/wgsmetrics/main'
-include { NGSBITS_SAMPLEGENDER                                     } from '../../../modules/nf-core/ngsbits/samplegender/main'
-include { VERIFYBAMID_VERIFYBAMID2                                 } from '../../../modules/nf-core/verifybamid/verifybamid2/main'
+include { CHROMOGRAPH as CHROMOGRAPH_COV                          } from '../../../modules/nf-core/chromograph/main'
+include { MOSDEPTH                                                } from '../../../modules/nf-core/mosdepth/main'
+include { NGSBITS_SAMPLEGENDER                                    } from '../../../modules/nf-core/ngsbits/samplegender/main'
+include { PICARD_COLLECTHSMETRICS                                 } from '../../../modules/nf-core/picard/collecthsmetrics/main'
+include { PICARD_COLLECTMULTIPLEMETRICS                           } from '../../../modules/nf-core/picard/collectmultiplemetrics/main'
+include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_WG } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
+include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y  } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
+include { SAMBAMBA_DEPTH                                          } from '../../../modules/nf-core/sambamba/depth/main'
+include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_WG           } from '../../../modules/nf-core/sentieon/wgsmetrics/main'
+include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_Y            } from '../../../modules/nf-core/sentieon/wgsmetrics/main'
+include { TIDDIT_COV                                              } from '../../../modules/nf-core/tiddit/cov/main'
+include { UCSC_WIGTOBIGWIG                                        } from '../../../modules/nf-core/ucsc/wigtobigwig/main'
+include { VERIFYBAMID_VERIFYBAMID2                                } from '../../../modules/nf-core/verifybamid/verifybamid2/main'
 
 workflow QC_BAM {
 
@@ -89,48 +89,34 @@ workflow QC_BAM {
         ch_svd_in = ch_svd_ud.combine(ch_svd_mu).combine(ch_svd_bed).collect()
         VERIFYBAMID_VERIFYBAMID2(ch_bam_bai, ch_svd_in, [], ch_genome_fasta.map {_meta, fasta-> fasta})
 
-        ch_publish = PICARD_COLLECTMULTIPLEMETRICS.out.metrics
-            .mix(PICARD_COLLECTMULTIPLEMETRICS.out.pdf)
-            .mix(TIDDIT_COV.out.wig)
-            .mix(TIDDIT_COV.out.cov)
-            .mix(UCSC_WIGTOBIGWIG.out.bw)
-            .mix(CHROMOGRAPH_COV.out.plots)
-            .mix(MOSDEPTH.out.global_txt)
-            .mix(MOSDEPTH.out.summary_txt)
-            .mix(MOSDEPTH.out.per_base_d4)
-            .mix(MOSDEPTH.out.regions_txt)
-            .mix(MOSDEPTH.out.per_base_bed)
-            .mix(MOSDEPTH.out.per_base_csi)
-            .mix(MOSDEPTH.out.regions_bed)
-            .mix(MOSDEPTH.out.regions_csi)
-            .mix(MOSDEPTH.out.quantized_bed)
-            .mix(MOSDEPTH.out.quantized_csi)
-            .mix(MOSDEPTH.out.thresholds_bed)
-            .mix(MOSDEPTH.out.thresholds_csi)
-            .mix(SAMBAMBA_DEPTH.out.bed)
-            .mix(VERIFYBAMID_VERIFYBAMID2.out.self_sm)
-            .mix(VERIFYBAMID_VERIFYBAMID2.out.log)
-            .mix(VERIFYBAMID_VERIFYBAMID2.out.ud)
-            .mix(VERIFYBAMID_VERIFYBAMID2.out.bed)
-            .mix(VERIFYBAMID_VERIFYBAMID2.out.mu)
-            .mix(VERIFYBAMID_VERIFYBAMID2.out.ancestry)
-            .mix(ch_hsmetrics)
-            .mix(ch_cov)
-            .mix(ch_cov_y)
-            .map { meta, value -> ['qc_bam/', [meta, value]] }
-            .mix(ch_ngsbits
-                .map { meta, tsv -> ['ngsbits_samplegender/', [meta, tsv]] })
-
     emit:
-        multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]
-        hs_metrics       = ch_hsmetrics                              // channel: [ val(meta), path(metrics) ]
-        tiddit_wig       = TIDDIT_COV.out.wig                        // channel: [ val(meta), path(wig) ]
-        bigwig           = UCSC_WIGTOBIGWIG.out.bw                   // channel: [ val(meta), path(bw) ]
-        d4               = MOSDEPTH.out.per_base_d4                  // channel: [ val(meta), path(d4) ]
-        global_dist      = MOSDEPTH.out.global_txt                   // channel: [ val(meta), path(txt) ]
-        sex_check        = ch_ngsbits                                // channel: [ val(meta), path(tsv) ]
-        self_sm          = VERIFYBAMID_VERIFYBAMID2.out.self_sm      // channel: [ val(meta), path(selfSM) ]
-        cov              = ch_cov                                    // channel: [ val(meta), path(metrics) ]
-        cov_y            = ch_cov_y                                  // channel: [ val(meta), path(metrics) ]
-        publish = ch_publish                                         // channel: [ val(destination), val(value) ]
+        chromograph_cov_plots                 = CHROMOGRAPH_COV.out.plots                    // channel: [ val(meta), path(png) ]
+        mosdepth_global_txt                   = MOSDEPTH.out.global_txt                      // channel: [ val(meta), path(txt) ]
+        mosdepth_per_base_bed                 = MOSDEPTH.out.per_base_bed                    // channel: [ val(meta), path(bed.gz) ]
+        mosdepth_per_base_csi                 = MOSDEPTH.out.per_base_csi                    // channel: [ val(meta), path(csi) ]
+        mosdepth_per_base_d4                  = MOSDEPTH.out.per_base_d4                     // channel: [ val(meta), path(d4) ]
+        mosdepth_quantized_bed                = MOSDEPTH.out.quantized_bed                   // channel: [ val(meta), path(bed.gz) ]
+        mosdepth_quantized_csi                = MOSDEPTH.out.quantized_csi                   // channel: [ val(meta), path(csi) ]
+        mosdepth_regions_bed                  = MOSDEPTH.out.regions_bed                     // channel: [ val(meta), path(bed.gz) ]
+        mosdepth_regions_csi                  = MOSDEPTH.out.regions_csi                     // channel: [ val(meta), path(csi) ]
+        mosdepth_regions_txt                  = MOSDEPTH.out.regions_txt                     // channel: [ val(meta), path(txt) ]
+        mosdepth_summary_txt                  = MOSDEPTH.out.summary_txt                     // channel: [ val(meta), path(txt) ]
+        mosdepth_thresholds_bed               = MOSDEPTH.out.thresholds_bed                  // channel: [ val(meta), path(bed.gz) ]
+        mosdepth_thresholds_csi               = MOSDEPTH.out.thresholds_csi                  // channel: [ val(meta), path(csi) ]
+        ngsbits_samplegender_tsv              = ch_ngsbits                                   // channel: [ val(meta), path(tsv) ]
+        picard_collecthsmetrics_metrics       = ch_hsmetrics                                 // channel: [ val(meta), path(metrics) ]
+        picard_collectmultiplemetrics_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics    // channel: [ val(meta), path(metrics) ]
+        picard_collectmultiplemetrics_pdf     = PICARD_COLLECTMULTIPLEMETRICS.out.pdf        // channel: [ val(meta), path(pdf) ]
+        sambamba_depth_bed                    = SAMBAMBA_DEPTH.out.bed                       // channel: [ val(meta), path(bed) ]
+        tiddit_cov_cov                        = TIDDIT_COV.out.cov                           // channel: [ val(meta), path(bed) ]
+        tiddit_cov_wig                        = TIDDIT_COV.out.wig                           // channel: [ val(meta), path(wig) ]
+        ucsc_wigtobigwig_bw                   = UCSC_WIGTOBIGWIG.out.bw                      // channel: [ val(meta), path(bw) ]
+        verifybamid_ancestry                  = VERIFYBAMID_VERIFYBAMID2.out.ancestry        // channel: [ val(meta), path(ancestry) ]
+        verifybamid_bed                       = VERIFYBAMID_VERIFYBAMID2.out.bed             // channel: [ val(meta), path(bed) ]
+        verifybamid_log                       = VERIFYBAMID_VERIFYBAMID2.out.log             // channel: [ val(meta), path(log) ]
+        verifybamid_mu                        = VERIFYBAMID_VERIFYBAMID2.out.mu              // channel: [ val(meta), path(mu) ]
+        verifybamid_self_sm                   = VERIFYBAMID_VERIFYBAMID2.out.self_sm         // channel: [ val(meta), path(selfSM) ]
+        verifybamid_ud                        = VERIFYBAMID_VERIFYBAMID2.out.ud              // channel: [ val(meta), path(ud) ]
+        wgsmetrics_wg                         = ch_cov                                       // channel: [ val(meta), path(metrics) ]
+        wgsmetrics_y                          = ch_cov_y                                     // channel: [ val(meta), path(metrics) ]
 }

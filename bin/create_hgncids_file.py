@@ -8,7 +8,10 @@ import argparse
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Reformat input file based on meta.id"
+        description="Extract HGNC IDs from a VEP filter file. Supports Scout gene panel format "
+                    "(tab-delimited, HGNC ID in column 4) and standard format (one HGNC ID per "
+                    "non-comment line). Pass --meta-id scout for Scout format, any other value "
+                    "for standard format."
     )
     parser.add_argument(
         "--input",

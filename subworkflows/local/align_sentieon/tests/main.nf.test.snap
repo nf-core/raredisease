@@ -149,7 +149,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "test_dedup.bam:md5,489a7a6b515bfeb9e22b10732d7586e4"
+                    "2d64e4363d9f3c0e2167fce49d5087cf"
                 ]
             ],
             [
@@ -164,7 +164,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "test_dedup.bam.bai:md5,14bc034b61e9f46cc0c0224b8915d7aa"
+                    "test_dedup.bam.bai"
                 ]
             ],
             [
@@ -258,11 +258,49 @@
                 ]
             ],
             [
-                "test_dedup.bam",
-                "test_dedup.bam.bai",
-                "test_dedup.bam.metrics",
-                "test_dedup.bam.metrics.multiqc.tsv",
-                "test_dedup.score"
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.bam.metrics:md5,67c42dfe156b0613d30966768d01b55c"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.bam.metrics.multiqc.tsv:md5,67c42dfe156b0613d30966768d01b55c"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.score:md5,107725946bfe75d63c82d4f330872833"
+                ]
             ]
         ],
         "meta": {

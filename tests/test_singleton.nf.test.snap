@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            355,
+            356,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -157,6 +157,11 @@
                 "FASTQC": {
                     "fastqc": "0.12.1"
                 },
+                "FIND_CONCATENATE": {
+                    "coreutils": 9.4,
+                    "find": "4.6.0",
+                    "pigz": 2.8
+                },
                 "GATK4_FILTERMUTECTCALLS_MT": {
                     "gatk4": "4.6.2.0"
                 },
@@ -216,6 +221,9 @@
                 },
                 "GENMOD_SCORE": {
                     "genmod": "3.10.2"
+                },
+                "GENOME_FAI_TO_BED": {
+                    "gawk": "5.3.1"
                 },
                 "GET_CHROM_SIZES": {
                     "coreutils": 9.5
@@ -466,7 +474,7 @@
                     "vcfanno": "0.3.7"
                 },
                 "Workflow": {
-                    "nf-core/raredisease": "v2.7.0dev"
+                    "nf-core/raredisease": "v3.1.0dev"
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
@@ -537,8 +545,8 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
                 "call_sv/hugelymodelbat.saltshaker.png",
-                "call_sv/hugelymodelbat.saltshaker_classify.html",
                 "call_sv/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/justhusky.saltshaker_classify.html",
                 "call_sv/justhusky_saltshaker.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz.tbi",
@@ -550,6 +558,7 @@
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/.stub",
                 "multiqc/multiqc_plots",
+                "multiqc/multiqc_plots/.stub",
                 "multiqc/multiqc_report.html",
                 "ngsbits_samplegender",
                 "ngsbits_samplegender/hugelymodelbat_ngsbits_sex.tsv",
@@ -655,10 +664,10 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
+        "timestamp": "2026-05-27T15:26:36.71307935",
         "meta": {
-            "nf-test": "0.9.3",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-04-14T15:03:52.559527073"
+        }
     }
 }

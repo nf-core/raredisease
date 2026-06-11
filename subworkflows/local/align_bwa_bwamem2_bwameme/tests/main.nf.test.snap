@@ -2,9 +2,19 @@
     "align bwamem2": {
         "content": [
             [
-                "test_sorted_md.bam",
-                "test_sorted_md.bam.bai",
                 "test_sorted_md.metrics.txt"
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "sample": "test",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                    },
+                    "test.stats:md5,f0914a56ae73007ebd242cab27861700"
+                ]
             ],
             [
                 [
@@ -496,9 +506,19 @@
     "align bwameme": {
         "content": [
             [
-                "test_sorted_md.bam",
-                "test_sorted_md.bam.bai",
                 "test_sorted_md.metrics.txt"
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "sample": "test",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                    },
+                    "test.stats:md5,f0914a56ae73007ebd242cab27861700"
+                ]
             ],
             [
                 [

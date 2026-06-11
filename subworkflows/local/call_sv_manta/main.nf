@@ -2,8 +2,8 @@
 // A structural variant caller workflow for manta
 //
 
-include { MANTA_GERMLINE as MANTA              } from '../../../modules/nf-core/manta/germline/main'
 include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_MANTA } from '../../../modules/nf-core/bcftools/view/main.nf'
+include { MANTA_GERMLINE as MANTA              } from '../../../modules/nf-core/manta/germline/main'
 
 workflow CALL_SV_MANTA {
     take:

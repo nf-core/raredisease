@@ -2,10 +2,10 @@
 // A structural variant caller workflow for tiddit
 //
 
-include { TIDDIT_SV                             } from '../../../modules/nf-core/tiddit/sv/main'
+include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_TIDDIT } from '../../../modules/nf-core/bcftools/view/main.nf'
 include { SVDB_MERGE as SVDB_MERGE_TIDDIT       } from '../../../modules/nf-core/svdb/merge/main'
 include { TABIX_BGZIPTABIX as INDEX_TIDDIT      } from '../../../modules/nf-core/tabix/bgziptabix/main'
-include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_TIDDIT } from '../../../modules/nf-core/bcftools/view/main.nf'
+include { TIDDIT_SV                             } from '../../../modules/nf-core/tiddit/sv/main'
 
 workflow CALL_SV_TIDDIT {
     take:

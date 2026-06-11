@@ -31,7 +31,14 @@ nextflow_workflow {
         }
 
         then {
-            assert workflow.success
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.bam.collect { meta, bamfile -> [ meta, bam(bamfile).getReadsMD5() ] },
+                        workflow.out.bai.collect { meta, baifile -> [ meta, file(baifile).name ] }
+                    ).match()
+                }
+            )
         }
     }
 
@@ -55,7 +62,10 @@ nextflow_workflow {
         }
 
         then {
-            assert workflow.success
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
         }
     }
 }

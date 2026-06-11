@@ -2,8 +2,8 @@
 // A subworkflow to add most severe consequence and pli to a vep annotated vcf
 //
 
-include { CUSTOM_ADDMOSTSEVERECONSEQUENCE } from '../../../modules/nf-core/custom/addmostsevereconsequence'
-include { CUSTOM_ADDMOSTSEVEREPLI         } from '../../../modules/nf-core/custom/addmostseverepli'
+include { CUSTOM_ADDMOSTSEVERECONSEQUENCE } from '../../../modules/local/custom/addmostsevereconsequence'
+include { CUSTOM_ADDMOSTSEVEREPLI         } from '../../../modules/local/custom/addmostseverepli'
 include { TABIX_TABIX                     } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow ANNOTATE_CSQ_PLI {

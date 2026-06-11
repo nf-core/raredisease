@@ -3,36 +3,36 @@
 // Prepare reference files
 //
 
-include { BEDTOOLS_SLOP as BEDTOOLS_PAD_TARGET_BED           } from '../../../modules/nf-core/bedtools/slop/main'
-include { BWA_INDEX as BWA_INDEX_GENOME                      } from '../../../modules/nf-core/bwa/index/main'
-include { BWA_INDEX as BWA_INDEX_MT                          } from '../../../modules/nf-core/bwa/index/main'
-include { BWA_INDEX as BWA_INDEX_MT_SHIFT                    } from '../../../modules/nf-core/bwa/index/main'
-include { BWAMEM2_INDEX as BWAMEM2_INDEX_GENOME              } from '../../../modules/nf-core/bwamem2/index/main'
-include { BWAMEM2_INDEX as BWAMEM2_INDEX_MT                  } from '../../../modules/nf-core/bwamem2/index/main'
-include { BWAMEM2_INDEX as BWAMEM2_INDEX_MT_SHIFT            } from '../../../modules/nf-core/bwamem2/index/main'
-include { BWAMEME_INDEX as BWAMEME_INDEX_GENOME              } from '../../../modules/nf-core/bwameme/index/main'
-include { CAT_CAT as CAT_CAT_BAIT                            } from '../../../modules/nf-core/cat/cat/main'
-include { GATK4_BEDTOINTERVALLIST as GATK_BILT               } from '../../../modules/nf-core/gatk4/bedtointervallist/main'
-include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD          } from '../../../modules/nf-core/gatk4/createsequencedictionary/main'
-include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD_MT       } from '../../../modules/nf-core/gatk4/createsequencedictionary/main'
-include { GATK4_INTERVALLISTTOOLS as GATK_ILT                } from '../../../modules/nf-core/gatk4/intervallisttools/main'
-include { GATK4_SHIFTFASTA as GATK_SHIFTFASTA                } from '../../../modules/nf-core/gatk4/shiftfasta/main'
-include { GET_CHROM_SIZES                                    } from '../../../modules/local/get_chrom_sizes'
-include { HISAT2_BUILD as HISAT2_INDEX_GENOME                } from '../../../modules/nf-core/hisat2/build'
-include { LAST_LASTDB as LAST_INDEX_MT                       } from '../../../modules/nf-core/last/lastdb'
-include { RTGTOOLS_FORMAT                                    } from '../../../modules/nf-core/rtgtools/format/main'
-include { SAMTOOLS_FAIDX as SAMTOOLS_EXTRACT_MT              } from '../../../modules/nf-core/samtools/faidx/main'
-include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME            } from '../../../modules/nf-core/samtools/faidx/main'
-include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_MT                } from '../../../modules/nf-core/samtools/faidx/main'
-include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_GENOME      } from '../../../modules/nf-core/sentieon/bwaindex/main'
-include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_MT          } from '../../../modules/nf-core/sentieon/bwaindex/main'
-include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_MT_SHIFT    } from '../../../modules/nf-core/sentieon/bwaindex/main'
-include { TABIX_BGZIPTABIX as TABIX_BGZIPINDEX_PADDED_BED    } from '../../../modules/nf-core/tabix/bgziptabix/main'
-include { TABIX_BGZIPTABIX as TABIX_BGZIPINDEX_VCFANNOEXTRA  } from '../../../modules/nf-core/tabix/bgziptabix/main'
-include { TABIX_TABIX as TABIX_VCFANNOEXTRA                  } from '../../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_DBSNP                         } from '../../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_GNOMAD_AF                     } from '../../../modules/nf-core/tabix/tabix/main'
-include { UNTAR as UNTAR_VEP_CACHE                           } from '../../../modules/nf-core/untar/main'
+include { BEDTOOLS_SLOP as BEDTOOLS_PAD_TARGET_BED          } from '../../../modules/nf-core/bedtools/slop/main'
+include { BWAMEM2_INDEX as BWAMEM2_INDEX_GENOME             } from '../../../modules/nf-core/bwamem2/index/main'
+include { BWAMEM2_INDEX as BWAMEM2_INDEX_MT                 } from '../../../modules/nf-core/bwamem2/index/main'
+include { BWAMEM2_INDEX as BWAMEM2_INDEX_MT_SHIFT           } from '../../../modules/nf-core/bwamem2/index/main'
+include { BWAMEME_INDEX as BWAMEME_INDEX_GENOME             } from '../../../modules/nf-core/bwameme/index/main'
+include { BWA_INDEX as BWA_INDEX_GENOME                     } from '../../../modules/nf-core/bwa/index/main'
+include { BWA_INDEX as BWA_INDEX_MT                         } from '../../../modules/nf-core/bwa/index/main'
+include { BWA_INDEX as BWA_INDEX_MT_SHIFT                   } from '../../../modules/nf-core/bwa/index/main'
+include { CAT_CAT as CAT_CAT_BAIT                           } from '../../../modules/nf-core/cat/cat/main'
+include { GATK4_BEDTOINTERVALLIST as GATK_BILT              } from '../../../modules/nf-core/gatk4/bedtointervallist/main'
+include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD         } from '../../../modules/nf-core/gatk4/createsequencedictionary/main'
+include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD_MT      } from '../../../modules/nf-core/gatk4/createsequencedictionary/main'
+include { GATK4_INTERVALLISTTOOLS as GATK_ILT               } from '../../../modules/nf-core/gatk4/intervallisttools/main'
+include { GATK4_SHIFTFASTA as GATK_SHIFTFASTA               } from '../../../modules/nf-core/gatk4/shiftfasta/main'
+include { GET_CHROM_SIZES                                   } from '../../../modules/local/get_chrom_sizes'
+include { HISAT2_BUILD as HISAT2_INDEX_GENOME               } from '../../../modules/nf-core/hisat2/build'
+include { LAST_LASTDB as LAST_INDEX_MT                      } from '../../../modules/nf-core/last/lastdb'
+include { RTGTOOLS_FORMAT                                   } from '../../../modules/nf-core/rtgtools/format/main'
+include { SAMTOOLS_FAIDX as SAMTOOLS_EXTRACT_MT             } from '../../../modules/nf-core/samtools/faidx/main'
+include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME           } from '../../../modules/nf-core/samtools/faidx/main'
+include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_MT               } from '../../../modules/nf-core/samtools/faidx/main'
+include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_GENOME     } from '../../../modules/nf-core/sentieon/bwaindex/main'
+include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_MT         } from '../../../modules/nf-core/sentieon/bwaindex/main'
+include { SENTIEON_BWAINDEX as SENTIEON_BWAINDEX_MT_SHIFT   } from '../../../modules/nf-core/sentieon/bwaindex/main'
+include { TABIX_BGZIPTABIX as TABIX_BGZIPINDEX_PADDED_BED   } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { TABIX_BGZIPTABIX as TABIX_BGZIPINDEX_VCFANNOEXTRA } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { TABIX_TABIX as TABIX_DBSNP                        } from '../../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_GNOMAD_AF                    } from '../../../modules/nf-core/tabix/tabix/main'
+include { TABIX_TABIX as TABIX_VCFANNOEXTRA                 } from '../../../modules/nf-core/tabix/tabix/main'
+include { UNTAR as UNTAR_VEP_CACHE                          } from '../../../modules/nf-core/untar/main'
 
 workflow PREPARE_REFERENCES {
     take:
@@ -61,7 +61,7 @@ workflow PREPARE_REFERENCES {
 
     main:
         ch_bait_intervals              = channel.empty()
-        ch_bwa                         = channel.empty()
+        ch_genome_bwa_index            = channel.empty()
         ch_genome_bwameme_index        = channel.empty()
         ch_genome_bwamem2_index        = channel.empty()
         ch_genome_hisat2_index         = channel.empty()
@@ -112,13 +112,13 @@ workflow PREPARE_REFERENCES {
         //
         if (!val_bwa) {
             if (!val_aligner.equals("sentieon") || val_mtaligner.equals("bwa")) {
-                ch_bwa      = BWA_INDEX_GENOME(ch_genome_fasta).index.collect()
+                ch_genome_bwa_index = BWA_INDEX_GENOME(ch_genome_fasta).index.collect()
             }
             if (val_aligner.equals("sentieon") || val_mtaligner.equals("sentieon")) {
-                ch_bwa      = SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.collect()
+                ch_genome_bwa_index = SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.collect()
             }
         } else if (val_bwa) {
-            ch_bwa = channel.fromPath(val_bwa).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_bwa_index = channel.fromPath(val_bwa).map {it -> [[id:it.simpleName], it]}.collect()
         }
 
         if (!val_bwamem2 && (val_aligner.equals("bwamem2") || val_mtaligner.equals("bwamem2"))) {
@@ -225,6 +225,8 @@ workflow PREPARE_REFERENCES {
             GATK_ILT.out.interval_list
                 .collect{ _meta, list -> list }
                 .map { list ->
+                    // list is e.g. [/path/mybed_split_0001.interval_list, ...]; strip the _split suffix
+                    // and directory to get the base name (e.g. "mybed"), then build the merged output name
                     def meta = list.toString().split("_split")[0].split("/")[-1] + "_bait.intervals_list"
                     return [[id:meta], list]
                 }
@@ -275,7 +277,7 @@ workflow PREPARE_REFERENCES {
         if (val_save_reference) {
             ch_publish = ch_dbsnp
                 .mix(ch_dbsnp_tbi)
-                .mix(ch_bwa)
+                .mix(ch_genome_bwa_index)
                 .mix(ch_genome_bwamem2_index)
                 .mix(ch_genome_bwameme_index)
                 .mix(ch_genome_fai)
@@ -317,7 +319,7 @@ workflow PREPARE_REFERENCES {
         bait_intervals        = ch_bait_intervals              // channel:[ path(intervals) ]
         dbsnp                 = ch_dbsnp                       // channel:[ val(meta), path(dbsnp) ]
         dbsnp_tbi             = ch_dbsnp_tbi                   // channel:[ val(meta), path(dbsnp_idx) ]
-        genome_bwa_index      = ch_bwa                         // channel:[ val(meta), path(index) ]
+        genome_bwa_index      = ch_genome_bwa_index            // channel:[ val(meta), path(index) ]
         genome_bwamem2_index  = ch_genome_bwamem2_index        // channel:[ val(meta), path(index) ]
         genome_bwameme_index  = ch_genome_bwameme_index        // channel:[ val(meta), path(index) ]
         genome_chrom_sizes    = ch_chrom_sizes                 // channel:[ path(sizes) ]
