@@ -680,14 +680,14 @@
                 "samtools_sort_threads": {
                     "type": "integer",
                     "default": 4,
-                    "description": "Number of threads allocated for sorting alignment files (used only by bwameme)",
+                    "description": "Number of threads allocated for sorting alignment files (used by bwameme and bwafastalign)",
                     "help_text": "To know more about this parameter check [bwameme](https://github.com/kaist-ina/BWA-MEME?tab=readme-ov-file#building-pipeline-with-samtools) documentation.",
                     "fa_icon": "fas fa-less-than"
                 },
                 "mbuffer_mem": {
                     "type": "integer",
-                    "default": 3072,
-                    "description": "Memory allocated for mbuffer in megabytes (used only by bwameme)",
+                    "default": 8192,
+                    "description": "Memory allocated for mbuffer in megabytes (MB) (used by bwameme and bwafastalign)",
                     "help_text": "To know more about this parameter check [bwameme](https://github.com/kaist-ina/BWA-MEME?tab=readme-ov-file#building-pipeline-with-samtools) documentation.",
                     "fa_icon": "fas fa-less-than"
                 },

@@ -11,10 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parameter `manta_call_regions` to restrict Manta SV calling to specified regions (e.g. primary chromosomes) via a bgzipped, tabix-indexed BED file, reducing runtime without affecting other callers [#867](https://github.com/nf-core/raredisease/pull/867)
 - Local `FILTERVEP` module using a Python reimplementation of Ensembl's `filter_vep`, replacing the `ENSEMBLVEP_FILTERVEP` module with a lighter cyvcf2-based alternative [#870](https://github.com/nf-core/raredisease/pull/870)
 - `bwafastalign/index` nf-core module and `bwafastalign` parameter to support index preparation for the bwa-fastalign genome aligner [#877](https://github.com/nf-core/raredisease/pull/877)
+- `bwafastalign/mem` nf-core module to support genome alignment with bwa-fastalign when `--aligner bwafastalign` is set [#880](https://github.com/nf-core/raredisease/pull/880)
 
 ### `Changed`
 
 - Replace `ENSEMBLVEP_FILTERVEP` with local `FILTERVEP` in the clinical set subworkflow, renamed from `VCF_FILTER_BCFTOOLS_ENSEMBLVEP` to `VCF_FILTER_BCFTOOLS_FILTERVEP` [#870](https://github.com/nf-core/raredisease/pull/870)
+- Increase default mbuffer memory value from 3GB to 8GB [#880](https://github.com/nf-core/raredisease/pull/880)
 
 ### `Fixed`
 
