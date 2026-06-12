@@ -186,6 +186,7 @@ workflow NFCORE_RAREDISEASE {
     ch_bait_intervals           = ch_references.bait_intervals
     ch_dbsnp                    = ch_references.dbsnp
     ch_dbsnp_tbi                = ch_references.dbsnp_tbi
+    ch_genome_bwafastalignindex = ch_references.genome_bwafastalign_index
     ch_genome_bwaindex          = ch_references.genome_bwa_index
     ch_genome_bwamem2index      = ch_references.genome_bwamem2_index
     ch_genome_bwamemeindex      = ch_references.genome_bwameme_index
@@ -397,6 +398,7 @@ workflow NFCORE_RAREDISEASE {
         ch_dbsnp_tbi,
         ch_foundin_header,
         ch_gcnvcaller_model,
+        ch_genome_bwafastalignindex,
         ch_genome_bwaindex,
         ch_genome_bwamem2index,
         ch_genome_bwamemeindex,

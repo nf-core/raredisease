@@ -80,6 +80,11 @@
                         "git_sha": "4ddd2d28518c7475bc76f0dd0e0451dd0e19df2a",
                         "installed_by": ["modules"]
                     },
+                    "bwafastalign/mem": {
+                        "branch": "master",
+                        "git_sha": "d6379deecb794ad5cc6234f3208085aaee27b327",
+                        "installed_by": ["modules"]
+                    },
                     "bwamem2/index": {
                         "branch": "master",
                         "git_sha": "5dd46a36fca68d6ad1a6b22ec47adc8c6863717d",

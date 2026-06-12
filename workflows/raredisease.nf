@@ -88,6 +88,7 @@ workflow RAREDISEASE {
     ch_dbsnp_tbi
     ch_foundin_header
     ch_gcnvcaller_model
+    ch_genome_bwafastalignindex
     ch_genome_bwaindex
     ch_genome_bwamem2index
     ch_genome_bwamemeindex
@@ -292,6 +293,7 @@ workflow RAREDISEASE {
 
     ALIGN (
         ch_alignments,
+        ch_genome_bwafastalignindex,
         ch_genome_bwaindex,
         ch_genome_bwamem2index,
         ch_genome_bwamemeindex,
