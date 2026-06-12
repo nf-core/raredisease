@@ -27,7 +27,7 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_genome_fasta                 // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_gnomad_af                    // channel: [optional] [ path(tab), path(tbi) ]
         ch_samples                      // channel: [mandatory] [ val(sample_meta) ]
-        ch_split_intervals              // channel: [mandatory] [ path(intervals) ]
+        ch_split_intervals              // channel: [mandatory] [ val(meta), path(interval_list) ]
         ch_vcf                          // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
         ch_vcfanno_extra                // channel: [mandatory] [ [path(vcf),path(index)] ]
         ch_vcfanno_lua                  // channel: [mandatory] [ path(lua) ]
@@ -41,10 +41,11 @@ workflow ANNOTATE_GENOME_SNVS {
         val_vep_cache_version           // string:  vep version ex: 107
 
     main:
-        ch_cadd_vcf            = channel.empty()
-        ch_vcf_scatter_in      = channel.empty()
-        ch_vep_in              = channel.empty()
-        ch_chromograph_publish = channel.empty()
+        ch_cadd_vcf                  = channel.empty()
+        ch_chromograph_regions_plots = channel.empty()
+        ch_chromograph_sites_plots   = channel.empty()
+        ch_vcf_scatter_in            = channel.empty()
+        ch_vep_in                    = channel.empty()
 
         ch_vcf
             .filter { meta, _vcf, _tbi ->
@@ -62,9 +63,13 @@ workflow ANNOTATE_GENOME_SNVS {
         // The remainder:true join pads cases without rohcall output with a single null, giving
         // tuples of length 4 (no rohcall) vs 5 (rohcall). After combining with an interval both
         // grow by one, so size==6 means this case has probands and a rohcall-annotated VCF.
+        ch_split_intervals
+            .flatMap { _meta, intervals -> intervals.collect{ interval -> [interval] } }
+            .set { ch_split_intervals_flat }
+
         ch_vcf
             .join(ZIP_TABIX_ROHCALL.out.gz_index, remainder: true)
-            .combine(ch_split_intervals)
+            .combine(ch_split_intervals_flat)
             .map { it ->
                     def meta = it[0]
                     def vcf  = it[1]
@@ -182,8 +187,8 @@ workflow ANNOTATE_GENOME_SNVS {
             UPD_REGIONS(ch_upd_in)
             CHROMOGRAPH_SITES([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_SITES.out.bed)
             CHROMOGRAPH_REGIONS([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_REGIONS.out.bed, [[],[]])
-            ch_chromograph_publish = CHROMOGRAPH_SITES.out.plots
-                .mix(CHROMOGRAPH_REGIONS.out.plots)
+            ch_chromograph_sites_plots   = CHROMOGRAPH_SITES.out.plots
+            ch_chromograph_regions_plots = CHROMOGRAPH_REGIONS.out.plots
         }
 
         BCFTOOLS_CONCAT.out.vcf
@@ -198,14 +203,13 @@ workflow ANNOTATE_GENOME_SNVS {
         //rhocall_viz
         ANNOTATE_RHOCALLVIZ(ch_genome_chrsizes, ch_samples, ch_vep_ann_index )
 
-        ch_publish = ch_chromograph_publish
-            .mix(ch_concat_vcf_out)
-            .mix(ch_concat_tbi_out)
-            .map { meta, value -> ['annotate_snv/genome/', [meta, value]] }
-            .mix(ANNOTATE_RHOCALLVIZ.out.publish)
-
     emit:
-        tbi      = ch_concat_tbi_out // channel: [ val(meta), path(tbi) ]
-        vcf_ann  = ch_concat_vcf_out // channel: [ val(meta), path(vcf) ]
-        publish  = ch_publish   // channel: [ val(destination), val(value) ]
+        bcftools_concat_tbi       = ch_concat_tbi_out                                // channel: [ val(meta), path(tbi) ]
+        bcftools_concat_vcf       = ch_concat_vcf_out                                // channel: [ val(meta), path(vcf) ]
+        chromograph_autozyg_plots = ANNOTATE_RHOCALLVIZ.out.chromograph_autozyg_plots // channel: [ val(meta), path(png) ]
+        chromograph_regions_plots = ch_chromograph_regions_plots                     // channel: [ val(meta), path(png) ]
+        chromograph_sites_plots   = ch_chromograph_sites_plots                       // channel: [ val(meta), path(png) ]
+        rhocall_viz_bed           = ANNOTATE_RHOCALLVIZ.out.rhocall_viz_bed          // channel: [ val(meta), path(bed) ]
+        rhocall_viz_wig           = ANNOTATE_RHOCALLVIZ.out.rhocall_viz_wig          // channel: [ val(meta), path(wig) ]
+        ucsc_wigtobigwig_bw       = ANNOTATE_RHOCALLVIZ.out.ucsc_wigtobigwig_bw     // channel: [ val(meta), path(bw) ]
 }

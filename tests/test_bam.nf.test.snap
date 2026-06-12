@@ -213,6 +213,9 @@
                 "GENMOD_SCORE": {
                     "genmod": "3.10.2"
                 },
+                "GENOME_FAI_TO_BED": {
+                    "gawk": "5.3.1"
+                },
                 "GET_CHROM_SIZES": {
                     "coreutils": 9.5
                 },
@@ -441,7 +444,7 @@
                     "vcfanno": "0.3.7"
                 },
                 "Workflow": {
-                    "nf-core/raredisease": "v3.0.0"
+                    "nf-core/raredisease": "v3.1.0dev"
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
@@ -629,6 +632,7 @@
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/.stub",
                 "multiqc/multiqc_plots",
+                "multiqc/multiqc_plots/.stub",
                 "multiqc/multiqc_report.html",
                 "ngsbits_samplegender",
                 "ngsbits_samplegender/earlycasualcaiman_ngsbits_sex.tsv",
@@ -844,7 +848,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-04-29T22:26:48.082490207",
+        "timestamp": "2026-05-27T15:22:23.152275002",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
