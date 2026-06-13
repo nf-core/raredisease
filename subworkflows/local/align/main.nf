@@ -38,11 +38,9 @@ workflow ALIGN {
         val_analysis_type             //  string:  'wgs', 'wes', or 'mito'
         val_exclude_alt               // boolean
         val_extract_alignments        // boolean
-        val_mbuffer_mem               // integer: [mandatory] memory in megabytes
         val_mt_aligner                //  string:  'bwa', 'bwamem2', or 'sentieon'
         val_platform                  //  string:  [mandatory] illumina or a different technology
         val_run_mt_for_wes            // boolean
-        val_samtools_sort_threads     // integer: [mandatory] number of sorting threads
         val_save_all_mapped_as_cram   // boolean
         val_save_noalt_mapped_as_cram // boolean
 
@@ -103,9 +101,7 @@ workflow ALIGN {
                 ch_input_reads,
                 val_aligner,
                 val_extract_alignments,
-                val_mbuffer_mem,
-                val_platform,
-                val_samtools_sort_threads
+                val_platform
             )
             ch_bwamem2_bam     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bam
             ch_bwamem2_bai     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bai

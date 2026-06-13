@@ -57,9 +57,7 @@ nextflow_workflow {
                 ])
                 input[7]  = "bwamem2"
                 input[8]  = true
-                input[9]  = 3072
-                input[10] = "illumina"
-                input[11] = 4
+                input[9]  = "illumina"
                 """
             }
         }
@@ -118,9 +116,7 @@ nextflow_workflow {
                 ])
                 input[7]  = "bwafastalign"
                 input[8]  = true
-                input[9]  = 3072
-                input[10] = "illumina"
-                input[11] = 4
+                input[9]  = "illumina"
                 """
             }
         }
@@ -179,9 +175,7 @@ nextflow_workflow {
                 ])
                 input[7]  = "bwameme"
                 input[8]  = true
-                input[9]  = 3072
-                input[10] = "illumina"
-                input[11] = 4
+                input[9]  = "illumina"
                 """
             }
         }
