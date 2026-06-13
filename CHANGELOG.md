@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - Replace `ENSEMBLVEP_FILTERVEP` with local `FILTERVEP` in the clinical set subworkflow, renamed from `VCF_FILTER_BCFTOOLS_ENSEMBLVEP` to `VCF_FILTER_BCFTOOLS_FILTERVEP` [#870](https://github.com/nf-core/raredisease/pull/870)
+- Update `bwameme/mem` to new nf-core module signature: `val mbuffer` and `val samtools_threads` replaced by `ext.args2` and `ext.args3`; increase `mbuffer_mem` default from 3072 to 8192 MB to prevent buffer saturation stalling alignment [#881](https://github.com/nf-core/raredisease/pull/881)
 
 ### `Fixed`
 
