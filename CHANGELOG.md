@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Replace `ENSEMBLVEP_FILTERVEP` with local `FILTERVEP` in the clinical set subworkflow, renamed from `VCF_FILTER_BCFTOOLS_ENSEMBLVEP` to `VCF_FILTER_BCFTOOLS_FILTERVEP` [#870](https://github.com/nf-core/raredisease/pull/870)
 - Increase default mbuffer memory value from 3GB to 8GB [#880](https://github.com/nf-core/raredisease/pull/880)
+- Update `bwameme/mem` to new nf-core module signature: `val mbuffer` and `val samtools_threads` replaced by `ext.args2` and `ext.args3` [#881](https://github.com/nf-core/raredisease/pull/881)
 
 ### `Fixed`
 

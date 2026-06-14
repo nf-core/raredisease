@@ -26,9 +26,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         ch_input_reads         // channel: [mandatory] [ val(meta), path(reads_input) ]
         val_aligner            // string:  'bwa', 'bwafastalign', 'bwamem2', or 'bwameme'
         val_extract_alignments // boolean
-        val_mbuffer_mem        // integer: [mandatory] default: 3072
         val_platform           // string:  [mandatory] default: illumina
-        val_sort_threads       // integer: [mandatory] default: 4
 
     main:
         // Map, sort, and index
@@ -39,8 +37,8 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
             BWAFASTALIGN_MEM ( ch_input_reads, ch_bwafastalign_index, ch_genome_fasta, true )
             ch_align = BWAFASTALIGN_MEM.out.output
         } else if (val_aligner.equals("bwameme")) {
-            BWAMEME_MEM ( ch_input_reads, ch_bwameme_index, ch_genome_fasta, true, val_mbuffer_mem, val_sort_threads )
-            ch_align = BWAMEME_MEM.out.bam
+            BWAMEME_MEM ( ch_input_reads, ch_bwameme_index, ch_genome_fasta, true )
+            ch_align = BWAMEME_MEM.out.output
         } else {
             BWAMEM2_MEM ( ch_input_reads, ch_bwamem2_index, ch_genome_fasta, true )
             ch_align    = BWAMEM2_MEM.out.bam

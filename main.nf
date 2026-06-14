@@ -77,7 +77,6 @@ workflow NFCORE_RAREDISEASE {
     val_light_strand_origin_start
     val_manta_call_regions
     val_manta_call_regions_tbi
-    val_mbuffer_mem
     val_mito_length
     val_mito_name
     val_mitosalt_breakspan
@@ -115,7 +114,6 @@ workflow NFCORE_RAREDISEASE {
     val_run_vcfanno_db_sanity_check
     val_sambamba_regions
     val_sample_id_map
-    val_samtools_sort_threads
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
     val_save_reference
@@ -504,7 +502,6 @@ workflow NFCORE_RAREDISEASE {
         val_homoplasmy_af_threshold,
         val_light_strand_origin_end,
         val_light_strand_origin_start,
-        val_mbuffer_mem,
         val_mito_length,
         val_mito_name,
         val_mitosalt_breakspan,
@@ -530,7 +527,6 @@ workflow NFCORE_RAREDISEASE {
         val_run_rtgvcfeval,
         val_run_vcfanno_db_sanity_check,
         val_sample_id_map,
-        val_samtools_sort_threads,
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram,
         val_svdb_query_bedpedbs,
@@ -610,7 +606,6 @@ workflow {
         params.light_strand_origin_start,
         params.manta_call_regions,
         params.manta_call_regions_tbi,
-        params.mbuffer_mem,
         params.mito_length,
         params.mito_name,
         params.mitosalt_breakspan,
@@ -648,7 +643,6 @@ workflow {
         params.run_vcfanno_db_sanity_check,
         params.sambamba_regions,
         params.sample_id_map,
-        params.samtools_sort_threads,
         params.save_all_mapped_as_cram,
         params.save_noalt_mapped_as_cram,
         params.save_reference,

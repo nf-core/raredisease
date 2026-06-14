@@ -194,7 +194,6 @@ workflow RAREDISEASE {
     val_homoplasmy_af_threshold
     val_light_strand_origin_end
     val_light_strand_origin_start
-    val_mbuffer_mem
     val_mito_length
     val_mito_name
     val_mitosalt_breakspan
@@ -220,7 +219,6 @@ workflow RAREDISEASE {
     val_run_rtgvcfeval
     val_run_vcfanno_db_sanity_check
     val_sample_id_map
-    val_samtools_sort_threads
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
     val_svdb_query_bedpedbs
@@ -316,11 +314,9 @@ workflow RAREDISEASE {
         val_analysis_type,
         val_exclude_alt,
         val_extract_alignments,
-        val_mbuffer_mem,
         val_mt_aligner,
         val_platform,
         val_run_mt_for_wes,
-        val_samtools_sort_threads,
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram
     )

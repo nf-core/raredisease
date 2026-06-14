@@ -117,13 +117,11 @@ nextflow_workflow {
                 input[21] = "wgs"
                 input[22] = true
                 input[23] = false
-                input[24] = 3072
-                input[25] = "bwamem2"
-                input[26] = "illumina"
-                input[27] = false
-                input[28] = 4
-                input[29] = true
-                input[30] = true
+                input[24] = "bwamem2"
+                input[25] = "illumina"
+                input[26] = false
+                input[27] = true
+                input[28] = true
                 """
             }
         }
@@ -225,13 +223,11 @@ nextflow_workflow {
                 input[21] = "wes"
                 input[22] = false
                 input[23] = false
-                input[24] = 3072
-                input[25] = "bwamem2"
-                input[26] = "illumina"
-                input[27] = false
-                input[28] = 4
-                input[29] = true
-                input[30] = false
+                input[24] = "bwamem2"
+                input[25] = "illumina"
+                input[26] = false
+                input[27] = true
+                input[28] = false
                 """
             }
         }
@@ -324,13 +320,11 @@ nextflow_workflow {
                 input[21] = "wgs"
                 input[22] = false
                 input[23] = false
-                input[24] = 3072
-                input[25] = "bwamem2"
-                input[26] = "illumina"
-                input[27] = false
-                input[28] = 4
-                input[29] = true
-                input[30] = false
+                input[24] = "bwamem2"
+                input[25] = "illumina"
+                input[26] = false
+                input[27] = true
+                input[28] = false
                 """
             }
         }
