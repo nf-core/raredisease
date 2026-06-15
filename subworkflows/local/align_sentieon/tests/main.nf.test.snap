@@ -13,7 +13,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "test_dedup.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    "d41d8cd98f00b204e9800998ecf8427e"
                 ]
             ],
             [
@@ -28,7 +28,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "test_dedup.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    "test_dedup.bam.bai"
                 ]
             ],
             [
@@ -122,18 +122,56 @@
                 ]
             ],
             [
-                "test_dedup.bam",
-                "test_dedup.bam.bai",
-                "test_dedup.bam.metrics",
-                "test_dedup.bam.metrics.multiqc.tsv",
-                "test_dedup.score"
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.bam.metrics:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.bam.metrics.multiqc.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.score:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
             ]
         ],
+        "timestamp": "2026-06-15T14:36:45.068348415",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-04-28T13:54:38.517974195"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
     },
     "align sentieon": {
         "content": [
@@ -303,10 +341,10 @@
                 ]
             ]
         ],
+        "timestamp": "2026-06-15T14:42:21.699949612",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-03-14T00:02:24.597092362"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
     }
 }

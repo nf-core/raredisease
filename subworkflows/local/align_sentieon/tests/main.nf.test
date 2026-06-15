@@ -121,23 +121,23 @@ nextflow_workflow {
         }
 
         then {
-            assert workflow.success
-            assert snapshot(
-                workflow.out.marked_bam,
-                workflow.out.marked_bai,
-                workflow.out.aln_metrics,
-                workflow.out.gc_metrics,
-                workflow.out.gc_summary,
-                workflow.out.is_metrics,
-                workflow.out.mq_metrics,
-                workflow.out.qd_metrics,
-                workflow.out.publish.flatten()
-                .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                .collect { new File(it).name }
-                .sort()
-                ).match()
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getReadsMD5() ] },
+                        workflow.out.marked_bai.collect { meta, baifile -> [ meta, file(baifile).name ] },
+                        workflow.out.aln_metrics,
+                        workflow.out.gc_metrics,
+                        workflow.out.gc_summary,
+                        workflow.out.is_metrics,
+                        workflow.out.mq_metrics,
+                        workflow.out.qd_metrics,
+                        workflow.out.dedup_metrics,
+                        workflow.out.dedup_metrics_multiqc,
+                        workflow.out.score,
+                    ).match()
+                }
+            )
         }
-
     }
-
 }
