@@ -25,7 +25,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ],
                     [
@@ -34,7 +34,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ]
                 ],
@@ -45,7 +45,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ],
                     [
@@ -54,7 +54,7 @@
                             {
                                 "id": "justhusky"
                             },
-                            "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ]
                 ],
@@ -76,10 +76,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-13T22:07:26.775535698",
+        "timestamp": "2026-06-15T16:34:00.07526095",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.4"
         }
     }
 }
