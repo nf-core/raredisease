@@ -2,27 +2,166 @@
     "align bwamem2 - wes, stub": {
         "content": [
             [
-                "earlycasualcaiman.fastp.html",
-                "earlycasualcaiman.fastp.json",
-                "earlycasualcaiman.fastp.log",
-                "earlycasualcaiman_R1.fastp.fastq.gz",
-                "earlycasualcaiman_R2.fastp.fastq.gz",
-                "earlycasualcaiman_sorted_md.cram",
-                "earlycasualcaiman_sorted_md.cram.crai",
-                "hugelymodelbat.fastp.html",
-                "hugelymodelbat.fastp.json",
-                "hugelymodelbat.fastp.log",
-                "hugelymodelbat_R1.fastp.fastq.gz",
-                "hugelymodelbat_R2.fastp.fastq.gz",
-                "hugelymodelbat_sorted_md.cram",
-                "hugelymodelbat_sorted_md.cram.crai",
-                "slowlycivilbuck.fastp.html",
-                "slowlycivilbuck.fastp.json",
-                "slowlycivilbuck.fastp.log",
-                "slowlycivilbuck_R1.fastp.fastq.gz",
-                "slowlycivilbuck_R2.fastp.fastq.gz",
-                "slowlycivilbuck_sorted_md.cram",
-                "slowlycivilbuck_sorted_md.cram.crai"
+                [
+                    {
+                        "id": "earlycasualcaiman",
+                        "sample": "earlycasualcaiman",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "lane": 1,
+                        "sex": 1,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "justhusky"
+                    },
+                    "earlycasualcaiman.fastp.json:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                [
+                    {
+                        "id": "hugelymodelbat",
+                        "sample": "hugelymodelbat",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                        "lane": 1,
+                        "sex": 1,
+                        "phenotype": 2,
+                        "paternal": "earlycasualcaiman",
+                        "maternal": "slowlycivilbuck",
+                        "case_id": "justhusky"
+                    },
+                    "hugelymodelbat.fastp.json:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                [
+                    {
+                        "id": "slowlycivilbuck",
+                        "sample": "slowlycivilbuck",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                        "lane": 1,
+                        "sex": 2,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "justhusky"
+                    },
+                    "slowlycivilbuck.fastp.json:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "earlycasualcaiman_sorted_md.cram.crai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "hugelymodelbat_sorted_md.cram.crai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "slowlycivilbuck_sorted_md.cram.crai"
+                ]
             ],
             [
                 [
@@ -93,42 +232,283 @@
                 
             ]
         ],
-        "timestamp": "2026-04-29T10:49:41.402548",
+        "timestamp": "2026-06-12T15:08:42.696356",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     },
     "align bwamem2 - wgs": {
         "content": [
             [
-                "earlycasualcaiman.fastp.html",
-                "earlycasualcaiman.fastp.json",
-                "earlycasualcaiman.fastp.log",
-                "earlycasualcaiman_R1.fastp.fastq.gz",
-                "earlycasualcaiman_R2.fastp.fastq.gz",
-                "earlycasualcaiman_sorted_md.cram",
-                "earlycasualcaiman_sorted_md.cram.crai",
-                "earlycasualcaiman_sorted_md_primary_contigs.cram",
-                "earlycasualcaiman_sorted_md_primary_contigs.cram.crai",
-                "hugelymodelbat.fastp.html",
-                "hugelymodelbat.fastp.json",
-                "hugelymodelbat.fastp.log",
-                "hugelymodelbat_R1.fastp.fastq.gz",
-                "hugelymodelbat_R2.fastp.fastq.gz",
-                "hugelymodelbat_sorted_md.cram",
-                "hugelymodelbat_sorted_md.cram.crai",
-                "hugelymodelbat_sorted_md_primary_contigs.cram",
-                "hugelymodelbat_sorted_md_primary_contigs.cram.crai",
-                "slowlycivilbuck.fastp.html",
-                "slowlycivilbuck.fastp.json",
-                "slowlycivilbuck.fastp.log",
-                "slowlycivilbuck_R1.fastp.fastq.gz",
-                "slowlycivilbuck_R2.fastp.fastq.gz",
-                "slowlycivilbuck_sorted_md.cram",
-                "slowlycivilbuck_sorted_md.cram.crai",
-                "slowlycivilbuck_sorted_md_primary_contigs.cram",
-                "slowlycivilbuck_sorted_md_primary_contigs.cram.crai"
+                [
+                    {
+                        "id": "earlycasualcaiman",
+                        "sample": "earlycasualcaiman",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "lane": 1,
+                        "sex": 1,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "justhusky"
+                    },
+                    "earlycasualcaiman.fastp.json:md5,d473c195ec66e23d39a02d4566b92d75"
+                ],
+                [
+                    {
+                        "id": "hugelymodelbat",
+                        "sample": "hugelymodelbat",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                        "lane": 1,
+                        "sex": 1,
+                        "phenotype": 2,
+                        "paternal": "earlycasualcaiman",
+                        "maternal": "slowlycivilbuck",
+                        "case_id": "justhusky"
+                    },
+                    "hugelymodelbat.fastp.json:md5,364c1702f8e833c70fbd36c2e0634f86"
+                ],
+                [
+                    {
+                        "id": "slowlycivilbuck",
+                        "sample": "slowlycivilbuck",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                        "lane": 1,
+                        "sex": 2,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "justhusky"
+                    },
+                    "slowlycivilbuck.fastp.json:md5,7ad34e9e48159c794ce777e4e48c0b96"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d948b0bd18f6f6526f5d8832465e1542"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "bb547b29eca1afded4229826c774fc90"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "2530fd24192b09084f45011703bd4954"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "6f48b21e58c7450dd4db0bfc1268d687"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "cc1385671a27d394f628d2d7868eba80"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "e8431e5dc096f9636efd37ebfe9a5883"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "earlycasualcaiman_sorted_md.cram.crai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "earlycasualcaiman_sorted_md_primary_contigs.cram.crai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "hugelymodelbat_sorted_md.cram.crai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "hugelymodelbat_sorted_md_primary_contigs.cram.crai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "slowlycivilbuck_sorted_md.cram.crai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "slowlycivilbuck_sorted_md_primary_contigs.cram.crai"
+                ]
             ],
             [
                 [
@@ -367,7 +747,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-04-29T10:48:31.959971",
+        "timestamp": "2026-06-12T15:07:25.051508",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
@@ -606,10 +986,66 @@
                 ]
             ],
             [
-                
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "c96587f3323ea479aebf0a8ba3ee710b",
+                    "earlycasualcaiman_sorted_merged_md_sorted_shifted.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "9f79604c77dc54d30daff682a50399bf",
+                    "hugelymodelbat_sorted_merged_md_sorted_shifted.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "8d810d8acecdeadc5a0e7ea159cb1343",
+                    "slowlycivilbuck_sorted_merged_md_sorted_shifted.bam.bai"
+                ]
             ]
         ],
-        "timestamp": "2026-04-29T11:06:56.369571",
+        "timestamp": "2026-06-12T15:26:16.997745",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
@@ -771,12 +1207,116 @@
     "align bwameme - wes, stub": {
         "content": [
             [
-                "earlycasualcaiman_sorted_md.cram",
-                "earlycasualcaiman_sorted_md.cram.crai",
-                "hugelymodelbat_sorted_md.cram",
-                "hugelymodelbat_sorted_md.cram.crai",
-                "slowlycivilbuck_sorted_md.cram",
-                "slowlycivilbuck_sorted_md.cram.crai"
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "earlycasualcaiman_sorted_md.cram.crai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "hugelymodelbat_sorted_md.cram.crai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "slowlycivilbuck_sorted_md.cram.crai"
+                ]
             ],
             [
                 [
@@ -897,12 +1437,68 @@
                 ]
             ],
             [
-                
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e",
+                    "earlycasualcaiman_sorted_merged_md_sorted_shifted.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "hugelymodelbat",
+                            "sample": "hugelymodelbat",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:hugelymodelbat\\tPL:illumina\\tSM:hugelymodelbat'",
+                            "sex": 1,
+                            "phenotype": 2,
+                            "paternal": "earlycasualcaiman",
+                            "maternal": "slowlycivilbuck",
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e",
+                    "hugelymodelbat_sorted_merged_md_sorted_shifted.bam.bai"
+                ],
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "slowlycivilbuck",
+                            "sample": "slowlycivilbuck",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:slowlycivilbuck\\tPL:illumina\\tSM:slowlycivilbuck'",
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        }
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e",
+                    "slowlycivilbuck_sorted_merged_md_sorted_shifted.bam.bai"
+                ]
             ]
         ],
-        "timestamp": "2026-04-29T11:13:18.312548",
+        "timestamp": "2026-06-12T15:33:25.667453",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     }
