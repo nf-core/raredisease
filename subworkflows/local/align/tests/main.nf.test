@@ -450,7 +450,7 @@ nextflow_workflow {
                             .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] }
                     ).match()
                 }
-                
+
             )
         }
     }
