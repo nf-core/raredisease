@@ -1,7 +1,7 @@
 {
     "-profile test_bam": {
         "content": [
-            774,
+            733,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -67,6 +67,10 @@
                 "BWAMEM2_INDEX_MT_SHIFT": {
                     "bwamem2": "2.2.1"
                 },
+                "BWAMEM2_MEM": {
+                    "bwamem2": "2.2.1",
+                    "samtools": "1.22.1"
+                },
                 "BWAMEM2_MEM_MT": {
                     "bwamem2": "2.2.1",
                     "samtools": "1.22.1"
@@ -76,6 +80,9 @@
                 },
                 "CAT_CAT_BAIT": {
                     "pigz": 2.8
+                },
+                "CAT_FASTQ": {
+                    "cat": 9.5
                 },
                 "CHROMOGRAPH_AUTOZYG": {
                     "chromograph": "1.3.1"
@@ -148,6 +155,12 @@
                 "EXPANSIONHUNTER": {
                     "bgzip": "1.22.1",
                     "expansionhunter": "5.0.0"
+                },
+                "FASTP": {
+                    "fastp": "1.0.1"
+                },
+                "FASTQC": {
+                    "fastqc": "0.12.1"
                 },
                 "FILTERVEP": {
                     "filtervep": "1.0.0"
@@ -235,8 +248,14 @@
                 "MANTA": {
                     "manta": "1.6.0"
                 },
+                "MARKDUPLICATES": {
+                    "picard": "3.4.0"
+                },
                 "ME_SPLIT_ALIGNMENT": {
                     "samtools": "1.22.1"
+                },
+                "MITOSALT": {
+                    "mitosalt": "1.1.1"
                 },
                 "MOSDEPTH": {
                     "mosdepth": "0.3.11"
@@ -302,6 +321,15 @@
                 "RHOCALL_VIZ": {
                     "rhocall": "0.5.1"
                 },
+                "SALTSHAKER_CALL": {
+                    "saltshaker": "1.1.1"
+                },
+                "SALTSHAKER_CLASSIFY": {
+                    "saltshaker": "1.1.1"
+                },
+                "SALTSHAKER_PLOT": {
+                    "saltshaker": "1.1.1"
+                },
                 "SAMTOOLS_COLLATE": {
                     "samtools": "1.22.1"
                 },
@@ -309,6 +337,9 @@
                     "samtools": "1.22.1"
                 },
                 "SAMTOOLS_FAIDX_MT": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_INDEX_ALIGN": {
                     "samtools": "1.22.1"
                 },
                 "SAMTOOLS_INDEX_MT": {
@@ -320,11 +351,17 @@
                 "SAMTOOLS_SORT_MT": {
                     "samtools": "1.22.1"
                 },
+                "SAMTOOLS_STATS": {
+                    "samtools": "1.22.1"
+                },
                 "SAMTOOLS_VIEW": {
                     "samtools": "1.22.1"
                 },
                 "SAM_TO_BAM": {
                     "samtools": "1.22.1"
+                },
+                "SEQTK_SAMPLE": {
+                    "seqtk": "1.4-r122"
                 },
                 "SMNCOPYNUMBERCALLER": {
                     "smncopynumbercaller": "1.1.2"
@@ -346,6 +383,9 @@
                 },
                 "SPLIT_MULTIALLELICS_POSTMERGE_MT": {
                     "bcftools": 1.22
+                },
+                "SPRING_DECOMPRESS_TO_FQ_PAIR": {
+                    "spring": "1.1.1"
                 },
                 "STRANGER": {
                     "stranger": "0.10.0",
@@ -374,9 +414,6 @@
                 "SVDB_QUERY_DB": {
                     "svdb": "2.8.4"
                 },
-                "TABIX_ANNOTATE": {
-                    "tabix": 1.21
-                },
                 "TABIX_BGZIPINDEX_PADDED_BED": {
                     "bgzip": 1.21,
                     "tabix": 1.21
@@ -394,22 +431,7 @@
                 "TABIX_GNOMAD_AF": {
                     "tabix": 1.21
                 },
-                "TABIX_ME": {
-                    "tabix": 1.21
-                },
-                "TABIX_ME_SPLIT": {
-                    "tabix": 1.21
-                },
                 "TABIX_TABIX": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_MERGE": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_MT2": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_MT": {
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
@@ -454,10 +476,19 @@
                 "alignment",
                 "alignment/earlycasualcaiman_mt_subsample.bam",
                 "alignment/earlycasualcaiman_mt_subsample.bam.bai",
+                "alignment/earlycasualcaiman_sorted_md.bam",
+                "alignment/earlycasualcaiman_sorted_md.bam.bai",
+                "alignment/earlycasualcaiman_sorted_md.metrics.txt",
                 "alignment/hugelymodelbat_mt_subsample.bam",
                 "alignment/hugelymodelbat_mt_subsample.bam.bai",
+                "alignment/hugelymodelbat_sorted_md.bam",
+                "alignment/hugelymodelbat_sorted_md.bam.bai",
+                "alignment/hugelymodelbat_sorted_md.metrics.txt",
                 "alignment/slowlycivilbuck_mt_subsample.bam",
                 "alignment/slowlycivilbuck_mt_subsample.bam.bai",
+                "alignment/slowlycivilbuck_sorted_md.bam",
+                "alignment/slowlycivilbuck_sorted_md.bam.bai",
+                "alignment/slowlycivilbuck_sorted_md.metrics.txt",
                 "annotate_mobile_elements",
                 "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz",
                 "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz.tbi",
@@ -622,11 +653,28 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz",
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
+                "call_sv/earlycasualcaiman.saltshaker.png",
+                "call_sv/earlycasualcaiman.saltshaker_classify.html",
                 "call_sv/earlycasualcaiman_mitochondria_deletions.txt",
+                "call_sv/hugelymodelbat.saltshaker.png",
+                "call_sv/hugelymodelbat.saltshaker_classify.html",
                 "call_sv/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/justhusky_saltshaker.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz.tbi",
+                "call_sv/slowlycivilbuck.saltshaker.png",
+                "call_sv/slowlycivilbuck.saltshaker_classify.html",
                 "call_sv/slowlycivilbuck_mitochondria_deletions.txt",
+                "fastqc",
+                "fastqc/earlycasualcaiman_LNUMBER1",
+                "fastqc/earlycasualcaiman_LNUMBER1/earlycasualcaiman_LNUMBER1.html",
+                "fastqc/earlycasualcaiman_LNUMBER1/earlycasualcaiman_LNUMBER1.zip",
+                "fastqc/hugelymodelbat_LNUMBER3",
+                "fastqc/hugelymodelbat_LNUMBER3/hugelymodelbat_LNUMBER3.html",
+                "fastqc/hugelymodelbat_LNUMBER3/hugelymodelbat_LNUMBER3.zip",
+                "fastqc/slowlycivilbuck_LNUMBER2",
+                "fastqc/slowlycivilbuck_LNUMBER2/slowlycivilbuck_LNUMBER2.html",
+                "fastqc/slowlycivilbuck_LNUMBER2/slowlycivilbuck_LNUMBER2.zip",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/.stub",
@@ -840,16 +888,32 @@
                 "smncopynumbercaller/out",
                 "smncopynumbercaller/out/justhusky_smncopynumbercaller.json",
                 "smncopynumbercaller/out/justhusky_smncopynumbercaller.tsv",
+                "trimming",
+                "trimming/earlycasualcaiman_LNUMBER1.fastp.html",
+                "trimming/earlycasualcaiman_LNUMBER1.fastp.json",
+                "trimming/earlycasualcaiman_LNUMBER1.fastp.log",
+                "trimming/earlycasualcaiman_LNUMBER1_R1.fastp.fastq.gz",
+                "trimming/earlycasualcaiman_LNUMBER1_R2.fastp.fastq.gz",
+                "trimming/hugelymodelbat_LNUMBER3.fastp.html",
+                "trimming/hugelymodelbat_LNUMBER3.fastp.json",
+                "trimming/hugelymodelbat_LNUMBER3.fastp.log",
+                "trimming/hugelymodelbat_LNUMBER3_R1.fastp.fastq.gz",
+                "trimming/hugelymodelbat_LNUMBER3_R2.fastp.fastq.gz",
+                "trimming/slowlycivilbuck_LNUMBER2.fastp.html",
+                "trimming/slowlycivilbuck_LNUMBER2.fastp.json",
+                "trimming/slowlycivilbuck_LNUMBER2.fastp.log",
+                "trimming/slowlycivilbuck_LNUMBER2_R1.fastp.fastq.gz",
+                "trimming/slowlycivilbuck_LNUMBER2_R2.fastp.fastq.gz",
                 "vcf2cytosure",
                 "vcf2cytosure/earlycasualcaiman.cgh",
                 "vcf2cytosure/hugelymodelbat.cgh",
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-06-05T00:25:53.862854239",
+        "timestamp": "2026-06-15T16:50:27.508222139",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.03.4"
         }
     }
 }
