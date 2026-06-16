@@ -485,7 +485,7 @@
                     "vcfanno": "0.3.7"
                 },
                 "Workflow": {
-                    "nf-core/raredisease": "v3.0.0"
+                    "nf-core/raredisease": "v3.1.0"
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
@@ -930,10 +930,10 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-06-11T10:20:14.951812109",
+        "timestamp": "2026-06-16T10:21:33.741825577",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "25.10.4"
         }
     }
 }

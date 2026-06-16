@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Tool          | Old version | New version |
 | ------------- | ----------- | ----------- |
 | bwa-fastalign |             | 1.0.0       |
+| saltshaker    | 1.0.0       | 1.1.1       |
 
 ## 3.0.0 - Mario [2026-05-12]
 
@@ -156,7 +157,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | picard                | 3.3.0       | 3.4.0       |
 | pigz                  | 2.3.4       | 2.8         |
 | qualimap              | 2.3         |             |
-| saltshaker            | 1.0.0       | 1.1.1       |
 | sambamba              |             | 1.0.1       |
 | samtools              | 1.21        | 1.22.1      |
 | sentieon              | 202503      | 202503.02   |
