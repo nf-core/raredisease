@@ -131,10 +131,6 @@
                 "DEEPVARIANT": {
                     "deepvariant": "1.9.0"
                 },
-                "ENSEMBLVEP_FILTERVEP": {
-                    "ensemblvep": 115.2,
-                    "perl-math-cdf": 0.1
-                },
                 "ENSEMBLVEP_ME": {
                     "ensemblvep": 110.1,
                     "perl-math-cdf": 0.1,
@@ -164,6 +160,9 @@
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
+                },
+                "FILTERVEP": {
+                    "filtervep": "1.0.0"
                 },
                 "GATK4_FILTERMUTECTCALLS_MT": {
                     "gatk4": "4.6.2.0"
@@ -322,13 +321,13 @@
                     "rhocall": "0.5.1"
                 },
                 "SALTSHAKER_CALL": {
-                    "saltshaker": "1.0.0"
+                    "saltshaker": "1.1.1"
                 },
                 "SALTSHAKER_CLASSIFY": {
-                    "saltshaker": "1.0.1"
+                    "saltshaker": "1.1.1"
                 },
                 "SALTSHAKER_PLOT": {
-                    "saltshaker": "1.0.0"
+                    "saltshaker": "1.1.1"
                 },
                 "SAMTOOLS_COLLATE": {
                     "samtools": "1.22.1"
@@ -382,6 +381,9 @@
                     "bcftools": 1.22
                 },
                 "SPLIT_MULTIALLELICS_MT": {
+                    "bcftools": 1.22
+                },
+                "SPLIT_MULTIALLELICS_POSTMERGE_MT": {
                     "bcftools": 1.22
                 },
                 "SPRING_DECOMPRESS_TO_FQ_PAIR": {
@@ -483,7 +485,7 @@
                     "vcfanno": "0.3.7"
                 },
                 "Workflow": {
-                    "nf-core/raredisease": "v3.0.0"
+                    "nf-core/raredisease": "v3.1.0"
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
@@ -928,7 +930,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-05-08T16:30:33.887641119",
+        "timestamp": "2026-06-16T10:21:33.741825577",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

@@ -1,4 +1,48 @@
 {
+    "align bwafastalign": {
+        "content": [
+            [
+                "test_sorted_md.bam",
+                "test_sorted_md.bam.bai",
+                "test_sorted_md.metrics.txt"
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "b88d51cb3010d98935b39ef6a3c58499"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "af8628d9df18b2d3d4f6fd47ef2bb872"
+                ]
+            ]
+        ],
+        "timestamp": "2026-06-12T15:46:43.756159921",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
     "align bwamem2": {
         "content": [
             [
@@ -37,9 +81,9 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T15:04:33.885203481",
+        "timestamp": "2026-06-12T15:43:33.682165862",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     },
@@ -62,7 +106,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "40408ed51d46ab3f1524be98d6b31441"
+                    "11413e81e47d32ac386d29b693693a2e"
                 ]
             ],
             [
@@ -81,9 +125,9 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T15:05:20.75721248",
+        "timestamp": "2026-06-12T15:47:31.561305633",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     }

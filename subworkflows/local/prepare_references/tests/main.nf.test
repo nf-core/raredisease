@@ -9,6 +9,7 @@ nextflow_workflow {
 
     tag "bedtools/slop"
     tag "bwa/index"
+    tag "bwafastalign/index"
     tag "bwamem2/index"
     tag "bwameme/index"
     tag "cat/cat"
@@ -44,21 +45,22 @@ nextflow_workflow {
                 input[3]  = null
                 input[4]  = null
                 input[5]  = null
-                input[6]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
-                input[7]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
-                input[8]  = null
-                input[9]  = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
-                input[10] = null
-                input[11] = "bwa"
-                input[12] = null
-                input[13] = false
+                input[6]  = null
+                input[7]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
+                input[8]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
+                input[9]  = null
+                input[10] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
+                input[11] = null
+                input[12] = "bwa"
+                input[13] = null
                 input[14] = false
-                input[15] = null
+                input[15] = false
                 input[16] = null
-                input[17] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[18] = null
-                input[19] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
-                input[20] = true
+                input[17] = null
+                input[18] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[19] = null
+                input[20] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                input[21] = true
                 """
             }
         }
