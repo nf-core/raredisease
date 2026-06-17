@@ -16,6 +16,7 @@
                 "justhusky_sv.vcf.gz.tbi"
             ]
         ],
+        "timestamp": "2026-04-14T15:51:47.077800376",
         "meta": {
             "nf-test": "0.9.3",
             "nextflow": "25.10.4"

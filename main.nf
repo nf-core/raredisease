@@ -46,8 +46,10 @@ workflow NFCORE_RAREDISEASE {
     val_aligner
     val_analysis_type
     val_bwa
+    val_bwafastalign
     val_bwamem2
     val_bwameme
+    val_cadd_prescored
     val_cadd_resources
     val_call_interval
     val_concatenate_snv_calls
@@ -73,7 +75,8 @@ workflow NFCORE_RAREDISEASE {
     val_known_dbsnp_tbi
     val_light_strand_origin_end
     val_light_strand_origin_start
-    val_mbuffer_mem
+    val_manta_call_regions
+    val_manta_call_regions_tbi
     val_mito_length
     val_mito_name
     val_mitosalt_breakspan
@@ -115,7 +118,6 @@ workflow NFCORE_RAREDISEASE {
     val_run_vcfanno_db_sanity_check
     val_sambamba_regions
     val_sample_id_map
-    val_samtools_sort_threads
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
     val_save_reference
@@ -161,6 +163,7 @@ workflow NFCORE_RAREDISEASE {
         val_aligner,
         val_analysis_type,
         val_bwa,
+        val_bwafastalign,
         val_bwamem2,
         val_bwameme,
         val_fai,
@@ -185,6 +188,7 @@ workflow NFCORE_RAREDISEASE {
     ch_bait_intervals           = ch_references.bait_intervals
     ch_dbsnp                    = ch_references.dbsnp
     ch_dbsnp_tbi                = ch_references.dbsnp_tbi
+    ch_genome_bwafastalignindex = ch_references.genome_bwafastalign_index
     ch_genome_bwaindex          = ch_references.genome_bwa_index
     ch_genome_bwamem2index      = ch_references.genome_bwamem2_index
     ch_genome_bwamemeindex      = ch_references.genome_bwameme_index
@@ -236,6 +240,7 @@ workflow NFCORE_RAREDISEASE {
     ch_svd_ud                   = channelFromPath(val_verifybamid_svd_ud)
 
     // Using channelFromPathWithMeta helper (with simpleName). If filepath is null, returns, [[:],[]]
+    ch_cadd_prescored           = channelFromPathWithMeta(val_cadd_prescored, true)
     ch_cadd_resources           = channelFromPathWithMeta(val_cadd_resources, true)
     ch_call_interval            = channelFromPathWithMeta(val_call_interval, true)
     ch_ml_model                 = channelFromPathWithMeta(val_ml_model, true)
@@ -263,6 +268,11 @@ workflow NFCORE_RAREDISEASE {
 
     ch_cadd_header              = channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_foundin_header           = channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
+    ch_manta_regions            = val_analysis_type.equals("wgs")
+                                    ? (val_manta_call_regions
+                                        ? channel.value([file(val_manta_call_regions), file(val_manta_call_regions_tbi)])
+                                        : channel.value([[], []]))
+                                    : ch_target_bed.map { _meta, bed, tbi -> [bed, tbi] }
     ch_ngsbits_method           = channel.value(val_ngsbits_samplegender_method)
     ch_sentieon_pcr_indel_model = channel.value(val_sentieon_dnascope_pcr_indel_model)
     ch_subdepth                 = channel.value(val_subdepth)
@@ -378,6 +388,7 @@ workflow NFCORE_RAREDISEASE {
         ch_alignments,
         ch_bait_intervals,
         ch_cadd_header,
+        ch_cadd_prescored,
         ch_cadd_resources,
         ch_call_interval,
         ch_case_info,
@@ -385,6 +396,7 @@ workflow NFCORE_RAREDISEASE {
         ch_dbsnp_tbi,
         ch_foundin_header,
         ch_gcnvcaller_model,
+        ch_genome_bwafastalignindex,
         ch_genome_bwaindex,
         ch_genome_bwamem2index,
         ch_genome_bwamemeindex,
@@ -401,6 +413,7 @@ workflow NFCORE_RAREDISEASE {
         ch_hgnc_ids,
         ch_intervals_wgs,
         ch_intervals_y,
+        ch_manta_regions,
         ch_me_references,
         ch_me_svdb_resources,
         ch_ml_model,
@@ -488,7 +501,6 @@ workflow NFCORE_RAREDISEASE {
         val_homoplasmy_af_threshold,
         val_light_strand_origin_end,
         val_light_strand_origin_start,
-        val_mbuffer_mem,
         val_mito_length,
         val_mito_name,
         val_mitosalt_breakspan,
@@ -519,7 +531,6 @@ workflow NFCORE_RAREDISEASE {
         val_run_rtgvcfeval,
         val_run_vcfanno_db_sanity_check,
         val_sample_id_map,
-        val_samtools_sort_threads,
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram,
         val_svdb_query_bedpedbs,
@@ -614,8 +625,10 @@ workflow {
         params.aligner,
         params.analysis_type,
         params.bwa,
+        params.bwafastalign,
         params.bwamem2,
         params.bwameme,
+        params.cadd_prescored,
         params.cadd_resources,
         params.call_interval,
         params.concatenate_snv_calls,
@@ -641,7 +654,8 @@ workflow {
         params.known_dbsnp_tbi,
         params.light_strand_origin_end,
         params.light_strand_origin_start,
-        params.mbuffer_mem,
+        params.manta_call_regions,
+        params.manta_call_regions_tbi,
         params.mito_length,
         params.mito_name,
         params.mitosalt_breakspan,
@@ -683,7 +697,6 @@ workflow {
         params.run_vcfanno_db_sanity_check,
         params.sambamba_regions,
         params.sample_id_map,
-        params.samtools_sort_threads,
         params.save_all_mapped_as_cram,
         params.save_noalt_mapped_as_cram,
         params.save_reference,

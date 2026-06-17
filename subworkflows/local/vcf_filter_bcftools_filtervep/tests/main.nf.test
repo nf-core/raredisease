@@ -1,15 +1,15 @@
 nextflow_workflow {
 
-    name "Test Subworkflow VCF_FILTER_BCFTOOLS_ENSEMBLVEP"
+    name "Test Subworkflow VCF_FILTER_BCFTOOLS_FILTERVEP"
     script "../main.nf"
-    workflow "VCF_FILTER_BCFTOOLS_ENSEMBLVEP"
+    workflow "VCF_FILTER_BCFTOOLS_FILTERVEP"
     config "./nextflow.config"
 
     tag "subworkflows"
-    tag "subworkflows_nfcore"
-    tag "subworkflows/vcf_filter_bcftools_ensemblvep"
+    tag "subworkflows_local"
+    tag "subworkflows/vcf_filter_bcftools_filtervep"
     tag "bcftools/view"
-    tag "ensemblvep/filtervep"
+    tag "filtervep"
     tag "tabix/bgziptabix"
 
     test("vcf, hgnc_ids - filter on expression") {
