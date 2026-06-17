@@ -9,8 +9,8 @@ nextflow_workflow {
 
     tag "rtgtools/vcfeval"
     tag "bcftools/reheader"
-    tag "tabix/tabix"
 
+    config "./nextflow.config"
 
     test("VARIANT_EVALUATION - stub") {
 
