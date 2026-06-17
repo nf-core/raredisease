@@ -886,7 +886,9 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_genome_fai,
             ch_somalier_sites,
-            ch_pedfile.map{ ped -> return[[id:'pedigree'], ped] }
+            ch_pedfile.map{ ped -> return[[id:'pedigree'], ped] },
+            channel.empty(),
+            null
         )
 
         ch_somalier_publish = VCF_EXTRACT_RELATE_SOMALIER.out.html
