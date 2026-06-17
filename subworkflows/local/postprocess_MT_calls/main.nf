@@ -96,7 +96,7 @@ workflow POSTPROCESS_MT_CALLS {
 
         SPLIT_MULTIALLELICS_POSTMERGE_MT.out.vcf
             .join(SPLIT_MULTIALLELICS_POSTMERGE_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
-            //.map { meta, vcf, tbi -> [meta, vcf, tbi] }
+            .map { meta, vcf, tbi -> [meta, vcf, tbi] } // need to map to have constant snapshots
             .mix(ch_case_vcf.single)
             .set { ch_addfoundintag_in }
 
