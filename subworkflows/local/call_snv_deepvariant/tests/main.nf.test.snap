@@ -152,7 +152,7 @@
     },
     "CALL_SNV_DEEPVARIANT - wgs": {
         "content": [
-            "c880882d4b929aada67df93ad2659dcc",
+            "e4e9e39859d7df52fd955fb32796fdb2",
             [
                 "justhusky_split_rmdup_info.vcf.gz.tbi"
             ],
@@ -160,10 +160,10 @@
                 "earlycasualcaiman_deepvar.g.vcf.gz"
             ]
         ],
-        "timestamp": "2026-06-16T10:38:02.618610765",
+        "timestamp": "2026-03-17T23:21:13.603834111",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.03.4"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
         }
     }
 }
