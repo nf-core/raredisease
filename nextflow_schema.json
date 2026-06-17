@@ -696,6 +696,20 @@
                     "type": "boolean",
                     "description": "Specifies whether duplicates reads should be removed prior to variant calling.",
                     "fa_icon": "fas fa-toggle-on"
+                },
+                "run_somalier": {
+                    "type": "boolean",
+                    "description": "Run Somalier extract and relate.",
+                    "fa_icon": "fas fa-toggle-on",
+                    "default": false
+                },
+                "somalier_sites_vcf": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "description": "Path to the somalier sites VCF (bgzipped).",
+                    "pattern": "^\\S+\\.vcf(\\.gz)?$",
+                    "fa_icon": "fas fa-file"
                 }
             }
         },
