@@ -545,11 +545,7 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
                 "call_sv/hugelymodelbat.saltshaker.png",
-                "call_sv/hugelymodelbat_mitochondria_deletions.txt",
                 "call_sv/justhusky.saltshaker_classify.html",
-                "call_sv/justhusky_saltshaker.vcf.gz",
-                "call_sv/justhusky_sv.vcf.gz",
-                "call_sv/justhusky_sv.vcf.gz.tbi",
                 "fastqc",
                 "fastqc/hugelymodelbat_LNUMBER1",
                 "fastqc/hugelymodelbat_LNUMBER1/hugelymodelbat_LNUMBER1.html",
@@ -664,10 +660,10 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-05-27T15:26:36.71307935",
+        "timestamp": "2026-06-18T13:38:45.854734171",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.3"
         }
     }
 }

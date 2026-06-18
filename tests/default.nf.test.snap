@@ -680,15 +680,9 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
                 "call_sv/earlycasualcaiman.saltshaker.png",
-                "call_sv/earlycasualcaiman_mitochondria_deletions.txt",
                 "call_sv/hugelymodelbat.saltshaker.png",
-                "call_sv/hugelymodelbat_mitochondria_deletions.txt",
                 "call_sv/justhusky.saltshaker_classify.html",
-                "call_sv/justhusky_saltshaker.vcf.gz",
-                "call_sv/justhusky_sv.vcf.gz",
-                "call_sv/justhusky_sv.vcf.gz.tbi",
                 "call_sv/slowlycivilbuck.saltshaker.png",
-                "call_sv/slowlycivilbuck_mitochondria_deletions.txt",
                 "fastqc",
                 "fastqc/earlycasualcaiman_LNUMBER1",
                 "fastqc/earlycasualcaiman_LNUMBER1/earlycasualcaiman_LNUMBER1.html",
@@ -1102,15 +1096,9 @@
                 "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
                 "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "hugelymodelbat.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "hugelymodelbat_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "justhusky.saltshaker_classify.html:md5,5ec112032a61697ad6e447fc71573522",
-                "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
-                "justhusky_sv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
-                "justhusky_sv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "slowlycivilbuck.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "slowlycivilbuck_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "earlycasualcaiman_LNUMBER1.html:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "earlycasualcaiman_LNUMBER1.zip:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "hugelymodelbat_LNUMBER3.html:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -1337,10 +1325,10 @@
                 "slowlycivilbuck.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
             ]
         ],
-        "timestamp": "2026-05-27T15:36:04.165275268",
+        "timestamp": "2026-06-18T13:35:09.306177124",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.3"
         }
     }
 }
