@@ -119,6 +119,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 .set { ch_saltshaker_vcf }
             ch_saltshaker_html   = ch_sv_mt_out.saltshaker_html
             ch_saltshaker_plot   = ch_sv_mt_out.saltshaker_plot
+            ch_mt_del_result     = ch_sv_mt_out.mt_del_result
             ch_svcaller_priority = ch_sv_mt_out.updated_priority
         }
 
