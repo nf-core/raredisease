@@ -247,6 +247,7 @@ workflow RAREDISEASE {
     ch_mt_del_result                    = channel.empty()
     ch_saltshaker_html                  = channel.empty()
     ch_saltshaker_plot                  = channel.empty()
+    ch_saltshaker_vcf                   = channel.empty()
     ch_call_repeat_expansions_publish   = channel.empty()
     ch_call_mobile_elements_publish     = channel.empty()
     ch_annotate_genome_snvs_bcftools_concat_tbi       = channel.empty()
@@ -693,6 +694,7 @@ workflow RAREDISEASE {
         ch_call_sv_tbi = CALL_STRUCTURAL_VARIANTS.out.tbi
         ch_saltshaker_html = CALL_STRUCTURAL_VARIANTS.out.saltshaker_html
         ch_saltshaker_plot = CALL_STRUCTURAL_VARIANTS.out.saltshaker_plot
+        ch_saltshaker_vcf = CALL_STRUCTURAL_VARIANTS.out.saltshaker_vcf
         ch_mt_del_result = CALL_STRUCTURAL_VARIANTS.out.mt_del_result
 
         //
@@ -1078,6 +1080,7 @@ workflow RAREDISEASE {
     call_sv_tbi                                      = ch_call_sv_tbi                                      // channel: [ val(meta), path(tbi) ]
     saltshaker_html                                  = ch_saltshaker_html                                  // channel: [ val(meta), path(html) ]
     saltshaker_plot                                  = ch_saltshaker_plot                                  // channel: [ val(meta), path(png) ]
+    saltshaker_vcf                                   = ch_saltshaker_vcf                                   // channel: [ val(meta), path(vcf) ]
     mt_del_result                                    = ch_mt_del_result                                    // channel: [ val(meta), path(txt) ]
     annotate_genome_snvs_bcftools_concat_tbi         = ch_annotate_genome_snvs_bcftools_concat_tbi       // channel: [ val(meta), path(tbi) ]
     annotate_genome_snvs_bcftools_concat_vcf         = ch_annotate_genome_snvs_bcftools_concat_vcf       // channel: [ val(meta), path(vcf) ]

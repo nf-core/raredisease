@@ -86,6 +86,7 @@ nextflow_workflow {
                     workflow.out.saltshaker_html.collect { meta, html -> file(html).name },
                     workflow.out.saltshaker_plot.collect { meta, plot -> file(plot).name },
                     workflow.out.mt_del_result.collect { meta, txt -> file(txt).name },
+                    workflow.out.saltshaker_vcf.collect { meta, vcf -> file(vcf).name },
                     workflow.out.vcf.collect { meta, vcf -> file(vcf).name },
                     workflow.out.tbi.collect { meta, tbi -> file(tbi).name }
                 ).match() }
