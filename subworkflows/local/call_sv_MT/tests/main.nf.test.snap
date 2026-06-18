@@ -2,19 +2,39 @@
     "CALL_SV_MT - stub": {
         "content": [
             [
-                "justhusky.saltshaker_classify.html"
+                [
+                    {
+                        "id": "justhusky"
+                    },
+                    "justhusky.saltshaker_classify.html:md5,5ec112032a61697ad6e447fc71573522"
+                ]
             ],
             [
                 "earlycasualcaiman.saltshaker.png"
             ],
             [
-                "earlycasualcaiman_mitochondria_deletions.txt"
+                [
+                    {
+                        "id": "earlycasualcaiman",
+                        "sample": "earlycasualcaiman",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "lane": 1,
+                        "sex": 1,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "justhusky"
+                    },
+                    "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
             ],
             [
                 "justhusky_saltshaker.vcf.gz"
             ]
         ],
-        "timestamp": "2026-06-18T12:13:26.375753",
+        "timestamp": "2026-06-18T13:16:35.904031",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

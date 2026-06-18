@@ -156,7 +156,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         mt_del_result   = ch_mt_del_result    // channel: [ val(meta), path(txt) ]
         saltshaker_html = ch_saltshaker_html  // channel: [ val(meta), path(html) ]
         saltshaker_plot = ch_saltshaker_plot  // channel: [ val(meta), path(png) ]
-        saltshaker_vcf  = ch_saltshaker_vcf   // channel: [ val(meta), path(vcf) ]
+        saltshaker_vcf  = ch_saltshaker_vcf   // channel: [ path(vcf) ]
         tbi             = ch_merged_tbi       // channel: [ val(meta), path(tbi)]
         vcf             = ch_merged_svs       // channel: [ val(meta), path(vcf)]
 }
