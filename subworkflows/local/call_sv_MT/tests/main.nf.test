@@ -64,10 +64,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.out.saltshaker_html,
-                    workflow.out.saltshaker_plot.collect { meta, plot -> file(plot).name },
-                    workflow.out.mt_del_result,
-                    workflow.out.saltshaker_vcf.collect { meta, vcf -> file(vcf).name }
+                    workflow.out
                 ).match() }
             )
         }
