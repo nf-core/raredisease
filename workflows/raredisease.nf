@@ -873,7 +873,8 @@ workflow RAREDISEASE {
     }
 
     // Somalier extract + relate (enabled unless skipped via `skip_subworkflows` / `skip_somalier`)
-    if (!skip_somalier) {
+    // Only run when `params.somalier_sites_vcf` is provided to avoid file(null) errors in test/profile runs
+    if (!skip_somalier && params.somalier_sites_vcf) {
         // prepare VCF channel: [ meta, vcf, tbi, count ] as expected by the subworkflow
         ch_vcfs_for_somalier = CALL_SNV.out.genome_vcf
             .join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true)
@@ -894,6 +895,8 @@ workflow RAREDISEASE {
 
         ch_somalier_publish = VCF_EXTRACT_RELATE_SOMALIER.out.publish
             .map { meta, value -> ['somalier/', [meta, value]] }
+    } else if (!skip_somalier && !params.somalier_sites_vcf) {
+        log.warn "Skipping Somalier: params.somalier_sites_vcf is not set"
     }
 
 /*
