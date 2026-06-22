@@ -176,6 +176,7 @@ workflow RAREDISEASE {
     skip_mitosalt
     skip_ngsbits
     skip_peddy
+    skip_somalier
     skip_smncopynumbercaller
     skip_vcf2cytosure
     val_aligner
@@ -871,8 +872,8 @@ workflow RAREDISEASE {
             .map { meta, value -> ['peddy/', [meta, value]] }
     }
 
-    // Somalier extract + relate (requires params.run_somalier and params.somalier_sites_vcf)
-    if (params.run_somalier ?: false) {
+    // Somalier extract + relate (enabled unless skipped via `skip_subworkflows` / `skip_somalier`)
+    if (!skip_somalier) {
         // prepare VCF channel: [ meta, vcf, tbi, count ] as expected by the subworkflow
         ch_vcfs_for_somalier = CALL_SNV.out.genome_vcf
             .join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true)
