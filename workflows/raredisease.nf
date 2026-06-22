@@ -459,8 +459,8 @@ workflow RAREDISEASE {
             ch_target_bed,
             val_analysis_type,
             val_concatenate_snv_calls,
-            val_skip_split_multiallelics,
             val_run_mt_for_wes,
+            val_skip_split_multiallelics,
             val_variant_caller
         )
         ch_call_snv_publish = CALL_SNV.out.publish
