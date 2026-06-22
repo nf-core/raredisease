@@ -697,9 +697,9 @@
                     "description": "Specifies whether duplicates reads should be removed prior to variant calling.",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "run_somalier": {
+                "somalier_sex_check": {
                     "type": "boolean",
-                    "description": "Run Somalier extract and relate.",
+                    "description": "Run Somalier sex-check (extract and relate).",
                     "fa_icon": "fas fa-toggle-on",
                     "default": true
                 },
