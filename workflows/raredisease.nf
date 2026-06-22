@@ -889,7 +889,7 @@ workflow RAREDISEASE {
             ch_somalier_sites,
             ch_pedfile.map{ ped -> return[[id:'pedigree'], ped] },
             channel.empty(),
-            null
+            'case_id'
         )
 
         ch_somalier_publish = VCF_EXTRACT_RELATE_SOMALIER.out.publish
