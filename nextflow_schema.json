@@ -701,7 +701,7 @@
                     "type": "boolean",
                     "description": "Run Somalier extract and relate.",
                     "fa_icon": "fas fa-toggle-on",
-                    "default": false
+                    "default": true
                 },
                 "somalier_sites_vcf": {
                     "type": "string",
