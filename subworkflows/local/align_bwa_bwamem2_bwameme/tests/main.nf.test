@@ -66,10 +66,8 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.publish.flatten()
-                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                            .collect { new File(it).name }
-                            .sort(),
+                        workflow.out.markdup_metrics.collect { meta, metrics -> file(metrics).name },
+                        workflow.out.stats,
                         workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getHeaderMD5() ] },
                         workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getReadsMD5() ] }
                     ).match()
@@ -126,15 +124,117 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.publish.flatten()
-                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                            .collect { new File(it).name }
-                            .sort(),
+                        workflow.out.markdup_metrics.collect { meta, metrics -> file(metrics).name },
+                        workflow.out.stats,
                         workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getHeaderMD5() ] },
                         workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getReadsMD5() ] }
                     ).match()
                 }
             )
+        }
+    }
+
+    test("align bwamem2, stub") {
+
+        setup {
+            run("BWAMEM2_INDEX") {
+                script "modules/nf-core/bwamem2/index/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'sarscov2'],
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
+        options "-stub"
+
+        when {
+            params {
+                sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                restrict_to_contigs = "MT192765.1"
+            }
+            workflow {
+                """
+                input[0]  = [[:],[]]
+                input[1]  = BWAMEM2_INDEX.out.index
+                input[2]  = [[:],[]]
+                input[3]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
+                input[4]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
+                input[5]  = channel.of([
+                    [ id:'test', sample:'test', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test'"  ], // meta map
+                    [
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
+                    ]
+                ])
+                input[6]  = "bwamem2"
+                input[7]  = true
+                input[8]  = 3072
+                input[9]  = "illumina"
+                input[10] = 4
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+    }
+
+    test("align bwameme, stub") {
+
+        setup {
+            run("BWAMEME_INDEX") {
+                script "modules/nf-core/bwameme/index/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'sarscov2'],
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
+        options "-stub"
+
+        when {
+            params {
+                sarscov_testdata_base_path= 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                restrict_to_contigs = "MT192765.1"
+            }
+            workflow {
+                """
+                input[0]  = [[:],[]]
+                input[1]  = [[:],[]]
+                input[2]  = BWAMEME_INDEX.out.index
+                input[3]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
+                input[4]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
+                input[5]  = channel.of([
+                    [ id:'test', sample:'test', single_end:false, num_lanes:1, read_group:"\'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test\'"  ], // meta map
+                    [
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
+                    ]
+                ])
+                input[6]  = "bwameme"
+                input[7]  = true
+                input[8]  = 3072
+                input[9]  = "illumina"
+                input[10] = 4
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
         }
     }
 

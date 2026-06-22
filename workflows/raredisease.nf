@@ -131,7 +131,7 @@ workflow RAREDISEASE {
     ch_sambamba_bed
     ch_sample_id_map
     ch_samples
-    ch_scatter_split_intervals
+    ch_scatter_genome_split_intervals
     ch_score_config_mt
     ch_score_config_snv
     ch_score_config_sv
@@ -233,14 +233,26 @@ workflow RAREDISEASE {
     main:
 
     ch_multiqc_files                    = channel.empty()
-    ch_align_publish                    = channel.empty()
-    ch_qc_bam_publish                   = channel.empty()
+    ch_align_fastp_out                  = channel.empty()
+    ch_align_genome_marked_cram         = channel.empty()
+    ch_align_genome_marked_crai         = channel.empty()
+    ch_align_genome_marked_bam          = channel.empty()
+    ch_align_genome_marked_bai          = channel.empty()
+    ch_align_markdup_metrics            = channel.empty()
+    ch_subsample_mt_bam                 = channel.empty()
+    ch_subsample_mt_bai                 = channel.empty()
     ch_call_snv_publish                 = channel.empty()
     ch_call_sv_publish                  = channel.empty()
     ch_call_repeat_expansions_publish   = channel.empty()
     ch_call_mobile_elements_publish     = channel.empty()
-    ch_subsample_publish                = channel.empty()
-    ch_annotate_genome_snvs_publish     = channel.empty()
+    ch_annotate_genome_snvs_bcftools_concat_tbi       = channel.empty()
+    ch_annotate_genome_snvs_bcftools_concat_vcf       = channel.empty()
+    ch_annotate_genome_snvs_chromograph_autozyg_plots = channel.empty()
+    ch_annotate_genome_snvs_chromograph_regions_plots = channel.empty()
+    ch_annotate_genome_snvs_chromograph_sites_plots   = channel.empty()
+    ch_annotate_genome_snvs_rhocall_viz_bed           = channel.empty()
+    ch_annotate_genome_snvs_rhocall_viz_wig           = channel.empty()
+    ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       = channel.empty()
     ch_annotate_mt_snvs_publish         = channel.empty()
     ch_annotate_sv_publish              = channel.empty()
     ch_generate_cytosure_files_publish  = channel.empty()
@@ -325,7 +337,12 @@ workflow RAREDISEASE {
         val_save_noalt_mapped_as_cram
     )
     .set { ch_mapped }
-    ch_align_publish = ALIGN.out.publish
+    ch_align_fastp_out              = ALIGN.out.fastp_out
+    ch_align_genome_marked_bam      = ALIGN.out.genome_marked_bam
+    ch_align_genome_marked_bai      = ALIGN.out.genome_marked_bai
+    ch_align_genome_marked_cram     = ALIGN.out.genome_marked_cram
+    ch_align_genome_marked_crai     = ALIGN.out.genome_marked_crai
+    ch_align_markdup_metrics        = ALIGN.out.markdup_metrics
 
     if (!(skip_mt_subsample) && (val_analysis_type.equals("wgs") || val_run_mt_for_wes)) {
         if (val_mt_subsample_approach.equals("fraction")) {
@@ -334,12 +351,14 @@ workflow RAREDISEASE {
                 val_mt_subsample_rd,
                 val_mt_subsample_seed
             )
-            ch_subsample_publish = SUBSAMPLE_MT_FRAC.out.publish
+            ch_subsample_mt_bam = SUBSAMPLE_MT_FRAC.out.bam
+            ch_subsample_mt_bai = SUBSAMPLE_MT_FRAC.out.bai
         } else {
             SUBSAMPLE_MT_READS(
                 ch_mapped.mt_bam_bai,
             )
-            ch_subsample_publish = SUBSAMPLE_MT_READS.out.publish
+            ch_subsample_mt_bam = SUBSAMPLE_MT_READS.out.bam
+            ch_subsample_mt_bai = SUBSAMPLE_MT_READS.out.bai
         }
     }
 
@@ -365,8 +384,6 @@ workflow RAREDISEASE {
         val_target_bed,
         skip_ngsbits
     )
-    ch_qc_bam_publish = QC_BAM.out.publish
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RENAME ALIGNMENT FILES FOR SMNCOPYNUMBERCALLER & REPEATCALLING
@@ -440,8 +457,8 @@ workflow RAREDISEASE {
             ch_target_bed,
             val_analysis_type,
             val_concatenate_snv_calls,
-            val_skip_split_multiallelics,
             val_run_mt_for_wes,
+            val_skip_split_multiallelics,
             val_variant_caller
         )
         ch_call_snv_publish = CALL_SNV.out.publish
@@ -470,7 +487,7 @@ workflow RAREDISEASE {
                 ch_genome_fasta,
                 ch_gnomad_af,
                 ch_samples,
-                ch_scatter_split_intervals,
+                ch_scatter_genome_split_intervals,
                 CALL_SNV.out.genome_vcf_tabix,
                 ch_vcfanno_extra,
                 ch_vcfanno_lua,
@@ -482,10 +499,17 @@ workflow RAREDISEASE {
                 val_cadd_resources,
                 val_genome,
                 val_vep_cache_version
-            ).set { ch_snv_annotate }
-            ch_annotate_genome_snvs_publish = ANNOTATE_GENOME_SNVS.out.publish
+            )
+            ch_annotate_genome_snvs_bcftools_concat_tbi       = ANNOTATE_GENOME_SNVS.out.bcftools_concat_tbi
+            ch_annotate_genome_snvs_bcftools_concat_vcf       = ANNOTATE_GENOME_SNVS.out.bcftools_concat_vcf
+            ch_annotate_genome_snvs_chromograph_autozyg_plots = ANNOTATE_GENOME_SNVS.out.chromograph_autozyg_plots
+            ch_annotate_genome_snvs_chromograph_regions_plots = ANNOTATE_GENOME_SNVS.out.chromograph_regions_plots
+            ch_annotate_genome_snvs_chromograph_sites_plots   = ANNOTATE_GENOME_SNVS.out.chromograph_sites_plots
+            ch_annotate_genome_snvs_rhocall_viz_bed           = ANNOTATE_GENOME_SNVS.out.rhocall_viz_bed
+            ch_annotate_genome_snvs_rhocall_viz_wig           = ANNOTATE_GENOME_SNVS.out.rhocall_viz_wig
+            ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       = ANNOTATE_GENOME_SNVS.out.ucsc_wigtobigwig_bw
 
-            ch_snv_annotate.vcf_ann
+            ch_annotate_genome_snvs_bcftools_concat_vcf
                 .multiMap { meta, vcf ->
                     clinical: [ meta + [ set: "clinical" ], vcf ]
                     research: [ meta + [ set: "research" ], vcf ]
@@ -969,12 +993,12 @@ workflow RAREDISEASE {
     }
     ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.fastp_json.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.markdup_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.sex_check.map{_meta, reports -> reports}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.multiple_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.hs_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.global_dist.map{_meta, reports -> reports}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.cov.map{_meta, reports -> reports}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.self_sm.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.ngsbits_samplegender_tsv.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.picard_collectmultiplemetrics_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.picard_collecthsmetrics_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.mosdepth_global_txt.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.wgsmetrics_wg.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.verifybamid_self_sm.map{_meta, reports -> reports}.collect().ifEmpty([]))
 
     if (!skip_peddy) {
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{_meta, reports -> reports}.collect().ifEmpty([]))
@@ -1006,16 +1030,57 @@ workflow RAREDISEASE {
         .map { _meta, value -> ['multiqc/', value] }
 
     emit:
-    multiqc_report = MULTIQC.out.report.map { _meta, report -> report }.toList()
-    versions       = ch_versions
-    publish        = ch_align_publish
-                       .mix(ch_qc_bam_publish)
-                       .mix(ch_subsample_publish)
-                       .mix(ch_call_snv_publish)
+    align_fastp_out              = ch_align_fastp_out              // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
+    align_genome_marked_bam      = ch_align_genome_marked_bam      // channel: [ val(meta), path(bam) ]
+    align_genome_marked_bai      = ch_align_genome_marked_bai      // channel: [ val(meta), path(bai) ]
+    align_genome_marked_cram     = ch_align_genome_marked_cram     // channel: [ val(meta), path(cram) ]
+    align_genome_marked_crai     = ch_align_genome_marked_crai     // channel: [ val(meta), path(crai) ]
+    align_markdup_metrics        = ch_align_markdup_metrics        // channel: [ val(meta), path(metrics) ]
+    multiqc_report                                   = MULTIQC.out.report.map { _meta, report -> report }.toList()
+    qc_bam_chromograph_cov_plots                     = QC_BAM.out.chromograph_cov_plots                    // channel: [ val(meta), path(png) ]
+    qc_bam_mosdepth_global_txt                       = QC_BAM.out.mosdepth_global_txt                      // channel: [ val(meta), path(txt) ]
+    qc_bam_mosdepth_per_base_bed                     = QC_BAM.out.mosdepth_per_base_bed                    // channel: [ val(meta), path(bed.gz) ]
+    qc_bam_mosdepth_per_base_csi                     = QC_BAM.out.mosdepth_per_base_csi                    // channel: [ val(meta), path(csi) ]
+    qc_bam_mosdepth_per_base_d4                      = QC_BAM.out.mosdepth_per_base_d4                     // channel: [ val(meta), path(d4) ]
+    qc_bam_mosdepth_quantized_bed                    = QC_BAM.out.mosdepth_quantized_bed                   // channel: [ val(meta), path(bed.gz) ]
+    qc_bam_mosdepth_quantized_csi                    = QC_BAM.out.mosdepth_quantized_csi                   // channel: [ val(meta), path(csi) ]
+    qc_bam_mosdepth_regions_bed                      = QC_BAM.out.mosdepth_regions_bed                     // channel: [ val(meta), path(bed.gz) ]
+    qc_bam_mosdepth_regions_csi                      = QC_BAM.out.mosdepth_regions_csi                     // channel: [ val(meta), path(csi) ]
+    qc_bam_mosdepth_regions_txt                      = QC_BAM.out.mosdepth_regions_txt                     // channel: [ val(meta), path(txt) ]
+    qc_bam_mosdepth_summary_txt                      = QC_BAM.out.mosdepth_summary_txt                     // channel: [ val(meta), path(txt) ]
+    qc_bam_mosdepth_thresholds_bed                   = QC_BAM.out.mosdepth_thresholds_bed                  // channel: [ val(meta), path(bed.gz) ]
+    qc_bam_mosdepth_thresholds_csi                   = QC_BAM.out.mosdepth_thresholds_csi                  // channel: [ val(meta), path(csi) ]
+    qc_bam_ngsbits_samplegender_tsv                  = QC_BAM.out.ngsbits_samplegender_tsv                 // channel: [ val(meta), path(tsv) ]
+    qc_bam_picard_collecthsmetrics_metrics           = QC_BAM.out.picard_collecthsmetrics_metrics          // channel: [ val(meta), path(metrics) ]
+    qc_bam_picard_collectmultiplemetrics_metrics     = QC_BAM.out.picard_collectmultiplemetrics_metrics    // channel: [ val(meta), path(metrics) ]
+    qc_bam_picard_collectmultiplemetrics_pdf         = QC_BAM.out.picard_collectmultiplemetrics_pdf        // channel: [ val(meta), path(pdf) ]
+    qc_bam_sambamba_depth_bed                        = QC_BAM.out.sambamba_depth_bed                       // channel: [ val(meta), path(bed) ]
+    qc_bam_tiddit_cov_cov                            = QC_BAM.out.tiddit_cov_cov                           // channel: [ val(meta), path(bed) ]
+    qc_bam_tiddit_cov_wig                            = QC_BAM.out.tiddit_cov_wig                           // channel: [ val(meta), path(wig) ]
+    qc_bam_ucsc_wigtobigwig_bw                       = QC_BAM.out.ucsc_wigtobigwig_bw                      // channel: [ val(meta), path(bw) ]
+    qc_bam_verifybamid_ancestry                      = QC_BAM.out.verifybamid_ancestry                     // channel: [ val(meta), path(ancestry) ]
+    qc_bam_verifybamid_bed                           = QC_BAM.out.verifybamid_bed                          // channel: [ val(meta), path(bed) ]
+    qc_bam_verifybamid_log                           = QC_BAM.out.verifybamid_log                          // channel: [ val(meta), path(log) ]
+    qc_bam_verifybamid_mu                            = QC_BAM.out.verifybamid_mu                           // channel: [ val(meta), path(mu) ]
+    qc_bam_verifybamid_self_sm                       = QC_BAM.out.verifybamid_self_sm                      // channel: [ val(meta), path(selfSM) ]
+    qc_bam_verifybamid_ud                            = QC_BAM.out.verifybamid_ud                           // channel: [ val(meta), path(ud) ]
+    qc_bam_wgsmetrics_wg                             = QC_BAM.out.wgsmetrics_wg                            // channel: [ val(meta), path(metrics) ]
+    qc_bam_wgsmetrics_y                              = QC_BAM.out.wgsmetrics_y                             // channel: [ val(meta), path(metrics) ]
+    annotate_genome_snvs_bcftools_concat_tbi         = ch_annotate_genome_snvs_bcftools_concat_tbi       // channel: [ val(meta), path(tbi) ]
+    annotate_genome_snvs_bcftools_concat_vcf         = ch_annotate_genome_snvs_bcftools_concat_vcf       // channel: [ val(meta), path(vcf) ]
+    annotate_genome_snvs_chromograph_autozyg_plots   = ch_annotate_genome_snvs_chromograph_autozyg_plots // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_chromograph_regions_plots   = ch_annotate_genome_snvs_chromograph_regions_plots // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_chromograph_sites_plots     = ch_annotate_genome_snvs_chromograph_sites_plots   // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_rhocall_viz_bed             = ch_annotate_genome_snvs_rhocall_viz_bed           // channel: [ val(meta), path(bed) ]
+    annotate_genome_snvs_rhocall_viz_wig             = ch_annotate_genome_snvs_rhocall_viz_wig           // channel: [ val(meta), path(wig) ]
+    annotate_genome_snvs_ucsc_wigtobigwig_bw         = ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       // channel: [ val(meta), path(bw) ]
+    subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
+    subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
+    versions                     = ch_versions
+    publish                      = ch_call_snv_publish
                        .mix(ch_call_sv_publish)
                        .mix(ch_call_repeat_expansions_publish)
                        .mix(ch_call_mobile_elements_publish)
-                       .mix(ch_annotate_genome_snvs_publish)
                        .mix(ch_annotate_mt_snvs_publish)
                        .mix(ch_annotate_sv_publish)
                        .mix(ch_generate_cytosure_files_publish)
