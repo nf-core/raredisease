@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.1.1 - Princess Peach (patch) [2026-06-23]
+
+### `Fixed`
+
+- Patch `deepvariant/rundeepvariant` to tee stdout/stderr to a log file and exit non-zero when `queue.Empty` or `BrokenPipeError` is detected, catching silent failures that previously caused the process to appear successful [#XXX](https://github.com/nf-core/raredisease/pull/XXX)
+
 ## 3.1.0 - Princess Peach [2026-06-16]
 
 ### `Added`

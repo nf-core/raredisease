@@ -138,7 +138,8 @@
                     "deepvariant/rundeepvariant": {
                         "branch": "master",
                         "git_sha": "f2b138ee1d91f67d31c187317d7e83e429bf0309",
-                        "installed_by": ["modules"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/deepvariant/rundeepvariant/deepvariant-rundeepvariant.diff"
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
