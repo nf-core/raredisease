@@ -892,9 +892,7 @@ workflow RAREDISEASE {
             null
         )
 
-        ch_somalier_publish = VCF_EXTRACT_RELATE_SOMALIER.out.html
-            .mix(VCF_EXTRACT_RELATE_SOMALIER.out.pairs_tsv)
-            .mix(VCF_EXTRACT_RELATE_SOMALIER.out.samples_tsv)
+        ch_somalier_publish = VCF_EXTRACT_RELATE_SOMALIER.out.publish
             .map { meta, value -> ['somalier/', [meta, value]] }
     }
 
