@@ -570,7 +570,6 @@ workflow NFCORE_RAREDISEASE {
     call_sv_tbi                                         = RAREDISEASE.out.call_sv_tbi                   // channel: [ val(meta), path(tbi) ]
     saltshaker_html                                     = RAREDISEASE.out.saltshaker_html              // channel: [ val(meta), path(html) ]
     saltshaker_plot                                     = RAREDISEASE.out.saltshaker_plot             // channel: [ val(meta), path(png) ]
-    saltshaker_vcf                                      = RAREDISEASE.out.saltshaker_vcf              // channel: [ val(meta), path(vcf) ]
     mt_del_result                                       = RAREDISEASE.out.mt_del_result               // channel: [ val(meta), path(txt) ]
     annotate_genome_snvs_bcftools_concat_tbi            = RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_tbi       // channel: [ val(meta), path(tbi) ]
     annotate_genome_snvs_bcftools_concat_vcf            = RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_vcf       // channel: [ val(meta), path(vcf) ]
@@ -777,7 +776,6 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.call_sv_tbi)
                                             .mix(NFCORE_RAREDISEASE.out.saltshaker_html)
                                             .mix(NFCORE_RAREDISEASE.out.saltshaker_plot)
-                                            .mix(NFCORE_RAREDISEASE.out.saltshaker_vcf)
                                             .mix(NFCORE_RAREDISEASE.out.mt_del_result)
     annotate_snv_genome               = NFCORE_RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_vcf
                                             .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_tbi)

@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            355,
+            356,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -663,7 +663,7 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-06-22T12:03:04.815283726",
+        "timestamp": "2026-06-22T16:29:48.340109138",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

@@ -148,9 +148,7 @@ workflow CALL_SV_MT {
             // combine never sees an empty-spread issue (combining case_info with [[]] would produce
             // a 1-element channel item that breaks 2-param destructuring closures downstream).
             SALTSHAKER_CLASSIFY.out.vcf
-                .map { _meta, vcf -> vcf }
-                .filter { !it.isEmpty() } // .collect{} produces an ArrayBag which .filter can't be used on, so first convert to regular elements with filter, then collect those to filter the whole list
-                .collect()
+                .collect { _meta, vcf -> vcf }
                 .filter { !it.isEmpty() }
                 .map { vcf_list -> [vcf_list] }
                 .set { ch_vcf_file_list }

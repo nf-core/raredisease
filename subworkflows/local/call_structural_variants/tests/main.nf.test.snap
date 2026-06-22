@@ -45,9 +45,6 @@
                     ]
                 ],
                 "3": [
-                    
-                ],
-                "4": [
                     [
                         {
                             "id": "justhusky"
@@ -55,7 +52,7 @@
                         "justhusky_sv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "5": [
+                "4": [
                     [
                         {
                             "id": "justhusky"
@@ -105,9 +102,6 @@
                         "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "saltshaker_vcf": [
-                    
-                ],
                 "tbi": [
                     [
                         {
@@ -126,7 +120,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-06-22T12:30:29.306790749",
+        "timestamp": "2026-06-22T16:33:34.786105072",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
