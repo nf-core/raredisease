@@ -25,8 +25,6 @@ workflow CALL_SNV_DEEPVARIANT {
 
     main:
 
-        ch_publish = channel.empty()
-
         if (val_analysis_type.equals("wes")) {
             TABIX_BGZIP(ch_target_bed.map{meta, gzbed, _index -> return [meta, gzbed]})
             ch_bam_bai
@@ -85,12 +83,10 @@ workflow CALL_SNV_DEEPVARIANT {
 
         BCFTOOLS_ANNOTATE(ch_annotate_in)
 
-        ch_publish = DEEPVARIANT.out.report
-
     emit:
-        gvcf       = DEEPVARIANT.out.gvcf       // channel: [ val(meta), path(gvcf)]
-        gvcf_tabix = DEEPVARIANT.out.gvcf_tbi   // channel: [ val(meta), path(gvcf_tbi)]
-        publish    = ch_publish                 // channel: [ val(meta), path(report) ]
-        tabix      = BCFTOOLS_ANNOTATE.out.tbi  // channel: [ val(meta), path(tbi) ]
-        vcf        = BCFTOOLS_ANNOTATE.out.vcf  // channel: [ val(meta), path(vcf) ]
+        deepvariant_report = DEEPVARIANT.out.report    // channel: [ val(meta), path(html) ]
+        gvcf               = DEEPVARIANT.out.gvcf      // channel: [ val(meta), path(gvcf)]
+        gvcf_tabix         = DEEPVARIANT.out.gvcf_tbi  // channel: [ val(meta), path(gvcf_tbi)]
+        tabix              = BCFTOOLS_ANNOTATE.out.tbi // channel: [ val(meta), path(tbi) ]
+        vcf                = BCFTOOLS_ANNOTATE.out.vcf // channel: [ val(meta), path(vcf) ]
 }
