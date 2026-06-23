@@ -33,7 +33,7 @@ nextflow_workflow {
                 input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
                 input[3]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
                 input[4]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
-                input[5]  = Channel.from("\$PWD").map { dir -> [[id:'genome'], file(dir)] }
+                input[5] = Channel.from(System.getenv('PWD')).map { dir -> [[id:'genome'], file(dir)] }
                 input[6]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]).collect()
                 input[7]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]).collect()
                 input[8]  = Channel.from("${projectDir}/subworkflows/local/variant_evaluation/tests").map { dir -> [[id:'mt'], file(dir)] }
@@ -64,16 +64,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.out.collect { name, channel ->
-                        def sorted_channel = channel.toList().sort { item ->
-                            def sortKey = item
-                            while (sortKey instanceof List) {
-                                sortKey = sortKey[-1]
-                            }
-                            sortKey.toString().split(':md5,')[0].tokenize('/')[-1]
-                        }
-                        [name, sorted_channel]
-                    }.sort { it[0] }  // Sort by channel name
+                    workflow.out
                 ).match() }
             )
         }
