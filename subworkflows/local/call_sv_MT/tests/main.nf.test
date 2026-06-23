@@ -66,18 +66,78 @@ nextflow_workflow {
                         file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)
                     ]
                 ])
-                input[10] = channel.value(10000000)
-                input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
-                input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
-                input[13] = false
-                input[14] = 16081
-                input[15] = 407
-                input[16] = 5730
-                input[17] = 5763
-                input[18] = 16569
-                input[19] = 'chrM'
-                input[20] = 15
-                input[21] = 0.01
+                input[10] = channel.of([[id:'earlycasualcaiman'], 'cust_ecc'])
+                input[11] = channel.value(10000000)
+                input[12] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[13] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
+                input[14] = false
+                input[15] = 16081
+                input[16] = 407
+                input[17] = 5730
+                input[18] = 5763
+                input[19] = 16569
+                input[20] = 'chrM'
+                input[21] = 15
+                input[22] = 0.01
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(workflow.out.saltshaker_vcf.get(0).get(1)).vcf.variantsMD5,
+                    workflow.out.saltshaker_html,
+                    file(workflow.out.saltshaker_plot.get(0).get(1)).name, // pngs are unstable so we just check that the name matches
+                    workflow.out.mt_del_result,
+                    workflow.out.updated_priority
+                ).match() }
+            )
+        }
+    }
+
+    test("CALL_SV_MT - 1 sample - no sample map") {
+
+        when {
+            params {
+                mt_del = "-s --insert-size 16000"
+            }
+            workflow {
+                """
+                input[0]  = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1]  = channel.of([id:'justhusky'])
+                input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[4]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[5]  = HISAT2_BUILD.out.index.collect()
+                input[6]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]).collect()
+                input[8]  = LAST_LASTDB.out.index.collect()
+                input[9]  = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    [
+                        file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_1.fastq.gz', checkIfExists: true),
+                        file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)
+                    ]
+                ])
+                input[10] = channel.empty()
+                input[11] = channel.value(10000000)
+                input[12] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[13] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
+                input[14] = false
+                input[15] = 16081
+                input[16] = 407
+                input[17] = 5730
+                input[18] = 5763
+                input[19] = 16569
+                input[20] = 'chrM'
+                input[21] = 15
+                input[22] = 0.01
                 """
             }
         }
@@ -140,18 +200,19 @@ nextflow_workflow {
                         ]
                     ]
                 )
-                input[10] = channel.value(10000000)
-                input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
-                input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
-                input[13] = false
-                input[14] = 16081
-                input[15] = 407
-                input[16] = 5730
-                input[17] = 5763
-                input[18] = 16569
-                input[19] = 'chrM'
-                input[20] = 15
-                input[21] = 0.01
+                input[10] = channel.of([[id:'earlycasualcaiman'], 'cust_ecc'], [[id:'hugelymodelbat'], 'cust_hmb'])
+                input[11] = channel.value(10000000)
+                input[12] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[13] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
+                input[14] = false
+                input[15] = 16081
+                input[16] = 407
+                input[17] = 5730
+                input[18] = 5763
+                input[19] = 16569
+                input[20] = 'chrM'
+                input[21] = 15
+                input[22] = 0.01
                 """
             }
         }
@@ -216,7 +277,7 @@ nextflow_workflow {
                         ]
                     ]
                 )
-                input[10] = channel.of([[id:'earlycasualcaiman'], 'cust_ecc'], [[id:'hugelymodelbat'], 'cust_hmb'])
+                input[10] = channel.of([[id:'earlycasualcaiman'], 'cust_ecc'])
                 input[11] = channel.value(10000000)
                 input[12] = channel.value(['manta', 'tiddit', 'cnvnator'])
                 input[13] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
@@ -237,22 +298,13 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.out.collect { name, channel ->
-                        def sorted_channel = channel.toList().sort { item ->
-                            def sortKey = item
-                            while (sortKey instanceof List) {
-                                sortKey = sortKey[-1]
-                            }
-                            sortKey.toString().split(':md5,')[0].tokenize('/')[-1]
-                        }
-                        [name, sorted_channel]
-                    }.sort { it[0] }  // Sort by channel name
+                    workflow.out
                 ).match() }
             )
         }
     }
 
-    test("CALL_SV_MT - no_sample_map - stub") {
+    test("CALL_SV_MT - 1 sample - no sample map - stub") {
 
         options "-stub"
 
@@ -262,18 +314,11 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0]  = channel.of(
-                    [
-                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                        file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                        file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
-                    ],
-                    [
-                        [id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                        file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbat_sorted_md.bam', checkIfExists: true),
-                        file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbat_sorted_md.bam.bai', checkIfExists: true)
-                    ]
-                )
+                input[0]  = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
                 input[1]  = channel.of([id:'justhusky'])
                 input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
                 input[3]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
@@ -285,13 +330,10 @@ nextflow_workflow {
                 input[9]  = channel.of([
                     [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
                     [
-                        [id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                        [
-                            file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbat_mt_1.fastq.gz', checkIfExists: true),
-                            file(params.pipelines_testdata_base_path + 'testdata/hugelymodelbat_mt_2.fastq.gz', checkIfExists: true)
-                        ]
+                        file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_1.fastq.gz', checkIfExists: true),
+                        file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)
                     ]
-                )
+                ])
                 input[10] = channel.empty()
                 input[11] = channel.value(10000000)
                 input[12] = channel.value(['manta', 'tiddit', 'cnvnator'])
@@ -349,7 +391,7 @@ nextflow_workflow {
                 input[6]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]).collect()
                 input[7]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]).collect()
                 input[8]  = LAST_LASTDB.out.index.collect()
-                 input[9]  = channel.of(
+                input[9]  = channel.of(
                     [
                         [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
                         [
@@ -365,18 +407,19 @@ nextflow_workflow {
                         ]
                     ]
                 )
-                input[10] = channel.value(10000000)
-                input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
-                input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
-                input[13] = false
-                input[14] = 16081
-                input[15] = 407
-                input[16] = 5730
-                input[17] = 5763
-                input[18] = 16569
-                input[19] = 'chrM'
-                input[20] = 15
-                input[21] = 0.01
+                input[10] = channel.of([[id:'earlycasualcaiman'], 'cust_ecc'], [[id:'hugelymodelbat'], 'cust_hmb'])
+                input[11] = channel.value(10000000)
+                input[12] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[13] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
+                input[14] = false
+                input[15] = 16081
+                input[16] = 407
+                input[17] = 5730
+                input[18] = 5763
+                input[19] = 16569
+                input[20] = 'chrM'
+                input[21] = 15
+                input[22] = 0.01
                 """
             }
         }
