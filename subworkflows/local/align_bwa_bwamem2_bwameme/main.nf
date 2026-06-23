@@ -2,6 +2,7 @@
 // Map to reference, fetch stats for each demultiplexed read pair, merge, mark duplicates, and index.
 //
 
+include { BWAFASTALIGN_MEM                         } from '../../../modules/nf-core/bwafastalign/mem/main'
 include { BWAMEM2_MEM                              } from '../../../modules/nf-core/bwamem2/mem/main'
 include { BWAMEME_MEM                              } from '../../../modules/nf-core/bwameme/mem/main'
 include { BWA_MEM as BWA                           } from '../../../modules/nf-core/bwa/mem/main'
@@ -9,7 +10,6 @@ include { FASTDUP                                  } from '../../../modules/nf-c
 include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-core/picard/markduplicates/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_ALIGN   } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_EXTRACT } from '../../../modules/nf-core/samtools/index/main'
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MARKDUP } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_MERGE                           } from '../../../modules/nf-core/samtools/merge/main'
 include { SAMTOOLS_STATS                           } from '../../../modules/nf-core/samtools/stats/main'
 include { SAMTOOLS_VIEW as EXTRACT_ALIGNMENTS      } from '../../../modules/nf-core/samtools/view/main'
@@ -18,26 +18,28 @@ include { SAMTOOLS_VIEW as EXTRACT_ALIGNMENTS      } from '../../../modules/nf-c
 workflow ALIGN_BWA_BWAMEM2_BWAMEME {
     take:
         ch_bwa_index           // channel: [mandatory] [ val(meta), path(bwa_index) ]
+        ch_bwafastalign_index  // channel: [mandatory] [ val(meta), path(bwafastalign_index) ]
         ch_bwamem2_index       // channel: [mandatory] [ val(meta), path(bwamem2_index) ]
         ch_bwameme_index       // channel: [mandatory] [ val(meta), path(bwameme_index) ]
         ch_genome_fai          // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_input_reads         // channel: [mandatory] [ val(meta), path(reads_input) ]
-        val_aligner            // string:  'bwa', 'bwamem2', 'bwameme', or 'sentieon'
+        val_aligner            // string:  'bwa', 'bwafastalign', 'bwamem2', or 'bwameme'
         val_duplicates_marker  // string:  'markduplicates' or 'fastdup', default: 'markduplicates'
         val_extract_alignments // boolean
-        val_mbuffer_mem        // integer: [mandatory] default: 3072
         val_platform           // string:  [mandatory] default: illumina
-        val_sort_threads       // integer: [mandatory] default: 4
 
     main:
         // Map, sort, and index
         if (val_aligner.equals("bwa")) {
             BWA ( ch_input_reads, ch_bwa_index, ch_genome_fasta, true )
             ch_align = BWA.out.bam
+        } else if (val_aligner.equals("bwafastalign")) {
+            BWAFASTALIGN_MEM ( ch_input_reads, ch_bwafastalign_index, ch_genome_fasta, true )
+            ch_align = BWAFASTALIGN_MEM.out.output
         } else if (val_aligner.equals("bwameme")) {
-            BWAMEME_MEM ( ch_input_reads, ch_bwameme_index, ch_genome_fasta, true, val_mbuffer_mem, val_sort_threads )
-            ch_align = BWAMEME_MEM.out.bam
+            BWAMEME_MEM ( ch_input_reads, ch_bwameme_index, ch_genome_fasta, true )
+            ch_align = BWAMEME_MEM.out.output
         } else {
             BWAMEM2_MEM ( ch_input_reads, ch_bwamem2_index, ch_genome_fasta, true )
             ch_align    = BWAMEM2_MEM.out.bam
@@ -78,33 +80,28 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         // Marking duplicates
         if (val_duplicates_marker == "markduplicates") {
             MARKDUPLICATES ( prepared_bam, ch_genome_fasta, ch_genome_fai )
-            SAMTOOLS_INDEX_MARKDUP (MARKDUPLICATES.out.bam)
 
             ch_marked_bam = MARKDUPLICATES.out.bam
-            ch_marked_bai = SAMTOOLS_INDEX_MARKDUP.out.bai
-            ch_marked_csi = SAMTOOLS_INDEX_MARKDUP.out.csi
+            ch_marked_bai = MARKDUPLICATES.out.bai
             ch_metrics    = MARKDUPLICATES.out.metrics
         } else {
             FASTDUP ( prepared_bam )
             ch_marked_bam = FASTDUP.out.bam
             ch_marked_bai = FASTDUP.out.bai
-            ch_marked_csi = FASTDUP.out.csi
             ch_metrics    = FASTDUP.out.metrics
         }
 
         ch_publish = ch_marked_bam
             .mix(ch_metrics)
             .mix(ch_marked_bai)
-            .mix(ch_marked_csi)
             .map {meta, value -> ['alignment/', [meta, value]] }
 
 
     emit:
 
-        marked_bam = ch_marked_bam // = MARKDUPLICATES.out.bam or FASTDUP.out.bam           // channel: [ val(meta), path(bam) ]
+        marked_bam = ch_marked_bam  // = MARKDUPLICATES.out.bam or FASTDUP.out.bam           // channel: [ val(meta), path(bam) ]
         marked_bai = ch_marked_bai  // = SAMTOOLS_INDEX_MARKDUP.out.bai or FASTDUP.out.bai   // channel: [ val(meta), path(bai) ]
-        marked_csi = ch_marked_csi  // = SAMTOOLS_INDEX_MARKDUP.out.csi or FASTDUP.out.csi   // channel: [ val(meta), path(csi) ]
         metrics    = ch_metrics     // = MARKDUPLICATES.out.metrics or FASTDUP.out.metrics   // channel: [ val(meta), path(metrics) ]
-        stats      = SAMTOOLS_STATS.out.stats                              // channel: [ val(meta), path(stats) ]
-        publish    = ch_publish                                                 // channel: [ val(destination), val(value) ]
+        stats      = SAMTOOLS_STATS.out.stats                                                // channel: [ val(meta), path(stats) ]
+        publish    = ch_publish                                                              // channel: [ val(destination), val(value) ]
 }

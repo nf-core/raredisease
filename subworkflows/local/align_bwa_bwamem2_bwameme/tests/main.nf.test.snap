@@ -1,9 +1,9 @@
 {
-    "align bwamem2": {
+    "align bwafastalign": {
         "content": [
             [
+                "test_sorted_md.bai",
                 "test_sorted_md.bam",
-                "test_sorted_md.bam.bai",
                 "test_sorted_md.metrics.txt"
             ],
             [
@@ -18,7 +18,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "72b312c47e502b8272741a40e435b96"
+                    "455ff02fb2f8d0d65d5fa20b8fd4f4ac"
                 ]
             ],
             [
@@ -37,10 +37,54 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T15:04:33.885203481",
+        "timestamp": "2026-06-15T15:01:16.183977034",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.4"
+        }
+    },
+    "align bwamem2": {
+        "content": [
+            [
+                "test_sorted_md.bai",
+                "test_sorted_md.bam",
+                "test_sorted_md.metrics.txt"
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "3d92874571b87b37115d09bdf486b43c"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "af8628d9df18b2d3d4f6fd47ef2bb872"
+                ]
+            ]
+        ],
+        "timestamp": "2026-06-15T14:59:34.44436902",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.4"
         }
     },
     "align bwameme, FASTDUP with bai index": {
@@ -90,8 +134,8 @@
     "align bwameme": {
         "content": [
             [
+                "test_sorted_md.bai",
                 "test_sorted_md.bam",
-                "test_sorted_md.bam.bai",
                 "test_sorted_md.metrics.txt"
             ],
             [
@@ -106,7 +150,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "40408ed51d46ab3f1524be98d6b31441"
+                    "db87952f0366650eb8d3fcf9aa146472"
                 ]
             ],
             [
@@ -125,10 +169,10 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-13T15:05:20.75721248",
+        "timestamp": "2026-06-15T15:01:36.090041714",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.4"
         }
     },
     "align bwameme, FASTDUP with csi index": {

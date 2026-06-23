@@ -3,17 +3,68 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 3.1.0 - XXXXX [2026-XX-XX]
+
+## 3.2.0 - Luigi [XXXX-XX-XX]
 
 ### `Added`
 
-- FastDup module from nf-core and integrated it into the pipeline, as an alternative for Picard Markduplicates. #XXX
+- FastDup module from nf-core and integrated it into the pipeline, as an alternative for Picard Markduplicates. [#876](https://github.com/nf-core/raredisease/pull/876)
+
+### `Changed`
+
+- Remove redundant indexing processes by enabling native index creation: use `--CREATE_INDEX true` in Picard MarkDuplicates, `--write-index=tbi` in bcftools tools (`SPLIT_MULTIALLELICS_MT`, `REMOVE_DUPLICATES_MT`, `BCFTOOLS_MERGE_MT`, `BCFTOOLS_ANNOTATE`, `BCFTOOLS_REHEADER`, `BCFTOOLS_SORT_ME`) and SVDB_MERGE; eliminate downstream `SAMTOOLS_INDEX` and `TABIX_TABIX` steps across `align_bwa_bwamem2_bwameme`, `postprocess_MT_calls`, `call_mobile_elements`, `call_structural_variants`, and `variant_evaluation` subworkflows [#884](https://github.com/nf-core/raredisease/pull/884)
+
+### `Fixed`
 
 ### Parameters
 
 | Old parameter | New parameter     |
 | ------------- | ----------------- |
 |               | duplicates_marker |
+
+### Tool updates
+
+| Tool | Old version | New version |
+| ---- | ----------- | ----------- |
+|      |             |             |
+
+## 3.1.0 - Princess Peach [2026-06-16]
+
+### `Added`
+
+- Parameter `cadd_prescored` to pass a directory of pre-scored CADD indel annotations to the CADD process in genome and mitochondrial SNV annotation subworkflows [#866](https://github.com/nf-core/raredisease/pull/866)
+- Parameter `manta_call_regions` to restrict Manta SV calling to specified regions (e.g. primary chromosomes) via a bgzipped, tabix-indexed BED file, reducing runtime without affecting other callers [#867](https://github.com/nf-core/raredisease/pull/867)
+- Local `FILTERVEP` module using a Python reimplementation of Ensembl's `filter_vep`, replacing the `ENSEMBLVEP_FILTERVEP` module with a lighter cyvcf2-based alternative [#870](https://github.com/nf-core/raredisease/pull/870)
+- `bwafastalign/index` nf-core module and `bwafastalign` parameter to support index preparation for the bwa-fastalign genome aligner [#877](https://github.com/nf-core/raredisease/pull/877)
+- `bwafastalign/mem` nf-core module to support genome alignment with bwa-fastalign when `--aligner bwafastalign` is set [#880](https://github.com/nf-core/raredisease/pull/880)
+
+### `Changed`
+
+- Replace `ENSEMBLVEP_FILTERVEP` with local `FILTERVEP` in the clinical set subworkflow, renamed from `VCF_FILTER_BCFTOOLS_ENSEMBLVEP` to `VCF_FILTER_BCFTOOLS_FILTERVEP` [#870](https://github.com/nf-core/raredisease/pull/870)
+- Increase default mbuffer memory value from 3GB to 8GB [#880](https://github.com/nf-core/raredisease/pull/880)
+- Update `bwameme/mem` to new nf-core module signature: `val mbuffer` and `val samtools_threads` replaced by `ext.args2` and `ext.args3` [#881](https://github.com/nf-core/raredisease/pull/881)
+
+### `Fixed`
+
+- Add a bcftools norm split-multiallelics step after merging standard and shifted MT calls to handle new multiallelic sites introduced by bcftools merge [#855](https://github.com/nf-core/raredisease/pull/855)
+
+### Parameters
+
+| Old parameter | New parameter          |
+| ------------- | ---------------------- |
+|               | bwafastalign           |
+|               | cadd_prescored         |
+|               | manta_call_regions     |
+|               | manta_call_regions_tbi |
+
+### Tool updates
+
+| Tool          | Old version | New version |
+| ------------- | ----------- | ----------- |
+| bwa-fastalign |             | 1.0.0       |
+| saltshaker    | 1.0.0       | 1.1.1       |
+
+> > > > > > > upstream/patch
 
 ## 3.0.0 - Mario [2026-05-12]
 

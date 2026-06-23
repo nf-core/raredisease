@@ -6,15 +6,15 @@
 include { ANNOTATE_CADD                     } from '../annotate_cadd'
 include { BCFTOOLS_PLUGINSETGT              } from '../../../modules/nf-core/bcftools/pluginsetgt'
 include { ENSEMBLVEP_VEP as ENSEMBLVEP_MT   } from '../../../modules/nf-core/ensemblvep/vep/main'
-include { TABIX_TABIX as TABIX_TABIX_VEP_MT } from '../../../modules/nf-core/tabix/tabix/main'
 include { VCFANNO as VCFANNO_MT             } from '../../../modules/nf-core/vcfanno/main'
 
 workflow ANNOTATE_MT_SNVS {
     take:
         ch_cadd_header              // channel: [mandatory] [ path(txt) ]
-        ch_cadd_resources           // channel: [mandatory] [ path(annotation) ]
+        ch_cadd_prescored           // channel: [optional]  [ val(meta), path(prescored) ]
+        ch_cadd_resources           // channel: [mandatory] [ val(meta), path(annotation) ]
         ch_genome_fasta             // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_fai                      // channel: [mandatory] [ path(fai) ]
+        ch_fai                      // channel: [mandatory] [ val(meta), path(fai) ]
         ch_mt_vcf_tbi               // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
         ch_vcfanno_extra            // channel: [mandatory] [ [path(vcf),path(index)] ]
         ch_vcfanno_lua              // channel: [mandatory] [ path(lua) ]
@@ -40,6 +40,7 @@ workflow ANNOTATE_MT_SNVS {
         if (!val_cadd_resources.equals(null)) {
             ANNOTATE_CADD (
                 ch_cadd_resources,
+                ch_cadd_prescored,
                 ch_fai,
                 ch_cadd_header,
                 VCFANNO_MT.out.vcf.join(VCFANNO_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true),

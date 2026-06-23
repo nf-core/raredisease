@@ -65,6 +65,14 @@
                     "help_text": "If none provided, will be generated automatically from the FASTA reference.",
                     "fa_icon": "fas fa-folder-open"
                 },
+                "bwafastalign": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "directory-path",
+                    "description": "Directory for pre-built bwa-fastalign index.",
+                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
+                    "fa_icon": "fas fa-folder-open"
+                },
                 "bwamem2": {
                     "type": "string",
                     "exists": true,
@@ -80,6 +88,14 @@
                     "description": "Directory for pre-built bwameme's learned index.",
                     "help_text": "If none provided, will be generated automatically from the FASTA reference.",
                     "fa_icon": "fas fa-folder-open"
+                },
+                "cadd_prescored": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "directory-path",
+                    "fa_icon": "fas fa-folder-open",
+                    "description": "Path to the directory containing pre-scored CADD indel annotations.",
+                    "help_text": "This folder contains the pre-scored indel files that would otherwise be in data/prescored folder as described in https://github.com/kircherlab/CADD-scripts/#manual-installation."
                 },
                 "cadd_resources": {
                     "type": "string",
@@ -234,6 +250,23 @@
                     "fa_icon": "fas fa-map-marker-alt",
                     "description": "Local directory base for genome references that map to the config.",
                     "help_text": "This folder is a flat structure with file names that map to the config."
+                },
+                "manta_call_regions": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.bed\\.gz$",
+                    "description": "Path to a bgzipped BED file restricting Manta SV calling to specific regions (e.g. primary chromosomes). Only applied for WGS; for WES, Manta always uses target_bed instead.",
+                    "help_text": "Must be supplied together with --manta_call_regions_tbi. Only used when analysis_type is wgs — for wes, Manta uses the target_bed supplied via --target_bed and this parameter has no effect. Useful for reducing runtime on references with many short contigs such as GRCh38."
+                },
+                "manta_call_regions_tbi": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.bed\\.gz\\.tbi$",
+                    "description": "Tabix index for the file supplied via --manta_call_regions."
                 },
                 "mito_name": {
                     "type": "string",
@@ -635,7 +668,7 @@
                     "default": "bwamem2",
                     "description": "Specifies the alignment algorithm to use - available options are 'bwamem2', 'bwa', 'bwameme' and 'sentieon'.",
                     "fa_icon": "fas fa-align-center",
-                    "enum": ["bwa", "bwamem2", "bwameme", "sentieon"]
+                    "enum": ["bwa", "bwafastalign", "bwamem2", "bwameme", "sentieon"]
                 },
                 "mt_aligner": {
                     "type": "string",
@@ -654,14 +687,14 @@
                 "samtools_sort_threads": {
                     "type": "integer",
                     "default": 4,
-                    "description": "Number of threads allocated for sorting alignment files (used only by bwameme)",
+                    "description": "Number of threads allocated for sorting alignment files (used by bwameme and bwafastalign)",
                     "help_text": "To know more about this parameter check [bwameme](https://github.com/kaist-ina/BWA-MEME?tab=readme-ov-file#building-pipeline-with-samtools) documentation.",
                     "fa_icon": "fas fa-less-than"
                 },
                 "mbuffer_mem": {
                     "type": "integer",
-                    "default": 3072,
-                    "description": "Memory allocated for mbuffer in megabytes (used only by bwameme)",
+                    "default": 8192,
+                    "description": "Memory allocated for mbuffer in megabytes (MB) (used by bwameme and bwafastalign)",
                     "help_text": "To know more about this parameter check [bwameme](https://github.com/kaist-ina/BWA-MEME?tab=readme-ov-file#building-pipeline-with-samtools) documentation.",
                     "fa_icon": "fas fa-less-than"
                 },

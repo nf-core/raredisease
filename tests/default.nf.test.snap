@@ -131,10 +131,6 @@
                 "DEEPVARIANT": {
                     "deepvariant": "1.9.0"
                 },
-                "ENSEMBLVEP_FILTERVEP": {
-                    "ensemblvep": 115.2,
-                    "perl-math-cdf": 0.1
-                },
                 "ENSEMBLVEP_ME": {
                     "ensemblvep": 110.1,
                     "perl-math-cdf": 0.1,
@@ -164,6 +160,9 @@
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
+                },
+                "FILTERVEP": {
+                    "filtervep": "1.0.0"
                 },
                 "GATK4_FILTERMUTECTCALLS_MT": {
                     "gatk4": "4.6.2.0"
@@ -322,13 +321,13 @@
                     "rhocall": "0.5.1"
                 },
                 "SALTSHAKER_CALL": {
-                    "saltshaker": "1.0.0"
+                    "saltshaker": "1.1.1"
                 },
                 "SALTSHAKER_CLASSIFY": {
-                    "saltshaker": "1.0.1"
+                    "saltshaker": "1.1.1"
                 },
                 "SALTSHAKER_PLOT": {
-                    "saltshaker": "1.0.0"
+                    "saltshaker": "1.1.1"
                 },
                 "SAMTOOLS_COLLATE": {
                     "samtools": "1.22.1"
@@ -340,9 +339,6 @@
                     "samtools": "1.22.1"
                 },
                 "SAMTOOLS_INDEX_ALIGN": {
-                    "samtools": "1.22.1"
-                },
-                "SAMTOOLS_INDEX_MARKDUP": {
                     "samtools": "1.22.1"
                 },
                 "SAMTOOLS_INDEX_MT": {
@@ -384,6 +380,9 @@
                 "SPLIT_MULTIALLELICS_MT": {
                     "bcftools": 1.22
                 },
+                "SPLIT_MULTIALLELICS_POSTMERGE_MT": {
+                    "bcftools": 1.22
+                },
                 "SPRING_DECOMPRESS_TO_FQ_PAIR": {
                     "spring": "1.1.1"
                 },
@@ -414,9 +413,6 @@
                 "SVDB_QUERY_DB": {
                     "svdb": "2.8.4"
                 },
-                "TABIX_ANNOTATE": {
-                    "tabix": 1.21
-                },
                 "TABIX_BGZIPINDEX_PADDED_BED": {
                     "bgzip": 1.21,
                     "tabix": 1.21
@@ -434,22 +430,7 @@
                 "TABIX_GNOMAD_AF": {
                     "tabix": 1.21
                 },
-                "TABIX_ME": {
-                    "tabix": 1.21
-                },
-                "TABIX_ME_SPLIT": {
-                    "tabix": 1.21
-                },
                 "TABIX_TABIX": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_MERGE": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_MT2": {
-                    "tabix": 1.21
-                },
-                "TABIX_TABIX_MT": {
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
@@ -483,7 +464,7 @@
                     "vcfanno": "0.3.7"
                 },
                 "Workflow": {
-                    "nf-core/raredisease": "v3.0.0"
+                    "nf-core/raredisease": "v3.1.0"
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
@@ -928,10 +909,10 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-05-08T16:30:33.887641119",
+        "timestamp": "2026-06-16T15:28:04.838056218",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.03.4"
         }
     }
 }

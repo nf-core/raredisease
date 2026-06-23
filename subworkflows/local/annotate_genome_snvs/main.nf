@@ -21,7 +21,8 @@ workflow ANNOTATE_GENOME_SNVS {
 
     take:
         ch_cadd_header                  // channel: [mandatory] [ path(txt) ]
-        ch_cadd_resources               // channel: [mandatory] [ path(annotation) ]
+        ch_cadd_prescored               // channel: [optional]  [ val(meta), path(prescored) ]
+        ch_cadd_resources               // channel: [mandatory] [ val(meta), path(annotation) ]
         ch_genome_chrsizes              // channel: [mandatory] [ path(sizes) ]
         ch_genome_fai                   // channel: [mandatory] [ path(fai) ]
         ch_genome_fasta                 // channel: [mandatory] [ val(meta), path(fasta) ]
@@ -121,6 +122,7 @@ workflow ANNOTATE_GENOME_SNVS {
 
             ANNOTATE_CADD (
                 ch_cadd_resources,
+                ch_cadd_prescored,
                 ch_genome_fai,
                 ch_cadd_header,
                 ch_cadd_in,
