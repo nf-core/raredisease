@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
-- Patch `deepvariant/rundeepvariant` to tee stdout/stderr to a log file and exit non-zero when `queue.Empty` or `BrokenPipeError` is detected, catching silent failures that previously caused the process to appear successful [#XXX](https://github.com/nf-core/raredisease/pull/XXX)
+- Patch `deepvariant/rundeepvariant` to tee stdout/stderr to a log file and exit non-zero when `queue.Empty` or `BrokenPipeError` is detected, catching silent failures that previously caused the process to appear successful [#889](https://github.com/nf-core/raredisease/pull/889)
 
 ## 3.1.0 - Princess Peach [2026-06-16]
 
