@@ -19,7 +19,6 @@ workflow CALL_REPEAT_EXPANSIONS {
         ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
 
     main:
-        ch_versions = channel.empty()
 
         EXPANSIONHUNTER (
             ch_bam,
@@ -41,7 +40,7 @@ workflow CALL_REPEAT_EXPANSIONS {
 
         // Split multi allelelic
         SPLIT_MULTIALLELICS_EXP (
-            RENAMESAMPLE_EXP.out.vcf.join(TABIX_EXP_RENAME.out.tbi, failOnMismatch:true, failOnDuplicate:true),
+            RENAMESAMPLE_EXP.out.vcf.join(TABIX_EXP_RENAME.out.index, failOnMismatch:true, failOnDuplicate:true),
             ch_genome_fasta
         )
 
@@ -58,15 +57,12 @@ workflow CALL_REPEAT_EXPANSIONS {
 
         SVDB_MERGE_REPEATS ( ch_svdb_merge_input, [], true )
 
-        ch_versions = ch_versions.mix(EXPANSIONHUNTER.out.versions.first())
-        ch_versions = ch_versions.mix(BCFTOOLS_REHEADER_EXP.out.versions.first())
-        ch_versions = ch_versions.mix(RENAMESAMPLE_EXP.out.versions.first()    )
-        ch_versions = ch_versions.mix(TABIX_EXP_RENAME.out.versions.first())
-        ch_versions = ch_versions.mix(SPLIT_MULTIALLELICS_EXP.out.versions.first())
-        ch_versions = ch_versions.mix(SVDB_MERGE_REPEATS.out.versions.first())
-        ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions.first())
+        ch_publish = SAMTOOLS_SORT.out.bam
+            .mix(SAMTOOLS_SORT.out.bai)
+            .mix(BCFTOOLS_REHEADER_EXP.out.vcf)
+            .map { meta, value -> ['repeat_expansions/', [meta, value]] }
 
-emit:
-        vcf      = SVDB_MERGE_REPEATS.out.vcf  // channel: [ val(meta), path(vcf) ]
-        versions = ch_versions                 // channel: [ path(versions.yml) ]
+    emit:
+        vcf        = SVDB_MERGE_REPEATS.out.vcf // channel: [ val(meta), path(vcf) ]
+        publish = ch_publish                    // channel: [ val(destination), val(value) ]
 }

@@ -1,0 +1,724 @@
+{
+    "ANNOTATE_GENOME_SNVS - GRCh37, wes, stub": {
+        "content": [
+            [
+                [
+                    "0",
+                    [
+                        [
+                            {
+                                "id": "justhusky",
+                                "probands": [
+                                    "earlycasualcaiman"
+                                ],
+                                "upd_children": [
+                                    "earlycasualcaiman"
+                                ],
+                                "mother": "",
+                                "father": ""
+                            },
+                            "justhusky_rhocall_filter_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "1",
+                    [
+                        [
+                            {
+                                "id": "justhusky",
+                                "probands": [
+                                    "earlycasualcaiman"
+                                ],
+                                "upd_children": [
+                                    "earlycasualcaiman"
+                                ],
+                                "mother": "",
+                                "father": ""
+                            },
+                            "justhusky_rhocall_filter_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "2",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            [
+                                "earlycasualcaiman_rhocallviz.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr10.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr11.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr12.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr13.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr14.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr15.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr16.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr17.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr18.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr19.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr2.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr20.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr21.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr22.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr3.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr4.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr5.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr6.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr7.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr8.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr9.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chrM.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chrX.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chrY.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "3",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "4",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "5",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_rhocallviz.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "6",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_rhocallviz.wig:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "7",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_rhocallviz.bw:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "bcftools_concat_tbi",
+                    [
+                        [
+                            {
+                                "id": "justhusky",
+                                "probands": [
+                                    "earlycasualcaiman"
+                                ],
+                                "upd_children": [
+                                    "earlycasualcaiman"
+                                ],
+                                "mother": "",
+                                "father": ""
+                            },
+                            "justhusky_rhocall_filter_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "bcftools_concat_vcf",
+                    [
+                        [
+                            {
+                                "id": "justhusky",
+                                "probands": [
+                                    "earlycasualcaiman"
+                                ],
+                                "upd_children": [
+                                    "earlycasualcaiman"
+                                ],
+                                "mother": "",
+                                "father": ""
+                            },
+                            "justhusky_rhocall_filter_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "chromograph_autozyg_plots",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            [
+                                "earlycasualcaiman_rhocallviz.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr10.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr11.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr12.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr13.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr14.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr15.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr16.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr17.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr18.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr19.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr2.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr20.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr21.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr22.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr3.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr4.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr5.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr6.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr7.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr8.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr9.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chrM.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chrX.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chrY.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "chromograph_regions_plots",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "chromograph_sites_plots",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "rhocall_viz_bed",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_rhocallviz.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "rhocall_viz_wig",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_rhocallviz.wig:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "ucsc_wigtobigwig_bw",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_rhocallviz.bw:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        "timestamp": "2026-05-26T10:50:20.100647825",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "ANNOTATE_GENOME_SNVS - GRCh37, wgs, stub": {
+        "content": [
+            [
+                [
+                    "0",
+                    [
+                        [
+                            {
+                                "id": "justhusky",
+                                "probands": [
+                                    "earlycasualcaiman"
+                                ],
+                                "upd_children": [
+                                    "earlycasualcaiman"
+                                ],
+                                "mother": "",
+                                "father": ""
+                            },
+                            "justhusky_rhocall_filter_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "1",
+                    [
+                        [
+                            {
+                                "id": "justhusky",
+                                "probands": [
+                                    "earlycasualcaiman"
+                                ],
+                                "upd_children": [
+                                    "earlycasualcaiman"
+                                ],
+                                "mother": "",
+                                "father": ""
+                            },
+                            "justhusky_rhocall_filter_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "2",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            [
+                                "earlycasualcaiman_rhocallviz.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr10.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr11.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr12.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr13.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr14.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr15.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr16.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr17.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr18.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr19.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr2.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr20.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr21.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr22.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr3.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr4.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr5.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr6.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr7.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr8.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr9.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chrM.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chrX.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chrY.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "3",
+                    [
+                        [
+                            [
+                                
+                            ],
+                            [
+                                "earlycasualcaiman_upd_regions.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr10.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr11.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr12.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr13.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr14.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr15.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr16.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr17.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr18.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr19.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr2.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr20.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr21.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr22.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr3.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr4.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr5.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr6.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr7.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr8.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr9.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chrM.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chrX.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chrY.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "4",
+                    [
+                        [
+                            [
+                                
+                            ],
+                            [
+                                "earlycasualcaiman_upd_sites.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr10.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr11.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr12.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr13.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr14.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr15.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr16.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr17.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr18.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr19.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr2.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr20.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr21.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr22.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr3.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr4.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr5.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr6.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr7.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr8.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr9.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chrM.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chrX.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chrY.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "5",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_rhocallviz.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "6",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_rhocallviz.wig:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "7",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_rhocallviz.bw:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "bcftools_concat_tbi",
+                    [
+                        [
+                            {
+                                "id": "justhusky",
+                                "probands": [
+                                    "earlycasualcaiman"
+                                ],
+                                "upd_children": [
+                                    "earlycasualcaiman"
+                                ],
+                                "mother": "",
+                                "father": ""
+                            },
+                            "justhusky_rhocall_filter_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "bcftools_concat_vcf",
+                    [
+                        [
+                            {
+                                "id": "justhusky",
+                                "probands": [
+                                    "earlycasualcaiman"
+                                ],
+                                "upd_children": [
+                                    "earlycasualcaiman"
+                                ],
+                                "mother": "",
+                                "father": ""
+                            },
+                            "justhusky_rhocall_filter_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "chromograph_autozyg_plots",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            [
+                                "earlycasualcaiman_rhocallviz.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr10.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr11.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr12.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr13.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr14.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr15.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr16.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr17.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr18.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr19.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr2.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr20.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr21.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr22.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr3.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr4.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr5.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr6.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr7.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr8.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chr9.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chrM.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chrX.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_rhocallviz.bed_chrY.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "chromograph_regions_plots",
+                    [
+                        [
+                            [
+                                
+                            ],
+                            [
+                                "earlycasualcaiman_upd_regions.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr10.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr11.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr12.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr13.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr14.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr15.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr16.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr17.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr18.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr19.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr2.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr20.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr21.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr22.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr3.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr4.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr5.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr6.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr7.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr8.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chr9.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chrM.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chrX.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_regions.bed_chrY.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "chromograph_sites_plots",
+                    [
+                        [
+                            [
+                                
+                            ],
+                            [
+                                "earlycasualcaiman_upd_sites.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr10.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr11.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr12.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr13.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr14.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr15.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr16.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr17.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr18.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr19.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr2.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr20.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr21.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr22.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr3.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr4.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr5.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr6.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr7.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr8.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chr9.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chrM.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chrX.png:md5,d41d8cd98f00b204e9800998ecf8427e",
+                                "earlycasualcaiman_upd_sites.bed_chrY.png:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "rhocall_viz_bed",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_rhocallviz.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "rhocall_viz_wig",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_rhocallviz.wig:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "ucsc_wigtobigwig_bw",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_rhocallviz.bw:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        "timestamp": "2026-05-26T10:49:33.095592057",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

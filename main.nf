@@ -17,6 +17,9 @@
 include { samplesheetToList       } from 'plugin/nf-schema'
 include { CREATE_HGNCIDS_FILE     } from './modules/local/create_hgncids_file'
 include { CREATE_PEDIGREE_FILE    } from './modules/local/create_pedigree_file'
+include { channelFromPath         } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { channelFromPathWithMeta } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { channelFromSamplesheet  } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { parseSkipList           } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
@@ -40,6 +43,111 @@ workflow NFCORE_RAREDISEASE {
     ch_case_info
     ch_reads
     ch_samples
+    val_aligner
+    val_analysis_type
+    val_bwa
+    val_bwamem2
+    val_bwameme
+    val_cadd_resources
+    val_call_interval
+    val_concatenate_snv_calls
+    val_skip_split_multiallelics
+    val_exclude_alt
+    val_extract_alignments
+    val_fai
+    val_fasta
+    val_gcnvcaller_model
+    val_genome
+    val_gens_gnomad_pos
+    val_gens_interval_list
+    val_gens_pon_female
+    val_gens_pon_male
+    val_gnomad_af
+    val_gnomad_af_idx
+    val_heavy_strand_origin_end
+    val_heavy_strand_origin_start
+    val_homoplasmy_af_threshold
+    val_intervals_wgs
+    val_intervals_y
+    val_known_dbsnp
+    val_known_dbsnp_tbi
+    val_light_strand_origin_end
+    val_light_strand_origin_start
+    val_mbuffer_mem
+    val_mito_length
+    val_mito_name
+    val_mitosalt_breakspan
+    val_mitosalt_breakthreshold
+    val_mitosalt_cluster_threshold
+    val_mitosalt_deletion_threshold_max
+    val_mitosalt_deletion_threshold_min
+    val_mitosalt_evalue_threshold
+    val_mitosalt_exclude
+    val_mitosalt_flank
+    val_mitosalt_heteroplasmy_limit
+    val_mitosalt_paired_distance
+    val_mitosalt_score_threshold
+    val_mitosalt_sizelimit
+    val_mitosalt_split_distance_threshold
+    val_mitosalt_split_length
+    val_ml_model
+    val_mobile_element_references
+    val_mobile_element_svdb_annotations
+    val_mt_aligner
+    val_mt_fasta
+    val_mt_subsample_approach
+    val_mt_subsample_rd
+    val_mt_subsample_seed
+    val_multiqc_config
+    val_multiqc_logo
+    val_multiqc_methods_description
+    val_multiqc_samples
+    val_ngsbits_samplegender_method
+    val_outdir
+    val_par_bed
+    val_platform
+    val_ploidy_model
+    val_readcount_intervals
+    val_reduced_penetrance
+    val_rtg_truthvcfs
+    val_run_mt_for_wes
+    val_run_rtgvcfeval
+    val_run_vcfanno_db_sanity_check
+    val_sambamba_regions
+    val_sample_id_map
+    val_samtools_sort_threads
+    val_save_all_mapped_as_cram
+    val_save_noalt_mapped_as_cram
+    val_save_reference
+    val_score_config_mt
+    val_score_config_snv
+    val_score_config_sv
+    val_sdf
+    val_sentieon_dnascope_pcr_indel_model
+    val_sequence_dictionary
+    val_skip_tools
+    val_skip_subworkflows
+    val_subdepth
+    val_svdb_query_bedpedbs
+    val_svdb_query_dbs
+    val_target_bed
+    val_variant_caller
+    val_variant_catalog
+    val_variant_consequences_snv
+    val_variant_consequences_sv
+    val_vcf2cytosure_blacklist
+    val_vcfanno_extra_resources
+    val_vcfanno_lua
+    val_vcfanno_resources
+    val_vcfanno_toml
+    val_vep_cache_version
+    val_vep_filters
+    val_vep_filters_scout_fmt
+    val_vep_plugin_files
+    val_verifybamid_svd_bed
+    val_verifybamid_svd_mu
+    val_verifybamid_svd_ud
+    val_vep_cache
 
     main:
 
@@ -47,89 +155,52 @@ workflow NFCORE_RAREDISEASE {
     // WORKFLOW: Run pipeline
     //
 
-    ch_versions                  = channel.empty()
-    ch_genome_fasta              = channel.fromPath(params.fasta).map { it -> [[id:it.simpleName], it] }.collect()
-    ch_genome_fai                = params.fai                 ? channel.fromPath(params.fai).map {it -> [[id:it.simpleName], it]}.collect()
-                                                                : channel.empty()
-    ch_genome_dictionary         = params.sequence_dictionary ? channel.fromPath(params.sequence_dictionary).map {it -> [[id:it.simpleName], it]}.collect()
-                                                                : channel.empty()
-    ch_gnomad_af_tab             = params.gnomad_af           ? channel.fromPath(params.gnomad_af).map{ it -> [[id:it.simpleName], it] }.collect()
-                                                                : channel.value([[],[]])
-    ch_dbsnp                     = params.known_dbsnp         ? channel.fromPath(params.known_dbsnp).map{ it -> [[id:it.simpleName], it] }.collect()
-                                                                : channel.value([[],[]])
-    ch_mt_fasta                  = params.mt_fasta            ? channel.fromPath(params.mt_fasta).map { it -> [[id:it.simpleName], it] }.collect()
-                                                                : channel.empty()
-    ch_target_bed_unprocessed    = params.target_bed          ? channel.fromPath(params.target_bed).map{ it -> [[id:it.simpleName], it] }.collect()
-                                                                : channel.value([[],[]])
-    ch_vcfanno_extra_unprocessed = params.vcfanno_extra_resources ? channel.fromPath(params.vcfanno_extra_resources).map { it -> [[id:it.baseName], it] }.collect()
-                                                                : channel.empty()
-    ch_vep_cache_unprocessed     = params.vep_cache           ? channel.fromPath(params.vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
-                                                                : channel.value([[],[]])
+    ch_versions = channel.empty()
 
     PREPARE_REFERENCES (
-        ch_genome_fasta,
-        ch_genome_fai,
-        ch_genome_dictionary,
-        ch_mt_fasta,
-        ch_gnomad_af_tab,
-        ch_dbsnp,
-        ch_target_bed_unprocessed,
-        ch_vcfanno_extra_unprocessed,
-        ch_vep_cache_unprocessed
+        val_aligner,
+        val_analysis_type,
+        val_bwa,
+        val_bwamem2,
+        val_bwameme,
+        val_fai,
+        val_fasta,
+        val_gnomad_af,
+        val_gnomad_af_idx,
+        val_known_dbsnp,
+        val_known_dbsnp_tbi,
+        val_mt_aligner,
+        val_mt_fasta,
+        val_run_mt_for_wes,
+        val_run_rtgvcfeval,
+        val_sdf,
+        val_sequence_dictionary,
+        val_target_bed,
+        val_vcfanno_extra_resources,
+        val_vep_cache,
+        val_save_reference
     )
     .set { ch_references }
 
     ch_bait_intervals           = ch_references.bait_intervals
-    ch_cadd_header              = channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
-    ch_cadd_resources           = params.cadd_resources                     ? channel.fromPath(params.cadd_resources).collect()
-                                                                            : channel.value([])
-    ch_call_interval            = params.call_interval                      ? channel.fromPath(params.call_interval).map {it -> [[id:it.simpleName], it]}.collect()
-                                                                            : channel.value([[:],[]])
-    ch_dbsnp_tbi                = params.known_dbsnp_tbi                    ? channel.fromPath(params.known_dbsnp_tbi).map {it -> [[id:it.simpleName], it]}.collect()
-                                                                            : ch_references.known_dbsnp_tbi.ifEmpty([[],[]])
-    ch_foundin_header           = channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
-    ch_gcnvcaller_model         = params.gcnvcaller_model                   ? channel.fromPath(params.gcnvcaller_model).splitCsv ( header:true )
-                                                                            .map { row ->
-                                                                                return [[id:file(row.models).simpleName], row.models]
-                                                                            }
-                                                                            : channel.empty()
-    ch_genome_bwaindex          = params.bwa                                ? channel.fromPath(params.bwa).map {it -> [[id:it.simpleName], it]}.collect()
-                                                                            : ch_references.genome_bwa_index
-    ch_genome_bwamem2index      = params.bwamem2                            ? channel.fromPath(params.bwamem2).map {it -> [[id:it.simpleName], it]}.collect()
-                                                                            : ch_references.genome_bwamem2_index
-    ch_genome_bwamemeindex      = params.bwameme                            ? channel.fromPath(params.bwameme).map {it -> [[id:it.simpleName], it]}.collect()
-                                                                            : ch_references.genome_bwameme_index
+    ch_dbsnp                    = ch_references.dbsnp
+    ch_dbsnp_tbi                = ch_references.dbsnp_tbi
+    ch_genome_bwaindex          = ch_references.genome_bwa_index
+    ch_genome_bwamem2index      = ch_references.genome_bwamem2_index
+    ch_genome_bwamemeindex      = ch_references.genome_bwameme_index
     ch_genome_chrsizes          = ch_references.genome_chrom_sizes
     ch_genome_fai               = ch_references.genome_fai
+    ch_genome_fasta             = ch_references.genome_fasta
     ch_genome_dictionary        = ch_references.genome_dict
-    ch_gens_gnomad_pos          = params.gens_gnomad_pos                    ? channel.fromPath(params.gens_gnomad_pos).collect()
-                                                                            : channel.empty()
-    ch_gens_interval_list       = params.gens_interval_list                 ? channel.fromPath(params.gens_interval_list).collect()
-                                                                            : channel.empty()
-    ch_gens_pon_female          = params.gens_pon_female                    ? channel.fromPath(params.gens_pon_female).map { it -> [ [id:it.simpleName], it ] }.collect()
-                                                                            : channel.empty()
-    ch_gens_pon_male            = params.gens_pon_male                      ? channel.fromPath(params.gens_pon_male).map { it -> [ [id:it.simpleName], it ] }.collect()
-                                                                            : channel.empty()
-    ch_gnomad_afidx             = params.gnomad_af_idx                      ? channel.fromPath(params.gnomad_af_idx).collect()
-                                                                            : ch_references.gnomad_af_idx
-    ch_gnomad_af                = params.gnomad_af                          ? ch_gnomad_af_tab.join(ch_gnomad_afidx).map {_meta, tab, idx -> [tab,idx]}.collect()
-                                                                            : channel.empty()
-    ch_intervals_wgs            = params.intervals_wgs                      ? channel.fromPath(params.intervals_wgs).collect()
-                                                                            : channel.empty()
-    ch_intervals_y              = params.intervals_y                        ? channel.fromPath(params.intervals_y).collect()
-                                                                            : channel.empty()
-    ch_me_references            = params.mobile_element_references          ? channel.fromList(samplesheetToList(params.mobile_element_references, "${projectDir}/assets/mobile_element_references_schema.json"))
-                                                                            : channel.empty()
-    ch_me_svdb_resources        = params.mobile_element_svdb_annotations    ? channel.fromPath(params.mobile_element_svdb_annotations)
-                                                                            : channel.empty()
-    ch_ml_model                 = params.variant_caller.equals("sentieon")  ? channel.fromPath(params.ml_model).map {it -> [[id:it.simpleName], it]}.collect()
-                                                                            : channel.value([[:],[]])
-    ch_mt_intervals             = ch_references.mt_intervals
+    ch_genome_hisat2index       = ch_references.genome_hisat2_index
+    ch_gnomad_af                = ch_references.gnomad_af_idx
     ch_mt_bwaindex              = ch_references.mt_bwa_index
     ch_mt_bwamem2index          = ch_references.mt_bwamem2_index
     ch_mt_dictionary            = ch_references.mt_dict
     ch_mt_fai                   = ch_references.mt_fai
     ch_mt_fasta                 = ch_references.mt_fasta
+    ch_mt_intervals             = ch_references.mt_intervals
+    ch_mt_lastdb                = ch_references.mt_last_index
     ch_mtshift_backchain        = ch_references.mtshift_backchain
     ch_mtshift_bwaindex         = ch_references.mtshift_bwa_index
     ch_mtshift_bwamem2index     = ch_references.mtshift_bwamem2_index
@@ -137,69 +208,79 @@ workflow NFCORE_RAREDISEASE {
     ch_mtshift_fai              = ch_references.mtshift_fai
     ch_mtshift_fasta            = ch_references.mtshift_fasta
     ch_mtshift_intervals        = ch_references.mtshift_intervals
-    ch_par_bed                  = params.par_bed                            ? channel.fromPath(params.par_bed).map{ it -> [[id:'par_bed'], it] }.collect()
-                                                                            : channel.value([[],[]])
-    ch_ploidy_model             = params.ploidy_model                       ? channel.fromPath(params.ploidy_model).map{ it -> [[id:it.simpleName], it] }.collect()
-                                                                            : channel.empty()
-    ch_readcount_intervals      = params.readcount_intervals                ? channel.fromPath(params.readcount_intervals).collect()
-                                                                            : channel.empty()
-    ch_reduced_penetrance       = params.reduced_penetrance                 ? channel.fromPath(params.reduced_penetrance).collect()
-                                                                            : channel.value([])
-    ch_rtg_truthvcfs            = params.rtg_truthvcfs                      ? channel.fromPath(params.rtg_truthvcfs).collect()
-                                                                            : channel.value([])
-    ch_sambamba_bed             = params.sambamba_regions                   ? channel.fromPath(params.sambamba_regions).map{ it -> [[id:'sambamba'], it] }.collect()
-                                                                            : channel.empty()
-    ch_sample_id_map            = params.sample_id_map                      ? channel.fromList(samplesheetToList(params.sample_id_map, "${projectDir}/assets/sample_id_map.json"))
-                                                                            : channel.empty()
-    ch_score_config_mt          = params.score_config_mt                    ? channel.fromPath(params.score_config_mt).collect()
-                                                                            : channel.value([])
-    ch_score_config_snv         = params.score_config_snv                   ? channel.fromPath(params.score_config_snv).collect()
-                                                                            : channel.value([])
-    ch_score_config_sv          = params.score_config_sv                    ? channel.fromPath(params.score_config_sv).collect()
-                                                                            : channel.value([])
-    ch_sdf                      = params.sdf                                ? channel.fromPath(params.sdf).map{it -> [[id:it.simpleName],it]}.collect()
-                                                                            : ch_references.sdf
-    ch_svd_bed                  = params.verifybamid_svd_bed                ? channel.fromPath(params.verifybamid_svd_bed)
-                                                                            : channel.empty()
-    ch_svd_mu                   = params.verifybamid_svd_mu                 ? channel.fromPath(params.verifybamid_svd_mu)
-                                                                            : channel.empty()
-    ch_svd_ud                   = params.verifybamid_svd_ud                 ? channel.fromPath(params.verifybamid_svd_ud)
-                                                                            : channel.empty()
-    ch_svdb_bedpedbs            = params.svdb_query_bedpedbs                ? channel.fromList(samplesheetToList(params.svdb_query_bedpedbs, "assets/svdb_query_bedpe_schema.json")).collect()
-                                                                            : channel.empty()
-    ch_svdb_dbs                 = params.svdb_query_dbs                     ? channel.fromList(samplesheetToList(params.svdb_query_dbs, "assets/svdb_query_vcf_schema.json")).collect()
-                                                                            : channel.empty()
+    ch_sdf                      = ch_references.sdf
     ch_target_bed               = ch_references.target_bed
     ch_target_intervals         = ch_references.target_intervals
-    ch_variant_catalog          = params.variant_catalog                    ? channel.fromPath(params.variant_catalog).map { it -> [[id:it.simpleName],it]}.collect()
-                                                                            : channel.value([[],[]])
-    ch_variant_consequences_snv = params.variant_consequences_snv           ? channel.fromPath(params.variant_consequences_snv).map { it -> [[id:it.simpleName],it]}.collect()
-                                                                            : channel.value([[],[]])
-    ch_variant_consequences_sv  = params.variant_consequences_sv            ? channel.fromPath(params.variant_consequences_sv).map { it -> [[id:it.simpleName],it]}.collect()
-                                                                            : channel.value([[],[]])
     ch_vcfanno_extra            = ch_references.vcfanno_extra
-    ch_vcfanno_resources        = params.vcfanno_resources                  ? channel.fromPath(params.vcfanno_resources).splitText().map{it -> it.trim()}.collect()
-                                                                            : channel.value([])
-    ch_vcf2cytosure_blacklist   = params.vcf2cytosure_blacklist             ? channel.fromPath(params.vcf2cytosure_blacklist).collect()
-                                                                            : channel.value([])
-    ch_vcfanno_lua              = params.vcfanno_lua                        ? channel.fromPath(params.vcfanno_lua).collect()
-                                                                            : channel.value([])
-    ch_vcfanno_toml             = params.vcfanno_toml                       ? channel.fromPath(params.vcfanno_toml).collect()
-                                                                            : channel.value([])
-    ch_vep_cache                = ( params.vep_cache && params.vep_cache.endsWith("tar.gz") )  ? ch_references.vep_resources
-                                                                            : ( params.vep_cache    ? channel.fromPath(params.vep_cache).collect() : channel.value([]) )
-    ch_vep_filters_std_fmt      = params.vep_filters                        ? channel.fromPath(params.vep_filters).map { it -> [[id:'standard'],it]}.collect()
-                                                                            : channel.empty()
-    ch_vep_filters_scout_fmt    = params.vep_filters_scout_fmt              ? channel.fromPath(params.vep_filters_scout_fmt).map { it -> [[id:'scout'],it]}.collect()
-                                                                            : channel.empty()
-    ch_versions                 = ch_versions.mix(ch_references.versions)
+    ch_vep_cache                = ch_references.vep_resources
+
+    // Using channelFromPath helper (val_x ? channel.fromPath(val_x).collect() : channel.value([]))
+    ch_reduced_penetrance       = channelFromPath(val_reduced_penetrance, true)
+    ch_rtg_truthvcfs            = channelFromPath(val_rtg_truthvcfs, true)
+    ch_score_config_mt          = channelFromPath(val_score_config_mt, true)
+    ch_score_config_snv         = channelFromPath(val_score_config_snv, true)
+    ch_score_config_sv          = channelFromPath(val_score_config_sv, true)
+    ch_vcf2cytosure_blacklist   = channelFromPath(val_vcf2cytosure_blacklist, true)
+    ch_vcfanno_lua              = channelFromPath(val_vcfanno_lua, true)
+    ch_vcfanno_toml             = channelFromPath(val_vcfanno_toml, true)
+
+    // Using channelFromPath helper (val_x ? channel.fromPath(val_x).collect() : channel.empty())
+    ch_gens_gnomad_pos          = channelFromPath(val_gens_gnomad_pos)
+    ch_gens_interval_list       = channelFromPath(val_gens_interval_list)
+    ch_intervals_wgs            = channelFromPath(val_intervals_wgs)
+    ch_intervals_y              = channelFromPath(val_intervals_y)
+    ch_me_svdb_resources        = channelFromPath(val_mobile_element_svdb_annotations)
+    ch_readcount_intervals      = channelFromPath(val_readcount_intervals)
+    ch_svd_bed                  = channelFromPath(val_verifybamid_svd_bed)
+    ch_svd_mu                   = channelFromPath(val_verifybamid_svd_mu)
+    ch_svd_ud                   = channelFromPath(val_verifybamid_svd_ud)
+
+    // Using channelFromPathWithMeta helper (with simpleName). If filepath is null, returns, [[:],[]]
+    ch_cadd_resources           = channelFromPathWithMeta(val_cadd_resources, true)
+    ch_call_interval            = channelFromPathWithMeta(val_call_interval, true)
+    ch_ml_model                 = channelFromPathWithMeta(val_ml_model, true)
+    ch_variant_catalog          = channelFromPathWithMeta(val_variant_catalog, true)
+    ch_variant_consequences_snv = channelFromPathWithMeta(val_variant_consequences_snv, true)
+    ch_variant_consequences_sv  = channelFromPathWithMeta(val_variant_consequences_sv, true)
+
+    // Using channelFromPathWithMeta helper (with simpleName). If filepath is null, returns, empty channel
+    ch_gens_pon_female          = channelFromPathWithMeta(val_gens_pon_female)
+    ch_gens_pon_male            = channelFromPathWithMeta(val_gens_pon_male)
+    ch_ploidy_model             = channelFromPathWithMeta(val_ploidy_model)
+
+    // Using channelFromPathWithMeta helper. Returns either an empty channel or [[:],[]] or a channel with custom ID.
+    ch_par_bed                  = channelFromPathWithMeta(val_par_bed, true, "par_bed")
+    ch_sambamba_bed             = channelFromPathWithMeta(val_sambamba_regions, false, 'sambamba')
+    ch_vep_filters_std_fmt      = channelFromPathWithMeta(val_vep_filters, false, 'standard')
+    ch_vep_filters_scout_fmt    = channelFromPathWithMeta(val_vep_filters_scout_fmt, false, 'scout')
+
+    // Using channelFromSamplesheet helper. Returns either an empty channel or validated channel.
+    ch_me_references            = channelFromSamplesheet(val_mobile_element_references, "${projectDir}/assets/mobile_element_references_schema.json", false)
+    ch_me_svdb_resources        = channelFromSamplesheet(val_mobile_element_svdb_annotations, "${projectDir}/assets/svdb_query_vcf_schema.json", false)
+    ch_sample_id_map            = channelFromSamplesheet(val_sample_id_map, "${projectDir}/assets/sample_id_map.json", false)
+    ch_svdb_bedpedbs            = channelFromSamplesheet(val_svdb_query_bedpedbs, "${projectDir}/assets/svdb_query_bedpe_schema.json", false)
+    ch_svdb_dbs                 = channelFromSamplesheet(val_svdb_query_dbs, "${projectDir}/assets/svdb_query_vcf_schema.json", false)
+
+    ch_cadd_header              = channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
+    ch_foundin_header           = channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
+    ch_ngsbits_method           = channel.value(val_ngsbits_samplegender_method)
+    ch_sentieon_pcr_indel_model = channel.value(val_sentieon_dnascope_pcr_indel_model)
+    ch_subdepth                 = channel.value(val_subdepth)
+    ch_vcfanno_resources        = val_vcfanno_resources ? channel.fromPath(val_vcfanno_resources).splitText().map{it -> it.trim()}.collect()
+                                                        : channel.value([])
+    ch_gcnvcaller_model         = val_gcnvcaller_model  ? channel.fromPath(val_gcnvcaller_model)
+                                                            .splitCsv ( header:true )
+                                                            .map { row ->
+                                                                    return [[id:file(row.models).simpleName], row.models]
+                                                                }
+                                                            : channel.empty()
 
     //
     // Read and store paths in the vep_plugin_files file
     //
     ch_vep_extra_files = channel.empty()
-    if (params.vep_plugin_files) {
-        channel.fromPath(params.vep_plugin_files)
+    if (val_vep_plugin_files) {
+        channel.fromPath(val_vep_plugin_files)
             .collect()
             .splitCsv ( header:true )
             .map { row ->
@@ -228,46 +309,52 @@ workflow NFCORE_RAREDISEASE {
     //
     // Generate pedigree file
     //
-    ch_pedfile  = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
-    ch_versions = ch_versions.mix(CREATE_PEDIGREE_FILE.out.versions)
+    ch_pedfile            = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
+    ch_pedfile_publish    = CREATE_PEDIGREE_FILE.out.ped
+        .map { ped -> ['pedigree/', [ped]] }
 
     // Tools
-    skip_eklipse               = parseSkipList(params.skip_tools, 'eklipse')
-    skip_fastp                 = parseSkipList(params.skip_tools, 'fastp')
-    skip_fastqc                = parseSkipList(params.skip_tools, 'fastqc')
-    skip_gens                  = parseSkipList(params.skip_tools, 'gens')
-    skip_germlinecnvcaller     = parseSkipList(params.skip_tools, 'germlinecnvcaller')
-    skip_haplogrep3            = parseSkipList(params.skip_tools, 'haplogrep3')
-    skip_ngsbits               = parseSkipList(params.skip_tools, 'ngsbits')
-    skip_peddy                 = parseSkipList(params.skip_tools, 'peddy')
-    skip_qualimap              = parseSkipList(params.skip_tools, 'qualimap')
-    skip_smncopynumbercaller   = parseSkipList(params.skip_tools, 'smncopynumbercaller')
-    skip_vcf2cytosure          = parseSkipList(params.skip_tools, 'vcf2cytosure')
+    skip_fastp                 = parseSkipList(val_skip_tools, 'fastp')
+    skip_fastqc                = parseSkipList(val_skip_tools, 'fastqc')
+    skip_gens                  = parseSkipList(val_skip_tools, 'gens')
+    skip_germlinecnvcaller     = parseSkipList(val_skip_tools, 'germlinecnvcaller')
+    skip_mitosalt              = parseSkipList(val_skip_tools, 'mitosalt')
+    skip_ngsbits               = parseSkipList(val_skip_tools, 'ngsbits')
+    skip_peddy                 = parseSkipList(val_skip_tools, 'peddy')
+    skip_smncopynumbercaller   = parseSkipList(val_skip_tools, 'smncopynumbercaller')
+    skip_vcf2cytosure          = parseSkipList(val_skip_tools, 'vcf2cytosure')
 
     // Subworkflows
-    skip_me_annotation         = parseSkipList(params.skip_subworkflows, 'me_annotation')
-    skip_me_calling            = parseSkipList(params.skip_subworkflows, 'me_calling')
-    skip_mt_annotation         = parseSkipList(params.skip_subworkflows, 'mt_annotation')
-    skip_mt_subsample          = parseSkipList(params.skip_subworkflows, 'mt_subsample')
-    skip_repeat_annotation     = parseSkipList(params.skip_subworkflows, 'repeat_annotation')
-    skip_repeat_calling        = parseSkipList(params.skip_subworkflows, 'repeat_calling')
-    skip_snv_annotation        = parseSkipList(params.skip_subworkflows, 'snv_annotation')
-    skip_snv_calling           = parseSkipList(params.skip_subworkflows, 'snv_calling')
-    skip_sv_annotation         = parseSkipList(params.skip_subworkflows, 'sv_annotation')
-    skip_sv_calling            = parseSkipList(params.skip_subworkflows, 'sv_calling')
-    skip_generate_clinical_set = parseSkipList(params.skip_subworkflows, 'generate_clinical_set')
+    skip_me_annotation         = parseSkipList(val_skip_subworkflows, 'me_annotation')
+    skip_me_calling            = parseSkipList(val_skip_subworkflows, 'me_calling')
+    skip_mt_annotation         = parseSkipList(val_skip_subworkflows, 'mt_annotation')
+    skip_mt_subsample          = parseSkipList(val_skip_subworkflows, 'mt_subsample')
+    skip_repeat_annotation     = parseSkipList(val_skip_subworkflows, 'repeat_annotation')
+    skip_repeat_calling        = parseSkipList(val_skip_subworkflows, 'repeat_calling')
+    skip_snv_annotation        = parseSkipList(val_skip_subworkflows, 'snv_annotation')
+    skip_snv_calling           = parseSkipList(val_skip_subworkflows, 'snv_calling')
+    skip_sv_annotation         = parseSkipList(val_skip_subworkflows, 'sv_annotation')
+    skip_sv_calling            = parseSkipList(val_skip_subworkflows, 'sv_calling')
+    skip_generate_clinical_set = parseSkipList(val_skip_subworkflows, 'generate_clinical_set')
+
+    //
+    // Validate parameter combinations
+    //
+    if (val_save_noalt_mapped_as_cram && !val_exclude_alt) {
+        error("save_noalt_mapped_as_cram requires exclude_alt to be set to true")
+    }
 
     //
     // SV caller priority
     //
     if (skip_germlinecnvcaller) {
-        if (params.analysis_type.equals("wgs")) {
+        if (val_analysis_type.equals("wgs")) {
             ch_svcaller_priority = channel.value(["tiddit", "manta", "cnvnator"])
         } else {
             ch_svcaller_priority = channel.value([])
         }
     } else {
-        if (params.analysis_type.equals("wgs")) {
+        if (val_analysis_type.equals("wgs")) {
             ch_svcaller_priority = channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
         } else {
             ch_svcaller_priority = channel.value(["manta", "gcnvcaller"])
@@ -277,14 +364,14 @@ workflow NFCORE_RAREDISEASE {
     //
     // Create chromosome bed and intervals for splitting and gathering operations
     //
-    ch_scatter_split_intervals = channel.empty()
+    ch_scatter_genome_split_intervals  = channel.empty()
     if (!skip_snv_annotation) {
         SCATTER_GENOME (
             ch_genome_dictionary,
             ch_genome_fai,
             ch_genome_fasta
-        ).split_intervals
-        .set { ch_scatter_split_intervals }
+        )
+        ch_scatter_genome_split_intervals = SCATTER_GENOME.out.gatk4_splitintervals_split_intervals
     }
 
     RAREDISEASE (
@@ -305,6 +392,7 @@ workflow NFCORE_RAREDISEASE {
         ch_genome_dictionary,
         ch_genome_fai,
         ch_genome_fasta,
+        ch_genome_hisat2index,
         ch_gens_gnomad_pos,
         ch_gens_interval_list,
         ch_gens_pon_female,
@@ -322,6 +410,7 @@ workflow NFCORE_RAREDISEASE {
         ch_mt_fai,
         ch_mt_fasta,
         ch_mt_intervals,
+        ch_mt_lastdb,
         ch_mtshift_backchain,
         ch_mtshift_bwaindex,
         ch_mtshift_bwamem2index,
@@ -329,6 +418,7 @@ workflow NFCORE_RAREDISEASE {
         ch_mtshift_fai,
         ch_mtshift_fasta,
         ch_mtshift_intervals,
+        ch_ngsbits_method,
         ch_par_bed,
         ch_pedfile,
         ch_ploidy_model,
@@ -339,11 +429,13 @@ workflow NFCORE_RAREDISEASE {
         ch_sambamba_bed,
         ch_sample_id_map,
         ch_samples,
-        ch_scatter_split_intervals,
+        ch_scatter_genome_split_intervals,
         ch_score_config_mt,
         ch_score_config_snv,
         ch_score_config_sv,
         ch_sdf,
+        ch_sentieon_pcr_indel_model,
+        ch_subdepth,
         ch_svcaller_priority,
         ch_svd_bed,
         ch_svd_mu,
@@ -363,9 +455,6 @@ workflow NFCORE_RAREDISEASE {
         ch_vep_cache,
         ch_vep_extra_files,
         ch_versions,
-        params.analysis_type,
-        params.svdb_query_bedpedbs,
-        params.svdb_query_dbs,
         skip_me_calling,
         skip_me_annotation,
         skip_mt_annotation,
@@ -377,20 +466,132 @@ workflow NFCORE_RAREDISEASE {
         skip_sv_annotation,
         skip_sv_calling,
         skip_generate_clinical_set,
-        skip_eklipse,
         skip_fastp,
         skip_fastqc,
         skip_gens,
         skip_germlinecnvcaller,
-        skip_haplogrep3,
+        skip_mitosalt,
         skip_ngsbits,
         skip_peddy,
-        skip_qualimap,
         skip_smncopynumbercaller,
-        skip_vcf2cytosure
+        skip_vcf2cytosure,
+        val_aligner,
+        val_analysis_type,
+        val_cadd_resources,
+        val_concatenate_snv_calls,
+        val_skip_split_multiallelics,
+        val_exclude_alt,
+        val_extract_alignments,
+        val_genome,
+        val_heavy_strand_origin_end,
+        val_heavy_strand_origin_start,
+        val_homoplasmy_af_threshold,
+        val_light_strand_origin_end,
+        val_light_strand_origin_start,
+        val_mbuffer_mem,
+        val_mito_length,
+        val_mito_name,
+        val_mitosalt_breakspan,
+        val_mitosalt_breakthreshold,
+        val_mitosalt_cluster_threshold,
+        val_mitosalt_deletion_threshold_max,
+        val_mitosalt_deletion_threshold_min,
+        val_mitosalt_evalue_threshold,
+        val_mitosalt_exclude,
+        val_mitosalt_flank,
+        val_mitosalt_heteroplasmy_limit,
+        val_mitosalt_paired_distance,
+        val_mitosalt_score_threshold,
+        val_mitosalt_sizelimit,
+        val_mitosalt_split_distance_threshold,
+        val_mitosalt_split_length,
+        val_mt_aligner,
+        val_mt_subsample_approach,
+        val_mt_subsample_rd,
+        val_mt_subsample_seed,
+        val_multiqc_config,
+        val_multiqc_logo,
+        val_multiqc_methods_description,
+        val_multiqc_samples,
+        val_outdir,
+        val_platform,
+        val_run_mt_for_wes,
+        val_run_rtgvcfeval,
+        val_run_vcfanno_db_sanity_check,
+        val_sample_id_map,
+        val_samtools_sort_threads,
+        val_save_all_mapped_as_cram,
+        val_save_noalt_mapped_as_cram,
+        val_svdb_query_bedpedbs,
+        val_svdb_query_dbs,
+        val_target_bed,
+        val_variant_caller,
+        val_vep_cache_version
     )
     emit:
-    multiqc_report = RAREDISEASE.out.multiqc_report // channel: /path/to/multiqc_report.html
+    align_fastp_out                                     = RAREDISEASE.out.align_fastp_out              // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
+    align_genome_marked_bam                             = RAREDISEASE.out.align_genome_marked_bam      // channel: [ val(meta), path(bam) ]
+    align_genome_marked_bai                             = RAREDISEASE.out.align_genome_marked_bai      // channel: [ val(meta), path(bai) ]
+    align_genome_marked_cram                            = RAREDISEASE.out.align_genome_marked_cram     // channel: [ val(meta), path(cram) ]
+    align_genome_marked_crai                            = RAREDISEASE.out.align_genome_marked_crai     // channel: [ val(meta), path(crai) ]
+    align_markdup_metrics                               = RAREDISEASE.out.align_markdup_metrics        // channel: [ val(meta), path(metrics) ]
+    multiqc_report                                      = RAREDISEASE.out.multiqc_report               // channel: /path/to/multiqc_report.html
+    scatter_genome_split_intervals                     = ch_scatter_genome_split_intervals // channel: [ val(meta), path(interval_list) ]
+    qc_bam_chromograph_cov_plots                        = RAREDISEASE.out.qc_bam_chromograph_cov_plots // channel: [ val(meta), path(png) ]
+    qc_bam_mosdepth_global_txt                          = RAREDISEASE.out.qc_bam_mosdepth_global_txt   // channel: [ val(meta), path(txt) ]
+    qc_bam_mosdepth_per_base_bed                        = RAREDISEASE.out.qc_bam_mosdepth_per_base_bed // channel: [ val(meta), path(bed.gz) ]
+    qc_bam_mosdepth_per_base_csi                        = RAREDISEASE.out.qc_bam_mosdepth_per_base_csi // channel: [ val(meta), path(csi) ]
+    qc_bam_mosdepth_per_base_d4                         = RAREDISEASE.out.qc_bam_mosdepth_per_base_d4  // channel: [ val(meta), path(d4) ]
+    qc_bam_mosdepth_quantized_bed                       = RAREDISEASE.out.qc_bam_mosdepth_quantized_bed // channel: [ val(meta), path(bed.gz) ]
+    qc_bam_mosdepth_quantized_csi                       = RAREDISEASE.out.qc_bam_mosdepth_quantized_csi // channel: [ val(meta), path(csi) ]
+    qc_bam_mosdepth_regions_bed                         = RAREDISEASE.out.qc_bam_mosdepth_regions_bed  // channel: [ val(meta), path(bed.gz) ]
+    qc_bam_mosdepth_regions_csi                         = RAREDISEASE.out.qc_bam_mosdepth_regions_csi  // channel: [ val(meta), path(csi) ]
+    qc_bam_mosdepth_regions_txt                         = RAREDISEASE.out.qc_bam_mosdepth_regions_txt  // channel: [ val(meta), path(txt) ]
+    qc_bam_mosdepth_summary_txt                         = RAREDISEASE.out.qc_bam_mosdepth_summary_txt  // channel: [ val(meta), path(txt) ]
+    qc_bam_mosdepth_thresholds_bed                      = RAREDISEASE.out.qc_bam_mosdepth_thresholds_bed // channel: [ val(meta), path(bed.gz) ]
+    qc_bam_mosdepth_thresholds_csi                      = RAREDISEASE.out.qc_bam_mosdepth_thresholds_csi // channel: [ val(meta), path(csi) ]
+    qc_bam_ngsbits_samplegender_tsv                     = RAREDISEASE.out.qc_bam_ngsbits_samplegender_tsv // channel: [ val(meta), path(tsv) ]
+    qc_bam_picard_collecthsmetrics_metrics              = RAREDISEASE.out.qc_bam_picard_collecthsmetrics_metrics // channel: [ val(meta), path(metrics) ]
+    qc_bam_picard_collectmultiplemetrics_metrics        = RAREDISEASE.out.qc_bam_picard_collectmultiplemetrics_metrics // channel: [ val(meta), path(metrics) ]
+    qc_bam_picard_collectmultiplemetrics_pdf            = RAREDISEASE.out.qc_bam_picard_collectmultiplemetrics_pdf // channel: [ val(meta), path(pdf) ]
+    qc_bam_sambamba_depth_bed                           = RAREDISEASE.out.qc_bam_sambamba_depth_bed    // channel: [ val(meta), path(bed) ]
+    qc_bam_tiddit_cov_cov                               = RAREDISEASE.out.qc_bam_tiddit_cov_cov        // channel: [ val(meta), path(bed) ]
+    qc_bam_tiddit_cov_wig                               = RAREDISEASE.out.qc_bam_tiddit_cov_wig        // channel: [ val(meta), path(wig) ]
+    qc_bam_ucsc_wigtobigwig_bw                          = RAREDISEASE.out.qc_bam_ucsc_wigtobigwig_bw   // channel: [ val(meta), path(bw) ]
+    qc_bam_verifybamid_ancestry                         = RAREDISEASE.out.qc_bam_verifybamid_ancestry  // channel: [ val(meta), path(ancestry) ]
+    qc_bam_verifybamid_bed                              = RAREDISEASE.out.qc_bam_verifybamid_bed       // channel: [ val(meta), path(bed) ]
+    qc_bam_verifybamid_log                              = RAREDISEASE.out.qc_bam_verifybamid_log       // channel: [ val(meta), path(log) ]
+    qc_bam_verifybamid_mu                               = RAREDISEASE.out.qc_bam_verifybamid_mu        // channel: [ val(meta), path(mu) ]
+    qc_bam_verifybamid_self_sm                          = RAREDISEASE.out.qc_bam_verifybamid_self_sm   // channel: [ val(meta), path(selfSM) ]
+    qc_bam_verifybamid_ud                               = RAREDISEASE.out.qc_bam_verifybamid_ud        // channel: [ val(meta), path(ud) ]
+    qc_bam_wgsmetrics_wg                                = RAREDISEASE.out.qc_bam_wgsmetrics_wg         // channel: [ val(meta), path(metrics) ]
+    qc_bam_wgsmetrics_y                                 = RAREDISEASE.out.qc_bam_wgsmetrics_y          // channel: [ val(meta), path(metrics) ]
+    call_sv_vcf                                         = RAREDISEASE.out.call_sv_vcf                   // channel: [ val(meta), path(vcf) ]
+    call_sv_tbi                                         = RAREDISEASE.out.call_sv_tbi                   // channel: [ val(meta), path(tbi) ]
+    saltshaker_html                                     = RAREDISEASE.out.saltshaker_html              // channel: [ val(meta), path(html) ]
+    saltshaker_plot                                     = RAREDISEASE.out.saltshaker_plot             // channel: [ val(meta), path(png) ]
+    mt_del_result                                       = RAREDISEASE.out.mt_del_result               // channel: [ val(meta), path(txt) ]
+    call_snv_bcftools_concat_csi                        = RAREDISEASE.out.call_snv_bcftools_concat_csi                   // channel: [ val(meta), path(csi) ]
+    call_snv_bcftools_concat_tbi                        = RAREDISEASE.out.call_snv_bcftools_concat_tbi                   // channel: [ val(meta), path(tbi) ]
+    call_snv_bcftools_concat_vcf                        = RAREDISEASE.out.call_snv_bcftools_concat_vcf                   // channel: [ val(meta), path(vcf) ]
+    call_snv_deepvariant_report                         = RAREDISEASE.out.call_snv_deepvariant_report                    // channel: [ val(meta), path(html) ]
+    call_snv_genome_tabix                               = RAREDISEASE.out.call_snv_genome_tabix                          // channel: [ val(meta), path(tbi) ]
+    call_snv_genome_vcf                                 = RAREDISEASE.out.call_snv_genome_vcf                            // channel: [ val(meta), path(vcf) ]
+    call_snv_mt_tabix                                   = RAREDISEASE.out.call_snv_mt_tabix                              // channel: [ val(meta), path(tbi) ]
+    call_snv_mt_vcf                                     = RAREDISEASE.out.call_snv_mt_vcf                                // channel: [ val(meta), path(vcf) ]
+    annotate_genome_snvs_bcftools_concat_tbi            = RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_tbi       // channel: [ val(meta), path(tbi) ]
+    annotate_genome_snvs_bcftools_concat_vcf            = RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_vcf       // channel: [ val(meta), path(vcf) ]
+    annotate_genome_snvs_chromograph_autozyg_plots      = RAREDISEASE.out.annotate_genome_snvs_chromograph_autozyg_plots // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_chromograph_regions_plots      = RAREDISEASE.out.annotate_genome_snvs_chromograph_regions_plots // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_chromograph_sites_plots        = RAREDISEASE.out.annotate_genome_snvs_chromograph_sites_plots   // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_rhocall_viz_bed                = RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_bed           // channel: [ val(meta), path(bed) ]
+    annotate_genome_snvs_rhocall_viz_wig                = RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_wig           // channel: [ val(meta), path(wig) ]
+    annotate_genome_snvs_ucsc_wigtobigwig_bw            = RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw       // channel: [ val(meta), path(bw) ]
+    subsample_mt_bai                                    = RAREDISEASE.out.subsample_mt_bai             // channel: [ val(meta), path(bai) ]
+    subsample_mt_bam                                    = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
+    publish                                             = RAREDISEASE.out.publish
+                                                            .mix(ch_pedfile_publish)
+                                                            .mix(ch_references.publish) // channel: [ val(destination), val(value) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -412,6 +613,7 @@ workflow {
         params.input,
         params.help,
         params.help_full,
+        params.monochrome_logs,
         params.show_hidden
     )
     //
@@ -421,7 +623,112 @@ workflow {
         PIPELINE_INITIALISATION.out.align,
         PIPELINE_INITIALISATION.out.case_info,
         PIPELINE_INITIALISATION.out.reads,
-        PIPELINE_INITIALISATION.out.samples
+        PIPELINE_INITIALISATION.out.samples,
+        params.aligner,
+        params.analysis_type,
+        params.bwa,
+        params.bwamem2,
+        params.bwameme,
+        params.cadd_resources,
+        params.call_interval,
+        params.concatenate_snv_calls,
+        params.skip_split_multiallelics,
+        params.exclude_alt,
+        params.extract_alignments,
+        params.fai,
+        params.fasta,
+        params.gcnvcaller_model,
+        params.genome,
+        params.gens_gnomad_pos,
+        params.gens_interval_list,
+        params.gens_pon_female,
+        params.gens_pon_male,
+        params.gnomad_af,
+        params.gnomad_af_idx,
+        params.heavy_strand_origin_end,
+        params.heavy_strand_origin_start,
+        params.homoplasmy_af_threshold,
+        params.intervals_wgs,
+        params.intervals_y,
+        params.known_dbsnp,
+        params.known_dbsnp_tbi,
+        params.light_strand_origin_end,
+        params.light_strand_origin_start,
+        params.mbuffer_mem,
+        params.mito_length,
+        params.mito_name,
+        params.mitosalt_breakspan,
+        params.mitosalt_breakthreshold,
+        params.mitosalt_cluster_threshold,
+        params.mitosalt_deletion_threshold_max,
+        params.mitosalt_deletion_threshold_min,
+        params.mitosalt_evalue_threshold,
+        params.mitosalt_exclude,
+        params.mitosalt_flank,
+        params.mitosalt_heteroplasmy_limit,
+        params.mitosalt_paired_distance,
+        params.mitosalt_score_threshold,
+        params.mitosalt_sizelimit,
+        params.mitosalt_split_distance_threshold,
+        params.mitosalt_split_length,
+        params.ml_model,
+        params.mobile_element_references,
+        params.mobile_element_svdb_annotations,
+        params.mt_aligner,
+        params.mt_fasta,
+        params.mt_subsample_approach,
+        params.mt_subsample_rd,
+        params.mt_subsample_seed,
+        params.multiqc_config,
+        params.multiqc_logo,
+        params.multiqc_methods_description,
+        params.multiqc_samples,
+        params.ngsbits_samplegender_method,
+        params.outdir,
+        params.par_bed,
+        params.platform,
+        params.ploidy_model,
+        params.readcount_intervals,
+        params.reduced_penetrance,
+        params.rtg_truthvcfs,
+        params.run_mt_for_wes,
+        params.run_rtgvcfeval,
+        params.run_vcfanno_db_sanity_check,
+        params.sambamba_regions,
+        params.sample_id_map,
+        params.samtools_sort_threads,
+        params.save_all_mapped_as_cram,
+        params.save_noalt_mapped_as_cram,
+        params.save_reference,
+        params.score_config_mt,
+        params.score_config_snv,
+        params.score_config_sv,
+        params.sdf,
+        params.sentieon_dnascope_pcr_indel_model,
+        params.sequence_dictionary,
+        params.skip_tools,
+        params.skip_subworkflows,
+        params.mitosalt_depth,
+        params.svdb_query_bedpedbs,
+        params.svdb_query_dbs,
+        params.target_bed,
+        params.variant_caller,
+        params.variant_catalog,
+        params.variant_consequences_snv,
+        params.variant_consequences_sv,
+        params.vcf2cytosure_blacklist,
+        params.vcfanno_extra_resources,
+        params.vcfanno_lua,
+        params.vcfanno_resources,
+        params.vcfanno_toml,
+        params.vep_cache_version,
+        params.vep_filters,
+        params.vep_filters_scout_fmt,
+        params.vep_plugin_files,
+        params.verifybamid_svd_bed,
+        params.verifybamid_svd_mu,
+        params.verifybamid_svd_ud,
+        params.vep_cache
     )
     //
     // SUBWORKFLOW: Run completion tasks
@@ -432,9 +739,110 @@ workflow {
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        params.hook_url,
         NFCORE_RAREDISEASE.out.multiqc_report
     )
+
+    publish:
+    alignment                         = NFCORE_RAREDISEASE.out.align_genome_marked_bam
+                                            .mix(NFCORE_RAREDISEASE.out.align_genome_marked_bai)
+                                            .mix(NFCORE_RAREDISEASE.out.align_genome_marked_cram)
+                                            .mix(NFCORE_RAREDISEASE.out.align_genome_marked_crai)
+                                            .mix(NFCORE_RAREDISEASE.out.align_markdup_metrics)
+                                            .mix(NFCORE_RAREDISEASE.out.subsample_mt_bam)
+                                            .mix(NFCORE_RAREDISEASE.out.subsample_mt_bai)
+    fastp                             = NFCORE_RAREDISEASE.out.align_fastp_out
+    ngsbits_samplegender              = NFCORE_RAREDISEASE.out.qc_bam_ngsbits_samplegender_tsv
+    qc_bam                            = NFCORE_RAREDISEASE.out.qc_bam_chromograph_cov_plots.transpose()
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_global_txt)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_per_base_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_per_base_csi)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_per_base_d4)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_quantized_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_quantized_csi)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_regions_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_regions_csi)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_regions_txt)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_summary_txt)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_thresholds_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_mosdepth_thresholds_csi)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_picard_collecthsmetrics_metrics)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_picard_collectmultiplemetrics_metrics.transpose())
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_picard_collectmultiplemetrics_pdf.transpose())
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_sambamba_depth_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_tiddit_cov_cov)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_tiddit_cov_wig)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_ucsc_wigtobigwig_bw)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_ancestry)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_log)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_mu)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_self_sm)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_ud)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_wg)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_y)
+    call_sv                            = NFCORE_RAREDISEASE.out.call_sv_vcf
+                                            .mix(NFCORE_RAREDISEASE.out.call_sv_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.saltshaker_html)
+                                            .mix(NFCORE_RAREDISEASE.out.saltshaker_plot)
+                                            .mix(NFCORE_RAREDISEASE.out.mt_del_result)
+    call_snv_genome               = NFCORE_RAREDISEASE.out.call_snv_genome_vcf
+                                        .mix(NFCORE_RAREDISEASE.out.call_snv_genome_tabix)
+                                        .mix(NFCORE_RAREDISEASE.out.call_snv_deepvariant_report)
+    call_snv_mt                   = NFCORE_RAREDISEASE.out.call_snv_mt_vcf
+                                        .mix(NFCORE_RAREDISEASE.out.call_snv_mt_tabix)
+    call_snv_concatenated         = NFCORE_RAREDISEASE.out.call_snv_bcftools_concat_vcf
+                                        .mix(NFCORE_RAREDISEASE.out.call_snv_bcftools_concat_tbi)
+                                        .mix(NFCORE_RAREDISEASE.out.call_snv_bcftools_concat_csi)
+    annotate_snv_genome               = NFCORE_RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_vcf
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_chromograph_autozyg_plots)
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_chromograph_regions_plots)
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_chromograph_sites_plots)
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_wig)
+    annotate_snv_genome_rhocallviz_bw = NFCORE_RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw
+    processed_references              = NFCORE_RAREDISEASE.out.scatter_genome_split_intervals
+    subworkflow_results               = NFCORE_RAREDISEASE.out.publish
+}
+
+output {
+    alignment {
+        path { _meta, _file -> "alignment/" }
+    }
+    fastp {
+        path { _meta, _file -> "trimming/" }
+    }
+    ngsbits_samplegender {
+        path { _meta, _file -> "ngsbits_samplegender/" }
+    }
+    qc_bam {
+        path { _meta, _file -> "qc_bam/" }
+    }
+    call_sv {
+        path { _meta, _file -> "call_sv/" }
+    }
+    call_snv_genome {
+        path { _meta, _file -> "call_snv/genome/" }
+    }
+    call_snv_mt {
+        path { _meta, _file -> "call_snv/mitochondria/" }
+    }
+    call_snv_concatenated {
+        path { _meta, _file -> "call_snv/concatenated_calls/" }
+    }
+    annotate_snv_genome {
+        path { _meta, _file -> "annotate_snv/genome/" }
+    }
+    annotate_snv_genome_rhocallviz_bw {
+        path { meta, _file -> "annotate_snv/genome/${meta.sample}_rhocallviz/" }
+    }
+    processed_references {
+        path { _meta, _file -> "processed_references/" }
+        enabled params.save_reference
+    }
+    subworkflow_results {
+        path { destination, _value -> destination }
+    }
 }
 
 /*

@@ -2,6 +2,21 @@
     "align bwamem2": {
         "content": [
             [
+                "test_sorted_md.metrics.txt"
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "sample": "test",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                    },
+                    "test.stats:md5,f0914a56ae73007ebd242cab27861700"
+                ]
+            ],
+            [
                 [
                     {
                         "groupSize": 1,
@@ -13,7 +28,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "13f1d6d13abf640bc42f5692510b9a7a"
+                    "72b312c47e502b8272741a40e435b96"
                 ]
             ],
             [
@@ -30,26 +45,282 @@
                     },
                     "af8628d9df18b2d3d4f6fd47ef2bb872"
                 ]
-            ],
-            [
-                "versions.yml:md5,22d2871963a6cdc14c58d98fc3c3c9c3",
-                "versions.yml:md5,6046f0e9edf48b8d3bd335da75134ee4",
-                "versions.yml:md5,952f0145e6a0a3d1dbd70aac2edf4ced",
-                "versions.yml:md5,9d7492d23e5995a4955de5f751df05af",
-                "versions.yml:md5,dea31a20732d740f0c824b01226c1dab",
-                "versions.yml:md5,e9e514dbea5a822d1978acac57bee61e",
-                "versions.yml:md5,f56a243ff21d59d873e0d0a3d3ee441d"
             ]
         ],
+        "timestamp": "2026-04-08T14:47:44.537374",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.0"
-        },
-        "timestamp": "2025-12-04T12:30:00.835976838"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "align bwamem2, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        },
+                        "test.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "markdup_metrics": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "marked_bai": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "marked_bam": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "stats": [
+                    [
+                        {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        },
+                        "test.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-06-11T16:06:18.512372",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "align bwameme, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        },
+                        "test.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "markdup_metrics": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "marked_bai": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "marked_bam": [
+                    [
+                        {
+                            "groupSize": 1,
+                            "groupTarget": {
+                                "id": "test",
+                                "sample": "test",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            }
+                        },
+                        "test_sorted_md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "stats": [
+                    [
+                        {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        },
+                        "test.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-06-11T16:06:37.969441",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
     },
     "align bwameme": {
         "content": [
             [
+                "test_sorted_md.metrics.txt"
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "sample": "test",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                    },
+                    "test.stats:md5,f0914a56ae73007ebd242cab27861700"
+                ]
+            ],
+            [
                 [
                     {
                         "groupSize": 1,
@@ -61,7 +332,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "2b9969e02527b37fdfb5852fc2583bc5"
+                    "40408ed51d46ab3f1524be98d6b31441"
                 ]
             ],
             [
@@ -78,21 +349,12 @@
                     },
                     "af8628d9df18b2d3d4f6fd47ef2bb872"
                 ]
-            ],
-            [
-                "versions.yml:md5,22d2871963a6cdc14c58d98fc3c3c9c3",
-                "versions.yml:md5,390a09ae83280da84de93856149cc3a1",
-                "versions.yml:md5,952f0145e6a0a3d1dbd70aac2edf4ced",
-                "versions.yml:md5,9d7492d23e5995a4955de5f751df05af",
-                "versions.yml:md5,dea31a20732d740f0c824b01226c1dab",
-                "versions.yml:md5,e9e514dbea5a822d1978acac57bee61e",
-                "versions.yml:md5,f56a243ff21d59d873e0d0a3d3ee441d"
             ]
         ],
+        "timestamp": "2026-04-08T14:48:21.046802",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.0"
-        },
-        "timestamp": "2025-12-04T12:30:47.082179053"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     }
 }

@@ -1,0 +1,172 @@
+{
+    "CALL_SNV_DEEPVARIANT - wgs, stub": {
+        "content": [
+            [
+                [
+                    "0",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "1",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
+                        ]
+                    ]
+                ],
+                [
+                    "2",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
+                        ]
+                    ]
+                ],
+                [
+                    "3",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "4",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "deepvariant_report",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "gvcf",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
+                        ]
+                    ]
+                ],
+                [
+                    "gvcf_tabix",
+                    [
+                        [
+                            {
+                                "id": "earlycasualcaiman",
+                                "sample": "earlycasualcaiman",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "justhusky"
+                            },
+                            "earlycasualcaiman_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
+                        ]
+                    ]
+                ],
+                [
+                    "tabix",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "vcf",
+                    [
+                        [
+                            {
+                                "id": "justhusky"
+                            },
+                            "justhusky_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        "timestamp": "2026-05-29T18:32:43.797748048",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "CALL_SNV_DEEPVARIANT - wgs": {
+        "content": [
+            "VcfFile [chromosomes=[MT, 21], sampleCount=1, variantCount=7601, phased=false, phasedAutodetect=false]",
+            [
+                "earlycasualcaiman_deepvar.visual_report.html"
+            ],
+            [
+                "justhusky_split_rmdup_info.vcf.gz.tbi"
+            ],
+            [
+                "earlycasualcaiman_deepvar.g.vcf.gz"
+            ]
+        ],
+        "timestamp": "2026-05-29T20:33:43.828437561",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

@@ -3,8 +3,23 @@ nextflow_workflow {
     name "Test Workflow QC_BAM"
     script "subworkflows/local/qc_bam/main.nf"
     workflow "QC_BAM"
+
     tag "subworkflows"
     tag "qc_bam"
+
+    tag "picard/collectmultiplemetrics"
+    tag "picard/collecthsmetrics"
+    tag "chromograph"
+    tag "qualimap/bamqc"
+    tag "tiddit/cov"
+    tag "mosdepth"
+    tag "sambamba/depth"
+    tag "ucsc/wigtobigwig"
+    tag "picard/collectwgsmetrics"
+    tag "sentieon/wgsmetrics"
+    tag "ngsbits/samplegender"
+    tag "verifybamid/verifybamid2"
+
     config "./nextflow.config"
 
     test("QC_BAM - test, bwamem2") {
@@ -19,32 +34,26 @@ nextflow_workflow {
                 input[0] = channel.of(
                     [
                         [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)]
-                    ]
-                )
-                input[1] = channel.of(
-                    [
-                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
                         [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
                         [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
                     ]
                 )
-                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[1]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
                 input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
-                input[4]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/bait.interval_list', checkIfExists: true)).collect()
-                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
-                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
-                input[7]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.empty()
+                input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
                 input[9]  = channel.empty()
                 input[10] = channel.empty()
                 input[11] = channel.empty()
-                input[12] = channel.empty()
-                input[13] = 'xy'
-                input[14] = 'wgs'
-                input[15] = 'bwamem2'
+                input[12] = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[13] = 'wgs'
+                input[14] = 'bwamem2'
+                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
                 input[16] = true
-                input[17] = false
                 """
             }
         }
@@ -53,29 +62,122 @@ nextflow_workflow {
             assertAll (
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.multiple_metrics
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
-                        workflow.out.hs_metrics
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
-                        workflow.out.d4
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
-                        workflow.out.cov
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
-                        workflow.out.tiddit_wig,
-                        workflow.out.bigwig,
-                        workflow.out.global_dist
+                        workflow.out.picard_collectmultiplemetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collectmultiplemetrics_pdf
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collecthsmetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.mosdepth_global_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_summary_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_csi
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_d4
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_wg
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_y
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_wig
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_cov
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ucsc_wigtobigwig_bw
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.chromograph_cov_plots
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.sambamba_depth_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.verifybamid_self_sm
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ngsbits_samplegender_tsv
+                            .collect { _meta, files -> file(files).name }
+                    ).match()
+                }
+            )
+        }
+
+    }
+
+    test("QC_BAM - test, bwamem2, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                skip_tools = null
+                outdir     = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.empty()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.empty()
+                input[10] = channel.empty()
+                input[11] = channel.empty()
+                input[12] = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[13] = 'wgs'
+                input[14] = 'bwamem2'
+                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[16] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert snapshot(
+                        workflow.out.picard_collectmultiplemetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collectmultiplemetrics_pdf
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collecthsmetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.mosdepth_global_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_summary_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_csi
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_d4
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_wg
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_y
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_wig
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_cov
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ucsc_wigtobigwig_bw
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.chromograph_cov_plots
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.sambamba_depth_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.verifybamid_self_sm
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ngsbits_samplegender_tsv
+                            .collect { _meta, files -> file(files).name }
                     ).match()
                 }
             )
@@ -95,32 +197,26 @@ nextflow_workflow {
                 input[0] = channel.of(
                     [
                         [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)]
-                    ]
-                )
-                input[1] = channel.of(
-                    [
-                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
                         [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
                         [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
                     ]
                 )
-                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[1]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
                 input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
-                input[4]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/bait.interval_list', checkIfExists: true)).collect()
-                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
-                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
-                input[7]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.empty()
+                input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
                 input[9]  = channel.empty()
                 input[10] = channel.empty()
                 input[11] = channel.empty()
-                input[12] = channel.empty()
-                input[13] = 'xy'
-                input[14] = 'wgs'
-                input[15] = 'sentieon'
+                input[12] = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[13] = 'wgs'
+                input[14] = 'sentieon'
+                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
                 input[16] = true
-                input[17] = false
                 """
             }
         }
@@ -128,35 +224,126 @@ nextflow_workflow {
         then {
             assertAll (
                 { assert workflow.success },
-                { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.multiple_metrics
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
-                        workflow.out.hs_metrics
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
-                        workflow.out.d4
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
-                        workflow.out.cov
-                            .collect {it[1]}
-                            .flatten()
-                            .collect { file(it).name }
-                            .toSorted(),
-                        workflow.out.tiddit_wig,
-                        workflow.out.bigwig,
-                        workflow.out.global_dist
+                        workflow.out.picard_collectmultiplemetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collectmultiplemetrics_pdf
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collecthsmetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.mosdepth_global_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_summary_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_csi
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_d4
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_wg
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_y
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_wig
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_cov
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ucsc_wigtobigwig_bw
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.chromograph_cov_plots
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.sambamba_depth_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.verifybamid_self_sm
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ngsbits_samplegender_tsv
+                            .collect { _meta, files -> file(files).name }
                     ).match()
                 }
             )
         }
     }
 
+    test("QC_BAM - test, sentieon, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                outdir     = "$outputDir"
+                skip_tools = null
+            }
+             workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.empty()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.empty()
+                input[10] = channel.empty()
+                input[11] = channel.empty()
+                input[12] = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[13] = 'wgs'
+                input[14] = 'sentieon'
+                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[16] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.picard_collectmultiplemetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collectmultiplemetrics_pdf
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collecthsmetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.mosdepth_global_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_summary_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_csi
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_d4
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_wg
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_y
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_wig
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_cov
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ucsc_wigtobigwig_bw
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.chromograph_cov_plots
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.sambamba_depth_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.verifybamid_self_sm
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ngsbits_samplegender_tsv
+                            .collect { _meta, files -> file(files).name }
+                    ).match()
+                }
+            )
+        }
+    }
 }

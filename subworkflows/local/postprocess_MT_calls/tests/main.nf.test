@@ -1,0 +1,52 @@
+nextflow_workflow {
+
+    name "Test Workflow POSTPROCESS_MT_CALLS"
+    script "subworkflows/local/postprocess_MT_calls/main.nf"
+    workflow "POSTPROCESS_MT_CALLS"
+
+    tag "subworkflows"
+    tag "postprocess_MT_calls"
+
+    tag "gatk4/mergevcfs"
+    tag "gatk4/variantfiltration"
+    tag "bcftools/norm"
+    tag "tabix/tabix"
+    tag "bcftools/merge"
+    tag "picard/liftovervcf"
+    tag "bcftools/annotate"
+    tag "local/add_varcallername_to_bed"
+
+    test("POSTPROCESS_MT_CALLS - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([id:'justhusky'])
+                input[1] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[2] = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[3] = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
+                input[4] = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[5] = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[6] = channel.of([
+                    [id:'earlycasualcaiman', case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'reference/vcfanno_gnomad_mt.vcf.gz', checkIfExists: true)
+                ])
+                input[7] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/mt_shift8000.back_chain', checkIfExists: true)]).collect()
+                input[8] = channel.of([
+                    [id:'earlycasualcaiman', case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'reference/grch38_gnomad_reformated_-r3.1.1-.vcf.gz', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}

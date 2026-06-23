@@ -1,0 +1,252 @@
+{
+    "CALL_SNV - deepvariant wgs": {
+        "content": [
+            "dfc0eeae02f4c1f04034e0fff555bf50",
+            "VcfFile [chromosomes=[21], sampleCount=1, variantCount=7562, phased=false, phasedAutodetect=false]",
+            [
+                "earlycasualcaiman_deepvar.visual_report.html"
+            ],
+            [
+                "justhusky_snv.vcf.gz.tbi"
+            ],
+            [
+                "justhusky_mitochondria.vcf.gz"
+            ],
+            [
+                "justhusky_mitochondria.vcf.gz.tbi"
+            ]
+        ],
+        "timestamp": "2026-05-30T00:18:20.446833954",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "CALL_SNV - deepvariant wgs, stub": {
+        "content": [
+            {
+                "0": [
+                    
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mt_and_nuclear_snvs.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "10": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "11": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mt_and_nuclear_snvs.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "3": [
+                    
+                ],
+                "4": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
+                    ]
+                ],
+                "5": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
+                    ]
+                ],
+                "6": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "7": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "8": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "9": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bcftools_concat_csi": [
+                    
+                ],
+                "bcftools_concat_tbi": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mt_and_nuclear_snvs.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bcftools_concat_vcf": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mt_and_nuclear_snvs.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "deepvariant_report": [
+                    
+                ],
+                "genome_gtabix": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
+                    ]
+                ],
+                "genome_gvcf": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "sample": "earlycasualcaiman",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "lane": 1,
+                            "sex": 1,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "earlycasualcaiman_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
+                    ]
+                ],
+                "genome_tabix": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "genome_vcf": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "genome_vcf_tabix": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "mt_tabix": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "mt_vcf": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "mt_vcf_tbi": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-06-22T12:57:59.006104185",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

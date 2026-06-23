@@ -1,0 +1,16 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - bioconda::bbmap=39.37
+  - bioconda::bedtools=2.31.1
+  - bioconda::bioconductor-biostrings=2.74.0
+  - bioconda::bioconductor-pwalign=1.2.0
+  - bioconda::hisat2=2.2.1
+  - bioconda::last=1648
+  - bioconda::sambamba=1.0.1
+  - bioconda::samtools=1.22.1
+  - bioconda::ucsc-bedgraphtobigwig=482
+  - bioconda::ucsc-fasize=482
+  - bioconda::ucsc-fasomerecords=482
+  - conda-forge::r-rcolorbrewer=1.1_3

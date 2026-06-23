@@ -3,7 +3,43 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2.7.0dev - Semiautomatix [xxxx-xx-xx]
+## 3.1.0 - Luigi [XXXX-XX-XX]
+
+### `Added`
+
+- Added GATK contamination check for WES/WGS samples as complement to VerifyBamID2 [#758](https://github.com/nf-core/raredisease/pull/758)
+- GATK Contamination results displayed in MultiQC with color-coded thresholds [#758](https://github.com/nf-core/raredisease/pull/758)
+
+### `Changed`
+
+- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for call_snv, call_snv_deepvariant, and postprocess_MT_calls subworkflows [#863](https://github.com/nf-core/raredisease/pull/863)
+- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for annotate_rhocallviz and annotate_genome_snvs subworkflows [#858](https://github.com/nf-core/raredisease/pull/858)
+- Expand annotate_rhocallviz test with snapshot assertions [#858](https://github.com/nf-core/raredisease/pull/858)
+- Refactor scatter_genome subworkflow: alias GAWK as `GENOME_FAI_TO_BED`, remove `val_save_reference` parameter, move interval flattening into `annotate_genome_snvs` [#857](https://github.com/nf-core/raredisease/pull/857)
+- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for qc_bam subworkflow [#853](https://github.com/nf-core/raredisease/pull/853)
+- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for alignment and subsample-MT subworkflows [#850](https://github.com/nf-core/raredisease/pull/850)
+
+### `Fixed`
+
+- Fix intermittent `CALL_SNV_DEEPVARIANT - wgs` test failure caused by non-deterministic GLnexus quality scores by replacing `variantsMD5` with `vcf.summary` [#850](https://github.com/nf-core/raredisease/pull/850)
+- Fix swapped `run_mt_for_wes`/`skip_split_multiallelics` arguments in the `CALL_SNV` call, which disabled multiallelic splitting (and inverted MT-for-WES) when `--run_mt_for_wes` was set [#854](https://github.com/nf-core/raredisease/issues/854)
+
+### Parameters
+
+| Old parameter | New parameter           |
+| ------------- | ----------------------- |
+|               | run_contamination       |
+|               | contamination_sites     |
+|               | contamination_sites_tbi |
+
+### Tool updates
+
+| Tool                         | Old version | New version |
+| ---------------------------- | ----------- | ----------- |
+| gatk4/calculatecontamination |             | 4.6.2.0     |
+| gatk4/getpileupsummaries     |             | 4.6.2.0     |
+
+## 3.0.0 - Mario [2026-05-12]
 
 ### `Added`
 
@@ -11,8 +47,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tests for call_repeat_expansions and qc_bam subworkflows [#713](https://github.com/nf-core/raredisease/pull/713)
 - Feature to subsample mitochondrial alignments based on number of reads [#748](https://github.com/nf-core/raredisease/pull/748)
 - Functionality to generate coverage information using Sambamba depth [#752](https://github.com/nf-core/raredisease/pull/752)
-- Added GATK contamination check for WES/WGS samples as complement to VerifyBamID2 [#758](https://github.com/nf-core/raredisease/pull/758)
-- GATK Contamination results displayed in MultiQC with color-coded thresholds [#758](https://github.com/nf-core/raredisease/pull/758)
+- Parameter to pass a file containing new sample ids to use with multiqc [#764](https://github.com/nf-core/raredisease/pull/764)
+- A helper function channelFromPath to create channels in a readable fashion in main.nf [#766](https://github.com/nf-core/raredisease/pull/766)
+- A helper function channelFromPathWithMeta to create channels in a readable fashion in main.nf [#767](https://github.com/nf-core/raredisease/pull/767)
+- A helper function channelFromSamplesheet to create channels in a readable fashion in main.nf [#767](https://github.com/nf-core/raredisease/pull/767)
+- A parameter `homoplasmy_af_threshold` to set genotypes of MT SNVs to 1/1 (homoplasmic) when AF >=`homoplasmy_af_threshold` [#768](https://github.com/nf-core/raredisease/pull/768)
+- Topic channels to local modules to caputure versions [#774](https://github.com/nf-core/raredisease/pull/774)
+- MitoSalt to detect mitochondrial deletions [#743](https://github.com/nf-core/raredisease/pull/743)
+- Tests for some of the subworkflows [#780](https://github.com/nf-core/raredisease/pull/780)
+- Tests for some of the subworkflows [#782](https://github.com/nf-core/raredisease/pull/782)
+- Tests for some of the subworkflows [#783](https://github.com/nf-core/raredisease/pull/783)
+- Test tags for dependent modules in subworkflow tests [#800](https://github.com/nf-core/raredisease/pull/800)
+- Stub test for scatter_genome subworkflow [#802](https://github.com/nf-core/raredisease/pull/802)
+- Add CAT_FASTQ before SEQTK_SAMPLE in call_sv_MT to merge reads across lanes before subsampling for MitoSalt [#799](https://github.com/nf-core/raredisease/pull/799)
+- Add new local SPLIT_CHR module to split reference FASTA by chromosome for CNVnator, and pass genome flag to all CNVnator steps [#799](https://github.com/nf-core/raredisease/pull/799)
+- Add peddy --sites hg38 argument when running with GRCh38 [#799](https://github.com/nf-core/raredisease/pull/799)
+- Saltshaker for downstream processing of mitochondrial SV calls from MitoSAlt [#775](https://github.com/nf-core/raredisease/pull/775)
+- Env variable NXF_SINGULARITY_NEW_PID_NAMESPACE = false to accommodate hisat2 running with latest Nextflow and Singularity [#775](https://github.com/nf-core/raredisease/pull/775)
+- Parameter `exclude_alt` to filter alignments to alt/unplaced contigs after alignment using samtools view, retaining only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM). Note that enabling this will restrict variant calling to these chromosomes [#803](https://github.com/nf-core/raredisease/pull/803)
+- Stub test for all the remaning subworkflows that were lacking it: align_bwa_bwamem2_bwameme, align_MT, align (bwameme - wes), align_sentieon, call_repeat_expansions, prepare_references, qc_bam [#820](https://github.com/nf-core/raredisease/pull/820)
+- Parameters `save_all_mapped_as_cram` and `save_noalt_mapped_as_cram` to replace `save_mapped_as_cram`, allowing independent control over publishing unfiltered and alt-filtered alignment files as CRAM [#807](https://github.com/nf-core/raredisease/pull/807)
+- Parameter `run_vcfanno_db_sanity_check` to check vcfanno database files for zero records and remove the corresponding annotation blocks from the TOML config before running vcfanno [#821](https://github.com/nf-core/raredisease/pull/821)
+- Added `--skip_split_multiallelics` parameter to allow users to skip the `bcftools norm --multiallelics -both` step in SNV calling (DeepVariant and Sentieon), which can cause indel quality degradation in single-interval runs [#823](https://github.com/nf-core/raredisease/pull/823)
+- Add find/concatenate step to concatenate saltshaker classification files before creating the html report, so the final report is case-level. [#826](https://github.com/nf-core/raredisease/pull/826)
+- Extended vcfanno database sanity check to include extra vcfanno resources (`vcfanno_extra`) alongside the main resources, and moved the check upstream to `raredisease.nf` so it covers both genome and mitochondrial SNV annotation subworkflows [#834](https://github.com/nf-core/raredisease/pull/834)
+- Add full test to call_sv_MT subworkflow [#874](https://github.com/nf-core/raredisease/pull/874)
 
 ### `Changed`
 
@@ -22,39 +81,95 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don't call mobile elements in mitochondrial DNA. [#741](https://github.com/nf-core/raredisease/pull/741)
 - Call SVs in mitochondria using mitochondrial alignments in the genome alignment files instead of from BAM files generated by the mitochondrial subworkflow. [#742](https://github.com/nf-core/raredisease/pull/742)
 - Update gens-preproc script [#747](https://github.com/nf-core/raredisease/pull/747)
+- Removed parameter `bwa_as_fallback` [#763](https://github.com/nf-core/raredisease/pull/763)
+- Sambamba depth now filters on not duplicates and not failed_quality_control [#768](https://github.com/nf-core/raredisease/pull/768)
+- Removed eKLIPse [#743](https://github.com/nf-core/raredisease/pull/743)
+- Removed haplocheck [#778](https://github.com/nf-core/raredisease/pull/778)
+- Removed HmtNote [#779](https://github.com/nf-core/raredisease/pull/779)
+- Updated svbd module [#781](https://github.com/nf-core/raredisease/pull/781)
+- Migrate file publishing from publishDir to a centralized output {} block for some workflows [#784](https://github.com/nf-core/raredisease/pull/784)
+- Replace local gens module with nf-core module [#785](https://github.com/nf-core/raredisease/pull/785)
+- Migrate file publishing from publishDir to a centralized output {} block for some workflows [#787](https://github.com/nf-core/raredisease/pull/787)
+- Migrate file publishing from publishDir to a centralized output {} block for some workflows [#788](https://github.com/nf-core/raredisease/pull/788)
+- Migrate file publishing from publishDir to a centralized output {} block for some workflows [#789](https://github.com/nf-core/raredisease/pull/789)
+- Remove redundant TABIX processes, and update configs for nf-test [#790](https://github.com/nf-core/raredisease/pull/790)
+- Migrate file publishing from publishDir to a centralized output {} block for some workflows [#791](https://github.com/nf-core/raredisease/pull/791)
+- Remove redundant ZIP_TABIX steps after VCFANNO in annotate_genome_snvs and annotate_mt_snvs by using VCFANNO's direct tbi output [#799](https://github.com/nf-core/raredisease/pull/799)
+- Collect genome fasta/fai channel in call_sv_tiddit to prevent per-sample re-emission [#799](https://github.com/nf-core/raredisease/pull/799)
+- Update cadd_resources channel to use channelFromPathWithMeta and set channelFromSamplesheet calls for svdb/ME resources as non-mandatory [#799](https://github.com/nf-core/raredisease/pull/799)
+- Run MitoSAlt.pl from bin rather than within container [#775](https://github.com/nf-core/raredisease/pull/775)
+- Include mitochonrdial SV calls in combined SV vcf, change call_sv output directory structure to remove mitochondria/ and genome/ [#775](https://github.com/nf-core/raredisease/pull/775)
+- Remove Qualimap and Haplogrep3 as they were made redundant by Picard and VerifyBamID2 [#801](https://github.com/nf-core/raredisease/pull/801)
+- Remove env variable NXF_SINGULARITY_NEW_PID_NAMESPACE from the config since this has to be set outside the subworkflow [#804](https://github.com/nf-core/raredisease/pull/804)
+- Run UPD_SITES, UPD_REGIONS, and CHROMOGRAPH for UPD only when analysis type is WGS [#806](https://github.com/nf-core/raredisease/pull/806)
+- Change saltshaker classification output from txt to html [#808](https://github.com/nf-core/raredisease/pull/808)
+- Sort parameters of `CALL_STRUCTURAL_VARIANTS` and `CALL_SV_MANTA` alphabetically [#821](https://github.com/nf-core/raredisease/pull/821)
 
 ### `Fixed`
 
+- Fixed argument order of `ch_genome_fai` and `ch_genome_fasta` in the `CALL_SNV_SENTIEON` subworkflow [#811](https://github.com/nf-core/raredisease/pull/811)
+- Ensure deterministic sample ordering in Manta SV output by sorting BAM/BAI channel inputs [#815](https://github.com/nf-core/raredisease/pull/815)
 - Fixed inconsistencies in JSON schema [#714](https://github.com/nf-core/raredisease/pull/714)
 - Fixed conda declaration in the add_varcallername_to_bed module [#733](https://github.com/nf-core/raredisease/pull/733)
 - Fixed CADD annotation to support chr prefix [#745](https://github.com/nf-core/raredisease/pull/745)
 - Fixed mismatch between VCF and ROH calls when analysing multiple samples [#755](https://github.com/nf-core/raredisease/pull/755)
 - Fixed pipeline to run variant calling even with bait_padding set to 0 [#757](https://github.com/nf-core/raredisease/pull/757)
+- Fixed mitosalt channel handling so it runs on all samples in a trio [#826](https://github.com/nf-core/raredisease/pull/826)
+- Fixed runtime errors in `call_sv_MT` and `call_structural_variants` when MitoSAlt produces no structural variant calls [#837](https://github.com/nf-core/raredisease/pull/837)
+- Fixed vcfanno sanity check map closure to handle `ch_vcfanno_resources` emitting a list of paths [#837](https://github.com/nf-core/raredisease/pull/837)
+- Fixed `PREP_MITOSALT` msconfig output being consumed as a queue channel by converting it to a value channel with `.collect()` before passing to `MITOSALT` [#837](https://github.com/nf-core/raredisease/pull/843)
 
 ### Parameters
 
-| Old parameter | New parameter           |
-| ------------- | ----------------------- |
-|               | sambamba_regions        |
-|               | run_contamination       |
-|               | contamination_sites     |
-|               | contamination_sites_tbi |
+| Old parameter       | New parameter               |
+| ------------------- | --------------------------- |
+|                     | sambamba_regions            |
+| bwa_as_fallback     |                             |
+|                     | multiqc_samples             |
+|                     | homoplasmy_af_threshold     |
+|                     | exclude_alt                 |
+| save_mapped_as_cram |                             |
+|                     | save_all_mapped_as_cram     |
+|                     | save_noalt_mapped_as_cram   |
+|                     | run_vcfanno_db_sanity_check |
+|                     | skip_split_multiallelics    |
 
 ### Tool updates
 
-| Tool                                | Old version | New version |
-| ----------------------------------- | ----------- | ----------- |
-| bcftools                            | 1.20        | 1.21        |
-| htslib                              | 1.20        | 1.21        |
-| mosdepth                            | 0.3.8       | 0.3.10      |
-| ngs-bits                            | 2023_02     | 2024_11     |
-| gatk4/determinegermlinecontigploidy | 4.5.0.0     | 4.6.2.0     |
-| gatk4/germlinecnvcaller             | 4.5.0.0     | 4.6.2.0     |
-| gens-preproc                        | 1.0.11      | 1.1.2       |
-| samtools (sort & view)              | 1.21        | 1.22.1      |
-| sambamba                            |             | 1.0.1       |
-| gatk4/calculatecontamination        |             | 4.6.2.0     |
-| gatk4/getpileupsummaries            |             | 4.6.2.0     |
+| Tool                  | Old version | New version |
+| --------------------- | ----------- | ----------- |
+| bcftools              | 1.20        | 1.21        |
+| bwa                   | 0.7.18      | 0.7.19      |
+| deepvariant           | 1.8.0       | 1.9.0       |
+| eKLIPse               | 1.8         |             |
+| ensemblvep/vep        | 110         | 110.1       |
+| ensemblvep/filtervep  | 113         | 115.2       |
+| fastp                 | 0.23.4      | 1.0.1       |
+| gatk4                 | 4.5.0.0     | 4.6.2.0     |
+| gawk                  | 5.3.0       | 5.3.1       |
+| genmod                | 3.9         | 3.10.2      |
+| gens-preproc          | 1.0.11      |             |
+| gens/preparecovandbaf |             | 1.1.5       |
+| haplocheck            | 1.3.3       |             |
+| haplogrep3            | 3.2.2       |             |
+| hmtnote               | 0.7.2       |             |
+| htslib                | 1.20        | 1.21        |
+| MitoSalt              |             | 1.1.1       |
+| mosdepth              | 0.3.8       | 0.3.11      |
+| multiqc               | 1.32        | 1.33        |
+| ngsbits               | 202411      | 202512      |
+| picard                | 3.3.0       | 3.4.0       |
+| pigz                  | 2.3.4       | 2.8         |
+| qualimap              | 2.3         |             |
+| sambamba              |             | 1.0.1       |
+| samtools              | 1.21        | 1.22.1      |
+| sentieon              | 202503      | 202503.02   |
+| stranger              | 0.9.4       | 0.10.0      |
+| svdb                  | 2.8.3       | 2.8.4       |
+| tiddit                | 3.6.1       | 3.9.5       |
+| ucsc                  | 447         | 482         |
+| vcfanno               | 0.3.5       | 0.3.7       |
+| vcf2cytosure          | 0.9.1       | 0.9.3       |
 
 ## 2.6.0 - Cacofonix [2025-06-25]
 

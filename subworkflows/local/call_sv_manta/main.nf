@@ -2,8 +2,8 @@
 // A structural variant caller workflow for manta
 //
 
-include { MANTA_GERMLINE as MANTA              } from '../../../modules/nf-core/manta/germline/main'
 include { BCFTOOLS_VIEW as BCFTOOLS_VIEW_MANTA } from '../../../modules/nf-core/bcftools/view/main.nf'
+include { MANTA_GERMLINE as MANTA              } from '../../../modules/nf-core/manta/germline/main'
 
 workflow CALL_SV_MANTA {
     take:
@@ -16,11 +16,13 @@ workflow CALL_SV_MANTA {
         val_analysis_type // string: "wes", "wgs", or "mito"
 
     main:
-        ch_bam.collect{_meta, bam -> bam}
+        ch_bam.map{ _meta, bam -> bam }
+            .collect(sort: { a, b -> a.getName() <=> b.getName() })
             .toList()
             .set { bam_file_list }
 
-        ch_bai.collect{_meta, bai -> bai}
+        ch_bai.map{ _meta, bai -> bai }
+            .collect(sort: { a, b -> a.getName() <=> b.getName() })
             .toList()
             .set { bai_file_list }
 
@@ -48,9 +50,6 @@ workflow CALL_SV_MANTA {
             .set {ch_filter_in}
         BCFTOOLS_VIEW_MANTA (ch_filter_in, [], [], [])
 
-        ch_versions = MANTA.out.versions
-        ch_versions = ch_versions.mix(BCFTOOLS_VIEW_MANTA.out.versions)
-
     emit:
         candidate_small_indels_vcf     = MANTA.out.candidate_small_indels_vcf     // channel: [ val(meta), path(vcf) ]
         candidate_small_indels_vcf_tbi = MANTA.out.candidate_small_indels_vcf_tbi // channel: [ val(meta), path(tbi) ]
@@ -59,5 +58,4 @@ workflow CALL_SV_MANTA {
         diploid_sv_vcf                 = MANTA.out.diploid_sv_vcf                 // channel: [ val(meta), path(vcf) ]
         diploid_sv_vcf_tbi             = MANTA.out.diploid_sv_vcf_tbi             // channel: [ val(meta), path(tbi) ]
         filtered_diploid_sv_vcf        = BCFTOOLS_VIEW_MANTA.out.vcf              // channel: [ val(meta), path(vcf) ]
-        versions                       = ch_versions
 }

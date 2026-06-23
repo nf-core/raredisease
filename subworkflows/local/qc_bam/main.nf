@@ -2,49 +2,46 @@
 // A quality check subworkflow for processed bams.
 //
 
-include { PICARD_COLLECTMULTIPLEMETRICS                            } from '../../../modules/nf-core/picard/collectmultiplemetrics/main'
-include { PICARD_COLLECTHSMETRICS                                  } from '../../../modules/nf-core/picard/collecthsmetrics/main'
-include { CHROMOGRAPH as CHROMOGRAPH_COV                           } from '../../../modules/nf-core/chromograph/main'
-include { QUALIMAP_BAMQC                                           } from '../../../modules/nf-core/qualimap/bamqc/main'
-include { TIDDIT_COV                                               } from '../../../modules/nf-core/tiddit/cov/main'
-include { MOSDEPTH                                                 } from '../../../modules/nf-core/mosdepth/main'
-include { SAMBAMBA_DEPTH                                           } from '../../../modules/nf-core/sambamba/depth/main'
-include { UCSC_WIGTOBIGWIG                                         } from '../../../modules/nf-core/ucsc/wigtobigwig/main'
-include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_WG  } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
-include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y   } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
-include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_WG            } from '../../../modules/nf-core/sentieon/wgsmetrics/main'
-include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_Y             } from '../../../modules/nf-core/sentieon/wgsmetrics/main'
-include { NGSBITS_SAMPLEGENDER                                     } from '../../../modules/nf-core/ngsbits/samplegender/main'
-include { VERIFYBAMID_VERIFYBAMID2                                 } from '../../../modules/nf-core/verifybamid/verifybamid2/main'
+include { CHROMOGRAPH as CHROMOGRAPH_COV                          } from '../../../modules/nf-core/chromograph/main'
+include { MOSDEPTH                                                } from '../../../modules/nf-core/mosdepth/main'
+include { NGSBITS_SAMPLEGENDER                                    } from '../../../modules/nf-core/ngsbits/samplegender/main'
+include { PICARD_COLLECTHSMETRICS                                 } from '../../../modules/nf-core/picard/collecthsmetrics/main'
+include { PICARD_COLLECTMULTIPLEMETRICS                           } from '../../../modules/nf-core/picard/collectmultiplemetrics/main'
+include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_WG } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
+include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y  } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
+include { SAMBAMBA_DEPTH                                          } from '../../../modules/nf-core/sambamba/depth/main'
+include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_WG           } from '../../../modules/nf-core/sentieon/wgsmetrics/main'
+include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_Y            } from '../../../modules/nf-core/sentieon/wgsmetrics/main'
+include { TIDDIT_COV                                              } from '../../../modules/nf-core/tiddit/cov/main'
+include { UCSC_WIGTOBIGWIG                                        } from '../../../modules/nf-core/ucsc/wigtobigwig/main'
+include { VERIFYBAMID_VERIFYBAMID2                                } from '../../../modules/nf-core/verifybamid/verifybamid2/main'
 
 workflow QC_BAM {
 
     take:
-        ch_bam                      // channel: [mandatory] [ val(meta), path(bam) ]
-        ch_bam_bai                  // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_genome_fasta             // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai               // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_bait_intervals           // channel: [mandatory] [ path(intervals_list) ]
-        ch_target_intervals         // channel: [mandatory] [ path(intervals_list) ]
-        ch_chrom_sizes              // channel: [mandatory] [ path(sizes) ]
-        ch_intervals_wgs            // channel: [mandatory] [ path(intervals) ]
-        ch_intervals_y              // channel: [mandatory] [ path(intervals) ]
-        ch_svd_bed                  // channel: [optional] [ path(bed) ]
-        ch_svd_mu                   // channel: [optional] [ path(meanpath) ]
-        ch_svd_ud                   // channel: [optional] [ path(ud) ]
-        ch_sambamba_bed             // channel: [optional] [ val(meta), path(bed) ]
-        ngsbits_samplegender_method // channel: [val(method)]
-        val_analysis_type           // string: "wes", "wgs", or "mito"
-        val_aligner                 // string: "bwa", "bwamem2", "bwameme", or "sentieon"
-        skip_ngsbits                // boolean
-        skip_qualimap               // boolean
+        ch_bam_bai                      // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_bait_intervals               // channel: [mandatory] [ path(intervals_list) ]
+        ch_genome_chrsizes              // channel: [mandatory] [ path(sizes) ]
+        ch_genome_fai                   // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_fasta                 // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_intervals_wgs                // channel: [mandatory] [ path(intervals) ]
+        ch_intervals_y                  // channel: [mandatory] [ path(intervals) ]
+        ch_ngsbits_method               // channel: [val(method)]
+        ch_svd_bed                      // channel: [optional] [ path(bed) ]
+        ch_svd_mu                       // channel: [optional] [ path(meanpath) ]
+        ch_svd_ud                       // channel: [optional] [ path(ud) ]
+        ch_sambamba_bed                 // channel: [optional] [ val(meta), path(bed) ]
+        ch_target_intervals             // channel: [mandatory] [ path(intervals_list) ]
+        val_analysis_type               // string: "wes", "wgs", or "mito"
+        val_aligner                     // string: "bwa", "bwamem2", "bwameme", or "sentieon"
+        val_target_bed                  // string: path to target bed file
+        skip_ngsbits                    // boolean
 
     main:
-        ch_cov      = channel.empty()
-        ch_cov_y    = channel.empty()
-        ch_versions = channel.empty()
-        ch_qualimap = channel.empty()
-        ch_ngsbits  = channel.empty()
+        ch_cov       = channel.empty()
+        ch_cov_y     = channel.empty()
+        ch_hsmetrics = channel.empty()
+        ch_ngsbits   = channel.empty()
 
         PICARD_COLLECTMULTIPLEMETRICS (ch_bam_bai, ch_genome_fasta, ch_genome_fai)
 
@@ -53,15 +50,13 @@ workflow QC_BAM {
             .combine(ch_target_intervals)
             .set { ch_hsmetrics_in}
 
-        PICARD_COLLECTHSMETRICS (ch_hsmetrics_in, ch_genome_fasta, ch_genome_fai, [[],[]])
-        if (!skip_qualimap) {
-            ch_qualimap = QUALIMAP_BAMQC (ch_bam, []).results
-            ch_versions = ch_versions.mix(QUALIMAP_BAMQC.out.versions)
+        if (val_target_bed) {
+            ch_hsmetrics = PICARD_COLLECTHSMETRICS (ch_hsmetrics_in, ch_genome_fasta, ch_genome_fai, [[:],[]], [[:],[]]).metrics
         }
 
-        TIDDIT_COV (ch_bam, [[],[]]) // 2nd pos. arg is req. only for cram input
+        TIDDIT_COV (ch_bam_bai, [[],[]]) // 2nd pos. arg is req. only for cram input
 
-        UCSC_WIGTOBIGWIG (TIDDIT_COV.out.wig, ch_chrom_sizes)
+        UCSC_WIGTOBIGWIG (TIDDIT_COV.out.wig, ch_genome_chrsizes)
 
         CHROMOGRAPH_COV([[:],[]], TIDDIT_COV.out.wig, [[:],[]], [[:],[]], [[:],[]], [[:],[]], [[:],[]])
 
@@ -78,45 +73,50 @@ workflow QC_BAM {
                 PICARD_COLLECTWGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y )
                 ch_cov      = PICARD_COLLECTWGSMETRICS_WG.out.metrics
                 ch_cov_y    = PICARD_COLLECTWGSMETRICS_Y.out.metrics
-                ch_versions = ch_versions.mix(PICARD_COLLECTWGSMETRICS_WG.out.versions, PICARD_COLLECTWGSMETRICS_Y.out.versions)
             } else if (val_aligner.equals("sentieon")) {
                 SENTIEON_WGSMETRICS_WG ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_wgs.map{ interval -> [[:], interval]} )
                 SENTIEON_WGSMETRICS_Y ( ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_intervals_y.map{ interval -> [[:], interval]} )
                 ch_cov      = SENTIEON_WGSMETRICS_WG.out.wgs_metrics
                 ch_cov_y    = SENTIEON_WGSMETRICS_Y.out.wgs_metrics
-                ch_versions = ch_versions.mix(SENTIEON_WGSMETRICS_WG.out.versions, SENTIEON_WGSMETRICS_Y.out.versions)
             }
         }
         // Check sex
         if (!skip_ngsbits) {
-            NGSBITS_SAMPLEGENDER(ch_bam_bai, ch_genome_fasta, ch_genome_fai, ngsbits_samplegender_method)
+            NGSBITS_SAMPLEGENDER(ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_ngsbits_method)
             ch_ngsbits  = NGSBITS_SAMPLEGENDER.out.tsv
-            ch_versions = ch_versions.mix(NGSBITS_SAMPLEGENDER.out.versions)
         }
         // Check contamination
         ch_svd_in = ch_svd_ud.combine(ch_svd_mu).combine(ch_svd_bed).collect()
         VERIFYBAMID_VERIFYBAMID2(ch_bam_bai, ch_svd_in, [], ch_genome_fasta.map {_meta, fasta-> fasta})
 
-        ch_versions = ch_versions.mix(CHROMOGRAPH_COV.out.versions)
-        ch_versions = ch_versions.mix(PICARD_COLLECTMULTIPLEMETRICS.out.versions)
-        ch_versions = ch_versions.mix(PICARD_COLLECTHSMETRICS.out.versions)
-        ch_versions = ch_versions.mix(TIDDIT_COV.out.versions)
-        ch_versions = ch_versions.mix(UCSC_WIGTOBIGWIG.out.versions)
-        ch_versions = ch_versions.mix(MOSDEPTH.out.versions)
-        ch_versions = ch_versions.mix(VERIFYBAMID_VERIFYBAMID2.out.versions)
-        ch_versions = ch_versions.mix(SAMBAMBA_DEPTH.out.versions.first())
-
     emit:
-        multiple_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics // channel: [ val(meta), path(metrics) ]
-        hs_metrics       = PICARD_COLLECTHSMETRICS.out.metrics       // channel: [ val(meta), path(metrics) ]
-        qualimap_results = ch_qualimap                               // channel: [ val(meta), path(qualimap_dir) ]
-        tiddit_wig       = TIDDIT_COV.out.wig                        // channel: [ val(meta), path(wig) ]
-        bigwig           = UCSC_WIGTOBIGWIG.out.bw                   // channel: [ val(meta), path(bw) ]
-        d4               = MOSDEPTH.out.per_base_d4                  // channel: [ val(meta), path(d4) ]
-        global_dist      = MOSDEPTH.out.global_txt                   // channel: [ val(meta), path(txt) ]
-        sex_check        = ch_ngsbits                                // channel: [ val(meta), path(tsv) ]
-        self_sm          = VERIFYBAMID_VERIFYBAMID2.out.self_sm      // channel: [ val(meta), path(selfSM) ]
-        cov              = ch_cov                                    // channel: [ val(meta), path(metrics) ]
-        cov_y            = ch_cov_y                                  // channel: [ val(meta), path(metrics) ]
-        versions         = ch_versions                               // channel: [ path(versions.yml) ]
+        chromograph_cov_plots                 = CHROMOGRAPH_COV.out.plots                    // channel: [ val(meta), path(png) ]
+        mosdepth_global_txt                   = MOSDEPTH.out.global_txt                      // channel: [ val(meta), path(txt) ]
+        mosdepth_per_base_bed                 = MOSDEPTH.out.per_base_bed                    // channel: [ val(meta), path(bed.gz) ]
+        mosdepth_per_base_csi                 = MOSDEPTH.out.per_base_csi                    // channel: [ val(meta), path(csi) ]
+        mosdepth_per_base_d4                  = MOSDEPTH.out.per_base_d4                     // channel: [ val(meta), path(d4) ]
+        mosdepth_quantized_bed                = MOSDEPTH.out.quantized_bed                   // channel: [ val(meta), path(bed.gz) ]
+        mosdepth_quantized_csi                = MOSDEPTH.out.quantized_csi                   // channel: [ val(meta), path(csi) ]
+        mosdepth_regions_bed                  = MOSDEPTH.out.regions_bed                     // channel: [ val(meta), path(bed.gz) ]
+        mosdepth_regions_csi                  = MOSDEPTH.out.regions_csi                     // channel: [ val(meta), path(csi) ]
+        mosdepth_regions_txt                  = MOSDEPTH.out.regions_txt                     // channel: [ val(meta), path(txt) ]
+        mosdepth_summary_txt                  = MOSDEPTH.out.summary_txt                     // channel: [ val(meta), path(txt) ]
+        mosdepth_thresholds_bed               = MOSDEPTH.out.thresholds_bed                  // channel: [ val(meta), path(bed.gz) ]
+        mosdepth_thresholds_csi               = MOSDEPTH.out.thresholds_csi                  // channel: [ val(meta), path(csi) ]
+        ngsbits_samplegender_tsv              = ch_ngsbits                                   // channel: [ val(meta), path(tsv) ]
+        picard_collecthsmetrics_metrics       = ch_hsmetrics                                 // channel: [ val(meta), path(metrics) ]
+        picard_collectmultiplemetrics_metrics = PICARD_COLLECTMULTIPLEMETRICS.out.metrics    // channel: [ val(meta), path(metrics) ]
+        picard_collectmultiplemetrics_pdf     = PICARD_COLLECTMULTIPLEMETRICS.out.pdf        // channel: [ val(meta), path(pdf) ]
+        sambamba_depth_bed                    = SAMBAMBA_DEPTH.out.bed                       // channel: [ val(meta), path(bed) ]
+        tiddit_cov_cov                        = TIDDIT_COV.out.cov                           // channel: [ val(meta), path(bed) ]
+        tiddit_cov_wig                        = TIDDIT_COV.out.wig                           // channel: [ val(meta), path(wig) ]
+        ucsc_wigtobigwig_bw                   = UCSC_WIGTOBIGWIG.out.bw                      // channel: [ val(meta), path(bw) ]
+        verifybamid_ancestry                  = VERIFYBAMID_VERIFYBAMID2.out.ancestry        // channel: [ val(meta), path(ancestry) ]
+        verifybamid_bed                       = VERIFYBAMID_VERIFYBAMID2.out.bed             // channel: [ val(meta), path(bed) ]
+        verifybamid_log                       = VERIFYBAMID_VERIFYBAMID2.out.log             // channel: [ val(meta), path(log) ]
+        verifybamid_mu                        = VERIFYBAMID_VERIFYBAMID2.out.mu              // channel: [ val(meta), path(mu) ]
+        verifybamid_self_sm                   = VERIFYBAMID_VERIFYBAMID2.out.self_sm         // channel: [ val(meta), path(selfSM) ]
+        verifybamid_ud                        = VERIFYBAMID_VERIFYBAMID2.out.ud              // channel: [ val(meta), path(ud) ]
+        wgsmetrics_wg                         = ch_cov                                       // channel: [ val(meta), path(metrics) ]
+        wgsmetrics_y                          = ch_cov_y                                     // channel: [ val(meta), path(metrics) ]
 }

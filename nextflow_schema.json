@@ -399,7 +399,7 @@
                     "exists": true,
                     "format": "path",
                     "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.bed(\\.gz)?$",
+                    "pattern": "^\\S+\\.bed$",
                     "description": "Path to directory for target bed file.",
                     "help_text": "If you would like to limit your analysis to specific regions of the genome, you can pass those regions in a bed file using this option"
                 },
@@ -555,23 +555,27 @@
                     "fa_icon": "fas fa-align-center",
                     "enum": ["wgs", "wes", "mito"]
                 },
-                "bwa_as_fallback": {
-                    "type": "boolean",
-                    "description": "Specifies whether or not to use bwa as a fallback aligner in case bwamem2 throws an error.",
-                    "help_text": "errorStrategy needs to be set to ignore for the bwamem2 process for the fallback to work. Turned off by default.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "concatenate_snv_calls": {
                     "type": "boolean",
                     "description": "Specifies whether to generate a concatenated VCF file containing both nuclear & mitochondrial snv calls",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "exclude_alt": {
+                    "type": "boolean",
+                    "description": "After aligning the reads to a reference, remove alignments to alt contigs using samtools view, retaining only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM).",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "extract_alignments": {
                     "type": "boolean",
-                    "default": "false",
                     "description": "After aligning the reads to a reference, extract alignments from specific regions/contigs and restrict the analysis to those regions/contigs.",
                     "help_text": "Set this to true, and specify the contig(s) using `restrict_to_contigs` parameter",
                     "fa_icon": "fas fa-toggle-on"
+                },
+                "homoplasmy_af_threshold": {
+                    "type": "number",
+                    "default": 1.0,
+                    "description": "Allele frequency threshold for mitochondrial variants. Variants with an AF above this threshold will be treated as homoplasmic and assigned a 1/1 genotype. Range 0-1.0.",
+                    "fa_icon": "fas fa-less-than"
                 },
                 "platform": {
                     "type": "string",
@@ -601,9 +605,19 @@
                     "description": "Specifies whether to run rtgtools' vcfeval",
                     "fa_icon": "fas fa-toggle-on"
                 },
-                "save_mapped_as_cram": {
+                "run_vcfanno_db_sanity_check": {
                     "type": "boolean",
-                    "description": "Specifies whether to generate and publish alignment files as cram instead of bam",
+                    "description": "Specifies whether to check vcfanno database files for zero records and remove the corresponding annotation blocks from the TOML config before running vcfanno",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "save_all_mapped_as_cram": {
+                    "type": "boolean",
+                    "description": "Specifies whether to generate and publish all (unfiltered) alignment files as cram instead of bam",
+                    "fa_icon": "fas fa-toggle-on"
+                },
+                "save_noalt_mapped_as_cram": {
+                    "type": "boolean",
+                    "description": "Specifies whether to generate and publish alt-filtered alignment files as cram instead of bam. Requires exclude_alt to be set to true.",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "scatter_count": {
@@ -611,6 +625,12 @@
                     "default": 20,
                     "description": "Number of intervals to split your genome into (used to parallelize annotations)",
                     "fa_icon": "fas fa-less-than"
+                },
+                "skip_split_multiallelics": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-forward",
+                    "description": "Skip the split multiallelics step in SNV calling.",
+                    "help_text": "Skips bcftools norm --multiallelics -both in CALL_SNV_SENTIEON and CALL_SNV_DEEPVARIANT. Useful for single-interval runs where the step is unnecessary and can degrade indel quality."
                 },
                 "skip_subworkflows": {
                     "type": "string",
@@ -624,7 +644,7 @@
                     "fa_icon": "fas fa-forward",
                     "description": "Disable specified tools.",
                     "help_text": "Multiple tools can be specified, separated by commas.",
-                    "pattern": "^((fastp|gens|germlinecnvcaller|haplogrep3|peddy|smncopynumbercaller|vcf2cytosure|fastqc|qualimap|ngsbits|eklipse)?,?)*(?<!,)$"
+                    "pattern": "^((fastp|gens|germlinecnvcaller|peddy|smncopynumbercaller|vcf2cytosure|fastqc|ngsbits|mitosalt)?,?)*(?<!,)$"
                 }
             }
         },
@@ -772,6 +792,147 @@
                 }
             }
         },
+        "mitosalt_options": {
+            "title": "Mitosalt and saltshaker options",
+            "type": "object",
+            "fa_icon": "fas fa-university",
+            "description": "Parameters used to run mitosalt and saltshaker",
+            "properties": {
+                "hisat2": {
+                    "type": "string"
+                },
+                "hisat2_build_memory": {
+                    "type": "string",
+                    "description": "Minimum memory required to build HISAT2 index with splice sites and exons. If available memory is below this threshold, a simpler index is built without splice sites.",
+                    "fa_icon": "fas fa-memory"
+                },
+                "mitosalt_breakspan": {
+                    "type": "integer",
+                    "default": 15,
+                    "description": "minimum number of bases a non-split read must span either side of a breakpoint to be considered in the heteroplasmy count"
+                },
+                "mitosalt_breakthreshold": {
+                    "type": "integer",
+                    "default": 2,
+                    "description": "the maximum deviation a given set of split read breakpoints can have to be considered within the same cluster"
+                },
+                "mitosalt_cluster_threshold": {
+                    "type": "integer",
+                    "default": 5,
+                    "description": "minimum number of reads supporting a cluster"
+                },
+                "mitosalt_deletion_threshold_max": {
+                    "type": "integer",
+                    "default": 30000,
+                    "description": "the maximum size of the gap between fragments of a split read for the split read to be considered as potentially spanning a deletion"
+                },
+                "mitosalt_deletion_threshold_min": {
+                    "type": "integer",
+                    "default": 30,
+                    "description": "the minimum size of the gap between fragments of a split read for the split read to be considered as potentially spanning a deletion"
+                },
+                "saltshaker_dominant_fraction": {
+                    "type": "number",
+                    "default": 0.5,
+                    "description": "fraction for dominant fraction for saltshaker classification"
+                },
+                "mitosalt_evalue_threshold": {
+                    "type": "number",
+                    "default": 1e-5,
+                    "description": "alignment e-value cutoff"
+                },
+                "mitosalt_exclude": {
+                    "type": "integer",
+                    "default": 5,
+                    "description": "filter split reads if both fragments fall within the regions at the start and end to avoid pseudo-gapped alignments due to a circular genome"
+                },
+                "mitosalt_flank": {
+                    "type": "integer",
+                    "default": 15,
+                    "description": "basepairs flanking a deletion"
+                },
+                "saltshaker_group_radius": {
+                    "type": "integer",
+                    "default": 600,
+                    "description": "spatial clustering radius for saltshaker grouping"
+                },
+                "saltshaker_high_heteroplasmy": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "high heteroplasmy threshold for saltshaker classification"
+                },
+                "mitosalt_heteroplasmy_limit": {
+                    "type": "number",
+                    "default": 0.01,
+                    "description": "detected heteroplasmy threshold"
+                },
+                "mitosalt_depth": {
+                    "type": "integer",
+                    "default": 10000000,
+                    "description": "depth to subsample fastq files to before running mitosalt"
+                },
+                "mito_length": {
+                    "type": "integer",
+                    "default": 16569,
+                    "description": "length of mitochondrial genome"
+                },
+                "saltshaker_multiple_threshold": {
+                    "type": "integer",
+                    "default": 5,
+                    "description": "threshold for multiple saltshaker classification"
+                },
+                "saltshaker_noise_threshold": {
+                    "type": "number",
+                    "default": 0.3,
+                    "description": "heteroplasmy threshold for background noise"
+                },
+                "heavy_strand_origin_start": {
+                    "type": "integer",
+                    "default": 16081,
+                    "description": "start of heavy strand origin"
+                },
+                "heavy_strand_origin_end": {
+                    "type": "integer",
+                    "default": 407,
+                    "description": "end of heavy strand origin"
+                },
+                "light_strand_origin_start": {
+                    "type": "integer",
+                    "default": 5730,
+                    "description": "start of light strand origin"
+                },
+                "light_strand_origin_end": {
+                    "type": "integer",
+                    "default": 5763,
+                    "description": "end of light strand origin"
+                },
+                "mitosalt_paired_distance": {
+                    "type": "integer",
+                    "default": 1000,
+                    "description": "the maximum distance of a paired read from its split counterpart for paired support to be considered positive"
+                },
+                "mitosalt_score_threshold": {
+                    "type": "integer",
+                    "default": 80,
+                    "description": "alignment score cutoff"
+                },
+                "mitosalt_sizelimit": {
+                    "type": "integer",
+                    "default": 10000,
+                    "description": "maximum size of deletions tolerated, beyond which they are reclassified as potential duplications in the reverse orientation"
+                },
+                "mitosalt_split_distance_threshold": {
+                    "type": "integer",
+                    "default": 5,
+                    "description": "the maximum length of unmapped distance between two fragments of a split read"
+                },
+                "mitosalt_split_length": {
+                    "type": "integer",
+                    "default": 15,
+                    "description": "minimum number of bases in a split read fragment for the read to be considered as potentially spanning a deletion"
+                }
+            }
+        },
         "institutional_config_options": {
             "title": "Institutional config options",
             "type": "object",
@@ -870,13 +1031,6 @@
                     "fa_icon": "fas fa-palette",
                     "hidden": true
                 },
-                "hook_url": {
-                    "type": "string",
-                    "description": "Incoming hook URL for messaging service",
-                    "fa_icon": "fas fa-people-group",
-                    "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
-                    "hidden": true
-                },
                 "multiqc_config": {
                     "type": "string",
                     "format": "file-path",
@@ -900,6 +1054,16 @@
                     "description": "Custom MultiQC yaml file containing HTML including a methods description.",
                     "fa_icon": "fas fa-cog",
                     "hidden": true
+                },
+                "multiqc_samples": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "description": "Path to a file containing internal ids and alternative ids in tab separated format. Will replace the internal id with the alternative id in the report. For more info check, https://docs.seqera.io/multiqc/reports/customisation#sample-name-replacement",
+                    "fa_icon": "fas fa-table",
+                    "mimetype": "text/csv",
+                    "help_text": "File for multiqc to embed renaming patterns in reports",
+                    "pattern": "^\\S+\\.tsv$"
                 },
                 "validate_params": {
                     "type": "boolean",
@@ -954,6 +1118,9 @@
         },
         {
             "$ref": "#/$defs/annotation_options"
+        },
+        {
+            "$ref": "#/$defs/mitosalt_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"

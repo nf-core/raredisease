@@ -28,7 +28,6 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
         - [FastQC](#fastqc)
         - [Mosdepth](#mosdepth)
         - [Picard tools](#picard-tools)
-        - [Qualimap](#qualimap)
         - [Chromograph coverage](#chromograph-coverage)
         - [Sention WgsMetricsAlgo](#sention-wgsmetricsalgo)
         - [TIDDIT's cov and UCSC WigToBigWig](#tiddits-cov-and-ucsc-wigtobigwig)
@@ -59,15 +58,13 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
       - [SVDB query](#svdb-query)
       - [VEP](#vep-1)
     - [Mitochondrial analysis](#mitochondrial-analysis)
-      - [Haplocheck](#haplocheck)
       - [Alignment and variant calling](#alignment-and-variant-calling)
         - [MT deletion script](#mt-deletion-script)
-        - [eKLIPse](#eklipse)
+        - [MitoSAlt](#mitosalt)
+        - [saltshaker](#saltshaker)
       - [Annotation](#annotation)
-        - [HaploGrep2](#haplogrep2)
         - [vcfanno](#vcfanno-1)
         - [CADD](#cadd-1)
-        - [Hmtnote](#hmtnote)
         - [VEP](#vep-2)
     - [Filtering and ranking](#filtering-and-ranking)
       - [Filter_vep](#filter_vep)
@@ -77,6 +74,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
       - [Annotating mobile elements](#annotating-mobile-elements)
     - [Variant evaluation](#variant-evaluation)
     - [Gens](#gens)
+    - [Peddy](#peddy)
     - [Pipeline information](#pipeline-information)
 
 ### Alignment
@@ -103,26 +101,28 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 ##### Picard's MarkDuplicates
 
-[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2, bwameme and bwa are processed by this tool. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
+[Picard MarkDuplicates](https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates) is used for marking PCR duplicates that can occur during library amplification. This is essential as the presence of such duplicates results in false inflated coverages, which in turn can lead to overly-confident genotyping calls during variant calling. Only reads aligned by Bwa-mem2, bwameme and bwa are processed by this tool. By default, alignment files are published in bam format. To publish cram files instead, use `--save_all_mapped_as_cram` for the full (unfiltered) alignment, or `--save_noalt_mapped_as_cram` for the alt-filtered alignment (requires `--exclude_alt`).
 
 <details markdown="1">
 <summary>Output files from Alignment</summary>
 
 - `{outputdir}/alignment/`
-  - `*.bam|*.cram`: Alignment file in bam/cram format.
+  - `*_sorted_md.bam|*_sorted_md.cram`: Full (unfiltered) alignment file. Published as bam by default, or as cram when `--save_all_mapped_as_cram` is set.
+  - `*_sorted_md_primary_contigs.cram`: Alt-filtered alignment file in cram format. Published when `--save_noalt_mapped_as_cram` is set (requires `--exclude_alt`). Contains only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM).
   - `*.bai|*.crai`: Index of the corresponding bam/cram file.
   - `*.txt`: Text file containing the dedup metrics.
   </details>
 
 ##### Sentieon Dedup
 
-[Sentieon Dedup](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#remove-or-mark-duplicates) is the algorithm used by Sentieon's driver to remove duplicate reads. Only reads aligned by Sentieon's implementation of bwa are processed by this algorithm. By default, alignment files are published in bam format. If you would like to store cram files instead, set `--save_mapped_as_cram` to true.
+[Sentieon Dedup](https://support.sentieon.com/manual/DNAseq_usage/dnaseq/#remove-or-mark-duplicates) is the algorithm used by Sentieon's driver to remove duplicate reads. Only reads aligned by Sentieon's implementation of bwa are processed by this algorithm. By default, alignment files are published in bam format. To publish cram files instead, use `--save_all_mapped_as_cram` for the full (unfiltered) alignment, or `--save_noalt_mapped_as_cram` for the alt-filtered alignment (requires `--exclude_alt`).
 
 <details markdown="1">
 <summary>Output files from Alignment</summary>
 
 - `{outputdir}/alignment/`
-  - `*.bam|*.cram`: Alignment file in bam/cram format.
+  - `*_sorted_md.bam|*_sorted_md.cram`: Full (unfiltered) alignment file. Published as bam by default, or as cram when `--save_all_mapped_as_cram` is set.
+  - `*_sorted_md_primary_contigs.cram`: Alt-filtered alignment file in cram format. Published when `--save_noalt_mapped_as_cram` is set (requires `--exclude_alt`). Contains only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM).
   - `*.bai|*.crai`: Index of the corresponding bam/cram file.
   - `*.metrics`: Text file containing the dedup metrics.
   </details>
@@ -184,7 +184,7 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 <details markdown="1">
 <summary>Output files</summary>
 
-- `{outputdir}/qc_bam/<sampleid>_qualimap/`
+- `{outputdir}/qc_bam/`
   - `<sampleid>_hsmetrics.CollectHsMetrics.coverage_metrics`:
   - `<sampleid>_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics`:
   - `<sampleid>_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics`:
@@ -193,21 +193,6 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
   - `<sampleid>_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics`:
   - `<sampleid>_wgsmetrics.CollectWgsMetrics.coverage_metrics`:
   - `<sampleid>_wgsmetrics_y.CollectWgsMetrics.coverage_metrics`:
-  </details>
-
-##### Qualimap
-
-[Qualimap](http://qualimap.conesalab.org/) also allows you to assess the alignment coverage. Qualimap results are used by MultiQC to generate the following plots.
-
-- Coverage histogram
-- Cumulative genome coverage
-- Insert size histogram
-- GC content distribution
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `{outputdir}/qc_bam/<sampleid>_qualimap/` this directory includes a qualimap report and associated raw statistic files. You can open the .html file in your internet browser to see the in-depth report.
   </details>
 
 ##### Chromograph coverage
@@ -454,24 +439,13 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 - `annotate_sv/`
   - `<case_id>_svdbquery_vep.vcf.gz`: file containing svdb query, and vep annotations.
   - `<case_id>_svdbquery_vep.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, and vep annotations.
+  - `<case_id>_svdbquery_vep_summary.html`: vep summary.
 
 </details>
 
 ### Mitochondrial analysis
 
 Mitochondrial analysis is run by default. If you want to turn off annotations set `--skip_subworkflows mt_annotation`.
-
-#### Haplocheck
-
-[Haplocheck](https://github.com/genepi/haplocheck/) analyses the mitochondrial content to detect contamination in samples. The results are displayed in MultiQC.
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `{outputdir}/haplocheck/`
-  - `<sampleid>.raw.txt`: haplocheck raw output. Read more about the file content [here](https://mitoverse.readthedocs.io/haplocheck/haplocheck/#textual-report-file-raw).
-
-</details>
 
 #### Alignment and variant calling
 
@@ -487,31 +461,19 @@ The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sen
 
 [MT deletion script](https://github.com/dnil/mitosign/blob/master/run_mt_del_check.sh) lists the fraction of mitochondrially aligning read pairs (per 1000) that appear discordant, as defined by an insert size of more than 1.2 kb (and less than 15 kb due to the circular nature of the genome) using samtools.
 
-- `call_sv/mitochondria`
+- `call_sv`
   - `<sample_id>_mitochondria_deletions.txt`: file containing deletions.
 
-##### eKLIPse
+##### Saltshaker
 
-[eKLIPse](https://github.com/dooguypapua/eKLIPse) allows the detection and quantification of large mtDNA rearrangements.
+[MitoSAlt](https://mitosalt.sourceforge.io/) allows the detection and quantification of mtDNA strucutral variants.
+[Saltshaker](https://gitlab.com/genomedx/annotation/saltshaker) allows for downstream clustering and classification of mtDNA strucutral variants. Called variants are combined with structural variants called in the nuclear genome.
 
-- `call_sv/mitochondria`
-  - `eKLIPse_<sample_id>_deletions.csv`: file containing all predicted deletions.
-  - `eKLIPse_<sample_id>_genes.csv`: file summarizing cumulated deletions per mtDNA gene.
-  - `eKLIPse_<sample_id>.png`: circos plot.
+- `call_sv`
+  - `<case_id>.saltshaker_classify.html`: report containing case-level classification of mitochondrial deletions. Only created when MitoSAlt finds at least one cluster.
+  - `<sample_id>.saltshaker.png`: circos plot. Only created when MitoSAlt finds at least one cluster.
 
 #### Annotation
-
-##### HaploGrep2
-
-[HaploGrep2](https://github.com/seppinho/haplogrep-cmd) allows detecting artificial recombinants and missing variants as well as annotating rare and phantom mutations in mitochondria. Haplogrep generates a text report, which is published by default.
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `annotate_snv/mitochondria`
-  - `<case_id>*haplogrep.txt`: file containing haplogroup information.
-
-</details>
 
 ##### vcfanno
 
@@ -523,10 +485,6 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 
 [CADD](https://cadd.gs.washington.edu/) is a tool for scoring the deleteriousness of single nucleotide variants as well as insertion/deletions variants in the human genome. In nf-core/raredisease, SNVs can be annotated with precomputed CADD scores using vcfanno. However, for small indels they will be calculated on the fly by CADD. The output files are not published in the output folder, and is passed to VEP for further annotation.
 
-##### Hmtnote
-
-[HmtNote](https://github.com/robertopreste/HmtNote) annotates vcf containing human mitochondrial variants with HmtVar. It will run offline by default with a database within the container.
-
 ##### VEP
 
 [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html) determines the effect of your variants on genes, transcripts, and protein sequence, as well as regulatory regions.
@@ -535,8 +493,8 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 <summary>Output files</summary>
 
 - `annotate_snv/mitochondria`
-  - `<case_id>_mitochondria_hmtnote_vcfanno_<cadd_vep|vep>.vcf.gz`: file containing mitochondrial annotations.
-  - `<case_id>_mitochondria_hmtnote_vcfanno_<cadd_vep|vep>.vcf.gz.tbi`: index of the file containing mitochondrial annotations.
+  - `<case_id>_mitochondria_vcfanno_<cadd_vep|vep>.vcf.gz`: file containing mitochondrial annotations.
+  - `<case_id>_mitochondria_vcfanno_<cadd_vep|vep>.vcf.gz.tbi`: index of the file containing mitochondrial annotations.
 
 </details>
 
@@ -640,6 +598,25 @@ The sequencing data can be prepared for visualization of CNVs in [Gens](https://
   - `<sample_id>_gens.cov.bed.gz.tbi`: index of the \*cov.bed.gz file.
 
 </details>
+
+### Peddy
+
+[Peddy](https://github.com/brentp/peddy) compares familial-relationships and sexes as reported in a PED file with those inferred from a VCF.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `peddy/`
+  - `*.het_check.csv`: CSV file containing heterozygosity check results — rate of het calls, allele-balance at het calls, mean and median depth, and a PCA projection onto 1000 Genomes.
+  - `*.het_check.png`: PNG plot of heterozygosity check results — rate of het calls, allele-balance at het calls, mean and median depth, and a PCA projection onto 1000 Genomes.
+  - `*.html`: interactive HTML report with plots for sex check (HET rate on chrX), depth and heterozygosity, and pedigree relatedness, plus an interactive pedigree table.
+  - `*.ped_check.csv`: CSV file containing pedigree check results — pairwise relatedness statistics comparing reported vs. inferred relationships.
+  - `*.ped_check.png`: PNG plot of pedigree check results — comparison between reported and inferred relatedness.
+  - `*.ped_check.rel-difference.csv`: CSV file with the comparison between inferred and reported relatedness for sample pairs where they differ.
+  - `*.peddy.ped`: extended PED file augmented with key columns from the het-check and sex-check results.
+  - `*.sex_check.csv`: CSV file with sex check results — comparison between the sex reported in the PED file and that inferred from genotypes on the non-PAR regions of the X chromosome.
+  - `*.sex_check.png`: PNG plot of sex check results — comparison between reported and inferred sex.
+  - `*.vs.html`: interactive scatter plot of observed vs. expected (pedigree-reported) relatedness for all sample pairs.
 
 ### Pipeline information
 

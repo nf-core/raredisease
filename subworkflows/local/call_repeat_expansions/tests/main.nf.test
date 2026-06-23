@@ -3,8 +3,18 @@ nextflow_workflow {
     name "Test Workflow CALL_REPEAT_EXPANSIONS"
     script "subworkflows/local/call_repeat_expansions/main.nf"
     workflow "CALL_REPEAT_EXPANSIONS"
+
     tag "subworkflows"
     tag "call_repeat_expansions"
+
+    tag "bcftools/norm"
+    tag "bcftools/reheader"
+    tag "expansionhunter"
+    tag "picard/renamesampleinvcf"
+    tag "samtools/sort"
+    tag "svdb/merge"
+    tag "tabix/tabix"
+
     config "./nextflow.config"
 
     test("CALL_REPEAT_EXPANSIONS") {
@@ -30,9 +40,43 @@ nextflow_workflow {
         then {
             assert workflow.success
             assert snapshot(
+                workflow.out.publish.flatten()
+                    .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
+                    .collect { new File(it).name }
+                    .sort(),
                 path(workflow.out.vcf[0][1].toString()).vcf.variantsMD5,
                 path(workflow.out.vcf[0][1].toString()).vcf.summary
             ).match()
+        }
+
+    }
+
+
+    test("CALL_REPEAT_EXPANSIONS, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + '/reference/variant_catalog.json', checkIfExists: true)).collect()
+                input[2] = channel.of([id:'justhusky'])
+                input[3] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[4] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
         }
 
     }

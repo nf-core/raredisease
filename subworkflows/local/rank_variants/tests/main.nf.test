@@ -1,0 +1,71 @@
+nextflow_workflow {
+
+    name "Test Workflow RANK_VARIANTS"
+    script "subworkflows/local/rank_variants/main.nf"
+    workflow "RANK_VARIANTS"
+
+    tag "subworkflows"
+    tag "rank_variants"
+
+    tag "genmod/annotate"
+    tag "genmod/models"
+    tag "genmod/score"
+    tag "genmod/compound"
+    tag "bcftools/sort"
+    tag "tabix/bgziptabix"
+
+    test("RANK_VARIANTS - SNV (process_with_sort = false), stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.value(file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/ped/justhusky.ped', checkIfExists: true))
+                input[1] = channel.value(file(params.pipelines_testdata_base_path + 'reference/reduced_penetrance.tsv', checkIfExists: true))
+                input[2] = channel.value(file(params.pipelines_testdata_base_path + 'reference/rank_model_snv.ini', checkIfExists: true))
+                input[3] = channel.of([
+                    [id:'justhusky', single_end: false],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/genmod.vcf.gz', checkIfExists: true)
+                ])
+                input[4] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+
+    test("RANK_VARIANTS - SV (process_with_sort = true), stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.value(file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/ped/justhusky.ped', checkIfExists: true))
+                input[1] = channel.value(file(params.pipelines_testdata_base_path + 'reference/reduced_penetrance.tsv', checkIfExists: true))
+                input[2] = channel.value(file(params.pipelines_testdata_base_path + 'reference/rank_model_sv.ini', checkIfExists: true))
+                input[3] = channel.of([
+                    [id:'justhusky', single_end: false],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/genmod.vcf.gz', checkIfExists: true)
+                ])
+                input[4] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+
+}
