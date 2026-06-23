@@ -820,6 +820,7 @@ output {
     }
     call_sv {
         path { _meta, _file -> "call_sv/" }
+    }
     call_snv_genome {
         path { _meta, _file -> "call_snv/genome/" }
     }
