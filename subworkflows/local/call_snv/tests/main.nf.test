@@ -69,14 +69,12 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.out.publish.flatten()
-                        .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                        .collect { new File(it).name }
-                        .sort(),
                     path(workflow.out.genome_vcf[0][1]).vcf.variantsMD5,
                     path(workflow.out.genome_vcf[0][1]).vcf.summary,
+                    workflow.out.deepvariant_report.collect { meta, report -> file(report).name },
                     workflow.out.genome_tabix.collect { meta, tbi -> file(tbi).name },
-                    workflow.out.mt_vcf.collect { meta, vcf -> file(vcf).name }
+                    workflow.out.mt_vcf.collect { meta, vcf -> file(vcf).name },
+                    workflow.out.mt_tabix.collect { meta, tbi -> file(tbi).name }
                 ).match() }
             )
         }
@@ -126,7 +124,7 @@ nextflow_workflow {
                 input[22] = channel.of([[id:'model'], []])
                 input[23] = channel.of([[id:'target'], [], []])
                 input[24] = 'wgs'
-                input[25] = false
+                input[25] = true
                 input[26] = false
                 input[27] = false
                 input[28] = 'deepvariant'
@@ -138,16 +136,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.out.collect { name, channel ->
-                        def sorted_channel = channel.toList().sort { item ->
-                            def sortKey = item
-                            while (sortKey instanceof List) {
-                                sortKey = sortKey[-1]
-                            }
-                            sortKey.toString().split(':md5,')[0].tokenize('/')[-1]
-                        }
-                        [name, sorted_channel]
-                    }.sort { it[0] }  // Sort by channel name
+                    workflow.out
                 ).match() }
             )
         }
