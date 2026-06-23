@@ -247,6 +247,15 @@ workflow RAREDISEASE {
     ch_mt_del_result                    = channel.empty()
     ch_saltshaker_html                  = channel.empty()
     ch_saltshaker_plot                  = channel.empty()
+    ch_call_snv_bcftools_concat_csi     = channel.empty()
+    ch_call_snv_bcftools_concat_tbi     = channel.empty()
+    ch_call_snv_bcftools_concat_vcf     = channel.empty()
+    ch_call_snv_deepvariant_report      = channel.empty()
+    ch_call_snv_genome_tabix            = channel.empty()
+    ch_call_snv_genome_vcf              = channel.empty()
+    ch_call_snv_mt_tabix                = channel.empty()
+    ch_call_snv_mt_vcf                  = channel.empty()
+    ch_call_sv_publish                  = channel.empty()
     ch_call_repeat_expansions_publish   = channel.empty()
     ch_call_mobile_elements_publish     = channel.empty()
     ch_annotate_genome_snvs_bcftools_concat_tbi       = channel.empty()
@@ -465,7 +474,14 @@ workflow RAREDISEASE {
             val_skip_split_multiallelics,
             val_variant_caller
         )
-        ch_call_snv_publish = CALL_SNV.out.publish
+        ch_call_snv_bcftools_concat_csi = CALL_SNV.out.bcftools_concat_csi
+        ch_call_snv_bcftools_concat_tbi = CALL_SNV.out.bcftools_concat_tbi
+        ch_call_snv_bcftools_concat_vcf = CALL_SNV.out.bcftools_concat_vcf
+        ch_call_snv_deepvariant_report  = CALL_SNV.out.deepvariant_report
+        ch_call_snv_genome_tabix        = CALL_SNV.out.genome_tabix
+        ch_call_snv_genome_vcf          = CALL_SNV.out.genome_vcf
+        ch_call_snv_mt_tabix            = CALL_SNV.out.mt_tabix
+        ch_call_snv_mt_vcf              = CALL_SNV.out.mt_vcf
 
         // Removes vcfanno resource with empty records to keep vcfanno from crashing on those files
         ch_vcfanno_toml_final = ch_vcfanno_toml
@@ -1079,18 +1095,26 @@ workflow RAREDISEASE {
     saltshaker_html                                  = ch_saltshaker_html                                  // channel: [ val(meta), path(html) ]
     saltshaker_plot                                  = ch_saltshaker_plot                                  // channel: [ val(meta), path(png) ]
     mt_del_result                                    = ch_mt_del_result                                    // channel: [ val(meta), path(txt) ]
-    annotate_genome_snvs_bcftools_concat_tbi         = ch_annotate_genome_snvs_bcftools_concat_tbi       // channel: [ val(meta), path(tbi) ]
-    annotate_genome_snvs_bcftools_concat_vcf         = ch_annotate_genome_snvs_bcftools_concat_vcf       // channel: [ val(meta), path(vcf) ]
-    annotate_genome_snvs_chromograph_autozyg_plots   = ch_annotate_genome_snvs_chromograph_autozyg_plots // channel: [ val(meta), path(png) ]
-    annotate_genome_snvs_chromograph_regions_plots   = ch_annotate_genome_snvs_chromograph_regions_plots // channel: [ val(meta), path(png) ]
-    annotate_genome_snvs_chromograph_sites_plots     = ch_annotate_genome_snvs_chromograph_sites_plots   // channel: [ val(meta), path(png) ]
-    annotate_genome_snvs_rhocall_viz_bed             = ch_annotate_genome_snvs_rhocall_viz_bed           // channel: [ val(meta), path(bed) ]
-    annotate_genome_snvs_rhocall_viz_wig             = ch_annotate_genome_snvs_rhocall_viz_wig           // channel: [ val(meta), path(wig) ]
-    annotate_genome_snvs_ucsc_wigtobigwig_bw         = ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       // channel: [ val(meta), path(bw) ]
+    call_snv_bcftools_concat_csi             = ch_call_snv_bcftools_concat_csi                             // channel: [ val(meta), path(csi) ]
+    call_snv_bcftools_concat_tbi             = ch_call_snv_bcftools_concat_tbi                             // channel: [ val(meta), path(tbi) ]
+    call_snv_bcftools_concat_vcf             = ch_call_snv_bcftools_concat_vcf                             // channel: [ val(meta), path(vcf) ]
+    call_snv_deepvariant_report              = ch_call_snv_deepvariant_report                              // channel: [ val(meta), path(html) ]
+    call_snv_genome_tabix                    = ch_call_snv_genome_tabix                                    // channel: [ val(meta), path(tbi) ]
+    call_snv_genome_vcf                      = ch_call_snv_genome_vcf                                      // channel: [ val(meta), path(vcf) ]
+    call_snv_mt_tabix                        = ch_call_snv_mt_tabix                                        // channel: [ val(meta), path(tbi) ]
+    call_snv_mt_vcf                          = ch_call_snv_mt_vcf                                          // channel: [ val(meta), path(vcf) ]
+    annotate_genome_snvs_bcftools_concat_tbi         = ch_annotate_genome_snvs_bcftools_concat_tbi         // channel: [ val(meta), path(tbi) ]
+    annotate_genome_snvs_bcftools_concat_vcf         = ch_annotate_genome_snvs_bcftools_concat_vcf         // channel: [ val(meta), path(vcf) ]
+    annotate_genome_snvs_chromograph_autozyg_plots   = ch_annotate_genome_snvs_chromograph_autozyg_plots   // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_chromograph_regions_plots   = ch_annotate_genome_snvs_chromograph_regions_plots   // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_chromograph_sites_plots     = ch_annotate_genome_snvs_chromograph_sites_plots     // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_rhocall_viz_bed             = ch_annotate_genome_snvs_rhocall_viz_bed             // channel: [ val(meta), path(bed) ]
+    annotate_genome_snvs_rhocall_viz_wig             = ch_annotate_genome_snvs_rhocall_viz_wig             // channel: [ val(meta), path(wig) ]
+    annotate_genome_snvs_ucsc_wigtobigwig_bw         = ch_annotate_genome_snvs_ucsc_wigtobigwig_bw         // channel: [ val(meta), path(bw) ]
     subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     versions                     = ch_versions
-    publish                      = ch_call_snv_publish
+    publish                      = ch_call_sv_publish
                        .mix(ch_call_repeat_expansions_publish)
                        .mix(ch_call_mobile_elements_publish)
                        .mix(ch_annotate_mt_snvs_publish)
