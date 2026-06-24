@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Added non-stub tests for `annotate_mt_snvs` [#890](https://github.com/nf-core/raredisease/pull/890)
+
 ### `Changed`
 
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for call_snv, call_snv_deepvariant, and postprocess_MT_calls subworkflows [#863](https://github.com/nf-core/raredisease/pull/863)
