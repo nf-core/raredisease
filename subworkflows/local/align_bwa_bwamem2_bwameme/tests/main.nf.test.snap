@@ -106,7 +106,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "785f016d043339de0df488fa1bb3a16"
+                    "2adf29dd0f88715a0fe4a91916b680fc"
                 ]
             ],
             [
@@ -125,10 +125,10 @@
                 ]
             ]
         ],
-        "timestamp": "2026-06-09T13:46:05.133199",
+        "timestamp": "2026-06-25T16:55:20.385796438",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
         }
     },
     "align bwameme": {
@@ -179,7 +179,6 @@
         "content": [
             [
                 "test_sorted_md.bam",
-                "test_sorted_md.bam.csi",
                 "test_sorted_md.metrics.txt"
             ],
             [
@@ -194,7 +193,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "6fbed72e21c5b2bcb981e1dded632829"
+                    "7bd502311d7aee2ad611821f31919fad"
                 ]
             ],
             [
@@ -213,10 +212,10 @@
                 ]
             ]
         ],
-        "timestamp": "2026-06-09T13:46:33.608928",
+        "timestamp": "2026-06-25T16:56:06.256115812",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
         }
     }
 }
