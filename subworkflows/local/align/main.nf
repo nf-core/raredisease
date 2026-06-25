@@ -14,36 +14,35 @@ include { SAMTOOLS_VIEW as SAMTOOLS_VIEW_EXCLUDE_ALT } from '../../../modules/nf
 
 workflow ALIGN {
     take:
-        ch_alignments             // channel: [optional] [ val(meta), [path(bam),path(bai)]  ]
-        ch_genome_bwaindex        // channel: [mandatory] [ val(meta), path(index) ]
-        ch_genome_bwamem2index    // channel: [mandatory] [ val(meta), path(index) ]
-        ch_genome_bwamemeindex    // channel: [mandatory] [ val(meta), path(index) ]
-        ch_genome_dictionary      // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_genome_fai             // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_genome_fasta           // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_input_reads            // channel: [optional] [ val(meta), [path(reads)]  ]
-        ch_mt_bwaindex            // channel: [mandatory] [ val(meta), path(index) ]
-        ch_mt_bwamem2index        // channel: [mandatory] [ val(meta), path(index) ]
-        ch_mt_dictionary          // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_mt_fai                 // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_mt_fasta               // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_mtshift_bwaindex       // channel: [mandatory] [ val(meta), path(index) ]
-        ch_mtshift_bwamem2index   // channel: [mandatory] [ val(meta), path(index) ]
-        ch_mtshift_dictionary     // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_mtshift_fai            // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_mtshift_fasta          // channel: [mandatory] [ val(meta), path(fasta) ]
-        skip_fastp                // boolean
-        val_aligner               //  string:  'bwa', 'bwamem2', 'bwameme', or 'sentieon'
-        val_analysis_type         //  string:  'wgs', 'wes', or 'mito'
-        val_exclude_alt           // boolean
-        val_extract_alignments    // boolean
-        val_mbuffer_mem           // integer: [mandatory] memory in megabytes
-        val_mt_aligner            //  string:  'bwa', 'bwamem2', or 'sentieon'
-        val_platform              //  string:  [mandatory] illumina or a different technology
-        val_run_mt_for_wes        // boolean
-        val_samtools_sort_threads // integer: [mandatory] number of sorting threads
-        val_save_all_mapped_as_cram    // boolean
-        val_save_noalt_mapped_as_cram  // boolean
+        ch_alignments                 // channel: [optional] [ val(meta), [path(bam),path(bai)]  ]
+        ch_genome_bwafastalignindex   // channel: [mandatory] [ val(meta), path(index) ]
+        ch_genome_bwaindex            // channel: [mandatory] [ val(meta), path(index) ]
+        ch_genome_bwamem2index        // channel: [mandatory] [ val(meta), path(index) ]
+        ch_genome_bwamemeindex        // channel: [mandatory] [ val(meta), path(index) ]
+        ch_genome_dictionary          // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_genome_fai                 // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_fasta               // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_input_reads                // channel: [optional] [ val(meta), [path(reads)]  ]
+        ch_mt_bwaindex                // channel: [mandatory] [ val(meta), path(index) ]
+        ch_mt_bwamem2index            // channel: [mandatory] [ val(meta), path(index) ]
+        ch_mt_dictionary              // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_mt_fai                     // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_mt_fasta                   // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_mtshift_bwaindex           // channel: [mandatory] [ val(meta), path(index) ]
+        ch_mtshift_bwamem2index       // channel: [mandatory] [ val(meta), path(index) ]
+        ch_mtshift_dictionary         // channel: [mandatory] [ val(meta), path(dict) ]
+        ch_mtshift_fai                // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_mtshift_fasta              // channel: [mandatory] [ val(meta), path(fasta) ]
+        skip_fastp                    // boolean
+        val_aligner                   //  string:  'bwa', 'bwafastalign', 'bwamem2', 'bwameme', or 'sentieon'
+        val_analysis_type             //  string:  'wgs', 'wes', or 'mito'
+        val_exclude_alt               // boolean
+        val_extract_alignments        // boolean
+        val_mt_aligner                //  string:  'bwa', 'bwamem2', or 'sentieon'
+        val_platform                  //  string:  [mandatory] illumina or a different technology
+        val_run_mt_for_wes            // boolean
+        val_save_all_mapped_as_cram   // boolean
+        val_save_noalt_mapped_as_cram // boolean
 
     main:
         ch_bwamem2_bam               = channel.empty()
@@ -89,9 +88,10 @@ workflow ALIGN {
         ch_input_bam = ch_input_aligned.bam
         ch_input_bai = ch_input_aligned.bai
 
-        if (val_aligner.matches("bwamem2|bwa|bwameme")) {
+        if (val_aligner.matches("bwamem2|bwa|bwameme|bwafastalign")) {
             ALIGN_BWA_BWAMEM2_BWAMEME (
                 ch_genome_bwaindex,
+                ch_genome_bwafastalignindex,
                 ch_genome_bwamem2index,
                 ch_genome_bwamemeindex,
                 ch_genome_fai,
@@ -99,9 +99,7 @@ workflow ALIGN {
                 ch_input_reads,
                 val_aligner,
                 val_extract_alignments,
-                val_mbuffer_mem,
-                val_platform,
-                val_samtools_sort_threads
+                val_platform
             )
             ch_bwamem2_bam     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bam
             ch_bwamem2_bai     = ALIGN_BWA_BWAMEM2_BWAMEME.out.marked_bai

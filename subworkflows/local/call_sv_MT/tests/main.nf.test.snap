@@ -1,13 +1,13 @@
 {
     "CALL_SV_MT - 2 samples": {
         "content": [
-            "3d2eca57b18e5d0180b333d7370a2bfb",
+            "77d88012f833253be9666bb792c60aee",
             [
                 [
                     {
                         "id": "justhusky"
                     },
-                    "justhusky.saltshaker_classify.html:md5,ed534bf6ccd5c7a9bb7efd06e32ae064"
+                    "justhusky.saltshaker_classify.html:md5,f8edbbe314bc4e5e7bfc10c0c92a59b3"
                 ]
             ],
             "earlycasualcaiman.saltshaker.png",
@@ -54,10 +54,10 @@
                 ]
             ]
         ],
-        "timestamp": "2026-06-23T11:43:56.545028",
+        "timestamp": "2026-06-25T14:07:56.059247461",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
         }
     },
     "CALL_SV_MT - 2 samples - stub": {
@@ -376,13 +376,13 @@
     },
     "CALL_SV_MT - 1 sample": {
         "content": [
-            "e591669a4985c6b4947b042d9461e8b5",
+            "619fc9380aac6cccd9d3f4d1df17a0ed",
             [
                 [
                     {
                         "id": "justhusky"
                     },
-                    "justhusky.saltshaker_classify.html:md5,c3a6eea9dbaf8bcd7a3e90acffb1c24f"
+                    "justhusky.saltshaker_classify.html:md5,e3077e05ca959239f0b8ea25ff515bf3"
                 ]
             ],
             "earlycasualcaiman.saltshaker.png",
@@ -413,10 +413,10 @@
                 ]
             ]
         ],
-        "timestamp": "2026-06-18T09:55:02.460892",
+        "timestamp": "2026-06-25T14:05:52.399203922",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
         }
     }
 }
