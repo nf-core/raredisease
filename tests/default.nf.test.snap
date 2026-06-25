@@ -164,6 +164,11 @@
                 "FILTERVEP": {
                     "filtervep": "1.0.0"
                 },
+                "FIND_CONCATENATE": {
+                    "coreutils": 9.4,
+                    "find": "4.6.0",
+                    "pigz": 2.8
+                },
                 "GATK4_FILTERMUTECTCALLS_MT": {
                     "gatk4": "4.6.2.0"
                 },
@@ -488,7 +493,7 @@
                     "vcfanno": "0.3.7"
                 },
                 "Workflow": {
-                    "nf-core/raredisease": "v3.1.0dev"
+                    "nf-core/raredisease": "v3.2.0dev"
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
@@ -1332,10 +1337,10 @@
                 "slowlycivilbuck.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
             ]
         ],
-        "timestamp": "2026-06-22T12:15:47.246320185",
+        "timestamp": "2026-06-25T10:06:29.744958455",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "25.10.4"
         }
     }
 }
