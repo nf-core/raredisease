@@ -681,7 +681,6 @@
                 "call_sv/hugelymodelbat.saltshaker.png",
                 "call_sv/hugelymodelbat_mitochondria_deletions.txt",
                 "call_sv/justhusky.saltshaker_classify.html",
-                "call_sv/justhusky_saltshaker.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz.tbi",
                 "call_sv/slowlycivilbuck.saltshaker.png",
@@ -1103,7 +1102,6 @@
                 "hugelymodelbat.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "hugelymodelbat_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "justhusky.saltshaker_classify.html:md5,5ec112032a61697ad6e447fc71573522",
-                "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
                 "justhusky_sv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
                 "justhusky_sv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "slowlycivilbuck.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -1334,10 +1332,10 @@
                 "slowlycivilbuck.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
             ]
         ],
-        "timestamp": "2026-05-27T15:36:04.165275268",
+        "timestamp": "2026-06-22T12:15:47.246320185",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.3"
         }
     }
 }

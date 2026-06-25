@@ -47,6 +47,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert snapshot(
                     path(workflow.out.vcf[0][1]).vcf.summary,
+                    workflow.out.deepvariant_report.collect { meta, report -> file(report).name },
                     workflow.out.tabix.collect { meta, tbi -> file(tbi).name },
                     workflow.out.gvcf.collect { meta, gvcf -> file(gvcf).name }
                 ).match() }
