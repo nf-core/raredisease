@@ -66,10 +66,8 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                        workflow.out.publish.flatten()
-                            .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                            .collect { new File(it).name }
-                            .sort(),
+                        workflow.out.markdup_metrics.collect { meta, metrics -> file(metrics).name },
+                        workflow.out.stats,
                         workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getHeaderMD5() ] },
                         workflow.out.marked_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getReadsMD5() ] }
                     ).match()
