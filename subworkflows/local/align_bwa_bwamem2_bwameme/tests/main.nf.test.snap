@@ -2,9 +2,19 @@
     "align bwafastalign": {
         "content": [
             [
-                "test_sorted_md.bam",
-                "test_sorted_md.bam.bai",
                 "test_sorted_md.metrics.txt"
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "sample": "test",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                    },
+                    "test.stats:md5,f0914a56ae73007ebd242cab27861700"
+                ]
             ],
             [
                 [
@@ -37,9 +47,9 @@
                 ]
             ]
         ],
-        "timestamp": "2026-06-12T15:46:43.756159921",
+        "timestamp": "2026-06-25T13:30:01.076823606",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
     },
