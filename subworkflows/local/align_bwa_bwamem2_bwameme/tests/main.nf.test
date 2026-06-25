@@ -216,22 +216,21 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = [[:],[]]
-                input[1]  = BWAMEM2_INDEX.out.index
-                input[2]  = [[:],[]]
-                input[3]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
-                input[4]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
-                input[5]  = channel.of([
+                input[1]  = [[:],[]]
+                input[2]  = BWAMEM2_INDEX.out.index
+                input[3]  = [[:],[]]
+                input[4]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
+                input[5]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
+                input[6]  = channel.of([
                     [ id:'test', sample:'test', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test'"  ], // meta map
                     [
                         file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
                         file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
                     ]
                 ])
-                input[6]  = "bwamem2"
-                input[7]  = true
-                input[8]  = 3072
+                input[7]  = "bwamem2"
+                input[8]  = true
                 input[9]  = "illumina"
-                input[10] = 4
                 """
             }
         }
@@ -269,21 +268,20 @@ nextflow_workflow {
                 """
                 input[0]  = [[:],[]]
                 input[1]  = [[:],[]]
-                input[2]  = BWAMEME_INDEX.out.index
-                input[3]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
-                input[4]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
-                input[5]  = channel.of([
+                input[2]  = [[:],[]]
+                input[3]  = BWAMEME_INDEX.out.index
+                input[4]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)]])
+                input[5]  = channel.of([[id:'sarscov2'], [file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)]])
+                input[6]  = channel.of([
                     [ id:'test', sample:'test', single_end:false, num_lanes:1, read_group:"\'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test\'"  ], // meta map
                     [
                         file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
                         file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
                     ]
                 ])
-                input[6]  = "bwameme"
-                input[7]  = true
-                input[8]  = 3072
+                input[7]  = "bwameme"
+                input[8]  = true
                 input[9]  = "illumina"
-                input[10] = 4
                 """
             }
         }
