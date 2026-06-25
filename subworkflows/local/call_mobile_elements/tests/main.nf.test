@@ -13,8 +13,9 @@ nextflow_workflow {
     tag "retroseq/discover"
     tag "retroseq/call"
     tag "samtools/view"
-    tag "tabix/tabix"
     tag "svdb/merge"
+
+    config "./nextflow.config"
 
     test("CALL_MOBILE_ELEMENTS - stub") {
 
