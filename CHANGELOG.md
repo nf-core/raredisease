@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for call_snv, call_snv_deepvariant, and postprocess_MT_calls subworkflows [#863](https://github.com/nf-core/raredisease/pull/863)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for annotate_rhocallviz and annotate_genome_snvs subworkflows [#858](https://github.com/nf-core/raredisease/pull/858)
 - Expand annotate_rhocallviz test with snapshot assertions [#858](https://github.com/nf-core/raredisease/pull/858)
 - Refactor scatter_genome subworkflow: alias GAWK as `GENOME_FAI_TO_BED`, remove `val_save_reference` parameter, move interval flattening into `annotate_genome_snvs` [#857](https://github.com/nf-core/raredisease/pull/857)
@@ -18,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed`
 
 - Fix intermittent `CALL_SNV_DEEPVARIANT - wgs` test failure caused by non-deterministic GLnexus quality scores by replacing `variantsMD5` with `vcf.summary` [#850](https://github.com/nf-core/raredisease/pull/850)
+- Fix swapped `run_mt_for_wes`/`skip_split_multiallelics` arguments in the `CALL_SNV` call, which disabled multiallelic splitting (and inverted MT-for-WES) when `--run_mt_for_wes` was set [#854](https://github.com/nf-core/raredisease/issues/854)
 
 ### Parameters
 
@@ -63,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `--skip_split_multiallelics` parameter to allow users to skip the `bcftools norm --multiallelics -both` step in SNV calling (DeepVariant and Sentieon), which can cause indel quality degradation in single-interval runs [#823](https://github.com/nf-core/raredisease/pull/823)
 - Add find/concatenate step to concatenate saltshaker classification files before creating the html report, so the final report is case-level. [#826](https://github.com/nf-core/raredisease/pull/826)
 - Extended vcfanno database sanity check to include extra vcfanno resources (`vcfanno_extra`) alongside the main resources, and moved the check upstream to `raredisease.nf` so it covers both genome and mitochondrial SNV annotation subworkflows [#834](https://github.com/nf-core/raredisease/pull/834)
+- Add full test to call_sv_MT subworkflow [#874](https://github.com/nf-core/raredisease/pull/874)
 
 ### `Changed`
 

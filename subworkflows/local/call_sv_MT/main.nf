@@ -121,7 +121,6 @@ workflow CALL_SV_MT {
                 SALTSHAKER_CALL.out.call,
                 val_mitochondria_name
             )
-            ch_saltshaker_vcf = SALTSHAKER_CLASSIFY.out.vcf
 
             SALTSHAKER_CLASSIFY.out.txt
                 .map { meta, txt ->
@@ -169,11 +168,6 @@ workflow CALL_SV_MT {
         }
         MT_DELETION(ch_bam_bai, ch_genome_fasta)
 
-        ch_publish = ch_saltshaker_html
-                        .mix(ch_saltshaker_vcf)
-                        .mix(ch_saltshaker_plot)
-                        .mix(MT_DELETION.out.mt_del_result)
-                        .map { meta, value -> ['call_sv/', [meta, value]] }
 
     emit:
         saltshaker_vcf   = ch_saltshaker_vcf             // channel: [ val(meta), path(vcf) ]
@@ -181,5 +175,4 @@ workflow CALL_SV_MT {
         saltshaker_plot  = ch_saltshaker_plot            // channel: [ val(meta), path(png) ]
         mt_del_result    = MT_DELETION.out.mt_del_result // channel: [ val(meta), path(txt) ]
         updated_priority = ch_svcaller_priority          // channel: [ val(["caller1", "caller2", ...]) ] - includes "mitosalt" if it ran
-        publish          = ch_publish                    // channel: [ val(destination), val(value) ]
 }
