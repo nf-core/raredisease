@@ -18,46 +18,6 @@
                         "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
-                "2": [
-                    [
-                        "call_snv/mitochondria/",
-                        [
-                            {
-                                "id": "justhusky"
-                            },
-                            "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                        ]
-                    ],
-                    [
-                        "call_snv/mitochondria/",
-                        [
-                            {
-                                "id": "justhusky"
-                            },
-                            "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ]
-                ],
-                "publish": [
-                    [
-                        "call_snv/mitochondria/",
-                        [
-                            {
-                                "id": "justhusky"
-                            },
-                            "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                        ]
-                    ],
-                    [
-                        "call_snv/mitochondria/",
-                        [
-                            {
-                                "id": "justhusky"
-                            },
-                            "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ]
-                ],
                 "tbi": [
                     [
                         {
@@ -76,9 +36,9 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-13T22:07:26.775535698",
+        "timestamp": "2026-05-29T16:03:50.71832229",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     }

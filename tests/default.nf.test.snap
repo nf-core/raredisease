@@ -131,10 +131,6 @@
                 "DEEPVARIANT": {
                     "deepvariant": "1.9.0"
                 },
-                "ENSEMBLVEP_FILTERVEP": {
-                    "ensemblvep": 115.2,
-                    "perl-math-cdf": 0.1
-                },
                 "ENSEMBLVEP_ME": {
                     "ensemblvep": 110.1,
                     "perl-math-cdf": 0.1,
@@ -164,6 +160,9 @@
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
+                },
+                "FILTERVEP": {
+                    "filtervep": "1.0.0"
                 },
                 "FIND_CONCATENATE": {
                     "coreutils": 9.4,
@@ -330,13 +329,13 @@
                     "rhocall": "0.5.1"
                 },
                 "SALTSHAKER_CALL": {
-                    "saltshaker": "1.0.0"
+                    "saltshaker": "1.1.1"
                 },
                 "SALTSHAKER_CLASSIFY": {
-                    "saltshaker": "1.0.1"
+                    "saltshaker": "1.1.1"
                 },
                 "SALTSHAKER_PLOT": {
-                    "saltshaker": "1.0.0"
+                    "saltshaker": "1.1.1"
                 },
                 "SAMTOOLS_COLLATE": {
                     "samtools": "1.22.1"
@@ -390,6 +389,9 @@
                     "bcftools": 1.22
                 },
                 "SPLIT_MULTIALLELICS_MT": {
+                    "bcftools": 1.22
+                },
+                "SPLIT_MULTIALLELICS_POSTMERGE_MT": {
                     "bcftools": 1.22
                 },
                 "SPRING_DECOMPRESS_TO_FQ_PAIR": {
@@ -491,7 +493,7 @@
                     "vcfanno": "0.3.7"
                 },
                 "Workflow": {
-                    "nf-core/raredisease": "v3.1.0dev"
+                    "nf-core/raredisease": "v3.2.0dev"
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
@@ -684,7 +686,6 @@
                 "call_sv/hugelymodelbat.saltshaker.png",
                 "call_sv/hugelymodelbat_mitochondria_deletions.txt",
                 "call_sv/justhusky.saltshaker_classify.html",
-                "call_sv/justhusky_saltshaker.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz.tbi",
                 "call_sv/slowlycivilbuck.saltshaker.png",
@@ -1106,7 +1107,6 @@
                 "hugelymodelbat.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "hugelymodelbat_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "justhusky.saltshaker_classify.html:md5,5ec112032a61697ad6e447fc71573522",
-                "justhusky_saltshaker.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
                 "justhusky_sv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
                 "justhusky_sv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "slowlycivilbuck.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -1337,7 +1337,7 @@
                 "slowlycivilbuck.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
             ]
         ],
-        "timestamp": "2026-05-27T15:36:04.165275268",
+        "timestamp": "2026-06-25T10:06:29.744958455",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

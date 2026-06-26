@@ -24,6 +24,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_genome_fai                         // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_fasta                       // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_hisat2index                 // channel: [mandatory] [ val(meta), path(hisat2index) ]
+        ch_manta_regions                      // channel: [mandatory] [ path(bed), path(tbi) ]
         ch_mitosalt_config                    // channel: [mandatory] [val(mitosalt_breakspan),val(mitosalt_breakthreshold),...,val(mitosalt_split_length)]
         ch_mt_bam_bai                         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_mt_fai                             // channel: [mandatory] [ val(meta), path(mtfai) ]
@@ -34,7 +35,6 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_reads                              // channel: [mandatory] [ val(meta), [path(reads)] ]
         ch_subdepth                           // channel: [mandatory] [ val(mitosalt_depth) ]
         ch_svcaller_priority                  // channel: [mandatory] [ val(["var caller tag 1", ...]) ]
-        ch_target_bed                         // channel: [mandatory for WES] [ val(meta), path(bed), path(tbi) ]
         skip_germlinecnvcaller                // boolean
         skip_mitosalt                         // boolean
         val_analysis_type                     // string: "wes", "wgs", or "mito"
@@ -49,17 +49,19 @@ workflow CALL_STRUCTURAL_VARIANTS {
         val_run_mt_for_wes                    // boolean: [mandatory] run_mt_for_wes
 
     main:
-        ch_cnvnator_vcf   = channel.empty()
-        ch_gcnvcaller_vcf = channel.empty()
-        ch_manta_vcf      = channel.empty()
-        ch_merged_svs     = channel.empty()
-        ch_merged_tbi     = channel.empty()
-        ch_publish_mt     = channel.empty()
-        ch_saltshaker_vcf = channel.empty()
-        ch_tiddit_vcf     = channel.empty()
+        ch_cnvnator_vcf    = channel.empty()
+        ch_gcnvcaller_vcf  = channel.empty()
+        ch_manta_vcf       = channel.empty()
+        ch_merged_svs      = channel.empty()
+        ch_merged_tbi      = channel.empty()
+        ch_mt_del_result   = channel.empty()
+        ch_saltshaker_html = channel.empty()
+        ch_saltshaker_plot = channel.empty()
+        ch_saltshaker_vcf  = channel.empty()
+        ch_tiddit_vcf      = channel.empty()
 
         if (!val_analysis_type.equals("mito")) {
-            CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_target_bed, val_analysis_type)
+            CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_manta_regions)
                 .filtered_diploid_sv_vcf
                 .collect{ _meta, vcf -> vcf }
                 .set{ ch_manta_vcf }
@@ -115,7 +117,9 @@ workflow CALL_STRUCTURAL_VARIANTS {
             ch_sv_mt_out.saltshaker_vcf
                 .collect{ _meta, vcf -> vcf }
                 .set { ch_saltshaker_vcf }
-            ch_publish_mt = ch_sv_mt_out.publish
+            ch_saltshaker_html   = ch_sv_mt_out.saltshaker_html
+            ch_saltshaker_plot   = ch_sv_mt_out.saltshaker_plot
+            ch_mt_del_result     = ch_sv_mt_out.mt_del_result
             ch_svcaller_priority = ch_sv_mt_out.updated_priority
         }
 
@@ -148,13 +152,10 @@ workflow CALL_STRUCTURAL_VARIANTS {
             ch_merged_tbi = TABIX_TABIX.out.index
         }
 
-        ch_publish = ch_merged_svs
-            .mix(ch_merged_tbi)
-            .mix(ch_publish_mt)
-            .map { meta, value -> ['call_sv/', [meta, value]] }
-
     emit:
-        vcf        = ch_merged_svs // channel: [ val(meta), path(vcf)]
-        tbi        = ch_merged_tbi // channel: [ val(meta), path(tbi)]
-        publish    = ch_publish    // channel: [ val(destination), val(value) ]
+        mt_del_result   = ch_mt_del_result    // channel: [ val(meta), path(txt) ]
+        saltshaker_html = ch_saltshaker_html  // channel: [ val(meta), path(html) ]
+        saltshaker_plot = ch_saltshaker_plot  // channel: [ val(meta), path(png) ]
+        tbi             = ch_merged_tbi       // channel: [ val(meta), path(tbi)]
+        vcf             = ch_merged_svs       // channel: [ val(meta), path(vcf)]
 }

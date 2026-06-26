@@ -7,6 +7,7 @@ include { BCFTOOLS_ANNOTATE                                     } from '../../..
 include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                   } from '../../../modules/nf-core/bcftools/merge/main'
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_MT                 } from '../../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_MT               } from '../../../modules/nf-core/bcftools/norm/main'
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_POSTMERGE_MT     } from '../../../modules/nf-core/bcftools/norm/main'
 include { GATK4_MERGEVCFS as GATK4_MERGEVCFS_LIFT_UNLIFT_MT     } from '../../../modules/nf-core/gatk4/mergevcfs/main'
 include { GATK4_VARIANTFILTRATION as GATK4_VARIANTFILTRATION_MT } from '../../../modules/nf-core/gatk4/variantfiltration/main'
 include { PICARD_LIFTOVERVCF                                    } from '../../../modules/nf-core/picard/liftovervcf/main'
@@ -94,7 +95,12 @@ workflow POSTPROCESS_MT_CALLS {
             ch_genome_fasta.join(ch_genome_fai, failOnMismatch:true, failOnDuplicate:true).collect()
         )
 
-        BCFTOOLS_MERGE_MT.out.vcf
+        SPLIT_MULTIALLELICS_POSTMERGE_MT(
+            BCFTOOLS_MERGE_MT.out.vcf.join(BCFTOOLS_MERGE_MT.out.index, failOnMismatch:true, failOnDuplicate:true).collect(),
+            ch_genome_fasta
+        )
+
+        SPLIT_MULTIALLELICS_POSTMERGE_MT.out.vcf
             .mix(ch_case_vcf.single)
             .set { ch_addfoundintag_in }
 
@@ -120,12 +126,7 @@ workflow POSTPROCESS_MT_CALLS {
 
         TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
 
-        ch_publish = BCFTOOLS_ANNOTATE.out.vcf
-            .mix(TABIX_ANNOTATE.out.index)
-            .map { meta, value -> ['call_snv/mitochondria/', [meta, value]] }
-
     emit:
-        tbi     = TABIX_ANNOTATE.out.index    // channel: [ val(meta), path(tbi) ]
-        vcf     = BCFTOOLS_ANNOTATE.out.vcf   // channel: [ val(meta), path(vcf) ]
-        publish = ch_publish                  // channel: [ val(destination), val(value) ]
+        tbi = TABIX_ANNOTATE.out.index  // channel: [ val(meta), path(tbi) ]
+        vcf = BCFTOOLS_ANNOTATE.out.vcf // channel: [ val(meta), path(vcf) ]
 }

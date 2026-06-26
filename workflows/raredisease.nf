@@ -63,10 +63,10 @@ include { RANK_VARIANTS as RANK_VARIANTS_SV                           } from '..
 include { SUBSAMPLE_MT_FRAC                                           } from '../subworkflows/local/subsample_mt_frac'
 include { SUBSAMPLE_MT_READS                                          } from '../subworkflows/local/subsample_mt_reads'
 include { VARIANT_EVALUATION                                          } from '../subworkflows/local/variant_evaluation'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
+include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
+include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
+include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -80,6 +80,7 @@ workflow RAREDISEASE {
     ch_alignments
     ch_bait_intervals
     ch_cadd_header
+    ch_cadd_prescored
     ch_cadd_resources
     ch_call_interval
     ch_case_info
@@ -87,6 +88,7 @@ workflow RAREDISEASE {
     ch_dbsnp_tbi
     ch_foundin_header
     ch_gcnvcaller_model
+    ch_genome_bwafastalignindex
     ch_genome_bwaindex
     ch_genome_bwamem2index
     ch_genome_bwamemeindex
@@ -103,6 +105,7 @@ workflow RAREDISEASE {
     ch_hgnc_ids
     ch_intervals_wgs
     ch_intervals_y
+    ch_manta_regions
     ch_me_references
     ch_me_svdb_resources
     ch_ml_model
@@ -190,7 +193,6 @@ workflow RAREDISEASE {
     val_homoplasmy_af_threshold
     val_light_strand_origin_end
     val_light_strand_origin_start
-    val_mbuffer_mem
     val_mito_length
     val_mito_name
     val_mitosalt_breakspan
@@ -221,7 +223,6 @@ workflow RAREDISEASE {
     val_run_rtgvcfeval
     val_run_vcfanno_db_sanity_check
     val_sample_id_map
-    val_samtools_sort_threads
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
     val_svdb_query_bedpedbs
@@ -242,6 +243,19 @@ workflow RAREDISEASE {
     ch_subsample_mt_bam                 = channel.empty()
     ch_subsample_mt_bai                 = channel.empty()
     ch_call_snv_publish                 = channel.empty()
+    ch_call_sv_vcf                      = channel.empty()
+    ch_call_sv_tbi                      = channel.empty()
+    ch_mt_del_result                    = channel.empty()
+    ch_saltshaker_html                  = channel.empty()
+    ch_saltshaker_plot                  = channel.empty()
+    ch_call_snv_bcftools_concat_csi     = channel.empty()
+    ch_call_snv_bcftools_concat_tbi     = channel.empty()
+    ch_call_snv_bcftools_concat_vcf     = channel.empty()
+    ch_call_snv_deepvariant_report      = channel.empty()
+    ch_call_snv_genome_tabix            = channel.empty()
+    ch_call_snv_genome_vcf              = channel.empty()
+    ch_call_snv_mt_tabix                = channel.empty()
+    ch_call_snv_mt_vcf                  = channel.empty()
     ch_call_sv_publish                  = channel.empty()
     ch_call_repeat_expansions_publish   = channel.empty()
     ch_call_mobile_elements_publish     = channel.empty()
@@ -306,6 +320,7 @@ workflow RAREDISEASE {
 
     ALIGN (
         ch_alignments,
+        ch_genome_bwafastalignindex,
         ch_genome_bwaindex,
         ch_genome_bwamem2index,
         ch_genome_bwamemeindex,
@@ -328,11 +343,9 @@ workflow RAREDISEASE {
         val_analysis_type,
         val_exclude_alt,
         val_extract_alignments,
-        val_mbuffer_mem,
         val_mt_aligner,
         val_platform,
         val_run_mt_for_wes,
-        val_samtools_sort_threads,
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram
     )
@@ -461,7 +474,14 @@ workflow RAREDISEASE {
             val_skip_split_multiallelics,
             val_variant_caller
         )
-        ch_call_snv_publish = CALL_SNV.out.publish
+        ch_call_snv_bcftools_concat_csi = CALL_SNV.out.bcftools_concat_csi
+        ch_call_snv_bcftools_concat_tbi = CALL_SNV.out.bcftools_concat_tbi
+        ch_call_snv_bcftools_concat_vcf = CALL_SNV.out.bcftools_concat_vcf
+        ch_call_snv_deepvariant_report  = CALL_SNV.out.deepvariant_report
+        ch_call_snv_genome_tabix        = CALL_SNV.out.genome_tabix
+        ch_call_snv_genome_vcf          = CALL_SNV.out.genome_vcf
+        ch_call_snv_mt_tabix            = CALL_SNV.out.mt_tabix
+        ch_call_snv_mt_vcf              = CALL_SNV.out.mt_vcf
 
         // Removes vcfanno resource with empty records to keep vcfanno from crashing on those files
         ch_vcfanno_toml_final = ch_vcfanno_toml
@@ -481,6 +501,7 @@ workflow RAREDISEASE {
 
             ANNOTATE_GENOME_SNVS (
                 ch_cadd_header,
+                ch_cadd_prescored,
                 ch_cadd_resources,
                 ch_genome_chrsizes,
                 ch_genome_fai,
@@ -563,6 +584,7 @@ workflow RAREDISEASE {
 
             ANNOTATE_MT_SNVS (
                 ch_cadd_header,
+                ch_cadd_prescored,
                 ch_cadd_resources,
                 ch_genome_fasta,
                 ch_genome_fai,
@@ -661,6 +683,7 @@ workflow RAREDISEASE {
             ch_genome_fai,
             ch_genome_fasta,
             ch_genome_hisat2index,
+            ch_manta_regions,
             ch_mitosalt_config,
             ch_mapped.mt_bam_bai,
             ch_mt_fai,
@@ -671,7 +694,6 @@ workflow RAREDISEASE {
             ch_input_fastqs,
             ch_subdepth,
             ch_svcaller_priority,
-            ch_target_bed,
             skip_germlinecnvcaller,
             skip_mitosalt,
             val_analysis_type,
@@ -685,7 +707,11 @@ workflow RAREDISEASE {
             val_mitosalt_heteroplasmy_limit,
             val_run_mt_for_wes
         )
-        ch_call_sv_publish = CALL_STRUCTURAL_VARIANTS.out.publish
+        ch_call_sv_vcf = CALL_STRUCTURAL_VARIANTS.out.vcf
+        ch_call_sv_tbi = CALL_STRUCTURAL_VARIANTS.out.tbi
+        ch_saltshaker_html = CALL_STRUCTURAL_VARIANTS.out.saltshaker_html
+        ch_saltshaker_plot = CALL_STRUCTURAL_VARIANTS.out.saltshaker_plot
+        ch_mt_del_result = CALL_STRUCTURAL_VARIANTS.out.mt_del_result
 
         //
         // ANNOTATE STRUCTURAL VARIANTS
@@ -696,7 +722,7 @@ workflow RAREDISEASE {
                 ch_genome_fasta,
                 ch_svdb_bedpedbs,
                 ch_svdb_dbs,
-                CALL_STRUCTURAL_VARIANTS.out.vcf,
+                ch_call_sv_vcf,
                 ch_vep_cache,
                 ch_vep_extra_files,
                 val_svdb_query_bedpedbs,
@@ -1066,19 +1092,31 @@ workflow RAREDISEASE {
     qc_bam_verifybamid_ud                            = QC_BAM.out.verifybamid_ud                           // channel: [ val(meta), path(ud) ]
     qc_bam_wgsmetrics_wg                             = QC_BAM.out.wgsmetrics_wg                            // channel: [ val(meta), path(metrics) ]
     qc_bam_wgsmetrics_y                              = QC_BAM.out.wgsmetrics_y                             // channel: [ val(meta), path(metrics) ]
-    annotate_genome_snvs_bcftools_concat_tbi         = ch_annotate_genome_snvs_bcftools_concat_tbi       // channel: [ val(meta), path(tbi) ]
-    annotate_genome_snvs_bcftools_concat_vcf         = ch_annotate_genome_snvs_bcftools_concat_vcf       // channel: [ val(meta), path(vcf) ]
-    annotate_genome_snvs_chromograph_autozyg_plots   = ch_annotate_genome_snvs_chromograph_autozyg_plots // channel: [ val(meta), path(png) ]
-    annotate_genome_snvs_chromograph_regions_plots   = ch_annotate_genome_snvs_chromograph_regions_plots // channel: [ val(meta), path(png) ]
-    annotate_genome_snvs_chromograph_sites_plots     = ch_annotate_genome_snvs_chromograph_sites_plots   // channel: [ val(meta), path(png) ]
-    annotate_genome_snvs_rhocall_viz_bed             = ch_annotate_genome_snvs_rhocall_viz_bed           // channel: [ val(meta), path(bed) ]
-    annotate_genome_snvs_rhocall_viz_wig             = ch_annotate_genome_snvs_rhocall_viz_wig           // channel: [ val(meta), path(wig) ]
-    annotate_genome_snvs_ucsc_wigtobigwig_bw         = ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       // channel: [ val(meta), path(bw) ]
+    call_sv_vcf                                      = ch_call_sv_vcf                                      // channel: [ val(meta), path(vcf) ]
+    call_sv_tbi                                      = ch_call_sv_tbi                                      // channel: [ val(meta), path(tbi) ]
+    saltshaker_html                                  = ch_saltshaker_html                                  // channel: [ val(meta), path(html) ]
+    saltshaker_plot                                  = ch_saltshaker_plot                                  // channel: [ val(meta), path(png) ]
+    mt_del_result                                    = ch_mt_del_result                                    // channel: [ val(meta), path(txt) ]
+    call_snv_bcftools_concat_csi             = ch_call_snv_bcftools_concat_csi                             // channel: [ val(meta), path(csi) ]
+    call_snv_bcftools_concat_tbi             = ch_call_snv_bcftools_concat_tbi                             // channel: [ val(meta), path(tbi) ]
+    call_snv_bcftools_concat_vcf             = ch_call_snv_bcftools_concat_vcf                             // channel: [ val(meta), path(vcf) ]
+    call_snv_deepvariant_report              = ch_call_snv_deepvariant_report                              // channel: [ val(meta), path(html) ]
+    call_snv_genome_tabix                    = ch_call_snv_genome_tabix                                    // channel: [ val(meta), path(tbi) ]
+    call_snv_genome_vcf                      = ch_call_snv_genome_vcf                                      // channel: [ val(meta), path(vcf) ]
+    call_snv_mt_tabix                        = ch_call_snv_mt_tabix                                        // channel: [ val(meta), path(tbi) ]
+    call_snv_mt_vcf                          = ch_call_snv_mt_vcf                                          // channel: [ val(meta), path(vcf) ]
+    annotate_genome_snvs_bcftools_concat_tbi         = ch_annotate_genome_snvs_bcftools_concat_tbi         // channel: [ val(meta), path(tbi) ]
+    annotate_genome_snvs_bcftools_concat_vcf         = ch_annotate_genome_snvs_bcftools_concat_vcf         // channel: [ val(meta), path(vcf) ]
+    annotate_genome_snvs_chromograph_autozyg_plots   = ch_annotate_genome_snvs_chromograph_autozyg_plots   // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_chromograph_regions_plots   = ch_annotate_genome_snvs_chromograph_regions_plots   // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_chromograph_sites_plots     = ch_annotate_genome_snvs_chromograph_sites_plots     // channel: [ val(meta), path(png) ]
+    annotate_genome_snvs_rhocall_viz_bed             = ch_annotate_genome_snvs_rhocall_viz_bed             // channel: [ val(meta), path(bed) ]
+    annotate_genome_snvs_rhocall_viz_wig             = ch_annotate_genome_snvs_rhocall_viz_wig             // channel: [ val(meta), path(wig) ]
+    annotate_genome_snvs_ucsc_wigtobigwig_bw         = ch_annotate_genome_snvs_ucsc_wigtobigwig_bw         // channel: [ val(meta), path(bw) ]
     subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     versions                     = ch_versions
-    publish                      = ch_call_snv_publish
-                       .mix(ch_call_sv_publish)
+    publish                      = ch_call_sv_publish
                        .mix(ch_call_repeat_expansions_publish)
                        .mix(ch_call_mobile_elements_publish)
                        .mix(ch_annotate_mt_snvs_publish)

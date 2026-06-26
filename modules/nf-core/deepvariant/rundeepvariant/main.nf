@@ -46,7 +46,12 @@ process DEEPVARIANT_RUNDEEPVARIANT {
         ${regions} \\
         ${par_regions} \\
         --intermediate_results_dir=tmp \\
-        --num_shards=${task.cpus}
+        --num_shards=${task.cpus} 2>&1 | tee deepvariant.log
+    
+    if grep -qi "queue\\.Empty\\|BrokenPipeError" deepvariant.log; then
+        echo "ERROR: Fatal error detected in tool log" >&2
+        exit 1
+    fi
     """
 
     stub:
