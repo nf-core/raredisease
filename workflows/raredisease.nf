@@ -63,10 +63,10 @@ include { RANK_VARIANTS as RANK_VARIANTS_SV                           } from '..
 include { SUBSAMPLE_MT_FRAC                                           } from '../subworkflows/local/subsample_mt_frac'
 include { SUBSAMPLE_MT_READS                                          } from '../subworkflows/local/subsample_mt_reads'
 include { VARIANT_EVALUATION                                          } from '../subworkflows/local/variant_evaluation'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
-include { VCF_FILTER_BCFTOOLS_ENSEMBLVEP as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/nf-core/vcf_filter_bcftools_ensemblvep/main'
+include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
+include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
+include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
+include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -80,6 +80,7 @@ workflow RAREDISEASE {
     ch_alignments
     ch_bait_intervals
     ch_cadd_header
+    ch_cadd_prescored
     ch_cadd_resources
     ch_call_interval
     ch_case_info
@@ -87,6 +88,7 @@ workflow RAREDISEASE {
     ch_dbsnp_tbi
     ch_foundin_header
     ch_gcnvcaller_model
+    ch_genome_bwafastalignindex
     ch_genome_bwaindex
     ch_genome_bwamem2index
     ch_genome_bwamemeindex
@@ -103,6 +105,7 @@ workflow RAREDISEASE {
     ch_hgnc_ids
     ch_intervals_wgs
     ch_intervals_y
+    ch_manta_regions
     ch_me_references
     ch_me_svdb_resources
     ch_ml_model
@@ -190,7 +193,6 @@ workflow RAREDISEASE {
     val_homoplasmy_af_threshold
     val_light_strand_origin_end
     val_light_strand_origin_start
-    val_mbuffer_mem
     val_mito_length
     val_mito_name
     val_mitosalt_breakspan
@@ -221,7 +223,6 @@ workflow RAREDISEASE {
     val_run_rtgvcfeval
     val_run_vcfanno_db_sanity_check
     val_sample_id_map
-    val_samtools_sort_threads
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
     val_svdb_query_bedpedbs
@@ -319,6 +320,7 @@ workflow RAREDISEASE {
 
     ALIGN (
         ch_alignments,
+        ch_genome_bwafastalignindex,
         ch_genome_bwaindex,
         ch_genome_bwamem2index,
         ch_genome_bwamemeindex,
@@ -341,11 +343,9 @@ workflow RAREDISEASE {
         val_analysis_type,
         val_exclude_alt,
         val_extract_alignments,
-        val_mbuffer_mem,
         val_mt_aligner,
         val_platform,
         val_run_mt_for_wes,
-        val_samtools_sort_threads,
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram
     )
@@ -501,6 +501,7 @@ workflow RAREDISEASE {
 
             ANNOTATE_GENOME_SNVS (
                 ch_cadd_header,
+                ch_cadd_prescored,
                 ch_cadd_resources,
                 ch_genome_chrsizes,
                 ch_genome_fai,
@@ -583,6 +584,7 @@ workflow RAREDISEASE {
 
             ANNOTATE_MT_SNVS (
                 ch_cadd_header,
+                ch_cadd_prescored,
                 ch_cadd_resources,
                 ch_genome_fasta,
                 ch_genome_fai,
@@ -681,6 +683,7 @@ workflow RAREDISEASE {
             ch_genome_fai,
             ch_genome_fasta,
             ch_genome_hisat2index,
+            ch_manta_regions,
             ch_mitosalt_config,
             ch_mapped.mt_bam_bai,
             ch_mt_fai,
@@ -691,7 +694,6 @@ workflow RAREDISEASE {
             ch_input_fastqs,
             ch_subdepth,
             ch_svcaller_priority,
-            ch_target_bed,
             skip_germlinecnvcaller,
             skip_mitosalt,
             val_analysis_type,

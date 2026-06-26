@@ -106,34 +106,25 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of([[id:'resources'], file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/cadd_to_vcf_header_-1.0-.txt', checkIfExists: true)]).collect()
-                input[1]  = Channel.from(env("PWD")).map { dir -> [ [ id: 'cadd_resources' ], dir ] }
-                input[2]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]).collect()
-                input[3]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]).collect()
-                input[4]  = channel.of([
+                input[1]  = channel.value([[:], []])
+                input[2]  = Channel.from(env("PWD")).map { dir -> [ [ id: 'cadd_resources' ], dir ] }
+                input[3]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]).collect()
+                input[4]  = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]).collect()
+                input[5]  = channel.of([
                     [id:'justhusky', case_id:'justhusky'],
                     file(params.pipelines_testdata_base_path + 'reference/vcfanno_gnomad_mt.vcf.gz', checkIfExists: true),
                     file(params.pipelines_testdata_base_path + 'reference/vcfanno_gnomad_mt.vcf.gz.tbi', checkIfExists: true),
                 ])
-                input[5]  = channel.value([[]])
-                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_functions.lua', checkIfExists: true)).collect()
-                input[7]  = [
-                                file(params.pipelines_testdata_base_path + 'reference/grch37_gnomad_-r2.1.1-.vcf.gz', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'reference/grch37_gnomad_-r2.1.1-.vcf.gz.tbi', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'reference/vcfanno_cadd.tsv.gz', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'reference/vcfanno_cadd.tsv.gz.tbi', checkIfExists: true)
-                            ]
-                input[8]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_config.toml', checkIfExists: true)).collect()
-                input[9]  = UNTAR.out.untar.map { _meta, untar -> untar }.collect()
-                input[10] = [
-                                file(params.pipelines_testdata_base_path + 'reference/pLI_values.txt', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'reference/LoFtool_scores.txt', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'reference/spliceai_21_scores_raw_snv_-v1.3-.vcf.gz', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'reference/spliceai_21_scores_raw_snv_-v1.3-.vcf.gz.tbi', checkIfExists: true)
-                            ]
-                input[11] = null
-                input[12] = 'GRCh37'
-                input[13] = 1.0
-                input[14] = 107
+                input[6]  = channel.value([[]])
+                input[7]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_functions.lua', checkIfExists: true)).collect()
+                input[8]  = channel.value(file(params.pipelines_testdata_base_path + 'reference/grch38_gnomad_reformated_-r3.1.1-.vcf.gz', checkIfExists: true))
+                input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_config.toml', checkIfExists: true)).collect()
+                input[10] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
+                input[11] = channel.value([])
+                input[12] = null
+                input[13] = 'GRCh37'
+                input[14] = 1.0
+                input[15] = 107
                 """
             }
         }
