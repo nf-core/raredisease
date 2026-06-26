@@ -1,4 +1,22 @@
 {
+    "ANNOTATE_MT_SNVS - GRCh37": {
+        "content": [
+            {
+                "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,35b30b356d34416a56b262834cbeaf32": "VcfFile [chromosomes=[MT], sampleCount=0, variantCount=18164, phased=true, phasedAutodetect=true]"
+            },
+            "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,35b30b356d34416a56b262834cbeaf32",
+            "VcfFile [chromosomes=[MT], sampleCount=0, variantCount=18164, phased=true, phasedAutodetect=true]",
+            "annotate_snv/mitochondria/",
+            {
+                
+            }
+        ],
+        "timestamp": "2026-06-24T11:27:16.802351909",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.4"
+        }
+    },
     "ANNOTATE_MT_SNVS - GRCh37, stub": {
         "content": [
             [
@@ -140,10 +158,10 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-27T16:43:51.626374218",
+        "timestamp": "2026-06-24T11:04:00.579594708",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.03.4"
         }
     }
 }
