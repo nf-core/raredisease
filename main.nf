@@ -598,6 +598,8 @@ workflow NFCORE_RAREDISEASE {
     annotate_genome_snvs_rhocall_viz_bed                = RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_bed           // channel: [ val(meta), path(bed) ]
     annotate_genome_snvs_rhocall_viz_wig                = RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_wig           // channel: [ val(meta), path(wig) ]
     annotate_genome_snvs_ucsc_wigtobigwig_bw            = RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw       // channel: [ val(meta), path(bw) ]
+    annotate_mt_snvs_ensemblvep_mt_tbi                  = RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_tbi             // channel: [ val(meta), path(tbi) ]
+    annotate_mt_snvs_ensemblvep_mt_vcf                  = RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf             // channel: [ val(meta), path(vcf) ]
     subsample_mt_bai                                    = RAREDISEASE.out.subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam                                    = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     publish                                             = RAREDISEASE.out.publish
