@@ -1,4 +1,58 @@
 {
+    "align bwafastalign": {
+        "content": [
+            [
+                "test_sorted_md.metrics.txt"
+            ],
+            [
+                [
+                    {
+                        "id": "test",
+                        "sample": "test",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                    },
+                    "test.stats:md5,f0914a56ae73007ebd242cab27861700"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "b88d51cb3010d98935b39ef6a3c58499"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "af8628d9df18b2d3d4f6fd47ef2bb872"
+                ]
+            ]
+        ],
+        "timestamp": "2026-06-25T13:30:01.076823606",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
     "align bwamem2": {
         "content": [
             [
@@ -49,7 +103,7 @@
         ],
         "timestamp": "2026-04-08T14:47:44.537374",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     },
@@ -332,7 +386,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "40408ed51d46ab3f1524be98d6b31441"
+                    "11413e81e47d32ac386d29b693693a2e"
                 ]
             ],
             [
@@ -353,7 +407,7 @@
         ],
         "timestamp": "2026-04-08T14:48:21.046802",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     }

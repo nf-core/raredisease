@@ -131,10 +131,6 @@
                 "DEEPVARIANT": {
                     "deepvariant": "1.9.0"
                 },
-                "ENSEMBLVEP_FILTERVEP": {
-                    "ensemblvep": 115.2,
-                    "perl-math-cdf": 0.1
-                },
                 "ENSEMBLVEP_ME": {
                     "ensemblvep": 110.1,
                     "perl-math-cdf": 0.1,
@@ -164,6 +160,14 @@
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
+                },
+                "FILTERVEP": {
+                    "filtervep": "1.0.0"
+                },
+                "FIND_CONCATENATE": {
+                    "coreutils": 9.4,
+                    "find": "4.6.0",
+                    "pigz": 2.8
                 },
                 "GATK4_FILTERMUTECTCALLS_MT": {
                     "gatk4": "4.6.2.0"
@@ -387,6 +391,9 @@
                 "SPLIT_MULTIALLELICS_MT": {
                     "bcftools": 1.22
                 },
+                "SPLIT_MULTIALLELICS_POSTMERGE_MT": {
+                    "bcftools": 1.22
+                },
                 "SPRING_DECOMPRESS_TO_FQ_PAIR": {
                     "spring": "1.1.1"
                 },
@@ -486,7 +493,7 @@
                     "vcfanno": "0.3.7"
                 },
                 "Workflow": {
-                    "nf-core/raredisease": "v3.1.0dev"
+                    "nf-core/raredisease": "v3.2.0dev"
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
@@ -1330,10 +1337,10 @@
                 "slowlycivilbuck.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
             ]
         ],
-        "timestamp": "2026-06-23T13:26:12.616875047",
+        "timestamp": "2026-06-25T10:06:29.744958455",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "25.10.4"
         }
     }
 }

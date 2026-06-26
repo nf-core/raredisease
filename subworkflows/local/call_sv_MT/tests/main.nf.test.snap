@@ -7,7 +7,7 @@
                     {
                         "id": "justhusky"
                     },
-                    "justhusky.saltshaker_classify.html:md5,d3e9be4deac01d3a53937edca7238709"
+                    "justhusky.saltshaker_classify.html:md5,f8edbbe314bc4e5e7bfc10c0c92a59b3"
                 ]
             ],
             "earlycasualcaiman.saltshaker.png",
@@ -54,10 +54,10 @@
                 ]
             ]
         ],
-        "timestamp": "2026-06-23T12:41:13.382138",
+        "timestamp": "2026-06-25T14:07:56.059247461",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
         }
     },
     "CALL_SV_MT - 2 samples - stub": {
@@ -614,7 +614,7 @@
                     {
                         "id": "justhusky"
                     },
-                    "justhusky.saltshaker_classify.html:md5,1999c31d1c6880fc5f3021397f2111d3"
+                    "justhusky.saltshaker_classify.html:md5,e3077e05ca959239f0b8ea25ff515bf3"
                 ]
             ],
             "earlycasualcaiman.saltshaker.png",
@@ -645,10 +645,10 @@
                 ]
             ]
         ],
-        "timestamp": "2026-06-23T12:37:46.672655",
+        "timestamp": "2026-06-25T14:05:52.399203922",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
         }
     }
 }

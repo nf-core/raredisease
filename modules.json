@@ -75,6 +75,16 @@
                         "git_sha": "707241c72951f24fd89982c4c80c5983a4c437ef",
                         "installed_by": ["modules"]
                     },
+                    "bwafastalign/index": {
+                        "branch": "master",
+                        "git_sha": "4ddd2d28518c7475bc76f0dd0e0451dd0e19df2a",
+                        "installed_by": ["modules"]
+                    },
+                    "bwafastalign/mem": {
+                        "branch": "master",
+                        "git_sha": "d6379deecb794ad5cc6234f3208085aaee27b327",
+                        "installed_by": ["modules"]
+                    },
                     "bwamem2/index": {
                         "branch": "master",
                         "git_sha": "5dd46a36fca68d6ad1a6b22ec47adc8c6863717d",
@@ -92,7 +102,7 @@
                     },
                     "bwameme/mem": {
                         "branch": "master",
-                        "git_sha": "7a41710e25fdcdf8e4d5b324f2eb74022ffc77ff",
+                        "git_sha": "ead2c49d7abda0172e1a0abf585b305b690fb8a8",
                         "installed_by": ["modules"]
                     },
                     "cadd": {
@@ -128,12 +138,8 @@
                     "deepvariant/rundeepvariant": {
                         "branch": "master",
                         "git_sha": "f2b138ee1d91f67d31c187317d7e83e429bf0309",
-                        "installed_by": ["modules"]
-                    },
-                    "ensemblvep/filtervep": {
-                        "branch": "master",
-                        "git_sha": "2e751c119b5e6e9c7ecda7a682e157aabb57a812",
-                        "installed_by": ["modules", "vcf_filter_bcftools_ensemblvep"]
+                        "installed_by": ["modules"],
+                        "patch": "modules/nf-core/deepvariant/rundeepvariant/deepvariant-rundeepvariant.diff"
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
@@ -383,7 +389,7 @@
                     },
                     "saltshaker/call": {
                         "branch": "master",
-                        "git_sha": "0932567705843eb10831d31cb200ea3f69a2322e",
+                        "git_sha": "a61c82ad6d255d555aa6c7f1c3c0e90c3735c830",
                         "installed_by": ["modules"]
                     },
                     "saltshaker/classify": {
@@ -578,11 +584,6 @@
                     "utils_nfschema_plugin": {
                         "branch": "master",
                         "git_sha": "fdc08b8b1ae74f56686ce21f7ea11ad11990ce57",
-                        "installed_by": ["subworkflows"]
-                    },
-                    "vcf_filter_bcftools_ensemblvep": {
-                        "branch": "master",
-                        "git_sha": "95518d261ec0561b3dffb332944bebc5ef85efcf",
                         "installed_by": ["subworkflows"]
                     }
                 }
