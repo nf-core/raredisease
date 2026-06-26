@@ -156,11 +156,6 @@
                 "FILTERVEP": {
                     "filtervep": "1.0.0"
                 },
-                "FIND_CONCATENATE": {
-                    "coreutils": 9.4,
-                    "find": "4.6.0",
-                    "pigz": 2.8
-                },
                 "GATK4_FILTERMUTECTCALLS_MT": {
                     "gatk4": "4.6.2.0"
                 },
@@ -662,10 +657,10 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-06-25T10:16:14.231848002",
+        "timestamp": "2026-06-26T14:21:28.826151619",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.3"
         }
     }
 }

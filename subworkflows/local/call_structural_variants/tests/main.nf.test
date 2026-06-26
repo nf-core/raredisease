@@ -61,10 +61,9 @@ nextflow_workflow {
                         file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)
                     ]
                 ])
-                input[19] = channel.empty()
-                input[20] = channel.value(10000000)
-                input[21] = channel.value(['manta', 'tiddit', 'cnvnator'])
-                input[22] = channel.of([[id:'target'], [], []])
+                input[20] = channel.empty()
+                input[21] = channel.value(10000000)
+                input[22] = channel.value(['manta', 'tiddit', 'cnvnator'])
                 input[23] = true
                 input[24] = false
                 input[25] = 'wgs'
