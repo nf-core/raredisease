@@ -257,7 +257,11 @@ workflow RAREDISEASE {
     ch_call_snv_mt_tabix                = channel.empty()
     ch_call_snv_mt_vcf                  = channel.empty()
     ch_call_sv_publish                  = channel.empty()
-    ch_call_repeat_expansions_publish   = channel.empty()
+    ch_call_repeat_expansions_expansionhunter_bai = channel.empty()
+    ch_call_repeat_expansions_expansionhunter_bam = channel.empty()
+    ch_call_repeat_expansions_expansionhunter_vcf = channel.empty()
+    ch_call_repeat_expansions_stranger_tbi        = channel.empty()
+    ch_call_repeat_expansions_stranger_vcf        = channel.empty()
     ch_call_mobile_elements_publish     = channel.empty()
     ch_annotate_genome_snvs_bcftools_concat_tbi       = channel.empty()
     ch_annotate_genome_snvs_bcftools_concat_vcf       = channel.empty()
@@ -421,17 +425,17 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_genome_fai
         )
-        ch_call_repeat_expansions_publish = CALL_REPEAT_EXPANSIONS.out.publish
+        ch_call_repeat_expansions_expansionhunter_bai = CALL_REPEAT_EXPANSIONS.out.expansionhunter_bai
+        ch_call_repeat_expansions_expansionhunter_bam = CALL_REPEAT_EXPANSIONS.out.expansionhunter_bam
+        ch_call_repeat_expansions_expansionhunter_vcf = CALL_REPEAT_EXPANSIONS.out.expansionhunter_vcf
 
         if (!skip_repeat_annotation) {
             STRANGER (
                 CALL_REPEAT_EXPANSIONS.out.vcf,
                 ch_variant_catalog
             )
-            ch_call_repeat_expansions_publish = ch_call_repeat_expansions_publish
-                .mix(STRANGER.out.vcf
-                    .mix(STRANGER.out.tbi)
-                    .map { meta, value -> ['repeat_expansions/', [meta, value]] })
+            ch_call_repeat_expansions_stranger_vcf = STRANGER.out.vcf
+            ch_call_repeat_expansions_stranger_tbi = STRANGER.out.tbi
         }
     }
 
@@ -1097,6 +1101,11 @@ workflow RAREDISEASE {
     saltshaker_html                                  = ch_saltshaker_html                                  // channel: [ val(meta), path(html) ]
     saltshaker_plot                                  = ch_saltshaker_plot                                  // channel: [ val(meta), path(png) ]
     mt_del_result                                    = ch_mt_del_result                                    // channel: [ val(meta), path(txt) ]
+    call_repeat_expansions_expansionhunter_bai       = ch_call_repeat_expansions_expansionhunter_bai       // channel: [ val(meta), path(bai) ]
+    call_repeat_expansions_expansionhunter_bam       = ch_call_repeat_expansions_expansionhunter_bam       // channel: [ val(meta), path(bam) ]
+    call_repeat_expansions_expansionhunter_vcf       = ch_call_repeat_expansions_expansionhunter_vcf       // channel: [ val(meta), path(vcf) ]
+    call_repeat_expansions_stranger_tbi              = ch_call_repeat_expansions_stranger_tbi              // channel: [ val(meta), path(tbi) ]
+    call_repeat_expansions_stranger_vcf              = ch_call_repeat_expansions_stranger_vcf              // channel: [ val(meta), path(vcf) ]
     call_snv_bcftools_concat_csi             = ch_call_snv_bcftools_concat_csi                             // channel: [ val(meta), path(csi) ]
     call_snv_bcftools_concat_tbi             = ch_call_snv_bcftools_concat_tbi                             // channel: [ val(meta), path(tbi) ]
     call_snv_bcftools_concat_vcf             = ch_call_snv_bcftools_concat_vcf                             // channel: [ val(meta), path(vcf) ]
@@ -1117,7 +1126,6 @@ workflow RAREDISEASE {
     subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     versions                     = ch_versions
     publish                      = ch_call_sv_publish
-                       .mix(ch_call_repeat_expansions_publish)
                        .mix(ch_call_mobile_elements_publish)
                        .mix(ch_annotate_mt_snvs_publish)
                        .mix(ch_annotate_sv_publish)
