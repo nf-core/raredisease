@@ -603,7 +603,8 @@
                     "vcf_extract_relate_somalier": {
                         "branch": "master",
                         "git_sha": "54e41f4ed3aead45054380a9befeb927612ffc91",
-                        "installed_by": ["subworkflows"]
+                        "installed_by": ["subworkflows"],
+                        "patch": "subworkflows/nf-core/vcf_extract_relate_somalier/vcf_extract_relate_somalier.diff"
                     }
                 }
             }

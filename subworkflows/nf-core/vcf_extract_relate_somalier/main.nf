@@ -68,9 +68,15 @@ workflow VCF_EXTRACT_RELATE_SOMALIER {
         ch_sample_groups
     )
 
+    // Consolidate publish outputs so callers can consume a single `publish` channel
+    ch_publish = SOMALIER_RELATE.out.html
+        .mix(SOMALIER_RELATE.out.pairs_tsv)
+        .mix(SOMALIER_RELATE.out.samples_tsv)
+
     emit:
     extract        = SOMALIER_EXTRACT.out.extract       // channel: [ val(meta), path(extract) ]
     html           = SOMALIER_RELATE.out.html           // channel: [ val(meta), path(html) ]
     pairs_tsv      = SOMALIER_RELATE.out.pairs_tsv      // channel: [ val(meta), path(tsv) ]
     samples_tsv    = SOMALIER_RELATE.out.samples_tsv    // channel: [ val(meta), path(tsv) ]
+    publish        = ch_publish                         // channel: [ val(meta), path(...) ]
 }

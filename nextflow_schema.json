@@ -654,6 +654,20 @@
                     "description": "Disable specified tools.",
                     "help_text": "Multiple tools can be specified, separated by commas.",
                     "pattern": "^((fastp|gens|germlinecnvcaller|peddy|smncopynumbercaller|vcf2cytosure|fastqc|ngsbits|mitosalt)?,?)*(?<!,)$"
+                },
+                "somalier_sex_check": {
+                    "type": "boolean",
+                    "description": "Run Somalier sex-check (extract and relate).",
+                    "fa_icon": "fas fa-toggle-on",
+                    "default": true
+                },
+                "somalier_sites_vcf": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "description": "Path to the somalier sites VCF (bgzipped).",
+                    "pattern": "^\\S+\\.vcf(\\.gz)?$",
+                    "fa_icon": "fas fa-file"                
                 }
             }
         },
