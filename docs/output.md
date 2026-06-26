@@ -69,6 +69,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
     - [Filtering and ranking](#filtering-and-ranking)
       - [Filter_vep](#filter_vep)
       - [GENMOD](#genmod)
+      - [MIVMIR, GICAM](#mivmir-gicam)
     - [Mobile element analysis](#mobile-element-analysis)
       - [Calling mobile elements](#calling-mobile-elements)
       - [Annotating mobile elements](#annotating-mobile-elements)
@@ -526,6 +527,101 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
   - `<case_id>_sv_ranked_resarch.vcf.gz.tbi`: index of the file containing SV annotations with their rank scores.
 
 </details>
+
+#### MIVMIR, GICAM
+
+[MIVMIR](../modules/local/mivmir/meta.yml) and [GICAM](../modules/local/gicam/meta.yml) are two machine learning models used to
+infer a pathogenicity score for SNVs, INDELs. In essence, MIVMIR infer SNV pathogenicity and GICAM improves precision
+for duo, trio, ... analysis.
+
+The models are enabled as a single entity, to achieve the best performance.
+GICAM has a dependency on MIVMIR, acting as an input feature to GICAM.
+
+MIVMIR, GICAM can be enabled by setting the `--rank_with_mivmir_gicam` feature flag.
+
+Only `<outdir>/rank_and_filter/<case_id>_snv_ranked_<research|clinical>.vcf.gz` contains the output annotations.
+
+MIVMIR and GICAM [source code and performance metrics available here](https://github.com/Clinical-Genomics/rdds/tree/master/src/rdds/).
+
+##### MIVMIR
+
+MIVMIR is a deep neural network regression type model trained on ClinVar pathogenic
+variants and an Ashkenazim trio negative background. The purpose of the model
+is to infer pathogenicity/ rank scores from a set of input annotations.
+The model is scoring every variant in isolation.
+
+Model is optimized to generalize well on Scilifelab Clinical Genomics Stockholm cohort,
+and does have some custom input features (`SWEGENAF`, `Frq`) as by our
+local pipeline configuration.
+
+> It is possible to run model inference on variants without SWEGENAF, Frq
+> annotations. These annotations are dropped out during training to simulate
+> lack of previous clinical evidence in order to regularize the model.
+> However, such configuration is highly experimental, unsupported
+> and at your own discretion.
+
+###### Requirements
+
+MIVMIR relies on the following VCF annotations/keys as variant feature inputs:
+
+- `CSQ/PolyPhen`
+- `CSQ/SIFT`
+- `CSQ/CLINVAR_CLNREVSTAT`
+- `CSQ/CLINVAR_CLNSIG`
+- `CSQ/MaxEntScan_alt`
+- `CSQ/MaxEntScan_diff`
+- `CSQ/MES-SWA_acceptor_alt`
+- `CSQ/MES-SWA_donor_alt`
+- `CSQ/MES-SWA_donor_diff`
+- `CSQ/SpliceAI_pred_DS_AL`
+- `CSQ/SpliceAI_pred_DS_DG`
+- `CSQ/SpliceAI_pred_DS_DL`
+- `CSQ/REVEL_score`
+- `CSQ/LoFtool`
+- `CSQ/GERP++_RS`
+- `CSQ/phastCons100way_vertebrate`
+- `CSQ/phyloP100way_vertebrate`
+- `CSQ/SpliceAI_pred_DS_AG`
+- `most_severe_consequence`
+- `CADD`
+- `SWEGENAF` ([SweGen Variant Frequency Dataset](https://swefreq.nbis.se/dataset/SweGen))
+- `GNOMADAF_popmax`
+- `Frq` (variant frequency from a local database)
+
+> If any annotation is missing, it will be **_*silently*_** interpreted as `''` or `0.0` depending on data type.
+
+> For GRCh38, GnomAD has renamed the `GNOMADAF_popmax` to `GNOMADAF_grpmax`.  
+> Adjust this via the `--override_vcf_input_keys [OLD_KEY:NEW_KEY],[...]` flag.
+
+The tool adds two keys to the VCF
+
+- `MivmirScore`, a score in range (0, 1) where 1.0 inferred pathogenic.
+- `MivmirExplanation`, a key value array type str-float explaining the additive contribution of each annotation
+  to the final variant score. The explanations are sorted in decreasing order, the largest input feature
+  contributor is listed first. This key is only available for high scoring variants for compute performance
+  reasons.
+
+##### GICAM
+
+Model for SNV ranking in conjunction with MIVMIR.
+
+This model improves precision for duo, trio, ... analysis situations by reducing MIVMIR scores for variants that's
+not following the appropriate GENMOD genetic inheritance model. Applied to MIVMIR scores as a post-processing step.
+
+###### Requirements
+
+GICAM relies on the following VCF annotations/keys as variant feature inputs:
+
+- `MivmirScore`, (0, 1)
+- `RankScoreNormalized`, (0, 1) as produced by GENMOD using rank_model_genmod_gicam.ini custom scoring config
+
+The tool adds one key to the VCF
+
+- `GicamScore` (0, 1) where 1.0 inferred pathogenic.
+
+> GICAM is optimized for the GENMOD scoring config present in the gicam module directory, that
+> generates RankScoreNormalized.  
+> Modifications to the GENMOD scoring config will break inference (unless GICAM is first retrained on the new config).
 
 ### Mobile element analysis
 

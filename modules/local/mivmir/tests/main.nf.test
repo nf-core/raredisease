@@ -1,0 +1,31 @@
+nextflow_process {
+
+    name "Test Process MIVMIR_INFER"
+    script "modules/local/mivmir/main.nf"
+    process "MIVMIR_INFER"
+
+    test("Test MIVMIR inference on annotated VCF") {
+
+        when {
+            params {
+            }
+            process {
+                """
+                input[0] = [
+                    [ id:'test', single_end:false ], // meta map
+                    // VCF as annotated by rank_variants subworkflow, prior to mivmir inference call
+                    file(params.pipelines_testdata_base_path + 'testdata/justhusky_snv_mivmir.vcf', checkIfExists: true)
+                ]
+                input[1] = true
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out).match()
+        }
+
+    }
+
+}
