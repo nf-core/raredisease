@@ -61,20 +61,21 @@ nextflow_workflow {
                         file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)
                     ]
                 ])
-                input[20] = channel.value(10000000)
-                input[21] = channel.value(['manta', 'tiddit', 'cnvnator'])
-                input[22] = true
-                input[23] = false
-                input[24] = 'wgs'
-                input[25] = 407
-                input[26] = 16081
-                input[27] = 5763
-                input[28] = 5730
-                input[29] = 16569
-                input[30] = 'MT'
-                input[31] = 15
-                input[32] = 0.01
-                input[33] = true
+                input[20] = channel.empty()
+                input[21] = channel.value(10000000)
+                input[22] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[23] = true
+                input[24] = false
+                input[25] = 'wgs'
+                input[26] = 407
+                input[27] = 16081
+                input[28] = 5763
+                input[29] = 5730
+                input[30] = 16569
+                input[31] = 'MT'
+                input[32] = 15
+                input[33] = 0.01
+                input[34] = true
                 """
             }
         }

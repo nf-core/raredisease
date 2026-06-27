@@ -164,11 +164,6 @@
                 "FILTERVEP": {
                     "filtervep": "1.0.0"
                 },
-                "FIND_CONCATENATE": {
-                    "coreutils": 9.4,
-                    "find": "4.6.0",
-                    "pigz": 2.8
-                },
                 "GATK4_FILTERMUTECTCALLS_MT": {
                     "gatk4": "4.6.2.0"
                 },
@@ -1106,7 +1101,7 @@
                 "earlycasualcaiman_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "hugelymodelbat.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "hugelymodelbat_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "justhusky.saltshaker_classify.html:md5,5ec112032a61697ad6e447fc71573522",
+                "justhusky.saltshaker_classify.html:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "justhusky_sv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
                 "justhusky_sv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "slowlycivilbuck.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -1337,10 +1332,10 @@
                 "slowlycivilbuck.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
             ]
         ],
-        "timestamp": "2026-06-25T10:06:29.744958455",
+        "timestamp": "2026-06-26T14:16:17.160260766",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.3"
         }
     }
 }
