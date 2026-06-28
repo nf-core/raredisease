@@ -17,9 +17,9 @@ Changes in 'vcf_extract_relate_somalier/main.nf':
      html           = SOMALIER_RELATE.out.html           // channel: [ val(meta), path(html) ]
      pairs_tsv      = SOMALIER_RELATE.out.pairs_tsv      // channel: [ val(meta), path(tsv) ]
      samples_tsv    = SOMALIER_RELATE.out.samples_tsv    // channel: [ val(meta), path(tsv) ]
--}
 +    publish        = ch_publish                         // channel: [ val(meta), path(...) ]
-+}
+ }
+
 'subworkflows/nf-core/vcf_extract_relate_somalier/tests/main.nf.test.snap' is unchanged
 'subworkflows/nf-core/vcf_extract_relate_somalier/tests/nextflow.config' is unchanged
 'subworkflows/nf-core/vcf_extract_relate_somalier/tests/main.nf.test' is unchanged
