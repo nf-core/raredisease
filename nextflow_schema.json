@@ -667,7 +667,7 @@
                     "exists": true,
                     "description": "Path to the somalier sites VCF (bgzipped).",
                     "pattern": "^\\S+\\.vcf(\\.gz)?$",
-                    "fa_icon": "fas fa-file"                
+                    "fa_icon": "fas fa-file"
                 }
             }
         },
