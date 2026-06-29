@@ -148,6 +148,8 @@ workflow NFCORE_RAREDISEASE {
     val_verifybamid_svd_mu
     val_verifybamid_svd_ud
     val_vep_cache
+    val_contamination_sites
+    val_contamination_sites_tbi
 
     main:
 
@@ -323,6 +325,26 @@ workflow NFCORE_RAREDISEASE {
     skip_peddy                 = parseSkipList(val_skip_tools, 'peddy')
     skip_smncopynumbercaller   = parseSkipList(val_skip_tools, 'smncopynumbercaller')
     skip_vcf2cytosure          = parseSkipList(val_skip_tools, 'vcf2cytosure')
+    // GATK contamination check is also skipped when no contamination sites are supplied
+    skip_contamination         = parseSkipList(val_skip_tools, 'contamination') || !val_contamination_sites
+
+    //
+    // Build contamination check inputs (channel construction kept out of the named workflow)
+    //
+    ch_contamination_sites     = channel.empty()
+    ch_intervals_contamination = channel.empty()
+    if (!skip_contamination) {
+        ch_contamination_sites = channel.of([
+            file(val_contamination_sites, checkIfExists: true),
+            file(val_contamination_sites_tbi, checkIfExists: true)
+        ]).collect()
+
+        // Use intervals for WES (target regions); WGS stays genome-wide.
+        // CRITICAL: keep channel.empty() for WGS, not channel.of([]), so downstream ifEmpty handling works.
+        if (val_analysis_type.equals("wes") && val_target_bed) {
+            ch_intervals_contamination = channel.fromPath(val_target_bed).collect()
+        }
+    }
 
     // Subworkflows
     skip_me_annotation         = parseSkipList(val_skip_subworkflows, 'me_annotation')
@@ -526,7 +548,10 @@ workflow NFCORE_RAREDISEASE {
         val_svdb_query_dbs,
         val_target_bed,
         val_variant_caller,
-        val_vep_cache_version
+        val_vep_cache_version,
+        skip_contamination,
+        ch_contamination_sites,
+        ch_intervals_contamination
     )
     emit:
     align_fastp_out                                     = RAREDISEASE.out.align_fastp_out              // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
@@ -728,7 +753,9 @@ workflow {
         params.verifybamid_svd_bed,
         params.verifybamid_svd_mu,
         params.verifybamid_svd_ud,
-        params.vep_cache
+        params.vep_cache,
+        params.contamination_sites,
+        params.contamination_sites_tbi
     )
     //
     // SUBWORKFLOW: Run completion tasks

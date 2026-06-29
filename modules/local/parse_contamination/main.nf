@@ -12,7 +12,7 @@ process PARSE_CONTAMINATION {
 
     output:
     tuple val(meta), path("*_contamination_mqc.tsv"), emit: mqc_table
-    path "versions.yml"                             , emit: versions
+    tuple val("${task.process}"), val('python'), eval("python3 --version | sed 's/Python //'"), topic: versions, emit: versions_python
 
     when:
     task.ext.when == null || task.ext.when
@@ -24,21 +24,11 @@ process PARSE_CONTAMINATION {
         --input ${contamination_table} \\
         --sample_id ${meta.id} \\
         --prefix ${prefix}
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: \$(python --version | sed 's/Python //')
-    END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}_contamination_mqc.tsv
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        python: \$(python --version | sed 's/Python //')
-    END_VERSIONS
     """
 }

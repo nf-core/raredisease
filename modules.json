@@ -258,12 +258,12 @@
                     },
                     "gatk4/calculatecontamination": {
                         "branch": "master",
-                        "git_sha": "ae8cd884f895585c6799ab4eb6a2c9f44df03336",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
                         "installed_by": ["modules"]
                     },
                     "gatk4/getpileupsummaries": {
                         "branch": "master",
-                        "git_sha": "ae8cd884f895585c6799ab4eb6a2c9f44df03336",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
                         "installed_by": ["modules"]
                     },
                     "gawk": {

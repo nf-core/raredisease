@@ -232,6 +232,9 @@ workflow RAREDISEASE {
     val_target_bed
     val_variant_caller
     val_vep_cache_version
+    skip_contamination
+    ch_contamination_sites
+    ch_intervals_contamination
 
     main:
 
@@ -407,25 +410,7 @@ workflow RAREDISEASE {
     //
     ch_contamination_mqc = Channel.empty()
 
-    if (params.run_contamination && params.contamination_sites) {
-
-        log.info "=== CONTAMINATION CHECK ENABLED ==="
-        log.info "Analysis type: ${params.analysis_type}"
-
-        // Prepare contamination sites channel
-        ch_contamination_sites = Channel.of([
-            file(params.contamination_sites, checkIfExists: true),
-            file(params.contamination_sites_tbi, checkIfExists: true)
-        ]).collect()
-
-        // Prepare intervals channel - CRITICAL: Use Channel.empty() for WGS, not Channel.of([])
-        if (params.analysis_type == 'wes' && params.target_bed) {
-            ch_intervals_contamination = Channel.fromPath(params.target_bed).collect()
-            log.info "Using target BED for WES contamination check"
-        } else {
-            ch_intervals_contamination = Channel.empty()
-            log.info "No intervals for WGS contamination check (genome-wide)"
-        }
+    if (!skip_contamination) {
 
         // Prepare BAM input with BAI
         ch_bam_for_contamination = ch_mapped.genome_marked_bam
@@ -446,8 +431,6 @@ workflow RAREDISEASE {
         )
 
         ch_contamination_mqc = PARSE_CONTAMINATION.out.mqc_table
-        ch_versions = ch_versions.mix(CONTAMINATION_CHECK.out.versions)
-        ch_versions = ch_versions.mix(PARSE_CONTAMINATION.out.versions)
     }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

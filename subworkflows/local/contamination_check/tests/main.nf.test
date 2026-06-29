@@ -49,8 +49,7 @@ nextflow_workflow {
                             .collect { it[1] }
                             .flatten()
                             .collect { file(it).name }
-                            .toSorted(),
-                        workflow.out.versions
+                            .toSorted()
                     ).match()
                 }
             )
@@ -100,8 +99,7 @@ nextflow_workflow {
                             .collect { it[1] }
                             .flatten()
                             .collect { file(it).name }
-                            .toSorted(),
-                        workflow.out.versions
+                            .toSorted()
                     ).match()
                 }
             )

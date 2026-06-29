@@ -443,13 +443,6 @@
                     "description": "Path to UD matrix file from SVD result of genotype matrix. Used by verifybamid2.",
                     "fa_icon": "fas fa-file-csv"
                 },
-                "run_contamination": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Run GATK contamination check in addition to VerifyBamID2.",
-                    "help_text": "GATK contamination check works better for WES samples and provides validation for WGS.",
-                    "fa_icon": "fas fa-toggle-on"
-                },
                 "contamination_sites": {
                     "type": "string",
                     "exists": true,
@@ -643,8 +636,8 @@
                     "type": "string",
                     "fa_icon": "fas fa-forward",
                     "description": "Disable specified tools.",
-                    "help_text": "Multiple tools can be specified, separated by commas.",
-                    "pattern": "^((fastp|gens|germlinecnvcaller|peddy|smncopynumbercaller|vcf2cytosure|fastqc|ngsbits|mitosalt)?,?)*(?<!,)$"
+                    "help_text": "Multiple tools can be specified, separated by commas. The GATK contamination check additionally requires `contamination_sites` to be set; it is skipped automatically when that file is not provided.",
+                    "pattern": "^((fastp|gens|germlinecnvcaller|peddy|smncopynumbercaller|vcf2cytosure|fastqc|ngsbits|mitosalt|contamination)?,?)*(?<!,)$"
                 }
             }
         },

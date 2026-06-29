@@ -16,7 +16,6 @@ workflow CONTAMINATION_CHECK {
     ch_intervals         // channel: [ path(bed) ] - only used for WES, empty for WGS
 
     main:
-    ch_versions = Channel.empty()
 
     // Prepare BAM with intervals - conditionally based on analysis type
     // For WGS: intervals will be empty [], for WES: intervals will contain the BED file
@@ -46,7 +45,6 @@ workflow CONTAMINATION_CHECK {
         ch_variants_vcf,        // path(vcf)
         ch_variants_tbi         // path(tbi)
     )
-    ch_versions = ch_versions.mix(GATK4_GETPILEUPSUMMARIES.out.versions.first())
 
     // Run CalculateContamination (tumor-only, no matched normal)
     // Format: [meta, pileup_table, matched_normal_table]
@@ -57,11 +55,9 @@ workflow CONTAMINATION_CHECK {
     GATK4_CALCULATECONTAMINATION (
         ch_contamination_input
     )
-    ch_versions = ch_versions.mix(GATK4_CALCULATECONTAMINATION.out.versions.first())
 
     emit:
     contamination_table = GATK4_CALCULATECONTAMINATION.out.contamination
     segmentation_table  = GATK4_CALCULATECONTAMINATION.out.segmentation
     pileup_table        = GATK4_GETPILEUPSUMMARIES.out.table
-    versions            = ch_versions
 }

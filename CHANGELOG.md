@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- Added GATK contamination check for WES/WGS samples as complement to VerifyBamID2 [#758](https://github.com/nf-core/raredisease/pull/758)
+- Added GATK contamination check for WES/WGS samples as complement to VerifyBamID2, enabled by providing `contamination_sites` and skippable via `--skip_tools contamination` [#758](https://github.com/nf-core/raredisease/pull/758)
 - GATK Contamination results displayed in MultiQC with color-coded thresholds [#758](https://github.com/nf-core/raredisease/pull/758)
 
 ### `Changed`
@@ -28,7 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Old parameter | New parameter           |
 | ------------- | ----------------------- |
-|               | run_contamination       |
 |               | contamination_sites     |
 |               | contamination_sites_tbi |
 
