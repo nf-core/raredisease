@@ -40,10 +40,9 @@ nextflow_workflow {
         then {
             assert workflow.success
             assert snapshot(
-                workflow.out.publish.flatten()
-                    .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                    .collect { new File(it).name }
-                    .sort(),
+                workflow.out.expansionhunter_bam.collect { meta, bamfile -> [ meta, bam(bamfile).getReadsMD5() ] },
+                workflow.out.expansionhunter_bai.collect { meta, f -> file(f).name },
+                workflow.out.expansionhunter_vcf.collect { meta, f -> file(f).name },
                 path(workflow.out.vcf[0][1].toString()).vcf.variantsMD5,
                 path(workflow.out.vcf[0][1].toString()).vcf.summary
             ).match()

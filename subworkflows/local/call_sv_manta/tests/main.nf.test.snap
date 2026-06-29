@@ -1,16 +1,16 @@
 {
-    "CALL_SV_MANTA - wgs": {
+    "CALL_SV_MANTA": {
         "content": [
             "9f37331609347a1685ba4862d8583b2f",
             "2111e88e54fdd01f0492901606bcea6f"
         ],
-        "timestamp": "2026-03-01T20:55:33.556714847",
+        "timestamp": "2026-06-03T11:38:41.791162924",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     },
-    "CALL_SV_MANTA - wgs, stub": {
+    "CALL_SV_MANTA - stub": {
         "content": [
             {
                 "0": [
@@ -127,9 +127,9 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-05T12:58:54.578278212",
+        "timestamp": "2026-06-03T11:39:05.440330127",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     }
