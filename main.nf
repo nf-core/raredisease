@@ -582,6 +582,11 @@ workflow NFCORE_RAREDISEASE {
     saltshaker_html                                     = RAREDISEASE.out.saltshaker_html              // channel: [ val(meta), path(html) ]
     saltshaker_plot                                     = RAREDISEASE.out.saltshaker_plot             // channel: [ val(meta), path(png) ]
     mt_del_result                                       = RAREDISEASE.out.mt_del_result               // channel: [ val(meta), path(txt) ]
+    call_repeat_expansions_expansionhunter_bai          = RAREDISEASE.out.call_repeat_expansions_expansionhunter_bai // channel: [ val(meta), path(bai) ]
+    call_repeat_expansions_expansionhunter_bam          = RAREDISEASE.out.call_repeat_expansions_expansionhunter_bam // channel: [ val(meta), path(bam) ]
+    call_repeat_expansions_expansionhunter_vcf          = RAREDISEASE.out.call_repeat_expansions_expansionhunter_vcf // channel: [ val(meta), path(vcf) ]
+    call_repeat_expansions_stranger_tbi                 = RAREDISEASE.out.call_repeat_expansions_stranger_tbi        // channel: [ val(meta), path(tbi) ]
+    call_repeat_expansions_stranger_vcf                 = RAREDISEASE.out.call_repeat_expansions_stranger_vcf        // channel: [ val(meta), path(vcf) ]
     call_mobile_elements_tbi                            = RAREDISEASE.out.call_mobile_elements_tbi    // channel: [ val(meta), path(tbi) ]
     call_mobile_elements_vcf                            = RAREDISEASE.out.call_mobile_elements_vcf    // channel: [ val(meta), path(vcf) ]
     ann_csq_pli_me_tbi                                  = RAREDISEASE.out.ann_csq_pli_me_tbi          // channel: [ val(meta), path(tbi) ]
@@ -799,6 +804,11 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_ud)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_wg)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_y)
+    call_repeat_expansions        = NFCORE_RAREDISEASE.out.call_repeat_expansions_expansionhunter_bam
+                                        .mix(NFCORE_RAREDISEASE.out.call_repeat_expansions_expansionhunter_bai)
+                                        .mix(NFCORE_RAREDISEASE.out.call_repeat_expansions_expansionhunter_vcf)
+                                        .mix(NFCORE_RAREDISEASE.out.call_repeat_expansions_stranger_vcf)
+                                        .mix(NFCORE_RAREDISEASE.out.call_repeat_expansions_stranger_tbi)
     call_mobile_elements           = NFCORE_RAREDISEASE.out.call_mobile_elements_vcf
                                         .mix(NFCORE_RAREDISEASE.out.call_mobile_elements_tbi)
     annotate_mobile_elements       = NFCORE_RAREDISEASE.out.ann_csq_pli_me_vcf_ann
@@ -842,6 +852,9 @@ output {
     }
     qc_bam {
         path { _meta, _file -> "qc_bam/" }
+    }
+    call_repeat_expansions {
+        path { _meta, _file -> "repeat_expansions/" }
     }
     call_mobile_elements {
         path { _meta, _file -> "call_mobile_elements/" }
