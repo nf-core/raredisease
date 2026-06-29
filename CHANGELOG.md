@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 3.2.0 - Luigi [XXXX-XX-XX]
 
 ### `Added`
+- Nf-core subworkflow vcf_extract_relate_somalier [#891](https://github.com/nf-core/raredisease/pull/891)
 
 ### `Changed`
 
