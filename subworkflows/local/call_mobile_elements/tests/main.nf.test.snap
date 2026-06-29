@@ -18,46 +18,6 @@
                         "justhusky_mobile_elements.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
-                "2": [
-                    [
-                        "call_mobile_elements/",
-                        [
-                            {
-                                "id": "justhusky"
-                            },
-                            "justhusky_mobile_elements.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                        ]
-                    ],
-                    [
-                        "call_mobile_elements/",
-                        [
-                            {
-                                "id": "justhusky"
-                            },
-                            "justhusky_mobile_elements.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ]
-                ],
-                "publish": [
-                    [
-                        "call_mobile_elements/",
-                        [
-                            {
-                                "id": "justhusky"
-                            },
-                            "justhusky_mobile_elements.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                        ]
-                    ],
-                    [
-                        "call_mobile_elements/",
-                        [
-                            {
-                                "id": "justhusky"
-                            },
-                            "justhusky_mobile_elements.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ]
-                ],
                 "tbi": [
                     [
                         {
@@ -76,9 +36,9 @@
                 ]
             }
         ],
-        "timestamp": "2026-03-13T09:28:04.925769836",
+        "timestamp": "2026-06-26T16:04:01.036079356",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     }

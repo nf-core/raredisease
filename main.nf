@@ -582,6 +582,10 @@ workflow NFCORE_RAREDISEASE {
     saltshaker_html                                     = RAREDISEASE.out.saltshaker_html              // channel: [ val(meta), path(html) ]
     saltshaker_plot                                     = RAREDISEASE.out.saltshaker_plot             // channel: [ val(meta), path(png) ]
     mt_del_result                                       = RAREDISEASE.out.mt_del_result               // channel: [ val(meta), path(txt) ]
+    call_mobile_elements_tbi                            = RAREDISEASE.out.call_mobile_elements_tbi    // channel: [ val(meta), path(tbi) ]
+    call_mobile_elements_vcf                            = RAREDISEASE.out.call_mobile_elements_vcf    // channel: [ val(meta), path(vcf) ]
+    ann_csq_pli_me_tbi                                  = RAREDISEASE.out.ann_csq_pli_me_tbi          // channel: [ val(meta), path(tbi) ]
+    ann_csq_pli_me_vcf_ann                              = RAREDISEASE.out.ann_csq_pli_me_vcf_ann      // channel: [ val(meta), path(vcf) ]
     call_snv_bcftools_concat_csi                        = RAREDISEASE.out.call_snv_bcftools_concat_csi                   // channel: [ val(meta), path(csi) ]
     call_snv_bcftools_concat_tbi                        = RAREDISEASE.out.call_snv_bcftools_concat_tbi                   // channel: [ val(meta), path(tbi) ]
     call_snv_bcftools_concat_vcf                        = RAREDISEASE.out.call_snv_bcftools_concat_vcf                   // channel: [ val(meta), path(vcf) ]
@@ -795,6 +799,10 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_ud)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_wg)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_y)
+    call_mobile_elements           = NFCORE_RAREDISEASE.out.call_mobile_elements_vcf
+                                        .mix(NFCORE_RAREDISEASE.out.call_mobile_elements_tbi)
+    annotate_mobile_elements       = NFCORE_RAREDISEASE.out.ann_csq_pli_me_vcf_ann
+                                        .mix(NFCORE_RAREDISEASE.out.ann_csq_pli_me_tbi)
     call_sv                            = NFCORE_RAREDISEASE.out.call_sv_vcf
                                             .mix(NFCORE_RAREDISEASE.out.call_sv_tbi)
                                             .mix(NFCORE_RAREDISEASE.out.saltshaker_html)
@@ -834,6 +842,12 @@ output {
     }
     qc_bam {
         path { _meta, _file -> "qc_bam/" }
+    }
+    call_mobile_elements {
+        path { _meta, _file -> "call_mobile_elements/" }
+    }
+    annotate_mobile_elements {
+        path { _meta, _file -> "annotate_mobile_elements/" }
     }
     call_sv {
         path { _meta, _file -> "call_sv/" }
