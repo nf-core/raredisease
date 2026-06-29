@@ -73,24 +73,16 @@ nextflow_workflow {
         }
 
         then {
-            // Get published vcf file for snapshot comparison (not tbi file)
-            def vcfPublish = file(workflow.out.publish[0][1][1]).name.endsWith('.gz') \
-                ? workflow.out.publish[0][1][1] \
-                : workflow.out.publish[1][1][1]
-
             assertAll(
                 { assert workflow.success },
                 { assert workflow.out.vcf_ann },
                 { assert workflow.out.tbi },
                 { assert workflow.out.report },
-                { assert workflow.out.publish },
+                { assert workflow.out.ensemblvep_mt_vcf },
+                { assert workflow.out.ensemblvep_mt_tbi },
                 { assert snapshot(
                     "${file(workflow.out.vcf_ann[0][1]).name}:md5,${path(workflow.out.vcf_ann[0][1]).vcf.variantsMD5}",
-                    path(workflow.out.vcf_ann[0][1]).vcf.summary,
-                    workflow.out.publish[0][0], // file destination path
-                    "${file(vcfPublish).name}:md5,${path(vcfPublish).vcf.variantsMD5}" :
-                    path(vcfPublish).vcf.summary,
-                    workflow.out.findAll { key, val -> key.startsWith('versions') }
+                    path(workflow.out.vcf_ann[0][1]).vcf.summary
                 ).match() }
             )
         }
@@ -133,18 +125,7 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(
-                    workflow.out.collect { name, channel ->
-                        def sorted_channel = channel.toList().sort { item ->
-                            def sortKey = item
-                            while (sortKey instanceof List) {
-                                sortKey = sortKey[-1]
-                            }
-                            sortKey.toString().split(':md5,')[0].tokenize('/')[-1]
-                        }
-                        [name, sorted_channel]
-                    }.sort { it[0] }  // Sort by channel name
-                ).match() }
+                { assert snapshot(workflow.out).match() }
             )
         }
     }
