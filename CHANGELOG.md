@@ -3,10 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 3.1.0 - Luigi [XXXX-XX-XX]
+## 3.2.0dev - Luigi [XXXX-XX-XX]
 
 ### `Added`
 
+- Update saltshaker classification reporting by adding customer ID to samples' reports and displaying them as tabs in html [#856](https://github.com/nf-core/raredisease/pull/856)
+- Added non-stub tests for `annotate_mt_snvs` [#890](https://github.com/nf-core/raredisease/pull/890)
 - Added GATK contamination check for WES/WGS samples as complement to VerifyBamID2, enabled by providing `contamination_sites` and skippable via `--skip_tools contamination` [#758](https://github.com/nf-core/raredisease/pull/758)
 - GATK Contamination results displayed in MultiQC with color-coded thresholds [#758](https://github.com/nf-core/raredisease/pull/758)
 
@@ -18,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactor scatter_genome subworkflow: alias GAWK as `GENOME_FAI_TO_BED`, remove `val_save_reference` parameter, move interval flattening into `annotate_genome_snvs` [#857](https://github.com/nf-core/raredisease/pull/857)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for qc_bam subworkflow [#853](https://github.com/nf-core/raredisease/pull/853)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for alignment and subsample-MT subworkflows [#850](https://github.com/nf-core/raredisease/pull/850)
+- Update saltshaker modules to version 1.1.1 so they can run on empty mitosalt output [#856](https://github.com/nf-core/raredisease/pull/856)
 
 ### `Fixed`
 
@@ -37,6 +40,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | ---------------------------- | ----------- | ----------- |
 | gatk4/calculatecontamination |             | 4.6.2.0     |
 | gatk4/getpileupsummaries     |             | 4.6.2.0     |
+| Saltshaker                   | 1.0.0       | 1.1.1       |
+
+## 3.1.1 - Princess Peach (patch) [2026-06-24]
+
+### `Fixed`
+
+- Patch `deepvariant/rundeepvariant` to tee stdout/stderr to a log file and exit non-zero when `queue.Empty` or `BrokenPipeError` is detected, catching silent failures that previously caused the process to appear successful [#889](https://github.com/nf-core/raredisease/pull/889)
+
+## 3.1.0 - Princess Peach [2026-06-16]
+
+### `Added`
+
+- Parameter `cadd_prescored` to pass a directory of pre-scored CADD indel annotations to the CADD process in genome and mitochondrial SNV annotation subworkflows [#866](https://github.com/nf-core/raredisease/pull/866)
+- Parameter `manta_call_regions` to restrict Manta SV calling to specified regions (e.g. primary chromosomes) via a bgzipped, tabix-indexed BED file, reducing runtime without affecting other callers [#867](https://github.com/nf-core/raredisease/pull/867)
+- Local `FILTERVEP` module using a Python reimplementation of Ensembl's `filter_vep`, replacing the `ENSEMBLVEP_FILTERVEP` module with a lighter cyvcf2-based alternative [#870](https://github.com/nf-core/raredisease/pull/870)
+- `bwafastalign/index` nf-core module and `bwafastalign` parameter to support index preparation for the bwa-fastalign genome aligner [#877](https://github.com/nf-core/raredisease/pull/877)
+- `bwafastalign/mem` nf-core module to support genome alignment with bwa-fastalign when `--aligner bwafastalign` is set [#880](https://github.com/nf-core/raredisease/pull/880)
+
+### `Changed`
+
+- Replace `ENSEMBLVEP_FILTERVEP` with local `FILTERVEP` in the clinical set subworkflow, renamed from `VCF_FILTER_BCFTOOLS_ENSEMBLVEP` to `VCF_FILTER_BCFTOOLS_FILTERVEP` [#870](https://github.com/nf-core/raredisease/pull/870)
+- Increase default mbuffer memory value from 3GB to 8GB [#880](https://github.com/nf-core/raredisease/pull/880)
+- Update `bwameme/mem` to new nf-core module signature: `val mbuffer` and `val samtools_threads` replaced by `ext.args2` and `ext.args3` [#881](https://github.com/nf-core/raredisease/pull/881)
+
+### `Fixed`
+
+- Add a bcftools norm split-multiallelics step after merging standard and shifted MT calls to handle new multiallelic sites introduced by bcftools merge [#855](https://github.com/nf-core/raredisease/pull/855)
+
+### Parameters
+
+| Old parameter | New parameter          |
+| ------------- | ---------------------- |
+|               | bwafastalign           |
+|               | cadd_prescored         |
+|               | manta_call_regions     |
+|               | manta_call_regions_tbi |
+
+### Tool updates
+
+| Tool          | Old version | New version |
+| ------------- | ----------- | ----------- |
+| bwa-fastalign |             | 1.0.0       |
+| saltshaker    | 1.0.0       | 1.1.1       |
 
 ## 3.0.0 - Mario [2026-05-12]
 

@@ -13,11 +13,12 @@ include { TABIX_TABIX as TABIX_CADD            } from '../../../modules/nf-core/
 workflow ANNOTATE_CADD {
 
     take:
-        ch_cadd_resources // channel: [mandatory] [ path(dir) ]
-        ch_fai            // channel: [optional]  [ path(fai) ]
-        ch_header         // channel: [mandatory] [ path(txt) ]
-        ch_vcf            // channel: [mandatory] [ val(meta), path(vcfs), path(idx) ]
-        val_genome        //  string: GRCh37 or GRCh38
+        ch_cadd_resources  // channel: [mandatory] [ val(meta), path(dir) ]
+        ch_cadd_prescored  // channel: [optional]  [ val(meta), path(prescored) ]
+        ch_fai             // channel: [optional]  [ val(meta), path(fai) ]
+        ch_header          // channel: [mandatory] [ path(txt) ]
+        ch_vcf             // channel: [mandatory] [ val(meta), path(vcfs), path(idx) ]
+        val_genome         //  string: GRCh37 or GRCh38
 
     main:
         ch_rename_chrs    = channel.value([[]])
@@ -45,7 +46,7 @@ workflow ANNOTATE_CADD {
 
         BCFTOOLS_VIEW(ch_vcf, [], [], [])
 
-        CADD(BCFTOOLS_VIEW.out.vcf, ch_cadd_resources, [[:], []])
+        CADD(BCFTOOLS_VIEW.out.vcf, ch_cadd_resources, ch_cadd_prescored)
 
         TABIX_CADD(CADD.out.tsv)
 

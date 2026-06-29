@@ -3,17 +3,16 @@
 // Also detects the number of discordant pairs using the mitodel script.
 //
 
-include { CAT_FASTQ           } from '../../../modules/nf-core/cat/fastq/main'
-include { MITOSALT            } from '../../../modules/local/mitosalt/main'
-include { MT_DELETION         } from '../../../modules/local/mt_deletion_script'
-include { PREP_MITOSALT       } from '../../../modules/local/prep_mitosalt/main'
-include { SALTSHAKER_CALL     } from '../../../modules/nf-core/saltshaker/call/main'
-include { SALTSHAKER_CLASSIFY } from '../../../modules/nf-core/saltshaker/classify/main'
-include { FIND_CONCATENATE    } from '../../../modules/nf-core/find/concatenate/main'
-include { SALTSHAKER_PLOT     } from '../../../modules/nf-core/saltshaker/plot/main'
-include { SALTSHAKER_TO_HTML  } from '../../../modules/local/saltshaker_to_html/main'
-include { SEQTK_SAMPLE        } from '../../../modules/nf-core/seqtk/sample/main'
-include { SVDB_MERGE          } from '../../../modules/nf-core/svdb/merge/main'
+include { CAT_FASTQ            } from '../../../modules/nf-core/cat/fastq/main'
+include { MITOSALT             } from '../../../modules/local/mitosalt/main'
+include { MT_DELETION          } from '../../../modules/local/mt_deletion_script'
+include { PREP_MITOSALT        } from '../../../modules/local/prep_mitosalt/main'
+include { SALTSHAKER_CALL      } from '../../../modules/nf-core/saltshaker/call/main'
+include { SALTSHAKER_CLASSIFY  } from '../../../modules/nf-core/saltshaker/classify/main'
+include { SALTSHAKER_PLOT      } from '../../../modules/nf-core/saltshaker/plot/main'
+include { SALTSHAKER_TO_HTML   } from '../../../modules/local/saltshaker_to_html/main'
+include { SEQTK_SAMPLE         } from '../../../modules/nf-core/seqtk/sample/main'
+include { SVDB_MERGE           } from '../../../modules/nf-core/svdb/merge/main'
 
 workflow CALL_SV_MT {
     take:
@@ -27,6 +26,7 @@ workflow CALL_SV_MT {
         ch_mt_fasta                           // channel: [mandatory] [ val(meta), path(mtfasta) ]
         ch_mt_lastdb                          // channel: [mandatory] [ val(meta), path(lastindex) ]
         ch_reads                              // channel: [mandatory] [ val(meta), [path(reads)] ]
+        ch_sample_id_map                      // channel: [optional] [ val(sample_id), val(customer_id) ]
         ch_subdepth                           // channel: [mandatory] [ val(mitosalt_depth) ]
         ch_svcaller_priority                  // channel: [mandatory] [ val(["var caller tag 1", ...]) ]
         ch_mitosalt_config                    // channel: [mandatory] [val(mitosalt_breakspan),val(mitosalt_breakthreshold),...,val(mitosalt_split_length)]
@@ -42,7 +42,6 @@ workflow CALL_SV_MT {
 
     main:
         ch_saltshaker_html  = channel.empty()
-        ch_saltshaker_txt   = channel.empty()
         ch_saltshaker_vcf   = channel.empty()
         ch_saltshaker_plot  = channel.empty()
 
@@ -96,15 +95,10 @@ workflow CALL_SV_MT {
                 ch_mt_lastdb
             )
 
-            MITOSALT.out.cluster
-                .filter { _meta, out -> out.countLines() > 0 }
-                .set { ch_cluster }
-
             MITOSALT.out.breakpoint
-                .join(ch_cluster)
+                .join(MITOSALT.out.cluster)
                 .set { ch_saltshaker_in }
 
-            // Saltshaker modules will only run if mitosalt called SVs and created a cluster file
             SALTSHAKER_CALL(
                 ch_saltshaker_in,
                 ch_mt_fasta,
@@ -122,20 +116,19 @@ workflow CALL_SV_MT {
                 val_mitochondria_name
             )
 
+            // Create case-level channel ch_saltshaker_html_input, consisting of all saltshaker txt reports and all
+            // customer IDs (or sample ID if no customer ID) so individual reports have identifers in the final HTML.
             SALTSHAKER_CLASSIFY.out.txt
-                .map { meta, txt ->
-                    return [['id': meta.case_id], txt]
-                    }
+                .map { meta, txt -> [['id':meta.sample], meta.case_id, txt] }
+                .join(ch_sample_id_map, remainder: true, failOnDuplicate: true)
+                .map { sample_meta, case_id, txt, cust_id ->
+                    cust_id ? [['id':case_id], txt, cust_id] : [['id':case_id], txt, sample_meta.id]
+                }
                 .groupTuple()
-                .set { ch_saltshaker_txts }
-
-            FIND_CONCATENATE(
-                ch_saltshaker_txts
-            )
-            ch_saltshaker_txt = FIND_CONCATENATE.out.file_out
+                .set { ch_saltshaker_html_input }
 
             SALTSHAKER_TO_HTML(
-                ch_saltshaker_txt
+                ch_saltshaker_html_input
             )
             ch_saltshaker_html = SALTSHAKER_TO_HTML.out.classify_html
 
