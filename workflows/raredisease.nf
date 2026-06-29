@@ -270,7 +270,8 @@ workflow RAREDISEASE {
     ch_annotate_genome_snvs_rhocall_viz_bed           = channel.empty()
     ch_annotate_genome_snvs_rhocall_viz_wig           = channel.empty()
     ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       = channel.empty()
-    ch_annotate_mt_snvs_publish         = channel.empty()
+    ch_annotate_mt_snvs_ensemblvep_mt_tbi             = channel.empty()
+    ch_annotate_mt_snvs_ensemblvep_mt_vcf             = channel.empty()
     ch_annotate_sv_publish              = channel.empty()
     ch_generate_cytosure_files_publish  = channel.empty()
     ch_gens_publish                     = channel.empty()
@@ -602,7 +603,8 @@ workflow RAREDISEASE {
                 val_homoplasmy_af_threshold,
                 val_vep_cache_version
             ).set { ch_mt_annotate }
-            ch_annotate_mt_snvs_publish = ch_mt_annotate.publish
+            ch_annotate_mt_snvs_ensemblvep_mt_tbi = ch_mt_annotate.ensemblvep_mt_tbi
+            ch_annotate_mt_snvs_ensemblvep_mt_vcf = ch_mt_annotate.ensemblvep_mt_vcf
 
             ch_mt_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -693,6 +695,7 @@ workflow RAREDISEASE {
             ch_ploidy_model,
             ch_readcount_intervals,
             ch_input_fastqs,
+            ch_sample_id_map,
             ch_subdepth,
             ch_svcaller_priority,
             skip_germlinecnvcaller,
@@ -1113,16 +1116,17 @@ workflow RAREDISEASE {
     annotate_genome_snvs_rhocall_viz_bed             = ch_annotate_genome_snvs_rhocall_viz_bed             // channel: [ val(meta), path(bed) ]
     annotate_genome_snvs_rhocall_viz_wig             = ch_annotate_genome_snvs_rhocall_viz_wig             // channel: [ val(meta), path(wig) ]
     annotate_genome_snvs_ucsc_wigtobigwig_bw         = ch_annotate_genome_snvs_ucsc_wigtobigwig_bw         // channel: [ val(meta), path(bw) ]
-    call_mobile_elements_tbi = ch_call_mobile_elements_tbi // channel: [ val(meta), path(tbi) ]
-    call_mobile_elements_vcf = ch_call_mobile_elements_vcf // channel: [ val(meta), path(vcf) ]
-    ann_csq_pli_me_tbi       = ch_ann_csq_pli_me_tbi       // channel: [ val(meta), path(tbi) ]
-    ann_csq_pli_me_vcf_ann   = ch_ann_csq_pli_me_vcf_ann   // channel: [ val(meta), path(vcf) ]
+    annotate_mt_snvs_ensemblvep_mt_tbi               = ch_annotate_mt_snvs_ensemblvep_mt_tbi // channel: [ val(meta), path(tbi) ]
+    annotate_mt_snvs_ensemblvep_mt_vcf               = ch_annotate_mt_snvs_ensemblvep_mt_vcf // channel: [ val(meta), path(vcf) ]
+    call_mobile_elements_tbi                         = ch_call_mobile_elements_tbi // channel: [ val(meta), path(tbi) ]
+    call_mobile_elements_vcf                         = ch_call_mobile_elements_vcf // channel: [ val(meta), path(vcf) ]
+    ann_csq_pli_me_tbi                               = ch_ann_csq_pli_me_tbi       // channel: [ val(meta), path(tbi) ]
+    ann_csq_pli_me_vcf_ann                           = ch_ann_csq_pli_me_vcf_ann   // channel: [ val(meta), path(vcf) ]
     subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     versions                     = ch_versions
     publish                      = ch_call_sv_publish
                        .mix(ch_call_repeat_expansions_publish)
-                       .mix(ch_annotate_mt_snvs_publish)
                        .mix(ch_annotate_sv_publish)
                        .mix(ch_generate_cytosure_files_publish)
                        .mix(ch_gens_publish)

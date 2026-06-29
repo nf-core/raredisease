@@ -92,13 +92,10 @@ workflow ANNOTATE_MT_SNVS {
             ch_tbi = BCFTOOLS_PLUGINSETGT.out.tbi
         }
 
-        ch_publish = ENSEMBLVEP_MT.out.vcf
-            .mix(ENSEMBLVEP_MT.out.tbi)
-            .map { meta, value -> ['annotate_snv/mitochondria/', [meta, value]] }
-
     emit:
-        publish   = ch_publish               // channel: [ val(destination), val(value) ]
-        report    = ENSEMBLVEP_MT.out.report // channel: [ path(html) ]
-        tbi       = ch_tbi                   // channel: [ val(meta), path(tbi) ]
-        vcf_ann   = ch_vcf                   // channel: [ val(meta), path(vcf) ]
+        ensemblvep_mt_tbi = ENSEMBLVEP_MT.out.tbi    // channel: [ val(meta), path(tbi) ]
+        ensemblvep_mt_vcf = ENSEMBLVEP_MT.out.vcf    // channel: [ val(meta), path(vcf) ]
+        report            = ENSEMBLVEP_MT.out.report // channel: [ val(meta), val(tool), val(toolver), path(html) ]
+        tbi               = ch_tbi                   // channel: [ val(meta), path(tbi) ]
+        vcf_ann           = ch_vcf                   // channel: [ val(meta), path(vcf) ]
 }
