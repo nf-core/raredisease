@@ -63,6 +63,7 @@ include { RANK_VARIANTS as RANK_VARIANTS_SV                           } from '..
 include { SUBSAMPLE_MT_FRAC                                           } from '../subworkflows/local/subsample_mt_frac'
 include { SUBSAMPLE_MT_READS                                          } from '../subworkflows/local/subsample_mt_reads'
 include { VARIANT_EVALUATION                                          } from '../subworkflows/local/variant_evaluation'
+include { VCF_EXTRACT_RELATE_SOMALIER                                 } from '../subworkflows/nf-core/vcf_extract_relate_somalier'
 include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
 include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
 include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
@@ -179,6 +180,7 @@ workflow RAREDISEASE {
     skip_mitosalt
     skip_ngsbits
     skip_peddy
+    skip_somalier
     skip_smncopynumbercaller
     skip_vcf2cytosure
     val_aligner
@@ -844,6 +846,38 @@ workflow RAREDISEASE {
             .mix(PEDDY.out.sex_check_csv)
             .mix(PEDDY.out.ped_check_rel_difference_csv)
             .map { meta, value -> ['peddy/', [meta, value]] }
+    }
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    SOMALIER
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+    // Somalier extract + relate (enabled unless skipped via `skip_subworkflows` / `skip_somalier`)
+    // Only run when `params.somalier_sites_vcf` is provided to avoid file(null) errors in test/profile runs
+    if (!skip_somalier && params.somalier_sites_vcf) {
+        // prepare VCF channel: [ meta, vcf, tbi, count ] as expected by the subworkflow
+        ch_vcfs_for_somalier = CALL_SNV.out.genome_vcf
+            .join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true)
+            .map { meta, vcf, tbi -> [ meta, vcf, tbi, [] ] }
+
+        // somalier sites VCF supplied via params.somalier_sites_vcf
+        ch_somalier_sites = channel.value( file(params.somalier_sites_vcf) )
+
+        VCF_EXTRACT_RELATE_SOMALIER(
+            ch_vcfs_for_somalier,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_somalier_sites,
+            ch_pedfile.map{ ped -> return[[id:'pedigree'], ped] },
+            channel.empty(),
+            'case_id'
+        )
+
+        ch_somalier_publish = VCF_EXTRACT_RELATE_SOMALIER.out.publish
+            .map { meta, value -> ['somalier/', [meta, value]] }
+    } else if (!skip_somalier && !params.somalier_sites_vcf) {
+        log.warn "Skipping Somalier: params.somalier_sites_vcf is not set"
     }
 
 /*

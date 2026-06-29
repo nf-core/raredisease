@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - FastDup module from nf-core and integrated it into the pipeline, as an alternative for Picard Markduplicates. [#876](https://github.com/nf-core/raredisease/pull/876)
+- Nf-core subworkflow vcf_extract_relate_somalier [#891](https://github.com/nf-core/raredisease/pull/891)
 
 ### `Changed`
 
@@ -26,6 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Tool | Old version | New version |
 | ---- | ----------- | ----------- |
 |      |             |             |
+
+## 3.1.1 - Princess Peach (patch) [2026-06-24]
+
+### `Fixed`
+
+- Patch `deepvariant/rundeepvariant` to tee stdout/stderr to a log file and exit non-zero when `queue.Empty` or `BrokenPipeError` is detected, catching silent failures that previously caused the process to appear successful [#889](https://github.com/nf-core/raredisease/pull/889)
 
 ## 3.1.0 - Princess Peach [2026-06-16]
 
