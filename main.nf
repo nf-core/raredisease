@@ -607,6 +607,15 @@ workflow NFCORE_RAREDISEASE {
     saltshaker_html                                     = RAREDISEASE.out.saltshaker_html              // channel: [ val(meta), path(html) ]
     saltshaker_plot                                     = RAREDISEASE.out.saltshaker_plot             // channel: [ val(meta), path(png) ]
     mt_del_result                                       = RAREDISEASE.out.mt_del_result               // channel: [ val(meta), path(txt) ]
+    call_repeat_expansions_expansionhunter_bai          = RAREDISEASE.out.call_repeat_expansions_expansionhunter_bai // channel: [ val(meta), path(bai) ]
+    call_repeat_expansions_expansionhunter_bam          = RAREDISEASE.out.call_repeat_expansions_expansionhunter_bam // channel: [ val(meta), path(bam) ]
+    call_repeat_expansions_expansionhunter_vcf          = RAREDISEASE.out.call_repeat_expansions_expansionhunter_vcf // channel: [ val(meta), path(vcf) ]
+    call_repeat_expansions_stranger_tbi                 = RAREDISEASE.out.call_repeat_expansions_stranger_tbi        // channel: [ val(meta), path(tbi) ]
+    call_repeat_expansions_stranger_vcf                 = RAREDISEASE.out.call_repeat_expansions_stranger_vcf        // channel: [ val(meta), path(vcf) ]
+    call_mobile_elements_tbi                            = RAREDISEASE.out.call_mobile_elements_tbi    // channel: [ val(meta), path(tbi) ]
+    call_mobile_elements_vcf                            = RAREDISEASE.out.call_mobile_elements_vcf    // channel: [ val(meta), path(vcf) ]
+    ann_csq_pli_me_tbi                                  = RAREDISEASE.out.ann_csq_pli_me_tbi          // channel: [ val(meta), path(tbi) ]
+    ann_csq_pli_me_vcf_ann                              = RAREDISEASE.out.ann_csq_pli_me_vcf_ann      // channel: [ val(meta), path(vcf) ]
     call_snv_bcftools_concat_csi                        = RAREDISEASE.out.call_snv_bcftools_concat_csi                   // channel: [ val(meta), path(csi) ]
     call_snv_bcftools_concat_tbi                        = RAREDISEASE.out.call_snv_bcftools_concat_tbi                   // channel: [ val(meta), path(tbi) ]
     call_snv_bcftools_concat_vcf                        = RAREDISEASE.out.call_snv_bcftools_concat_vcf                   // channel: [ val(meta), path(vcf) ]
@@ -623,6 +632,8 @@ workflow NFCORE_RAREDISEASE {
     annotate_genome_snvs_rhocall_viz_bed                = RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_bed           // channel: [ val(meta), path(bed) ]
     annotate_genome_snvs_rhocall_viz_wig                = RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_wig           // channel: [ val(meta), path(wig) ]
     annotate_genome_snvs_ucsc_wigtobigwig_bw            = RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw       // channel: [ val(meta), path(bw) ]
+    annotate_mt_snvs_ensemblvep_mt_tbi                  = RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_tbi             // channel: [ val(meta), path(tbi) ]
+    annotate_mt_snvs_ensemblvep_mt_vcf                  = RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf             // channel: [ val(meta), path(vcf) ]
     subsample_mt_bai                                    = RAREDISEASE.out.subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam                                    = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     publish                                             = RAREDISEASE.out.publish
@@ -820,6 +831,15 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_ud)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_wg)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_y)
+    call_repeat_expansions        = NFCORE_RAREDISEASE.out.call_repeat_expansions_expansionhunter_bam
+                                        .mix(NFCORE_RAREDISEASE.out.call_repeat_expansions_expansionhunter_bai)
+                                        .mix(NFCORE_RAREDISEASE.out.call_repeat_expansions_expansionhunter_vcf)
+                                        .mix(NFCORE_RAREDISEASE.out.call_repeat_expansions_stranger_vcf)
+                                        .mix(NFCORE_RAREDISEASE.out.call_repeat_expansions_stranger_tbi)
+    call_mobile_elements           = NFCORE_RAREDISEASE.out.call_mobile_elements_vcf
+                                        .mix(NFCORE_RAREDISEASE.out.call_mobile_elements_tbi)
+    annotate_mobile_elements       = NFCORE_RAREDISEASE.out.ann_csq_pli_me_vcf_ann
+                                        .mix(NFCORE_RAREDISEASE.out.ann_csq_pli_me_tbi)
     call_sv                            = NFCORE_RAREDISEASE.out.call_sv_vcf
                                             .mix(NFCORE_RAREDISEASE.out.call_sv_tbi)
                                             .mix(NFCORE_RAREDISEASE.out.saltshaker_html)
@@ -841,6 +861,8 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_bed)
                                             .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_wig)
     annotate_snv_genome_rhocallviz_bw = NFCORE_RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw
+    annotate_snv_mt                   = NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_tbi)
     processed_references              = NFCORE_RAREDISEASE.out.scatter_genome_split_intervals
     subworkflow_results               = NFCORE_RAREDISEASE.out.publish
 }
@@ -857,6 +879,15 @@ output {
     }
     qc_bam {
         path { _meta, _file -> "qc_bam/" }
+    }
+    call_repeat_expansions {
+        path { _meta, _file -> "repeat_expansions/" }
+    }
+    call_mobile_elements {
+        path { _meta, _file -> "call_mobile_elements/" }
+    }
+    annotate_mobile_elements {
+        path { _meta, _file -> "annotate_mobile_elements/" }
     }
     call_sv {
         path { _meta, _file -> "call_sv/" }
@@ -875,6 +906,9 @@ output {
     }
     annotate_snv_genome_rhocallviz_bw {
         path { meta, _file -> "annotate_snv/genome/${meta.sample}_rhocallviz/" }
+    }
+    annotate_snv_mt {
+        path { _meta, _file -> "annotate_snv/mitochondria/" }
     }
     processed_references {
         path { _meta, _file -> "processed_references/" }

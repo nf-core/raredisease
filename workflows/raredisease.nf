@@ -263,8 +263,15 @@ workflow RAREDISEASE {
     ch_call_snv_mt_tabix                = channel.empty()
     ch_call_snv_mt_vcf                  = channel.empty()
     ch_call_sv_publish                  = channel.empty()
-    ch_call_repeat_expansions_publish   = channel.empty()
-    ch_call_mobile_elements_publish     = channel.empty()
+    ch_call_repeat_expansions_expansionhunter_bai = channel.empty()
+    ch_call_repeat_expansions_expansionhunter_bam = channel.empty()
+    ch_call_repeat_expansions_expansionhunter_vcf = channel.empty()
+    ch_call_repeat_expansions_stranger_tbi        = channel.empty()
+    ch_call_repeat_expansions_stranger_vcf        = channel.empty()
+    ch_call_mobile_elements_tbi         = channel.empty()
+    ch_call_mobile_elements_vcf         = channel.empty()
+    ch_ann_csq_pli_me_tbi               = channel.empty()
+    ch_ann_csq_pli_me_vcf_ann           = channel.empty()
     ch_annotate_genome_snvs_bcftools_concat_tbi       = channel.empty()
     ch_annotate_genome_snvs_bcftools_concat_vcf       = channel.empty()
     ch_annotate_genome_snvs_chromograph_autozyg_plots = channel.empty()
@@ -273,7 +280,8 @@ workflow RAREDISEASE {
     ch_annotate_genome_snvs_rhocall_viz_bed           = channel.empty()
     ch_annotate_genome_snvs_rhocall_viz_wig           = channel.empty()
     ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       = channel.empty()
-    ch_annotate_mt_snvs_publish         = channel.empty()
+    ch_annotate_mt_snvs_ensemblvep_mt_tbi             = channel.empty()
+    ch_annotate_mt_snvs_ensemblvep_mt_vcf             = channel.empty()
     ch_annotate_sv_publish              = channel.empty()
     ch_generate_cytosure_files_publish  = channel.empty()
     ch_gens_publish                     = channel.empty()
@@ -456,17 +464,17 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_genome_fai
         )
-        ch_call_repeat_expansions_publish = CALL_REPEAT_EXPANSIONS.out.publish
+        ch_call_repeat_expansions_expansionhunter_bai = CALL_REPEAT_EXPANSIONS.out.expansionhunter_bai
+        ch_call_repeat_expansions_expansionhunter_bam = CALL_REPEAT_EXPANSIONS.out.expansionhunter_bam
+        ch_call_repeat_expansions_expansionhunter_vcf = CALL_REPEAT_EXPANSIONS.out.expansionhunter_vcf
 
         if (!skip_repeat_annotation) {
             STRANGER (
                 CALL_REPEAT_EXPANSIONS.out.vcf,
                 ch_variant_catalog
             )
-            ch_call_repeat_expansions_publish = ch_call_repeat_expansions_publish
-                .mix(STRANGER.out.vcf
-                    .mix(STRANGER.out.tbi)
-                    .map { meta, value -> ['repeat_expansions/', [meta, value]] })
+            ch_call_repeat_expansions_stranger_vcf = STRANGER.out.vcf
+            ch_call_repeat_expansions_stranger_tbi = STRANGER.out.tbi
         }
     }
 
@@ -589,8 +597,7 @@ workflow RAREDISEASE {
             ANN_CSQ_PLI_SNV (
                 ch_variant_consequences_snv,
                 ch_ann_csq_snv_in,
-                false,
-                ''
+                false
             )
 
             ANN_CSQ_PLI_SNV.out.vcf_ann
@@ -635,7 +642,8 @@ workflow RAREDISEASE {
                 val_homoplasmy_af_threshold,
                 val_vep_cache_version
             ).set { ch_mt_annotate }
-            ch_annotate_mt_snvs_publish = ch_mt_annotate.publish
+            ch_annotate_mt_snvs_ensemblvep_mt_tbi = ch_mt_annotate.ensemblvep_mt_tbi
+            ch_annotate_mt_snvs_ensemblvep_mt_vcf = ch_mt_annotate.ensemblvep_mt_vcf
 
             ch_mt_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -661,8 +669,7 @@ workflow RAREDISEASE {
             ANN_CSQ_PLI_MT(
                 ch_variant_consequences_snv,
                 ch_ann_csq_mtsnv_in,
-                false,
-                ''
+                false
             )
 
             ANN_CSQ_PLI_MT.out.vcf_ann
@@ -792,8 +799,7 @@ workflow RAREDISEASE {
             ANN_CSQ_PLI_SV (
                 ch_variant_consequences_sv,
                 ch_ann_csq_sv_in,
-                false,
-                ''
+                false
             )
 
             ANN_CSQ_PLI_SV.out.vcf_ann
@@ -830,7 +836,8 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_me_references
         )
-        ch_call_mobile_elements_publish = CALL_MOBILE_ELEMENTS.out.publish
+        ch_call_mobile_elements_vcf = CALL_MOBILE_ELEMENTS.out.vcf
+        ch_call_mobile_elements_tbi = CALL_MOBILE_ELEMENTS.out.tbi
 
         if (!skip_me_annotation) {
             ANNOTATE_MOBILE_ELEMENTS(
@@ -868,11 +875,10 @@ workflow RAREDISEASE {
             ANN_CSQ_PLI_ME(
                 ch_variant_consequences_sv,
                 ch_ann_csq_me_in,
-                true,
-                'annotate_mobile_elements/'
+                true
             )
-            ch_call_mobile_elements_publish = ch_call_mobile_elements_publish
-                .mix(ANN_CSQ_PLI_ME.out.publish)
+            ch_ann_csq_pli_me_vcf_ann = ANN_CSQ_PLI_ME.out.vcf_ann
+            ch_ann_csq_pli_me_tbi     = ANN_CSQ_PLI_ME.out.tbi
 
         }
     }
@@ -1136,6 +1142,11 @@ workflow RAREDISEASE {
     saltshaker_html                                  = ch_saltshaker_html                                  // channel: [ val(meta), path(html) ]
     saltshaker_plot                                  = ch_saltshaker_plot                                  // channel: [ val(meta), path(png) ]
     mt_del_result                                    = ch_mt_del_result                                    // channel: [ val(meta), path(txt) ]
+    call_repeat_expansions_expansionhunter_bai       = ch_call_repeat_expansions_expansionhunter_bai       // channel: [ val(meta), path(bai) ]
+    call_repeat_expansions_expansionhunter_bam       = ch_call_repeat_expansions_expansionhunter_bam       // channel: [ val(meta), path(bam) ]
+    call_repeat_expansions_expansionhunter_vcf       = ch_call_repeat_expansions_expansionhunter_vcf       // channel: [ val(meta), path(vcf) ]
+    call_repeat_expansions_stranger_tbi              = ch_call_repeat_expansions_stranger_tbi              // channel: [ val(meta), path(tbi) ]
+    call_repeat_expansions_stranger_vcf              = ch_call_repeat_expansions_stranger_vcf              // channel: [ val(meta), path(vcf) ]
     call_snv_bcftools_concat_csi             = ch_call_snv_bcftools_concat_csi                             // channel: [ val(meta), path(csi) ]
     call_snv_bcftools_concat_tbi             = ch_call_snv_bcftools_concat_tbi                             // channel: [ val(meta), path(tbi) ]
     call_snv_bcftools_concat_vcf             = ch_call_snv_bcftools_concat_vcf                             // channel: [ val(meta), path(vcf) ]
@@ -1152,13 +1163,16 @@ workflow RAREDISEASE {
     annotate_genome_snvs_rhocall_viz_bed             = ch_annotate_genome_snvs_rhocall_viz_bed             // channel: [ val(meta), path(bed) ]
     annotate_genome_snvs_rhocall_viz_wig             = ch_annotate_genome_snvs_rhocall_viz_wig             // channel: [ val(meta), path(wig) ]
     annotate_genome_snvs_ucsc_wigtobigwig_bw         = ch_annotate_genome_snvs_ucsc_wigtobigwig_bw         // channel: [ val(meta), path(bw) ]
+    annotate_mt_snvs_ensemblvep_mt_tbi               = ch_annotate_mt_snvs_ensemblvep_mt_tbi // channel: [ val(meta), path(tbi) ]
+    annotate_mt_snvs_ensemblvep_mt_vcf               = ch_annotate_mt_snvs_ensemblvep_mt_vcf // channel: [ val(meta), path(vcf) ]
+    call_mobile_elements_tbi                         = ch_call_mobile_elements_tbi // channel: [ val(meta), path(tbi) ]
+    call_mobile_elements_vcf                         = ch_call_mobile_elements_vcf // channel: [ val(meta), path(vcf) ]
+    ann_csq_pli_me_tbi                               = ch_ann_csq_pli_me_tbi       // channel: [ val(meta), path(tbi) ]
+    ann_csq_pli_me_vcf_ann                           = ch_ann_csq_pli_me_vcf_ann   // channel: [ val(meta), path(vcf) ]
     subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     versions                     = ch_versions
     publish                      = ch_call_sv_publish
-                       .mix(ch_call_repeat_expansions_publish)
-                       .mix(ch_call_mobile_elements_publish)
-                       .mix(ch_annotate_mt_snvs_publish)
                        .mix(ch_annotate_sv_publish)
                        .mix(ch_generate_cytosure_files_publish)
                        .mix(ch_gens_publish)

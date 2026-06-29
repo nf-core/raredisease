@@ -119,12 +119,7 @@ workflow CALL_MOBILE_ELEMENTS {
         SVDB_MERGE_ME ( ch_svdb_merge_me_input, [], true )
         TABIX_ME ( SVDB_MERGE_ME.out.vcf )
 
-        ch_publish = SVDB_MERGE_ME.out.vcf
-            .mix(TABIX_ME.out.index)
-            .map { meta, value -> ['call_mobile_elements/', [meta, value]] }
-
     emit:
-        tbi      = TABIX_ME.out.index    // channel: [ val(meta), path(tbi) ]
-        vcf      = SVDB_MERGE_ME.out.vcf // channel: [ val(meta), path(vcf) ]
-        publish = ch_publish             // channel: [ val(destination), val(value) ]
+        tbi = TABIX_ME.out.index    // channel: [ val(meta), path(tbi) ]
+        vcf = SVDB_MERGE_ME.out.vcf // channel: [ val(meta), path(vcf) ]
 }
