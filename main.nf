@@ -340,6 +340,7 @@ workflow NFCORE_RAREDISEASE {
     skip_repeat_calling        = parseSkipList(val_skip_subworkflows, 'repeat_calling')
     skip_snv_annotation        = parseSkipList(val_skip_subworkflows, 'snv_annotation')
     skip_snv_calling           = parseSkipList(val_skip_subworkflows, 'snv_calling')
+    skip_somalier              = parseSkipList(val_skip_subworkflows, 'somalier_sex_check')
     skip_sv_annotation         = parseSkipList(val_skip_subworkflows, 'sv_annotation')
     skip_sv_calling            = parseSkipList(val_skip_subworkflows, 'sv_calling')
     skip_generate_clinical_set = parseSkipList(val_skip_subworkflows, 'generate_clinical_set')
@@ -487,6 +488,7 @@ workflow NFCORE_RAREDISEASE {
         skip_mitosalt,
         skip_ngsbits,
         skip_peddy,
+        skip_somalier,
         skip_smncopynumbercaller,
         skip_vcf2cytosure,
         val_aligner,

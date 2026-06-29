@@ -297,6 +297,11 @@
                         "git_sha": "66391ca86ea6a081d288afe6a93d242fefcd8c2c",
                         "installed_by": ["modules"]
                     },
+                    "htslib/bgziptabix": {
+                        "branch": "master",
+                        "git_sha": "22edd7ce9462025093b25e3b55006f7720ff0d8e",
+                        "installed_by": ["vcf_extract_relate_somalier"]
+                    },
                     "last/lastdb": {
                         "branch": "master",
                         "git_sha": "a54953d05812af249d40ffaccb5b8ee371a75866",
@@ -492,6 +497,16 @@
                         "git_sha": "d0afa49c7c23c9e99a47af9bafb4cee449853560",
                         "installed_by": ["modules"]
                     },
+                    "somalier/extract": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["vcf_extract_relate_somalier"]
+                    },
+                    "somalier/relate": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["vcf_extract_relate_somalier"]
+                    },
                     "spring/decompress": {
                         "branch": "master",
                         "git_sha": "d0afa49c7c23c9e99a47af9bafb4cee449853560",
@@ -585,6 +600,12 @@
                         "branch": "master",
                         "git_sha": "4b406a74dc0449c0401ed87d5bfff4252fd277fd",
                         "installed_by": ["subworkflows"]
+                    },
+                    "vcf_extract_relate_somalier": {
+                        "branch": "master",
+                        "git_sha": "54e41f4ed3aead45054380a9befeb927612ffc91",
+                        "installed_by": ["subworkflows"],
+                        "patch": "subworkflows/nf-core/vcf_extract_relate_somalier/vcf_extract_relate_somalier.diff"
                     }
                 }
             }

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Nf-core subworkflow vcf_extract_relate_somalier [#891](https://github.com/nf-core/raredisease/pull/891)
+
 ### `Changed`
 
 - Remove redundant indexing processes by enabling native index creation: use `--CREATE_INDEX true` in Picard MarkDuplicates, `--write-index=tbi` in bcftools tools (`SPLIT_MULTIALLELICS_MT`, `REMOVE_DUPLICATES_MT`, `BCFTOOLS_MERGE_MT`, `BCFTOOLS_ANNOTATE`, `BCFTOOLS_REHEADER`, `BCFTOOLS_SORT_ME`) and SVDB_MERGE; eliminate downstream `SAMTOOLS_INDEX` and `TABIX_TABIX` steps across `align_bwa_bwamem2_bwameme`, `postprocess_MT_calls`, `call_mobile_elements`, `call_structural_variants`, and `variant_evaluation` subworkflows [#884](https://github.com/nf-core/raredisease/pull/884)
