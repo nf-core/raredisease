@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Update saltshaker classification reporting by adding customer ID to samples' reports and displaying them as tabs in html [#856](https://github.com/nf-core/raredisease/pull/856)
 - Added non-stub tests for `annotate_mt_snvs` [#890](https://github.com/nf-core/raredisease/pull/890)
 
 ### `Changed`
@@ -18,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactor scatter_genome subworkflow: alias GAWK as `GENOME_FAI_TO_BED`, remove `val_save_reference` parameter, move interval flattening into `annotate_genome_snvs` [#857](https://github.com/nf-core/raredisease/pull/857)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for qc_bam subworkflow [#853](https://github.com/nf-core/raredisease/pull/853)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for alignment and subsample-MT subworkflows [#850](https://github.com/nf-core/raredisease/pull/850)
+- Update saltshaker modules to version 1.1.1 so they can run on empty mitosalt output [#856](https://github.com/nf-core/raredisease/pull/856)
 
 ### `Fixed`
 
@@ -32,9 +34,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Tool updates
 
-| Tool | Old version | New version |
-| ---- | ----------- | ----------- |
-|      |             |             |
+| Tool       | Old version | New version |
+| ---------- | ----------- | ----------- |
+| Saltshaker | 1.0.0       | 1.1.1       |
 
 ## 3.1.1 - Princess Peach (patch) [2026-06-24]
 
