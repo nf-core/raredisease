@@ -11,27 +11,19 @@ workflow ANNOTATE_CSQ_PLI {
         ch_variant_consequences // channel: [mandatory] [ path(consequences) ]
         ch_vcf                  // channel: [mandatory] [ val(meta), path(vcf) ]
         val_index               // bool
-        val_publish_dir         // val: destination string, or '' to skip publishing
 
     main:
         CUSTOM_ADDMOSTSEVERECONSEQUENCE (ch_vcf, ch_variant_consequences)
 
         CUSTOM_ADDMOSTSEVEREPLI (CUSTOM_ADDMOSTSEVERECONSEQUENCE.out.vcf)
 
-        ch_tbi_publish = channel.empty()
+        ch_tbi = channel.empty()
         if (val_index) {
             TABIX_TABIX(CUSTOM_ADDMOSTSEVEREPLI.out.vcf)
-            ch_tbi_publish = TABIX_TABIX.out.index
-        }
-
-        ch_publish = channel.empty()
-        if (val_publish_dir) {
-            ch_publish = CUSTOM_ADDMOSTSEVEREPLI.out.vcf
-                .mix(ch_tbi_publish)
-                .map { meta, value -> [val_publish_dir, [meta, value]] }
+            ch_tbi = TABIX_TABIX.out.index
         }
 
     emit:
-        vcf_ann  = CUSTOM_ADDMOSTSEVEREPLI.out.vcf // channel: [ val(meta), path(vcf) ]
-        publish  = ch_publish                       // channel: [ val(destination), val(value) ]
+        tbi     = ch_tbi                           // channel: [ val(meta), path(tbi) ]
+        vcf_ann = CUSTOM_ADDMOSTSEVEREPLI.out.vcf  // channel: [ val(meta), path(vcf) ]
 }
