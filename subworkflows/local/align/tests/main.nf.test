@@ -115,13 +115,14 @@ nextflow_workflow {
                 input[19] = false
                 input[20] = "bwamem2"
                 input[21] = "wgs"
-                input[22] = true
-                input[23] = false
-                input[24] = "bwamem2"
-                input[25] = "illumina"
-                input[26] = false
-                input[27] = true
+                input[22] = "markduplicates"
+                input[23] = true
+                input[24] = false
+                input[25] = "bwamem2"
+                input[26] = "illumina"
+                input[27] = false
                 input[28] = true
+                input[29] = true
                 """
             }
         }
@@ -221,13 +222,14 @@ nextflow_workflow {
                 input[19] = false
                 input[20] = "bwamem2"
                 input[21] = "wes"
-                input[22] = false
+                input[22] = "markduplicates"
                 input[23] = false
-                input[24] = "bwamem2"
-                input[25] = "illumina"
-                input[26] = false
-                input[27] = true
-                input[28] = false
+                input[24] = false
+                input[25] = "bwamem2"
+                input[26] = "illumina"
+                input[27] = false
+                input[28] = true
+                input[29] = false
                 """
             }
         }
@@ -318,13 +320,14 @@ nextflow_workflow {
                 input[19] = true
                 input[20] = "bwameme"
                 input[21] = "wgs"
-                input[22] = false
+                input[22] = "markduplicates"
                 input[23] = false
-                input[24] = "bwamem2"
-                input[25] = "illumina"
-                input[26] = false
-                input[27] = true
-                input[28] = false
+                input[24] = false
+                input[25] = "bwamem2"
+                input[26] = "illumina"
+                input[27] = false
+                input[28] = true
+                input[29] = false
                 """
             }
         }

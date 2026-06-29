@@ -87,6 +87,50 @@
             "nextflow": "26.03.4"
         }
     },
+    "align bwameme, FASTDUP with bai index": {
+        "content": [
+            [
+                "test_sorted_md.bam",
+                "test_sorted_md.bam.bai",
+                "test_sorted_md.metrics.txt"
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "2adf29dd0f88715a0fe4a91916b680fc"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "af8628d9df18b2d3d4f6fd47ef2bb872"
+                ]
+            ]
+        ],
+        "timestamp": "2026-06-25T16:55:20.385796438",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
     "align bwameme": {
         "content": [
             [
@@ -129,6 +173,49 @@
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.03.4"
+        }
+    },
+    "align bwameme, FASTDUP with csi index": {
+        "content": [
+            [
+                "test_sorted_md.bam",
+                "test_sorted_md.metrics.txt"
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "7bd502311d7aee2ad611821f31919fad"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "af8628d9df18b2d3d4f6fd47ef2bb872"
+                ]
+            ]
+        ],
+        "timestamp": "2026-06-25T16:56:06.256115812",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
         }
     }
 }

@@ -152,6 +152,11 @@
                         "git_sha": "2ad28db4a5a82972c1210dfa7c85f035bb80c4de",
                         "installed_by": ["modules"]
                     },
+                    "fastdup": {
+                        "branch": "master",
+                        "git_sha": "4aab34a29f9ca1730e2f7d194261f5145f53d56d",
+                        "installed_by": ["modules"]
+                    },
                     "fastp": {
                         "branch": "master",
                         "git_sha": "a331ecfd1aa48b2b2298aab23bb4516c800e410b",

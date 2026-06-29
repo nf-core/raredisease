@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- FastDup module from nf-core and integrated it into the pipeline, as an alternative for Picard Markduplicates. [#876](https://github.com/nf-core/raredisease/pull/876)
 - Nf-core subworkflow vcf_extract_relate_somalier [#891](https://github.com/nf-core/raredisease/pull/891)
 
 ### `Changed`
@@ -17,9 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter | New parameter |
-| ------------- | ------------- |
-|               |               |
+| Old parameter | New parameter     |
+| ------------- | ----------------- |
+|               | duplicates_marker |
 
 ### Tool updates
 
