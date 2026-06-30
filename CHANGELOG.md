@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for `prepare_references` subworkflow [#900](https://github.com/nf-core/raredisease/pull/900)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for call_repeat_expansions subworkflow [#893](https://github.com/nf-core/raredisease/pull/893)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for call_mobile_elements and annotate_consequence_pli subworkflows; remove `val_publish_dir` parameter from annotate_consequence_pli [#894](https://github.com/nf-core/raredisease/pull/894)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for `annotate_mt_snvs` subworkflow [#895](https://github.com/nf-core/raredisease/pull/895)
