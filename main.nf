@@ -609,6 +609,19 @@ workflow NFCORE_RAREDISEASE {
     annotate_genome_snvs_ucsc_wigtobigwig_bw            = RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw       // channel: [ val(meta), path(bw) ]
     annotate_mt_snvs_ensemblvep_mt_tbi                  = RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_tbi             // channel: [ val(meta), path(tbi) ]
     annotate_mt_snvs_ensemblvep_mt_vcf                  = RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf             // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_baseline_tbi                     = RAREDISEASE.out.variant_evaluation_baseline_tbi // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_baseline_vcf                     = RAREDISEASE.out.variant_evaluation_baseline_vcf // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_fn_tbi                           = RAREDISEASE.out.variant_evaluation_fn_tbi       // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_fn_vcf                           = RAREDISEASE.out.variant_evaluation_fn_vcf       // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_fp_tbi                           = RAREDISEASE.out.variant_evaluation_fp_tbi       // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_fp_vcf                           = RAREDISEASE.out.variant_evaluation_fp_vcf       // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_non_snp_roc                      = RAREDISEASE.out.variant_evaluation_non_snp_roc  // channel: [ val(meta), path(tsv) ]
+    variant_evaluation_phasing                          = RAREDISEASE.out.variant_evaluation_phasing      // channel: [ val(meta), path(txt) ]
+    variant_evaluation_snp_roc                          = RAREDISEASE.out.variant_evaluation_snp_roc      // channel: [ val(meta), path(tsv) ]
+    variant_evaluation_summary                          = RAREDISEASE.out.variant_evaluation_summary      // channel: [ val(meta), path(txt) ]
+    variant_evaluation_tp_tbi                           = RAREDISEASE.out.variant_evaluation_tp_tbi       // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_tp_vcf                           = RAREDISEASE.out.variant_evaluation_tp_vcf       // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_weighted_roc                     = RAREDISEASE.out.variant_evaluation_weighted_roc // channel: [ val(meta), path(tsv) ]
     subsample_mt_bai                                    = RAREDISEASE.out.subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam                                    = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     publish                                             = RAREDISEASE.out.publish
@@ -836,6 +849,19 @@ workflow {
     annotate_snv_genome_rhocallviz_bw = NFCORE_RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw
     annotate_snv_mt                   = NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf
                                             .mix(NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_tbi)
+    variant_evaluation                = NFCORE_RAREDISEASE.out.variant_evaluation_tp_vcf
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_tp_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_fn_vcf)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_fn_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_fp_vcf)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_fp_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_baseline_vcf)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_baseline_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_snp_roc)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_non_snp_roc)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_weighted_roc)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_summary)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_phasing)
     processed_references              = NFCORE_RAREDISEASE.out.scatter_genome_split_intervals
     subworkflow_results               = NFCORE_RAREDISEASE.out.publish
 }
@@ -882,6 +908,9 @@ output {
     }
     annotate_snv_mt {
         path { _meta, _file -> "annotate_snv/mitochondria/" }
+    }
+    variant_evaluation {
+        path { _meta, _file -> "rtgvcfeval/" }
     }
     processed_references {
         path { _meta, _file -> "processed_references/" }

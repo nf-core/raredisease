@@ -286,7 +286,19 @@ workflow RAREDISEASE {
     ch_rank_snv_publish                 = channel.empty()
     ch_rank_mt_publish                  = channel.empty()
     ch_rank_sv_publish                  = channel.empty()
-    ch_variant_evaluation_publish       = channel.empty()
+    ch_variant_evaluation_baseline_tbi  = channel.empty()
+    ch_variant_evaluation_baseline_vcf  = channel.empty()
+    ch_variant_evaluation_fn_tbi        = channel.empty()
+    ch_variant_evaluation_fn_vcf        = channel.empty()
+    ch_variant_evaluation_fp_tbi        = channel.empty()
+    ch_variant_evaluation_fp_vcf        = channel.empty()
+    ch_variant_evaluation_non_snp_roc   = channel.empty()
+    ch_variant_evaluation_phasing       = channel.empty()
+    ch_variant_evaluation_snp_roc       = channel.empty()
+    ch_variant_evaluation_summary       = channel.empty()
+    ch_variant_evaluation_tp_tbi        = channel.empty()
+    ch_variant_evaluation_tp_vcf        = channel.empty()
+    ch_variant_evaluation_weighted_roc  = channel.empty()
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
@@ -953,7 +965,19 @@ workflow RAREDISEASE {
             ch_sdf,
             CALL_SNV.out.genome_vcf_tabix
         )
-        ch_variant_evaluation_publish = VARIANT_EVALUATION.out.publish
+        ch_variant_evaluation_baseline_tbi = VARIANT_EVALUATION.out.baseline_tbi
+        ch_variant_evaluation_baseline_vcf = VARIANT_EVALUATION.out.baseline_vcf
+        ch_variant_evaluation_fn_tbi       = VARIANT_EVALUATION.out.fn_tbi
+        ch_variant_evaluation_fn_vcf       = VARIANT_EVALUATION.out.fn_vcf
+        ch_variant_evaluation_fp_tbi       = VARIANT_EVALUATION.out.fp_tbi
+        ch_variant_evaluation_fp_vcf       = VARIANT_EVALUATION.out.fp_vcf
+        ch_variant_evaluation_non_snp_roc  = VARIANT_EVALUATION.out.non_snp_roc
+        ch_variant_evaluation_phasing      = VARIANT_EVALUATION.out.phasing
+        ch_variant_evaluation_snp_roc      = VARIANT_EVALUATION.out.snp_roc
+        ch_variant_evaluation_summary      = VARIANT_EVALUATION.out.summary
+        ch_variant_evaluation_tp_tbi       = VARIANT_EVALUATION.out.tp_tbi
+        ch_variant_evaluation_tp_vcf       = VARIANT_EVALUATION.out.tp_vcf
+        ch_variant_evaluation_weighted_roc = VARIANT_EVALUATION.out.weighted_roc
     }
 
 /*
@@ -1131,6 +1155,19 @@ workflow RAREDISEASE {
     call_mobile_elements_vcf                         = ch_call_mobile_elements_vcf // channel: [ val(meta), path(vcf) ]
     ann_csq_pli_me_tbi                               = ch_ann_csq_pli_me_tbi       // channel: [ val(meta), path(tbi) ]
     ann_csq_pli_me_vcf_ann                           = ch_ann_csq_pli_me_vcf_ann   // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_baseline_tbi                  = ch_variant_evaluation_baseline_tbi // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_baseline_vcf                  = ch_variant_evaluation_baseline_vcf // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_fn_tbi                        = ch_variant_evaluation_fn_tbi       // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_fn_vcf                        = ch_variant_evaluation_fn_vcf       // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_fp_tbi                        = ch_variant_evaluation_fp_tbi       // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_fp_vcf                        = ch_variant_evaluation_fp_vcf       // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_non_snp_roc                   = ch_variant_evaluation_non_snp_roc  // channel: [ val(meta), path(tsv) ]
+    variant_evaluation_phasing                       = ch_variant_evaluation_phasing      // channel: [ val(meta), path(txt) ]
+    variant_evaluation_snp_roc                       = ch_variant_evaluation_snp_roc      // channel: [ val(meta), path(tsv) ]
+    variant_evaluation_summary                       = ch_variant_evaluation_summary      // channel: [ val(meta), path(txt) ]
+    variant_evaluation_tp_tbi                        = ch_variant_evaluation_tp_tbi       // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_tp_vcf                        = ch_variant_evaluation_tp_vcf       // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_weighted_roc                  = ch_variant_evaluation_weighted_roc // channel: [ val(meta), path(tsv) ]
     subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     versions                     = ch_versions
@@ -1145,7 +1182,6 @@ workflow RAREDISEASE {
                        .mix(ch_rank_snv_publish)
                        .mix(ch_rank_mt_publish)
                        .mix(ch_rank_sv_publish)
-                       .mix(ch_variant_evaluation_publish)
 }
 
 
