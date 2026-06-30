@@ -611,16 +611,16 @@ workflow NFCORE_RAREDISEASE {
     annotate_mt_snvs_ensemblvep_mt_vcf                  = RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf             // channel: [ val(meta), path(vcf) ]
     variant_evaluation_baseline_tbi                     = RAREDISEASE.out.variant_evaluation_baseline_tbi // channel: [ val(meta), path(tbi) ]
     variant_evaluation_baseline_vcf                     = RAREDISEASE.out.variant_evaluation_baseline_vcf // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_fn_tbi                           = RAREDISEASE.out.variant_evaluation_fn_tbi       // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_fn_vcf                           = RAREDISEASE.out.variant_evaluation_fn_vcf       // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_fp_tbi                           = RAREDISEASE.out.variant_evaluation_fp_tbi       // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_fp_vcf                           = RAREDISEASE.out.variant_evaluation_fp_vcf       // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_false_negatives_tbi              = RAREDISEASE.out.variant_evaluation_false_negatives_tbi // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_false_negatives_vcf              = RAREDISEASE.out.variant_evaluation_false_negatives_vcf // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_false_positives_tbi              = RAREDISEASE.out.variant_evaluation_false_positives_tbi // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_false_positives_vcf              = RAREDISEASE.out.variant_evaluation_false_positives_vcf // channel: [ val(meta), path(vcf) ]
     variant_evaluation_non_snp_roc                      = RAREDISEASE.out.variant_evaluation_non_snp_roc  // channel: [ val(meta), path(tsv) ]
     variant_evaluation_phasing                          = RAREDISEASE.out.variant_evaluation_phasing      // channel: [ val(meta), path(txt) ]
     variant_evaluation_snp_roc                          = RAREDISEASE.out.variant_evaluation_snp_roc      // channel: [ val(meta), path(tsv) ]
     variant_evaluation_summary                          = RAREDISEASE.out.variant_evaluation_summary      // channel: [ val(meta), path(txt) ]
-    variant_evaluation_tp_tbi                           = RAREDISEASE.out.variant_evaluation_tp_tbi       // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_tp_vcf                           = RAREDISEASE.out.variant_evaluation_tp_vcf       // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_true_positives_tbi               = RAREDISEASE.out.variant_evaluation_true_positives_tbi // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_true_positives_vcf               = RAREDISEASE.out.variant_evaluation_true_positives_vcf // channel: [ val(meta), path(vcf) ]
     variant_evaluation_weighted_roc                     = RAREDISEASE.out.variant_evaluation_weighted_roc // channel: [ val(meta), path(tsv) ]
     subsample_mt_bai                                    = RAREDISEASE.out.subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam                                    = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
@@ -849,12 +849,12 @@ workflow {
     annotate_snv_genome_rhocallviz_bw = NFCORE_RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw
     annotate_snv_mt                   = NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf
                                             .mix(NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_tbi)
-    variant_evaluation                = NFCORE_RAREDISEASE.out.variant_evaluation_tp_vcf
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_tp_tbi)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_fn_vcf)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_fn_tbi)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_fp_vcf)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_fp_tbi)
+    variant_evaluation                = NFCORE_RAREDISEASE.out.variant_evaluation_true_positives_vcf
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_true_positives_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_false_negatives_vcf)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_false_negatives_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_false_positives_vcf)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_false_positives_tbi)
                                             .mix(NFCORE_RAREDISEASE.out.variant_evaluation_baseline_vcf)
                                             .mix(NFCORE_RAREDISEASE.out.variant_evaluation_baseline_tbi)
                                             .mix(NFCORE_RAREDISEASE.out.variant_evaluation_snp_roc)
