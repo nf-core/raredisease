@@ -411,12 +411,13 @@ workflow RAREDISEASE {
         val_target_bed,
         skip_ngsbits
     )
-    ch_versions = ch_versions.mix(QC_BAM.out.versions)
 
     //
     // SUBWORKFLOW: Check for contamination using GATK
     //
-    ch_contamination_mqc = Channel.empty()
+    ch_contamination_mqc    = Channel.empty()
+    ch_contamination_table  = Channel.empty()
+    ch_contamination_pileup = Channel.empty()
 
     if (!skip_contamination) {
 
@@ -438,7 +439,9 @@ workflow RAREDISEASE {
             CONTAMINATION_CHECK.out.contamination_table
         )
 
-        ch_contamination_mqc = PARSE_CONTAMINATION.out.mqc_table
+        ch_contamination_mqc    = PARSE_CONTAMINATION.out.mqc_table
+        ch_contamination_table  = CONTAMINATION_CHECK.out.contamination_table
+        ch_contamination_pileup = CONTAMINATION_CHECK.out.pileup_table
     }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1171,6 +1174,8 @@ workflow RAREDISEASE {
     ann_csq_pli_me_vcf_ann                           = ch_ann_csq_pli_me_vcf_ann   // channel: [ val(meta), path(vcf) ]
     subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
+    contamination_table          = ch_contamination_table         // channel: [ val(meta), path(table) ]
+    contamination_pileup         = ch_contamination_pileup        // channel: [ val(meta), path(table) ]
     versions                     = ch_versions
     publish                      = ch_call_sv_publish
                        .mix(ch_annotate_sv_publish)

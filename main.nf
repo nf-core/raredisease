@@ -636,6 +636,8 @@ workflow NFCORE_RAREDISEASE {
     annotate_mt_snvs_ensemblvep_mt_vcf                  = RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf             // channel: [ val(meta), path(vcf) ]
     subsample_mt_bai                                    = RAREDISEASE.out.subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam                                    = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
+    contamination_table                                 = RAREDISEASE.out.contamination_table         // channel: [ val(meta), path(table) ]
+    contamination_pileup                                = RAREDISEASE.out.contamination_pileup        // channel: [ val(meta), path(table) ]
     publish                                             = RAREDISEASE.out.publish
                                                             .mix(ch_pedfile_publish)
                                                             .mix(ch_references.publish) // channel: [ val(destination), val(value) ]
@@ -863,6 +865,8 @@ workflow {
     annotate_snv_genome_rhocallviz_bw = NFCORE_RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw
     annotate_snv_mt                   = NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf
                                             .mix(NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_tbi)
+    contamination                     = NFCORE_RAREDISEASE.out.contamination_table
+    contamination_pileups             = NFCORE_RAREDISEASE.out.contamination_pileup
     processed_references              = NFCORE_RAREDISEASE.out.scatter_genome_split_intervals
     subworkflow_results               = NFCORE_RAREDISEASE.out.publish
 }
@@ -909,6 +913,12 @@ output {
     }
     annotate_snv_mt {
         path { _meta, _file -> "annotate_snv/mitochondria/" }
+    }
+    contamination {
+        path { _meta, _file -> "qc/contamination/" }
+    }
+    contamination_pileups {
+        path { _meta, _file -> "qc/contamination/pileups/" }
     }
     processed_references {
         path { _meta, _file -> "processed_references/" }
