@@ -54,11 +54,7 @@ nextflow_workflow {
                     workflow.out.gens_baf_bed_gz,
                     workflow.out.gens_baf_bed_tbi,
                     workflow.out.gens_cov_bed_gz,
-                    workflow.out.gens_cov_bed_tbi,
-                    workflow.out.publish.flatten()
-                        .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                        .collect { new File(it).name }
-                        .sort()
+                    workflow.out.gens_cov_bed_tbi
                     ).match() }
             )
         }
@@ -102,11 +98,7 @@ nextflow_workflow {
                     workflow.out.gens_baf_bed_gz,
                     workflow.out.gens_baf_bed_tbi,
                     workflow.out.gens_cov_bed_gz,
-                    workflow.out.gens_cov_bed_tbi,
-                    workflow.out.publish.flatten()
-                        .findAll { it instanceof String && (it.startsWith('/') || it.contains('.')) }
-                        .collect { new File(it).name }
-                        .sort()
+                    workflow.out.gens_cov_bed_tbi
                     ).match()
                 }
             )

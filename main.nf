@@ -581,6 +581,7 @@ workflow NFCORE_RAREDISEASE {
     call_sv_tbi                                         = RAREDISEASE.out.call_sv_tbi                   // channel: [ val(meta), path(tbi) ]
     saltshaker_html                                     = RAREDISEASE.out.saltshaker_html              // channel: [ val(meta), path(html) ]
     saltshaker_plot                                     = RAREDISEASE.out.saltshaker_plot             // channel: [ val(meta), path(png) ]
+    generate_cytosure_files_cgh                         = RAREDISEASE.out.generate_cytosure_files_cgh // channel: [ val(meta), path(cgh) ]
     mt_del_result                                       = RAREDISEASE.out.mt_del_result               // channel: [ val(meta), path(txt) ]
     call_repeat_expansions_expansionhunter_bai          = RAREDISEASE.out.call_repeat_expansions_expansionhunter_bai // channel: [ val(meta), path(bai) ]
     call_repeat_expansions_expansionhunter_bam          = RAREDISEASE.out.call_repeat_expansions_expansionhunter_bam // channel: [ val(meta), path(bam) ]
@@ -599,6 +600,10 @@ workflow NFCORE_RAREDISEASE {
     call_snv_genome_vcf                                 = RAREDISEASE.out.call_snv_genome_vcf                            // channel: [ val(meta), path(vcf) ]
     call_snv_mt_tabix                                   = RAREDISEASE.out.call_snv_mt_tabix                              // channel: [ val(meta), path(tbi) ]
     call_snv_mt_vcf                                     = RAREDISEASE.out.call_snv_mt_vcf                                // channel: [ val(meta), path(vcf) ]
+    gens_baf_bed_gz                                     = RAREDISEASE.out.gens_baf_bed_gz                                // channel: [ val(meta), path(bed.gz) ]
+    gens_baf_bed_tbi                                    = RAREDISEASE.out.gens_baf_bed_tbi                               // channel: [ val(meta), path(tbi) ]
+    gens_cov_bed_gz                                     = RAREDISEASE.out.gens_cov_bed_gz                                // channel: [ val(meta), path(bed.gz) ]
+    gens_cov_bed_tbi                                    = RAREDISEASE.out.gens_cov_bed_tbi                               // channel: [ val(meta), path(tbi) ]
     annotate_genome_snvs_bcftools_concat_tbi            = RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_tbi       // channel: [ val(meta), path(tbi) ]
     annotate_genome_snvs_bcftools_concat_vcf            = RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_vcf       // channel: [ val(meta), path(vcf) ]
     annotate_genome_snvs_chromograph_autozyg_plots      = RAREDISEASE.out.annotate_genome_snvs_chromograph_autozyg_plots // channel: [ val(meta), path(png) ]
@@ -818,6 +823,7 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.saltshaker_html)
                                             .mix(NFCORE_RAREDISEASE.out.saltshaker_plot)
                                             .mix(NFCORE_RAREDISEASE.out.mt_del_result)
+    generate_cytosure_files            = NFCORE_RAREDISEASE.out.generate_cytosure_files_cgh
     call_snv_genome               = NFCORE_RAREDISEASE.out.call_snv_genome_vcf
                                         .mix(NFCORE_RAREDISEASE.out.call_snv_genome_tabix)
                                         .mix(NFCORE_RAREDISEASE.out.call_snv_deepvariant_report)
@@ -826,6 +832,10 @@ workflow {
     call_snv_concatenated         = NFCORE_RAREDISEASE.out.call_snv_bcftools_concat_vcf
                                         .mix(NFCORE_RAREDISEASE.out.call_snv_bcftools_concat_tbi)
                                         .mix(NFCORE_RAREDISEASE.out.call_snv_bcftools_concat_csi)
+    gens                          = NFCORE_RAREDISEASE.out.gens_baf_bed_gz
+                                        .mix(NFCORE_RAREDISEASE.out.gens_baf_bed_tbi)
+                                        .mix(NFCORE_RAREDISEASE.out.gens_cov_bed_gz)
+                                        .mix(NFCORE_RAREDISEASE.out.gens_cov_bed_tbi)
     annotate_snv_genome               = NFCORE_RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_vcf
                                             .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_tbi)
                                             .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_chromograph_autozyg_plots)
@@ -865,6 +875,9 @@ output {
     call_sv {
         path { _meta, _file -> "call_sv/" }
     }
+    generate_cytosure_files {
+        path { _meta, _file -> "vcf2cytosure/" }
+    }
     call_snv_genome {
         path { _meta, _file -> "call_snv/genome/" }
     }
@@ -873,6 +886,9 @@ output {
     }
     call_snv_concatenated {
         path { _meta, _file -> "call_snv/concatenated_calls/" }
+    }
+    gens {
+        path { _meta, _file -> "gens/" }
     }
     annotate_snv_genome {
         path { _meta, _file -> "annotate_snv/genome/" }
