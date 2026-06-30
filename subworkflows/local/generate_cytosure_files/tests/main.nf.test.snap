@@ -1,0 +1,64 @@
+{
+    "GENERATE_CYTOSURE_FILES - no sample_id_map, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "custid": "earlycasualcaiman",
+                            "sex": 1
+                        },
+                        "earlycasualcaiman.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "cgh": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "custid": "earlycasualcaiman",
+                            "sex": 1
+                        },
+                        "earlycasualcaiman.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-06-30T20:58:21.226904272",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "GENERATE_CYTOSURE_FILES - with sample_id_map, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "custid": "CUST_001",
+                            "sex": 1
+                        },
+                        "CUST_001.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "cgh": [
+                    [
+                        {
+                            "id": "earlycasualcaiman",
+                            "custid": "CUST_001",
+                            "sex": 1
+                        },
+                        "CUST_001.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-06-30T20:58:44.411334018",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

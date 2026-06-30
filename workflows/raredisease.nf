@@ -277,8 +277,11 @@ workflow RAREDISEASE {
     ch_annotate_mt_snvs_ensemblvep_mt_tbi             = channel.empty()
     ch_annotate_mt_snvs_ensemblvep_mt_vcf             = channel.empty()
     ch_annotate_sv_publish              = channel.empty()
-    ch_generate_cytosure_files_publish  = channel.empty()
-    ch_gens_publish                     = channel.empty()
+    ch_generate_cytosure_files_cgh      = channel.empty()
+    ch_gens_baf_bed_gz               = channel.empty()
+    ch_gens_baf_bed_tbi              = channel.empty()
+    ch_gens_cov_bed_gz               = channel.empty()
+    ch_gens_cov_bed_tbi              = channel.empty()
     ch_fastqc_publish                   = channel.empty()
     ch_smncopynumbercaller_publish      = channel.empty()
     ch_peddy_publish                    = channel.empty()
@@ -935,7 +938,7 @@ workflow RAREDISEASE {
             ch_sv_annotate.vcf_ann,
             val_sample_id_map
         )
-        ch_generate_cytosure_files_publish = GENERATE_CYTOSURE_FILES.out.publish
+        ch_generate_cytosure_files_cgh = GENERATE_CYTOSURE_FILES.out.cgh
     }
 
 /*
@@ -956,7 +959,10 @@ workflow RAREDISEASE {
             ch_gens_pon_female,
             ch_gens_pon_male
         )
-        ch_gens_publish = GENS.out.publish
+        ch_gens_baf_bed_gz  = GENS.out.gens_baf_bed_gz
+        ch_gens_baf_bed_tbi = GENS.out.gens_baf_bed_tbi
+        ch_gens_cov_bed_gz  = GENS.out.gens_cov_bed_gz
+        ch_gens_cov_bed_tbi = GENS.out.gens_cov_bed_tbi
     }
 
 /*
@@ -1133,6 +1139,7 @@ workflow RAREDISEASE {
     call_sv_tbi                                      = ch_call_sv_tbi                                      // channel: [ val(meta), path(tbi) ]
     saltshaker_html                                  = ch_saltshaker_html                                  // channel: [ val(meta), path(html) ]
     saltshaker_plot                                  = ch_saltshaker_plot                                  // channel: [ val(meta), path(png) ]
+    generate_cytosure_files_cgh                      = ch_generate_cytosure_files_cgh                      // channel: [ val(meta), path(cgh) ]
     mt_del_result                                    = ch_mt_del_result                                    // channel: [ val(meta), path(txt) ]
     call_repeat_expansions_expansionhunter_bai       = ch_call_repeat_expansions_expansionhunter_bai       // channel: [ val(meta), path(bai) ]
     call_repeat_expansions_expansionhunter_bam       = ch_call_repeat_expansions_expansionhunter_bam       // channel: [ val(meta), path(bam) ]
@@ -1147,6 +1154,10 @@ workflow RAREDISEASE {
     call_snv_genome_vcf                      = ch_call_snv_genome_vcf                                      // channel: [ val(meta), path(vcf) ]
     call_snv_mt_tabix                        = ch_call_snv_mt_tabix                                        // channel: [ val(meta), path(tbi) ]
     call_snv_mt_vcf                          = ch_call_snv_mt_vcf                                          // channel: [ val(meta), path(vcf) ]
+    gens_baf_bed_gz                          = ch_gens_baf_bed_gz                                          // channel: [ val(meta), path(bed.gz) ]
+    gens_baf_bed_tbi                         = ch_gens_baf_bed_tbi                                         // channel: [ val(meta), path(tbi) ]
+    gens_cov_bed_gz                          = ch_gens_cov_bed_gz                                          // channel: [ val(meta), path(bed.gz) ]
+    gens_cov_bed_tbi                         = ch_gens_cov_bed_tbi                                         // channel: [ val(meta), path(tbi) ]
     annotate_genome_snvs_bcftools_concat_tbi         = ch_annotate_genome_snvs_bcftools_concat_tbi         // channel: [ val(meta), path(tbi) ]
     annotate_genome_snvs_bcftools_concat_vcf         = ch_annotate_genome_snvs_bcftools_concat_vcf         // channel: [ val(meta), path(vcf) ]
     annotate_genome_snvs_chromograph_autozyg_plots   = ch_annotate_genome_snvs_chromograph_autozyg_plots   // channel: [ val(meta), path(png) ]
@@ -1185,8 +1196,6 @@ workflow RAREDISEASE {
     versions                     = ch_versions
     publish                      = ch_call_sv_publish
                        .mix(ch_annotate_sv_publish)
-                       .mix(ch_generate_cytosure_files_publish)
-                       .mix(ch_gens_publish)
                        .mix(ch_fastqc_publish)
                        .mix(ch_smncopynumbercaller_publish)
                        .mix(ch_peddy_publish)
