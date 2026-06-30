@@ -842,11 +842,11 @@ workflow {
     annotate_snv_genome_rhocallviz_bw = NFCORE_RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw
     annotate_snv_mt                   = NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf
                                             .mix(NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_tbi)
-    rank_snv                          = NFCORE_RAREDISEASE.out.rank_snv_vcf
+    rank_variants                     = NFCORE_RAREDISEASE.out.rank_snv_vcf
                                             .mix(NFCORE_RAREDISEASE.out.rank_snv_tbi)
-    rank_mt                           = NFCORE_RAREDISEASE.out.rank_mt_vcf
+                                            .mix(NFCORE_RAREDISEASE.out.rank_mt_vcf)
                                             .mix(NFCORE_RAREDISEASE.out.rank_mt_tbi)
-    rank_sv                           = NFCORE_RAREDISEASE.out.rank_sv_vcf
+                                            .mix(NFCORE_RAREDISEASE.out.rank_sv_vcf)
                                             .mix(NFCORE_RAREDISEASE.out.rank_sv_tbi)
     processed_references              = NFCORE_RAREDISEASE.out.scatter_genome_split_intervals
     subworkflow_results               = NFCORE_RAREDISEASE.out.publish
@@ -895,13 +895,7 @@ output {
     annotate_snv_mt {
         path { _meta, _file -> "annotate_snv/mitochondria/" }
     }
-    rank_snv {
-        path { _meta, _file -> "rank_and_filter/" }
-    }
-    rank_mt {
-        path { _meta, _file -> "rank_and_filter/" }
-    }
-    rank_sv {
+    rank_variants {
         path { _meta, _file -> "rank_and_filter/" }
     }
     processed_references {
