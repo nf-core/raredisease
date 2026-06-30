@@ -40,21 +40,18 @@ workflow VARIANT_EVALUATION {
 
         RTGTOOLS_VCFEVAL ( ch_vcfeval_in, ch_sdf )
 
-        ch_publish = RTGTOOLS_VCFEVAL.out.tp_vcf
-            .mix(RTGTOOLS_VCFEVAL.out.tp_tbi)
-            .mix(RTGTOOLS_VCFEVAL.out.fn_vcf)
-            .mix(RTGTOOLS_VCFEVAL.out.fn_tbi)
-            .mix(RTGTOOLS_VCFEVAL.out.fp_vcf)
-            .mix(RTGTOOLS_VCFEVAL.out.fp_tbi)
-            .mix(RTGTOOLS_VCFEVAL.out.baseline_vcf)
-            .mix(RTGTOOLS_VCFEVAL.out.baseline_tbi)
-            .mix(RTGTOOLS_VCFEVAL.out.snp_roc)
-            .mix(RTGTOOLS_VCFEVAL.out.non_snp_roc)
-            .mix(RTGTOOLS_VCFEVAL.out.weighted_roc)
-            .mix(RTGTOOLS_VCFEVAL.out.summary)
-            .mix(RTGTOOLS_VCFEVAL.out.phasing)
-            .map { meta, value -> ['rtgvcfeval/', [meta, value]] }
-
     emit:
-        publish = ch_publish // channel: [ val(destination), val(value) ]
+        baseline_tbi        = RTGTOOLS_VCFEVAL.out.baseline_tbi // channel: [ val(meta), path(tbi) ]
+        baseline_vcf        = RTGTOOLS_VCFEVAL.out.baseline_vcf // channel: [ val(meta), path(vcf) ]
+        false_negatives_tbi = RTGTOOLS_VCFEVAL.out.fn_tbi       // channel: [ val(meta), path(tbi) ]
+        false_negatives_vcf = RTGTOOLS_VCFEVAL.out.fn_vcf       // channel: [ val(meta), path(vcf) ]
+        false_positives_tbi = RTGTOOLS_VCFEVAL.out.fp_tbi       // channel: [ val(meta), path(tbi) ]
+        false_positives_vcf = RTGTOOLS_VCFEVAL.out.fp_vcf       // channel: [ val(meta), path(vcf) ]
+        non_snp_roc         = RTGTOOLS_VCFEVAL.out.non_snp_roc  // channel: [ val(meta), path(tsv) ]
+        phasing             = RTGTOOLS_VCFEVAL.out.phasing      // channel: [ val(meta), path(txt) ]
+        snp_roc             = RTGTOOLS_VCFEVAL.out.snp_roc      // channel: [ val(meta), path(tsv) ]
+        summary             = RTGTOOLS_VCFEVAL.out.summary      // channel: [ val(meta), path(txt) ]
+        true_positives_tbi  = RTGTOOLS_VCFEVAL.out.tp_tbi       // channel: [ val(meta), path(tbi) ]
+        true_positives_vcf  = RTGTOOLS_VCFEVAL.out.tp_vcf       // channel: [ val(meta), path(vcf) ]
+        weighted_roc        = RTGTOOLS_VCFEVAL.out.weighted_roc // channel: [ val(meta), path(tsv) ]
 }

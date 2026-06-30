@@ -277,16 +277,34 @@ workflow RAREDISEASE {
     ch_annotate_mt_snvs_ensemblvep_mt_tbi             = channel.empty()
     ch_annotate_mt_snvs_ensemblvep_mt_vcf             = channel.empty()
     ch_annotate_sv_publish              = channel.empty()
-    ch_generate_cytosure_files_publish  = channel.empty()
-    ch_gens_publish                     = channel.empty()
+    ch_generate_cytosure_files_cgh      = channel.empty()
+    ch_gens_baf_bed_gz               = channel.empty()
+    ch_gens_baf_bed_tbi              = channel.empty()
+    ch_gens_cov_bed_gz               = channel.empty()
+    ch_gens_cov_bed_tbi              = channel.empty()
     ch_fastqc_publish                   = channel.empty()
     ch_smncopynumbercaller_publish      = channel.empty()
     ch_peddy_publish                    = channel.empty()
     ch_multiqc_publish                  = channel.empty()
-    ch_rank_snv_publish                 = channel.empty()
-    ch_rank_mt_publish                  = channel.empty()
-    ch_rank_sv_publish                  = channel.empty()
-    ch_variant_evaluation_publish       = channel.empty()
+    ch_rank_snv_tbi                           = channel.empty()
+    ch_rank_snv_vcf                           = channel.empty()
+    ch_rank_mt_tbi                            = channel.empty()
+    ch_rank_mt_vcf                            = channel.empty()
+    ch_rank_sv_tbi                            = channel.empty()
+    ch_rank_sv_vcf                            = channel.empty()
+    ch_variant_evaluation_baseline_tbi        = channel.empty()
+    ch_variant_evaluation_baseline_vcf        = channel.empty()
+    ch_variant_evaluation_false_negatives_tbi = channel.empty()
+    ch_variant_evaluation_false_negatives_vcf = channel.empty()
+    ch_variant_evaluation_false_positives_tbi = channel.empty()
+    ch_variant_evaluation_false_positives_vcf = channel.empty()
+    ch_variant_evaluation_non_snp_roc         = channel.empty()
+    ch_variant_evaluation_phasing             = channel.empty()
+    ch_variant_evaluation_snp_roc             = channel.empty()
+    ch_variant_evaluation_summary             = channel.empty()
+    ch_variant_evaluation_true_positives_tbi  = channel.empty()
+    ch_variant_evaluation_true_positives_vcf  = channel.empty()
+    ch_variant_evaluation_weighted_roc        = channel.empty()
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
@@ -581,7 +599,8 @@ workflow RAREDISEASE {
                 ch_ranksnv_nuclear_in,
                 false
             )
-            ch_rank_snv_publish = RANK_VARIANTS_SNV.out.publish
+            ch_rank_snv_tbi = RANK_VARIANTS_SNV.out.tbi
+            ch_rank_snv_vcf = RANK_VARIANTS_SNV.out.vcf
         }
 
         //
@@ -653,7 +672,8 @@ workflow RAREDISEASE {
                 ch_ranksnv_mt_in,
                 false
             )
-            ch_rank_mt_publish = RANK_VARIANTS_MT.out.publish
+            ch_rank_mt_tbi = RANK_VARIANTS_MT.out.tbi
+            ch_rank_mt_vcf = RANK_VARIANTS_MT.out.vcf
         }
     }
 
@@ -783,7 +803,8 @@ workflow RAREDISEASE {
                 ch_ranksnv_sv_in,
                 true
             )
-            ch_rank_sv_publish = RANK_VARIANTS_SV.out.publish
+            ch_rank_sv_tbi = RANK_VARIANTS_SV.out.tbi
+            ch_rank_sv_vcf = RANK_VARIANTS_SV.out.vcf
         }
     }
 /*
@@ -917,7 +938,7 @@ workflow RAREDISEASE {
             ch_sv_annotate.vcf_ann,
             val_sample_id_map
         )
-        ch_generate_cytosure_files_publish = GENERATE_CYTOSURE_FILES.out.publish
+        ch_generate_cytosure_files_cgh = GENERATE_CYTOSURE_FILES.out.cgh
     }
 
 /*
@@ -938,7 +959,10 @@ workflow RAREDISEASE {
             ch_gens_pon_female,
             ch_gens_pon_male
         )
-        ch_gens_publish = GENS.out.publish
+        ch_gens_baf_bed_gz  = GENS.out.gens_baf_bed_gz
+        ch_gens_baf_bed_tbi = GENS.out.gens_baf_bed_tbi
+        ch_gens_cov_bed_gz  = GENS.out.gens_cov_bed_gz
+        ch_gens_cov_bed_tbi = GENS.out.gens_cov_bed_tbi
     }
 
 /*
@@ -953,7 +977,19 @@ workflow RAREDISEASE {
             ch_sdf,
             CALL_SNV.out.genome_vcf_tabix
         )
-        ch_variant_evaluation_publish = VARIANT_EVALUATION.out.publish
+        ch_variant_evaluation_baseline_tbi        = VARIANT_EVALUATION.out.baseline_tbi
+        ch_variant_evaluation_baseline_vcf        = VARIANT_EVALUATION.out.baseline_vcf
+        ch_variant_evaluation_false_negatives_tbi = VARIANT_EVALUATION.out.false_negatives_tbi
+        ch_variant_evaluation_false_negatives_vcf = VARIANT_EVALUATION.out.false_negatives_vcf
+        ch_variant_evaluation_false_positives_tbi = VARIANT_EVALUATION.out.false_positives_tbi
+        ch_variant_evaluation_false_positives_vcf = VARIANT_EVALUATION.out.false_positives_vcf
+        ch_variant_evaluation_non_snp_roc         = VARIANT_EVALUATION.out.non_snp_roc
+        ch_variant_evaluation_phasing             = VARIANT_EVALUATION.out.phasing
+        ch_variant_evaluation_snp_roc             = VARIANT_EVALUATION.out.snp_roc
+        ch_variant_evaluation_summary             = VARIANT_EVALUATION.out.summary
+        ch_variant_evaluation_true_positives_tbi  = VARIANT_EVALUATION.out.true_positives_tbi
+        ch_variant_evaluation_true_positives_vcf  = VARIANT_EVALUATION.out.true_positives_vcf
+        ch_variant_evaluation_weighted_roc        = VARIANT_EVALUATION.out.weighted_roc
     }
 
 /*
@@ -1103,6 +1139,7 @@ workflow RAREDISEASE {
     call_sv_tbi                                      = ch_call_sv_tbi                                      // channel: [ val(meta), path(tbi) ]
     saltshaker_html                                  = ch_saltshaker_html                                  // channel: [ val(meta), path(html) ]
     saltshaker_plot                                  = ch_saltshaker_plot                                  // channel: [ val(meta), path(png) ]
+    generate_cytosure_files_cgh                      = ch_generate_cytosure_files_cgh                      // channel: [ val(meta), path(cgh) ]
     mt_del_result                                    = ch_mt_del_result                                    // channel: [ val(meta), path(txt) ]
     call_repeat_expansions_expansionhunter_bai       = ch_call_repeat_expansions_expansionhunter_bai       // channel: [ val(meta), path(bai) ]
     call_repeat_expansions_expansionhunter_bam       = ch_call_repeat_expansions_expansionhunter_bam       // channel: [ val(meta), path(bam) ]
@@ -1117,6 +1154,10 @@ workflow RAREDISEASE {
     call_snv_genome_vcf                      = ch_call_snv_genome_vcf                                      // channel: [ val(meta), path(vcf) ]
     call_snv_mt_tabix                        = ch_call_snv_mt_tabix                                        // channel: [ val(meta), path(tbi) ]
     call_snv_mt_vcf                          = ch_call_snv_mt_vcf                                          // channel: [ val(meta), path(vcf) ]
+    gens_baf_bed_gz                          = ch_gens_baf_bed_gz                                          // channel: [ val(meta), path(bed.gz) ]
+    gens_baf_bed_tbi                         = ch_gens_baf_bed_tbi                                         // channel: [ val(meta), path(tbi) ]
+    gens_cov_bed_gz                          = ch_gens_cov_bed_gz                                          // channel: [ val(meta), path(bed.gz) ]
+    gens_cov_bed_tbi                         = ch_gens_cov_bed_tbi                                         // channel: [ val(meta), path(tbi) ]
     annotate_genome_snvs_bcftools_concat_tbi         = ch_annotate_genome_snvs_bcftools_concat_tbi         // channel: [ val(meta), path(tbi) ]
     annotate_genome_snvs_bcftools_concat_vcf         = ch_annotate_genome_snvs_bcftools_concat_vcf         // channel: [ val(meta), path(vcf) ]
     annotate_genome_snvs_chromograph_autozyg_plots   = ch_annotate_genome_snvs_chromograph_autozyg_plots   // channel: [ val(meta), path(png) ]
@@ -1131,21 +1172,34 @@ workflow RAREDISEASE {
     call_mobile_elements_vcf                         = ch_call_mobile_elements_vcf // channel: [ val(meta), path(vcf) ]
     ann_csq_pli_me_tbi                               = ch_ann_csq_pli_me_tbi       // channel: [ val(meta), path(tbi) ]
     ann_csq_pli_me_vcf_ann                           = ch_ann_csq_pli_me_vcf_ann   // channel: [ val(meta), path(vcf) ]
+    rank_snv_tbi                                     = ch_rank_snv_tbi             // channel: [ val(meta), path(tbi) ]
+    rank_snv_vcf                                     = ch_rank_snv_vcf             // channel: [ val(meta), path(vcf) ]
+    rank_mt_tbi                                      = ch_rank_mt_tbi              // channel: [ val(meta), path(tbi) ]
+    rank_mt_vcf                                      = ch_rank_mt_vcf              // channel: [ val(meta), path(vcf) ]
+    rank_sv_tbi                                      = ch_rank_sv_tbi              // channel: [ val(meta), path(tbi) ]
+    rank_sv_vcf                                      = ch_rank_sv_vcf              // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_baseline_tbi                  = ch_variant_evaluation_baseline_tbi              // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_baseline_vcf                  = ch_variant_evaluation_baseline_vcf              // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_false_negatives_tbi           = ch_variant_evaluation_false_negatives_tbi       // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_false_negatives_vcf           = ch_variant_evaluation_false_negatives_vcf       // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_false_positives_tbi           = ch_variant_evaluation_false_positives_tbi       // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_false_positives_vcf           = ch_variant_evaluation_false_positives_vcf       // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_non_snp_roc                   = ch_variant_evaluation_non_snp_roc               // channel: [ val(meta), path(tsv) ]
+    variant_evaluation_phasing                       = ch_variant_evaluation_phasing                   // channel: [ val(meta), path(txt) ]
+    variant_evaluation_snp_roc                       = ch_variant_evaluation_snp_roc                   // channel: [ val(meta), path(tsv) ]
+    variant_evaluation_summary                       = ch_variant_evaluation_summary                   // channel: [ val(meta), path(txt) ]
+    variant_evaluation_true_positives_tbi            = ch_variant_evaluation_true_positives_tbi        // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_true_positives_vcf            = ch_variant_evaluation_true_positives_vcf        // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_weighted_roc                  = ch_variant_evaluation_weighted_roc              // channel: [ val(meta), path(tsv) ]
     subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     versions                     = ch_versions
     publish                      = ch_call_sv_publish
                        .mix(ch_annotate_sv_publish)
-                       .mix(ch_generate_cytosure_files_publish)
-                       .mix(ch_gens_publish)
                        .mix(ch_fastqc_publish)
                        .mix(ch_smncopynumbercaller_publish)
                        .mix(ch_peddy_publish)
                        .mix(ch_multiqc_publish)
-                       .mix(ch_rank_snv_publish)
-                       .mix(ch_rank_mt_publish)
-                       .mix(ch_rank_sv_publish)
-                       .mix(ch_variant_evaluation_publish)
 }
 
 
