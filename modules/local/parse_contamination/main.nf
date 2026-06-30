@@ -20,7 +20,7 @@ process PARSE_CONTAMINATION {
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    python3 ${moduleDir}/bin/parse_contamination.py \\
+    parse_contamination.py \\
         --input ${contamination_table} \\
         --sample_id ${meta.id} \\
         --prefix ${prefix}

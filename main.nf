@@ -336,7 +336,7 @@ workflow NFCORE_RAREDISEASE {
     skip_smncopynumbercaller   = parseSkipList(val_skip_tools, 'smncopynumbercaller')
     skip_vcf2cytosure          = parseSkipList(val_skip_tools, 'vcf2cytosure')
     // GATK contamination check is also skipped when no contamination sites are supplied
-    skip_contamination         = parseSkipList(val_skip_tools, 'contamination') || !val_contamination_sites
+    skip_contamination         = parseSkipList(val_skip_tools, 'gatkcontamination') || !val_contamination_sites
 
     //
     // Build contamination check inputs (channel construction kept out of the named workflow)

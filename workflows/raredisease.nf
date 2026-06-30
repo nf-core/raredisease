@@ -27,14 +27,13 @@ include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_R1_FQ   } from '../modules/n
 include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_R2_FQ   } from '../modules/nf-core/spring/decompress/main'
 include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_FQ_PAIR } from '../modules/nf-core/spring/decompress/main'
 include { STRANGER                                          } from '../modules/nf-core/stranger/main'
+
 //
 // MODULE: Local modules
 //
 
 include { RENAME_ALIGN_FILES as RENAME_BAM } from '../modules/local/rename_align_files'
 include { RENAME_ALIGN_FILES as RENAME_BAI } from '../modules/local/rename_align_files'
-include { CREATE_HGNCIDS_FILE              } from '../modules/local/create_hgncids_file'
-include { CREATE_PEDIGREE_FILE             } from '../modules/local/create_pedigree_file'
 include { PARSE_CONTAMINATION              } from '../modules/local/parse_contamination/main'
 include { SANITY_CHECK_VCFANNO_DATABASES   } from '../modules/local/sanity_check_vcfanno_databases/main'
 
