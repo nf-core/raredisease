@@ -1,0 +1,32 @@
+{
+    "CONTAMINATION_CHECK - WGS, no intervals": {
+        "content": [
+            [
+                "earlycasualcaiman_contamination.contamination.table"
+            ],
+            [
+                "earlycasualcaiman_pileups.pileups.table"
+            ]
+        ],
+        "timestamp": "2026-03-23T14:29:41.579345381",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "CONTAMINATION_CHECK - WES, with intervals": {
+        "content": [
+            [
+                "earlycasualcaiman_contamination.contamination.table"
+            ],
+            [
+                "earlycasualcaiman_pileups.pileups.table"
+            ]
+        ],
+        "timestamp": "2026-03-23T14:31:02.497064504",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

@@ -11,9 +11,9 @@ report_section_order:
     order: -1001
   "nf-core-raredisease-summary":
     order: -1002
-
+  gatk_contamination:
+    order: 1050
 export_plots: true
-
 run_modules:
   - fastqc
   - fastp
@@ -23,7 +23,6 @@ run_modules:
   - peddy
   - verifybamid
   - custom_content
-
 module_order:
   - fastqc:
       name: "FastQC"
@@ -42,8 +41,52 @@ module_order:
   - verifybamid:
       name: "VerifyBamID2"
 
+# Custom content configuration for GATK contamination
+custom_data:
+  gatk_contamination:
+    id: "gatk_contamination"
+    section_name: "GATK Contamination"
+    description: "Sample contamination estimates from GATK CalculateContamination based on common variant allele frequencies"
+    plot_type: "generalstats"
+    pconfig:
+      contamination_pct:
+        title: "Contamination"
+        description: "Estimated sample contamination percentage"
+        max: 10
+        min: 0
+        scale: "RdYlGn-rev"
+        suffix: "%"
+        format: "{:,.2f}"
+        shared_key: "contamination"
+
+# Make contamination visible in general stats by default
+table_columns_visible:
+  gatk_contamination:
+    contamination_pct: true
+
+# Color coding thresholds for contamination
+table_cond_formatting_rules:
+  contamination_pct:
+    pass:
+      - s_eq: "pass"
+      - lt: 2.0
+    warn:
+      - s_eq: "warn"
+      - lt: 5.0
+      - gte: 2.0
+    fail:
+      - s_eq: "fail"
+      - gte: 5.0
+
+# Add to General Statistics table configuration
+table_columns_placement:
+  gatk_contamination:
+    contamination_pct: 900
+
 extra_fn_clean_exts:
   - "_sorted_md"
+  - "_contamination"
+  - "_pileups"
   - "_mosdepth"
   - "_sorted"
   - type: regex

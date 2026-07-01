@@ -34,6 +34,7 @@ include { STRANGER                                          } from '../modules/n
 
 include { RENAME_ALIGN_FILES as RENAME_BAM } from '../modules/local/rename_align_files'
 include { RENAME_ALIGN_FILES as RENAME_BAI } from '../modules/local/rename_align_files'
+include { PARSE_CONTAMINATION              } from '../modules/local/parse_contamination/main'
 include { SANITY_CHECK_VCFANNO_DATABASES   } from '../modules/local/sanity_check_vcfanno_databases/main'
 
 //
@@ -53,6 +54,7 @@ include { CALL_MOBILE_ELEMENTS                                        } from '..
 include { CALL_REPEAT_EXPANSIONS                                      } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                                                    } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS                                    } from '../subworkflows/local/call_structural_variants'
+include { CONTAMINATION_CHECK                                         } from '../subworkflows/local/contamination_check/main'
 include { GENERATE_CYTOSURE_FILES                                     } from '../subworkflows/local/generate_cytosure_files'
 include { GENS                                                        } from '../subworkflows/local/gens'
 include { PREPARE_REFERENCES                                          } from '../subworkflows/local/prepare_references'
@@ -230,6 +232,9 @@ workflow RAREDISEASE {
     val_target_bed
     val_variant_caller
     val_vep_cache_version
+    skip_contamination
+    ch_contamination_sites
+    ch_intervals_contamination
 
     main:
 
@@ -423,6 +428,38 @@ workflow RAREDISEASE {
         val_target_bed,
         skip_ngsbits
     )
+
+    //
+    // SUBWORKFLOW: Check for contamination using GATK
+    //
+    ch_contamination_mqc    = Channel.empty()
+    ch_contamination_table  = Channel.empty()
+    ch_contamination_pileup = Channel.empty()
+
+    if (!skip_contamination) {
+
+        // Prepare BAM input with BAI
+        ch_bam_for_contamination = ch_mapped.genome_marked_bam
+            .join(ch_mapped.genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
+
+        CONTAMINATION_CHECK (
+            ch_bam_for_contamination,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_genome_dictionary,
+            ch_contamination_sites,
+            ch_intervals_contamination
+        )
+
+        // Parse for MultiQC
+        PARSE_CONTAMINATION (
+            CONTAMINATION_CHECK.out.contamination_table
+        )
+
+        ch_contamination_mqc    = PARSE_CONTAMINATION.out.mqc_table
+        ch_contamination_table  = CONTAMINATION_CHECK.out.contamination_table
+        ch_contamination_pileup = CONTAMINATION_CHECK.out.pileup_table
+    }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RENAME ALIGNMENT FILES FOR SMNCOPYNUMBERCALLER & REPEATCALLING
@@ -1069,6 +1106,9 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.wgsmetrics_wg.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.verifybamid_self_sm.map{_meta, reports -> reports}.collect().ifEmpty([]))
 
+    // Add contamination results to MultiQC
+    ch_multiqc_files = ch_multiqc_files.mix(ch_contamination_mqc.map { _meta, file -> file })
+
     if (!skip_peddy) {
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{_meta, reports -> reports}.collect().ifEmpty([]))
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.het_check_csv.map{_meta, reports -> reports}.collect().ifEmpty([]))
@@ -1193,6 +1233,8 @@ workflow RAREDISEASE {
     variant_evaluation_weighted_roc                  = ch_variant_evaluation_weighted_roc              // channel: [ val(meta), path(tsv) ]
     subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
+    contamination_table          = ch_contamination_table         // channel: [ val(meta), path(table) ]
+    contamination_pileup         = ch_contamination_pileup        // channel: [ val(meta), path(table) ]
     versions                     = ch_versions
     publish                      = ch_call_sv_publish
                        .mix(ch_annotate_sv_publish)

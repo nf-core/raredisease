@@ -150,6 +150,8 @@ workflow NFCORE_RAREDISEASE {
     val_verifybamid_svd_mu
     val_verifybamid_svd_ud
     val_vep_cache
+    val_contamination_sites
+    val_contamination_sites_tbi
 
     main:
 
@@ -332,6 +334,26 @@ workflow NFCORE_RAREDISEASE {
     skip_peddy                 = parseSkipList(val_skip_tools, 'peddy')
     skip_smncopynumbercaller   = parseSkipList(val_skip_tools, 'smncopynumbercaller')
     skip_vcf2cytosure          = parseSkipList(val_skip_tools, 'vcf2cytosure')
+    // GATK contamination check is also skipped when no contamination sites are supplied
+    skip_contamination         = parseSkipList(val_skip_tools, 'gatkcontamination') || !val_contamination_sites
+
+    //
+    // Build contamination check inputs (channel construction kept out of the named workflow)
+    //
+    ch_contamination_sites     = channel.empty()
+    ch_intervals_contamination = channel.empty()
+    if (!skip_contamination) {
+        ch_contamination_sites = channel.of([
+            file(val_contamination_sites, checkIfExists: true),
+            file(val_contamination_sites_tbi, checkIfExists: true)
+        ]).collect()
+
+        // Use intervals for WES (target regions); WGS stays genome-wide.
+        // CRITICAL: keep channel.empty() for WGS, not channel.of([]), so downstream ifEmpty handling works.
+        if (val_analysis_type.equals("wes") && val_target_bed) {
+            ch_intervals_contamination = channel.fromPath(val_target_bed).collect()
+        }
+    }
 
     // Subworkflows
     skip_me_annotation         = parseSkipList(val_skip_subworkflows, 'me_annotation')
@@ -536,7 +558,10 @@ workflow NFCORE_RAREDISEASE {
         val_svdb_query_dbs,
         val_target_bed,
         val_variant_caller,
-        val_vep_cache_version
+        val_vep_cache_version,
+        skip_contamination,
+        ch_contamination_sites,
+        ch_intervals_contamination
     )
     emit:
     align_fastp_out                                     = RAREDISEASE.out.align_fastp_out              // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
@@ -666,6 +691,8 @@ workflow NFCORE_RAREDISEASE {
     prepare_references_vep_cache                        = ch_vep_cache
     subsample_mt_bai                                    = RAREDISEASE.out.subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam                                    = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
+    contamination_table                                 = RAREDISEASE.out.contamination_table         // channel: [ val(meta), path(table) ]
+    contamination_pileup                                = RAREDISEASE.out.contamination_pileup        // channel: [ val(meta), path(table) ]
     publish                                             = RAREDISEASE.out.publish
                                                             .mix(ch_pedfile_publish) // channel: [ val(destination), val(value) ]
 }
@@ -806,7 +833,9 @@ workflow {
         params.verifybamid_svd_bed,
         params.verifybamid_svd_mu,
         params.verifybamid_svd_ud,
-        params.vep_cache
+        params.vep_cache,
+        params.contamination_sites,
+        params.contamination_sites_tbi
     )
     //
     // SUBWORKFLOW: Run completion tasks
@@ -895,6 +924,8 @@ workflow {
     annotate_snv_genome_rhocallviz_bw = NFCORE_RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw
     annotate_snv_mt                   = NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf
                                             .mix(NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_tbi)
+    contamination                     = NFCORE_RAREDISEASE.out.contamination_table
+    contamination_pileups             = NFCORE_RAREDISEASE.out.contamination_pileup
     rank_variants                     = NFCORE_RAREDISEASE.out.rank_snv_vcf
                                             .mix(NFCORE_RAREDISEASE.out.rank_snv_tbi)
                                             .mix(NFCORE_RAREDISEASE.out.rank_mt_vcf)
@@ -998,6 +1029,12 @@ output {
     }
     annotate_snv_mt {
         path { _meta, _file -> "annotate_snv/mitochondria/" }
+    }
+    contamination {
+        path { _meta, _file -> "qc/contamination/" }
+    }
+    contamination_pileups {
+        path { _meta, _file -> "qc/contamination/pileups/" }
     }
     rank_variants {
         path { _meta, _file -> "rank_and_filter/" }

@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update saltshaker classification reporting by adding customer ID to samples' reports and displaying them as tabs in html [#856](https://github.com/nf-core/raredisease/pull/856)
 - Added non-stub tests for `annotate_mt_snvs` [#890](https://github.com/nf-core/raredisease/pull/890)
+- Added GATK contamination check for WES/WGS samples as complement to VerifyBamID2, enabled by providing `contamination_sites` and skippable via `--skip_tools gatkcontamination` [#758](https://github.com/nf-core/raredisease/pull/758)
+- GATK Contamination results displayed in MultiQC with color-coded thresholds [#758](https://github.com/nf-core/raredisease/pull/758)
 
 ### `Changed`
 
@@ -35,15 +37,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter | New parameter |
-| ------------- | ------------- |
-|               |               |
+| Old parameter | New parameter           |
+| ------------- | ----------------------- |
+|               | contamination_sites     |
+|               | contamination_sites_tbi |
 
 ### Tool updates
 
-| Tool       | Old version | New version |
-| ---------- | ----------- | ----------- |
-| Saltshaker | 1.0.0       | 1.1.1       |
+| Tool                         | Old version | New version |
+| ---------------------------- | ----------- | ----------- |
+| gatk4/calculatecontamination |             | 4.6.2.0     |
+| gatk4/getpileupsummaries     |             | 4.6.2.0     |
+| Saltshaker                   | 1.0.0       | 1.1.1       |
 
 ## 3.1.1 - Princess Peach (patch) [2026-06-24]
 

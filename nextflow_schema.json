@@ -476,6 +476,23 @@
                     "description": "Path to UD matrix file from SVD result of genotype matrix. Used by verifybamid2.",
                     "fa_icon": "fas fa-file-csv"
                 },
+                "contamination_sites": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.vcf(\\.gz)?$",
+                    "description": "Path to VCF file with common variants for GATK contamination detection.",
+                    "help_text": "Use small_exac_common_3.hg38.vcf.gz for no_alt reference genomes. This file should contain common SNP sites with population allele frequencies.",
+                    "fa_icon": "fas fa-file"
+                },
+                "contamination_sites_tbi": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.vcf(\\.gz)?\\.tbi$",
+                    "description": "Index file for contamination sites VCF.",
+                    "fa_icon": "fas fa-file"
+                },
                 "vcf2cytosure_blacklist": {
                     "type": "string",
                     "exists": true,
@@ -652,8 +669,8 @@
                     "type": "string",
                     "fa_icon": "fas fa-forward",
                     "description": "Disable specified tools.",
-                    "help_text": "Multiple tools can be specified, separated by commas.",
-                    "pattern": "^((fastp|gens|germlinecnvcaller|peddy|smncopynumbercaller|vcf2cytosure|fastqc|ngsbits|mitosalt)?,?)*(?<!,)$"
+                    "help_text": "Multiple tools can be specified, separated by commas. The GATK contamination check (`gatkcontamination`) additionally requires `contamination_sites` to be set; it is skipped automatically when that file is not provided.",
+                    "pattern": "^((fastp|gens|germlinecnvcaller|peddy|smncopynumbercaller|vcf2cytosure|fastqc|ngsbits|mitosalt|gatkcontamination)?,?)*(?<!,)$"
                 }
             }
         },
