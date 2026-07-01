@@ -320,9 +320,7 @@ workflow NFCORE_RAREDISEASE {
     //
     // Generate pedigree file
     //
-    ch_pedfile         = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
-    ch_pedfile_publish = CREATE_PEDIGREE_FILE.out.ped
-        .map { ped -> ['pedigree/', [ped]] }
+    ch_pedfile = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
 
     // Tools
     skip_fastp                 = parseSkipList(val_skip_tools, 'fastp')
@@ -696,8 +694,11 @@ workflow NFCORE_RAREDISEASE {
     annotate_sv_report                                  = RAREDISEASE.out.annotate_sv_report          // channel: [ val(meta), path(html) ]
     annotate_sv_tbi                                     = RAREDISEASE.out.annotate_sv_tbi             // channel: [ val(meta), path(tbi) ]
     annotate_sv_vcf_ann                                 = RAREDISEASE.out.annotate_sv_vcf_ann         // channel: [ val(meta), path(vcf) ]
-    publish                                             = RAREDISEASE.out.publish
-                                                            .mix(ch_pedfile_publish) // channel: [ val(destination), val(value) ]
+    fastqc                                              = RAREDISEASE.out.fastqc                      // channel: [ val(meta), path(html|zip) ]
+    smncopynumbercaller                                 = RAREDISEASE.out.smncopynumbercaller         // channel: [ val(meta), path(*) ]
+    peddy                                               = RAREDISEASE.out.peddy                       // channel: [ val(meta), path(*) ]
+    multiqc                                             = RAREDISEASE.out.multiqc                     // channel: [ val(meta), path(*) ]
+    pedigree                                            = ch_pedfile                                  // channel: [ path(ped) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -984,7 +985,11 @@ workflow {
     annotate_sv                       = NFCORE_RAREDISEASE.out.annotate_sv_vcf_ann
                                             .mix(NFCORE_RAREDISEASE.out.annotate_sv_tbi)
                                             .mix(NFCORE_RAREDISEASE.out.annotate_sv_report)
-    subworkflow_results               = NFCORE_RAREDISEASE.out.publish
+    fastqc                            = NFCORE_RAREDISEASE.out.fastqc
+    smncopynumbercaller               = NFCORE_RAREDISEASE.out.smncopynumbercaller
+    peddy                             = NFCORE_RAREDISEASE.out.peddy
+    multiqc                           = NFCORE_RAREDISEASE.out.multiqc
+    pedigree                          = NFCORE_RAREDISEASE.out.pedigree
 }
 
 output {
@@ -1059,8 +1064,20 @@ output {
     annotate_sv {
         path { _meta, _file -> "annotate_sv/" }
     }
-    subworkflow_results {
-        path { destination, _value -> destination }
+    fastqc {
+        path { meta, _file -> "fastqc/${meta.id}/" }
+    }
+    smncopynumbercaller {
+        path { _meta, _file -> "smncopynumbercaller/" }
+    }
+    peddy {
+        path { _meta, _file -> "peddy/" }
+    }
+    multiqc {
+        path { _meta, _file -> "multiqc/" }
+    }
+    pedigree {
+        path { _file -> "pedigree/" }
     }
 }
 
