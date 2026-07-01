@@ -9,8 +9,6 @@
                             {
                                 "id": "test"
                             },
-                            "ANNOTATE_STRUCTURAL_VARIANTS:ENSEMBLVEP_SV",
-                            "ensemblvep",
                             "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
@@ -44,8 +42,6 @@
                             {
                                 "id": "test"
                             },
-                            "ANNOTATE_STRUCTURAL_VARIANTS:ENSEMBLVEP_SV",
-                            "ensemblvep",
                             "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
@@ -74,7 +70,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-07-01T10:48:16.288760959",
+        "timestamp": "2026-07-01T12:26:54.713361746",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
@@ -90,8 +86,6 @@
                             {
                                 "id": "test"
                             },
-                            "ANNOTATE_STRUCTURAL_VARIANTS:ENSEMBLVEP_SV",
-                            "ensemblvep",
                             "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
@@ -125,8 +119,6 @@
                             {
                                 "id": "test"
                             },
-                            "ANNOTATE_STRUCTURAL_VARIANTS:ENSEMBLVEP_SV",
-                            "ensemblvep",
                             "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
@@ -155,7 +147,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-07-01T10:48:43.007034925",
+        "timestamp": "2026-07-01T12:27:22.712984253",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
