@@ -93,13 +93,8 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             ch_vep_extra_files
         )
 
-        ch_publish = ENSEMBLVEP_SV.out.vcf
-            .mix(ENSEMBLVEP_SV.out.tbi)
-            .mix(ENSEMBLVEP_SV.out.report.map{ meta, _process, _vep, html -> return [meta, html] })
-            .map { meta, value -> ['annotate_sv/', [meta, value]] }
-
     emit:
-        publish  = ch_publish            // channel: [ val(destination), val(value) ]
-        tbi      = ENSEMBLVEP_SV.out.tbi // channel: [ val(meta), path(tbi) ]
-        vcf_ann  = ENSEMBLVEP_SV.out.vcf // channel: [ val(meta), path(vcf) ]
+        report   = ENSEMBLVEP_SV.out.report // channel: [ val(meta), path(html) ]
+        tbi      = ENSEMBLVEP_SV.out.tbi    // channel: [ val(meta), path(tbi) ]
+        vcf_ann  = ENSEMBLVEP_SV.out.vcf    // channel: [ val(meta), path(vcf) ]
 }

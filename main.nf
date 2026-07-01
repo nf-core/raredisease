@@ -320,8 +320,8 @@ workflow NFCORE_RAREDISEASE {
     //
     // Generate pedigree file
     //
-    ch_pedfile            = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
-    ch_pedfile_publish    = CREATE_PEDIGREE_FILE.out.ped
+    ch_pedfile         = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
+    ch_pedfile_publish = CREATE_PEDIGREE_FILE.out.ped
         .map { ped -> ['pedigree/', [ped]] }
 
     // Tools
@@ -693,6 +693,9 @@ workflow NFCORE_RAREDISEASE {
     subsample_mt_bam                                    = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     contamination_table                                 = RAREDISEASE.out.contamination_table         // channel: [ val(meta), path(table) ]
     contamination_pileup                                = RAREDISEASE.out.contamination_pileup        // channel: [ val(meta), path(table) ]
+    annotate_sv_report                                  = RAREDISEASE.out.annotate_sv_report          // channel: [ val(meta), path(html) ]
+    annotate_sv_tbi                                     = RAREDISEASE.out.annotate_sv_tbi             // channel: [ val(meta), path(tbi) ]
+    annotate_sv_vcf_ann                                 = RAREDISEASE.out.annotate_sv_vcf_ann         // channel: [ val(meta), path(vcf) ]
     publish                                             = RAREDISEASE.out.publish
                                                             .mix(ch_pedfile_publish) // channel: [ val(destination), val(value) ]
 }
@@ -978,6 +981,9 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_vcfanno_extra)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_vep_cache)
     processed_references              = NFCORE_RAREDISEASE.out.scatter_genome_split_intervals
+    annotate_sv                       = NFCORE_RAREDISEASE.out.annotate_sv_vcf_ann
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_sv_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_sv_report)
     subworkflow_results               = NFCORE_RAREDISEASE.out.publish
 }
 
@@ -1049,6 +1055,9 @@ output {
     processed_references {
         path { _meta, _file -> "processed_references/" }
         enabled params.save_reference
+    }
+    annotate_sv {
+        path { _meta, _file -> "annotate_sv/" }
     }
     subworkflow_results {
         path { destination, _value -> destination }

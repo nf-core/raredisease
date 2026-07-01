@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for `annotate_structural_variants` subworkflow [#902](https://github.com/nf-core/raredisease/pull/902)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for gens and generate_cytosure_files subworkflows [#899](https://github.com/nf-core/raredisease/pull/899)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for `rank_variants` subworkflow [#896](https://github.com/nf-core/raredisease/pull/896)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for `variant_evaluation` subworkflow [#897](https://github.com/nf-core/raredisease/pull/897)
