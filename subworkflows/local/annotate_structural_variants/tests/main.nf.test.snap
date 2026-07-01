@@ -6,31 +6,10 @@
                     "0",
                     [
                         [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -57,34 +36,13 @@
                     ]
                 ],
                 [
-                    "publish",
+                    "report",
                     [
                         [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -112,9 +70,9 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-17T22:56:56.445250387",
+        "timestamp": "2026-07-01T12:26:54.713361746",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     },
@@ -125,31 +83,10 @@
                     "0",
                     [
                         [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -176,34 +113,13 @@
                     ]
                 ],
                 [
-                    "publish",
+                    "report",
                     [
                         [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
+                            {
+                                "id": "test"
+                            },
+                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -231,9 +147,9 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-17T22:57:23.293047427",
+        "timestamp": "2026-07-01T12:27:22.712984253",
         "meta": {
-            "nf-test": "0.9.4",
+            "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     }

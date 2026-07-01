@@ -281,7 +281,9 @@ workflow RAREDISEASE {
     ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       = channel.empty()
     ch_annotate_mt_snvs_ensemblvep_mt_tbi             = channel.empty()
     ch_annotate_mt_snvs_ensemblvep_mt_vcf             = channel.empty()
-    ch_annotate_sv_publish              = channel.empty()
+    ch_annotate_sv_report               = channel.empty()
+    ch_annotate_sv_tbi                  = channel.empty()
+    ch_annotate_sv_vcf_ann              = channel.empty()
     ch_generate_cytosure_files_cgh      = channel.empty()
     ch_gens_baf_bed_gz               = channel.empty()
     ch_gens_baf_bed_tbi              = channel.empty()
@@ -795,7 +797,9 @@ workflow RAREDISEASE {
                 val_genome,
                 val_vep_cache_version
             ).set { ch_sv_annotate }
-            ch_annotate_sv_publish = ch_sv_annotate.publish
+            ch_annotate_sv_report  = ch_sv_annotate.report
+            ch_annotate_sv_tbi     = ch_sv_annotate.tbi
+            ch_annotate_sv_vcf_ann = ch_sv_annotate.vcf_ann
 
             ch_sv_annotate.vcf_ann
                 .multiMap { meta, vcf ->
@@ -1212,6 +1216,9 @@ workflow RAREDISEASE {
     call_mobile_elements_vcf                         = ch_call_mobile_elements_vcf // channel: [ val(meta), path(vcf) ]
     ann_csq_pli_me_tbi                               = ch_ann_csq_pli_me_tbi       // channel: [ val(meta), path(tbi) ]
     ann_csq_pli_me_vcf_ann                           = ch_ann_csq_pli_me_vcf_ann   // channel: [ val(meta), path(vcf) ]
+    annotate_sv_report                               = ch_annotate_sv_report       // channel: [ val(meta), path(html) ]
+    annotate_sv_tbi                                  = ch_annotate_sv_tbi          // channel: [ val(meta), path(tbi) ]
+    annotate_sv_vcf_ann                              = ch_annotate_sv_vcf_ann      // channel: [ val(meta), path(vcf) ]
     rank_snv_tbi                                     = ch_rank_snv_tbi             // channel: [ val(meta), path(tbi) ]
     rank_snv_vcf                                     = ch_rank_snv_vcf             // channel: [ val(meta), path(vcf) ]
     rank_mt_tbi                                      = ch_rank_mt_tbi              // channel: [ val(meta), path(tbi) ]
@@ -1237,7 +1244,6 @@ workflow RAREDISEASE {
     contamination_pileup         = ch_contamination_pileup        // channel: [ val(meta), path(table) ]
     versions                     = ch_versions
     publish                      = ch_call_sv_publish
-                       .mix(ch_annotate_sv_publish)
                        .mix(ch_fastqc_publish)
                        .mix(ch_smncopynumbercaller_publish)
                        .mix(ch_peddy_publish)
