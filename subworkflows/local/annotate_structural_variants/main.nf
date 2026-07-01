@@ -94,7 +94,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         )
 
     emit:
-        report   = ENSEMBLVEP_SV.out.report // channel: [ val(meta), path(html) ]
+        report   = ENSEMBLVEP_SV.out.report.map { meta, _process, _tool, html -> [meta, html] } // channel: [ val(meta), path(html) ]
         tbi      = ENSEMBLVEP_SV.out.tbi    // channel: [ val(meta), path(tbi) ]
         vcf_ann  = ENSEMBLVEP_SV.out.vcf    // channel: [ val(meta), path(vcf) ]
 }
