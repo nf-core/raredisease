@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for gens and generate_cytosure_files subworkflows [#899](https://github.com/nf-core/raredisease/pull/899)
+- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for `rank_variants` subworkflow [#896](https://github.com/nf-core/raredisease/pull/896)
+- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for `variant_evaluation` subworkflow [#897](https://github.com/nf-core/raredisease/pull/897)
+- Replace `ch_publish`/`subworkflow_results` with named typed channel emits for `prepare_references` subworkflow [#900](https://github.com/nf-core/raredisease/pull/900)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for call_repeat_expansions subworkflow [#893](https://github.com/nf-core/raredisease/pull/893)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for call_mobile_elements and annotate_consequence_pli subworkflows; remove `val_publish_dir` parameter from annotate_consequence_pli [#894](https://github.com/nf-core/raredisease/pull/894)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for `annotate_mt_snvs` subworkflow [#895](https://github.com/nf-core/raredisease/pull/895)
@@ -24,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for qc_bam subworkflow [#853](https://github.com/nf-core/raredisease/pull/853)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for alignment and subsample-MT subworkflows [#850](https://github.com/nf-core/raredisease/pull/850)
 - Update saltshaker modules to version 1.1.1 so they can run on empty mitosalt output [#856](https://github.com/nf-core/raredisease/pull/856)
+- Update metromap to reflect the addition of mitosalt + saltshaker and removal of eklipse [#892](https://github.com/nf-core/raredisease/pull/892)
 
 ### `Fixed`
 

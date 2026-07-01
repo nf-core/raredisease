@@ -59,16 +59,9 @@ workflow GENS {
             ch_gnomad_pos
         )
 
-        ch_publish = GENS_GENERATE.out.baf_gz
-            .mix(GENS_GENERATE.out.baf_tbi)
-            .mix(GENS_GENERATE.out.cov_gz)
-            .mix(GENS_GENERATE.out.cov_tbi)
-            .map { meta, value -> ['gens/', [meta, value]] }
-
     emit:
         gens_baf_bed_gz  = GENS_GENERATE.out.baf_gz  // channel: [ val(meta), path(bed.gz) ]
         gens_baf_bed_tbi = GENS_GENERATE.out.baf_tbi // channel: [ val(meta), path(tbi) ]
         gens_cov_bed_gz  = GENS_GENERATE.out.cov_gz  // channel: [ val(meta), path(bed.gz) ]
         gens_cov_bed_tbi = GENS_GENERATE.out.cov_tbi // channel: [ val(meta), path(tbi) ]
-        publish          = ch_publish                 // channel: [ val(destination), val(value) ]
 }

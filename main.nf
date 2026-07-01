@@ -182,8 +182,7 @@ workflow NFCORE_RAREDISEASE {
         val_sequence_dictionary,
         val_target_bed,
         val_vcfanno_extra_resources,
-        val_vep_cache,
-        val_save_reference
+        val_vep_cache
     )
     .set { ch_references }
 
@@ -606,6 +605,7 @@ workflow NFCORE_RAREDISEASE {
     call_sv_tbi                                         = RAREDISEASE.out.call_sv_tbi                   // channel: [ val(meta), path(tbi) ]
     saltshaker_html                                     = RAREDISEASE.out.saltshaker_html              // channel: [ val(meta), path(html) ]
     saltshaker_plot                                     = RAREDISEASE.out.saltshaker_plot             // channel: [ val(meta), path(png) ]
+    generate_cytosure_files_cgh                         = RAREDISEASE.out.generate_cytosure_files_cgh // channel: [ val(meta), path(cgh) ]
     mt_del_result                                       = RAREDISEASE.out.mt_del_result               // channel: [ val(meta), path(txt) ]
     call_repeat_expansions_expansionhunter_bai          = RAREDISEASE.out.call_repeat_expansions_expansionhunter_bai // channel: [ val(meta), path(bai) ]
     call_repeat_expansions_expansionhunter_bam          = RAREDISEASE.out.call_repeat_expansions_expansionhunter_bam // channel: [ val(meta), path(bam) ]
@@ -624,6 +624,10 @@ workflow NFCORE_RAREDISEASE {
     call_snv_genome_vcf                                 = RAREDISEASE.out.call_snv_genome_vcf                            // channel: [ val(meta), path(vcf) ]
     call_snv_mt_tabix                                   = RAREDISEASE.out.call_snv_mt_tabix                              // channel: [ val(meta), path(tbi) ]
     call_snv_mt_vcf                                     = RAREDISEASE.out.call_snv_mt_vcf                                // channel: [ val(meta), path(vcf) ]
+    gens_baf_bed_gz                                     = RAREDISEASE.out.gens_baf_bed_gz                                // channel: [ val(meta), path(bed.gz) ]
+    gens_baf_bed_tbi                                    = RAREDISEASE.out.gens_baf_bed_tbi                               // channel: [ val(meta), path(tbi) ]
+    gens_cov_bed_gz                                     = RAREDISEASE.out.gens_cov_bed_gz                                // channel: [ val(meta), path(bed.gz) ]
+    gens_cov_bed_tbi                                    = RAREDISEASE.out.gens_cov_bed_tbi                               // channel: [ val(meta), path(tbi) ]
     annotate_genome_snvs_bcftools_concat_tbi            = RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_tbi       // channel: [ val(meta), path(tbi) ]
     annotate_genome_snvs_bcftools_concat_vcf            = RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_vcf       // channel: [ val(meta), path(vcf) ]
     annotate_genome_snvs_chromograph_autozyg_plots      = RAREDISEASE.out.annotate_genome_snvs_chromograph_autozyg_plots // channel: [ val(meta), path(png) ]
@@ -634,13 +638,63 @@ workflow NFCORE_RAREDISEASE {
     annotate_genome_snvs_ucsc_wigtobigwig_bw            = RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw       // channel: [ val(meta), path(bw) ]
     annotate_mt_snvs_ensemblvep_mt_tbi                  = RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_tbi             // channel: [ val(meta), path(tbi) ]
     annotate_mt_snvs_ensemblvep_mt_vcf                  = RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf             // channel: [ val(meta), path(vcf) ]
+    rank_snv_tbi                                        = RAREDISEASE.out.rank_snv_tbi                                  // channel: [ val(meta), path(tbi) ]
+    rank_snv_vcf                                        = RAREDISEASE.out.rank_snv_vcf                                  // channel: [ val(meta), path(vcf) ]
+    rank_mt_tbi                                         = RAREDISEASE.out.rank_mt_tbi                                   // channel: [ val(meta), path(tbi) ]
+    rank_mt_vcf                                         = RAREDISEASE.out.rank_mt_vcf                                   // channel: [ val(meta), path(vcf) ]
+    rank_sv_tbi                                         = RAREDISEASE.out.rank_sv_tbi                                   // channel: [ val(meta), path(tbi) ]
+    rank_sv_vcf                                         = RAREDISEASE.out.rank_sv_vcf                                   // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_baseline_tbi                     = RAREDISEASE.out.variant_evaluation_baseline_tbi // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_baseline_vcf                     = RAREDISEASE.out.variant_evaluation_baseline_vcf // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_false_negatives_tbi              = RAREDISEASE.out.variant_evaluation_false_negatives_tbi // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_false_negatives_vcf              = RAREDISEASE.out.variant_evaluation_false_negatives_vcf // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_false_positives_tbi              = RAREDISEASE.out.variant_evaluation_false_positives_tbi // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_false_positives_vcf              = RAREDISEASE.out.variant_evaluation_false_positives_vcf // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_non_snp_roc                      = RAREDISEASE.out.variant_evaluation_non_snp_roc  // channel: [ val(meta), path(tsv) ]
+    variant_evaluation_phasing                          = RAREDISEASE.out.variant_evaluation_phasing      // channel: [ val(meta), path(txt) ]
+    variant_evaluation_snp_roc                          = RAREDISEASE.out.variant_evaluation_snp_roc      // channel: [ val(meta), path(tsv) ]
+    variant_evaluation_summary                          = RAREDISEASE.out.variant_evaluation_summary      // channel: [ val(meta), path(txt) ]
+    variant_evaluation_true_positives_tbi               = RAREDISEASE.out.variant_evaluation_true_positives_tbi // channel: [ val(meta), path(tbi) ]
+    variant_evaluation_true_positives_vcf               = RAREDISEASE.out.variant_evaluation_true_positives_vcf // channel: [ val(meta), path(vcf) ]
+    variant_evaluation_weighted_roc                     = RAREDISEASE.out.variant_evaluation_weighted_roc // channel: [ val(meta), path(tsv) ]
+    prepare_references_bait_intervals                   = ch_bait_intervals
+    prepare_references_dbsnp                            = ch_dbsnp
+    prepare_references_dbsnp_tbi                        = ch_dbsnp_tbi
+    prepare_references_genome_bwafastalignindex         = ch_genome_bwafastalignindex
+    prepare_references_genome_bwaindex                  = ch_genome_bwaindex
+    prepare_references_genome_bwamem2index              = ch_genome_bwamem2index
+    prepare_references_genome_bwamemeindex              = ch_genome_bwamemeindex
+    prepare_references_genome_chrsizes                  = ch_genome_chrsizes
+    prepare_references_genome_dictionary                = ch_genome_dictionary
+    prepare_references_genome_fai                       = ch_genome_fai
+    prepare_references_genome_fasta                     = ch_genome_fasta
+    prepare_references_genome_hisat2index               = ch_genome_hisat2index
+    prepare_references_gnomad_af                        = ch_gnomad_af
+    prepare_references_mt_bwaindex                      = ch_mt_bwaindex
+    prepare_references_mt_bwamem2index                  = ch_mt_bwamem2index
+    prepare_references_mt_dictionary                    = ch_mt_dictionary
+    prepare_references_mt_fai                           = ch_mt_fai
+    prepare_references_mt_fasta                         = ch_mt_fasta
+    prepare_references_mt_intervals                     = ch_mt_intervals
+    prepare_references_mt_lastdb                        = ch_mt_lastdb
+    prepare_references_mtshift_backchain                = ch_mtshift_backchain
+    prepare_references_mtshift_bwaindex                 = ch_mtshift_bwaindex
+    prepare_references_mtshift_bwamem2index             = ch_mtshift_bwamem2index
+    prepare_references_mtshift_dictionary               = ch_mtshift_dictionary
+    prepare_references_mtshift_fai                      = ch_mtshift_fai
+    prepare_references_mtshift_fasta                    = ch_mtshift_fasta
+    prepare_references_mtshift_intervals                = ch_mtshift_intervals
+    prepare_references_sdf                              = ch_sdf
+    prepare_references_target_bed                       = ch_target_bed
+    prepare_references_target_intervals                 = ch_target_intervals
+    prepare_references_vcfanno_extra                    = ch_vcfanno_extra
+    prepare_references_vep_cache                        = ch_vep_cache
     subsample_mt_bai                                    = RAREDISEASE.out.subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam                                    = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     contamination_table                                 = RAREDISEASE.out.contamination_table         // channel: [ val(meta), path(table) ]
     contamination_pileup                                = RAREDISEASE.out.contamination_pileup        // channel: [ val(meta), path(table) ]
     publish                                             = RAREDISEASE.out.publish
-                                                            .mix(ch_pedfile_publish)
-                                                            .mix(ch_references.publish) // channel: [ val(destination), val(value) ]
+                                                            .mix(ch_pedfile_publish) // channel: [ val(destination), val(value) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -847,6 +901,7 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.saltshaker_html)
                                             .mix(NFCORE_RAREDISEASE.out.saltshaker_plot)
                                             .mix(NFCORE_RAREDISEASE.out.mt_del_result)
+    generate_cytosure_files            = NFCORE_RAREDISEASE.out.generate_cytosure_files_cgh
     call_snv_genome               = NFCORE_RAREDISEASE.out.call_snv_genome_vcf
                                         .mix(NFCORE_RAREDISEASE.out.call_snv_genome_tabix)
                                         .mix(NFCORE_RAREDISEASE.out.call_snv_deepvariant_report)
@@ -855,6 +910,10 @@ workflow {
     call_snv_concatenated         = NFCORE_RAREDISEASE.out.call_snv_bcftools_concat_vcf
                                         .mix(NFCORE_RAREDISEASE.out.call_snv_bcftools_concat_tbi)
                                         .mix(NFCORE_RAREDISEASE.out.call_snv_bcftools_concat_csi)
+    gens                          = NFCORE_RAREDISEASE.out.gens_baf_bed_gz
+                                        .mix(NFCORE_RAREDISEASE.out.gens_baf_bed_tbi)
+                                        .mix(NFCORE_RAREDISEASE.out.gens_cov_bed_gz)
+                                        .mix(NFCORE_RAREDISEASE.out.gens_cov_bed_tbi)
     annotate_snv_genome               = NFCORE_RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_vcf
                                             .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_bcftools_concat_tbi)
                                             .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_chromograph_autozyg_plots)
@@ -867,6 +926,57 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_tbi)
     contamination                     = NFCORE_RAREDISEASE.out.contamination_table
     contamination_pileups             = NFCORE_RAREDISEASE.out.contamination_pileup
+    rank_variants                     = NFCORE_RAREDISEASE.out.rank_snv_vcf
+                                            .mix(NFCORE_RAREDISEASE.out.rank_snv_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.rank_mt_vcf)
+                                            .mix(NFCORE_RAREDISEASE.out.rank_mt_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.rank_sv_vcf)
+                                            .mix(NFCORE_RAREDISEASE.out.rank_sv_tbi)
+    variant_evaluation                = NFCORE_RAREDISEASE.out.variant_evaluation_true_positives_vcf
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_true_positives_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_false_negatives_vcf)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_false_negatives_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_false_positives_vcf)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_false_positives_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_baseline_vcf)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_baseline_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_snp_roc)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_non_snp_roc)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_weighted_roc)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_summary)
+                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_phasing)
+    references                        = NFCORE_RAREDISEASE.out.prepare_references_dbsnp
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_dbsnp_tbi)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_bwaindex)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_bwafastalignindex)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_bwamem2index)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_bwamemeindex)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_fai)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_fasta)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_hisat2index)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_dictionary)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_chrsizes)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_bait_intervals)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_gnomad_af)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_mt_bwaindex)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_mt_bwamem2index)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_mt_dictionary)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_mt_fai)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_mt_fasta)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_mt_intervals)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_mt_lastdb)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_mtshift_backchain)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_mtshift_bwaindex)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_mtshift_bwamem2index)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_mtshift_dictionary)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_mtshift_fai)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_mtshift_fasta)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_mtshift_intervals)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_sdf)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_target_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_target_intervals)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_vcfanno_extra)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_vep_cache)
     processed_references              = NFCORE_RAREDISEASE.out.scatter_genome_split_intervals
     subworkflow_results               = NFCORE_RAREDISEASE.out.publish
 }
@@ -896,6 +1006,9 @@ output {
     call_sv {
         path { _meta, _file -> "call_sv/" }
     }
+    generate_cytosure_files {
+        path { _meta, _file -> "vcf2cytosure/" }
+    }
     call_snv_genome {
         path { _meta, _file -> "call_snv/genome/" }
     }
@@ -904,6 +1017,9 @@ output {
     }
     call_snv_concatenated {
         path { _meta, _file -> "call_snv/concatenated_calls/" }
+    }
+    gens {
+        path { _meta, _file -> "gens/" }
     }
     annotate_snv_genome {
         path { _meta, _file -> "annotate_snv/genome/" }
@@ -919,6 +1035,16 @@ output {
     }
     contamination_pileups {
         path { _meta, _file -> "qc/contamination/pileups/" }
+    }
+    rank_variants {
+        path { _meta, _file -> "rank_and_filter/" }
+    }
+    variant_evaluation {
+        path { _meta, _file -> "rtgvcfeval/" }
+    }
+    references {
+        path { _meta, _file -> "references/" }
+        enabled params.save_reference
     }
     processed_references {
         path { _meta, _file -> "processed_references/" }

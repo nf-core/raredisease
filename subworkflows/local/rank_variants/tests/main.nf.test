@@ -45,6 +45,7 @@ nextflow_workflow {
 
         options "-stub"
 
+        config "./nextflow.config"
         when {
             workflow {
                 """

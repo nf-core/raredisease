@@ -60,7 +60,6 @@ nextflow_workflow {
                 input[18] = params.pipelines_testdata_base_path + 'reference/target.bed'
                 input[19] = null
                 input[20] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
-                input[21] = true
                 """
             }
         }
@@ -143,7 +142,6 @@ nextflow_workflow {
                 input[18] = params.pipelines_testdata_base_path + 'reference/target.bed'
                 input[19] = null
                 input[20] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
-                input[21] = true
                 """
             }
         }
