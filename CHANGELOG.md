@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Add missing `docs/output.md` sections for GATK contamination check (`qc/contamination/`) and pedigree file (`pedigree/`); fix missing `</details>` closing tag in Peddy section [#904](https://github.com/nf-core/raredisease/pull/904)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for fastqc, smncopynumbercaller, peddy, multiqc, and pedigree; remove legacy `publish` emit from `raredisease.nf` [#903](https://github.com/nf-core/raredisease/pull/903)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for `annotate_structural_variants` subworkflow [#902](https://github.com/nf-core/raredisease/pull/902)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for gens and generate_cytosure_files subworkflows [#899](https://github.com/nf-core/raredisease/pull/899)
