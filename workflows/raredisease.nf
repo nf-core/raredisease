@@ -247,7 +247,6 @@ workflow RAREDISEASE {
     ch_align_markdup_metrics            = channel.empty()
     ch_subsample_mt_bam                 = channel.empty()
     ch_subsample_mt_bai                 = channel.empty()
-    ch_call_snv_publish                 = channel.empty()
     ch_call_sv_vcf                      = channel.empty()
     ch_call_sv_tbi                      = channel.empty()
     ch_mt_del_result                    = channel.empty()
@@ -261,7 +260,6 @@ workflow RAREDISEASE {
     ch_call_snv_genome_vcf              = channel.empty()
     ch_call_snv_mt_tabix                = channel.empty()
     ch_call_snv_mt_vcf                  = channel.empty()
-    ch_call_sv_publish                  = channel.empty()
     ch_call_repeat_expansions_expansionhunter_bai = channel.empty()
     ch_call_repeat_expansions_expansionhunter_bam = channel.empty()
     ch_call_repeat_expansions_expansionhunter_vcf = channel.empty()
@@ -289,10 +287,10 @@ workflow RAREDISEASE {
     ch_gens_baf_bed_tbi              = channel.empty()
     ch_gens_cov_bed_gz               = channel.empty()
     ch_gens_cov_bed_tbi              = channel.empty()
-    ch_fastqc_publish                   = channel.empty()
-    ch_smncopynumbercaller_publish      = channel.empty()
-    ch_peddy_publish                    = channel.empty()
-    ch_multiqc_publish                  = channel.empty()
+    ch_fastqc                           = channel.empty()
+    ch_smncopynumbercaller              = channel.empty()
+    ch_peddy                            = channel.empty()
+    ch_multiqc                          = channel.empty()
     ch_rank_snv_tbi                           = channel.empty()
     ch_rank_snv_vcf                           = channel.empty()
     ch_rank_mt_tbi                            = channel.empty()
@@ -340,9 +338,8 @@ workflow RAREDISEASE {
     if (!skip_fastqc) {
         FASTQC (ch_input_fastqs)
         fastqc_report = FASTQC.out.zip
-        ch_fastqc_publish = FASTQC.out.html
+        ch_fastqc = FASTQC.out.html
             .mix(FASTQC.out.zip)
-            .map { meta, value -> ["fastqc/${meta.id}/", [meta, value]] }
     }
 
 /*
@@ -936,9 +933,8 @@ workflow RAREDISEASE {
         SMNCOPYNUMBERCALLER (
             ch_bams_bais
         )
-        ch_smncopynumbercaller_publish = SMNCOPYNUMBERCALLER.out.smncopynumber
+        ch_smncopynumbercaller = SMNCOPYNUMBERCALLER.out.smncopynumber
             .mix(SMNCOPYNUMBERCALLER.out.run_metrics)
-            .map { meta, value -> ['smncopynumbercaller/', [meta, value]] }
     }
 
 /*
@@ -952,7 +948,7 @@ workflow RAREDISEASE {
             ch_pedfile.map{ped -> return[[id:"pedigree"], ped]},
             [[:],[]]
         )
-        ch_peddy_publish = PEDDY.out.vs_html
+        ch_peddy = PEDDY.out.vs_html
             .mix(PEDDY.out.html)
             .mix(PEDDY.out.ped)
             .mix(PEDDY.out.het_check_png)
@@ -962,7 +958,6 @@ workflow RAREDISEASE {
             .mix(PEDDY.out.ped_check_csv)
             .mix(PEDDY.out.sex_check_csv)
             .mix(PEDDY.out.ped_check_rel_difference_csv)
-            .map { meta, value -> ['peddy/', [meta, value]] }
     }
 
 /*
@@ -1137,10 +1132,9 @@ workflow RAREDISEASE {
             ]
         }
     )
-    ch_multiqc_publish = MULTIQC.out.report
+    ch_multiqc = MULTIQC.out.report
         .mix(MULTIQC.out.data)
         .mix(MULTIQC.out.plots)
-        .map { _meta, value -> ['multiqc/', value] }
 
     emit:
     align_fastp_out              = ch_align_fastp_out              // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
@@ -1243,11 +1237,10 @@ workflow RAREDISEASE {
     contamination_table          = ch_contamination_table         // channel: [ val(meta), path(table) ]
     contamination_pileup         = ch_contamination_pileup        // channel: [ val(meta), path(table) ]
     versions                     = ch_versions
-    publish                      = ch_call_sv_publish
-                       .mix(ch_fastqc_publish)
-                       .mix(ch_smncopynumbercaller_publish)
-                       .mix(ch_peddy_publish)
-                       .mix(ch_multiqc_publish)
+    fastqc              = ch_fastqc              // channel: [ val(meta), path(html|zip) ]
+    smncopynumbercaller = ch_smncopynumbercaller // channel: [ val(meta), path(*) ]
+    peddy               = ch_peddy               // channel: [ val(meta), path(*) ]
+    multiqc             = ch_multiqc             // channel: [ val(meta), path(*) ]
 }
 
 
