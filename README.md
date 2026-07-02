@@ -70,6 +70,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/)
 - [TIDDIT's cov](https://github.com/J35P312/)
 - [VerifyBamID2](https://github.com/Griffan/VerifyBamID)
+- [GATK Contamination](https://gatk.broadinstitute.org/hc/en-us)
 
 **4. Sex check:**
 
