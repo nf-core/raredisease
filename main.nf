@@ -68,6 +68,7 @@ workflow NFCORE_RAREDISEASE {
     val_gnomad_af_idx
     val_heavy_strand_origin_end
     val_heavy_strand_origin_start
+    val_hisat2
     val_homoplasmy_af_threshold
     val_intervals_wgs
     val_intervals_y
@@ -172,6 +173,7 @@ workflow NFCORE_RAREDISEASE {
         val_fasta,
         val_gnomad_af,
         val_gnomad_af_idx,
+        val_hisat2,
         val_known_dbsnp,
         val_known_dbsnp_tbi,
         val_mt_aligner,
@@ -756,6 +758,7 @@ workflow {
         params.gnomad_af_idx,
         params.heavy_strand_origin_end,
         params.heavy_strand_origin_start,
+        params.hisat2,
         params.homoplasmy_af_threshold,
         params.intervals_wgs,
         params.intervals_y,
