@@ -35,12 +35,11 @@ workflow ALIGN {
         ch_mtshift_fasta              // channel: [mandatory] [ val(meta), path(fasta) ]
         skip_fastp                    // boolean
         val_aligner                   //  string:  'bwa', 'bwafastalign', 'bwamem2', 'bwameme', or 'sentieon'
-        val_analysis_type             //  string:  'wgs', 'wes', or 'mito'
         val_exclude_alt               // boolean
         val_extract_alignments        // boolean
         val_mt_aligner                //  string:  'bwa', 'bwamem2', or 'sentieon'
         val_platform                  //  string:  [mandatory] illumina or a different technology
-        val_run_mt_for_wes            // boolean
+        val_run_mt                    // boolean: true if MT analysis will run
         val_save_all_mapped_as_cram   // boolean
         val_save_noalt_mapped_as_cram // boolean
 
@@ -144,7 +143,7 @@ workflow ALIGN {
 
         // PREPARING READS FOR MT ALIGNMENT
 
-        if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
+        if (val_run_mt) {
             CONVERT_MT_BAM_TO_FASTQ (
                 ch_genome_marked_bam_bai,
                 ch_genome_dictionary,
