@@ -38,7 +38,6 @@ include { UNTAR as UNTAR_VEP_CACHE                          } from '../../../mod
 workflow PREPARE_REFERENCES {
     take:
         val_aligner                  // String: "bwa", "bwafastalign", "bwamem2", "sentieon" or "bwameme"
-        val_analysis_type            // String: "wgs", "wes", or "mito"
         val_bwa                      // String: path to bwa index
         val_bwafastalign             // String: path to bwafastalign index
         val_bwamem2                  // String: path to bwamem2 index
@@ -51,7 +50,7 @@ workflow PREPARE_REFERENCES {
         val_known_dbsnp_tbi          // String: path to dbsnp file's index
         val_mtaligner                // String: "bwa", "bwamem2", or "sentieon"
         val_mtfasta                  // String: path to mitochondrial fasta
-        val_run_mt_for_wes           // Boolean
+        val_run_mt                   // boolean: true if MT analysis will run
         val_run_rtgvcfeval           // Boolean
         val_sdf                      // String: path to sdf file
         val_genome_dict              // String: path to genome dictionary
@@ -143,7 +142,7 @@ workflow PREPARE_REFERENCES {
         //
         // MT genome indices
         //
-        if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
+        if (val_run_mt) {
             if (!val_mtfasta) {
                 ch_mt_fasta = SAMTOOLS_EXTRACT_MT(ch_genome_fasta.join(ch_genome_fai), false).fa.collect()
             } else {
@@ -181,15 +180,15 @@ workflow PREPARE_REFERENCES {
         //
         // MT alignment indices
         //
-        if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("bwamem2")) {
+        if (val_run_mt && val_mtaligner.equals("bwamem2")) {
             ch_mt_bwamem2_index      = BWAMEM2_INDEX_MT(ch_mt_fasta).index.collect()
             ch_mtshift_bwamem2_index = BWAMEM2_INDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
         }
-        if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("bwa")) {
+        if (val_run_mt && val_mtaligner.equals("bwa")) {
             ch_mt_bwa_index          = BWA_INDEX_MT(ch_mt_fasta).index.collect()
             ch_mtshift_bwa_index     = BWA_INDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
         }
-        if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("sentieon")) {
+        if (val_run_mt && val_mtaligner.equals("sentieon")) {
             ch_mt_bwa_index          = SENTIEON_BWAINDEX_MT(ch_mt_fasta).index.collect()
             ch_mtshift_bwa_index     = SENTIEON_BWAINDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
         }

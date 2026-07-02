@@ -16,7 +16,7 @@
                 "justhusky_mitochondria.vcf.gz.tbi"
             ]
         ],
-        "timestamp": "2026-05-30T00:18:20.446833954",
+        "timestamp": "2026-07-02T17:41:58.064361793",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
@@ -243,7 +243,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-06-22T12:57:59.006104185",
+        "timestamp": "2026-07-02T17:43:07.089299319",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

@@ -40,20 +40,20 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = "bwamem2"
-                input[1]  = "wgs"
+                input[1]  = null
                 input[2]  = null
                 input[3]  = null
                 input[4]  = null
                 input[5]  = null
-                input[6]  = null
-                input[7]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
-                input[8]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
+                input[6]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
+                input[7]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
+                input[8]  = null
                 input[9]  = null
                 input[10] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
                 input[11] = null
                 input[12] = "bwa"
                 input[13] = null
-                input[14] = false
+                input[14] = true
                 input[15] = false
                 input[16] = null
                 input[17] = null
@@ -122,20 +122,20 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = "bwamem2"
-                input[1]  = "wgs"
+                input[1]  = null
                 input[2]  = null
                 input[3]  = null
                 input[4]  = null
                 input[5]  = null
-                input[6]  = null
-                input[7]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
-                input[8]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
+                input[6]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
+                input[7]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
+                input[8]  = null
                 input[9]  = null
                 input[10] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
                 input[11] = null
                 input[12] = "bwa"
                 input[13] = null
-                input[14] = false
+                input[14] = true
                 input[15] = false
                 input[16] = null
                 input[17] = null

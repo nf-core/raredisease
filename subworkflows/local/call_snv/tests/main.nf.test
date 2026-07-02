@@ -58,7 +58,7 @@ nextflow_workflow {
                 input[23] = channel.of([[id:'target'], [], []])
                 input[24] = 'wgs'
                 input[25] = false
-                input[26] = false
+                input[26] = true
                 input[27] = false
                 input[28] = 'deepvariant'
                 """
@@ -125,7 +125,7 @@ nextflow_workflow {
                 input[23] = channel.of([[id:'target'], [], []])
                 input[24] = 'wgs'
                 input[25] = true
-                input[26] = false
+                input[26] = true
                 input[27] = false
                 input[28] = 'deepvariant'
                 """
