@@ -32,6 +32,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
         - [Sention WgsMetricsAlgo](#sention-wgsmetricsalgo)
         - [TIDDIT's cov and UCSC WigToBigWig](#tiddits-cov-and-ucsc-wigtobigwig)
         - [VerifyBamID2](#verifybamid2)
+        - [GATK CalculateContamination](#gatk-calculatecontamination)
       - [Reporting](#reporting)
         - [MultiQC](#multiqc)
     - [Variant calling - SNV](#variant-calling---snv)
@@ -75,6 +76,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
     - [Variant evaluation](#variant-evaluation)
     - [Gens](#gens)
     - [Peddy](#peddy)
+    - [Pedigree](#pedigree)
     - [Pipeline information](#pipeline-information)
 
 ### Alignment
@@ -239,6 +241,20 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
   - `<sampleid>.selfSM`:
   - `<sampleid>.Ancestry`:
     </details>
+
+##### GATK CalculateContamination
+
+[GATK GetPileupSummaries](https://gatk.broadinstitute.org/hc/en-us/articles/30332036200731-GetPileupSummaries) summarises read support for a set of known variant sites to enable downstream contamination estimation. [GATK CalculateContamination](https://gatk.broadinstitute.org/hc/en-us/articles/30332023942555-CalculateContamination) then estimates the fraction of reads originating from cross-sample contamination. This step requires providing `--contamination_sites` (a VCF of common variants) and is skippable via `--skip_tools gatkcontamination`. Results are reported in MultiQC with color-coded thresholds.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `qc/contamination/`
+  - `<sample_id>.contamination.table`: table containing the estimated contamination fraction and confidence interval for each sample.
+- `qc/contamination/pileups/`
+  - `<sample_id>.pileups.table`: table containing the pileup counts at known variant sites used as input to contamination estimation.
+
+</details>
 
 #### Reporting
 
@@ -617,6 +633,20 @@ The sequencing data can be prepared for visualization of CNVs in [Gens](https://
   - `*.sex_check.csv`: CSV file with sex check results — comparison between the sex reported in the PED file and that inferred from genotypes on the non-PAR regions of the X chromosome.
   - `*.sex_check.png`: PNG plot of sex check results — comparison between reported and inferred sex.
   - `*.vs.html`: interactive scatter plot of observed vs. expected (pedigree-reported) relatedness for all sample pairs.
+
+</details>
+
+### Pedigree
+
+The pipeline generates a PED file from the input samplesheet using an internal helper module. This file encodes the family structure (sample IDs, sex, and affected status) and is used as input to tools such as Peddy and GENMOD.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `pedigree/`
+  - `*.ped`: PED file describing the family structure of the case, derived from the input samplesheet.
+
+</details>
 
 ### Pipeline information
 
