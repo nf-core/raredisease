@@ -1,4 +1,17 @@
 {
+    "CALL_STRUCTURAL_VARIANTS - wgs": {
+        "content": [
+            [
+                "justhusky_sv.vcf.gz.tbi"
+            ],
+            "fc6a4a8da828088fbf5b7603212cc75d"
+        ],
+        "timestamp": "2026-07-03T13:06:03.944746155",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
     "CALL_STRUCTURAL_VARIANTS - wgs, stub": {
         "content": [
             [

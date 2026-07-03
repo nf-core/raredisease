@@ -36,11 +36,11 @@ process SVDB_MERGE {
     def prio = ""
     if (input_priority) {
         if (vcfs.collect().size() > 1 && sort_inputs) {
-            // make vcf-priority pairs and sort on VCF name, so priority is also sorted the same
-            def pairs = vcfs.indices.collect { index -> [vcfs[index], input_priority[index]] }
-            pairs = pairs.sort { a, b -> a[0].name <=> b[0].name }
-            vcfs = pairs.collect { vcf -> vcf[0] }
-            priority = pairs.collect { pair -> pair[1] }
+            // Nextflow stages path(vcfs) alphabetically before the script runs, so pairs must
+            // be formed by matching independently sorted tags to sorted filenames — not by the
+            // original index, which assumed files arrive in input_priority order.
+            vcfs = vcfs.sort { a, b -> a.name <=> b.name }
+            priority = input_priority.toSorted()
         } else {
             priority = input_priority
         }

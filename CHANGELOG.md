@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.1.2 - Princess Peach (patch) [2026-06-24]
+
+### `Fixed`
+
+- Fix `svdb/merge` mislabelling VCF caller tags when `sort_inputs` is true: sort VCF files and priority tags independently (both alphabetically) instead of pairing them by index before sorting, which was a no-op since Nextflow already stages `path(vcfs)` alphabetically [#909](https://github.com/nf-core/raredisease/issues/909)
+
 ## 3.1.1 - Princess Peach (patch) [2026-06-24]
 
 ### `Fixed`
