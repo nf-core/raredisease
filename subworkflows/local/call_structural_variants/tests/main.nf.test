@@ -100,7 +100,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert snapshot(
                     workflow.out.tbi.collect { meta, tbi -> file(tbi).name },
-                    path(workflow.out.vcf[0][1]).vcf.variantsMD5
+                    path(workflow.out.vcf[0][1]).vcf.summary
                 ).match() }
             )
         }

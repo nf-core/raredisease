@@ -4,9 +4,9 @@
             [
                 "justhusky_sv.vcf.gz.tbi"
             ],
-            "ea0e90c386ec974c040d840249fb8d7a"
+            "VcfFile [chromosomes=[MT, 21], sampleCount=1, variantCount=115, phased=false, phasedAutodetect=false]"
         ],
-        "timestamp": "2026-07-03T15:33:09.1249338",
+        "timestamp": "2026-07-03T15:59:49.244712615",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
