@@ -256,7 +256,7 @@ The mandatory and optional parameters for each category are tabulated below.
 |                            | skip_split_multiallelics<sup>5</sup> |
 
 <sup>1</sup>Default variant caller is DeepVariant, but you have the option to use Sentieon as well.<br />
-<sup>2</sup>These parameters are only used by Sentieon.<br />
+<sup>2</sup>These parameters are only used by Sentieon. The `ml_model` parameter expects a path to a model file (e.g. `dnascope.model`). If Sentieon provides the model in `.bundle` format, unpack it first with `ar models.bundle` and point `--ml_model` to the extracted `dnascope.model` file. `ar` is part of the GNU binutils package.<br />
 <sup>3</sup>Default is `WGS`, but you have the option to choose `WES` and `mito` as well.<br />
 <sup>4</sup>This parameter is only used by Deepvariant.<br />
 <sup>5</sup>Skips `bcftools norm --multiallelics -both` in both DeepVariant and Sentieon SNV calling. Recommended for single-interval runs to avoid indel quality degradation. See [#813](https://github.com/nf-core/raredisease/issues/813) for details.<br />

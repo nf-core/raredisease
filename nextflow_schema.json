@@ -304,7 +304,7 @@
                     "exists": true,
                     "format": "path",
                     "fa_icon": "fas fa-file",
-                    "description": "Path to sentieon machine learning model file."
+                    "description": "Path to sentieon machine learning model file (e.g. dnascope.model). If the model is distributed in .bundle format, unpack it first with `ar models.bundle` and point this parameter to the extracted model file."
                 },
                 "mt_fasta": {
                     "type": "string",
