@@ -134,7 +134,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
             ch_case_info
                 .combine(ch_vcf_paths)
                 .set { ch_merge_vcfs_in }
-            SVDB_MERGE (ch_merge_vcfs_in, ch_svcaller_priority, true)
+            SVDB_MERGE (ch_merge_vcfs_in, ch_svcaller_priority, false)
 
             TABIX_TABIX (SVDB_MERGE.out.vcf)
             ch_merged_svs = SVDB_MERGE.out.vcf

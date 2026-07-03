@@ -505,8 +505,7 @@
                     "svdb/merge": {
                         "branch": "master",
                         "git_sha": "7d09b5f86908bdd951e42aef9994ad5bb0f6c307",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/svdb/merge/svdb-merge.diff"
+                        "installed_by": ["modules"]
                     },
                     "svdb/query": {
                         "branch": "master",
