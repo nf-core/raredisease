@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
-- Fix `svdb/merge` mislabelling VCF caller tags when `sort_inputs` is true: sort VCF files and priority tags independently (both alphabetically) instead of pairing them by index before sorting, which was a no-op since Nextflow already stages `path(vcfs)` alphabetically [#909](https://github.com/nf-core/raredisease/issues/909)
+- Fix `svdb/merge` mislabelling VCF caller tags when `sort_inputs` is true: sort VCF files and priority tags independently (both alphabetically) instead of pairing them by index before sorting, which was a no-op since Nextflow already stages `path(vcfs)` alphabetically [#910](https://github.com/nf-core/raredisease/pull/910)
 
 ## 3.1.1 - Princess Peach (patch) [2026-06-24]
 
