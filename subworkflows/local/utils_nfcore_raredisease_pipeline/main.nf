@@ -394,6 +394,12 @@ def checkRequiredParameters(params) {
         } else if (params.vep_filters && params.vep_filters_scout_fmt) {
             println("Either params.vep_filters or params.vep_filters_scout_fmt should be set.")
             missingParamsCount += 1
+        } else {
+            def filtersFile = params.vep_filters_scout_fmt ?: params.vep_filters
+            def nonHeaderLines = file(filtersFile).readLines().count { line -> !line.startsWith('#') && line.trim() }
+            if (nonHeaderLines == 0) {
+                error("The file '${filtersFile}' contains no records (only headers or empty lines). The clinical set will contain 0 variants.")
+            }
         }
     }
 
