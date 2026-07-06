@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.1.2 - Princess Peach (patch)
+
+### `Changed``
+
+- Changed filter logic for merging mitochondrial snvs to report variants which pass filter in at least one sample [#914](https://github.com/nf-core/raredisease/pull/914)
+
 ## 3.1.1 - Princess Peach (patch) [2026-06-24]
 
 ### `Fixed`
