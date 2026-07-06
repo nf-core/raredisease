@@ -235,6 +235,7 @@ workflow RAREDISEASE {
     val_target_bed
     val_variant_caller
     val_vep_cache_version
+    val_qc_metrics_tool
 
     main:
 
@@ -421,7 +422,8 @@ workflow RAREDISEASE {
         val_analysis_type,
         val_aligner,
         val_target_bed,
-        skip_ngsbits
+        skip_ngsbits,
+        val_qc_metrics_tool
     )
 
     //
@@ -1085,6 +1087,14 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.picard_collecthsmetrics_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.mosdepth_global_txt.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.wgsmetrics_wg.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.riker_alignment_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.riker_wgs_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.riker_isize_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.riker_base_dist.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.riker_mean_qual.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.riker_qual_dist.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.riker_hybcap_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.riker_gcbias_summary.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(CONTAMINATION.out.verifybamid_self_sm.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(CONTAMINATION.out.gatk_contamination_mqc.map { _meta, file -> file })
 
@@ -1155,6 +1165,14 @@ workflow RAREDISEASE {
     contamination_verifybamid_mu                     = CONTAMINATION.out.verifybamid_mu                    // channel: [ val(meta), path(mu) ]
     contamination_verifybamid_self_sm                = CONTAMINATION.out.verifybamid_self_sm               // channel: [ val(meta), path(selfSM) ]
     contamination_verifybamid_ud                     = CONTAMINATION.out.verifybamid_ud                    // channel: [ val(meta), path(ud) ]
+    qc_bam_riker_alignment_metrics                   = QC_BAM.out.riker_alignment_metrics                  // channel: [ val(meta), path(txt) ]
+    qc_bam_riker_wgs_metrics                         = QC_BAM.out.riker_wgs_metrics                        // channel: [ val(meta), path(txt) ]
+    qc_bam_riker_isize_metrics                       = QC_BAM.out.riker_isize_metrics                      // channel: [ val(meta), path(txt) ]
+    qc_bam_riker_base_dist                           = QC_BAM.out.riker_base_dist                          // channel: [ val(meta), path(txt) ]
+    qc_bam_riker_mean_qual                           = QC_BAM.out.riker_mean_qual                          // channel: [ val(meta), path(txt) ]
+    qc_bam_riker_qual_dist                           = QC_BAM.out.riker_qual_dist                          // channel: [ val(meta), path(txt) ]
+    qc_bam_riker_hybcap_metrics                      = QC_BAM.out.riker_hybcap_metrics                     // channel: [ val(meta), path(txt) ]
+    qc_bam_riker_gcbias_summary                      = QC_BAM.out.riker_gcbias_summary                     // channel: [ val(meta), path(txt) ]
     call_sv_vcf                                      = ch_call_sv_vcf                                      // channel: [ val(meta), path(vcf) ]
     call_sv_tbi                                      = ch_call_sv_tbi                                      // channel: [ val(meta), path(tbi) ]
     saltshaker_html                                  = ch_saltshaker_html                                  // channel: [ val(meta), path(html) ]
