@@ -241,6 +241,16 @@ The mandatory and optional parameters for each category are tabulated below.
 <sup>7</sup>Used to limit your analysis to specific contigs. Can be used to remove alignments to unplaced contigs to minimize potential errors. This parameter should be used in conjunction with the `extract_alignments` parameter.<br />
 <sup>8</sup>When set to true, alignments to alt/unplaced contigs are removed after alignment using samtools view, retaining only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM). Note that this will affect all downstream variant calling, as variants will only be called on these primary chromosomes.<br />
 
+### BAM QC metrics tool
+
+By default, BAM-level QC metrics are collected with Picard (`CollectMultipleMetrics`, `CollectHsMetrics`, `CollectWgsMetrics`).
+
+Set `--qc_metrics_tool riker` to instead collect these metrics with a single [Riker](https://github.com/fulcrumgenomics/riker) `multi` run.
+
+When `riker` is selected it is used regardless of aligner for the alignment, insert-size and GC-bias metrics (and, when a target BED is set, the hybrid-capture metrics), but when `--aligner sentieon` is used the WGS coverage metrics are still produced by Sentieon (matching the Picard path).
+
+Targeted (hybrid-capture) metrics are produced only when a target BED is supplied.
+
 ##### 2. QC stats from the alignment files
 
 | Mandatory                                                    | Optional                            |
