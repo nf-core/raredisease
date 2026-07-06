@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed`
 
 - Fix `svdb/merge` mislabelling VCF caller tags by passing `sort_inputs = false` to `SVDB_MERGE` in `call_structural_variants`; the VCF list is already in the correct caller-priority order from the upstream `concat` chain, so in-module re-sorting by filename was causing tag misassignment [#910](https://github.com/nf-core/raredisease/pull/910)
+- Changed filter logic for merging mitochondrial snvs to report variants which pass filter in at least one sample [#915](https://github.com/nf-core/raredisease/pull/915)
 
 ## 3.1.1 - Princess Peach (patch) [2026-06-24]
 
