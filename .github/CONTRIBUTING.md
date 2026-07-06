@@ -190,7 +190,7 @@ When in doubt, keep enough of the process name to remain unambiguous.
 - Every subworkflow should have a test at `subworkflows/local/<name>/tests/main.nf.test`.
 - Use `-stub` in the `when:` block only when real test data is difficult to generate. Prefer running with real data where it is reasonably available.
 - Snapshot files (`*.nf.test.snap`) are committed alongside tests — update them when outputs change.
-- Pipeline-level tests live in `tests/` and cover `default`, `test_bam`, and `test_singleton` profiles.
+- Pipeline-level tests live in `tests/` and cover `default`, `test_align`, and `test_singleton` profiles.
 - Run `nf-test test <path>` for a single test, `nf-test test` for all.
 
 ### Style

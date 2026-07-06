@@ -8,6 +8,7 @@ include { ALIGN_MT as ALIGN_MT_SHIFT                 } from '../align_MT'
 include { ALIGN_SENTIEON                             } from '../align_sentieon'
 include { CONVERT_MT_BAM_TO_FASTQ                    } from '../convert_mt_bam_to_fastq'
 include { FASTP                                      } from '../../../modules/nf-core/fastp/main'
+include { SAMTOOLS_VIEW as CONVERTTOBAM_CRAM         } from '../../../modules/nf-core/samtools/view/main'
 include { SAMTOOLS_VIEW as CONVERTTOCRAM_ALTFILTERED } from '../../../modules/nf-core/samtools/view/main'
 include { SAMTOOLS_VIEW as CONVERTTOCRAM_UNFILTERED  } from '../../../modules/nf-core/samtools/view/main'
 include { SAMTOOLS_VIEW as SAMTOOLS_VIEW_EXCLUDE_ALT } from '../../../modules/nf-core/samtools/view/main'
@@ -71,7 +72,7 @@ workflow ALIGN {
         }
 
         //
-        // If input is bam
+        // If input is bam or cram
         //
         ch_alignments
             .map { meta, files ->
@@ -79,14 +80,28 @@ workflow ALIGN {
                 def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
                 return [new_meta, files].flatten()
             }
+            .branch { meta, _file1, _file2 ->
+                bam:  meta.data_type == "bam"
+                cram: meta.data_type == "cram"
+            }
+            .set { ch_alignments_by_type }
+
+        ch_alignments_by_type.bam
             .multiMap { meta, bam, bai ->
-                bam: [meta, bam]
-                bai: [meta, bai]
+                bam: [meta - meta.subMap('data_type'), bam]
+                bai: [meta - meta.subMap('data_type'), bai]
             }
             .set { ch_input_aligned }
 
         ch_input_bam = ch_input_aligned.bam
         ch_input_bai = ch_input_aligned.bai
+
+        CONVERTTOBAM_CRAM(
+            ch_alignments_by_type.cram.map { meta, cram, crai -> [meta, cram, crai] },
+            ch_genome_fasta.map { meta, fasta -> [meta, fasta, []] },
+            [],
+            'bai'
+        )
 
         if (val_aligner.matches("bwamem2|bwa|bwameme|bwafastalign")) {
             ALIGN_BWA_BWAMEM2_BWAMEME (
@@ -120,8 +135,11 @@ workflow ALIGN {
                 .mix(ALIGN_SENTIEON.out.score)
         }
 
-        ch_genome_marked_bam_initial     = channel.empty().mix(ch_bwamem2_bam, ch_sentieon_bam, ch_input_bam)
-        ch_genome_marked_bai_initial     = channel.empty().mix(ch_bwamem2_bai, ch_sentieon_bai, ch_input_bai)
+        ch_cram_converted_bam = CONVERTTOBAM_CRAM.out.bam.map { meta, bam -> [meta - meta.subMap('data_type'), bam] }
+        ch_cram_converted_bai = CONVERTTOBAM_CRAM.out.bai.map { meta, bai -> [meta - meta.subMap('data_type'), bai] }
+
+        ch_genome_marked_bam_initial     = channel.empty().mix(ch_bwamem2_bam, ch_sentieon_bam, ch_input_bam, ch_cram_converted_bam)
+        ch_genome_marked_bai_initial     = channel.empty().mix(ch_bwamem2_bai, ch_sentieon_bai, ch_input_bai, ch_cram_converted_bai)
         ch_genome_marked_bam_bai_initial = ch_genome_marked_bam_initial.join(ch_genome_marked_bai_initial, failOnMismatch:true, failOnDuplicate:true)
 
         ch_branched = ch_genome_marked_bam_bai_initial.branch { meta, bam, bai ->

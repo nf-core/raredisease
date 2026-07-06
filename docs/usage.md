@@ -100,7 +100,7 @@ Running the pipeline involves three steps:
 
 A samplesheet is used to provide information about the sample(s) to the pipeline in CSV format, including the path to the FASTQ files and other metadata such as sex and phenotype.
 
-The nf-core/raredisease pipeline accepts FASTQ files, SPRING files, or BAM files as input. Currently, the pipeline does not support single-end data from Illumina, and mitochondrial SV calling with MitoSAlt and saltshaker does not run with BAM file input. The pedigree information in the samplesheet (sex and phenotype) should be provided in the same format as a [PED file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format), with sex indicated as 1 for male, 2 for female, and other for unknown.
+The nf-core/raredisease pipeline accepts FASTQ files, SPRING files, BAM files, or CRAM files as input. Currently, the pipeline does not support single-end data from Illumina, and mitochondrial SV calling with MitoSAlt and saltshaker does not run with BAM or CRAM file input. The pedigree information in the samplesheet (sex and phenotype) should be provided in the same format as a [PED file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format), with sex indicated as 1 for male, 2 for female, and other for unknown.
 
 | Fields        | Description                                                                                                                                                                                             |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -110,8 +110,10 @@ The nf-core/raredisease pipeline accepts FASTQ files, SPRING files, or BAM files
 | `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                          |
 | `spring_1`    | Full path to spring-compressed file for read 1 or for reads 1 and 2. The Fastq file has to be first gzipped, then spring-compressed, and it must have the extension `.spring`.                          |
 | `spring_2`    | Full path to spring-compressed file for read 2. The Fastq file has to be first gzipped, then spring-compressed, and it must have the extension `.spring`.                                               |
-| `bam`         | Full path to a bam file containing alignments.                                                                                                                                                          |
-| `bai`         | Full path to a bam index file.                                                                                                                                                                          |
+| `bam`         | Full path to a duplicate-marked BAM file containing alignments.                                                                                                                                         |
+| `bai`         | Full path to a BAM index file.                                                                                                                                                                          |
+| `cram`        | Full path to a duplicate-marked CRAM file containing alignments.                                                                                                                                        |
+| `crai`        | Full path to a CRAM index file.                                                                                                                                                                         |
 | `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                                                                                                               |
 | `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                     |
 | `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                   |
@@ -145,6 +147,24 @@ The nf-core/raredisease pipeline can handle duplicate-marked BAM files as input.
 | `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                          |
 
 If you would like to see an example of what a typical samplesheet looks like in this case, follow this [link.](https://github.com/nf-core/test-datasets/blob/raredisease/testdata/samplesheet_bam.csv)
+
+##### Samplesheet for CRAM file input
+
+The nf-core/raredisease pipeline can handle duplicate-marked CRAM files as input. CRAM is a more space-efficient alternative to BAM and requires the reference genome FASTA (`--fasta`) to decode. In such cases, samplesheet should contain the following columns:
+
+| Fields        | Description                                                                                                           |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.         |
+| `cram`        | Absolute path to a duplicate-marked CRAM file.                                                                        |
+| `crai`        | Absolute path to the CRAM index file (.crai).                                                                         |
+| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                             |
+| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                   |
+| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband. |
+| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband. |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                          |
+
+> [!NOTE]
+> CRAM decoding requires the reference genome FASTA. Make sure `--fasta` (or `--genome`) is set when running with CRAM input. Mitochondrial SV calling with MitoSAlt and saltshaker does not support CRAM input.
 
 #### Reference files and parameters
 
