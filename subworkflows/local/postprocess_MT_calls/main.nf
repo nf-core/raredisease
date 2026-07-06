@@ -11,10 +11,6 @@ include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_POSTMERGE_MT     } from '../../..
 include { GATK4_MERGEVCFS as GATK4_MERGEVCFS_LIFT_UNLIFT_MT     } from '../../../modules/nf-core/gatk4/mergevcfs/main'
 include { GATK4_VARIANTFILTRATION as GATK4_VARIANTFILTRATION_MT } from '../../../modules/nf-core/gatk4/variantfiltration/main'
 include { PICARD_LIFTOVERVCF                                    } from '../../../modules/nf-core/picard/liftovervcf/main'
-include { TABIX_TABIX as TABIX_ANNOTATE                         } from '../../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_TABIX_MERGE                      } from '../../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_TABIX_MT                         } from '../../../modules/nf-core/tabix/tabix/main'
-include { TABIX_TABIX as TABIX_TABIX_MT2                        } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow POSTPROCESS_MT_CALLS {
     take:
@@ -56,14 +52,12 @@ workflow POSTPROCESS_MT_CALLS {
             .join(GATK4_VARIANTFILTRATION_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
             .set { ch_in_split }
         SPLIT_MULTIALLELICS_MT (ch_in_split, ch_genome_fasta)
-        TABIX_TABIX_MT(SPLIT_MULTIALLELICS_MT.out.vcf)
 
         // Removing duplicates and merging if there is more than one sample
         SPLIT_MULTIALLELICS_MT.out.vcf
-            .join(TABIX_TABIX_MT.out.index, failOnMismatch:true, failOnDuplicate:true)
+            .join(SPLIT_MULTIALLELICS_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
             .set { ch_in_remdup }
         REMOVE_DUPLICATES_MT(ch_in_remdup, ch_genome_fasta)
-        TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
 
         REMOVE_DUPLICATES_MT.out.vcf
             .map{ _meta, vcf -> vcf}
@@ -71,8 +65,8 @@ workflow POSTPROCESS_MT_CALLS {
             .toList()
             .set { file_list_vcf }
 
-        TABIX_TABIX_MT2.out.index
-            .map{ _meta, vcf -> vcf}
+        REMOVE_DUPLICATES_MT.out.tbi
+            .map{ _meta, tbi -> tbi}
             .toSortedList{a, b -> a.name <=> b.name}
             .toList()
             .set { file_list_tbi }
@@ -85,7 +79,7 @@ workflow POSTPROCESS_MT_CALLS {
         ch_rem_dup_vcf_tbi.branch {
             meta, vcf, tbi ->
                 single: vcf.size() == 1
-                    return [meta, vcf]
+                    return [meta, vcf, tbi]
                 multiple: vcf.size() > 1
                     return [meta, vcf, tbi]
             }.set { ch_case_vcf }
@@ -101,10 +95,10 @@ workflow POSTPROCESS_MT_CALLS {
         )
 
         SPLIT_MULTIALLELICS_POSTMERGE_MT.out.vcf
+            .join(SPLIT_MULTIALLELICS_POSTMERGE_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .map { meta, vcf, tbi -> [meta, vcf, tbi] } // need to map to have constant snapshots
             .mix(ch_case_vcf.single)
             .set { ch_addfoundintag_in }
-
-        TABIX_TABIX_MERGE(ch_addfoundintag_in)
 
         ch_genome_chrsizes.flatten().map{chromsizes ->
             return [[id:'mutect2'], chromsizes]
@@ -116,7 +110,6 @@ workflow POSTPROCESS_MT_CALLS {
             .set{ch_varcallerbed}
 
         ch_addfoundintag_in
-            .join(TABIX_TABIX_MERGE.out.index)
             .combine(ch_varcallerbed)
             .combine(ch_foundin_header)
             .map { meta, vcf, vcf_tbi, bed, bed_tbi, hdr -> return [meta, vcf, vcf_tbi, bed, bed_tbi, [], hdr, []] }
@@ -124,14 +117,13 @@ workflow POSTPROCESS_MT_CALLS {
 
         BCFTOOLS_ANNOTATE(ch_annotate_in)
 
-        TABIX_ANNOTATE(BCFTOOLS_ANNOTATE.out.vcf)
-
         ch_publish = BCFTOOLS_ANNOTATE.out.vcf
-            .mix(TABIX_ANNOTATE.out.index)
+            .mix(BCFTOOLS_ANNOTATE.out.tbi)
+            .mix(BCFTOOLS_ANNOTATE.out.csi)
             .map { meta, value -> ['call_snv/mitochondria/', [meta, value]] }
 
     emit:
-        tbi     = TABIX_ANNOTATE.out.index    // channel: [ val(meta), path(tbi) ]
+        tbi     = BCFTOOLS_ANNOTATE.out.tbi    // channel: [ val(meta), path(tbi) ]
         vcf     = BCFTOOLS_ANNOTATE.out.vcf   // channel: [ val(meta), path(vcf) ]
         publish = ch_publish                  // channel: [ val(destination), val(value) ]
 }

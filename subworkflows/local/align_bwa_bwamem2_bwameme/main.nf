@@ -6,10 +6,10 @@ include { BWAFASTALIGN_MEM                         } from '../../../modules/nf-c
 include { BWAMEM2_MEM                              } from '../../../modules/nf-core/bwamem2/mem/main'
 include { BWAMEME_MEM                              } from '../../../modules/nf-core/bwameme/mem/main'
 include { BWA_MEM as BWA                           } from '../../../modules/nf-core/bwa/mem/main'
+include { FASTDUP                                  } from '../../../modules/nf-core/fastdup/main'
 include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-core/picard/markduplicates/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_ALIGN   } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_EXTRACT } from '../../../modules/nf-core/samtools/index/main'
-include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_MARKDUP } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_MERGE                           } from '../../../modules/nf-core/samtools/merge/main'
 include { SAMTOOLS_STATS                           } from '../../../modules/nf-core/samtools/stats/main'
 include { SAMTOOLS_VIEW as EXTRACT_ALIGNMENTS      } from '../../../modules/nf-core/samtools/view/main'
@@ -25,6 +25,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_input_reads         // channel: [mandatory] [ val(meta), path(reads_input) ]
         val_aligner            // string:  'bwa', 'bwafastalign', 'bwamem2', or 'bwameme'
+        val_duplicates_marker  // string:  'markduplicates' or 'fastdup', default: 'markduplicates'
         val_extract_alignments // boolean
         val_platform           // string:  [mandatory] default: illumina
 
@@ -77,19 +78,30 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         }
 
         // Marking duplicates
-        MARKDUPLICATES ( prepared_bam , ch_genome_fasta, ch_genome_fai )
-        SAMTOOLS_INDEX_MARKDUP ( MARKDUPLICATES.out.bam )
+        if (val_duplicates_marker == "markduplicates") {
+            MARKDUPLICATES ( prepared_bam, ch_genome_fasta, ch_genome_fai )
 
-        ch_publish = MARKDUPLICATES.out.bam
-            .mix(MARKDUPLICATES.out.metrics)
-            .mix(SAMTOOLS_INDEX_MARKDUP.out.bai)
-            .mix(SAMTOOLS_INDEX_MARKDUP.out.csi)
-            .map { meta, value -> ['alignment/', [meta, value]] }
+            ch_marked_bam = MARKDUPLICATES.out.bam
+            ch_marked_bai = MARKDUPLICATES.out.bai
+            ch_metrics    = MARKDUPLICATES.out.metrics
+        } else {
+            FASTDUP ( prepared_bam )
+            ch_marked_bam = FASTDUP.out.bam
+            ch_marked_bai = FASTDUP.out.bai
+            ch_metrics    = FASTDUP.out.metrics
+        }
+
+        ch_publish = ch_marked_bam
+            .mix(ch_metrics)
+            .mix(ch_marked_bai)
+            .map {meta, value -> ['alignment/', [meta, value]] }
+
 
     emit:
-        marked_bai  = SAMTOOLS_INDEX_MARKDUP.out.bai // channel: [ val(meta), path(bai) ]
-        marked_bam  = MARKDUPLICATES.out.bam         // channel: [ val(meta), path(bam) ]
-        metrics     = MARKDUPLICATES.out.metrics     // channel: [ val(meta), path(metrics) ]
-        stats       = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), path(stats) ]
-        publish = ch_publish                         // channel: [ val(destination), val(value) ]
+
+        marked_bam = ch_marked_bam  // = MARKDUPLICATES.out.bam or FASTDUP.out.bam           // channel: [ val(meta), path(bam) ]
+        marked_bai = ch_marked_bai  // = SAMTOOLS_INDEX_MARKDUP.out.bai or FASTDUP.out.bai   // channel: [ val(meta), path(bai) ]
+        metrics    = ch_metrics     // = MARKDUPLICATES.out.metrics or FASTDUP.out.metrics   // channel: [ val(meta), path(metrics) ]
+        stats      = SAMTOOLS_STATS.out.stats                                                // channel: [ val(meta), path(stats) ]
+        publish    = ch_publish                                                              // channel: [ val(destination), val(value) ]
 }

@@ -3,11 +3,31 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 3.1.2 - Princess Peach (patch)
+## 3.2.0 - Luigi [XXXX-XX-XX]
 
-### `Changed``
+### `Added`
 
+- FastDup module from nf-core and integrated it into the pipeline, as an alternative for Picard Markduplicates. [#876](https://github.com/nf-core/raredisease/pull/876)
+- Nf-core subworkflow vcf_extract_relate_somalier [#891](https://github.com/nf-core/raredisease/pull/891)
+
+### `Changed`
+
+- Remove redundant indexing processes by enabling native index creation: use `--CREATE_INDEX true` in Picard MarkDuplicates, `--write-index=tbi` in bcftools tools (`SPLIT_MULTIALLELICS_MT`, `REMOVE_DUPLICATES_MT`, `BCFTOOLS_MERGE_MT`, `BCFTOOLS_ANNOTATE`, `BCFTOOLS_REHEADER`, `BCFTOOLS_SORT_ME`) and SVDB_MERGE; eliminate downstream `SAMTOOLS_INDEX` and `TABIX_TABIX` steps across `align_bwa_bwamem2_bwameme`, `postprocess_MT_calls`, `call_mobile_elements`, `call_structural_variants`, and `variant_evaluation` subworkflows [#884](https://github.com/nf-core/raredisease/pull/884)
 - Changed filter logic for merging mitochondrial snvs to report variants which pass filter in at least one sample [#914](https://github.com/nf-core/raredisease/pull/914)
+
+### `Fixed`
+
+### Parameters
+
+| Old parameter | New parameter     |
+| ------------- | ----------------- |
+|               | duplicates_marker |
+
+### Tool updates
+
+| Tool | Old version | New version |
+| ---- | ----------- | ----------- |
+|      |             |             |
 
 ## 3.1.1 - Princess Peach (patch) [2026-06-24]
 

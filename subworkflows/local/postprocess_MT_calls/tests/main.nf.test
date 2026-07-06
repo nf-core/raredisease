@@ -10,11 +10,12 @@ nextflow_workflow {
     tag "gatk4/mergevcfs"
     tag "gatk4/variantfiltration"
     tag "bcftools/norm"
-    tag "tabix/tabix"
     tag "bcftools/merge"
     tag "picard/liftovervcf"
     tag "bcftools/annotate"
     tag "local/add_varcallername_to_bed"
+
+    config "./nextflow.config"
 
     test("POSTPROCESS_MT_CALLS - stub") {
 
