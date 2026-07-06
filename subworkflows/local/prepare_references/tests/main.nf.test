@@ -40,27 +40,26 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = "bwamem2"
-                input[1]  = "wgs"
+                input[1]  = null
                 input[2]  = null
                 input[3]  = null
                 input[4]  = null
                 input[5]  = null
-                input[6]  = null
-                input[7]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
-                input[8]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
+                input[6]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
+                input[7]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
+                input[8]  = null
                 input[9]  = null
-                input[10] = null
-                input[11] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
-                input[12] = null
-                input[13] = "bwa"
-                input[14] = null
+                input[10] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
+                input[11] = null
+                input[12] = "bwa"
+                input[13] = null
+                input[14] = true
                 input[15] = false
-                input[16] = false
+                input[16] = null
                 input[17] = null
-                input[18] = null
-                input[19] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[20] = null
-                input[21] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                input[18] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[19] = null
+                input[20] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
                 """
             }
         }
@@ -123,27 +122,26 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = "bwamem2"
-                input[1]  = "wgs"
+                input[1]  = null
                 input[2]  = null
                 input[3]  = null
                 input[4]  = null
                 input[5]  = null
-                input[6]  = null
-                input[7]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
-                input[8]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
+                input[6]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
+                input[7]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
+                input[8]  = null
                 input[9]  = null
-                input[10] = null
-                input[11] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
-                input[12] = null
-                input[13] = "bwa"
-                input[14] = null
+                input[10] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
+                input[11] = null
+                input[12] = "bwa"
+                input[13] = null
+                input[14] = true
                 input[15] = false
-                input[16] = false
+                input[16] = null
                 input[17] = null
-                input[18] = null
-                input[19] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[20] = null
-                input[21] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                input[18] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[19] = null
+                input[20] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
                 """
             }
         }
