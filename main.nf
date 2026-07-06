@@ -120,7 +120,6 @@ workflow NFCORE_RAREDISEASE {
     val_sample_id_map
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
-    val_save_reference
     val_score_config_mt
     val_score_config_snv
     val_score_config_sv
@@ -160,10 +159,10 @@ workflow NFCORE_RAREDISEASE {
     //
 
     ch_versions = channel.empty()
+    def val_run_mt = val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes
 
     PREPARE_REFERENCES (
         val_aligner,
-        val_analysis_type,
         val_bwa,
         val_bwafastalign,
         val_bwamem2,
@@ -176,7 +175,7 @@ workflow NFCORE_RAREDISEASE {
         val_known_dbsnp_tbi,
         val_mt_aligner,
         val_mt_fasta,
-        val_run_mt_for_wes,
+        val_run_mt,
         val_run_rtgvcfeval,
         val_sdf,
         val_sequence_dictionary,
@@ -546,7 +545,7 @@ workflow NFCORE_RAREDISEASE {
         val_multiqc_samples,
         val_outdir,
         val_platform,
-        val_run_mt_for_wes,
+        val_run_mt,
         val_run_rtgvcfeval,
         val_run_vcfanno_db_sanity_check,
         val_sample_id_map,
@@ -808,7 +807,6 @@ workflow {
         params.sample_id_map,
         params.save_all_mapped_as_cram,
         params.save_noalt_mapped_as_cram,
-        params.save_reference,
         params.score_config_mt,
         params.score_config_snv,
         params.score_config_sv,
