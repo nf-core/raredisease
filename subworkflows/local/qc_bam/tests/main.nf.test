@@ -257,7 +257,9 @@ nextflow_workflow {
         then {
             assertAll (
                 { assert workflow.failed },
-                { assert workflow.errorReport.contains("Unknown qc_metrics_tool") }
+                // The error() is raised during workflow composition, so it lands on stdout
+                // rather than in workflow.errorReport (which stays empty here).
+                { assert workflow.stdout.any { it.contains("Unknown qc_metrics_tool") } }
             )
         }
 
