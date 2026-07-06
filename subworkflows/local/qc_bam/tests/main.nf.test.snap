@@ -195,6 +195,57 @@
             "nextflow": "26.04.3"
         }
     },
+    "QC_BAM - test, riker": {
+        "content": [
+            [
+                "earlycasualcaiman_riker.alignment-metrics.txt"
+            ],
+            [
+                "earlycasualcaiman_riker.wgs-metrics.txt"
+            ],
+            [
+                "earlycasualcaiman_riker.isize-metrics.txt"
+            ],
+            [
+                "earlycasualcaiman_riker.hybcap-metrics.txt"
+            ],
+            [
+                "earlycasualcaiman_mosdepth.mosdepth.global.dist.txt"
+            ]
+        ],
+        "timestamp": "2026-06-24T13:00:47.363925",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
+    "QC_BAM - test, riker, sentieon, stub": {
+        "content": [
+            [
+                "earlycasualcaiman_riker.alignment-metrics.txt"
+            ],
+            [
+                "earlycasualcaiman_riker.wgs-metrics.txt"
+            ],
+            [
+                "earlycasualcaiman_riker.isize-metrics.txt"
+            ],
+            [
+                "earlycasualcaiman_riker.hybcap-metrics.txt"
+            ],
+            [
+                "earlycasualcaiman_wgsmetrics.txt"
+            ],
+            [
+                "earlycasualcaiman_mosdepth.global.dist.txt"
+            ]
+        ],
+        "timestamp": "2026-06-24T15:40:38.87621",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
     "QC_BAM - test, bwamem2": {
         "content": [
             [
@@ -288,6 +339,30 @@
             ]
         ],
         "timestamp": "2026-06-15T14:02:21.833990928",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
+    "QC_BAM - test, riker, stub": {
+        "content": [
+            [
+                "earlycasualcaiman_riker.alignment-metrics.txt"
+            ],
+            [
+                "earlycasualcaiman_riker.wgs-metrics.txt"
+            ],
+            [
+                "earlycasualcaiman_riker.isize-metrics.txt"
+            ],
+            [
+                "earlycasualcaiman_riker.hybcap-metrics.txt"
+            ],
+            [
+                "earlycasualcaiman_mosdepth.global.dist.txt"
+            ]
+        ],
+        "timestamp": "2026-06-24T13:01:28.109422",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
