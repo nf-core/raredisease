@@ -3,16 +3,16 @@
         "content": [
             [
                 {
-                    "id": "b8bee6ab94ceb90d351b78deaffb8023"
+                    "id": "bwa"
                 }
             ],
             [
                 {
-                    "id": "b8bee6ab94ceb90d351b78deaffb8023"
+                    "id": "hisat2_index"
                 }
             ]
         ],
-        "timestamp": "2026-07-07T09:20:09.633219817",
+        "timestamp": "2026-07-07T11:13:09.86863584",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
