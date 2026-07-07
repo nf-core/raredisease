@@ -1,4 +1,23 @@
 {
+    "Should use pre-built BWA and HISAT2 indexes when provided, stub": {
+        "content": [
+            [
+                {
+                    "id": "b8bee6ab94ceb90d351b78deaffb8023"
+                }
+            ],
+            [
+                {
+                    "id": "b8bee6ab94ceb90d351b78deaffb8023"
+                }
+            ]
+        ],
+        "timestamp": "2026-07-07T09:20:09.633219817",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
     "Should run without failures, stub": {
         "content": [
             [
