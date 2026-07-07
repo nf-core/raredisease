@@ -167,6 +167,11 @@
                         "git_sha": "a89928b3f8b4fa91e4c783e769dbc10f91c89b32",
                         "installed_by": ["modules"]
                     },
+                    "gatk4/calculatecontamination": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["modules"]
+                    },
                     "gatk4/collectreadcounts": {
                         "branch": "master",
                         "git_sha": "86308d628760125908c5c77540517effe0f8880f",
@@ -195,6 +200,11 @@
                     "gatk4/germlinecnvcaller": {
                         "branch": "master",
                         "git_sha": "86308d628760125908c5c77540517effe0f8880f",
+                        "installed_by": ["modules"]
+                    },
+                    "gatk4/getpileupsummaries": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
                         "installed_by": ["modules"]
                     },
                     "gatk4/intervallisttools": {
@@ -255,16 +265,6 @@
                     "gatk4/variantfiltration": {
                         "branch": "master",
                         "git_sha": "52b7843bd92ccf833cc12e71cd84aeccf2583852",
-                        "installed_by": ["modules"]
-                    },
-                    "gatk4/calculatecontamination": {
-                        "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-                        "installed_by": ["modules"]
-                    },
-                    "gatk4/getpileupsummaries": {
-                        "branch": "master",
-                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
                         "installed_by": ["modules"]
                     },
                     "gawk": {
@@ -389,7 +389,7 @@
                     },
                     "riker/multi": {
                         "branch": "master",
-                        "git_sha": "bdcc0aa910bb7dc54a7335e81608b7a03f0a9992",
+                        "git_sha": "89b094a1b914b1e0844b4c0cc901cda5eddd569b",
                         "installed_by": ["modules"]
                     },
                     "rtgtools/format": {
