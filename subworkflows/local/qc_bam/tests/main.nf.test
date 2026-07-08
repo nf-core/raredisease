@@ -125,7 +125,7 @@ nextflow_workflow {
                 input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
                 input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
                 input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
-                input[6]  = channel.empty()
+                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/targetY.interval_list', checkIfExists: true)).collect()
                 input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
@@ -145,6 +145,8 @@ nextflow_workflow {
                         workflow.out.riker_alignment_metrics
                             .collect { _meta, files -> file(files).name },
                         workflow.out.riker_wgs_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics_y
                             .collect { _meta, files -> file(files).name },
                         workflow.out.riker_isize_metrics
                             .collect { _meta, files -> file(files).name },
@@ -182,7 +184,7 @@ nextflow_workflow {
                 input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
                 input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
                 input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
-                input[6]  = channel.empty()
+                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/targetY.interval_list', checkIfExists: true)).collect()
                 input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
@@ -202,6 +204,8 @@ nextflow_workflow {
                         workflow.out.riker_alignment_metrics
                             .collect { _meta, files -> file(files).name },
                         workflow.out.riker_wgs_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics_y
                             .collect { _meta, files -> file(files).name },
                         workflow.out.riker_isize_metrics
                             .collect { _meta, files -> file(files).name },
@@ -291,7 +295,7 @@ nextflow_workflow {
                 input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
                 input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
                 input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
-                input[6]  = channel.empty()
+                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/targetY.interval_list', checkIfExists: true)).collect()
                 input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
                 input[9]  = channel.empty()
@@ -311,6 +315,8 @@ nextflow_workflow {
                 { assert workflow.out.riker_alignment_metrics.size() == 1 },
                 { assert workflow.out.riker_isize_metrics.size() == 1 },
                 { assert workflow.out.riker_wgs_metrics.size() == 1 },
+                // chrY wgs pass runs for wgs + bwa-family (RIKER_MULTI_Y)
+                { assert workflow.out.riker_wgs_metrics_y.size() == 1 },
                 { assert workflow.out.riker_gcbias_summary.size() == 1 }
             )
         }
@@ -351,7 +357,7 @@ nextflow_workflow {
                 input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
                 input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
                 input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
-                input[6]  = channel.empty()
+                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/targetY.interval_list', checkIfExists: true)).collect()
                 input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
@@ -371,6 +377,8 @@ nextflow_workflow {
                 { assert workflow.out.riker_alignment_metrics.size() == 2 },
                 { assert workflow.out.riker_isize_metrics.size() == 2 },
                 { assert workflow.out.riker_wgs_metrics.size() == 2 },
+                // chrY wgs pass runs once per sample for wgs + bwa-family (RIKER_MULTI_Y)
+                { assert workflow.out.riker_wgs_metrics_y.size() == 2 },
                 { assert workflow.out.riker_hybcap_metrics.size() == 2 },
                 { assert workflow.out.riker_gcbias_summary.size() == 2 }
             )
@@ -642,7 +650,7 @@ nextflow_workflow {
                 input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
                 input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
                 input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
-                input[6]  = channel.empty()
+                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/targetY.interval_list', checkIfExists: true)).collect()
                 input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
@@ -658,10 +666,15 @@ nextflow_workflow {
         then {
             assertAll (
                 { assert workflow.success },
+                // Gate check: with a sentieon aligner the WGS coverage comes from
+                // SENTIEON_WGSMETRICS, so riker's chrY wgs pass (RIKER_MULTI_Y) must NOT run.
+                { assert workflow.out.riker_wgs_metrics_y.size() == 0 },
                 { assert snapshot(
                         workflow.out.riker_alignment_metrics
                             .collect { _meta, files -> file(files).name },
                         workflow.out.riker_wgs_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics_y
                             .collect { _meta, files -> file(files).name },
                         workflow.out.riker_isize_metrics
                             .collect { _meta, files -> file(files).name },

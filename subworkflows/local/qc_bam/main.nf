@@ -3,13 +3,14 @@
 //
 
 include { CHROMOGRAPH as CHROMOGRAPH_COV                          } from '../../../modules/nf-core/chromograph/main'
-include { RIKER_MULTI                                            } from '../../../modules/nf-core/riker/multi/main'
 include { MOSDEPTH                                                } from '../../../modules/nf-core/mosdepth/main'
 include { NGSBITS_SAMPLEGENDER                                    } from '../../../modules/nf-core/ngsbits/samplegender/main'
 include { PICARD_COLLECTHSMETRICS                                 } from '../../../modules/nf-core/picard/collecthsmetrics/main'
 include { PICARD_COLLECTMULTIPLEMETRICS                           } from '../../../modules/nf-core/picard/collectmultiplemetrics/main'
 include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_WG } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
 include { PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_Y  } from '../../../modules/nf-core/picard/collectwgsmetrics/main'
+include { RIKER_MULTI                                            } from '../../../modules/nf-core/riker/multi/main'
+include { RIKER_MULTI as RIKER_MULTI_Y                           } from '../../../modules/nf-core/riker/multi/main'
 include { SAMBAMBA_DEPTH                                          } from '../../../modules/nf-core/sambamba/depth/main'
 include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_WG           } from '../../../modules/nf-core/sentieon/wgsmetrics/main'
 include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_Y            } from '../../../modules/nf-core/sentieon/wgsmetrics/main'
@@ -43,6 +44,7 @@ workflow QC_BAM {
         ch_picard_multimetrics_pdf = channel.empty()
         ch_riker_alignment        = channel.empty()
         ch_riker_wgs              = channel.empty()
+        ch_riker_wgs_y            = channel.empty()
         ch_riker_isize            = channel.empty()
         ch_riker_base             = channel.empty()
         ch_riker_mean_qual        = channel.empty()
@@ -87,29 +89,44 @@ workflow QC_BAM {
             // on non-wes runs with a bwa-family aligner; for sentieon the WGS coverage comes from
             // WgsMetricsAlgo above, so 'wgs' is omitted here to avoid computing it twice. 'hybcap'
             // requires a target bed.
+            def include_wgs = (val_analysis_type != 'wes' && val_aligner != 'sentieon')
             def riker_tools = ['alignment', 'basic', 'isize', 'gcbias']
-            if (val_analysis_type != 'wes' && val_aligner != 'sentieon') { riker_tools << 'wgs' }
+            if (include_wgs) { riker_tools << 'wgs' }
             if (val_target_bed) { riker_tools << 'hybcap' }
+
+            // .first() keeps the reference a value channel so it broadcasts to every sample;
+            // a bare .join() is a queue channel and would pair with only the first sample.
+            ch_riker_ref = ch_genome_fasta.join(ch_genome_fai, failOnMismatch:true, failOnDuplicate:true).first()
 
             // When no target bed is supplied, ch_bait_intervals/ch_target_intervals are empty
             // channels; combining against them would yield an empty channel and RIKER_MULTI would
             // never run. Build the input with empty bait/target placeholders in that case instead.
-            ch_riker_in = ( val_target_bed
+            ch_riker_baits = ( val_target_bed
                 ? ch_bam_bai
                     .combine(ch_bait_intervals)
                     .combine(ch_target_intervals)
                 : ch_bam_bai.map { meta, bam, bai -> [meta, bam, bai, [], []] }
-            ).map { meta, bam, bai, baits, targets -> [meta + [riker_tools: riker_tools], bam, bai, baits, targets] }
-
-            RIKER_MULTI (
-                ch_riker_in,
-                // .first() keeps the reference a value channel so it broadcasts to every sample;
-                // a bare .join() is a queue channel and would pair with only the first sample.
-                ch_genome_fasta.join(ch_genome_fai, failOnMismatch:true, failOnDuplicate:true).first()
             )
 
-            // RIKER_MULTI also emits error_*, gcbias_detail, hybcap_per_target/per_base and pdf
-            // channels; those are intentionally not wired here as the pipeline does not consume them.
+            // riker/multi takes a 12-element sample tuple; this pipeline only uses the hybcap
+            // baits/targets and the wgs intervals, so every other slot is an empty placeholder.
+            // The wgs tool is restricted to intervals_wgs to match PICARD_COLLECTWGSMETRICS_WG;
+            // when wgs is not collected (wes/sentieon) the wgs-intervals slot stays empty.
+            ch_riker_in = ( include_wgs
+                ? ch_riker_baits.combine(ch_intervals_wgs)
+                : ch_riker_baits.map { row -> row + [[]] }
+            ).map { meta, bam, bai, baits, targets, wgs_intervals ->
+                [ meta + [riker_tools: riker_tools], bam, bai,
+                  [], [], [], [],       // error_vcf, error_vcf_idx, error_intervals, gcbias_exclude_intervals
+                  baits, targets,       // hybcap_baits, hybcap_targets
+                  [], [],               // rna_gene_model, rna_ribosomal_intervals
+                  wgs_intervals ]
+            }
+
+            RIKER_MULTI ( ch_riker_in, ch_riker_ref )
+
+            // RIKER_MULTI also emits error_*, gcbias_detail, hybcap_per_target/per_base, rna_* and
+            // pdf channels; those are intentionally not wired here as the pipeline does not consume them.
             ch_riker_alignment = RIKER_MULTI.out.alignment_metrics
             ch_riker_wgs       = RIKER_MULTI.out.wgs_metrics
             ch_riker_isize     = RIKER_MULTI.out.isize_metrics
@@ -118,6 +135,20 @@ workflow QC_BAM {
             ch_riker_qual_dist = RIKER_MULTI.out.qual_dist
             ch_riker_hybcap    = RIKER_MULTI.out.hybcap_metrics
             ch_riker_gcbias    = RIKER_MULTI.out.gcbias_summary
+
+            // chrY WGS coverage, mirroring PICARD_COLLECTWGSMETRICS_Y: a second riker pass running
+            // only the wgs tool restricted to intervals_y. Same gate as the whole-genome wgs above.
+            if (include_wgs) {
+                ch_riker_y_in = ch_bam_bai
+                    .combine(ch_intervals_y)
+                    .map { meta, bam, bai, wgs_intervals ->
+                        [ meta + [riker_tools: ['wgs']], bam, bai,
+                          [], [], [], [], [], [], [], [],
+                          wgs_intervals ]
+                    }
+                RIKER_MULTI_Y ( ch_riker_y_in, ch_riker_ref )
+                ch_riker_wgs_y = RIKER_MULTI_Y.out.wgs_metrics
+            }
         } else {
             error "Unknown qc_metrics_tool '${val_qc_metrics_tool}'; expected 'picard' or 'riker'."
         }
@@ -164,6 +195,7 @@ workflow QC_BAM {
         wgsmetrics_y                          = ch_cov_y                                     // channel: [ val(meta), path(metrics) ]
         riker_alignment_metrics               = ch_riker_alignment                           // channel: [ val(meta), path(txt) ]
         riker_wgs_metrics                     = ch_riker_wgs                                 // channel: [ val(meta), path(txt) ]
+        riker_wgs_metrics_y                   = ch_riker_wgs_y                               // channel: [ val(meta), path(txt) ]
         riker_isize_metrics                   = ch_riker_isize                               // channel: [ val(meta), path(txt) ]
         riker_base_dist                       = ch_riker_base                                // channel: [ val(meta), path(txt) ]
         riker_mean_qual                       = ch_riker_mean_qual                           // channel: [ val(meta), path(txt) ]

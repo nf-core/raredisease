@@ -1167,6 +1167,7 @@ workflow RAREDISEASE {
     contamination_verifybamid_ud                     = CONTAMINATION.out.verifybamid_ud                    // channel: [ val(meta), path(ud) ]
     qc_bam_riker_alignment_metrics                   = QC_BAM.out.riker_alignment_metrics                  // channel: [ val(meta), path(txt) ]
     qc_bam_riker_wgs_metrics                         = QC_BAM.out.riker_wgs_metrics                        // channel: [ val(meta), path(txt) ]
+    qc_bam_riker_wgs_metrics_y                       = QC_BAM.out.riker_wgs_metrics_y                      // channel: [ val(meta), path(txt) ]
     qc_bam_riker_isize_metrics                       = QC_BAM.out.riker_isize_metrics                      // channel: [ val(meta), path(txt) ]
     qc_bam_riker_base_dist                           = QC_BAM.out.riker_base_dist                          // channel: [ val(meta), path(txt) ]
     qc_bam_riker_mean_qual                           = QC_BAM.out.riker_mean_qual                          // channel: [ val(meta), path(txt) ]

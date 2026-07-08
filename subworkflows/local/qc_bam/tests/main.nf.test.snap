@@ -204,6 +204,9 @@
                 "earlycasualcaiman_riker.wgs-metrics.txt"
             ],
             [
+                "earlycasualcaiman_riker_y.wgs-metrics.txt"
+            ],
+            [
                 "earlycasualcaiman_riker.isize-metrics.txt"
             ],
             [
@@ -213,7 +216,7 @@
                 "earlycasualcaiman_mosdepth.mosdepth.global.dist.txt"
             ]
         ],
-        "timestamp": "2026-06-24T13:00:47.363925",
+        "timestamp": "2026-07-08T09:51:44.506717",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
@@ -228,6 +231,9 @@
                 "earlycasualcaiman_riker.wgs-metrics.txt"
             ],
             [
+                
+            ],
+            [
                 "earlycasualcaiman_riker.isize-metrics.txt"
             ],
             [
@@ -240,7 +246,7 @@
                 "earlycasualcaiman_mosdepth.global.dist.txt"
             ]
         ],
-        "timestamp": "2026-06-24T15:40:38.87621",
+        "timestamp": "2026-07-08T09:57:23.72132",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
@@ -353,6 +359,9 @@
                 "earlycasualcaiman_riker.wgs-metrics.txt"
             ],
             [
+                "earlycasualcaiman_riker_y.wgs-metrics.txt"
+            ],
+            [
                 "earlycasualcaiman_riker.isize-metrics.txt"
             ],
             [
@@ -362,7 +371,7 @@
                 "earlycasualcaiman_mosdepth.global.dist.txt"
             ]
         ],
-        "timestamp": "2026-06-24T13:01:28.109422",
+        "timestamp": "2026-07-08T09:52:21.848259",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

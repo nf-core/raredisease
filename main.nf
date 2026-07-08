@@ -609,6 +609,7 @@ workflow NFCORE_RAREDISEASE {
     contamination_verifybamid_ud                        = RAREDISEASE.out.contamination_verifybamid_ud        // channel: [ val(meta), path(ud) ]
     qc_bam_riker_alignment_metrics                      = RAREDISEASE.out.qc_bam_riker_alignment_metrics // channel: [ val(meta), path(txt) ]
     qc_bam_riker_wgs_metrics                            = RAREDISEASE.out.qc_bam_riker_wgs_metrics      // channel: [ val(meta), path(txt) ]
+    qc_bam_riker_wgs_metrics_y                          = RAREDISEASE.out.qc_bam_riker_wgs_metrics_y    // channel: [ val(meta), path(txt) ]
     qc_bam_riker_isize_metrics                          = RAREDISEASE.out.qc_bam_riker_isize_metrics    // channel: [ val(meta), path(txt) ]
     qc_bam_riker_base_dist                              = RAREDISEASE.out.qc_bam_riker_base_dist        // channel: [ val(meta), path(txt) ]
     qc_bam_riker_mean_qual                              = RAREDISEASE.out.qc_bam_riker_mean_qual        // channel: [ val(meta), path(txt) ]
@@ -902,6 +903,7 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_y)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_riker_alignment_metrics)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_riker_wgs_metrics)
+                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_riker_wgs_metrics_y)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_riker_isize_metrics)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_riker_base_dist)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_riker_mean_qual)
