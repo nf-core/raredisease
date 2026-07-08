@@ -204,7 +204,7 @@ Picard is the default BAM QC engine. Set `--qc_metrics_tool riker` to use Riker 
 
 ##### Riker multi
 
-[Riker](https://github.com/fulcrumgenomics/riker) is an alternative BAM QC engine that collects alignment, insert-size, GC-bias, WGS coverage, and hybrid-capture metrics in a single `riker multi` call. It is activated by setting `--qc_metrics_tool riker` and replaces the Picard metrics processes. As with the Picard path, when `--aligner sentieon` is used the WGS coverage metrics are still produced by Sentieon WgsMetricsAlgo rather than by Riker. Targeted hybrid-capture metrics (`*.hybcap-metrics.txt`) are produced only when a target BED file is supplied via `--target_bed`. All output files are forwarded to MultiQC.
+[Riker](https://github.com/fulcrumgenomics/riker) is an alternative BAM QC engine that collects alignment, insert-size, GC-bias, WGS coverage, and hybrid-capture metrics in a single `riker multi` call. It is activated by setting `--qc_metrics_tool riker` and replaces the Picard metrics processes. As with the Picard path, when `--aligner sentieon` is used the WGS coverage metrics are still produced by Sentieon WgsMetricsAlgo rather than by Riker. Targeted hybrid-capture metrics (`*.hybcap-metrics.txt`) are produced only when a target BED file is supplied via `--target_bed`. Generated metrics files are forwarded to MultiQC.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -217,6 +217,7 @@ Picard is the default BAM QC engine. Set `--qc_metrics_tool riker` to use Riker 
   - `<sampleid>_riker.mean-quality-by-cycle.txt`: mean quality by cycle metrics.
   - `<sampleid>_riker.quality-score-distribution.txt`: quality score distribution metrics.
   - `<sampleid>_riker.wgs-metrics.txt`: WGS coverage metrics (WGS runs only; equivalent to Picard `CollectWgsMetrics`).
+  - `<sampleid>_riker_y.wgs-metrics.txt`: chrY WGS coverage metrics (WGS runs only; a second `riker multi` pass restricted to the chrY intervals, mirroring Picard `CollectWgsMetrics` on chrY). Published only; not forwarded to MultiQC.
   - `<sampleid>_riker.hybcap-metrics.txt`: hybrid-capture metrics (produced whenever a target BED is supplied via `--target_bed`; equivalent to Picard `CollectHsMetrics`).
   </details>
 
