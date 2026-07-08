@@ -46,6 +46,7 @@ workflow PREPARE_REFERENCES {
         val_fasta                    // String: path to genome fasta
         val_gnomad_af                // String: path to gnomad allele frequency file
         val_gnomad_af_idx            // String: path to gnomad allele frequency file's index
+        val_hisat2                   // String: [optional] path to pre-built HISAT2 genome index
         val_known_dbsnp              // String: path to dbsnp file
         val_known_dbsnp_tbi          // String: path to dbsnp file's index
         val_mtaligner                // String: "bwa", "bwamem2", or "sentieon"
@@ -119,25 +120,25 @@ workflow PREPARE_REFERENCES {
                 ch_genome_bwa_index = SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.collect()
             }
         } else if (val_bwa) {
-            ch_genome_bwa_index = channel.fromPath(val_bwa).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_bwa_index = channel.fromPath(val_bwa).map {it -> [[id:"bwa"], it]}.collect()
         }
 
         if (!val_bwamem2 && (val_aligner.equals("bwamem2") || val_mtaligner.equals("bwamem2"))) {
             ch_genome_bwamem2_index = BWAMEM2_INDEX_GENOME(ch_genome_fasta).index.collect()
         } else if (val_bwamem2) {
-            ch_genome_bwamem2_index = channel.fromPath(val_bwamem2).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_bwamem2_index = channel.fromPath(val_bwamem2).map {it -> [[id:"bwamem2"], it]}.collect()
         }
 
         if (!val_bwamem2 && val_aligner.equals("bwameme")) {
             ch_genome_bwameme_index = BWAMEME_INDEX_GENOME(ch_genome_fasta).index.collect()
         } else if (val_bwameme) {
-            ch_genome_bwameme_index = channel.fromPath(val_bwameme).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_bwameme_index = channel.fromPath(val_bwameme).map {it -> [[id:"bwameme"], it]}.collect()
         }
 
         if (!val_bwafastalign && val_aligner.equals("bwafastalign")) {
             ch_genome_bwafastalign_index = BWAFASTALIGN_INDEX_GENOME(ch_genome_fasta).index.collect()
         } else if (val_bwafastalign) {
-            ch_genome_bwafastalign_index = channel.fromPath(val_bwafastalign).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_bwafastalign_index = channel.fromPath(val_bwafastalign).map {it -> [[id:"bwafastalign_index"], it]}.collect()
         }
         //
         // MT genome indices
@@ -146,13 +147,17 @@ workflow PREPARE_REFERENCES {
             if (!val_mtfasta) {
                 ch_mt_fasta = SAMTOOLS_EXTRACT_MT(ch_genome_fasta.join(ch_genome_fai), false).fa.collect()
             } else {
-                ch_mt_fasta = channel.fromPath(val_mtfasta).map { it -> [[id:it.simpleName], it] }.collect()
+                ch_mt_fasta = channel.fromPath(val_mtfasta).map { it -> [[id:"mt_fasta_index"], it] }.collect()
             }
 
             ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta.map{meta, fasta -> return [meta, fasta,[]]}, false).fai.collect()
             ch_mt_dict = GATK_SD_MT(ch_mt_fasta).dict.collect()
 
-            ch_genome_hisat2_index = HISAT2_INDEX_GENOME(ch_genome_fasta,[[:],[]], [[:],[]]).index.collect()
+            if (!val_hisat2) {
+                ch_genome_hisat2_index = HISAT2_INDEX_GENOME(ch_genome_fasta,[[:],[]], [[:],[]]).index.collect()
+            } else {
+                ch_genome_hisat2_index = channel.fromPath(val_hisat2).map { it -> [[id:"hisat2_index"], it] }.collect()
+            }
             ch_mt_last_index       = LAST_INDEX_MT(ch_mt_fasta).index.collect()
 
             GATK_SHIFTFASTA(ch_mt_fasta, ch_mt_fai, ch_mt_dict)

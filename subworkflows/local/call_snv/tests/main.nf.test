@@ -14,6 +14,7 @@ nextflow_workflow {
     tag "gatk4_selectvariants"
     tag "bcftools_concat"
 
+    config "./nextflow.config"
 
     test("CALL_SNV - deepvariant wgs") {
 
