@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `changelog.yml` GitHub Actions workflow to enforce CHANGELOG updates on every PR; PRs can be exempted with the `skip-changelog` label [issue #796](https://github.com/nf-core/raredisease/issues/796) [PR #920](https://github.com/nf-core/raredisease/pull/920)
 - Update saltshaker classification reporting by adding customer ID to samples' reports and displaying them as tabs in html [#856](https://github.com/nf-core/raredisease/pull/856)
 - Added non-stub tests for `annotate_mt_snvs` [#890](https://github.com/nf-core/raredisease/pull/890)
 - Added GATK contamination check for WES/WGS samples as complement to VerifyBamID2, enabled by providing `contamination_sites` and skippable via `--skip_tools gatkcontamination` [#758](https://github.com/nf-core/raredisease/pull/758)
