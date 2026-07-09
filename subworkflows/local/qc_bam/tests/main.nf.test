@@ -46,14 +46,11 @@ nextflow_workflow {
                 input[6]  = channel.empty()
                 input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
-                input[9]  = channel.empty()
-                input[10] = channel.empty()
-                input[11] = channel.empty()
-                input[12] = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
-                input[13] = 'wgs'
-                input[14] = 'bwamem2'
-                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[16] = true
+                input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[13] = true
                 """
             }
         }
@@ -129,14 +126,11 @@ nextflow_workflow {
                 input[6]  = channel.empty()
                 input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
-                input[9]  = channel.empty()
-                input[10] = channel.empty()
-                input[11] = channel.empty()
-                input[12] = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
-                input[13] = 'wgs'
-                input[14] = 'bwamem2'
-                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[16] = true
+                input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[13] = true
                 """
             }
         }
@@ -209,14 +203,11 @@ nextflow_workflow {
                 input[6]  = channel.empty()
                 input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
-                input[9]  = channel.empty()
-                input[10] = channel.empty()
-                input[11] = channel.empty()
-                input[12] = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
-                input[13] = 'wgs'
-                input[14] = 'sentieon'
-                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[16] = true
+                input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'sentieon'
+                input[12] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[13] = true
                 """
             }
         }
@@ -291,14 +282,11 @@ nextflow_workflow {
                 input[6]  = channel.empty()
                 input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
-                input[9]  = channel.empty()
-                input[10] = channel.empty()
-                input[11] = channel.empty()
-                input[12] = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
-                input[13] = 'wgs'
-                input[14] = 'sentieon'
-                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[16] = true
+                input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'sentieon'
+                input[12] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[13] = true
                 """
             }
         }
