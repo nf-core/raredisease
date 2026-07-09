@@ -38,7 +38,7 @@ workflow CALL_SNV {
         ch_target_bed             // channel: [mandatory] [ val(meta), path(bed), path(index) ]
         val_analysis_type             // string:  'wgs', 'wes', or 'mito'
         val_concatenate_snv_calls     // boolean
-        val_run_mt_for_wes            // boolean
+        val_run_mt                    // boolean: true if MT analysis will run
         val_skip_split_multiallelics  // boolean
         val_variant_caller            // string:  'deepvariant' or 'sentieon'
 
@@ -113,7 +113,7 @@ workflow CALL_SNV {
         ch_genome_tabix     = GATK4_SELECTVARIANTS.out.tbi
         ch_genome_vcf_tabix = ch_genome_vcf.join(ch_genome_tabix, failOnMismatch:true, failOnDuplicate:true)
 
-        if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
+        if (val_run_mt) {
             CALL_SNV_MT(
                 ch_mt_bam_bai,
                 ch_mt_dictionary,

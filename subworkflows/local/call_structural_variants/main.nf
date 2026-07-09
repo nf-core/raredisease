@@ -47,7 +47,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
         val_mitochondria_name                 // string: [mandatory] mito_name
         val_mitosalt_flank                    // string: [mandatory] mitosalt_flank
         val_mitosalt_heteroplasmy_limit       // string: [mandatory] mitosalt_heteroplasmy_limit
-        val_run_mt_for_wes                    // boolean: [mandatory] run_mt_for_wes
+        val_run_mt                            // boolean: true if MT analysis will run
 
     main:
         ch_cnvnator_vcf    = channel.empty()
@@ -88,7 +88,7 @@ workflow CALL_STRUCTURAL_VARIANTS {
 
         }
 
-        if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
+        if (val_run_mt) {
             CALL_SV_MT(
                 ch_mt_bam_bai,
                 ch_case_info,

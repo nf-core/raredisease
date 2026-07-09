@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Add CRAM file input support: accept `cram`/`crai` columns in the samplesheet, converting CRAM to BAM early in the align subworkflow so all downstream tools remain unchanged [#261](https://github.com/nf-core/raredisease/issues/261)
+- Add `changelog.yml` GitHub Actions workflow to enforce CHANGELOG updates on every PR; PRs can be exempted with the `skip-changelog` label [issue #796](https://github.com/nf-core/raredisease/issues/796) [PR #920](https://github.com/nf-core/raredisease/pull/920)
 - Update saltshaker classification reporting by adding customer ID to samples' reports and displaying them as tabs in html [#856](https://github.com/nf-core/raredisease/pull/856)
 - Added non-stub tests for `annotate_mt_snvs` [#890](https://github.com/nf-core/raredisease/pull/890)
 - Added GATK contamination check for WES/WGS samples as complement to VerifyBamID2, enabled by providing `contamination_sites` and skippable via `--skip_tools gatkcontamination` [#758](https://github.com/nf-core/raredisease/pull/758)
@@ -15,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Document the `ar x models.bundle` workaround for Sentieon DNAscope `.bundle` model format in `docs/usage.md` and `nextflow_schema.json` [issue #568](https://github.com/nf-core/raredisease/issues/568) [PR #912](https://github.com/nf-core/raredisease/pull/912)
+- Pre-resolve the MT analysis flag (`val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes`) into a single named boolean `val_run_mt` in `NFCORE_RAREDISEASE`, replacing `val_run_mt_for_wes` across downstream subworkflow signatures and simplifying repeated conditionals in `PREPARE_REFERENCES`, `ALIGN`, `CALL_SNV`, and `CALL_STRUCTURAL_VARIANTS` [#906](https://github.com/nf-core/raredisease/pull/906)
+- Clarify in `docs/usage.md` that the pLI VEP plugin is mandatory when annotation is enabled and LoFtool is optional at the pipeline level [#911](https://github.com/nf-core/raredisease/pull/911)
 - Add missing `docs/output.md` sections for GATK contamination check (`qc/contamination/`) and pedigree file (`pedigree/`); fix missing `</details>` closing tag in Peddy section [#904](https://github.com/nf-core/raredisease/pull/904)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for fastqc, smncopynumbercaller, peddy, multiqc, and pedigree; remove legacy `publish` emit from `raredisease.nf` [#903](https://github.com/nf-core/raredisease/pull/903)
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for `annotate_structural_variants` subworkflow [#902](https://github.com/nf-core/raredisease/pull/902)
@@ -36,6 +40,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Emit an error at startup when `vep_filters_scout_fmt` or `vep_filters` contains no records (headers or empty lines only), which would otherwise cause the clinical set to silently contain 0 variants [#913](https://github.com/nf-core/raredisease/pull/913)
+- Add missing CADD 1.7.3 module update to the v3.0.0 `Tool updates` table in `CHANGELOG.md` [issue #888](https://github.com/nf-core/raredisease/issues/888) [PR #919](https://github.com/nf-core/raredisease/pull/919)
+- Add changelog entry requirement (including the Parameters table) to the contribution workflow in `CONTRIBUTING.md` [issue #797](https://github.com/nf-core/raredisease/issues/797) [PR #919](https://github.com/nf-core/raredisease/pull/919)
+- Fix `--hisat2` parameter being declared but never consumed, causing the HISAT2 genome index to always be rebuilt [#905](https://github.com/nf-core/raredisease/pull/905)
+- Fix inconsistent sample column order in Sentieon SNV family VCF by sorting per-sample VCFs by filename before merging, consistent with DeepVariant and MT paths [#908](https://github.com/nf-core/raredisease/pull/908)
 - Fix intermittent `CALL_SNV_DEEPVARIANT - wgs` test failure caused by non-deterministic GLnexus quality scores by replacing `variantsMD5` with `vcf.summary` [#850](https://github.com/nf-core/raredisease/pull/850)
 - Fix swapped `run_mt_for_wes`/`skip_split_multiallelics` arguments in the `CALL_SNV` call, which disabled multiallelic splitting (and inverted MT-for-WES) when `--run_mt_for_wes` was set [#854](https://github.com/nf-core/raredisease/issues/854)
 
@@ -197,6 +206,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | --------------------- | ----------- | ----------- |
 | bcftools              | 1.20        | 1.21        |
 | bwa                   | 0.7.18      | 0.7.19      |
+| cadd                  | 1.6.post1   | 1.7.3       |
 | deepvariant           | 1.8.0       | 1.9.0       |
 | eKLIPse               | 1.8         |             |
 | ensemblvep/vep        | 110         | 110.1       |
