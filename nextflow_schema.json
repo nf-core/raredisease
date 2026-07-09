@@ -304,7 +304,7 @@
                     "exists": true,
                     "format": "path",
                     "fa_icon": "fas fa-file",
-                    "description": "Path to sentieon machine learning model file."
+                    "description": "Path to sentieon machine learning model file (e.g. dnascope.model). If the model is distributed in .bundle format, unpack it first with `ar models.bundle` and point this parameter to the extracted model file."
                 },
                 "mt_fasta": {
                     "type": "string",
@@ -825,7 +825,8 @@
             "description": "Parameters used to run mitosalt and saltshaker",
             "properties": {
                 "hisat2": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Path to a pre-built HISAT2 genome index directory. If not provided, the index is built at runtime."
                 },
                 "hisat2_build_memory": {
                     "type": "string",

@@ -63,7 +63,11 @@ workflow CALL_SNV_SENTIEON {
         ch_case_info
             .combine(ch_vcf_idx)
             .groupTuple()
-            .branch{ _meta, vcfs, _idx ->                                                                                                    // branch the channel into multiple channels (single, multiple) depending on size of list
+            .map { meta, vcfs, idxs ->
+                def sorted = [vcfs, idxs].transpose().sort { it[0].name }
+                return [meta, sorted.collect { it[0] }, sorted.collect { it[1] }]
+            }
+            .branch{ _meta, vcfs, _idx ->
                 single: vcfs.size() == 1
                 multiple: vcfs.size() > 1
             }
