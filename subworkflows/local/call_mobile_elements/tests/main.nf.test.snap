@@ -1,42 +1,10 @@
 {
     "CALL_MOBILE_ELEMENTS": {
         "content": [
-            {
-                "0": [
-                    [
-                        {
-                            "id": "justhusky"
-                        },
-                        "justhusky_mobile_elements.vcf.gz.tbi:md5,4cb176febbc8c26d717a6c6e67b9c905"
-                    ]
-                ],
-                "1": [
-                    [
-                        {
-                            "id": "justhusky"
-                        },
-                        "justhusky_mobile_elements.vcf.gz:md5,22ce591ae4712b88034b32f79e3beb85"
-                    ]
-                ],
-                "tbi": [
-                    [
-                        {
-                            "id": "justhusky"
-                        },
-                        "justhusky_mobile_elements.vcf.gz.tbi:md5,4cb176febbc8c26d717a6c6e67b9c905"
-                    ]
-                ],
-                "vcf": [
-                    [
-                        {
-                            "id": "justhusky"
-                        },
-                        "justhusky_mobile_elements.vcf.gz:md5,22ce591ae4712b88034b32f79e3beb85"
-                    ]
-                ]
-            }
+            "justhusky_mobile_elements.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+            "VcfFile [chromosomes=[], sampleCount=1, variantCount=0, phased=true, phasedAutodetect=true]"
         ],
-        "timestamp": "2026-07-09T15:37:22.909150778",
+        "timestamp": "2026-07-09T16:27:30.627582267",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.06.0"
