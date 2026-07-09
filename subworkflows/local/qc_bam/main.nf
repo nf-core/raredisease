@@ -101,7 +101,7 @@ workflow QC_BAM {
             // When no target bed is supplied, ch_bait_intervals/ch_target_intervals are empty
             // channels; combining against them would yield an empty channel and RIKER_MULTI would
             // never run. Build the input with empty bait/target placeholders in that case instead.
-            ch_riker_baits = ( val_target_bed
+            ch_riker_hybcap_in = ( val_target_bed
                 ? ch_bam_bai
                     .combine(ch_bait_intervals)
                     .combine(ch_target_intervals)
@@ -113,8 +113,8 @@ workflow QC_BAM {
             // The wgs tool is restricted to intervals_wgs to match PICARD_COLLECTWGSMETRICS_WG;
             // when wgs is not collected (wes/sentieon) the wgs-intervals slot stays empty.
             ch_riker_in = ( include_wgs
-                ? ch_riker_baits.combine(ch_intervals_wgs)
-                : ch_riker_baits.map { row -> row + [[]] }
+                ? ch_riker_hybcap_in.combine(ch_intervals_wgs)
+                : ch_riker_hybcap_in.map { row -> row + [[]] }
             ).map { meta, bam, bai, baits, targets, wgs_intervals ->
                 [ meta + [riker_tools: riker_tools], bam, bai,
                   [], [], [], [],       // error_vcf, error_vcf_idx, error_intervals, gcbias_exclude_intervals
