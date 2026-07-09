@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `changelog.yml` GitHub Actions workflow to enforce CHANGELOG updates on every PR; PRs can be exempted with the `skip-changelog` label [issue #796](https://github.com/nf-core/raredisease/issues/796) [PR #920](https://github.com/nf-core/raredisease/pull/920)
 - Update saltshaker classification reporting by adding customer ID to samples' reports and displaying them as tabs in html [#856](https://github.com/nf-core/raredisease/pull/856)
 - Added non-stub tests for `annotate_mt_snvs` [#890](https://github.com/nf-core/raredisease/pull/890)
 - Added GATK contamination check for WES/WGS samples as complement to VerifyBamID2, enabled by providing `contamination_sites` and skippable via `--skip_tools gatkcontamination` [#758](https://github.com/nf-core/raredisease/pull/758)
@@ -14,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Document the `ar x models.bundle` workaround for Sentieon DNAscope `.bundle` model format in `docs/usage.md` and `nextflow_schema.json` [issue #568](https://github.com/nf-core/raredisease/issues/568) [PR #912](https://github.com/nf-core/raredisease/pull/912)
 - Pre-resolve the MT analysis flag (`val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes`) into a single named boolean `val_run_mt` in `NFCORE_RAREDISEASE`, replacing `val_run_mt_for_wes` across downstream subworkflow signatures and simplifying repeated conditionals in `PREPARE_REFERENCES`, `ALIGN`, `CALL_SNV`, and `CALL_STRUCTURAL_VARIANTS` [#906](https://github.com/nf-core/raredisease/pull/906)
 - Clarify in `docs/usage.md` that the pLI VEP plugin is mandatory when annotation is enabled and LoFtool is optional at the pipeline level [#911](https://github.com/nf-core/raredisease/pull/911)
 - Add missing `docs/output.md` sections for GATK contamination check (`qc/contamination/`) and pedigree file (`pedigree/`); fix missing `</details>` closing tag in Peddy section [#904](https://github.com/nf-core/raredisease/pull/904)
