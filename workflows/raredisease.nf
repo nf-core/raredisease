@@ -221,7 +221,7 @@ workflow RAREDISEASE {
     val_multiqc_samples
     val_outdir
     val_platform
-    val_run_mt_for_wes
+    val_run_mt
     val_run_rtgvcfeval
     val_run_vcfanno_db_sanity_check
     val_sample_id_map
@@ -370,12 +370,11 @@ workflow RAREDISEASE {
         ch_mtshift_fasta,
         skip_fastp,
         val_aligner,
-        val_analysis_type,
         val_exclude_alt,
         val_extract_alignments,
         val_mt_aligner,
         val_platform,
-        val_run_mt_for_wes,
+        val_run_mt,
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram
     )
@@ -387,7 +386,7 @@ workflow RAREDISEASE {
     ch_align_genome_marked_crai     = ALIGN.out.genome_marked_crai
     ch_align_markdup_metrics        = ALIGN.out.markdup_metrics
 
-    if (!(skip_mt_subsample) && (val_analysis_type.equals("wgs") || val_run_mt_for_wes)) {
+    if (!skip_mt_subsample && val_run_mt) {
         if (val_mt_subsample_approach.equals("fraction")) {
             SUBSAMPLE_MT_FRAC(
                 ch_mapped.mt_bam_bai,
@@ -532,7 +531,7 @@ workflow RAREDISEASE {
             ch_target_bed,
             val_analysis_type,
             val_concatenate_snv_calls,
-            val_run_mt_for_wes,
+            val_run_mt,
             val_skip_split_multiallelics,
             val_variant_caller
         )
@@ -547,7 +546,8 @@ workflow RAREDISEASE {
 
         // Removes vcfanno resource with empty records to keep vcfanno from crashing on those files
         ch_vcfanno_toml_final = ch_vcfanno_toml
-        if (val_run_vcfanno_db_sanity_check && (!skip_snv_annotation || (!skip_mt_annotation && (val_run_mt_for_wes || val_analysis_type.matches("wgs|mito"))))) {
+        def annotation_uses_vcfanno = !skip_snv_annotation || (!skip_mt_annotation && val_run_mt)
+        if (val_run_vcfanno_db_sanity_check && annotation_uses_vcfanno) {
             ch_vcfanno_resources
                 .combine(ch_vcfanno_extra)
                 .map { files -> files.flatten() }
@@ -642,7 +642,7 @@ workflow RAREDISEASE {
         //
         // ANNOTATE MT SNVs
         //
-        if (!(skip_mt_annotation) && (val_run_mt_for_wes || val_analysis_type.matches("wgs|mito"))) {
+        if (!skip_mt_annotation && val_run_mt) {
 
             ANNOTATE_MT_SNVS (
                 ch_cadd_header,
@@ -769,7 +769,7 @@ workflow RAREDISEASE {
             val_mito_name,
             val_mitosalt_flank,
             val_mitosalt_heteroplasmy_limit,
-            val_run_mt_for_wes
+            val_run_mt
         )
         ch_call_sv_vcf = CALL_STRUCTURAL_VARIANTS.out.vcf
         ch_call_sv_tbi = CALL_STRUCTURAL_VARIANTS.out.tbi

@@ -825,7 +825,8 @@
             "description": "Parameters used to run mitosalt and saltshaker",
             "properties": {
                 "hisat2": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Path to a pre-built HISAT2 genome index directory. If not provided, the index is built at runtime."
                 },
                 "hisat2_build_memory": {
                     "type": "string",
