@@ -11,8 +11,73 @@ nextflow_workflow {
     tag "ensemblvep/vep"
     tag "picard/sortvcf"
     tag "svdb/query"
+    tag "call_mobile_elements"
 
     config "./nextflow.config"
+
+    setup {
+        run("CALL_MOBILE_ELEMENTS") {
+            script "../../call_mobile_elements/main.nf"
+            process {
+                """
+                input[0] = channel.of([id:'justhusky'])
+                input[1] = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[2] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[4] = channel.of(['LINE', file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)])
+                """
+            }
+        }
+        run("UNTAR") {
+            script "modules/nf-core/untar/main.nf"
+            process {
+                """
+                input[0] = channel.of([
+                    [id:'vep_cache'],
+                    file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)
+                ])
+                """
+            }
+        }
+    }
+
+    test("ANNOTATE_MOBILE_ELEMENTS - GRCh37") {
+
+        when {
+            params {
+                bcftools_args = "--output-type z"
+            }
+            workflow {
+                """
+                input[0] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
+                input[1] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[2] = channel.of([
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
+                    'FRQ',
+                    'OCC',
+                    'swegen_FRQ',
+                    'swegen_OCC'
+                ])
+                input[3] = CALL_MOBILE_ELEMENTS.out.vcf
+                input[4] = UNTAR.out.untar.map { _meta, untar -> untar }.collect()
+                input[5] = 'GRCh37'
+                input[6] = 107
+                input[7] = channel.value([])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
 
     test("ANNOTATE_MOBILE_ELEMENTS - GRCh37, stub") {
 
@@ -33,11 +98,8 @@ nextflow_workflow {
                     'swegen_FRQ',
                     'swegen_OCC'
                 ])
-                input[3] = channel.of([
-                    [id:'justhusky', single_end:false],
-                    file(params.pipelines_testdata_base_path + 'reference/grch38_gnomad_reformated_-r3.1.1-.vcf.gz', checkIfExists: true)
-                ])
-                input[4] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
+                input[3] = CALL_MOBILE_ELEMENTS.out.vcf
+                input[4] = UNTAR.out.untar.map { _meta, untar -> untar }.collect()
                 input[5] = 'GRCh37'
                 input[6] = 107
                 input[7] = channel.value([])
