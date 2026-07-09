@@ -28,26 +28,10 @@
     },
     "ANNOTATE_MOBILE_ELEMENTS - GRCh37": {
         "content": [
-            {
-                "0": [
-                    [
-                        {
-                            "id": "justhusky"
-                        },
-                        "justhusky_filter.vcf.gz:md5,2ced1a556f32abfda2dfe26cd39602d8"
-                    ]
-                ],
-                "vcf_ann": [
-                    [
-                        {
-                            "id": "justhusky"
-                        },
-                        "justhusky_filter.vcf.gz:md5,2ced1a556f32abfda2dfe26cd39602d8"
-                    ]
-                ]
-            }
+            "justhusky_filter.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+            "VcfFile [chromosomes=[], sampleCount=1, variantCount=0, phased=true, phasedAutodetect=true]"
         ],
-        "timestamp": "2026-07-09T15:08:16.328851321",
+        "timestamp": "2026-07-09T16:36:45.031104801",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.06.0"

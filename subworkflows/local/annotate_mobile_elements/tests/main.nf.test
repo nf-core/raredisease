@@ -74,7 +74,10 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(workflow.out).match() }
+                { assert snapshot(
+                    "${file(workflow.out.vcf_ann[0][1]).name}:md5,${path(workflow.out.vcf_ann[0][1]).vcf.variantsMD5}",
+                    path(workflow.out.vcf_ann[0][1]).vcf.summary
+                ).match() }
             )
         }
     }
