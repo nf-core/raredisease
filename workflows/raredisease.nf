@@ -34,7 +34,6 @@ include { STRANGER                                          } from '../modules/n
 
 include { RENAME_ALIGN_FILES as RENAME_BAM } from '../modules/local/rename_align_files'
 include { RENAME_ALIGN_FILES as RENAME_BAI } from '../modules/local/rename_align_files'
-include { PARSE_CONTAMINATION              } from '../modules/local/parse_contamination/main'
 include { SANITY_CHECK_VCFANNO_DATABASES   } from '../modules/local/sanity_check_vcfanno_databases/main'
 
 //
@@ -54,7 +53,7 @@ include { CALL_MOBILE_ELEMENTS                                        } from '..
 include { CALL_REPEAT_EXPANSIONS                                      } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                                                    } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS                                    } from '../subworkflows/local/call_structural_variants'
-include { CONTAMINATION_CHECK                                         } from '../subworkflows/local/contamination_check/main'
+include { CONTAMINATION                                               } from '../subworkflows/local/contamination'
 include { GENERATE_CYTOSURE_FILES                                     } from '../subworkflows/local/generate_cytosure_files'
 include { GENS                                                        } from '../subworkflows/local/gens'
 include { PREPARE_REFERENCES                                          } from '../subworkflows/local/prepare_references'
@@ -86,6 +85,7 @@ workflow RAREDISEASE {
     ch_cadd_resources
     ch_call_interval
     ch_case_info
+    ch_contamination_sites
     ch_dbsnp
     ch_dbsnp_tbi
     ch_foundin_header
@@ -105,6 +105,7 @@ workflow RAREDISEASE {
     ch_gens_pon_male
     ch_gnomad_af
     ch_hgnc_ids
+    ch_intervals_contamination
     ch_intervals_wgs
     ch_intervals_y
     ch_manta_regions
@@ -175,6 +176,7 @@ workflow RAREDISEASE {
     skip_generate_clinical_set
     skip_fastp
     skip_fastqc
+    skip_gatkcontamination
     skip_gens
     skip_germlinecnvcaller
     skip_mitosalt
@@ -182,6 +184,7 @@ workflow RAREDISEASE {
     skip_peddy
     skip_smncopynumbercaller
     skip_vcf2cytosure
+    skip_verifybamid
     val_aligner
     val_analysis_type
     val_cadd_resources
@@ -232,9 +235,6 @@ workflow RAREDISEASE {
     val_target_bed
     val_variant_caller
     val_vep_cache_version
-    skip_contamination
-    ch_contamination_sites
-    ch_intervals_contamination
 
     main:
 
@@ -416,9 +416,6 @@ workflow RAREDISEASE {
         ch_intervals_wgs,
         ch_intervals_y,
         ch_ngsbits_method,
-        ch_svd_bed,
-        ch_svd_mu,
-        ch_svd_ud,
         ch_sambamba_bed,
         ch_target_intervals,
         val_analysis_type,
@@ -428,36 +425,21 @@ workflow RAREDISEASE {
     )
 
     //
-    // SUBWORKFLOW: Check for contamination using GATK
+    // SUBWORKFLOW: Check sample contamination using VerifyBamID2 and/or GATK
     //
-    ch_contamination_mqc    = Channel.empty()
-    ch_contamination_table  = Channel.empty()
-    ch_contamination_pileup = Channel.empty()
-
-    if (!skip_contamination) {
-
-        // Prepare BAM input with BAI
-        ch_bam_for_contamination = ch_mapped.genome_marked_bam
-            .join(ch_mapped.genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
-
-        CONTAMINATION_CHECK (
-            ch_bam_for_contamination,
-            ch_genome_fasta,
-            ch_genome_fai,
-            ch_genome_dictionary,
-            ch_contamination_sites,
-            ch_intervals_contamination
-        )
-
-        // Parse for MultiQC
-        PARSE_CONTAMINATION (
-            CONTAMINATION_CHECK.out.contamination_table
-        )
-
-        ch_contamination_mqc    = PARSE_CONTAMINATION.out.mqc_table
-        ch_contamination_table  = CONTAMINATION_CHECK.out.contamination_table
-        ch_contamination_pileup = CONTAMINATION_CHECK.out.pileup_table
-    }
+    CONTAMINATION (
+        ch_mapped.genome_marked_bam_bai,
+        ch_genome_fasta,
+        ch_genome_fai,
+        ch_genome_dictionary,
+        ch_svd_bed,
+        ch_svd_mu,
+        ch_svd_ud,
+        ch_contamination_sites,
+        ch_intervals_contamination,
+        skip_gatkcontamination,
+        skip_verifybamid
+    )
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RENAME ALIGNMENT FILES FOR SMNCOPYNUMBERCALLER & REPEATCALLING
@@ -1103,10 +1085,8 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.picard_collecthsmetrics_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.mosdepth_global_txt.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.wgsmetrics_wg.map{_meta, reports -> reports}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.verifybamid_self_sm.map{_meta, reports -> reports}.collect().ifEmpty([]))
-
-    // Add contamination results to MultiQC
-    ch_multiqc_files = ch_multiqc_files.mix(ch_contamination_mqc.map { _meta, file -> file })
+    ch_multiqc_files = ch_multiqc_files.mix(CONTAMINATION.out.verifybamid_self_sm.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(CONTAMINATION.out.gatk_contamination_mqc.map { _meta, file -> file })
 
     if (!skip_peddy) {
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{_meta, reports -> reports}.collect().ifEmpty([]))
@@ -1165,14 +1145,16 @@ workflow RAREDISEASE {
     qc_bam_tiddit_cov_cov                            = QC_BAM.out.tiddit_cov_cov                           // channel: [ val(meta), path(bed) ]
     qc_bam_tiddit_cov_wig                            = QC_BAM.out.tiddit_cov_wig                           // channel: [ val(meta), path(wig) ]
     qc_bam_ucsc_wigtobigwig_bw                       = QC_BAM.out.ucsc_wigtobigwig_bw                      // channel: [ val(meta), path(bw) ]
-    qc_bam_verifybamid_ancestry                      = QC_BAM.out.verifybamid_ancestry                     // channel: [ val(meta), path(ancestry) ]
-    qc_bam_verifybamid_bed                           = QC_BAM.out.verifybamid_bed                          // channel: [ val(meta), path(bed) ]
-    qc_bam_verifybamid_log                           = QC_BAM.out.verifybamid_log                          // channel: [ val(meta), path(log) ]
-    qc_bam_verifybamid_mu                            = QC_BAM.out.verifybamid_mu                           // channel: [ val(meta), path(mu) ]
-    qc_bam_verifybamid_self_sm                       = QC_BAM.out.verifybamid_self_sm                      // channel: [ val(meta), path(selfSM) ]
-    qc_bam_verifybamid_ud                            = QC_BAM.out.verifybamid_ud                           // channel: [ val(meta), path(ud) ]
     qc_bam_wgsmetrics_wg                             = QC_BAM.out.wgsmetrics_wg                            // channel: [ val(meta), path(metrics) ]
     qc_bam_wgsmetrics_y                              = QC_BAM.out.wgsmetrics_y                             // channel: [ val(meta), path(metrics) ]
+    contamination_gatk_pileup                        = CONTAMINATION.out.gatk_contamination_pileup         // channel: [ val(meta), path(table) ]
+    contamination_gatk_table                         = CONTAMINATION.out.gatk_contamination_table          // channel: [ val(meta), path(table) ]
+    contamination_verifybamid_ancestry               = CONTAMINATION.out.verifybamid_ancestry              // channel: [ val(meta), path(ancestry) ]
+    contamination_verifybamid_bed                    = CONTAMINATION.out.verifybamid_bed                   // channel: [ val(meta), path(bed) ]
+    contamination_verifybamid_log                    = CONTAMINATION.out.verifybamid_log                   // channel: [ val(meta), path(log) ]
+    contamination_verifybamid_mu                     = CONTAMINATION.out.verifybamid_mu                    // channel: [ val(meta), path(mu) ]
+    contamination_verifybamid_self_sm                = CONTAMINATION.out.verifybamid_self_sm               // channel: [ val(meta), path(selfSM) ]
+    contamination_verifybamid_ud                     = CONTAMINATION.out.verifybamid_ud                    // channel: [ val(meta), path(ud) ]
     call_sv_vcf                                      = ch_call_sv_vcf                                      // channel: [ val(meta), path(vcf) ]
     call_sv_tbi                                      = ch_call_sv_tbi                                      // channel: [ val(meta), path(tbi) ]
     saltshaker_html                                  = ch_saltshaker_html                                  // channel: [ val(meta), path(html) ]
@@ -1234,8 +1216,6 @@ workflow RAREDISEASE {
     variant_evaluation_weighted_roc                  = ch_variant_evaluation_weighted_roc              // channel: [ val(meta), path(tsv) ]
     subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
-    contamination_table          = ch_contamination_table         // channel: [ val(meta), path(table) ]
-    contamination_pileup         = ch_contamination_pileup        // channel: [ val(meta), path(table) ]
     versions                     = ch_versions
     fastqc              = ch_fastqc              // channel: [ val(meta), path(html|zip) ]
     smncopynumbercaller = ch_smncopynumbercaller // channel: [ val(meta), path(*) ]

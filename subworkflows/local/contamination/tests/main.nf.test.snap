@@ -1,0 +1,55 @@
+{
+    "CONTAMINATION - gatk only - stub": {
+        "content": [
+            [
+                "test_contamination.contamination.table"
+            ],
+            [
+                "test_pileups.pileups.table"
+            ],
+            0
+        ],
+        "timestamp": "2026-07-09T14:31:05.273772864",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "CONTAMINATION - verifybamid only - stub": {
+        "content": [
+            [
+                "test.selfSM"
+            ],
+            [
+                "test.log"
+            ],
+            0
+        ],
+        "timestamp": "2026-07-09T14:30:30.92194731",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "CONTAMINATION - both - stub": {
+        "content": [
+            [
+                "test.selfSM"
+            ],
+            [
+                "test.log"
+            ],
+            [
+                "test_contamination.contamination.table"
+            ],
+            [
+                "test_pileups.pileups.table"
+            ]
+        ],
+        "timestamp": "2026-07-09T14:31:36.069989905",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

@@ -14,8 +14,6 @@ include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_WG           } from '../../
 include { SENTIEON_WGSMETRICS as SENTIEON_WGSMETRICS_Y            } from '../../../modules/nf-core/sentieon/wgsmetrics/main'
 include { TIDDIT_COV                                              } from '../../../modules/nf-core/tiddit/cov/main'
 include { UCSC_WIGTOBIGWIG                                        } from '../../../modules/nf-core/ucsc/wigtobigwig/main'
-include { VERIFYBAMID_VERIFYBAMID2                                } from '../../../modules/nf-core/verifybamid/verifybamid2/main'
-
 workflow QC_BAM {
 
     take:
@@ -27,9 +25,6 @@ workflow QC_BAM {
         ch_intervals_wgs                // channel: [mandatory] [ path(intervals) ]
         ch_intervals_y                  // channel: [mandatory] [ path(intervals) ]
         ch_ngsbits_method               // channel: [val(method)]
-        ch_svd_bed                      // channel: [optional] [ path(bed) ]
-        ch_svd_mu                       // channel: [optional] [ path(meanpath) ]
-        ch_svd_ud                       // channel: [optional] [ path(ud) ]
         ch_sambamba_bed                 // channel: [optional] [ val(meta), path(bed) ]
         ch_target_intervals             // channel: [mandatory] [ path(intervals_list) ]
         val_analysis_type               // string: "wes", "wgs", or "mito"
@@ -85,10 +80,6 @@ workflow QC_BAM {
             NGSBITS_SAMPLEGENDER(ch_bam_bai, ch_genome_fasta, ch_genome_fai, ch_ngsbits_method)
             ch_ngsbits  = NGSBITS_SAMPLEGENDER.out.tsv
         }
-        // Check contamination
-        ch_svd_in = ch_svd_ud.combine(ch_svd_mu).combine(ch_svd_bed).collect()
-        VERIFYBAMID_VERIFYBAMID2(ch_bam_bai, ch_svd_in, [], ch_genome_fasta.map {_meta, fasta-> fasta})
-
     emit:
         chromograph_cov_plots                 = CHROMOGRAPH_COV.out.plots                    // channel: [ val(meta), path(png) ]
         mosdepth_global_txt                   = MOSDEPTH.out.global_txt                      // channel: [ val(meta), path(txt) ]
@@ -111,12 +102,6 @@ workflow QC_BAM {
         tiddit_cov_cov                        = TIDDIT_COV.out.cov                           // channel: [ val(meta), path(bed) ]
         tiddit_cov_wig                        = TIDDIT_COV.out.wig                           // channel: [ val(meta), path(wig) ]
         ucsc_wigtobigwig_bw                   = UCSC_WIGTOBIGWIG.out.bw                      // channel: [ val(meta), path(bw) ]
-        verifybamid_ancestry                  = VERIFYBAMID_VERIFYBAMID2.out.ancestry        // channel: [ val(meta), path(ancestry) ]
-        verifybamid_bed                       = VERIFYBAMID_VERIFYBAMID2.out.bed             // channel: [ val(meta), path(bed) ]
-        verifybamid_log                       = VERIFYBAMID_VERIFYBAMID2.out.log             // channel: [ val(meta), path(log) ]
-        verifybamid_mu                        = VERIFYBAMID_VERIFYBAMID2.out.mu              // channel: [ val(meta), path(mu) ]
-        verifybamid_self_sm                   = VERIFYBAMID_VERIFYBAMID2.out.self_sm         // channel: [ val(meta), path(selfSM) ]
-        verifybamid_ud                        = VERIFYBAMID_VERIFYBAMID2.out.ud              // channel: [ val(meta), path(ud) ]
         wgsmetrics_wg                         = ch_cov                                       // channel: [ val(meta), path(metrics) ]
         wgsmetrics_y                          = ch_cov_y                                     // channel: [ val(meta), path(metrics) ]
 }
