@@ -39,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Add missing CADD 1.7.3 module update to the v3.0.0 `Tool updates` table in `CHANGELOG.md` [issue #888](https://github.com/nf-core/raredisease/issues/888) [PR #919](https://github.com/nf-core/raredisease/pull/919)
+- Add changelog entry requirement (including the Parameters table) to the contribution workflow in `CONTRIBUTING.md` [issue #797](https://github.com/nf-core/raredisease/issues/797) [PR #919](https://github.com/nf-core/raredisease/pull/919)
 - Fix `--hisat2` parameter being declared but never consumed, causing the HISAT2 genome index to always be rebuilt [#905](https://github.com/nf-core/raredisease/pull/905)
 - Fix inconsistent sample column order in Sentieon SNV family VCF by sorting per-sample VCFs by filename before merging, consistent with DeepVariant and MT paths [#908](https://github.com/nf-core/raredisease/pull/908)
 - Fix intermittent `CALL_SNV_DEEPVARIANT - wgs` test failure caused by non-deterministic GLnexus quality scores by replacing `variantsMD5` with `vcf.summary` [#850](https://github.com/nf-core/raredisease/pull/850)
@@ -202,6 +204,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | --------------------- | ----------- | ----------- |
 | bcftools              | 1.20        | 1.21        |
 | bwa                   | 0.7.18      | 0.7.19      |
+| cadd                  | 1.6.post1   | 1.7.3       |
 | deepvariant           | 1.8.0       | 1.9.0       |
 | eKLIPse               | 1.8         |             |
 | ensemblvep/vep        | 110         | 110.1       |
