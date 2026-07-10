@@ -389,7 +389,7 @@
                     },
                     "riker/multi": {
                         "branch": "master",
-                        "git_sha": "89b094a1b914b1e0844b4c0cc901cda5eddd569b",
+                        "git_sha": "da4b4aa519d032c6689cb7d27c6dda496f657989",
                         "installed_by": ["modules"]
                     },
                     "rtgtools/format": {

@@ -89,7 +89,7 @@ workflow QC_BAM {
             // on non-wes runs with a bwa-family aligner; for sentieon the WGS coverage comes from
             // WgsMetricsAlgo above, so 'wgs' is omitted here to avoid computing it twice. 'hybcap'
             // requires a target bed.
-            def include_wgs = (val_analysis_type != 'wes' && val_aligner != 'sentieon')
+            def include_wgs = (val_analysis_type != 'wes' && val_aligner in ['bwa', 'bwameme', 'bwamem2'])
             def riker_tools = ['alignment', 'basic', 'isize', 'gcbias']
             if (include_wgs) { riker_tools << 'wgs' }
             if (val_target_bed) { riker_tools << 'hybcap' }
@@ -150,6 +150,9 @@ workflow QC_BAM {
                 ch_riker_wgs_y = RIKER_MULTI_Y.out.wgs_metrics
             }
         } else {
+            // Unreachable via params (the nextflow_schema.json enum blocks any other value);
+            // this guards direct callers of the subworkflow and fails loud instead of silently
+            // producing no metrics.
             error "Unknown qc_metrics_tool '${val_qc_metrics_tool}'; expected 'picard' or 'riker'."
         }
 
