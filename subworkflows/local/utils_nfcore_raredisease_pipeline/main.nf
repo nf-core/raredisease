@@ -110,13 +110,13 @@ workflow PIPELINE_INITIALISATION {
     channel
         .fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
         .tap { ch_original_input }
-        .map { meta, _fastq1, _fastq2, _spring1, _spring2, _bam, _bai -> meta.id }
+        .map { meta, _fastq1, _fastq2, _spring1, _spring2, _bam, _bai, _cram, _crai -> meta.id }
         .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
             counts[sample] = (counts[sample] ?: 0) + 1
             counts
         }
         .combine( ch_original_input )
-        .map { counts, meta, fastq1, fastq2, spring1, spring2, bam, bai ->
+        .map { counts, meta, fastq1, fastq2, spring1, spring2, bam, bai, cram, crai ->
             def new_meta = meta + [num_lanes:counts[meta.id]]
             if (fastq1 && fastq2) {
                 new_meta += [read_group: generateReadGroupLine(fastq1, meta, params)]
@@ -132,7 +132,10 @@ workflow PIPELINE_INITIALISATION {
                 return [new_meta + [single_end: false, data_type: "interleaved_spring"], [spring1]]
             } else if (bam && bai) {
                 new_meta += [read_group: generateReadGroupLine(bam, meta, params)]
-                return [new_meta, [bam, bai]]
+                return [new_meta + [data_type: "bam"], [bam, bai]]
+            } else if (cram && crai) {
+                new_meta += [read_group: generateReadGroupLine(cram, meta, params)]
+                return [new_meta + [data_type: "cram"], [cram, crai]]
             }
         }
         .tap{ ch_input_counts }
@@ -148,9 +151,9 @@ workflow PIPELINE_INITIALISATION {
         }
         .tap { ch_samplesheet }
         .branch { meta, files  ->
-            fastq: !files[0].toString().endsWith("bam")
+            fastq: !files[0].toString().endsWith("bam") && !files[0].toString().endsWith("cram")
                 return [meta, files]
-            align: files[0].toString().endsWith("bam")
+            align: files[0].toString().endsWith("bam") || files[0].toString().endsWith("cram")
                 return [meta, files]
         }
         .set {ch_samplesheet_by_type}
