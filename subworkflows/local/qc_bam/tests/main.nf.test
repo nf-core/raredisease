@@ -50,9 +50,9 @@ nextflow_workflow {
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
                 input[10] = 'wgs'
                 input[11] = 'bwamem2'
-                input[12] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[13] = true
-                input[14] = 'picard'
+                input[12] = 'picard'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
                 """
             }
         }
@@ -131,9 +131,9 @@ nextflow_workflow {
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
                 input[10] = 'wgs'
                 input[11] = 'bwamem2'
-                input[12] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[13] = true
-                input[14] = 'riker'
+                input[12] = 'riker'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
                 """
             }
         }
@@ -190,9 +190,9 @@ nextflow_workflow {
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
                 input[10] = 'wgs'
                 input[11] = 'bwamem2'
-                input[12] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[13] = true
-                input[14] = 'riker'
+                input[12] = 'riker'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
                 """
             }
         }
@@ -251,9 +251,9 @@ nextflow_workflow {
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
                 input[10] = 'wgs'
                 input[11] = 'bwamem2'
-                input[12] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[13] = true
-                input[14] = 'bogus'
+                input[12] = 'bogus'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
                 """
             }
         }
@@ -301,9 +301,9 @@ nextflow_workflow {
                 input[9]  = channel.empty()
                 input[10] = 'wgs'
                 input[11] = 'bwamem2'
-                input[12] = null
-                input[13] = true
-                input[14] = 'riker'
+                input[12] = 'riker'
+                input[13] = null
+                input[14] = true
                 """
             }
         }
@@ -363,9 +363,9 @@ nextflow_workflow {
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
                 input[10] = 'wgs'
                 input[11] = 'bwamem2'
-                input[12] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[13] = true
-                input[14] = 'riker'
+                input[12] = 'riker'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
                 """
             }
         }
@@ -415,9 +415,9 @@ nextflow_workflow {
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
                 input[10] = 'wgs'
                 input[11] = 'bwamem2'
-                input[12] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[13] = true
-                input[14] = 'picard'
+                input[12] = 'picard'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
                 """
             }
         }
@@ -493,9 +493,9 @@ nextflow_workflow {
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
                 input[10] = 'wgs'
                 input[11] = 'sentieon'
-                input[12] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[13] = true
-                input[14] = 'picard'
+                input[12] = 'picard'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
                 """
             }
         }
@@ -573,9 +573,9 @@ nextflow_workflow {
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
                 input[10] = 'wgs'
                 input[11] = 'sentieon'
-                input[12] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[13] = true
-                input[14] = 'picard'
+                input[12] = 'picard'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
                 """
             }
         }
@@ -656,9 +656,9 @@ nextflow_workflow {
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
                 input[10] = 'wgs'
                 input[11] = 'sentieon'
-                input[12] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[13] = true
-                input[14] = 'riker'
+                input[12] = 'riker'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
                 """
             }
         }

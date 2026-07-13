@@ -31,9 +31,9 @@ workflow QC_BAM {
         ch_target_intervals             // channel: [mandatory] [ path(intervals_list) ]
         val_analysis_type               // string: "wes", "wgs", or "mito"
         val_aligner                     // string: "bwa", "bwamem2", "bwameme", or "sentieon"
+        val_qc_metrics_tool             // string: "picard" or "riker"
         val_target_bed                  // string: path to target bed file
         skip_ngsbits                    // boolean
-        val_qc_metrics_tool             // string: "picard" or "riker"
 
     main:
         ch_cov                    = channel.empty()

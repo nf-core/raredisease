@@ -421,9 +421,9 @@ workflow RAREDISEASE {
         ch_target_intervals,
         val_analysis_type,
         val_aligner,
+        val_qc_metrics_tool,
         val_target_bed,
-        skip_ngsbits,
-        val_qc_metrics_tool
+        skip_ngsbits
     )
 
     //
