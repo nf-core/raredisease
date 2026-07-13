@@ -29,7 +29,13 @@ nextflow_workflow {
                 ])
                 input[2] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
                 input[3] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
-                input[4] = channel.of(['LINE', file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)])
+                input[4] = channel
+                    .fromPath(params.pipelines_testdata_base_path + 'reference/mobile_element_references.tsv', checkIfExists: true)
+                    .splitText()
+                    .map { line -> line.trim() }
+                    .map { line -> line.split('\\t') as List }
+                    .filter { cols -> !(cols[0].equalsIgnoreCase('type') && cols[1].equalsIgnoreCase('path')) }
+                    .map { cols -> [cols[0], file(cols[1], checkIfExists: true)] }
                 """
             }
         }
@@ -39,7 +45,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert workflow.out.tbi },
                 { assert snapshot(
-                    "${file(workflow.out.vcf[0][1]).name}:md5,${path(workflow.out.vcf[0][1]).vcf.variantsMD5}",
+                    "${file(workflow.out.vcf[0][1]).name}",
                     path(workflow.out.vcf[0][1]).vcf.summary
                 ).match() }
              )

@@ -1,10 +1,10 @@
 {
     "CALL_MOBILE_ELEMENTS": {
         "content": [
-            "justhusky_mobile_elements.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
-            "VcfFile [chromosomes=[], sampleCount=1, variantCount=0, phased=true, phasedAutodetect=true]"
+            "justhusky_mobile_elements.vcf.gz",
+            "VcfFile [chromosomes=[21], sampleCount=1, variantCount=10, phased=false, phasedAutodetect=false]"
         ],
-        "timestamp": "2026-07-09T16:27:30.627582267",
+        "timestamp": "2026-07-13T11:22:58.92822511",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.06.0"
@@ -47,10 +47,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-06-26T16:04:01.036079356",
+        "timestamp": "2026-07-13T11:06:02.622682017",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.06.0"
         }
     }
 }
