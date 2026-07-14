@@ -16,22 +16,6 @@ nextflow_workflow {
     config "./nextflow.config"
 
     setup {
-        run("CALL_MOBILE_ELEMENTS") {
-            script "../../call_mobile_elements/main.nf"
-            process {
-                """
-                input[0] = channel.of([id:'justhusky'])
-                input[1] = channel.of([
-                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
-                ])
-                input[2] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
-                input[3] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
-                input[4] = channel.of(['LINE', file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)])
-                """
-            }
-        }
         run("UNTAR") {
             script "modules/nf-core/untar/main.nf"
             process {
@@ -49,20 +33,20 @@ nextflow_workflow {
 
         when {
             params {
-                bcftools_args = "--output-type z"
+                bcftools_args = "--apply-filters .,PASS --output-type z"
             }
             workflow {
                 """
                 input[0] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
                 input[1] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
                 input[2] = channel.of([
-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
-                    'FRQ',
-                    'OCC',
-                    'swegen_FRQ',
-                    'swegen_OCC'
+                    file(params.pipelines_testdata_base_path + 'reference/svdb_gnomad_genomes_sv-.vcf', checkIfExists: true),
+                    'AF',
+                    'AC',
+                    'gnomad_svAF',
+                    'gnomad_svAC'
                 ])
-                input[3] = CALL_MOBILE_ELEMENTS.out.vcf
+                input[3] = channel.of([[id:'earlycasualcaiman'], file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mobile_elements.vcf.gz', checkIfExists: true)])
                 input[4] = UNTAR.out.untar.map { _meta, untar -> untar }.collect()
                 input[5] = 'GRCh37'
                 input[6] = 107
@@ -75,7 +59,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    "${file(workflow.out.vcf_ann[0][1]).name}:md5,${path(workflow.out.vcf_ann[0][1]).vcf.variantsMD5}",
+                    "${file(workflow.out.vcf_ann[0][1]).name}",
                     path(workflow.out.vcf_ann[0][1]).vcf.summary
                 ).match() }
             )
@@ -88,20 +72,20 @@ nextflow_workflow {
 
         when {
             params {
-                bcftools_args = "--output-type z"
+                bcftools_args = "--apply-filters .,PASS --output-type z"
             }
             workflow {
                 """
                 input[0] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
                 input[1] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
                 input[2] = channel.of([
-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
-                    'FRQ',
-                    'OCC',
-                    'swegen_FRQ',
-                    'swegen_OCC'
+                    file(params.pipelines_testdata_base_path + 'reference/svdb_gnomad_genomes_sv-.vcf', checkIfExists: true),
+                    'AF',
+                    'AC',
+                    'gnomad_svAF',
+                    'gnomad_svAC'
                 ])
-                input[3] = CALL_MOBILE_ELEMENTS.out.vcf
+                input[3] = channel.of([[id:'earlycasualcaiman'], file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mobile_elements.vcf.gz', checkIfExists: true)])
                 input[4] = UNTAR.out.untar.map { _meta, untar -> untar }.collect()
                 input[5] = 'GRCh37'
                 input[6] = 107
