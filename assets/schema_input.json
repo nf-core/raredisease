@@ -55,7 +55,7 @@
                 "exists": true
             },
             "bam": {
-                "errorMessage": "BAM file cannot contain spaces and must have extension '.bam'",
+                "errorMessage": "BAM file must be duplicate-marked, cannot contain spaces, and must have extension '.bam'",
                 "type": "string",
                 "pattern": "^\\S+\\.bam$",
                 "format": "file-path",
@@ -65,6 +65,20 @@
                 "errorMessage": "BAM index file cannot contain spaces and must have extension '.bai'",
                 "type": "string",
                 "pattern": "^\\S+\\.bai$",
+                "format": "file-path",
+                "exists": true
+            },
+            "cram": {
+                "errorMessage": "CRAM file must be duplicate-marked, cannot contain spaces, and must have extension '.cram'",
+                "type": "string",
+                "pattern": "^\\S+\\.cram$",
+                "format": "file-path",
+                "exists": true
+            },
+            "crai": {
+                "errorMessage": "CRAM index file cannot contain spaces and must have extension '.crai'",
+                "type": "string",
+                "pattern": "^\\S+\\.crai$",
                 "format": "file-path",
                 "exists": true
             },
@@ -140,7 +154,8 @@
         "dependentRequired": {
             "fastq_2": ["fastq_1"],
             "spring_2": ["spring_1"],
-            "bam": ["bai"]
+            "bam": ["bai"],
+            "cram": ["crai"]
         },
         "required": ["sample", "sex", "phenotype", "case_id"]
     }
