@@ -82,6 +82,25 @@
                 "format": "file-path",
                 "exists": true
             },
+            "vcf": {
+                "errorMessage": "Precalled VCF must be bgzipped, cannot contain spaces, and must have extension '.vcf.gz'",
+                "type": "string",
+                "pattern": "^\\S+\\.vcf\\.gz$",
+                "format": "file-path",
+                "exists": true
+            },
+            "tbi": {
+                "errorMessage": "Precalled VCF index file cannot contain spaces and must have extension '.vcf.gz.tbi'",
+                "type": "string",
+                "pattern": "^\\S+\\.vcf\\.gz\\.tbi$",
+                "format": "file-path",
+                "exists": true
+            },
+            "type": {
+                "errorMessage": "Precalled VCF type must be one of 'snv', 'sv', 'mt'",
+                "type": "string",
+                "enum": ["snv", "sv", "mt"]
+            },
             "sex": {
                 "anyOf": [
                     {
@@ -151,11 +170,21 @@
                 }
             }
         ],
+        "oneOf": [
+            { "required": ["fastq_1"], "not": { "anyOf": [ {"required": ["spring_1"]}, {"required": ["bam"]}, {"required": ["cram"]}, {"required": ["vcf"]} ] } },
+            { "required": ["spring_1"], "not": { "anyOf": [ {"required": ["fastq_1"]}, {"required": ["bam"]}, {"required": ["cram"]}, {"required": ["vcf"]} ] } },
+            { "required": ["bam"], "not": { "anyOf": [ {"required": ["fastq_1"]}, {"required": ["spring_1"]}, {"required": ["cram"]}, {"required": ["vcf"]} ] } },
+            { "required": ["cram"], "not": { "anyOf": [ {"required": ["fastq_1"]}, {"required": ["spring_1"]}, {"required": ["bam"]}, {"required": ["vcf"]} ] } },
+            { "required": ["vcf"], "not": { "anyOf": [ {"required": ["fastq_1"]}, {"required": ["spring_1"]}, {"required": ["bam"]}, {"required": ["cram"]} ] } }
+        ],
         "dependentRequired": {
             "fastq_2": ["fastq_1"],
             "spring_2": ["spring_1"],
             "bam": ["bai"],
-            "cram": ["crai"]
+            "cram": ["crai"],
+            "vcf": ["tbi", "type"],
+            "tbi": ["vcf", "type"],
+            "type": ["vcf", "tbi"]
         },
         "required": ["sample", "sex", "phenotype", "case_id"]
     }

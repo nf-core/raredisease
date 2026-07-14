@@ -110,13 +110,13 @@ workflow PIPELINE_INITIALISATION {
     channel
         .fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
         .tap { ch_original_input }
-        .map { meta, _fastq1, _fastq2, _spring1, _spring2, _bam, _bai, _cram, _crai -> meta.id }
+        .map { meta, _fastq1, _fastq2, _spring1, _spring2, _bam, _bai, _cram, _crai, _vcf, _tbi, _type -> meta.id }
         .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
             counts[sample] = (counts[sample] ?: 0) + 1
             counts
         }
         .combine( ch_original_input )
-        .map { counts, meta, fastq1, fastq2, spring1, spring2, bam, bai, cram, crai ->
+        .map { counts, meta, fastq1, fastq2, spring1, spring2, bam, bai, cram, crai, vcf, tbi, type ->
             def new_meta = meta + [num_lanes:counts[meta.id]]
             if (fastq1 && fastq2) {
                 new_meta += [read_group: generateReadGroupLine(fastq1, meta, params)]
@@ -136,6 +136,8 @@ workflow PIPELINE_INITIALISATION {
             } else if (cram && crai) {
                 new_meta += [read_group: generateReadGroupLine(cram, meta, params)]
                 return [new_meta + [data_type: "cram"], [cram, crai]]
+            } else if (vcf && tbi && type) {
+                return [new_meta + [data_type: "${type}_vcf"], [vcf, tbi]]
             }
         }
         .tap{ ch_input_counts }
@@ -151,9 +153,11 @@ workflow PIPELINE_INITIALISATION {
         }
         .tap { ch_samplesheet }
         .branch { meta, files  ->
-            fastq: !files[0].toString().endsWith("bam") && !files[0].toString().endsWith("cram")
+            fastq:     meta.data_type in ["fastq_gz", "separate_spring", "interleaved_spring"]
                 return [meta, files]
-            align: files[0].toString().endsWith("bam") || files[0].toString().endsWith("cram")
+            align:     meta.data_type in ["bam", "cram"]
+                return [meta, files]
+            precalled: meta.data_type.endsWith("_vcf")
                 return [meta, files]
         }
         .set {ch_samplesheet_by_type}
@@ -166,12 +170,17 @@ workflow PIPELINE_INITIALISATION {
 
     ch_case_info = ch_samples.toList().map { it -> createCaseChannel(it) }
 
+    ch_precalled_vcfs = ch_samplesheet_by_type.precalled
+        .toList()
+        .map { rows -> extractPrecalledVcfs(rows) }
+
     emit:
-    reads     = ch_samplesheet_by_type.fastq
-    align     = ch_samplesheet_by_type.align
-    samples   = ch_samples
-    case_info = ch_case_info
-    versions  = ch_versions
+    reads          = ch_samplesheet_by_type.fastq // channel: [ val(meta), [ path(reads) ] ]
+    align          = ch_samplesheet_by_type.align // channel: [ val(meta), [ path(bam/cram), path(bai/crai) ] ]
+    samples        = ch_samples                   // channel: [ val(meta) ]
+    case_info      = ch_case_info                 // channel: [ val(case_info) ]
+    precalled_vcfs = ch_precalled_vcfs             // channel: [ val([snv:[vcf,tbi]|null, sv:[...]|null, mt:[...]|null]) ]
+    versions       = ch_versions                  // channel: [ path(versions) ]
 }
 
 /*
@@ -313,6 +322,19 @@ def createCaseChannel(List rows) {
     case_info.id           = rows[0].case_id
 
     return case_info
+}
+
+// Function to collect precalled vcf/tbi pairs per variant type from rows tagged with a "*_vcf" data_type
+def extractPrecalledVcfs(List rows) {
+    def precalled = [snv: null, sv: null, mt: null]
+    rows.each { meta, files ->
+        def type = meta.data_type - "_vcf"
+        if (precalled[type] && precalled[type] != files) {
+            error("Conflicting precalled '${type}' VCFs supplied in samplesheet for the same case.")
+        }
+        precalled[type] = files
+    }
+    return precalled
 }
 
 //
