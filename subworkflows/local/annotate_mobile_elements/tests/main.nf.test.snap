@@ -5,7 +5,8 @@
                 "0": [
                     [
                         {
-                            "id": "earlycasualcaiman"
+                            "id": "earlycasualcaiman",
+                            "single_end": false
                         },
                         "earlycasualcaiman_filter.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
@@ -13,14 +14,15 @@
                 "vcf_ann": [
                     [
                         {
-                            "id": "earlycasualcaiman"
+                            "id": "earlycasualcaiman",
+                            "single_end": false
                         },
                         "earlycasualcaiman_filter.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-07-13T14:13:46.208600255",
+        "timestamp": "2026-07-14T09:49:42.64836918",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.06.0"

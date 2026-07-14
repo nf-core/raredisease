@@ -11,7 +11,6 @@ nextflow_workflow {
     tag "ensemblvep/vep"
     tag "picard/sortvcf"
     tag "svdb/query"
-    tag "call_mobile_elements"
 
     config "./nextflow.config"
 
@@ -46,7 +45,7 @@ nextflow_workflow {
                     'gnomad_svAF',
                     'gnomad_svAC'
                 ])
-                input[3] = channel.of([[id:'earlycasualcaiman'], file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mobile_elements.vcf.gz', checkIfExists: true)])
+                input[3] = channel.of([[id:'earlycasualcaiman', "single_end": false], file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mobile_elements.vcf.gz', checkIfExists: true)])
                 input[4] = UNTAR.out.untar.map { _meta, untar -> untar }.collect()
                 input[5] = 'GRCh37'
                 input[6] = 107
@@ -85,7 +84,7 @@ nextflow_workflow {
                     'gnomad_svAF',
                     'gnomad_svAC'
                 ])
-                input[3] = channel.of([[id:'earlycasualcaiman'], file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mobile_elements.vcf.gz', checkIfExists: true)])
+                input[3] = channel.of([[id:'earlycasualcaiman', "single_end": false], file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mobile_elements.vcf.gz', checkIfExists: true)])
                 input[4] = UNTAR.out.untar.map { _meta, untar -> untar }.collect()
                 input[5] = 'GRCh37'
                 input[6] = 107
