@@ -171,11 +171,61 @@
             }
         ],
         "oneOf": [
-            { "required": ["fastq_1"], "not": { "anyOf": [ {"required": ["spring_1"]}, {"required": ["bam"]}, {"required": ["cram"]}, {"required": ["vcf"]} ] } },
-            { "required": ["spring_1"], "not": { "anyOf": [ {"required": ["fastq_1"]}, {"required": ["bam"]}, {"required": ["cram"]}, {"required": ["vcf"]} ] } },
-            { "required": ["bam"], "not": { "anyOf": [ {"required": ["fastq_1"]}, {"required": ["spring_1"]}, {"required": ["cram"]}, {"required": ["vcf"]} ] } },
-            { "required": ["cram"], "not": { "anyOf": [ {"required": ["fastq_1"]}, {"required": ["spring_1"]}, {"required": ["bam"]}, {"required": ["vcf"]} ] } },
-            { "required": ["vcf"], "not": { "anyOf": [ {"required": ["fastq_1"]}, {"required": ["spring_1"]}, {"required": ["bam"]}, {"required": ["cram"]} ] } }
+            {
+                "required": ["fastq_1"],
+                "not": {
+                    "anyOf": [
+                        { "required": ["spring_1"] },
+                        { "required": ["bam"] },
+                        { "required": ["cram"] },
+                        { "required": ["vcf"] }
+                    ]
+                }
+            },
+            {
+                "required": ["spring_1"],
+                "not": {
+                    "anyOf": [
+                        { "required": ["fastq_1"] },
+                        { "required": ["bam"] },
+                        { "required": ["cram"] },
+                        { "required": ["vcf"] }
+                    ]
+                }
+            },
+            {
+                "required": ["bam"],
+                "not": {
+                    "anyOf": [
+                        { "required": ["fastq_1"] },
+                        { "required": ["spring_1"] },
+                        { "required": ["cram"] },
+                        { "required": ["vcf"] }
+                    ]
+                }
+            },
+            {
+                "required": ["cram"],
+                "not": {
+                    "anyOf": [
+                        { "required": ["fastq_1"] },
+                        { "required": ["spring_1"] },
+                        { "required": ["bam"] },
+                        { "required": ["vcf"] }
+                    ]
+                }
+            },
+            {
+                "required": ["vcf"],
+                "not": {
+                    "anyOf": [
+                        { "required": ["fastq_1"] },
+                        { "required": ["spring_1"] },
+                        { "required": ["bam"] },
+                        { "required": ["cram"] }
+                    ]
+                }
+            }
         ],
         "dependentRequired": {
             "fastq_2": ["fastq_1"],
