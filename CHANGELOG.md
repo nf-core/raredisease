@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Add CRAM file input support: accept `cram`/`crai` columns in the samplesheet, converting CRAM to BAM early in the align subworkflow so all downstream tools remain unchanged [#261](https://github.com/nf-core/raredisease/issues/261)
+- Add `vcf`/`tbi`/`type` columns to the samplesheet schema, enforcing exactly one data type per row (`fastq`, `spring`, `bam`, `cram`, or `vcf`) via a schema-level `oneOf` constraint, and extend `PIPELINE_INITIALISATION` to recognise precalled SNV/SV/MT VCFs and collect them into a new `precalled_vcfs` channel (Only schema/plumbing changes in this PR) [Issue #261](https://github.com/nf-core/raredisease/issues/261) and [PR #927](https://github.com/nf-core/raredisease/pull/927)
 - Add `changelog.yml` GitHub Actions workflow to enforce CHANGELOG updates on every PR; PRs can be exempted with the `skip-changelog` label [issue #796](https://github.com/nf-core/raredisease/issues/796) [PR #920](https://github.com/nf-core/raredisease/pull/920)
 - Update saltshaker classification reporting by adding customer ID to samples' reports and displaying them as tabs in html [#856](https://github.com/nf-core/raredisease/pull/856)
 - Added non-stub tests for `annotate_mt_snvs` [#890](https://github.com/nf-core/raredisease/pull/890)
