@@ -175,4 +175,86 @@ nextflow_workflow {
             )
         }
     }
+
+    test("CONTAMINATION - gatk only - real, WGS no intervals") {
+
+        when {
+            workflow {
+                """
+                input[0]  = channel.of([
+                    [id:'test', sample:'test', single_end:false, num_lanes:1, lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'test_case'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
+                input[4]  = channel.empty()
+                input[5]  = channel.empty()
+                input[6]  = channel.empty()
+                input[7]  = channel.of([
+                    file(params.pipelines_testdata_base_path + 'reference/grch37_gnomad_-r2.1.1-.vcf.gz', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'reference/grch37_gnomad_-r2.1.1-.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[8]  = channel.empty()
+                input[9]  = false
+                input[10] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.gatk_contamination_table
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.gatk_contamination_pileup
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.verifybamid_self_sm.size()
+                ).match() }
+            )
+        }
+    }
+
+    test("CONTAMINATION - gatk only - real, WES with intervals") {
+
+        when {
+            workflow {
+                """
+                input[0]  = channel.of([
+                    [id:'test', sample:'test', single_end:false, num_lanes:1, lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'test_case'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
+                input[4]  = channel.empty()
+                input[5]  = channel.empty()
+                input[6]  = channel.empty()
+                input[7]  = channel.of([
+                    file(params.pipelines_testdata_base_path + 'reference/grch37_gnomad_-r2.1.1-.vcf.gz', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'reference/grch37_gnomad_-r2.1.1-.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[8]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.bed', checkIfExists: true)).collect()
+                input[9]  = false
+                input[10] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.gatk_contamination_table
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.gatk_contamination_pileup
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.verifybamid_self_sm.size()
+                ).match() }
+            )
+        }
+    }
 }

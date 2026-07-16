@@ -45,9 +45,12 @@ workflow CONTAMINATION {
         }
 
         if (!skip_gatkcontamination) {
+            // Prepare BAM with intervals - conditionally based on analysis type
+            // For WGS: intervals will be empty [], for WES: intervals will contain the BED file
             ch_bam_with_intervals = ch_bam_bai
                 .combine(ch_intervals.ifEmpty([[]]))
                 .map { meta, bam, bai, bed ->
+                    // If bed is an empty list, pass empty list; otherwise pass bed file
                     def intervals = (bed instanceof List && bed.isEmpty()) ? [] : (bed ?: [])
                     [ meta, bam, bai, intervals ]
                 }
