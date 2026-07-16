@@ -20,6 +20,9 @@ include { CREATE_PEDIGREE_FILE    } from './modules/local/create_pedigree_file'
 include { channelFromPath         } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { channelFromPathWithMeta } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { channelFromSamplesheet  } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { hasPrecalledMtVcf       } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { hasPrecalledSnvVcf      } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { hasPrecalledSvVcf       } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { parseSkipList           } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
@@ -67,9 +70,6 @@ workflow NFCORE_RAREDISEASE {
     val_gens_pon_male
     val_gnomad_af
     val_gnomad_af_idx
-    val_has_precalled_mt
-    val_has_precalled_snv
-    val_has_precalled_sv
     val_heavy_strand_origin_end
     val_heavy_strand_origin_start
     val_hisat2
@@ -359,18 +359,22 @@ workflow NFCORE_RAREDISEASE {
     }
 
     // Subworkflows
-    // A precalled VCF supplied in the samplesheet for a given type auto-skips calling for that type
+    // A precalled VCF supplied in the samplesheet for a given type auto-skips calling for that type.
+    // Computed not through a subworkflow emit, since skip_* must be plain booleans.
+    has_precalled_snv          = hasPrecalledSnvVcf()
+    has_precalled_sv           = hasPrecalledSvVcf()
+    has_precalled_mt           = hasPrecalledMtVcf()
     skip_me_annotation         = parseSkipList(val_skip_subworkflows, 'me_annotation')
     skip_me_calling            = parseSkipList(val_skip_subworkflows, 'me_calling')
     skip_mt_annotation         = parseSkipList(val_skip_subworkflows, 'mt_annotation')
-    skip_mt_calling            = parseSkipList(val_skip_subworkflows, 'mt_calling') || val_has_precalled_mt
+    skip_mt_calling            = parseSkipList(val_skip_subworkflows, 'mt_calling') || has_precalled_mt
     skip_mt_subsample          = parseSkipList(val_skip_subworkflows, 'mt_subsample')
     skip_repeat_annotation     = parseSkipList(val_skip_subworkflows, 'repeat_annotation')
     skip_repeat_calling        = parseSkipList(val_skip_subworkflows, 'repeat_calling')
     skip_snv_annotation        = parseSkipList(val_skip_subworkflows, 'snv_annotation')
-    skip_snv_calling           = parseSkipList(val_skip_subworkflows, 'snv_calling') || val_has_precalled_snv
+    skip_snv_calling           = parseSkipList(val_skip_subworkflows, 'snv_calling') || has_precalled_snv
     skip_sv_annotation         = parseSkipList(val_skip_subworkflows, 'sv_annotation')
-    skip_sv_calling            = parseSkipList(val_skip_subworkflows, 'sv_calling') || val_has_precalled_sv
+    skip_sv_calling            = parseSkipList(val_skip_subworkflows, 'sv_calling') || has_precalled_sv
     skip_generate_clinical_set = parseSkipList(val_skip_subworkflows, 'generate_clinical_set')
 
     //
@@ -569,9 +573,9 @@ workflow NFCORE_RAREDISEASE {
         ch_contamination_sites,
         ch_intervals_contamination,
         ch_precalled_vcfs,
-        val_has_precalled_snv,
-        val_has_precalled_sv,
-        val_has_precalled_mt
+        has_precalled_snv,
+        has_precalled_sv,
+        has_precalled_mt
     )
     emit:
     align_fastp_out                                     = RAREDISEASE.out.align_fastp_out              // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
@@ -767,9 +771,6 @@ workflow {
         params.gens_pon_male,
         params.gnomad_af,
         params.gnomad_af_idx,
-        PIPELINE_INITIALISATION.out.has_precalled_mt,
-        PIPELINE_INITIALISATION.out.has_precalled_snv,
-        PIPELINE_INITIALISATION.out.has_precalled_sv,
         params.heavy_strand_origin_end,
         params.heavy_strand_origin_start,
         params.hisat2,

@@ -174,21 +174,13 @@ workflow PIPELINE_INITIALISATION {
         .toList()
         .map { rows -> extractPrecalledVcfs(rows) }
 
-    // A precalled VCF supplied in the samplesheet for a given type auto-skips calling for that type downstream
-    has_precalled_snv = hasPrecalledSnvVcf()
-    has_precalled_sv  = hasPrecalledSvVcf()
-    has_precalled_mt  = hasPrecalledMtVcf()
-
     emit:
-    reads             = ch_samplesheet_by_type.fastq // channel: [ val(meta), [ path(reads) ] ]
-    align             = ch_samplesheet_by_type.align // channel: [ val(meta), [ path(bam/cram), path(bai/crai) ] ]
-    samples           = ch_samples                   // channel: [ val(meta) ]
-    case_info         = ch_case_info                 // channel: [ val(case_info) ]
-    precalled_vcfs    = ch_precalled_vcfs             // channel: [ val([snv:[vcf,tbi]|null, sv:[...]|null, mt:[...]|null]) ]
-    has_precalled_snv = has_precalled_snv             // boolean: true if the samplesheet contains a precalled SNV VCF
-    has_precalled_sv  = has_precalled_sv              // boolean: true if the samplesheet contains a precalled SV VCF
-    has_precalled_mt  = has_precalled_mt              // boolean: true if the samplesheet contains a precalled MT VCF
-    versions          = ch_versions                  // channel: [ path(versions) ]
+    reads          = ch_samplesheet_by_type.fastq // channel: [ val(meta), [ path(reads) ] ]
+    align          = ch_samplesheet_by_type.align // channel: [ val(meta), [ path(bam/cram), path(bai/crai) ] ]
+    samples        = ch_samples                   // channel: [ val(meta) ]
+    case_info      = ch_case_info                 // channel: [ val(case_info) ]
+    precalled_vcfs = ch_precalled_vcfs             // channel: [ val([snv:[vcf,tbi]|null, sv:[...]|null, mt:[...]|null]) ]
+    versions       = ch_versions                  // channel: [ path(versions) ]
 }
 
 /*
