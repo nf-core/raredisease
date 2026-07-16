@@ -168,19 +168,27 @@ workflow PIPELINE_INITIALISATION {
                     return new_meta
                     }.unique()
 
-    ch_case_info = ch_samples.toList().map { it -> createCaseChannel(it) }
+    ch_case_info = ch_samples.toList().map { it -> validateNoMixedCaseInput(it); createCaseChannel(it) }
 
     ch_precalled_vcfs = ch_samplesheet_by_type.precalled
         .toList()
         .map { rows -> extractPrecalledVcfs(rows) }
 
+    // A precalled VCF supplied in the samplesheet for a given type auto-skips calling for that type downstream
+    has_precalled_snv = hasPrecalledSnvVcf()
+    has_precalled_sv  = hasPrecalledSvVcf()
+    has_precalled_mt  = hasPrecalledMtVcf()
+
     emit:
-    reads          = ch_samplesheet_by_type.fastq // channel: [ val(meta), [ path(reads) ] ]
-    align          = ch_samplesheet_by_type.align // channel: [ val(meta), [ path(bam/cram), path(bai/crai) ] ]
-    samples        = ch_samples                   // channel: [ val(meta) ]
-    case_info      = ch_case_info                 // channel: [ val(case_info) ]
-    precalled_vcfs = ch_precalled_vcfs             // channel: [ val([snv:[vcf,tbi]|null, sv:[...]|null, mt:[...]|null]) ]
-    versions       = ch_versions                  // channel: [ path(versions) ]
+    reads             = ch_samplesheet_by_type.fastq // channel: [ val(meta), [ path(reads) ] ]
+    align             = ch_samplesheet_by_type.align // channel: [ val(meta), [ path(bam/cram), path(bai/crai) ] ]
+    samples           = ch_samples                   // channel: [ val(meta) ]
+    case_info         = ch_case_info                 // channel: [ val(case_info) ]
+    precalled_vcfs    = ch_precalled_vcfs             // channel: [ val([snv:[vcf,tbi]|null, sv:[...]|null, mt:[...]|null]) ]
+    has_precalled_snv = has_precalled_snv             // boolean: true if the samplesheet contains a precalled SNV VCF
+    has_precalled_sv  = has_precalled_sv              // boolean: true if the samplesheet contains a precalled SV VCF
+    has_precalled_mt  = has_precalled_mt              // boolean: true if the samplesheet contains a precalled MT VCF
+    versions          = ch_versions                  // channel: [ path(versions) ]
 }
 
 /*
@@ -283,6 +291,36 @@ def boolean hasSpringInput() {
     return file(params.input).readLines().any { line -> line.contains('.spring') }
 }
 
+// Checks whether any samplesheet row has its 'type' column set to the given precalled-VCF type (snv/sv/mt)
+def boolean hasPrecalledVcfOfType(String type) {
+    def lines = file(params.input).readLines()
+    if (!lines) {
+        return false
+    }
+    def header   = lines[0].split(',', -1)*.trim()
+    def type_idx = header.indexOf('type')
+    if (type_idx == -1) {
+        return false
+    }
+    return lines.drop(1).any { line ->
+        def fields = line.split(',', -1)
+        type_idx < fields.size() && fields[type_idx].trim() == type
+    }
+}
+
+// Per-type wrappers used to compute the has_precalled_* emits and gate calling/annotation downstream
+def boolean hasPrecalledSnvVcf() {
+    return hasPrecalledVcfOfType('snv')
+}
+
+def boolean hasPrecalledSvVcf() {
+    return hasPrecalledVcfOfType('sv')
+}
+
+def boolean hasPrecalledMtVcf() {
+    return hasPrecalledVcfOfType('mt')
+}
+
 def generateReadGroupLine(file, meta, params) {
     return "\'@RG\\tID:" + file.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"
 }
@@ -324,6 +362,20 @@ def createCaseChannel(List rows) {
     return case_info
 }
 
+// A case must be either fully precalled (vcf/tbi/type rows) or fully processed from raw/aligned reads, never both
+def validateNoMixedCaseInput(List rows) {
+    def groups_by_case = [:]
+    rows.each { row ->
+        def group = row.data_type.endsWith('_vcf') ? 'vcf' : 'align'
+        groups_by_case.computeIfAbsent(row.case_id) { [] as Set }.add(group)
+    }
+    groups_by_case.each { case_id, groups ->
+        if (groups.size() > 1) {
+            error("Case '${case_id}' mixes precalled VCF input (vcf/tbi/type columns) with fastq/spring/bam/cram input. A case must be either fully precalled or fully processed from raw/aligned reads, not both.")
+        }
+    }
+}
+
 // Function to collect precalled vcf/tbi pairs per variant type from rows tagged with a "*_vcf" data_type
 def extractPrecalledVcfs(List rows) {
     def precalled = [snv: null, sv: null, mt: null]
@@ -342,6 +394,33 @@ def extractPrecalledVcfs(List rows) {
 //
 def validateInputParameters() {
     genomeExistsError()
+    validatePrecalledVcfCoverage()
+}
+
+// A case with any precalled VCF has no fastq/bam/cram rows (enforced by validateNoMixedCaseInput), so every
+// relevant type must either have a precalled VCF or have its calling explicitly skipped, otherwise it would
+// silently run calling with no input data
+def validatePrecalledVcfCoverage() {
+    def has_snv = hasPrecalledSnvVcf()
+    def has_sv  = hasPrecalledSvVcf()
+    def has_mt  = hasPrecalledMtVcf()
+    if (!has_snv && !has_sv && !has_mt) {
+        return
+    }
+    def run_mt  = params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes
+    def missing = []
+    if (!has_snv && !parseSkipList(params.skip_subworkflows, 'snv_calling')) {
+        missing << 'snv'
+    }
+    if (!has_sv && !parseSkipList(params.skip_subworkflows, 'sv_calling')) {
+        missing << 'sv'
+    }
+    if (run_mt && !has_mt && !parseSkipList(params.skip_subworkflows, 'mt_calling')) {
+        missing << 'mt'
+    }
+    if (missing) {
+        error("The samplesheet supplies a precalled VCF for at least one variant type, making this a fully-precalled case with no fastq/bam/cram input for calling. But no precalled VCF was supplied for: ${missing.join(', ')}. Either add a precalled VCF for ${missing.join(', ')}, or skip that calling explicitly via --skip_subworkflows.")
+    }
 }
 
 

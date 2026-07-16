@@ -41,6 +41,7 @@ workflow NFCORE_RAREDISEASE {
     take:
     ch_alignments
     ch_case_info
+    ch_precalled_vcfs
     ch_reads
     ch_samples
     val_aligner
@@ -66,6 +67,9 @@ workflow NFCORE_RAREDISEASE {
     val_gens_pon_male
     val_gnomad_af
     val_gnomad_af_idx
+    val_has_precalled_mt
+    val_has_precalled_snv
+    val_has_precalled_sv
     val_heavy_strand_origin_end
     val_heavy_strand_origin_start
     val_hisat2
@@ -355,16 +359,18 @@ workflow NFCORE_RAREDISEASE {
     }
 
     // Subworkflows
+    // A precalled VCF supplied in the samplesheet for a given type auto-skips calling for that type
     skip_me_annotation         = parseSkipList(val_skip_subworkflows, 'me_annotation')
     skip_me_calling            = parseSkipList(val_skip_subworkflows, 'me_calling')
     skip_mt_annotation         = parseSkipList(val_skip_subworkflows, 'mt_annotation')
+    skip_mt_calling            = parseSkipList(val_skip_subworkflows, 'mt_calling') || val_has_precalled_mt
     skip_mt_subsample          = parseSkipList(val_skip_subworkflows, 'mt_subsample')
     skip_repeat_annotation     = parseSkipList(val_skip_subworkflows, 'repeat_annotation')
     skip_repeat_calling        = parseSkipList(val_skip_subworkflows, 'repeat_calling')
     skip_snv_annotation        = parseSkipList(val_skip_subworkflows, 'snv_annotation')
-    skip_snv_calling           = parseSkipList(val_skip_subworkflows, 'snv_calling')
+    skip_snv_calling           = parseSkipList(val_skip_subworkflows, 'snv_calling') || val_has_precalled_snv
     skip_sv_annotation         = parseSkipList(val_skip_subworkflows, 'sv_annotation')
-    skip_sv_calling            = parseSkipList(val_skip_subworkflows, 'sv_calling')
+    skip_sv_calling            = parseSkipList(val_skip_subworkflows, 'sv_calling') || val_has_precalled_sv
     skip_generate_clinical_set = parseSkipList(val_skip_subworkflows, 'generate_clinical_set')
 
     //
@@ -491,6 +497,7 @@ workflow NFCORE_RAREDISEASE {
         skip_me_calling,
         skip_me_annotation,
         skip_mt_annotation,
+        skip_mt_calling,
         skip_mt_subsample,
         skip_repeat_annotation,
         skip_repeat_calling,
@@ -560,7 +567,11 @@ workflow NFCORE_RAREDISEASE {
         val_vep_cache_version,
         skip_contamination,
         ch_contamination_sites,
-        ch_intervals_contamination
+        ch_intervals_contamination,
+        ch_precalled_vcfs,
+        val_has_precalled_snv,
+        val_has_precalled_sv,
+        val_has_precalled_mt
     )
     emit:
     align_fastp_out                                     = RAREDISEASE.out.align_fastp_out              // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
@@ -730,6 +741,7 @@ workflow {
     NFCORE_RAREDISEASE (
         PIPELINE_INITIALISATION.out.align,
         PIPELINE_INITIALISATION.out.case_info,
+        PIPELINE_INITIALISATION.out.precalled_vcfs,
         PIPELINE_INITIALISATION.out.reads,
         PIPELINE_INITIALISATION.out.samples,
         params.aligner,
@@ -755,6 +767,9 @@ workflow {
         params.gens_pon_male,
         params.gnomad_af,
         params.gnomad_af_idx,
+        PIPELINE_INITIALISATION.out.has_precalled_mt,
+        PIPELINE_INITIALISATION.out.has_precalled_snv,
+        PIPELINE_INITIALISATION.out.has_precalled_sv,
         params.heavy_strand_origin_end,
         params.heavy_strand_origin_start,
         params.hisat2,

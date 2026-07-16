@@ -166,6 +166,22 @@ The nf-core/raredisease pipeline can handle duplicate-marked CRAM files as input
 > [!NOTE]
 > CRAM decoding requires the reference genome FASTA. Make sure `--fasta` (or `--genome`) is set when running with CRAM input. Mitochondrial SV calling with MitoSAlt and saltshaker does not support CRAM input.
 
+##### Samplesheet for VCF file input
+
+The nf-core/raredisease pipeline can also accept precalled, case-level VCF files, skipping the corresponding calling step(s) and feeding the supplied VCF directly into annotation. This is useful for reannotating or re-ranking variants without rerunning calling from FASTQ/BAM/CRAM. Precalled VCFs are supplied via three generic columns, one row per variant type:
+
+| Fields   | Description                                                                                    |
+| -------- | ------------------------------------------------------------------------------------------------ |
+| `sample` | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. |
+| `vcf`    | Absolute path to a bgzipped, precalled VCF file (`.vcf.gz`).                                    |
+| `tbi`    | Absolute path to the tabix index of the VCF file (`.vcf.gz.tbi`).                               |
+| `type`   | The variant type contained in the VCF. One of `snv`, `sv`, or `mt`.                             |
+
+> [!NOTE]
+> Each precalled VCF must contain only the variant type it declares in `type`: a nuclear (non-mitochondrial) VCF for `snv`, an MT-only VCF for `mt`, and an SVDB-merged structural variant VCF for `sv`. A row in the samplesheet may only specify one data type (`fastq`/`spring`/`bam`/`cram`/`vcf`) — mixing, for example, `fastq_1` and `vcf` in the same row is rejected by the schema. Supplying a precalled VCF for a given type automatically skips calling for that type; parents and other unaffected relatives are referenced through the existing `paternal_id`/`maternal_id` columns and never need their own samplesheet row.
+>
+> A case is either fully precalled or fully processed from raw/aligned reads, never both: since a precalled VCF represents the whole case (not a single sample), a case cannot mix `vcf` rows for one or more variant types with `fastq`/`spring`/`bam`/`cram` rows for its samples. The pipeline errors out if it detects this.
+
 #### Reference files and parameters
 
 In nf-core/raredisease, references can be supplied using parameters listed [here](https://nf-co.re/raredisease/dev/parameters).
@@ -195,9 +211,9 @@ The pipeline is modular — individual tools and subworkflows can be skipped usi
 | --------------------------------------------------------------------------------------------------------- |
 | `fastp`, `fastqc`, `gens`, `germlinecnvcaller`, `ngsbits`, `peddy`, `smncopynumbercaller`, `vcf2cytosure` |
 
-| `--skip_subworkflows`                                                                                                                                                                          |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `generate_clinical_set`, `me_annotation`, `me_calling`, `mt_annotation`, `mt_subsample`, `repeat_annotation`, `repeat_calling`, `snv_annotation`, `snv_calling`, `sv_annotation`, `sv_calling` |
+| `--skip_subworkflows`                                                                                                                                                                                        |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `generate_clinical_set`, `me_annotation`, `me_calling`, `mt_annotation`, `mt_calling`, `mt_subsample`, `repeat_annotation`, `repeat_calling`, `snv_annotation`, `snv_calling`, `sv_annotation`, `sv_calling` |
 
 nf-core/raredisease consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
 
