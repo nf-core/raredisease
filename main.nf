@@ -53,6 +53,8 @@ workflow NFCORE_RAREDISEASE {
     val_cadd_resources
     val_call_interval
     val_concatenate_snv_calls
+    val_contamination_sites
+    val_contamination_sites_tbi
     val_skip_split_multiallelics
     val_exclude_alt
     val_extract_alignments
@@ -150,8 +152,6 @@ workflow NFCORE_RAREDISEASE {
     val_verifybamid_svd_mu
     val_verifybamid_svd_ud
     val_vep_cache
-    val_contamination_sites
-    val_contamination_sites_tbi
 
     main:
 
@@ -334,14 +334,16 @@ workflow NFCORE_RAREDISEASE {
     skip_smncopynumbercaller   = parseSkipList(val_skip_tools, 'smncopynumbercaller')
     skip_vcf2cytosure          = parseSkipList(val_skip_tools, 'vcf2cytosure')
     // GATK contamination check is also skipped when no contamination sites are supplied
-    skip_contamination         = parseSkipList(val_skip_tools, 'gatkcontamination') || !val_contamination_sites
+    skip_gatkcontamination     = parseSkipList(val_skip_tools, 'gatkcontamination') || !val_contamination_sites
+    // VerifyBamID2 is skipped when no SVD bed file is supplied
+    skip_verifybamid           = parseSkipList(val_skip_tools, 'verifybamid') || !val_verifybamid_svd_bed
 
     //
     // Build contamination check inputs (channel construction kept out of the named workflow)
     //
     ch_contamination_sites     = channel.empty()
     ch_intervals_contamination = channel.empty()
-    if (!skip_contamination) {
+    if (!skip_gatkcontamination) {
         ch_contamination_sites = channel.of([
             file(val_contamination_sites, checkIfExists: true),
             file(val_contamination_sites_tbi, checkIfExists: true)
@@ -412,6 +414,7 @@ workflow NFCORE_RAREDISEASE {
         ch_cadd_resources,
         ch_call_interval,
         ch_case_info,
+        ch_contamination_sites,
         ch_dbsnp,
         ch_dbsnp_tbi,
         ch_foundin_header,
@@ -431,6 +434,7 @@ workflow NFCORE_RAREDISEASE {
         ch_gens_pon_male,
         ch_gnomad_af,
         ch_hgnc_ids,
+        ch_intervals_contamination,
         ch_intervals_wgs,
         ch_intervals_y,
         ch_manta_regions,
@@ -501,6 +505,7 @@ workflow NFCORE_RAREDISEASE {
         skip_generate_clinical_set,
         skip_fastp,
         skip_fastqc,
+        skip_gatkcontamination,
         skip_gens,
         skip_germlinecnvcaller,
         skip_mitosalt,
@@ -508,6 +513,7 @@ workflow NFCORE_RAREDISEASE {
         skip_peddy,
         skip_smncopynumbercaller,
         skip_vcf2cytosure,
+        skip_verifybamid,
         val_aligner,
         val_analysis_type,
         val_cadd_resources,
@@ -557,10 +563,7 @@ workflow NFCORE_RAREDISEASE {
         val_svdb_query_dbs,
         val_target_bed,
         val_variant_caller,
-        val_vep_cache_version,
-        skip_contamination,
-        ch_contamination_sites,
-        ch_intervals_contamination
+        val_vep_cache_version
     )
     emit:
     align_fastp_out                                     = RAREDISEASE.out.align_fastp_out              // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
@@ -592,14 +595,16 @@ workflow NFCORE_RAREDISEASE {
     qc_bam_tiddit_cov_cov                               = RAREDISEASE.out.qc_bam_tiddit_cov_cov        // channel: [ val(meta), path(bed) ]
     qc_bam_tiddit_cov_wig                               = RAREDISEASE.out.qc_bam_tiddit_cov_wig        // channel: [ val(meta), path(wig) ]
     qc_bam_ucsc_wigtobigwig_bw                          = RAREDISEASE.out.qc_bam_ucsc_wigtobigwig_bw   // channel: [ val(meta), path(bw) ]
-    qc_bam_verifybamid_ancestry                         = RAREDISEASE.out.qc_bam_verifybamid_ancestry  // channel: [ val(meta), path(ancestry) ]
-    qc_bam_verifybamid_bed                              = RAREDISEASE.out.qc_bam_verifybamid_bed       // channel: [ val(meta), path(bed) ]
-    qc_bam_verifybamid_log                              = RAREDISEASE.out.qc_bam_verifybamid_log       // channel: [ val(meta), path(log) ]
-    qc_bam_verifybamid_mu                               = RAREDISEASE.out.qc_bam_verifybamid_mu        // channel: [ val(meta), path(mu) ]
-    qc_bam_verifybamid_self_sm                          = RAREDISEASE.out.qc_bam_verifybamid_self_sm   // channel: [ val(meta), path(selfSM) ]
-    qc_bam_verifybamid_ud                               = RAREDISEASE.out.qc_bam_verifybamid_ud        // channel: [ val(meta), path(ud) ]
     qc_bam_wgsmetrics_wg                                = RAREDISEASE.out.qc_bam_wgsmetrics_wg         // channel: [ val(meta), path(metrics) ]
     qc_bam_wgsmetrics_y                                 = RAREDISEASE.out.qc_bam_wgsmetrics_y          // channel: [ val(meta), path(metrics) ]
+    contamination_gatk_pileup                           = RAREDISEASE.out.contamination_gatk_pileup    // channel: [ val(meta), path(table) ]
+    contamination_gatk_table                            = RAREDISEASE.out.contamination_gatk_table     // channel: [ val(meta), path(table) ]
+    contamination_verifybamid_ancestry                  = RAREDISEASE.out.contamination_verifybamid_ancestry  // channel: [ val(meta), path(ancestry) ]
+    contamination_verifybamid_bed                       = RAREDISEASE.out.contamination_verifybamid_bed       // channel: [ val(meta), path(bed) ]
+    contamination_verifybamid_log                       = RAREDISEASE.out.contamination_verifybamid_log       // channel: [ val(meta), path(log) ]
+    contamination_verifybamid_mu                        = RAREDISEASE.out.contamination_verifybamid_mu        // channel: [ val(meta), path(mu) ]
+    contamination_verifybamid_self_sm                   = RAREDISEASE.out.contamination_verifybamid_self_sm   // channel: [ val(meta), path(selfSM) ]
+    contamination_verifybamid_ud                        = RAREDISEASE.out.contamination_verifybamid_ud        // channel: [ val(meta), path(ud) ]
     call_sv_vcf                                         = RAREDISEASE.out.call_sv_vcf                   // channel: [ val(meta), path(vcf) ]
     call_sv_tbi                                         = RAREDISEASE.out.call_sv_tbi                   // channel: [ val(meta), path(tbi) ]
     saltshaker_html                                     = RAREDISEASE.out.saltshaker_html              // channel: [ val(meta), path(html) ]
@@ -690,8 +695,6 @@ workflow NFCORE_RAREDISEASE {
     prepare_references_vep_cache                        = ch_vep_cache
     subsample_mt_bai                                    = RAREDISEASE.out.subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam                                    = RAREDISEASE.out.subsample_mt_bam             // channel: [ val(meta), path(bam) ]
-    contamination_table                                 = RAREDISEASE.out.contamination_table         // channel: [ val(meta), path(table) ]
-    contamination_pileup                                = RAREDISEASE.out.contamination_pileup        // channel: [ val(meta), path(table) ]
     annotate_sv_report                                  = RAREDISEASE.out.annotate_sv_report          // channel: [ val(meta), path(html) ]
     annotate_sv_tbi                                     = RAREDISEASE.out.annotate_sv_tbi             // channel: [ val(meta), path(tbi) ]
     annotate_sv_vcf_ann                                 = RAREDISEASE.out.annotate_sv_vcf_ann         // channel: [ val(meta), path(vcf) ]
@@ -742,6 +745,8 @@ workflow {
         params.cadd_resources,
         params.call_interval,
         params.concatenate_snv_calls,
+        params.contamination_sites,
+        params.contamination_sites_tbi,
         params.skip_split_multiallelics,
         params.exclude_alt,
         params.extract_alignments,
@@ -838,9 +843,7 @@ workflow {
         params.verifybamid_svd_bed,
         params.verifybamid_svd_mu,
         params.verifybamid_svd_ud,
-        params.vep_cache,
-        params.contamination_sites,
-        params.contamination_sites_tbi
+        params.vep_cache
     )
     //
     // SUBWORKFLOW: Run completion tasks
@@ -884,14 +887,14 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_tiddit_cov_cov)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_tiddit_cov_wig)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_ucsc_wigtobigwig_bw)
-                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_ancestry)
-                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_bed)
-                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_log)
-                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_mu)
-                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_self_sm)
-                                            .mix(NFCORE_RAREDISEASE.out.qc_bam_verifybamid_ud)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_wg)
                                             .mix(NFCORE_RAREDISEASE.out.qc_bam_wgsmetrics_y)
+    contamination_verifybamid             = NFCORE_RAREDISEASE.out.contamination_verifybamid_ancestry
+                                            .mix(NFCORE_RAREDISEASE.out.contamination_verifybamid_bed)
+                                            .mix(NFCORE_RAREDISEASE.out.contamination_verifybamid_log)
+                                            .mix(NFCORE_RAREDISEASE.out.contamination_verifybamid_mu)
+                                            .mix(NFCORE_RAREDISEASE.out.contamination_verifybamid_self_sm)
+                                            .mix(NFCORE_RAREDISEASE.out.contamination_verifybamid_ud)
     call_repeat_expansions        = NFCORE_RAREDISEASE.out.call_repeat_expansions_expansionhunter_bam
                                         .mix(NFCORE_RAREDISEASE.out.call_repeat_expansions_expansionhunter_bai)
                                         .mix(NFCORE_RAREDISEASE.out.call_repeat_expansions_expansionhunter_vcf)
@@ -929,8 +932,8 @@ workflow {
     annotate_snv_genome_rhocallviz_bw = NFCORE_RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw
     annotate_snv_mt                   = NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf
                                             .mix(NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_tbi)
-    contamination                     = NFCORE_RAREDISEASE.out.contamination_table
-    contamination_pileups             = NFCORE_RAREDISEASE.out.contamination_pileup
+    contamination_gatk                = NFCORE_RAREDISEASE.out.contamination_gatk_table
+                                            .mix(NFCORE_RAREDISEASE.out.contamination_gatk_pileup)
     rank_variants                     = NFCORE_RAREDISEASE.out.rank_snv_vcf
                                             .mix(NFCORE_RAREDISEASE.out.rank_snv_tbi)
                                             .mix(NFCORE_RAREDISEASE.out.rank_mt_vcf)
@@ -1042,11 +1045,11 @@ output {
     annotate_snv_mt {
         path { _meta, _file -> "annotate_snv/mitochondria/" }
     }
-    contamination {
-        path { _meta, _file -> "qc/contamination/" }
+    contamination_gatk {
+        path { _meta, _file -> "contamination/gatk/" }
     }
-    contamination_pileups {
-        path { _meta, _file -> "qc/contamination/pileups/" }
+    contamination_verifybamid {
+        path { _meta, _file -> "contamination/verifybamid/" }
     }
     rank_variants {
         path { _meta, _file -> "rank_and_filter/" }

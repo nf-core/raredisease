@@ -232,12 +232,12 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 
 ##### VerifyBamID2
 
-[VerifyBamID2](https://github.com/Griffan/VerifyBamID) is used to analyse a bam file and generates a contamination report. The pipeline will only generate the following files when the parameters `verifybamid_svd_bed`, `verifybamid_svd_mu`, and `verifybamid_svd_ud` are provided.
+[VerifyBamID2](https://github.com/Griffan/VerifyBamID) is used to analyse a bam file and generates a contamination report. The pipeline will only generate the following files when the parameters `verifybamid_svd_bed`, `verifybamid_svd_mu`, and `verifybamid_svd_ud` are provided. It can be skipped explicitly via `--skip_tools verifybamid`.
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `{outputdir}/qc_bam/`
+- `{outputdir}/contamination/verifybamid/`
   - `<sampleid>.selfSM`:
   - `<sampleid>.Ancestry`:
     </details>
@@ -249,9 +249,8 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 <details markdown="1">
 <summary>Output files</summary>
 
-- `qc/contamination/`
+- `{outputdir}/contamination/gatk/`
   - `<sample_id>.contamination.table`: table containing the estimated contamination fraction and confidence interval for each sample.
-- `qc/contamination/pileups/`
   - `<sample_id>.pileups.table`: table containing the pileup counts at known variant sites used as input to contamination estimation.
 
 </details>
