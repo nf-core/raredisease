@@ -1,0 +1,87 @@
+{
+    "CONTAMINATION - gatk only - stub": {
+        "content": [
+            [
+                "test.contamination.table"
+            ],
+            [
+                "test.pileups.table"
+            ],
+            0
+        ],
+        "timestamp": "2026-07-09T14:31:05.273772864",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "CONTAMINATION - gatk only - real, WES with intervals": {
+        "content": [
+            [
+                "test.contamination.table"
+            ],
+            [
+                "test.pileups.table"
+            ],
+            0
+        ],
+        "timestamp": "2026-07-16T13:16:10.526914689",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "CONTAMINATION - gatk only - real, WGS no intervals": {
+        "content": [
+            [
+                "test.contamination.table"
+            ],
+            [
+                "test.pileups.table"
+            ],
+            0
+        ],
+        "timestamp": "2026-07-16T13:15:31.156781331",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "CONTAMINATION - verifybamid only - stub": {
+        "content": [
+            [
+                "test.selfSM"
+            ],
+            [
+                "test.log"
+            ],
+            0
+        ],
+        "timestamp": "2026-07-09T14:30:30.92194731",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "CONTAMINATION - both - stub": {
+        "content": [
+            [
+                "test.selfSM"
+            ],
+            [
+                "test.log"
+            ],
+            [
+                "test.contamination.table"
+            ],
+            [
+                "test.pileups.table"
+            ]
+        ],
+        "timestamp": "2026-07-09T14:31:36.069989905",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}
