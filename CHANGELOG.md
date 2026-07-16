@@ -65,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | gatk4/calculatecontamination |             | 4.6.2.0     |
 | gatk4/getpileupsummaries     |             | 4.6.2.0     |
 | Saltshaker                   | 1.0.0       | 1.1.1       |
+
 ## 3.1.2 - Princess Peach (patch) [2026-07-06]
 
 ### `Fixed`
