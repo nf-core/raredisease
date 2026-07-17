@@ -1,0 +1,70 @@
+nextflow_pipeline {
+
+    name "Test pipeline - precalled VCF input"
+    script "../main.nf"
+    tag "pipeline"
+    profile "test_vcf"
+
+    test("-profile test_vcf") {
+
+        options "-stub"
+
+        when {
+            params {
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            def versions_yml = file("$outputDir/pipeline_info/nf_core_raredisease_software_mqc_versions.yml").text
+            assertAll(
+                { assert workflow.success },
+                // Calling must be skipped in favor of the precalled VCFs
+                { assert !versions_yml.contains("DEEPVARIANT") },
+                { assert !versions_yml.contains("GLNEXUS") },
+                { assert !versions_yml.contains("MANTA") },
+                { assert !versions_yml.contains("TIDDIT_SV") },
+                { assert !versions_yml.contains("CNVNATOR_CALL") },
+                { assert !versions_yml.contains("GATK4_MUTECT2_MT") },
+                // GENS/germlinecnvcaller are already moot here without any --skip_tools override:
+                // GENS is gated on !skip_snv_calling, and germlinecnvcaller only affects SV-caller
+                // priority inside CALL_STRUCTURAL_VARIANTS, which is skipped entirely
+                { assert !versions_yml.contains("GERMLINECNVCALLER") },
+                // Annotation/ranking must still run off the substituted precalled data
+                { assert versions_yml.contains("ENSEMBLVEP_SNV") },
+                { assert versions_yml.contains("ENSEMBLVEP_SV") },
+                { assert versions_yml.contains("ENSEMBLVEP_MT") },
+                { assert versions_yml.contains("GENMOD_SCORE") },
+                { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_raredisease_software_mqc_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_name
+                ).match() }
+            )
+        }
+    }
+
+    test("-profile test_vcf, mixed precalled and raw input errors") {
+
+        options "-stub"
+
+        when {
+            params {
+                outdir = "$outputDir"
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/testdata/samplesheet_vcf_mixed_invalid.csv'
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.failed },
+                { assert workflow.stdout.any { it.contains("mixes precalled VCF input") } }
+            )
+        }
+    }
+}

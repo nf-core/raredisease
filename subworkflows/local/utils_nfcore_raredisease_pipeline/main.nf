@@ -313,6 +313,12 @@ def boolean hasPrecalledMtVcf() {
     return hasPrecalledVcfOfType('mt')
 }
 
+// True whenever the case is fully precalled for at least one type - since validateNoMixedCaseInput
+// guarantees such a case has zero fastq/bam/cram rows, this also means no alignment data exists at all
+def boolean hasAnyPrecalledVcf() {
+    return hasPrecalledSnvVcf() || hasPrecalledSvVcf() || hasPrecalledMtVcf()
+}
+
 def generateReadGroupLine(file, meta, params) {
     return "\'@RG\\tID:" + file.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"
 }
@@ -472,8 +478,13 @@ def checkRequiredParameters(params) {
     }
 
     def all_skips = params.skip_subworkflows+","+params.skip_tools
+    // These are all BAM/alignment-dependent auxiliary steps that are also skipped at runtime whenever
+    // the case is fully precalled (no alignment data exists at all), even though that isn't reflected
+    // in --skip_tools/--skip_subworkflows, so their extra params shouldn't be forced mandatory either
+    def alignmentDependentConditions = ['repeat_calling', 'repeat_annotation', 'me_calling', 'me_annotation', 'gens', 'germlinecnvcaller']
     dynamicRequirements.each { condition, paramsList ->
-        if (!all_skips.split(',').contains(condition)) {
+        def auto_skipped = condition in alignmentDependentConditions && hasAnyPrecalledVcf()
+        if (!all_skips.split(',').contains(condition) && !auto_skipped) {
                 mandatoryParams += paramsList
         }
     }
