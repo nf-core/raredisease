@@ -66,6 +66,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [Mosdepth](https://github.com/brentp/mosdepth)
 - [MultiQC](http://multiqc.info/)
 - [Picard's CollectMultipleMetrics, CollectHsMetrics, and CollectWgsMetrics](https://broadinstitute.github.io/picard/)
+- [Riker's multi](https://github.com/fulcrumgenomics/riker)
 - [Sambamba](https://github.com/biod/sambamba)
 - [Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/)
 - [TIDDIT's cov](https://github.com/J35P312/)

@@ -694,6 +694,13 @@
                     "fa_icon": "fas fa-align-center",
                     "enum": ["bwa", "bwamem2", "sentieon"]
                 },
+                "qc_metrics_tool": {
+                    "type": "string",
+                    "default": "picard",
+                    "description": "Specifies the tool to collect BAM QC metrics - available options are 'picard' and 'riker'.",
+                    "fa_icon": "fas fa-ruler",
+                    "enum": ["picard", "riker"]
+                },
                 "samtools_sort_threads": {
                     "type": "integer",
                     "default": 4,
