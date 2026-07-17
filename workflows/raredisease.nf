@@ -167,6 +167,7 @@ workflow RAREDISEASE {
     skip_me_calling
     skip_me_annotation
     skip_mt_annotation
+    skip_mt_calling
     skip_mt_subsample
     skip_repeat_annotation
     skip_repeat_calling
@@ -237,6 +238,10 @@ workflow RAREDISEASE {
     skip_contamination
     ch_contamination_sites
     ch_intervals_contamination
+    ch_precalled_vcfs      // channel: [ val([snv:[vcf,tbi]|null, sv:[vcf,tbi]|null, mt:[vcf,tbi]|null]) ]
+    val_has_precalled_snv  // boolean: true if the samplesheet contains a precalled SNV VCF
+    val_has_precalled_sv   // boolean: true if the samplesheet contains a precalled SV VCF
+    val_has_precalled_mt   // boolean: true if the samplesheet contains a precalled MT VCF
 
     main:
 
@@ -314,6 +319,27 @@ workflow RAREDISEASE {
     ch_variant_evaluation_true_positives_tbi  = channel.empty()
     ch_variant_evaluation_true_positives_vcf  = channel.empty()
     ch_variant_evaluation_weighted_roc        = channel.empty()
+
+    //
+    // Precalled VCFs supplied in the samplesheet, split out per variant type
+    //
+    ch_case_info_precalled = ch_case_info.combine(ch_precalled_vcfs)
+
+    ch_precalled_snv_vcf_tbi = ch_case_info_precalled
+        .filter { _case_info, precalled -> precalled.snv }
+        .map { case_info, precalled -> [case_info, precalled.snv[0], precalled.snv[1]] }
+
+    ch_precalled_sv_vcf = ch_case_info_precalled
+        .filter { _case_info, precalled -> precalled.sv }
+        .map { case_info, precalled -> [case_info, precalled.sv[0]] }
+
+    ch_precalled_sv_tbi = ch_case_info_precalled
+        .filter { _case_info, precalled -> precalled.sv }
+        .map { case_info, precalled -> [case_info, precalled.sv[1]] }
+
+    ch_precalled_mt_vcf_tbi = ch_case_info_precalled
+        .filter { _case_info, precalled -> precalled.mt }
+        .map { case_info, precalled -> [case_info, precalled.mt[0], precalled.mt[1]] }
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
@@ -509,7 +535,7 @@ workflow RAREDISEASE {
 
     // Removes vcfanno resource with empty records to keep vcfanno from crashing on those files
     ch_vcfanno_toml_final = ch_vcfanno_toml
-    def annotation_uses_vcfanno = !skip_snv_annotation || (!skip_mt_annotation && val_run_mt)
+    def annotation_uses_vcfanno = !skip_snv_annotation || (!skip_mt_annotation && (val_run_mt || skip_mt_calling))
     if (val_run_vcfanno_db_sanity_check && annotation_uses_vcfanno) {
         ch_vcfanno_resources
             .combine(ch_vcfanno_extra)
@@ -542,6 +568,15 @@ workflow RAREDISEASE {
         ch_call_snv_genome_tabix        = CALL_SNV.out.genome_tabix
         ch_call_snv_genome_vcf          = CALL_SNV.out.genome_vcf
         ch_call_snv_genome_vcf_tabix    = CALL_SNV.out.genome_vcf_tabix
+    } else if (skip_snv_calling) {
+        ch_precalled_snv_vcf_tbi.multiMap { meta, vcf, tbi ->
+            vcf_tabix: [meta, vcf, tbi]
+            vcf: [meta, vcf]
+            tabix: [meta, tbi]
+        }.set { ch_precalled_snv_split }
+        ch_call_snv_genome_tabix     = ch_precalled_snv_split.tabix
+        ch_call_snv_genome_vcf       = ch_precalled_snv_split.vcf
+        ch_call_snv_genome_vcf_tabix = ch_precalled_snv_split.vcf_tabix
     }
 
     //
@@ -549,7 +584,7 @@ workflow RAREDISEASE {
     //
     if (!skip_snv_annotation) {
 
-        if (skip_snv_calling) {
+        if (skip_snv_calling && !val_has_precalled_snv) {
             log.warn("SNV annotation is enabled but SNV calling is skipped and no precalled VCF is available yet - no nuclear SNVs will be annotated.")
         }
 
@@ -631,7 +666,7 @@ workflow RAREDISEASE {
         ch_rank_snv_vcf = RANK_VARIANTS_SNV.out.vcf
     }
 
-    if (val_run_mt) {
+    if (val_run_mt && !skip_mt_calling) {
         CALL_MT_SNVS (
             ch_case_info,
             ch_foundin_header,
@@ -651,9 +686,18 @@ workflow RAREDISEASE {
         ch_call_snv_mt_tabix   = CALL_MT_SNVS.out.tbi
         ch_call_snv_mt_vcf     = CALL_MT_SNVS.out.vcf
         ch_call_snv_mt_vcf_tbi = CALL_MT_SNVS.out.vcf_tbi
+    } else if (skip_mt_calling) {
+        ch_precalled_mt_vcf_tbi.multiMap { meta, vcf, tbi ->
+            vcf_tbi: [meta, vcf, tbi]
+            vcf: [meta, vcf]
+            tbi: [meta, tbi]
+        }.set { ch_precalled_mt_split }
+        ch_call_snv_mt_tabix   = ch_precalled_mt_split.tbi
+        ch_call_snv_mt_vcf     = ch_precalled_mt_split.vcf
+        ch_call_snv_mt_vcf_tbi = ch_precalled_mt_split.vcf_tbi
     }
 
-    if (!skip_snv_calling && val_concatenate_snv_calls) {
+    if (val_concatenate_snv_calls && (!skip_snv_calling || val_has_precalled_snv)) {
         ch_concat_vcf_in = ch_call_snv_genome_vcf_tabix.concat(ch_call_snv_mt_vcf_tbi).groupTuple()
         CONCAT_NUCLEAR_AND_MT_SNVS (ch_concat_vcf_in)
         ch_call_snv_bcftools_concat_csi = CONCAT_NUCLEAR_AND_MT_SNVS.out.csi
@@ -664,7 +708,7 @@ workflow RAREDISEASE {
     //
     // ANNOTATE MT SNVs
     //
-    if (!skip_mt_annotation && val_run_mt) {
+    if (!skip_mt_annotation && (val_run_mt || skip_mt_calling)) {
 
         ANNOTATE_MT_SNVS (
             ch_cadd_header,
@@ -797,74 +841,82 @@ workflow RAREDISEASE {
         ch_saltshaker_html = CALL_STRUCTURAL_VARIANTS.out.saltshaker_html
         ch_saltshaker_plot = CALL_STRUCTURAL_VARIANTS.out.saltshaker_plot
         ch_mt_del_result = CALL_STRUCTURAL_VARIANTS.out.mt_del_result
+    } else if (skip_sv_calling) {
+        ch_call_sv_vcf = ch_precalled_sv_vcf
+        ch_call_sv_tbi = ch_precalled_sv_tbi
+    }
 
-        //
-        // ANNOTATE STRUCTURAL VARIANTS
-        //
-        if (!skip_sv_annotation) {
-            ANNOTATE_STRUCTURAL_VARIANTS (
-                ch_genome_dictionary,
-                ch_genome_fasta,
-                ch_svdb_bedpedbs,
-                ch_svdb_dbs,
-                ch_call_sv_vcf,
-                ch_vep_cache,
-                ch_vep_extra_files,
-                val_svdb_query_bedpedbs,
-                val_svdb_query_dbs,
-                val_genome,
-                val_vep_cache_version
-            ).set { ch_sv_annotate }
-            ch_annotate_sv_report  = ch_sv_annotate.report
-            ch_annotate_sv_tbi     = ch_sv_annotate.tbi
-            ch_annotate_sv_vcf_ann = ch_sv_annotate.vcf_ann
+    //
+    // ANNOTATE STRUCTURAL VARIANTS
+    //
+    if (!skip_sv_annotation) {
 
-            ch_sv_annotate.vcf_ann
-                .multiMap { meta, vcf ->
-                    clinical: [ meta + [ set: "clinical" ], vcf ]
-                    research: [ meta + [ set: "research" ], vcf ]
-                }
-                .set { ch_clin_research_sv_vcf }
+        if (skip_sv_calling && !val_has_precalled_sv) {
+            log.warn("SV annotation is enabled but SV calling is skipped and no precalled VCF is available yet - no SVs will be annotated.")
+        }
 
-            ch_clinical_sv_vcf = channel.empty()
-            if (!skip_generate_clinical_set) {
-                GENERATE_CLINICAL_SET_SV(
-                    ch_clin_research_sv_vcf.clinical,
-                    ch_hgnc_ids,
-                    false,
-                    true
-                )
-                GENERATE_CLINICAL_SET_SV.out.vcf
-                .set { ch_clinical_sv_vcf }
+        ANNOTATE_STRUCTURAL_VARIANTS (
+            ch_genome_dictionary,
+            ch_genome_fasta,
+            ch_svdb_bedpedbs,
+            ch_svdb_dbs,
+            ch_call_sv_vcf,
+            ch_vep_cache,
+            ch_vep_extra_files,
+            val_svdb_query_bedpedbs,
+            val_svdb_query_dbs,
+            val_genome,
+            val_vep_cache_version
+        ).set { ch_sv_annotate }
+        ch_annotate_sv_report  = ch_sv_annotate.report
+        ch_annotate_sv_tbi     = ch_sv_annotate.tbi
+        ch_annotate_sv_vcf_ann = ch_sv_annotate.vcf_ann
+
+        ch_sv_annotate.vcf_ann
+            .multiMap { meta, vcf ->
+                clinical: [ meta + [ set: "clinical" ], vcf ]
+                research: [ meta + [ set: "research" ], vcf ]
             }
+            .set { ch_clin_research_sv_vcf }
 
-            ch_ann_csq_sv_in = ch_clinical_sv_vcf.mix(ch_clin_research_sv_vcf.research)
-
-            ANN_CSQ_PLI_SV (
-                ch_variant_consequences_sv,
-                ch_ann_csq_sv_in,
-                false
-            )
-
-            ANN_CSQ_PLI_SV.out.vcf_ann
-                .filter { meta, _vcf ->
-                    if (meta.probands.size()==0) {
-                        log.warn("Skipping SV ranking since no affected samples are detected in the case")
-                    }
-                    meta.probands.size()>0
-                }
-                .set {ch_ranksnv_sv_in}
-
-            RANK_VARIANTS_SV (
-                ch_pedfile,
-                ch_reduced_penetrance,
-                ch_score_config_sv,
-                ch_ranksnv_sv_in,
+        ch_clinical_sv_vcf = channel.empty()
+        if (!skip_generate_clinical_set) {
+            GENERATE_CLINICAL_SET_SV(
+                ch_clin_research_sv_vcf.clinical,
+                ch_hgnc_ids,
+                false,
                 true
             )
-            ch_rank_sv_tbi = RANK_VARIANTS_SV.out.tbi
-            ch_rank_sv_vcf = RANK_VARIANTS_SV.out.vcf
+            GENERATE_CLINICAL_SET_SV.out.vcf
+            .set { ch_clinical_sv_vcf }
         }
+
+        ch_ann_csq_sv_in = ch_clinical_sv_vcf.mix(ch_clin_research_sv_vcf.research)
+
+        ANN_CSQ_PLI_SV (
+            ch_variant_consequences_sv,
+            ch_ann_csq_sv_in,
+            false
+        )
+
+        ANN_CSQ_PLI_SV.out.vcf_ann
+            .filter { meta, _vcf ->
+                if (meta.probands.size()==0) {
+                    log.warn("Skipping SV ranking since no affected samples are detected in the case")
+                }
+                meta.probands.size()>0
+            }
+            .set {ch_ranksnv_sv_in}
+
+        RANK_VARIANTS_SV (
+            ch_pedfile,
+            ch_reduced_penetrance,
+            ch_score_config_sv,
+            ch_ranksnv_sv_in,
+            true
+        )
+        ch_rank_sv_tbi = RANK_VARIANTS_SV.out.tbi
+        ch_rank_sv_vcf = RANK_VARIANTS_SV.out.vcf
     }
 /*
 
@@ -986,13 +1038,13 @@ workflow RAREDISEASE {
     Generate CGH files from sequencing data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if (!skip_vcf2cytosure && val_analysis_type.equals("wgs") && !skip_sv_calling && !skip_sv_annotation) {
+    if (!skip_vcf2cytosure && val_analysis_type.equals("wgs") && !skip_sv_annotation) {
         GENERATE_CYTOSURE_FILES (
             ch_mapped.genome_marked_bam_bai,
             ch_vcf2cytosure_blacklist,
             ch_sample_id_map,
-            ch_sv_annotate.tbi,
-            ch_sv_annotate.vcf_ann,
+            ch_annotate_sv_tbi,
+            ch_annotate_sv_vcf_ann,
             val_sample_id_map
         )
         ch_generate_cytosure_files_cgh = GENERATE_CYTOSURE_FILES.out.cgh
