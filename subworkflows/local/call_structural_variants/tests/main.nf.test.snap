@@ -1,4 +1,17 @@
 {
+    "CALL_STRUCTURAL_VARIANTS - wgs": {
+        "content": [
+            [
+                "justhusky_sv.vcf.gz.tbi"
+            ],
+            "VcfFile [chromosomes=[MT, 21], sampleCount=1, variantCount=115, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-07-03T15:59:49.244712615",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
     "CALL_STRUCTURAL_VARIANTS - wgs, stub": {
         "content": [
             {
