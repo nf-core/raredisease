@@ -181,11 +181,11 @@ Each precalled VCF must contain only the variant type it declares in `type`: a n
 
 Below is an example samplesheet for a trio where all three variant types have been precalled for the case. Note that `father` and `mother` are referenced by ID only and never appear as their own rows:
 
-| sample  | vcf                  | tbi                      | type  | sex | phenotype | paternal_id | maternal_id | case_id |
-| ------- | -------------------- | ------------------------ | ----- | --- | --------- | ----------- | ----------- | ------- |
-| proband | proband_snv.vcf.gz   | proband_snv.vcf.gz.tbi   | snv   | 1   | 2         | father      | mother      | fam_1   |
-| proband | proband_sv.vcf.gz    | proband_sv.vcf.gz.tbi    | sv    | 1   | 2         | father      | mother      | fam_1   |
-| proband | proband_mt.vcf.gz    | proband_mt.vcf.gz.tbi    | mt    | 1   | 2         | father      | mother      | fam_1   |
+| sample  | vcf                | tbi                    | type | sex | phenotype | paternal_id | maternal_id | case_id |
+| ------- | ------------------ | ---------------------- | ---- | --- | --------- | ----------- | ----------- | ------- |
+| proband | proband_snv.vcf.gz | proband_snv.vcf.gz.tbi | snv  | 1   | 2         | father      | mother      | fam_1   |
+| proband | proband_sv.vcf.gz  | proband_sv.vcf.gz.tbi  | sv   | 1   | 2         | father      | mother      | fam_1   |
+| proband | proband_mt.vcf.gz  | proband_mt.vcf.gz.tbi  | mt   | 1   | 2         | father      | mother      | fam_1   |
 
 **What's possible:**
 
