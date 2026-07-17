@@ -196,9 +196,9 @@ workflow RAREDISEASE {
     val_exclude_alt
     val_extract_alignments
     val_genome
-    val_has_precalled_mt   
-    val_has_precalled_snv  
-    val_has_precalled_sv   
+    val_has_precalled_mt
+    val_has_precalled_snv
+    val_has_precalled_sv
     val_heavy_strand_origin_end
     val_heavy_strand_origin_start
     val_homoplasmy_af_threshold
@@ -243,7 +243,7 @@ workflow RAREDISEASE {
     val_target_bed
     val_variant_caller
     val_vep_cache_version
- 
+
     main:
 
     ch_multiqc_files                    = channel.empty()
