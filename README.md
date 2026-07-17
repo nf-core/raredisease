@@ -34,6 +34,8 @@
 
 **nf-core/raredisease** is a best-practice bioinformatic pipeline for calling and scoring variants from WGS/WES data from rare disease patients. This pipeline is heavily inspired by [MIP](https://github.com/Clinical-Genomics/MIP).
 
+The pipeline offers multiple entry points depending on how far along your data already is: start from raw FASTQ/SPRING files, from pre-aligned BAM/CRAM files, or from precalled SNV/SV/mitochondrial VCF files to skip calling entirely and go straight to annotation and ranking. See [Samplesheet](docs/usage.md#samplesheet) for details.
+
 > [!NOTE]
 > Right now, we only support paired-end data from Illumina. If you've got other types of data and the pipeline doesn't work for you, just open an issue. We'd be happy to chat about a solution.
 

@@ -19,6 +19,7 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_rare
 // MODULE: Installed directly from nf-core/modules
 //
 
+include { BCFTOOLS_CONCAT as CONCAT_NUCLEAR_AND_MT_SNVS     } from '../modules/nf-core/bcftools/concat'
 include { FASTQC                                            } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                                           } from '../modules/nf-core/multiqc/main'
 include { PEDDY                                             } from '../modules/nf-core/peddy/main'
@@ -50,6 +51,7 @@ include { ANNOTATE_MOBILE_ELEMENTS                                    } from '..
 include { ANNOTATE_MT_SNVS                                            } from '../subworkflows/local/annotate_mt_snvs'
 include { ANNOTATE_STRUCTURAL_VARIANTS                                } from '../subworkflows/local/annotate_structural_variants'
 include { CALL_MOBILE_ELEMENTS                                        } from '../subworkflows/local/call_mobile_elements'
+include { CALL_MT_SNVS                                                } from '../subworkflows/local/call_mt_snvs'
 include { CALL_REPEAT_EXPANSIONS                                      } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                                                    } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS                                    } from '../subworkflows/local/call_structural_variants'
@@ -130,6 +132,7 @@ workflow RAREDISEASE {
     ch_par_bed
     ch_pedfile
     ch_ploidy_model
+    ch_precalled_vcfs
     ch_readcount_intervals
     ch_reads
     ch_reduced_penetrance
@@ -163,36 +166,39 @@ workflow RAREDISEASE {
     ch_vep_cache
     ch_vep_extra_files
     ch_versions
-    skip_me_calling
+    skip_fastp
+    skip_fastqc
+    skip_gatkcontamination
+    skip_generate_clinical_set
+    skip_gens
+    skip_germlinecnvcaller
     skip_me_annotation
+    skip_me_calling
+    skip_mitosalt
     skip_mt_annotation
+    skip_mt_calling
     skip_mt_subsample
+    skip_ngsbits
+    skip_peddy
     skip_repeat_annotation
     skip_repeat_calling
+    skip_smncopynumbercaller
     skip_snv_annotation
     skip_snv_calling
     skip_sv_annotation
     skip_sv_calling
-    skip_generate_clinical_set
-    skip_fastp
-    skip_fastqc
-    skip_gatkcontamination
-    skip_gens
-    skip_germlinecnvcaller
-    skip_mitosalt
-    skip_ngsbits
-    skip_peddy
-    skip_smncopynumbercaller
     skip_vcf2cytosure
     skip_verifybamid
     val_aligner
     val_analysis_type
     val_cadd_resources
     val_concatenate_snv_calls
-    val_skip_split_multiallelics
     val_exclude_alt
     val_extract_alignments
     val_genome
+    val_has_precalled_mt
+    val_has_precalled_snv
+    val_has_precalled_sv
     val_heavy_strand_origin_end
     val_heavy_strand_origin_start
     val_homoplasmy_af_threshold
@@ -224,18 +230,19 @@ workflow RAREDISEASE {
     val_multiqc_samples
     val_outdir
     val_platform
+    val_qc_metrics_tool
     val_run_mt
     val_run_rtgvcfeval
     val_run_vcfanno_db_sanity_check
     val_sample_id_map
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
+    val_skip_split_multiallelics
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
     val_target_bed
     val_variant_caller
     val_vep_cache_version
-    val_qc_metrics_tool
 
     main:
 
@@ -259,8 +266,10 @@ workflow RAREDISEASE {
     ch_call_snv_deepvariant_report      = channel.empty()
     ch_call_snv_genome_tabix            = channel.empty()
     ch_call_snv_genome_vcf              = channel.empty()
+    ch_call_snv_genome_vcf_tabix        = channel.empty()
     ch_call_snv_mt_tabix                = channel.empty()
     ch_call_snv_mt_vcf                  = channel.empty()
+    ch_call_snv_mt_vcf_tbi              = channel.empty()
     ch_call_repeat_expansions_expansionhunter_bai = channel.empty()
     ch_call_repeat_expansions_expansionhunter_bam = channel.empty()
     ch_call_repeat_expansions_expansionhunter_vcf = channel.empty()
@@ -311,6 +320,33 @@ workflow RAREDISEASE {
     ch_variant_evaluation_true_positives_tbi  = channel.empty()
     ch_variant_evaluation_true_positives_vcf  = channel.empty()
     ch_variant_evaluation_weighted_roc        = channel.empty()
+
+    //
+    // Precalled VCFs supplied in the samplesheet, split out per variant type
+    //
+    ch_case_info_precalled = ch_case_info.combine(ch_precalled_vcfs)
+
+    ch_precalled_snv_vcf_tbi = ch_case_info_precalled
+        .filter { _case_info, precalled -> precalled.snv }
+        .map { case_info, precalled -> [case_info, precalled.snv[0], precalled.snv[1]] }
+
+    ch_precalled_sv_vcf = ch_case_info_precalled
+        .filter { _case_info, precalled -> precalled.sv }
+        .map { case_info, precalled -> [case_info, precalled.sv[0]] }
+
+    ch_precalled_sv_tbi = ch_case_info_precalled
+        .filter { _case_info, precalled -> precalled.sv }
+        .map { case_info, precalled -> [case_info, precalled.sv[1]] }
+
+    ch_precalled_mt_vcf_tbi = ch_case_info_precalled
+        .filter { _case_info, precalled -> precalled.mt }
+        .map { case_info, precalled -> [case_info, precalled.mt[0], precalled.mt[1]] }
+
+    // A case with any precalled VCF has zero fastq/bam/cram rows (enforced by validateNoMixedCaseInput),
+    // so no alignment data exists at all for it - used to gate BAM-only auxiliary steps that have no
+    // precalled substitute (SMN copy number, contamination check, mobile elements/repeat expansion
+    // calling from BAM, vcf2cytosure)
+    def has_any_precalled_vcf = val_has_precalled_snv || val_has_precalled_sv || val_has_precalled_mt
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
@@ -447,7 +483,7 @@ workflow RAREDISEASE {
     RENAME ALIGNMENT FILES FOR SMNCOPYNUMBERCALLER & REPEATCALLING
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if ( val_analysis_type.equals("wgs") && (!skip_smncopynumbercaller || !skip_repeat_calling)) {
+    if ( val_analysis_type.equals("wgs") && (!skip_smncopynumbercaller || !skip_repeat_calling) && !has_any_precalled_vcf) {
         RENAME_BAM(ch_mapped.genome_marked_bam, "bam")
         RENAME_BAI(ch_mapped.genome_marked_bai, "bam.bai")
     }
@@ -458,7 +494,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!skip_repeat_calling && val_analysis_type.equals("wgs") ) {
+    if (!skip_repeat_calling && val_analysis_type.equals("wgs") && !has_any_precalled_vcf ) {
         CALL_REPEAT_EXPANSIONS (
             RENAME_BAM.out.output.join(RENAME_BAI.out.output, failOnMismatch:true, failOnDuplicate:true),
             ch_variant_catalog,
@@ -487,6 +523,18 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+    // Removes vcfanno resource with empty records to keep vcfanno from crashing on those files
+    ch_vcfanno_toml_final = ch_vcfanno_toml
+    def annotation_uses_vcfanno = !skip_snv_annotation || (!skip_mt_annotation && (val_run_mt || skip_mt_calling))
+    if (val_run_vcfanno_db_sanity_check && annotation_uses_vcfanno) {
+        ch_vcfanno_resources
+            .combine(ch_vcfanno_extra)
+            .map { files -> files.flatten() }
+            .set { ch_all_vcfanno_dbs }
+        SANITY_CHECK_VCFANNO_DATABASES (ch_vcfanno_toml, ch_all_vcfanno_dbs)
+        ch_vcfanno_toml_final = SANITY_CHECK_VCFANNO_DATABASES.out.toml.collect()
+    }
+
     if (!skip_snv_calling) {
         CALL_SNV (
             ch_call_interval,
@@ -499,202 +547,225 @@ workflow RAREDISEASE {
             ch_genome_fasta,
             ch_genome_fai,
             ch_ml_model,
+            ch_par_bed,
+            ch_sentieon_pcr_indel_model,
+            ch_target_bed,
+            val_analysis_type,
+            val_skip_split_multiallelics,
+            val_variant_caller
+        )
+        ch_call_snv_deepvariant_report  = CALL_SNV.out.deepvariant_report
+        ch_call_snv_genome_tabix        = CALL_SNV.out.genome_tabix
+        ch_call_snv_genome_vcf          = CALL_SNV.out.genome_vcf
+        ch_call_snv_genome_vcf_tabix    = CALL_SNV.out.genome_vcf_tabix
+    } else if (skip_snv_calling) {
+        ch_precalled_snv_vcf_tbi.multiMap { meta, vcf, tbi ->
+            vcf_tabix: [meta, vcf, tbi]
+            vcf: [meta, vcf]
+            tabix: [meta, tbi]
+        }.set { ch_precalled_snv_split }
+        ch_call_snv_genome_tabix     = ch_precalled_snv_split.tabix
+        ch_call_snv_genome_vcf       = ch_precalled_snv_split.vcf
+        ch_call_snv_genome_vcf_tabix = ch_precalled_snv_split.vcf_tabix
+    }
+
+    //
+    // ANNOTATE GENOME SNVs
+    //
+    if (!skip_snv_annotation) {
+
+        if (skip_snv_calling && !val_has_precalled_snv) {
+            log.warn("SNV annotation is enabled but SNV calling is skipped and no precalled VCF is available yet - no nuclear SNVs will be annotated.")
+        }
+
+        ANNOTATE_GENOME_SNVS (
+            ch_cadd_header,
+            ch_cadd_prescored,
+            ch_cadd_resources,
+            ch_genome_chrsizes,
+            ch_genome_fai,
+            ch_genome_fasta,
+            ch_gnomad_af,
+            ch_samples,
+            ch_scatter_genome_split_intervals,
+            ch_call_snv_genome_vcf_tabix,
+            ch_vcfanno_extra,
+            ch_vcfanno_lua,
+            ch_vcfanno_resources,
+            ch_vcfanno_toml_final,
+            ch_vep_cache,
+            ch_vep_extra_files,
+            val_analysis_type,
+            val_cadd_resources,
+            val_genome,
+            val_vep_cache_version
+        )
+        ch_annotate_genome_snvs_bcftools_concat_tbi       = ANNOTATE_GENOME_SNVS.out.bcftools_concat_tbi
+        ch_annotate_genome_snvs_bcftools_concat_vcf       = ANNOTATE_GENOME_SNVS.out.bcftools_concat_vcf
+        ch_annotate_genome_snvs_chromograph_autozyg_plots = ANNOTATE_GENOME_SNVS.out.chromograph_autozyg_plots
+        ch_annotate_genome_snvs_chromograph_regions_plots = ANNOTATE_GENOME_SNVS.out.chromograph_regions_plots
+        ch_annotate_genome_snvs_chromograph_sites_plots   = ANNOTATE_GENOME_SNVS.out.chromograph_sites_plots
+        ch_annotate_genome_snvs_rhocall_viz_bed           = ANNOTATE_GENOME_SNVS.out.rhocall_viz_bed
+        ch_annotate_genome_snvs_rhocall_viz_wig           = ANNOTATE_GENOME_SNVS.out.rhocall_viz_wig
+        ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       = ANNOTATE_GENOME_SNVS.out.ucsc_wigtobigwig_bw
+
+        ch_annotate_genome_snvs_bcftools_concat_vcf
+            .multiMap { meta, vcf ->
+                clinical: [ meta + [ set: "clinical" ], vcf ]
+                research: [ meta + [ set: "research" ], vcf ]
+            }
+            .set { ch_clin_research_snv_vcf }
+
+        ch_clinical_snv_vcf = channel.empty()
+        if (!skip_generate_clinical_set) {
+            GENERATE_CLINICAL_SET_SNV(
+                ch_clin_research_snv_vcf.clinical,
+                ch_hgnc_ids,
+                false,
+                true
+            )
+            GENERATE_CLINICAL_SET_SNV.out.vcf
+            .set { ch_clinical_snv_vcf }
+        }
+
+        ch_ann_csq_snv_in = ch_clinical_snv_vcf.mix(ch_clin_research_snv_vcf.research)
+
+        ANN_CSQ_PLI_SNV (
+            ch_variant_consequences_snv,
+            ch_ann_csq_snv_in,
+            false
+        )
+
+        ANN_CSQ_PLI_SNV.out.vcf_ann
+            .filter { meta, _vcf ->
+                if (meta.probands.size()==0) {
+                    log.warn("Skipping nuclear SNV ranking since no affected samples are detected in the case")
+                }
+                meta.probands.size()>0
+            }
+            .set {ch_ranksnv_nuclear_in}
+
+        RANK_VARIANTS_SNV (
+            ch_pedfile,
+            ch_reduced_penetrance,
+            ch_score_config_snv,
+            ch_ranksnv_nuclear_in,
+            false
+        )
+        ch_rank_snv_tbi = RANK_VARIANTS_SNV.out.tbi
+        ch_rank_snv_vcf = RANK_VARIANTS_SNV.out.vcf
+    }
+
+    if (val_run_mt && !skip_mt_calling) {
+        CALL_MT_SNVS (
+            ch_case_info,
+            ch_foundin_header,
+            ch_genome_chrsizes,
             ch_mapped.mt_bam_bai_gatksubwf,
             ch_mt_dictionary,
             ch_mt_fai,
             ch_mt_fasta,
             ch_mt_intervals,
+            ch_mtshift_backchain,
             ch_mapped.mtshift_bam_bai_gatksubwf,
             ch_mtshift_dictionary,
             ch_mtshift_fai,
             ch_mtshift_fasta,
-            ch_mtshift_intervals,
-            ch_mtshift_backchain,
-            ch_par_bed,
-            ch_sentieon_pcr_indel_model,
-            ch_target_bed,
-            val_analysis_type,
-            val_concatenate_snv_calls,
-            val_run_mt,
-            val_skip_split_multiallelics,
-            val_variant_caller
+            ch_mtshift_intervals
         )
-        ch_call_snv_bcftools_concat_csi = CALL_SNV.out.bcftools_concat_csi
-        ch_call_snv_bcftools_concat_tbi = CALL_SNV.out.bcftools_concat_tbi
-        ch_call_snv_bcftools_concat_vcf = CALL_SNV.out.bcftools_concat_vcf
-        ch_call_snv_deepvariant_report  = CALL_SNV.out.deepvariant_report
-        ch_call_snv_genome_tabix        = CALL_SNV.out.genome_tabix
-        ch_call_snv_genome_vcf          = CALL_SNV.out.genome_vcf
-        ch_call_snv_mt_tabix            = CALL_SNV.out.mt_tabix
-        ch_call_snv_mt_vcf              = CALL_SNV.out.mt_vcf
+        ch_call_snv_mt_tabix   = CALL_MT_SNVS.out.tbi
+        ch_call_snv_mt_vcf     = CALL_MT_SNVS.out.vcf
+        ch_call_snv_mt_vcf_tbi = CALL_MT_SNVS.out.vcf_tbi
+    } else if (skip_mt_calling) {
+        ch_precalled_mt_vcf_tbi.multiMap { meta, vcf, tbi ->
+            vcf_tbi: [meta, vcf, tbi]
+            vcf: [meta, vcf]
+            tbi: [meta, tbi]
+        }.set { ch_precalled_mt_split }
+        ch_call_snv_mt_tabix   = ch_precalled_mt_split.tbi
+        ch_call_snv_mt_vcf     = ch_precalled_mt_split.vcf
+        ch_call_snv_mt_vcf_tbi = ch_precalled_mt_split.vcf_tbi
+    }
 
-        // Removes vcfanno resource with empty records to keep vcfanno from crashing on those files
-        ch_vcfanno_toml_final = ch_vcfanno_toml
-        def annotation_uses_vcfanno = !skip_snv_annotation || (!skip_mt_annotation && val_run_mt)
-        if (val_run_vcfanno_db_sanity_check && annotation_uses_vcfanno) {
-            ch_vcfanno_resources
-                .combine(ch_vcfanno_extra)
-                .map { files -> files.flatten() }
-                .set { ch_all_vcfanno_dbs }
-            SANITY_CHECK_VCFANNO_DATABASES (ch_vcfanno_toml, ch_all_vcfanno_dbs)
-            ch_vcfanno_toml_final = SANITY_CHECK_VCFANNO_DATABASES.out.toml.collect()
-        }
+    if (val_concatenate_snv_calls && (!skip_snv_calling || val_has_precalled_snv)) {
+        ch_concat_vcf_in = ch_call_snv_genome_vcf_tabix.concat(ch_call_snv_mt_vcf_tbi).groupTuple()
+        CONCAT_NUCLEAR_AND_MT_SNVS (ch_concat_vcf_in)
+        ch_call_snv_bcftools_concat_csi = CONCAT_NUCLEAR_AND_MT_SNVS.out.csi
+        ch_call_snv_bcftools_concat_tbi = CONCAT_NUCLEAR_AND_MT_SNVS.out.tbi
+        ch_call_snv_bcftools_concat_vcf = CONCAT_NUCLEAR_AND_MT_SNVS.out.vcf
+    }
 
-        //
-        // ANNOTATE GENOME SNVs
-        //
-        if (!skip_snv_annotation) {
+    //
+    // ANNOTATE MT SNVs
+    //
+    if (!skip_mt_annotation && (val_run_mt || skip_mt_calling)) {
 
-            ANNOTATE_GENOME_SNVS (
-                ch_cadd_header,
-                ch_cadd_prescored,
-                ch_cadd_resources,
-                ch_genome_chrsizes,
-                ch_genome_fai,
-                ch_genome_fasta,
-                ch_gnomad_af,
-                ch_samples,
-                ch_scatter_genome_split_intervals,
-                CALL_SNV.out.genome_vcf_tabix,
-                ch_vcfanno_extra,
-                ch_vcfanno_lua,
-                ch_vcfanno_resources,
-                ch_vcfanno_toml_final,
-                ch_vep_cache,
-                ch_vep_extra_files,
-                val_analysis_type,
-                val_cadd_resources,
-                val_genome,
-                val_vep_cache_version
-            )
-            ch_annotate_genome_snvs_bcftools_concat_tbi       = ANNOTATE_GENOME_SNVS.out.bcftools_concat_tbi
-            ch_annotate_genome_snvs_bcftools_concat_vcf       = ANNOTATE_GENOME_SNVS.out.bcftools_concat_vcf
-            ch_annotate_genome_snvs_chromograph_autozyg_plots = ANNOTATE_GENOME_SNVS.out.chromograph_autozyg_plots
-            ch_annotate_genome_snvs_chromograph_regions_plots = ANNOTATE_GENOME_SNVS.out.chromograph_regions_plots
-            ch_annotate_genome_snvs_chromograph_sites_plots   = ANNOTATE_GENOME_SNVS.out.chromograph_sites_plots
-            ch_annotate_genome_snvs_rhocall_viz_bed           = ANNOTATE_GENOME_SNVS.out.rhocall_viz_bed
-            ch_annotate_genome_snvs_rhocall_viz_wig           = ANNOTATE_GENOME_SNVS.out.rhocall_viz_wig
-            ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       = ANNOTATE_GENOME_SNVS.out.ucsc_wigtobigwig_bw
+        ANNOTATE_MT_SNVS (
+            ch_cadd_header,
+            ch_cadd_prescored,
+            ch_cadd_resources,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_call_snv_mt_vcf_tbi,
+            ch_vcfanno_extra,
+            ch_vcfanno_lua,
+            ch_vcfanno_resources,
+            ch_vcfanno_toml_final,
+            ch_vep_cache,
+            ch_vep_extra_files,
+            val_cadd_resources,
+            val_genome,
+            val_homoplasmy_af_threshold,
+            val_vep_cache_version
+        ).set { ch_mt_annotate }
+        ch_annotate_mt_snvs_ensemblvep_mt_tbi = ch_mt_annotate.ensemblvep_mt_tbi
+        ch_annotate_mt_snvs_ensemblvep_mt_vcf = ch_mt_annotate.ensemblvep_mt_vcf
 
-            ch_annotate_genome_snvs_bcftools_concat_vcf
-                .multiMap { meta, vcf ->
-                    clinical: [ meta + [ set: "clinical" ], vcf ]
-                    research: [ meta + [ set: "research" ], vcf ]
-                }
-                .set { ch_clin_research_snv_vcf }
-
-            ch_clinical_snv_vcf = channel.empty()
-            if (!skip_generate_clinical_set) {
-                GENERATE_CLINICAL_SET_SNV(
-                    ch_clin_research_snv_vcf.clinical,
-                    ch_hgnc_ids,
-                    false,
-                    true
-                )
-                GENERATE_CLINICAL_SET_SNV.out.vcf
-                .set { ch_clinical_snv_vcf }
+        ch_mt_annotate.vcf_ann
+            .multiMap { meta, vcf ->
+                clinical: [ meta + [ set: "clinical" ], vcf ]
+                research: [ meta + [ set: "research" ], vcf ]
             }
+            .set { ch_clin_research_mt_vcf }
 
-            ch_ann_csq_snv_in = ch_clinical_snv_vcf.mix(ch_clin_research_snv_vcf.research)
-
-            ANN_CSQ_PLI_SNV (
-                ch_variant_consequences_snv,
-                ch_ann_csq_snv_in,
+        ch_clinical_mtsnv_vcf = channel.empty()
+        if (!skip_generate_clinical_set) {
+            GENERATE_CLINICAL_SET_MT(
+                ch_clin_research_mt_vcf.clinical,
+                ch_hgnc_ids,
+                true,
                 false
             )
-
-            ANN_CSQ_PLI_SNV.out.vcf_ann
-                .filter { meta, _vcf ->
-                    if (meta.probands.size()==0) {
-                        log.warn("Skipping nuclear SNV ranking since no affected samples are detected in the case")
-                    }
-                    meta.probands.size()>0
-                }
-                .set {ch_ranksnv_nuclear_in}
-
-            RANK_VARIANTS_SNV (
-                ch_pedfile,
-                ch_reduced_penetrance,
-                ch_score_config_snv,
-                ch_ranksnv_nuclear_in,
-                false
-            )
-            ch_rank_snv_tbi = RANK_VARIANTS_SNV.out.tbi
-            ch_rank_snv_vcf = RANK_VARIANTS_SNV.out.vcf
+            GENERATE_CLINICAL_SET_MT.out.vcf
+                .set { ch_clinical_mtsnv_vcf }
         }
 
-        //
-        // ANNOTATE MT SNVs
-        //
-        if (!skip_mt_annotation && val_run_mt) {
+        ch_ann_csq_mtsnv_in = ch_clinical_mtsnv_vcf.mix(ch_clin_research_mt_vcf.research)
 
-            ANNOTATE_MT_SNVS (
-                ch_cadd_header,
-                ch_cadd_prescored,
-                ch_cadd_resources,
-                ch_genome_fasta,
-                ch_genome_fai,
-                CALL_SNV.out.mt_vcf_tbi,
-                ch_vcfanno_extra,
-                ch_vcfanno_lua,
-                ch_vcfanno_resources,
-                ch_vcfanno_toml_final,
-                ch_vep_cache,
-                ch_vep_extra_files,
-                val_cadd_resources,
-                val_genome,
-                val_homoplasmy_af_threshold,
-                val_vep_cache_version
-            ).set { ch_mt_annotate }
-            ch_annotate_mt_snvs_ensemblvep_mt_tbi = ch_mt_annotate.ensemblvep_mt_tbi
-            ch_annotate_mt_snvs_ensemblvep_mt_vcf = ch_mt_annotate.ensemblvep_mt_vcf
+        ANN_CSQ_PLI_MT(
+            ch_variant_consequences_snv,
+            ch_ann_csq_mtsnv_in,
+            false
+        )
 
-            ch_mt_annotate.vcf_ann
-                .multiMap { meta, vcf ->
-                    clinical: [ meta + [ set: "clinical" ], vcf ]
-                    research: [ meta + [ set: "research" ], vcf ]
+        ANN_CSQ_PLI_MT.out.vcf_ann
+            .filter { meta, _vcf ->
+                if (meta.probands.size()==0) {
+                    log.warn("Skipping mitochondrial SNV ranking since no affected samples are detected in the case")
                 }
-                .set { ch_clin_research_mt_vcf }
-
-            ch_clinical_mtsnv_vcf = channel.empty()
-            if (!skip_generate_clinical_set) {
-                GENERATE_CLINICAL_SET_MT(
-                    ch_clin_research_mt_vcf.clinical,
-                    ch_hgnc_ids,
-                    true,
-                    false
-                )
-                GENERATE_CLINICAL_SET_MT.out.vcf
-                    .set { ch_clinical_mtsnv_vcf }
+                meta.probands.size()>0
             }
+            .set {ch_ranksnv_mt_in}
 
-            ch_ann_csq_mtsnv_in = ch_clinical_mtsnv_vcf.mix(ch_clin_research_mt_vcf.research)
-
-            ANN_CSQ_PLI_MT(
-                ch_variant_consequences_snv,
-                ch_ann_csq_mtsnv_in,
-                false
-            )
-
-            ANN_CSQ_PLI_MT.out.vcf_ann
-                .filter { meta, _vcf ->
-                    if (meta.probands.size()==0) {
-                        log.warn("Skipping mitochondrial SNV ranking since no affected samples are detected in the case")
-                    }
-                    meta.probands.size()>0
-                }
-                .set {ch_ranksnv_mt_in}
-
-            RANK_VARIANTS_MT (
-                ch_pedfile,
-                ch_reduced_penetrance,
-                ch_score_config_mt,
-                ch_ranksnv_mt_in,
-                false
-            )
-            ch_rank_mt_tbi = RANK_VARIANTS_MT.out.tbi
-            ch_rank_mt_vcf = RANK_VARIANTS_MT.out.vcf
-        }
+        RANK_VARIANTS_MT (
+            ch_pedfile,
+            ch_reduced_penetrance,
+            ch_score_config_mt,
+            ch_ranksnv_mt_in,
+            false
+        )
+        ch_rank_mt_tbi = RANK_VARIANTS_MT.out.tbi
+        ch_rank_mt_vcf = RANK_VARIANTS_MT.out.vcf
     }
 
 /*
@@ -760,74 +831,82 @@ workflow RAREDISEASE {
         ch_saltshaker_html = CALL_STRUCTURAL_VARIANTS.out.saltshaker_html
         ch_saltshaker_plot = CALL_STRUCTURAL_VARIANTS.out.saltshaker_plot
         ch_mt_del_result = CALL_STRUCTURAL_VARIANTS.out.mt_del_result
+    } else if (skip_sv_calling) {
+        ch_call_sv_vcf = ch_precalled_sv_vcf
+        ch_call_sv_tbi = ch_precalled_sv_tbi
+    }
 
-        //
-        // ANNOTATE STRUCTURAL VARIANTS
-        //
-        if (!skip_sv_annotation) {
-            ANNOTATE_STRUCTURAL_VARIANTS (
-                ch_genome_dictionary,
-                ch_genome_fasta,
-                ch_svdb_bedpedbs,
-                ch_svdb_dbs,
-                ch_call_sv_vcf,
-                ch_vep_cache,
-                ch_vep_extra_files,
-                val_svdb_query_bedpedbs,
-                val_svdb_query_dbs,
-                val_genome,
-                val_vep_cache_version
-            ).set { ch_sv_annotate }
-            ch_annotate_sv_report  = ch_sv_annotate.report
-            ch_annotate_sv_tbi     = ch_sv_annotate.tbi
-            ch_annotate_sv_vcf_ann = ch_sv_annotate.vcf_ann
+    //
+    // ANNOTATE STRUCTURAL VARIANTS
+    //
+    if (!skip_sv_annotation) {
 
-            ch_sv_annotate.vcf_ann
-                .multiMap { meta, vcf ->
-                    clinical: [ meta + [ set: "clinical" ], vcf ]
-                    research: [ meta + [ set: "research" ], vcf ]
-                }
-                .set { ch_clin_research_sv_vcf }
+        if (skip_sv_calling && !val_has_precalled_sv) {
+            log.warn("SV annotation is enabled but SV calling is skipped and no precalled VCF is available yet - no SVs will be annotated.")
+        }
 
-            ch_clinical_sv_vcf = channel.empty()
-            if (!skip_generate_clinical_set) {
-                GENERATE_CLINICAL_SET_SV(
-                    ch_clin_research_sv_vcf.clinical,
-                    ch_hgnc_ids,
-                    false,
-                    true
-                )
-                GENERATE_CLINICAL_SET_SV.out.vcf
-                .set { ch_clinical_sv_vcf }
+        ANNOTATE_STRUCTURAL_VARIANTS (
+            ch_genome_dictionary,
+            ch_genome_fasta,
+            ch_svdb_bedpedbs,
+            ch_svdb_dbs,
+            ch_call_sv_vcf,
+            ch_vep_cache,
+            ch_vep_extra_files,
+            val_svdb_query_bedpedbs,
+            val_svdb_query_dbs,
+            val_genome,
+            val_vep_cache_version
+        ).set { ch_sv_annotate }
+        ch_annotate_sv_report  = ch_sv_annotate.report
+        ch_annotate_sv_tbi     = ch_sv_annotate.tbi
+        ch_annotate_sv_vcf_ann = ch_sv_annotate.vcf_ann
+
+        ch_sv_annotate.vcf_ann
+            .multiMap { meta, vcf ->
+                clinical: [ meta + [ set: "clinical" ], vcf ]
+                research: [ meta + [ set: "research" ], vcf ]
             }
+            .set { ch_clin_research_sv_vcf }
 
-            ch_ann_csq_sv_in = ch_clinical_sv_vcf.mix(ch_clin_research_sv_vcf.research)
-
-            ANN_CSQ_PLI_SV (
-                ch_variant_consequences_sv,
-                ch_ann_csq_sv_in,
-                false
-            )
-
-            ANN_CSQ_PLI_SV.out.vcf_ann
-                .filter { meta, _vcf ->
-                    if (meta.probands.size()==0) {
-                        log.warn("Skipping SV ranking since no affected samples are detected in the case")
-                    }
-                    meta.probands.size()>0
-                }
-                .set {ch_ranksnv_sv_in}
-
-            RANK_VARIANTS_SV (
-                ch_pedfile,
-                ch_reduced_penetrance,
-                ch_score_config_sv,
-                ch_ranksnv_sv_in,
+        ch_clinical_sv_vcf = channel.empty()
+        if (!skip_generate_clinical_set) {
+            GENERATE_CLINICAL_SET_SV(
+                ch_clin_research_sv_vcf.clinical,
+                ch_hgnc_ids,
+                false,
                 true
             )
-            ch_rank_sv_tbi = RANK_VARIANTS_SV.out.tbi
-            ch_rank_sv_vcf = RANK_VARIANTS_SV.out.vcf
+            GENERATE_CLINICAL_SET_SV.out.vcf
+            .set { ch_clinical_sv_vcf }
         }
+
+        ch_ann_csq_sv_in = ch_clinical_sv_vcf.mix(ch_clin_research_sv_vcf.research)
+
+        ANN_CSQ_PLI_SV (
+            ch_variant_consequences_sv,
+            ch_ann_csq_sv_in,
+            false
+        )
+
+        ANN_CSQ_PLI_SV.out.vcf_ann
+            .filter { meta, _vcf ->
+                if (meta.probands.size()==0) {
+                    log.warn("Skipping SV ranking since no affected samples are detected in the case")
+                }
+                meta.probands.size()>0
+            }
+            .set {ch_ranksnv_sv_in}
+
+        RANK_VARIANTS_SV (
+            ch_pedfile,
+            ch_reduced_penetrance,
+            ch_score_config_sv,
+            ch_ranksnv_sv_in,
+            true
+        )
+        ch_rank_sv_tbi = RANK_VARIANTS_SV.out.tbi
+        ch_rank_sv_vcf = RANK_VARIANTS_SV.out.vcf
     }
 /*
 
@@ -836,7 +915,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!skip_me_calling && val_analysis_type.equals("wgs")) {
+    if (!skip_me_calling && val_analysis_type.equals("wgs") && !has_any_precalled_vcf) {
         CALL_MOBILE_ELEMENTS(
             ch_case_info,
             ch_mapped.genome_marked_bam_bai,
@@ -897,7 +976,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if ( val_analysis_type.equals("wgs") && !skip_smncopynumbercaller ) {
+    if ( val_analysis_type.equals("wgs") && !skip_smncopynumbercaller && !has_any_precalled_vcf ) {
 
         RENAME_BAM.out.output
             .collect{_meta, bam -> bam}
@@ -928,7 +1007,7 @@ workflow RAREDISEASE {
 */
     if (!skip_peddy) {
         PEDDY (
-            CALL_SNV.out.genome_vcf.join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true),
+            ch_call_snv_genome_vcf.join(ch_call_snv_genome_tabix, failOnMismatch:true, failOnDuplicate:true),
             ch_pedfile.map{ped -> return[[id:"pedigree"], ped]},
             [[:],[]]
         )
@@ -949,13 +1028,13 @@ workflow RAREDISEASE {
     Generate CGH files from sequencing data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if (!skip_vcf2cytosure && val_analysis_type.equals("wgs") && !skip_sv_calling && !skip_sv_annotation) {
+    if (!skip_vcf2cytosure && val_analysis_type.equals("wgs") && !skip_sv_annotation && !has_any_precalled_vcf) {
         GENERATE_CYTOSURE_FILES (
             ch_mapped.genome_marked_bam_bai,
             ch_vcf2cytosure_blacklist,
             ch_sample_id_map,
-            ch_sv_annotate.tbi,
-            ch_sv_annotate.vcf_ann,
+            ch_annotate_sv_tbi,
+            ch_annotate_sv_vcf_ann,
             val_sample_id_map
         )
         ch_generate_cytosure_files_cgh = GENERATE_CYTOSURE_FILES.out.cgh
@@ -966,7 +1045,7 @@ workflow RAREDISEASE {
     GENS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if (!skip_gens && val_analysis_type.equals("wgs")) {
+    if (!skip_gens && val_analysis_type.equals("wgs") && !skip_snv_calling) {
         GENS (
             ch_mapped.genome_marked_bam_bai,
             ch_genome_dictionary,
@@ -995,7 +1074,7 @@ workflow RAREDISEASE {
         VARIANT_EVALUATION (
             ch_rtg_truthvcfs,
             ch_sdf,
-            CALL_SNV.out.genome_vcf_tabix
+            ch_call_snv_genome_vcf_tabix
         )
         ch_variant_evaluation_baseline_tbi        = VARIANT_EVALUATION.out.baseline_tbi
         ch_variant_evaluation_baseline_vcf        = VARIANT_EVALUATION.out.baseline_vcf

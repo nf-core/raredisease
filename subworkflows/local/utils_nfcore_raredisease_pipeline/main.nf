@@ -110,13 +110,13 @@ workflow PIPELINE_INITIALISATION {
     channel
         .fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
         .tap { ch_original_input }
-        .map { meta, _fastq1, _fastq2, _spring1, _spring2, _bam, _bai, _cram, _crai -> meta.id }
+        .map { meta, _fastq1, _fastq2, _spring1, _spring2, _bam, _bai, _cram, _crai, _vcf, _tbi, _type -> meta.id }
         .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
             counts[sample] = (counts[sample] ?: 0) + 1
             counts
         }
         .combine( ch_original_input )
-        .map { counts, meta, fastq1, fastq2, spring1, spring2, bam, bai, cram, crai ->
+        .map { counts, meta, fastq1, fastq2, spring1, spring2, bam, bai, cram, crai, vcf, tbi, type ->
             def new_meta = meta + [num_lanes:counts[meta.id]]
             if (fastq1 && fastq2) {
                 new_meta += [read_group: generateReadGroupLine(fastq1, meta, params)]
@@ -136,6 +136,8 @@ workflow PIPELINE_INITIALISATION {
             } else if (cram && crai) {
                 new_meta += [read_group: generateReadGroupLine(cram, meta, params)]
                 return [new_meta + [data_type: "cram"], [cram, crai]]
+            } else if (vcf && tbi && type) {
+                return [new_meta + [data_type: "${type}_vcf"], [vcf, tbi]]
             }
         }
         .tap{ ch_input_counts }
@@ -151,9 +153,11 @@ workflow PIPELINE_INITIALISATION {
         }
         .tap { ch_samplesheet }
         .branch { meta, files  ->
-            fastq: !files[0].toString().endsWith("bam") && !files[0].toString().endsWith("cram")
+            fastq:     meta.data_type in ["fastq_gz", "separate_spring", "interleaved_spring"]
                 return [meta, files]
-            align: files[0].toString().endsWith("bam") || files[0].toString().endsWith("cram")
+            align:     meta.data_type in ["bam", "cram"]
+                return [meta, files]
+            precalled: meta.data_type.endsWith("_vcf")
                 return [meta, files]
         }
         .set {ch_samplesheet_by_type}
@@ -164,14 +168,19 @@ workflow PIPELINE_INITIALISATION {
                     return new_meta
                     }.unique()
 
-    ch_case_info = ch_samples.toList().map { it -> createCaseChannel(it) }
+    ch_case_info = ch_samples.toList().map { it -> validateNoMixedCaseInput(it); createCaseChannel(it) }
+
+    ch_precalled_vcfs = ch_samplesheet_by_type.precalled
+        .toList()
+        .map { rows -> extractPrecalledVcfs(rows) }
 
     emit:
-    reads     = ch_samplesheet_by_type.fastq
-    align     = ch_samplesheet_by_type.align
-    samples   = ch_samples
-    case_info = ch_case_info
-    versions  = ch_versions
+    reads          = ch_samplesheet_by_type.fastq // channel: [ val(meta), [ path(reads) ] ]
+    align          = ch_samplesheet_by_type.align // channel: [ val(meta), [ path(bam/cram), path(bai/crai) ] ]
+    samples        = ch_samples                   // channel: [ val(meta) ]
+    case_info      = ch_case_info                 // channel: [ val(case_info) ]
+    precalled_vcfs = ch_precalled_vcfs             // channel: [ val([snv:[vcf,tbi]|null, sv:[...]|null, mt:[...]|null]) ]
+    versions       = ch_versions                  // channel: [ path(versions) ]
 }
 
 /*
@@ -274,6 +283,42 @@ def boolean hasSpringInput() {
     return file(params.input).readLines().any { line -> line.contains('.spring') }
 }
 
+// Checks whether any samplesheet row has its 'type' column set to the given precalled-VCF type (snv/sv/mt)
+def boolean hasPrecalledVcfOfType(String type) {
+    def lines = file(params.input).readLines()
+    if (!lines) {
+        return false
+    }
+    def header   = lines[0].split(',', -1)*.trim()
+    def type_idx = header.indexOf('type')
+    if (type_idx == -1) {
+        return false
+    }
+    return lines.drop(1).any { line ->
+        def fields = line.split(',', -1)
+        type_idx < fields.size() && fields[type_idx].trim() == type
+    }
+}
+
+// Per-type wrappers used to compute the has_precalled_* emits and gate calling/annotation downstream
+def boolean hasPrecalledSnvVcf() {
+    return hasPrecalledVcfOfType('snv')
+}
+
+def boolean hasPrecalledSvVcf() {
+    return hasPrecalledVcfOfType('sv')
+}
+
+def boolean hasPrecalledMtVcf() {
+    return hasPrecalledVcfOfType('mt')
+}
+
+// True whenever the case is fully precalled for at least one type - since validateNoMixedCaseInput
+// guarantees such a case has zero fastq/bam/cram rows, this also means no alignment data exists at all
+def boolean hasAnyPrecalledVcf() {
+    return hasPrecalledSnvVcf() || hasPrecalledSvVcf() || hasPrecalledMtVcf()
+}
+
 def generateReadGroupLine(file, meta, params) {
     return "\'@RG\\tID:" + file.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"
 }
@@ -315,11 +360,65 @@ def createCaseChannel(List rows) {
     return case_info
 }
 
+// A case must be either fully precalled (vcf/tbi/type rows) or fully processed from raw/aligned reads, never both
+def validateNoMixedCaseInput(List rows) {
+    def groups_by_case = [:]
+    rows.each { row ->
+        def group = row.data_type.endsWith('_vcf') ? 'vcf' : 'align'
+        groups_by_case.computeIfAbsent(row.case_id) { [] as Set }.add(group)
+    }
+    groups_by_case.each { case_id, groups ->
+        if (groups.size() > 1) {
+            error("Case '${case_id}' mixes precalled VCF input (vcf/tbi/type columns) with fastq/spring/bam/cram input. A case must be either fully precalled or fully processed from raw/aligned reads, not both.")
+        }
+    }
+}
+
+// Function to collect precalled vcf/tbi pairs per variant type from rows tagged with a "*_vcf" data_type
+def extractPrecalledVcfs(List rows) {
+    def precalled = [snv: null, sv: null, mt: null]
+    rows.each { meta, files ->
+        def type = meta.data_type - "_vcf"
+        if (precalled[type] && precalled[type] != files) {
+            error("Conflicting precalled '${type}' VCFs supplied in samplesheet for the same case.")
+        }
+        precalled[type] = files
+    }
+    return precalled
+}
+
 //
 // Check and validate pipeline parameters
 //
 def validateInputParameters() {
     genomeExistsError()
+    validatePrecalledVcfCoverage()
+}
+
+// A case with any precalled VCF has no fastq/bam/cram rows (enforced by validateNoMixedCaseInput), so every
+// relevant type must either have a precalled VCF or have its calling explicitly skipped, otherwise it would
+// silently run calling with no input data
+def validatePrecalledVcfCoverage() {
+    def has_snv = hasPrecalledSnvVcf()
+    def has_sv  = hasPrecalledSvVcf()
+    def has_mt  = hasPrecalledMtVcf()
+    if (!has_snv && !has_sv && !has_mt) {
+        return
+    }
+    def run_mt  = params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes
+    def missing = []
+    if (!has_snv && !parseSkipList(params.skip_subworkflows, 'snv_calling')) {
+        missing << 'snv'
+    }
+    if (!has_sv && !parseSkipList(params.skip_subworkflows, 'sv_calling')) {
+        missing << 'sv'
+    }
+    if (run_mt && !has_mt && !parseSkipList(params.skip_subworkflows, 'mt_calling')) {
+        missing << 'mt'
+    }
+    if (missing) {
+        error("The samplesheet supplies a precalled VCF for at least one variant type, making this a fully-precalled case with no fastq/bam/cram input for calling. But no precalled VCF was supplied for: ${missing.join(', ')}. Either add a precalled VCF for ${missing.join(', ')}, or skip that calling explicitly via --skip_subworkflows.")
+    }
 }
 
 
@@ -379,8 +478,13 @@ def checkRequiredParameters(params) {
     }
 
     def all_skips = params.skip_subworkflows+","+params.skip_tools
+    // These are all BAM/alignment-dependent auxiliary steps that are also skipped at runtime whenever
+    // the case is fully precalled (no alignment data exists at all), even though that isn't reflected
+    // in --skip_tools/--skip_subworkflows, so their extra params shouldn't be forced mandatory either
+    def alignmentDependentConditions = ['repeat_calling', 'repeat_annotation', 'me_calling', 'me_annotation', 'gens', 'germlinecnvcaller']
     dynamicRequirements.each { condition, paramsList ->
-        if (!all_skips.split(',').contains(condition)) {
+        def auto_skipped = condition in alignmentDependentConditions && hasAnyPrecalledVcf()
+        if (!all_skips.split(',').contains(condition) && !auto_skipped) {
                 mandatoryParams += paramsList
         }
     }
