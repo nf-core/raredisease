@@ -20,6 +20,9 @@ include { CREATE_PEDIGREE_FILE    } from './modules/local/create_pedigree_file'
 include { channelFromPath         } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { channelFromPathWithMeta } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { channelFromSamplesheet  } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { hasPrecalledMtVcf       } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { hasPrecalledSnvVcf      } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { hasPrecalledSvVcf       } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { parseSkipList           } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
@@ -41,6 +44,7 @@ workflow NFCORE_RAREDISEASE {
     take:
     ch_alignments
     ch_case_info
+    ch_precalled_vcfs
     ch_reads
     ch_samples
     val_aligner
@@ -358,16 +362,22 @@ workflow NFCORE_RAREDISEASE {
     }
 
     // Subworkflows
+    // A precalled VCF supplied in the samplesheet for a given type auto-skips calling for that type.
+    // Computed not through a subworkflow emit, since skip_* must be plain booleans.
+    val_has_precalled_snv      = hasPrecalledSnvVcf()
+    val_has_precalled_sv       = hasPrecalledSvVcf()
+    val_has_precalled_mt       = hasPrecalledMtVcf()
     skip_me_annotation         = parseSkipList(val_skip_subworkflows, 'me_annotation')
     skip_me_calling            = parseSkipList(val_skip_subworkflows, 'me_calling')
     skip_mt_annotation         = parseSkipList(val_skip_subworkflows, 'mt_annotation')
+    skip_mt_calling            = parseSkipList(val_skip_subworkflows, 'mt_calling') || val_has_precalled_mt
     skip_mt_subsample          = parseSkipList(val_skip_subworkflows, 'mt_subsample')
     skip_repeat_annotation     = parseSkipList(val_skip_subworkflows, 'repeat_annotation')
     skip_repeat_calling        = parseSkipList(val_skip_subworkflows, 'repeat_calling')
     skip_snv_annotation        = parseSkipList(val_skip_subworkflows, 'snv_annotation')
-    skip_snv_calling           = parseSkipList(val_skip_subworkflows, 'snv_calling')
+    skip_snv_calling           = parseSkipList(val_skip_subworkflows, 'snv_calling') || val_has_precalled_snv
     skip_sv_annotation         = parseSkipList(val_skip_subworkflows, 'sv_annotation')
-    skip_sv_calling            = parseSkipList(val_skip_subworkflows, 'sv_calling')
+    skip_sv_calling            = parseSkipList(val_skip_subworkflows, 'sv_calling') || val_has_precalled_sv
     skip_generate_clinical_set = parseSkipList(val_skip_subworkflows, 'generate_clinical_set')
 
     //
@@ -460,6 +470,7 @@ workflow NFCORE_RAREDISEASE {
         ch_par_bed,
         ch_pedfile,
         ch_ploidy_model,
+        ch_precalled_vcfs,
         ch_readcount_intervals,
         ch_reads,
         ch_reduced_penetrance,
@@ -493,36 +504,39 @@ workflow NFCORE_RAREDISEASE {
         ch_vep_cache,
         ch_vep_extra_files,
         ch_versions,
-        skip_me_calling,
+        skip_fastp,
+        skip_fastqc,
+        skip_gatkcontamination,
+        skip_generate_clinical_set,
+        skip_gens,
+        skip_germlinecnvcaller,
         skip_me_annotation,
+        skip_me_calling,
+        skip_mitosalt,
         skip_mt_annotation,
+        skip_mt_calling,
         skip_mt_subsample,
+        skip_ngsbits,
+        skip_peddy,
         skip_repeat_annotation,
         skip_repeat_calling,
+        skip_smncopynumbercaller,
         skip_snv_annotation,
         skip_snv_calling,
         skip_sv_annotation,
         skip_sv_calling,
-        skip_generate_clinical_set,
-        skip_fastp,
-        skip_fastqc,
-        skip_gatkcontamination,
-        skip_gens,
-        skip_germlinecnvcaller,
-        skip_mitosalt,
-        skip_ngsbits,
-        skip_peddy,
-        skip_smncopynumbercaller,
         skip_vcf2cytosure,
         skip_verifybamid,
         val_aligner,
         val_analysis_type,
         val_cadd_resources,
         val_concatenate_snv_calls,
-        val_skip_split_multiallelics,
         val_exclude_alt,
         val_extract_alignments,
         val_genome,
+        val_has_precalled_mt,
+        val_has_precalled_snv,
+        val_has_precalled_sv,
         val_heavy_strand_origin_end,
         val_heavy_strand_origin_start,
         val_homoplasmy_af_threshold,
@@ -554,18 +568,19 @@ workflow NFCORE_RAREDISEASE {
         val_multiqc_samples,
         val_outdir,
         val_platform,
+        val_qc_metrics_tool,
         val_run_mt,
         val_run_rtgvcfeval,
         val_run_vcfanno_db_sanity_check,
         val_sample_id_map,
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram,
+        val_skip_split_multiallelics,
         val_svdb_query_bedpedbs,
         val_svdb_query_dbs,
         val_target_bed,
         val_variant_caller,
-        val_vep_cache_version,
-        val_qc_metrics_tool
+        val_vep_cache_version
     )
     emit:
     align_fastp_out                                     = RAREDISEASE.out.align_fastp_out              // channel: [ val(meta), path(json|html|log|reads|reads_fail|reads_merged) ]
@@ -744,6 +759,7 @@ workflow {
     NFCORE_RAREDISEASE (
         PIPELINE_INITIALISATION.out.align,
         PIPELINE_INITIALISATION.out.case_info,
+        PIPELINE_INITIALISATION.out.precalled_vcfs,
         PIPELINE_INITIALISATION.out.reads,
         PIPELINE_INITIALISATION.out.samples,
         params.aligner,
