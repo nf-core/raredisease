@@ -14,30 +14,78 @@ nextflow_workflow {
 
     config "./nextflow.config"
 
-    test("ANNOTATE_MOBILE_ELEMENTS - GRCh37, stub") {
+    setup {
+        run("UNTAR") {
+            script "modules/nf-core/untar/main.nf"
+            process {
+                """
+                input[0] = channel.of([
+                    [id:'vep_cache'],
+                    file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)
+                ])
+                """
+            }
+        }
+    }
 
-        options "-stub"
+    test("ANNOTATE_MOBILE_ELEMENTS - GRCh37") {
 
         when {
             params {
-                bcftools_args = "--output-type z"
+                bcftools_args = "--apply-filters .,PASS --output-type z"
             }
             workflow {
                 """
                 input[0] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
                 input[1] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
                 input[2] = channel.of([
-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
-                    'FRQ',
-                    'OCC',
-                    'swegen_FRQ',
-                    'swegen_OCC'
+                    file(params.pipelines_testdata_base_path + 'reference/svdb_gnomad_genomes_sv-.vcf', checkIfExists: true),
+                    'AF',
+                    'AC',
+                    'gnomad_svAF',
+                    'gnomad_svAC'
                 ])
-                input[3] = channel.of([
-                    [id:'justhusky', single_end:false],
-                    file(params.pipelines_testdata_base_path + 'reference/grch38_gnomad_reformated_-r3.1.1-.vcf.gz', checkIfExists: true)
+                input[3] = channel.of([[id:'earlycasualcaiman', "single_end": false], file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mobile_elements.vcf.gz', checkIfExists: true)])
+                input[4] = UNTAR.out.untar.map { _meta, untar -> untar }.collect()
+                input[5] = 'GRCh37'
+                input[6] = 107
+                input[7] = channel.value([])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    "${file(workflow.out.vcf_ann[0][1]).name}",
+                    path(workflow.out.vcf_ann[0][1]).vcf.summary
+                ).match() }
+            )
+        }
+    }
+
+    test("ANNOTATE_MOBILE_ELEMENTS - GRCh37, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                bcftools_args = "--apply-filters .,PASS --output-type z"
+            }
+            workflow {
+                """
+                input[0] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
+                input[1] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[2] = channel.of([
+                    file(params.pipelines_testdata_base_path + 'reference/svdb_gnomad_genomes_sv-.vcf', checkIfExists: true),
+                    'AF',
+                    'AC',
+                    'gnomad_svAF',
+                    'gnomad_svAC'
                 ])
-                input[4] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
+                input[3] = channel.of([[id:'earlycasualcaiman', "single_end": false], file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mobile_elements.vcf.gz', checkIfExists: true)])
+                input[4] = UNTAR.out.untar.map { _meta, untar -> untar }.collect()
                 input[5] = 'GRCh37'
                 input[6] = 107
                 input[7] = channel.value([])

@@ -225,9 +225,9 @@ Note that the pipeline is modular in architecture. It offers you the flexibility
 
 The pipeline is modular — individual tools and subworkflows can be skipped using `--skip_tools` and `--skip_subworkflows` (comma-separated). The valid values are:
 
-| `--skip_tools`                                                                                            |
-| --------------------------------------------------------------------------------------------------------- |
-| `fastp`, `fastqc`, `gens`, `germlinecnvcaller`, `ngsbits`, `peddy`, `smncopynumbercaller`, `vcf2cytosure` |
+| `--skip_tools`                                                                                                                                |
+| --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fastp`, `fastqc`, `gatkcontamination`, `gens`, `germlinecnvcaller`, `ngsbits`, `peddy`, `smncopynumbercaller`, `vcf2cytosure`, `verifybamid` |
 
 | `--skip_subworkflows`                                                                                                                                                                                        |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -275,20 +275,33 @@ The mandatory and optional parameters for each category are tabulated below.
 <sup>7</sup>Used to limit your analysis to specific contigs. Can be used to remove alignments to unplaced contigs to minimize potential errors. This parameter should be used in conjunction with the `extract_alignments` parameter.<br />
 <sup>8</sup>When set to true, alignments to alt/unplaced contigs are removed after alignment using samtools view, retaining only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM). Note that this will affect all downstream variant calling, as variants will only be called on these primary chromosomes.<br />
 
+### BAM QC metrics tool
+
+By default, BAM-level QC metrics are collected with Picard (`CollectMultipleMetrics`, `CollectHsMetrics`, `CollectWgsMetrics`).
+
+Set `--qc_metrics_tool riker` to instead collect these metrics with a single [Riker](https://github.com/fulcrumgenomics/riker) `multi` run.
+
+When `riker` is selected it is used regardless of aligner for the alignment, insert-size and GC-bias metrics (and, when a target BED is set, the hybrid-capture metrics), but when `--aligner sentieon` is used the WGS coverage metrics are still produced by Sentieon (matching the Picard path).
+
+Targeted (hybrid-capture) metrics are produced only when a target BED is supplied.
+
 ##### 2. QC stats from the alignment files
 
-| Mandatory                                                    | Optional                        |
-| ------------------------------------------------------------ | ------------------------------- |
-| intervals_wgs<sup>1</sup>                                    |                                 |
-| intervals_y<sup>1</sup>                                      |                                 |
-| target_bed / (bait_intervals & target_intervals)<sup>2</sup> |                                 |
-|                                                              | verifybamid_svd_bed<sup>3</sup> |
-|                                                              | verifybamid_svd_mu<sup>3</sup>  |
-|                                                              | verifybamid_svd_ud<sup>3</sup>  |
+| Mandatory                                                    | Optional                            |
+| ------------------------------------------------------------ | ----------------------------------- |
+| intervals_wgs<sup>1</sup>                                    |                                     |
+| intervals_y<sup>1</sup>                                      |                                     |
+| target_bed / (bait_intervals & target_intervals)<sup>2</sup> |                                     |
+|                                                              | verifybamid_svd_bed<sup>3</sup>     |
+|                                                              | verifybamid_svd_mu<sup>3</sup>      |
+|                                                              | verifybamid_svd_ud<sup>3</sup>      |
+|                                                              | contamination_sites<sup>4</sup>     |
+|                                                              | contamination_sites_tbi<sup>4</sup> |
 
 <sup>1</sup>These files are Picard's style interval list files, comprising the entire genome or only the chromosome Y. A version of these files for GRCh37 and for GRCh38 is supplied in the pipeline assets. These files are not necessary if you are using Sentieon.<br />
 <sup>2</sup> If a target_bed file is provided, bait_intervals and target_intervals can be generated by the pipeline.<br />
-<sup>3</sup> Used by VerifyBamID2 to check for contamination. These files can either be downloaded from [VerifyBamID2 repository](https://github.com/Griffan/VerifyBamID/tree/master/resource) or created using VerifyBamID2 with custom files as described [here](https://github.com/Griffan/VerifyBamID?tab=readme-ov-file#generating-your-own-resource-files).
+<sup>3</sup> Used by VerifyBamID2 to check for contamination. These files can either be downloaded from [VerifyBamID2 repository](https://github.com/Griffan/VerifyBamID/tree/master/resource) or created using VerifyBamID2 with custom files as described [here](https://github.com/Griffan/VerifyBamID?tab=readme-ov-file#generating-your-own-resource-files).<br />
+<sup>4</sup> Used by GATK CalculateContamination to estimate cross-sample contamination. Provide a VCF of common variants (e.g. `small_exac_common_3.hg38.vcf.gz`) and its tabix index. When not provided, GATK contamination is skipped automatically. Can also be skipped explicitly via `--skip_tools gatkcontamination`.
 
 ##### 3. Repeat expansions
 

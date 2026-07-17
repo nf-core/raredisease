@@ -643,6 +643,7 @@ def toolCitationText() {
     }
     qc_bam_text = [
         "Picard (Broad Institute, 2023)",
+        params.qc_metrics_tool.equals("riker") ? "Riker (Fulcrum Genomics, 2026)," : "",
         "Sambamba (Tarasov et al., 2015),",
         "TIDDIT (Eisfeldt et al., 2017),",
         "UCSC Bigwig and Bigbed (Kent et al., 2010),",
@@ -766,6 +767,7 @@ def toolBibliographyText() {
     }
     qc_bam_text = [
         "<li>Broad Institute. (2023). Picard Tools. In Broad Institute, GitHub repository. http://broadinstitute.github.io/picard/</li>",
+        params.qc_metrics_tool.equals("riker") ? "<li>Fulcrum Genomics. (2026). Riker. In Fulcrum Genomics, GitHub repository. https://github.com/fulcrumgenomics/riker</li>" : "",
         "<li>Tarasov, A., Vilella, A. J., Cuppen, E., Nijman, I. J., & Prins, P. (2015). Sambamba: Fast processing of NGS alignment formats. Bioinformatics, 31(12), 2032–2034. https://doi.org/10.1093/bioinformatics/btv098</li>",
         "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>",
         "<li>Kent, W. J., Zweig, A. S., Barber, G., Hinrichs, A. S., & Karolchik, D. (2010). BigWig and BigBed: Enabling browsing of large distributed datasets. Bioinformatics, 26(17), 2204–2207. https://doi.org/10.1093/bioinformatics/btq351</li>",

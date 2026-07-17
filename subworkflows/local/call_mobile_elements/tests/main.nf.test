@@ -16,16 +16,52 @@ nextflow_workflow {
     tag "tabix/tabix"
     tag "svdb/merge"
 
-    test("CALL_MOBILE_ELEMENTS - stub") {
+    test("CALL_MOBILE_ELEMENTS") {
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([id:'earlycasualcaiman'])
+                input[1] = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'earlycasualcaiman'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[2] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[4] = channel
+                    .fromPath(params.pipelines_testdata_base_path + 'reference/mobile_element_references.tsv', checkIfExists: true)
+                    .splitText()
+                    .map { line -> line.trim() }
+                    .map { line -> line.split('\\t') as List }
+                    .filter { cols -> !(cols[0].equalsIgnoreCase('type') && cols[1].equalsIgnoreCase('path')) }
+                    .map { cols -> [cols[0], file(cols[1], checkIfExists: true)] }
+                """
+            }
+        }
+
+        then {
+             assertAll(
+                { assert workflow.success },
+                { assert workflow.out.tbi },
+                { assert snapshot(
+                    "${file(workflow.out.vcf[0][1]).name}",
+                    path(workflow.out.vcf[0][1]).vcf.summary
+                ).match() }
+             )
+        }
+    }
+
+        test("CALL_MOBILE_ELEMENTS - stub") {
 
         options "-stub"
 
         when {
             workflow {
                 """
-                input[0] = channel.of([id:'justhusky'])
+                input[0] = channel.of([id:'earlycasualcaiman'])
                 input[1] = channel.of([
-                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'earlycasualcaiman'],
                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
                 ])

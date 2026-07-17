@@ -5,27 +5,38 @@
                 "0": [
                     [
                         {
-                            "id": "justhusky",
+                            "id": "earlycasualcaiman",
                             "single_end": false
                         },
-                        "justhusky_filter.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "earlycasualcaiman_filter.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "vcf_ann": [
                     [
                         {
-                            "id": "justhusky",
+                            "id": "earlycasualcaiman",
                             "single_end": false
                         },
-                        "justhusky_filter.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "earlycasualcaiman_filter.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-03-05T00:16:05.837537418",
+        "timestamp": "2026-07-14T09:49:42.64836918",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.06.0"
+        }
+    },
+    "ANNOTATE_MOBILE_ELEMENTS - GRCh37": {
+        "content": [
+            "earlycasualcaiman_filter.vcf.gz",
+            "VcfFile [chromosomes=[21], sampleCount=1, variantCount=10, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-07-13T14:48:33.584703611",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.06.0"
         }
     }
 }

@@ -669,8 +669,8 @@
                     "type": "string",
                     "fa_icon": "fas fa-forward",
                     "description": "Disable specified tools.",
-                    "help_text": "Multiple tools can be specified, separated by commas. The GATK contamination check (`gatkcontamination`) additionally requires `contamination_sites` to be set; it is skipped automatically when that file is not provided.",
-                    "pattern": "^((fastp|gens|germlinecnvcaller|peddy|smncopynumbercaller|vcf2cytosure|fastqc|ngsbits|mitosalt|gatkcontamination)?,?)*(?<!,)$"
+                    "help_text": "Multiple tools can be specified, separated by commas. The GATK contamination check (`gatkcontamination`) additionally requires `contamination_sites` to be set; it is skipped automatically when that file is not provided. VerifyBamID2 (`verifybamid`) is skipped automatically when `verifybamid_svd_bed` is not provided.",
+                    "pattern": "^((fastp|gens|germlinecnvcaller|peddy|smncopynumbercaller|vcf2cytosure|fastqc|ngsbits|mitosalt|gatkcontamination|verifybamid)?,?)*(?<!,)$"
                 }
             }
         },
@@ -693,6 +693,13 @@
                     "description": "Specifies the alignment algorithm to use - available options are 'bwamem2', 'bwa' and 'sentieon'.",
                     "fa_icon": "fas fa-align-center",
                     "enum": ["bwa", "bwamem2", "sentieon"]
+                },
+                "qc_metrics_tool": {
+                    "type": "string",
+                    "default": "picard",
+                    "description": "Specifies the tool to collect BAM QC metrics - available options are 'picard' and 'riker'.",
+                    "fa_icon": "fas fa-ruler",
+                    "enum": ["picard", "riker"]
                 },
                 "samtools_sort_threads": {
                     "type": "integer",
