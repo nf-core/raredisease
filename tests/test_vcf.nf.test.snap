@@ -1,0 +1,242 @@
+{
+    "-profile test_vcf": {
+        "content": [
+            103,
+            {
+                "BCFTOOLS_CONCAT": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_ROH": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_SORT": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_VIEW": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_VIEW_RHOCALL": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_VIEW_UNCOMPRESS": {
+                    "bcftools": 1.22
+                },
+                "BWAMEM2_INDEX_GENOME": {
+                    "bwamem2": "2.2.1"
+                },
+                "BWAMEM2_INDEX_MT": {
+                    "bwamem2": "2.2.1"
+                },
+                "BWAMEM2_INDEX_MT_SHIFT": {
+                    "bwamem2": "2.2.1"
+                },
+                "BWA_INDEX_GENOME": {
+                    "bwa": "0.7.19-r1273"
+                },
+                "CHROMOGRAPH_AUTOZYG": {
+                    "chromograph": "1.3.1"
+                },
+                "CREATE_HGNCIDS_FILE": {
+                    "create_hgncids_file": 1.0,
+                    "python": "3.14.3"
+                },
+                "CREATE_PEDIGREE_FILE": {
+                    "coreutils": 9.5
+                },
+                "CUSTOM_ADDMOSTSEVERECONSEQUENCE": {
+                    "addmostsevereconsequence": "1.2.0",
+                    "bgzip": 1.21
+                },
+                "CUSTOM_ADDMOSTSEVEREPLI": {
+                    "addmostseverepli": "1.2.0",
+                    "bgzip": 1.21
+                },
+                "ENSEMBLVEP_MT": {
+                    "ensemblvep": 110.1,
+                    "perl-math-cdf": 0.1,
+                    "tabix": 1.21
+                },
+                "ENSEMBLVEP_SNV": {
+                    "ensemblvep": 110.1,
+                    "perl-math-cdf": 0.1,
+                    "tabix": 1.21
+                },
+                "ENSEMBLVEP_SV": {
+                    "ensemblvep": 110.1,
+                    "perl-math-cdf": 0.1,
+                    "tabix": 1.21
+                },
+                "FILTERVEP": {
+                    "filtervep": "1.0.0"
+                },
+                "GATK4_SELECTVARIANTS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK4_SPLITINTERVALS": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK_SD": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK_SD_MT": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GATK_SHIFTFASTA": {
+                    "gatk4": "4.6.2.0"
+                },
+                "GENMOD_ANNOTATE": {
+                    "genmod": "3.10.2"
+                },
+                "GENMOD_COMPOUND": {
+                    "genmod": "3.10.2"
+                },
+                "GENMOD_MODELS": {
+                    "genmod": "3.10.2"
+                },
+                "GENMOD_SCORE": {
+                    "genmod": "3.10.2"
+                },
+                "GENOME_FAI_TO_BED": {
+                    "gawk": "5.3.1"
+                },
+                "GET_CHROM_SIZES": {
+                    "coreutils": 9.5
+                },
+                "HISAT2_INDEX_GENOME": {
+                    "hisat2": "2.2.1"
+                },
+                "LAST_INDEX_MT": {
+                    "last": 1611
+                },
+                "PEDDY": {
+                    "peddy": "0.4.8"
+                },
+                "PICARD_SORTVCF": {
+                    "picard": "3.4.0"
+                },
+                "RHOCALL_ANNOTATE": {
+                    "rhocall": "0.5.1"
+                },
+                "RHOCALL_VIZ": {
+                    "rhocall": "0.5.1"
+                },
+                "SAMTOOLS_EXTRACT_MT": {
+                    "samtools": "1.22.1"
+                },
+                "SAMTOOLS_FAIDX_MT": {
+                    "samtools": "1.22.1"
+                },
+                "SVDB_QUERY_DB": {
+                    "svdb": "2.8.4"
+                },
+                "TABIX_BGZIPTABIX": {
+                    "bgzip": 1.21,
+                    "tabix": 1.21
+                },
+                "TABIX_GNOMAD_AF": {
+                    "tabix": 1.21
+                },
+                "UCSC_WIGTOBIGWIG": {
+                    "ucsc": 482
+                },
+                "UNTAR_VEP_CACHE": {
+                    "untar": 1.34
+                },
+                "VCFANNO": {
+                    "vcfanno": "0.3.7"
+                },
+                "VCFANNO_MT": {
+                    "vcfanno": "0.3.7"
+                },
+                "Workflow": {
+                    "nf-core/raredisease": "v3.2.0dev"
+                },
+                "ZIP_TABIX_ROHCALL": {
+                    "bgzip": 1.21,
+                    "tabix": 1.21
+                }
+            },
+            [
+                "annotate_snv",
+                "annotate_snv/genome",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr1.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr10.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr11.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr12.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr13.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr14.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr15.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr16.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr17.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr18.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr19.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr2.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr20.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr21.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr22.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr3.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr4.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr5.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr6.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr7.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr8.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr9.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chrM.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chrX.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chrY.png",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz/hugelymodelbat_rhocallviz.bed",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz/hugelymodelbat_rhocallviz.bw",
+                "annotate_snv/genome/hugelymodelbat_rhocallviz/hugelymodelbat_rhocallviz.wig",
+                "annotate_snv/genome/justhusky_rhocall_filter_vep.vcf.gz",
+                "annotate_snv/genome/justhusky_rhocall_filter_vep.vcf.gz.tbi",
+                "annotate_snv/mitochondria",
+                "annotate_snv/mitochondria/justhusky_precalled_mt_vcfanno_vep.vcf.gz",
+                "annotate_snv/mitochondria/justhusky_precalled_mt_vcfanno_vep.vcf.gz.tbi",
+                "annotate_sv",
+                "annotate_sv/justhusky_svdbquery_vep.vcf.gz",
+                "annotate_sv/justhusky_svdbquery_vep.vcf.gz.tbi",
+                "annotate_sv/justhusky_svdbquery_vep_summary.html",
+                "multiqc",
+                "multiqc/multiqc_data",
+                "multiqc/multiqc_data/.stub",
+                "multiqc/multiqc_plots",
+                "multiqc/multiqc_plots/.stub",
+                "multiqc/multiqc_report.html",
+                "peddy",
+                "peddy/justhusky.het_check.csv",
+                "peddy/justhusky.het_check.png",
+                "peddy/justhusky.html",
+                "peddy/justhusky.ped_check.csv",
+                "peddy/justhusky.ped_check.png",
+                "peddy/justhusky.ped_check.rel-difference.csv",
+                "peddy/justhusky.peddy.ped",
+                "peddy/justhusky.sex_check.csv",
+                "peddy/justhusky.sex_check.png",
+                "peddy/justhusky.vs.html",
+                "pedigree",
+                "pedigree/justhusky.ped",
+                "pipeline_info",
+                "pipeline_info/nf_core_raredisease_software_mqc_versions.yml",
+                "rank_and_filter",
+                "rank_and_filter/justhusky_mt_ranked_clinical.vcf.gz",
+                "rank_and_filter/justhusky_mt_ranked_clinical.vcf.gz.tbi",
+                "rank_and_filter/justhusky_mt_ranked_research.vcf.gz",
+                "rank_and_filter/justhusky_mt_ranked_research.vcf.gz.tbi",
+                "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz",
+                "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz.tbi",
+                "rank_and_filter/justhusky_snv_ranked_research.vcf.gz",
+                "rank_and_filter/justhusky_snv_ranked_research.vcf.gz.tbi",
+                "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz",
+                "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz.tbi",
+                "rank_and_filter/justhusky_sv_ranked_research.vcf.gz",
+                "rank_and_filter/justhusky_sv_ranked_research.vcf.gz.tbi"
+            ]
+        ],
+        "timestamp": "2026-07-17T15:55:39.417216514",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

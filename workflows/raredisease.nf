@@ -341,6 +341,12 @@ workflow RAREDISEASE {
         .filter { _case_info, precalled -> precalled.mt }
         .map { case_info, precalled -> [case_info, precalled.mt[0], precalled.mt[1]] }
 
+    // A case with any precalled VCF has zero fastq/bam/cram rows (enforced by validateNoMixedCaseInput),
+    // so no alignment data exists at all for it - used to gate BAM-only auxiliary steps that have no
+    // precalled substitute (SMN copy number, contamination check, mobile elements/repeat expansion
+    // calling from BAM, vcf2cytosure)
+    def has_any_precalled_vcf = val_has_precalled_snv || val_has_precalled_sv || val_has_precalled_mt
+
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
     //
@@ -464,7 +470,7 @@ workflow RAREDISEASE {
     ch_contamination_table  = Channel.empty()
     ch_contamination_pileup = Channel.empty()
 
-    if (!skip_contamination) {
+    if (!skip_contamination && !has_any_precalled_vcf) {
 
         // Prepare BAM input with BAI
         ch_bam_for_contamination = ch_mapped.genome_marked_bam
@@ -493,7 +499,7 @@ workflow RAREDISEASE {
     RENAME ALIGNMENT FILES FOR SMNCOPYNUMBERCALLER & REPEATCALLING
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if ( val_analysis_type.equals("wgs") && (!skip_smncopynumbercaller || !skip_repeat_calling)) {
+    if ( val_analysis_type.equals("wgs") && (!skip_smncopynumbercaller || !skip_repeat_calling) && !has_any_precalled_vcf) {
         RENAME_BAM(ch_mapped.genome_marked_bam, "bam")
         RENAME_BAI(ch_mapped.genome_marked_bai, "bam.bai")
     }
@@ -504,7 +510,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!skip_repeat_calling && val_analysis_type.equals("wgs") ) {
+    if (!skip_repeat_calling && val_analysis_type.equals("wgs") && !has_any_precalled_vcf ) {
         CALL_REPEAT_EXPANSIONS (
             RENAME_BAM.out.output.join(RENAME_BAI.out.output, failOnMismatch:true, failOnDuplicate:true),
             ch_variant_catalog,
@@ -925,7 +931,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if (!skip_me_calling && val_analysis_type.equals("wgs")) {
+    if (!skip_me_calling && val_analysis_type.equals("wgs") && !has_any_precalled_vcf) {
         CALL_MOBILE_ELEMENTS(
             ch_case_info,
             ch_mapped.genome_marked_bam_bai,
@@ -986,7 +992,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    if ( val_analysis_type.equals("wgs") && !skip_smncopynumbercaller ) {
+    if ( val_analysis_type.equals("wgs") && !skip_smncopynumbercaller && !has_any_precalled_vcf ) {
 
         RENAME_BAM.out.output
             .collect{_meta, bam -> bam}
@@ -1038,7 +1044,7 @@ workflow RAREDISEASE {
     Generate CGH files from sequencing data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    if (!skip_vcf2cytosure && val_analysis_type.equals("wgs") && !skip_sv_annotation) {
+    if (!skip_vcf2cytosure && val_analysis_type.equals("wgs") && !skip_sv_annotation && !has_any_precalled_vcf) {
         GENERATE_CYTOSURE_FILES (
             ch_mapped.genome_marked_bam_bai,
             ch_vcf2cytosure_blacklist,
