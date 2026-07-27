@@ -10,9 +10,102 @@ nextflow_workflow {
     tag "call_sv_tiddit"
     tag "call_sv_germlinecnvcaller"
     tag "call_sv_cnvnator"
+    tag "call_sv_mt"
 
+    tag "bwa/index"
     tag "svdb/merge"
     tag "tabix/tabix"
+
+    config "./nextflow.config"
+
+    test("CALL_STRUCTURAL_VARIANTS - wgs") {
+
+        setup {
+            run("BWA_INDEX") {
+                script "modules/nf-core/bwa/index/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'genome'],
+                        file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
+        when {
+            workflow {
+                """
+                input[0]  = BWA_INDEX.out.index.collect()
+                input[1]  = channel.of([id:'justhusky'])
+                input[2]  = channel.of([[id:'gcnvcaller'], []])
+                input[3]  = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[4]  = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)
+                ])
+                input[5]  = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[6]  = channel.from(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true))
+                input[7]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[9]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[10] = Channel.from("\$PWD").map { dir -> [[id:'genome'], file(dir)] }
+                input[11] = channel.value([[], []])
+                input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
+                input[13] = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[14] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)]).collect()
+                input[15] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)]).collect()
+                input[16] = Channel.from("${projectDir}/subworkflows/local/variant_evaluation/tests").map { dir -> [[id:'mt'], file(dir)] }
+                input[17] = channel.of([[id:'ploidy'], []])
+                input[18] = channel.of([[]])
+                input[19] = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    [
+                        file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_1.fastq.gz', checkIfExists: true),
+                        file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)
+                    ]
+                ])
+                input[20] = channel.empty()
+                input[21] = channel.value(10000000)
+                input[22] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[23] = true
+                input[24] = true
+                input[25] = 'wgs'
+                input[26] = 407
+                input[27] = 16081
+                input[28] = 5763
+                input[29] = 5730
+                input[30] = 16569
+                input[31] = 'MT'
+                input[32] = 15
+                input[33] = 0.01
+                input[34] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.tbi.collect { meta, tbi -> file(tbi).name },
+                    path(workflow.out.vcf[0][1]).vcf.summary
+                ).match() }
+            )
+        }
+    }
 
     test("CALL_STRUCTURAL_VARIANTS - wgs, stub") {
 
