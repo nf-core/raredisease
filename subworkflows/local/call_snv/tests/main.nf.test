@@ -1,0 +1,98 @@
+nextflow_workflow {
+
+    name "Test Workflow CALL_SNV"
+    script "subworkflows/local/call_snv/main.nf"
+    workflow "CALL_SNV"
+
+    tag "subworkflows"
+    tag "call_snv"
+    tag "call_snv_deepvariant"
+    tag "call_snv_sentieon"
+
+    tag "gatk4_selectvariants"
+
+    config "./nextflow.config"
+
+    test("CALL_SNV - deepvariant wgs") {
+
+        when {
+            workflow {
+                """
+                input[0]  = channel.of([[id:'interval'], []])
+                input[1]  = channel.of([id:'justhusky'])
+                input[2]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz', checkIfExists: true)])
+                input[3]  = channel.of([[id:'genome'], []])
+                input[4]  = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[5]  = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[7]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[9]  = channel.of([[id:'model'], []])
+                input[10] = channel.of([[id:'par'], []])
+                input[11] = channel.of([[id:'model'], []])
+                input[12] = channel.of([[id:'target'], [], []])
+                input[13] = 'wgs'
+                input[14] = false
+                input[15] = 'deepvariant'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(workflow.out.genome_vcf[0][1]).vcf.variantsMD5,
+                    path(workflow.out.genome_vcf[0][1]).vcf.summary,
+                    workflow.out.deepvariant_report.collect { meta, report -> file(report).name },
+                    workflow.out.genome_tabix.collect { meta, tbi -> file(tbi).name }
+                ).match() }
+            )
+        }
+    }
+
+    test("CALL_SNV - deepvariant wgs, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0]  = channel.of([[id:'interval'], []])
+                input[1]  = channel.of([id:'justhusky'])
+                input[2]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz', checkIfExists: true)])
+                input[3]  = channel.of([[id:'genome'], []])
+                input[4]  = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[5]  = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[7]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[9]  = channel.of([[id:'model'], []])
+                input[10] = channel.of([[id:'par'], []])
+                input[11] = channel.of([[id:'model'], []])
+                input[12] = channel.of([[id:'target'], [], []])
+                input[13] = 'wgs'
+                input[14] = false
+                input[15] = 'deepvariant'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out
+                ).match() }
+            )
+        }
+    }
+}

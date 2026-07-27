@@ -1,0 +1,97 @@
+name: gatk4_splitintervals
+description: Split intervals into sub-interval files.
+keywords:
+  - bed
+  - gatk4
+  - interval
+  - splitintervals
+tools:
+  - gatk4:
+      description: Genome Analysis Toolkit (GATK4)
+      homepage: https://gatk.broadinstitute.org/hc/en-us
+      documentation: https://gatk.broadinstitute.org/hc/en-us/categories/360002369672s
+      tool_dev_url: https://github.com/broadinstitute/gatk
+      doi: "10.1158/1538-7445.AM2017-3590"
+      licence: ["BSD-3-clause"]
+      identifier: ""
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. [ id:'test' ]
+    - intervals:
+        type: file
+        description: Interval file
+        ontologies: []
+  - - meta2:
+        type: map
+        description: |
+          Groovy Map containing reference information
+          e.g. [ id:'genome' ]
+    - fasta:
+        type: file
+        description: Reference FASTA
+        pattern: "*.{fa,fasta}"
+        ontologies: []
+  - - meta3:
+        type: map
+        description: |
+          Groovy Map containing reference information
+          e.g. [ id:'genome' ]
+    - fai:
+        type: file
+        description: Reference FASTA index
+        pattern: "*.fai"
+        ontologies: []
+  - - meta4:
+        type: map
+        description: |
+          Groovy Map containing reference information
+          e.g. [ id:'genome' ]
+    - dict:
+        type: file
+        description: Reference sequence dictionary
+        pattern: "*.dict"
+        ontologies: []
+output:
+  split_intervals:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. [ id:'test' ]
+          pattern: "*.interval_list"
+      - "**.interval_list":
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. [ id:'test' ]
+          pattern: "*.interval_list"
+  versions_gatk4:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - gatk4:
+          type: string
+          description: The name of the tool
+      - gatk --version | sed -n '/GATK.*v/s/.*v//p':
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - gatk4:
+          type: string
+          description: The name of the tool
+      - gatk --version | sed -n '/GATK.*v/s/.*v//p':
+          type: eval
+          description: The expression to obtain the version of the tool
+authors:
+  - "@nvnieuwk"
+  - "@ramprasadn"
+maintainers:
+  - "@nvnieuwk"
+  - "@ramprasadn"

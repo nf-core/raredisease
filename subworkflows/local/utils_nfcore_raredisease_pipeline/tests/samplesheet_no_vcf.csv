@@ -1,0 +1,2 @@
+sample,fastq_1,fastq_2,case_id
+proband,/fake/proband_1.fastq.gz,/fake/proband_2.fastq.gz,fam1

@@ -1,0 +1,84 @@
+{
+    "test-bcftools-roh": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.roh:md5,a75b347243c2e955ad4203a6be6dc616"
+                    ]
+                ],
+                "1": [
+                    [
+                        "BCFTOOLS_ROH",
+                        "bcftools",
+                        "1.22"
+                    ]
+                ],
+                "roh": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.roh:md5,a75b347243c2e955ad4203a6be6dc616"
+                    ]
+                ],
+                "versions_bcftools": [
+                    [
+                        "BCFTOOLS_ROH",
+                        "bcftools",
+                        "1.22"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
+        },
+        "timestamp": "2026-01-20T12:18:25.872864592"
+    },
+    "test-bcftools-roh-stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.roh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        "BCFTOOLS_ROH",
+                        "bcftools",
+                        "1.22"
+                    ]
+                ],
+                "roh": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.roh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions_bcftools": [
+                    [
+                        "BCFTOOLS_ROH",
+                        "bcftools",
+                        "1.22"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
+        },
+        "timestamp": "2026-01-20T12:18:32.403407806"
+    }
+}

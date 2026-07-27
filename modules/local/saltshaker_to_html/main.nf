@@ -1,0 +1,34 @@
+process SALTSHAKER_TO_HTML {
+    tag "$meta.id"
+    label "process_low"
+
+    conda "${moduleDir}/environment.yml"
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/a2/a23c958d5a0439419f82069df6217c542f6ab13816f9808ed73307dff1efe227/data':
+        'community.wave.seqera.io/library/typer:0.25.1--25ea8a9ce34456a3' }"
+
+    input:
+    tuple val(meta), path(saltshaker_classify_reports), val(sample_ids)
+
+    output:
+    tuple val(meta), path("*.html"), emit: classify_html
+
+    script:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    def args = task.ext.args ?: ""
+    """
+    saltshaker_to_html.py \
+        $args \
+        --input ${saltshaker_classify_reports.join(' --input ')} \
+        --sample ${sample_ids.join(' --sample ')} \
+        --output ${prefix}.html
+    """
+
+    stub:
+    def args = task.ext.args ?: ''
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    echo $args
+    touch ${prefix}.html
+    """
+}

@@ -1,0 +1,43 @@
+{
+    "homo_sapiens - bam, bai, [], [], sry - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        "NGSBITS_SAMPLEGENDER",
+                        "ngsbits",
+                        "2025_12"
+                    ]
+                ],
+                "tsv": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions_ngsbits": [
+                    [
+                        "NGSBITS_SAMPLEGENDER",
+                        "ngsbits",
+                        "2025_12"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-16T09:21:42.78314623"
+    }
+}

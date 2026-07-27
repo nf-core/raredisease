@@ -1,0 +1,96 @@
+nextflow_workflow {
+
+    name "Test Workflow CALL_SNV_SENTIEON"
+    script "subworkflows/local/call_snv_sentieon/main.nf"
+    workflow "CALL_SNV_SENTIEON"
+
+    tag "subworkflows"
+    tag "call_snv_sentieon"
+
+    tag "sentieon/dnascope"
+    tag "sentieon/dnamodelapply"
+    tag "bcftools/merge"
+    tag "bcftools/norm"
+    tag "bcftools/filter"
+    tag "bcftools/annotate"
+    tag "add_varcallername_to_bed"
+
+    config "./nextflow.config"
+
+    test("CALL_SNV_SENTIEON - single sample, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1] = channel.of([[id:'interval'], []])
+                input[2] = channel.of([id:'justhusky'])
+                input[3] = channel.of([[id:'genome'], file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true)])
+                input[4] = channel.of([[id:'genome'], file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)])
+                input[5] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[6] = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[7] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[8] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[9] = channel.of([[id:'model'], []])
+                input[10] = channel.value([])
+                input[11] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+
+    test("CALL_SNV_SENTIEON - two samples (merge), stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                        file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                    ],
+                    [
+                        [id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        file(params.pipelines_testdata_base_path + 'testdata/slowlycivilbuck_sorted_md.bam', checkIfExists: true),
+                        file(params.pipelines_testdata_base_path + 'testdata/slowlycivilbuck_sorted_md.bam.bai', checkIfExists: true)
+                    ]
+                )
+                input[1] = channel.of([[id:'interval'], []])
+                input[2] = channel.of([id:'justhusky'])
+                input[3] = channel.of([[id:'genome'], file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true)])
+                input[4] = channel.of([[id:'genome'], file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)])
+                input[5] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[6] = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[7] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[8] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[9] = channel.of([[id:'model'], []])
+                input[10] = channel.value([])
+                input[11] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}

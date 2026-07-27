@@ -1,0 +1,24 @@
+Changes in component 'nf-core/deepvariant/rundeepvariant'
+'modules/nf-core/deepvariant/rundeepvariant/meta.yml' is unchanged
+Changes in 'deepvariant/rundeepvariant/main.nf':
+--- modules/nf-core/deepvariant/rundeepvariant/main.nf
++++ modules/nf-core/deepvariant/rundeepvariant/main.nf
+@@ -46,7 +46,12 @@
+         ${regions} \\
+         ${par_regions} \\
+         --intermediate_results_dir=tmp \\
+-        --num_shards=${task.cpus}
++        --num_shards=${task.cpus} 2>&1 | tee deepvariant.log
++    
++    if grep -qi "queue\.Empty" deepvariant.log; then
++        echo "ERROR: Fatal error detected in tool log" >&2
++        exit 1
++    fi
+     """
+ 
+     stub:
+
+'modules/nf-core/deepvariant/rundeepvariant/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/deepvariant/rundeepvariant/tests/nextflow.config' is unchanged
+'modules/nf-core/deepvariant/rundeepvariant/tests/main.nf.test' is unchanged
+************************************************************

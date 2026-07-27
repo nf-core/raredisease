@@ -1,0 +1,54 @@
+{
+    "homo sapiens - vcf - bed": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.cgh:md5,c9bcda3fafe67359e353bedf02d041e8"
+                ]
+            ],
+            {
+                "versions_vcf2cytosure": [
+                    [
+                        "VCF2CYTOSURE",
+                        "vcf2cytosure",
+                        "0.9.3"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-04T15:29:44.501025"
+    },
+    "homo sapiens - vcf - bed - stub": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            {
+                "versions_vcf2cytosure": [
+                    [
+                        "VCF2CYTOSURE",
+                        "vcf2cytosure",
+                        "0.9.3"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-04T15:29:50.263249"
+    }
+}

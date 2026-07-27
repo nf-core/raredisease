@@ -1,0 +1,69 @@
+name: "retroseq_call"
+description: RetroSeq is a tool for discovery and genotyping of transposable element variants (TEVs) from next-gen sequencing reads aligned to a reference genome in BAM format.
+keywords:
+  - retroseq
+  - transposable elements
+  - genomics
+tools:
+  - "retroseq":
+      description: "RetroSeq: discovery and genotyping of TEVs from reads in BAM format."
+      homepage: "https://github.com/tk2/RetroSeq"
+      documentation: "https://github.com/tk2/RetroSeq"
+      tool_dev_url: "https://github.com/tk2/RetroSeq"
+      doi: "10.1093/bioinformatics/bts697"
+      licence: "['GPL']"
+
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'test', single_end:false ]`
+  - tab:
+      type: file
+      description: Output file from running retroseq -call
+      pattern: "*.tab"
+  - bam:
+      type: file
+      description: Sorted BAM file
+      pattern: "*.bam"
+  - bai:
+      type: file
+      description: Index of the sorted BAM file
+      pattern: "*.bam"
+  - meta2:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'test', single_end:false ]`
+  - fasta:
+      type: file
+      description: Reference genome in fasta format
+      pattern: "*.fasta"
+  - meta3:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'test', single_end:false ]`
+  - fai:
+      type: file
+      description: Reference FASTA index
+      pattern: "*.fai"
+
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'test', single_end:false ]`
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+  - vcf:
+      type: file
+      description: Output file containing TEVs and their location in the genome.
+      pattern: "*.vcf"
+
+authors:
+  - "@peterpru"
