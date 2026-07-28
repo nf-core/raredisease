@@ -27,27 +27,23 @@ workflow CALL_SNV_DEEPVARIANT {
 
         if (val_analysis_type.equals("wes")) {
             TABIX_BGZIP(ch_target_bed.map{meta, gzbed, _index -> return [meta, gzbed]})
-            ch_bam_bai
+            ch_deepvar_in = ch_bam_bai
                 .combine (TABIX_BGZIP.out.output.map {_meta, bed -> return bed})
-                .set { ch_deepvar_in }
         } else if (val_analysis_type.equals("wgs")) {
-            ch_bam_bai
+            ch_deepvar_in = ch_bam_bai
                 .map { meta, bam, bai ->
                         return [meta, bam, bai, []] }
-                .set { ch_deepvar_in }
         }
 
         DEEPVARIANT ( ch_deepvar_in, ch_genome_fasta, ch_genome_fai, [[],[]], ch_par_bed )
-        DEEPVARIANT.out.gvcf
+        ch_file_list = DEEPVARIANT.out.gvcf
             .map{ _meta, gvcf -> gvcf}
             .toSortedList{a, b -> a.name <=> b.name}
             .toList()
-            .set { ch_file_list }
 
-        ch_case_info
+        ch_gvcfs = ch_case_info
             .combine(ch_file_list)
             .map {meta, gvcf -> return [meta, gvcf, []]}
-            .set { ch_gvcfs }
 
         GLNEXUS ( ch_gvcfs, [[:],[]] )
 
@@ -65,21 +61,19 @@ workflow CALL_SNV_DEEPVARIANT {
         }
         REMOVE_DUPLICATES_GL (ch_remove_dup_in, ch_genome_fasta)
 
-        ch_genome_chrsizes.flatten().map{chromsizes ->
+        ch_varcallerinfo = ch_genome_chrsizes.flatten().map{chromsizes ->
             return [[id:'deepvariant'], chromsizes]
             }
-            .set { ch_varcallerinfo }
 
-        ADD_VARCALLER_TO_BED (ch_varcallerinfo).gz_tbi
+        ADD_VARCALLER_TO_BED (ch_varcallerinfo)
+        ch_varcallerbed = ADD_VARCALLER_TO_BED.out.gz_tbi
             .map{_meta,bed,tbi -> return [bed, tbi]}
-            .set{ch_varcallerbed}
 
-        REMOVE_DUPLICATES_GL.out.vcf
+        ch_annotate_in = REMOVE_DUPLICATES_GL.out.vcf
             .join(REMOVE_DUPLICATES_GL.out.tbi)
             .combine(ch_varcallerbed)
             .combine(ch_foundin_header)
             .map { meta, vcf, vcf_tbi, bed, bed_tbi, hdr -> return [meta, vcf, vcf_tbi, bed, bed_tbi, [], hdr, []] }
-            .set { ch_annotate_in }
 
         BCFTOOLS_ANNOTATE(ch_annotate_in)
 

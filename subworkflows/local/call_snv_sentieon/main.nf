@@ -56,11 +56,10 @@ workflow CALL_SNV_SENTIEON {
         ch_bcffiltertwo_in = BCF_FILTER_ONE.out.vcf.join(BCF_FILTER_ONE.out.tbi, failOnMismatch: true)
         BCF_FILTER_TWO ( ch_bcffiltertwo_in )
 
-        BCF_FILTER_TWO.out.vcf.join(BCF_FILTER_TWO.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+        ch_vcf_idx = BCF_FILTER_TWO.out.vcf.join(BCF_FILTER_TWO.out.tbi, failOnMismatch:true, failOnDuplicate:true)
             .map { _meta, vcf, tbi -> return [vcf, tbi] }
-            .set { ch_vcf_idx }
 
-        ch_case_info
+        ch_vcf_idx_merge_in = ch_case_info
             .combine(ch_vcf_idx)
             .groupTuple()
             .map { meta, vcfs, idxs ->
@@ -71,7 +70,6 @@ workflow CALL_SNV_SENTIEON {
                 single: vcfs.size() == 1
                 multiple: vcfs.size() > 1
             }
-            .set{ ch_vcf_idx_merge_in }
 
         BCFTOOLS_MERGE(
             ch_vcf_idx_merge_in.multiple.map { meta, vcf, idx ->  return [meta, vcf, idx, []] },
@@ -97,21 +95,19 @@ workflow CALL_SNV_SENTIEON {
 
         REMOVE_DUPLICATES_SEN(ch_remove_dup_in, ch_genome_fasta)
 
-        ch_genome_chrsizes.flatten().map{chromsizes ->
+        ch_varcallerinfo = ch_genome_chrsizes.flatten().map{chromsizes ->
             return [[id:'sentieon_dnascope'], chromsizes]
             }
-            .set { ch_varcallerinfo }
 
-        ADD_VARCALLER_TO_BED (ch_varcallerinfo).gz_tbi
+        ADD_VARCALLER_TO_BED (ch_varcallerinfo)
+        ch_varcallerbed = ADD_VARCALLER_TO_BED.out.gz_tbi
             .map{_meta, bed, tbi -> return [bed, tbi]}
-            .set{ch_varcallerbed}
 
-        REMOVE_DUPLICATES_SEN.out.vcf
+        ch_annotate_in = REMOVE_DUPLICATES_SEN.out.vcf
             .join(REMOVE_DUPLICATES_SEN.out.tbi)
             .combine(ch_varcallerbed)
             .combine(ch_foundin_header)
             .map { meta, vcf, vcf_tbi, bed, bed_tbi, hdr -> return [meta, vcf, vcf_tbi, bed, bed_tbi, [], hdr, []] }
-            .set { ch_annotate_in }
 
         BCFTOOLS_ANNOTATE(ch_annotate_in)
 

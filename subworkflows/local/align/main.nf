@@ -73,7 +73,7 @@ workflow ALIGN {
         //
         // If input is bam or cram
         //
-        ch_alignments
+        ch_alignments_by_type = ch_alignments
             .map { meta, files ->
                 def new_id   = meta.sample
                 def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane')
@@ -83,14 +83,12 @@ workflow ALIGN {
                 bam:  meta.data_type == "bam"
                 cram: meta.data_type == "cram"
             }
-            .set { ch_alignments_by_type }
 
-        ch_alignments_by_type.bam
+        ch_input_aligned = ch_alignments_by_type.bam
             .multiMap { meta, bam, bai ->
                 bam: [meta - meta.subMap('data_type'), bam]
                 bai: [meta - meta.subMap('data_type'), bai]
             }
-            .set { ch_input_aligned }
 
         ch_input_bam = ch_input_aligned.bam
         ch_input_bai = ch_input_aligned.bai

@@ -385,7 +385,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    ALIGN (
+    ch_mapped = ALIGN (
         ch_alignments,
         ch_genome_bwafastalignindex,
         ch_genome_bwaindex,
@@ -415,7 +415,6 @@ workflow RAREDISEASE {
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram
     )
-    .set { ch_mapped }
     ch_align_fastp_out              = ALIGN.out.fastp_out
     ch_align_genome_marked_bam      = ALIGN.out.genome_marked_bam
     ch_align_genome_marked_bai      = ALIGN.out.genome_marked_bai
@@ -527,10 +526,9 @@ workflow RAREDISEASE {
     ch_vcfanno_toml_final = ch_vcfanno_toml
     def annotation_uses_vcfanno = !skip_snv_annotation || (!skip_mt_annotation && (val_run_mt || skip_mt_calling))
     if (val_run_vcfanno_db_sanity_check && annotation_uses_vcfanno) {
-        ch_vcfanno_resources
+        ch_all_vcfanno_dbs = ch_vcfanno_resources
             .combine(ch_vcfanno_extra)
             .map { files -> files.flatten() }
-            .set { ch_all_vcfanno_dbs }
         SANITY_CHECK_VCFANNO_DATABASES (ch_vcfanno_toml, ch_all_vcfanno_dbs)
         ch_vcfanno_toml_final = SANITY_CHECK_VCFANNO_DATABASES.out.toml.collect()
     }
@@ -559,11 +557,11 @@ workflow RAREDISEASE {
         ch_call_snv_genome_vcf          = CALL_SNV.out.genome_vcf
         ch_call_snv_genome_vcf_tabix    = CALL_SNV.out.genome_vcf_tabix
     } else if (skip_snv_calling) {
-        ch_precalled_snv_vcf_tbi.multiMap { meta, vcf, tbi ->
+        ch_precalled_snv_split = ch_precalled_snv_vcf_tbi.multiMap { meta, vcf, tbi ->
             vcf_tabix: [meta, vcf, tbi]
             vcf: [meta, vcf]
             tabix: [meta, tbi]
-        }.set { ch_precalled_snv_split }
+        }
         ch_call_snv_genome_tabix     = ch_precalled_snv_split.tabix
         ch_call_snv_genome_vcf       = ch_precalled_snv_split.vcf
         ch_call_snv_genome_vcf_tabix = ch_precalled_snv_split.vcf_tabix
@@ -609,12 +607,11 @@ workflow RAREDISEASE {
         ch_annotate_genome_snvs_rhocall_viz_wig           = ANNOTATE_GENOME_SNVS.out.rhocall_viz_wig
         ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       = ANNOTATE_GENOME_SNVS.out.ucsc_wigtobigwig_bw
 
-        ch_annotate_genome_snvs_bcftools_concat_vcf
+        ch_clin_research_snv_vcf = ch_annotate_genome_snvs_bcftools_concat_vcf
             .multiMap { meta, vcf ->
                 clinical: [ meta + [ set: "clinical" ], vcf ]
                 research: [ meta + [ set: "research" ], vcf ]
             }
-            .set { ch_clin_research_snv_vcf }
 
         ch_clinical_snv_vcf = channel.empty()
         if (!skip_generate_clinical_set) {
@@ -624,8 +621,7 @@ workflow RAREDISEASE {
                 false,
                 true
             )
-            GENERATE_CLINICAL_SET_SNV.out.vcf
-            .set { ch_clinical_snv_vcf }
+            ch_clinical_snv_vcf = GENERATE_CLINICAL_SET_SNV.out.vcf
         }
 
         ch_ann_csq_snv_in = ch_clinical_snv_vcf.mix(ch_clin_research_snv_vcf.research)
@@ -636,14 +632,13 @@ workflow RAREDISEASE {
             false
         )
 
-        ANN_CSQ_PLI_SNV.out.vcf_ann
+        ch_ranksnv_nuclear_in = ANN_CSQ_PLI_SNV.out.vcf_ann
             .filter { meta, _vcf ->
                 if (meta.probands.size()==0) {
                     log.warn("Skipping nuclear SNV ranking since no affected samples are detected in the case")
                 }
                 meta.probands.size()>0
             }
-            .set {ch_ranksnv_nuclear_in}
 
         RANK_VARIANTS_SNV (
             ch_pedfile,
@@ -677,11 +672,11 @@ workflow RAREDISEASE {
         ch_call_snv_mt_vcf     = CALL_MT_SNVS.out.vcf
         ch_call_snv_mt_vcf_tbi = CALL_MT_SNVS.out.vcf_tbi
     } else if (skip_mt_calling) {
-        ch_precalled_mt_vcf_tbi.multiMap { meta, vcf, tbi ->
+        ch_precalled_mt_split = ch_precalled_mt_vcf_tbi.multiMap { meta, vcf, tbi ->
             vcf_tbi: [meta, vcf, tbi]
             vcf: [meta, vcf]
             tbi: [meta, tbi]
-        }.set { ch_precalled_mt_split }
+        }
         ch_call_snv_mt_tabix   = ch_precalled_mt_split.tbi
         ch_call_snv_mt_vcf     = ch_precalled_mt_split.vcf
         ch_call_snv_mt_vcf_tbi = ch_precalled_mt_split.vcf_tbi
@@ -700,7 +695,7 @@ workflow RAREDISEASE {
     //
     if (!skip_mt_annotation && (val_run_mt || skip_mt_calling)) {
 
-        ANNOTATE_MT_SNVS (
+        ch_mt_annotate = ANNOTATE_MT_SNVS (
             ch_cadd_header,
             ch_cadd_prescored,
             ch_cadd_resources,
@@ -717,16 +712,15 @@ workflow RAREDISEASE {
             val_genome,
             val_homoplasmy_af_threshold,
             val_vep_cache_version
-        ).set { ch_mt_annotate }
+        )
         ch_annotate_mt_snvs_ensemblvep_mt_tbi = ch_mt_annotate.ensemblvep_mt_tbi
         ch_annotate_mt_snvs_ensemblvep_mt_vcf = ch_mt_annotate.ensemblvep_mt_vcf
 
-        ch_mt_annotate.vcf_ann
+        ch_clin_research_mt_vcf = ch_mt_annotate.vcf_ann
             .multiMap { meta, vcf ->
                 clinical: [ meta + [ set: "clinical" ], vcf ]
                 research: [ meta + [ set: "research" ], vcf ]
             }
-            .set { ch_clin_research_mt_vcf }
 
         ch_clinical_mtsnv_vcf = channel.empty()
         if (!skip_generate_clinical_set) {
@@ -736,8 +730,7 @@ workflow RAREDISEASE {
                 true,
                 false
             )
-            GENERATE_CLINICAL_SET_MT.out.vcf
-                .set { ch_clinical_mtsnv_vcf }
+            ch_clinical_mtsnv_vcf = GENERATE_CLINICAL_SET_MT.out.vcf
         }
 
         ch_ann_csq_mtsnv_in = ch_clinical_mtsnv_vcf.mix(ch_clin_research_mt_vcf.research)
@@ -748,14 +741,13 @@ workflow RAREDISEASE {
             false
         )
 
-        ANN_CSQ_PLI_MT.out.vcf_ann
+        ch_ranksnv_mt_in = ANN_CSQ_PLI_MT.out.vcf_ann
             .filter { meta, _vcf ->
                 if (meta.probands.size()==0) {
                     log.warn("Skipping mitochondrial SNV ranking since no affected samples are detected in the case")
                 }
                 meta.probands.size()>0
             }
-            .set {ch_ranksnv_mt_in}
 
         RANK_VARIANTS_MT (
             ch_pedfile,
@@ -775,7 +767,7 @@ workflow RAREDISEASE {
 */
 
     if (!skip_sv_calling) {
-        channel.of([val_mitosalt_breakspan,
+        ch_mitosalt_config = channel.of([val_mitosalt_breakspan,
             val_mitosalt_breakthreshold,
             val_mitosalt_cluster_threshold,
             val_mitosalt_deletion_threshold_max,
@@ -787,7 +779,6 @@ workflow RAREDISEASE {
             val_mitosalt_sizelimit,
             val_mitosalt_split_distance_threshold,
             val_mitosalt_split_length])
-            .set{ ch_mitosalt_config }
 
         CALL_STRUCTURAL_VARIANTS (
             ch_genome_bwaindex,
@@ -845,7 +836,7 @@ workflow RAREDISEASE {
             log.warn("SV annotation is enabled but SV calling is skipped and no precalled VCF is available yet - no SVs will be annotated.")
         }
 
-        ANNOTATE_STRUCTURAL_VARIANTS (
+        ch_sv_annotate = ANNOTATE_STRUCTURAL_VARIANTS (
             ch_genome_dictionary,
             ch_genome_fasta,
             ch_svdb_bedpedbs,
@@ -857,17 +848,16 @@ workflow RAREDISEASE {
             val_svdb_query_dbs,
             val_genome,
             val_vep_cache_version
-        ).set { ch_sv_annotate }
+        )
         ch_annotate_sv_report  = ch_sv_annotate.report
         ch_annotate_sv_tbi     = ch_sv_annotate.tbi
         ch_annotate_sv_vcf_ann = ch_sv_annotate.vcf_ann
 
-        ch_sv_annotate.vcf_ann
+        ch_clin_research_sv_vcf = ch_sv_annotate.vcf_ann
             .multiMap { meta, vcf ->
                 clinical: [ meta + [ set: "clinical" ], vcf ]
                 research: [ meta + [ set: "research" ], vcf ]
             }
-            .set { ch_clin_research_sv_vcf }
 
         ch_clinical_sv_vcf = channel.empty()
         if (!skip_generate_clinical_set) {
@@ -877,8 +867,7 @@ workflow RAREDISEASE {
                 false,
                 true
             )
-            GENERATE_CLINICAL_SET_SV.out.vcf
-            .set { ch_clinical_sv_vcf }
+            ch_clinical_sv_vcf = GENERATE_CLINICAL_SET_SV.out.vcf
         }
 
         ch_ann_csq_sv_in = ch_clinical_sv_vcf.mix(ch_clin_research_sv_vcf.research)
@@ -889,14 +878,13 @@ workflow RAREDISEASE {
             false
         )
 
-        ANN_CSQ_PLI_SV.out.vcf_ann
+        ch_ranksnv_sv_in = ANN_CSQ_PLI_SV.out.vcf_ann
             .filter { meta, _vcf ->
                 if (meta.probands.size()==0) {
                     log.warn("Skipping SV ranking since no affected samples are detected in the case")
                 }
                 meta.probands.size()>0
             }
-            .set {ch_ranksnv_sv_in}
 
         RANK_VARIANTS_SV (
             ch_pedfile,
@@ -927,7 +915,7 @@ workflow RAREDISEASE {
         ch_call_mobile_elements_tbi = CALL_MOBILE_ELEMENTS.out.tbi
 
         if (!skip_me_annotation) {
-            ANNOTATE_MOBILE_ELEMENTS(
+            ch_me_annotate = ANNOTATE_MOBILE_ELEMENTS(
                 ch_genome_dictionary,
                 ch_genome_fasta,
                 ch_me_svdb_resources,
@@ -936,14 +924,13 @@ workflow RAREDISEASE {
                 val_genome,
                 val_vep_cache_version,
                 ch_vep_extra_files
-            ).set { ch_me_annotate }
+            )
 
-            ch_me_annotate.vcf_ann
+            ch_clin_research_me_vcf = ch_me_annotate.vcf_ann
                 .multiMap { meta, vcf ->
                     clinical: [ meta + [ set: "clinical" ], vcf ]
                     research: [ meta + [ set: "research" ], vcf ]
                 }
-                .set { ch_clin_research_me_vcf }
 
             ch_clinical_me_vcf = channel.empty()
             if (!skip_generate_clinical_set) {
@@ -953,8 +940,7 @@ workflow RAREDISEASE {
                     false,
                     true
                 )
-                GENERATE_CLINICAL_SET_ME.out.vcf
-                .set { ch_clinical_me_vcf }
+                ch_clinical_me_vcf = GENERATE_CLINICAL_SET_ME.out.vcf
             }
 
             ch_ann_csq_me_in = ch_clinical_me_vcf.mix(ch_clin_research_me_vcf.research)
@@ -978,20 +964,17 @@ workflow RAREDISEASE {
 
     if ( val_analysis_type.equals("wgs") && !skip_smncopynumbercaller && !has_any_precalled_vcf ) {
 
-        RENAME_BAM.out.output
+        ch_bam_list = RENAME_BAM.out.output
             .collect{_meta, bam -> bam}
             .toList()
-            .set { ch_bam_list }
 
-        RENAME_BAI.out.output
+        ch_bai_list = RENAME_BAI.out.output
             .collect{_meta, bai -> bai}
             .toList()
-            .set { ch_bai_list }
 
-        ch_case_info
+        ch_bams_bais = ch_case_info
             .combine(ch_bam_list)
             .combine(ch_bai_list)
-            .set { ch_bams_bais }
 
         SMNCOPYNUMBERCALLER (
             ch_bams_bais

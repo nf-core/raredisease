@@ -75,10 +75,9 @@ workflow QC_BAM {
             ch_picard_multimetrics     = PICARD_COLLECTMULTIPLEMETRICS.out.metrics
             ch_picard_multimetrics_pdf = PICARD_COLLECTMULTIPLEMETRICS.out.pdf
 
-            ch_bam_bai
+            ch_hsmetrics_in = ch_bam_bai
                 .combine(ch_bait_intervals)
                 .combine(ch_target_intervals)
-                .set { ch_hsmetrics_in}
 
             if (val_target_bed) {
                 ch_hsmetrics = PICARD_COLLECTHSMETRICS (ch_hsmetrics_in, ch_genome_fasta, ch_genome_fai, [[:],[]], [[:],[]]).metrics
@@ -162,7 +161,7 @@ workflow QC_BAM {
 
         CHROMOGRAPH_COV([[:],[]], TIDDIT_COV.out.wig, [[:],[]], [[:],[]], [[:],[]], [[:],[]], [[:],[]])
 
-        ch_bam_bai.map{ meta, bam, bai -> [meta, bam, bai, []]}.set{ch_mosdepth_in}
+        ch_mosdepth_in = ch_bam_bai.map{ meta, bam, bai -> [meta, bam, bai, []]}
         MOSDEPTH (ch_mosdepth_in, ch_genome_fasta)
 
 

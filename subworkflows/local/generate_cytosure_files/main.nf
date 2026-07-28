@@ -22,10 +22,9 @@ workflow GENERATE_CYTOSURE_FILES {
         TIDDIT_COV_VCF2CYTOSURE (ch_bam_bai, [[],[]])
 
         // Build channel: [val(sample_meta), path(vcf), path(vcf_index)]
-        ch_vcf.join( ch_tbi, failOnMismatch: true )
-            .set { ch_vcf_tbi }
+        ch_vcf_tbi = ch_vcf.join( ch_tbi, failOnMismatch: true )
 
-        ch_bam_bai.combine(ch_vcf_tbi)
+        ch_for_mix = ch_bam_bai.combine(ch_vcf_tbi)
             .map {
                 meta_sample, _bam, _bai, _meta_case, vcf, tbi ->
                 def id_meta = ['id':meta_sample.sample]
@@ -39,27 +38,24 @@ workflow GENERATE_CYTOSURE_FILES {
                 custid: !(samplemap.equals(null))
                     return [id_meta + [custid:samplemap] + sex_meta, vcf, tbi]
             }
-            .set { ch_for_mix }
 
-        channel.empty()
+        ch_sample_vcf = channel.empty()
             .mix(ch_for_mix.id, ch_for_mix.custid)
-            .set { ch_sample_vcf }
 
         // Split vcf into sample vcf:s and frequency filter
         SPLIT_AND_FILTER_SV_VCF ( ch_sample_vcf, [], [], [] )
 
         if (!val_sample_id_map.equals(null)) {
 
-            SPLIT_AND_FILTER_SV_VCF.out.vcf
+            ch_reheader_in = SPLIT_AND_FILTER_SV_VCF.out.vcf
                 .map { meta, vcf -> return [meta, vcf, [], []]}
-                .set { ch_reheader_in }
 
-            BCFTOOLS_REHEADER_SV_VCF ( ch_reheader_in, [[:],[]] ).vcf
-                .set {ch_reheader_out}
+            BCFTOOLS_REHEADER_SV_VCF ( ch_reheader_in, [[:],[]] )
+            ch_reheader_out = BCFTOOLS_REHEADER_SV_VCF.out.vcf
 
         }
 
-        SPLIT_AND_FILTER_SV_VCF.out.vcf
+        ch_for_mix = SPLIT_AND_FILTER_SV_VCF.out.vcf
             .join(ch_reheader_out, remainder: true)
             .branch { meta, filteredvcf, reheaderedvcf  ->
                 split: reheaderedvcf.equals(null)
@@ -67,18 +63,15 @@ workflow GENERATE_CYTOSURE_FILES {
                 reheader: !(reheaderedvcf.equals(null))
                     return [meta, reheaderedvcf]
             }
-            .set { ch_for_mix }
 
-        channel.empty()
+        ch_vcf2cytosure_in = channel.empty()
             .mix(ch_for_mix.split, ch_for_mix.reheader)
             .toSortedList { a, b -> a[0].id <=> b[0].id }
             .flatMap()
-            .set { ch_vcf2cytosure_in }
 
-        TIDDIT_COV_VCF2CYTOSURE.out.cov
+        ch_cov2cytosure_in = TIDDIT_COV_VCF2CYTOSURE.out.cov
             .toSortedList { a, b -> a[0].id <=> b[0].id }
             .flatMap()
-            .set { ch_cov2cytosure_in }
 
         VCF2CYTOSURE (
             ch_vcf2cytosure_in,

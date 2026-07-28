@@ -27,21 +27,19 @@ workflow CALL_SV_GERMLINECNVCALLER {
 
         GATK4_COLLECTREADCOUNTS ( input, ch_fasta, ch_fai, ch_genome_dictionary )
 
-        GATK4_COLLECTREADCOUNTS.out.tsv
+        ch_dgcp_in = GATK4_COLLECTREADCOUNTS.out.tsv
                 .map({ meta, tsv -> return [meta, tsv, [], [] ]})
-                .set{ch_dgcp_in}
 
         GATK4_DETERMINEGERMLINECONTIGPLOIDY ( ch_dgcp_in, ch_ploidy_model, [] )
 
-        GATK4_COLLECTREADCOUNTS.out.tsv
+        ch_gcnvc_in = GATK4_COLLECTREADCOUNTS.out.tsv
                 .join(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls)
                 .combine(ch_gcnvcaller_model)
                 .map({ meta, tsv, calls, _meta2, model -> return [meta, tsv, [], calls, model ]})
-                .set{ch_gcnvc_in}
 
         GATK4_GERMLINECNVCALLER ( ch_gcnvc_in )
 
-        GATK4_GERMLINECNVCALLER.out.casecalls
+        ch_postproc_in = GATK4_GERMLINECNVCALLER.out.casecalls
             .map { meta, model_calls ->
                 return [meta.sample, meta, model_calls]
             }
@@ -53,25 +51,21 @@ workflow CALL_SV_GERMLINECNVCALLER {
             }
             .combine(ch_gcnvcaller_model.collect{_meta, model -> model}.toList())
             .join(GATK4_DETERMINEGERMLINECONTIGPLOIDY.out.calls)
-            .set {ch_postproc_in}
 
         GATK4_POSTPROCESSGERMLINECNVCALLS ( ch_postproc_in )
 
         TABIX_TABIX(GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments)
-        GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments
+        ch_segments_in = GATK4_POSTPROCESSGERMLINECNVCALLS.out.segments
             .join(TABIX_TABIX.out.index, failOnMismatch:true)
-            .set {ch_segments_in}
         // Filter out reference only (0/0) segments
         BCFTOOLS_VIEW (ch_segments_in , [], [], [] )
 
-        BCFTOOLS_VIEW.out.vcf
+        vcf_file_list = BCFTOOLS_VIEW.out.vcf
             .collect{_meta, vcf -> vcf}
             .toList()
-            .set { vcf_file_list }
 
-        ch_case_info
+        merge_input_vcfs = ch_case_info
             .combine(vcf_file_list)
-            .set { merge_input_vcfs }
 
         SVDB_MERGE_GCNVCALLER ( merge_input_vcfs, [], true )
 
