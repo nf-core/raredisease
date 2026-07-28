@@ -8,7 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Add a VCF entry point: samplesheets can now supply precalled, case-level SNV/SV/MT VCFs directly, skipping the corresponding calling step and feeding straight into annotation and ranking. See `docs/usage.md` for samplesheet details [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #936](https://github.com/nf-core/raredisease/pull/936)
-
 - Add test coverage for the VCF entry point: function-level nf-test cases for `validateNoMixedCaseInput`/`validatePrecalledVcfCoverage`/`extractPrecalledVcfs`/`hasPrecalledSnvVcf`/`hasPrecalledSvVcf`/`hasPrecalledMtVcf`, and a new `test_vcf` profile/pipeline-level test confirming precalled SNV/SV/MT VCFs correctly skip calling while annotation/ranking still run, plus a negative test for the mixed precalled/raw-input case [issue #261](https://github.com/nf-core/raredisease/issues/261)
   [PR #935](https://github.com/nf-core/raredisease/pull/935)
 - Add CRAM file input support: accept `cram`/`crai` columns in the samplesheet, converting CRAM to BAM early in the align subworkflow so all downstream tools remain unchanged [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #933](https://github.com/nf-core/raredisease/pull/933)
@@ -23,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
-- Split mitochondrial alignment out of `ALIGN` into its own independently-gated `ALIGN_MITOCHONDRIA` subworkflow, called directly from `raredisease.nf`, matching how `CALL_MT_SNVS` was already split out of `CALL_SNV` [issue #944](https://github.com/nf-core/raredisease/issues/944) [PR #945](https://github.com/nf-core/raredisease/issues/945)
+- Split mitochondrial alignment out of `ALIGN` into its own independently-gated `ALIGN_MITOCHONDRIA` subworkflow, called directly from `raredisease.nf`, matching how `CALL_MT_SNVS` was already split out of `CALL_SNV` [issue #944](https://github.com/nf-core/raredisease/issues/944) [PR #945](https://github.com/nf-core/raredisease/pull/945)
 - Migrate all `.set { ch }` and `.tap { ch }` operators to direct channel assignment (`ch = ...`) across `main.nf`, `workflows/raredisease.nf`, and all local subworkflows; behavior-preserving refactor, prerequisite for adopting Nextflow's static type checking [issue #940](https://github.com/nf-core/raredisease/issues/940) [PR #941](https://github.com/nf-core/raredisease/pull/941)
 - Speed up `align` subworkflow tests: switch `subworkflows/local/align/tests/main.nf.test` from full GRCh37-scale reference/read data to the small sarscov2 fixtures [issue #938](https://github.com/nf-core/raredisease/issues/938) [PR #939](https://github.com/nf-core/raredisease/pull/939)
 - Document the VCF entry point: expand `docs/usage.md`'s samplesheet section with a worked trio example and explicit "what's possible"/"what's not possible" guidance (mixed-input rule, per-type coverage requirement, conflicting-VCF rejection), and add `> **NB**` notes to the SNV/SV/mitochondrial calling sections of `docs/output.md` explaining when those output directories are skipped in favor of the supplied VCF [issue #261](https://github.com/nf-core/raredisease/issues/261)
