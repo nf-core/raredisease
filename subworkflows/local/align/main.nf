@@ -3,10 +3,7 @@
 //
 
 include { ALIGN_BWA_BWAMEM2_BWAMEME                  } from '../align_bwa_bwamem2_bwameme'
-include { ALIGN_MT                                   } from '../align_MT'
-include { ALIGN_MT as ALIGN_MT_SHIFT                 } from '../align_MT'
 include { ALIGN_SENTIEON                             } from '../align_sentieon'
-include { CONVERT_MT_BAM_TO_FASTQ                    } from '../convert_mt_bam_to_fastq'
 include { FASTP                                      } from '../../../modules/nf-core/fastp/main'
 include { SAMTOOLS_VIEW as CONVERTTOBAM_CRAM         } from '../../../modules/nf-core/samtools/view/main'
 include { SAMTOOLS_VIEW as CONVERTTOCRAM_ALTFILTERED } from '../../../modules/nf-core/samtools/view/main'
@@ -24,23 +21,11 @@ workflow ALIGN {
         ch_genome_fai                 // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_fasta               // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_input_reads                // channel: [optional] [ val(meta), [path(reads)]  ]
-        ch_mt_bwaindex                // channel: [mandatory] [ val(meta), path(index) ]
-        ch_mt_bwamem2index            // channel: [mandatory] [ val(meta), path(index) ]
-        ch_mt_dictionary              // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_mt_fai                     // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_mt_fasta                   // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_mtshift_bwaindex           // channel: [mandatory] [ val(meta), path(index) ]
-        ch_mtshift_bwamem2index       // channel: [mandatory] [ val(meta), path(index) ]
-        ch_mtshift_dictionary         // channel: [mandatory] [ val(meta), path(dict) ]
-        ch_mtshift_fai                // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_mtshift_fasta              // channel: [mandatory] [ val(meta), path(fasta) ]
         skip_fastp                    // boolean
         val_aligner                   //  string:  'bwa', 'bwafastalign', 'bwamem2', 'bwameme', or 'sentieon'
         val_exclude_alt               // boolean
         val_extract_alignments        // boolean
-        val_mt_aligner                //  string:  'bwa', 'bwamem2', or 'sentieon'
         val_platform                  //  string:  [mandatory] illumina or a different technology
-        val_run_mt                    // boolean: true if MT analysis will run
         val_save_all_mapped_as_cram   // boolean
         val_save_noalt_mapped_as_cram // boolean
 
@@ -52,9 +37,6 @@ workflow ALIGN {
         ch_genome_marked_cram        = channel.empty()
         ch_genome_marked_crai        = channel.empty()
         ch_markdup_metrics           = channel.empty()
-        ch_mt_bam_bai                = channel.empty()
-        ch_mt_bam_bai_gatksubwf      = channel.empty()
-        ch_mtshift_bam_bai_gatksubwf = channel.empty()
         ch_sentieon_bam              = channel.empty()
         ch_sentieon_bai              = channel.empty()
 
@@ -157,45 +139,6 @@ workflow ALIGN {
         ch_genome_marked_bai     = val_exclude_alt ? SAMTOOLS_VIEW_EXCLUDE_ALT.out.bai : ch_branched.keep_all.map { meta, _bam, bai -> [meta, bai] }
         ch_genome_marked_bam_bai = ch_genome_marked_bam.join(ch_genome_marked_bai, failOnMismatch:true, failOnDuplicate:true)
 
-        // PREPARING READS FOR MT ALIGNMENT
-
-        if (val_run_mt) {
-            CONVERT_MT_BAM_TO_FASTQ (
-                ch_genome_marked_bam_bai,
-                ch_genome_dictionary,
-                ch_genome_fai,
-                ch_genome_fasta
-            )
-
-            ALIGN_MT (
-                ch_mt_bwaindex,
-                ch_mt_bwamem2index,
-                ch_mt_dictionary,
-                ch_mt_fai,
-                ch_mt_fasta,
-                CONVERT_MT_BAM_TO_FASTQ.out.fastq,
-                CONVERT_MT_BAM_TO_FASTQ.out.ubam,
-                val_mt_aligner
-            )
-
-            ALIGN_MT_SHIFT (
-                ch_mtshift_bwaindex,
-                ch_mtshift_bwamem2index,
-                ch_mtshift_dictionary,
-                ch_mtshift_fai,
-                ch_mtshift_fasta,
-                CONVERT_MT_BAM_TO_FASTQ.out.fastq,
-                CONVERT_MT_BAM_TO_FASTQ.out.ubam,
-                val_mt_aligner
-            )
-
-            ch_mt_bam_bai                = CONVERT_MT_BAM_TO_FASTQ.out.bam_bai // Used for subsampling and SV calling
-            ch_mt_bam_bai_gatksubwf      = ALIGN_MT.out.marked_bam
-                                            .join(ALIGN_MT.out.marked_bai, failOnMismatch:true, failOnDuplicate:true) // Only for SNV calling
-            ch_mtshift_bam_bai_gatksubwf = ALIGN_MT_SHIFT.out.marked_bam
-                                            .join(ALIGN_MT_SHIFT.out.marked_bai, failOnMismatch:true, failOnDuplicate:true) // Only for SNV calling
-        }
-
         if (val_save_noalt_mapped_as_cram) {
             CONVERTTOCRAM_ALTFILTERED( ch_genome_marked_bam_bai, ch_genome_fasta.map{meta, fasta -> return [meta, fasta, []]}, [], 'crai' )
             ch_genome_marked_cram = ch_genome_marked_cram.mix(CONVERTTOCRAM_ALTFILTERED.out.cram)
@@ -217,7 +160,4 @@ workflow ALIGN {
         genome_marked_bai         = ch_genome_marked_bai         // channel: [ val(meta), path(bai) ]
         genome_marked_bam_bai     = ch_genome_marked_bam_bai     // channel: [ val(meta), path(bam), path(bai) ]
         markdup_metrics           = ch_markdup_metrics           // channel: [ val(meta), path(metrics) ]
-        mt_bam_bai                = ch_mt_bam_bai                // channel: [ val(meta), path(bam), path(bai) ]
-        mt_bam_bai_gatksubwf      = ch_mt_bam_bai_gatksubwf      // channel: [ val(meta), path(bam), path(bai) ]
-        mtshift_bam_bai_gatksubwf = ch_mtshift_bam_bai_gatksubwf // channel: [ val(meta), path(bam), path(bai) ]
 }
