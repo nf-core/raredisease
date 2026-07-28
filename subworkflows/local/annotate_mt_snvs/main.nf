@@ -30,10 +30,9 @@ workflow ANNOTATE_MT_SNVS {
 
     main:
         // Vcfanno
-        ch_mt_vcf_tbi
+        ch_in_vcfanno = ch_mt_vcf_tbi
             .combine(ch_vcfanno_extra)
             .map { meta, vcf, tbi, resources -> return [meta + [prefix: vcf.simpleName + "_vcfanno"], vcf, tbi, resources]}
-            .set { ch_in_vcfanno }
 
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
 
@@ -52,7 +51,7 @@ workflow ANNOTATE_MT_SNVS {
             ch_cadd_vcf = channel.empty()
         }
 
-        VCFANNO_MT.out.vcf
+        ch_annotated_vcfs = VCFANNO_MT.out.vcf
             .join(ch_cadd_vcf, remainder: true)
             .branch { meta, vcfanno, cadd  ->
                 vcfanno: cadd.equals(null)
@@ -60,11 +59,9 @@ workflow ANNOTATE_MT_SNVS {
                 cadd: !(cadd.equals(null))
                     return [meta + [prefix: meta.prefix + "_cadd_vep"], cadd]
             }
-            .set { ch_annotated_vcfs }
 
-        ch_annotated_vcfs.vcfanno.mix(ch_annotated_vcfs.cadd)
+        ch_vep_in = ch_annotated_vcfs.vcfanno.mix(ch_annotated_vcfs.cadd)
             .map { meta, vcf -> return [meta, vcf, []] }
-            .set { ch_vep_in }
 
         // Annotating with ensembl Vep
         ENSEMBLVEP_MT(

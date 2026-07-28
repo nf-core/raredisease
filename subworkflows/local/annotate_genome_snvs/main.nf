@@ -48,11 +48,10 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_vcf_scatter_in            = channel.empty()
         ch_vep_in                    = channel.empty()
 
-        ch_vcf
+        ch_roh_in = ch_vcf
             .filter { meta, _vcf, _tbi ->
                 meta.probands.size() > 0
             }
-            .set { ch_roh_in }
 
         BCFTOOLS_ROH (ch_roh_in, ch_gnomad_af, [], [], [], [])
 
@@ -64,11 +63,10 @@ workflow ANNOTATE_GENOME_SNVS {
         // The remainder:true join pads cases without rohcall output with a single null, giving
         // tuples of length 4 (no rohcall) vs 5 (rohcall). After combining with an interval both
         // grow by one, so size==6 means this case has probands and a rohcall-annotated VCF.
-        ch_split_intervals
+        ch_split_intervals_flat = ch_split_intervals
             .flatMap { _meta, intervals -> intervals.collect{ interval -> [interval] } }
-            .set { ch_split_intervals_flat }
 
-        ch_vcf
+        ch_vcf_scatter_in = ch_vcf
             .join(ZIP_TABIX_ROHCALL.out.gz_index, remainder: true)
             .combine(ch_split_intervals_flat)
             .map { it ->
@@ -98,20 +96,17 @@ workflow ANNOTATE_GENOME_SNVS {
                     ]
                 }
             }
-            .set { ch_vcf_scatter_in }
 
         GATK4_SELECTVARIANTS (ch_vcf_scatter_in)
 
-        GATK4_SELECTVARIANTS.out.vcf
+        ch_vcfanno_in = GATK4_SELECTVARIANTS.out.vcf
             .join(GATK4_SELECTVARIANTS.out.tbi)
             .combine(ch_vcfanno_extra)
-            .set { ch_vcfanno_in }
 
         VCFANNO (ch_vcfanno_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
 
-        VCFANNO.out.vcf
+        ch_bcftools_view_in = VCFANNO.out.vcf
             .join(VCFANNO.out.tbi, failOnMismatch:true, failOnDuplicate:true)
-            .set { ch_bcftools_view_in }
 
         // filter on frequencies
         BCFTOOLS_VIEW(
@@ -121,9 +116,8 @@ workflow ANNOTATE_GENOME_SNVS {
         // Annotating with CADD
         if (!val_cadd_resources.equals(null)) {
 
-            BCFTOOLS_VIEW.out.vcf
+            ch_cadd_in = BCFTOOLS_VIEW.out.vcf
                 .join(BCFTOOLS_VIEW.out.tbi, failOnMismatch:true, failOnDuplicate:true)
-                .set { ch_cadd_in }
 
             ANNOTATE_CADD (
                 ch_cadd_resources,
@@ -136,7 +130,7 @@ workflow ANNOTATE_GENOME_SNVS {
             ch_cadd_vcf = ANNOTATE_CADD.out.vcf
         }
 
-        BCFTOOLS_VIEW.out.vcf
+        ch_annotated_vcfs = BCFTOOLS_VIEW.out.vcf
             .join(ch_cadd_vcf, remainder: true)
             .branch { meta, selectvariants, cadd  ->
                 selvar: cadd.equals(null)
@@ -144,11 +138,9 @@ workflow ANNOTATE_GENOME_SNVS {
                 cadd: !(cadd.equals(null))
                     return [meta + [prefix: meta.prefix + "_filter_cadd"], cadd]
             }
-            .set { ch_annotated_vcfs }
 
-        ch_annotated_vcfs.selvar.mix(ch_annotated_vcfs.cadd)
+        ch_vep_in = ch_annotated_vcfs.selvar.mix(ch_annotated_vcfs.cadd)
             .map { meta, vcf -> return [meta, vcf, []] }
-            .set { ch_vep_in }
 
         // Annotating with ensembl Vep
         ENSEMBLVEP_SNV(
@@ -161,28 +153,24 @@ workflow ANNOTATE_GENOME_SNVS {
             ch_vep_extra_files
         )
 
-        ENSEMBLVEP_SNV.out.vcf
+        ch_vep_vcf_out = ENSEMBLVEP_SNV.out.vcf
             .map { meta, vcf -> [meta - meta.subMap('scatterid'), vcf] }
-            .set { ch_vep_vcf_out }
-        ENSEMBLVEP_SNV.out.tbi
+        ch_vep_tbi_out = ENSEMBLVEP_SNV.out.tbi
             .map { meta, tbi -> [meta - meta.subMap('scatterid'), tbi] }
-            .set { ch_vep_tbi_out }
 
-        ch_vep_vcf_out
+        ch_concat_in = ch_vep_vcf_out
             .join(ch_vep_tbi_out, failOnMismatch:true)
             .groupTuple()
-            .set { ch_concat_in }
 
         BCFTOOLS_CONCAT (ch_concat_in)
 
-        BCFTOOLS_CONCAT.out.vcf
+        ch_upd_in = BCFTOOLS_CONCAT.out.vcf
             .flatMap { meta, vcf ->
                 meta.upd_children.collect { upd_sample ->
                     def new_meta = meta + [upd_child: upd_sample, prefix: meta.prefix + "_vcfanno"]
                     [new_meta, vcf]
                 }
             }
-            .set { ch_upd_in }
 
         if (val_analysis_type.equals("wgs")) {
             UPD_SITES(ch_upd_in)
@@ -193,13 +181,11 @@ workflow ANNOTATE_GENOME_SNVS {
             ch_chromograph_regions_plots = CHROMOGRAPH_REGIONS.out.plots
         }
 
-        BCFTOOLS_CONCAT.out.vcf
+        ch_concat_vcf_out = BCFTOOLS_CONCAT.out.vcf
             .map { meta, vcf -> [meta - meta.subMap('prefix'), vcf] }
-            .set { ch_concat_vcf_out }
 
-        BCFTOOLS_CONCAT.out.tbi
+        ch_concat_tbi_out = BCFTOOLS_CONCAT.out.tbi
             .map { meta, tbi -> [meta - meta.subMap('prefix'), tbi] }
-            .set { ch_concat_tbi_out }
 
         ch_vep_ann_index = ch_concat_vcf_out.join(ch_concat_tbi_out, failOnMismatch:true, failOnDuplicate:true)
         //rhocall_viz

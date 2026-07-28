@@ -167,7 +167,7 @@ workflow NFCORE_RAREDISEASE {
     ch_versions = channel.empty()
     def val_run_mt = val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes
 
-    PREPARE_REFERENCES (
+    ch_references = PREPARE_REFERENCES (
         val_aligner,
         val_bwa,
         val_bwafastalign,
@@ -190,7 +190,6 @@ workflow NFCORE_RAREDISEASE {
         val_vcfanno_extra_resources,
         val_vep_cache
     )
-    .set { ch_references }
 
     ch_bait_intervals           = ch_references.bait_intervals
     ch_dbsnp                    = ch_references.dbsnp
@@ -297,7 +296,7 @@ workflow NFCORE_RAREDISEASE {
     //
     ch_vep_extra_files = channel.empty()
     if (val_vep_plugin_files) {
-        channel.fromPath(val_vep_plugin_files)
+        ch_vep_extra_files = channel.fromPath(val_vep_plugin_files)
             .collect()
             .splitCsv ( header:true )
             .map { row ->
@@ -309,19 +308,16 @@ workflow NFCORE_RAREDISEASE {
                 }
             }
             .collect()
-            .set {ch_vep_extra_files}
     }
 
     //
     // Dump all HGNC ids in a file
     //
-    ch_vep_filters_scout_fmt
+    ch_vep_filters = ch_vep_filters_scout_fmt
         .mix (ch_vep_filters_std_fmt)
-        .set {ch_vep_filters}
 
-    CREATE_HGNCIDS_FILE(ch_vep_filters)
+    ch_hgnc_ids = CREATE_HGNCIDS_FILE(ch_vep_filters)
         .txt
-        .set {ch_hgnc_ids}
 
     //
     // Generate pedigree file

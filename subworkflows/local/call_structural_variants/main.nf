@@ -62,34 +62,30 @@ workflow CALL_STRUCTURAL_VARIANTS {
         ch_tiddit_vcf      = channel.empty()
 
         if (!val_analysis_type.equals("mito")) {
-            CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_manta_regions)
+            ch_manta_vcf = CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_manta_regions)
                 .filtered_diploid_sv_vcf
                 .collect{ _meta, vcf -> vcf }
-                .set{ ch_manta_vcf }
         }
 
         if (val_analysis_type.equals("wgs")) {
-            CALL_SV_TIDDIT (ch_genome_bam_bai, ch_genome_fai, ch_genome_fasta, ch_bwa_index, ch_case_info)
+            ch_tiddit_vcf = CALL_SV_TIDDIT (ch_genome_bam_bai, ch_genome_fai, ch_genome_fasta, ch_bwa_index, ch_case_info)
                 .vcf
                 .collect{ _meta, vcf -> vcf }
-                .set { ch_tiddit_vcf }
 
-            CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_case_info)
+            ch_cnvnator_vcf = CALL_SV_CNVNATOR (ch_genome_bam_bai, ch_genome_fasta, ch_case_info)
                 .vcf
                 .collect{ _meta, vcf -> vcf }
-                .set { ch_cnvnator_vcf }
         }
 
         if (!skip_germlinecnvcaller) {
-            CALL_SV_GERMLINECNVCALLER (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model, ch_case_info)
+            ch_gcnvcaller_vcf = CALL_SV_GERMLINECNVCALLER (ch_genome_bam_bai, ch_genome_fasta, ch_genome_fai, ch_readcount_intervals, ch_genome_dictionary, ch_ploidy_model, ch_gcnvcaller_model, ch_case_info)
                 .genotyped_filtered_segments_vcf
                 .collect{ _meta, vcf -> vcf }
-                .set { ch_gcnvcaller_vcf }
 
         }
 
         if (val_run_mt) {
-            CALL_SV_MT(
+            ch_sv_mt_out = CALL_SV_MT(
                 ch_mt_bam_bai,
                 ch_case_info,
                 ch_genome_chrsizes,
@@ -114,11 +110,9 @@ workflow CALL_STRUCTURAL_VARIANTS {
                 val_mitosalt_flank,
                 val_mitosalt_heteroplasmy_limit,
             )
-            .set { ch_sv_mt_out }
 
-            ch_sv_mt_out.saltshaker_vcf
+            ch_saltshaker_vcf = ch_sv_mt_out.saltshaker_vcf
                 .collect{ _meta, vcf -> vcf }
-                .set { ch_saltshaker_vcf }
             ch_saltshaker_html   = ch_sv_mt_out.saltshaker_html
             ch_saltshaker_plot   = ch_sv_mt_out.saltshaker_plot
             ch_mt_del_result     = ch_sv_mt_out.mt_del_result
@@ -129,17 +123,15 @@ workflow CALL_STRUCTURAL_VARIANTS {
         if (!val_analysis_type.equals("mito")) {
             // Concatenate in specific order: tiddit -> manta -> gcnvcaller -> cnvnator -> mitosalt
             // Empty channels won't contribute any items
-            ch_tiddit_vcf
+            ch_vcf_paths = ch_tiddit_vcf
                 .concat(ch_manta_vcf)
                 .concat(ch_gcnvcaller_vcf)
                 .concat(ch_cnvnator_vcf)
                 .concat(ch_saltshaker_vcf)
                 .collect()
                 .map { vcf_list -> [vcf_list] }
-                .set { ch_vcf_paths }
-            ch_case_info
+            ch_merge_vcfs_in = ch_case_info
                 .combine(ch_vcf_paths)
-                .set { ch_merge_vcfs_in }
             SVDB_MERGE (ch_merge_vcfs_in, ch_svcaller_priority, false)
 
             TABIX_TABIX (SVDB_MERGE.out.vcf)

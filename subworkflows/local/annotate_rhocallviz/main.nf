@@ -17,28 +17,25 @@ workflow ANNOTATE_RHOCALLVIZ {
         ch_vcf_tbi         // channel: [mandatory] [ val(meta), path(vcf), path(tbi) ]
 
     main:
-        ch_vcf_tbi
+        ch_rhocall_viz = ch_vcf_tbi
             .combine(ch_samples)
             .map {_meta, vcf, tbi, meta2 -> return [meta2,vcf,tbi]}
-            .set { ch_rhocall_viz }
 
         BCFTOOLS_VIEW_RHOCALL(ch_rhocall_viz, [],[],[])
 
-        BCFTOOLS_VIEW_RHOCALL.out.vcf
+        ch_roh_in = BCFTOOLS_VIEW_RHOCALL.out.vcf
             .join(BCFTOOLS_VIEW_RHOCALL.out.tbi)
-            .set {ch_roh_in }
 
         BCFTOOLS_ROH(ch_roh_in, [[],[]], [], [], [], [])
 
         BCFTOOLS_VIEW_UNCOMPRESS(ch_roh_in,[],[],[])
 
-        BCFTOOLS_VIEW_UNCOMPRESS.out.vcf
+        ch_rhocall_viz_input = BCFTOOLS_VIEW_UNCOMPRESS.out.vcf
                 .join(BCFTOOLS_ROH.out.roh)
                 .multiMap { meta, vcf, roh ->
                     vcf: [meta, vcf]
                     roh: [meta, roh]
                 }
-                .set { ch_rhocall_viz_input }
 
         RHOCALL_VIZ(
             ch_rhocall_viz_input.vcf,

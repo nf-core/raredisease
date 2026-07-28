@@ -51,7 +51,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         SAMTOOLS_STATS ( bam_sorted_indexed, [[],[]] )
 
         // Merge multiple lane samples and index
-        ch_align
+        bams = ch_align
             .map{ meta, bam ->
                     def new_id   = meta.sample
                     def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane','data_type')
@@ -62,7 +62,6 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
                 single: bam.size() == 1
                 multiple: bam.size() > 1
                 }
-            .set{ bams }
 
         // If there are no samples to merge, skip the process
         SAMTOOLS_MERGE ( bams.multiple.map { it -> it + [[]] }, ch_genome_fasta.join(ch_genome_fai).map{meta,fasta,fai-> return [meta,fasta,fai,[]]}.collect())

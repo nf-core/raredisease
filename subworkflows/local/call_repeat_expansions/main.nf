@@ -45,15 +45,13 @@ workflow CALL_REPEAT_EXPANSIONS {
         )
 
         // Merge indiviual repeat expansions
-        SPLIT_MULTIALLELICS_EXP.out.vcf
+        ch_exp_vcfs = SPLIT_MULTIALLELICS_EXP.out.vcf
             .collect{_meta, vcf -> vcf}
             .toList()
             .collect()
-            .set {ch_exp_vcfs}
 
-        ch_case_info
+        ch_svdb_merge_input = ch_case_info
             .combine(ch_exp_vcfs)
-            .set {ch_svdb_merge_input}
 
         SVDB_MERGE_REPEATS ( ch_svdb_merge_input, [], true )
 

@@ -80,10 +80,9 @@ workflow CALL_SNV {
         ch_gvcf   = channel.empty().mix(ch_deepvariant_gvcf, ch_sentieon_gvcf)
         ch_gtabix = channel.empty().mix(ch_deepvariant_gtbi, ch_sentieon_gtbi)
 
-        ch_vcf
+        ch_select_variants_in = ch_vcf
             .join(ch_tabix, failOnMismatch:true, failOnDuplicate:true)
             .map { meta, vcf, tbi -> return [meta, vcf, tbi, []]}
-            .set {ch_select_variants_in}
         GATK4_SELECTVARIANTS(ch_select_variants_in) // remove mitochondrial variants
 
         ch_genome_vcf       = GATK4_SELECTVARIANTS.out.vcf

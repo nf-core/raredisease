@@ -107,9 +107,10 @@ workflow PIPELINE_INITIALISATION {
     //
     // Create channel from input file provided through params.input
     //
-    channel
+    ch_original_input = channel
         .fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
-        .tap { ch_original_input }
+
+    ch_input_counts = ch_original_input
         .map { meta, _fastq1, _fastq2, _spring1, _spring2, _bam, _bai, _cram, _crai, _vcf, _tbi, _type -> meta.id }
         .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
             counts[sample] = (counts[sample] ?: 0) + 1
@@ -140,7 +141,8 @@ workflow PIPELINE_INITIALISATION {
                 return [new_meta + [data_type: "${type}_vcf"], [vcf, tbi]]
             }
         }
-        .tap{ ch_input_counts }
+
+    ch_samplesheet = ch_input_counts
         .map { _meta, files -> files }
         .reduce([:]) { counts, files -> //get line number for each row to construct unique sample ids
             counts[files] = counts.size() + 1
@@ -151,7 +153,8 @@ workflow PIPELINE_INITIALISATION {
             def new_meta = meta + [id:meta.id+"_LNUMBER"+lineno[files]]
             return [ new_meta, files ]
         }
-        .tap { ch_samplesheet }
+
+    ch_samplesheet_by_type = ch_samplesheet
         .branch { meta, files  ->
             fastq:     meta.data_type in ["fastq_gz", "separate_spring", "interleaved_spring"]
                 return [meta, files]
@@ -160,7 +163,6 @@ workflow PIPELINE_INITIALISATION {
             precalled: meta.data_type.endsWith("_vcf")
                 return [meta, files]
         }
-        .set {ch_samplesheet_by_type}
 
     ch_samples  = ch_samplesheet.map { meta, _files ->
                     def new_id = meta.sample

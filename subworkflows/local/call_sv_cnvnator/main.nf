@@ -29,14 +29,13 @@ workflow CALL_SV_CNVNATOR {
         CNVNATOR_CALL ( [[:],[],[]], CNVNATOR_PARTITION.out.root, [[:],[]], [[:],[]], "call" )
         CNVNATOR_CONVERT2VCF (CNVNATOR_CALL.out.tab)
         INDEX_CNVNATOR (CNVNATOR_CONVERT2VCF.out.vcf)
-        BCFTOOLS_VIEW_CNVNATOR (INDEX_CNVNATOR.out.gz_index, [], [], []).vcf
+        BCFTOOLS_VIEW_CNVNATOR (INDEX_CNVNATOR.out.gz_index, [], [], [])
+        vcf_file_list = BCFTOOLS_VIEW_CNVNATOR.out.vcf
             .collect{_meta, vcf -> vcf}
             .toList()
-            .set { vcf_file_list }
 
-        ch_case_info
+        merge_input_vcfs = ch_case_info
             .combine(vcf_file_list)
-            .set { merge_input_vcfs }
 
         SVDB_MERGE_CNVNATOR ( merge_input_vcfs, [], true )
 

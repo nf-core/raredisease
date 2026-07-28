@@ -33,9 +33,8 @@ workflow ALIGN_MT {
             BWA_MEM_MT ( ch_fastq, ch_bwaindex, ch_fasta, true )
             ch_align       = BWA_MEM_MT.out.bam
         }
-        ch_align
+        ch_bam_ubam = ch_align
             .join(ch_ubam, failOnMismatch:true, failOnDuplicate:true)
-            .set {ch_bam_ubam}
 
         GATK4_MERGEBAMALIGNMENT_MT (ch_bam_ubam, ch_fasta, ch_dict)
 

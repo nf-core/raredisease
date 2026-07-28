@@ -25,7 +25,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
     main:
         if (val_svdb_query_dbs) {
-            ch_svdb_dbs
+            ch_svdb_dbs = ch_svdb_dbs
                 .multiMap { file, in_freq_info_key, in_allele_count_info_key, out_freq_info_key, out_allele_count_info_key ->
                     vcf_dbs:  file
                     in_frqs:  in_freq_info_key
@@ -33,7 +33,6 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
                     out_frqs: out_freq_info_key
                     out_occs: out_allele_count_info_key
                 }
-                .set { ch_svdb_dbs }
 
             SVDB_QUERY_DB (
                 ch_vcf,
@@ -49,7 +48,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         }
 
         if (val_svdb_query_bedpedbs) {
-            ch_svdb_bedpedbs
+            ch_svdb_bedpedbs = ch_svdb_bedpedbs
                 .multiMap { file, in_freq_info_key, in_allele_count_info_key, out_freq_info_key, out_allele_count_info_key ->
                     bedpedbs: file
                     in_frqs:  in_freq_info_key
@@ -57,7 +56,6 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
                     out_frqs: out_freq_info_key
                     out_occs: out_allele_count_info_key
                 }
-                .set { ch_svdb_bedpedbs }
 
             SVDB_QUERY_BEDPE (
                 ch_vcf,
@@ -74,14 +72,12 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
 
         PICARD_SORTVCF(ch_vcf, ch_genome_fasta, ch_genome_dictionary)
 
-        PICARD_SORTVCF.out.vcf
+        ch_sortvcf = PICARD_SORTVCF.out.vcf
             .map { meta, vcf -> return [meta,vcf,[]] }
-            .set { ch_sortvcf }
 
         BCFTOOLS_VIEW(ch_sortvcf, [], [], [])
-            .vcf
+        ch_vep_in = BCFTOOLS_VIEW.out.vcf
             .map { meta, vcf -> return [meta, vcf, []]}
-            .set { ch_vep_in }
 
         ENSEMBLVEP_SV(
             ch_vep_in,
