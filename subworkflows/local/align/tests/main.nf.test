@@ -25,7 +25,7 @@ nextflow_workflow {
                 """
                 input[0] = channel.of([
                     [id:'mt'],
-                    file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference_mt.fa', checkIfExists: true)
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
                 ])
                 """
             }
@@ -36,7 +36,7 @@ nextflow_workflow {
                 """
                 input[0] = channel.of([
                     [id:'shiftmt'],
-                    file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference_shift.fasta', checkIfExists: true)
+                    file('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
                 ])
                 """
             }
@@ -52,7 +52,7 @@ nextflow_workflow {
                     """
                     input[0] = channel.of([
                         [id:'genome'],
-                        file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference.fasta', checkIfExists: true)
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
                     ])
                     """
                 }
@@ -61,13 +61,13 @@ nextflow_workflow {
 
         when {
             params {
-                pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
-                exclude_alt         = true
-                genome              = "GRCh37"
-                platform            = "illumina"
-                min_trimmed_length  = 50
-                mito_name           = "MT"
-                outdir              = "$outputDir"
+                sarscov_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
+                exclude_alt          = true
+                restrict_to_contigs  = "MT192765.1"
+                platform             = "illumina"
+                min_trimmed_length   = 50
+                mito_name            = "MT192765.1"
+                outdir               = "$outputDir"
             }
             workflow {
                 """
@@ -76,42 +76,38 @@ nextflow_workflow {
                 input[2]  = channel.empty()
                 input[3]  = GENOME_MEM2.out.index.collect()
                 input[4]  = channel.empty()
-                input[5]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
-                input[6]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
-                input[7]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
+                input[6]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[7]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
+                def read1 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true)
+                def read2 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
                 input[8]  = channel.of(
                     [
                         [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                        [
-                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_1.fastq.gz', checkIfExists: true),
-                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_2.fastq.gz', checkIfExists: true)
-                        ]
+                        [ read1, read2 ]
                     ],
                     [
                         [id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", lane:1, sex:1, phenotype:2, paternal:'earlycasualcaiman', maternal:'slowlycivilbuck', case_id:'justhusky'],
                         [
-                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_1.fastq.gz', checkIfExists: true),
-                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_2.fastq.gz', checkIfExists: true)
+                            file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test2_1.fastq.gz', checkIfExists: true),
+                            file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test2_2.fastq.gz', checkIfExists: true)
                         ]
                     ],
                     [
                         [id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                        [
-                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_1.fastq.gz', checkIfExists: true),
-                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_2.fastq.gz', checkIfExists: true)
-                        ]
+                        [ read1, read2 ]
                     ]
                 )
                 input[9]  = channel.empty()
                 input[10] = MT_MEM2.out.index.collect()
-                input[11] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
-                input[12] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
-                input[13] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[11] = channel.of([id:'mt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
+                input[12] = channel.of([id:'mt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[13] = channel.of([id:'mt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
                 input[14] = channel.empty()
                 input[15] = SHIFTMT_MEM2.out.index.collect()
-                input[16] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
-                input[17] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
-                input[18] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[16] = channel.of([id:'shiftmt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
+                input[17] = channel.of([id:'shiftmt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[18] = channel.of([id:'shiftmt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
                 input[19] = false
                 input[20] = "bwamem2"
                 input[21] = true
@@ -131,7 +127,7 @@ nextflow_workflow {
                 { assert snapshot(
                         workflow.out.fastp_json,
                         workflow.out.genome_marked_cram
-                            .collect { meta, cramfile -> [ meta, cram(cramfile, params.pipelines_testdata_base_path + 'reference/reference.fasta').getReadsMD5() ] },
+                            .collect { meta, cramfile -> [ meta, cram(cramfile, params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta').getReadsMD5() ] },
                         workflow.out.genome_marked_crai
                             .collect { meta, craifile -> [meta, file(craifile).name] },
                         workflow.out.genome_marked_bam_bai
@@ -158,7 +154,7 @@ nextflow_workflow {
                     """
                     input[0] = channel.of([
                         [id:'genome'],
-                        file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference.fasta', checkIfExists: true)
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
                     ])
                     """
                 }
@@ -167,12 +163,12 @@ nextflow_workflow {
 
         when {
             params {
-                pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
+                sarscov_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
                 save_noalt_mapped_as_cram = false
                 save_all_mapped_as_cram   = true
                 platform            = "illumina"
                 min_trimmed_length  = 50
-                mito_name           = "MT"
+                mito_name           = "MT192765.1"
                 outdir              = "$outputDir"
             }
             workflow {
@@ -182,42 +178,38 @@ nextflow_workflow {
                 input[2]  = channel.empty()
                 input[3]  = GENOME_MEM2.out.index.collect()
                 input[4]  = channel.empty()
-                input[5]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
-                input[6]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
-                input[7]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
+                input[6]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[7]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
+                def read1 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true)
+                def read2 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
                 input[8]  = channel.of(
                     [
                         [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                        [
-                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_1.fastq.gz', checkIfExists: true),
-                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_2.fastq.gz', checkIfExists: true)
-                        ]
+                        [ read1, read2 ]
                     ],
                     [
                         [id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", lane:1, sex:1, phenotype:2, paternal:'earlycasualcaiman', maternal:'slowlycivilbuck', case_id:'justhusky'],
                         [
-                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_1.fastq.gz', checkIfExists: true),
-                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_2.fastq.gz', checkIfExists: true)
+                            file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test2_1.fastq.gz', checkIfExists: true),
+                            file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test2_2.fastq.gz', checkIfExists: true)
                         ]
                     ],
                     [
                         [id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                        [
-                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_1.fastq.gz', checkIfExists: true),
-                            file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_2.fastq.gz', checkIfExists: true)
-                        ]
+                        [ read1, read2 ]
                     ]
                 )
                 input[9]  = channel.empty()
                 input[10] = MT_MEM2.out.index.collect()
-                input[11] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
-                input[12] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
-                input[13] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[11] = channel.of([id:'mt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
+                input[12] = channel.of([id:'mt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[13] = channel.of([id:'mt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
                 input[14] = channel.empty()
                 input[15] = SHIFTMT_MEM2.out.index.collect()
-                input[16] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
-                input[17] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
-                input[18] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[16] = channel.of([id:'shiftmt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
+                input[17] = channel.of([id:'shiftmt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[18] = channel.of([id:'shiftmt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
                 input[19] = false
                 input[20] = "bwamem2"
                 input[21] = false
@@ -237,7 +229,7 @@ nextflow_workflow {
                 { assert snapshot(
                         workflow.out.fastp_json,
                         workflow.out.genome_marked_cram
-                            .collect { meta, cramfile -> [ meta, cram(cramfile, params.pipelines_testdata_base_path + 'reference/reference.fasta').getReadsMD5() ] },
+                            .collect { meta, cramfile -> [ meta, cram(cramfile, params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta').getReadsMD5() ] },
                         workflow.out.genome_marked_crai
                             .collect { meta, craifile -> [meta, file(craifile).name] },
                         workflow.out.genome_marked_bam_bai
@@ -263,7 +255,7 @@ nextflow_workflow {
                     """
                     input[0] = channel.of([
                         [id:'genome'],
-                        file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference.fasta', checkIfExists: true)
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
                     ])
                     """
                 }
@@ -272,10 +264,10 @@ nextflow_workflow {
 
         when {
             params {
-                pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
+                sarscov_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
                 platform            = "illumina"
                 min_trimmed_length  = 50
-                mito_name           = "MT"
+                mito_name           = "MT192765.1"
                 outdir              = "$outputDir"
             }
             workflow {
@@ -285,36 +277,32 @@ nextflow_workflow {
                 input[2]  = channel.empty()
                 input[3]  = channel.empty()
                 input[4]  = GENOME_MEME.out.index.collect()
-                input[5]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
-                input[6]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
-                input[7]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
+                input[6]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[7]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
+                def read1 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true)
+                def read2 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
                 input[8]  = channel.fromList([
                     [[ id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", 'lane':1, 'sex':1, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
-                    [
-                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_1.fastq.gz', checkIfExists: true),
-                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_2.fastq.gz', checkIfExists: true)
-                    ]],
+                    [ read1, read2 ]],
                     [[ id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", 'lane':1, 'sex':1, 'phenotype':2, 'paternal':'earlycasualcaiman', 'maternal':'slowlycivilbuck', 'case_id':'justhusky'  ], // meta map
                     [
-                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_1.fastq.gz', checkIfExists: true),
-                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_2.fastq.gz', checkIfExists: true)
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test2_1.fastq.gz', checkIfExists: true),
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test2_2.fastq.gz', checkIfExists: true)
                     ]],
                     [[ id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'",  'lane':1, 'sex':2, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
-                    [
-                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_1.fastq.gz', checkIfExists: true),
-                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_2.fastq.gz', checkIfExists: true)
-                    ]]
+                    [ read1, read2 ]]
                 ])
                 input[9]  = channel.empty()
                 input[10] = MT_MEM2.out.index.collect()
-                input[11] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
-                input[12] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
-                input[13] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[11] = channel.of([id:'mt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
+                input[12] = channel.of([id:'mt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[13] = channel.of([id:'mt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
                 input[14] = channel.empty()
                 input[15] = SHIFTMT_MEM2.out.index.collect()
-                input[16] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
-                input[17] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
-                input[18] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[16] = channel.of([id:'shiftmt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
+                input[17] = channel.of([id:'shiftmt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[18] = channel.of([id:'shiftmt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
                 input[19] = true
                 input[20] = "bwameme"
                 input[21] = false
@@ -333,7 +321,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert snapshot(
                         workflow.out.genome_marked_cram
-                            .collect { meta, cramfile -> [ meta, cram(cramfile, params.pipelines_testdata_base_path + 'reference/reference.fasta').getReadsMD5() ] },
+                            .collect { meta, cramfile -> [ meta, cram(cramfile, params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta').getReadsMD5() ] },
                         workflow.out.genome_marked_crai
                             .collect { meta, craifile -> [meta, file(craifile).name] },
                         workflow.out.genome_marked_bam_bai
@@ -361,7 +349,7 @@ nextflow_workflow {
                     """
                     input[0] = channel.of([
                         [id:'genome'],
-                        file('https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/reference.fasta', checkIfExists: true)
+                        file('https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
                     ])
                     """
                 }
@@ -371,10 +359,10 @@ nextflow_workflow {
 
         when {
             params {
-                pipelines_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/'
+                sarscov_testdata_base_path = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/'
                 platform            = "illumina"
                 min_trimmed_length  = 50
-                mito_name           = "MT"
+                mito_name           = "MT192765.1"
                 outdir              = "$outputDir"
             }
             workflow {
@@ -384,36 +372,32 @@ nextflow_workflow {
                 input[2]  = channel.empty()
                 input[3]  = channel.empty()
                 input[4]  = GENOME_MEME.out.index.collect()
-                input[5]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
-                input[6]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
-                input[7]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
+                input[6]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[7]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
+                def read1 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true)
+                def read2 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
                 input[8]  = channel.fromList([
                     [[ id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", 'lane':1, 'sex':1, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
-                    [
-                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_1.fastq.gz', checkIfExists: true),
-                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_earlycasualcaiman_XXXXXX_2.fastq.gz', checkIfExists: true)
-                    ]],
+                    [ read1, read2 ]],
                     [[ id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", 'lane':1, 'sex':1, 'phenotype':2, 'paternal':'earlycasualcaiman', 'maternal':'slowlycivilbuck', 'case_id':'justhusky'  ], // meta map
                     [
-                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_1.fastq.gz', checkIfExists: true),
-                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_hugelymodelbat_XXXXXX_2.fastq.gz', checkIfExists: true)
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test2_1.fastq.gz', checkIfExists: true),
+                        file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test2_2.fastq.gz', checkIfExists: true)
                     ]],
                     [[ id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'",  'lane':1, 'sex':2, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
-                    [
-                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_1.fastq.gz', checkIfExists: true),
-                        file(params.pipelines_testdata_base_path + '/testdata/1_171015_HHT5NDSXX_slowlycivilbuck_XXXXXX_2.fastq.gz', checkIfExists: true)
-                    ]]
+                    [ read1, read2 ]]
                 ])
                 input[9]  = channel.empty()
                 input[10] = MT_MEM2.out.index.collect()
-                input[11] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
-                input[12] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
-                input[13] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[11] = channel.of([id:'mt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
+                input[12] = channel.of([id:'mt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[13] = channel.of([id:'mt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
                 input[14] = channel.empty()
                 input[15] = SHIFTMT_MEM2.out.index.collect()
-                input[16] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.dict', checkIfExists: true)).collect()
-                input[17] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa.fai', checkIfExists: true)).collect()
-                input[18] = channel.of([id:'shiftmt'], file(params.pipelines_testdata_base_path + 'reference/reference_mt.fa', checkIfExists: true)).collect()
+                input[16] = channel.of([id:'shiftmt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
+                input[17] = channel.of([id:'shiftmt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[18] = channel.of([id:'shiftmt'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
                 input[19] = true
                 input[20] = "bwameme"
                 input[21] = false
@@ -432,7 +416,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 {  assert snapshot(
                         workflow.out.genome_marked_cram
-                            .collect { meta, cramfile -> [ meta, cram(cramfile, params.pipelines_testdata_base_path + 'reference/reference.fasta').getReadsMD5() ] },
+                            .collect { meta, cramfile -> [ meta, cram(cramfile, params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta').getReadsMD5() ] },
                         workflow.out.genome_marked_crai
                             .collect { meta, craifile -> [meta, file(craifile).name] },
                         workflow.out.genome_marked_bam_bai
