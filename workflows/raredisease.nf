@@ -41,7 +41,8 @@ include { SANITY_CHECK_VCFANNO_DATABASES   } from '../modules/local/sanity_check
 // SUBWORKFLOWS
 //
 
-include { ALIGN                                                       } from '../subworkflows/local/align'
+include { ALIGN_GENOME                                                } from '../subworkflows/local/align_genome'
+include { ALIGN_MITOCHONDRIA                                          } from '../subworkflows/local/align_mitochondria'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_ME                          } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_MT                          } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV                         } from '../subworkflows/local/annotate_consequence_pli'
@@ -385,7 +386,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    ch_mapped = ALIGN (
+    ch_mapped = ALIGN_GENOME (
         ch_alignments,
         ch_genome_bwafastalignindex,
         ch_genome_bwaindex,
@@ -395,37 +396,52 @@ workflow RAREDISEASE {
         ch_genome_fai,
         ch_genome_fasta,
         ch_input_fastqs,
-        ch_mt_bwaindex,
-        ch_mt_bwamem2index,
-        ch_mt_dictionary,
-        ch_mt_fai,
-        ch_mt_fasta,
-        ch_mtshift_bwaindex,
-        ch_mtshift_bwamem2index,
-        ch_mtshift_dictionary,
-        ch_mtshift_fai,
-        ch_mtshift_fasta,
         skip_fastp,
         val_aligner,
         val_exclude_alt,
         val_extract_alignments,
-        val_mt_aligner,
         val_platform,
-        val_run_mt,
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram
     )
-    ch_align_fastp_out              = ALIGN.out.fastp_out
-    ch_align_genome_marked_bam      = ALIGN.out.genome_marked_bam
-    ch_align_genome_marked_bai      = ALIGN.out.genome_marked_bai
-    ch_align_genome_marked_cram     = ALIGN.out.genome_marked_cram
-    ch_align_genome_marked_crai     = ALIGN.out.genome_marked_crai
-    ch_align_markdup_metrics        = ALIGN.out.markdup_metrics
+    ch_align_fastp_out              = ALIGN_GENOME.out.fastp_out
+    ch_align_genome_marked_bam      = ALIGN_GENOME.out.genome_marked_bam
+    ch_align_genome_marked_bai      = ALIGN_GENOME.out.genome_marked_bai
+    ch_align_genome_marked_cram     = ALIGN_GENOME.out.genome_marked_cram
+    ch_align_genome_marked_crai     = ALIGN_GENOME.out.genome_marked_crai
+    ch_align_markdup_metrics        = ALIGN_GENOME.out.markdup_metrics
+
+    if (val_run_mt) {
+        ALIGN_MITOCHONDRIA (
+            ch_mapped.genome_marked_bam_bai,
+            ch_genome_dictionary,
+            ch_genome_fai,
+            ch_genome_fasta,
+            ch_mt_bwaindex,
+            ch_mt_bwamem2index,
+            ch_mt_dictionary,
+            ch_mt_fai,
+            ch_mt_fasta,
+            ch_mtshift_bwaindex,
+            ch_mtshift_bwamem2index,
+            ch_mtshift_dictionary,
+            ch_mtshift_fai,
+            ch_mtshift_fasta,
+            val_mt_aligner
+        )
+        ch_mt_bam_bai                = ALIGN_MITOCHONDRIA.out.mt_bam_bai
+        ch_mt_bam_bai_gatksubwf      = ALIGN_MITOCHONDRIA.out.mt_bam_bai_gatksubwf
+        ch_mtshift_bam_bai_gatksubwf = ALIGN_MITOCHONDRIA.out.mtshift_bam_bai_gatksubwf
+    } else {
+        ch_mt_bam_bai                = channel.empty()
+        ch_mt_bam_bai_gatksubwf      = channel.empty()
+        ch_mtshift_bam_bai_gatksubwf = channel.empty()
+    }
 
     if (!skip_mt_subsample && val_run_mt) {
         if (val_mt_subsample_approach.equals("fraction")) {
             SUBSAMPLE_MT_FRAC(
-                ch_mapped.mt_bam_bai,
+                ch_mt_bam_bai,
                 val_mt_subsample_rd,
                 val_mt_subsample_seed
             )
@@ -433,7 +449,7 @@ workflow RAREDISEASE {
             ch_subsample_mt_bai = SUBSAMPLE_MT_FRAC.out.bai
         } else {
             SUBSAMPLE_MT_READS(
-                ch_mapped.mt_bam_bai,
+                ch_mt_bam_bai,
             )
             ch_subsample_mt_bam = SUBSAMPLE_MT_READS.out.bam
             ch_subsample_mt_bai = SUBSAMPLE_MT_READS.out.bai
@@ -656,13 +672,13 @@ workflow RAREDISEASE {
             ch_case_info,
             ch_foundin_header,
             ch_genome_chrsizes,
-            ch_mapped.mt_bam_bai_gatksubwf,
+            ch_mt_bam_bai_gatksubwf,
             ch_mt_dictionary,
             ch_mt_fai,
             ch_mt_fasta,
             ch_mt_intervals,
             ch_mtshift_backchain,
-            ch_mapped.mtshift_bam_bai_gatksubwf,
+            ch_mtshift_bam_bai_gatksubwf,
             ch_mtshift_dictionary,
             ch_mtshift_fai,
             ch_mtshift_fasta,
@@ -794,7 +810,7 @@ workflow RAREDISEASE {
             ch_genome_hisat2index,
             ch_manta_regions,
             ch_mitosalt_config,
-            ch_mapped.mt_bam_bai,
+            ch_mt_bam_bai,
             ch_mt_fai,
             ch_mt_fasta,
             ch_mt_lastdb,
@@ -1142,8 +1158,8 @@ workflow RAREDISEASE {
     if (!skip_fastqc) {
         ch_multiqc_files = ch_multiqc_files.mix(fastqc_report.collect{_meta, reports -> reports}.ifEmpty([]))
     }
-    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.fastp_json.map{_meta, reports -> reports}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.markdup_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGN_GENOME.out.fastp_json.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGN_GENOME.out.markdup_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.ngsbits_samplegender_tsv.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.picard_collectmultiplemetrics_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.picard_collecthsmetrics_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))

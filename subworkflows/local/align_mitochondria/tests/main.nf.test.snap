@@ -1,0 +1,134 @@
+{
+    "align_mitochondria bwamem2 - stub": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "earlycasualcaiman",
+                        "sample": "earlycasualcaiman",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "lane": 1,
+                        "sex": 1,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "justhusky"
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e",
+                    "earlycasualcaiman.bam.bai"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "earlycasualcaiman",
+                        "sample": "earlycasualcaiman",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "lane": 1,
+                        "sex": 1,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "justhusky"
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e",
+                    "earlycasualcaiman_sorted_merged_md_sorted.bam.bai"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "earlycasualcaiman",
+                        "sample": "earlycasualcaiman",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "lane": 1,
+                        "sex": 1,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "justhusky"
+                    },
+                    "d41d8cd98f00b204e9800998ecf8427e",
+                    "earlycasualcaiman_sorted_merged_md_sorted_shifted.bam.bai"
+                ]
+            ]
+        ],
+        "timestamp": "2026-07-28T16:59:58.874193245",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "align_mitochondria bwamem2": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "earlycasualcaiman",
+                        "sample": "earlycasualcaiman",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "lane": 1,
+                        "sex": 1,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "justhusky"
+                    },
+                    "1c515d47818b6fa31d2bc7436370d1c7",
+                    "earlycasualcaiman.bam.bai"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "earlycasualcaiman",
+                        "sample": "earlycasualcaiman",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "lane": 1,
+                        "sex": 1,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "justhusky"
+                    },
+                    "6a8b1154b8f8ffae06e609857d0e99f8",
+                    "earlycasualcaiman_sorted_merged_md_sorted.bam.bai"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "earlycasualcaiman",
+                        "sample": "earlycasualcaiman",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "lane": 1,
+                        "sex": 1,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "justhusky"
+                    },
+                    "f1ad6caaa9ca7cf668dae278454191a5",
+                    "earlycasualcaiman_sorted_merged_md_sorted_shifted.bam.bai"
+                ]
+            ]
+        ],
+        "timestamp": "2026-07-28T17:03:26.453041766",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}
