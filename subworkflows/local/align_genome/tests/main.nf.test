@@ -1,11 +1,11 @@
 nextflow_workflow {
 
-    name "Test Workflow ALIGN"
-    script "subworkflows/local/align/main.nf"
-    workflow "ALIGN"
+    name "Test Workflow ALIGN_GENOME"
+    script "subworkflows/local/align_genome/main.nf"
+    workflow "ALIGN_GENOME"
 
     tag "subworkflows"
-    tag "align"
+    tag "align_genome"
     tag "align_bwa_bwamem2_bwameme"
     tag "bwafastalign/mem"
     tag "align_sentieon"

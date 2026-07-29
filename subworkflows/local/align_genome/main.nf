@@ -1,5 +1,5 @@
 //
-// Map to reference
+// Map to reference genome
 //
 
 include { ALIGN_BWA_BWAMEM2_BWAMEME                  } from '../align_bwa_bwamem2_bwameme'
@@ -10,7 +10,7 @@ include { SAMTOOLS_VIEW as CONVERTTOCRAM_ALTFILTERED } from '../../../modules/nf
 include { SAMTOOLS_VIEW as CONVERTTOCRAM_UNFILTERED  } from '../../../modules/nf-core/samtools/view/main'
 include { SAMTOOLS_VIEW as SAMTOOLS_VIEW_EXCLUDE_ALT } from '../../../modules/nf-core/samtools/view/main'
 
-workflow ALIGN {
+workflow ALIGN_GENOME {
     take:
         ch_alignments                 // channel: [optional] [ val(meta), [path(bam),path(bai)]  ]
         ch_genome_bwafastalignindex   // channel: [mandatory] [ val(meta), path(index) ]

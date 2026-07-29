@@ -41,7 +41,7 @@ include { SANITY_CHECK_VCFANNO_DATABASES   } from '../modules/local/sanity_check
 // SUBWORKFLOWS
 //
 
-include { ALIGN                                                       } from '../subworkflows/local/align'
+include { ALIGN_GENOME                                                } from '../subworkflows/local/align_genome'
 include { ALIGN_MITOCHONDRIA                                          } from '../subworkflows/local/align_mitochondria'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_ME                          } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_MT                          } from '../subworkflows/local/annotate_consequence_pli'
@@ -386,7 +386,7 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-    ch_mapped = ALIGN (
+    ch_mapped = ALIGN_GENOME (
         ch_alignments,
         ch_genome_bwafastalignindex,
         ch_genome_bwaindex,
@@ -404,12 +404,12 @@ workflow RAREDISEASE {
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram
     )
-    ch_align_fastp_out              = ALIGN.out.fastp_out
-    ch_align_genome_marked_bam      = ALIGN.out.genome_marked_bam
-    ch_align_genome_marked_bai      = ALIGN.out.genome_marked_bai
-    ch_align_genome_marked_cram     = ALIGN.out.genome_marked_cram
-    ch_align_genome_marked_crai     = ALIGN.out.genome_marked_crai
-    ch_align_markdup_metrics        = ALIGN.out.markdup_metrics
+    ch_align_fastp_out              = ALIGN_GENOME.out.fastp_out
+    ch_align_genome_marked_bam      = ALIGN_GENOME.out.genome_marked_bam
+    ch_align_genome_marked_bai      = ALIGN_GENOME.out.genome_marked_bai
+    ch_align_genome_marked_cram     = ALIGN_GENOME.out.genome_marked_cram
+    ch_align_genome_marked_crai     = ALIGN_GENOME.out.genome_marked_crai
+    ch_align_markdup_metrics        = ALIGN_GENOME.out.markdup_metrics
 
     if (val_run_mt) {
         ALIGN_MITOCHONDRIA (
@@ -1158,8 +1158,8 @@ workflow RAREDISEASE {
     if (!skip_fastqc) {
         ch_multiqc_files = ch_multiqc_files.mix(fastqc_report.collect{_meta, reports -> reports}.ifEmpty([]))
     }
-    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.fastp_json.map{_meta, reports -> reports}.collect().ifEmpty([]))
-    ch_multiqc_files = ch_multiqc_files.mix(ALIGN.out.markdup_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGN_GENOME.out.fastp_json.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    ch_multiqc_files = ch_multiqc_files.mix(ALIGN_GENOME.out.markdup_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.ngsbits_samplegender_tsv.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.picard_collectmultiplemetrics_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(QC_BAM.out.picard_collecthsmetrics_metrics.map{_meta, reports -> reports}.collect().ifEmpty([]))
