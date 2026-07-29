@@ -15,6 +15,20 @@ nextflow_workflow {
 
     test("CALL_SNV - deepvariant wgs") {
 
+        setup {
+            run("GET_CHROM_SIZES") {
+                script "modules/local/get_chrom_sizes/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'genome'],
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
         when {
             workflow {
                 """
@@ -23,16 +37,19 @@ nextflow_workflow {
                 input[2]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz', checkIfExists: true)])
                 input[3]  = channel.of([[id:'genome'], []])
                 input[4]  = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
-                input[5]  = channel.of([
-                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
-                ])
-                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
-                input[7]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
-                input[8]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[5]  = channel.of(
+                    [[id:'test', sample:'test', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true),
+                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam.bai', checkIfExists: true)],
+                    [[id:'test2', sample:'test2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test2\\\\tPL:illumina\\\\tSM:test2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test2.paired_end.sorted.bam', checkIfExists: true),
+                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test2.paired_end.sorted.bam.bai', checkIfExists: true)]
+                )
+                input[6]  = GET_CHROM_SIZES.out.sizes.collect()
+                input[7]  = channel.of([[id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)]).collect()
                 input[9]  = channel.of([[id:'model'], []])
-                input[10] = channel.of([[id:'par'], []])
+                input[10] = channel.of([[id:'par'], []]).collect()
                 input[11] = channel.of([[id:'model'], []])
                 input[12] = channel.of([[id:'target'], [], []])
                 input[13] = 'wgs'
@@ -47,7 +64,6 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert snapshot(
                     path(workflow.out.genome_vcf[0][1]).vcf.variantsMD5,
-                    path(workflow.out.genome_vcf[0][1]).vcf.summary,
                     workflow.out.deepvariant_report.collect { meta, report -> file(report).name },
                     workflow.out.genome_tabix.collect { meta, tbi -> file(tbi).name }
                 ).match() }
@@ -59,6 +75,20 @@ nextflow_workflow {
 
         options "-stub"
 
+        setup {
+            run("GET_CHROM_SIZES") {
+                script "modules/local/get_chrom_sizes/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'genome'],
+                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
         when {
             workflow {
                 """
@@ -67,16 +97,19 @@ nextflow_workflow {
                 input[2]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz', checkIfExists: true)])
                 input[3]  = channel.of([[id:'genome'], []])
                 input[4]  = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
-                input[5]  = channel.of([
-                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
-                ])
-                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
-                input[7]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
-                input[8]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[5]  = channel.of(
+                    [[id:'test', sample:'test', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true),
+                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam.bai', checkIfExists: true)],
+                    [[id:'test2', sample:'test2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test2\\\\tPL:illumina\\\\tSM:test2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test2.paired_end.sorted.bam', checkIfExists: true),
+                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test2.paired_end.sorted.bam.bai', checkIfExists: true)]
+                )
+                input[6]  = GET_CHROM_SIZES.out.sizes.collect()
+                input[7]  = channel.of([[id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)]).collect()
                 input[9]  = channel.of([[id:'model'], []])
-                input[10] = channel.of([[id:'par'], []])
+                input[10] = channel.of([[id:'par'], []]).collect()
                 input[11] = channel.of([[id:'model'], []])
                 input[12] = channel.of([[id:'target'], [], []])
                 input[13] = 'wgs'

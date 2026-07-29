@@ -55,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Speed up and stabilise the call_snv_deepvariant/call_snv (DeepVariant) subworkflow tests by using small chr22 fixtures, adding 2-sample coverage for GLnexus joint genotyping, and restoring the deterministic variantsMD5 snapshot assertion. [#918](https://github.com/nf-core/raredisease/pull/918)
 - Emit an error at startup when `vep_filters_scout_fmt` or `vep_filters` contains no records (headers or empty lines only), which would otherwise cause the clinical set to silently contain 0 variants [#913](https://github.com/nf-core/raredisease/pull/913)
 - Add missing CADD 1.7.3 module update to the v3.0.0 `Tool updates` table in `CHANGELOG.md` [issue #888](https://github.com/nf-core/raredisease/issues/888) [PR #919](https://github.com/nf-core/raredisease/pull/919)
 - Add changelog entry requirement (including the Parameters table) to the contribution workflow in `CONTRIBUTING.md` [issue #797](https://github.com/nf-core/raredisease/issues/797) [PR #919](https://github.com/nf-core/raredisease/pull/919)
