@@ -1,15 +1,16 @@
 {
     "CALL_SNV - deepvariant wgs": {
         "content": [
-            "VcfFile [chromosomes=[21], sampleCount=1, variantCount=7562, phased=false, phasedAutodetect=false]",
+            "60de6f6d19bd2a63d88b1fca6519a5ee",
             [
-                "earlycasualcaiman_deepvar.visual_report.html"
+                "test_deepvar.visual_report.html",
+                "test2_deepvar.visual_report.html"
             ],
             [
                 "justhusky_snv.vcf.gz.tbi"
             ]
         ],
-        "timestamp": "2026-07-15T09:17:14.610146783",
+        "timestamp": "2026-07-29T14:46:54.430182489",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
@@ -24,37 +25,69 @@
                 "1": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "test",
+                            "sample": "test",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
+                        "test_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
+                    ],
+                    [
+                        {
+                            "id": "test2",
+                            "sample": "test2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test2\\tPL:illumina\\tSM:test2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "test2_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
                     ]
                 ],
                 "2": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "test",
+                            "sample": "test",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
+                        "test_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
+                    ],
+                    [
+                        {
+                            "id": "test2",
+                            "sample": "test2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test2\\tPL:illumina\\tSM:test2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "test2_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
                     ]
                 ],
                 "3": [
@@ -88,37 +121,69 @@
                 "genome_gtabix": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "test",
+                            "sample": "test",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
+                        "test_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
+                    ],
+                    [
+                        {
+                            "id": "test2",
+                            "sample": "test2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test2\\tPL:illumina\\tSM:test2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "test2_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
                     ]
                 ],
                 "genome_gvcf": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "test",
+                            "sample": "test",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
                             "case_id": "justhusky"
                         },
-                        "earlycasualcaiman_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
+                        "test_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
+                    ],
+                    [
+                        {
+                            "id": "test2",
+                            "sample": "test2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test2\\tPL:illumina\\tSM:test2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "justhusky"
+                        },
+                        "test2_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
                     ]
                 ],
                 "genome_tabix": [
@@ -148,10 +213,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-07-14T22:45:58.044920519",
+        "timestamp": "2026-07-29T14:47:28.470133178",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "25.10.4"
         }
     }
 }
