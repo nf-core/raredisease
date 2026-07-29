@@ -46,49 +46,43 @@ workflow POSTPROCESS_MT_CALLS {
         GATK4_MERGEVCFS_LIFT_UNLIFT_MT( ch_vcfs, ch_genome_dictionary)
 
         // Filtering Variants
-        GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf
+        ch_filt_vcf = GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.vcf
             .join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
-            .set { ch_filt_vcf }
         GATK4_VARIANTFILTRATION_MT (ch_filt_vcf, ch_genome_fasta, ch_genome_fai, ch_genome_dictionary, [[:],[]])
 
         // Spliting multiallelic calls
-        GATK4_VARIANTFILTRATION_MT.out.vcf
+        ch_in_split = GATK4_VARIANTFILTRATION_MT.out.vcf
             .join(GATK4_VARIANTFILTRATION_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
-            .set { ch_in_split }
         SPLIT_MULTIALLELICS_MT (ch_in_split, ch_genome_fasta)
         TABIX_TABIX_MT(SPLIT_MULTIALLELICS_MT.out.vcf)
 
         // Removing duplicates and merging if there is more than one sample
-        SPLIT_MULTIALLELICS_MT.out.vcf
+        ch_in_remdup = SPLIT_MULTIALLELICS_MT.out.vcf
             .join(TABIX_TABIX_MT.out.index, failOnMismatch:true, failOnDuplicate:true)
-            .set { ch_in_remdup }
         REMOVE_DUPLICATES_MT(ch_in_remdup, ch_genome_fasta)
         TABIX_TABIX_MT2(REMOVE_DUPLICATES_MT.out.vcf)
 
-        REMOVE_DUPLICATES_MT.out.vcf
+        file_list_vcf = REMOVE_DUPLICATES_MT.out.vcf
             .map{ _meta, vcf -> vcf}
             .toSortedList{a, b -> a.name <=> b.name}
             .toList()
-            .set { file_list_vcf }
 
-        TABIX_TABIX_MT2.out.index
+        file_list_tbi = TABIX_TABIX_MT2.out.index
             .map{ _meta, vcf -> vcf}
             .toSortedList{a, b -> a.name <=> b.name}
             .toList()
-            .set { file_list_tbi }
 
-        ch_case_info
+        ch_rem_dup_vcf_tbi = ch_case_info
             .combine(file_list_vcf)
             .combine(file_list_tbi)
-            .set { ch_rem_dup_vcf_tbi }
 
-        ch_rem_dup_vcf_tbi.branch {
+        ch_case_vcf = ch_rem_dup_vcf_tbi.branch {
             meta, vcf, tbi ->
                 single: vcf.size() == 1
                     return [meta, vcf]
                 multiple: vcf.size() > 1
                     return [meta, vcf, tbi]
-            }.set { ch_case_vcf }
+            }
 
         BCFTOOLS_MERGE_MT(
             ch_case_vcf.multiple.map { meta, vcf, tbi -> return [meta, vcf, tbi, []] },
@@ -100,27 +94,24 @@ workflow POSTPROCESS_MT_CALLS {
             ch_genome_fasta
         )
 
-        SPLIT_MULTIALLELICS_POSTMERGE_MT.out.vcf
+        ch_addfoundintag_in = SPLIT_MULTIALLELICS_POSTMERGE_MT.out.vcf
             .mix(ch_case_vcf.single)
-            .set { ch_addfoundintag_in }
 
         TABIX_TABIX_MERGE(ch_addfoundintag_in)
 
-        ch_genome_chrsizes.flatten().map{chromsizes ->
+        ch_varcallerinfo = ch_genome_chrsizes.flatten().map{chromsizes ->
             return [[id:'mutect2'], chromsizes]
             }
-            .set { ch_varcallerinfo }
 
-        ADD_VARCALLER_TO_BED (ch_varcallerinfo).gz_tbi
+        ADD_VARCALLER_TO_BED (ch_varcallerinfo)
+        ch_varcallerbed = ADD_VARCALLER_TO_BED.out.gz_tbi
             .map{_meta,bed,tbi -> return [bed, tbi]}
-            .set{ch_varcallerbed}
 
-        ch_addfoundintag_in
+        ch_annotate_in = ch_addfoundintag_in
             .join(TABIX_TABIX_MERGE.out.index)
             .combine(ch_varcallerbed)
             .combine(ch_foundin_header)
             .map { meta, vcf, vcf_tbi, bed, bed_tbi, hdr -> return [meta, vcf, vcf_tbi, bed, bed_tbi, [], hdr, []] }
-            .set { ch_annotate_in }
 
         BCFTOOLS_ANNOTATE(ch_annotate_in)
 

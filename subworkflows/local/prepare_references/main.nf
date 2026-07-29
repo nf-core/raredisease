@@ -46,6 +46,7 @@ workflow PREPARE_REFERENCES {
         val_fasta                    // String: path to genome fasta
         val_gnomad_af                // String: path to gnomad allele frequency file
         val_gnomad_af_idx            // String: path to gnomad allele frequency file's index
+        val_hisat2                   // String: [optional] path to pre-built HISAT2 genome index
         val_known_dbsnp              // String: path to dbsnp file
         val_known_dbsnp_tbi          // String: path to dbsnp file's index
         val_mtaligner                // String: "bwa", "bwamem2", or "sentieon"
@@ -119,25 +120,25 @@ workflow PREPARE_REFERENCES {
                 ch_genome_bwa_index = SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.collect()
             }
         } else if (val_bwa) {
-            ch_genome_bwa_index = channel.fromPath(val_bwa).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_bwa_index = channel.fromPath(val_bwa).map {it -> [[id:"bwa"], it]}.collect()
         }
 
         if (!val_bwamem2 && (val_aligner.equals("bwamem2") || val_mtaligner.equals("bwamem2"))) {
             ch_genome_bwamem2_index = BWAMEM2_INDEX_GENOME(ch_genome_fasta).index.collect()
         } else if (val_bwamem2) {
-            ch_genome_bwamem2_index = channel.fromPath(val_bwamem2).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_bwamem2_index = channel.fromPath(val_bwamem2).map {it -> [[id:"bwamem2"], it]}.collect()
         }
 
         if (!val_bwamem2 && val_aligner.equals("bwameme")) {
             ch_genome_bwameme_index = BWAMEME_INDEX_GENOME(ch_genome_fasta).index.collect()
         } else if (val_bwameme) {
-            ch_genome_bwameme_index = channel.fromPath(val_bwameme).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_bwameme_index = channel.fromPath(val_bwameme).map {it -> [[id:"bwameme"], it]}.collect()
         }
 
         if (!val_bwafastalign && val_aligner.equals("bwafastalign")) {
             ch_genome_bwafastalign_index = BWAFASTALIGN_INDEX_GENOME(ch_genome_fasta).index.collect()
         } else if (val_bwafastalign) {
-            ch_genome_bwafastalign_index = channel.fromPath(val_bwafastalign).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_bwafastalign_index = channel.fromPath(val_bwafastalign).map {it -> [[id:"bwafastalign_index"], it]}.collect()
         }
         //
         // MT genome indices
@@ -146,13 +147,17 @@ workflow PREPARE_REFERENCES {
             if (!val_mtfasta) {
                 ch_mt_fasta = SAMTOOLS_EXTRACT_MT(ch_genome_fasta.join(ch_genome_fai), false).fa.collect()
             } else {
-                ch_mt_fasta = channel.fromPath(val_mtfasta).map { it -> [[id:it.simpleName], it] }.collect()
+                ch_mt_fasta = channel.fromPath(val_mtfasta).map { it -> [[id:"mt_fasta_index"], it] }.collect()
             }
 
             ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta.map{meta, fasta -> return [meta, fasta,[]]}, false).fai.collect()
             ch_mt_dict = GATK_SD_MT(ch_mt_fasta).dict.collect()
 
-            ch_genome_hisat2_index = HISAT2_INDEX_GENOME(ch_genome_fasta,[[:],[]], [[:],[]]).index.collect()
+            if (!val_hisat2) {
+                ch_genome_hisat2_index = HISAT2_INDEX_GENOME(ch_genome_fasta,[[:],[]], [[:],[]]).index.collect()
+            } else {
+                ch_genome_hisat2_index = channel.fromPath(val_hisat2).map { it -> [[id:"hisat2_index"], it] }.collect()
+            }
             ch_mt_last_index       = LAST_INDEX_MT(ch_mt_fasta).index.collect()
 
             GATK_SHIFTFASTA(ch_mt_fasta, ch_mt_fai, ch_mt_dict)
@@ -162,7 +167,7 @@ workflow PREPARE_REFERENCES {
             ch_mtshift_fai           = GATK_SHIFTFASTA.out.shift_fai.collect()
             ch_mtshift_fasta         = GATK_SHIFTFASTA.out.shift_fa.collect()
 
-            GATK_SHIFTFASTA.out.intervals
+            ch_mtintervals = GATK_SHIFTFASTA.out.intervals
                 .multiMap{ _meta, files ->
                         shift_intervals:
                             def ind = files.findIndexValues {file -> file.toString().endsWith("shifted.intervals")}
@@ -171,7 +176,6 @@ workflow PREPARE_REFERENCES {
                             ind = files.findIndexValues {file -> !(file.toString().endsWith("shifted.intervals"))}
                             files[ind]
                 }
-                .set {ch_mtintervals}
             ch_shiftfasta_mtintervals      = ch_mtintervals.intervals.collect()
             ch_shiftfasta_mtshiftintervals = ch_mtintervals.shift_intervals.collect()
 
@@ -229,7 +233,7 @@ workflow PREPARE_REFERENCES {
 
             GATK_ILT(GATK_BILT.out.interval_list)
 
-            GATK_ILT.out.interval_list
+            ch_bait_intervals_cat_in = GATK_ILT.out.interval_list
                 .collect{ _meta, list -> list }
                 .map { list ->
                     // list is e.g. [/path/mybed_split_0001.interval_list, ...]; strip the _split suffix
@@ -237,7 +241,6 @@ workflow PREPARE_REFERENCES {
                     def meta = list.toString().split("_split")[0].split("/")[-1] + "_bait.intervals_list"
                     return [[id:meta], list]
                 }
-                .set { ch_bait_intervals_cat_in }
 
             ch_bait_intervals = CAT_CAT_BAIT ( ch_bait_intervals_cat_in ).file_out.map {_meta, inter -> inter}.collect().ifEmpty([[]])
 
@@ -249,16 +252,15 @@ workflow PREPARE_REFERENCES {
             ch_vcfanno_tabix_in = channel.fromPath(val_vcfanno_extra).map { it -> [[id:it.baseName], it] }
 
             if (val_vcfanno_extra.endsWith(".gz")) {
-                TABIX_VCFANNOEXTRA(ch_vcfanno_tabix_in).index
+                TABIX_VCFANNOEXTRA(ch_vcfanno_tabix_in)
+                ch_vcfanno_extra = TABIX_VCFANNOEXTRA.out.index
                     .join(ch_vcfanno_tabix_in)
                     .map { _meta, tbi, vcf -> return [[vcf,tbi]]}
-                    .set {ch_vcfanno_extra}
             } else {
                 TABIX_BGZIPINDEX_VCFANNOEXTRA(ch_vcfanno_tabix_in)
-                channel.empty()
+                ch_vcfanno_extra = channel.empty()
                     .mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_index)
                     .map { _meta, vcf, index -> return [[vcf,index]] }
-                    .set {ch_vcfanno_extra}
             }
         }
         //
@@ -275,8 +277,7 @@ workflow PREPARE_REFERENCES {
         // RTG tools
         //
         if (!val_sdf && val_run_rtgvcfeval) {
-            ch_genome_fasta.map { meta, fasta -> return [meta, fasta, [], [] ] }
-                .set {ch_rtgformat_in}
+            ch_rtgformat_in = ch_genome_fasta.map { meta, fasta -> return [meta, fasta, [], [] ] }
             ch_sdf      = RTGTOOLS_FORMAT(ch_rtgformat_in).out.sdf
         }
 

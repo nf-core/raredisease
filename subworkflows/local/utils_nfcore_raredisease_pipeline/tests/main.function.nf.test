@@ -1,0 +1,253 @@
+nextflow_function {
+
+    name "Test Functions"
+    script "../main.nf"
+    tag "subworkflows"
+    tag "utils_nfcore_raredisease_pipeline"
+
+    test("validateNoMixedCaseInput - all align rows, no error") {
+
+        function "validateNoMixedCaseInput"
+
+        when {
+            function {
+                """
+                input[0] = [
+                    [case_id: 'fam1', data_type: 'fastq_gz'],
+                    [case_id: 'fam1', data_type: 'bam']
+                ]
+                """
+            }
+        }
+
+        then {
+            assert function.success
+        }
+    }
+
+    test("validateNoMixedCaseInput - all vcf rows, no error") {
+
+        function "validateNoMixedCaseInput"
+
+        when {
+            function {
+                """
+                input[0] = [
+                    [case_id: 'fam1', data_type: 'snv_vcf'],
+                    [case_id: 'fam1', data_type: 'sv_vcf'],
+                    [case_id: 'fam1', data_type: 'mt_vcf']
+                ]
+                """
+            }
+        }
+
+        then {
+            assert function.success
+        }
+    }
+
+    test("validateNoMixedCaseInput - mixed align and vcf rows, errors") {
+
+        function "validateNoMixedCaseInput"
+
+        when {
+            function {
+                """
+                input[0] = [
+                    [case_id: 'fam1', data_type: 'fastq_gz'],
+                    [case_id: 'fam1', data_type: 'snv_vcf']
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert function.failed },
+                { assert function.stdout.any { it.contains("mixes precalled VCF input") } }
+            )
+        }
+    }
+
+    test("extractPrecalledVcfs - normal grouping") {
+
+        function "extractPrecalledVcfs"
+
+        when {
+            function {
+                """
+                input[0] = [
+                    [[data_type: 'snv_vcf'], ['snv.vcf.gz', 'snv.vcf.gz.tbi']],
+                    [[data_type: 'sv_vcf'],  ['sv.vcf.gz', 'sv.vcf.gz.tbi']]
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert function.success },
+                { assert function.result.snv == ['snv.vcf.gz', 'snv.vcf.gz.tbi'] },
+                { assert function.result.sv  == ['sv.vcf.gz', 'sv.vcf.gz.tbi'] },
+                { assert function.result.mt  == null }
+            )
+        }
+    }
+
+    test("extractPrecalledVcfs - conflicting VCFs for same type, errors") {
+
+        function "extractPrecalledVcfs"
+
+        when {
+            function {
+                """
+                input[0] = [
+                    [[data_type: 'snv_vcf'], ['snv_a.vcf.gz', 'snv_a.vcf.gz.tbi']],
+                    [[data_type: 'snv_vcf'], ['snv_b.vcf.gz', 'snv_b.vcf.gz.tbi']]
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert function.failed },
+                { assert function.stdout.any { it.contains("Conflicting precalled") } }
+            )
+        }
+    }
+
+    test("hasPrecalledSnvVcf/hasPrecalledSvVcf/hasPrecalledMtVcf - all types present") {
+
+        function "hasPrecalledSnvVcf"
+
+        when {
+            params {
+                input = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_all_vcf.csv"
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == true
+        }
+    }
+
+    test("hasPrecalledSnvVcf - no vcf rows at all") {
+
+        function "hasPrecalledSnvVcf"
+
+        when {
+            params {
+                input = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_no_vcf.csv"
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == false
+        }
+    }
+
+    test("hasPrecalledMtVcf - missing from partial samplesheet") {
+
+        function "hasPrecalledMtVcf"
+
+        when {
+            params {
+                input = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf.csv"
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == false
+        }
+    }
+
+    test("validatePrecalledVcfCoverage - fully covered, no error") {
+
+        function "validatePrecalledVcfCoverage"
+
+        when {
+            params {
+                input         = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_all_vcf.csv"
+                analysis_type = 'wgs'
+            }
+        }
+
+        then {
+            assert function.success
+        }
+    }
+
+    test("validatePrecalledVcfCoverage - no precalled input at all, no error") {
+
+        function "validatePrecalledVcfCoverage"
+
+        when {
+            params {
+                input         = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_no_vcf.csv"
+                analysis_type = 'wgs'
+            }
+        }
+
+        then {
+            assert function.success
+        }
+    }
+
+    test("validatePrecalledVcfCoverage - mt uncovered and not skipped on wgs, errors") {
+
+        function "validatePrecalledVcfCoverage"
+
+        when {
+            params {
+                input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf.csv"
+                analysis_type     = 'wgs'
+                skip_subworkflows = ''
+            }
+        }
+
+        then {
+            assertAll(
+                { assert function.failed },
+                { assert function.stdout.any { it.contains("mt") } }
+            )
+        }
+    }
+
+    test("validatePrecalledVcfCoverage - mt uncovered but explicitly skipped, no error") {
+
+        function "validatePrecalledVcfCoverage"
+
+        when {
+            params {
+                input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf.csv"
+                analysis_type     = 'wgs'
+                skip_subworkflows = 'mt_calling'
+            }
+        }
+
+        then {
+            assert function.success
+        }
+    }
+
+    test("validatePrecalledVcfCoverage - mt not applicable on wes, no error") {
+
+        function "validatePrecalledVcfCoverage"
+
+        when {
+            params {
+                input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf.csv"
+                analysis_type     = 'wes'
+                run_mt_for_wes    = false
+            }
+        }
+
+        then {
+            assert function.success
+        }
+    }
+}

@@ -16,6 +16,7 @@ nextflow_workflow {
     tag "sambamba/depth"
     tag "ucsc/wigtobigwig"
     tag "picard/collectwgsmetrics"
+    tag "riker/multi"
     tag "sentieon/wgsmetrics"
     tag "ngsbits/samplegender"
     tag "verifybamid/verifybamid2"
@@ -46,14 +47,12 @@ nextflow_workflow {
                 input[6]  = channel.empty()
                 input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
-                input[9]  = channel.empty()
-                input[10] = channel.empty()
-                input[11] = channel.empty()
-                input[12] = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
-                input[13] = 'wgs'
-                input[14] = 'bwamem2'
-                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[16] = true
+                input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = 'picard'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
                 """
             }
         }
@@ -103,6 +102,290 @@ nextflow_workflow {
 
     }
 
+    test("QC_BAM - test, riker") {
+
+        when {
+            params {
+                skip_tools    = null
+                outdir        = "$outputDir"
+                analysis_type = 'wgs'
+                target_bed    = params.pipelines_testdata_base_path + 'reference/target.bed'
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/targetY.interval_list', checkIfExists: true)).collect()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = 'riker'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.riker_alignment_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics_y
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_isize_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_hybcap_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_global_txt
+                            .collect { _meta, files -> file(files).name }
+                    ).match()
+                }
+            )
+        }
+
+    }
+
+    test("QC_BAM - test, riker, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                skip_tools = null
+                outdir     = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/targetY.interval_list', checkIfExists: true)).collect()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = 'riker'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.riker_alignment_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics_y
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_isize_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_hybcap_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_global_txt
+                            .collect { _meta, files -> file(files).name }
+                    ).match()
+                }
+            )
+        }
+
+    }
+
+    test("QC_BAM - fails on unknown qc_metrics_tool") {
+        // The subworkflow must fail loud when qc_metrics_tool is neither 'picard' nor 'riker'
+        // rather than silently producing no metrics.
+
+        options "-stub"
+
+        when {
+            params {
+                skip_tools = null
+                outdir     = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.empty()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = 'bogus'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert workflow.failed },
+                // The error() is raised during workflow composition, so it lands on stdout
+                // rather than in workflow.errorReport (which stays empty here).
+                { assert workflow.stdout.any { it.contains("Unknown qc_metrics_tool") } }
+            )
+        }
+
+    }
+
+    test("QC_BAM - test, riker, no target bed, stub") {
+        // Regression test: with no target bed, ch_bait_intervals/ch_target_intervals are empty
+        // channels. RIKER_MULTI must still run and emit metrics (hybcap excepted).
+
+        options "-stub"
+
+        when {
+            params {
+                skip_tools    = null
+                outdir        = "$outputDir"
+                analysis_type = 'wgs'
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.empty()
+                input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/targetY.interval_list', checkIfExists: true)).collect()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.empty()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = 'riker'
+                input[13] = null
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert workflow.success },
+                // RIKER_MULTI ran despite no target bed / empty interval channels
+                { assert workflow.out.riker_alignment_metrics.size() == 1 },
+                { assert workflow.out.riker_isize_metrics.size() == 1 },
+                { assert workflow.out.riker_wgs_metrics.size() == 1 },
+                // chrY wgs pass runs for wgs + bwa-family (RIKER_MULTI_Y)
+                { assert workflow.out.riker_wgs_metrics_y.size() == 1 },
+                { assert workflow.out.riker_gcbias_summary.size() == 1 }
+            )
+        }
+
+    }
+
+    test("QC_BAM - test, riker, multi-sample, stub") {
+        // Regression test: the genome reference must broadcast to every sample. With two samples
+        // in, RIKER_MULTI must run twice. A bare ch_genome_fasta.join(ch_genome_fai) is a queue
+        // channel and would pair with only the first sample (size == 1); .first() restores value
+        // semantics so the reference reaches both (size == 2).
+
+        options "-stub"
+
+        when {
+            params {
+                skip_tools    = null
+                outdir        = "$outputDir"
+                analysis_type = 'wgs'
+                target_bed    = params.pipelines_testdata_base_path + 'reference/target.bed'
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
+                    ],
+                    [
+                        [id:'latetiredcaiman', sample:'latetiredcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:latetiredcaiman\\\\tPL:illumina\\\\tSM:latetiredcaiman'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/targetY.interval_list', checkIfExists: true)).collect()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = 'riker'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert workflow.success },
+                // The reference broadcasts to both samples, so RIKER_MULTI runs twice.
+                { assert workflow.out.riker_alignment_metrics.size() == 2 },
+                { assert workflow.out.riker_isize_metrics.size() == 2 },
+                { assert workflow.out.riker_wgs_metrics.size() == 2 },
+                // chrY wgs pass runs once per sample for wgs + bwa-family (RIKER_MULTI_Y)
+                { assert workflow.out.riker_wgs_metrics_y.size() == 2 },
+                { assert workflow.out.riker_hybcap_metrics.size() == 2 },
+                { assert workflow.out.riker_gcbias_summary.size() == 2 }
+            )
+        }
+
+    }
+
     test("QC_BAM - test, bwamem2, stub") {
 
         options "-stub"
@@ -129,14 +412,12 @@ nextflow_workflow {
                 input[6]  = channel.empty()
                 input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
-                input[9]  = channel.empty()
-                input[10] = channel.empty()
-                input[11] = channel.empty()
-                input[12] = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
-                input[13] = 'wgs'
-                input[14] = 'bwamem2'
-                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[16] = true
+                input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = 'picard'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
                 """
             }
         }
@@ -209,14 +490,12 @@ nextflow_workflow {
                 input[6]  = channel.empty()
                 input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
-                input[9]  = channel.empty()
-                input[10] = channel.empty()
-                input[11] = channel.empty()
-                input[12] = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
-                input[13] = 'wgs'
-                input[14] = 'sentieon'
-                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[16] = true
+                input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'sentieon'
+                input[12] = 'picard'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
                 """
             }
         }
@@ -291,14 +570,12 @@ nextflow_workflow {
                 input[6]  = channel.empty()
                 input[7]  = channel.of('xy')
                 input[8]  = channel.empty()
-                input[9]  = channel.empty()
-                input[10] = channel.empty()
-                input[11] = channel.empty()
-                input[12] = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
-                input[13] = 'wgs'
-                input[14] = 'sentieon'
-                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[16] = true
+                input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'sentieon'
+                input[12] = 'picard'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
                 """
             }
         }
@@ -340,6 +617,72 @@ nextflow_workflow {
                         workflow.out.verifybamid_self_sm
                             .collect { _meta, files -> file(files).name },
                         workflow.out.ngsbits_samplegender_tsv
+                            .collect { _meta, files -> file(files).name }
+                    ).match()
+                }
+            )
+        }
+    }
+
+    test("QC_BAM - test, riker, sentieon, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                outdir        = "$outputDir"
+                skip_tools    = null
+                analysis_type = 'wgs'
+                aligner       = 'sentieon'
+                target_bed    = params.pipelines_testdata_base_path + 'reference/target.bed'
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
+                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/reference_chr.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/targetY.interval_list', checkIfExists: true)).collect()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'sentieon'
+                input[12] = 'riker'
+                input[13] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert workflow.success },
+                // Gate check: with a sentieon aligner the WGS coverage comes from
+                // SENTIEON_WGSMETRICS, so riker's chrY wgs pass (RIKER_MULTI_Y) must NOT run.
+                { assert workflow.out.riker_wgs_metrics_y.size() == 0 },
+                { assert snapshot(
+                        workflow.out.riker_alignment_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics_y
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_isize_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_hybcap_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_wg
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_global_txt
                             .collect { _meta, files -> file(files).name }
                     ).match()
                 }

@@ -40,8 +40,9 @@ Contributions to the code are even more welcome ;)
 1. Check that there isn't already an issue about your idea in the [nf-core/raredisease issues](https://github.com/nf-core/raredisease/issues) to avoid duplicating work. If there isn't one already, please create one so that others know you're working on this.
 2. [Fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) the [nf-core/raredisease repository](https://github.com/nf-core/raredisease) to your GitHub account.
 3. Make the necessary changes / additions within your forked repository following the conventions below.
-4. Use `nf-core pipelines schema build` to add any new parameters to `nextflow_schema.json`.
-5. Submit a Pull Request against the `dev` branch and wait for the code to be reviewed and merged.
+4. Update `CHANGELOG.md` with a description of your changes under the relevant section (`Added`, `Changed`, `Fixed`, or `Tool updates`). If you added, renamed, or removed parameters, also update the `Parameters` table.
+5. Use `nf-core pipelines schema build` to add any new parameters to `nextflow_schema.json`.
+6. Submit a Pull Request against the `dev` branch and wait for the code to be reviewed and merged.
 
 If you're not used to this workflow with git, you can start with some [docs from GitHub](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests) or even their [excellent `git` resources](https://try.github.io/).
 
@@ -190,7 +191,7 @@ When in doubt, keep enough of the process name to remain unambiguous.
 - Every subworkflow should have a test at `subworkflows/local/<name>/tests/main.nf.test`.
 - Use `-stub` in the `when:` block only when real test data is difficult to generate. Prefer running with real data where it is reasonably available.
 - Snapshot files (`*.nf.test.snap`) are committed alongside tests — update them when outputs change.
-- Pipeline-level tests live in `tests/` and cover `default`, `test_bam`, and `test_singleton` profiles.
+- Pipeline-level tests live in `tests/` and cover `default`, `test_align`, and `test_singleton` profiles.
 - Run `nf-test test <path>` for a single test, `nf-test test` for all.
 
 ### Style

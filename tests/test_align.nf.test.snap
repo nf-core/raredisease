@@ -1,7 +1,7 @@
 {
-    "-profile test_bam": {
+    "-profile test_align": {
         "content": [
-            774,
+            775,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -106,6 +106,9 @@
                 },
                 "CNVNATOR_STAT": {
                     "cnvnator": "0.4.1"
+                },
+                "CONVERTTOBAM_CRAM": {
+                    "samtools": "1.22.1"
                 },
                 "CREATE_HGNCIDS_FILE": {
                     "create_hgncids_file": 1.0,
@@ -457,6 +460,8 @@
                 "alignment",
                 "alignment/earlycasualcaiman_mt_subsample.bam",
                 "alignment/earlycasualcaiman_mt_subsample.bam.bai",
+                "alignment/hugelymodelbat_cram_to_bam.bam",
+                "alignment/hugelymodelbat_cram_to_bam.bam.bai",
                 "alignment/hugelymodelbat_mt_subsample.bam",
                 "alignment/hugelymodelbat_mt_subsample.bam.bai",
                 "alignment/slowlycivilbuck_mt_subsample.bam",
@@ -850,7 +855,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-06-25T10:12:33.084372846",
+        "timestamp": "2026-07-04T21:05:17.633211653",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

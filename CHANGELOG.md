@@ -7,13 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add a VCF entry point: samplesheets can now supply precalled, case-level SNV/SV/MT VCFs directly, skipping the corresponding calling step and feeding straight into annotation and ranking. See `docs/usage.md` for samplesheet details [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #936](https://github.com/nf-core/raredisease/pull/936)
+- Add test coverage for the VCF entry point: function-level nf-test cases for `validateNoMixedCaseInput`/`validatePrecalledVcfCoverage`/`extractPrecalledVcfs`/`hasPrecalledSnvVcf`/`hasPrecalledSvVcf`/`hasPrecalledMtVcf`, and a new `test_vcf` profile/pipeline-level test confirming precalled SNV/SV/MT VCFs correctly skip calling while annotation/ranking still run, plus a negative test for the mixed precalled/raw-input case [issue #261](https://github.com/nf-core/raredisease/issues/261)
+  [PR #935](https://github.com/nf-core/raredisease/pull/935)
+- Add CRAM file input support: accept `cram`/`crai` columns in the samplesheet, converting CRAM to BAM early in the align subworkflow so all downstream tools remain unchanged [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #933](https://github.com/nf-core/raredisease/pull/933)
+- Add `vcf`/`tbi`/`type` columns to the samplesheet schema, enforcing exactly one data type per row (`fastq`, `spring`, `bam`, `cram`, or `vcf`) via a schema-level `oneOf` constraint, and extend `PIPELINE_INITIALISATION` to recognise precalled SNV/SV/MT VCFs and collect them into a new `precalled_vcfs` channel (Only schema/plumbing changes in this PR) [Issue #261](https://github.com/nf-core/raredisease/issues/261) and [PR #927](https://github.com/nf-core/raredisease/pull/927)
+- Add `changelog.yml` GitHub Actions workflow to enforce CHANGELOG updates on every PR; PRs can be exempted with the `skip-changelog` label [issue #796](https://github.com/nf-core/raredisease/issues/796) [PR #920](https://github.com/nf-core/raredisease/pull/920)
 - Update saltshaker classification reporting by adding customer ID to samples' reports and displaying them as tabs in html [#856](https://github.com/nf-core/raredisease/pull/856)
 - Added non-stub tests for `annotate_mt_snvs` [#890](https://github.com/nf-core/raredisease/pull/890)
 - Added GATK contamination check for WES/WGS samples as complement to VerifyBamID2, enabled by providing `contamination_sites` and skippable via `--skip_tools gatkcontamination` [#758](https://github.com/nf-core/raredisease/pull/758)
 - GATK Contamination results displayed in MultiQC with color-coded thresholds [#758](https://github.com/nf-core/raredisease/pull/758)
+- Added non-stub tests for `annotate_mobile_elements` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #923](https://github.com/nf-core/raredisease/pull/923)
+- Added non-stub tests for `call_mobile_elements` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #924](https://github.com/nf-core/raredisease/pull/924)
 
 ### `Changed`
 
+- Split mitochondrial alignment out of `ALIGN` into its own independently-gated `ALIGN_MITOCHONDRIA` subworkflow, called directly from `raredisease.nf`, matching how `CALL_MT_SNVS` was already split out of `CALL_SNV` [issue #944](https://github.com/nf-core/raredisease/issues/944) [PR #945](https://github.com/nf-core/raredisease/pull/945)
+- Migrate all `.set { ch }` and `.tap { ch }` operators to direct channel assignment (`ch = ...`) across `main.nf`, `workflows/raredisease.nf`, and all local subworkflows; behavior-preserving refactor, prerequisite for adopting Nextflow's static type checking [issue #940](https://github.com/nf-core/raredisease/issues/940) [PR #941](https://github.com/nf-core/raredisease/pull/941)
+- Speed up `align` subworkflow tests: switch `subworkflows/local/align/tests/main.nf.test` from full GRCh37-scale reference/read data to the small sarscov2 fixtures [issue #938](https://github.com/nf-core/raredisease/issues/938) [PR #939](https://github.com/nf-core/raredisease/pull/939)
+- Document the VCF entry point: expand `docs/usage.md`'s samplesheet section with a worked trio example and explicit "what's possible"/"what's not possible" guidance (mixed-input rule, per-type coverage requirement, conflicting-VCF rejection), and add `> **NB**` notes to the SNV/SV/mitochondrial calling sections of `docs/output.md` explaining when those output directories are skipped in favor of the supplied VCF [issue #261](https://github.com/nf-core/raredisease/issues/261)
+- Wire up the VCF entry point: a precalled SNV/SV/MT VCF supplied in the samplesheet now auto-skips calling for that type and is substituted directly into annotation. Adds `mt_calling` as a new independently-skippable subworkflow, un-nests `ANNOTATE_STRUCTURAL_VARIANTS` (and its downstream chain) from `skip_sv_calling` to match the existing SNV precedent, fixes `GENERATE_CYTOSURE_FILES` and the `CONCAT_NUCLEAR_AND_MT_SNVS` gate to work correctly with precalled data, and rejects samplesheets where a case mixes precalled VCF rows with fastq/spring/bam/cram rows (a case must be fully precalled or fully processed from raw/aligned reads, not both) [issue #261](https://github.com/nf-core/raredisease/issues/261)[PR #931](https://github.com/nf-core/raredisease/pull/931)
+- Split mitochondrial SNV calling out of `CALL_SNV` into its own independently-gated `CALL_MT_SNVS` subworkflow, matching how SV/mobile-element/repeat-expansion calling are each already independently gated in `raredisease.nf`; behavior-preserving refactor, groundwork for letting nuclear and mitochondrial SNV calling be skipped independently [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #926](https://github.com/nf-core/raredisease/pull/926)
+- Un-nest `ANNOTATE_GENOME_SNVS` (and its downstream `GENERATE_CLINICAL_SET_SNV`/`ANN_CSQ_PLI_SNV`/`RANK_VARIANTS_SNV` chain) from `if (!skip_snv_calling)` so nuclear SNV annotation can run independently of whether nuclear SNV calling ran; fix `PEDDY` and `VARIANT_EVALUATION` to route through the unified `ch_call_snv_genome_*` channels instead of referencing `CALL_SNV.out.*` directly (previously unsafe if `snv_calling` were ever skipped), and gate `GENS` on `!skip_snv_calling` since no precalled substitute exists for a gVCF; behavior-preserving refactor, groundwork for the VCF entry point [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #928](https://github.com/nf-core/raredisease/pull/928)
+- Added `--qc_metrics_tool` parameter (`picard` | `riker`) to choose between Picard (`CollectMultipleMetrics` / `CollectHsMetrics` / `CollectWgsMetrics`) and [Riker](https://github.com/fulcrumgenomics/riker) `multi` for BAM QC metrics collection; Riker outputs forwarded to MultiQC [issue #871](https://github.com/nf-core/raredisease/issues/871) [PR #917](https://github.com/nf-core/raredisease/pull/917)
+- Consolidate contamination detection into a unified `CONTAMINATION` subworkflow: move `VERIFYBAMID_VERIFYBAMID2` out of `QC_BAM` and `PARSE_CONTAMINATION` out of `raredisease.nf`; replace single `skip_contamination` flag with independent `skip_gatkcontamination` and `skip_verifybamid` flags; `verifybamid` is now skippable via `--skip_tools verifybamid` and auto-skips when `--verifybamid_svd_bed` is not provided; output paths renamed to `contamination/verifybamid/` and `contamination/gatk/` [issue #921](https://github.com/nf-core/raredisease/issues/921) [PR #922](https://github.com/nf-core/raredisease/pull/922)
+- Document the `ar x models.bundle` workaround for Sentieon DNAscope `.bundle` model format in `docs/usage.md` and `nextflow_schema.json` [issue #568](https://github.com/nf-core/raredisease/issues/568) [PR #912](https://github.com/nf-core/raredisease/pull/912)
 - Pre-resolve the MT analysis flag (`val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes`) into a single named boolean `val_run_mt` in `NFCORE_RAREDISEASE`, replacing `val_run_mt_for_wes` across downstream subworkflow signatures and simplifying repeated conditionals in `PREPARE_REFERENCES`, `ALIGN`, `CALL_SNV`, and `CALL_STRUCTURAL_VARIANTS` [#906](https://github.com/nf-core/raredisease/pull/906)
 - Clarify in `docs/usage.md` that the pLI VEP plugin is mandatory when annotation is enabled and LoFtool is optional at the pipeline level [#911](https://github.com/nf-core/raredisease/pull/911)
 - Add missing `docs/output.md` sections for GATK contamination check (`qc/contamination/`) and pedigree file (`pedigree/`); fix missing `</details>` closing tag in Peddy section [#904](https://github.com/nf-core/raredisease/pull/904)
@@ -38,6 +56,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed`
 
 - Fix flaky `call_snv` test by replacing non-deterministic `variantsMD5` snapshot with `vcf.summary` for the genome VCF [#918](https://github.com/nf-core/raredisease/pull/918)
+- Emit an error at startup when `vep_filters_scout_fmt` or `vep_filters` contains no records (headers or empty lines only), which would otherwise cause the clinical set to silently contain 0 variants [#913](https://github.com/nf-core/raredisease/pull/913)
+- Add missing CADD 1.7.3 module update to the v3.0.0 `Tool updates` table in `CHANGELOG.md` [issue #888](https://github.com/nf-core/raredisease/issues/888) [PR #919](https://github.com/nf-core/raredisease/pull/919)
+- Add changelog entry requirement (including the Parameters table) to the contribution workflow in `CONTRIBUTING.md` [issue #797](https://github.com/nf-core/raredisease/issues/797) [PR #919](https://github.com/nf-core/raredisease/pull/919)
+- Fix `--hisat2` parameter being declared but never consumed, causing the HISAT2 genome index to always be rebuilt [#905](https://github.com/nf-core/raredisease/pull/905)
 - Fix inconsistent sample column order in Sentieon SNV family VCF by sorting per-sample VCFs by filename before merging, consistent with DeepVariant and MT paths [#908](https://github.com/nf-core/raredisease/pull/908)
 - Fix intermittent `CALL_SNV_DEEPVARIANT - wgs` test failure caused by non-deterministic GLnexus quality scores by replacing `variantsMD5` with `vcf.summary` [#850](https://github.com/nf-core/raredisease/pull/850)
 - Fix swapped `run_mt_for_wes`/`skip_split_multiallelics` arguments in the `CALL_SNV` call, which disabled multiallelic splitting (and inverted MT-for-WES) when `--run_mt_for_wes` was set [#854](https://github.com/nf-core/raredisease/issues/854)
@@ -56,6 +78,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | gatk4/calculatecontamination |             | 4.6.2.0     |
 | gatk4/getpileupsummaries     |             | 4.6.2.0     |
 | Saltshaker                   | 1.0.0       | 1.1.1       |
+
+## 3.1.2 - Princess Peach (patch) [2026-07-06]
+
+### `Fixed`
+
+- Fix `svdb/merge` mislabelling VCF caller tags by passing `sort_inputs = false` to `SVDB_MERGE` in `call_structural_variants`; the VCF list is already in the correct caller-priority order from the upstream `concat` chain, so in-module re-sorting by filename was causing tag misassignment [#910](https://github.com/nf-core/raredisease/pull/910)
+- Changed filter logic for merging mitochondrial snvs to report variants which pass filter in at least one sample [#915](https://github.com/nf-core/raredisease/pull/915)
 
 ## 3.1.1 - Princess Peach (patch) [2026-06-24]
 
@@ -200,6 +229,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | --------------------- | ----------- | ----------- |
 | bcftools              | 1.20        | 1.21        |
 | bwa                   | 0.7.18      | 0.7.19      |
+| cadd                  | 1.6.post1   | 1.7.3       |
 | deepvariant           | 1.8.0       | 1.9.0       |
 | eKLIPse               | 1.8         |             |
 | ensemblvep/vep        | 110         | 110.1       |

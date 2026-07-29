@@ -1,0 +1,260 @@
+nextflow_workflow {
+
+    name "Test Workflow CONTAMINATION"
+    script "subworkflows/local/contamination/main.nf"
+    workflow "CONTAMINATION"
+
+    tag "subworkflows"
+    tag "contamination"
+    tag "verifybamid/verifybamid2"
+    tag "gatk4/getpileupsummaries"
+    tag "gatk4/calculatecontamination"
+
+    config "./nextflow.config"
+
+    test("CONTAMINATION - skip both - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0]  = channel.of([
+                    [id:'test', sample:'test', single_end:false, num_lanes:1, lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'test_case'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[3]  = channel.empty()
+                input[4]  = channel.empty()
+                input[5]  = channel.empty()
+                input[6]  = channel.empty()
+                input[7]  = channel.empty()
+                input[8]  = channel.empty()
+                input[9]  = true
+                input[10] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.verifybamid_self_sm.size() == 0 },
+                { assert workflow.out.gatk_contamination_table.size() == 0 }
+            )
+        }
+    }
+
+    test("CONTAMINATION - verifybamid only - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0]  = channel.of([
+                    [id:'test', sample:'test', single_end:false, num_lanes:1, lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'test_case'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[3]  = channel.empty()
+                input[4]  = channel.of(file(params.modules_testdata_base_path + 'delete_me/verifybamid/test.genome.vcf.bed', checkIfExists: true))
+                input[5]  = channel.of(file(params.modules_testdata_base_path + 'delete_me/verifybamid/test.genome.vcf.mu', checkIfExists: true))
+                input[6]  = channel.of(file(params.modules_testdata_base_path + 'delete_me/verifybamid/test.genome.vcf.UD', checkIfExists: true))
+                input[7]  = channel.empty()
+                input[8]  = channel.empty()
+                input[9]  = true
+                input[10] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.verifybamid_self_sm
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.verifybamid_log
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.gatk_contamination_table.size()
+                ).match() }
+            )
+        }
+    }
+
+    test("CONTAMINATION - gatk only - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0]  = channel.of([
+                    [id:'test', sample:'test', single_end:false, num_lanes:1, lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'test_case'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/sequence/genome.dict', checkIfExists: true)).collect()
+                input[4]  = channel.empty()
+                input[5]  = channel.empty()
+                input[6]  = channel.empty()
+                input[7]  = channel.of([
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/germlineresources/gnomAD.r2.1.1.vcf.gz', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/germlineresources/gnomAD.r2.1.1.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[8]  = channel.empty()
+                input[9]  = false
+                input[10] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.gatk_contamination_table
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.gatk_contamination_pileup
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.verifybamid_self_sm.size()
+                ).match() }
+            )
+        }
+    }
+
+    test("CONTAMINATION - both - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0]  = channel.of([
+                    [id:'test', sample:'test', single_end:false, num_lanes:1, lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'test_case'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/sequence/genome.dict', checkIfExists: true)).collect()
+                input[4]  = channel.of(file(params.modules_testdata_base_path + 'delete_me/verifybamid/test.genome.vcf.bed', checkIfExists: true))
+                input[5]  = channel.of(file(params.modules_testdata_base_path + 'delete_me/verifybamid/test.genome.vcf.mu', checkIfExists: true))
+                input[6]  = channel.of(file(params.modules_testdata_base_path + 'delete_me/verifybamid/test.genome.vcf.UD', checkIfExists: true))
+                input[7]  = channel.of([
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/germlineresources/gnomAD.r2.1.1.vcf.gz', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/germlineresources/gnomAD.r2.1.1.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[8]  = channel.empty()
+                input[9]  = false
+                input[10] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.verifybamid_self_sm
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.verifybamid_log
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.gatk_contamination_table
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.gatk_contamination_pileup
+                        .collect { _meta, f -> file(f).name }
+                ).match() }
+            )
+        }
+    }
+
+    test("CONTAMINATION - gatk only - real, WGS no intervals") {
+
+        when {
+            workflow {
+                """
+                input[0]  = channel.of([
+                    [id:'test', sample:'test', single_end:false, num_lanes:1, lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'test_case'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
+                input[4]  = channel.empty()
+                input[5]  = channel.empty()
+                input[6]  = channel.empty()
+                input[7]  = channel.of([
+                    file(params.pipelines_testdata_base_path + 'reference/grch37_gnomad_-r2.1.1-.vcf.gz', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'reference/grch37_gnomad_-r2.1.1-.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[8]  = channel.empty()
+                input[9]  = false
+                input[10] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.gatk_contamination_table
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.gatk_contamination_pileup
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.verifybamid_self_sm.size()
+                ).match() }
+            )
+        }
+    }
+
+    test("CONTAMINATION - gatk only - real, WES with intervals") {
+
+        when {
+            workflow {
+                """
+                input[0]  = channel.of([
+                    [id:'test', sample:'test', single_end:false, num_lanes:1, lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'test_case'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
+                input[4]  = channel.empty()
+                input[5]  = channel.empty()
+                input[6]  = channel.empty()
+                input[7]  = channel.of([
+                    file(params.pipelines_testdata_base_path + 'reference/grch37_gnomad_-r2.1.1-.vcf.gz', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'reference/grch37_gnomad_-r2.1.1-.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[8]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.bed', checkIfExists: true)).collect()
+                input[9]  = false
+                input[10] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.gatk_contamination_table
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.gatk_contamination_pileup
+                        .collect { _meta, f -> file(f).name },
+                    workflow.out.verifybamid_self_sm.size()
+                ).match() }
+            )
+        }
+    }
+}

@@ -104,6 +104,8 @@
 
 - [rhocall](https://github.com/dnil/rhocall)
 
+- [Riker](https://github.com/fulcrumgenomics/riker)
+
 - [RTG Tools (vcfeval)](https://github.com/RealTimeGenomics/rtg-tools)
 
   > John G. Cleary, Ross Braithwaite, Kurt Gaastra, Brian S. Hilbush, Stuart Inglis, Sean A. Irvine, Alan Jackson, Richard Littin, Mehul Rathod, David Ware, Justin M. Zook, Len Trigg, and Francisco M. De La Vega. "Comparing Variant Call Files for Performance Benchmarking of Next-Generation Sequencing Variant Calling Pipelines." bioRxiv, 2015. doi:10.1101/023754.

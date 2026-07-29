@@ -1,11 +1,11 @@
 nextflow_pipeline {
 
-    name "Test pipeline"
+    name "Test pipeline - pre-aligned input (BAM/CRAM)"
     script "../main.nf"
     tag "pipeline"
-    profile "test_bam"
+    profile "test_align"
 
-    test("-profile test_bam") {
+    test("-profile test_align") {
 
         options "-stub"
 

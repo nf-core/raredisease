@@ -21,7 +21,7 @@ workflow ALIGN_SENTIEON {
 
         SENTIEON_BWAMEM ( ch_input_reads, ch_bwa_index, ch_genome_fasta, ch_genome_fai )
 
-        SENTIEON_BWAMEM.out
+        merge_bams_in = SENTIEON_BWAMEM.out
             .bam_and_bai
             .map{ meta, bam, bai ->
                 def new_id   = meta.sample
@@ -33,7 +33,6 @@ workflow ALIGN_SENTIEON {
                 single: bam.size() == 1
                 multiple: bam.size() > 1
                 }
-            .set{ merge_bams_in }
 
         SENTIEON_READWRITER ( merge_bams_in.multiple, ch_genome_fasta, ch_genome_fai )
         ch_bam_bai = merge_bams_in.single.mix(SENTIEON_READWRITER.out.output_index)
