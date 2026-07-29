@@ -102,24 +102,24 @@ A samplesheet is used to provide information about the sample(s) to the pipeline
 
 The nf-core/raredisease pipeline accepts FASTQ files, SPRING files, BAM files, or CRAM files as input. Currently, the pipeline does not support single-end data from Illumina, and mitochondrial SV calling with MitoSAlt and saltshaker does not run with BAM or CRAM file input. The pedigree information in the samplesheet (sex and phenotype) should be provided in the same format as a [PED file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format), with sex indicated as 1 for male, 2 for female, and other for unknown.
 
-| Fields        | Description                                                                                                                                                                                             |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.                                                                                           |
-| `lane`        | Used to generate separate channels during the alignment step. It is of string type, and we recommend using a combination of flowcell and lane to distinguish between different runs of the same sample. |
-| `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                          |
-| `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                          |
-| `spring_1`    | Full path to spring-compressed file for read 1 or for reads 1 and 2. The Fastq file has to be first gzipped, then spring-compressed, and it must have the extension `.spring`.                          |
-| `spring_2`    | Full path to spring-compressed file for read 2. The Fastq file has to be first gzipped, then spring-compressed, and it must have the extension `.spring`.                                               |
-| `bam`         | Full path to a duplicate-marked BAM file containing alignments.                                                                                                                                         |
-| `bai`         | Full path to a BAM index file.                                                                                                                                                                          |
-| `cram`        | Full path to a duplicate-marked CRAM file containing alignments.                                                                                                                                        |
-| `crai`        | Full path to a CRAM index file.                                                                                                                                                                         |
-| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                                                                                                               |
-| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                     |
-| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                   |
-| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                   |
-| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                                                                                            |
-| `customer_id` | Optional external/customer identifier for the sample. If provided, it is used instead of `sample` to label Saltshaker HTML reports and to rename the sample in the VCF2CYTOSURE output; defaults to `sample` if left blank.                                                                                   |
+| Fields        | Description                                                                                                                                                                                                                 |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.                                                                                                               |
+| `lane`        | Used to generate separate channels during the alignment step. It is of string type, and we recommend using a combination of flowcell and lane to distinguish between different runs of the same sample.                     |
+| `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                                              |
+| `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                                              |
+| `spring_1`    | Full path to spring-compressed file for read 1 or for reads 1 and 2. The Fastq file has to be first gzipped, then spring-compressed, and it must have the extension `.spring`.                                              |
+| `spring_2`    | Full path to spring-compressed file for read 2. The Fastq file has to be first gzipped, then spring-compressed, and it must have the extension `.spring`.                                                                   |
+| `bam`         | Full path to a duplicate-marked BAM file containing alignments.                                                                                                                                                             |
+| `bai`         | Full path to a BAM index file.                                                                                                                                                                                              |
+| `cram`        | Full path to a duplicate-marked CRAM file containing alignments.                                                                                                                                                            |
+| `crai`        | Full path to a CRAM index file.                                                                                                                                                                                             |
+| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                                                                                                                                   |
+| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                                         |
+| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                                       |
+| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                                       |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                                                                                                                |
+| `customer_id` | Optional external/customer identifier for the sample. If provided, it is used instead of `sample` to label Saltshaker HTML reports and to rename the sample in the VCF2CYTOSURE output; defaults to `sample` if left blank. |
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
@@ -136,16 +136,16 @@ If you would like to see more examples of what a typical samplesheet looks like 
 
 The nf-core/raredisease pipeline can handle duplicate-marked BAM files as input. In such cases, samplesheet should contain the following columns:
 
-| Fields        | Description                                                                                                           |
-| ------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.         |
-| `bam`         | Absolute path to a duplicate-marked BAM file.                                                                         |
-| `bai`         | Absolute path to the BAM index file (.bai).                                                                           |
-| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                             |
-| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                   |
-| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband. |
-| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband. |
-| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                          |
+| Fields        | Description                                                                                                                                                                                                                 |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.                                                                                                               |
+| `bam`         | Absolute path to a duplicate-marked BAM file.                                                                                                                                                                               |
+| `bai`         | Absolute path to the BAM index file (.bai).                                                                                                                                                                                 |
+| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                                                                                                                                   |
+| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                                         |
+| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                                       |
+| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                                       |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                                                                                                                |
 | `customer_id` | Optional external/customer identifier for the sample. If provided, it is used instead of `sample` to label Saltshaker HTML reports and to rename the sample in the VCF2CYTOSURE output; defaults to `sample` if left blank. |
 
 If you would like to see an example of what a typical samplesheet looks like in this case, follow this [link.](https://github.com/nf-core/test-datasets/blob/raredisease/testdata/samplesheet_bam.csv)
@@ -154,16 +154,16 @@ If you would like to see an example of what a typical samplesheet looks like in 
 
 The nf-core/raredisease pipeline can handle duplicate-marked CRAM files as input. CRAM is a more space-efficient alternative to BAM and requires the reference genome FASTA (`--fasta`) to decode. In such cases, samplesheet should contain the following columns:
 
-| Fields        | Description                                                                                                           |
-| ------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.         |
-| `cram`        | Absolute path to a duplicate-marked CRAM file.                                                                        |
-| `crai`        | Absolute path to the CRAM index file (.crai).                                                                         |
-| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                             |
-| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                   |
-| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband. |
-| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband. |
-| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                          |
+| Fields        | Description                                                                                                                                                                                                                 |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.                                                                                                               |
+| `cram`        | Absolute path to a duplicate-marked CRAM file.                                                                                                                                                                              |
+| `crai`        | Absolute path to the CRAM index file (.crai).                                                                                                                                                                               |
+| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                                                                                                                                   |
+| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                                         |
+| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                                       |
+| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                                       |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                                                                                                                |
 | `customer_id` | Optional external/customer identifier for the sample. If provided, it is used instead of `sample` to label Saltshaker HTML reports and to rename the sample in the VCF2CYTOSURE output; defaults to `sample` if left blank. |
 
 > [!NOTE]
