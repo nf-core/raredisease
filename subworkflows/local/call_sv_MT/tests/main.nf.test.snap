@@ -90,7 +90,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "justhusky",
+                            "customer_id": "cust_ecc"
                         },
                         "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ],
@@ -104,7 +105,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "justhusky",
+                            "customer_id": "cust_hmb"
                         },
                         "hugelymodelbat.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -204,7 +206,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "justhusky",
+                            "customer_id": "cust_ecc"
                         },
                         "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ],
@@ -218,7 +221,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "justhusky",
+                            "customer_id": "cust_hmb"
                         },
                         "hugelymodelbat.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -241,10 +245,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-06-23T12:43:15.024082",
+        "timestamp": "2026-07-29T16:14:30.064671511",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "25.10.4"
         }
     },
     "CALL_SV_MT - 1 sample - no sample map - stub": {
@@ -449,7 +453,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "justhusky",
+                            "customer_id": "cust_ecc"
                         },
                         "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ],
@@ -563,7 +568,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "justhusky",
+                            "customer_id": "cust_ecc"
                         },
                         "earlycasualcaiman.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ],
@@ -600,10 +606,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-06-23T12:42:09.390542",
+        "timestamp": "2026-07-29T16:13:26.110125252",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "25.10.4"
         }
     },
     "CALL_SV_MT - 1 sample": {
