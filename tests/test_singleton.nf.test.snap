@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            355,
+            357,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -245,6 +245,10 @@
                 "MARKDUPLICATES": {
                     "picard": "3.4.0"
                 },
+                "MERGE_NUCLEAR_AND_MT_SVS": {
+                    "bcftools": 1.23,
+                    "svdb": "2.8.4"
+                },
                 "ME_SPLIT_ALIGNMENT": {
                     "samtools": "1.22.1"
                 },
@@ -429,6 +433,9 @@
                     "tabix": 1.21
                 },
                 "TABIX_ME_SPLIT": {
+                    "tabix": 1.21
+                },
+                "TABIX_NUCLEAR_AND_MT_SVS": {
                     "tabix": 1.21
                 },
                 "TABIX_TABIX": {
@@ -657,10 +664,10 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-06-26T14:21:28.826151619",
+        "timestamp": "2026-07-30T21:26:19.582496597",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "25.10.4"
         }
     }
 }
