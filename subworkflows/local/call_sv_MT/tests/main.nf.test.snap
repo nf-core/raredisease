@@ -251,7 +251,7 @@
             "nextflow": "25.10.4"
         }
     },
-    "CALL_SV_MT - 1 sample - no sample map - stub": {
+    "CALL_SV_MT - 1 sample - no customer_id - stub": {
         "content": [
             {
                 "0": [
@@ -378,7 +378,7 @@
             "nextflow": "26.04.3"
         }
     },
-    "CALL_SV_MT - 1 sample - no sample map": {
+    "CALL_SV_MT - 1 sample - no customer_id": {
         "content": [
             "619fc9380aac6cccd9d3f4d1df17a0ed",
             [

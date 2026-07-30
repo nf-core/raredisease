@@ -96,7 +96,7 @@ nextflow_workflow {
         }
     }
 
-    test("CALL_SV_MT - 1 sample - no sample map") {
+    test("CALL_SV_MT - 1 sample - no customer_id") {
 
         when {
             params {
@@ -300,7 +300,7 @@ nextflow_workflow {
         }
     }
 
-    test("CALL_SV_MT - 1 sample - no sample map - stub") {
+    test("CALL_SV_MT - 1 sample - no customer_id - stub") {
 
         options "-stub"
 
