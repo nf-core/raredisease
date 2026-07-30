@@ -14,7 +14,7 @@ nextflow_workflow {
 
     config "./nextflow.config"
 
-    test("GENERATE_CYTOSURE_FILES - no sample_id_map, stub") {
+    test("GENERATE_CYTOSURE_FILES - no customer_id, stub") {
 
         options "-stub"
 
@@ -27,16 +27,14 @@ nextflow_workflow {
                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
                 ])
                 input[1] = channel.value([])
-                input[2] = channel.empty()
-                input[3] = channel.of([
+                input[2] = channel.of([
                     [id:'justhusky'],
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
                 ])
-                input[4] = channel.of([
+                input[3] = channel.of([
                     [id:'justhusky'],
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true)
                 ])
-                input[5] = null
                 """
             }
         }
@@ -49,7 +47,7 @@ nextflow_workflow {
         }
     }
 
-    test("GENERATE_CYTOSURE_FILES - with sample_id_map, stub") {
+    test("GENERATE_CYTOSURE_FILES - with customer_id, stub") {
 
         options "-stub"
 
@@ -57,21 +55,19 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = channel.of([
-                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky', customer_id:'CUST_001'],
                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
                     file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
                 ])
                 input[1] = channel.value([])
-                input[2] = channel.of([[id:'earlycasualcaiman'], 'CUST_001'])
-                input[3] = channel.of([
+                input[2] = channel.of([
                     [id:'justhusky'],
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
                 ])
-                input[4] = channel.of([
+                input[3] = channel.of([
                     [id:'justhusky'],
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true)
                 ])
-                input[5] = 'sample_id_map.csv'
                 """
             }
         }

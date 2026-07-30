@@ -155,6 +155,23 @@
                 "meta": ["case_id"],
                 "pattern": "^\\S+$",
                 "errorMessage": "Case name must be provided and cannot contain spaces"
+            },
+            "customer_id": {
+                "errorMessage": "Customer ID cannot contain spaces",
+                "meta": ["customer_id"],
+                "default": "",
+                "anyOf": [
+                    {
+                        "type": "integer"
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    },
+                    {
+                        "maxLength": 0
+                    }
+                ]
             }
         },
         "uniqueEntries": ["case_id"],
