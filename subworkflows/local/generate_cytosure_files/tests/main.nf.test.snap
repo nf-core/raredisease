@@ -1,61 +1,61 @@
 {
-    "GENERATE_CYTOSURE_FILES - no sample_id_map, stub": {
+    "GENERATE_CYTOSURE_FILES - with customer_id, stub": {
         "content": [
             {
                 "0": [
                     [
                         {
                             "id": "earlycasualcaiman",
-                            "custid": "earlycasualcaiman",
-                            "sex": 1
+                            "sex": 1,
+                            "custid": "CUST_001"
                         },
-                        "earlycasualcaiman.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "CUST_001.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "cgh": [
                     [
                         {
                             "id": "earlycasualcaiman",
-                            "custid": "earlycasualcaiman",
-                            "sex": 1
+                            "sex": 1,
+                            "custid": "CUST_001"
                         },
-                        "earlycasualcaiman.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "CUST_001.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-06-30T20:58:21.226904272",
+        "timestamp": "2026-07-29T15:57:57.860032538",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
     },
-    "GENERATE_CYTOSURE_FILES - with sample_id_map, stub": {
+    "GENERATE_CYTOSURE_FILES - no customer_id, stub": {
         "content": [
             {
                 "0": [
                     [
                         {
                             "id": "earlycasualcaiman",
-                            "custid": "CUST_001",
-                            "sex": 1
+                            "sex": 1,
+                            "custid": "earlycasualcaiman"
                         },
-                        "CUST_001.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "earlycasualcaiman.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "cgh": [
                     [
                         {
                             "id": "earlycasualcaiman",
-                            "custid": "CUST_001",
-                            "sex": 1
+                            "sex": 1,
+                            "custid": "earlycasualcaiman"
                         },
-                        "CUST_001.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "earlycasualcaiman.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-06-30T20:58:44.411334018",
+        "timestamp": "2026-07-29T15:57:34.443398636",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

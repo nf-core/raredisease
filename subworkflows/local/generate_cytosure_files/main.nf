@@ -11,61 +11,39 @@ workflow GENERATE_CYTOSURE_FILES {
     take:
         ch_bam_bai        // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_blacklist      // channel: [optional] [path(blacklist)]
-        ch_sample_id_map  // channel: [optional] [val(id), val(id)]
         ch_tbi            // channel: [mandatory] [ val(meta), path(vcf_index) ]
         ch_vcf            // channel: [mandatory] [ val(meta), path(vcf) ]
-        val_sample_id_map // string: path to sample_id_map file
 
     main:
-        ch_reheader_out = channel.empty()
-
         TIDDIT_COV_VCF2CYTOSURE (ch_bam_bai, [[],[]])
 
         // Build channel: [val(sample_meta), path(vcf), path(vcf_index)]
         ch_vcf_tbi = ch_vcf.join( ch_tbi, failOnMismatch: true )
 
-        ch_for_mix = ch_bam_bai.combine(ch_vcf_tbi)
+        ch_sample_vcf = ch_bam_bai.combine(ch_vcf_tbi)
             .map {
                 meta_sample, _bam, _bai, _meta_case, vcf, tbi ->
-                def id_meta = ['id':meta_sample.sample]
-                def sex_meta = ['sex':meta_sample.sex]
-                return [ id_meta, sex_meta, vcf, tbi ]
+                def new_meta = ['id':meta_sample.sample, 'sex':meta_sample.sex, 'custid':meta_sample.customer_id ?: meta_sample.sample]
+                return [ new_meta, vcf, tbi ]
             }
-            .join(ch_sample_id_map, remainder: true)
-            .branch { id_meta, sex_meta, vcf, tbi, samplemap  ->
-                id: samplemap.equals(null)
-                    return [id_meta + [custid:id_meta.id] + sex_meta, vcf, tbi]
-                custid: !(samplemap.equals(null))
-                    return [id_meta + [custid:samplemap] + sex_meta, vcf, tbi]
-            }
-
-        ch_sample_vcf = channel.empty()
-            .mix(ch_for_mix.id, ch_for_mix.custid)
 
         // Split vcf into sample vcf:s and frequency filter
         SPLIT_AND_FILTER_SV_VCF ( ch_sample_vcf, [], [], [] )
 
-        if (!val_sample_id_map.equals(null)) {
-
-            ch_reheader_in = SPLIT_AND_FILTER_SV_VCF.out.vcf
-                .map { meta, vcf -> return [meta, vcf, [], []]}
-
-            BCFTOOLS_REHEADER_SV_VCF ( ch_reheader_in, [[:],[]] )
-            ch_reheader_out = BCFTOOLS_REHEADER_SV_VCF.out.vcf
-
-        }
-
-        ch_for_mix = SPLIT_AND_FILTER_SV_VCF.out.vcf
-            .join(ch_reheader_out, remainder: true)
-            .branch { meta, filteredvcf, reheaderedvcf  ->
-                split: reheaderedvcf.equals(null)
-                    return [meta, filteredvcf]
-                reheader: !(reheaderedvcf.equals(null))
-                    return [meta, reheaderedvcf]
+        // Only rows with a distinct customer id need their VCF header renamed
+        ch_split = SPLIT_AND_FILTER_SV_VCF.out.vcf
+            .branch { meta, vcf ->
+                reheader: meta.custid != meta.id
+                as_is:    true
             }
 
-        ch_vcf2cytosure_in = channel.empty()
-            .mix(ch_for_mix.split, ch_for_mix.reheader)
+        ch_reheader_in = ch_split.reheader
+            .map { meta, vcf -> return [meta, vcf, [], []]}
+
+        BCFTOOLS_REHEADER_SV_VCF ( ch_reheader_in, [[:],[]] )
+
+        ch_vcf2cytosure_in = ch_split.as_is
+            .mix(BCFTOOLS_REHEADER_SV_VCF.out.vcf)
             .toSortedList { a, b -> a[0].id <=> b[0].id }
             .flatMap()
 

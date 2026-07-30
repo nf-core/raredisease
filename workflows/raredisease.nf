@@ -142,7 +142,6 @@ workflow RAREDISEASE {
     ch_reduced_penetrance
     ch_rtg_truthvcfs
     ch_sambamba_bed
-    ch_sample_id_map
     ch_samples
     ch_scatter_genome_split_intervals
     ch_score_config_mt
@@ -238,7 +237,6 @@ workflow RAREDISEASE {
     val_run_mt
     val_run_rtgvcfeval
     val_run_vcfanno_db_sanity_check
-    val_sample_id_map
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
     val_skip_split_multiallelics
@@ -831,7 +829,6 @@ workflow RAREDISEASE {
                 ch_mt_fasta,
                 ch_mt_lastdb,
                 ch_input_fastqs,
-                ch_sample_id_map,
                 ch_subdepth,
                 ch_svcaller_priority,
                 ch_mitosalt_config,
@@ -1066,10 +1063,8 @@ workflow RAREDISEASE {
         GENERATE_CYTOSURE_FILES (
             ch_mapped.genome_marked_bam_bai,
             ch_vcf2cytosure_blacklist,
-            ch_sample_id_map,
             ch_annotate_sv_tbi,
-            ch_annotate_sv_vcf_ann,
-            val_sample_id_map
+            ch_annotate_sv_vcf_ann
         )
         ch_generate_cytosure_files_cgh = GENERATE_CYTOSURE_FILES.out.cgh
     }

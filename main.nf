@@ -124,7 +124,6 @@ workflow NFCORE_RAREDISEASE {
     val_run_rtgvcfeval
     val_run_vcfanno_db_sanity_check
     val_sambamba_regions
-    val_sample_id_map
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
     val_score_config_mt
@@ -268,7 +267,6 @@ workflow NFCORE_RAREDISEASE {
     // Using channelFromSamplesheet helper. Returns either an empty channel or validated channel.
     ch_me_references            = channelFromSamplesheet(val_mobile_element_references, "${projectDir}/assets/mobile_element_references_schema.json", false)
     ch_me_svdb_resources        = channelFromSamplesheet(val_mobile_element_svdb_annotations, "${projectDir}/assets/svdb_query_vcf_schema.json", false)
-    ch_sample_id_map            = channelFromSamplesheet(val_sample_id_map, "${projectDir}/assets/sample_id_map.json", false)
     ch_svdb_bedpedbs            = channelFromSamplesheet(val_svdb_query_bedpedbs, "${projectDir}/assets/svdb_query_bedpe_schema.json", false)
     ch_svdb_dbs                 = channelFromSamplesheet(val_svdb_query_dbs, "${projectDir}/assets/svdb_query_vcf_schema.json", false)
 
@@ -472,7 +470,6 @@ workflow NFCORE_RAREDISEASE {
         ch_reduced_penetrance,
         ch_rtg_truthvcfs,
         ch_sambamba_bed,
-        ch_sample_id_map,
         ch_samples,
         ch_scatter_genome_split_intervals,
         ch_score_config_mt,
@@ -568,7 +565,6 @@ workflow NFCORE_RAREDISEASE {
         val_run_mt,
         val_run_rtgvcfeval,
         val_run_vcfanno_db_sanity_check,
-        val_sample_id_map,
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram,
         val_skip_split_multiallelics,
@@ -835,7 +831,6 @@ workflow {
         params.run_rtgvcfeval,
         params.run_vcfanno_db_sanity_check,
         params.sambamba_regions,
-        params.sample_id_map,
         params.save_all_mapped_as_cram,
         params.save_noalt_mapped_as_cram,
         params.score_config_mt,
