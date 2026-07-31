@@ -797,25 +797,29 @@ workflow RAREDISEASE {
             val_mitosalt_split_distance_threshold,
             val_mitosalt_split_length])
 
-        CALL_SV (
-            ch_genome_bwaindex,
-            ch_case_info,
-            ch_gcnvcaller_model,
-            ch_mapped.genome_marked_bai,
-            ch_mapped.genome_marked_bam,
-            ch_mapped.genome_marked_bam_bai,
-            ch_genome_dictionary,
-            ch_genome_fai,
-            ch_genome_fasta,
-            ch_manta_regions,
-            ch_ploidy_model,
-            ch_readcount_intervals,
-            ch_svcaller_priority,
-            skip_germlinecnvcaller,
-            val_analysis_type
-        )
-        ch_call_sv_nuclear_vcf = CALL_SV.out.vcf
-        ch_saltshaker_vcf      = channel.empty()
+        // CALL_SV only handles nuclear callers; skip it entirely for mito-only analysis,
+        // mirroring how CALL_SV_MT below is gated on val_run_mt.
+        if (!val_analysis_type.equals("mito")) {
+            CALL_SV (
+                ch_genome_bwaindex,
+                ch_case_info,
+                ch_gcnvcaller_model,
+                ch_mapped.genome_marked_bai,
+                ch_mapped.genome_marked_bam,
+                ch_mapped.genome_marked_bam_bai,
+                ch_genome_dictionary,
+                ch_genome_fai,
+                ch_genome_fasta,
+                ch_manta_regions,
+                ch_ploidy_model,
+                ch_readcount_intervals,
+                ch_svcaller_priority,
+                skip_germlinecnvcaller,
+                val_analysis_type
+            )
+            ch_call_sv_nuclear_vcf = CALL_SV.out.vcf
+        }
+        ch_saltshaker_vcf = channel.empty()
 
         if (val_run_mt) {
             CALL_SV_MT (

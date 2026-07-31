@@ -36,13 +36,11 @@ workflow CALL_SV {
         ch_merged_tbi      = channel.empty()
         ch_tiddit_vcf      = channel.empty()
 
-        // CALL_SV is invoked for every analysis type, including mito-only runs (there's no
-        // nuclear alignment data in that case, so nuclear callers must stay gated here).
-        if (!val_analysis_type.equals("mito")) {
-            ch_manta_vcf = CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_manta_regions)
-                .filtered_diploid_sv_vcf
-                .collect{ _meta, vcf -> vcf }
-        }
+        // CALL_SV is only invoked for non-mito analysis types (gated at the call site in
+        // raredisease.nf, mirroring CALL_SV_MT's val_run_mt gate), so no mito check is needed here.
+        ch_manta_vcf = CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_manta_regions)
+            .filtered_diploid_sv_vcf
+            .collect{ _meta, vcf -> vcf }
 
         if (val_analysis_type.equals("wgs")) {
             ch_tiddit_vcf = CALL_SV_TIDDIT (ch_genome_bam_bai, ch_genome_fai, ch_genome_fasta, ch_bwa_index, ch_case_info)
@@ -61,25 +59,22 @@ workflow CALL_SV {
 
         }
 
-        // Merge - with consistent ordering using concat. Only meaningful outside of mito-only
-        // analysis, since none of the nuclear callers above run for that mode.
-        if (!val_analysis_type.equals("mito")) {
-            // Concatenate in specific order: tiddit -> manta -> gcnvcaller -> cnvnator
-            // Empty channels won't contribute any items
-            ch_vcf_paths = ch_tiddit_vcf
-                .concat(ch_manta_vcf)
-                .concat(ch_gcnvcaller_vcf)
-                .concat(ch_cnvnator_vcf)
-                .collect()
-                .map { vcf_list -> [vcf_list] }
-            ch_merge_vcfs_in = ch_case_info
-                .combine(ch_vcf_paths)
-            SVDB_MERGE (ch_merge_vcfs_in, ch_svcaller_priority, false)
+        // Merge - with consistent ordering using concat
+        // Concatenate in specific order: tiddit -> manta -> gcnvcaller -> cnvnator
+        // Empty channels won't contribute any items
+        ch_vcf_paths = ch_tiddit_vcf
+            .concat(ch_manta_vcf)
+            .concat(ch_gcnvcaller_vcf)
+            .concat(ch_cnvnator_vcf)
+            .collect()
+            .map { vcf_list -> [vcf_list] }
+        ch_merge_vcfs_in = ch_case_info
+            .combine(ch_vcf_paths)
+        SVDB_MERGE (ch_merge_vcfs_in, ch_svcaller_priority, false)
 
-            TABIX_TABIX (SVDB_MERGE.out.vcf)
-            ch_merged_svs = SVDB_MERGE.out.vcf
-            ch_merged_tbi = TABIX_TABIX.out.index
-        }
+        TABIX_TABIX (SVDB_MERGE.out.vcf)
+        ch_merged_svs = SVDB_MERGE.out.vcf
+        ch_merged_tbi = TABIX_TABIX.out.index
 
     emit:
         tbi = ch_merged_tbi // channel: [ val(meta), path(tbi)]
