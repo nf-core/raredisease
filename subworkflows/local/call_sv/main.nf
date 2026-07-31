@@ -36,6 +36,8 @@ workflow CALL_SV {
         ch_merged_tbi      = channel.empty()
         ch_tiddit_vcf      = channel.empty()
 
+        // CALL_SV is invoked for every analysis type, including mito-only runs (there's no
+        // nuclear alignment data in that case, so nuclear callers must stay gated here).
         if (!val_analysis_type.equals("mito")) {
             ch_manta_vcf = CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_manta_regions)
                 .filtered_diploid_sv_vcf
