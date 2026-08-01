@@ -117,7 +117,7 @@ Devcontainer specs:
 ### Architecture & structure
 
 - **One subworkflow per biological task** — alignment, QC, variant calling, annotation, and ranking are each their own subworkflow under `subworkflows/local/`. Don't add logic to `workflows/raredisease.nf` that belongs in a subworkflow.
-- **Reuse over duplication** — `RANK_VARIANTS`, `ANNOTATE_CSQ_PLI`, and `VCF_FILTER_BCFTOOLS_ENSEMBLVEP` are intentionally included multiple times under different aliases. Follow this pattern before creating a near-identical subworkflow.
+- **Reuse over duplication** — `RANK_VARIANTS`, `ANNOTATE_CSQ_PLI`, `VCF_FILTER_BCFTOOLS_FILTERVEP`, and their composite `FILTER_ANNOTATE_RANK` wrapper are intentionally included multiple times under different aliases. Follow this pattern before creating a near-identical subworkflow.
 - **nf-core modules first** — prefer a module from `modules/nf-core/` over writing a local one. Only add to `modules/local/` when no nf-core module exists or the use case is too pipeline-specific.
 
 ### Adding a new step

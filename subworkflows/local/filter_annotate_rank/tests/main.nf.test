@@ -1,0 +1,101 @@
+nextflow_workflow {
+
+    name "Test Workflow FILTER_ANNOTATE_RANK"
+    script "subworkflows/local/filter_annotate_rank/main.nf"
+    workflow "FILTER_ANNOTATE_RANK"
+
+    tag "subworkflows"
+    tag "subworkflows_local"
+    tag "subworkflows/filter_annotate_rank"
+
+    tag "bcftools/view"
+    tag "filtervep"
+    tag "tabix/bgziptabix"
+    tag "custom/addmostsevereconsequence"
+    tag "custom/addmostseverepli"
+    tag "tabix/tabix"
+    tag "genmod/annotate"
+    tag "genmod/models"
+    tag "genmod/score"
+    tag "genmod/compound"
+
+    config "./nextflow.config"
+
+    test("FILTER_ANNOTATE_RANK - clinical set + rank, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of('3084')
+                    .collectFile(name: 'hgnc_ids.txt')
+                    .map { file -> [ [ id: 'hgnc_ids' ], file ] }
+                input[1] = Channel.value(file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/ped/justhusky.ped', checkIfExists: true))
+                input[2] = Channel.value(file(params.pipelines_testdata_base_path + 'reference/reduced_penetrance.tsv', checkIfExists: true))
+                input[3] = Channel.value(file(params.pipelines_testdata_base_path + 'reference/rank_model_snv.ini', checkIfExists: true))
+                input[4] = Channel.of([
+                    [ id:'var_csq' ],
+                    file(params.pipelines_testdata_base_path + 'reference/variant_consequences_v2.txt', checkIfExists: true)
+                ]).collect()
+                input[5] = Channel.of([
+                    [ id:'justhusky', probands:['justhusky'] ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/genmod.vcf.gz', checkIfExists: true)
+                ])
+                input[6] = false
+                input[7] = true
+                input[8] = false
+                input[9] = true
+                input[10] = false
+                input[11] = "SNV"
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+
+    test("FILTER_ANNOTATE_RANK - no rank (ME-like), stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of('3084')
+                    .collectFile(name: 'hgnc_ids.txt')
+                    .map { file -> [ [ id: 'hgnc_ids' ], file ] }
+                input[1] = Channel.value(file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/ped/justhusky.ped', checkIfExists: true))
+                input[2] = Channel.value(file(params.pipelines_testdata_base_path + 'reference/reduced_penetrance.tsv', checkIfExists: true))
+                input[3] = Channel.value(file(params.pipelines_testdata_base_path + 'reference/rank_model_snv.ini', checkIfExists: true))
+                input[4] = Channel.of([
+                    [ id:'var_csq' ],
+                    file(params.pipelines_testdata_base_path + 'reference/variant_consequences_v2.txt', checkIfExists: true)
+                ]).collect()
+                input[5] = Channel.of([
+                    [ id:'justhusky', probands:[] ],
+                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/genmod.vcf.gz', checkIfExists: true)
+                ])
+                input[6] = false
+                input[7] = true
+                input[8] = false
+                input[9] = false
+                input[10] = false
+                input[11] = ""
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}

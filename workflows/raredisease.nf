@@ -43,10 +43,6 @@ include { SANITY_CHECK_VCFANNO_DATABASES   } from '../modules/local/sanity_check
 
 include { ALIGN_GENOME                                                } from '../subworkflows/local/align_genome'
 include { ALIGN_MITOCHONDRIA                                          } from '../subworkflows/local/align_mitochondria'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_ME                          } from '../subworkflows/local/annotate_consequence_pli'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_MT                          } from '../subworkflows/local/annotate_consequence_pli'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SNV                         } from '../subworkflows/local/annotate_consequence_pli'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI_SV                          } from '../subworkflows/local/annotate_consequence_pli'
 include { ANNOTATE_GENOME_SNVS                                        } from '../subworkflows/local/annotate_genome_snvs'
 include { ANNOTATE_MOBILE_ELEMENTS                                    } from '../subworkflows/local/annotate_mobile_elements'
 include { ANNOTATE_MT_SNVS                                            } from '../subworkflows/local/annotate_mt_snvs'
@@ -57,20 +53,17 @@ include { CALL_REPEAT_EXPANSIONS                                      } from '..
 include { CALL_SNV                                                    } from '../subworkflows/local/call_snv'
 include { CALL_STRUCTURAL_VARIANTS                                    } from '../subworkflows/local/call_structural_variants'
 include { CONTAMINATION                                               } from '../subworkflows/local/contamination'
+include { FILTER_ANNOTATE_RANK as FILTER_ANNOTATE_RANK_ME             } from '../subworkflows/local/filter_annotate_rank'
+include { FILTER_ANNOTATE_RANK as FILTER_ANNOTATE_RANK_MT             } from '../subworkflows/local/filter_annotate_rank'
+include { FILTER_ANNOTATE_RANK as FILTER_ANNOTATE_RANK_SNV            } from '../subworkflows/local/filter_annotate_rank'
+include { FILTER_ANNOTATE_RANK as FILTER_ANNOTATE_RANK_SV             } from '../subworkflows/local/filter_annotate_rank'
 include { GENERATE_CYTOSURE_FILES                                     } from '../subworkflows/local/generate_cytosure_files'
 include { GENS                                                        } from '../subworkflows/local/gens'
 include { PREPARE_REFERENCES                                          } from '../subworkflows/local/prepare_references'
 include { QC_BAM                                                      } from '../subworkflows/local/qc_bam'
-include { RANK_VARIANTS as RANK_VARIANTS_MT                           } from '../subworkflows/local/rank_variants'
-include { RANK_VARIANTS as RANK_VARIANTS_SNV                          } from '../subworkflows/local/rank_variants'
-include { RANK_VARIANTS as RANK_VARIANTS_SV                           } from '../subworkflows/local/rank_variants'
 include { SUBSAMPLE_MT_FRAC                                           } from '../subworkflows/local/subsample_mt_frac'
 include { SUBSAMPLE_MT_READS                                          } from '../subworkflows/local/subsample_mt_reads'
 include { VARIANT_EVALUATION                                          } from '../subworkflows/local/variant_evaluation'
-include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_ME  } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
-include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_MT  } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
-include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_SNV } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
-include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET_SV  } from '../subworkflows/local/vcf_filter_bcftools_filtervep'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -621,48 +614,22 @@ workflow RAREDISEASE {
         ch_annotate_genome_snvs_rhocall_viz_wig           = ANNOTATE_GENOME_SNVS.out.rhocall_viz_wig
         ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       = ANNOTATE_GENOME_SNVS.out.ucsc_wigtobigwig_bw
 
-        ch_clin_research_snv_vcf = ch_annotate_genome_snvs_bcftools_concat_vcf
-            .multiMap { meta, vcf ->
-                clinical: [ meta + [ set: "clinical" ], vcf ]
-                research: [ meta + [ set: "research" ], vcf ]
-            }
-
-        ch_clinical_snv_vcf = channel.empty()
-        if (!skip_generate_clinical_set) {
-            GENERATE_CLINICAL_SET_SNV(
-                ch_clin_research_snv_vcf.clinical,
-                ch_hgnc_ids,
-                false,
-                true
-            )
-            ch_clinical_snv_vcf = GENERATE_CLINICAL_SET_SNV.out.vcf
-        }
-
-        ch_ann_csq_snv_in = ch_clinical_snv_vcf.mix(ch_clin_research_snv_vcf.research)
-
-        ANN_CSQ_PLI_SNV (
-            ch_variant_consequences_snv,
-            ch_ann_csq_snv_in,
-            false
-        )
-
-        ch_ranksnv_nuclear_in = ANN_CSQ_PLI_SNV.out.vcf_ann
-            .filter { meta, _vcf ->
-                if (meta.probands.size()==0) {
-                    log.warn("Skipping nuclear SNV ranking since no affected samples are detected in the case")
-                }
-                meta.probands.size()>0
-            }
-
-        RANK_VARIANTS_SNV (
+        FILTER_ANNOTATE_RANK_SNV(
+            ch_hgnc_ids,
             ch_pedfile,
             ch_reduced_penetrance,
             ch_score_config_snv,
-            ch_ranksnv_nuclear_in,
-            false
+            ch_variant_consequences_snv,
+            ch_annotate_genome_snvs_bcftools_concat_vcf,
+            false,
+            true,
+            false,
+            true,
+            skip_generate_clinical_set,
+            "nuclear SNV"
         )
-        ch_rank_snv_tbi = RANK_VARIANTS_SNV.out.tbi
-        ch_rank_snv_vcf = RANK_VARIANTS_SNV.out.vcf
+        ch_rank_snv_tbi = FILTER_ANNOTATE_RANK_SNV.out.tbi
+        ch_rank_snv_vcf = FILTER_ANNOTATE_RANK_SNV.out.vcf
     }
 
     if (val_run_mt && !skip_mt_calling) {
@@ -730,48 +697,22 @@ workflow RAREDISEASE {
         ch_annotate_mt_snvs_ensemblvep_mt_tbi = ch_mt_annotate.ensemblvep_mt_tbi
         ch_annotate_mt_snvs_ensemblvep_mt_vcf = ch_mt_annotate.ensemblvep_mt_vcf
 
-        ch_clin_research_mt_vcf = ch_mt_annotate.vcf_ann
-            .multiMap { meta, vcf ->
-                clinical: [ meta + [ set: "clinical" ], vcf ]
-                research: [ meta + [ set: "research" ], vcf ]
-            }
-
-        ch_clinical_mtsnv_vcf = channel.empty()
-        if (!skip_generate_clinical_set) {
-            GENERATE_CLINICAL_SET_MT(
-                ch_clin_research_mt_vcf.clinical,
-                ch_hgnc_ids,
-                true,
-                false
-            )
-            ch_clinical_mtsnv_vcf = GENERATE_CLINICAL_SET_MT.out.vcf
-        }
-
-        ch_ann_csq_mtsnv_in = ch_clinical_mtsnv_vcf.mix(ch_clin_research_mt_vcf.research)
-
-        ANN_CSQ_PLI_MT(
-            ch_variant_consequences_snv,
-            ch_ann_csq_mtsnv_in,
-            false
-        )
-
-        ch_ranksnv_mt_in = ANN_CSQ_PLI_MT.out.vcf_ann
-            .filter { meta, _vcf ->
-                if (meta.probands.size()==0) {
-                    log.warn("Skipping mitochondrial SNV ranking since no affected samples are detected in the case")
-                }
-                meta.probands.size()>0
-            }
-
-        RANK_VARIANTS_MT (
+        FILTER_ANNOTATE_RANK_MT(
+            ch_hgnc_ids,
             ch_pedfile,
             ch_reduced_penetrance,
             ch_score_config_mt,
-            ch_ranksnv_mt_in,
-            false
+            ch_variant_consequences_snv,
+            ch_mt_annotate.vcf_ann,
+            true,
+            false,
+            false,
+            true,
+            skip_generate_clinical_set,
+            "mitochondrial SNV"
         )
-        ch_rank_mt_tbi = RANK_VARIANTS_MT.out.tbi
-        ch_rank_mt_vcf = RANK_VARIANTS_MT.out.vcf
+        ch_rank_mt_tbi = FILTER_ANNOTATE_RANK_MT.out.tbi
+        ch_rank_mt_vcf = FILTER_ANNOTATE_RANK_MT.out.vcf
     }
 
 /*
@@ -866,48 +807,22 @@ workflow RAREDISEASE {
         ch_annotate_sv_tbi     = ch_sv_annotate.tbi
         ch_annotate_sv_vcf_ann = ch_sv_annotate.vcf_ann
 
-        ch_clin_research_sv_vcf = ch_sv_annotate.vcf_ann
-            .multiMap { meta, vcf ->
-                clinical: [ meta + [ set: "clinical" ], vcf ]
-                research: [ meta + [ set: "research" ], vcf ]
-            }
-
-        ch_clinical_sv_vcf = channel.empty()
-        if (!skip_generate_clinical_set) {
-            GENERATE_CLINICAL_SET_SV(
-                ch_clin_research_sv_vcf.clinical,
-                ch_hgnc_ids,
-                false,
-                true
-            )
-            ch_clinical_sv_vcf = GENERATE_CLINICAL_SET_SV.out.vcf
-        }
-
-        ch_ann_csq_sv_in = ch_clinical_sv_vcf.mix(ch_clin_research_sv_vcf.research)
-
-        ANN_CSQ_PLI_SV (
-            ch_variant_consequences_sv,
-            ch_ann_csq_sv_in,
-            false
-        )
-
-        ch_ranksnv_sv_in = ANN_CSQ_PLI_SV.out.vcf_ann
-            .filter { meta, _vcf ->
-                if (meta.probands.size()==0) {
-                    log.warn("Skipping SV ranking since no affected samples are detected in the case")
-                }
-                meta.probands.size()>0
-            }
-
-        RANK_VARIANTS_SV (
+        FILTER_ANNOTATE_RANK_SV(
+            ch_hgnc_ids,
             ch_pedfile,
             ch_reduced_penetrance,
             ch_score_config_sv,
-            ch_ranksnv_sv_in,
-            true
+            ch_variant_consequences_sv,
+            ch_sv_annotate.vcf_ann,
+            false,
+            true,
+            true,
+            true,
+            skip_generate_clinical_set,
+            "SV"
         )
-        ch_rank_sv_tbi = RANK_VARIANTS_SV.out.tbi
-        ch_rank_sv_vcf = RANK_VARIANTS_SV.out.vcf
+        ch_rank_sv_tbi = FILTER_ANNOTATE_RANK_SV.out.tbi
+        ch_rank_sv_vcf = FILTER_ANNOTATE_RANK_SV.out.vcf
     }
 /*
 
@@ -939,32 +854,22 @@ workflow RAREDISEASE {
                 ch_vep_extra_files
             )
 
-            ch_clin_research_me_vcf = ch_me_annotate.vcf_ann
-                .multiMap { meta, vcf ->
-                    clinical: [ meta + [ set: "clinical" ], vcf ]
-                    research: [ meta + [ set: "research" ], vcf ]
-                }
-
-            ch_clinical_me_vcf = channel.empty()
-            if (!skip_generate_clinical_set) {
-                GENERATE_CLINICAL_SET_ME(
-                    ch_clin_research_me_vcf.clinical,
-                    ch_hgnc_ids,
-                    false,
-                    true
-                )
-                ch_clinical_me_vcf = GENERATE_CLINICAL_SET_ME.out.vcf
-            }
-
-            ch_ann_csq_me_in = ch_clinical_me_vcf.mix(ch_clin_research_me_vcf.research)
-
-            ANN_CSQ_PLI_ME(
+            FILTER_ANNOTATE_RANK_ME(
+                ch_hgnc_ids,
+                ch_pedfile,
+                ch_reduced_penetrance,
+                ch_score_config_sv,
                 ch_variant_consequences_sv,
-                ch_ann_csq_me_in,
-                true
+                ch_me_annotate.vcf_ann,
+                false,
+                true,
+                false,
+                false,
+                skip_generate_clinical_set,
+                ""
             )
-            ch_ann_csq_pli_me_vcf_ann = ANN_CSQ_PLI_ME.out.vcf_ann
-            ch_ann_csq_pli_me_tbi     = ANN_CSQ_PLI_ME.out.tbi
+            ch_ann_csq_pli_me_vcf_ann = FILTER_ANNOTATE_RANK_ME.out.vcf
+            ch_ann_csq_pli_me_tbi     = FILTER_ANNOTATE_RANK_ME.out.tbi
 
         }
     }

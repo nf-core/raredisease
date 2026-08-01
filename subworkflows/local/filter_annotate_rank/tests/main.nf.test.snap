@@ -1,0 +1,200 @@
+{
+    "FILTER_ANNOTATE_RANK - no rank (ME-like), stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                
+                            ],
+                            "set": "clinical"
+                        },
+                        "justhusky_csq_pli_clinical.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ],
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                
+                            ],
+                            "set": "research"
+                        },
+                        "justhusky_csq_pli_research.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                
+                            ],
+                            "set": "clinical"
+                        },
+                        "justhusky_csq_pli_clinical.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ],
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                
+                            ],
+                            "set": "research"
+                        },
+                        "justhusky_csq_pli_research.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "tbi": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                
+                            ],
+                            "set": "clinical"
+                        },
+                        "justhusky_csq_pli_clinical.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ],
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                
+                            ],
+                            "set": "research"
+                        },
+                        "justhusky_csq_pli_research.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                
+                            ],
+                            "set": "clinical"
+                        },
+                        "justhusky_csq_pli_clinical.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ],
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                
+                            ],
+                            "set": "research"
+                        },
+                        "justhusky_csq_pli_research.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-07-31T14:52:40.069989072",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "FILTER_ANNOTATE_RANK - clinical set + rank, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                "justhusky"
+                            ],
+                            "set": "clinical"
+                        },
+                        "justhusky_ranked_clinical.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ],
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                "justhusky"
+                            ],
+                            "set": "research"
+                        },
+                        "justhusky_ranked_research.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                "justhusky"
+                            ],
+                            "set": "clinical"
+                        },
+                        "justhusky_ranked_clinical.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ],
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                "justhusky"
+                            ],
+                            "set": "research"
+                        },
+                        "justhusky_ranked_research.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "tbi": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                "justhusky"
+                            ],
+                            "set": "clinical"
+                        },
+                        "justhusky_ranked_clinical.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ],
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                "justhusky"
+                            ],
+                            "set": "research"
+                        },
+                        "justhusky_ranked_research.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                "justhusky"
+                            ],
+                            "set": "clinical"
+                        },
+                        "justhusky_ranked_clinical.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ],
+                    [
+                        {
+                            "id": "justhusky",
+                            "probands": [
+                                "justhusky"
+                            ],
+                            "set": "research"
+                        },
+                        "justhusky_ranked_research.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-07-31T14:52:16.291994535",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}
