@@ -1,0 +1,58 @@
+{
+    "CALL_SV - wgs, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_sv_nuclear.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_sv_nuclear.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "tbi": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_sv_nuclear.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "justhusky"
+                        },
+                        "justhusky_sv_nuclear.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-07-29T17:07:36.837029912",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    },
+    "CALL_SV - wgs": {
+        "content": [
+            [
+                "justhusky_sv_nuclear.vcf.gz.tbi"
+            ],
+            "VcfFile [chromosomes=[MT, 21], sampleCount=1, variantCount=115, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-07-29T17:07:01.666191758",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

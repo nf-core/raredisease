@@ -253,6 +253,10 @@
                 "MARKDUPLICATES": {
                     "picard": "3.4.0"
                 },
+                "MERGE_NUCLEAR_AND_MT_SVS": {
+                    "bcftools": 1.23,
+                    "svdb": "2.8.4"
+                },
                 "ME_SPLIT_ALIGNMENT": {
                     "samtools": "1.22.1"
                 },
@@ -443,6 +447,9 @@
                     "tabix": 1.21
                 },
                 "TABIX_ME_SPLIT": {
+                    "tabix": 1.21
+                },
+                "TABIX_NUCLEAR_AND_MT_SVS": {
                     "tabix": 1.21
                 },
                 "TABIX_TABIX": {
@@ -1332,10 +1339,10 @@
                 "slowlycivilbuck.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
             ]
         ],
-        "timestamp": "2026-06-26T14:16:17.160260766",
+        "timestamp": "2026-07-29T17:36:12.069850085",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "25.10.4"
         }
     }
 }

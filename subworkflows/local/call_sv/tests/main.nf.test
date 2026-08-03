@@ -1,0 +1,124 @@
+nextflow_workflow {
+
+    name "Test Workflow CALL_SV"
+    script "subworkflows/local/call_sv/main.nf"
+    workflow "CALL_SV"
+
+    tag "subworkflows"
+    tag "call_sv"
+    tag "call_sv_manta"
+    tag "call_sv_tiddit"
+    tag "call_sv_germlinecnvcaller"
+    tag "call_sv_cnvnator"
+
+    tag "bwa/index"
+    tag "svdb/merge"
+    tag "tabix/tabix"
+
+    config "./nextflow.config"
+
+    test("CALL_SV - wgs") {
+
+        setup {
+            run("BWA_INDEX") {
+                script "modules/nf-core/bwa/index/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'genome'],
+                        file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
+        when {
+            workflow {
+                """
+                input[0]  = BWA_INDEX.out.index.collect()
+                input[1]  = channel.of([id:'justhusky'])
+                input[2]  = channel.of([[id:'gcnvcaller'], []])
+                input[3]  = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[4]  = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)
+                ])
+                input[5]  = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[6]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[9]  = channel.value([[], []])
+                input[10] = channel.of([[id:'ploidy'], []])
+                input[11] = channel.of([[]])
+                input[12] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[13] = true
+                input[14] = 'wgs'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.tbi.collect { meta, tbi -> file(tbi).name },
+                    path(workflow.out.vcf[0][1]).vcf.summary
+                ).match() }
+            )
+        }
+    }
+
+    test("CALL_SV - wgs, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0]  = channel.of([[id:'bwa'], []])
+                input[1]  = channel.of([id:'justhusky'])
+                input[2]  = channel.of([[id:'gcnvcaller'], []])
+                input[3]  = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[4]  = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)
+                ])
+                input[5]  = channel.of([
+                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[6]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[9]  = channel.value([[], []])
+                input[10] = channel.of([[id:'ploidy'], []])
+                input[11] = channel.of([[]])
+                input[12] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[13] = true
+                input[14] = 'wgs'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out
+                ).match() }
+            )
+        }
+    }
+}

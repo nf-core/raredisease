@@ -28,6 +28,8 @@ include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_R1_FQ   } from '../modules/n
 include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_R2_FQ   } from '../modules/nf-core/spring/decompress/main'
 include { SPRING_DECOMPRESS as SPRING_DECOMPRESS_TO_FQ_PAIR } from '../modules/nf-core/spring/decompress/main'
 include { STRANGER                                          } from '../modules/nf-core/stranger/main'
+include { SVDB_MERGE as MERGE_NUCLEAR_AND_MT_SVS            } from '../modules/nf-core/svdb/merge/main'
+include { TABIX_TABIX as TABIX_NUCLEAR_AND_MT_SVS           } from '../modules/nf-core/tabix/tabix/main'
 
 //
 // MODULE: Local modules
@@ -51,7 +53,8 @@ include { CALL_MOBILE_ELEMENTS                                        } from '..
 include { CALL_MT_SNVS                                                } from '../subworkflows/local/call_mt_snvs'
 include { CALL_REPEAT_EXPANSIONS                                      } from '../subworkflows/local/call_repeat_expansions'
 include { CALL_SNV                                                    } from '../subworkflows/local/call_snv'
-include { CALL_STRUCTURAL_VARIANTS                                    } from '../subworkflows/local/call_structural_variants'
+include { CALL_SV                                                     } from '../subworkflows/local/call_sv'
+include { CALL_SV_MT                                                  } from '../subworkflows/local/call_sv_MT'
 include { CONTAMINATION                                               } from '../subworkflows/local/contamination'
 include { FILTER_ANNOTATE_RANK as FILTER_ANNOTATE_RANK_ME             } from '../subworkflows/local/filter_annotate_rank'
 include { FILTER_ANNOTATE_RANK as FILTER_ANNOTATE_RANK_MT             } from '../subworkflows/local/filter_annotate_rank'
@@ -735,47 +738,83 @@ workflow RAREDISEASE {
             val_mitosalt_split_distance_threshold,
             val_mitosalt_split_length])
 
-        CALL_STRUCTURAL_VARIANTS (
-            ch_genome_bwaindex,
-            ch_case_info,
-            ch_gcnvcaller_model,
-            ch_mapped.genome_marked_bai,
-            ch_mapped.genome_marked_bam,
-            ch_mapped.genome_marked_bam_bai,
-            ch_genome_chrsizes,
-            ch_genome_dictionary,
-            ch_genome_fai,
-            ch_genome_fasta,
-            ch_genome_hisat2index,
-            ch_manta_regions,
-            ch_mitosalt_config,
-            ch_mt_bam_bai,
-            ch_mt_fai,
-            ch_mt_fasta,
-            ch_mt_lastdb,
-            ch_ploidy_model,
-            ch_readcount_intervals,
-            ch_input_fastqs,
-            ch_subdepth,
-            ch_svcaller_priority,
-            skip_germlinecnvcaller,
-            skip_mitosalt,
-            val_analysis_type,
-            val_heavy_strand_origin_end,
-            val_heavy_strand_origin_start,
-            val_light_strand_origin_end,
-            val_light_strand_origin_start,
-            val_mito_length,
-            val_mito_name,
-            val_mitosalt_flank,
-            val_mitosalt_heteroplasmy_limit,
-            val_run_mt
-        )
-        ch_call_sv_vcf = CALL_STRUCTURAL_VARIANTS.out.vcf
-        ch_call_sv_tbi = CALL_STRUCTURAL_VARIANTS.out.tbi
-        ch_saltshaker_html = CALL_STRUCTURAL_VARIANTS.out.saltshaker_html
-        ch_saltshaker_plot = CALL_STRUCTURAL_VARIANTS.out.saltshaker_plot
-        ch_mt_del_result = CALL_STRUCTURAL_VARIANTS.out.mt_del_result
+        // CALL_SV only handles nuclear callers; skip it entirely for mito-only analysis,
+        // mirroring how CALL_SV_MT below is gated on val_run_mt.
+        if (!val_analysis_type.equals("mito")) {
+            CALL_SV (
+                ch_genome_bwaindex,
+                ch_case_info,
+                ch_gcnvcaller_model,
+                ch_mapped.genome_marked_bai,
+                ch_mapped.genome_marked_bam,
+                ch_mapped.genome_marked_bam_bai,
+                ch_genome_dictionary,
+                ch_genome_fai,
+                ch_genome_fasta,
+                ch_manta_regions,
+                ch_ploidy_model,
+                ch_readcount_intervals,
+                ch_svcaller_priority,
+                skip_germlinecnvcaller,
+                val_analysis_type
+            )
+            ch_call_sv_nuclear_vcf = CALL_SV.out.vcf
+        }
+        ch_saltshaker_vcf = channel.empty()
+
+        if (val_run_mt) {
+            CALL_SV_MT (
+                ch_mt_bam_bai,
+                ch_case_info,
+                ch_genome_chrsizes,
+                ch_genome_fai,
+                ch_genome_fasta,
+                ch_genome_hisat2index,
+                ch_mt_fai,
+                ch_mt_fasta,
+                ch_mt_lastdb,
+                ch_input_fastqs,
+                ch_subdepth,
+                ch_svcaller_priority,
+                ch_mitosalt_config,
+                skip_mitosalt,
+                val_heavy_strand_origin_start,
+                val_heavy_strand_origin_end,
+                val_light_strand_origin_start,
+                val_light_strand_origin_end,
+                val_mito_length,
+                val_mito_name,
+                val_mitosalt_flank,
+                val_mitosalt_heteroplasmy_limit,
+            )
+            ch_saltshaker_vcf   = CALL_SV_MT.out.saltshaker_vcf
+            ch_saltshaker_html  = CALL_SV_MT.out.saltshaker_html
+            ch_saltshaker_plot  = CALL_SV_MT.out.saltshaker_plot
+            ch_mt_del_result    = CALL_SV_MT.out.mt_del_result
+            ch_svcaller_priority = CALL_SV_MT.out.updated_priority
+        }
+
+        // Merge nuclear and mitochondrial SV calls, mirroring the CALL_SNV/CALL_MT_SNVS split
+        if (!val_analysis_type.equals("mito")) {
+            ch_vcf_paths = ch_call_sv_nuclear_vcf
+                .collect{ _meta, vcf -> vcf }
+                .concat(ch_saltshaker_vcf.collect{ _meta, vcf -> vcf })
+                .collect()
+                .map { vcf_list -> [vcf_list] }
+            ch_merge_vcfs_in = ch_case_info
+                .combine(ch_vcf_paths)
+            MERGE_NUCLEAR_AND_MT_SVS (ch_merge_vcfs_in, ch_svcaller_priority, false)
+
+            TABIX_NUCLEAR_AND_MT_SVS (MERGE_NUCLEAR_AND_MT_SVS.out.vcf)
+            ch_call_sv_vcf = MERGE_NUCLEAR_AND_MT_SVS.out.vcf
+            ch_call_sv_tbi = TABIX_NUCLEAR_AND_MT_SVS.out.index
+        } else {
+            // For mito-only analysis, use saltshaker_vcf with meta directly (ch_saltshaker_vcf
+            // holds collected paths only, CALL_SV_MT.out.saltshaker_vcf holds [meta, vcf] tuples)
+            TABIX_NUCLEAR_AND_MT_SVS (CALL_SV_MT.out.saltshaker_vcf)
+            ch_call_sv_vcf = CALL_SV_MT.out.saltshaker_vcf
+            ch_call_sv_tbi = TABIX_NUCLEAR_AND_MT_SVS.out.index
+        }
     } else if (skip_sv_calling) {
         ch_call_sv_vcf = ch_precalled_sv_vcf
         ch_call_sv_tbi = ch_precalled_sv_tbi
