@@ -1,5 +1,5 @@
 include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET } from '../vcf_filter_bcftools_filtervep'
-include { ANNOTATE_CSQ_PLI as ANN_CSQ_PLI                        } from '../annotate_consequence_pli'
+include { ANNOTATE_CSQ_PLI                                       } from '../annotate_consequence_pli'
 include { RANK_VARIANTS                                          } from '../rank_variants'
 
 workflow FILTER_ANNOTATE_RANK {
@@ -37,17 +37,17 @@ workflow FILTER_ANNOTATE_RANK {
 
     ch_ann_csq_in = ch_clinical_vcf.mix(ch_clin_research_vcf.research)
 
-    ANN_CSQ_PLI(
+    ANNOTATE_CSQ_PLI(
         ch_variant_consequences,
         ch_ann_csq_in,
         !run_rank
     )
 
-    ch_out_vcf = ANN_CSQ_PLI.out.vcf_ann
-    ch_out_tbi = ANN_CSQ_PLI.out.tbi
+    ch_out_vcf = ANNOTATE_CSQ_PLI.out.vcf_ann
+    ch_out_tbi = ANNOTATE_CSQ_PLI.out.tbi
 
     if (run_rank) {
-        ch_rank_in = ANN_CSQ_PLI.out.vcf_ann
+        ch_rank_in = ANNOTATE_CSQ_PLI.out.vcf_ann
             .filter { meta, _vcf ->
                 if (meta.probands.size()==0) {
                     log.warn("Skipping ${val_type_label} ranking since no affected samples are detected in the case")
