@@ -232,8 +232,8 @@ The pipeline is modular — individual tools and subworkflows can be skipped usi
 | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | `fastp`, `fastqc`, `gatkcontamination`, `gens`, `germlinecnvcaller`, `ngsbits`, `peddy`, `smncopynumbercaller`, `vcf2cytosure`, `verifybamid` |
 
-| `--skip_subworkflows`                                                                                                                                                                                        |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--skip_subworkflows`                                                                                                                                                                                                             |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `generate_clinical_set`, `me_annotation`, `me_calling`, `mt_annotation`, `mt_snv_calling`, `mt_subsample`, `mt_sv_calling`, `repeat_annotation`, `repeat_calling`, `snv_annotation`, `snv_calling`, `sv_annotation`, `sv_calling` |
 
 nf-core/raredisease consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
