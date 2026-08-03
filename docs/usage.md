@@ -193,7 +193,7 @@ Below is an example samplesheet for a trio where all three variant types have be
 **What's possible:**
 
 - Supplying precalled VCFs for all variant types applicable to the case (`snv` + `sv` + `mt` for WGS/mito, or just `snv` + `sv` for WES without `--run_mt_for_wes`) to run annotation/ranking only, with no calling at all.
-- Supplying precalled VCFs for only a subset of types, as long as calling for the remaining type(s) is explicitly disabled with `--skip_subworkflows`. For example, a WGS case with only `snv`/`sv` VCFs needs `--skip_subworkflows mt_calling` added on the command line, since MT calling would otherwise run by default for WGS but there's no alignment data to call it from.
+- Supplying precalled VCFs for only a subset of types, as long as calling for the remaining type(s) is explicitly disabled with `--skip_subworkflows`. For example, a WGS case with only `snv`/`sv` VCFs needs `--skip_subworkflows mt_snv_calling` added on the command line, since MT calling would otherwise run by default for WGS but there's no alignment data to call it from.
 - Mixing precalled and freshly-called cases across **different** runs/samplesheets — the restrictions below apply per case, not pipeline-wide.
 
 **What's not possible** (the pipeline validates these and errors out with a specific message rather than silently producing empty output):
@@ -201,7 +201,7 @@ Below is an example samplesheet for a trio where all three variant types have be
 - Mixing `vcf` rows with `fastq`/`spring`/`bam`/`cram` rows for the **same case**. A row in the samplesheet may only specify one data type (`fastq`, `spring`, `bam`, `cram`, or `vcf`) — mixing, for example, `fastq_1` and `vcf` in the same row is rejected by the schema — and a case as a whole must be either fully precalled or fully processed from raw/aligned reads, never both.
 - Leaving a variant type uncovered. If a case has any precalled VCF, every other type that's still relevant to the analysis must either also have a precalled VCF or have its calling explicitly skipped via `--skip_subworkflows` — the pipeline checks this upfront and errors out immediately, before any channels are built, naming exactly which type(s) are missing.
 - Supplying two different VCFs for the same `type` within the same case (conflicting precalled VCFs for one case).
-- A `type` value other than `snv`, `sv`, or `mt` (schema-enforced).
+- A `type` value other than `snv`, `sv`, or `mt` (schema-enforced). Note there is no separate `mt_sv` type: nuclear and mitochondrial SV calls (MitoSalt/SaltShaker) are merged into one VCF before annotation/ranking, so a `sv` VCF is expected to already include mitochondrial SV calls if you want them represented — merge them in yourself before supplying it.
 
 #### Reference files and parameters
 
@@ -234,7 +234,7 @@ The pipeline is modular — individual tools and subworkflows can be skipped usi
 
 | `--skip_subworkflows`                                                                                                                                                                                        |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `generate_clinical_set`, `me_annotation`, `me_calling`, `mt_annotation`, `mt_calling`, `mt_subsample`, `repeat_annotation`, `repeat_calling`, `snv_annotation`, `snv_calling`, `sv_annotation`, `sv_calling` |
+| `generate_clinical_set`, `me_annotation`, `me_calling`, `mt_annotation`, `mt_snv_calling`, `mt_subsample`, `mt_sv_calling`, `repeat_annotation`, `repeat_calling`, `snv_annotation`, `snv_calling`, `sv_annotation`, `sv_calling` |
 
 nf-core/raredisease consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
 
