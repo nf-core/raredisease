@@ -25,7 +25,7 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = Channel.from("\$PWD").map { dir -> [ [ id: 'cadd_resources' ], dir ] }
+                input[0] = Channel.from(env('PWD')).map { dir -> [ [ id: 'cadd_resources' ], dir ] }
                 input[1] = channel.value([[:], []])
                 input[2] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
                 input[3] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/cadd_to_vcf_header_-1.0-.txt', checkIfExists: true)).collect()
@@ -57,7 +57,7 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = Channel.from("\$PWD").map { dir -> [ [ id: 'cadd_resources' ], dir ] }
+                input[0] = Channel.from(env('PWD')).map { dir -> [ [ id: 'cadd_resources' ], dir ] }
                 input[1] = channel.value([[:], []])
                 input[2] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
                 input[3] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/cadd_to_vcf_header_-1.0-.txt', checkIfExists: true)).collect()
