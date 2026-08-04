@@ -225,7 +225,7 @@ nextflow_function {
             params {
                 input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf.csv"
                 analysis_type     = 'wgs'
-                skip_subworkflows = 'mt_calling'
+                skip_subworkflows = 'mt_snv_calling'
             }
         }
 

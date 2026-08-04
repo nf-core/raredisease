@@ -364,8 +364,9 @@ workflow NFCORE_RAREDISEASE {
     skip_me_annotation         = parseSkipList(val_skip_subworkflows, 'me_annotation')
     skip_me_calling            = parseSkipList(val_skip_subworkflows, 'me_calling')
     skip_mt_annotation         = parseSkipList(val_skip_subworkflows, 'mt_annotation')
-    skip_mt_calling            = parseSkipList(val_skip_subworkflows, 'mt_calling') || val_has_precalled_mt
+    skip_mt_snv_calling        = parseSkipList(val_skip_subworkflows, 'mt_snv_calling') || val_has_precalled_mt
     skip_mt_subsample          = parseSkipList(val_skip_subworkflows, 'mt_subsample')
+    skip_mt_sv_calling         = parseSkipList(val_skip_subworkflows, 'mt_sv_calling')
     skip_repeat_annotation     = parseSkipList(val_skip_subworkflows, 'repeat_annotation')
     skip_repeat_calling        = parseSkipList(val_skip_subworkflows, 'repeat_calling')
     skip_snv_annotation        = parseSkipList(val_skip_subworkflows, 'snv_annotation')
@@ -507,8 +508,9 @@ workflow NFCORE_RAREDISEASE {
         skip_me_calling,
         skip_mitosalt,
         skip_mt_annotation,
-        skip_mt_calling,
+        skip_mt_snv_calling,
         skip_mt_subsample,
+        skip_mt_sv_calling,
         skip_ngsbits,
         skip_peddy,
         skip_repeat_annotation,

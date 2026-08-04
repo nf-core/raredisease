@@ -415,7 +415,7 @@ def validatePrecalledVcfCoverage() {
     if (!has_sv && !parseSkipList(params.skip_subworkflows, 'sv_calling')) {
         missing << 'sv'
     }
-    if (run_mt && !has_mt && !parseSkipList(params.skip_subworkflows, 'mt_calling')) {
+    if (run_mt && !has_mt && !parseSkipList(params.skip_subworkflows, 'mt_snv_calling')) {
         missing << 'mt'
     }
     if (missing) {

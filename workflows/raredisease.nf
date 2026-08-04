@@ -172,8 +172,9 @@ workflow RAREDISEASE {
     skip_me_calling
     skip_mitosalt
     skip_mt_annotation
-    skip_mt_calling
+    skip_mt_snv_calling
     skip_mt_subsample
+    skip_mt_sv_calling
     skip_ngsbits
     skip_peddy
     skip_repeat_annotation
@@ -534,7 +535,7 @@ workflow RAREDISEASE {
 
     // Removes vcfanno resource with empty records to keep vcfanno from crashing on those files
     ch_vcfanno_toml_final = ch_vcfanno_toml
-    def annotation_uses_vcfanno = !skip_snv_annotation || (!skip_mt_annotation && (val_run_mt || skip_mt_calling))
+    def annotation_uses_vcfanno = !skip_snv_annotation || (!skip_mt_annotation && (val_run_mt || skip_mt_snv_calling))
     if (val_run_vcfanno_db_sanity_check && annotation_uses_vcfanno) {
         ch_all_vcfanno_dbs = ch_vcfanno_resources
             .combine(ch_vcfanno_extra)
@@ -635,7 +636,7 @@ workflow RAREDISEASE {
         ch_rank_snv_vcf = FILTER_ANNOTATE_RANK_SNV.out.vcf
     }
 
-    if (val_run_mt && !skip_mt_calling) {
+    if (val_run_mt && !skip_mt_snv_calling) {
         CALL_MT_SNVS (
             ch_case_info,
             ch_foundin_header,
@@ -655,7 +656,7 @@ workflow RAREDISEASE {
         ch_call_snv_mt_tabix   = CALL_MT_SNVS.out.tbi
         ch_call_snv_mt_vcf     = CALL_MT_SNVS.out.vcf
         ch_call_snv_mt_vcf_tbi = CALL_MT_SNVS.out.vcf_tbi
-    } else if (skip_mt_calling) {
+    } else if (skip_mt_snv_calling) {
         ch_precalled_mt_split = ch_precalled_mt_vcf_tbi.multiMap { meta, vcf, tbi ->
             vcf_tbi: [meta, vcf, tbi]
             vcf: [meta, vcf]
@@ -677,7 +678,7 @@ workflow RAREDISEASE {
     //
     // ANNOTATE MT SNVs
     //
-    if (!skip_mt_annotation && (val_run_mt || skip_mt_calling)) {
+    if (!skip_mt_annotation && (val_run_mt || skip_mt_snv_calling)) {
 
         ch_mt_annotate = ANNOTATE_MT_SNVS (
             ch_cadd_header,
@@ -739,7 +740,7 @@ workflow RAREDISEASE {
             val_mitosalt_split_length])
 
         // CALL_SV only handles nuclear callers; skip it entirely for mito-only analysis,
-        // mirroring how CALL_SV_MT below is gated on val_run_mt.
+        // mirroring how CALL_SV_MT below is gated on val_run_mt && !skip_mt_sv_calling.
         if (!val_analysis_type.equals("mito")) {
             CALL_SV (
                 ch_genome_bwaindex,
@@ -762,7 +763,7 @@ workflow RAREDISEASE {
         }
         ch_saltshaker_vcf = channel.empty()
 
-        if (val_run_mt) {
+        if (val_run_mt && !skip_mt_sv_calling) {
             CALL_SV_MT (
                 ch_mt_bam_bai,
                 ch_case_info,
