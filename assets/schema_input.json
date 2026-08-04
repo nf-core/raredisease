@@ -97,9 +97,9 @@
                 "exists": true
             },
             "type": {
-                "errorMessage": "Precalled VCF type must be one of 'snv', 'sv', 'mt'",
+                "errorMessage": "Precalled VCF type must be one of 'snv', 'sv', 'mt', 'me'",
                 "type": "string",
-                "enum": ["snv", "sv", "mt"]
+                "enum": ["snv", "sv", "mt", "me"]
             },
             "sex": {
                 "anyOf": [

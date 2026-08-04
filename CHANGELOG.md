@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Extend the VCF entry point to a fourth type, `me` [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #TBD](https://github.com/nf-core/raredisease/pull/TBD)
 - Split `skip_mt_calling` into independently-gated `skip_mt_snv_calling` (gates `CALL_MT_SNVS` only, same behavior as before) and `skip_mt_sv_calling` (new tag gating `CALL_SV_MT` - MitoSalt/SaltShaker and the mitodel/MT-deletion script) [issue #950](https://github.com/nf-core/raredisease/issues/950) [PR #954](https://github.com/nf-core/raredisease/pull/954)
 - Extract the clinical-set-filter → CSQ/PLI-annotate → (proband-filter) → rank sequence, previously duplicated once each for SNV/MT/SV/ME in `raredisease.nf`, into a new `FILTER_ANNOTATE_RANK` subworkflow called four times under aliases [issue #952](https://github.com/nf-core/raredisease/issues/952) [PR #953](https://github.com/nf-core/raredisease/pull/953)
 - Split mitochondrial SV calling out of `CALL_STRUCTURAL_VARIANTS` into its own top-level `CALL_SV` (nuclear-only) and `CALL_SV_MT` (unchanged) subworkflows called independently from `raredisease.nf`, with the final nuclear+MT SVDB merge moved to the top level; matches how `CALL_SNV`/`CALL_MT_SNVS` are already split; behavior-preserving refactor [issue #948](https://github.com/nf-core/raredisease/issues/948) [PR #951](https://github.com/nf-core/raredisease/pull/951)

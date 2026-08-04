@@ -193,6 +193,7 @@ workflow RAREDISEASE {
     val_exclude_alt
     val_extract_alignments
     val_genome
+    val_has_precalled_me
     val_has_precalled_mt
     val_has_precalled_snv
     val_has_precalled_sv
@@ -338,11 +339,19 @@ workflow RAREDISEASE {
         .filter { _case_info, precalled -> precalled.mt }
         .map { case_info, precalled -> [case_info, precalled.mt[0], precalled.mt[1]] }
 
+    ch_precalled_me_vcf = ch_case_info_precalled
+        .filter { _case_info, precalled -> precalled.me }
+        .map { case_info, precalled -> [case_info, precalled.me[0]] }
+
+    ch_precalled_me_tbi = ch_case_info_precalled
+        .filter { _case_info, precalled -> precalled.me }
+        .map { case_info, precalled -> [case_info, precalled.me[1]] }
+
     // A case with any precalled VCF has zero fastq/bam/cram rows (enforced by validateNoMixedCaseInput),
     // so no alignment data exists at all for it - used to gate BAM-only auxiliary steps that have no
     // precalled substitute (SMN copy number, contamination check, mobile elements/repeat expansion
     // calling from BAM, vcf2cytosure)
-    def has_any_precalled_vcf = val_has_precalled_snv || val_has_precalled_sv || val_has_precalled_mt
+    def has_any_precalled_vcf = val_has_precalled_snv || val_has_precalled_sv || val_has_precalled_mt || val_has_precalled_me
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
@@ -881,37 +890,44 @@ workflow RAREDISEASE {
         )
         ch_call_mobile_elements_vcf = CALL_MOBILE_ELEMENTS.out.vcf
         ch_call_mobile_elements_tbi = CALL_MOBILE_ELEMENTS.out.tbi
+    } else if (skip_me_calling) {
+        ch_call_mobile_elements_vcf = ch_precalled_me_vcf
+        ch_call_mobile_elements_tbi = ch_precalled_me_tbi
+    }
 
-        if (!skip_me_annotation) {
-            ch_me_annotate = ANNOTATE_MOBILE_ELEMENTS(
-                ch_genome_dictionary,
-                ch_genome_fasta,
-                ch_me_svdb_resources,
-                CALL_MOBILE_ELEMENTS.out.vcf,
-                ch_vep_cache,
-                val_genome,
-                val_vep_cache_version,
-                ch_vep_extra_files
-            )
+    if (!skip_me_annotation && val_analysis_type.equals("wgs")) {
 
-            FILTER_ANNOTATE_RANK_ME(
-                ch_hgnc_ids,
-                ch_pedfile,
-                ch_reduced_penetrance,
-                ch_score_config_sv,
-                ch_variant_consequences_sv,
-                ch_me_annotate.vcf_ann,
-                false,
-                true,
-                false,
-                false,
-                skip_generate_clinical_set,
-                ""
-            )
-            ch_ann_csq_pli_me_vcf_ann = FILTER_ANNOTATE_RANK_ME.out.vcf
-            ch_ann_csq_pli_me_tbi     = FILTER_ANNOTATE_RANK_ME.out.tbi
-
+        if (skip_me_calling && !val_has_precalled_me) {
+            log.warn("ME annotation is enabled but ME calling is skipped and no precalled VCF is available yet - no mobile elements will be annotated.")
         }
+
+        ch_me_annotate = ANNOTATE_MOBILE_ELEMENTS(
+            ch_genome_dictionary,
+            ch_genome_fasta,
+            ch_me_svdb_resources,
+            ch_call_mobile_elements_vcf,
+            ch_vep_cache,
+            val_genome,
+            val_vep_cache_version,
+            ch_vep_extra_files
+        )
+
+        FILTER_ANNOTATE_RANK_ME(
+            ch_hgnc_ids,
+            ch_pedfile,
+            ch_reduced_penetrance,
+            ch_score_config_sv,
+            ch_variant_consequences_sv,
+            ch_me_annotate.vcf_ann,
+            false,
+            true,
+            false,
+            false,
+            skip_generate_clinical_set,
+            ""
+        )
+        ch_ann_csq_pli_me_vcf_ann = FILTER_ANNOTATE_RANK_ME.out.vcf
+        ch_ann_csq_pli_me_tbi     = FILTER_ANNOTATE_RANK_ME.out.tbi
     }
 
 /*
