@@ -61,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Fix `MERGE_NUCLEAR_AND_MT_SVS` crashing with "If priority is used, one tag per VCF is needed" whenever both nuclear and mitochondrial SV calling ran: `CALL_SV` no longer pre-merges the nuclear caller VCFs (tiddit/manta/gcnvcaller/cnvnator) into one file before the top-level merge; it now emits the individual per-caller VCFs so the single merge in `raredisease.nf` always has one priority tag per input VCF. Regression from the `CALL_SV`/`CALL_SV_MT` split in [issue #948](https://github.com/nf-core/raredisease/issues/948) [PR #959](https://github.com/nf-core/raredisease/pull/959)
 - Speed up and stabilise the call_snv_deepvariant/call_snv (DeepVariant) subworkflow tests by using small chr22 fixtures, adding 2-sample coverage for GLnexus joint genotyping, and restoring the deterministic variantsMD5 snapshot assertion. [#918](https://github.com/nf-core/raredisease/pull/918)
 - Emit an error at startup when `vep_filters_scout_fmt` or `vep_filters` contains no records (headers or empty lines only), which would otherwise cause the clinical set to silently contain 0 variants [#913](https://github.com/nf-core/raredisease/pull/913)
 - Add missing CADD 1.7.3 module update to the v3.0.0 `Tool updates` table in `CHANGELOG.md` [issue #888](https://github.com/nf-core/raredisease/issues/888) [PR #919](https://github.com/nf-core/raredisease/pull/919)
