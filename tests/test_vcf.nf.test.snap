@@ -1,7 +1,7 @@
 {
     "-profile test_vcf": {
         "content": [
-            121,
+            128,
             {
                 "BCFTOOLS_CONCAT": {
                     "bcftools": 1.22
@@ -134,6 +134,10 @@
                 "SAMTOOLS_FAIDX_MT": {
                     "samtools": "1.22.1"
                 },
+                "STRANGER": {
+                    "stranger": "0.10.0",
+                    "tabix": 1.23
+                },
                 "SVDB_QUERY_DB": {
                     "svdb": "2.8.4"
                 },
@@ -246,10 +250,13 @@
                 "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz",
                 "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz.tbi",
                 "rank_and_filter/justhusky_sv_ranked_research.vcf.gz",
-                "rank_and_filter/justhusky_sv_ranked_research.vcf.gz.tbi"
+                "rank_and_filter/justhusky_sv_ranked_research.vcf.gz.tbi",
+                "repeat_expansions",
+                "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz",
+                "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz.tbi"
             ]
         ],
-        "timestamp": "2026-08-04T13:58:44.360185287",
+        "timestamp": "2026-08-05T11:54:49.165516299",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"

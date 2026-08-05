@@ -195,6 +195,7 @@ workflow RAREDISEASE {
     val_genome
     val_has_precalled_me
     val_has_precalled_mt
+    val_has_precalled_repeat
     val_has_precalled_snv
     val_has_precalled_sv
     val_heavy_strand_origin_end
@@ -270,6 +271,7 @@ workflow RAREDISEASE {
     ch_call_repeat_expansions_expansionhunter_bai = channel.empty()
     ch_call_repeat_expansions_expansionhunter_bam = channel.empty()
     ch_call_repeat_expansions_expansionhunter_vcf = channel.empty()
+    ch_call_repeat_expansions_vcf                 = channel.empty()
     ch_call_repeat_expansions_stranger_tbi        = channel.empty()
     ch_call_repeat_expansions_stranger_vcf        = channel.empty()
     ch_call_mobile_elements_tbi         = channel.empty()
@@ -347,11 +349,15 @@ workflow RAREDISEASE {
         .filter { _case_info, precalled -> precalled.me }
         .map { case_info, precalled -> [case_info, precalled.me[1]] }
 
+    ch_precalled_repeat_vcf = ch_case_info_precalled
+        .filter { _case_info, precalled -> precalled.repeat }
+        .map { case_info, precalled -> [case_info, precalled.repeat[0]] }
+
     // A case with any precalled VCF has zero fastq/bam/cram rows (enforced by validateNoMixedCaseInput),
     // so no alignment data exists at all for it - used to gate BAM-only auxiliary steps that have no
     // precalled substitute (SMN copy number, contamination check, mobile elements/repeat expansion
     // calling from BAM, vcf2cytosure)
-    def has_any_precalled_vcf = val_has_precalled_snv || val_has_precalled_sv || val_has_precalled_mt || val_has_precalled_me
+    def has_any_precalled_vcf = val_has_precalled_snv || val_has_precalled_sv || val_has_precalled_mt || val_has_precalled_me || val_has_precalled_repeat
 
     //
     // Input QC (ch_reads will be empty if fastq input isn't provided so FASTQC won't run if input is not fastq)
@@ -524,15 +530,23 @@ workflow RAREDISEASE {
         ch_call_repeat_expansions_expansionhunter_bai = CALL_REPEAT_EXPANSIONS.out.expansionhunter_bai
         ch_call_repeat_expansions_expansionhunter_bam = CALL_REPEAT_EXPANSIONS.out.expansionhunter_bam
         ch_call_repeat_expansions_expansionhunter_vcf = CALL_REPEAT_EXPANSIONS.out.expansionhunter_vcf
+        ch_call_repeat_expansions_vcf                 = CALL_REPEAT_EXPANSIONS.out.vcf
+    } else if (skip_repeat_calling) {
+        ch_call_repeat_expansions_vcf = ch_precalled_repeat_vcf
+    }
 
-        if (!skip_repeat_annotation) {
-            STRANGER (
-                CALL_REPEAT_EXPANSIONS.out.vcf,
-                ch_variant_catalog
-            )
-            ch_call_repeat_expansions_stranger_vcf = STRANGER.out.vcf
-            ch_call_repeat_expansions_stranger_tbi = STRANGER.out.tbi
+    if (!skip_repeat_annotation && val_analysis_type.equals("wgs")) {
+
+        if (skip_repeat_calling && !val_has_precalled_repeat) {
+            log.warn("Repeat expansion annotation is enabled but repeat calling is skipped and no precalled VCF is available yet - no repeat expansions will be annotated.")
         }
+
+        STRANGER (
+            ch_call_repeat_expansions_vcf,
+            ch_variant_catalog
+        )
+        ch_call_repeat_expansions_stranger_vcf = STRANGER.out.vcf
+        ch_call_repeat_expansions_stranger_tbi = STRANGER.out.tbi
     }
 
 
