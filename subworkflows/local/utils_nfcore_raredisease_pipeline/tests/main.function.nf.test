@@ -90,7 +90,8 @@ nextflow_function {
                 { assert function.result.snv == ['snv.vcf.gz', 'snv.vcf.gz.tbi'] },
                 { assert function.result.sv  == ['sv.vcf.gz', 'sv.vcf.gz.tbi'] },
                 { assert function.result.mt  == null },
-                { assert function.result.me  == null }
+                { assert function.result.me  == null },
+                { assert function.result.repeat == null }
             )
         }
     }
@@ -113,6 +114,28 @@ nextflow_function {
             assertAll(
                 { assert function.success },
                 { assert function.result.me == ['me.vcf.gz', 'me.vcf.gz.tbi'] }
+            )
+        }
+    }
+
+    test("extractPrecalledVcfs - includes repeat") {
+
+        function "extractPrecalledVcfs"
+
+        when {
+            function {
+                """
+                input[0] = [
+                    [[data_type: 'repeat_vcf'], ['repeat.vcf.gz', 'repeat.vcf.gz.tbi']]
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert function.success },
+                { assert function.result.repeat == ['repeat.vcf.gz', 'repeat.vcf.gz.tbi'] }
             )
         }
     }
@@ -162,7 +185,7 @@ nextflow_function {
 
         when {
             params {
-                input = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_all_vcf_with_me.csv"
+                input = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_all_vcf_full.csv"
             }
         }
 
@@ -179,6 +202,38 @@ nextflow_function {
         when {
             params {
                 input = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf_no_me.csv"
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == false
+        }
+    }
+
+    test("hasPrecalledRepeatVcf - present") {
+
+        function "hasPrecalledRepeatVcf"
+
+        when {
+            params {
+                input = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_all_vcf_full.csv"
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == true
+        }
+    }
+
+    test("hasPrecalledRepeatVcf - missing from partial samplesheet") {
+
+        function "hasPrecalledRepeatVcf"
+
+        when {
+            params {
+                input = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf_no_repeat.csv"
             }
         }
 
@@ -226,7 +281,7 @@ nextflow_function {
 
         when {
             params {
-                input         = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_all_vcf_with_me.csv"
+                input         = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_all_vcf_full.csv"
                 analysis_type = 'wgs'
             }
         }
@@ -280,7 +335,7 @@ nextflow_function {
             params {
                 input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf.csv"
                 analysis_type     = 'wgs'
-                skip_subworkflows = 'mt_snv_calling,me_calling'
+                skip_subworkflows = 'mt_snv_calling,me_calling,repeat_calling'
             }
         }
 
@@ -334,7 +389,7 @@ nextflow_function {
             params {
                 input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf_no_me.csv"
                 analysis_type     = 'wgs'
-                skip_subworkflows = 'me_calling'
+                skip_subworkflows = 'me_calling,repeat_calling'
             }
         }
 
@@ -350,6 +405,60 @@ nextflow_function {
         when {
             params {
                 input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf_no_me.csv"
+                analysis_type     = 'wes'
+                run_mt_for_wes    = false
+            }
+        }
+
+        then {
+            assert function.success
+        }
+    }
+
+    test("validatePrecalledVcfCoverage - repeat uncovered and not skipped on wgs, errors") {
+
+        function "validatePrecalledVcfCoverage"
+
+        when {
+            params {
+                input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf_no_repeat.csv"
+                analysis_type     = 'wgs'
+                skip_subworkflows = ''
+            }
+        }
+
+        then {
+            assertAll(
+                { assert function.failed },
+                { assert function.stdout.any { it.contains("repeat") } }
+            )
+        }
+    }
+
+    test("validatePrecalledVcfCoverage - repeat uncovered but explicitly skipped, no error") {
+
+        function "validatePrecalledVcfCoverage"
+
+        when {
+            params {
+                input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf_no_repeat.csv"
+                analysis_type     = 'wgs'
+                skip_subworkflows = 'repeat_calling'
+            }
+        }
+
+        then {
+            assert function.success
+        }
+    }
+
+    test("validatePrecalledVcfCoverage - repeat not applicable on wes, no error") {
+
+        function "validatePrecalledVcfCoverage"
+
+        when {
+            params {
+                input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf_no_repeat.csv"
                 analysis_type     = 'wes'
                 run_mt_for_wes    = false
             }
