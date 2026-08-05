@@ -366,6 +366,8 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 #### Expansion Hunter
 
+> **NB**: This section is skipped if a precalled repeat-expansion VCF is supplied in the samplesheet (see [Samplesheet for VCF file input](usage.md#samplesheet-for-vcf-file-input)); the supplied VCF is used directly for Stranger annotation instead, and no ExpansionHunter output is produced.
+
 [Expansion Hunter](https://github.com/Illumina/ExpansionHunter) aims to estimate sizes of repeat sequences by performing a targeted search through alignments that span, flank, and are fully contained in each repeat. The files generated are ready to be used with [REViewer](https://github.com/Illumina/REViewer).
 
 <details markdown="1">

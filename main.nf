@@ -22,6 +22,7 @@ include { channelFromPathWithMeta } from './subworkflows/local/utils_nfcore_rare
 include { channelFromSamplesheet  } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { hasPrecalledMeVcf       } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { hasPrecalledMtVcf       } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { hasPrecalledRepeatVcf   } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { hasPrecalledSnvVcf      } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { hasPrecalledSvVcf       } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { parseSkipList           } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
@@ -363,6 +364,7 @@ workflow NFCORE_RAREDISEASE {
     val_has_precalled_sv       = hasPrecalledSvVcf()
     val_has_precalled_mt       = hasPrecalledMtVcf()
     val_has_precalled_me       = hasPrecalledMeVcf()
+    val_has_precalled_repeat   = hasPrecalledRepeatVcf()
     skip_me_annotation         = parseSkipList(val_skip_subworkflows, 'me_annotation')
     skip_me_calling            = parseSkipList(val_skip_subworkflows, 'me_calling') || val_has_precalled_me
     skip_mt_annotation         = parseSkipList(val_skip_subworkflows, 'mt_annotation')
@@ -370,7 +372,7 @@ workflow NFCORE_RAREDISEASE {
     skip_mt_subsample          = parseSkipList(val_skip_subworkflows, 'mt_subsample')
     skip_mt_sv_calling         = parseSkipList(val_skip_subworkflows, 'mt_sv_calling')
     skip_repeat_annotation     = parseSkipList(val_skip_subworkflows, 'repeat_annotation')
-    skip_repeat_calling        = parseSkipList(val_skip_subworkflows, 'repeat_calling')
+    skip_repeat_calling        = parseSkipList(val_skip_subworkflows, 'repeat_calling') || val_has_precalled_repeat
     skip_snv_annotation        = parseSkipList(val_skip_subworkflows, 'snv_annotation')
     skip_snv_calling           = parseSkipList(val_skip_subworkflows, 'snv_calling') || val_has_precalled_snv
     skip_sv_annotation         = parseSkipList(val_skip_subworkflows, 'sv_annotation')
@@ -533,6 +535,7 @@ workflow NFCORE_RAREDISEASE {
         val_genome,
         val_has_precalled_me,
         val_has_precalled_mt,
+        val_has_precalled_repeat,
         val_has_precalled_snv,
         val_has_precalled_sv,
         val_heavy_strand_origin_end,

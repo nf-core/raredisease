@@ -181,7 +181,7 @@ workflow PIPELINE_INITIALISATION {
     align          = ch_samplesheet_by_type.align // channel: [ val(meta), [ path(bam/cram), path(bai/crai) ] ]
     samples        = ch_samples                   // channel: [ val(meta) ]
     case_info      = ch_case_info                 // channel: [ val(case_info) ]
-    precalled_vcfs = ch_precalled_vcfs             // channel: [ val([snv:[vcf,tbi]|null, sv:[...]|null, mt:[...]|null, me:[...]|null]) ]
+    precalled_vcfs = ch_precalled_vcfs             // channel: [ val([snv:[vcf,tbi]|null, sv:[...]|null, mt:[...]|null, me:[...]|null, repeat:[...]|null]) ]
     versions       = ch_versions                  // channel: [ path(versions) ]
 }
 
@@ -285,7 +285,7 @@ def boolean hasSpringInput() {
     return file(params.input).readLines().any { line -> line.contains('.spring') }
 }
 
-// Checks whether any samplesheet row has its 'type' column set to the given precalled-VCF type (snv/sv/mt/me)
+// Checks whether any samplesheet row has its 'type' column set to the given precalled-VCF type (snv/sv/mt/me/repeat)
 def boolean hasPrecalledVcfOfType(String type) {
     def lines = file(params.input).readLines()
     if (!lines) {
@@ -319,10 +319,14 @@ def boolean hasPrecalledMeVcf() {
     return hasPrecalledVcfOfType('me')
 }
 
+def boolean hasPrecalledRepeatVcf() {
+    return hasPrecalledVcfOfType('repeat')
+}
+
 // True whenever the case is fully precalled for at least one type - since validateNoMixedCaseInput
 // guarantees such a case has zero fastq/bam/cram rows, this also means no alignment data exists at all
 def boolean hasAnyPrecalledVcf() {
-    return hasPrecalledSnvVcf() || hasPrecalledSvVcf() || hasPrecalledMtVcf() || hasPrecalledMeVcf()
+    return hasPrecalledSnvVcf() || hasPrecalledSvVcf() || hasPrecalledMtVcf() || hasPrecalledMeVcf() || hasPrecalledRepeatVcf()
 }
 
 def generateReadGroupLine(file, meta, params) {
@@ -382,7 +386,7 @@ def validateNoMixedCaseInput(List rows) {
 
 // Function to collect precalled vcf/tbi pairs per variant type from rows tagged with a "*_vcf" data_type
 def extractPrecalledVcfs(List rows) {
-    def precalled = [snv: null, sv: null, mt: null, me: null]
+    def precalled = [snv: null, sv: null, mt: null, me: null, repeat: null]
     rows.each { meta, files ->
         def type = meta.data_type - "_vcf"
         if (precalled[type] && precalled[type] != files) {
@@ -405,15 +409,17 @@ def validateInputParameters() {
 // relevant type must either have a precalled VCF or have its calling explicitly skipped, otherwise it would
 // silently run calling with no input data
 def validatePrecalledVcfCoverage() {
-    def has_snv = hasPrecalledSnvVcf()
-    def has_sv  = hasPrecalledSvVcf()
-    def has_mt  = hasPrecalledMtVcf()
-    def has_me  = hasPrecalledMeVcf()
-    if (!has_snv && !has_sv && !has_mt && !has_me) {
+    def has_snv    = hasPrecalledSnvVcf()
+    def has_sv     = hasPrecalledSvVcf()
+    def has_mt     = hasPrecalledMtVcf()
+    def has_me     = hasPrecalledMeVcf()
+    def has_repeat = hasPrecalledRepeatVcf()
+    if (!has_snv && !has_sv && !has_mt && !has_me && !has_repeat) {
         return
     }
-    def run_mt  = params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes
-    def run_me  = params.analysis_type.equals("wgs")
+    def run_mt     = params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes
+    def run_me     = params.analysis_type.equals("wgs")
+    def run_repeat = params.analysis_type.equals("wgs")
     def missing = []
     if (!has_snv && !parseSkipList(params.skip_subworkflows, 'snv_calling')) {
         missing << 'snv'
@@ -426,6 +432,9 @@ def validatePrecalledVcfCoverage() {
     }
     if (run_me && !has_me && !parseSkipList(params.skip_subworkflows, 'me_calling')) {
         missing << 'me'
+    }
+    if (run_repeat && !has_repeat && !parseSkipList(params.skip_subworkflows, 'repeat_calling')) {
+        missing << 'repeat'
     }
     if (missing) {
         error("The samplesheet supplies a precalled VCF for at least one variant type, making this a fully-precalled case with no fastq/bam/cram input for calling. But no precalled VCF was supplied for: ${missing.join(', ')}. Either add a precalled VCF for ${missing.join(', ')}, or skip that calling explicitly via --skip_subworkflows.")
@@ -492,9 +501,10 @@ def checkRequiredParameters(params) {
     // These are all BAM/alignment-dependent auxiliary steps that are also skipped at runtime whenever
     // the case is fully precalled (no alignment data exists at all), even though that isn't reflected
     // in --skip_tools/--skip_subworkflows, so their extra params shouldn't be forced mandatory either.
-    // me_annotation is deliberately excluded: like snv/sv/mt_annotation, it has its own precalled
-    // substitute and stays mandatory unless explicitly skipped, regardless of whether calling ran.
-    def alignmentDependentConditions = ['repeat_calling', 'repeat_annotation', 'me_calling', 'gens', 'germlinecnvcaller']
+    // me_annotation/repeat_annotation are deliberately excluded: like snv/sv/mt_annotation, they have
+    // their own precalled substitute and stay mandatory unless explicitly skipped, regardless of
+    // whether calling ran.
+    def alignmentDependentConditions = ['repeat_calling', 'me_calling', 'gens', 'germlinecnvcaller']
     dynamicRequirements.each { condition, paramsList ->
         def auto_skipped = condition in alignmentDependentConditions && hasAnyPrecalledVcf()
         if (!all_skips.split(',').contains(condition) && !auto_skipped) {

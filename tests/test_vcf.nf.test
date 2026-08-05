@@ -29,6 +29,7 @@ nextflow_pipeline {
                 { assert !versions_yml.contains("CNVNATOR_CALL") },
                 { assert !versions_yml.contains("GATK4_MUTECT2_MT") },
                 { assert !versions_yml.contains("RETROSEQ") },
+                { assert !versions_yml.contains("EXPANSIONHUNTER") },
                 // GENS/germlinecnvcaller are already moot here without any --skip_tools override:
                 // GENS is gated on !skip_snv_calling, and germlinecnvcaller only affects SV-caller
                 // priority inside CALL_STRUCTURAL_VARIANTS, which is skipped entirely
@@ -39,6 +40,7 @@ nextflow_pipeline {
                 { assert versions_yml.contains("ENSEMBLVEP_MT") },
                 { assert versions_yml.contains("ENSEMBLVEP_ME") },
                 { assert versions_yml.contains("GENMOD_SCORE") },
+                { assert versions_yml.contains("STRANGER") },
                 { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
@@ -59,10 +61,10 @@ nextflow_pipeline {
             params {
                 outdir            = "$outputDir"
                 input             = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/testdata/samplesheet_vcf_mixed_invalid.csv'
-                // This fixture predates the `me` type and has no me row; skip it explicitly so
-                // this test still isolates the mixed-input error rather than tripping the
-                // separate "missing me coverage" validation first.
-                skip_subworkflows = 'me_calling'
+                // This fixture predates the `me`/`repeat` types and has no me/repeat rows; skip them
+                // explicitly so this test still isolates the mixed-input error rather than tripping
+                // the separate "missing me/repeat coverage" validation first.
+                skip_subworkflows = 'me_calling,repeat_calling'
             }
         }
 

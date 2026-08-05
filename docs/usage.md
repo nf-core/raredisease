@@ -178,23 +178,24 @@ The nf-core/raredisease pipeline can also accept precalled, case-level VCF files
 | `sample` | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. |
 | `vcf`    | Absolute path to a bgzipped, precalled VCF file (`.vcf.gz`).                                                  |
 | `tbi`    | Absolute path to the tabix index of the VCF file (`.vcf.gz.tbi`).                                             |
-| `type`   | The variant type contained in the VCF. One of `snv`, `sv`, `mt`, or `me`.                                     |
+| `type`   | The variant type contained in the VCF. One of `snv`, `sv`, `mt`, `me`, or `repeat`.                           |
 
-Each precalled VCF must contain only the variant type it declares in `type`: a nuclear (non-mitochondrial) VCF for `snv`, an MT-only VCF for `mt`, an SVDB-merged structural variant VCF for `sv`, and an SVDB-merged mobile-element VCF (matching `CALL_MOBILE_ELEMENTS` output) for `me`. Since a precalled VCF represents the whole case (it's already jointly called across the family, not a single sample), parents and other unaffected relatives are referenced purely through the existing `paternal_id`/`maternal_id` columns on the proband's row(s) and never get their own samplesheet row — they're assumed to already be genotyped inside the supplied VCF.
+Each precalled VCF must contain only the variant type it declares in `type`: a nuclear (non-mitochondrial) VCF for `snv`, an MT-only VCF for `mt`, an SVDB-merged structural variant VCF for `sv`, an SVDB-merged mobile-element VCF (matching `CALL_MOBILE_ELEMENTS` output) for `me`, and an SVDB-merged repeat-expansion VCF (matching `CALL_REPEAT_EXPANSIONS` output, before Stranger annotation) for `repeat`. Since a precalled VCF represents the whole case (it's already jointly called across the family, not a single sample), parents and other unaffected relatives are referenced purely through the existing `paternal_id`/`maternal_id` columns on the proband's row(s) and never get their own samplesheet row — they're assumed to already be genotyped inside the supplied VCF.
 
-Below is an example samplesheet for a trio where all four variant types have been precalled for the case. Note that `father` and `mother` are referenced by ID only and never appear as their own rows:
+Below is an example samplesheet for a trio where all five variant types have been precalled for the case. Note that `father` and `mother` are referenced by ID only and never appear as their own rows:
 
-| sample  | vcf                | tbi                    | type | sex | phenotype | paternal_id | maternal_id | case_id |
-| ------- | ------------------ | ---------------------- | ---- | --- | --------- | ----------- | ----------- | ------- |
-| proband | proband_snv.vcf.gz | proband_snv.vcf.gz.tbi | snv  | 1   | 2         | father      | mother      | fam_1   |
-| proband | proband_sv.vcf.gz  | proband_sv.vcf.gz.tbi  | sv   | 1   | 2         | father      | mother      | fam_1   |
-| proband | proband_mt.vcf.gz  | proband_mt.vcf.gz.tbi  | mt   | 1   | 2         | father      | mother      | fam_1   |
-| proband | proband_me.vcf.gz  | proband_me.vcf.gz.tbi  | me   | 1   | 2         | father      | mother      | fam_1   |
+| sample  | vcf                   | tbi                       | type   | sex | phenotype | paternal_id | maternal_id | case_id |
+| ------- | --------------------- | ------------------------- | ------ | --- | --------- | ----------- | ----------- | ------- |
+| proband | proband_snv.vcf.gz    | proband_snv.vcf.gz.tbi    | snv    | 1   | 2         | father      | mother      | fam_1   |
+| proband | proband_sv.vcf.gz     | proband_sv.vcf.gz.tbi     | sv     | 1   | 2         | father      | mother      | fam_1   |
+| proband | proband_mt.vcf.gz     | proband_mt.vcf.gz.tbi     | mt     | 1   | 2         | father      | mother      | fam_1   |
+| proband | proband_me.vcf.gz     | proband_me.vcf.gz.tbi     | me     | 1   | 2         | father      | mother      | fam_1   |
+| proband | proband_repeat.vcf.gz | proband_repeat.vcf.gz.tbi | repeat | 1   | 2         | father      | mother      | fam_1   |
 
 **What's possible:**
 
-- Supplying precalled VCFs for all variant types applicable to the case (`snv` + `sv` + `mt` + `me` for WGS, `snv` + `sv` + `mt` for mito, or just `snv` + `sv` for WES without `--run_mt_for_wes`) to run annotation/ranking only, with no calling at all.
-- Supplying precalled VCFs for only a subset of types, as long as calling for the remaining type(s) is explicitly disabled with `--skip_subworkflows`. For example, a WGS case with only `snv`/`sv` VCFs needs `--skip_subworkflows mt_snv_calling,me_calling` added on the command line, since MT and mobile-element calling would otherwise run by default for WGS but there's no alignment data to call them from.
+- Supplying precalled VCFs for all variant types applicable to the case (`snv` + `sv` + `mt` + `me` + `repeat` for WGS, `snv` + `sv` + `mt` for mito, or just `snv` + `sv` for WES without `--run_mt_for_wes`) to run annotation/ranking only, with no calling at all.
+- Supplying precalled VCFs for only a subset of types, as long as calling for the remaining type(s) is explicitly disabled with `--skip_subworkflows`. For example, a WGS case with only `snv`/`sv` VCFs needs `--skip_subworkflows mt_snv_calling,me_calling,repeat_calling` added on the command line, since MT, mobile-element, and repeat-expansion calling would otherwise run by default for WGS but there's no alignment data to call them from.
 - Mixing precalled and freshly-called cases across **different** runs/samplesheets — the restrictions below apply per case, not pipeline-wide.
 
 **What's not possible** (the pipeline validates these and errors out with a specific message rather than silently producing empty output):
@@ -202,7 +203,7 @@ Below is an example samplesheet for a trio where all four variant types have bee
 - Mixing `vcf` rows with `fastq`/`spring`/`bam`/`cram` rows for the **same case**. A row in the samplesheet may only specify one data type (`fastq`, `spring`, `bam`, `cram`, or `vcf`) — mixing, for example, `fastq_1` and `vcf` in the same row is rejected by the schema — and a case as a whole must be either fully precalled or fully processed from raw/aligned reads, never both.
 - Leaving a variant type uncovered. If a case has any precalled VCF, every other type that's still relevant to the analysis must either also have a precalled VCF or have its calling explicitly skipped via `--skip_subworkflows` — the pipeline checks this upfront and errors out immediately, before any channels are built, naming exactly which type(s) are missing.
 - Supplying two different VCFs for the same `type` within the same case (conflicting precalled VCFs for one case).
-- A `type` value other than `snv`, `sv`, `mt`, or `me` (schema-enforced). Note there is no separate `mt_sv` type: nuclear and mitochondrial SV calls (MitoSalt/SaltShaker) are merged into one VCF before annotation/ranking, so a `sv` VCF is expected to already include mitochondrial SV calls if you want them represented — merge them in yourself before supplying it.
+- A `type` value other than `snv`, `sv`, `mt`, `me`, or `repeat` (schema-enforced). Note there is no separate `mt_sv` type: nuclear and mitochondrial SV calls (MitoSalt/SaltShaker) are merged into one VCF before annotation/ranking, so a `sv` VCF is expected to already include mitochondrial SV calls if you want them represented — merge them in yourself before supplying it.
 
 #### Reference files and parameters
 

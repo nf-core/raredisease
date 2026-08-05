@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Extend the VCF entry point to a fifth type, `repeat` [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #957](https://github.com/nf-core/raredisease/pull/957)
 - Extend the VCF entry point to a fourth type, `me` [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #955](https://github.com/nf-core/raredisease/pull/955)
 - Split `skip_mt_calling` into independently-gated `skip_mt_snv_calling` (gates `CALL_MT_SNVS` only, same behavior as before) and `skip_mt_sv_calling` (new tag gating `CALL_SV_MT` - MitoSalt/SaltShaker and the mitodel/MT-deletion script) [issue #950](https://github.com/nf-core/raredisease/issues/950) [PR #954](https://github.com/nf-core/raredisease/pull/954)
 - Extract the clinical-set-filter → CSQ/PLI-annotate → (proband-filter) → rank sequence, previously duplicated once each for SNV/MT/SV/ME in `raredisease.nf`, into a new `FILTER_ANNOTATE_RANK` subworkflow called four times under aliases [issue #952](https://github.com/nf-core/raredisease/issues/952) [PR #953](https://github.com/nf-core/raredisease/pull/953)
