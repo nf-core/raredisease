@@ -576,6 +576,8 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 
 #### Calling mobile elements
 
+> **NB**: This section is skipped if a precalled ME VCF is supplied in the samplesheet (see [Samplesheet for VCF file input](usage.md#samplesheet-for-vcf-file-input)); the supplied VCF is used directly for annotation instead, and no `call_mobile_elements/` output is produced.
+
 Mobile elements are identified from the bam file using [RetroSeq](https://github.com/tk2/RetroSeq) and the indiviual calls are merged to case VCF using SVDB.
 
 <details markdown="1">

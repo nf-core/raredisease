@@ -20,6 +20,7 @@ include { CREATE_PEDIGREE_FILE    } from './modules/local/create_pedigree_file'
 include { channelFromPath         } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { channelFromPathWithMeta } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { channelFromSamplesheet  } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { hasPrecalledMeVcf       } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { hasPrecalledMtVcf       } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { hasPrecalledSnvVcf      } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
 include { hasPrecalledSvVcf       } from './subworkflows/local/utils_nfcore_raredisease_pipeline'
@@ -361,8 +362,9 @@ workflow NFCORE_RAREDISEASE {
     val_has_precalled_snv      = hasPrecalledSnvVcf()
     val_has_precalled_sv       = hasPrecalledSvVcf()
     val_has_precalled_mt       = hasPrecalledMtVcf()
+    val_has_precalled_me       = hasPrecalledMeVcf()
     skip_me_annotation         = parseSkipList(val_skip_subworkflows, 'me_annotation')
-    skip_me_calling            = parseSkipList(val_skip_subworkflows, 'me_calling')
+    skip_me_calling            = parseSkipList(val_skip_subworkflows, 'me_calling') || val_has_precalled_me
     skip_mt_annotation         = parseSkipList(val_skip_subworkflows, 'mt_annotation')
     skip_mt_snv_calling        = parseSkipList(val_skip_subworkflows, 'mt_snv_calling') || val_has_precalled_mt
     skip_mt_subsample          = parseSkipList(val_skip_subworkflows, 'mt_subsample')
@@ -529,6 +531,7 @@ workflow NFCORE_RAREDISEASE {
         val_exclude_alt,
         val_extract_alignments,
         val_genome,
+        val_has_precalled_me,
         val_has_precalled_mt,
         val_has_precalled_snv,
         val_has_precalled_sv,

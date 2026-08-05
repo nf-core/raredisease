@@ -89,7 +89,30 @@ nextflow_function {
                 { assert function.success },
                 { assert function.result.snv == ['snv.vcf.gz', 'snv.vcf.gz.tbi'] },
                 { assert function.result.sv  == ['sv.vcf.gz', 'sv.vcf.gz.tbi'] },
-                { assert function.result.mt  == null }
+                { assert function.result.mt  == null },
+                { assert function.result.me  == null }
+            )
+        }
+    }
+
+    test("extractPrecalledVcfs - includes me") {
+
+        function "extractPrecalledVcfs"
+
+        when {
+            function {
+                """
+                input[0] = [
+                    [[data_type: 'me_vcf'], ['me.vcf.gz', 'me.vcf.gz.tbi']]
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert function.success },
+                { assert function.result.me == ['me.vcf.gz', 'me.vcf.gz.tbi'] }
             )
         }
     }
@@ -133,6 +156,38 @@ nextflow_function {
         }
     }
 
+    test("hasPrecalledMeVcf - present") {
+
+        function "hasPrecalledMeVcf"
+
+        when {
+            params {
+                input = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_all_vcf_with_me.csv"
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == true
+        }
+    }
+
+    test("hasPrecalledMeVcf - missing from partial samplesheet") {
+
+        function "hasPrecalledMeVcf"
+
+        when {
+            params {
+                input = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf_no_me.csv"
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == false
+        }
+    }
+
     test("hasPrecalledSnvVcf - no vcf rows at all") {
 
         function "hasPrecalledSnvVcf"
@@ -171,7 +226,7 @@ nextflow_function {
 
         when {
             params {
-                input         = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_all_vcf.csv"
+                input         = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_all_vcf_with_me.csv"
                 analysis_type = 'wgs'
             }
         }
@@ -225,7 +280,7 @@ nextflow_function {
             params {
                 input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf.csv"
                 analysis_type     = 'wgs'
-                skip_subworkflows = 'mt_snv_calling'
+                skip_subworkflows = 'mt_snv_calling,me_calling'
             }
         }
 
@@ -241,6 +296,60 @@ nextflow_function {
         when {
             params {
                 input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf.csv"
+                analysis_type     = 'wes'
+                run_mt_for_wes    = false
+            }
+        }
+
+        then {
+            assert function.success
+        }
+    }
+
+    test("validatePrecalledVcfCoverage - me uncovered and not skipped on wgs, errors") {
+
+        function "validatePrecalledVcfCoverage"
+
+        when {
+            params {
+                input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf_no_me.csv"
+                analysis_type     = 'wgs'
+                skip_subworkflows = ''
+            }
+        }
+
+        then {
+            assertAll(
+                { assert function.failed },
+                { assert function.stdout.any { it.contains("me") } }
+            )
+        }
+    }
+
+    test("validatePrecalledVcfCoverage - me uncovered but explicitly skipped, no error") {
+
+        function "validatePrecalledVcfCoverage"
+
+        when {
+            params {
+                input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf_no_me.csv"
+                analysis_type     = 'wgs'
+                skip_subworkflows = 'me_calling'
+            }
+        }
+
+        then {
+            assert function.success
+        }
+    }
+
+    test("validatePrecalledVcfCoverage - me not applicable on wes, no error") {
+
+        function "validatePrecalledVcfCoverage"
+
+        when {
+            params {
+                input             = "${projectDir}/subworkflows/local/utils_nfcore_raredisease_pipeline/tests/samplesheet_partial_vcf_no_me.csv"
                 analysis_type     = 'wes'
                 run_mt_for_wes    = false
             }
