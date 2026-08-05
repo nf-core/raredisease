@@ -598,6 +598,13 @@
                     "description": "Specifies the platform on which the reads were sequenced.",
                     "fa_icon": "fas fa-align-center"
                 },
+                "pre_vep_snv_filter_expression": {
+                    "type": "string",
+                    "default": "INFO/GNOMADAF > 0.70 | INFO/GNOMADAF_popmax > 0.70",
+                    "description": "bcftools expression used to exclude SNVs before VEP annotation.",
+                    "help_text": "Passed as the `--exclude` expression to bcftools view before ENSEMBLVEP_SNV. Set stricter filters to reduce the number of variants processed downstream.",
+                    "fa_icon": "fas fa-filter"
+                },
                 "ngsbits_samplegender_method": {
                     "type": "string",
                     "default": "xy",

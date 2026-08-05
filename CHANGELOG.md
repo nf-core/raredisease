@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Added `pre_vep_snv_filter_expression` parameter to configure the `bcftools view --exclude` expression used to filter SNVs before VEP annotation, instead of hardcoding it in `conf/modules/annotate_genome_snvs.config` [issue #929](https://github.com/nf-core/raredisease/issues/929) [PR #958](https://github.com/nf-core/raredisease/pull/958)
 - Add a VCF entry point: samplesheets can now supply precalled, case-level SNV/SV/MT VCFs directly, skipping the corresponding calling step and feeding straight into annotation and ranking. See `docs/usage.md` for samplesheet details [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #936](https://github.com/nf-core/raredisease/pull/936)
 - Add test coverage for the VCF entry point: function-level nf-test cases for `validateNoMixedCaseInput`/`validatePrecalledVcfCoverage`/`extractPrecalledVcfs`/`hasPrecalledSnvVcf`/`hasPrecalledSvVcf`/`hasPrecalledMtVcf`, and a new `test_vcf` profile/pipeline-level test confirming precalled SNV/SV/MT VCFs correctly skip calling while annotation/ranking still run, plus a negative test for the mixed precalled/raw-input case [issue #261](https://github.com/nf-core/raredisease/issues/261)
   [PR #935](https://github.com/nf-core/raredisease/pull/935)
@@ -72,10 +73,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter | New parameter           |
-| ------------- | ----------------------- |
-|               | contamination_sites     |
-|               | contamination_sites_tbi |
+| Old parameter | New parameter                 |
+| ------------- | ----------------------------- |
+|               | contamination_sites           |
+|               | contamination_sites_tbi       |
+|               | pre_vep_snv_filter_expression |
 
 ### Tool updates
 
