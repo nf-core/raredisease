@@ -1,7 +1,7 @@
 {
     "-profile test_align": {
         "content": [
-            777,
+            775,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -360,10 +360,6 @@
                 "STRANGER": {
                     "stranger": "0.10.0",
                     "tabix": 1.23
-                },
-                "SVDB_MERGE": {
-                    "bcftools": 1.23,
-                    "svdb": "2.8.4"
                 },
                 "SVDB_MERGE_CNVNATOR": {
                     "bcftools": 1.23,
@@ -862,7 +858,7 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-07-30T21:22:33.889071436",
+        "timestamp": "2026-08-05T15:48:49.571093493",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
