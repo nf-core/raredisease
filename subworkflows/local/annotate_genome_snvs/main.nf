@@ -2,20 +2,21 @@
 // A subworkflow to annotate snvs in the genome
 //
 
-include { ANNOTATE_CADD                         } from '../annotate_cadd'
-include { ANNOTATE_RHOCALLVIZ                   } from '../annotate_rhocallviz'
-include { BCFTOOLS_CONCAT                       } from '../../../modules/nf-core/bcftools/concat/main'
-include { BCFTOOLS_ROH                          } from '../../../modules/nf-core/bcftools/roh/main'
-include { BCFTOOLS_VIEW                         } from '../../../modules/nf-core/bcftools/view/main'
-include { CHROMOGRAPH as CHROMOGRAPH_REGIONS    } from '../../../modules/nf-core/chromograph/main'
-include { CHROMOGRAPH as CHROMOGRAPH_SITES      } from '../../../modules/nf-core/chromograph/main'
-include { ENSEMBLVEP_VEP as ENSEMBLVEP_SNV      } from '../../../modules/nf-core/ensemblvep/vep/main'
-include { GATK4_SELECTVARIANTS                  } from '../../../modules/nf-core/gatk4/selectvariants/main'
-include { RHOCALL_ANNOTATE                      } from '../../../modules/nf-core/rhocall/annotate/main'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL } from '../../../modules/nf-core/tabix/bgziptabix/main'
-include { UPD as UPD_REGIONS                    } from '../../../modules/nf-core/upd/main'
-include { UPD as UPD_SITES                      } from '../../../modules/nf-core/upd/main'
-include { VCFANNO                               } from '../../../modules/nf-core/vcfanno/main'
+include { ANNOTATE_CADD                              } from '../annotate_cadd'
+include { ANNOTATE_RHOCALLVIZ                        } from '../annotate_rhocallviz'
+include { BCFTOOLS_CONCAT                            } from '../../../modules/nf-core/bcftools/concat/main'
+include { BCFTOOLS_CONCAT as BCFTOOLS_CONCAT_VCFANNO } from '../../../modules/nf-core/bcftools/concat/main'
+include { BCFTOOLS_ROH                               } from '../../../modules/nf-core/bcftools/roh/main'
+include { BCFTOOLS_VIEW                              } from '../../../modules/nf-core/bcftools/view/main'
+include { CHROMOGRAPH as CHROMOGRAPH_REGIONS         } from '../../../modules/nf-core/chromograph/main'
+include { CHROMOGRAPH as CHROMOGRAPH_SITES           } from '../../../modules/nf-core/chromograph/main'
+include { ENSEMBLVEP_VEP as ENSEMBLVEP_SNV           } from '../../../modules/nf-core/ensemblvep/vep/main'
+include { GATK4_SELECTVARIANTS                       } from '../../../modules/nf-core/gatk4/selectvariants/main'
+include { RHOCALL_ANNOTATE                           } from '../../../modules/nf-core/rhocall/annotate/main'
+include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL      } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { UPD as UPD_REGIONS                         } from '../../../modules/nf-core/upd/main'
+include { UPD as UPD_SITES                           } from '../../../modules/nf-core/upd/main'
+include { VCFANNO                                    } from '../../../modules/nf-core/vcfanno/main'
 
 workflow ANNOTATE_GENOME_SNVS {
 
@@ -105,6 +106,16 @@ workflow ANNOTATE_GENOME_SNVS {
 
         VCFANNO (ch_vcfanno_in, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
 
+        // Concatenate the vcfanno-annotated scatters per sample before pre_vep_snv_filter_expression
+        // trims variants below, so UPD and rhocall-viz (fed from this concat further down) see the
+        // full unfiltered variant set instead of only what's left for VEP.
+        ch_concat_vcfanno_in = VCFANNO.out.vcf
+            .join(VCFANNO.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .map { meta, vcf, tbi -> [meta - meta.subMap('scatterid'), vcf, tbi] }
+            .groupTuple()
+
+        BCFTOOLS_CONCAT_VCFANNO (ch_concat_vcfanno_in)
+
         ch_bcftools_view_in = VCFANNO.out.vcf
             .join(VCFANNO.out.tbi, failOnMismatch:true, failOnDuplicate:true)
 
@@ -153,18 +164,14 @@ workflow ANNOTATE_GENOME_SNVS {
             ch_vep_extra_files
         )
 
-        ch_vep_vcf_out = ENSEMBLVEP_SNV.out.vcf
-            .map { meta, vcf -> [meta - meta.subMap('scatterid'), vcf] }
-        ch_vep_tbi_out = ENSEMBLVEP_SNV.out.tbi
-            .map { meta, tbi -> [meta - meta.subMap('scatterid'), tbi] }
-
-        ch_concat_in = ch_vep_vcf_out
-            .join(ch_vep_tbi_out, failOnMismatch:true)
+        ch_concat_in = ENSEMBLVEP_SNV.out.vcf
+            .join(ENSEMBLVEP_SNV.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+            .map { meta, vcf, tbi -> [meta - meta.subMap('scatterid'), vcf, tbi] }
             .groupTuple()
 
         BCFTOOLS_CONCAT (ch_concat_in)
 
-        ch_upd_in = BCFTOOLS_CONCAT.out.vcf
+        ch_upd_in = BCFTOOLS_CONCAT_VCFANNO.out.vcf
             .flatMap { meta, vcf ->
                 meta.upd_children.collect { upd_sample ->
                     def new_meta = meta + [upd_child: upd_sample, prefix: meta.prefix + "_vcfanno"]
@@ -187,9 +194,8 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_concat_tbi_out = BCFTOOLS_CONCAT.out.tbi
             .map { meta, tbi -> [meta - meta.subMap('prefix'), tbi] }
 
-        ch_vep_ann_index = ch_concat_vcf_out.join(ch_concat_tbi_out, failOnMismatch:true, failOnDuplicate:true)
-        //rhocall_viz
-        ANNOTATE_RHOCALLVIZ(ch_genome_chrsizes, ch_samples, ch_vep_ann_index )
+        ch_vcfanno_ann_index = BCFTOOLS_CONCAT_VCFANNO.out.vcf.join(BCFTOOLS_CONCAT_VCFANNO.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+        ANNOTATE_RHOCALLVIZ(ch_genome_chrsizes, ch_samples, ch_vcfanno_ann_index )
 
     emit:
         bcftools_concat_tbi       = ch_concat_tbi_out                                // channel: [ val(meta), path(tbi) ]
