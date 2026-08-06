@@ -392,16 +392,6 @@
                         "git_sha": "da4b4aa519d032c6689cb7d27c6dda496f657989",
                         "installed_by": ["modules"]
                     },
-                    "rtgtools/format": {
-                        "branch": "master",
-                        "git_sha": "0f04646a9282049b16b3eb35b042e94dfb3340a0",
-                        "installed_by": ["modules"]
-                    },
-                    "rtgtools/vcfeval": {
-                        "branch": "master",
-                        "git_sha": "0f04646a9282049b16b3eb35b042e94dfb3340a0",
-                        "installed_by": ["modules"]
-                    },
                     "saltshaker/call": {
                         "branch": "master",
                         "git_sha": "a61c82ad6d255d555aa6c7f1c3c0e90c3735c830",
