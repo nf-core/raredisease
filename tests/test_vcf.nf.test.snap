@@ -1,9 +1,12 @@
 {
     "-profile test_vcf": {
         "content": [
-            128,
+            129,
             {
                 "BCFTOOLS_CONCAT": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_CONCAT_VCFANNO": {
                     "bcftools": 1.22
                 },
                 "BCFTOOLS_ROH": {
@@ -256,7 +259,7 @@
                 "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz.tbi"
             ]
         ],
-        "timestamp": "2026-08-05T11:54:49.165516299",
+        "timestamp": "2026-08-06T10:45:51.286176975",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
