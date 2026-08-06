@@ -1,7 +1,7 @@
 {
     "-profile test_align": {
         "content": [
-            778,
+            776,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -363,10 +363,6 @@
                 "STRANGER": {
                     "stranger": "0.10.0",
                     "tabix": 1.23
-                },
-                "SVDB_MERGE": {
-                    "bcftools": 1.23,
-                    "svdb": "2.8.4"
                 },
                 "SVDB_MERGE_CNVNATOR": {
                     "bcftools": 1.23,
