@@ -24,6 +24,7 @@ workflow CALL_SNV {
         val_analysis_type             // string:  'wgs', 'wes', or 'mito'
         val_skip_split_multiallelics  // boolean
         val_variant_caller            // string:  'deepvariant' or 'sentieon'
+        ch_custom_glnexus_config // path: [optional]  [ val(meta), path(config_file) ]
 
     main:
         ch_deepvariant_gvcf     = channel.empty()
@@ -47,7 +48,8 @@ workflow CALL_SNV {
                 ch_par_bed,
                 ch_target_bed,
                 val_analysis_type,
-                val_skip_split_multiallelics
+                val_skip_split_multiallelics,
+                ch_custom_glnexus_config,
             )
             ch_deepvariant_vcf    = CALL_SNV_DEEPVARIANT.out.vcf
             ch_deepvariant_tbi    = CALL_SNV_DEEPVARIANT.out.tabix

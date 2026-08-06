@@ -22,6 +22,7 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_target_bed                // channel: [mandatory] [ val(meta), path(bed), path(index) ]
         val_analysis_type            // boolean
         val_skip_split_multiallelics // boolean
+        ch_custom_glnexus_config // path: [optional]  [ val(meta), path(config_file) ]
 
     main:
 
@@ -41,9 +42,10 @@ workflow CALL_SNV_DEEPVARIANT {
             .toSortedList{a, b -> a.name <=> b.name}
             .toList()
 
+         // toList() enables passing [] if ch_custom_glnexus_config is empty
         ch_gvcfs = ch_case_info
             .combine(ch_file_list)
-            .map {meta, gvcf -> return [meta, gvcf, []]}
+            .combine(ch_custom_glnexus_config.map { _meta, config -> config }.toList())
 
         GLNEXUS ( ch_gvcfs, [[:],[]] )
 

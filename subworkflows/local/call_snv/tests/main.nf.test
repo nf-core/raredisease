@@ -55,6 +55,10 @@ nextflow_workflow {
                 input[13] = 'wgs'
                 input[14] = false
                 input[15] = 'deepvariant'
+                input[16] = channel.of([
+                    [ id:'glnexus_config'],
+                    file('../../../assets/glnexus_config_dp1.yml')
+                ])
                 """
             }
         }
@@ -115,6 +119,10 @@ nextflow_workflow {
                 input[13] = 'wgs'
                 input[14] = false
                 input[15] = 'deepvariant'
+                input[16] = channel.of([
+                    [ id:'glnexus_config'],
+                    file('../../../assets/glnexus_config_dp1.yml')
+                ])
                 """
             }
         }

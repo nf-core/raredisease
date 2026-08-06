@@ -55,6 +55,10 @@ nextflow_workflow {
                 input[7] = channel.of([[id:'target'], [], []])
                 input[8] = 'wgs'
                 input[9] = false
+                input[10] = channel.of([
+                    [ id:'glnexus_config'],
+                    file('../../../assets/glnexus_config_dp1.yml')
+                ])
                 """
             }
         }
@@ -110,6 +114,7 @@ nextflow_workflow {
                 input[7] = channel.of([[id:'target'], [], []])
                 input[8] = 'wgs'
                 input[9] = false
+                input[10] = channel.of([[],[]])
                 """
             }
         }
