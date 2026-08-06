@@ -780,11 +780,10 @@ workflow RAREDISEASE {
                 ch_manta_regions,
                 ch_ploidy_model,
                 ch_readcount_intervals,
-                ch_svcaller_priority,
                 skip_germlinecnvcaller,
                 val_analysis_type
             )
-            ch_call_sv_nuclear_vcf = CALL_SV.out.vcf
+            ch_call_sv_nuclear_vcfs = CALL_SV.out.vcfs
         }
         ch_saltshaker_vcf = channel.empty()
 
@@ -820,10 +819,12 @@ workflow RAREDISEASE {
             ch_svcaller_priority = CALL_SV_MT.out.updated_priority
         }
 
-        // Merge nuclear and mitochondrial SV calls, mirroring the CALL_SNV/CALL_MT_SNVS split
+        // Merge nuclear and mitochondrial SV calls, mirroring the CALL_SNV/CALL_MT_SNVS split.
+        // Merge all individual caller VCFs (nuclear + saltshaker) in a single SVDB_MERGE call so
+        // there is exactly one priority list (ch_svcaller_priority, updated above with "mitosalt"
+        // only if saltshaker actually produced a VCF) matching exactly one VCF count.
         if (!val_analysis_type.equals("mito")) {
-            ch_vcf_paths = ch_call_sv_nuclear_vcf
-                .collect{ _meta, vcf -> vcf }
+            ch_vcf_paths = ch_call_sv_nuclear_vcfs
                 .concat(ch_saltshaker_vcf.collect{ _meta, vcf -> vcf })
                 .collect()
                 .map { vcf_list -> [vcf_list] }
