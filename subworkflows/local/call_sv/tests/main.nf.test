@@ -12,8 +12,6 @@ nextflow_workflow {
     tag "call_sv_cnvnator"
 
     tag "bwa/index"
-    tag "svdb/merge"
-    tag "tabix/tabix"
 
     config "./nextflow.config"
 
@@ -58,9 +56,8 @@ nextflow_workflow {
                 input[9]  = channel.value([[], []])
                 input[10] = channel.of([[id:'ploidy'], []])
                 input[11] = channel.of([[]])
-                input[12] = channel.value(['manta', 'tiddit', 'cnvnator'])
-                input[13] = true
-                input[14] = 'wgs'
+                input[12] = true
+                input[13] = 'wgs'
                 """
             }
         }
@@ -69,8 +66,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    workflow.out.tbi.collect { meta, tbi -> file(tbi).name },
-                    path(workflow.out.vcf[0][1]).vcf.summary
+                    workflow.out.vcfs.collect { vcfs -> vcfs.collect { vcf -> file(vcf).name } }
                 ).match() }
             )
         }
@@ -105,9 +101,8 @@ nextflow_workflow {
                 input[9]  = channel.value([[], []])
                 input[10] = channel.of([[id:'ploidy'], []])
                 input[11] = channel.of([[]])
-                input[12] = channel.value(['manta', 'tiddit', 'cnvnator'])
-                input[13] = true
-                input[14] = 'wgs'
+                input[12] = true
+                input[13] = 'wgs'
                 """
             }
         }

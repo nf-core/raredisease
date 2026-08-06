@@ -6,8 +6,6 @@ include { CALL_SV_CNVNATOR          } from '../call_sv_cnvnator'
 include { CALL_SV_GERMLINECNVCALLER } from '../call_sv_germlinecnvcaller'
 include { CALL_SV_MANTA             } from '../call_sv_manta'
 include { CALL_SV_TIDDIT            } from '../call_sv_tiddit'
-include { SVDB_MERGE                } from '../../../modules/nf-core/svdb/merge/main'
-include { TABIX_TABIX               } from '../../../modules/nf-core/tabix/tabix/main'
 
 workflow CALL_SV {
 
@@ -24,7 +22,6 @@ workflow CALL_SV {
         ch_manta_regions                      // channel: [mandatory] [ path(bed), path(tbi) ]
         ch_ploidy_model                       // channel: [optional; used by mandatory for GATK's cnvcaller][ path(ploidy_model) ]
         ch_readcount_intervals                // channel: [optional; used by mandatory for GATK's cnvcaller][ path(intervals) ]
-        ch_svcaller_priority                  // channel: [mandatory] [ val(["var caller tag 1", ...]) ]
         skip_germlinecnvcaller                // boolean
         val_analysis_type                     // string: "wes", "wgs", or "mito"
 
@@ -32,8 +29,6 @@ workflow CALL_SV {
         ch_cnvnator_vcf    = channel.empty()
         ch_gcnvcaller_vcf  = channel.empty()
         ch_manta_vcf       = channel.empty()
-        ch_merged_svs      = channel.empty()
-        ch_merged_tbi      = channel.empty()
         ch_tiddit_vcf      = channel.empty()
 
         // CALL_SV is only invoked for non-mito analysis types (gated at the call site in
@@ -59,24 +54,16 @@ workflow CALL_SV {
 
         }
 
-        // Merge - with consistent ordering using concat
-        // Concatenate in specific order: tiddit -> manta -> gcnvcaller -> cnvnator
-        // Empty channels won't contribute any items
+        // Collect individual caller VCFs in a fixed, consistent order so the flat list lines
+        // up positionally with the svcaller_priority tags built in main.nf: tiddit -> manta ->
+        // gcnvcaller -> cnvnator.
+        // Empty channels won't contribute any items.
         ch_vcf_paths = ch_tiddit_vcf
             .concat(ch_manta_vcf)
             .concat(ch_gcnvcaller_vcf)
             .concat(ch_cnvnator_vcf)
             .collect()
-            .map { vcf_list -> [vcf_list] }
-        ch_merge_vcfs_in = ch_case_info
-            .combine(ch_vcf_paths)
-        SVDB_MERGE (ch_merge_vcfs_in, ch_svcaller_priority, false)
-
-        TABIX_TABIX (SVDB_MERGE.out.vcf)
-        ch_merged_svs = SVDB_MERGE.out.vcf
-        ch_merged_tbi = TABIX_TABIX.out.index
 
     emit:
-        tbi = ch_merged_tbi // channel: [ val(meta), path(tbi)]
-        vcf = ch_merged_svs // channel: [ val(meta), path(vcf)]
+        vcfs = ch_vcf_paths // channel: [ [path(vcf), path(vcf), ...] ] - flat list of nuclear caller VCFs, in priority order
 }
