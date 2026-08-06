@@ -102,6 +102,7 @@ workflow RAREDISEASE {
     ch_gens_interval_list
     ch_gens_pon_female
     ch_gens_pon_male
+    ch_glnexus_config
     ch_gnomad_af
     ch_hgnc_ids
     ch_intervals_contamination
@@ -584,7 +585,8 @@ workflow RAREDISEASE {
             ch_target_bed,
             val_analysis_type,
             val_skip_split_multiallelics,
-            val_variant_caller
+            val_variant_caller,
+            ch_glnexus_config,
         )
         ch_call_snv_deepvariant_report  = CALL_SNV.out.deepvariant_report
         ch_call_snv_genome_tabix        = CALL_SNV.out.genome_tabix

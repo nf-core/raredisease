@@ -176,6 +176,15 @@
                     "help_text": "The male panel used to run DenoiseReadCounts.",
                     "hidden": true
                 },
+                "glnexus_config": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Glnexus configuration file",
+                    "help_text": "Path to the glnexus configuration file.",
+                    "pattern": "^\\S+\\.yml$"
+                },
                 "gnomad_af": {
                     "type": "string",
                     "exists": true,
