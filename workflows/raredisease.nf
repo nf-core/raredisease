@@ -572,7 +572,6 @@ workflow RAREDISEASE {
         CALL_SNV (
             ch_call_interval,
             ch_case_info,
-            ch_glnexus_config,
             ch_dbsnp,
             ch_dbsnp_tbi,
             ch_foundin_header,
@@ -580,6 +579,7 @@ workflow RAREDISEASE {
             ch_genome_chrsizes,
             ch_genome_fasta,
             ch_genome_fai,
+            ch_glnexus_config,
             ch_ml_model,
             ch_par_bed,
             ch_sentieon_pcr_indel_model,

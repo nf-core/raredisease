@@ -10,7 +10,6 @@ workflow CALL_SNV {
     take:
         ch_call_interval          // channel: [mandatory] [ path(intervals) ]
         ch_case_info              // channel: [mandatory] [ val(case_info) ]
-        ch_custom_glnexus_config // path: [optional]  [ val(meta), path(config_file) ]
         ch_dbsnp                  // channel: [optional] [ val(meta), path(vcf) ]
         ch_dbsnp_tbi              // channel: [optional] [ val(meta), path(tbi) ]
         ch_foundin_header         // channel: [mandatory] [ path(header) ]
@@ -18,6 +17,7 @@ workflow CALL_SNV {
         ch_genome_chrsizes        // channel: [mandatory] [ path(sizes) ]
         ch_genome_fasta           // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai             // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_glnexus_config // path: [optional]  [ val(meta), path(config_file) ]
         ch_ml_model               // channel: [mandatory] [ path(model) ]
         ch_par_bed                // channel: [optional] [ val(meta), path(bed) ]
         ch_pcr_indel_model        // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
@@ -41,11 +41,11 @@ workflow CALL_SNV {
             CALL_SNV_DEEPVARIANT (
                 ch_genome_bam_bai,
                 ch_case_info,
-                ch_custom_glnexus_config,
                 ch_foundin_header,
                 ch_genome_chrsizes,
                 ch_genome_fai,
                 ch_genome_fasta,
+                ch_glnexus_config,
                 ch_par_bed,
                 ch_target_bed,
                 val_analysis_type,

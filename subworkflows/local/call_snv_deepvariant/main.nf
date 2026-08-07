@@ -14,11 +14,11 @@ workflow CALL_SNV_DEEPVARIANT {
     take:
         ch_bam_bai         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_case_info       // channel: [mandatory] [ val(case_info) ]
-        ch_custom_glnexus_config // path: [optional]  [ val(meta), path(config_file) ]
         ch_foundin_header  // channel: [mandatory] [ path(header) ]
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
         ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_glnexus_config // path: [optional]  [ val(meta), path(config_file) ]
         ch_par_bed                   // channel: [optional] [ val(meta), path(bed) ]
         ch_target_bed                // channel: [mandatory] [ val(meta), path(bed), path(index) ]
         val_analysis_type            // boolean
@@ -45,7 +45,7 @@ workflow CALL_SNV_DEEPVARIANT {
          // toList() enables passing [] if ch_custom_glnexus_config is empty
         ch_gvcfs = ch_case_info
             .combine(ch_file_list)
-            .combine(ch_custom_glnexus_config.map { _meta, config -> config }.toList())
+            .combine(ch_glnexus_config.map { _meta, config -> config }.toList())
 
         GLNEXUS ( ch_gvcfs, [[:],[]] )
 

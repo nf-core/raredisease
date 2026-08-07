@@ -47,14 +47,14 @@ nextflow_workflow {
                      file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test2.paired_end.sorted.bam.bai', checkIfExists: true)]
                 )
                 input[1] = channel.of([id:'justhusky'])
-                input[2] = channel.of([
+                input[2] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[3] = GET_CHROM_SIZES.out.sizes.collect()
+                input[4] = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[5] = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)).collect()
+                input[6] = channel.of([
                     [ id:'glnexus_config'],
                     file('../../../assets/glnexus_config_dp1.yml')
                 ])
-                input[3] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
-                input[4] = GET_CHROM_SIZES.out.sizes.collect()
-                input[5] = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)).collect()
-                input[6] = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)).collect()
                 input[7] = channel.of([[id:'par'], []]).collect()
                 input[8] = channel.of([[id:'target'], [], []])
                 input[9] = 'wgs'
@@ -106,11 +106,12 @@ nextflow_workflow {
                      file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test2.paired_end.sorted.bam.bai', checkIfExists: true)]
                 )
                 input[1] = channel.of([id:'justhusky'])
-                input[2] = channel.of([[],[]])
-                input[3] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
-                input[4] = GET_CHROM_SIZES.out.sizes.collect()
-                input[5] = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)).collect()
-                input[6] = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)).collect()
+                input[2] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[3] = GET_CHROM_SIZES.out.sizes.collect()
+                input[4] = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[5] = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)).collect()
+
+                input[6] = channel.of([[],[]])
                 input[7] = channel.of([[id:'par'], []]).collect()
                 input[8] = channel.of([[id:'target'], [], []])
                 input[9] = 'wgs'
