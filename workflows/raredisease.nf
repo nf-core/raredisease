@@ -572,6 +572,7 @@ workflow RAREDISEASE {
         CALL_SNV (
             ch_call_interval,
             ch_case_info,
+            ch_glnexus_config,
             ch_dbsnp,
             ch_dbsnp_tbi,
             ch_foundin_header,
@@ -586,7 +587,6 @@ workflow RAREDISEASE {
             val_analysis_type,
             val_skip_split_multiallelics,
             val_variant_caller,
-            ch_glnexus_config,
         )
         ch_call_snv_deepvariant_report  = CALL_SNV.out.deepvariant_report
         ch_call_snv_genome_tabix        = CALL_SNV.out.genome_tabix

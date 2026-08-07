@@ -14,6 +14,7 @@ workflow CALL_SNV_DEEPVARIANT {
     take:
         ch_bam_bai         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
         ch_case_info       // channel: [mandatory] [ val(case_info) ]
+        ch_custom_glnexus_config // path: [optional]  [ val(meta), path(config_file) ]
         ch_foundin_header  // channel: [mandatory] [ path(header) ]
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
         ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
@@ -22,7 +23,6 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_target_bed                // channel: [mandatory] [ val(meta), path(bed), path(index) ]
         val_analysis_type            // boolean
         val_skip_split_multiallelics // boolean
-        ch_custom_glnexus_config // path: [optional]  [ val(meta), path(config_file) ]
 
     main:
 
