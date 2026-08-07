@@ -121,9 +121,7 @@ workflow NFCORE_RAREDISEASE {
     val_ploidy_model
     val_readcount_intervals
     val_reduced_penetrance
-    val_rtg_truthvcfs
     val_run_mt_for_wes
-    val_run_rtgvcfeval
     val_run_vcfanno_db_sanity_check
     val_sambamba_regions
     val_save_all_mapped_as_cram
@@ -131,7 +129,6 @@ workflow NFCORE_RAREDISEASE {
     val_score_config_mt
     val_score_config_snv
     val_score_config_sv
-    val_sdf
     val_sentieon_dnascope_pcr_indel_model
     val_sequence_dictionary
     val_skip_tools
@@ -184,8 +181,6 @@ workflow NFCORE_RAREDISEASE {
         val_mt_aligner,
         val_mt_fasta,
         val_run_mt,
-        val_run_rtgvcfeval,
-        val_sdf,
         val_sequence_dictionary,
         val_target_bed,
         val_vcfanno_extra_resources,
@@ -219,7 +214,6 @@ workflow NFCORE_RAREDISEASE {
     ch_mtshift_fai              = ch_references.mtshift_fai
     ch_mtshift_fasta            = ch_references.mtshift_fasta
     ch_mtshift_intervals        = ch_references.mtshift_intervals
-    ch_sdf                      = ch_references.sdf
     ch_target_bed               = ch_references.target_bed
     ch_target_intervals         = ch_references.target_intervals
     ch_vcfanno_extra            = ch_references.vcfanno_extra
@@ -227,7 +221,6 @@ workflow NFCORE_RAREDISEASE {
 
     // Using channelFromPath helper (val_x ? channel.fromPath(val_x).collect() : channel.value([]))
     ch_reduced_penetrance       = channelFromPath(val_reduced_penetrance, true)
-    ch_rtg_truthvcfs            = channelFromPath(val_rtg_truthvcfs, true)
     ch_score_config_mt          = channelFromPath(val_score_config_mt, true)
     ch_score_config_snv         = channelFromPath(val_score_config_snv, true)
     ch_score_config_sv          = channelFromPath(val_score_config_sv, true)
@@ -473,14 +466,12 @@ workflow NFCORE_RAREDISEASE {
         ch_readcount_intervals,
         ch_reads,
         ch_reduced_penetrance,
-        ch_rtg_truthvcfs,
         ch_sambamba_bed,
         ch_samples,
         ch_scatter_genome_split_intervals,
         ch_score_config_mt,
         ch_score_config_snv,
         ch_score_config_sv,
-        ch_sdf,
         ch_sentieon_pcr_indel_model,
         ch_subdepth,
         ch_svcaller_priority,
@@ -571,7 +562,6 @@ workflow NFCORE_RAREDISEASE {
         val_platform,
         val_qc_metrics_tool,
         val_run_mt,
-        val_run_rtgvcfeval,
         val_run_vcfanno_db_sanity_check,
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram,
@@ -674,19 +664,6 @@ workflow NFCORE_RAREDISEASE {
     rank_mt_vcf                                         = RAREDISEASE.out.rank_mt_vcf                                   // channel: [ val(meta), path(vcf) ]
     rank_sv_tbi                                         = RAREDISEASE.out.rank_sv_tbi                                   // channel: [ val(meta), path(tbi) ]
     rank_sv_vcf                                         = RAREDISEASE.out.rank_sv_vcf                                   // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_baseline_tbi                     = RAREDISEASE.out.variant_evaluation_baseline_tbi // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_baseline_vcf                     = RAREDISEASE.out.variant_evaluation_baseline_vcf // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_false_negatives_tbi              = RAREDISEASE.out.variant_evaluation_false_negatives_tbi // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_false_negatives_vcf              = RAREDISEASE.out.variant_evaluation_false_negatives_vcf // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_false_positives_tbi              = RAREDISEASE.out.variant_evaluation_false_positives_tbi // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_false_positives_vcf              = RAREDISEASE.out.variant_evaluation_false_positives_vcf // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_non_snp_roc                      = RAREDISEASE.out.variant_evaluation_non_snp_roc  // channel: [ val(meta), path(tsv) ]
-    variant_evaluation_phasing                          = RAREDISEASE.out.variant_evaluation_phasing      // channel: [ val(meta), path(txt) ]
-    variant_evaluation_snp_roc                          = RAREDISEASE.out.variant_evaluation_snp_roc      // channel: [ val(meta), path(tsv) ]
-    variant_evaluation_summary                          = RAREDISEASE.out.variant_evaluation_summary      // channel: [ val(meta), path(txt) ]
-    variant_evaluation_true_positives_tbi               = RAREDISEASE.out.variant_evaluation_true_positives_tbi // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_true_positives_vcf               = RAREDISEASE.out.variant_evaluation_true_positives_vcf // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_weighted_roc                     = RAREDISEASE.out.variant_evaluation_weighted_roc // channel: [ val(meta), path(tsv) ]
     prepare_references_bait_intervals                   = ch_bait_intervals
     prepare_references_dbsnp                            = ch_dbsnp
     prepare_references_dbsnp_tbi                        = ch_dbsnp_tbi
@@ -714,7 +691,6 @@ workflow NFCORE_RAREDISEASE {
     prepare_references_mtshift_fai                      = ch_mtshift_fai
     prepare_references_mtshift_fasta                    = ch_mtshift_fasta
     prepare_references_mtshift_intervals                = ch_mtshift_intervals
-    prepare_references_sdf                              = ch_sdf
     prepare_references_target_bed                       = ch_target_bed
     prepare_references_target_intervals                 = ch_target_intervals
     prepare_references_vcfanno_extra                    = ch_vcfanno_extra
@@ -834,9 +810,7 @@ workflow {
         params.ploidy_model,
         params.readcount_intervals,
         params.reduced_penetrance,
-        params.rtg_truthvcfs,
         params.run_mt_for_wes,
-        params.run_rtgvcfeval,
         params.run_vcfanno_db_sanity_check,
         params.sambamba_regions,
         params.save_all_mapped_as_cram,
@@ -844,7 +818,6 @@ workflow {
         params.score_config_mt,
         params.score_config_snv,
         params.score_config_sv,
-        params.sdf,
         params.sentieon_dnascope_pcr_indel_model,
         params.sequence_dictionary,
         params.skip_tools,
@@ -976,19 +949,6 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.rank_mt_tbi)
                                             .mix(NFCORE_RAREDISEASE.out.rank_sv_vcf)
                                             .mix(NFCORE_RAREDISEASE.out.rank_sv_tbi)
-    variant_evaluation                = NFCORE_RAREDISEASE.out.variant_evaluation_true_positives_vcf
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_true_positives_tbi)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_false_negatives_vcf)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_false_negatives_tbi)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_false_positives_vcf)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_false_positives_tbi)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_baseline_vcf)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_baseline_tbi)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_snp_roc)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_non_snp_roc)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_weighted_roc)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_summary)
-                                            .mix(NFCORE_RAREDISEASE.out.variant_evaluation_phasing)
     references                        = NFCORE_RAREDISEASE.out.prepare_references_dbsnp
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_dbsnp_tbi)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_bwaindex)
@@ -1016,7 +976,6 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_mtshift_fai)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_mtshift_fasta)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_mtshift_intervals)
-                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_sdf)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_target_bed)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_target_intervals)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_vcfanno_extra)
@@ -1089,9 +1048,6 @@ output {
     }
     rank_variants {
         path { _meta, _file -> "rank_and_filter/" }
-    }
-    variant_evaluation {
-        path { _meta, _file -> "rtgvcfeval/" }
     }
     references {
         path { _meta, _file -> "references/" }
