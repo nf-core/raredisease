@@ -72,6 +72,7 @@ workflow NFCORE_RAREDISEASE {
     val_gens_interval_list
     val_gens_pon_female
     val_gens_pon_male
+    val_glnexus_config
     val_gnomad_af
     val_gnomad_af_idx
     val_heavy_strand_origin_end
@@ -267,6 +268,7 @@ workflow NFCORE_RAREDISEASE {
 
     ch_cadd_header              = channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_foundin_header           = channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
+    ch_glnexus_config           = val_glnexus_config ? channel.value([[id: 'glnexus_config'], file(val_glnexus_config)]) : channelFromPathWithMeta("${projectDir}/assets/glnexus_config_dp1.yml", true)
     ch_manta_regions            = val_analysis_type.equals("wgs")
                                     ? (val_manta_call_regions
                                         ? channel.value([file(val_manta_call_regions), file(val_manta_call_regions_tbi)])
@@ -435,6 +437,7 @@ workflow NFCORE_RAREDISEASE {
         ch_gens_interval_list,
         ch_gens_pon_female,
         ch_gens_pon_male,
+        ch_glnexus_config,
         ch_gnomad_af,
         ch_hgnc_ids,
         ch_intervals_contamination,
@@ -761,6 +764,7 @@ workflow {
         params.gens_interval_list,
         params.gens_pon_female,
         params.gens_pon_male,
+        params.glnexus_config,
         params.gnomad_af,
         params.gnomad_af_idx,
         params.heavy_strand_origin_end,
