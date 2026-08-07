@@ -20,7 +20,6 @@ nextflow_workflow {
     tag "get_chrom_sizes"
     tag "hisat2/build"
     tag "last/lastdb"
-    tag "rtgtools/format"
     tag "samtools/faidx"
     tag "sentieon/bwaindex"
     tag "tabix/bgziptabix"
@@ -54,12 +53,10 @@ nextflow_workflow {
                 input[12] = "bwa"
                 input[13] = null
                 input[14] = true
-                input[15] = false
-                input[16] = null
+                input[15] = null
+                input[16] = params.pipelines_testdata_base_path + 'reference/target.bed'
                 input[17] = null
-                input[18] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[19] = null
-                input[20] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                input[18] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
                 """
             }
         }
@@ -136,12 +133,10 @@ nextflow_workflow {
                 input[12] = "bwa"
                 input[13] = null
                 input[14] = true
-                input[15] = false
-                input[16] = null
+                input[15] = null
+                input[16] = params.pipelines_testdata_base_path + 'reference/target.bed'
                 input[17] = null
-                input[18] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[19] = null
-                input[20] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                input[18] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
                 """
             }
         }
@@ -218,12 +213,10 @@ nextflow_workflow {
                 input[12] = "bwa"
                 input[13] = null
                 input[14] = true
-                input[15] = false
-                input[16] = null
+                input[15] = null
+                input[16] = params.pipelines_testdata_base_path + 'reference/target.bed'
                 input[17] = null
-                input[18] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[19] = null
-                input[20] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                input[18] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
                 """
             }
         }

@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added non-stub tests for `annotate_mobile_elements` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #923](https://github.com/nf-core/raredisease/pull/923)
 - Added non-stub tests for `call_mobile_elements` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #924](https://github.com/nf-core/raredisease/pull/924)
 
+### `Removed`
+
+- Removed the `rtgtools`/`vcfeval` variant-evaluation feature entirely: the `VARIANT_EVALUATION` subworkflow, `rtgtools/format` and `rtgtools/vcfeval` modules, and the `--run_rtgvcfeval`, `--rtg_truthvcfs`, and `--sdf` parameters [issue #963](https://github.com/nf-core/raredisease/issues/963) [PR #964](https://github.com/nf-core/raredisease/pull/964)
+
 ### `Changed`
 
 - Feed `UPD_SITES`, `UPD_REGIONS`, and `ANNOTATE_RHOCALLVIZ` the unfiltered vcfanno-annotated VCF instead of the VEP/`pre_vep_snv_filter_expression`-filtered one, so stricter filtering (#929) no longer removes variants these subworkflows need [issue #930](https://github.com/nf-core/raredisease/issues/930) [PR #962](https://github.com/nf-core/raredisease/pull/962)

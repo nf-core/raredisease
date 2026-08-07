@@ -355,16 +355,6 @@
                     "fa_icon": "fas fa-file-csv",
                     "description": "File with gene ids that have reduced penetrance. For use with genmod"
                 },
-                "rtg_truthvcfs": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "file-path",
-                    "description": "Vcf used for evaluating variant calls.",
-                    "fa_icon": "fas fa-file-csv",
-                    "help_text": "Path to comma-separated file containing information about the truth vcf files used by vcfeval.",
-                    "pattern": "^\\S+\\.(csv|tsv|json|yaml|yml)$",
-                    "schema": "assets/rtg_truthvcfs_schema.json"
-                },
                 "sambamba_regions": {
                     "type": "string",
                     "exists": true,
@@ -399,14 +389,6 @@
                     "format": "path",
                     "fa_icon": "fas fa-file",
                     "description": "SV rank model config file for genmod."
-                },
-                "sdf": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "directory-path",
-                    "description": "Directory for pre-built sdf index. Used by rtg/vcfeval",
-                    "help_text": "If none provided, will be generated automatically from the FASTA reference.",
-                    "fa_icon": "fas fa-folder-open"
                 },
                 "sequence_dictionary": {
                     "type": "string",
@@ -629,11 +611,6 @@
                 "run_mt_for_wes": {
                     "type": "boolean",
                     "description": "Specifies whether to run mitochondrial analysis for wes samples",
-                    "fa_icon": "fas fa-toggle-on"
-                },
-                "run_rtgvcfeval": {
-                    "type": "boolean",
-                    "description": "Specifies whether to run rtgtools' vcfeval",
                     "fa_icon": "fas fa-toggle-on"
                 },
                 "run_vcfanno_db_sanity_check": {

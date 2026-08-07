@@ -66,7 +66,6 @@ include { PREPARE_REFERENCES                                          } from '..
 include { QC_BAM                                                      } from '../subworkflows/local/qc_bam'
 include { SUBSAMPLE_MT_FRAC                                           } from '../subworkflows/local/subsample_mt_frac'
 include { SUBSAMPLE_MT_READS                                          } from '../subworkflows/local/subsample_mt_reads'
-include { VARIANT_EVALUATION                                          } from '../subworkflows/local/variant_evaluation'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,14 +133,12 @@ workflow RAREDISEASE {
     ch_readcount_intervals
     ch_reads
     ch_reduced_penetrance
-    ch_rtg_truthvcfs
     ch_sambamba_bed
     ch_samples
     ch_scatter_genome_split_intervals
     ch_score_config_mt
     ch_score_config_snv
     ch_score_config_sv
-    ch_sdf
     ch_sentieon_pcr_indel_model
     ch_subdepth
     ch_svcaller_priority
@@ -232,7 +229,6 @@ workflow RAREDISEASE {
     val_platform
     val_qc_metrics_tool
     val_run_mt
-    val_run_rtgvcfeval
     val_run_vcfanno_db_sanity_check
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
@@ -307,19 +303,6 @@ workflow RAREDISEASE {
     ch_rank_mt_vcf                            = channel.empty()
     ch_rank_sv_tbi                            = channel.empty()
     ch_rank_sv_vcf                            = channel.empty()
-    ch_variant_evaluation_baseline_tbi        = channel.empty()
-    ch_variant_evaluation_baseline_vcf        = channel.empty()
-    ch_variant_evaluation_false_negatives_tbi = channel.empty()
-    ch_variant_evaluation_false_negatives_vcf = channel.empty()
-    ch_variant_evaluation_false_positives_tbi = channel.empty()
-    ch_variant_evaluation_false_positives_vcf = channel.empty()
-    ch_variant_evaluation_non_snp_roc         = channel.empty()
-    ch_variant_evaluation_phasing             = channel.empty()
-    ch_variant_evaluation_snp_roc             = channel.empty()
-    ch_variant_evaluation_summary             = channel.empty()
-    ch_variant_evaluation_true_positives_tbi  = channel.empty()
-    ch_variant_evaluation_true_positives_vcf  = channel.empty()
-    ch_variant_evaluation_weighted_roc        = channel.empty()
 
     //
     // Precalled VCFs supplied in the samplesheet, split out per variant type
@@ -1038,33 +1021,6 @@ workflow RAREDISEASE {
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    VARIANT EVALUATION WITH RTGTOOLS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-    if (val_run_rtgvcfeval) {
-        VARIANT_EVALUATION (
-            ch_rtg_truthvcfs,
-            ch_sdf,
-            ch_call_snv_genome_vcf_tabix
-        )
-        ch_variant_evaluation_baseline_tbi        = VARIANT_EVALUATION.out.baseline_tbi
-        ch_variant_evaluation_baseline_vcf        = VARIANT_EVALUATION.out.baseline_vcf
-        ch_variant_evaluation_false_negatives_tbi = VARIANT_EVALUATION.out.false_negatives_tbi
-        ch_variant_evaluation_false_negatives_vcf = VARIANT_EVALUATION.out.false_negatives_vcf
-        ch_variant_evaluation_false_positives_tbi = VARIANT_EVALUATION.out.false_positives_tbi
-        ch_variant_evaluation_false_positives_vcf = VARIANT_EVALUATION.out.false_positives_vcf
-        ch_variant_evaluation_non_snp_roc         = VARIANT_EVALUATION.out.non_snp_roc
-        ch_variant_evaluation_phasing             = VARIANT_EVALUATION.out.phasing
-        ch_variant_evaluation_snp_roc             = VARIANT_EVALUATION.out.snp_roc
-        ch_variant_evaluation_summary             = VARIANT_EVALUATION.out.summary
-        ch_variant_evaluation_true_positives_tbi  = VARIANT_EVALUATION.out.true_positives_tbi
-        ch_variant_evaluation_true_positives_vcf  = VARIANT_EVALUATION.out.true_positives_vcf
-        ch_variant_evaluation_weighted_roc        = VARIANT_EVALUATION.out.weighted_roc
-    }
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     COLLECT SOFTWARE VERSIONS & MultiQC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -1271,19 +1227,6 @@ workflow RAREDISEASE {
     rank_mt_vcf                                      = ch_rank_mt_vcf              // channel: [ val(meta), path(vcf) ]
     rank_sv_tbi                                      = ch_rank_sv_tbi              // channel: [ val(meta), path(tbi) ]
     rank_sv_vcf                                      = ch_rank_sv_vcf              // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_baseline_tbi                  = ch_variant_evaluation_baseline_tbi              // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_baseline_vcf                  = ch_variant_evaluation_baseline_vcf              // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_false_negatives_tbi           = ch_variant_evaluation_false_negatives_tbi       // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_false_negatives_vcf           = ch_variant_evaluation_false_negatives_vcf       // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_false_positives_tbi           = ch_variant_evaluation_false_positives_tbi       // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_false_positives_vcf           = ch_variant_evaluation_false_positives_vcf       // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_non_snp_roc                   = ch_variant_evaluation_non_snp_roc               // channel: [ val(meta), path(tsv) ]
-    variant_evaluation_phasing                       = ch_variant_evaluation_phasing                   // channel: [ val(meta), path(txt) ]
-    variant_evaluation_snp_roc                       = ch_variant_evaluation_snp_roc                   // channel: [ val(meta), path(tsv) ]
-    variant_evaluation_summary                       = ch_variant_evaluation_summary                   // channel: [ val(meta), path(txt) ]
-    variant_evaluation_true_positives_tbi            = ch_variant_evaluation_true_positives_tbi        // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_true_positives_vcf            = ch_variant_evaluation_true_positives_vcf        // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_weighted_roc                  = ch_variant_evaluation_weighted_roc              // channel: [ val(meta), path(tsv) ]
     subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     versions                     = ch_versions
