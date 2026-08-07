@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            356,
+            355,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -80,9 +80,6 @@
                 },
                 "CAT_CAT_BAIT": {
                     "pigz": 2.8
-                },
-                "CAT_FASTQ": {
-                    "cat": 9.5
                 },
                 "CHROMOGRAPH_AUTOZYG": {
                     "chromograph": "1.3.1"
@@ -548,7 +545,7 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz",
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
-                "call_sv/hugelymodelbat.saltshaker.png",
+                "call_sv/hugelymodelbat_LNUMBER1.saltshaker.png",
                 "call_sv/hugelymodelbat_mitochondria_deletions.txt",
                 "call_sv/justhusky.saltshaker_classify.html",
                 "call_sv/justhusky_sv.vcf.gz",
@@ -667,10 +664,10 @@
                 "vcf2cytosure/hugelymodelbat.cgh"
             ]
         ],
-        "timestamp": "2026-08-06T10:47:54.225969605",
+        "timestamp": "2026-08-07T14:11:49.252798943",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.3"
         }
     }
 }
