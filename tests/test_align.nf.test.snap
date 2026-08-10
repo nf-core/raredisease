@@ -1,7 +1,7 @@
 {
     "-profile test_align": {
         "content": [
-            776,
+            793,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -251,6 +251,9 @@
                 "ME_SPLIT_ALIGNMENT": {
                     "samtools": "1.22.1"
                 },
+                "MITOSALT": {
+                    "mitosalt": "1.1.1"
+                },
                 "MOSDEPTH": {
                     "mosdepth": "0.3.11"
                 },
@@ -315,6 +318,15 @@
                 "RHOCALL_VIZ": {
                     "rhocall": "0.5.1"
                 },
+                "SALTSHAKER_CALL": {
+                    "saltshaker": "1.1.1"
+                },
+                "SALTSHAKER_CLASSIFY": {
+                    "saltshaker": "1.1.1"
+                },
+                "SALTSHAKER_PLOT": {
+                    "saltshaker": "1.1.1"
+                },
                 "SAMTOOLS_COLLATE": {
                     "samtools": "1.22.1"
                 },
@@ -338,6 +350,9 @@
                 },
                 "SAM_TO_BAM": {
                     "samtools": "1.22.1"
+                },
+                "SEQTK_SAMPLE": {
+                    "seqtk": "1.4-r122"
                 },
                 "SMNCOPYNUMBERCALLER": {
                     "smncopynumbercaller": "1.1.2"
@@ -363,6 +378,10 @@
                 "STRANGER": {
                     "stranger": "0.10.0",
                     "tabix": 1.23
+                },
+                "SVDB_MERGE": {
+                    "bcftools": 1.23,
+                    "svdb": "2.8.4"
                 },
                 "SVDB_MERGE_CNVNATOR": {
                     "bcftools": 1.23,
@@ -636,10 +655,14 @@
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz",
                 "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
                 "call_sv",
+                "call_sv/earlycasualcaiman.saltshaker.png",
                 "call_sv/earlycasualcaiman_mitochondria_deletions.txt",
+                "call_sv/hugelymodelbat.saltshaker.png",
                 "call_sv/hugelymodelbat_mitochondria_deletions.txt",
+                "call_sv/justhusky.saltshaker_classify.html",
                 "call_sv/justhusky_sv.vcf.gz",
                 "call_sv/justhusky_sv.vcf.gz.tbi",
+                "call_sv/slowlycivilbuck.saltshaker.png",
                 "call_sv/slowlycivilbuck_mitochondria_deletions.txt",
                 "multiqc",
                 "multiqc/multiqc_data",
@@ -861,10 +884,10 @@
                 "vcf2cytosure/slowlycivilbuck.cgh"
             ]
         ],
-        "timestamp": "2026-08-06T10:48:05.609810892",
+        "timestamp": "2026-08-10T10:24:36.969555883",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.3"
         }
     }
 }
