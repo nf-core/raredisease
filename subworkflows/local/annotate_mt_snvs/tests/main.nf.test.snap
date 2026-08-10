@@ -1,13 +1,13 @@
 {
     "ANNOTATE_MT_SNVS - GRCh37": {
         "content": [
-            "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,35b30b356d34416a56b262834cbeaf32",
+            "vcfanno_gnomad_mt_vcfanno_vep.vcf.gz:md5,afda3b8952821b8cc737165541357428",
             "VcfFile [chromosomes=[MT], sampleCount=0, variantCount=18164, phased=true, phasedAutodetect=true]"
         ],
-        "timestamp": "2026-06-26T16:50:08.067805575",
+        "timestamp": "2026-08-10T11:37:12.253675261",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     },
     "ANNOTATE_MT_SNVS - GRCh37, stub": {
