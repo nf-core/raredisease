@@ -51,10 +51,14 @@ nextflow_workflow {
                 input[3] = GET_CHROM_SIZES.out.sizes.collect()
                 input[4] = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)).collect()
                 input[5] = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)).collect()
-                input[6] = channel.of([[id:'par'], []]).collect()
-                input[7] = channel.of([[id:'target'], [], []])
-                input[8] = 'wgs'
-                input[9] = false
+                input[6] = channel.of([
+                    [ id:'glnexus_config'],
+                    file('../../../assets/glnexus_config_dp1.yml')
+                ])
+                input[7] = channel.of([[id:'par'], []]).collect()
+                input[8] = channel.of([[id:'target'], [], []])
+                input[9] = 'wgs'
+                input[10] = false
                 """
             }
         }
@@ -106,10 +110,12 @@ nextflow_workflow {
                 input[3] = GET_CHROM_SIZES.out.sizes.collect()
                 input[4] = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)).collect()
                 input[5] = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)).collect()
-                input[6] = channel.of([[id:'par'], []]).collect()
-                input[7] = channel.of([[id:'target'], [], []])
-                input[8] = 'wgs'
-                input[9] = false
+
+                input[6] = channel.of([[],[]])
+                input[7] = channel.of([[id:'par'], []]).collect()
+                input[8] = channel.of([[id:'target'], [], []])
+                input[9] = 'wgs'
+                input[10] = false
                 """
             }
         }

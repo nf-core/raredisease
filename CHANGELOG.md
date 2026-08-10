@@ -64,6 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replace `ch_publish`/`subworkflow_results` with named typed channel emits for alignment and subsample-MT subworkflows [#850](https://github.com/nf-core/raredisease/pull/850)
 - Update saltshaker modules to version 1.1.1 so they can run on empty mitosalt output [#856](https://github.com/nf-core/raredisease/pull/856)
 - Update metromap to reflect the addition of mitosalt + saltshaker and removal of eklipse [#892](https://github.com/nf-core/raredisease/pull/892)
+- Changed default glnexus config from `DeepVariant_unfiltered` to a custom config in `assets/` due to unfixed [bug](https://github.com/dnanexus-rnd/GLnexus/issues/286) [issue #960](https://github.com/nf-core/raredisease/issues/960) [PR #961](https://github.com/nf-core/raredisease/pull/961)
 
 ### `Fixed`
 
@@ -84,6 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |               | contamination_sites           |
 |               | contamination_sites_tbi       |
 |               | pre_vep_snv_filter_expression |
+|               | glnexus_config                |
 
 ### Tool updates
 

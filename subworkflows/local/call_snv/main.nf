@@ -17,6 +17,7 @@ workflow CALL_SNV {
         ch_genome_chrsizes        // channel: [mandatory] [ path(sizes) ]
         ch_genome_fasta           // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai             // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_glnexus_config // path: [optional]  [ val(meta), path(config_file) ]
         ch_ml_model               // channel: [mandatory] [ path(model) ]
         ch_par_bed                // channel: [optional] [ val(meta), path(bed) ]
         ch_pcr_indel_model        // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
@@ -44,10 +45,11 @@ workflow CALL_SNV {
                 ch_genome_chrsizes,
                 ch_genome_fai,
                 ch_genome_fasta,
+                ch_glnexus_config,
                 ch_par_bed,
                 ch_target_bed,
                 val_analysis_type,
-                val_skip_split_multiallelics
+                val_skip_split_multiallelics,
             )
             ch_deepvariant_vcf    = CALL_SNV_DEEPVARIANT.out.vcf
             ch_deepvariant_tbi    = CALL_SNV_DEEPVARIANT.out.tabix
