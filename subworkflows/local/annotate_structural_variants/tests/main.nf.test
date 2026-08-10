@@ -33,7 +33,7 @@ nextflow_workflow {
                     [id:'test'],
                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/sv_query.vcf.gz', checkIfExists: true)
                 ])
-                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
+                input[5]  = channel.of([[id:'vep_cache'], file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)]).collect()
                 input[6]  = channel.value([])
                 input[7]  = null
                 input[8]  = null
@@ -83,7 +83,7 @@ nextflow_workflow {
                     [id:'test'],
                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/sv_query.vcf.gz', checkIfExists: true)
                 ])
-                input[5]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
+                input[5]  = channel.of([[id:'vep_cache'], file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)]).collect()
                 input[6]  = channel.value([])
                 input[7]  = null
                 input[8]  = 'gnomAD.r2.1.1-sv.vcf.gz'

@@ -16,7 +16,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         ch_svdb_bedpedbs        // channel: [optional]
         ch_svdb_dbs             // channel: [optional]
         ch_vcf                  // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_vep_cache            // channel: [mandatory] [ path(cache) ]
+        ch_vep_cache            // channel: [mandatory] [ val(meta), path(cache) ]
         ch_vep_extra_files      // channel: [mandatory] [ path(files) ]
         val_svdb_query_bedpedbs // String: [optional] params.svdb_query_bedpedbs
         val_svdb_query_dbs      // String: [optional] params.svdb_query_dbs

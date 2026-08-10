@@ -15,7 +15,7 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
         ch_genome_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_me_svdb_resources    // channel: [mandatory] [ path(csv) ]
         ch_vcf                  // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_vep_cache            // channel: [mandatory] [ path(cache) ]
+        ch_vep_cache            // channel: [mandatory] [ val(meta), path(cache) ]
         val_genome              // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version   // string: [mandatory] default: 107
         ch_vep_extra_files      // channel: [mandatory] [ path(files) ]

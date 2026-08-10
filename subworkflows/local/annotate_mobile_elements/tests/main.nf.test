@@ -46,7 +46,7 @@ nextflow_workflow {
                     'gnomad_svAC'
                 ])
                 input[3] = channel.of([[id:'earlycasualcaiman', "single_end": false], file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mobile_elements.vcf.gz', checkIfExists: true)])
-                input[4] = UNTAR.out.untar.map { _meta, untar -> untar }.collect()
+                input[4] = UNTAR.out.untar.collect()
                 input[5] = 'GRCh37'
                 input[6] = 107
                 input[7] = channel.value([])
@@ -85,7 +85,7 @@ nextflow_workflow {
                     'gnomad_svAC'
                 ])
                 input[3] = channel.of([[id:'earlycasualcaiman', "single_end": false], file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mobile_elements.vcf.gz', checkIfExists: true)])
-                input[4] = UNTAR.out.untar.map { _meta, untar -> untar }.collect()
+                input[4] = UNTAR.out.untar.collect()
                 input[5] = 'GRCh37'
                 input[6] = 107
                 input[7] = channel.value([])

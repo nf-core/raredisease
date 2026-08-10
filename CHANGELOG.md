@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - Feed `UPD_SITES`, `UPD_REGIONS`, and `ANNOTATE_RHOCALLVIZ` the unfiltered vcfanno-annotated VCF instead of the VEP/`pre_vep_snv_filter_expression`-filtered one, so stricter filtering (#929) no longer removes variants these subworkflows need [issue #930](https://github.com/nf-core/raredisease/issues/930) [PR #962](https://github.com/nf-core/raredisease/pull/962)
+- Bump VEP to 116.1 and default `vep_cache_version` to 116; the updated `ensemblvep/vep` module now takes the VEP cache as a `[meta, path]` tuple instead of a bare path, so `PREPARE_REFERENCES` was updated to emit it in that shape [issue #872](https://github.com/nf-core/raredisease/issues/872) [PR #TBD]
 - Extend the VCF entry point to a fifth type, `repeat` [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #957](https://github.com/nf-core/raredisease/pull/957)
 - Extend the VCF entry point to a fourth type, `me` [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #955](https://github.com/nf-core/raredisease/pull/955)
 - Split `skip_mt_calling` into independently-gated `skip_mt_snv_calling` (gates `CALL_MT_SNVS` only, same behavior as before) and `skip_mt_sv_calling` (new tag gating `CALL_SV_MT` - MitoSalt/SaltShaker and the mitodel/MT-deletion script) [issue #950](https://github.com/nf-core/raredisease/issues/950) [PR #954](https://github.com/nf-core/raredisease/pull/954)
@@ -94,6 +95,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | gatk4/calculatecontamination |             | 4.6.2.0     |
 | gatk4/getpileupsummaries     |             | 4.6.2.0     |
 | Saltshaker                   | 1.0.0       | 1.1.1       |
+| Ensemblvep                   | 110.1       | 116.1       |
 
 ## 3.1.2 - Princess Peach (patch) [2026-07-06]
 
