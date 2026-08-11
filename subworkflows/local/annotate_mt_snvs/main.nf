@@ -21,7 +21,7 @@ workflow ANNOTATE_MT_SNVS {
         ch_vcfanno_lua              // channel: [mandatory] [ path(lua) ]
         ch_vcfanno_resources        // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
         ch_vcfanno_toml             // channel: [mandatory] [ path(toml) ]
-        ch_vep_cache                // channel: [mandatory] [ path(cache) ]
+        ch_vep_cache                // channel: [mandatory] [ val(meta), path(cache) ]
         ch_vep_extra_files          // channel: [mandatory] [ path(files) ]
         val_cadd_resources          //  string:  path to cadd resources file
         val_genome                  //  string:  GRCh37 or GRCh38

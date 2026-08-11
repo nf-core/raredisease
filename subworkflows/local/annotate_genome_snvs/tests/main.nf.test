@@ -47,7 +47,7 @@ nextflow_workflow {
                 input[11] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_functions.lua', checkIfExists: true)).collect()
                 input[12] = channel.value(file(params.pipelines_testdata_base_path + 'reference/grch38_gnomad_reformated_-r3.1.1-.vcf.gz', checkIfExists: true))
                 input[13] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_config.toml', checkIfExists: true)).collect()
-                input[14] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
+                input[14] = channel.of([[id:'vep_cache'], file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)]).collect()
                 input[15] = channel.value([])
                 input[16] = 'wgs'
                 input[17] = null
@@ -104,7 +104,7 @@ nextflow_workflow {
                 input[11] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_functions.lua', checkIfExists: true)).collect()
                 input[12] = channel.value(file(params.pipelines_testdata_base_path + 'reference/grch38_gnomad_reformated_-r3.1.1-.vcf.gz', checkIfExists: true))
                 input[13] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_config.toml', checkIfExists: true)).collect()
-                input[14] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)).collect()
+                input[14] = channel.of([[id:'vep_cache'], file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)]).collect()
                 input[15] = channel.value([])
                 input[16] = 'wes'
                 input[17] = null

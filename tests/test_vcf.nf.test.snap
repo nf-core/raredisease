@@ -58,24 +58,24 @@
                     "bgzip": 1.21
                 },
                 "ENSEMBLVEP_ME": {
-                    "ensemblvep": 110.1,
+                    "ensemblvep": 116.1,
                     "perl-math-cdf": 0.1,
-                    "tabix": 1.21
+                    "tabix": "1.23.1"
                 },
                 "ENSEMBLVEP_MT": {
-                    "ensemblvep": 110.1,
+                    "ensemblvep": 116.1,
                     "perl-math-cdf": 0.1,
-                    "tabix": 1.21
+                    "tabix": "1.23.1"
                 },
                 "ENSEMBLVEP_SNV": {
-                    "ensemblvep": 110.1,
+                    "ensemblvep": 116.1,
                     "perl-math-cdf": 0.1,
-                    "tabix": 1.21
+                    "tabix": "1.23.1"
                 },
                 "ENSEMBLVEP_SV": {
-                    "ensemblvep": 110.1,
+                    "ensemblvep": 116.1,
                     "perl-math-cdf": 0.1,
-                    "tabix": 1.21
+                    "tabix": "1.23.1"
                 },
                 "FILTERVEP": {
                     "filtervep": "1.0.0"
@@ -259,10 +259,10 @@
                 "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz.tbi"
             ]
         ],
-        "timestamp": "2026-08-06T10:45:51.286176975",
+        "timestamp": "2026-08-10T11:47:40.662580991",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     }
 }

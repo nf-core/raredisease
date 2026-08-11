@@ -3,17 +3,17 @@ process ENSEMBLVEP_VEP {
     label 'process_medium'
 
     conda "${moduleDir}/environment.yml"
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
-        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/da/da2ef7e58823df3fc9d6c0a9927e219435329a52173f871a6fa2b5302679f7b2/data'
-        : 'community.wave.seqera.io/library/ensembl-vep_perl-list-moreutils_perl-math-cdf:3c62f15be110ccc2'}"
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/90/9021c17a89ce9034b23f85736fd7ce906c44716e612f8e34d2a5e7ceeeb372d8/data'
+        : 'community.wave.seqera.io/library/ensembl-vep_htslib_perl-math-cdf_gzip_tar:35e34ac4f7e9d58a'}"
 
     input:
     tuple val(meta), path(vcf), path(custom_extra_files)
     val genome
     val species
     val cache_version
-    path cache
-    tuple val(meta2), path(fasta)
+    tuple val(meta2), path(cache)
+    tuple val(meta3), path(fasta)
     path extra_files
 
     output:

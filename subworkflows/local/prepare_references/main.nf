@@ -84,7 +84,7 @@ workflow PREPARE_REFERENCES {
         ch_target_bed_gz_tbi           = channel.value([[:],[],[]])
         ch_target_intervals            = channel.empty()
         ch_vcfanno_extra               = channel.value([[]])
-        ch_vep_resources               = channel.value([[]])
+        ch_vep_resources               = channel.value([[:], []])
 
         ch_genome_fasta = channel.fromPath(val_fasta).map { it -> [[id:it.simpleName], it] }.collect()
         //
@@ -264,9 +264,9 @@ workflow PREPARE_REFERENCES {
         //
         if (val_vep_cache) {
             if (val_vep_cache.endsWith("tar.gz")) {
-                ch_vep_resources = UNTAR_VEP_CACHE (channel.fromPath(val_vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()).untar.map{ _meta, files -> [files]}.collect()
+                ch_vep_resources = UNTAR_VEP_CACHE (channel.fromPath(val_vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()).untar.collect()
             } else {
-                ch_vep_resources = channel.fromPath(val_vep_cache).collect()
+                ch_vep_resources = channel.fromPath(val_vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
             }
         }
 
@@ -301,5 +301,5 @@ workflow PREPARE_REFERENCES {
         target_bed                = ch_target_bed_gz_tbi.collect() // channel:[ val(meta), path(bed), path(tbi) ]
         target_intervals          = ch_target_intervals            // channel:[ path(interval_list) ]
         vcfanno_extra             = ch_vcfanno_extra               // channel:[ [path(vcf), path(tbi)] ]
-        vep_resources             = ch_vep_resources               // channel:[ path(cache) ]
+        vep_resources             = ch_vep_resources               // channel:[ val(meta), path(cache) ]
 }

@@ -143,9 +143,8 @@
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
-                        "git_sha": "34505e1fc5e9f4fd641210ca440acff6bd33b842",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/ensemblvep/vep/ensemblvep-vep.diff"
+                        "git_sha": "e308fe14c49cf664228866a2f17f175efae6bf88",
+                        "installed_by": ["modules"]
                     },
                     "expansionhunter": {
                         "branch": "master",
