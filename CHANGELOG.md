@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `peddy_sites` parameter: lets a custom sites file (`chrom:pos:ref:alt` per line) be used in place of peddy's bundled hg19/hg38 site lists, which are absolute-coordinate and won't overlap a coordinate-remapped or sliced reference, causing `het_check` to crash on zero overlapping sites [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #971](https://github.com/nf-core/raredisease/pull/971)
 - Add GTF-mode VEP annotation support: `ENSEMBLVEP_VEP` can now annotate directly from a bgzipped, tabix-indexed GTF file (`vep_gtf`/`vep_gtf_tbi`) instead of an Ensembl cache, for custom/non-standard references with no corresponding Ensembl cache (e.g. a sliced or coordinate-remapped genome); mutually exclusive with `vep_cache` [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #970](https://github.com/nf-core/raredisease/pull/970)
 - Added `pre_vep_snv_filter_expression` parameter to configure the `bcftools view --exclude` expression used to filter SNVs before VEP annotation, instead of hardcoding it in `conf/modules/annotate_genome_snvs.config` [issue #929](https://github.com/nf-core/raredisease/issues/929) [PR #958](https://github.com/nf-core/raredisease/pull/958)
 - Add a VCF entry point: samplesheets can now supply precalled, case-level SNV/SV/MT VCFs directly, skipping the corresponding calling step and feeding straight into annotation and ranking. See `docs/usage.md` for samplesheet details [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #936](https://github.com/nf-core/raredisease/pull/936)
@@ -93,6 +94,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |               | glnexus_config                |
 |               | vep_gtf                       |
 |               | vep_gtf_tbi                   |
+|               | peddy_sites                   |
 
 ### Tool updates
 

@@ -560,6 +560,14 @@
                     "format": "path",
                     "fa_icon": "fas fa-table",
                     "description": "Path to a bed-like file exported by scout, which contains HGNC_IDs to be used in filter_vep."
+                },
+                "peddy_sites": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to a custom peddy sites file (chrom:pos:ref:alt per line) to use instead of peddy's bundled hg19/hg38 site list.",
+                    "help_text": "Peddy's built-in --sites hg19/hg38 lists are absolute-coordinate, real-genome common-SNP positions. They will not overlap a coordinate-remapped or sliced reference (e.g. a minimal test dataset), causing peddy's het_check to crash on zero overlapping sites. Set this to a sites file built from positions that actually exist in the reference/VCF being used."
                 }
             },
             "required": ["fasta", "intervals_wgs", "intervals_y"]
