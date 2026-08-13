@@ -333,7 +333,7 @@
                     },
                     "peddy": {
                         "branch": "master",
-                        "git_sha": "7773ae1c42342cacb0b99794aa3827af0d523678",
+                        "git_sha": "a66627f24220a7a3ca7a83bd840f1a37c5083327",
                         "installed_by": ["modules"]
                     },
                     "picard/addorreplacereadgroups": {
