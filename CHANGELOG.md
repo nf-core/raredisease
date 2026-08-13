@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Replace the default `test` profile's fixture: the chr20/chrM GRCh37 cache-mode dataset is replaced with a 9-region GIAB trio (SNV/SV/STR/ME/MT) sliced to local coordinates on GRCh38, with VEP running in `--gtf` mode. `fastp` and `peddy` are no longer skipped by default; `smncopynumbercaller` is newly skipped (hardcodes SMN1/SMN2 on chr5, not one of this dataset's loci) [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #972](https://github.com/nf-core/raredisease/pull/972)
 - Feed `UPD_SITES`, `UPD_REGIONS`, and `ANNOTATE_RHOCALLVIZ` the unfiltered vcfanno-annotated VCF instead of the VEP/`pre_vep_snv_filter_expression`-filtered one, so stricter filtering (#929) no longer removes variants these subworkflows need [issue #930](https://github.com/nf-core/raredisease/issues/930) [PR #962](https://github.com/nf-core/raredisease/pull/962)
 - Bump VEP to 116.1 and default `vep_cache_version` to 116; the updated `ensemblvep/vep` module now takes the VEP cache as a `[meta, path]` tuple instead of a bare path, so `PREPARE_REFERENCES` was updated to emit it in that shape [issue #872](https://github.com/nf-core/raredisease/issues/872) [PR #968](https://github.com/nf-core/raredisease/pull/968)
 - Extend the VCF entry point to a fifth type, `repeat` [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #957](https://github.com/nf-core/raredisease/pull/957)
