@@ -49,10 +49,11 @@ nextflow_workflow {
                 input[13] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_config.toml', checkIfExists: true)).collect()
                 input[14] = channel.of([[id:'vep_cache'], file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)]).collect()
                 input[15] = channel.value([])
-                input[16] = 'wgs'
-                input[17] = null
-                input[18] = 'GRCh37'
-                input[19] = 107
+                input[16] = channel.value([[],[]])
+                input[17] = 'wgs'
+                input[18] = null
+                input[19] = 'GRCh37'
+                input[20] = 107
                 """
             }
         }
@@ -106,10 +107,11 @@ nextflow_workflow {
                 input[13] = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_config.toml', checkIfExists: true)).collect()
                 input[14] = channel.of([[id:'vep_cache'], file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)]).collect()
                 input[15] = channel.value([])
-                input[16] = 'wes'
-                input[17] = null
-                input[18] = 'GRCh37'
-                input[19] = 107
+                input[16] = channel.value([[],[]])
+                input[17] = 'wes'
+                input[18] = null
+                input[19] = 'GRCh37'
+                input[20] = 107
                 """
             }
         }
