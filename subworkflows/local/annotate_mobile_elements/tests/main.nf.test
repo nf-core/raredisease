@@ -50,6 +50,7 @@ nextflow_workflow {
                 input[5] = 'GRCh37'
                 input[6] = 107
                 input[7] = channel.value([])
+                input[8] = channel.value([[],[]])
                 """
             }
         }
@@ -89,6 +90,7 @@ nextflow_workflow {
                 input[5] = 'GRCh37'
                 input[6] = 107
                 input[7] = channel.value([])
+                input[8] = channel.value([[],[]])
                 """
             }
         }

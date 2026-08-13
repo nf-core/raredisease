@@ -159,6 +159,7 @@ workflow RAREDISEASE {
     ch_vcfanno_toml
     ch_vep_cache
     ch_vep_extra_files
+    ch_vep_gtf
     ch_versions
     skip_fastp
     skip_fastqc
@@ -612,6 +613,7 @@ workflow RAREDISEASE {
             ch_vcfanno_toml_final,
             ch_vep_cache,
             ch_vep_extra_files,
+            ch_vep_gtf,
             val_analysis_type,
             val_cadd_resources,
             val_genome,
@@ -701,6 +703,7 @@ workflow RAREDISEASE {
             ch_vcfanno_toml_final,
             ch_vep_cache,
             ch_vep_extra_files,
+            ch_vep_gtf,
             val_cadd_resources,
             val_genome,
             val_homoplasmy_af_threshold,
@@ -847,6 +850,7 @@ workflow RAREDISEASE {
             ch_call_sv_vcf,
             ch_vep_cache,
             ch_vep_extra_files,
+            ch_vep_gtf,
             val_svdb_query_bedpedbs,
             val_svdb_query_dbs,
             val_genome,
@@ -909,7 +913,8 @@ workflow RAREDISEASE {
             ch_vep_cache,
             val_genome,
             val_vep_cache_version,
-            ch_vep_extra_files
+            ch_vep_extra_files,
+            ch_vep_gtf
         )
 
         FILTER_ANNOTATE_RANK_ME(

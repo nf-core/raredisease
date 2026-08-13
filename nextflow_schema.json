@@ -520,6 +520,22 @@
                     "help_text": "If no directory path is passed, vcf files will not be annotated by vep.",
                     "fa_icon": "fas fa-folder-open"
                 },
+                "vep_gtf": {
+                    "type": "string",
+                    "exists": true,
+                    "description": "Path to a bgzipped GTF file to annotate with VEP instead of a cache.",
+                    "help_text": "Mutually exclusive with vep_cache. Use for non-standard/custom references (e.g. a sliced or coordinate-remapped genome) that have no corresponding Ensembl cache. Requires vep_gtf_tbi to be set. If set, takes precedence over vep_cache for all four ENSEMBLVEP invocations.",
+                    "pattern": "^\\S+\\.gtf\\.gz$",
+                    "fa_icon": "fas fa-file"
+                },
+                "vep_gtf_tbi": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.gtf\\.gz\\.tbi$",
+                    "description": "Tabix index for vep_gtf.",
+                    "fa_icon": "fas fa-file"
+                },
                 "vep_plugin_files": {
                     "type": "string",
                     "exists": true,
