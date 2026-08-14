@@ -13,15 +13,40 @@ include { TABIX_TABIX as TABIX_EXP_RENAME              } from '../../../modules/
 workflow CALL_REPEAT_EXPANSIONS {
     take:
         ch_bam             // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_samplegender    // channel: [mandatory] [ val(meta), path(tsv) ]
         ch_variant_catalog // channel: [mandatory] [ path(variant_catalog.json) ]
         ch_case_info       // channel: [mandatory] [ val(case_id) ]
         ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
 
     main:
+        ch_samplegender_parsed = ch_samplegender.map { meta, tsv ->
+            def data_line = tsv.readLines()
+                .find { line -> line.trim() && !line.startsWith('#') }
 
-        EXPANSIONHUNTER (
-            ch_bam,
+            def gender
+            if (data_line) {
+                gender = data_line.split('\t')[1]
+            } else if (workflow.stubRun) {
+                gender = meta.sex?.toString() == '2' ? 'female' : 'male'
+            } else {
+                throw new IllegalStateException(
+                    "No SampleGender result found for sample ${meta.id} in ${tsv}"
+                )
+            }
+
+            [meta.id, gender]
+        }
+
+       ch_bam_with_gender = ch_bam
+           .map { meta, bam, bai -> [meta.id, meta, bam, bai] }
+           .join(ch_samplegender_parsed, by: 0, failOnMismatch: true, failOnDuplicate: true)
+           .map { id, meta, bam, bai, gender ->
+               [meta + [ngsbits_sex: gender], bam, bai]
+       }
+
+         EXPANSIONHUNTER (
+            ch_bam_with_gender,
             ch_genome_fasta,
             ch_genome_fai,
             ch_variant_catalog

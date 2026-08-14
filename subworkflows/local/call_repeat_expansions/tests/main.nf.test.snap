@@ -15,7 +15,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "justhusky",
+                            "ngsbits_sex": "male"
                         },
                         "earlycasualcaiman_exphunter_sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -33,7 +34,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "justhusky",
+                            "ngsbits_sex": "male"
                         },
                         "earlycasualcaiman_exphunter_sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -51,7 +53,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "justhusky",
+                            "ngsbits_sex": "male"
                         },
                         "earlycasualcaiman_repeat_expansion.vcf:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -77,7 +80,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "justhusky",
+                            "ngsbits_sex": "male"
                         },
                         "earlycasualcaiman_exphunter_sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -95,7 +99,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "justhusky",
+                            "ngsbits_sex": "male"
                         },
                         "earlycasualcaiman_exphunter_sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -113,7 +118,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "justhusky",
+                            "ngsbits_sex": "male"
                         },
                         "earlycasualcaiman_repeat_expansion.vcf:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -149,7 +155,8 @@
                         "phenotype": 1,
                         "paternal": 0,
                         "maternal": 0,
-                        "case_id": "justhusky"
+                        "case_id": "justhusky",
+                        "ngsbits_sex": "male"
                     },
                     "79adf682f13384ba13be973a64e2db48"
                 ]
