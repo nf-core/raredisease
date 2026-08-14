@@ -1,11 +1,11 @@
 .DS_Store
 
-# VCF/BAM content is verified separately (VCFs via the sorted, CTG-stripped
-# vcf_records check in tests/default.nf.test; BAMs by existence only) since
-# both formats embed run-specific header metadata (command lines, timestamps,
-# temp paths) that make a whole-file hash non-reproducible across otherwise
-# identical runs. .tbi/.csi indices pair with a .vcf.gz body and shift their
-# own byte layout whenever that body's header size changes, so they're not
+# VCF/BAM content is verified separately (VCFs via the vcf_records/sv_records
+# checks in tests/default.nf.test; BAMs by existence only) since both formats
+# embed run-specific header metadata (command lines, timestamps, temp paths)
+# that make a whole-file hash non-reproducible across otherwise identical
+# runs. .tbi/.csi indices pair with a .vcf.gz body and shift their own byte
+# layout whenever that body's header size changes, so they're not
 # independently meaningful to content-check either.
 **/*.vcf.gz
 **/*.vcf
