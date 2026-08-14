@@ -968,10 +968,13 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
     if (!skip_peddy) {
+        ch_peddy_sites = params.peddy_sites
+            ? channel.fromPath(params.peddy_sites).map { sites -> [[:], sites] }.collect()
+            : channel.value([[:],[]])
         PEDDY (
             ch_call_snv_genome_vcf.join(ch_call_snv_genome_tabix, failOnMismatch:true, failOnDuplicate:true),
             ch_pedfile.map{ped -> return[[id:"pedigree"], ped]},
-            [[:],[]]
+            ch_peddy_sites
         )
         ch_peddy = PEDDY.out.vs_html
             .mix(PEDDY.out.html)
