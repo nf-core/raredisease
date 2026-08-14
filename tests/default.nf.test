@@ -67,7 +67,7 @@ nextflow_pipeline {
             // carry several TIDDIT-specific fields that are genuinely non-deterministic between
             // otherwise-identical runs -- not just reordered, but different values outright
             // (assembled breakpoint consensus sequence, per-sample coverage estimates, breakpoint
-            // region boundaries, and arbitrary internal SV_N_M call labels). So snapshotting 
+            // region boundaries, and arbitrary internal SV_N_M call labels). So snapshotting
             // only the fields that define the call itself
             // position, type, length, alleles, and each sample's genotype.
             def sv_records = getAllFilesFromDir(params.outdir, include: ['**/*sv*.vcf.gz'])
