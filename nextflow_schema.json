@@ -520,6 +520,22 @@
                     "help_text": "If no directory path is passed, vcf files will not be annotated by vep.",
                     "fa_icon": "fas fa-folder-open"
                 },
+                "vep_gtf": {
+                    "type": "string",
+                    "exists": true,
+                    "description": "Path to a bgzipped GTF file to annotate with VEP instead of a cache.",
+                    "help_text": "Mutually exclusive with vep_cache. Use for non-standard/custom references (e.g. a sliced or coordinate-remapped genome) that have no corresponding Ensembl cache. Requires vep_gtf_tbi to be set. If set, takes precedence over vep_cache for all four ENSEMBLVEP invocations.",
+                    "pattern": "^\\S+\\.gtf\\.gz$",
+                    "fa_icon": "fas fa-file"
+                },
+                "vep_gtf_tbi": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.gtf\\.gz\\.tbi$",
+                    "description": "Tabix index for vep_gtf.",
+                    "fa_icon": "fas fa-file"
+                },
                 "vep_plugin_files": {
                     "type": "string",
                     "exists": true,
@@ -544,6 +560,14 @@
                     "format": "path",
                     "fa_icon": "fas fa-table",
                     "description": "Path to a bed-like file exported by scout, which contains HGNC_IDs to be used in filter_vep."
+                },
+                "peddy_sites": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to a custom peddy sites file (chrom:pos:ref:alt per line) to use instead of peddy's bundled hg19/hg38 site list.",
+                    "help_text": "Peddy's built-in --sites hg19/hg38 lists are absolute-coordinate, real-genome common-SNP positions. They will not overlap a coordinate-remapped or sliced reference (e.g. a minimal test dataset), causing peddy's het_check to crash on zero overlapping sites. Set this to a sites file built from positions that actually exist in the reference/VCF being used."
                 }
             },
             "required": ["fasta", "intervals_wgs", "intervals_y"]
@@ -591,7 +615,7 @@
                 },
                 "pre_vep_snv_filter_expression": {
                     "type": "string",
-                    "default": "INFO/GNOMADAF > 0.70 | INFO/GNOMADAF_popmax > 0.70",
+                    "default": "INFO/GNOMADAF > 0.70 | INFO/GNOMADAF_grpmax > 0.70",
                     "description": "bcftools expression used to exclude SNVs before VEP annotation.",
                     "help_text": "Passed as the `--exclude` expression to bcftools view before ENSEMBLVEP_SNV. Set stricter filters to reduce the number of variants processed downstream.",
                     "fa_icon": "fas fa-filter"

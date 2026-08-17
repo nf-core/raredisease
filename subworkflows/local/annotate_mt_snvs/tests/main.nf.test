@@ -61,13 +61,16 @@ nextflow_workflow {
                 input[11] = [
                                 file(params.pipelines_testdata_base_path + 'reference/pLI_values.txt', checkIfExists: true),
                                 file(params.pipelines_testdata_base_path + 'reference/LoFtool_scores.txt', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'reference/spliceai_21_scores_raw_snv_-v1.3-.vcf.gz', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'reference/spliceai_21_scores_raw_snv_-v1.3-.vcf.gz.tbi', checkIfExists: true)
+                                file(params.pipelines_testdata_base_path + 'reference/spliceai_snv.vcf.gz', checkIfExists: true),
+                                file(params.pipelines_testdata_base_path + 'reference/spliceai_snv.vcf.gz.tbi', checkIfExists: true),
+                                file(params.pipelines_testdata_base_path + 'reference/spliceai_indel.vcf.gz', checkIfExists: true),
+                                file(params.pipelines_testdata_base_path + 'reference/spliceai_indel.vcf.gz.tbi', checkIfExists: true)
                             ]
-                input[12] = null
-                input[13] = 'GRCh37'
-                input[14] = 1.0
-                input[15] = 107
+                input[12] = channel.value([[],[]])
+                input[13] = null
+                input[14] = 'GRCh37'
+                input[15] = 1.0
+                input[16] = 107
                 """
             }
         }
@@ -114,10 +117,11 @@ nextflow_workflow {
                 input[9]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/vcfanno_config.toml', checkIfExists: true)).collect()
                 input[10] = channel.of([[id:'vep_cache'], file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)]).collect()
                 input[11] = channel.value([])
-                input[12] = null
-                input[13] = 'GRCh37'
-                input[14] = 1.0
-                input[15] = 107
+                input[12] = channel.value([[],[]])
+                input[13] = null
+                input[14] = 'GRCh37'
+                input[15] = 1.0
+                input[16] = 107
                 """
             }
         }

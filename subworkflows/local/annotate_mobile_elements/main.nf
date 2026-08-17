@@ -19,6 +19,7 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
         val_genome              // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version   // string: [mandatory] default: 107
         ch_vep_extra_files      // channel: [mandatory] [ path(files) ]
+        ch_vep_gtf              // channel: [optional]  [ path(gtf) ]
 
     main:
         ch_svdb_dbs = channel.empty()
@@ -57,7 +58,8 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
             val_vep_cache_version,
             ch_vep_cache,
             ch_genome_fasta,
-            ch_vep_extra_files
+            ch_vep_extra_files,
+            ch_vep_gtf
         )
 
         ch_bcftools_filter_input = ENSEMBLVEP_ME.out.vcf

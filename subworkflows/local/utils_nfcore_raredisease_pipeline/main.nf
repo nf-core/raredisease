@@ -474,11 +474,11 @@ def checkRequiredParameters(params) {
         repeat_calling           : ["variant_catalog"],
         repeat_annotation        : ["variant_catalog"],
         snv_calling              : ["genome"],
-        snv_annotation           : ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
+        snv_annotation           : ["genome", "vcfanno_resources", "vcfanno_toml",
                                     "gnomad_af", "score_config_snv", "variant_consequences_snv"],
-        sv_annotation            : ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"],
+        sv_annotation            : ["genome", "score_config_sv", "variant_consequences_sv"],
         mt_annotation            : ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "score_config_mt",
-                                    "vep_cache_version", "vep_cache", "variant_consequences_snv"],
+                                    "variant_consequences_snv"],
         me_calling               : ["mobile_element_references"],
         me_annotation            : ["mobile_element_svdb_annotations", "variant_consequences_snv"],
         gens                     : ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
@@ -513,6 +513,30 @@ def checkRequiredParameters(params) {
     if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_annotation')) && !params.svdb_query_bedpedbs && !params.svdb_query_dbs) {
         println("params.svdb_query_bedpedbs or params.svdb_query_dbs should be set.")
         missingParamsCount += 1
+    }
+
+    // vep_cache and vep_gtf are mutually exclusive annotation sources for
+    // ENSEMBLVEP_VEP (SNV/SV/MT annotation): whichever subworkflows are
+    // active need EITHER a real cache (vep_cache + vep_cache_version) OR
+    // a gtf (vep_gtf, for non-standard/custom references with no Ensembl
+    // cache) -- not neither, and not both.
+    def vepAnnotationActive = ["snv_annotation", "sv_annotation", "mt_annotation"].any { condition ->
+        !all_skips.split(',').contains(condition)
+    }
+    if (vepAnnotationActive) {
+        if (!params.vep_cache && !params.vep_gtf) {
+            println("params.vep_cache or params.vep_gtf should be set.")
+            missingParamsCount += 1
+        } else if (params.vep_cache && params.vep_gtf) {
+            println("Either params.vep_cache or params.vep_gtf should be set, not both.")
+            missingParamsCount += 1
+        } else if (params.vep_cache && !params.vep_cache_version) {
+            println("params.vep_cache_version not set.")
+            missingParamsCount += 1
+        } else if (params.vep_gtf && !params.vep_gtf_tbi) {
+            println("params.vep_gtf_tbi not set.")
+            missingParamsCount += 1
+        }
     }
 
     if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('generate_clinical_set')) ) {

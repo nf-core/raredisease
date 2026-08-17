@@ -35,10 +35,11 @@ nextflow_workflow {
                 ])
                 input[5]  = channel.of([[id:'vep_cache'], file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)]).collect()
                 input[6]  = channel.value([])
-                input[7]  = null
+                input[7]  = channel.value([[],[]])
                 input[8]  = null
-                input[9]  = 'GRCh37'
-                input[10] = 107
+                input[9]  = null
+                input[10] = 'GRCh37'
+                input[11] = 107
                 """
             }
         }
@@ -85,10 +86,11 @@ nextflow_workflow {
                 ])
                 input[5]  = channel.of([[id:'vep_cache'], file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)]).collect()
                 input[6]  = channel.value([])
-                input[7]  = null
-                input[8]  = 'gnomAD.r2.1.1-sv.vcf.gz'
-                input[9]  = 'GRCh37'
-                input[10] = 107
+                input[7]  = channel.value([[],[]])
+                input[8]  = null
+                input[9]  = 'gnomAD.r2.1.1-sv.vcf.gz'
+                input[10] = 'GRCh37'
+                input[11] = 107
                 """
             }
         }

@@ -143,7 +143,7 @@
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
-                        "git_sha": "e308fe14c49cf664228866a2f17f175efae6bf88",
+                        "git_sha": "7047ebe92547d7f029fa6e71d2c893d5fb131938",
                         "installed_by": ["modules"]
                     },
                     "expansionhunter": {
@@ -333,7 +333,7 @@
                     },
                     "peddy": {
                         "branch": "master",
-                        "git_sha": "7773ae1c42342cacb0b99794aa3827af0d523678",
+                        "git_sha": "a66627f24220a7a3ca7a83bd840f1a37c5083327",
                         "installed_by": ["modules"]
                     },
                     "picard/addorreplacereadgroups": {

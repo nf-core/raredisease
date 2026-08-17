@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `peddy_sites` parameter: lets a custom sites file (`chrom:pos:ref:alt` per line) be used in place of peddy's bundled hg19/hg38 site lists, which are absolute-coordinate and won't overlap a coordinate-remapped or sliced reference, causing `het_check` to crash on zero overlapping sites [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #971](https://github.com/nf-core/raredisease/pull/971)
+- Add GTF-mode VEP annotation support: `ENSEMBLVEP_VEP` can now annotate directly from a bgzipped, tabix-indexed GTF file (`vep_gtf`/`vep_gtf_tbi`) instead of an Ensembl cache, for custom/non-standard references with no corresponding Ensembl cache (e.g. a sliced or coordinate-remapped genome); mutually exclusive with `vep_cache` [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #970](https://github.com/nf-core/raredisease/pull/970)
 - Added `pre_vep_snv_filter_expression` parameter to configure the `bcftools view --exclude` expression used to filter SNVs before VEP annotation, instead of hardcoding it in `conf/modules/annotate_genome_snvs.config` [issue #929](https://github.com/nf-core/raredisease/issues/929) [PR #958](https://github.com/nf-core/raredisease/pull/958)
 - Add a VCF entry point: samplesheets can now supply precalled, case-level SNV/SV/MT VCFs directly, skipping the corresponding calling step and feeding straight into annotation and ranking. See `docs/usage.md` for samplesheet details [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #936](https://github.com/nf-core/raredisease/pull/936)
 - Add test coverage for the VCF entry point: function-level nf-test cases for `validateNoMixedCaseInput`/`validatePrecalledVcfCoverage`/`extractPrecalledVcfs`/`hasPrecalledSnvVcf`/`hasPrecalledSvVcf`/`hasPrecalledMtVcf`, and a new `test_vcf` profile/pipeline-level test confirming precalled SNV/SV/MT VCFs correctly skip calling while annotation/ranking still run, plus a negative test for the mixed precalled/raw-input case [issue #261](https://github.com/nf-core/raredisease/issues/261)
@@ -27,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Replace the default `test` profile's fixture: the chr20/chrM GRCh37 cache-mode dataset is replaced with a 9-region GIAB trio (SNV/SV/STR/ME/MT) sliced to local coordinates on GRCh38, with VEP running in `--gtf` mode. `fastp` and `peddy` are no longer skipped by default; `smncopynumbercaller` is newly skipped (hardcodes SMN1/SMN2 on chr5, not one of this dataset's loci) [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #972](https://github.com/nf-core/raredisease/pull/972)
 - Feed `UPD_SITES`, `UPD_REGIONS`, and `ANNOTATE_RHOCALLVIZ` the unfiltered vcfanno-annotated VCF instead of the VEP/`pre_vep_snv_filter_expression`-filtered one, so stricter filtering (#929) no longer removes variants these subworkflows need [issue #930](https://github.com/nf-core/raredisease/issues/930) [PR #962](https://github.com/nf-core/raredisease/pull/962)
 - Bump VEP to 116.1 and default `vep_cache_version` to 116; the updated `ensemblvep/vep` module now takes the VEP cache as a `[meta, path]` tuple instead of a bare path, so `PREPARE_REFERENCES` was updated to emit it in that shape [issue #872](https://github.com/nf-core/raredisease/issues/872) [PR #968](https://github.com/nf-core/raredisease/pull/968)
 - Extend the VCF entry point to a fifth type, `repeat` [issue #261](https://github.com/nf-core/raredisease/issues/261) [PR #957](https://github.com/nf-core/raredisease/pull/957)
@@ -69,6 +72,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Fix `pre_vep_snv_filter_expression`'s default hardcoding `GNOMADAF_popmax`: gnomAD v4 renamed the field to `GNOMADAF_grpmax`, so this filter failed with "tag not defined in VCF header" against any gnomAD v4-labeled annotation, not a dataset-specific issue [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #969](https://github.com/nf-core/raredisease/pull/969)
+- Fix `ANNOTATE_MOBILE_ELEMENTS:BCFTOOLS_VIEW_FILTER` discarding every mobile-element call: RetroSeq never sets `FILTER=PASS` (always `.`), so `--apply-filters PASS` kept nothing; now accepts `.` as well as `PASS` [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #969](https://github.com/nf-core/raredisease/pull/969)
+- Fix `ENSEMBLVEP_SNV`/`ENSEMBLVEP_MT`'s SpliceAI plugin argument scoring every indel against SNV-only data: `indel=` was copy-pasted from `snv=` and pointed at the SNV-scores file for both. Also fixes the same copy-paste bug in `annotate_mt_snvs`'s standalone subworkflow-test config, whose real (non-stub) test never staged an indel-named SpliceAI file either, and unifies the SpliceAI plugin filenames used across cache mode and `--gtf` mode onto `spliceai_snv.vcf.gz`/`spliceai_indel.vcf.gz`, backed by [nf-core/test-datasets#2212](https://github.com/nf-core/test-datasets/pull/2212) renaming the shared `reference/` files [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #969](https://github.com/nf-core/raredisease/pull/969)
 - Fix `MERGE_NUCLEAR_AND_MT_SVS` crashing with "If priority is used, one tag per VCF is needed" whenever both nuclear and mitochondrial SV calling ran: `CALL_SV` no longer pre-merges the nuclear caller VCFs (tiddit/manta/gcnvcaller/cnvnator) into one file before the top-level merge; it now emits the individual per-caller VCFs so the single merge in `raredisease.nf` always has one priority tag per input VCF. Regression from the `CALL_SV`/`CALL_SV_MT` split in [issue #948](https://github.com/nf-core/raredisease/issues/948) [PR #959](https://github.com/nf-core/raredisease/pull/959)
 - Speed up and stabilise the call_snv_deepvariant/call_snv (DeepVariant) subworkflow tests by using small chr22 fixtures, adding 2-sample coverage for GLnexus joint genotyping, and restoring the deterministic variantsMD5 snapshot assertion. [#918](https://github.com/nf-core/raredisease/pull/918)
 - Emit an error at startup when `vep_filters_scout_fmt` or `vep_filters` contains no records (headers or empty lines only), which would otherwise cause the clinical set to silently contain 0 variants [#913](https://github.com/nf-core/raredisease/pull/913)
@@ -87,6 +93,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |               | contamination_sites_tbi       |
 |               | pre_vep_snv_filter_expression |
 |               | glnexus_config                |
+|               | vep_gtf                       |
+|               | vep_gtf_tbi                   |
+|               | peddy_sites                   |
 
 ### Tool updates
 
