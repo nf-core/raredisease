@@ -1,11 +1,11 @@
 nextflow_pipeline {
 
-    name "Test pipeline - pre-aligned input (BAM/CRAM)"
+    name "Test pipeline - pre-aligned singleton input (BAM)"
     script "../main.nf"
     tag "pipeline"
-    profile "test_align"
+    profile "test_align_singleton"
 
-    test("-profile test_align") {
+    test("-profile test_align_singleton") {
 
         when {
             params {
@@ -28,15 +28,9 @@ nextflow_pipeline {
             // the records don't)
             def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
 
-            // vcf_records: every VCF's variant lines, header stripped (removes run-specific
-            // command lines/timestamps), INFO sub-fields sorted (Stranger writes its
-            // disease-annotation keys in a non-deterministic order within an otherwise-identical
-            // record), CSQ's own comma-separated transcript consequences sorted (VEP doesn't
-            // guarantee a stable order across multiple overlapping transcripts), and the overall
-            // line list sorted (so a tie-break in record order between calls sharing the same
-            // position doesn't fail the snapshot when the calls themselves match). TIDDIT-derived
-            // SV files are excluded here -- see sv_records below -- since they carry additional
-            // vendor-specific fields that aren't just reordered but genuinely non-deterministic.
+            // vcf_records: every VCF's variant lines, header stripped, INFO sub-fields sorted, and
+            // CSQ's transcript consequences sorted -- see tests/default.nf.test for the full
+            // rationale. TIDDIT-derived SV files are excluded here -- see sv_records below.
             def vcf_records = getAllFilesFromDir(params.outdir, include: ['**/*.vcf.gz', '**/*.vcf'], ignore: ['**/*sv*.vcf.gz'])
                 .sort { it.name }
                 .collectEntries { f ->
@@ -61,13 +55,8 @@ nextflow_pipeline {
                         .sort()
                     [(f.name): records]
                 }
-            // sv_records: TIDDIT-derived SV calls (sv.vcf.gz and everything downstream of it)
-            // carry several TIDDIT-specific fields that are genuinely non-deterministic between
-            // otherwise-identical runs -- not just reordered, but different values outright
-            // (assembled breakpoint consensus sequence, per-sample coverage estimates, breakpoint
-            // region boundaries, and arbitrary internal SV_N_M call labels). So snapshotting
-            // only the fields that define the call itself
-            // position, type, length, alleles, and each sample's genotype.
+            // sv_records: TIDDIT-derived SV calls reduced to their essential fields -- see
+            // tests/default.nf.test for the full rationale.
             def sv_records = getAllFilesFromDir(params.outdir, include: ['**/*sv*.vcf.gz'])
                 .sort { it.name }
                 .collectEntries { f ->
