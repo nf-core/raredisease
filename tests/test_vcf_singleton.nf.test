@@ -1,11 +1,11 @@
 nextflow_pipeline {
 
-    name "Test pipeline - precalled VCF input"
+    name "Test pipeline - precalled VCF singleton input"
     script "../main.nf"
     tag "pipeline"
-    profile "test_vcf"
+    profile "test_vcf_singleton"
 
-    test("-profile test_vcf") {
+    test("-profile test_vcf_singleton") {
 
         when {
             params {
@@ -101,29 +101,6 @@ nextflow_pipeline {
                     // TIDDIT-derived SV calls, reduced to their essential fields
                     sv_records
                 ).match() }
-            )
-        }
-    }
-
-    test("-profile test_vcf, mixed precalled and raw input errors") {
-
-        options "-stub"
-
-        when {
-            params {
-                outdir            = "$outputDir"
-                input             = 'https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/testdata/samplesheet_vcf_mixed_invalid.csv'
-                // This fixture predates the `me`/`repeat` types and has no me/repeat rows; skip them
-                // explicitly so this test still isolates the mixed-input error rather than tripping
-                // the separate "missing me/repeat coverage" validation first.
-                skip_subworkflows = 'me_calling,repeat_calling'
-            }
-        }
-
-        then {
-            assertAll(
-                { assert workflow.failed },
-                { assert workflow.stdout.any { it.contains("mixes precalled VCF input") } }
             )
         }
     }
