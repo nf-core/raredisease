@@ -10,6 +10,8 @@ nextflow_workflow {
     tag "gatk4/mutect2"
     tag "gatk4/filtermutectcalls"
 
+    config "./nextflow.config"
+
     test("CALL_SNV_MT") {
 
         when {

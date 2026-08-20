@@ -16,6 +16,8 @@ nextflow_workflow {
     tag "bcftools/annotate"
     tag "local/add_varcallername_to_bed"
 
+    config "./nextflow.config"
+
     test("POSTPROCESS_MT_CALLS - stub") {
 
         options "-stub"

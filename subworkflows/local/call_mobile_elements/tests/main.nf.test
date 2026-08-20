@@ -16,6 +16,8 @@ nextflow_workflow {
     tag "tabix/tabix"
     tag "svdb/merge"
 
+    config "./nextflow.config"
+
     test("CALL_MOBILE_ELEMENTS") {
 
         when {
