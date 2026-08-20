@@ -1,7 +1,7 @@
 .DS_Store
 
-# VCF/BAM content is verified separately (VCFs via the vcf_records/sv_records
-# checks in tests/default.nf.test; BAMs by existence only) since both formats
+# VCF/BAM content is verified separately (VCFs via each test's own
+# vcf_records/sv_records checks; BAMs by existence only) since both formats
 # embed run-specific header metadata (command lines, timestamps, temp paths)
 # that make a whole-file hash non-reproducible across otherwise identical
 # runs. .tbi/.csi indices pair with a .vcf.gz body and shift their own byte
@@ -18,8 +18,8 @@
 # embed a generation timestamp and/or are threshold-triggered (e.g.
 # overrepresented-sequences, duplication-levels) on this dataset's low read
 # counts, so both their content and, in some cases, their very existence can
-# vary between identical runs. Existence is still covered by stable_path's
-# own ignore list in tests/default.nf.test where that additionally applies.
+# vary between identical runs. Existence is still covered by each test's own
+# stable_path ignore list where that additionally applies.
 **/*.fastp.html
 **/*.fastp.log
 **/*_fastqc.{html,zip}
