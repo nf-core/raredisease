@@ -7,24 +7,24 @@
             [
                 "severepli.vcf.gz.tbi"
             ],
-            "58d9c7a329ee86094acc0826b671652c",
-            "VcfFile [chromosomes=[MT], sampleCount=3, variantCount=22, phased=false, phasedAutodetect=false]"
+            "ee53388ed52bd3d4ba8414567d0474d2",
+            "VcfFile [chromosomes=[chr7, chrX, chr16, chr21, chr1, chr12, chr20], sampleCount=3, variantCount=783, phased=false, phasedAutodetect=false]"
         ],
-        "timestamp": "2026-06-26T16:05:57.762515171",
+        "timestamp": "2026-08-21T13:36:59.855730249",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     },
     "ANNOTATE_CSQ_PLI - no index": {
         "content": [
-            "58d9c7a329ee86094acc0826b671652c",
-            "VcfFile [chromosomes=[MT], sampleCount=3, variantCount=22, phased=false, phasedAutodetect=false]"
+            "ee53388ed52bd3d4ba8414567d0474d2",
+            "VcfFile [chromosomes=[chr7, chrX, chr16, chr21, chr1, chr12, chr20], sampleCount=3, variantCount=783, phased=false, phasedAutodetect=false]"
         ],
-        "timestamp": "2026-03-01T17:08:08.450262918",
+        "timestamp": "2026-08-21T13:36:42.840030621",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     },
     "ANNOTATE_CSQ_PLI - with index, stub": {
@@ -33,7 +33,7 @@
                 "0": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
                         "severepli.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -41,7 +41,7 @@
                 "1": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
                         "severepli.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
@@ -49,7 +49,7 @@
                 "tbi": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
                         "severepli.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -57,17 +57,17 @@
                 "vcf_ann": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
                         "severepli.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-06-26T15:58:14.350740472",
+        "timestamp": "2026-08-21T11:12:08.884893384",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     }
 }

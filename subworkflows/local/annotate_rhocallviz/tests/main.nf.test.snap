@@ -1,4 +1,31 @@
 {
+    "ANNOTATE_RHOCALLVIZ - minimal dataset": {
+        "content": [
+            [
+                [
+                    "ACC13778A1_rhocallviz.bed:md5,4579710bbd8e1e4449274d261c439891"
+                ]
+            ],
+            [
+                [
+                    "ACC13778A1_rhocallviz.wig:md5,bda08a523e20f8aa713c0bcd80bf02ca"
+                ]
+            ],
+            [
+                [
+                    "ACC13778A1_rhocallviz.bw:md5,b81e85f354f22214d4d6f8e0f8570322"
+                ]
+            ],
+            [
+                
+            ]
+        ],
+        "timestamp": "2026-08-21T11:10:17.264453173",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
     "ANNOTATE_RHOCALLVIZ - stub": {
         "content": [
             [
