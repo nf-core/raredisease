@@ -46,6 +46,22 @@
             "nextflow": "25.10.4"
         }
     },
+    "RANK_VARIANTS - SNV (process_with_sort = false), minimal dataset": {
+        "content": [
+            "d88cb31dfec4e1cd97a834181413aaab",
+            [
+                "amusingmarmoset.vcf.gz"
+            ],
+            [
+                "amusingmarmoset.vcf.gz.tbi"
+            ]
+        ],
+        "timestamp": "2026-08-24T14:08:40.759514547",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
     "RANK_VARIANTS - SNV (process_with_sort = false), stub": {
         "content": [
             {

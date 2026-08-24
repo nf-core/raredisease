@@ -196,5 +196,23 @@
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
+    },
+    "FILTER_ANNOTATE_RANK - clinical set + rank, minimal dataset": {
+        "content": [
+            "d41d8cd98f00b204e9800998ecf8427e",
+            [
+                "amusingmarmoset_ranked_clinical.vcf.gz",
+                "amusingmarmoset_ranked_research.vcf.gz"
+            ],
+            [
+                "amusingmarmoset_ranked_clinical.vcf.gz.tbi",
+                "amusingmarmoset_ranked_research.vcf.gz.tbi"
+            ]
+        ],
+        "timestamp": "2026-08-24T13:16:35.507244655",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
     }
 }
