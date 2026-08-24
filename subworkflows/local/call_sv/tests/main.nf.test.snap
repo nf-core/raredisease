@@ -39,5 +39,21 @@
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
+    },
+    "CALL_SV - wgs, minimal dataset": {
+        "content": [
+            [
+                [
+                    "amusingmarmoset_tiddit.vcf.gz",
+                    "amusingmarmoset_manta.vcf.gz",
+                    "amusingmarmoset_cnvnator.vcf.gz"
+                ]
+            ]
+        ],
+        "timestamp": "2026-08-21T14:24:20.169277138",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
     }
 }

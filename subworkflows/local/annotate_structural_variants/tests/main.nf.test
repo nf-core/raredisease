@@ -14,6 +14,59 @@ nextflow_workflow {
 
     config "./nextflow.config"
 
+    test("ANNOTATE_STRUCTURAL_VARIANTS - minimal dataset") {
+
+        when {
+            params {
+                bcftools_view = "--output-type z"
+                vep           = "--dir_plugins . --plugin pLI,pLI_values.txt --appris --biotype --buffer_size 100 --canonical --ccds --compress_output bgzip --distance 5000 --domains --exclude_predicted --force_overwrite --format vcf --hgvs --humdiv --max_sv_size 248956422 --no_progress --numbers --per_gene --polyphen p --protein --regulatory --sift p --symbol --tsl --uniprot --vcf"
+            }
+            workflow {
+                """
+                input[0]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.dict', checkIfExists: true)]).collect()
+                input[1]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[2]  = channel.of(
+                    [file(params.pipelines_testdata_base_path + 'resources_remapped/svdb/grch38_clinvar_sv_pathogenic_-20250728-.remapped.bedpe', checkIfExists: true), '', '', 'clinvar_pathogenicFrq', 'clinvar_pathogenicOcc'],
+                    [file(params.pipelines_testdata_base_path + 'resources_remapped/svdb/grch38_clinvar_sv_non_pathogenic_-20250728-.remapped.bedpe', checkIfExists: true), '', '', 'clinvar_non_pathogenicFrq', 'clinvar_non_pathogenicOcc']
+                )
+                input[3]  = channel.of(
+                    [file(params.pipelines_testdata_base_path + 'resources_remapped/svdb/grch38_gnomad.v4.1.sv.sites.no_cnv.remapped.vcf.gz', checkIfExists: true), 'AF', 'AC', 'gnomad_svAF', 'gnomad_svAC']
+                )
+                input[4]  = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.pipelines_testdata_base_path + 'precalled/trio/amusingmarmoset_precalled_sv.vcf.gz', checkIfExists: true)
+                ])
+                input[5]  = channel.value([[:], []])
+                input[6]  = [
+                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/LoFtool.pm', checkIfExists: true),
+                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/pLI.pm', checkIfExists: true),
+                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/SpliceAI.pm', checkIfExists: true),
+                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/plugin_config.txt', checkIfExists: true),
+                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/pLI_values.txt', checkIfExists: true)
+                            ]
+                input[7]  = channel.of(
+                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/minimal_reference.sorted.gtf.gz', checkIfExists: true),
+                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/minimal_reference.sorted.gtf.gz.tbi', checkIfExists: true)
+                            ).collect()
+                input[8]  = 'resources_remapped/svdb/grch38_clinvar_sv_pathogenic_-20250728-.remapped.bedpe,resources_remapped/svdb/grch38_clinvar_sv_non_pathogenic_-20250728-.remapped.bedpe'
+                input[9]  = 'grch38_gnomad.v4.1.sv.sites.no_cnv.remapped.vcf.gz'
+                input[10] = 'GRCh38'
+                input[11] = 116
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    "${file(workflow.out.vcf_ann[0][1]).name}:md5,${path(workflow.out.vcf_ann[0][1]).vcf.variantsMD5}",
+                    path(workflow.out.vcf_ann[0][1]).vcf.summary
+                ).match() }
+            )
+        }
+    }
+
     test("ANNOTATE_STRUCTURAL_VARIANTS - no SVDB queries, stub") {
 
         options "-stub"
