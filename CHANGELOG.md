@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Migrate `contamination`'s real tests to the minimal dataset [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #TBD](https://github.com/nf-core/raredisease/pull/TBD)
 - Replace the per-profile BWA index memory override (duplicated across every `test_*.config` with a colon-anchored selector) with a single safe floor in `conf/modules/prepare_references.config`, applied unconditionally without affecting `PREPARE_REFERENCES`'s own real-fasta test [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #975](https://github.com/nf-core/raredisease/pull/975)
 - Migrate the `test_singleton` profile's fixture to the minimal 9-region GIAB dataset (same trio, proband alone), matching the default profile's migration; also fixes a stale `skip_tools` override that was silently dropping `smncopynumbercaller` from the test [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #976](https://github.com/nf-core/raredisease/pull/976)
 - Migrate the `test_align` profile's fixture to the minimal dataset (BAM/CRAM trio) [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #977](https://github.com/nf-core/raredisease/pull/977)
