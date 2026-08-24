@@ -1,14 +1,14 @@
 {
-    "CALL_MT_SNVS - wgs": {
+    "CALL_MT_SNVS - wgs, minimal dataset": {
         "content": [
             [
-                "justhusky_mitochondria.vcf.gz"
+                "amusingmarmoset_mitochondria.vcf.gz"
             ],
             [
-                "justhusky_mitochondria.vcf.gz.tbi"
+                "amusingmarmoset_mitochondria.vcf.gz.tbi"
             ]
         ],
-        "timestamp": "2026-07-14T22:49:43.37203972",
+        "timestamp": "2026-08-24T14:59:59.603664793",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
