@@ -10,6 +10,17 @@
             "nextflow": "25.10.4"
         }
     },
+    "CALL_SV_MANTA - minimal dataset": {
+        "content": [
+            "ace4e5a3779148f6e6801b2e1eec7aeb",
+            "488262b4d2edc32c8f1c65e058777987"
+        ],
+        "timestamp": "2026-08-24T09:31:32.314595189",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
     "CALL_SV_MANTA - stub": {
         "content": [
             {
