@@ -1,136 +1,136 @@
 {
-    "SUBSAMPLE_MT_FRAC": {
+    "SUBSAMPLE_MT_FRAC - wgs, minimal dataset": {
         "content": [
             [
                 [
                     {
-                        "id": "earlycasualcaiman",
-                        "seedfrac": "31.339226",
-                        "sample": "earlycasualcaiman",
+                        "id": "ACC13778A2",
+                        "seedfrac": "31.020741",
+                        "sample": "ACC13778A2",
                         "single_end": false,
                         "num_lanes": 1,
-                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                         "lane": 1,
-                        "sex": 1,
+                        "sex": 2,
                         "phenotype": 1,
                         "paternal": 0,
                         "maternal": 0,
-                        "case_id": "justhusky"
+                        "case_id": "amusingmarmoset"
                     },
-                    "3738567deb98475ea48267fc25568a6a"
+                    "9ffc263bc5ed9612592908d38e28ad8d"
                 ]
             ],
             [
                 [
                     {
-                        "id": "earlycasualcaiman",
-                        "seedfrac": "31.339226",
-                        "sample": "earlycasualcaiman",
+                        "id": "ACC13778A2",
+                        "seedfrac": "31.020741",
+                        "sample": "ACC13778A2",
                         "single_end": false,
                         "num_lanes": 1,
-                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                         "lane": 1,
-                        "sex": 1,
+                        "sex": 2,
                         "phenotype": 1,
                         "paternal": 0,
                         "maternal": 0,
-                        "case_id": "justhusky"
+                        "case_id": "amusingmarmoset"
                     },
-                    "earlycasualcaiman_mt_subsample.bam.bai"
+                    "ACC13778A2_mt_subsample.bam.bai"
                 ]
             ]
         ],
-        "timestamp": "2026-05-20T00:15:22.219541427",
+        "timestamp": "2026-08-24T16:56:34.503761415",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     },
-    "SUBSAMPLE_MT_FRAC -stub": {
+    "SUBSAMPLE_MT_FRAC - wgs, stub": {
         "content": [
             {
                 "0": [
                     [
                         {
-                            "id": "earlycasualcaiman",
+                            "id": "ACC13778A2",
                             "seedfrac": null,
-                            "sample": "earlycasualcaiman",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_mt_subsample.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A2_mt_subsample.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "1": [
                     [
                         {
-                            "id": "earlycasualcaiman",
+                            "id": "ACC13778A2",
                             "seedfrac": null,
-                            "sample": "earlycasualcaiman",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_mt_subsample.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A2_mt_subsample.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "bai": [
                     [
                         {
-                            "id": "earlycasualcaiman",
+                            "id": "ACC13778A2",
                             "seedfrac": null,
-                            "sample": "earlycasualcaiman",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_mt_subsample.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A2_mt_subsample.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "bam": [
                     [
                         {
-                            "id": "earlycasualcaiman",
+                            "id": "ACC13778A2",
                             "seedfrac": null,
-                            "sample": "earlycasualcaiman",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_mt_subsample.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A2_mt_subsample.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-05-20T00:15:41.615447408",
+        "timestamp": "2026-08-24T16:56:50.152583154",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     }
 }

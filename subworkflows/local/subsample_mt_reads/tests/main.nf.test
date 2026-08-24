@@ -13,18 +13,18 @@ nextflow_workflow {
 
     config "./nextflow.config"
 
-    test("SUBSAMPLE_MT_READS") {
+    test("SUBSAMPLE_MT_READS - wgs, minimal dataset") {
 
         when {
             params {
-                mt_subsample_reads = 18000
+                mt_subsample_reads = 5000
             }
             workflow {
                 """
                 input[0] = channel.of([
-                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/ACC13778A2_mt_aligned.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/ACC13778A2_mt_aligned.bam.bai', checkIfExists: true)
                 ])
                 """
             }
@@ -42,7 +42,7 @@ nextflow_workflow {
         }
     }
 
-    test("SUBSAMPLE_MT_READS -stub") {
+    test("SUBSAMPLE_MT_READS - wgs, stub") {
 
         options "-stub"
 
@@ -53,9 +53,9 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = channel.of([
-                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/ACC13778A2_mt_aligned.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/ACC13778A2_mt_aligned.bam.bai', checkIfExists: true)
                 ])
                 """
             }
