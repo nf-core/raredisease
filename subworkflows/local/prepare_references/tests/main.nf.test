@@ -32,8 +32,7 @@ nextflow_workflow {
 
         when {
             params {
-                variant_caller     = "deepvariant"
-                mito_name          = "MT"
+                mito_name          = "chrM"
                 bait_padding       = 100
             }
             workflow {
@@ -44,8 +43,8 @@ nextflow_workflow {
                 input[3]  = null
                 input[4]  = null
                 input[5]  = null
-                input[6]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
-                input[7]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
+                input[6]  = params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta'
+                input[7]  = params.pipelines_testdata_base_path + 'resources_remapped/vcfanno/grch38_gnomad_af.remapped.tab.gz'
                 input[8]  = null
                 input[9]  = null
                 input[10] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
@@ -54,7 +53,7 @@ nextflow_workflow {
                 input[13] = null
                 input[14] = true
                 input[15] = null
-                input[16] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[16] = params.pipelines_testdata_base_path + 'resources_remapped/beds/target_bed.remapped.bed'
                 input[17] = null
                 input[18] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
                 """
@@ -112,8 +111,7 @@ nextflow_workflow {
 
         when {
             params {
-                variant_caller     = "deepvariant"
-                mito_name          = "MT"
+                mito_name          = "chrM"
                 bait_padding       = 100
             }
             workflow {
@@ -124,8 +122,8 @@ nextflow_workflow {
                 input[3]  = null
                 input[4]  = null
                 input[5]  = null
-                input[6]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
-                input[7]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
+                input[6]  = params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta'
+                input[7]  = params.pipelines_testdata_base_path + 'resources_remapped/vcfanno/grch38_gnomad_af.remapped.tab.gz'
                 input[8]  = null
                 input[9]  = null
                 input[10] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
@@ -134,7 +132,7 @@ nextflow_workflow {
                 input[13] = null
                 input[14] = true
                 input[15] = null
-                input[16] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[16] = params.pipelines_testdata_base_path + 'resources_remapped/beds/target_bed.remapped.bed'
                 input[17] = null
                 input[18] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
                 """
@@ -192,8 +190,7 @@ nextflow_workflow {
 
         when {
             params {
-                variant_caller     = "deepvariant"
-                mito_name          = "MT"
+                mito_name          = "chrM"
                 bait_padding       = 100
             }
             workflow {
