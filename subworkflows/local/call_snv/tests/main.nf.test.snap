@@ -7,13 +7,13 @@
                 "test2_deepvar.visual_report.html"
             ],
             [
-                "justhusky_snv.vcf.gz.tbi"
+                "justhusky.vcf.gz.tbi"
             ]
         ],
-        "timestamp": "2026-07-29T15:02:29.995011028",
+        "timestamp": "2026-08-24T21:11:32.667491205",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     },
     "CALL_SNV - deepvariant wgs, stub": {
@@ -95,7 +95,7 @@
                         {
                             "id": "justhusky"
                         },
-                        "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "justhusky.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "4": [
@@ -103,7 +103,7 @@
                         {
                             "id": "justhusky"
                         },
-                        "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "5": [
@@ -111,8 +111,8 @@
                         {
                             "id": "justhusky"
                         },
-                        "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
-                        "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "justhusky.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "deepvariant_report": [
@@ -191,7 +191,7 @@
                         {
                             "id": "justhusky"
                         },
-                        "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "justhusky.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "genome_vcf": [
@@ -199,7 +199,7 @@
                         {
                             "id": "justhusky"
                         },
-                        "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "genome_vcf_tabix": [
@@ -207,16 +207,16 @@
                         {
                             "id": "justhusky"
                         },
-                        "justhusky_snv.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
-                        "justhusky_snv.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "justhusky.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-07-29T15:03:07.086288156",
+        "timestamp": "2026-08-24T21:12:05.229778796",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     }
 }

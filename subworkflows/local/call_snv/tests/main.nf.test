@@ -34,7 +34,7 @@ nextflow_workflow {
                 """
                 input[0]  = channel.of([[id:'interval'], []])
                 input[1]  = channel.of([id:'justhusky'])
-                input[2]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz', checkIfExists: true)])
+                input[2]  = channel.of([[:], []])
                 input[3]  = channel.of([[id:'genome'], []])
                 input[4]  = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
                 input[5]  = channel.of(
@@ -98,7 +98,7 @@ nextflow_workflow {
                 """
                 input[0]  = channel.of([[id:'interval'], []])
                 input[1]  = channel.of([id:'justhusky'])
-                input[2]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz', checkIfExists: true)])
+                input[2]  = channel.of([[:], []])
                 input[3]  = channel.of([[id:'genome'], []])
                 input[4]  = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
                 input[5]  = channel.of(
