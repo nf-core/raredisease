@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `somalier/extract` and `somalier/relate` modules via the `nf-core/vcf_extract_relate_somalier` subworkflow, ported from `patch` [issue #446](https://github.com/nf-core/raredisease/issues/446) [PR #891](https://github.com/nf-core/raredisease/pull/891)
+- Add the `fastdup` module as a faster alternative to Picard MarkDuplicates in `align_bwa_bwamem2_bwameme`, ported from `patch` [issue #864](https://github.com/nf-core/raredisease/issues/864) [PR #876](https://github.com/nf-core/raredisease/pull/876)
 - Add `test_vcf_singleton` profile [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #978](https://github.com/nf-core/raredisease/pull/978)
 - Add `test_align_singleton` profile (BAM-only singleton input) [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #977](https://github.com/nf-core/raredisease/pull/977)
 - Add `peddy_sites` parameter: lets a custom sites file (`chrom:pos:ref:alt` per line) be used in place of peddy's bundled hg19/hg38 site lists, which are absolute-coordinate and won't overlap a coordinate-remapped or sliced reference, causing `het_check` to crash on zero overlapping sites [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #971](https://github.com/nf-core/raredisease/pull/971)
@@ -105,6 +107,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |               | vep_gtf                       |
 |               | vep_gtf_tbi                   |
 |               | peddy_sites                   |
+|               | duplicates_marker             |
+|               | somalier_sites_vcf            |
 
 ### Tool updates
 

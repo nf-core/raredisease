@@ -6,6 +6,7 @@ include { BWAFASTALIGN_MEM                         } from '../../../modules/nf-c
 include { BWAMEM2_MEM                              } from '../../../modules/nf-core/bwamem2/mem/main'
 include { BWAMEME_MEM                              } from '../../../modules/nf-core/bwameme/mem/main'
 include { BWA_MEM as BWA                           } from '../../../modules/nf-core/bwa/mem/main'
+include { FASTDUP                                  } from '../../../modules/nf-core/fastdup/main'
 include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-core/picard/markduplicates/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_ALIGN   } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_EXTRACT } from '../../../modules/nf-core/samtools/index/main'
@@ -25,6 +26,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_input_reads         // channel: [mandatory] [ val(meta), path(reads_input) ]
         val_aligner            // string:  'bwa', 'bwafastalign', 'bwamem2', or 'bwameme'
+        val_duplicates_marker  // string:  'markduplicates' or 'fastdup', default: 'markduplicates'
         val_extract_alignments // boolean
         val_platform           // string:  [mandatory] default: illumina
 
@@ -76,12 +78,24 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         }
 
         // Marking duplicates
-        MARKDUPLICATES ( prepared_bam , ch_genome_fasta, ch_genome_fai )
-        SAMTOOLS_INDEX_MARKDUP ( MARKDUPLICATES.out.bam )
+        if (val_duplicates_marker == "markduplicates") {
+            MARKDUPLICATES ( prepared_bam, ch_genome_fasta, ch_genome_fai )
+            SAMTOOLS_INDEX_MARKDUP ( MARKDUPLICATES.out.bam )
+
+            ch_marked_bam      = MARKDUPLICATES.out.bam
+            ch_marked_bai      = SAMTOOLS_INDEX_MARKDUP.out.bai
+            ch_markdup_metrics = MARKDUPLICATES.out.metrics
+        } else {
+            FASTDUP ( prepared_bam )
+
+            ch_marked_bam      = FASTDUP.out.bam
+            ch_marked_bai      = FASTDUP.out.bai
+            ch_markdup_metrics = FASTDUP.out.metrics
+        }
 
     emit:
-        marked_bai      = SAMTOOLS_INDEX_MARKDUP.out.bai // channel: [ val(meta), path(bai) ]
-        marked_bam      = MARKDUPLICATES.out.bam         // channel: [ val(meta), path(bam) ]
-        markdup_metrics = MARKDUPLICATES.out.metrics     // channel: [ val(meta), path(metrics) ]
-        stats           = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), path(stats) ]
+        marked_bai      = ch_marked_bai            // channel: [ val(meta), path(bai) ]
+        marked_bam      = ch_marked_bam            // channel: [ val(meta), path(bam) ]
+        markdup_metrics = ch_markdup_metrics       // channel: [ val(meta), path(metrics) ]
+        stats           = SAMTOOLS_STATS.out.stats // channel: [ val(meta), path(stats) ]
 }
