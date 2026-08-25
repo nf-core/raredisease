@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- Add a real (non-stub) test to `annotate_structural_variants` using the new minimal 9-region GIAB dataset, and migrate `call_sv`'s existing real test from the old large-genome fixtures to the same minimal dataset, extended to the full trio so `CALL_SV_TIDDIT`/`CALL_SV_CNVNATOR`'s per-sample fan-out and `CALL_SV_MANTA`'s joint calling are all exercised, not just the single-sample path [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #983](https://github.com/nf-core/raredisease/pull/983)
+- Add a real (non-stub) test to `annotate_structural_variants` using the new minimal 9-region GIAB dataset, and migrate `call_sv`'s existing real test from the old large-genome fixtures to the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #983](https://github.com/nf-core/raredisease/pull/983)
 - Add `test_vcf_singleton` profile [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #978](https://github.com/nf-core/raredisease/pull/978)
 - Add `test_align_singleton` profile (BAM-only singleton input) [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #977](https://github.com/nf-core/raredisease/pull/977)
 - Add `peddy_sites` parameter: lets a custom sites file (`chrom:pos:ref:alt` per line) be used in place of peddy's bundled hg19/hg38 site lists, which are absolute-coordinate and won't overlap a coordinate-remapped or sliced reference, causing `het_check` to crash on zero overlapping sites [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #971](https://github.com/nf-core/raredisease/pull/971)
