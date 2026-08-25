@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GATK Contamination results displayed in MultiQC with color-coded thresholds [#758](https://github.com/nf-core/raredisease/pull/758)
 - Added non-stub tests for `annotate_mobile_elements` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #923](https://github.com/nf-core/raredisease/pull/923)
 - Added non-stub tests for `call_mobile_elements` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #924](https://github.com/nf-core/raredisease/pull/924)
-- Added non-stub tests for `rank_variants` and `filter_annotate_rank` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #TBD](https://github.com/nf-core/raredisease/pull/TBD)
+- Added non-stub tests for `rank_variants` and `filter_annotate_rank` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #988](https://github.com/nf-core/raredisease/pull/988)
 
 ### `Removed`
 
@@ -81,8 +81,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
-- Fix `rank_variants`'s standalone test missing `GENMOD_*` args needed to run for real (present in the pipeline config, never mirrored into the subworkflow test config) [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #TBD](https://github.com/nf-core/raredisease/pull/TBD)
-- Fix `rank_variants`'s real test flaking on `variantsMD5`: genmod's multiprocessing doesn't guarantee record order among same-position ties, so records are now sorted before hashing [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #TBD](https://github.com/nf-core/raredisease/pull/TBD)
+- Fix `rank_variants`'s standalone test missing `GENMOD_*` args needed to run for real (present in the pipeline config, never mirrored into the subworkflow test config) [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #988](https://github.com/nf-core/raredisease/pull/988)
+- Fix `rank_variants`'s real test flaking on `variantsMD5`: genmod's multiprocessing doesn't guarantee record order among same-position ties, so records are now sorted before hashing [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #988](https://github.com/nf-core/raredisease/pull/988)
 - Fix pipeline-level `conf/modules/*.config` selectors leaking into subworkflow-level nf-test isolation: `withName` patterns nested under a locally-tested subworkflow (e.g. `.*CALL_SV:CALL_SV_MANTA:MANTA`) matched that subworkflow's own standalone test run as well as the real pipeline, since `.*` can match an empty prefix; anchored ~165 selectors across 30 `conf/modules/*.config` files to `.*:PARENT:CHILD:PROC` so they only apply when reached via a genuine outer (pipeline) prefix, and backfilled the subworkflow-local `tests/nextflow.config` overrides (adding the required `config "./nextflow.config"` test directive where missing) that several subworkflows had been unknowingly relying on the leaked pipeline values for [issue #981](https://github.com/nf-core/raredisease/issues/981) [PR #982](https://github.com/nf-core/raredisease/pull/982)
 - Fix `pre_vep_snv_filter_expression`'s default hardcoding `GNOMADAF_popmax`: gnomAD v4 renamed the field to `GNOMADAF_grpmax`, so this filter failed with "tag not defined in VCF header" against any gnomAD v4-labeled annotation, not a dataset-specific issue [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #969](https://github.com/nf-core/raredisease/pull/969)
 - Fix `ANNOTATE_MOBILE_ELEMENTS:BCFTOOLS_VIEW_FILTER` discarding every mobile-element call: RetroSeq never sets `FILTER=PASS` (always `.`), so `--apply-filters PASS` kept nothing; now accepts `.` as well as `PASS` [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #969](https://github.com/nf-core/raredisease/pull/969)
