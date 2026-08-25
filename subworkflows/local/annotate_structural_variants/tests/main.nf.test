@@ -57,10 +57,25 @@ nextflow_workflow {
         }
 
         then {
+            // VEP's CSQ field lists overlapping-transcript annotations comma-separated in a
+            // non-deterministic order (independent of record order); sort each record's CSQ
+            // sub-entries in addition to the records themselves for a stable hash.
+            def allLines = path(workflow.out.vcf_ann[0][1]).linesGzip
+            def header = allLines.findAll { it.startsWith('#') }
+            def records = allLines.findAll { !it.startsWith('#') }.collect { line ->
+                def cols = line.split('\t')
+                def info = cols[7].split(';').collect { field ->
+                    field.startsWith('CSQ=') ? 'CSQ=' + field.substring(4).split(',').sort().join(',') : field
+                }.join(';')
+                cols[7] = info
+                cols.join('\t')
+            }.sort()
+            def sortedFile = File.createTempFile('annotate_structural_variants_sorted_', '.vcf')
+            sortedFile.text = (header + records).join('\n') + '\n'
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
-                    "${file(workflow.out.vcf_ann[0][1]).name}:md5,${path(workflow.out.vcf_ann[0][1]).vcf.variantsMD5}",
+                    "${file(workflow.out.vcf_ann[0][1]).name}:md5,${path(sortedFile.toString()).vcf.variantsMD5}",
                     path(workflow.out.vcf_ann[0][1]).vcf.summary
                 ).match() }
             )
