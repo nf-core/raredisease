@@ -114,6 +114,19 @@
             "nextflow": "26.04.6"
         }
     },
+    "CALL_SNV_SENTIEON - two samples (merge), minimal dataset": {
+        "content": [
+            "7a5ca713168c4844ba42fc54f55d08fb",
+            [
+                "amusingmarmoset_split_rmdup_info.vcf.gz.tbi"
+            ]
+        ],
+        "timestamp": "2026-08-25T13:34:05.942802415",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
     "CALL_SNV_SENTIEON - single sample, stub": {
         "content": [
             {
