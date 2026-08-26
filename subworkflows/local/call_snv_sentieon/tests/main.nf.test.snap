@@ -5,110 +5,123 @@
                 "0": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_dnascope.g.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "ACC13778A2_dnascope.g.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "1": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_dnascope.g.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A2_dnascope.g.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "2": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
-                        "justhusky_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "amusingmarmoset_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "3": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
-                        "justhusky_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "gvcf": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_dnascope.g.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "ACC13778A2_dnascope.g.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "gvcf_tbi": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_dnascope.g.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A2_dnascope.g.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "tabix": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
-                        "justhusky_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "amusingmarmoset_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "vcf": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
-                        "justhusky_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-03-10T14:40:02.625974988",
+        "timestamp": "2026-08-24T09:44:58.418928868",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "CALL_SNV_SENTIEON - two samples (merge), minimal dataset": {
+        "content": [
+            "7a5ca713168c4844ba42fc54f55d08fb",
+            [
+                "amusingmarmoset_split_rmdup_info.vcf.gz.tbi"
+            ]
+        ],
+        "timestamp": "2026-08-25T13:34:05.942802415",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -120,113 +133,113 @@
                 "0": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_dnascope.g.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "ACC13778A2_dnascope.g.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "1": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_dnascope.g.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A2_dnascope.g.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "2": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
-                        "justhusky_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "amusingmarmoset_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "3": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
-                        "justhusky_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "gvcf": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_dnascope.g.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "ACC13778A2_dnascope.g.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "gvcf_tbi": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_dnascope.g.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A2_dnascope.g.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "tabix": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
-                        "justhusky_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "amusingmarmoset_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "vcf": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
-                        "justhusky_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-03-10T14:39:28.659577535",
+        "timestamp": "2026-08-24T09:44:32.893853417",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     }
 }
