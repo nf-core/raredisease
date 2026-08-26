@@ -5,45 +5,45 @@
                 "0": [
                     [
                         {
-                            "id": "justhusky",
+                            "id": "amusingmarmoset",
                             "single_end": false
                         },
-                        "justhusky.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "amusingmarmoset.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "1": [
                     [
                         {
-                            "id": "justhusky",
+                            "id": "amusingmarmoset",
                             "single_end": false
                         },
-                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "tbi": [
                     [
                         {
-                            "id": "justhusky",
+                            "id": "amusingmarmoset",
                             "single_end": false
                         },
-                        "justhusky.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "amusingmarmoset.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "vcf": [
                     [
                         {
-                            "id": "justhusky",
+                            "id": "amusingmarmoset",
                             "single_end": false
                         },
-                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-06-29T15:43:51.267701775",
+        "timestamp": "2026-08-26T11:21:40.898511921",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     },
     "RANK_VARIANTS - SNV (process_with_sort = false), minimal dataset": {
@@ -68,45 +68,45 @@
                 "0": [
                     [
                         {
-                            "id": "justhusky",
+                            "id": "amusingmarmoset",
                             "single_end": false
                         },
-                        "justhusky.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "amusingmarmoset.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "1": [
                     [
                         {
-                            "id": "justhusky",
+                            "id": "amusingmarmoset",
                             "single_end": false
                         },
-                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "tbi": [
                     [
                         {
-                            "id": "justhusky",
+                            "id": "amusingmarmoset",
                             "single_end": false
                         },
-                        "justhusky.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "amusingmarmoset.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "vcf": [
                     [
                         {
-                            "id": "justhusky",
+                            "id": "amusingmarmoset",
                             "single_end": false
                         },
-                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-06-29T15:39:16.158216602",
+        "timestamp": "2026-08-26T11:21:18.395482016",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     }
 }
