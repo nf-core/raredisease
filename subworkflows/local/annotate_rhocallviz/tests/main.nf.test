@@ -76,7 +76,7 @@ nextflow_workflow {
 
         when {
             params {
-                bcftools_view_rhocall      = "--output-type z --write-index=tbi --min-ac 1 --samples test_sample"
+                bcftools_view_rhocall      = "--output-type z --write-index=tbi --min-ac 1 --samples ACC13778A1"
                 bcftools_roh               = "--AF-tag GNOMADAF --skip-indels"
                 bcftools_view_uncompressed = "--output-type v"
                 rhocall_viz                = "--aftag GNOMADAF --wig"
@@ -85,12 +85,12 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = channel.of(file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.sizes', checkIfExists: true)).collect()
-                input[1] = channel.of([id:'test_sample', sample:'test_sample', sex:1, phenotype:2, paternal:0, maternal:0, case_id:'test_case'])
+                input[0] = channel.of(file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[1] = channel.of([id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'])
                 input[2] = channel.of([
-                    [id:'test_case', sample:'test_sample'],
-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
+                    [id:'amusingmarmoset'],
+                    file(params.pipelines_testdata_base_path + 'precalled/trio/amusingmarmoset_precalled_snv.vcf.gz', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'precalled/trio/amusingmarmoset_precalled_snv.vcf.gz.tbi', checkIfExists: true)
                 ])
                 """
             }
