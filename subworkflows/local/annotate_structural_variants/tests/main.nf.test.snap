@@ -18,9 +18,9 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "amusingmarmoset_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -29,9 +29,9 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -40,9 +40,9 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ]
                 ],
@@ -51,9 +51,9 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "amusingmarmoset_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -62,9 +62,9 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -73,18 +73,18 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ]
                 ]
             ]
         ],
-        "timestamp": "2026-07-01T12:26:54.713361746",
+        "timestamp": "2026-08-26T11:05:33.04466467",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     },
     "ANNOTATE_STRUCTURAL_VARIANTS - with SVDB_QUERY_DB, stub": {
@@ -95,9 +95,9 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "amusingmarmoset_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -106,9 +106,9 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -117,9 +117,9 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ]
                 ],
@@ -128,9 +128,9 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "amusingmarmoset_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -139,9 +139,9 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -150,18 +150,18 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ]
                 ]
             ]
         ],
-        "timestamp": "2026-07-01T12:27:22.712984253",
+        "timestamp": "2026-08-26T11:05:58.80980936",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     }
 }
