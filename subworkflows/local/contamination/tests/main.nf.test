@@ -20,12 +20,12 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of([
-                    [id:'test', sample:'test', single_end:false, num_lanes:1, lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'test_case'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                 ])
-                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
-                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta.fai', checkIfExists: true)).collect()
                 input[3]  = channel.empty()
                 input[4]  = channel.empty()
                 input[5]  = channel.empty()
@@ -55,12 +55,12 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of([
-                    [id:'test', sample:'test', single_end:false, num_lanes:1, lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'test_case'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                 ])
-                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
-                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta.fai', checkIfExists: true)).collect()
                 input[3]  = channel.empty()
                 input[4]  = channel.of(file(params.modules_testdata_base_path + 'delete_me/verifybamid/test.genome.vcf.bed', checkIfExists: true))
                 input[5]  = channel.of(file(params.modules_testdata_base_path + 'delete_me/verifybamid/test.genome.vcf.mu', checkIfExists: true))
@@ -95,19 +95,19 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of([
-                    [id:'test', sample:'test', single_end:false, num_lanes:1, lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'test_case'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                 ])
-                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
-                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
-                input[3]  = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/sequence/genome.dict', checkIfExists: true)).collect()
+                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.dict', checkIfExists: true)).collect()
                 input[4]  = channel.empty()
                 input[5]  = channel.empty()
                 input[6]  = channel.empty()
                 input[7]  = channel.of([
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/germlineresources/gnomAD.r2.1.1.vcf.gz', checkIfExists: true),
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/germlineresources/gnomAD.r2.1.1.vcf.gz.tbi', checkIfExists: true)
+                    file(params.pipelines_testdata_base_path + 'resources_remapped/vcfanno/grch38_gnomad_reformatted_merged_r4.1.remapped.vcf.gz', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'resources_remapped/vcfanno/grch38_gnomad_reformatted_merged_r4.1.remapped.vcf.gz.tbi', checkIfExists: true)
                 ])
                 input[8]  = channel.empty()
                 input[9]  = false
@@ -138,19 +138,19 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of([
-                    [id:'test', sample:'test', single_end:false, num_lanes:1, lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'test_case'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                 ])
-                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
-                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
-                input[3]  = channel.of([id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/sequence/genome.dict', checkIfExists: true)).collect()
+                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.dict', checkIfExists: true)).collect()
                 input[4]  = channel.of(file(params.modules_testdata_base_path + 'delete_me/verifybamid/test.genome.vcf.bed', checkIfExists: true))
                 input[5]  = channel.of(file(params.modules_testdata_base_path + 'delete_me/verifybamid/test.genome.vcf.mu', checkIfExists: true))
                 input[6]  = channel.of(file(params.modules_testdata_base_path + 'delete_me/verifybamid/test.genome.vcf.UD', checkIfExists: true))
                 input[7]  = channel.of([
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/germlineresources/gnomAD.r2.1.1.vcf.gz', checkIfExists: true),
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/chr21/germlineresources/gnomAD.r2.1.1.vcf.gz.tbi', checkIfExists: true)
+                    file(params.pipelines_testdata_base_path + 'resources_remapped/vcfanno/grch38_gnomad_reformatted_merged_r4.1.remapped.vcf.gz', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'resources_remapped/vcfanno/grch38_gnomad_reformatted_merged_r4.1.remapped.vcf.gz.tbi', checkIfExists: true)
                 ])
                 input[8]  = channel.empty()
                 input[9]  = false
@@ -182,19 +182,19 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of([
-                    [id:'test', sample:'test', single_end:false, num_lanes:1, lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'test_case'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                 ])
-                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
-                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
-                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
+                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.dict', checkIfExists: true)).collect()
                 input[4]  = channel.empty()
                 input[5]  = channel.empty()
                 input[6]  = channel.empty()
                 input[7]  = channel.of([
-                    file(params.pipelines_testdata_base_path + 'reference/grch37_gnomad_-r2.1.1-.vcf.gz', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'reference/grch37_gnomad_-r2.1.1-.vcf.gz.tbi', checkIfExists: true)
+                    file(params.pipelines_testdata_base_path + 'resources_remapped/vcfanno/grch38_gnomad_reformatted_merged_r4.1.remapped.vcf.gz', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'resources_remapped/vcfanno/grch38_gnomad_reformatted_merged_r4.1.remapped.vcf.gz.tbi', checkIfExists: true)
                 ])
                 input[8]  = channel.empty()
                 input[9]  = false
@@ -223,21 +223,21 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of([
-                    [id:'test', sample:'test', single_end:false, num_lanes:1, lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'test_case'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                 ])
-                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
-                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
-                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)).collect()
+                input[1]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.dict', checkIfExists: true)).collect()
                 input[4]  = channel.empty()
                 input[5]  = channel.empty()
                 input[6]  = channel.empty()
                 input[7]  = channel.of([
-                    file(params.pipelines_testdata_base_path + 'reference/grch37_gnomad_-r2.1.1-.vcf.gz', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'reference/grch37_gnomad_-r2.1.1-.vcf.gz.tbi', checkIfExists: true)
+                    file(params.pipelines_testdata_base_path + 'resources_remapped/vcfanno/grch38_gnomad_reformatted_merged_r4.1.remapped.vcf.gz', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'resources_remapped/vcfanno/grch38_gnomad_reformatted_merged_r4.1.remapped.vcf.gz.tbi', checkIfExists: true)
                 ])
-                input[8]  = channel.of(file(params.pipelines_testdata_base_path + 'reference/target.bed', checkIfExists: true)).collect()
+                input[8]  = channel.of(file(params.pipelines_testdata_base_path + 'resources_remapped/beds/target_bed.remapped.bed', checkIfExists: true)).collect()
                 input[9]  = false
                 input[10] = true
                 """
