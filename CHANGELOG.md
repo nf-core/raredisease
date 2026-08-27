@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add a real (non-stub) test to `annotate_rhocallviz` using the new minimal 9-region GIAB dataset, and migrate `annotate_consequence_pli`'s real tests off the generic nf-core/modules VCF fixture onto a genuine VEP-CSQ-annotated VCF derived from the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #985](https://github.com/nf-core/raredisease/pull/985)
 - Add a real (non-stub) test to `annotate_structural_variants` using the new minimal 9-region GIAB dataset, and migrate `call_sv`'s existing real test from the old large-genome fixtures to the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #983](https://github.com/nf-core/raredisease/pull/983)
 - Add `somalier/extract` and `somalier/relate` modules via the `nf-core/vcf_extract_relate_somalier` subworkflow, ported from `patch` [issue #446](https://github.com/nf-core/raredisease/issues/446) [PR #891](https://github.com/nf-core/raredisease/pull/891)
 - Add the `fastdup` module as a faster alternative to Picard MarkDuplicates in `align_bwa_bwamem2_bwameme`, ported from `patch` [issue #864](https://github.com/nf-core/raredisease/issues/864) [PR #876](https://github.com/nf-core/raredisease/pull/876)
