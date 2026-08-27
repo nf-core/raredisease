@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Add a real (non-stub) test to `generate_cytosure_files` using the new minimal 9-region GIAB dataset, and migrate `call_sv_manta`'s existing real test to the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #986](https://github.com/nf-core/raredisease/pull/986)
+- Add a real (non-stub) test to `annotate_rhocallviz` using the new minimal 9-region GIAB dataset, and migrate `annotate_consequence_pli`'s real tests off the generic nf-core/modules VCF fixture onto a genuine VEP-CSQ-annotated VCF derived from the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #985](https://github.com/nf-core/raredisease/pull/985)
+- Add a real (non-stub) test to `annotate_structural_variants` using the new minimal 9-region GIAB dataset, and migrate `call_sv`'s existing real test from the old large-genome fixtures to the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #983](https://github.com/nf-core/raredisease/pull/983)
+- Add `somalier/extract` and `somalier/relate` modules via the `nf-core/vcf_extract_relate_somalier` subworkflow, ported from `patch` [issue #446](https://github.com/nf-core/raredisease/issues/446) [PR #891](https://github.com/nf-core/raredisease/pull/891)
+- Add the `fastdup` module as a faster alternative to Picard MarkDuplicates in `align_bwa_bwamem2_bwameme`, ported from `patch` [issue #864](https://github.com/nf-core/raredisease/issues/864) [PR #876](https://github.com/nf-core/raredisease/pull/876)
+- Add a real (non-stub) test to `call_snv_sentieon`, covering the two-sample merge scenario (`BCFTOOLS_MERGE`) to match its stub test's coverage, and migrate `call_snv_deepvariant`'s real test to the new minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #987](https://github.com/nf-core/raredisease/pull/987)
 - Add `test_vcf_singleton` profile [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #978](https://github.com/nf-core/raredisease/pull/978)
 - Add `test_align_singleton` profile (BAM-only singleton input) [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #977](https://github.com/nf-core/raredisease/pull/977)
 - Add `peddy_sites` parameter: lets a custom sites file (`chrom:pos:ref:alt` per line) be used in place of peddy's bundled hg19/hg38 site lists, which are absolute-coordinate and won't overlap a coordinate-remapped or sliced reference, causing `het_check` to crash on zero overlapping sites [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #971](https://github.com/nf-core/raredisease/pull/971)
@@ -33,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Migrate `call_repeat_expansions`'s and `call_snv`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #997](https://github.com/nf-core/raredisease/pull/997)
 - Replace the per-profile BWA index memory override (duplicated across every `test_*.config` with a colon-anchored selector) with a single safe floor in `conf/modules/prepare_references.config`, applied unconditionally without affecting `PREPARE_REFERENCES`'s own real-fasta test [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #975](https://github.com/nf-core/raredisease/pull/975)
 - Migrate the `test_singleton` profile's fixture to the minimal 9-region GIAB dataset (same trio, proband alone), matching the default profile's migration; also fixes a stale `skip_tools` override that was silently dropping `smncopynumbercaller` from the test [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #976](https://github.com/nf-core/raredisease/pull/976)
 - Migrate the `test_align` profile's fixture to the minimal dataset (BAM/CRAM trio) [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #977](https://github.com/nf-core/raredisease/pull/977)
@@ -81,6 +87,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Fix `call_sv`'s standalone subworkflow test failing against the new minimal dataset with "Minimum memory limit allowed is 6MB": `BWA_INDEX`'s default memory (proportional to fasta size) computes below Docker's floor for the tiny sliced reference; the test's own setup step now applies the same `[6.B * fasta.size(), 100.MB].max()` floor already used for the real `PREPARE_REFERENCES:BWA_INDEX_GENOME` invocation in `conf/modules/prepare_references.config` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #983](https://github.com/nf-core/raredisease/pull/983)
+- Fix `call_snv_sentieon`'s standalone test passing the genome fasta and fai in the wrong argument order (a pre-existing bug masked by stub mode never touching file content) [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #987](https://github.com/nf-core/raredisease/pull/987)
+- Fix `call_snv_deepvariant`'s standalone test hardcoding `--regions="chr22:0-40001"`, left over from the old dataset; the new minimal dataset has no chr22 region, so DeepVariant errored with "regions to call is empty" [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #987](https://github.com/nf-core/raredisease/pull/987)
+- Fix `call_snv_deepvariant`'s standalone test config missing `-c CHROM,FROM,TO,FOUND_IN` on `BCFTOOLS_ANNOTATE` (present in the real pipeline config but never mirrored into the subworkflow test's own `tests/nextflow.config`), which made the real test's `bcftools annotate` step fail with "The -c option not given" [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #987](https://github.com/nf-core/raredisease/pull/987)
 - Fix pipeline-level `conf/modules/*.config` selectors leaking into subworkflow-level nf-test isolation: `withName` patterns nested under a locally-tested subworkflow (e.g. `.*CALL_SV:CALL_SV_MANTA:MANTA`) matched that subworkflow's own standalone test run as well as the real pipeline, since `.*` can match an empty prefix; anchored ~165 selectors across 30 `conf/modules/*.config` files to `.*:PARENT:CHILD:PROC` so they only apply when reached via a genuine outer (pipeline) prefix, and backfilled the subworkflow-local `tests/nextflow.config` overrides (adding the required `config "./nextflow.config"` test directive where missing) that several subworkflows had been unknowingly relying on the leaked pipeline values for [issue #981](https://github.com/nf-core/raredisease/issues/981) [PR #982](https://github.com/nf-core/raredisease/pull/982)
 - Fix `pre_vep_snv_filter_expression`'s default hardcoding `GNOMADAF_popmax`: gnomAD v4 renamed the field to `GNOMADAF_grpmax`, so this filter failed with "tag not defined in VCF header" against any gnomAD v4-labeled annotation, not a dataset-specific issue [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #969](https://github.com/nf-core/raredisease/pull/969)
 - Fix `ANNOTATE_MOBILE_ELEMENTS:BCFTOOLS_VIEW_FILTER` discarding every mobile-element call: RetroSeq never sets `FILTER=PASS` (always `.`), so `--apply-filters PASS` kept nothing; now accepts `.` as well as `PASS` [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #969](https://github.com/nf-core/raredisease/pull/969)
@@ -106,6 +116,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |               | vep_gtf                       |
 |               | vep_gtf_tbi                   |
 |               | peddy_sites                   |
+|               | duplicates_marker             |
+|               | somalier_sites_vcf            |
 
 ### Tool updates
 
