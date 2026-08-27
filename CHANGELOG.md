@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GATK Contamination results displayed in MultiQC with color-coded thresholds [#758](https://github.com/nf-core/raredisease/pull/758)
 - Added non-stub tests for `annotate_mobile_elements` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #923](https://github.com/nf-core/raredisease/pull/923)
 - Added non-stub tests for `call_mobile_elements` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #924](https://github.com/nf-core/raredisease/pull/924)
+- Added non-stub tests for `postprocess_MT_calls` and `call_mt_snvs` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #989](https://github.com/nf-core/raredisease/pull/989)
 
 ### `Removed`
 
@@ -41,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migrate `call_repeat_expansions`'s and `call_snv`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #997](https://github.com/nf-core/raredisease/pull/997)
 - Replace the per-profile BWA index memory override (duplicated across every `test_*.config` with a colon-anchored selector) with a single safe floor in `conf/modules/prepare_references.config`, applied unconditionally without affecting `PREPARE_REFERENCES`'s own real-fasta test [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #975](https://github.com/nf-core/raredisease/pull/975)
 - Migrate `align_MT`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #991](https://github.com/nf-core/raredisease/pull/991)
+- Migrate `align_mitochondria`'s and `convert_mt_bam_to_fastq`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #990](https://github.com/nf-core/raredisease/pull/990)
 - Migrate the `test_singleton` profile's fixture to the minimal 9-region GIAB dataset (same trio, proband alone), matching the default profile's migration; also fixes a stale `skip_tools` override that was silently dropping `smncopynumbercaller` from the test [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #976](https://github.com/nf-core/raredisease/pull/976)
 - Migrate the `test_align` profile's fixture to the minimal dataset (BAM/CRAM trio) [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #977](https://github.com/nf-core/raredisease/pull/977)
 - Migrate the `test_vcf` profile's fixture to the minimal dataset; fixes peddy crashing against the custom sliced-coordinate reference (missing `peddy_sites`) and `genmod models` crashing on the precalled-VCF proband-only samplesheet convention when parent IDs are referenced without a row of their own [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #978](https://github.com/nf-core/raredisease/pull/978)
