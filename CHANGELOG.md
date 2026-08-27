@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Migrate `qc_bam`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #999](https://github.com/nf-core/raredisease/pull/999)
 - Migrate `prepare_references`'s and `scatter_genome`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #996](https://github.com/nf-core/raredisease/pull/996)
 - Migrate `call_repeat_expansions`'s and `call_snv`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #997](https://github.com/nf-core/raredisease/pull/997)
 - Replace the per-profile BWA index memory override (duplicated across every `test_*.config` with a colon-anchored selector) with a single safe floor in `conf/modules/prepare_references.config`, applied unconditionally without affecting `PREPARE_REFERENCES`'s own real-fasta test [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #975](https://github.com/nf-core/raredisease/pull/975)

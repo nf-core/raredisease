@@ -3,82 +3,82 @@
         "content": [
             [
                 [
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics"
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics"
                 ]
             ],
             [
                 [
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf"
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf"
                 ]
             ],
             [
-                "earlycasualcaiman_hsmetrics.CollectHsMetrics.coverage_metrics"
+                "ACC13778A2_hsmetrics.CollectHsMetrics.coverage_metrics"
             ],
             [
-                "earlycasualcaiman_mosdepth.global.dist.txt"
+                "ACC13778A2_mosdepth.global.dist.txt"
             ],
             [
-                "earlycasualcaiman_mosdepth.summary.txt"
+                "ACC13778A2_mosdepth.summary.txt"
             ],
             [
-                "earlycasualcaiman_mosdepth.per-base.bed.gz"
+                "ACC13778A2_mosdepth.per-base.bed.gz"
             ],
             [
-                "earlycasualcaiman_mosdepth.per-base.bed.gz.csi"
+                "ACC13778A2_mosdepth.per-base.bed.gz.csi"
             ],
             [
-                "earlycasualcaiman_mosdepth.per-base.d4"
+                "ACC13778A2_mosdepth.per-base.d4"
             ],
             [
-                "earlycasualcaiman_wgsmetrics.CollectWgsMetrics.coverage_metrics"
+                "ACC13778A2_wgsmetrics.CollectWgsMetrics.coverage_metrics"
             ],
             [
                 
             ],
             [
-                "earlycasualcaiman_tidditcov.wig"
+                "ACC13778A2_tidditcov.wig"
             ],
             [
-                "earlycasualcaiman_tidditcov.bed"
+                "ACC13778A2_tidditcov.bed"
             ],
             [
-                "earlycasualcaiman_tidditcov.bw"
+                "ACC13778A2_tidditcov.bw"
             ],
             [
                 [
-                    "earlycasualcaiman_tidditcov.wig_chr1.png",
-                    "earlycasualcaiman_tidditcov.wig_chr10.png",
-                    "earlycasualcaiman_tidditcov.wig_chr11.png",
-                    "earlycasualcaiman_tidditcov.wig_chr12.png",
-                    "earlycasualcaiman_tidditcov.wig_chr13.png",
-                    "earlycasualcaiman_tidditcov.wig_chr14.png",
-                    "earlycasualcaiman_tidditcov.wig_chr15.png",
-                    "earlycasualcaiman_tidditcov.wig_chr16.png",
-                    "earlycasualcaiman_tidditcov.wig_chr17.png",
-                    "earlycasualcaiman_tidditcov.wig_chr18.png",
-                    "earlycasualcaiman_tidditcov.wig_chr19.png",
-                    "earlycasualcaiman_tidditcov.wig_chr2.png",
-                    "earlycasualcaiman_tidditcov.wig_chr20.png",
-                    "earlycasualcaiman_tidditcov.wig_chr21.png",
-                    "earlycasualcaiman_tidditcov.wig_chr22.png",
-                    "earlycasualcaiman_tidditcov.wig_chr3.png",
-                    "earlycasualcaiman_tidditcov.wig_chr4.png",
-                    "earlycasualcaiman_tidditcov.wig_chr5.png",
-                    "earlycasualcaiman_tidditcov.wig_chr6.png",
-                    "earlycasualcaiman_tidditcov.wig_chr7.png",
-                    "earlycasualcaiman_tidditcov.wig_chr8.png",
-                    "earlycasualcaiman_tidditcov.wig_chr9.png",
-                    "earlycasualcaiman_tidditcov.wig_chrM.png",
-                    "earlycasualcaiman_tidditcov.wig_chrX.png",
-                    "earlycasualcaiman_tidditcov.wig_chrY.png"
+                    "ACC13778A2_tidditcov.wig_chr1.png",
+                    "ACC13778A2_tidditcov.wig_chr10.png",
+                    "ACC13778A2_tidditcov.wig_chr11.png",
+                    "ACC13778A2_tidditcov.wig_chr12.png",
+                    "ACC13778A2_tidditcov.wig_chr13.png",
+                    "ACC13778A2_tidditcov.wig_chr14.png",
+                    "ACC13778A2_tidditcov.wig_chr15.png",
+                    "ACC13778A2_tidditcov.wig_chr16.png",
+                    "ACC13778A2_tidditcov.wig_chr17.png",
+                    "ACC13778A2_tidditcov.wig_chr18.png",
+                    "ACC13778A2_tidditcov.wig_chr19.png",
+                    "ACC13778A2_tidditcov.wig_chr2.png",
+                    "ACC13778A2_tidditcov.wig_chr20.png",
+                    "ACC13778A2_tidditcov.wig_chr21.png",
+                    "ACC13778A2_tidditcov.wig_chr22.png",
+                    "ACC13778A2_tidditcov.wig_chr3.png",
+                    "ACC13778A2_tidditcov.wig_chr4.png",
+                    "ACC13778A2_tidditcov.wig_chr5.png",
+                    "ACC13778A2_tidditcov.wig_chr6.png",
+                    "ACC13778A2_tidditcov.wig_chr7.png",
+                    "ACC13778A2_tidditcov.wig_chr8.png",
+                    "ACC13778A2_tidditcov.wig_chr9.png",
+                    "ACC13778A2_tidditcov.wig_chrM.png",
+                    "ACC13778A2_tidditcov.wig_chrX.png",
+                    "ACC13778A2_tidditcov.wig_chrY.png"
                 ]
             ],
             [
@@ -91,92 +91,92 @@
                 
             ]
         ],
-        "timestamp": "2026-06-15T14:03:53.405773659",
+        "timestamp": "2026-08-24T21:42:42.262055499",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.6"
         }
     },
     "QC_BAM - test, sentieon, stub": {
         "content": [
             [
                 [
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics"
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics"
                 ]
             ],
             [
                 [
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf"
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf"
                 ]
             ],
             [
-                "earlycasualcaiman_hsmetrics.CollectHsMetrics.coverage_metrics"
+                "ACC13778A2_hsmetrics.CollectHsMetrics.coverage_metrics"
             ],
             [
-                "earlycasualcaiman_mosdepth.global.dist.txt"
+                "ACC13778A2_mosdepth.global.dist.txt"
             ],
             [
-                "earlycasualcaiman_mosdepth.summary.txt"
+                "ACC13778A2_mosdepth.summary.txt"
             ],
             [
-                "earlycasualcaiman_mosdepth.per-base.bed.gz"
+                "ACC13778A2_mosdepth.per-base.bed.gz"
             ],
             [
-                "earlycasualcaiman_mosdepth.per-base.bed.gz.csi"
+                "ACC13778A2_mosdepth.per-base.bed.gz.csi"
             ],
             [
-                "earlycasualcaiman_mosdepth.per-base.d4"
+                "ACC13778A2_mosdepth.per-base.d4"
             ],
             [
-                "earlycasualcaiman_wgsmetrics.txt"
+                "ACC13778A2_wgsmetrics.txt"
             ],
             [
                 
             ],
             [
-                "earlycasualcaiman_tidditcov.wig"
+                "ACC13778A2_tidditcov.wig"
             ],
             [
-                "earlycasualcaiman_tidditcov.bed"
+                "ACC13778A2_tidditcov.bed"
             ],
             [
-                "earlycasualcaiman_tidditcov.bw"
+                "ACC13778A2_tidditcov.bw"
             ],
             [
                 [
-                    "earlycasualcaiman_tidditcov.wig_chr1.png",
-                    "earlycasualcaiman_tidditcov.wig_chr10.png",
-                    "earlycasualcaiman_tidditcov.wig_chr11.png",
-                    "earlycasualcaiman_tidditcov.wig_chr12.png",
-                    "earlycasualcaiman_tidditcov.wig_chr13.png",
-                    "earlycasualcaiman_tidditcov.wig_chr14.png",
-                    "earlycasualcaiman_tidditcov.wig_chr15.png",
-                    "earlycasualcaiman_tidditcov.wig_chr16.png",
-                    "earlycasualcaiman_tidditcov.wig_chr17.png",
-                    "earlycasualcaiman_tidditcov.wig_chr18.png",
-                    "earlycasualcaiman_tidditcov.wig_chr19.png",
-                    "earlycasualcaiman_tidditcov.wig_chr2.png",
-                    "earlycasualcaiman_tidditcov.wig_chr20.png",
-                    "earlycasualcaiman_tidditcov.wig_chr21.png",
-                    "earlycasualcaiman_tidditcov.wig_chr22.png",
-                    "earlycasualcaiman_tidditcov.wig_chr3.png",
-                    "earlycasualcaiman_tidditcov.wig_chr4.png",
-                    "earlycasualcaiman_tidditcov.wig_chr5.png",
-                    "earlycasualcaiman_tidditcov.wig_chr6.png",
-                    "earlycasualcaiman_tidditcov.wig_chr7.png",
-                    "earlycasualcaiman_tidditcov.wig_chr8.png",
-                    "earlycasualcaiman_tidditcov.wig_chr9.png",
-                    "earlycasualcaiman_tidditcov.wig_chrM.png",
-                    "earlycasualcaiman_tidditcov.wig_chrX.png",
-                    "earlycasualcaiman_tidditcov.wig_chrY.png"
+                    "ACC13778A2_tidditcov.wig_chr1.png",
+                    "ACC13778A2_tidditcov.wig_chr10.png",
+                    "ACC13778A2_tidditcov.wig_chr11.png",
+                    "ACC13778A2_tidditcov.wig_chr12.png",
+                    "ACC13778A2_tidditcov.wig_chr13.png",
+                    "ACC13778A2_tidditcov.wig_chr14.png",
+                    "ACC13778A2_tidditcov.wig_chr15.png",
+                    "ACC13778A2_tidditcov.wig_chr16.png",
+                    "ACC13778A2_tidditcov.wig_chr17.png",
+                    "ACC13778A2_tidditcov.wig_chr18.png",
+                    "ACC13778A2_tidditcov.wig_chr19.png",
+                    "ACC13778A2_tidditcov.wig_chr2.png",
+                    "ACC13778A2_tidditcov.wig_chr20.png",
+                    "ACC13778A2_tidditcov.wig_chr21.png",
+                    "ACC13778A2_tidditcov.wig_chr22.png",
+                    "ACC13778A2_tidditcov.wig_chr3.png",
+                    "ACC13778A2_tidditcov.wig_chr4.png",
+                    "ACC13778A2_tidditcov.wig_chr5.png",
+                    "ACC13778A2_tidditcov.wig_chr6.png",
+                    "ACC13778A2_tidditcov.wig_chr7.png",
+                    "ACC13778A2_tidditcov.wig_chr8.png",
+                    "ACC13778A2_tidditcov.wig_chr9.png",
+                    "ACC13778A2_tidditcov.wig_chrM.png",
+                    "ACC13778A2_tidditcov.wig_chrX.png",
+                    "ACC13778A2_tidditcov.wig_chrY.png"
                 ]
             ],
             [
@@ -189,149 +189,149 @@
                 
             ]
         ],
-        "timestamp": "2026-06-15T14:05:39.811825004",
+        "timestamp": "2026-08-24T21:46:42.382426096",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.6"
         }
     },
     "QC_BAM - test, riker": {
         "content": [
             [
-                "earlycasualcaiman_riker.alignment-metrics.txt"
+                "ACC13778A2_riker.alignment-metrics.txt"
             ],
             [
-                "earlycasualcaiman_riker.wgs-metrics.txt"
+                "ACC13778A2_riker.wgs-metrics.txt"
             ],
             [
-                "earlycasualcaiman_riker_y.wgs-metrics.txt"
+                "ACC13778A2_riker_y.wgs-metrics.txt"
             ],
             [
-                "earlycasualcaiman_riker.isize-metrics.txt"
+                "ACC13778A2_riker.isize-metrics.txt"
             ],
             [
-                "earlycasualcaiman_riker.hybcap-metrics.txt"
+                "ACC13778A2_riker.hybcap-metrics.txt"
             ],
             [
-                "earlycasualcaiman_mosdepth.mosdepth.global.dist.txt"
+                "ACC13778A2_mosdepth.mosdepth.global.dist.txt"
             ]
         ],
-        "timestamp": "2026-07-08T09:51:44.506717",
+        "timestamp": "2026-08-24T21:40:57.995384426",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.6"
         }
     },
     "QC_BAM - test, riker, sentieon, stub": {
         "content": [
             [
-                "earlycasualcaiman_riker.alignment-metrics.txt"
+                "ACC13778A2_riker.alignment-metrics.txt"
             ],
             [
-                "earlycasualcaiman_riker.wgs-metrics.txt"
+                "ACC13778A2_riker.wgs-metrics.txt"
             ],
             [
                 
             ],
             [
-                "earlycasualcaiman_riker.isize-metrics.txt"
+                "ACC13778A2_riker.isize-metrics.txt"
             ],
             [
-                "earlycasualcaiman_riker.hybcap-metrics.txt"
+                "ACC13778A2_riker.hybcap-metrics.txt"
             ],
             [
-                "earlycasualcaiman_wgsmetrics.txt"
+                "ACC13778A2_wgsmetrics.txt"
             ],
             [
-                "earlycasualcaiman_mosdepth.global.dist.txt"
+                "ACC13778A2_mosdepth.global.dist.txt"
             ]
         ],
-        "timestamp": "2026-07-08T09:57:23.72132",
+        "timestamp": "2026-08-24T21:47:02.336871492",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.6"
         }
     },
     "QC_BAM - test, bwamem2": {
         "content": [
             [
                 [
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics"
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics"
                 ]
             ],
             [
                 [
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf"
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf"
                 ]
             ],
             [
-                "earlycasualcaiman_hsmetrics.CollectHsMetrics.coverage_metrics"
+                "ACC13778A2_hsmetrics.CollectHsMetrics.coverage_metrics"
             ],
             [
-                "earlycasualcaiman_mosdepth.mosdepth.global.dist.txt"
+                "ACC13778A2_mosdepth.mosdepth.global.dist.txt"
             ],
             [
-                "earlycasualcaiman_mosdepth.mosdepth.summary.txt"
+                "ACC13778A2_mosdepth.mosdepth.summary.txt"
             ],
             [
-                "earlycasualcaiman_mosdepth.per-base.bed.gz"
+                "ACC13778A2_mosdepth.per-base.bed.gz"
             ],
             [
-                "earlycasualcaiman_mosdepth.per-base.bed.gz.csi"
-            ],
-            [
-                
-            ],
-            [
-                "earlycasualcaiman_wgsmetrics.CollectWgsMetrics.coverage_metrics"
+                "ACC13778A2_mosdepth.per-base.bed.gz.csi"
             ],
             [
                 
             ],
             [
-                "earlycasualcaiman_tidditcov.wig"
+                "ACC13778A2_wgsmetrics.CollectWgsMetrics.coverage_metrics"
             ],
             [
                 
             ],
             [
-                "earlycasualcaiman_tidditcov.bw"
+                "ACC13778A2_tidditcov.wig"
+            ],
+            [
+                
+            ],
+            [
+                "ACC13778A2_tidditcov.bw"
             ],
             [
                 [
-                    "earlycasualcaiman_tidditcov_1.png",
-                    "earlycasualcaiman_tidditcov_10.png",
-                    "earlycasualcaiman_tidditcov_11.png",
-                    "earlycasualcaiman_tidditcov_12.png",
-                    "earlycasualcaiman_tidditcov_13.png",
-                    "earlycasualcaiman_tidditcov_14.png",
-                    "earlycasualcaiman_tidditcov_15.png",
-                    "earlycasualcaiman_tidditcov_16.png",
-                    "earlycasualcaiman_tidditcov_17.png",
-                    "earlycasualcaiman_tidditcov_18.png",
-                    "earlycasualcaiman_tidditcov_19.png",
-                    "earlycasualcaiman_tidditcov_2.png",
-                    "earlycasualcaiman_tidditcov_20.png",
-                    "earlycasualcaiman_tidditcov_21.png",
-                    "earlycasualcaiman_tidditcov_22.png",
-                    "earlycasualcaiman_tidditcov_3.png",
-                    "earlycasualcaiman_tidditcov_4.png",
-                    "earlycasualcaiman_tidditcov_5.png",
-                    "earlycasualcaiman_tidditcov_6.png",
-                    "earlycasualcaiman_tidditcov_7.png",
-                    "earlycasualcaiman_tidditcov_8.png",
-                    "earlycasualcaiman_tidditcov_9.png",
-                    "earlycasualcaiman_tidditcov_M.png",
-                    "earlycasualcaiman_tidditcov_X.png",
-                    "earlycasualcaiman_tidditcov_Y.png"
+                    "ACC13778A2_tidditcov_chr1.png",
+                    "ACC13778A2_tidditcov_chr10.png",
+                    "ACC13778A2_tidditcov_chr11.png",
+                    "ACC13778A2_tidditcov_chr12.png",
+                    "ACC13778A2_tidditcov_chr13.png",
+                    "ACC13778A2_tidditcov_chr14.png",
+                    "ACC13778A2_tidditcov_chr15.png",
+                    "ACC13778A2_tidditcov_chr16.png",
+                    "ACC13778A2_tidditcov_chr17.png",
+                    "ACC13778A2_tidditcov_chr18.png",
+                    "ACC13778A2_tidditcov_chr19.png",
+                    "ACC13778A2_tidditcov_chr2.png",
+                    "ACC13778A2_tidditcov_chr20.png",
+                    "ACC13778A2_tidditcov_chr21.png",
+                    "ACC13778A2_tidditcov_chr22.png",
+                    "ACC13778A2_tidditcov_chr3.png",
+                    "ACC13778A2_tidditcov_chr4.png",
+                    "ACC13778A2_tidditcov_chr5.png",
+                    "ACC13778A2_tidditcov_chr6.png",
+                    "ACC13778A2_tidditcov_chr7.png",
+                    "ACC13778A2_tidditcov_chr8.png",
+                    "ACC13778A2_tidditcov_chr9.png",
+                    "ACC13778A2_tidditcov_chrM.png",
+                    "ACC13778A2_tidditcov_chrX.png",
+                    "ACC13778A2_tidditcov_chrY.png"
                 ]
             ],
             [
@@ -344,119 +344,119 @@
                 
             ]
         ],
-        "timestamp": "2026-06-15T14:02:21.833990928",
+        "timestamp": "2026-08-24T21:40:32.448851556",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.6"
         }
     },
     "QC_BAM - test, riker, stub": {
         "content": [
             [
-                "earlycasualcaiman_riker.alignment-metrics.txt"
+                "ACC13778A2_riker.alignment-metrics.txt"
             ],
             [
-                "earlycasualcaiman_riker.wgs-metrics.txt"
+                "ACC13778A2_riker.wgs-metrics.txt"
             ],
             [
-                "earlycasualcaiman_riker_y.wgs-metrics.txt"
+                "ACC13778A2_riker_y.wgs-metrics.txt"
             ],
             [
-                "earlycasualcaiman_riker.isize-metrics.txt"
+                "ACC13778A2_riker.isize-metrics.txt"
             ],
             [
-                "earlycasualcaiman_riker.hybcap-metrics.txt"
+                "ACC13778A2_riker.hybcap-metrics.txt"
             ],
             [
-                "earlycasualcaiman_mosdepth.global.dist.txt"
+                "ACC13778A2_mosdepth.global.dist.txt"
             ]
         ],
-        "timestamp": "2026-07-08T09:52:21.848259",
+        "timestamp": "2026-08-24T21:40:15.579202012",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.6"
         }
     },
     "QC_BAM - test, sentieon": {
         "content": [
             [
                 [
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics"
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics"
                 ]
             ],
             [
                 [
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
-                    "earlycasualcaiman_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf"
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf"
                 ]
             ],
             [
-                "earlycasualcaiman_hsmetrics.CollectHsMetrics.coverage_metrics"
+                "ACC13778A2_hsmetrics.CollectHsMetrics.coverage_metrics"
             ],
             [
-                "earlycasualcaiman_mosdepth.mosdepth.global.dist.txt"
+                "ACC13778A2_mosdepth.mosdepth.global.dist.txt"
             ],
             [
-                "earlycasualcaiman_mosdepth.mosdepth.summary.txt"
+                "ACC13778A2_mosdepth.mosdepth.summary.txt"
             ],
             [
-                "earlycasualcaiman_mosdepth.per-base.bed.gz"
+                "ACC13778A2_mosdepth.per-base.bed.gz"
             ],
             [
-                "earlycasualcaiman_mosdepth.per-base.bed.gz.csi"
-            ],
-            [
-                
-            ],
-            [
-                "earlycasualcaiman_wgsmetrics.txt"
+                "ACC13778A2_mosdepth.per-base.bed.gz.csi"
             ],
             [
                 
             ],
             [
-                "earlycasualcaiman_tidditcov.wig"
+                "ACC13778A2_wgsmetrics.txt"
             ],
             [
                 
             ],
             [
-                "earlycasualcaiman_tidditcov.bw"
+                "ACC13778A2_tidditcov.wig"
+            ],
+            [
+                
+            ],
+            [
+                "ACC13778A2_tidditcov.bw"
             ],
             [
                 [
-                    "earlycasualcaiman_tidditcov_1.png",
-                    "earlycasualcaiman_tidditcov_10.png",
-                    "earlycasualcaiman_tidditcov_11.png",
-                    "earlycasualcaiman_tidditcov_12.png",
-                    "earlycasualcaiman_tidditcov_13.png",
-                    "earlycasualcaiman_tidditcov_14.png",
-                    "earlycasualcaiman_tidditcov_15.png",
-                    "earlycasualcaiman_tidditcov_16.png",
-                    "earlycasualcaiman_tidditcov_17.png",
-                    "earlycasualcaiman_tidditcov_18.png",
-                    "earlycasualcaiman_tidditcov_19.png",
-                    "earlycasualcaiman_tidditcov_2.png",
-                    "earlycasualcaiman_tidditcov_20.png",
-                    "earlycasualcaiman_tidditcov_21.png",
-                    "earlycasualcaiman_tidditcov_22.png",
-                    "earlycasualcaiman_tidditcov_3.png",
-                    "earlycasualcaiman_tidditcov_4.png",
-                    "earlycasualcaiman_tidditcov_5.png",
-                    "earlycasualcaiman_tidditcov_6.png",
-                    "earlycasualcaiman_tidditcov_7.png",
-                    "earlycasualcaiman_tidditcov_8.png",
-                    "earlycasualcaiman_tidditcov_9.png",
-                    "earlycasualcaiman_tidditcov_M.png",
-                    "earlycasualcaiman_tidditcov_X.png",
-                    "earlycasualcaiman_tidditcov_Y.png"
+                    "ACC13778A2_tidditcov_chr1.png",
+                    "ACC13778A2_tidditcov_chr10.png",
+                    "ACC13778A2_tidditcov_chr11.png",
+                    "ACC13778A2_tidditcov_chr12.png",
+                    "ACC13778A2_tidditcov_chr13.png",
+                    "ACC13778A2_tidditcov_chr14.png",
+                    "ACC13778A2_tidditcov_chr15.png",
+                    "ACC13778A2_tidditcov_chr16.png",
+                    "ACC13778A2_tidditcov_chr17.png",
+                    "ACC13778A2_tidditcov_chr18.png",
+                    "ACC13778A2_tidditcov_chr19.png",
+                    "ACC13778A2_tidditcov_chr2.png",
+                    "ACC13778A2_tidditcov_chr20.png",
+                    "ACC13778A2_tidditcov_chr21.png",
+                    "ACC13778A2_tidditcov_chr22.png",
+                    "ACC13778A2_tidditcov_chr3.png",
+                    "ACC13778A2_tidditcov_chr4.png",
+                    "ACC13778A2_tidditcov_chr5.png",
+                    "ACC13778A2_tidditcov_chr6.png",
+                    "ACC13778A2_tidditcov_chr7.png",
+                    "ACC13778A2_tidditcov_chr8.png",
+                    "ACC13778A2_tidditcov_chr9.png",
+                    "ACC13778A2_tidditcov_chrM.png",
+                    "ACC13778A2_tidditcov_chrX.png",
+                    "ACC13778A2_tidditcov_chrY.png"
                 ]
             ],
             [
@@ -469,10 +469,10 @@
                 
             ]
         ],
-        "timestamp": "2026-06-15T14:17:24.028920433",
+        "timestamp": "2026-08-25T15:26:45.911276815",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
         }
     }
 }
