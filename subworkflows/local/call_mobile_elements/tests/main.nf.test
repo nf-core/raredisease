@@ -18,21 +18,21 @@ nextflow_workflow {
 
     config "./nextflow.config"
 
-    test("CALL_MOBILE_ELEMENTS") {
+    test("CALL_MOBILE_ELEMENTS - wgs, minimal dataset") {
 
         when {
             workflow {
                 """
-                input[0] = channel.of([id:'earlycasualcaiman'])
+                input[0] = channel.of([id:'amusingmarmoset'])
                 input[1] = channel.of([
-                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'earlycasualcaiman'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                 ])
-                input[2] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
-                input[3] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[2] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[4] = channel
-                    .fromPath(params.pipelines_testdata_base_path + 'reference/mobile_element_references.tsv', checkIfExists: true)
+                    .fromPath(params.pipelines_testdata_base_path + 'resources_remapped/mobile_elements/mobile_element_references_remapped.tsv', checkIfExists: true)
                     .splitText()
                     .map { line -> line.trim() }
                     .map { line -> line.split('\\t') as List }
@@ -54,22 +54,28 @@ nextflow_workflow {
         }
     }
 
-        test("CALL_MOBILE_ELEMENTS - stub") {
+    test("CALL_MOBILE_ELEMENTS - stub") {
 
         options "-stub"
 
         when {
             workflow {
                 """
-                input[0] = channel.of([id:'earlycasualcaiman'])
+                input[0] = channel.of([id:'amusingmarmoset'])
                 input[1] = channel.of([
-                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'earlycasualcaiman'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                 ])
-                input[2] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
-                input[3] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
-                input[4] = channel.of(['LINE', file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)])
+                input[2] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[4] = channel
+                    .fromPath(params.pipelines_testdata_base_path + 'resources_remapped/mobile_elements/mobile_element_references_remapped.tsv', checkIfExists: true)
+                    .splitText()
+                    .map { line -> line.trim() }
+                    .map { line -> line.split('\\t') as List }
+                    .filter { cols -> !(cols[0].equalsIgnoreCase('type') && cols[1].equalsIgnoreCase('path')) }
+                    .map { cols -> [cols[0], file(cols[1], checkIfExists: true)] }
                 """
             }
         }
