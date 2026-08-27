@@ -4,65 +4,65 @@
             [
                 [
                     {
-                        "id": "earlycasualcaiman",
-                        "sample": "earlycasualcaiman",
+                        "id": "ACC13778A2",
+                        "sample": "ACC13778A2",
                         "single_end": false,
                         "num_lanes": 1,
-                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                         "lane": 1,
-                        "sex": 1,
+                        "sex": 2,
                         "phenotype": 1,
                         "paternal": 0,
                         "maternal": 0,
-                        "case_id": "justhusky"
+                        "case_id": "amusingmarmoset"
                     },
                     "d41d8cd98f00b204e9800998ecf8427e",
-                    "earlycasualcaiman.bam.bai"
+                    "ACC13778A2.bam.bai"
                 ]
             ],
             [
                 [
                     {
-                        "id": "earlycasualcaiman",
-                        "sample": "earlycasualcaiman",
+                        "id": "ACC13778A2",
+                        "sample": "ACC13778A2",
                         "single_end": false,
                         "num_lanes": 1,
-                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                         "lane": 1,
-                        "sex": 1,
+                        "sex": 2,
                         "phenotype": 1,
                         "paternal": 0,
                         "maternal": 0,
-                        "case_id": "justhusky"
+                        "case_id": "amusingmarmoset"
                     },
                     "d41d8cd98f00b204e9800998ecf8427e",
-                    "earlycasualcaiman_sorted_merged_md_sorted.bam.bai"
+                    "ACC13778A2_sorted_merged_md_sorted.bam.bai"
                 ]
             ],
             [
                 [
                     {
-                        "id": "earlycasualcaiman",
-                        "sample": "earlycasualcaiman",
+                        "id": "ACC13778A2",
+                        "sample": "ACC13778A2",
                         "single_end": false,
                         "num_lanes": 1,
-                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                         "lane": 1,
-                        "sex": 1,
+                        "sex": 2,
                         "phenotype": 1,
                         "paternal": 0,
                         "maternal": 0,
-                        "case_id": "justhusky"
+                        "case_id": "amusingmarmoset"
                     },
                     "d41d8cd98f00b204e9800998ecf8427e",
-                    "earlycasualcaiman_sorted_merged_md_sorted_shifted.bam.bai"
+                    "ACC13778A2_sorted_merged_md_sorted_shifted.bam.bai"
                 ]
             ]
         ],
-        "timestamp": "2026-07-28T16:59:58.874193245",
+        "timestamp": "2026-08-27T15:16:28.873275171",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     },
     "align_mitochondria bwamem2, minimal dataset": {
