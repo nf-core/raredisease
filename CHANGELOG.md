@@ -39,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
-- Migrate the stub tests for `call_sv`, `call_sv_manta`, and `generate_cytosure_files` to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1002](https://github.com/nf-core/raredisease/pull/1002)
+- Migrate the stub tests for `call_sv`, `call_sv_manta`, `generate_cytosure_files`, `call_sv_germlinecnvcaller`, and `gens` to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1002](https://github.com/nf-core/raredisease/pull/1002)
 - Migrate `contamination`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #998](https://github.com/nf-core/raredisease/pull/998)
 - Migrate `qc_bam`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #999](https://github.com/nf-core/raredisease/pull/999)
 - Migrate `prepare_references`'s and `scatter_genome`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #996](https://github.com/nf-core/raredisease/pull/996)
