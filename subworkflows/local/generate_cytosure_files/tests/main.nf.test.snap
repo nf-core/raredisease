@@ -60,5 +60,24 @@
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
         }
+    },
+    "GENERATE_CYTOSURE_FILES - minimal dataset": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "ACC13778A1",
+                        "sex": 1,
+                        "custid": "ACC13778A1"
+                    },
+                    "ACC13778A1.cgh:md5,112c020ffaade806d29edb24c8078a60"
+                ]
+            ]
+        ],
+        "timestamp": "2026-08-24T09:31:22.254656867",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
     }
 }
