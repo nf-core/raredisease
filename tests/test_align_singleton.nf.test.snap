@@ -397,13 +397,13 @@
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
-                    "tiddit": "3.9.5"
+                    "tiddit": "3.9.7"
                 },
                 "TIDDIT_COV_VCF2CYTOSURE": {
-                    "tiddit": "3.9.5"
+                    "tiddit": "3.9.7"
                 },
                 "TIDDIT_SV": {
-                    "tiddit": "3.9.5"
+                    "tiddit": "3.9.7"
                 },
                 "UCSC_WIGTOBIGWIG": {
                     "ucsc": 482
@@ -2255,7 +2255,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-08-17T15:34:38.648597635",
+        "timestamp": "2026-08-26T15:14:45.350278803",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
