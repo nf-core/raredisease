@@ -62,6 +62,7 @@ workflow NFCORE_RAREDISEASE {
     val_contamination_sites
     val_contamination_sites_tbi
     val_skip_split_multiallelics
+    val_duplicates_marker
     val_exclude_alt
     val_extract_alignments
     val_fai
@@ -375,6 +376,7 @@ workflow NFCORE_RAREDISEASE {
     skip_repeat_calling        = parseSkipList(val_skip_subworkflows, 'repeat_calling') || val_has_precalled_repeat
     skip_snv_annotation        = parseSkipList(val_skip_subworkflows, 'snv_annotation')
     skip_snv_calling           = parseSkipList(val_skip_subworkflows, 'snv_calling') || val_has_precalled_snv
+    skip_somalier              = parseSkipList(val_skip_subworkflows, 'somalier_sex_check')
     skip_sv_annotation         = parseSkipList(val_skip_subworkflows, 'sv_annotation')
     skip_sv_calling            = parseSkipList(val_skip_subworkflows, 'sv_calling') || val_has_precalled_sv
     skip_generate_clinical_set = parseSkipList(val_skip_subworkflows, 'generate_clinical_set')
@@ -522,6 +524,7 @@ workflow NFCORE_RAREDISEASE {
         skip_smncopynumbercaller,
         skip_snv_annotation,
         skip_snv_calling,
+        skip_somalier,
         skip_sv_annotation,
         skip_sv_calling,
         skip_vcf2cytosure,
@@ -530,6 +533,7 @@ workflow NFCORE_RAREDISEASE {
         val_analysis_type,
         val_cadd_resources,
         val_concatenate_snv_calls,
+        val_duplicates_marker,
         val_exclude_alt,
         val_extract_alignments,
         val_genome,
@@ -760,6 +764,7 @@ workflow {
         params.contamination_sites,
         params.contamination_sites_tbi,
         params.skip_split_multiallelics,
+        params.duplicates_marker,
         params.exclude_alt,
         params.extract_alignments,
         params.fai,

@@ -1,42 +1,42 @@
 {
-    "ANNOTATE_MOBILE_ELEMENTS - GRCh37, stub": {
+    "ANNOTATE_MOBILE_ELEMENTS - wgs, minimal dataset": {
+        "content": [
+            "amusingmarmoset_filter.vcf.gz",
+            "VcfFile [chromosomes=[chr12, chr20], sampleCount=1, variantCount=3, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-08-24T16:47:20.772701395",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "ANNOTATE_MOBILE_ELEMENTS - wgs, stub": {
         "content": [
             {
                 "0": [
                     [
                         {
-                            "id": "earlycasualcaiman",
+                            "id": "amusingmarmoset",
                             "single_end": false
                         },
-                        "earlycasualcaiman_filter.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset_filter.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "vcf_ann": [
                     [
                         {
-                            "id": "earlycasualcaiman",
+                            "id": "amusingmarmoset",
                             "single_end": false
                         },
-                        "earlycasualcaiman_filter.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset_filter.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-07-14T09:49:42.64836918",
+        "timestamp": "2026-08-24T16:47:44.031176068",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.06.0"
-        }
-    },
-    "ANNOTATE_MOBILE_ELEMENTS - GRCh37": {
-        "content": [
-            "earlycasualcaiman_filter.vcf.gz",
-            "VcfFile [chromosomes=[21], sampleCount=1, variantCount=10, phased=false, phasedAutodetect=false]"
-        ],
-        "timestamp": "2026-07-13T14:48:33.584703611",
-        "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.06.0"
+            "nextflow": "26.04.6"
         }
     }
 }
