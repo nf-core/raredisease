@@ -84,6 +84,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update saltshaker modules to version 1.1.1 so they can run on empty mitosalt output [#856](https://github.com/nf-core/raredisease/pull/856)
 - Update metromap to reflect the addition of mitosalt + saltshaker and removal of eklipse [#892](https://github.com/nf-core/raredisease/pull/892)
 - Changed default glnexus config from `DeepVariant_unfiltered` to a custom config in `assets/` due to unfixed [bug](https://github.com/dnanexus-rnd/GLnexus/issues/286) [issue #960](https://github.com/nf-core/raredisease/issues/960) [PR #961](https://github.com/nf-core/raredisease/pull/961)
+- Updated tiddit/cov and tiddit/sv to v3.9.7 [PR #1001](https://github.com/nf-core/raredisease/pull/1001)
 
 ### `Fixed`
 
@@ -127,6 +128,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | gatk4/getpileupsummaries     |             | 4.6.2.0     |
 | Saltshaker                   | 1.0.0       | 1.1.1       |
 | Ensemblvep                   | 110.1       | 116.1       |
+| tiddit/sv                    | 3.9.5       | 3.9.7       |
+| tiddit/cov                   | 3.9.5       | 3.9.7       |
 
 ## 3.1.2 - Princess Peach (patch) [2026-07-06]
 
