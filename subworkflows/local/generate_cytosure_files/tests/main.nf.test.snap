@@ -5,7 +5,7 @@
                 "0": [
                     [
                         {
-                            "id": "earlycasualcaiman",
+                            "id": "ACC13778A1",
                             "sex": 1,
                             "custid": "CUST_001"
                         },
@@ -15,7 +15,7 @@
                 "cgh": [
                     [
                         {
-                            "id": "earlycasualcaiman",
+                            "id": "ACC13778A1",
                             "sex": 1,
                             "custid": "CUST_001"
                         },
@@ -24,10 +24,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-07-29T15:57:57.860032538",
+        "timestamp": "2026-08-27T15:54:36.545079668",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     },
     "GENERATE_CYTOSURE_FILES - no customer_id, stub": {
@@ -36,29 +36,48 @@
                 "0": [
                     [
                         {
-                            "id": "earlycasualcaiman",
+                            "id": "ACC13778A1",
                             "sex": 1,
-                            "custid": "earlycasualcaiman"
+                            "custid": "ACC13778A1"
                         },
-                        "earlycasualcaiman.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A1.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "cgh": [
                     [
                         {
-                            "id": "earlycasualcaiman",
+                            "id": "ACC13778A1",
                             "sex": 1,
-                            "custid": "earlycasualcaiman"
+                            "custid": "ACC13778A1"
                         },
-                        "earlycasualcaiman.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A1.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-07-29T15:57:34.443398636",
+        "timestamp": "2026-08-27T15:54:14.939716515",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
+        }
+    },
+    "GENERATE_CYTOSURE_FILES - minimal dataset": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "ACC13778A1",
+                        "sex": 1,
+                        "custid": "ACC13778A1"
+                    },
+                    "ACC13778A1.cgh:md5,112c020ffaade806d29edb24c8078a60"
+                ]
+            ]
+        ],
+        "timestamp": "2026-08-24T09:31:22.254656867",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     }
 }
