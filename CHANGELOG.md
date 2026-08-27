@@ -115,6 +115,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | gatk4/getpileupsummaries     |             | 4.6.2.0     |
 | Saltshaker                   | 1.0.0       | 1.1.1       |
 | Ensemblvep                   | 110.1       | 116.1       |
+| tiddit/sv                    | 3.9.5       | 3.9.7       |
+| tiddit/cov                   | 3.9.5       | 3.9.7       |
 
 ## 3.1.2 - Princess Peach (patch) [2026-07-06]
 
