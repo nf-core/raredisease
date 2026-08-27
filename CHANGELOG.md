@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `somalier/extract` and `somalier/relate` modules via the `nf-core/vcf_extract_relate_somalier` subworkflow, ported from `patch` [issue #446](https://github.com/nf-core/raredisease/issues/446) [PR #891](https://github.com/nf-core/raredisease/pull/891)
+- Add the `fastdup` module as a faster alternative to Picard MarkDuplicates in `align_bwa_bwamem2_bwameme`, ported from `patch` [issue #864](https://github.com/nf-core/raredisease/issues/864) [PR #876](https://github.com/nf-core/raredisease/pull/876)
 - Add a real (non-stub) test to `call_snv_sentieon`, covering the two-sample merge scenario (`BCFTOOLS_MERGE`) to match its stub test's coverage, and migrate `call_snv_deepvariant`'s real test to the new minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #987](https://github.com/nf-core/raredisease/pull/987)
 - Add `test_vcf_singleton` profile [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #978](https://github.com/nf-core/raredisease/pull/978)
 - Add `test_align_singleton` profile (BAM-only singleton input) [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #977](https://github.com/nf-core/raredisease/pull/977)
@@ -110,6 +112,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |               | vep_gtf                       |
 |               | vep_gtf_tbi                   |
 |               | peddy_sites                   |
+|               | duplicates_marker             |
+|               | somalier_sites_vcf            |
 
 ### Tool updates
 
