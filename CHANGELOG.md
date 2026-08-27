@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add a real (non-stub) test to `annotate_structural_variants` using the new minimal 9-region GIAB dataset, and migrate `call_sv`'s existing real test from the old large-genome fixtures to the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #983](https://github.com/nf-core/raredisease/pull/983)
 - Add `somalier/extract` and `somalier/relate` modules via the `nf-core/vcf_extract_relate_somalier` subworkflow, ported from `patch` [issue #446](https://github.com/nf-core/raredisease/issues/446) [PR #891](https://github.com/nf-core/raredisease/pull/891)
 - Add the `fastdup` module as a faster alternative to Picard MarkDuplicates in `align_bwa_bwamem2_bwameme`, ported from `patch` [issue #864](https://github.com/nf-core/raredisease/issues/864) [PR #876](https://github.com/nf-core/raredisease/pull/876)
 - Add a real (non-stub) test to `call_snv_sentieon`, covering the two-sample merge scenario (`BCFTOOLS_MERGE`) to match its stub test's coverage, and migrate `call_snv_deepvariant`'s real test to the new minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #987](https://github.com/nf-core/raredisease/pull/987)
@@ -84,6 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Fix `call_sv`'s standalone subworkflow test failing against the new minimal dataset with "Minimum memory limit allowed is 6MB": `BWA_INDEX`'s default memory (proportional to fasta size) computes below Docker's floor for the tiny sliced reference; the test's own setup step now applies the same `[6.B * fasta.size(), 100.MB].max()` floor already used for the real `PREPARE_REFERENCES:BWA_INDEX_GENOME` invocation in `conf/modules/prepare_references.config` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #983](https://github.com/nf-core/raredisease/pull/983)
 - Fix `call_snv_sentieon`'s standalone test passing the genome fasta and fai in the wrong argument order (a pre-existing bug masked by stub mode never touching file content) [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #987](https://github.com/nf-core/raredisease/pull/987)
 - Fix `call_snv_deepvariant`'s standalone test hardcoding `--regions="chr22:0-40001"`, left over from the old dataset; the new minimal dataset has no chr22 region, so DeepVariant errored with "regions to call is empty" [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #987](https://github.com/nf-core/raredisease/pull/987)
 - Fix `call_snv_deepvariant`'s standalone test config missing `-c CHROM,FROM,TO,FOUND_IN` on `BCFTOOLS_ANNOTATE` (present in the real pipeline config but never mirrored into the subworkflow test's own `tests/nextflow.config`), which made the real test's `bcftools annotate` step fail with "The -c option not given" [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #987](https://github.com/nf-core/raredisease/pull/987)
