@@ -196,7 +196,7 @@
     },
     "CALL_SNV_DEEPVARIANT - wgs, minimal dataset": {
         "content": [
-            "7efff34a150613be6b116c5739be4231",
+            "11996f7ce5061eadc3b58c845983d3c1",
             [
                 "ACC13778A2_deepvar.visual_report.html",
                 "ACC13778A3_deepvar.visual_report.html"
@@ -209,7 +209,7 @@
                 "ACC13778A3_deepvar.g.vcf.gz"
             ]
         ],
-        "timestamp": "2026-08-24T11:15:59.770691632",
+        "timestamp": "2026-08-28T17:27:59.307615985",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
