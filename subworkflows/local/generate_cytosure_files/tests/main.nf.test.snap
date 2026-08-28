@@ -70,11 +70,11 @@
                         "sex": 1,
                         "custid": "ACC13778A1"
                     },
-                    "ACC13778A1.cgh:md5,112c020ffaade806d29edb24c8078a60"
+                    "ACC13778A1.cgh:md5,1b506c7eef4900f466ff23e7f71083f5"
                 ]
             ]
         ],
-        "timestamp": "2026-08-24T09:31:22.254656867",
+        "timestamp": "2026-08-27T16:53:28.363235806",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
