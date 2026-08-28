@@ -20,7 +20,7 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = channel.of([
-                    [id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A1')},
                     file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
                     file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)
                 ])
@@ -55,7 +55,7 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = channel.of([
-                    [id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A1')},
                     file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
                     file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)
                 ])
@@ -88,7 +88,7 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = channel.of([
-                    [id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset', customer_id:'CUST_001'],
+                    ${TestData.sample('ACC13778A1', "customer_id:'CUST_001'")},
                     file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
                     file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)
                 ])

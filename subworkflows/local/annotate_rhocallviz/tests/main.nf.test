@@ -28,8 +28,8 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
-                input[1] = channel.of([id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'])
+                input[0] = GET_CHROM_SIZES.out.sizes.collect()
+                input[1] = channel.of(${TestData.sample('ACC13778A1')})
                 input[2] = channel.of([
                     [id:'amusingmarmoset'],
                     file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz', checkIfExists: true),
@@ -72,7 +72,7 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
-                input[1] = channel.of([id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'])
+                input[1] = channel.of(${TestData.sample('ACC13778A1')})
                 input[2] = channel.of([
                     [id:'amusingmarmoset'],
                     file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz', checkIfExists: true),
