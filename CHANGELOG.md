@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GATK Contamination results displayed in MultiQC with color-coded thresholds [#758](https://github.com/nf-core/raredisease/pull/758)
 - Added non-stub tests for `annotate_mobile_elements` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #923](https://github.com/nf-core/raredisease/pull/923)
 - Added non-stub tests for `call_mobile_elements` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #924](https://github.com/nf-core/raredisease/pull/924)
+- Added non-stub tests for `rank_variants` and `filter_annotate_rank` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #988](https://github.com/nf-core/raredisease/pull/988)
 - Added non-stub tests for `postprocess_MT_calls` and `call_mt_snvs` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #989](https://github.com/nf-core/raredisease/pull/989)
 
 ### `Removed`
@@ -41,6 +42,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Add a `tests/lib/TestData.groovy` helper (`TestData.sample('ACC13778A2')`) and use it across the subworkflow nf-tests, replacing 124 repeated inline sample-meta literals [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1006](https://github.com/nf-core/raredisease/pull/1006)
+- Replace the repeated `setup { run("GET_CHROM_SIZES") {…} }` block in eight subworkflow nf-tests (`annotate_genome_snvs`, `annotate_rhocallviz`, `call_mt_snvs`, `call_snv`, `call_snv_deepvariant`, `call_snv_sentieon`, `call_sv_MT`, `postprocess_MT_calls`) with the pre-generated `subworkflow_fixtures/minimal_reference_chrom.sizes` fixture [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1007](https://github.com/nf-core/raredisease/pull/1007)
 - Add `alignment`/`reference_sliced`/`subworkflow_fixtures`/`resources_remapped`/`precalled` path-prefix params to `tests/nextflow.config` and use them across the subworkflow nf-tests, replacing ~560 repeated `params.pipelines_testdata_base_path + '<subdir>/…'` references [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1005](https://github.com/nf-core/raredisease/pull/1005)
 - Migrate `call_snv_MT`'s real and stub tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1004](https://github.com/nf-core/raredisease/pull/1004)
 - Migrate the stub tests for `call_sv`, `call_sv_manta`, `generate_cytosure_files`, `call_sv_germlinecnvcaller`, and `gens` to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1002](https://github.com/nf-core/raredisease/pull/1002)

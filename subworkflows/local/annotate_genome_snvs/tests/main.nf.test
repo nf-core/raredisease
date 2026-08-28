@@ -24,27 +24,13 @@ nextflow_workflow {
 
     test("ANNOTATE_GENOME_SNVS - GRCh38, wgs, minimal dataset") {
 
-        setup {
-            run("GET_CHROM_SIZES") {
-                script "modules/local/get_chrom_sizes/main.nf"
-                process {
-                    """
-                    input[0] = channel.of([
-                        [id:'genome'],
-                        file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta.fai', checkIfExists: true)
-                    ])
-                    """
-                }
-            }
-        }
-
         when {
             workflow {
                 """
                 input[0]  = channel.of([[id:'resources'], file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/cadd_to_vcf_header_-1.0-.txt', checkIfExists: true)]).collect()
                 input[1]  = channel.value([[:], []])
                 input[2]  = Channel.from(env('PWD')).map { dir -> [ [ id: 'cadd_resources' ], dir ] }
-                input[3]  = GET_CHROM_SIZES.out.sizes.collect()
+                input[3]  = channel.of(file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
                 input[4]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
                 input[5]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[6]  = channel.value([

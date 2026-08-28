@@ -5,7 +5,6 @@
                 [
                     {
                         "id": "ACC13778A2",
-                        "seedfrac": "31.020741",
                         "sample": "ACC13778A2",
                         "single_end": false,
                         "num_lanes": 1,
@@ -15,7 +14,8 @@
                         "phenotype": 1,
                         "paternal": 0,
                         "maternal": 0,
-                        "case_id": "amusingmarmoset"
+                        "case_id": "amusingmarmoset",
+                        "seedfrac": "31.020741"
                     },
                     "9ffc263bc5ed9612592908d38e28ad8d"
                 ]
@@ -24,7 +24,6 @@
                 [
                     {
                         "id": "ACC13778A2",
-                        "seedfrac": "31.020741",
                         "sample": "ACC13778A2",
                         "single_end": false,
                         "num_lanes": 1,
@@ -34,13 +33,14 @@
                         "phenotype": 1,
                         "paternal": 0,
                         "maternal": 0,
-                        "case_id": "amusingmarmoset"
+                        "case_id": "amusingmarmoset",
+                        "seedfrac": "31.020741"
                     },
                     "ACC13778A2_mt_subsample.bam.bai"
                 ]
             ]
         ],
-        "timestamp": "2026-08-24T16:56:34.503761415",
+        "timestamp": "2026-08-28T14:25:48.028886271",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
@@ -53,7 +53,6 @@
                     [
                         {
                             "id": "ACC13778A2",
-                            "seedfrac": null,
                             "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
@@ -63,7 +62,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "case_id": "amusingmarmoset",
+                            "seedfrac": null
                         },
                         "ACC13778A2_mt_subsample.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -72,7 +72,6 @@
                     [
                         {
                             "id": "ACC13778A2",
-                            "seedfrac": null,
                             "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
@@ -82,7 +81,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "case_id": "amusingmarmoset",
+                            "seedfrac": null
                         },
                         "ACC13778A2_mt_subsample.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -91,7 +91,6 @@
                     [
                         {
                             "id": "ACC13778A2",
-                            "seedfrac": null,
                             "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
@@ -101,7 +100,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "case_id": "amusingmarmoset",
+                            "seedfrac": null
                         },
                         "ACC13778A2_mt_subsample.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -110,7 +110,6 @@
                     [
                         {
                             "id": "ACC13778A2",
-                            "seedfrac": null,
                             "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
@@ -120,14 +119,15 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "case_id": "amusingmarmoset",
+                            "seedfrac": null
                         },
                         "ACC13778A2_mt_subsample.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-08-24T16:56:50.152583154",
+        "timestamp": "2026-08-28T14:26:09.539520018",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
