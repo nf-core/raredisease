@@ -36,23 +36,21 @@ nextflow_workflow {
                 """
             }
         }
+
+        run("CREATE_HGNCIDS_FILE") {
+            script "modules/local/create_hgncids_file/main.nf"
+            process {
+                """
+                input[0] = [
+                    [id:'standard'],
+                    file(params.pipelines_testdata_base_path + 'reference/hgnc.txt', checkIfExists: true)
+                ]
+                """
+            }
+        }
     }
 
     test("FILTER_ANNOTATE_RANK - clinical set + rank, minimal dataset") {
-
-        setup {
-            run("CREATE_HGNCIDS_FILE") {
-                script "modules/local/create_hgncids_file/main.nf"
-                process {
-                    """
-                    input[0] = [
-                        [id:'standard'],
-                        file(params.pipelines_testdata_base_path + 'reference/hgnc.txt', checkIfExists: true)
-                    ]
-                    """
-                }
-            }
-        }
 
         when {
             workflow {
@@ -98,9 +96,7 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = Channel.of('3084')
-                    .collectFile(name: 'hgnc_ids.txt')
-                    .map { file -> [ [ id: 'hgnc_ids' ], file ] }
+                input[0] = CREATE_HGNCIDS_FILE.out.txt
                 input[1] = CREATE_PEDIGREE_FILE.out.ped
                 input[2] = Channel.value(file(params.pipelines_testdata_base_path + 'reference/reduced_penetrance.tsv', checkIfExists: true))
                 input[3] = Channel.value(file(params.pipelines_testdata_base_path + 'resources_remapped/rank_models/grch38_rank_model_-v0.4-.minimal_trimmed.ini', checkIfExists: true))
@@ -137,9 +133,7 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = Channel.of('3084')
-                    .collectFile(name: 'hgnc_ids.txt')
-                    .map { file -> [ [ id: 'hgnc_ids' ], file ] }
+                input[0] = CREATE_HGNCIDS_FILE.out.txt
                 input[1] = CREATE_PEDIGREE_FILE.out.ped
                 input[2] = Channel.value(file(params.pipelines_testdata_base_path + 'reference/reduced_penetrance.tsv', checkIfExists: true))
                 input[3] = Channel.value(file(params.pipelines_testdata_base_path + 'resources_remapped/rank_models/grch38_rank_model_-v0.4-.minimal_trimmed.ini', checkIfExists: true))
