@@ -15,23 +15,8 @@ nextflow_workflow {
     tag "picard/liftovervcf"
     tag "bcftools/annotate"
     tag "local/add_varcallername_to_bed"
-    tag "get_chrom_sizes"
 
     config "./nextflow.config"
-
-    setup {
-        run("GET_CHROM_SIZES") {
-            script "modules/local/get_chrom_sizes/main.nf"
-            process {
-                """
-                input[0] = channel.of([
-                    [id:'genome'],
-                    file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)
-                ])
-                """
-            }
-        }
-    }
 
     test("POSTPROCESS_MT_CALLS - wgs, minimal dataset") {
 
@@ -40,7 +25,7 @@ nextflow_workflow {
                 """
                 input[0] = channel.of([id:'amusingmarmoset'])
                 input[1] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
-                input[2] = GET_CHROM_SIZES.out.sizes.collect()
+                input[2] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
                 input[3] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.dict', checkIfExists: true)]).collect()
                 input[4] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
                 input[5] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
@@ -78,7 +63,7 @@ nextflow_workflow {
                 """
                 input[0] = channel.of([id:'amusingmarmoset'])
                 input[1] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
-                input[2] = GET_CHROM_SIZES.out.sizes.collect()
+                input[2] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
                 input[3] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.dict', checkIfExists: true)]).collect()
                 input[4] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
                 input[5] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
