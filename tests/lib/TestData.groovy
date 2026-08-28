@@ -24,11 +24,11 @@ class TestData {
      * `extra` is appended verbatim, e.g. sample('ACC13778A2', "customer_id:'cust_a2'").
      */
     static String sample(String id, String extra = null) {
-        def m  = TRIO[id]
+        def sample_map  = TRIO[id]
         def rg = "\"'@RG\\\\tID:${id}\\\\tPL:illumina\\\\tSM:${id}'\""
         def base = "id:'${id}', sample:'${id}', single_end:false, num_lanes:1, " +
-                   "read_group: ${rg}, lane:1, sex:${m.sex}, phenotype:${m.phenotype}, " +
-                   "paternal:${m.paternal}, maternal:${m.maternal}, case_id:'amusingmarmoset'"
+                   "read_group: ${rg}, lane:1, sex:${sample_map.sex}, phenotype:${sample_map.phenotype}, " +
+                   "paternal:${sample_map.paternal}, maternal:${sample_map.maternal}, case_id:'amusingmarmoset'"
         "[${extra ? "${base}, ${extra}" : base}]"
     }
 }
