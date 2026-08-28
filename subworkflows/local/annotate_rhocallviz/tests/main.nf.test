@@ -15,13 +15,25 @@ nextflow_workflow {
 
     config "./nextflow.config"
 
-    test("ANNOTATE_RHOCALLVIZ - stub") {
+    test("ANNOTATE_RHOCALLVIZ - minimal dataset") {
 
-        options "-stub"
+        setup {
+            run("GET_CHROM_SIZES") {
+                script "modules/local/get_chrom_sizes/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'genome'],
+                        file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
 
         when {
             params {
-                bcftools_view_rhocall      = "--output-type z --write-index=tbi --min-ac 1 --samples test_sample"
+                bcftools_view_rhocall      = "--output-type z --write-index=tbi --min-ac 1 --samples ACC13778A1"
                 bcftools_roh               = "--AF-tag GNOMADAF --skip-indels"
                 bcftools_view_uncompressed = "--output-type v"
                 rhocall_viz                = "--aftag GNOMADAF --wig"
@@ -30,12 +42,55 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = channel.of(file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.sizes', checkIfExists: true)).collect()
-                input[1] = channel.of([id:'test_sample', sample:'test_sample', sex:1, phenotype:2, paternal:0, maternal:0, case_id:'test_case'])
+                input[0] = GET_CHROM_SIZES.out.sizes.collect()
+                input[1] = channel.of([id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'])
                 input[2] = channel.of([
-                    [id:'test_case', sample:'test_sample'],
-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true),
-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz.tbi', checkIfExists: true)
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz', checkIfExists: true),
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz.tbi', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.rhocall_viz_bed
+                        .collect { meta, bedfile -> [file(bedfile)] },
+                    workflow.out.rhocall_viz_wig
+                        .collect { meta, wigfile -> [file(wigfile)] },
+                    workflow.out.ucsc_wigtobigwig_bw
+                        .collect { meta, bwfile -> [file(bwfile)] },
+                    workflow.out.chromograph_autozyg_plots
+                        .collect { meta, plots -> [plots.collect { png -> file(png) }.sort()] }
+                ).match() }
+            )
+        }
+    }
+
+    test("ANNOTATE_RHOCALLVIZ - stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                bcftools_view_rhocall      = "--output-type z --write-index=tbi --min-ac 1 --samples ACC13778A1"
+                bcftools_roh               = "--AF-tag GNOMADAF --skip-indels"
+                bcftools_view_uncompressed = "--output-type v"
+                rhocall_viz                = "--aftag GNOMADAF --wig"
+                chromograph_autozyg        = "--euploid"
+                ucsc_wigtobigwig           = "-clip"
+            }
+            workflow {
+                """
+                input[0] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[1] = channel.of([id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'])
+                input[2] = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz', checkIfExists: true),
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz.tbi', checkIfExists: true)
                 ])
                 """
             }

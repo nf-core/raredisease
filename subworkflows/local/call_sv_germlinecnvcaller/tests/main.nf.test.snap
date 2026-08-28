@@ -2,13 +2,13 @@
     "CALL_SV_GERMLINECNVCALLER - stub": {
         "content": [
             [
-                "justhusky_gcnvcaller.vcf.gz"
+                "amusingmarmoset_gcnvcaller.vcf.gz"
             ]
         ],
-        "timestamp": "2026-03-01T22:17:21.509267479",
+        "timestamp": "2026-08-27T23:32:55.601934529",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     }
 }
