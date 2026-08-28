@@ -24,7 +24,7 @@ nextflow_workflow {
                     """
                     input[0] = channel.of([
                         [id:'genome'],
-                        file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)
+                        file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)
                     ])
                     """
                 }
@@ -39,34 +39,34 @@ nextflow_workflow {
                 input[2]  = channel.of([[id:'gcnvcaller'], []])
                 input[3]  = channel.of(
                     [[id:'ACC13778A1', sample:'ACC13778A1', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A1\\\\tPL:illumina\\\\tSM:ACC13778A1'", lane:1, sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)],
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)],
                     [[id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
                     [[id:'ACC13778A3', sample:'ACC13778A3', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A3\\\\tPL:illumina\\\\tSM:ACC13778A3'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
                 )
                 input[4]  = channel.of(
                     [[id:'ACC13778A1', sample:'ACC13778A1', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A1\\\\tPL:illumina\\\\tSM:ACC13778A1'", lane:1, sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A1_sorted_md.bam', checkIfExists: true)],
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true)],
                     [[id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
                     [[id:'ACC13778A3', sample:'ACC13778A3', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A3\\\\tPL:illumina\\\\tSM:ACC13778A3'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A3_sorted_md.bam', checkIfExists: true)]
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true)]
                 )
                 input[5]  = channel.of(
                     [[id:'ACC13778A1', sample:'ACC13778A1', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A1\\\\tPL:illumina\\\\tSM:ACC13778A1'", lane:1, sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A1_sorted_md.bam', checkIfExists: true),
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)],
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)],
                     [[id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam', checkIfExists: true),
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
                     [[id:'ACC13778A3', sample:'ACC13778A3', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A3\\\\tPL:illumina\\\\tSM:ACC13778A3'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A3_sorted_md.bam', checkIfExists: true),
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
                 )
-                input[6]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.dict', checkIfExists: true)]).collect()
-                input[7]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
-                input[8]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[6]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[9]  = channel.value([[], []])
                 input[10] = channel.of([[id:'ploidy'], []])
                 input[11] = channel.of([[]])
@@ -98,34 +98,34 @@ nextflow_workflow {
                 input[2]  = channel.of([[id:'gcnvcaller'], []])
                 input[3]  = channel.of(
                     [[id:'ACC13778A1', sample:'ACC13778A1', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A1\\\\tPL:illumina\\\\tSM:ACC13778A1'", lane:1, sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)],
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)],
                     [[id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
                     [[id:'ACC13778A3', sample:'ACC13778A3', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A3\\\\tPL:illumina\\\\tSM:ACC13778A3'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
                 )
                 input[4]  = channel.of(
                     [[id:'ACC13778A1', sample:'ACC13778A1', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A1\\\\tPL:illumina\\\\tSM:ACC13778A1'", lane:1, sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A1_sorted_md.bam', checkIfExists: true)],
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true)],
                     [[id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
                     [[id:'ACC13778A3', sample:'ACC13778A3', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A3\\\\tPL:illumina\\\\tSM:ACC13778A3'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A3_sorted_md.bam', checkIfExists: true)]
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true)]
                 )
                 input[5]  = channel.of(
                     [[id:'ACC13778A1', sample:'ACC13778A1', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A1\\\\tPL:illumina\\\\tSM:ACC13778A1'", lane:1, sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A1_sorted_md.bam', checkIfExists: true),
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)],
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)],
                     [[id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam', checkIfExists: true),
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
                     [[id:'ACC13778A3', sample:'ACC13778A3', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A3\\\\tPL:illumina\\\\tSM:ACC13778A3'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A3_sorted_md.bam', checkIfExists: true),
-                     file(params.pipelines_testdata_base_path + 'alignment/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
                 )
-                input[6]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.dict', checkIfExists: true)]).collect()
-                input[7]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
-                input[8]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[6]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[9]  = channel.value([[], []])
                 input[10] = channel.of([[id:'ploidy'], []])
                 input[11] = channel.of([[]])

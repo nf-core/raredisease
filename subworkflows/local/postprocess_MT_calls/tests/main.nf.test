@@ -26,7 +26,7 @@ nextflow_workflow {
                 """
                 input[0] = channel.of([
                     [id:'genome'],
-                    file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta.fai', checkIfExists: true)
+                    file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)
                 ])
                 """
             }
@@ -41,17 +41,17 @@ nextflow_workflow {
                 input[0] = channel.of([id:'amusingmarmoset'])
                 input[1] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
                 input[2] = GET_CHROM_SIZES.out.sizes.collect()
-                input[3] = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mt.dict', checkIfExists: true)]).collect()
-                input[4] = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
-                input[5] = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.dict', checkIfExists: true)]).collect()
+                input[4] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
+                input[5] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
                 input[6] = channel.of([
                     [id:'ACC13778A2', case_id:'amusingmarmoset'],
-                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/ACC13778A2_mutect2_mt.vcf.gz', checkIfExists: true)
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mutect2_mt.vcf.gz', checkIfExists: true)
                 ])
-                input[7] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mtshift.back_chain', checkIfExists: true)]).collect()
+                input[7] = channel.of([[id:'genome'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.back_chain', checkIfExists: true)]).collect()
                 input[8] = channel.of([
                     [id:'ACC13778A2', case_id:'amusingmarmoset'],
-                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/ACC13778A2_mutect2_mtshift.vcf.gz', checkIfExists: true)
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mutect2_mtshift.vcf.gz', checkIfExists: true)
                 ])
                 """
             }
@@ -79,17 +79,17 @@ nextflow_workflow {
                 input[0] = channel.of([id:'amusingmarmoset'])
                 input[1] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
                 input[2] = GET_CHROM_SIZES.out.sizes.collect()
-                input[3] = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mt.dict', checkIfExists: true)]).collect()
-                input[4] = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
-                input[5] = channel.of([[id:'mt'], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.dict', checkIfExists: true)]).collect()
+                input[4] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
+                input[5] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
                 input[6] = channel.of([
                     [id:'ACC13778A2', case_id:'amusingmarmoset'],
-                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/ACC13778A2_mutect2_mt.vcf.gz', checkIfExists: true)
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mutect2_mt.vcf.gz', checkIfExists: true)
                 ])
-                input[7] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mtshift.back_chain', checkIfExists: true)]).collect()
+                input[7] = channel.of([[id:'genome'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.back_chain', checkIfExists: true)]).collect()
                 input[8] = channel.of([
                     [id:'ACC13778A2', case_id:'amusingmarmoset'],
-                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/ACC13778A2_mutect2_mtshift.vcf.gz', checkIfExists: true)
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mutect2_mtshift.vcf.gz', checkIfExists: true)
                 ])
                 """
             }
