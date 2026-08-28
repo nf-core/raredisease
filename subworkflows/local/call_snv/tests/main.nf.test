@@ -15,20 +15,6 @@ nextflow_workflow {
 
     test("CALL_SNV - deepvariant wgs") {
 
-        setup {
-            run("GET_CHROM_SIZES") {
-                script "modules/local/get_chrom_sizes/main.nf"
-                process {
-                    """
-                    input[0] = channel.of([
-                        [id:'genome'],
-                        file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)
-                    ])
-                    """
-                }
-            }
-        }
-
         when {
             params {
                 bcftools_args = "--write-index=tbi --output-type z"
@@ -48,7 +34,7 @@ nextflow_workflow {
                      file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
                      file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
                 )
-                input[6]  = GET_CHROM_SIZES.out.sizes.collect()
+                input[6]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
                 input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
                 input[9] = channel.of([
@@ -82,20 +68,6 @@ nextflow_workflow {
 
         options "-stub"
 
-        setup {
-            run("GET_CHROM_SIZES") {
-                script "modules/local/get_chrom_sizes/main.nf"
-                process {
-                    """
-                    input[0] = channel.of([
-                        [id:'genome'],
-                        file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)
-                    ])
-                    """
-                }
-            }
-        }
-
         when {
             params {
                 bcftools_args = "--write-index=tbi --output-type z"
@@ -115,7 +87,7 @@ nextflow_workflow {
                      file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
                      file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
                 )
-                input[6]  = GET_CHROM_SIZES.out.sizes.collect()
+                input[6]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
                 input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
                 input[9] = channel.of([
