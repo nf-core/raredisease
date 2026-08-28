@@ -24,7 +24,7 @@ nextflow_workflow {
                 ]).collect()
                 input[1] = channel.of([
                     [id:'amusingmarmoset'],
-                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
+                    file(params.subworkflow_fixtures + '/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
                 ])
                 input[2] = false
                 """
@@ -53,7 +53,7 @@ nextflow_workflow {
                 ]).collect()
                 input[1] = channel.of([
                     [id:'amusingmarmoset'],
-                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
+                    file(params.subworkflow_fixtures + '/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
                 ])
                 input[2] = true
                 """
@@ -85,7 +85,7 @@ nextflow_workflow {
                 ]).collect()
                 input[1] = channel.of([
                     [id:'amusingmarmoset'],
-                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
+                    file(params.subworkflow_fixtures + '/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
                 ])
                 input[2] = true
                 """
