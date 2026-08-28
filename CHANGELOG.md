@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add a real (non-stub) test to `annotate_genome_snvs` using the new minimal 9-region GIAB dataset in `--gtf` VEP mode, and migrate `annotate_mt_snvs`'s existing real test from the old large-genome fixtures to the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #984](https://github.com/nf-core/raredisease/pull/984)
 - Add a real (non-stub) test to `generate_cytosure_files` using the new minimal 9-region GIAB dataset, and migrate `call_sv_manta`'s existing real test to the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #986](https://github.com/nf-core/raredisease/pull/986)
 - Add a real (non-stub) test to `annotate_rhocallviz` using the new minimal 9-region GIAB dataset, and migrate `annotate_consequence_pli`'s real tests off the generic nf-core/modules VCF fixture onto a genuine VEP-CSQ-annotated VCF derived from the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #985](https://github.com/nf-core/raredisease/pull/985)
 - Add a real (non-stub) test to `annotate_structural_variants` using the new minimal 9-region GIAB dataset, and migrate `call_sv`'s existing real test from the old large-genome fixtures to the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #983](https://github.com/nf-core/raredisease/pull/983)
