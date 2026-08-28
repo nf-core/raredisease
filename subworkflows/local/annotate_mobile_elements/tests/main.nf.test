@@ -22,34 +22,34 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.dict', checkIfExists: true)]).collect()
-                input[1] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[0] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
+                input[1] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[2] = channel.of([
-                    file(params.pipelines_testdata_base_path + 'resources_remapped/svdb/grch38_gnomad.v4.1.sv.sites.no_cnv.remapped.vcf.gz', checkIfExists: true),
+                    file(params.resources_remapped + '/svdb/grch38_gnomad.v4.1.sv.sites.no_cnv.remapped.vcf.gz', checkIfExists: true),
                     'AF',
                     'AC',
                     'gnomad_svAF',
                     'gnomad_svAC'
                 ])
-                input[3] = channel.of([[id:'amusingmarmoset', "single_end": false], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/amusingmarmoset_mobile_elements.vcf.gz', checkIfExists: true)])
+                input[3] = channel.of([[id:'amusingmarmoset', "single_end": false], file(params.subworkflow_fixtures + '/amusingmarmoset_mobile_elements.vcf.gz', checkIfExists: true)])
                 input[4] = channel.value([[:], []])
                 input[5] = 'GRCh38'
                 input[6] = 116
                 input[7] = [
-                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/LoFtool.pm', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/pLI.pm', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/SpliceAI.pm', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/plugin_config.txt', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/LoFtool_scores.txt', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/pLI_values.txt', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/spliceai_snv.vcf.gz', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/spliceai_snv.vcf.gz.tbi', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/spliceai_indel.vcf.gz', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/spliceai_indel.vcf.gz.tbi', checkIfExists: true)
+                                file(params.resources_remapped + '/vep_gtf/LoFtool.pm', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/pLI.pm', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/SpliceAI.pm', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/plugin_config.txt', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/LoFtool_scores.txt', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/pLI_values.txt', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/spliceai_snv.vcf.gz', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/spliceai_snv.vcf.gz.tbi', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/spliceai_indel.vcf.gz', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/spliceai_indel.vcf.gz.tbi', checkIfExists: true)
                             ]
                 input[8] = channel.of(
-                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/minimal_reference.sorted.gtf.gz', checkIfExists: true),
-                                file(params.pipelines_testdata_base_path + 'resources_remapped/vep_gtf/minimal_reference.sorted.gtf.gz.tbi', checkIfExists: true)
+                                file(params.resources_remapped + '/vep_gtf/minimal_reference.sorted.gtf.gz', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/minimal_reference.sorted.gtf.gz.tbi', checkIfExists: true)
                             ).collect()
                 """
             }
@@ -76,16 +76,16 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.dict', checkIfExists: true)]).collect()
-                input[1] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference_sliced/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[0] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
+                input[1] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[2] = channel.of([
-                    file(params.pipelines_testdata_base_path + 'resources_remapped/svdb/grch38_gnomad.v4.1.sv.sites.no_cnv.remapped.vcf.gz', checkIfExists: true),
+                    file(params.resources_remapped + '/svdb/grch38_gnomad.v4.1.sv.sites.no_cnv.remapped.vcf.gz', checkIfExists: true),
                     'AF',
                     'AC',
                     'gnomad_svAF',
                     'gnomad_svAC'
                 ])
-                input[3] = channel.of([[id:'amusingmarmoset', "single_end": false], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/amusingmarmoset_mobile_elements.vcf.gz', checkIfExists: true)])
+                input[3] = channel.of([[id:'amusingmarmoset', "single_end": false], file(params.subworkflow_fixtures + '/amusingmarmoset_mobile_elements.vcf.gz', checkIfExists: true)])
                 input[4] = channel.value([[:], []])
                 input[5] = 'GRCh38'
                 input[6] = 116

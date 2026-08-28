@@ -21,17 +21,17 @@ nextflow_workflow {
                 """
                 input[0] = channel.of([
                     [id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'],
-                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A1_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'alignment/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)
+                    file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)
                 ])
                 input[1] = channel.value([])
                 input[2] = channel.of([
                     [id:'amusingmarmoset'],
-                    file(params.pipelines_testdata_base_path + 'precalled/trio/amusingmarmoset_precalled_sv.vcf.gz.tbi', checkIfExists: true)
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz.tbi', checkIfExists: true)
                 ])
                 input[3] = channel.of([
                     [id:'amusingmarmoset'],
-                    file(params.pipelines_testdata_base_path + 'precalled/trio/amusingmarmoset_precalled_sv.vcf.gz', checkIfExists: true)
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz', checkIfExists: true)
                 ])
                 """
             }
@@ -55,18 +55,18 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = channel.of([
-                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                    [id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'],
+                    file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)
                 ])
                 input[1] = channel.value([])
                 input[2] = channel.of([
-                    [id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'testdata/justhusky_precalled_sv.vcf.gz.tbi', checkIfExists: true)
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz.tbi', checkIfExists: true)
                 ])
                 input[3] = channel.of([
-                    [id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'testdata/justhusky_precalled_sv.vcf.gz', checkIfExists: true)
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz', checkIfExists: true)
                 ])
                 """
             }
@@ -88,18 +88,18 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = channel.of([
-                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky', customer_id:'CUST_001'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                    [id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset', customer_id:'CUST_001'],
+                    file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)
                 ])
                 input[1] = channel.value([])
                 input[2] = channel.of([
-                    [id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'testdata/justhusky_precalled_sv.vcf.gz.tbi', checkIfExists: true)
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz.tbi', checkIfExists: true)
                 ])
                 input[3] = channel.of([
-                    [id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'testdata/justhusky_precalled_sv.vcf.gz', checkIfExists: true)
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz', checkIfExists: true)
                 ])
                 """
             }

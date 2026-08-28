@@ -578,7 +578,7 @@
                     },
                     "vcf2cytosure": {
                         "branch": "master",
-                        "git_sha": "2ad28db4a5a82972c1210dfa7c85f035bb80c4de",
+                        "git_sha": "f1eb4e27e85a454b7e7c5be881deba444abe736f",
                         "installed_by": ["modules"]
                     },
                     "vcfanno": {
