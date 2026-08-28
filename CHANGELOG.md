@@ -39,8 +39,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Migrate the stub tests for `call_sv`, `call_sv_manta`, `generate_cytosure_files`, `call_sv_germlinecnvcaller`, and `gens` to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1002](https://github.com/nf-core/raredisease/pull/1002)
+- Migrate `contamination`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #998](https://github.com/nf-core/raredisease/pull/998)
+- Migrate `qc_bam`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #999](https://github.com/nf-core/raredisease/pull/999)
+- Migrate `prepare_references`'s and `scatter_genome`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #996](https://github.com/nf-core/raredisease/pull/996)
 - Migrate `call_repeat_expansions`'s and `call_snv`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #997](https://github.com/nf-core/raredisease/pull/997)
 - Replace the per-profile BWA index memory override (duplicated across every `test_*.config` with a colon-anchored selector) with a single safe floor in `conf/modules/prepare_references.config`, applied unconditionally without affecting `PREPARE_REFERENCES`'s own real-fasta test [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #975](https://github.com/nf-core/raredisease/pull/975)
+- Migrate `call_sv_MT`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #995](https://github.com/nf-core/raredisease/pull/995)
+- Migrate `call_sv_cnvnator`'s and `call_sv_tiddit`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #994](https://github.com/nf-core/raredisease/pull/994)
+- Migrate `subsample_mt_frac`'s and `subsample_mt_reads`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #993](https://github.com/nf-core/raredisease/pull/993)
 - Migrate `call_mobile_elements`'s and `annotate_mobile_elements`'s real tests to the minimal dataset, switching the latter from GRCh37 VEP cache-mode to GTF-mode annotation [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #992](https://github.com/nf-core/raredisease/pull/992)
 - Migrate `align_MT`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #991](https://github.com/nf-core/raredisease/pull/991)
 - Migrate `align_mitochondria`'s and `convert_mt_bam_to_fastq`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #990](https://github.com/nf-core/raredisease/pull/990)
