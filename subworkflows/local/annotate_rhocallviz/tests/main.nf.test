@@ -17,20 +17,6 @@ nextflow_workflow {
 
     test("ANNOTATE_RHOCALLVIZ - minimal dataset") {
 
-        setup {
-            run("GET_CHROM_SIZES") {
-                script "modules/local/get_chrom_sizes/main.nf"
-                process {
-                    """
-                    input[0] = channel.of([
-                        [id:'genome'],
-                        file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)
-                    ])
-                    """
-                }
-            }
-        }
-
         when {
             params {
                 bcftools_view_rhocall      = "--output-type z --write-index=tbi --min-ac 1 --samples ACC13778A1"
@@ -42,7 +28,7 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = GET_CHROM_SIZES.out.sizes.collect()
+                input[0] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
                 input[1] = channel.of([id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2', case_id:'amusingmarmoset'])
                 input[2] = channel.of([
                     [id:'amusingmarmoset'],
