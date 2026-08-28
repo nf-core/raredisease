@@ -465,7 +465,7 @@
                     "ucsc": 482
                 },
                 "VCF2CYTOSURE": {
-                    "vcf2cytosure": "0.9.3"
+                    "vcf2cytosure": "0.10.0"
                 },
                 "VCFANNO": {
                     "vcfanno": "0.3.7"
@@ -5473,7 +5473,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-08-27T09:14:49.673279067",
+        "timestamp": "2026-08-27T17:07:00.000000000",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"

@@ -40,11 +40,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - Migrate `call_snv_MT`'s real and stub tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1004](https://github.com/nf-core/raredisease/pull/1004)
+- Migrate the stub tests for `call_sv`, `call_sv_manta`, `generate_cytosure_files`, `call_sv_germlinecnvcaller`, and `gens` to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1002](https://github.com/nf-core/raredisease/pull/1002)
 - Migrate `contamination`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #998](https://github.com/nf-core/raredisease/pull/998)
 - Migrate `qc_bam`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #999](https://github.com/nf-core/raredisease/pull/999)
 - Migrate `prepare_references`'s and `scatter_genome`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #996](https://github.com/nf-core/raredisease/pull/996)
 - Migrate `call_repeat_expansions`'s and `call_snv`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #997](https://github.com/nf-core/raredisease/pull/997)
 - Replace the per-profile BWA index memory override (duplicated across every `test_*.config` with a colon-anchored selector) with a single safe floor in `conf/modules/prepare_references.config`, applied unconditionally without affecting `PREPARE_REFERENCES`'s own real-fasta test [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #975](https://github.com/nf-core/raredisease/pull/975)
+- Migrate `call_sv_MT`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #995](https://github.com/nf-core/raredisease/pull/995)
 - Migrate `call_sv_cnvnator`'s and `call_sv_tiddit`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #994](https://github.com/nf-core/raredisease/pull/994)
 - Migrate `subsample_mt_frac`'s and `subsample_mt_reads`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #993](https://github.com/nf-core/raredisease/pull/993)
 - Migrate `call_mobile_elements`'s and `annotate_mobile_elements`'s real tests to the minimal dataset, switching the latter from GRCh37 VEP cache-mode to GTF-mode annotation [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #992](https://github.com/nf-core/raredisease/pull/992)
@@ -95,6 +97,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update metromap to reflect the addition of mitosalt + saltshaker and removal of eklipse [#892](https://github.com/nf-core/raredisease/pull/892)
 - Changed default glnexus config from `DeepVariant_unfiltered` to a custom config in `assets/` due to unfixed [bug](https://github.com/dnanexus-rnd/GLnexus/issues/286) [issue #960](https://github.com/nf-core/raredisease/issues/960) [PR #961](https://github.com/nf-core/raredisease/pull/961)
 - Updated tiddit/cov and tiddit/sv to v3.9.7 [PR #1001](https://github.com/nf-core/raredisease/pull/1001)
+- Updated vcf2cytosure to v0.10.0 [PR #1003](https://github.com/nf-core/raredisease/pull/1003)
 
 ### `Fixed`
 
@@ -140,6 +143,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Ensemblvep                   | 110.1       | 116.1       |
 | tiddit/sv                    | 3.9.5       | 3.9.7       |
 | tiddit/cov                   | 3.9.5       | 3.9.7       |
+| vcf2cytosure                 | 0.9.3       | 0.10.0      |
 
 ## 3.1.2 - Princess Peach (patch) [2026-07-06]
 
