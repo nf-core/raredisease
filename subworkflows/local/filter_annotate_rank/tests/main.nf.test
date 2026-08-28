@@ -18,8 +18,76 @@ nextflow_workflow {
     tag "genmod/models"
     tag "genmod/score"
     tag "genmod/compound"
+    tag "create_hgncids_file"
+    tag "create_pedigree_file"
 
     config "./nextflow.config"
+
+    setup {
+        run("CREATE_PEDIGREE_FILE") {
+            script "modules/local/create_pedigree_file/main.nf"
+            process {
+                """
+                input[0] = [
+                    [sample:'ACC13778A1', case_id:'amusingmarmoset', sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2'],
+                    [sample:'ACC13778A2', case_id:'amusingmarmoset', sex:2, phenotype:1, paternal:0, maternal:0],
+                    [sample:'ACC13778A3', case_id:'amusingmarmoset', sex:1, phenotype:1, paternal:0, maternal:0]
+                ]
+                """
+            }
+        }
+
+        run("CREATE_HGNCIDS_FILE") {
+            script "modules/local/create_hgncids_file/main.nf"
+            process {
+                """
+                input[0] = [
+                    [id:'standard'],
+                    file(params.pipelines_testdata_base_path + 'reference/hgnc.txt', checkIfExists: true)
+                ]
+                """
+            }
+        }
+    }
+
+    test("FILTER_ANNOTATE_RANK - clinical set + rank, minimal dataset") {
+
+        when {
+            workflow {
+                """
+                input[0] = CREATE_HGNCIDS_FILE.out.txt
+                input[1] = CREATE_PEDIGREE_FILE.out.ped
+                input[2] = channel.value(file(params.pipelines_testdata_base_path + 'reference/reduced_penetrance.tsv', checkIfExists: true))
+                input[3] = channel.value(file(params.pipelines_testdata_base_path + 'resources_remapped/rank_models/grch38_rank_model_-v0.4-.minimal_trimmed.ini', checkIfExists: true))
+                input[4] = channel.of([
+                    [ id:'var_csq' ],
+                    file(params.pipelines_testdata_base_path + 'reference/variant_consequences_v2.txt', checkIfExists: true)
+                ]).collect()
+                input[5] = channel.of([
+                    [id:'amusingmarmoset', probands:['ACC13778A1']],
+                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
+                ])
+                input[6] = false
+                input[7] = true
+                input[8] = false
+                input[9] = true
+                input[10] = false
+                input[11] = "nuclear SNV"
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(workflow.out.vcf[0][1]).vcf.variantsMD5,
+                    workflow.out.vcf.collect { meta, vcf -> file(vcf).name },
+                    workflow.out.tbi.collect { meta, tbi -> file(tbi).name }
+                ).match() }
+            )
+        }
+    }
 
     test("FILTER_ANNOTATE_RANK - clinical set + rank, stub") {
 
@@ -28,19 +96,17 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = Channel.of('3084')
-                    .collectFile(name: 'hgnc_ids.txt')
-                    .map { file -> [ [ id: 'hgnc_ids' ], file ] }
-                input[1] = Channel.value(file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/ped/justhusky.ped', checkIfExists: true))
+                input[0] = CREATE_HGNCIDS_FILE.out.txt
+                input[1] = CREATE_PEDIGREE_FILE.out.ped
                 input[2] = Channel.value(file(params.pipelines_testdata_base_path + 'reference/reduced_penetrance.tsv', checkIfExists: true))
-                input[3] = Channel.value(file(params.pipelines_testdata_base_path + 'reference/rank_model_snv.ini', checkIfExists: true))
+                input[3] = Channel.value(file(params.pipelines_testdata_base_path + 'resources_remapped/rank_models/grch38_rank_model_-v0.4-.minimal_trimmed.ini', checkIfExists: true))
                 input[4] = Channel.of([
                     [ id:'var_csq' ],
                     file(params.pipelines_testdata_base_path + 'reference/variant_consequences_v2.txt', checkIfExists: true)
                 ]).collect()
                 input[5] = Channel.of([
-                    [ id:'justhusky', probands:['justhusky'] ],
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/genmod.vcf.gz', checkIfExists: true)
+                    [ id:'amusingmarmoset', probands:['ACC13778A1'] ],
+                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
                 ])
                 input[6] = false
                 input[7] = true
@@ -67,19 +133,17 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = Channel.of('3084')
-                    .collectFile(name: 'hgnc_ids.txt')
-                    .map { file -> [ [ id: 'hgnc_ids' ], file ] }
-                input[1] = Channel.value(file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/ped/justhusky.ped', checkIfExists: true))
+                input[0] = CREATE_HGNCIDS_FILE.out.txt
+                input[1] = CREATE_PEDIGREE_FILE.out.ped
                 input[2] = Channel.value(file(params.pipelines_testdata_base_path + 'reference/reduced_penetrance.tsv', checkIfExists: true))
-                input[3] = Channel.value(file(params.pipelines_testdata_base_path + 'reference/rank_model_snv.ini', checkIfExists: true))
+                input[3] = Channel.value(file(params.pipelines_testdata_base_path + 'resources_remapped/rank_models/grch38_rank_model_-v0.4-.minimal_trimmed.ini', checkIfExists: true))
                 input[4] = Channel.of([
                     [ id:'var_csq' ],
                     file(params.pipelines_testdata_base_path + 'reference/variant_consequences_v2.txt', checkIfExists: true)
                 ]).collect()
                 input[5] = Channel.of([
-                    [ id:'justhusky', probands:[] ],
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/vcf/genmod.vcf.gz', checkIfExists: true)
+                    [ id:'amusingmarmoset', probands:[] ],
+                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
                 ])
                 input[6] = false
                 input[7] = true
