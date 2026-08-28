@@ -15,39 +15,28 @@ nextflow_workflow {
 
     test("CALL_SNV - deepvariant wgs") {
 
-        setup {
-            run("GET_CHROM_SIZES") {
-                script "modules/local/get_chrom_sizes/main.nf"
-                process {
-                    """
-                    input[0] = channel.of([
-                        [id:'genome'],
-                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
-                    ])
-                    """
-                }
-            }
-        }
-
         when {
+            params {
+                bcftools_args = "--write-index=tbi --output-type z"
+            }
             workflow {
                 """
                 input[0]  = channel.of([[id:'interval'], []])
-                input[1]  = channel.of([id:'justhusky'])
-                input[2]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz', checkIfExists: true)])
+                input[1]  = channel.of([id:'amusingmarmoset'])
+                input[2]  = channel.of([[:], []])
                 input[3]  = channel.of([[id:'genome'], []])
                 input[4]  = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
                 input[5]  = channel.of(
-                    [[id:'test', sample:'test', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true),
-                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam.bai', checkIfExists: true)],
-                    [[id:'test2', sample:'test2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test2\\\\tPL:illumina\\\\tSM:test2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test2.paired_end.sorted.bam', checkIfExists: true),
-                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test2.paired_end.sorted.bam.bai', checkIfExists: true)]
+                    [${TestData.sample('ACC13778A2')},
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A3')},
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
                 )
-                input[6]  = GET_CHROM_SIZES.out.sizes.collect()
-                input[7]  = channel.of([[id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)]).collect()
-                input[8]  = channel.of([[id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)]).collect()
+                input[6]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
                 input[9] = channel.of([
                     [ id:'glnexus_config'],
                     file('../../../assets/glnexus_config_dp1.yml')
@@ -79,39 +68,28 @@ nextflow_workflow {
 
         options "-stub"
 
-        setup {
-            run("GET_CHROM_SIZES") {
-                script "modules/local/get_chrom_sizes/main.nf"
-                process {
-                    """
-                    input[0] = channel.of([
-                        [id:'genome'],
-                        file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)
-                    ])
-                    """
-                }
-            }
-        }
-
         when {
+            params {
+                bcftools_args = "--write-index=tbi --output-type z"
+            }
             workflow {
                 """
                 input[0]  = channel.of([[id:'interval'], []])
-                input[1]  = channel.of([id:'justhusky'])
-                input[2]  = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz', checkIfExists: true)])
+                input[1]  = channel.of([id:'amusingmarmoset'])
+                input[2]  = channel.of([[:], []])
                 input[3]  = channel.of([[id:'genome'], []])
                 input[4]  = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
                 input[5]  = channel.of(
-                    [[id:'test', sample:'test', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test\\\\tPL:illumina\\\\tSM:test'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true),
-                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test.paired_end.sorted.bam.bai', checkIfExists: true)],
-                    [[id:'test2', sample:'test2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:test2\\\\tPL:illumina\\\\tSM:test2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test2.paired_end.sorted.bam', checkIfExists: true),
-                     file(params.modules_testdata_base_path + 'genomics/homo_sapiens/illumina/bam/test2.paired_end.sorted.bam.bai', checkIfExists: true)]
+                    [${TestData.sample('ACC13778A2')},
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A3')},
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
                 )
-                input[6]  = GET_CHROM_SIZES.out.sizes.collect()
-                input[7]  = channel.of([[id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta', checkIfExists: true)]).collect()
-                input[8]  = channel.of([[id:'genome'], file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/genome.fasta.fai', checkIfExists: true)]).collect()
+                input[6]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
                 input[9] = channel.of([
                     [ id:'glnexus_config'],
                     file('../../../assets/glnexus_config_dp1.yml')
