@@ -18,7 +18,7 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = channel.of([
-                    [id:'ACC13778A2', seedfrac: 0.1, sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A2')},
                     file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam', checkIfExists: true),
                     file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam.bai', checkIfExists: true)
                 ])
@@ -48,7 +48,7 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = channel.of([
-                    [id:'ACC13778A2', seedfrac: 0.1, sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A2')},
                     file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam', checkIfExists: true),
                     file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam.bai', checkIfExists: true)
                 ])

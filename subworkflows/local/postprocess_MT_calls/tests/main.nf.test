@@ -45,12 +45,12 @@ nextflow_workflow {
                 input[4] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
                 input[5] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
                 input[6] = channel.of([
-                    [id:'ACC13778A2', case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A2')},
                     file(params.subworkflow_fixtures + '/ACC13778A2_mutect2_mt.vcf.gz', checkIfExists: true)
                 ])
                 input[7] = channel.of([[id:'genome'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.back_chain', checkIfExists: true)]).collect()
                 input[8] = channel.of([
-                    [id:'ACC13778A2', case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A2')},
                     file(params.subworkflow_fixtures + '/ACC13778A2_mutect2_mtshift.vcf.gz', checkIfExists: true)
                 ])
                 """
@@ -83,12 +83,12 @@ nextflow_workflow {
                 input[4] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
                 input[5] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
                 input[6] = channel.of([
-                    [id:'ACC13778A2', case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A2')},
                     file(params.subworkflow_fixtures + '/ACC13778A2_mutect2_mt.vcf.gz', checkIfExists: true)
                 ])
                 input[7] = channel.of([[id:'genome'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.back_chain', checkIfExists: true)]).collect()
                 input[8] = channel.of([
-                    [id:'ACC13778A2', case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A2')},
                     file(params.subworkflow_fixtures + '/ACC13778A2_mutect2_mtshift.vcf.gz', checkIfExists: true)
                 ])
                 """

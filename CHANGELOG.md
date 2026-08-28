@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Add a `tests/lib/TestData.groovy` helper (`TestData.sample('ACC13778A2')`) and use it across the subworkflow nf-tests, replacing 124 repeated inline sample-meta literals [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1006](https://github.com/nf-core/raredisease/pull/1006)
 - Add `alignment`/`reference_sliced`/`subworkflow_fixtures`/`resources_remapped`/`precalled` path-prefix params to `tests/nextflow.config` and use them across the subworkflow nf-tests, replacing ~560 repeated `params.pipelines_testdata_base_path + '<subdir>/…'` references [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1005](https://github.com/nf-core/raredisease/pull/1005)
 - Migrate the stub tests for `call_sv`, `call_sv_manta`, `generate_cytosure_files`, `call_sv_germlinecnvcaller`, and `gens` to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1002](https://github.com/nf-core/raredisease/pull/1002)
 - Migrate `contamination`'s real tests to the minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #998](https://github.com/nf-core/raredisease/pull/998)

@@ -60,7 +60,7 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of([
-                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A2')},
                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                 ])
@@ -73,7 +73,7 @@ nextflow_workflow {
                 input[7]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
                 input[8]  = LAST_LASTDB.out.index.collect()
                 input[9]  = channel.of([
-                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset', customer_id:'cust_a2'],
+                    ${TestData.sample('ACC13778A2', "customer_id:'cust_a2'")},
                     [
                         file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true),
                         file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)
@@ -118,7 +118,7 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of([
-                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A2')},
                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                 ])
@@ -131,7 +131,7 @@ nextflow_workflow {
                 input[7]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
                 input[8]  = LAST_LASTDB.out.index.collect()
                 input[9]  = channel.of([
-                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A2')},
                     [
                         file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true),
                         file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)
@@ -177,12 +177,12 @@ nextflow_workflow {
                 """
                 input[0]  = channel.of(
                     [
-                        [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                        ${TestData.sample('ACC13778A2')},
                         file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
                         file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                     ],
                     [
-                        [id:'ACC13778A3', sample:'ACC13778A3', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A3\\\\tPL:illumina\\\\tSM:ACC13778A3'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                        ${TestData.sample('ACC13778A3')},
                         file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
                         file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)
                     ]
@@ -197,14 +197,14 @@ nextflow_workflow {
                 input[8]  = LAST_LASTDB.out.index.collect()
                 input[9]  = channel.of(
                     [
-                        [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset', customer_id:'cust_a2'],
+                        ${TestData.sample('ACC13778A2', "customer_id:'cust_a2'")},
                         [
                             file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true),
                             file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)
                         ]
                     ],
                     [
-                        [id:'ACC13778A3', sample:'ACC13778A3', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A3\\\\tPL:illumina\\\\tSM:ACC13778A3'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset', customer_id:'cust_a3'],
+                        ${TestData.sample('ACC13778A3', "customer_id:'cust_a3'")},
                         [
                             file(params.subworkflow_fixtures + '/ACC13778A3_mt_1.fastq.gz', checkIfExists: true),
                             file(params.subworkflow_fixtures + '/ACC13778A3_mt_2.fastq.gz', checkIfExists: true)
@@ -253,12 +253,12 @@ nextflow_workflow {
                 """
                 input[0]  = channel.of(
                     [
-                        [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                        ${TestData.sample('ACC13778A2')},
                         file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
                         file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                     ],
                     [
-                        [id:'ACC13778A3', sample:'ACC13778A3', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A3\\\\tPL:illumina\\\\tSM:ACC13778A3'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                        ${TestData.sample('ACC13778A3')},
                         file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
                         file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)
                     ]
@@ -273,14 +273,14 @@ nextflow_workflow {
                 input[8]  = channel.of([[id:'mt'], file("${projectDir}/subworkflows/local/prepare_references/tests")]).collect()
                 input[9]  = channel.of(
                     [
-                        [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset', customer_id:'cust_a2'],
+                        ${TestData.sample('ACC13778A2', "customer_id:'cust_a2'")},
                         [
                             file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true),
                             file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)
                         ]
                     ],
                     [
-                        [id:'ACC13778A3', sample:'ACC13778A3', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A3\\\\tPL:illumina\\\\tSM:ACC13778A3'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                        ${TestData.sample('ACC13778A3')},
                         [
                             file(params.subworkflow_fixtures + '/ACC13778A3_mt_1.fastq.gz', checkIfExists: true),
                             file(params.subworkflow_fixtures + '/ACC13778A3_mt_2.fastq.gz', checkIfExists: true)
@@ -324,7 +324,7 @@ nextflow_workflow {
             workflow {
                 """
                 input[0]  = channel.of([
-                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A2')},
                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                 ])
@@ -337,7 +337,7 @@ nextflow_workflow {
                 input[7]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
                 input[8]  = LAST_LASTDB.out.index.collect()
                 input[9]  = channel.of([
-                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A2')},
                     [
                         file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true),
                         file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)
@@ -381,12 +381,12 @@ nextflow_workflow {
                 """
                 input[0]  = channel.of(
                     [
-                        [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                        ${TestData.sample('ACC13778A2')},
                         file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
                         file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                     ],
                     [
-                        [id:'ACC13778A3', sample:'ACC13778A3', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A3\\\\tPL:illumina\\\\tSM:ACC13778A3'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                        ${TestData.sample('ACC13778A3')},
                         file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
                         file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)
                     ]
@@ -401,14 +401,14 @@ nextflow_workflow {
                 input[8]  = LAST_LASTDB.out.index.collect()
                 input[9]  = channel.of(
                     [
-                        [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset', customer_id:'cust_a2'],
+                        ${TestData.sample('ACC13778A2', "customer_id:'cust_a2'")},
                         [
                             file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true),
                             file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)
                         ]
                     ],
                     [
-                        [id:'ACC13778A3', sample:'ACC13778A3', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A3\\\\tPL:illumina\\\\tSM:ACC13778A3'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset', customer_id:'cust_a3'],
+                        ${TestData.sample('ACC13778A3', "customer_id:'cust_a3'")},
                         [
                             file(params.subworkflow_fixtures + '/ACC13778A3_mt_1.fastq.gz', checkIfExists: true),
                             file(params.subworkflow_fixtures + '/ACC13778A3_mt_2.fastq.gz', checkIfExists: true)

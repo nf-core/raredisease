@@ -24,7 +24,7 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = channel.of([
-                    [id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A1')},
                     file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
                     file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)
                 ])
@@ -33,11 +33,11 @@ nextflow_workflow {
                 input[3] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[4] = channel.of(file(params.resources_remapped + '/vcfanno/grch38_gnomad_af.remapped.tab.gz', checkIfExists: true))
                 input[5] = channel.of([
-                    [id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A1')},
                     file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz', checkIfExists: true)
                 ])
                 input[6] = channel.of([
-                    [id:'ACC13778A1', sample:'ACC13778A1', sex:1, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A1')},
                     file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz.tbi', checkIfExists: true)
                 ])
                 input[7] = channel.of(file(params.resources_remapped + '/beds/intervals_wgs.interval_list', checkIfExists: true))
@@ -68,7 +68,7 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = channel.of([
-                    [id:'ACC13778A2', sample:'ACC13778A2', sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A2')},
                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                 ])
@@ -77,11 +77,11 @@ nextflow_workflow {
                 input[3] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[4] = channel.of(file(params.resources_remapped + '/vcfanno/grch38_gnomad_af.remapped.tab.gz', checkIfExists: true))
                 input[5] = channel.of([
-                    [id:'ACC13778A2', sample:'ACC13778A2', sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A2')},
                     file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz', checkIfExists: true)
                 ])
                 input[6] = channel.of([
-                    [id:'ACC13778A2', sample:'ACC13778A2', sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    ${TestData.sample('ACC13778A2')},
                     file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz.tbi', checkIfExists: true)
                 ])
                 input[7] = channel.of(file(params.resources_remapped + '/beds/intervals_wgs.interval_list', checkIfExists: true))
