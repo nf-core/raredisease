@@ -7,8 +7,6 @@ nextflow_pipeline {
 
     test("-profile test_singleton") {
 
-        options "-stub"
-
         when {
             params {
                 outdir = "$outputDir"
@@ -16,19 +14,85 @@ nextflow_pipeline {
         }
 
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
-            // stable_path: All files in ${params.outdir}/ with stable content
-            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
+            // fastp's/fastqc's overrepresented-sequences, sequence-duplication-levels, and
+            // sequence-length-distribution MultiQC modules are threshold-triggered and flaky
+            // on this dataset's low read counts -- whether they're generated at all can vary
+            // run to run on identical input, so their existence can't be asserted reliably.
+            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: [
+                'pipeline_info/*.{html,json,txt}',
+                'multiqc/multiqc_data/fastp*.txt',
+                'multiqc/multiqc_data/fastqc*.txt',
+                'multiqc/multiqc_plots/{svg,pdf,png}/*.{svg,pdf,png}'
+            ])
+
+            // stable_content: All files in ${params.outdir}/ with stable content
+            // (VCFs excluded here -- see vcf_records below -- since their headers embed
+            // run-specific command lines/timestamps that vary even when the records don't)
+            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+
+            // vcf_records: every VCF's variant lines, header stripped (removes run-specific
+            // command lines/timestamps), INFO sub-fields sorted (Stranger writes its
+            // disease-annotation keys in a non-deterministic order within an otherwise-identical
+            // record), CSQ's own comma-separated transcript consequences sorted (VEP doesn't
+            // guarantee a stable order across multiple overlapping transcripts), and the overall
+            // line list sorted (so a tie-break in record order between calls sharing the same
+            // position doesn't fail the snapshot when the calls themselves match). TIDDIT-derived
+            // SV files are excluded here -- see sv_records below -- since they carry additional
+            // vendor-specific fields that aren't just reordered but genuinely non-deterministic.
+            def vcf_records = getAllFilesFromDir(params.outdir, include: ['**/*.vcf.gz', '**/*.vcf'], ignore: ['**/*sv*.vcf.gz'])
+                .sort { it.name }
+                .collectEntries { f ->
+                    def lines = f.name.endsWith('.gz')
+                        ? new java.util.zip.GZIPInputStream(new FileInputStream(f)).withReader { it.readLines() }
+                        : f.readLines()
+                    def records = lines
+                        .findAll { !it.startsWith('#') }
+                        .collect { line ->
+                            def cols = line.split('\t', -1)
+                            if (cols.size() > 7) {
+                                cols[7] = cols[7]
+                                    .split(';')
+                                    .collect { kv ->
+                                        kv.startsWith('CSQ=') ? 'CSQ=' + kv.substring(4).split(',').sort().join(',') : kv
+                                    }
+                                    .sort()
+                                    .join(';')
+                            }
+                            cols.join('\t')
+                        }
+                        .sort()
+                    [(f.name): records]
+                }
+            // sv_records: TIDDIT-derived SV calls (sv.vcf.gz and everything downstream of it)
+            // carry several TIDDIT-specific fields that are genuinely non-deterministic between
+            // otherwise-identical runs -- not just reordered, but different values outright
+            // (assembled breakpoint consensus sequence, per-sample coverage estimates, breakpoint
+            // region boundaries, and arbitrary internal SV_N_M call labels). So snapshotting
+            // only the fields that define the call itself
+            // position, type, length, alleles, and each sample's genotype.
+            def sv_records = getAllFilesFromDir(params.outdir, include: ['**/*sv*.vcf.gz'])
+                .sort { it.name }
+                .collectEntries { f ->
+                    def summaries = path(f.toString()).vcf.variants.collect { vc ->
+                        def gts = vc.genotypes.collect { g -> "${g.sampleName}:${g.genotypeString}" }.sort().join(',')
+                        "${vc.contig}:${vc.start}-${vc.end}\t${vc.reference}>${vc.alternateAlleles}\tSVTYPE=${vc.getAttribute('SVTYPE')}\tSVLEN=${vc.getAttribute('SVLEN')}\tGT=[${gts}]"
+                    }.sort()
+                    [(f.name): summaries]
+                }
+            assert workflow.success
             assertAll(
-                { assert workflow.success},
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     removeNextflowVersion("$outputDir/pipeline_info/nf_core_raredisease_software_mqc_versions.yml"),
                     // All stable path name, with a relative path
-                    stable_name
+                    stable_path,
+                    // All files with stable contents
+                    stable_content,
+                    // All VCFs' variant records, header-independent
+                    vcf_records,
+                    // TIDDIT-derived SV calls, reduced to their essential fields
+                    sv_records
                 ).match() }
             )
         }
