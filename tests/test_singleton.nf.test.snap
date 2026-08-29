@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            288,
+            289,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -23,6 +23,9 @@
                     "bcftools": 1.22
                 },
                 "BCFTOOLS_REHEADER_ME": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_REHEADER_SV_VCF": {
                     "bcftools": 1.22
                 },
                 "BCFTOOLS_ROH": {
@@ -124,7 +127,7 @@
                     "bgzip": 1.21
                 },
                 "DEEPVARIANT": {
-                    "deepvariant": "1.9.0"
+                    "deepvariant": "1.10.0"
                 },
                 "ENSEMBLVEP_ME": {
                     "ensemblvep": 116.1,
@@ -651,10 +654,10 @@
                 "repeat_expansions/amusingmarmoset_repeat_expansion_stranger.vcf.gz",
                 "repeat_expansions/amusingmarmoset_repeat_expansion_stranger.vcf.gz.tbi",
                 "vcf2cytosure",
-                "vcf2cytosure/ACC13778A1.cgh"
+                "vcf2cytosure/cust_A1.cgh"
             ]
         ],
-        "timestamp": "2026-08-27T17:06:08.418379568",
+        "timestamp": "2026-08-28T17:31:42.586176176",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"

@@ -1,7 +1,7 @@
 {
     "CALL_SNV - deepvariant wgs": {
         "content": [
-            "8e2f16d374469445235ea74a0a6f393e",
+            "f7fdc4aafc80ae6d667a8dead412cdfc",
             [
                 "ACC13778A2_deepvar.visual_report.html",
                 "ACC13778A3_deepvar.visual_report.html"
@@ -10,7 +10,7 @@
                 "amusingmarmoset.vcf.gz.tbi"
             ]
         ],
-        "timestamp": "2026-08-26T10:47:58.108109149",
+        "timestamp": "2026-08-28T17:31:29.135821694",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
