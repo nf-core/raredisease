@@ -1,14 +1,17 @@
 lint:
   files_exist:
     - conf/modules.config
+    - .github/workflows/linting_comment.yml
   files_unchanged:
     - .github/CONTRIBUTING.md
     - .github/PULL_REQUEST_TEMPLATE.md
     - docs/images/nf-core-raredisease_logo_dark.png
     - docs/images/nf-core-raredisease_logo_light.png
     - assets/nf-core-raredisease_logo_light.png
+    - .github/workflows/branch.yml
+    - .github/workflows/linting.yml
   modules_config: false
-nf_core_version: 4.0.3
+nf_core_version: 4.1.0
 repository_type: pipeline
 template:
   author: Clinical Genomics Stockholm
