@@ -19,7 +19,6 @@ include { GATK4_CREATESEQUENCEDICTIONARY as GATK_SD_MT      } from '../../../mod
 include { GATK4_INTERVALLISTTOOLS as GATK_ILT               } from '../../../modules/nf-core/gatk4/intervallisttools/main'
 include { GATK4_SHIFTFASTA as GATK_SHIFTFASTA               } from '../../../modules/nf-core/gatk4/shiftfasta/main'
 include { GET_CHROM_SIZES                                   } from '../../../modules/local/get_chrom_sizes'
-include { HISAT2_BUILD as HISAT2_INDEX_GENOME               } from '../../../modules/nf-core/hisat2/build'
 include { LAST_LASTDB as LAST_INDEX_MT                      } from '../../../modules/nf-core/last/lastdb'
 include { SAMTOOLS_FAIDX as SAMTOOLS_EXTRACT_MT             } from '../../../modules/nf-core/samtools/faidx/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME           } from '../../../modules/nf-core/samtools/faidx/main'
@@ -45,7 +44,6 @@ workflow PREPARE_REFERENCES {
         val_fasta                    // String: path to genome fasta
         val_gnomad_af                // String: path to gnomad allele frequency file
         val_gnomad_af_idx            // String: path to gnomad allele frequency file's index
-        val_hisat2                   // String: [optional] path to pre-built HISAT2 genome index
         val_known_dbsnp              // String: path to dbsnp file
         val_known_dbsnp_tbi          // String: path to dbsnp file's index
         val_mtaligner                // String: "bwa", "bwamem2", or "sentieon"
@@ -63,7 +61,6 @@ workflow PREPARE_REFERENCES {
         ch_genome_bwafastalign_index   = channel.empty()
         ch_genome_bwameme_index        = channel.empty()
         ch_genome_bwamem2_index        = channel.empty()
-        ch_genome_hisat2_index         = channel.empty()
         ch_mt_last_index               = channel.empty()
         ch_gnomad_af_idx               = channel.empty()
         ch_dbsnp                       = channel.value([[:],[]])
@@ -149,11 +146,6 @@ workflow PREPARE_REFERENCES {
             ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta.map{meta, fasta -> return [meta, fasta,[]]}, false).fai.collect()
             ch_mt_dict = GATK_SD_MT(ch_mt_fasta).dict.collect()
 
-            if (!val_hisat2) {
-                ch_genome_hisat2_index = HISAT2_INDEX_GENOME(ch_genome_fasta,[[:],[]], [[:],[]]).index.collect()
-            } else {
-                ch_genome_hisat2_index = channel.fromPath(val_hisat2).map { it -> [[id:"hisat2_index"], it] }.collect()
-            }
             ch_mt_last_index       = LAST_INDEX_MT(ch_mt_fasta).index.collect()
 
             GATK_SHIFTFASTA(ch_mt_fasta, ch_mt_fai, ch_mt_dict)
@@ -281,7 +273,6 @@ workflow PREPARE_REFERENCES {
         genome_chrom_sizes        = ch_chrom_sizes                 // channel:[ path(sizes) ]
         genome_fai                = ch_genome_fai                  // channel:[ val(meta), path(fai) ]
         genome_fasta              = ch_genome_fasta                // channel:[ val(meta), path(fasta) ]
-        genome_hisat2_index       = ch_genome_hisat2_index         // channel: [ val(meta), path(index) ]
         genome_dict               = ch_genome_dict                 // channel:[ val(meta), path(dict) ]
         gnomad_af_idx             = ch_gnomad_af_idx               // channel:[ val(gnomad), path(idx) ]
         mt_bwa_index              = ch_mt_bwa_index                // channel:[ val(meta), path(index) ]

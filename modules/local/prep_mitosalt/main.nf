@@ -5,14 +5,13 @@ process PREP_MITOSALT {
     input:
     path chrsizes
     tuple val(meta), path(genomefai)
-    tuple val(meta2), path(hisat2index)
     tuple val(breakspan), val(breakthreshold), val(cluster_threshold),
         val(deletion_threshold_max), val(deletion_threshold_min), val(evalue_threshold),
         val(exclude), val(paired_distance), val(score_threshold),
         val(sizelimit), val(split_distance_threshold), val(split_length)
-    tuple val(meta3), path(mtfai)
-    tuple val(meta4), path(mtfasta)
-    tuple val(meta5), path(lastindex)
+    tuple val(meta2), path(mtfai)
+    tuple val(meta3), path(mtfasta)
+    tuple val(meta4), path(lastindex)
     val flank
     val heteroplasmy_limit
     val mitochondria_name
@@ -22,7 +21,6 @@ process PREP_MITOSALT {
 
     script:
     """
-    hisat2path=`find -L ./ -name "*.1.ht2" | sed 's/.1.ht2//'`
     lastpath=`find -L ./ -name "*.prj" | sed 's/.prj//'`
 
     echo "hisat2 = hisat2"                                        > mitosalt_config.txt
@@ -40,9 +38,9 @@ process PREP_MITOSALT {
     echo "randomBed = randomBed"                                  >> mitosalt_config.txt
     echo "groupBy = groupBy"                                      >> mitosalt_config.txt
     echo "bg2bw = bedGraphToBigWig"                               >> mitosalt_config.txt
-    echo "hsindex = \$hisat2path"                                  >> mitosalt_config.txt
+    echo "hsindex = NA"                                           >> mitosalt_config.txt
     echo "faindex = ${genomefai}"                                 >> mitosalt_config.txt
-    echo "lastindex = \$lastpath"                                  >> mitosalt_config.txt
+    echo "lastindex = \$lastpath"                                 >> mitosalt_config.txt
     echo "mtfaindex = ${mtfai}"                                   >> mitosalt_config.txt
     echo "gsize = ${chrsizes}"                                    >> mitosalt_config.txt
     echo "MT_fasta = ${mtfasta}"                                  >> mitosalt_config.txt
@@ -78,7 +76,6 @@ process PREP_MITOSALT {
 
     stub:
     """
-    echo "hisat2 = hisat2" > mitosalt_config.txt
     echo "lastal = lastal" >> mitosalt_config.txt
     """
 

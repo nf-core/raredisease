@@ -302,11 +302,6 @@
                         "git_sha": "824f8012c9ede97642fd23371c8784fb71074c63",
                         "installed_by": ["modules"]
                     },
-                    "hisat2/build": {
-                        "branch": "master",
-                        "git_sha": "66391ca86ea6a081d288afe6a93d242fefcd8c2c",
-                        "installed_by": ["modules"]
-                    },
                     "last/lastdb": {
                         "branch": "master",
                         "git_sha": "a54953d05812af249d40ffaccb5b8ee371a75866",

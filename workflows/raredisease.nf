@@ -96,7 +96,6 @@ workflow RAREDISEASE {
     ch_genome_dictionary
     ch_genome_fai
     ch_genome_fasta
-    ch_genome_hisat2index
     ch_gens_gnomad_pos
     ch_gens_interval_list
     ch_gens_pon_female
@@ -779,7 +778,6 @@ workflow RAREDISEASE {
                 ch_genome_chrsizes,
                 ch_genome_fai,
                 ch_genome_fasta,
-                ch_genome_hisat2index,
                 ch_mt_fai,
                 ch_mt_fasta,
                 ch_mt_lastdb,

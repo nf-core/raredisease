@@ -21,7 +21,6 @@ workflow CALL_SV_MT {
         ch_genome_chrsizes                    // channel: [mandatory] [ path(chrsizes) ]
         ch_genome_fai                         // channel: [mandatory] [ val(meta), path(genomefai) ]
         ch_genome_fasta                       // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_hisat2index                 // channel: [mandatory] [ val(meta), path(hisat2index) ]
         ch_mt_fai                             // channel: [mandatory] [ val(meta), path(mtfai) ]
         ch_mt_fasta                           // channel: [mandatory] [ val(meta), path(mtfasta) ]
         ch_mt_lastdb                          // channel: [mandatory] [ val(meta), path(lastindex) ]
@@ -52,7 +51,6 @@ workflow CALL_SV_MT {
             PREP_MITOSALT(
                 ch_genome_chrsizes,
                 ch_genome_fai,
-                ch_genome_hisat2index,
                 ch_mitosalt_config,
                 ch_mt_fai,
                 ch_mt_fasta,
@@ -68,7 +66,6 @@ workflow CALL_SV_MT {
                 ch_prepmitosalt_config,
                 ch_genome_chrsizes,
                 ch_genome_fai,
-                ch_genome_hisat2index,
                 ch_mt_fai,
                 ch_mt_fasta,
                 ch_mt_lastdb
