@@ -66,7 +66,7 @@ nextflow_workflow {
                         file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)
                     ]
                 ])
-                input[10] = channel.value(10000000)
+                input[10] = channel.value(500000)
                 input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
                 input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
                 input[13] = false
@@ -124,7 +124,7 @@ nextflow_workflow {
                         file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)
                     ]
                 ])
-                input[10] = channel.value(10000000)
+                input[10] = channel.value(500000)
                 input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
                 input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
                 input[13] = false
@@ -198,7 +198,7 @@ nextflow_workflow {
                         ]
                     ]
                 )
-                input[10] = channel.value(10000000)
+                input[10] = channel.value(500000)
                 input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
                 input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
                 input[13] = false
@@ -274,7 +274,7 @@ nextflow_workflow {
                         ]
                     ]
                 )
-                input[10] = channel.value(10000000)
+                input[10] = channel.value(500000)
                 input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
                 input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
                 input[13] = false
@@ -330,7 +330,7 @@ nextflow_workflow {
                         file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mt_2.fastq.gz', checkIfExists: true)
                     ]
                 ])
-                input[10] = channel.value(10000000)
+                input[10] = channel.value(500000)
                 input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
                 input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
                 input[13] = false
@@ -402,7 +402,7 @@ nextflow_workflow {
                         ]
                     ]
                 )
-                input[10] = channel.value(10000000)
+                input[10] = channel.value(500000)
                 input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
                 input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
                 input[13] = false
