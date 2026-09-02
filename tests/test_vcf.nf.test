@@ -7,8 +7,6 @@ nextflow_pipeline {
 
     test("-profile test_vcf") {
 
-        options "-stub"
-
         when {
             params {
                 outdir = "$outputDir"
@@ -16,8 +14,58 @@ nextflow_pipeline {
         }
 
         then {
-            // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
+            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: [
+                'pipeline_info/*.{html,json,txt}',
+                'multiqc/multiqc_data/fastp*.txt',
+                'multiqc/multiqc_data/fastqc*.txt',
+                'multiqc/multiqc_plots/{svg,pdf,png}/*.{svg,pdf,png}'
+            ])
+
+            // stable_content: All files in ${params.outdir}/ with stable content
+            // (VCFs excluded here -- see vcf_records/sv_records below -- since their
+            // headers embed run-specific command lines/timestamps that vary even when
+            // the records don't)
+            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+
+            // vcf_records: every VCF's variant lines, header stripped, INFO sub-fields sorted, and
+            // CSQ's transcript consequences sorted -- see tests/default.nf.test for the full
+            // rationale. TIDDIT-derived SV files are excluded here -- see sv_records below.
+            def vcf_records = getAllFilesFromDir(params.outdir, include: ['**/*.vcf.gz', '**/*.vcf'], ignore: ['**/*sv*.vcf.gz'])
+                .sort { it.name }
+                .collectEntries { f ->
+                    def lines = f.name.endsWith('.gz')
+                        ? new java.util.zip.GZIPInputStream(new FileInputStream(f)).withReader { it.readLines() }
+                        : f.readLines()
+                    def records = lines
+                        .findAll { !it.startsWith('#') }
+                        .collect { line ->
+                            def cols = line.split('\t', -1)
+                            if (cols.size() > 7) {
+                                cols[7] = cols[7]
+                                    .split(';')
+                                    .collect { kv ->
+                                        kv.startsWith('CSQ=') ? 'CSQ=' + kv.substring(4).split(',').sort().join(',') : kv
+                                    }
+                                    .sort()
+                                    .join(';')
+                            }
+                            cols.join('\t')
+                        }
+                        .sort()
+                    [(f.name): records]
+                }
+            // sv_records: TIDDIT-derived SV calls reduced to their essential fields -- see
+            // tests/default.nf.test for the full rationale.
+            def sv_records = getAllFilesFromDir(params.outdir, include: ['**/*sv*.vcf.gz'])
+                .sort { it.name }
+                .collectEntries { f ->
+                    def summaries = path(f.toString()).vcf.variants.collect { vc ->
+                        def gts = vc.genotypes.collect { g -> "${g.sampleName}:${g.genotypeString}" }.sort().join(',')
+                        "${vc.contig}:${vc.start}-${vc.end}\t${vc.reference}>${vc.alternateAlleles}\tSVTYPE=${vc.getAttribute('SVTYPE')}\tSVLEN=${vc.getAttribute('SVLEN')}\tGT=[${gts}]"
+                    }.sort()
+                    [(f.name): summaries]
+                }
             def versions_yml = file("$outputDir/pipeline_info/nf_core_raredisease_software_mqc_versions.yml").text
             assertAll(
                 { assert workflow.success },
@@ -42,12 +90,16 @@ nextflow_pipeline {
                 { assert versions_yml.contains("GENMOD_SCORE") },
                 { assert versions_yml.contains("STRANGER") },
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     removeNextflowVersion("$outputDir/pipeline_info/nf_core_raredisease_software_mqc_versions.yml"),
                     // All stable path name, with a relative path
-                    stable_name
+                    stable_path,
+                    // All files with stable contents
+                    stable_content,
+                    // All VCFs' variant records, header-independent
+                    vcf_records,
+                    // TIDDIT-derived SV calls, reduced to their essential fields
+                    sv_records
                 ).match() }
             )
         }

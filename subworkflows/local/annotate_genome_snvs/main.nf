@@ -35,8 +35,9 @@ workflow ANNOTATE_GENOME_SNVS {
         ch_vcfanno_lua                  // channel: [mandatory] [ path(lua) ]
         ch_vcfanno_resources            // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
         ch_vcfanno_toml                 // channel: [mandatory] [ path(toml) ]
-        ch_vep_cache                    // channel: [mandatory] [ path(cache) ]
+        ch_vep_cache                    // channel: [mandatory] [ val(meta), path(cache) ]
         ch_vep_extra_files              // channel: [mandatory] [ path(files) ]
+        ch_vep_gtf                      // channel: [optional]  [ path(gtf) ]
         val_analysis_type               // string: wgs, wes, or mito
         val_cadd_resources              // string: path to cadd resources file
         val_genome                      // string: GRCh37 or GRCh38
@@ -161,7 +162,8 @@ workflow ANNOTATE_GENOME_SNVS {
             val_vep_cache_version,
             ch_vep_cache,
             ch_genome_fasta,
-            ch_vep_extra_files
+            ch_vep_extra_files,
+            ch_vep_gtf
         )
 
         ch_concat_in = ENSEMBLVEP_SNV.out.vcf

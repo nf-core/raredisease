@@ -66,6 +66,7 @@ include { PREPARE_REFERENCES                                          } from '..
 include { QC_BAM                                                      } from '../subworkflows/local/qc_bam'
 include { SUBSAMPLE_MT_FRAC                                           } from '../subworkflows/local/subsample_mt_frac'
 include { SUBSAMPLE_MT_READS                                          } from '../subworkflows/local/subsample_mt_reads'
+include { VCF_EXTRACT_RELATE_SOMALIER                                 } from '../subworkflows/nf-core/vcf_extract_relate_somalier'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -159,6 +160,7 @@ workflow RAREDISEASE {
     ch_vcfanno_toml
     ch_vep_cache
     ch_vep_extra_files
+    ch_vep_gtf
     ch_versions
     skip_fastp
     skip_fastqc
@@ -180,6 +182,7 @@ workflow RAREDISEASE {
     skip_smncopynumbercaller
     skip_snv_annotation
     skip_snv_calling
+    skip_somalier
     skip_sv_annotation
     skip_sv_calling
     skip_vcf2cytosure
@@ -188,6 +191,7 @@ workflow RAREDISEASE {
     val_analysis_type
     val_cadd_resources
     val_concatenate_snv_calls
+    val_duplicates_marker
     val_exclude_alt
     val_extract_alignments
     val_genome
@@ -392,6 +396,7 @@ workflow RAREDISEASE {
         ch_input_fastqs,
         skip_fastp,
         val_aligner,
+        val_duplicates_marker,
         val_exclude_alt,
         val_extract_alignments,
         val_platform,
@@ -614,6 +619,7 @@ workflow RAREDISEASE {
             ch_vcfanno_toml_final,
             ch_vep_cache,
             ch_vep_extra_files,
+            ch_vep_gtf,
             val_analysis_type,
             val_cadd_resources,
             val_genome,
@@ -703,6 +709,7 @@ workflow RAREDISEASE {
             ch_vcfanno_toml_final,
             ch_vep_cache,
             ch_vep_extra_files,
+            ch_vep_gtf,
             val_cadd_resources,
             val_genome,
             val_homoplasmy_af_threshold,
@@ -849,6 +856,7 @@ workflow RAREDISEASE {
             ch_call_sv_vcf,
             ch_vep_cache,
             ch_vep_extra_files,
+            ch_vep_gtf,
             val_svdb_query_bedpedbs,
             val_svdb_query_dbs,
             val_genome,
@@ -911,7 +919,8 @@ workflow RAREDISEASE {
             ch_vep_cache,
             val_genome,
             val_vep_cache_version,
-            ch_vep_extra_files
+            ch_vep_extra_files,
+            ch_vep_gtf
         )
 
         FILTER_ANNOTATE_RANK_ME(
@@ -965,10 +974,13 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
     if (!skip_peddy) {
+        ch_peddy_sites = params.peddy_sites
+            ? channel.fromPath(params.peddy_sites).map { sites -> [[:], sites] }.collect()
+            : channel.value([[:],[]])
         PEDDY (
             ch_call_snv_genome_vcf.join(ch_call_snv_genome_tabix, failOnMismatch:true, failOnDuplicate:true),
             ch_pedfile.map{ped -> return[[id:"pedigree"], ped]},
-            [[:],[]]
+            ch_peddy_sites
         )
         ch_peddy = PEDDY.out.vs_html
             .mix(PEDDY.out.html)
@@ -980,6 +992,38 @@ workflow RAREDISEASE {
             .mix(PEDDY.out.ped_check_csv)
             .mix(PEDDY.out.sex_check_csv)
             .mix(PEDDY.out.ped_check_rel_difference_csv)
+    }
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    SOMALIER
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+    // Somalier extract + relate (enabled unless skipped via `skip_subworkflows` / `skip_somalier`)
+    // Only run when `params.somalier_sites_vcf` is provided to avoid file(null) errors in test/profile runs
+    if (!skip_somalier && params.somalier_sites_vcf) {
+        // prepare VCF channel: [ meta, vcf, tbi, count ] as expected by the subworkflow
+        ch_vcfs_for_somalier = CALL_SNV.out.genome_vcf
+            .join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true)
+            .map { meta, vcf, tbi -> [ meta, vcf, tbi, [] ] }
+
+        // somalier sites VCF supplied via params.somalier_sites_vcf
+        ch_somalier_sites = channel.value( file(params.somalier_sites_vcf) )
+
+        VCF_EXTRACT_RELATE_SOMALIER(
+            ch_vcfs_for_somalier,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_somalier_sites,
+            ch_pedfile.map{ ped -> return[[id:'pedigree'], ped] },
+            channel.empty(),
+            'case_id'
+        )
+
+        ch_somalier_publish = VCF_EXTRACT_RELATE_SOMALIER.out.publish
+            .map { meta, value -> ['somalier/', [meta, value]] }
+    } else if (!skip_somalier && !params.somalier_sites_vcf) {
+        log.warn "Skipping Somalier: params.somalier_sites_vcf is not set"
     }
 
 /*

@@ -520,6 +520,22 @@
                     "help_text": "If no directory path is passed, vcf files will not be annotated by vep.",
                     "fa_icon": "fas fa-folder-open"
                 },
+                "vep_gtf": {
+                    "type": "string",
+                    "exists": true,
+                    "description": "Path to a bgzipped GTF file to annotate with VEP instead of a cache.",
+                    "help_text": "Mutually exclusive with vep_cache. Use for non-standard/custom references (e.g. a sliced or coordinate-remapped genome) that have no corresponding Ensembl cache. Requires vep_gtf_tbi to be set. If set, takes precedence over vep_cache for all four ENSEMBLVEP invocations.",
+                    "pattern": "^\\S+\\.gtf\\.gz$",
+                    "fa_icon": "fas fa-file"
+                },
+                "vep_gtf_tbi": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "pattern": "^\\S+\\.gtf\\.gz\\.tbi$",
+                    "description": "Tabix index for vep_gtf.",
+                    "fa_icon": "fas fa-file"
+                },
                 "vep_plugin_files": {
                     "type": "string",
                     "exists": true,
@@ -544,6 +560,14 @@
                     "format": "path",
                     "fa_icon": "fas fa-table",
                     "description": "Path to a bed-like file exported by scout, which contains HGNC_IDs to be used in filter_vep."
+                },
+                "peddy_sites": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to a custom peddy sites file (chrom:pos:ref:alt per line) to use instead of peddy's bundled hg19/hg38 site list.",
+                    "help_text": "Peddy's built-in --sites hg19/hg38 lists are absolute-coordinate, real-genome common-SNP positions. They will not overlap a coordinate-remapped or sliced reference (e.g. a minimal test dataset), causing peddy's het_check to crash on zero overlapping sites. Set this to a sites file built from positions that actually exist in the reference/VCF being used."
                 }
             },
             "required": ["fasta", "intervals_wgs", "intervals_y"]
@@ -591,7 +615,7 @@
                 },
                 "pre_vep_snv_filter_expression": {
                     "type": "string",
-                    "default": "INFO/GNOMADAF > 0.70 | INFO/GNOMADAF_popmax > 0.70",
+                    "default": "INFO/GNOMADAF > 0.70 | INFO/GNOMADAF_grpmax > 0.70",
                     "description": "bcftools expression used to exclude SNVs before VEP annotation.",
                     "help_text": "Passed as the `--exclude` expression to bcftools view before ENSEMBLVEP_SNV. Set stricter filters to reduce the number of variants processed downstream.",
                     "fa_icon": "fas fa-filter"
@@ -645,7 +669,7 @@
                     "fa_icon": "fas fa-forward",
                     "description": "Disable specified subworkflows.",
                     "help_text": "Multiple subworkflows can be specified, separated by commas.",
-                    "pattern": "^((me_calling|me_annotation|mt_annotation|mt_snv_calling|mt_subsample|mt_sv_calling|repeat_annotation|repeat_calling|snv_annotation|snv_calling|sv_annotation|sv_calling|generate_clinical_set)?,?)*(?<!,)$"
+                    "pattern": "^((me_calling|me_annotation|mt_annotation|mt_snv_calling|mt_subsample|mt_sv_calling|repeat_annotation|repeat_calling|snv_annotation|snv_calling|sv_annotation|sv_calling|generate_clinical_set|somalier_sex_check)?,?)*(?<!,)$"
                 },
                 "skip_tools": {
                     "type": "string",
@@ -653,6 +677,14 @@
                     "description": "Disable specified tools.",
                     "help_text": "Multiple tools can be specified, separated by commas. The GATK contamination check (`gatkcontamination`) additionally requires `contamination_sites` to be set; it is skipped automatically when that file is not provided. VerifyBamID2 (`verifybamid`) is skipped automatically when `verifybamid_svd_bed` is not provided.",
                     "pattern": "^((fastp|gens|germlinecnvcaller|peddy|smncopynumbercaller|vcf2cytosure|fastqc|ngsbits|mitosalt|gatkcontamination|verifybamid)?,?)*(?<!,)$"
+                },
+                "somalier_sites_vcf": {
+                    "type": "string",
+                    "format": "file-path",
+                    "exists": true,
+                    "description": "Path to the somalier sites VCF (bgzipped).",
+                    "pattern": "^\\S+\\.vcf(\\.gz)?$",
+                    "fa_icon": "fas fa-file"
                 }
             }
         },
@@ -682,6 +714,13 @@
                     "description": "Specifies the tool to collect BAM QC metrics - available options are 'picard' and 'riker'.",
                     "fa_icon": "fas fa-ruler",
                     "enum": ["picard", "riker"]
+                },
+                "duplicates_marker": {
+                    "type": "string",
+                    "default": "markduplicates",
+                    "description": "Specifies the tool to use for marking duplicates. The default is 'markduplicates', another option is the faster alternative 'fastdup'.",
+                    "fa_icon": "fas fa-align-center",
+                    "enum": ["markduplicates", "fastdup"]
                 },
                 "samtools_sort_threads": {
                     "type": "integer",
@@ -801,7 +840,7 @@
                 },
                 "vep_cache_version": {
                     "type": "integer",
-                    "default": 112,
+                    "default": 116,
                     "description": "Specify the version of the VEP cache provided to the `--vep_cache` option.",
                     "fa_icon": "fas fa-align-center"
                 }

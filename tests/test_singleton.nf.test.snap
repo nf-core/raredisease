@@ -1,7 +1,7 @@
 {
     "-profile test_singleton": {
         "content": [
-            355,
+            289,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -23,6 +23,9 @@
                     "bcftools": 1.22
                 },
                 "BCFTOOLS_REHEADER_ME": {
+                    "bcftools": 1.22
+                },
+                "BCFTOOLS_REHEADER_SV_VCF": {
                     "bcftools": 1.22
                 },
                 "BCFTOOLS_ROH": {
@@ -121,34 +124,31 @@
                     "bgzip": 1.21
                 },
                 "DEEPVARIANT": {
-                    "deepvariant": "1.9.0"
+                    "deepvariant": "1.10.0"
                 },
                 "ENSEMBLVEP_ME": {
-                    "ensemblvep": 110.1,
+                    "ensemblvep": 116.1,
                     "perl-math-cdf": 0.1,
-                    "tabix": 1.21
+                    "tabix": "1.23.1"
                 },
                 "ENSEMBLVEP_MT": {
-                    "ensemblvep": 110.1,
+                    "ensemblvep": 116.1,
                     "perl-math-cdf": 0.1,
-                    "tabix": 1.21
+                    "tabix": "1.23.1"
                 },
                 "ENSEMBLVEP_SNV": {
-                    "ensemblvep": 110.1,
+                    "ensemblvep": 116.1,
                     "perl-math-cdf": 0.1,
-                    "tabix": 1.21
+                    "tabix": "1.23.1"
                 },
                 "ENSEMBLVEP_SV": {
-                    "ensemblvep": 110.1,
+                    "ensemblvep": 116.1,
                     "perl-math-cdf": 0.1,
-                    "tabix": 1.21
+                    "tabix": "1.23.1"
                 },
                 "EXPANSIONHUNTER": {
                     "bgzip": "1.22.1",
                     "expansionhunter": "5.0.0"
-                },
-                "FASTP": {
-                    "fastp": "1.0.1"
                 },
                 "FASTQC": {
                     "fastqc": "0.12.1"
@@ -190,9 +190,6 @@
                     "gatk4": "4.6.2.0"
                 },
                 "GATK_ILT": {
-                    "gatk4": "4.6.2.0"
-                },
-                "GATK_SD": {
                     "gatk4": "4.6.2.0"
                 },
                 "GATK_SD_MT": {
@@ -261,12 +258,6 @@
                 "MT_DELETION": {
                     "mitodel": 1.0,
                     "samtools": 1.23
-                },
-                "NGSBITS_SAMPLEGENDER": {
-                    "ngsbits": 202512
-                },
-                "PEDDY": {
-                    "peddy": "0.4.8"
                 },
                 "PICARD_ADDORREPLACEREADGROUPS_MT": {
                     "picard": "3.4.0"
@@ -346,6 +337,9 @@
                 "SAMTOOLS_INDEX_MT": {
                     "samtools": "1.22.1"
                 },
+                "SAMTOOLS_MERGE": {
+                    "samtools": "1.22.1"
+                },
                 "SAMTOOLS_SORT": {
                     "samtools": "1.22.1"
                 },
@@ -363,9 +357,6 @@
                 },
                 "SEQTK_SAMPLE": {
                     "seqtk": "1.4-r122"
-                },
-                "SMNCOPYNUMBERCALLER": {
-                    "smncopynumbercaller": "1.1.2"
                 },
                 "SPLIT_AND_FILTER_SV_VCF": {
                     "bcftools": 1.22
@@ -406,6 +397,9 @@
                     "bcftools": 1.23,
                     "svdb": "2.8.4"
                 },
+                "SVDB_QUERY_BEDPE": {
+                    "svdb": "2.8.4"
+                },
                 "SVDB_QUERY_DB": {
                     "svdb": "2.8.4"
                 },
@@ -418,9 +412,6 @@
                 },
                 "TABIX_BGZIPTABIX": {
                     "bgzip": 1.21,
-                    "tabix": 1.21
-                },
-                "TABIX_DBSNP": {
                     "tabix": 1.21
                 },
                 "TABIX_EXP_RENAME": {
@@ -451,22 +442,19 @@
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
-                    "tiddit": "3.9.5"
+                    "tiddit": "3.9.7"
                 },
                 "TIDDIT_COV_VCF2CYTOSURE": {
-                    "tiddit": "3.9.5"
+                    "tiddit": "3.9.7"
                 },
                 "TIDDIT_SV": {
-                    "tiddit": "3.9.5"
+                    "tiddit": "3.9.7"
                 },
                 "UCSC_WIGTOBIGWIG": {
                     "ucsc": 482
                 },
-                "UNTAR_VEP_CACHE": {
-                    "untar": 1.34
-                },
                 "VCF2CYTOSURE": {
-                    "vcf2cytosure": "0.9.3"
+                    "vcf2cytosure": "0.10.0"
                 },
                 "VCFANNO": {
                     "vcfanno": "0.3.7"
@@ -484,190 +472,192 @@
             },
             [
                 "alignment",
-                "alignment/hugelymodelbat_mt_subsample.bam",
-                "alignment/hugelymodelbat_mt_subsample.bam.bai",
-                "alignment/hugelymodelbat_sorted_md.bam",
-                "alignment/hugelymodelbat_sorted_md.bam.bai",
-                "alignment/hugelymodelbat_sorted_md.metrics.txt",
+                "alignment/ACC13778A1_mt_subsample.bam",
+                "alignment/ACC13778A1_mt_subsample.bam.bai",
+                "alignment/ACC13778A1_sorted_md.bam",
+                "alignment/ACC13778A1_sorted_md.bam.bai",
+                "alignment/ACC13778A1_sorted_md.metrics.txt",
                 "annotate_mobile_elements",
-                "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz",
-                "annotate_mobile_elements/justhusky_me_pli_clinical.vcf.gz.tbi",
-                "annotate_mobile_elements/justhusky_me_pli_research.vcf.gz",
-                "annotate_mobile_elements/justhusky_me_pli_research.vcf.gz.tbi",
+                "annotate_mobile_elements/amusingmarmoset_me_pli_clinical.vcf.gz",
+                "annotate_mobile_elements/amusingmarmoset_me_pli_clinical.vcf.gz.tbi",
+                "annotate_mobile_elements/amusingmarmoset_me_pli_research.vcf.gz",
+                "annotate_mobile_elements/amusingmarmoset_me_pli_research.vcf.gz.tbi",
                 "annotate_snv",
                 "annotate_snv/genome",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr1.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr10.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr11.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr12.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr13.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr14.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr15.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr16.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr17.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr18.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr19.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr2.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr20.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr21.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr22.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr3.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr4.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr5.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr6.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr7.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr8.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chr9.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chrM.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chrX.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz.bed_chrY.png",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz/hugelymodelbat_rhocallviz.bed",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz/hugelymodelbat_rhocallviz.bw",
-                "annotate_snv/genome/hugelymodelbat_rhocallviz/hugelymodelbat_rhocallviz.wig",
-                "annotate_snv/genome/justhusky_rhocall_filter_vep.vcf.gz",
-                "annotate_snv/genome/justhusky_rhocall_filter_vep.vcf.gz.tbi",
+                "annotate_snv/genome/ACC13778A1_rhocallviz",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr1.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr10.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr11.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr12.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr13.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr14.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr15.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr16.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr17.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr18.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr19.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr2.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr20.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr21.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr22.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr3.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr4.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr5.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr6.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr7.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr8.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chr9.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chrM.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chrX.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz.bed_chrY.png",
+                "annotate_snv/genome/ACC13778A1_rhocallviz/ACC13778A1_rhocallviz.bed",
+                "annotate_snv/genome/ACC13778A1_rhocallviz/ACC13778A1_rhocallviz.bw",
+                "annotate_snv/genome/ACC13778A1_rhocallviz/ACC13778A1_rhocallviz.wig",
+                "annotate_snv/genome/amusingmarmoset_rhocall_filter_vep.vcf.gz",
+                "annotate_snv/genome/amusingmarmoset_rhocall_filter_vep.vcf.gz.tbi",
                 "annotate_snv/mitochondria",
-                "annotate_snv/mitochondria/justhusky_mitochondria_vcfanno_vep.vcf.gz",
-                "annotate_snv/mitochondria/justhusky_mitochondria_vcfanno_vep.vcf.gz.tbi",
+                "annotate_snv/mitochondria/amusingmarmoset_mitochondria_vcfanno_vep.vcf.gz",
+                "annotate_snv/mitochondria/amusingmarmoset_mitochondria_vcfanno_vep.vcf.gz.tbi",
                 "annotate_sv",
-                "annotate_sv/justhusky_svdbquery_vep.vcf.gz",
-                "annotate_sv/justhusky_svdbquery_vep.vcf.gz.tbi",
-                "annotate_sv/justhusky_svdbquery_vep_summary.html",
+                "annotate_sv/amusingmarmoset_svdbquery_vep.vcf.gz",
+                "annotate_sv/amusingmarmoset_svdbquery_vep.vcf.gz.tbi",
+                "annotate_sv/amusingmarmoset_svdbquery_vep_summary.html",
                 "call_mobile_elements",
-                "call_mobile_elements/justhusky_mobile_elements.vcf.gz",
-                "call_mobile_elements/justhusky_mobile_elements.vcf.gz.tbi",
+                "call_mobile_elements/amusingmarmoset_mobile_elements.vcf.gz",
+                "call_mobile_elements/amusingmarmoset_mobile_elements.vcf.gz.tbi",
                 "call_snv",
                 "call_snv/genome",
-                "call_snv/genome/justhusky_snv.vcf.gz",
-                "call_snv/genome/justhusky_snv.vcf.gz.tbi",
+                "call_snv/genome/amusingmarmoset_snv.vcf.gz",
+                "call_snv/genome/amusingmarmoset_snv.vcf.gz.tbi",
                 "call_snv/mitochondria",
-                "call_snv/mitochondria/justhusky_mitochondria.vcf.gz",
-                "call_snv/mitochondria/justhusky_mitochondria.vcf.gz.tbi",
+                "call_snv/mitochondria/amusingmarmoset_mitochondria.vcf.gz",
+                "call_snv/mitochondria/amusingmarmoset_mitochondria.vcf.gz.tbi",
                 "call_sv",
-                "call_sv/hugelymodelbat.saltshaker.png",
-                "call_sv/hugelymodelbat_mitochondria_deletions.txt",
-                "call_sv/justhusky.saltshaker_classify.html",
-                "call_sv/justhusky_sv.vcf.gz",
-                "call_sv/justhusky_sv.vcf.gz.tbi",
+                "call_sv/ACC13778A1.saltshaker.png",
+                "call_sv/ACC13778A1_mitochondria_deletions.txt",
+                "call_sv/amusingmarmoset.saltshaker_classify.html",
+                "call_sv/amusingmarmoset_sv.vcf.gz",
+                "call_sv/amusingmarmoset_sv.vcf.gz.tbi",
                 "fastqc",
-                "fastqc/hugelymodelbat_LNUMBER1",
-                "fastqc/hugelymodelbat_LNUMBER1/hugelymodelbat_LNUMBER1.html",
-                "fastqc/hugelymodelbat_LNUMBER1/hugelymodelbat_LNUMBER1.zip",
+                "fastqc/ACC13778A1_LNUMBER1",
+                "fastqc/ACC13778A1_LNUMBER1/ACC13778A1_LNUMBER1.html",
+                "fastqc/ACC13778A1_LNUMBER1/ACC13778A1_LNUMBER1.zip",
+                "fastqc/ACC13778A1_LNUMBER2",
+                "fastqc/ACC13778A1_LNUMBER2/ACC13778A1_LNUMBER2.html",
+                "fastqc/ACC13778A1_LNUMBER2/ACC13778A1_LNUMBER2.zip",
+                "fastqc/ACC13778A1_LNUMBER3",
+                "fastqc/ACC13778A1_LNUMBER3/ACC13778A1_LNUMBER3.html",
+                "fastqc/ACC13778A1_LNUMBER3/ACC13778A1_LNUMBER3.zip",
+                "fastqc/ACC13778A1_LNUMBER4",
+                "fastqc/ACC13778A1_LNUMBER4/ACC13778A1_LNUMBER4.html",
+                "fastqc/ACC13778A1_LNUMBER4/ACC13778A1_LNUMBER4.zip",
+                "fastqc/ACC13778A1_LNUMBER5",
+                "fastqc/ACC13778A1_LNUMBER5/ACC13778A1_LNUMBER5.html",
+                "fastqc/ACC13778A1_LNUMBER5/ACC13778A1_LNUMBER5.zip",
+                "fastqc/ACC13778A1_LNUMBER6",
+                "fastqc/ACC13778A1_LNUMBER6/ACC13778A1_LNUMBER6.html",
+                "fastqc/ACC13778A1_LNUMBER6/ACC13778A1_LNUMBER6.zip",
+                "fastqc/ACC13778A1_LNUMBER7",
+                "fastqc/ACC13778A1_LNUMBER7/ACC13778A1_LNUMBER7.html",
+                "fastqc/ACC13778A1_LNUMBER7/ACC13778A1_LNUMBER7.zip",
+                "fastqc/ACC13778A1_LNUMBER8",
+                "fastqc/ACC13778A1_LNUMBER8/ACC13778A1_LNUMBER8.html",
+                "fastqc/ACC13778A1_LNUMBER8/ACC13778A1_LNUMBER8.zip",
+                "fastqc/ACC13778A1_LNUMBER9",
+                "fastqc/ACC13778A1_LNUMBER9/ACC13778A1_LNUMBER9.html",
+                "fastqc/ACC13778A1_LNUMBER9/ACC13778A1_LNUMBER9.zip",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/.stub",
                 "multiqc/multiqc_plots",
                 "multiqc/multiqc_plots/.stub",
                 "multiqc/multiqc_report.html",
-                "ngsbits_samplegender",
-                "ngsbits_samplegender/hugelymodelbat_ngsbits_sex.tsv",
-                "peddy",
-                "peddy/justhusky.het_check.csv",
-                "peddy/justhusky.het_check.png",
-                "peddy/justhusky.html",
-                "peddy/justhusky.ped_check.csv",
-                "peddy/justhusky.ped_check.png",
-                "peddy/justhusky.ped_check.rel-difference.csv",
-                "peddy/justhusky.peddy.ped",
-                "peddy/justhusky.sex_check.csv",
-                "peddy/justhusky.sex_check.png",
-                "peddy/justhusky.vs.html",
                 "pedigree",
-                "pedigree/justhusky.ped",
+                "pedigree/amusingmarmoset.ped",
                 "pipeline_info",
                 "pipeline_info/nf_core_raredisease_software_mqc_versions.yml",
                 "qc_bam",
-                "qc_bam/hugelymodelbat_hsmetrics.CollectHsMetrics.coverage_metrics",
-                "qc_bam/hugelymodelbat_mosdepth.global.dist.txt",
-                "qc_bam/hugelymodelbat_mosdepth.per-base.bed.gz",
-                "qc_bam/hugelymodelbat_mosdepth.per-base.bed.gz.csi",
-                "qc_bam/hugelymodelbat_mosdepth.per-base.d4",
-                "qc_bam/hugelymodelbat_mosdepth.quantized.bed.gz",
-                "qc_bam/hugelymodelbat_mosdepth.quantized.bed.gz.csi",
-                "qc_bam/hugelymodelbat_mosdepth.region.dist.txt",
-                "qc_bam/hugelymodelbat_mosdepth.regions.bed.gz",
-                "qc_bam/hugelymodelbat_mosdepth.regions.bed.gz.csi",
-                "qc_bam/hugelymodelbat_mosdepth.summary.txt",
-                "qc_bam/hugelymodelbat_mosdepth.thresholds.bed.gz",
-                "qc_bam/hugelymodelbat_mosdepth.thresholds.bed.gz.csi",
-                "qc_bam/hugelymodelbat_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
-                "qc_bam/hugelymodelbat_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
-                "qc_bam/hugelymodelbat_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
-                "qc_bam/hugelymodelbat_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
-                "qc_bam/hugelymodelbat_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
-                "qc_bam/hugelymodelbat_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
-                "qc_bam/hugelymodelbat_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
-                "qc_bam/hugelymodelbat_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
-                "qc_bam/hugelymodelbat_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics",
-                "qc_bam/hugelymodelbat_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf",
-                "qc_bam/hugelymodelbat_tidditcov.bed",
-                "qc_bam/hugelymodelbat_tidditcov.bw",
-                "qc_bam/hugelymodelbat_tidditcov.wig",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr1.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr10.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr11.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr12.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr13.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr14.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr15.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr16.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr17.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr18.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr19.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr2.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr20.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr21.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr22.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr3.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr4.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr5.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr6.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr7.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr8.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chr9.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chrM.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chrX.png",
-                "qc_bam/hugelymodelbat_tidditcov.wig_chrY.png",
-                "qc_bam/hugelymodelbat_wgsmetrics.CollectWgsMetrics.coverage_metrics",
-                "qc_bam/hugelymodelbat_wgsmetrics_y.CollectWgsMetrics.coverage_metrics",
+                "qc_bam/ACC13778A1_hsmetrics.CollectHsMetrics.coverage_metrics",
+                "qc_bam/ACC13778A1_mosdepth.global.dist.txt",
+                "qc_bam/ACC13778A1_mosdepth.per-base.bed.gz",
+                "qc_bam/ACC13778A1_mosdepth.per-base.bed.gz.csi",
+                "qc_bam/ACC13778A1_mosdepth.per-base.d4",
+                "qc_bam/ACC13778A1_mosdepth.quantized.bed.gz",
+                "qc_bam/ACC13778A1_mosdepth.quantized.bed.gz.csi",
+                "qc_bam/ACC13778A1_mosdepth.region.dist.txt",
+                "qc_bam/ACC13778A1_mosdepth.regions.bed.gz",
+                "qc_bam/ACC13778A1_mosdepth.regions.bed.gz.csi",
+                "qc_bam/ACC13778A1_mosdepth.summary.txt",
+                "qc_bam/ACC13778A1_mosdepth.thresholds.bed.gz",
+                "qc_bam/ACC13778A1_mosdepth.thresholds.bed.gz.csi",
+                "qc_bam/ACC13778A1_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
+                "qc_bam/ACC13778A1_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
+                "qc_bam/ACC13778A1_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
+                "qc_bam/ACC13778A1_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
+                "qc_bam/ACC13778A1_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
+                "qc_bam/ACC13778A1_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
+                "qc_bam/ACC13778A1_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
+                "qc_bam/ACC13778A1_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
+                "qc_bam/ACC13778A1_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics",
+                "qc_bam/ACC13778A1_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf",
+                "qc_bam/ACC13778A1_sambamba_depth.bed",
+                "qc_bam/ACC13778A1_tidditcov.bed",
+                "qc_bam/ACC13778A1_tidditcov.bw",
+                "qc_bam/ACC13778A1_tidditcov.wig",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr1.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr10.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr11.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr12.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr13.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr14.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr15.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr16.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr17.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr18.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr19.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr2.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr20.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr21.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr22.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr3.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr4.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr5.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr6.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr7.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr8.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chr9.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chrM.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chrX.png",
+                "qc_bam/ACC13778A1_tidditcov.wig_chrY.png",
+                "qc_bam/ACC13778A1_wgsmetrics.CollectWgsMetrics.coverage_metrics",
+                "qc_bam/ACC13778A1_wgsmetrics_y.CollectWgsMetrics.coverage_metrics",
                 "rank_and_filter",
-                "rank_and_filter/justhusky_mt_ranked_clinical.vcf.gz",
-                "rank_and_filter/justhusky_mt_ranked_clinical.vcf.gz.tbi",
-                "rank_and_filter/justhusky_mt_ranked_research.vcf.gz",
-                "rank_and_filter/justhusky_mt_ranked_research.vcf.gz.tbi",
-                "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz",
-                "rank_and_filter/justhusky_snv_ranked_clinical.vcf.gz.tbi",
-                "rank_and_filter/justhusky_snv_ranked_research.vcf.gz",
-                "rank_and_filter/justhusky_snv_ranked_research.vcf.gz.tbi",
-                "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz",
-                "rank_and_filter/justhusky_sv_ranked_clinical.vcf.gz.tbi",
-                "rank_and_filter/justhusky_sv_ranked_research.vcf.gz",
-                "rank_and_filter/justhusky_sv_ranked_research.vcf.gz.tbi",
+                "rank_and_filter/amusingmarmoset_mt_ranked_clinical.vcf.gz",
+                "rank_and_filter/amusingmarmoset_mt_ranked_clinical.vcf.gz.tbi",
+                "rank_and_filter/amusingmarmoset_mt_ranked_research.vcf.gz",
+                "rank_and_filter/amusingmarmoset_mt_ranked_research.vcf.gz.tbi",
+                "rank_and_filter/amusingmarmoset_snv_ranked_clinical.vcf.gz",
+                "rank_and_filter/amusingmarmoset_snv_ranked_clinical.vcf.gz.tbi",
+                "rank_and_filter/amusingmarmoset_snv_ranked_research.vcf.gz",
+                "rank_and_filter/amusingmarmoset_snv_ranked_research.vcf.gz.tbi",
+                "rank_and_filter/amusingmarmoset_sv_ranked_clinical.vcf.gz",
+                "rank_and_filter/amusingmarmoset_sv_ranked_clinical.vcf.gz.tbi",
+                "rank_and_filter/amusingmarmoset_sv_ranked_research.vcf.gz",
+                "rank_and_filter/amusingmarmoset_sv_ranked_research.vcf.gz.tbi",
                 "repeat_expansions",
-                "repeat_expansions/hugelymodelbat_exphunter_sorted.bam",
-                "repeat_expansions/hugelymodelbat_exphunter_sorted.bam.bai",
-                "repeat_expansions/hugelymodelbat_repeat_expansion.vcf",
-                "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz",
-                "repeat_expansions/justhusky_repeat_expansion_stranger.vcf.gz.tbi",
-                "smncopynumbercaller",
-                "smncopynumbercaller/out",
-                "smncopynumbercaller/out/justhusky_smncopynumbercaller.json",
-                "smncopynumbercaller/out/justhusky_smncopynumbercaller.tsv",
-                "trimming",
-                "trimming/hugelymodelbat_LNUMBER1.fastp.html",
-                "trimming/hugelymodelbat_LNUMBER1.fastp.json",
-                "trimming/hugelymodelbat_LNUMBER1.fastp.log",
-                "trimming/hugelymodelbat_LNUMBER1_R1.fastp.fastq.gz",
-                "trimming/hugelymodelbat_LNUMBER1_R2.fastp.fastq.gz",
+                "repeat_expansions/ACC13778A1_exphunter_sorted.bam",
+                "repeat_expansions/ACC13778A1_exphunter_sorted.bam.bai",
+                "repeat_expansions/ACC13778A1_repeat_expansion.vcf",
+                "repeat_expansions/amusingmarmoset_repeat_expansion_stranger.vcf.gz",
+                "repeat_expansions/amusingmarmoset_repeat_expansion_stranger.vcf.gz.tbi",
                 "vcf2cytosure",
-                "vcf2cytosure/hugelymodelbat.cgh"
+                "vcf2cytosure/cust_A1.cgh"
             ]
         ],
-        "timestamp": "2026-08-10T10:44:20.527884202",
+        "timestamp": "2026-08-28T17:31:42.586176176",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.6"
         }
     }
 }

@@ -62,6 +62,7 @@ workflow NFCORE_RAREDISEASE {
     val_contamination_sites
     val_contamination_sites_tbi
     val_skip_split_multiallelics
+    val_duplicates_marker
     val_exclude_alt
     val_extract_alignments
     val_fai
@@ -120,6 +121,7 @@ workflow NFCORE_RAREDISEASE {
     val_par_bed
     val_platform
     val_ploidy_model
+    val_qc_metrics_tool
     val_readcount_intervals
     val_reduced_penetrance
     val_run_mt_for_wes
@@ -147,15 +149,16 @@ workflow NFCORE_RAREDISEASE {
     val_vcfanno_lua
     val_vcfanno_resources
     val_vcfanno_toml
+    val_vep_cache
     val_vep_cache_version
     val_vep_filters
     val_vep_filters_scout_fmt
+    val_vep_gtf
+    val_vep_gtf_tbi
     val_vep_plugin_files
     val_verifybamid_svd_bed
     val_verifybamid_svd_mu
     val_verifybamid_svd_ud
-    val_vep_cache
-    val_qc_metrics_tool
 
     main:
 
@@ -219,6 +222,9 @@ workflow NFCORE_RAREDISEASE {
     ch_target_intervals         = ch_references.target_intervals
     ch_vcfanno_extra            = ch_references.vcfanno_extra
     ch_vep_cache                = ch_references.vep_resources
+    ch_vep_gtf                  = val_vep_gtf
+        ? channel.fromPath([val_vep_gtf, val_vep_gtf_tbi]).collect()
+        : channel.value([[],[]])
 
     // Using channelFromPath helper (val_x ? channel.fromPath(val_x).collect() : channel.value([]))
     ch_reduced_penetrance       = channelFromPath(val_reduced_penetrance, true)
@@ -370,6 +376,7 @@ workflow NFCORE_RAREDISEASE {
     skip_repeat_calling        = parseSkipList(val_skip_subworkflows, 'repeat_calling') || val_has_precalled_repeat
     skip_snv_annotation        = parseSkipList(val_skip_subworkflows, 'snv_annotation')
     skip_snv_calling           = parseSkipList(val_skip_subworkflows, 'snv_calling') || val_has_precalled_snv
+    skip_somalier              = parseSkipList(val_skip_subworkflows, 'somalier_sex_check')
     skip_sv_annotation         = parseSkipList(val_skip_subworkflows, 'sv_annotation')
     skip_sv_calling            = parseSkipList(val_skip_subworkflows, 'sv_calling') || val_has_precalled_sv
     skip_generate_clinical_set = parseSkipList(val_skip_subworkflows, 'generate_clinical_set')
@@ -495,6 +502,7 @@ workflow NFCORE_RAREDISEASE {
         ch_vcfanno_toml,
         ch_vep_cache,
         ch_vep_extra_files,
+        ch_vep_gtf,
         ch_versions,
         skip_fastp,
         skip_fastqc,
@@ -516,6 +524,7 @@ workflow NFCORE_RAREDISEASE {
         skip_smncopynumbercaller,
         skip_snv_annotation,
         skip_snv_calling,
+        skip_somalier,
         skip_sv_annotation,
         skip_sv_calling,
         skip_vcf2cytosure,
@@ -524,6 +533,7 @@ workflow NFCORE_RAREDISEASE {
         val_analysis_type,
         val_cadd_resources,
         val_concatenate_snv_calls,
+        val_duplicates_marker,
         val_exclude_alt,
         val_extract_alignments,
         val_genome,
@@ -754,6 +764,7 @@ workflow {
         params.contamination_sites,
         params.contamination_sites_tbi,
         params.skip_split_multiallelics,
+        params.duplicates_marker,
         params.exclude_alt,
         params.extract_alignments,
         params.fai,
@@ -812,6 +823,7 @@ workflow {
         params.par_bed,
         params.platform,
         params.ploidy_model,
+        params.qc_metrics_tool,
         params.readcount_intervals,
         params.reduced_penetrance,
         params.run_mt_for_wes,
@@ -839,15 +851,16 @@ workflow {
         params.vcfanno_lua,
         params.vcfanno_resources,
         params.vcfanno_toml,
+        params.vep_cache,
         params.vep_cache_version,
         params.vep_filters,
         params.vep_filters_scout_fmt,
+        params.vep_gtf,
+        params.vep_gtf_tbi,
         params.vep_plugin_files,
         params.verifybamid_svd_bed,
         params.verifybamid_svd_mu,
-        params.verifybamid_svd_ud,
-        params.vep_cache,
-        params.qc_metrics_tool
+        params.verifybamid_svd_ud
     )
     //
     // SUBWORKFLOW: Run completion tasks

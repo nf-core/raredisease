@@ -16,8 +16,9 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         ch_svdb_bedpedbs        // channel: [optional]
         ch_svdb_dbs             // channel: [optional]
         ch_vcf                  // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_vep_cache            // channel: [mandatory] [ path(cache) ]
+        ch_vep_cache            // channel: [mandatory] [ val(meta), path(cache) ]
         ch_vep_extra_files      // channel: [mandatory] [ path(files) ]
+        ch_vep_gtf              // channel: [optional]  [ path(gtf) ]
         val_svdb_query_bedpedbs // String: [optional] params.svdb_query_bedpedbs
         val_svdb_query_dbs      // String: [optional] params.svdb_query_dbs
         val_genome              // string: [mandatory] GRCh37 or GRCh38
@@ -86,7 +87,8 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             val_vep_cache_version,
             ch_vep_cache,
             ch_genome_fasta,
-            ch_vep_extra_files
+            ch_vep_extra_files,
+            ch_vep_gtf
         )
 
     emit:
