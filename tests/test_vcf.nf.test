@@ -14,8 +14,6 @@ nextflow_pipeline {
         }
 
         then {
-            assert workflow.success
-
             // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
             def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: [
                 'pipeline_info/*.{html,json,txt}',
@@ -34,42 +32,43 @@ nextflow_pipeline {
             // CSQ's transcript consequences sorted -- see tests/default.nf.test for the full
             // rationale. TIDDIT-derived SV files are excluded here -- see sv_records below.
             def vcf_records = getAllFilesFromDir(params.outdir, include: ['**/*.vcf.gz', '**/*.vcf'], ignore: ['**/*sv*.vcf.gz'])
-                .sort { vcfFile -> vcfFile.name }
-                .collectEntries { vcfFile ->
-                    def lines = vcfFile.name.endsWith('.gz')
-                        ? new java.util.zip.GZIPInputStream(new FileInputStream(vcfFile)).withReader { reader -> reader.readLines() }
-                        : vcfFile.readLines()
+                .sort { it.name }
+                .collectEntries { f ->
+                    def lines = f.name.endsWith('.gz')
+                        ? new java.util.zip.GZIPInputStream(new FileInputStream(f)).withReader { it.readLines() }
+                        : f.readLines()
                     def records = lines
-                        .findAll { line -> !line.startsWith('#') }
+                        .findAll { !it.startsWith('#') }
                         .collect { line ->
-                            def columns = line.split('\t', -1)
-                            if (columns.size() > 7) {
-                                columns[7] = columns[7]
+                            def cols = line.split('\t', -1)
+                            if (cols.size() > 7) {
+                                cols[7] = cols[7]
                                     .split(';')
-                                    .collect { infoEntry ->
-                                        infoEntry.startsWith('CSQ=') ? 'CSQ=' + infoEntry.substring(4).split(',').sort().join(',') : infoEntry
+                                    .collect { kv ->
+                                        kv.startsWith('CSQ=') ? 'CSQ=' + kv.substring(4).split(',').sort().join(',') : kv
                                     }
                                     .sort()
                                     .join(';')
                             }
-                            columns.join('\t')
+                            cols.join('\t')
                         }
                         .sort()
-                    [(vcfFile.name): records]
+                    [(f.name): records]
                 }
             // sv_records: TIDDIT-derived SV calls reduced to their essential fields -- see
             // tests/default.nf.test for the full rationale.
             def sv_records = getAllFilesFromDir(params.outdir, include: ['**/*sv*.vcf.gz'])
-                .sort { svVcfFile -> svVcfFile.name }
-                .collectEntries { svVcfFile ->
-                    def summaries = path(svVcfFile.toString()).vcf.variants.collect { variant ->
-                        def sampleGenotypes = variant.genotypes.collect { genotype -> "${genotype.sampleName}:${genotype.genotypeString}" }.sort().join(',')
-                        "${variant.contig}:${variant.start}-${variant.end}\t${variant.reference}>${variant.alternateAlleles}\tSVTYPE=${variant.getAttribute('SVTYPE')}\tSVLEN=${variant.getAttribute('SVLEN')}\tGT=[${sampleGenotypes}]"
+                .sort { it.name }
+                .collectEntries { f ->
+                    def summaries = path(f.toString()).vcf.variants.collect { vc ->
+                        def gts = vc.genotypes.collect { g -> "${g.sampleName}:${g.genotypeString}" }.sort().join(',')
+                        "${vc.contig}:${vc.start}-${vc.end}\t${vc.reference}>${vc.alternateAlleles}\tSVTYPE=${vc.getAttribute('SVTYPE')}\tSVLEN=${vc.getAttribute('SVLEN')}\tGT=[${gts}]"
                     }.sort()
-                    [(svVcfFile.name): summaries]
+                    [(f.name): summaries]
                 }
             def versions_yml = file("$outputDir/pipeline_info/nf_core_raredisease_software_mqc_versions.yml").text
             assertAll(
+                { assert workflow.success },
                 // Calling must be skipped in favor of the precalled VCFs
                 { assert !versions_yml.contains("DEEPVARIANT") },
                 { assert !versions_yml.contains("GLNEXUS") },
@@ -124,7 +123,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.failed },
-                { assert workflow.stdout.any { line -> line.contains("mixes precalled VCF input") } }
+                { assert workflow.stdout.any { it.contains("mixes precalled VCF input") } }
             )
         }
     }

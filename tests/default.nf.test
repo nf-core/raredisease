@@ -13,10 +13,8 @@ nextflow_pipeline {
         }
 
         then {
-            assert workflow.success
-
-            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name).
-            // Note: fastp's/fastqc's overrepresented-sequences, sequence-duplication-levels, and
+            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
+            // fastp's/fastqc's overrepresented-sequences, sequence-duplication-levels, and
             // sequence-length-distribution MultiQC modules are threshold-triggered and flaky
             // on this dataset's low read counts -- whether they're generated at all can vary
             // run to run on identical input, so their existence can't be asserted reliably.
@@ -27,9 +25,9 @@ nextflow_pipeline {
                 'multiqc/multiqc_plots/{svg,pdf,png}/*.{svg,pdf,png}'
             ])
 
-            // stable_content: All files in ${params.outdir}/ with stable content.
-            // VCFs excluded here -- see vcf_records below -- since their headers embed
-            // run-specific command lines/timestamps that vary even when the records don't.
+            // stable_content: All files in ${params.outdir}/ with stable content
+            // (VCFs excluded here -- see vcf_records below -- since their headers embed
+            // run-specific command lines/timestamps that vary even when the records don't)
             def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
 
             // vcf_records: every VCF's variant lines, header stripped (removes run-specific
@@ -38,48 +36,50 @@ nextflow_pipeline {
             // record), CSQ's own comma-separated transcript consequences sorted (VEP doesn't
             // guarantee a stable order across multiple overlapping transcripts), and the overall
             // line list sorted (so a tie-break in record order between calls sharing the same
-            // position doesn't fail the snapshot when the calls themselves match).
-            // SV files are excluded here -- see sv_records below.
+            // position doesn't fail the snapshot when the calls themselves match). TIDDIT-derived
+            // SV files are excluded here -- see sv_records below -- since they carry additional
+            // vendor-specific fields that aren't just reordered but genuinely non-deterministic.
             def vcf_records = getAllFilesFromDir(params.outdir, include: ['**/*.vcf.gz', '**/*.vcf'], ignore: ['**/*sv*.vcf.gz'])
-                .sort { vcfFile -> vcfFile.name }
-                .collectEntries { vcfFile ->
-                    def lines = vcfFile.name.endsWith('.gz')
-                        ? new java.util.zip.GZIPInputStream(new FileInputStream(vcfFile)).withReader { reader -> reader.readLines() }
-                        : vcfFile.readLines()
+                .sort { it.name }
+                .collectEntries { f ->
+                    def lines = f.name.endsWith('.gz')
+                        ? new java.util.zip.GZIPInputStream(new FileInputStream(f)).withReader { it.readLines() }
+                        : f.readLines()
                     def records = lines
-                        .findAll { line -> !line.startsWith('#') }
+                        .findAll { !it.startsWith('#') }
                         .collect { line ->
-                            def columns = line.split('\t', -1)
-                            if (columns.size() > 7) {
-                                columns[7] = columns[7]
+                            def cols = line.split('\t', -1)
+                            if (cols.size() > 7) {
+                                cols[7] = cols[7]
                                     .split(';')
-                                    .collect { infoEntry ->
-                                        infoEntry.startsWith('CSQ=') ? 'CSQ=' + infoEntry.substring(4).split(',').sort().join(',') : infoEntry
+                                    .collect { kv ->
+                                        kv.startsWith('CSQ=') ? 'CSQ=' + kv.substring(4).split(',').sort().join(',') : kv
                                     }
                                     .sort()
                                     .join(';')
                             }
-                            columns.join('\t')
+                            cols.join('\t')
                         }
                         .sort()
-                    [(vcfFile.name): records]
+                    [(f.name): records]
                 }
             // sv_records: TIDDIT-derived SV calls (sv.vcf.gz and everything downstream of it)
             // carry several TIDDIT-specific fields that are genuinely non-deterministic between
             // otherwise-identical runs -- not just reordered, but different values outright
             // (assembled breakpoint consensus sequence, per-sample coverage estimates, breakpoint
-            // region boundaries, and arbitrary internal SV_N_M call labels). So snapshot only the
-            // fields that define the call itself: position, type, length, alleles, and each
-            // sample's genotype.
+            // region boundaries, and arbitrary internal SV_N_M call labels). So snapshotting
+            // only the fields that define the call itself
+            // position, type, length, alleles, and each sample's genotype.
             def sv_records = getAllFilesFromDir(params.outdir, include: ['**/*sv*.vcf.gz'])
-                .sort { svVcfFile -> svVcfFile.name }
-                .collectEntries { svVcfFile ->
-                    def summaries = path(svVcfFile.toString()).vcf.variants.collect { variant ->
-                        def sampleGenotypes = variant.genotypes.collect { genotype -> "${genotype.sampleName}:${genotype.genotypeString}" }.sort().join(',')
-                        "${variant.contig}:${variant.start}-${variant.end}\t${variant.reference}>${variant.alternateAlleles}\tSVTYPE=${variant.getAttribute('SVTYPE')}\tSVLEN=${variant.getAttribute('SVLEN')}\tGT=[${sampleGenotypes}]"
+                .sort { it.name }
+                .collectEntries { f ->
+                    def summaries = path(f.toString()).vcf.variants.collect { vc ->
+                        def gts = vc.genotypes.collect { g -> "${g.sampleName}:${g.genotypeString}" }.sort().join(',')
+                        "${vc.contig}:${vc.start}-${vc.end}\t${vc.reference}>${vc.alternateAlleles}\tSVTYPE=${vc.getAttribute('SVTYPE')}\tSVLEN=${vc.getAttribute('SVLEN')}\tGT=[${gts}]"
                     }.sort()
-                    [(svVcfFile.name): summaries]
+                    [(f.name): summaries]
                 }
+            assert workflow.success
             assertAll(
                 { assert snapshot(
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
