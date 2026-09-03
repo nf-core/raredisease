@@ -1,0 +1,130 @@
+nextflow_workflow {
+
+    name "Test Workflow RANK_VARIANTS"
+    script "subworkflows/local/rank_variants/main.nf"
+    workflow "RANK_VARIANTS"
+
+    tag "subworkflows"
+    tag "rank_variants"
+
+    tag "genmod/annotate"
+    tag "genmod/models"
+    tag "genmod/score"
+    tag "genmod/compound"
+    tag "bcftools/sort"
+    tag "tabix/bgziptabix"
+    tag "create_pedigree_file"
+
+    config "./nextflow.config"
+
+    setup {
+        run("CREATE_PEDIGREE_FILE") {
+            script "modules/local/create_pedigree_file/main.nf"
+            process {
+                """
+                input[0] = [
+                    [sample:'ACC13778A1', case_id:'amusingmarmoset', sex:1, phenotype:2, paternal:'ACC13778A3', maternal:'ACC13778A2'],
+                    [sample:'ACC13778A2', case_id:'amusingmarmoset', sex:2, phenotype:1, paternal:0, maternal:0],
+                    [sample:'ACC13778A3', case_id:'amusingmarmoset', sex:1, phenotype:1, paternal:0, maternal:0]
+                ]
+                """
+            }
+        }
+    }
+
+    test("RANK_VARIANTS - SNV (process_with_sort = false), minimal dataset") {
+
+        when {
+            workflow {
+                """
+                input[0] = CREATE_PEDIGREE_FILE.out.ped
+                input[1] = channel.value(file(params.pipelines_testdata_base_path + 'reference/reduced_penetrance.tsv', checkIfExists: true))
+                input[2] = channel.value(file(params.pipelines_testdata_base_path + 'resources_remapped/rank_models/grch38_rank_model_-v0.4-.minimal_trimmed.ini', checkIfExists: true))
+                input[3] = channel.of([
+                    [id:'amusingmarmoset', probands:['ACC13778A1']],
+                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/amusingmarmoset_csq_pli_annotated_snv.vcf.gz', checkIfExists: true)
+                ])
+                input[4] = false
+                """
+            }
+        }
+
+        then {
+            // genmod models/score/compound run with --processes task.cpus and don't guarantee a
+            // stable record order run-to-run on otherwise-identical input (confirmed: nft-vcf's
+            // variantsMD5 -- a plain streaming hash over non-header lines in file order, no
+            // sorting -- differed across 3 consecutive runs, though the records themselves were
+            // byte-identical once sorted). Write the sorted records to a plain file and hash
+            // that instead, mirroring tests/default.nf.test's handling of the same genmod
+            // non-determinism at the pipeline level, while keeping a single-hash snapshot.
+            def allLines = path(workflow.out.vcf[0][1]).linesGzip
+            def header = allLines.findAll { it.startsWith('#') }
+            def records = allLines.findAll { !it.startsWith('#') }.sort()
+            def sortedFile = File.createTempFile('rank_variants_sorted_', '.vcf')
+            sortedFile.text = (header + records).join('\n') + '\n'
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(sortedFile.toString()).vcf.variantsMD5,
+                    workflow.out.vcf.collect { meta, vcf -> file(vcf).name },
+                    workflow.out.tbi.collect { meta, tbi -> file(tbi).name }
+                ).match() }
+            )
+        }
+    }
+
+    test("RANK_VARIANTS - SNV (process_with_sort = false), stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = CREATE_PEDIGREE_FILE.out.ped
+                input[1] = channel.value(file(params.pipelines_testdata_base_path + 'reference/reduced_penetrance.tsv', checkIfExists: true))
+                input[2] = channel.value(file(params.pipelines_testdata_base_path + 'resources_remapped/rank_models/grch38_rank_model_-v0.4-.minimal_trimmed.ini', checkIfExists: true))
+                input[3] = channel.of([
+                    [id:'amusingmarmoset', single_end: false],
+                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/amusingmarmoset_csq_pli_annotated_snv.vcf.gz', checkIfExists: true)
+                ])
+                input[4] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+
+    test("RANK_VARIANTS - SV (process_with_sort = true), stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = CREATE_PEDIGREE_FILE.out.ped
+                input[1] = channel.value(file(params.pipelines_testdata_base_path + 'reference/reduced_penetrance.tsv', checkIfExists: true))
+                input[2] = channel.value(file(params.pipelines_testdata_base_path + 'resources_remapped/rank_models/grch38_rank_model_-v0.4-.minimal_trimmed.ini', checkIfExists: true))
+                input[3] = channel.of([
+                    [id:'amusingmarmoset', single_end: false],
+                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/amusingmarmoset_csq_pli_annotated_snv.vcf.gz', checkIfExists: true)
+                ])
+                input[4] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+
+}

@@ -1,0 +1,245 @@
+{
+    "CALL_SNV_SENTIEON - two samples (merge), stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_dnascope.g.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_dnascope.g.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "amusingmarmoset"
+                        },
+                        "amusingmarmoset_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "amusingmarmoset"
+                        },
+                        "amusingmarmoset_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "gvcf": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_dnascope.g.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "gvcf_tbi": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_dnascope.g.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "tabix": [
+                    [
+                        {
+                            "id": "amusingmarmoset"
+                        },
+                        "amusingmarmoset_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "amusingmarmoset"
+                        },
+                        "amusingmarmoset_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-24T09:44:58.418928868",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "CALL_SNV_SENTIEON - two samples (merge), minimal dataset": {
+        "content": [
+            "7a5ca713168c4844ba42fc54f55d08fb",
+            [
+                "amusingmarmoset_split_rmdup_info.vcf.gz.tbi"
+            ]
+        ],
+        "timestamp": "2026-08-25T13:34:05.942802415",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
+    "CALL_SNV_SENTIEON - single sample, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_dnascope.g.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_dnascope.g.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "amusingmarmoset"
+                        },
+                        "amusingmarmoset_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "amusingmarmoset"
+                        },
+                        "amusingmarmoset_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "gvcf": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_dnascope.g.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "gvcf_tbi": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_dnascope.g.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "tabix": [
+                    [
+                        {
+                            "id": "amusingmarmoset"
+                        },
+                        "amusingmarmoset_split_rmdup_info.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "amusingmarmoset"
+                        },
+                        "amusingmarmoset_split_rmdup_info.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-24T09:44:32.893853417",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

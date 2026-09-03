@@ -1,0 +1,430 @@
+nextflow_workflow {
+
+    name "Test Workflow CALL_SV_MT"
+    script "subworkflows/local/call_sv_MT/main.nf"
+    workflow "CALL_SV_MT"
+
+    tag "subworkflows"
+    tag "call_sv_mt"
+
+    tag "mt_deletion_script"
+    tag "prep_mitosalt"
+    tag "mitosalt"
+    tag "seqtk/sample"
+
+    config "./nextflow.config"
+
+    setup {
+        run("HISAT2_BUILD") {
+            script "../../../../modules/nf-core/hisat2/build/main.nf"
+            config "./nextflow.config"
+            process {
+                """
+                input[0] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)])
+                input[1] = [[:],[]]
+                input[2] = [[:],[]]
+                """
+            }
+        }
+
+        run("LAST_LASTDB") {
+            script "../../../../modules/nf-core/last/lastdb/main.nf"
+            config "./nextflow.config"
+            process {
+                """
+                input[0] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)])
+                """
+            }
+        }
+    }
+
+    test("CALL_SV_MT - 1 sample - wgs, minimal dataset") {
+
+        when {
+            params {
+                mt_del = "-s --insert-size 16000"
+            }
+            workflow {
+                """
+                input[0]  = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1]  = channel.of([id:'amusingmarmoset'])
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[4]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[5]  = HISAT2_BUILD.out.index.collect()
+                input[6]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
+                input[8]  = LAST_LASTDB.out.index.collect()
+                input[9]  = channel.of([
+                    ${TestData.sample('ACC13778A2', "customer_id:'cust_a2'")},
+                    [
+                        file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true),
+                        file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)
+                    ]
+                ])
+                input[10] = channel.value(10000000)
+                input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
+                input[13] = false
+                input[14] = 16081
+                input[15] = 407
+                input[16] = 5730
+                input[17] = 5763
+                input[18] = 16569
+                input[19] = 'chrM'
+                input[20] = 15
+                input[21] = 0.01
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(workflow.out.saltshaker_vcf.get(0).get(1)).vcf.variantsMD5,
+                    workflow.out.saltshaker_html,
+                    file(workflow.out.saltshaker_plot.get(0).get(1)).name, // pngs are unstable so we just check that the name matches
+                    workflow.out.mt_del_result,
+                    workflow.out.updated_priority
+                ).match() }
+            )
+        }
+    }
+
+    test("CALL_SV_MT - 1 sample - no customer_id - wgs, minimal dataset") {
+
+        when {
+            params {
+                mt_del = "-s --insert-size 16000"
+            }
+            workflow {
+                """
+                input[0]  = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1]  = channel.of([id:'amusingmarmoset'])
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[4]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[5]  = HISAT2_BUILD.out.index.collect()
+                input[6]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
+                input[8]  = LAST_LASTDB.out.index.collect()
+                input[9]  = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    [
+                        file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true),
+                        file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)
+                    ]
+                ])
+                input[10] = channel.value(10000000)
+                input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
+                input[13] = false
+                input[14] = 16081
+                input[15] = 407
+                input[16] = 5730
+                input[17] = 5763
+                input[18] = 16569
+                input[19] = 'chrM'
+                input[20] = 15
+                input[21] = 0.01
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(workflow.out.saltshaker_vcf.get(0).get(1)).vcf.variantsMD5,
+                    workflow.out.saltshaker_html,
+                    file(workflow.out.saltshaker_plot.get(0).get(1)).name, // pngs are unstable so we just check that the name matches
+                    workflow.out.mt_del_result,
+                    workflow.out.updated_priority
+                ).match() }
+            )
+        }
+    }
+
+    test("CALL_SV_MT - 2 samples - wgs, minimal dataset") {
+
+        when {
+            params {
+                mt_del = "-s --insert-size 16000"
+            }
+            workflow {
+                """
+                input[0]  = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                        file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                    ],
+                    [
+                        ${TestData.sample('ACC13778A3')},
+                        file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
+                        file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)
+                    ]
+                )
+                input[1]  = channel.of([id:'amusingmarmoset'])
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[4]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[5]  = HISAT2_BUILD.out.index.collect()
+                input[6]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
+                input[8]  = LAST_LASTDB.out.index.collect()
+                input[9]  = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2', "customer_id:'cust_a2'")},
+                        [
+                            file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true),
+                            file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)
+                        ]
+                    ],
+                    [
+                        ${TestData.sample('ACC13778A3', "customer_id:'cust_a3'")},
+                        [
+                            file(params.subworkflow_fixtures + '/ACC13778A3_mt_1.fastq.gz', checkIfExists: true),
+                            file(params.subworkflow_fixtures + '/ACC13778A3_mt_2.fastq.gz', checkIfExists: true)
+                        ]
+                    ]
+                )
+                input[10] = channel.value(10000000)
+                input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
+                input[13] = false
+                input[14] = 16081
+                input[15] = 407
+                input[16] = 5730
+                input[17] = 5763
+                input[18] = 16569
+                input[19] = 'chrM'
+                input[20] = 15
+                input[21] = 0.01
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(workflow.out.saltshaker_vcf.get(0).get(1)).vcf.variantsMD5,
+                    workflow.out.saltshaker_html,
+                    file(workflow.out.saltshaker_plot.get(0).get(1)).name, // pngs are unstable so we just check that the name matches
+                    workflow.out.mt_del_result,
+                    workflow.out.updated_priority
+                ).match() }
+            )
+        }
+    }
+
+    test("CALL_SV_MT - 1 sample - wgs, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                mt_del = "-s --insert-size 16000"
+            }
+            workflow {
+                """
+                input[0]  = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                        file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                    ],
+                    [
+                        ${TestData.sample('ACC13778A3')},
+                        file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
+                        file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)
+                    ]
+                )
+                input[1]  = channel.of([id:'amusingmarmoset'])
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[4]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[5]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[6]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'mt'], file("${projectDir}/subworkflows/local/prepare_references/tests")]).collect()
+                input[9]  = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2', "customer_id:'cust_a2'")},
+                        [
+                            file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true),
+                            file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)
+                        ]
+                    ],
+                    [
+                        ${TestData.sample('ACC13778A3')},
+                        [
+                            file(params.subworkflow_fixtures + '/ACC13778A3_mt_1.fastq.gz', checkIfExists: true),
+                            file(params.subworkflow_fixtures + '/ACC13778A3_mt_2.fastq.gz', checkIfExists: true)
+                        ]
+                    ]
+                )
+                input[10] = channel.value(10000000)
+                input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
+                input[13] = false
+                input[14] = 16081
+                input[15] = 407
+                input[16] = 5730
+                input[17] = 5763
+                input[18] = 16569
+                input[19] = 'chrM'
+                input[20] = 15
+                input[21] = 0.01
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out
+                ).match() }
+            )
+        }
+    }
+
+    test("CALL_SV_MT - 1 sample - no customer_id - wgs, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                mt_del = "-s --insert-size 16000"
+            }
+            workflow {
+                """
+                input[0]  = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1]  = channel.of([id:'amusingmarmoset'])
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[4]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[5]  = HISAT2_BUILD.out.index.collect()
+                input[6]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
+                input[8]  = LAST_LASTDB.out.index.collect()
+                input[9]  = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    [
+                        file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true),
+                        file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)
+                    ]
+                ])
+                input[10] = channel.value(10000000)
+                input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
+                input[13] = false
+                input[14] = 16081
+                input[15] = 407
+                input[16] = 5730
+                input[17] = 5763
+                input[18] = 16569
+                input[19] = 'chrM'
+                input[20] = 15
+                input[21] = 0.01
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out
+                ).match() }
+            )
+        }
+    }
+
+    test("CALL_SV_MT - 2 samples - wgs, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                mt_del = "-s --insert-size 16000"
+            }
+            workflow {
+                """
+                input[0]  = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                        file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                    ],
+                    [
+                        ${TestData.sample('ACC13778A3')},
+                        file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
+                        file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)
+                    ]
+                )
+                input[1]  = channel.of([id:'amusingmarmoset'])
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[4]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[5]  = HISAT2_BUILD.out.index.collect()
+                input[6]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
+                input[8]  = LAST_LASTDB.out.index.collect()
+                input[9]  = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2', "customer_id:'cust_a2'")},
+                        [
+                            file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true),
+                            file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)
+                        ]
+                    ],
+                    [
+                        ${TestData.sample('ACC13778A3', "customer_id:'cust_a3'")},
+                        [
+                            file(params.subworkflow_fixtures + '/ACC13778A3_mt_1.fastq.gz', checkIfExists: true),
+                            file(params.subworkflow_fixtures + '/ACC13778A3_mt_2.fastq.gz', checkIfExists: true)
+                        ]
+                    ]
+                )
+                input[10] = channel.value(10000000)
+                input[11] = channel.value(['manta', 'tiddit', 'cnvnator'])
+                input[12] = channel.of([15, 2, 2, 30000, 30, 0.00001, 5, 1000, 80, 10000, 5, 15])
+                input[13] = false
+                input[14] = 16081
+                input[15] = 407
+                input[16] = 5730
+                input[17] = 5763
+                input[18] = 16569
+                input[19] = 'chrM'
+                input[20] = 15
+                input[21] = 0.01
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out
+                ).match() }
+            )
+        }
+    }
+}

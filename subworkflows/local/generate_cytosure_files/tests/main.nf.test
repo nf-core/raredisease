@@ -1,0 +1,115 @@
+nextflow_workflow {
+
+    name "Test Workflow GENERATE_CYTOSURE_FILES"
+    script "subworkflows/local/generate_cytosure_files/main.nf"
+    workflow "GENERATE_CYTOSURE_FILES"
+
+    tag "subworkflows"
+    tag "generate_cytosure_files"
+
+    tag "bcftools/view"
+    tag "bcftools/reheader"
+    tag "tiddit/cov"
+    tag "vcf2cytosure"
+
+    config "./nextflow.config"
+
+    test("GENERATE_CYTOSURE_FILES - minimal dataset") {
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    ${TestData.sample('ACC13778A1')},
+                    file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1] = channel.value([])
+                input[2] = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[3] = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.cgh.collect { meta, cgh -> [meta, file(cgh)] }
+                ).match() }
+            )
+        }
+    }
+
+    test("GENERATE_CYTOSURE_FILES - no customer_id, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    ${TestData.sample('ACC13778A1')},
+                    file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1] = channel.value([])
+                input[2] = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[3] = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+
+    test("GENERATE_CYTOSURE_FILES - with customer_id, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    ${TestData.sample('ACC13778A1', "customer_id:'CUST_001'")},
+                    file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1] = channel.value([])
+                input[2] = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[3] = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}

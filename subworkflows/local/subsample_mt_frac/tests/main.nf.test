@@ -1,0 +1,68 @@
+nextflow_workflow {
+
+    name "Test Workflow SUBSAMPLE_MT_FRAC"
+    script "subworkflows/local/subsample_mt_frac/main.nf"
+    workflow "SUBSAMPLE_MT_FRAC"
+    tag "subworkflows"
+    tag "subsample_mt_frac"
+
+    tag "bedtools/genomecov"
+    tag "calculate_seed_fraction"
+    tag "samtools/view"
+
+    config "./nextflow.config"
+
+    test("SUBSAMPLE_MT_FRAC - wgs, minimal dataset") {
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam', checkIfExists: true),
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam.bai', checkIfExists: true)
+                ])
+                input[1] = 150
+                input[2] = 30
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.bam.collect { meta, bamfile -> [ meta, bam(bamfile).getReadsMD5() ] },
+                        workflow.out.bai.collect { meta, baifile -> [ meta, file(baifile).name ] }
+                    ).match()
+                }
+            )
+        }
+    }
+
+    test("SUBSAMPLE_MT_FRAC - wgs, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam', checkIfExists: true),
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam.bai', checkIfExists: true)
+                ])
+                input[1] = 150
+                input[2] = 30
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}

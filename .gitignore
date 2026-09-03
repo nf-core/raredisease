@@ -8,3 +8,6 @@ testing*
 *.pyc
 null/
 .lineage/
+.prettierignore
+.nf-test/
+.nf-test.log

@@ -1,0 +1,117 @@
+nextflow_workflow {
+
+    name "Test Workflow CALL_SNV"
+    script "subworkflows/local/call_snv/main.nf"
+    workflow "CALL_SNV"
+
+    tag "subworkflows"
+    tag "call_snv"
+    tag "call_snv_deepvariant"
+    tag "call_snv_sentieon"
+
+    tag "gatk4_selectvariants"
+
+    config "./nextflow.config"
+
+    test("CALL_SNV - deepvariant wgs") {
+
+        when {
+            params {
+                bcftools_args = "--write-index=tbi --output-type z"
+            }
+            workflow {
+                """
+                input[0]  = channel.of([[id:'interval'], []])
+                input[1]  = channel.of([id:'amusingmarmoset'])
+                input[2]  = channel.of([[:], []])
+                input[3]  = channel.of([[id:'genome'], []])
+                input[4]  = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[5]  = channel.of(
+                    [${TestData.sample('ACC13778A2')},
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A3')},
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
+                )
+                input[6]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[9] = channel.of([
+                    [ id:'glnexus_config'],
+                    file('../../../assets/glnexus_config_dp1.yml')
+                ])
+                input[10]  = channel.of([[id:'model'], []])
+                input[11] = channel.of([[id:'par'], []]).collect()
+                input[12] = channel.of([[id:'model'], []])
+                input[13] = channel.of([[id:'target'], [], []])
+                input[14] = 'wgs'
+                input[15] = false
+                input[16] = 'deepvariant'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(workflow.out.genome_vcf[0][1]).vcf.variantsMD5,
+                    workflow.out.deepvariant_report.collect { meta, report -> file(report).name },
+                    workflow.out.genome_tabix.collect { meta, tbi -> file(tbi).name }
+                ).match() }
+            )
+        }
+    }
+
+    test("CALL_SNV - deepvariant wgs, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                bcftools_args = "--write-index=tbi --output-type z"
+            }
+            workflow {
+                """
+                input[0]  = channel.of([[id:'interval'], []])
+                input[1]  = channel.of([id:'amusingmarmoset'])
+                input[2]  = channel.of([[:], []])
+                input[3]  = channel.of([[id:'genome'], []])
+                input[4]  = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[5]  = channel.of(
+                    [${TestData.sample('ACC13778A2')},
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A3')},
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
+                )
+                input[6]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[9] = channel.of([
+                    [ id:'glnexus_config'],
+                    file('../../../assets/glnexus_config_dp1.yml')
+                ])
+                input[10] = channel.of([[id:'model'], []])
+                input[11] = channel.of([[id:'par'], []]).collect()
+                input[12] = channel.of([[id:'model'], []])
+                input[13] = channel.of([[id:'target'], [], []])
+                input[14] = 'wgs'
+                input[15] = false
+                input[16] = 'deepvariant'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out
+                ).match() }
+            )
+        }
+    }
+}

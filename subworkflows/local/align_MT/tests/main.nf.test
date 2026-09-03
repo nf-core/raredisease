@@ -1,0 +1,227 @@
+nextflow_workflow {
+
+    name "Test Workflow ALIGN_MT"
+    script "subworkflows/local/align_MT/main.nf"
+    workflow "ALIGN_MT"
+
+    tag "subworkflows"
+    tag "align_mt"
+
+    tag "bwa/mem"
+    tag "bwamem2/mem"
+    tag "sentieon/bwamem"
+    tag "gatk4/mergebamalignment"
+    tag "picard/addorreplacereadgroups"
+    tag "picard/markduplicates"
+    tag "samtools/sort"
+
+    config "./nextflow.config"
+
+    test("align mt - bwamem2") {
+
+        setup {
+            run("BWAMEM2_INDEX", alias: 'MT_MEM2') {
+                script "modules/nf-core/bwamem2/index/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'mt'],
+                        file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+        when {
+            params {
+                outdir                       = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = [[:],[]]
+                input[1] = MT_MEM2.out.index.collect()
+                input[2] = channel.value([[id:'mt'], [file(params.subworkflow_fixtures + '/minimal_reference_mt.dict', checkIfExists: true)]])
+                input[3] = channel.value([[id:'mt'], [file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]])
+                input[4] = channel.value([[id:'mt'], [file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]])
+                input[5] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')}, // meta map
+                        [ file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true), file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)]
+                    ]
+                )
+                input[6] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')}, // meta map
+                        [ file(params.subworkflow_fixtures + '/ACC13778A2_mtreverted.bam', checkIfExists: true)]
+                    ]
+                )
+                input[7] = "bwamem2"
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+    test("align mt - bwa") {
+
+        setup {
+            run("BWA_INDEX", alias: 'MT_BWA') {
+                script "modules/nf-core/bwa/index/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'mt'],
+                        file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+        when {
+            params {
+                outdir                       = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = MT_BWA.out.index.collect()
+                input[1] = [[:],[]]
+                input[2] = channel.value([[id:'mt'], [file(params.subworkflow_fixtures + '/minimal_reference_mt.dict', checkIfExists: true)]])
+                input[3] = channel.value([[id:'mt'], [file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]])
+                input[4] = channel.value([[id:'mt'], [file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]])
+                input[5] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')}, // meta map
+                        [ file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true), file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)]
+                    ]
+                )
+                input[6] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')}, // meta map
+                        [ file(params.subworkflow_fixtures + '/ACC13778A2_mtreverted.bam', checkIfExists: true)]
+                    ]
+                )
+                input[7] = 'bwa'
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+
+    test("align mt - bwamem2, stub") {
+
+        setup {
+            run("BWAMEM2_INDEX", alias: 'MT_MEM2') {
+                script "modules/nf-core/bwamem2/index/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'mt'],
+                        file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
+        options "-stub"
+
+        when {
+            params {
+                outdir                       = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = [[:],[]]
+                input[1] = MT_MEM2.out.index.collect()
+                input[2] = channel.value([[id:'mt'], [file(params.subworkflow_fixtures + '/minimal_reference_mt.dict', checkIfExists: true)]])
+                input[3] = channel.value([[id:'mt'], [file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]])
+                input[4] = channel.value([[id:'mt'], [file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]])
+                input[5] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')}, // meta map
+                        [ file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true), file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)]
+                    ]
+                )
+                input[6] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')}, // meta map
+                        [ file(params.subworkflow_fixtures + '/ACC13778A2_mtreverted.bam', checkIfExists: true)]
+                    ]
+                )
+                input[7] = "bwamem2"
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+    test("align mt - bwa, stub") {
+
+        setup {
+            run("BWA_INDEX", alias: 'MT_BWA') {
+                script "modules/nf-core/bwa/index/main.nf"
+                process {
+                    """
+                    input[0] = channel.of([
+                        [id:'mt'],
+                        file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)
+                    ])
+                    """
+                }
+            }
+        }
+
+        options "-stub"
+
+        when {
+            params {
+                outdir                       = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = MT_BWA.out.index.collect()
+                input[1] = [[:],[]]
+                input[2] = channel.value([[id:'mt'], [file(params.subworkflow_fixtures + '/minimal_reference_mt.dict', checkIfExists: true)]])
+                input[3] = channel.value([[id:'mt'], [file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]])
+                input[4] = channel.value([[id:'mt'], [file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]])
+                input[5] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')}, // meta map
+                        [ file(params.subworkflow_fixtures + '/ACC13778A2_mt_1.fastq.gz', checkIfExists: true), file(params.subworkflow_fixtures + '/ACC13778A2_mt_2.fastq.gz', checkIfExists: true)]
+                    ]
+                )
+                input[6] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')}, // meta map
+                        [ file(params.subworkflow_fixtures + '/ACC13778A2_mtreverted.bam', checkIfExists: true)]
+                    ]
+                )
+                input[7] = 'bwa'
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}

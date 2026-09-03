@@ -1,0 +1,32 @@
+{
+    "CALL_SNV_MT, stub": {
+        "content": [
+            [
+                "ACC13778A2_filtered.vcf.gz"
+            ],
+            [
+                "ACC13778A2_filtered.vcf.gz.tbi"
+            ]
+        ],
+        "timestamp": "2026-08-27T23:44:50.681768143",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "CALL_SNV_MT": {
+        "content": [
+            [
+                "ACC13778A2_filtered.vcf.gz"
+            ],
+            [
+                "ACC13778A2_filtered.vcf.gz.tbi"
+            ]
+        ],
+        "timestamp": "2026-08-27T23:44:26.405477778",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

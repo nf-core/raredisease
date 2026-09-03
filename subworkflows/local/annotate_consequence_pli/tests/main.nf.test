@@ -1,0 +1,102 @@
+nextflow_workflow {
+
+    name "Test Workflow ANNOTATE_CSQ_PLI"
+    script "subworkflows/local/annotate_consequence_pli/main.nf"
+    workflow "ANNOTATE_CSQ_PLI"
+
+    tag "custom/addmostsevereconsequence"
+    tag "custom/addmostseverepli"
+    tag "tabix/tabix"
+
+    tag "subworkflows"
+    tag "annotate_consequence_pli"
+
+    config './nextflow.config'
+
+    test("ANNOTATE_CSQ_PLI - no index") {
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    [id:'var_csq'],
+                    file(params.pipelines_testdata_base_path + 'reference/variant_consequences_v2.txt', checkIfExists: true)
+                ]).collect()
+                input[1] = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.subworkflow_fixtures + '/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
+                ])
+                input[2] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(workflow.out.vcf_ann[0][1]).vcf.variantsMD5,
+                    path(workflow.out.vcf_ann[0][1]).vcf.summary
+                ).match() }
+            )
+        }
+    }
+
+    test("ANNOTATE_CSQ_PLI - with index") {
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    [id:'var_csq'],
+                    file(params.pipelines_testdata_base_path + 'reference/variant_consequences_v2.txt', checkIfExists: true)
+                ]).collect()
+                input[1] = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.subworkflow_fixtures + '/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
+                ])
+                input[2] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.vcf_ann.collect { meta, f -> file(f).name },
+                    workflow.out.tbi.collect { meta, f -> file(f).name },
+                    path(workflow.out.vcf_ann[0][1]).vcf.variantsMD5,
+                    path(workflow.out.vcf_ann[0][1]).vcf.summary
+                ).match() }
+            )
+        }
+    }
+    test("ANNOTATE_CSQ_PLI - with index, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    [id:'var_csq'],
+                    file(params.pipelines_testdata_base_path + 'reference/variant_consequences_v2.txt', checkIfExists: true)
+                ]).collect()
+                input[1] = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.subworkflow_fixtures + '/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
+                ])
+                input[2] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}

@@ -1,0 +1,101 @@
+name: picard_liftovervcf
+description: Lifts over a VCF file from one reference build to another.
+keywords:
+  - vcf
+  - picard
+  - liftovervcf
+tools:
+  - picard:
+      description: Move annotations from one assembly to another
+      homepage: https://gatk.broadinstitute.org/hc/en-us/articles/360037060932-LiftoverVcf-Picard
+      documentation: https://gatk.broadinstitute.org/hc/en-us/articles/360037060932-LiftoverVcf-Picard
+      tool_dev_url: https://github.com/broadinstitute/picard
+      licence: ["MIT"]
+      identifier: biotools:picard_tools
+input:
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information e.g. [ id:'test', single_end:false
+          ]
+    - input_vcf:
+        type: file
+        description: VCF file
+        pattern: "*.{vcf,vcf.gz}"
+        ontologies: []
+  - - meta2:
+        type: map
+        description: |
+          Groovy Map containing reference information
+          e.g. [ id:'genome' ]
+    - dict:
+        type: file
+        description: dictionary for fasta file
+        pattern: "*.{dict}"
+        ontologies: []
+  - - meta3:
+        type: map
+        description: |
+          Groovy Map containing reference information
+          e.g. [ id:'genome' ]
+    - fasta:
+        type: file
+        description: fasta file
+        pattern: "*.fasta"
+        ontologies: []
+  - - meta4:
+        type: map
+        description: |
+          Groovy Map containing reference information
+          e.g. [ id:'genome' ]
+    - chain:
+        type: file
+        description: The liftover chain file
+        ontologies: []
+output:
+  vcf_lifted:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information e.g. [ id:'test', single_end:false
+            ]
+      - "*.lifted.vcf.gz":
+          type: file
+          description: VCF file containing successfully lifted variants
+          pattern: "*.{lifted.vcf.gz}"
+          ontologies: []
+  vcf_unlifted:
+    - - meta:
+          type: map
+          description: Groovy Map containing sample information e.g. [ id:'test', single_end:false
+            ]
+      - "*.unlifted.vcf.gz":
+          type: file
+          description: VCF file containing unsuccessfully lifted variants
+          pattern: "*.{unlifted.vcf.gz}"
+          ontologies: []
+  versions_picard:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - picard:
+          type: string
+          description: The tool name
+      - "picard LiftoverVcf --version 2>&1 | sed -n 's/.*Version://p'":
+          type: string
+          description: The command used to generate the version of the tool
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - picard:
+          type: string
+          description: The tool name
+      - "picard LiftoverVcf --version 2>&1 | sed -n 's/.*Version://p'":
+          type: string
+          description: The command used to generate the version of the tool
+authors:
+  - "@lucpen"
+  - "@ramprasadn"
+maintainers:
+  - "@lucpen"
+  - "@ramprasadn"

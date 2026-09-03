@@ -1,0 +1,136 @@
+nextflow_workflow {
+
+    name "Test Workflow ALIGN_MITOCHONDRIA"
+    script "subworkflows/local/align_mitochondria/main.nf"
+    workflow "ALIGN_MITOCHONDRIA"
+
+    tag "subworkflows"
+    tag "align_mitochondria"
+    tag "align_MT"
+    tag "convert_mt_bam_to_fastq"
+
+    config "./nextflow.config"
+
+    setup {
+        run("BWAMEM2_INDEX", alias: 'MT_MEM2') {
+            script "modules/nf-core/bwamem2/index/main.nf"
+            process {
+                """
+                input[0] = channel.of([
+                    [id:'mt'],
+                    file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)
+                ])
+                """
+            }
+        }
+        run("BWAMEM2_INDEX", alias: 'SHIFTMT_MEM2') {
+            script "modules/nf-core/bwamem2/index/main.nf"
+            process {
+                """
+                input[0] = channel.of([
+                    [id:'shiftmt'],
+                    file(params.subworkflow_fixtures + '/minimal_reference_mtshift.fasta', checkIfExists: true)
+                ])
+                """
+            }
+        }
+    }
+
+    test("align_mitochondria bwamem2, minimal dataset") {
+
+        when {
+            params {
+                mito_name = 'chrM'
+                outdir    = "$outputDir"
+            }
+            workflow {
+                """
+                input[0]  = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[4]  = channel.empty()
+                input[5]  = MT_MEM2.out.index.collect()
+                input[6]  = channel.of([id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.dict', checkIfExists: true)).collect()
+                input[7]  = channel.of([id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)).collect()
+                input[8]  = channel.of([id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)).collect()
+                input[9]  = channel.empty()
+                input[10] = SHIFTMT_MEM2.out.index.collect()
+                input[11] = channel.of([id:'shiftmt'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.dict', checkIfExists: true)).collect()
+                input[12] = channel.of([id:'shiftmt'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.fasta.fai', checkIfExists: true)).collect()
+                input[13] = channel.of([id:'shiftmt'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.fasta', checkIfExists: true)).collect()
+                input[14] = "bwamem2"
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.mt_bam_bai
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.mt_bam_bai_gatksubwf
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.mtshift_bam_bai_gatksubwf
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] }
+                    ).match()
+                }
+            )
+        }
+    }
+
+    test("align_mitochondria bwamem2 - stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                mito_name = 'chrM'
+                outdir    = "$outputDir"
+            }
+            workflow {
+                """
+                input[0]  = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)).collect()
+                input[2]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[4]  = channel.empty()
+                input[5]  = MT_MEM2.out.index.collect()
+                input[6]  = channel.of([id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.dict', checkIfExists: true)).collect()
+                input[7]  = channel.of([id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)).collect()
+                input[8]  = channel.of([id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)).collect()
+                input[9]  = channel.empty()
+                input[10] = SHIFTMT_MEM2.out.index.collect()
+                input[11] = channel.of([id:'shiftmt'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.dict', checkIfExists: true)).collect()
+                input[12] = channel.of([id:'shiftmt'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.fasta.fai', checkIfExists: true)).collect()
+                input[13] = channel.of([id:'shiftmt'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.fasta', checkIfExists: true)).collect()
+                input[14] = "bwamem2"
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.mt_bam_bai
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.mt_bam_bai_gatksubwf
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] },
+                        workflow.out.mtshift_bam_bai_gatksubwf
+                            .collect { meta, bamfile, index -> [ meta, bam(bamfile).getReadsMD5(), file(index).name ] }
+                    ).match()
+                }
+            )
+        }
+    }
+}

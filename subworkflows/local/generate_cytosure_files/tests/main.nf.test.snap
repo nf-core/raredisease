@@ -1,0 +1,83 @@
+{
+    "GENERATE_CYTOSURE_FILES - with customer_id, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "ACC13778A1",
+                            "sex": 1,
+                            "custid": "CUST_001"
+                        },
+                        "CUST_001.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "cgh": [
+                    [
+                        {
+                            "id": "ACC13778A1",
+                            "sex": 1,
+                            "custid": "CUST_001"
+                        },
+                        "CUST_001.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-27T15:54:36.545079668",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "GENERATE_CYTOSURE_FILES - no customer_id, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "ACC13778A1",
+                            "sex": 1,
+                            "custid": "ACC13778A1"
+                        },
+                        "ACC13778A1.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "cgh": [
+                    [
+                        {
+                            "id": "ACC13778A1",
+                            "sex": 1,
+                            "custid": "ACC13778A1"
+                        },
+                        "ACC13778A1.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-27T15:54:14.939716515",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "GENERATE_CYTOSURE_FILES - minimal dataset": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "ACC13778A1",
+                        "sex": 1,
+                        "custid": "ACC13778A1"
+                    },
+                    "ACC13778A1.cgh:md5,1b506c7eef4900f466ff23e7f71083f5"
+                ]
+            ]
+        ],
+        "timestamp": "2026-08-27T16:53:28.363235806",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

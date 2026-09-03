@@ -1,0 +1,167 @@
+{
+    "ANNOTATE_STRUCTURAL_VARIANTS - minimal dataset": {
+        "content": [
+            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,8c628795becf1ac24dcb62bbfb4e6a15",
+            "VcfFile [chromosomes=[chr7, chrX, chr16, chr21, chr1, chr12, chrM, chr20], sampleCount=3, variantCount=35, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-08-25T10:55:52.095476855",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "ANNOTATE_STRUCTURAL_VARIANTS - no SVDB queries, stub": {
+        "content": [
+            [
+                [
+                    "0",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "1",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "2",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "report",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "tbi",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "vcf_ann",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        "timestamp": "2026-08-26T11:05:33.04466467",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "ANNOTATE_STRUCTURAL_VARIANTS - with SVDB_QUERY_DB, stub": {
+        "content": [
+            [
+                [
+                    "0",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "1",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "2",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                [
+                    "report",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "tbi",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "vcf_ann",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        "timestamp": "2026-08-26T11:05:58.80980936",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

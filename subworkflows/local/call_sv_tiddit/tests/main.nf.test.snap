@@ -1,0 +1,41 @@
+{
+    "CALL_SV_TIDDIT - wgs, minimal dataset": {
+        "content": [
+            [
+                "amusingmarmoset_svdb_tiddit.vcf.gz"
+            ]
+        ],
+        "timestamp": "2026-08-24T19:48:38.086191171",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "CALL_SV_TIDDIT - wgs, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "amusingmarmoset"
+                        },
+                        "amusingmarmoset_svdb_tiddit.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "amusingmarmoset"
+                        },
+                        "amusingmarmoset_svdb_tiddit.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-24T19:49:00.755132145",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

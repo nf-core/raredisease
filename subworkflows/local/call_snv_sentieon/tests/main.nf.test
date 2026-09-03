@@ -1,0 +1,139 @@
+nextflow_workflow {
+
+    name "Test Workflow CALL_SNV_SENTIEON"
+    script "subworkflows/local/call_snv_sentieon/main.nf"
+    workflow "CALL_SNV_SENTIEON"
+
+    tag "subworkflows"
+    tag "call_snv_sentieon"
+
+    tag "sentieon/dnascope"
+    tag "sentieon/dnamodelapply"
+    tag "bcftools/merge"
+    tag "bcftools/norm"
+    tag "bcftools/filter"
+    tag "bcftools/annotate"
+    tag "add_varcallername_to_bed"
+
+    config "./nextflow.config"
+
+    test("CALL_SNV_SENTIEON - two samples (merge), minimal dataset") {
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                        file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                    ],
+                    [
+                        ${TestData.sample('ACC13778A3')},
+                        file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
+                        file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)
+                    ]
+                )
+                input[1] = channel.of([[id:'interval'], []])
+                input[2] = channel.of([id:'amusingmarmoset'])
+                input[3] = channel.of([[id:'genome'], []])
+                input[4] = channel.of([[id:'genome'], []])
+                input[5] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[6] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[7] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[8] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[9] = channel.of([[id:'model'], file('https://s3.amazonaws.com/sentieon-release/other/SentieonDNAscopeModel1.1.model', checkIfExists: true)]).collect()
+                input[10] = channel.value([])
+                input[11] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(workflow.out.vcf[0][1]).vcf.variantsMD5,
+                    workflow.out.tabix.collect { meta, tbi -> file(tbi).name }
+                ).match() }
+            )
+        }
+    }
+
+    test("CALL_SNV_SENTIEON - single sample, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1] = channel.of([[id:'interval'], []])
+                input[2] = channel.of([id:'amusingmarmoset'])
+                input[3] = channel.of([[id:'genome'], []])
+                input[4] = channel.of([[id:'genome'], []])
+                input[5] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[6] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[7] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[8] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[9] = channel.of([[id:'model'], []])
+                input[10] = channel.value([])
+                input[11] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+
+    test("CALL_SNV_SENTIEON - two samples (merge), stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                        file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                    ],
+                    [
+                        ${TestData.sample('ACC13778A3')},
+                        file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
+                        file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)
+                    ]
+                )
+                input[1] = channel.of([[id:'interval'], []])
+                input[2] = channel.of([id:'amusingmarmoset'])
+                input[3] = channel.of([[id:'genome'], []])
+                input[4] = channel.of([[id:'genome'], []])
+                input[5] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[6] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[7] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[8] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[9] = channel.of([[id:'model'], []])
+                input[10] = channel.value([])
+                input[11] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}

@@ -1,0 +1,43 @@
+{
+    "CALL_SV - wgs, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        "amusingmarmoset_tiddit.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "amusingmarmoset_manta.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "amusingmarmoset_cnvnator.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "vcfs": [
+                    [
+                        "amusingmarmoset_tiddit.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "amusingmarmoset_manta.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "amusingmarmoset_cnvnator.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-27T15:55:01.111772544",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "CALL_SV - wgs, minimal dataset": {
+        "content": [
+            [
+                [
+                    "amusingmarmoset_tiddit.vcf.gz",
+                    "amusingmarmoset_manta.vcf.gz",
+                    "amusingmarmoset_cnvnator.vcf.gz"
+                ]
+            ]
+        ],
+        "timestamp": "2026-08-21T14:24:20.169277138",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

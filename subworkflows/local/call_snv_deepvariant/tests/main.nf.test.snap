@@ -1,0 +1,218 @@
+{
+    "CALL_SNV_DEEPVARIANT - wgs, stub": {
+        "content": [
+            [
+                [
+                    "0",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "1",
+                    [
+                        [
+                            {
+                                "id": "ACC13778A2",
+                                "sample": "ACC13778A2",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                                "lane": 1,
+                                "sex": 2,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "amusingmarmoset"
+                            },
+                            "ACC13778A2_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
+                        ],
+                        [
+                            {
+                                "id": "ACC13778A3",
+                                "sample": "ACC13778A3",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "amusingmarmoset"
+                            },
+                            "ACC13778A3_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
+                        ]
+                    ]
+                ],
+                [
+                    "2",
+                    [
+                        [
+                            {
+                                "id": "ACC13778A2",
+                                "sample": "ACC13778A2",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                                "lane": 1,
+                                "sex": 2,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "amusingmarmoset"
+                            },
+                            "ACC13778A2_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
+                        ],
+                        [
+                            {
+                                "id": "ACC13778A3",
+                                "sample": "ACC13778A3",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "amusingmarmoset"
+                            },
+                            "ACC13778A3_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
+                        ]
+                    ]
+                ],
+                [
+                    "3",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "4",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "deepvariant_report",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "gvcf",
+                    [
+                        [
+                            {
+                                "id": "ACC13778A2",
+                                "sample": "ACC13778A2",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                                "lane": 1,
+                                "sex": 2,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "amusingmarmoset"
+                            },
+                            "ACC13778A2_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
+                        ],
+                        [
+                            {
+                                "id": "ACC13778A3",
+                                "sample": "ACC13778A3",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "amusingmarmoset"
+                            },
+                            "ACC13778A3_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
+                        ]
+                    ]
+                ],
+                [
+                    "gvcf_tabix",
+                    [
+                        [
+                            {
+                                "id": "ACC13778A2",
+                                "sample": "ACC13778A2",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                                "lane": 1,
+                                "sex": 2,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "amusingmarmoset"
+                            },
+                            "ACC13778A2_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
+                        ],
+                        [
+                            {
+                                "id": "ACC13778A3",
+                                "sample": "ACC13778A3",
+                                "single_end": false,
+                                "num_lanes": 1,
+                                "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
+                                "lane": 1,
+                                "sex": 1,
+                                "phenotype": 1,
+                                "paternal": 0,
+                                "maternal": 0,
+                                "case_id": "amusingmarmoset"
+                            },
+                            "ACC13778A3_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
+                        ]
+                    ]
+                ],
+                [
+                    "tabix",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "vcf",
+                    [
+                        
+                    ]
+                ]
+            ]
+        ],
+        "timestamp": "2026-08-24T09:48:14.866568257",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "CALL_SNV_DEEPVARIANT - wgs, minimal dataset": {
+        "content": [
+            "11996f7ce5061eadc3b58c845983d3c1",
+            [
+                "ACC13778A2_deepvar.visual_report.html",
+                "ACC13778A3_deepvar.visual_report.html"
+            ],
+            [
+                "amusingmarmoset_split_rmdup_info.vcf.gz.tbi"
+            ],
+            [
+                "ACC13778A2_deepvar.g.vcf.gz",
+                "ACC13778A3_deepvar.g.vcf.gz"
+            ]
+        ],
+        "timestamp": "2026-08-28T17:27:59.307615985",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

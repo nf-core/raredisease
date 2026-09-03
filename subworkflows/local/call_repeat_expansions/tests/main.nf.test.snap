@@ -1,0 +1,172 @@
+{
+    "CALL_REPEAT_EXPANSIONS, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_exphunter_sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_exphunter_sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_repeat_expansion.vcf:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "amusingmarmoset"
+                        },
+                        "amusingmarmoset.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "expansionhunter_bai": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_exphunter_sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "expansionhunter_bam": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_exphunter_sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "expansionhunter_vcf": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_repeat_expansion.vcf:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "amusingmarmoset"
+                        },
+                        "amusingmarmoset.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-24T21:13:24.107073115",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "CALL_REPEAT_EXPANSIONS": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "ACC13778A2",
+                        "sample": "ACC13778A2",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "lane": 1,
+                        "sex": 2,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "amusingmarmoset"
+                    },
+                    "403b083e5ee8bc143b81b36980058e27"
+                ]
+            ],
+            [
+                "ACC13778A2_exphunter_sorted.bam.bai"
+            ],
+            [
+                "ACC13778A2_repeat_expansion.vcf"
+            ],
+            "545167fc7911c7f2de251b30d236f77e",
+            "VcfFile [chromosomes=[chrX, chr16, chr21, chr12, chr20], sampleCount=1, variantCount=7, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-08-24T21:12:56.729555871",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

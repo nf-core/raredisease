@@ -1,0 +1,88 @@
+//
+// A variant caller workflow for deepvariant
+//
+
+include { ADD_VARCALLER_TO_BED                      } from '../../../modules/local/add_varcallername_to_bed'
+include { BCFTOOLS_ANNOTATE                         } from '../../../modules/nf-core/bcftools/annotate/main'
+include { BCFTOOLS_NORM as REMOVE_DUPLICATES_GL     } from '../../../modules/nf-core/bcftools/norm/main'
+include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_GL   } from '../../../modules/nf-core/bcftools/norm/main'
+include { DEEPVARIANT_RUNDEEPVARIANT as DEEPVARIANT } from '../../../modules/nf-core/deepvariant/rundeepvariant/main'
+include { GLNEXUS                                   } from '../../../modules/nf-core/glnexus/main'
+include { TABIX_BGZIP                               } from '../../../modules/nf-core/tabix/bgzip/main'
+
+workflow CALL_SNV_DEEPVARIANT {
+    take:
+        ch_bam_bai         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_case_info       // channel: [mandatory] [ val(case_info) ]
+        ch_foundin_header  // channel: [mandatory] [ path(header) ]
+        ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
+        ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_glnexus_config // path: [optional]  [ val(meta), path(config_file) ]
+        ch_par_bed                   // channel: [optional] [ val(meta), path(bed) ]
+        ch_target_bed                // channel: [mandatory] [ val(meta), path(bed), path(index) ]
+        val_analysis_type            // boolean
+        val_skip_split_multiallelics // boolean
+
+    main:
+
+        if (val_analysis_type.equals("wes")) {
+            TABIX_BGZIP(ch_target_bed.map{meta, gzbed, _index -> return [meta, gzbed]})
+            ch_deepvar_in = ch_bam_bai
+                .combine (TABIX_BGZIP.out.output.map {_meta, bed -> return bed})
+        } else if (val_analysis_type.equals("wgs")) {
+            ch_deepvar_in = ch_bam_bai
+                .map { meta, bam, bai ->
+                        return [meta, bam, bai, []] }
+        }
+
+        DEEPVARIANT ( ch_deepvar_in, ch_genome_fasta, ch_genome_fai, [[],[]], ch_par_bed )
+        ch_file_list = DEEPVARIANT.out.gvcf
+            .map{ _meta, gvcf -> gvcf}
+            .toSortedList{a, b -> a.name <=> b.name}
+            .toList()
+
+         // toList() enables passing [] if ch_custom_glnexus_config is empty
+        ch_gvcfs = ch_case_info
+            .combine(ch_file_list)
+            .combine(ch_glnexus_config.map { _meta, config -> config }.toList())
+
+        GLNEXUS ( ch_gvcfs, [[:],[]] )
+
+        ch_split_multi_in = GLNEXUS.out.bcf
+                            .map{ meta, bcf ->
+                                    return [meta, bcf, []] }
+
+        if (!val_skip_split_multiallelics) {
+            SPLIT_MULTIALLELICS_GL (ch_split_multi_in, ch_genome_fasta)
+            ch_remove_dup_in = SPLIT_MULTIALLELICS_GL.out.vcf
+                                .map{ meta, vcf ->
+                                        return [meta, vcf, []] }
+        } else {
+            ch_remove_dup_in = ch_split_multi_in
+        }
+        REMOVE_DUPLICATES_GL (ch_remove_dup_in, ch_genome_fasta)
+
+        ch_varcallerinfo = ch_genome_chrsizes.flatten().map{chromsizes ->
+            return [[id:'deepvariant'], chromsizes]
+            }
+
+        ADD_VARCALLER_TO_BED (ch_varcallerinfo)
+        ch_varcallerbed = ADD_VARCALLER_TO_BED.out.gz_tbi
+            .map{_meta,bed,tbi -> return [bed, tbi]}
+
+        ch_annotate_in = REMOVE_DUPLICATES_GL.out.vcf
+            .join(REMOVE_DUPLICATES_GL.out.tbi)
+            .combine(ch_varcallerbed)
+            .combine(ch_foundin_header)
+            .map { meta, vcf, vcf_tbi, bed, bed_tbi, hdr -> return [meta, vcf, vcf_tbi, bed, bed_tbi, [], hdr, []] }
+
+        BCFTOOLS_ANNOTATE(ch_annotate_in)
+
+    emit:
+        deepvariant_report = DEEPVARIANT.out.report     // channel: [ val(meta), path(html) ]
+        gvcf               = DEEPVARIANT.out.gvcf       // channel: [ val(meta), path(gvcf)]
+        gvcf_tabix         = DEEPVARIANT.out.gvcf_index // channel: [ val(meta), path(gvcf_tbi)]
+        tabix              = BCFTOOLS_ANNOTATE.out.tbi  // channel: [ val(meta), path(tbi) ]
+        vcf                = BCFTOOLS_ANNOTATE.out.vcf  // channel: [ val(meta), path(vcf) ]
+}

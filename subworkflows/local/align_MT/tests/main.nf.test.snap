@@ -1,0 +1,334 @@
+{
+    "align mt - bwamem2, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "marked_bai": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "marked_bam": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-24T16:30:29.476352716",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "align mt - bwa, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "marked_bai": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "marked_bam": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-24T16:31:00.469422131",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "align mt - bwamem2": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam.bai:md5,4eb19fdd179224b02e311233c4c040d2"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam:md5,7e31c2f28c4d01d7fdfb3335247fcea8"
+                    ]
+                ],
+                "marked_bai": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam.bai:md5,4eb19fdd179224b02e311233c4c040d2"
+                    ]
+                ],
+                "marked_bam": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam:md5,7e31c2f28c4d01d7fdfb3335247fcea8"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-24T16:29:13.334845758",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "align mt - bwa": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam.bai:md5,0347b95cee7797317d835f8804f4f7f7"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam:md5,fe5d8b33fc7fe08d8dd5bd49afc6b16a"
+                    ]
+                ],
+                "marked_bai": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam.bai:md5,0347b95cee7797317d835f8804f4f7f7"
+                    ]
+                ],
+                "marked_bam": [
+                    [
+                        {
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "lane": 1,
+                            "sex": 2,
+                            "phenotype": 1,
+                            "paternal": 0,
+                            "maternal": 0,
+                            "case_id": "amusingmarmoset"
+                        },
+                        "ACC13778A2_sorted_merged_md_sorted.bam:md5,fe5d8b33fc7fe08d8dd5bd49afc6b16a"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-24T16:29:55.484354729",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

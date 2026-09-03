@@ -1,0 +1,80 @@
+nextflow_workflow {
+
+    name "Test Workflow CONVERT_MT_BAM_TO_FASTQ"
+    script "subworkflows/local/convert_mt_bam_to_fastq/main.nf"
+    workflow "CONVERT_MT_BAM_TO_FASTQ"
+
+    tag "subworkflows"
+    tag "convert_mt_bam_to_fastq"
+
+    tag "gatk4/printreads"
+    tag "gatk4/revertsam"
+    tag "gatk4/samtofastq"
+    tag "samtools/index"
+
+    config "./nextflow.config"
+
+    test("CONVERT_MT_BAM_TO_FASTQ - wgs, minimal dataset") {
+
+        when {
+            params {
+                mito_name = 'chrM'
+            }
+            workflow {
+                """
+                input[0] = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
+                input[2] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.bam_bai.collect { meta, bamfile, bai -> [meta, bam(bamfile).getReadsMD5(), file(bai).name] },
+                    workflow.out.fastq.collect { meta, fastq -> [meta, fastq.collect { f -> file(f).name }] },
+                    workflow.out.ubam.collect { meta, bamfile -> [meta, bam(bamfile).getReadsMD5()] }
+                ).match() }
+            )
+        }
+    }
+
+    test("CONVERT_MT_BAM_TO_FASTQ - stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                mito_name = 'chrM'
+            }
+            workflow {
+                """
+                input[0] = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
+                input[2] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out
+                ).match() }
+            )
+        }
+    }
+}

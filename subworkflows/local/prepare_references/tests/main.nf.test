@@ -1,0 +1,232 @@
+nextflow_workflow {
+
+    name "Test Workflow PREPARE_REFERENCES"
+    script "subworkflows/local/prepare_references/main.nf"
+    workflow "PREPARE_REFERENCES"
+
+    tag "subworkflows"
+    tag "prepare_references"
+
+    tag "bedtools/slop"
+    tag "bwa/index"
+    tag "bwafastalign/index"
+    tag "bwamem2/index"
+    tag "bwameme/index"
+    tag "cat/cat"
+    tag "gatk4/bedtointervallist"
+    tag "gatk4/createsequencedictionary"
+    tag "gatk4/intervallisttools"
+    tag "gatk4/shiftfasta"
+    tag "get_chrom_sizes"
+    tag "hisat2/build"
+    tag "last/lastdb"
+    tag "samtools/faidx"
+    tag "sentieon/bwaindex"
+    tag "tabix/bgziptabix"
+    tag "tabix/tabix"
+    tag "untar"
+
+    config "./nextflow.config"
+
+    test("Should run without failures") {
+
+        when {
+            params {
+                mito_name          = "chrM"
+                bait_padding       = 100
+            }
+            workflow {
+                """
+                input[0]  = "bwamem2"
+                input[1]  = null
+                input[2]  = null
+                input[3]  = null
+                input[4]  = null
+                input[5]  = null
+                input[6]  = params.reference_sliced + '/minimal_reference.fasta'
+                input[7]  = params.resources_remapped + '/vcfanno/grch38_gnomad_af.remapped.tab.gz'
+                input[8]  = null
+                input[9]  = null
+                input[10] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
+                input[11] = null
+                input[12] = "bwa"
+                input[13] = null
+                input[14] = true
+                input[15] = null
+                input[16] = params.resources_remapped + '/beds/target_bed.remapped.bed'
+                input[17] = null
+                input[18] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.collect { name, channel ->
+                        def sorted_channel = channel.toList().sort { item ->
+                            def sortKey = item
+                            while (sortKey instanceof List && !sortKey.isEmpty()) {
+                                def next = sortKey[-1]
+                                if (next instanceof List && next.every { !(it instanceof List) }) {
+                                    // Leaf list: could be [meta, path] or [file1, file2, ...].
+                                    // For directory outputs (e.g. BWA/BWAMEM2/HISAT2 index folders),
+                                    // nf-test represents the value as a Path at sort time rather than
+                                    // expanding it to a file list. List the directory contents to
+                                    // produce a stable, unique sort key across same-named directories.
+                                    return next.findAll { !(it instanceof Map) }
+                                        .collect { v ->
+                                            def s = v.toString()
+                                            if (s.contains(':md5,')) {
+                                                return s.split(':md5,')[0].tokenize('/').last() ?: ''
+                                            }
+                                            try {
+                                                def f = new File(s)
+                                                if (f.isDirectory()) {
+                                                    return f.listFiles()?.collect { it.name }?.sort()?.join(',') ?: s.tokenize('/').last() ?: ''
+                                                }
+                                            } catch (e) {}
+                                            return s.tokenize('/').last() ?: ''
+                                        }
+                                        .sort()
+                                        .join(',')
+                                }
+                                sortKey = next
+                            }
+                            def parts = sortKey.toString().split(':md5,')[0].tokenize('/')
+                            parts ? parts[-1] : ''
+                        }
+                        [name, sorted_channel]
+                    }.sort { it[0] }
+                ).match() }
+            )
+        }
+
+    }
+
+    test("Should run without failures, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                mito_name          = "chrM"
+                bait_padding       = 100
+            }
+            workflow {
+                """
+                input[0]  = "bwamem2"
+                input[1]  = null
+                input[2]  = null
+                input[3]  = null
+                input[4]  = null
+                input[5]  = null
+                input[6]  = params.reference_sliced + '/minimal_reference.fasta'
+                input[7]  = params.resources_remapped + '/vcfanno/grch38_gnomad_af.remapped.tab.gz'
+                input[8]  = null
+                input[9]  = null
+                input[10] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
+                input[11] = null
+                input[12] = "bwa"
+                input[13] = null
+                input[14] = true
+                input[15] = null
+                input[16] = params.resources_remapped + '/beds/target_bed.remapped.bed'
+                input[17] = null
+                input[18] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.collect { name, channel ->
+                        def sorted_channel = channel.toList().sort { item ->
+                            def sortKey = item
+                            while (sortKey instanceof List && !sortKey.isEmpty()) {
+                                def next = sortKey[-1]
+                                if (next instanceof List && next.every { !(it instanceof List) }) {
+                                    // Leaf list: could be [meta, path] or [file1, file2, ...].
+                                    // For directory outputs (e.g. BWA/BWAMEM2/HISAT2 index folders),
+                                    // nf-test represents the value as a Path at sort time rather than
+                                    // expanding it to a file list. List the directory contents to
+                                    // produce a stable, unique sort key across same-named directories.
+                                    return next.findAll { !(it instanceof Map) }
+                                        .collect { v ->
+                                            def s = v.toString()
+                                            if (s.contains(':md5,')) {
+                                                return s.split(':md5,')[0].tokenize('/').last() ?: ''
+                                            }
+                                            try {
+                                                def f = new File(s)
+                                                if (f.isDirectory()) {
+                                                    return f.listFiles()?.collect { it.name }?.sort()?.join(',') ?: s.tokenize('/').last() ?: ''
+                                                }
+                                            } catch (e) {}
+                                            return s.tokenize('/').last() ?: ''
+                                        }
+                                        .sort()
+                                        .join(',')
+                                }
+                                sortKey = next
+                            }
+                            def parts = sortKey.toString().split(':md5,')[0].tokenize('/')
+                            parts ? parts[-1] : ''
+                        }
+                        [name, sorted_channel]
+                    }.sort { it[0] }
+                ).match() }
+            )
+        }
+
+    }
+
+    test("Should use pre-built BWA and HISAT2 indexes when provided, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                mito_name          = "chrM"
+                bait_padding       = 100
+            }
+            workflow {
+                """
+                input[0]  = "bwa"
+                input[1]  = env('PWD')
+                input[2]  = null
+                input[3]  = null
+                input[4]  = null
+                input[5]  = null
+                input[6]  = params.reference_sliced + '/minimal_reference.fasta'
+                input[7]  = params.resources_remapped + '/vcfanno/grch38_gnomad_af.remapped.tab.gz'
+                input[8]  = null
+                input[9]  = env('PWD')
+                input[10] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
+                input[11] = null
+                input[12] = "bwa"
+                input[13] = null
+                input[14] = true
+                input[15] = null
+                input[16] = params.resources_remapped + '/beds/target_bed.remapped.bed'
+                input[17] = null
+                input[18] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.genome_bwa_index.collect  { meta, _index -> meta },
+                    workflow.out.genome_hisat2_index.collect { meta, _index -> meta }
+                ).match() }
+            )
+        }
+
+    }
+}
