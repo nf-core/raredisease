@@ -1,7 +1,6 @@
 {
     "-profile test_singleton": {
         "content": [
-            288,
             {
                 "ADD_VARCALLER_TO_BED": {
                     "bgzip": 1.21,
@@ -83,9 +82,6 @@
                 },
                 "CAT_CAT_BAIT": {
                     "pigz": 2.8
-                },
-                "CHROMOGRAPH_AUTOZYG": {
-                    "chromograph": "1.3.1"
                 },
                 "CHROMOGRAPH_COV": {
                     "chromograph": "1.3.1"
@@ -2317,7 +2313,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-03T14:10:28.756815297",
+        "timestamp": "2026-09-03T15:24:35.816371663",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
