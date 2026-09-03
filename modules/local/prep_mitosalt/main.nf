@@ -76,7 +76,7 @@ process PREP_MITOSALT {
 
     stub:
     """
-    echo "lastal = lastal" >> mitosalt_config.txt
+    echo "lastal = lastal" > mitosalt_config.txt
     """
 
 }

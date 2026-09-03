@@ -1,21 +1,16 @@
 {
-    "Should use pre-built BWA and HISAT2 indexes when provided, stub": {
+    "Should use pre-built BWA indexes when provided, stub": {
         "content": [
             [
                 {
                     "id": "bwa"
                 }
-            ],
-            [
-                {
-                    "id": "hisat2_index"
-                }
             ]
         ],
-        "timestamp": "2026-07-07T11:13:09.86863584",
+        "timestamp": "2026-09-03T11:44:16.256891",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.3"
         }
     },
     "Should run without failures, stub": {
@@ -47,25 +42,12 @@
                             {
                                 "id": "reference"
                             },
-                            [
-                                
-                            ]
-                        ]
-                    ]
-                ],
-                [
-                    "11",
-                    [
-                        [
-                            {
-                                "id": "reference"
-                            },
                             "reference.dict:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
                 [
-                    "12",
+                    "11",
                     [
                         [
                             "/nf-core/test-datasets/raredisease/reference/gnomad_reformated.tab.gz",
@@ -74,7 +56,7 @@
                     ]
                 ],
                 [
-                    "13",
+                    "12",
                     [
                         [
                             {
@@ -91,13 +73,13 @@
                     ]
                 ],
                 [
-                    "14",
+                    "13",
                     [
                         
                     ]
                 ],
                 [
-                    "15",
+                    "14",
                     [
                         [
                             {
@@ -108,7 +90,7 @@
                     ]
                 ],
                 [
-                    "16",
+                    "15",
                     [
                         [
                             {
@@ -119,7 +101,7 @@
                     ]
                 ],
                 [
-                    "17",
+                    "16",
                     [
                         [
                             {
@@ -130,7 +112,7 @@
                     ]
                 ],
                 [
-                    "18",
+                    "17",
                     [
                         [
                             "reference.intervals:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -138,7 +120,7 @@
                     ]
                 ],
                 [
-                    "19",
+                    "18",
                     [
                         [
                             {
@@ -153,6 +135,17 @@
                                 "reference.suf:md5,d41d8cd98f00b204e9800998ecf8427e",
                                 "reference.tis:md5,d41d8cd98f00b204e9800998ecf8427e"
                             ]
+                        ]
+                    ]
+                ],
+                [
+                    "19",
+                    [
+                        [
+                            {
+                                "id": "reference"
+                            },
+                            "reference_shift.back_chain:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -174,17 +167,6 @@
                             {
                                 "id": "reference"
                             },
-                            "reference_shift.back_chain:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ]
-                ],
-                [
-                    "21",
-                    [
-                        [
-                            {
-                                "id": "reference"
-                            },
                             [
                                 "reference_shift.amb:md5,d41d8cd98f00b204e9800998ecf8427e",
                                 "reference_shift.ann:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -196,13 +178,13 @@
                     ]
                 ],
                 [
-                    "22",
+                    "21",
                     [
                         
                     ]
                 ],
                 [
-                    "23",
+                    "22",
                     [
                         [
                             {
@@ -213,7 +195,7 @@
                     ]
                 ],
                 [
-                    "24",
+                    "23",
                     [
                         [
                             {
@@ -224,7 +206,7 @@
                     ]
                 ],
                 [
-                    "25",
+                    "24",
                     [
                         [
                             {
@@ -235,7 +217,7 @@
                     ]
                 ],
                 [
-                    "26",
+                    "25",
                     [
                         [
                             "reference.shifted.intervals:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -243,7 +225,7 @@
                     ]
                 ],
                 [
-                    "27",
+                    "26",
                     [
                         [
                             {
@@ -255,10 +237,20 @@
                     ]
                 ],
                 [
-                    "28",
+                    "27",
                     [
                         [
                             "target_target.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "28",
+                    [
+                        [
+                            [
+                                
+                            ]
                         ]
                     ]
                 ],
@@ -285,16 +277,6 @@
                                 "reference.bwt:md5,d41d8cd98f00b204e9800998ecf8427e",
                                 "reference.pac:md5,d41d8cd98f00b204e9800998ecf8427e",
                                 "reference.sa:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
-                        ]
-                    ]
-                ],
-                [
-                    "30",
-                    [
-                        [
-                            [
-                                
                             ]
                         ]
                     ]
@@ -476,19 +458,6 @@
                     ]
                 ],
                 [
-                    "genome_hisat2_index",
-                    [
-                        [
-                            {
-                                "id": "reference"
-                            },
-                            [
-                                
-                            ]
-                        ]
-                    ]
-                ],
-                [
                     "gnomad_af_idx",
                     [
                         [
@@ -697,10 +666,10 @@
                 ]
             ]
         ],
-        "timestamp": "2026-08-06T15:54:23.183571906",
+        "timestamp": "2026-09-03T11:43:07.716083",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.3"
         }
     },
     "Should run without failures": {
@@ -732,32 +701,12 @@
                             {
                                 "id": "reference"
                             },
-                            [
-                                "reference.1.ht2:md5,f1f1779341ba9a0ab7078e358f6efdde",
-                                "reference.2.ht2:md5,09f0021a3a29a0e4aee96083ea4d4020",
-                                "reference.3.ht2:md5,3b641d6168aa70fe864844bb02ef39f2",
-                                "reference.4.ht2:md5,2dd52cfb372404a3619c0f9367fc4012",
-                                "reference.5.ht2:md5,999891dff8303f7c576f5a1ad4be5036",
-                                "reference.6.ht2:md5,e1a25310dabfaeb7f0fa200785bad49f",
-                                "reference.7.ht2:md5,9013eccd91ad614d7893c739275a394f",
-                                "reference.8.ht2:md5,33cdeccccebe80329f1fdbee7f5874cb"
-                            ]
-                        ]
-                    ]
-                ],
-                [
-                    "11",
-                    [
-                        [
-                            {
-                                "id": "reference"
-                            },
                             "reference.dict:md5,81abd0fc051c084405024e0927f7b436"
                         ]
                     ]
                 ],
                 [
-                    "12",
+                    "11",
                     [
                         [
                             "/nf-core/test-datasets/raredisease/reference/gnomad_reformated.tab.gz",
@@ -766,7 +715,7 @@
                     ]
                 ],
                 [
-                    "13",
+                    "12",
                     [
                         [
                             {
@@ -783,13 +732,13 @@
                     ]
                 ],
                 [
-                    "14",
+                    "13",
                     [
                         
                     ]
                 ],
                 [
-                    "15",
+                    "14",
                     [
                         [
                             {
@@ -800,7 +749,7 @@
                     ]
                 ],
                 [
-                    "16",
+                    "15",
                     [
                         [
                             {
@@ -811,7 +760,7 @@
                     ]
                 ],
                 [
-                    "17",
+                    "16",
                     [
                         [
                             {
@@ -822,7 +771,7 @@
                     ]
                 ],
                 [
-                    "18",
+                    "17",
                     [
                         [
                             "reference_mt.intervals:md5,0930dafc5645246542112ae3d62573a3"
@@ -830,7 +779,7 @@
                     ]
                 ],
                 [
-                    "19",
+                    "18",
                     [
                         [
                             {
@@ -845,6 +794,17 @@
                                 "reference.suf:md5,b2180a9a2d85be97f896808c05b0e38c",
                                 "reference.tis:md5,c4167c6aebb2139c3dc9b07a65830c3d"
                             ]
+                        ]
+                    ]
+                ],
+                [
+                    "19",
+                    [
+                        [
+                            {
+                                "id": "reference"
+                            },
+                            "reference_shift.back_chain:md5,25d682d73a9bae009f4a38b3ede5dbc8"
                         ]
                     ]
                 ],
@@ -866,17 +826,6 @@
                             {
                                 "id": "reference"
                             },
-                            "reference_shift.back_chain:md5,25d682d73a9bae009f4a38b3ede5dbc8"
-                        ]
-                    ]
-                ],
-                [
-                    "21",
-                    [
-                        [
-                            {
-                                "id": "reference"
-                            },
                             [
                                 "reference_shift.amb:md5,ad1d6545efc080e69ad54ecdbcd0720c",
                                 "reference_shift.ann:md5,4111990d7eae543ed95cb82a5e32b04a",
@@ -888,13 +837,13 @@
                     ]
                 ],
                 [
-                    "22",
+                    "21",
                     [
                         
                     ]
                 ],
                 [
-                    "23",
+                    "22",
                     [
                         [
                             {
@@ -905,7 +854,7 @@
                     ]
                 ],
                 [
-                    "24",
+                    "23",
                     [
                         [
                             {
@@ -916,7 +865,7 @@
                     ]
                 ],
                 [
-                    "25",
+                    "24",
                     [
                         [
                             {
@@ -927,7 +876,7 @@
                     ]
                 ],
                 [
-                    "26",
+                    "25",
                     [
                         [
                             "reference_mt.shifted.intervals:md5,083d8f782fd4228dd9f6948ddbc64fd0"
@@ -935,7 +884,7 @@
                     ]
                 ],
                 [
-                    "27",
+                    "26",
                     [
                         [
                             {
@@ -947,7 +896,7 @@
                     ]
                 ],
                 [
-                    "28",
+                    "27",
                     [
                         [
                             "target_target.interval_list:md5,2959b7b0e1b298fe84ad708f447d6703"
@@ -955,7 +904,7 @@
                     ]
                 ],
                 [
-                    "29",
+                    "28",
                     [
                         [
                             [
@@ -965,24 +914,7 @@
                     ]
                 ],
                 [
-                    "3",
-                    [
-                        [
-                            {
-                                "id": "reference"
-                            },
-                            [
-                                "reference.amb:md5,0a85644af00f9a856d874381d24e7803",
-                                "reference.ann:md5,8fdb46970ca95a4ef54f5f1a02d233cd",
-                                "reference.bwt:md5,0d1ba8d4e0229df6abb869a69f621dc8",
-                                "reference.pac:md5,96b449e1316067fdfba91b1399687bc2",
-                                "reference.sa:md5,c5c99cdc7a3cb6224841131b4b4285fe"
-                            ]
-                        ]
-                    ]
-                ],
-                [
-                    "30",
+                    "29",
                     [
                         [
                             [
@@ -1216,6 +1148,23 @@
                     ]
                 ],
                 [
+                    "3",
+                    [
+                        [
+                            {
+                                "id": "reference"
+                            },
+                            [
+                                "reference.amb:md5,0a85644af00f9a856d874381d24e7803",
+                                "reference.ann:md5,8fdb46970ca95a4ef54f5f1a02d233cd",
+                                "reference.bwt:md5,0d1ba8d4e0229df6abb869a69f621dc8",
+                                "reference.pac:md5,96b449e1316067fdfba91b1399687bc2",
+                                "reference.sa:md5,c5c99cdc7a3cb6224841131b4b4285fe"
+                            ]
+                        ]
+                    ]
+                ],
+                [
                     "4",
                     [
                         
@@ -1388,26 +1337,6 @@
                                 "id": "reference"
                             },
                             "/nf-core/test-datasets/raredisease/reference/reference.fasta"
-                        ]
-                    ]
-                ],
-                [
-                    "genome_hisat2_index",
-                    [
-                        [
-                            {
-                                "id": "reference"
-                            },
-                            [
-                                "reference.1.ht2:md5,f1f1779341ba9a0ab7078e358f6efdde",
-                                "reference.2.ht2:md5,09f0021a3a29a0e4aee96083ea4d4020",
-                                "reference.3.ht2:md5,3b641d6168aa70fe864844bb02ef39f2",
-                                "reference.4.ht2:md5,2dd52cfb372404a3619c0f9367fc4012",
-                                "reference.5.ht2:md5,999891dff8303f7c576f5a1ad4be5036",
-                                "reference.6.ht2:md5,e1a25310dabfaeb7f0fa200785bad49f",
-                                "reference.7.ht2:md5,9013eccd91ad614d7893c739275a394f",
-                                "reference.8.ht2:md5,33cdeccccebe80329f1fdbee7f5874cb"
-                            ]
                         ]
                     ]
                 ],
@@ -1844,10 +1773,10 @@
                 ]
             ]
         ],
-        "timestamp": "2026-08-06T15:53:29.170203248",
+        "timestamp": "2026-09-03T11:42:01.978258",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.3"
         }
     }
 }

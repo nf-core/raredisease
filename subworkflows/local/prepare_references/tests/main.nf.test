@@ -18,7 +18,6 @@ nextflow_workflow {
     tag "gatk4/intervallisttools"
     tag "gatk4/shiftfasta"
     tag "get_chrom_sizes"
-    tag "hisat2/build"
     tag "last/lastdb"
     tag "samtools/faidx"
     tag "sentieon/bwaindex"
@@ -47,16 +46,15 @@ nextflow_workflow {
                 input[6]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
                 input[7]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
                 input[8]  = null
-                input[9]  = null
-                input[10] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
-                input[11] = null
-                input[12] = "bwa"
-                input[13] = null
-                input[14] = true
-                input[15] = null
-                input[16] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[17] = null
-                input[18] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                input[9] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
+                input[10] = null
+                input[11] = "bwa"
+                input[12] = null
+                input[13] = true
+                input[14] = null
+                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[16] = null
+                input[17] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
                 """
             }
         }
@@ -72,7 +70,7 @@ nextflow_workflow {
                                 def next = sortKey[-1]
                                 if (next instanceof List && next.every { !(it instanceof List) }) {
                                     // Leaf list: could be [meta, path] or [file1, file2, ...].
-                                    // For directory outputs (e.g. BWA/BWAMEM2/HISAT2 index folders),
+                                    // For directory outputs (e.g. BWA/BWAMEM2 index folders),
                                     // nf-test represents the value as a Path at sort time rather than
                                     // expanding it to a file list. List the directory contents to
                                     // produce a stable, unique sort key across same-named directories.
@@ -127,16 +125,15 @@ nextflow_workflow {
                 input[6]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
                 input[7]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
                 input[8]  = null
-                input[9]  = null
-                input[10] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
-                input[11] = null
-                input[12] = "bwa"
-                input[13] = null
-                input[14] = true
-                input[15] = null
-                input[16] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[17] = null
-                input[18] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                input[9] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
+                input[10] = null
+                input[11] = "bwa"
+                input[12] = null
+                input[13] = true
+                input[14] = null
+                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[16] = null
+                input[17] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
                 """
             }
         }
@@ -152,7 +149,7 @@ nextflow_workflow {
                                 def next = sortKey[-1]
                                 if (next instanceof List && next.every { !(it instanceof List) }) {
                                     // Leaf list: could be [meta, path] or [file1, file2, ...].
-                                    // For directory outputs (e.g. BWA/BWAMEM2/HISAT2 index folders),
+                                    // For directory outputs (e.g. BWA/BWAMEM2 index folders),
                                     // nf-test represents the value as a Path at sort time rather than
                                     // expanding it to a file list. List the directory contents to
                                     // produce a stable, unique sort key across same-named directories.
@@ -186,7 +183,7 @@ nextflow_workflow {
 
     }
 
-    test("Should use pre-built BWA and HISAT2 indexes when provided, stub") {
+    test("Should use pre-built BWA indexes when provided, stub") {
 
         options "-stub"
 
@@ -207,16 +204,15 @@ nextflow_workflow {
                 input[6]  = params.pipelines_testdata_base_path + 'reference/reference.fasta'
                 input[7]  = params.pipelines_testdata_base_path + 'reference/gnomad_reformated.tab.gz'
                 input[8]  = null
-                input[9]  = env('PWD')
-                input[10] = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
-                input[11] = null
-                input[12] = "bwa"
-                input[13] = null
-                input[14] = true
-                input[15] = null
-                input[16] = params.pipelines_testdata_base_path + 'reference/target.bed'
-                input[17] = null
-                input[18] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
+                input[9]  = params.pipelines_testdata_base_path + 'reference/dbsnp_-138-.vcf.gz'
+                input[10] = null
+                input[11] = "bwa"
+                input[12] = null
+                input[13] = true
+                input[14] = null
+                input[15] = params.pipelines_testdata_base_path + 'reference/target.bed'
+                input[16] = null
+                input[17] = params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz'
                 """
             }
         }
@@ -226,7 +222,6 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert snapshot(
                     workflow.out.genome_bwa_index.collect  { meta, _index -> meta },
-                    workflow.out.genome_hisat2_index.collect { meta, _index -> meta }
                 ).match() }
             )
         }
