@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Convert the `test_singleton` pipeline test from a stub run to a real (non-stub) run, and set the optional `customer_id` column in its samplesheet fixture so it exercises the VCF2CYTOSURE output-rename / SV-VCF header-reheader branch and SaltShaker report labelling that replaced the removed `sample_id_map` [issue #860](https://github.com/nf-core/raredisease/issues/860) [PR #1009](https://github.com/nf-core/raredisease/pull/1009)
 - Add a real (non-stub) test to `annotate_genome_snvs` using the new minimal 9-region GIAB dataset in `--gtf` VEP mode, and migrate `annotate_mt_snvs`'s existing real test from the old large-genome fixtures to the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #984](https://github.com/nf-core/raredisease/pull/984)
 - Add a real (non-stub) test to `generate_cytosure_files` using the new minimal 9-region GIAB dataset, and migrate `call_sv_manta`'s existing real test to the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #986](https://github.com/nf-core/raredisease/pull/986)
 - Add a real (non-stub) test to `annotate_rhocallviz` using the new minimal 9-region GIAB dataset, and migrate `annotate_consequence_pli`'s real tests off the generic nf-core/modules VCF fixture onto a genuine VEP-CSQ-annotated VCF derived from the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #985](https://github.com/nf-core/raredisease/pull/985)
@@ -41,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Refactor the `then {}` blocks of the pipeline-level nf-tests (`default`, `test_align`, `test_align_singleton`, `test_sentieon`, `test_vcf`, `test_vcf_singleton`): assert `workflow.success` first, before any file parsing; use descriptive closure parameter names; drop the implicit `it` [PR #1015](https://github.com/nf-core/raredisease/pull/1016)
 - Add a `tests/lib/TestData.groovy` helper (`TestData.sample('ACC13778A2')`) and use it across the subworkflow nf-tests, replacing 124 repeated inline sample-meta literals [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1006](https://github.com/nf-core/raredisease/pull/1006)
 - Replace the repeated `setup { run("GET_CHROM_SIZES") {…} }` block in eight subworkflow nf-tests (`annotate_genome_snvs`, `annotate_rhocallviz`, `call_mt_snvs`, `call_snv`, `call_snv_deepvariant`, `call_snv_sentieon`, `call_sv_MT`, `postprocess_MT_calls`) with the pre-generated `subworkflow_fixtures/minimal_reference_chrom.sizes` fixture [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1007](https://github.com/nf-core/raredisease/pull/1007)
 - Add `alignment`/`reference_sliced`/`subworkflow_fixtures`/`resources_remapped`/`precalled` path-prefix params to `tests/nextflow.config` and use them across the subworkflow nf-tests, replacing ~560 repeated `params.pipelines_testdata_base_path + '<subdir>/…'` references [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1005](https://github.com/nf-core/raredisease/pull/1005)
@@ -103,6 +105,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed default glnexus config from `DeepVariant_unfiltered` to a custom config in `assets/` due to unfixed [bug](https://github.com/dnanexus-rnd/GLnexus/issues/286) [issue #960](https://github.com/nf-core/raredisease/issues/960) [PR #961](https://github.com/nf-core/raredisease/pull/961)
 - Updated tiddit/cov and tiddit/sv to v3.9.7 [PR #1001](https://github.com/nf-core/raredisease/pull/1001)
 - Updated vcf2cytosure to v0.10.0 [PR #1003](https://github.com/nf-core/raredisease/pull/1003)
+- Updated `deepvariant/rundeepvariant` to v1.10.0 [PR #1010](https://github.com/nf-core/raredisease/pull/1010)
 
 ### `Fixed`
 
@@ -150,6 +153,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | tiddit/sv                    | 3.9.5       | 3.9.7       |
 | tiddit/cov                   | 3.9.5       | 3.9.7       |
 | vcf2cytosure                 | 0.9.3       | 0.10.0      |
+| deepvariant                  | 1.9.0       | 1.10.0      |
 
 ## 3.1.2 - Princess Peach (patch) [2026-07-06]
 
