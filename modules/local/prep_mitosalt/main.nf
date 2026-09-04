@@ -68,12 +68,12 @@ process PREP_MITOSALT {
     echo "flank = ${flank}"                                       >> mitosalt_config.txt
     echo "split_distance_threshold = ${split_distance_threshold}" >> mitosalt_config.txt
     echo "dna = yes"                                              >> mitosalt_config.txt
-    echo "enriched = no"                                          >> mitosalt_config.txt
-    echo "nu_mt = yes"                                            >> mitosalt_config.txt
+    echo "enriched = yes"                                         >> mitosalt_config.txt
+    echo "nu_mt = no"                                             >> mitosalt_config.txt
     echo "rmtmp = no"                                             >> mitosalt_config.txt
     echo "o_mt = yes"                                             >> mitosalt_config.txt
     echo "i_del = yes"                                            >> mitosalt_config.txt
-    echo "cn_mt = yes"                                            >> mitosalt_config.txt
+    echo "cn_mt = no"                                             >> mitosalt_config.txt
     """
 
     stub:

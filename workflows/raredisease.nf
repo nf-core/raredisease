@@ -428,10 +428,12 @@ workflow RAREDISEASE {
             ch_mtshift_fasta,
             val_mt_aligner
         )
+        ch_mt_fastq                  = ALIGN_MITOCHONDRIA.out.mt_fastq
         ch_mt_bam_bai                = ALIGN_MITOCHONDRIA.out.mt_bam_bai
         ch_mt_bam_bai_gatksubwf      = ALIGN_MITOCHONDRIA.out.mt_bam_bai_gatksubwf
         ch_mtshift_bam_bai_gatksubwf = ALIGN_MITOCHONDRIA.out.mtshift_bam_bai_gatksubwf
     } else {
+        ch_mt_fastq                  = channel.empty()
         ch_mt_bam_bai                = channel.empty()
         ch_mt_bam_bai_gatksubwf      = channel.empty()
         ch_mtshift_bam_bai_gatksubwf = channel.empty()
@@ -788,7 +790,7 @@ workflow RAREDISEASE {
                 ch_mt_fai,
                 ch_mt_fasta,
                 ch_mt_lastdb,
-                ch_input_fastqs,
+                ch_mt_fastq,
                 ch_subdepth,
                 ch_svcaller_priority,
                 ch_mitosalt_config,

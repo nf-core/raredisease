@@ -103,6 +103,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update saltshaker modules to version 1.1.1 so they can run on empty mitosalt output [#856](https://github.com/nf-core/raredisease/pull/856)
 - Update metromap to reflect the addition of mitosalt + saltshaker and removal of eklipse [#892](https://github.com/nf-core/raredisease/pull/892)
 - Changed default glnexus config from `DeepVariant_unfiltered` to a custom config in `assets/` due to unfixed [bug](https://github.com/dnanexus-rnd/GLnexus/issues/286) [issue #960](https://github.com/nf-core/raredisease/issues/960) [PR #961](https://github.com/nf-core/raredisease/pull/961)
+- Change input file for mitosalt from genome-wide fastq to mitochondrial fastq [PR #967](https://github.com/nf-core/raredisease/pull/967)
 - Updated tiddit/cov and tiddit/sv to v3.9.7 [PR #1001](https://github.com/nf-core/raredisease/pull/1001)
 - Updated vcf2cytosure to v0.10.0 [PR #1003](https://github.com/nf-core/raredisease/pull/1003)
 - Updated `deepvariant/rundeepvariant` to v1.10.0 [PR #1010](https://github.com/nf-core/raredisease/pull/1010)
