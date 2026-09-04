@@ -13,6 +13,51 @@ nextflow_workflow {
 
     config "./nextflow.config"
 
+    test("GENS - male sample, minimal dataset") {
+
+        when {
+            params {
+                countreadcounts = "--interval-merging-rule OVERLAPPING_ONLY --format HDF5"
+            }
+            workflow {
+                """
+                input[0] = channel.of([
+                    ${TestData.sample('ACC13778A1')},
+                    file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
+                input[2] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[4] = channel.of(file(params.resources_remapped + '/gens/gens_gnomad_pos.txt.gz', checkIfExists: true))
+                input[5] = channel.of([
+                    ${TestData.sample('ACC13778A1')},
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz', checkIfExists: true)
+                ])
+                input[6] = channel.of([
+                    ${TestData.sample('ACC13778A1')},
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[7] = channel.of(file(params.resources_remapped + '/gens/gens_targets.interval_list', checkIfExists: true))
+                input[8] = channel.of([[id:'pon_female'], file(params.resources_remapped + '/gens/gens_pon.hdf5', checkIfExists: true)])
+                input[9] = channel.of([[id:'pon_male'], file(params.resources_remapped + '/gens/gens_pon.hdf5', checkIfExists: true)])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.gens_cov_bed_gz.collect { meta, bed -> [meta, file(bed).name, path(bed.toString()).linesGzip.sort()] },
+                    workflow.out.gens_baf_bed_gz.collect { meta, bed -> [meta, file(bed).name, path(bed.toString()).linesGzip.sort()] },
+                    workflow.out.gens_cov_bed_tbi.collect { meta, tbi -> [meta, file(tbi).name] },
+                    workflow.out.gens_baf_bed_tbi.collect { meta, tbi -> [meta, file(tbi).name] }
+                ).match() }
+            )
+        }
+    }
+
     test("GENS - male sample, stub") {
 
         options "-stub"
