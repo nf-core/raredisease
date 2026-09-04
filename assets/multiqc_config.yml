@@ -83,14 +83,21 @@ table_columns_placement:
   gatk_contamination:
     contamination_pct: 900
 
+fn_clean_sample_names: true
+
+fn_clean_exts:
+  - ".gz"
+  - ".fastq"
+  - ".tsv"
+  - ".txt"
+  - ".bam"
+
 extra_fn_clean_exts:
   - "_sorted_md"
   - "_contamination"
   - "_pileups"
   - "_mosdepth"
   - "_sorted"
-  - type: regex
-    pattern: "_LNUMBER[0-9]{1,}"
 
 table_sample_merge:
   "(R1)": "_1"
