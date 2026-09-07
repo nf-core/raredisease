@@ -1,4 +1,77 @@
 {
+    "CALL_SV_GERMLINECNVCALLER - minimal dataset": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "ACC13778A2",
+                        "sample": "ACC13778A2",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "lane": 1,
+                        "sex": 2,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "amusingmarmoset"
+                    },
+                    "ACC13778A2_genotyped_segments.vcf.gz",
+                    "92122f50bb6d77e530efddb07a764e21"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "amusingmarmoset"
+                    },
+                    "amusingmarmoset_gcnvcaller.vcf.gz",
+                    "7eb1c3422fdd2123ac839524e9d9d880"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "ACC13778A2",
+                        "sample": "ACC13778A2",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "lane": 1,
+                        "sex": 2,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "amusingmarmoset"
+                    },
+                    "ACC13778A2_genotyped_intervals.vcf.gz"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "ACC13778A2",
+                        "sample": "ACC13778A2",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "lane": 1,
+                        "sex": 2,
+                        "phenotype": 1,
+                        "paternal": 0,
+                        "maternal": 0,
+                        "case_id": "amusingmarmoset"
+                    },
+                    "ACC13778A2_denoised.vcf.gz"
+                ]
+            ]
+        ],
+        "timestamp": "2026-09-04T11:24:52.734647687",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
     "CALL_SV_GERMLINECNVCALLER - stub": {
         "content": [
             [

@@ -14,8 +14,68 @@ nextflow_workflow {
     tag "bcftools/view"
     tag "tabix/tabix"
     tag "svdb/merge"
+    tag "untar"
 
     config "./nextflow.config"
+
+    test("CALL_SV_GERMLINECNVCALLER - minimal dataset") {
+
+        setup {
+            run("UNTAR", alias: 'UNTAR_PLOIDY_MODEL') {
+                script "modules/nf-core/untar/main.nf"
+                process {
+                    """
+                    input[0] = [
+                        [id:'ploidy'],
+                        file(params.resources_remapped + '/gcnv/germlinecnvcaller_ploidy_model.tar.gz', checkIfExists: true)
+                    ]
+                    """
+                }
+            }
+            run("UNTAR", alias: 'UNTAR_GCNV_MODEL') {
+                script "modules/nf-core/untar/main.nf"
+                process {
+                    """
+                    input[0] = [
+                        [id:'gcnvcaller'],
+                        file(params.resources_remapped + '/gcnv/germlinecnvcaller_model.tar.gz', checkIfExists: true)
+                    ]
+                    """
+                }
+            }
+        }
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of(
+                    [${TestData.sample('ACC13778A2')},
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                )
+                input[1] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[2] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[3] = channel.of(file(params.resources_remapped + '/gcnv/gcnv_readcount.interval_list', checkIfExists: true)).collect()
+                input[4] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)).collect()
+                input[5] = UNTAR_PLOIDY_MODEL.out.untar.collect()
+                input[6] = UNTAR_GCNV_MODEL.out.untar
+                input[7] = channel.of([id:'amusingmarmoset'])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.genotyped_segments_vcf.collect { meta, vcf -> [meta, file(vcf).name, path(vcf.toString()).vcf.variantsMD5] },
+                    workflow.out.genotyped_filtered_segments_vcf.collect { meta, vcf -> [meta, file(vcf).name, path(vcf.toString()).vcf.variantsMD5] },
+                    workflow.out.genotyped_intervals_vcf.collect { meta, vcf -> [meta, file(vcf).name] },
+                    workflow.out.denoised_vcf.collect { meta, vcf -> [meta, file(vcf).name] }
+                ).match() }
+            )
+        }
+    }
 
     test("CALL_SV_GERMLINECNVCALLER - stub") {
 
