@@ -4,40 +4,40 @@
             {
                 "0": [
                     [
-                        "justhusky_tiddit.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
-                        "justhusky_manta.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
-                        "justhusky_cnvnator.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset_tiddit.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "amusingmarmoset_manta.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "amusingmarmoset_cnvnator.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "vcfs": [
                     [
-                        "justhusky_tiddit.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
-                        "justhusky_manta.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
-                        "justhusky_cnvnator.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset_tiddit.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "amusingmarmoset_manta.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                        "amusingmarmoset_cnvnator.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-08-05T14:05:26.640097496",
+        "timestamp": "2026-08-27T15:55:01.111772544",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     },
-    "CALL_SV - wgs": {
+    "CALL_SV - wgs, minimal dataset": {
         "content": [
             [
                 [
-                    "justhusky_tiddit.vcf.gz",
-                    "justhusky_manta.vcf.gz",
-                    "justhusky_cnvnator.vcf.gz"
+                    "amusingmarmoset_tiddit.vcf.gz",
+                    "amusingmarmoset_manta.vcf.gz",
+                    "amusingmarmoset_cnvnator.vcf.gz"
                 ]
             ]
         ],
-        "timestamp": "2026-08-05T14:04:51.471696423",
+        "timestamp": "2026-08-21T14:24:20.169277138",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     }
 }

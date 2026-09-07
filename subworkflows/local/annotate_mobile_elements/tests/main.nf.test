@@ -14,21 +14,7 @@ nextflow_workflow {
 
     config "./nextflow.config"
 
-    setup {
-        run("UNTAR") {
-            script "modules/nf-core/untar/main.nf"
-            process {
-                """
-                input[0] = channel.of([
-                    [id:'vep_cache'],
-                    file(params.pipelines_testdata_base_path + 'reference/vep_cache_and_plugins.tar.gz', checkIfExists: true)
-                ])
-                """
-            }
-        }
-    }
-
-    test("ANNOTATE_MOBILE_ELEMENTS - GRCh37") {
+    test("ANNOTATE_MOBILE_ELEMENTS - wgs, minimal dataset") {
 
         when {
             params {
@@ -36,20 +22,35 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
-                input[1] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[0] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
+                input[1] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[2] = channel.of([
-                    file(params.pipelines_testdata_base_path + 'reference/svdb_gnomad_genomes_sv-.vcf', checkIfExists: true),
+                    file(params.resources_remapped + '/svdb/grch38_gnomad.v4.1.sv.sites.no_cnv.remapped.vcf.gz', checkIfExists: true),
                     'AF',
                     'AC',
                     'gnomad_svAF',
                     'gnomad_svAC'
                 ])
-                input[3] = channel.of([[id:'earlycasualcaiman', "single_end": false], file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mobile_elements.vcf.gz', checkIfExists: true)])
-                input[4] = UNTAR.out.untar.map { _meta, untar -> untar }.collect()
-                input[5] = 'GRCh37'
-                input[6] = 107
-                input[7] = channel.value([])
+                input[3] = channel.of([[id:'amusingmarmoset', "single_end": false], file(params.subworkflow_fixtures + '/amusingmarmoset_mobile_elements.vcf.gz', checkIfExists: true)])
+                input[4] = channel.value([[:], []])
+                input[5] = 'GRCh38'
+                input[6] = 116
+                input[7] = [
+                                file(params.resources_remapped + '/vep_gtf/LoFtool.pm', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/pLI.pm', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/SpliceAI.pm', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/plugin_config.txt', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/LoFtool_scores.txt', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/pLI_values.txt', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/spliceai_snv.vcf.gz', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/spliceai_snv.vcf.gz.tbi', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/spliceai_indel.vcf.gz', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/spliceai_indel.vcf.gz.tbi', checkIfExists: true)
+                            ]
+                input[8] = channel.of(
+                                file(params.resources_remapped + '/vep_gtf/minimal_reference.sorted.gtf.gz', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/minimal_reference.sorted.gtf.gz.tbi', checkIfExists: true)
+                            ).collect()
                 """
             }
         }
@@ -65,7 +66,7 @@ nextflow_workflow {
         }
     }
 
-    test("ANNOTATE_MOBILE_ELEMENTS - GRCh37, stub") {
+    test("ANNOTATE_MOBILE_ELEMENTS - wgs, stub") {
 
         options "-stub"
 
@@ -75,20 +76,21 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.dict', checkIfExists: true)]).collect()
-                input[1] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
+                input[0] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
+                input[1] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[2] = channel.of([
-                    file(params.pipelines_testdata_base_path + 'reference/svdb_gnomad_genomes_sv-.vcf', checkIfExists: true),
+                    file(params.resources_remapped + '/svdb/grch38_gnomad.v4.1.sv.sites.no_cnv.remapped.vcf.gz', checkIfExists: true),
                     'AF',
                     'AC',
                     'gnomad_svAF',
                     'gnomad_svAC'
                 ])
-                input[3] = channel.of([[id:'earlycasualcaiman', "single_end": false], file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_mobile_elements.vcf.gz', checkIfExists: true)])
-                input[4] = UNTAR.out.untar.map { _meta, untar -> untar }.collect()
-                input[5] = 'GRCh37'
-                input[6] = 107
+                input[3] = channel.of([[id:'amusingmarmoset', "single_end": false], file(params.subworkflow_fixtures + '/amusingmarmoset_mobile_elements.vcf.gz', checkIfExists: true)])
+                input[4] = channel.value([[:], []])
+                input[5] = 'GRCh38'
+                input[6] = 116
                 input[7] = channel.value([])
+                input[8] = channel.value([[],[]])
                 """
             }
         }

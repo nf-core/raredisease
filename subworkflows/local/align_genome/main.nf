@@ -23,6 +23,7 @@ workflow ALIGN_GENOME {
         ch_input_reads                // channel: [optional] [ val(meta), [path(reads)]  ]
         skip_fastp                    // boolean
         val_aligner                   //  string:  'bwa', 'bwafastalign', 'bwamem2', 'bwameme', or 'sentieon'
+        val_duplicates_marker         // string:  'markduplicates' or 'fastdup', default: 'markduplicates'
         val_exclude_alt               // boolean
         val_extract_alignments        // boolean
         val_platform                  //  string:  [mandatory] illumina or a different technology
@@ -92,6 +93,7 @@ workflow ALIGN_GENOME {
                 ch_genome_fasta,
                 ch_input_reads,
                 val_aligner,
+                val_duplicates_marker,
                 val_extract_alignments,
                 val_platform
             )

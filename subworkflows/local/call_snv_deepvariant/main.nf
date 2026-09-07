@@ -80,9 +80,9 @@ workflow CALL_SNV_DEEPVARIANT {
         BCFTOOLS_ANNOTATE(ch_annotate_in)
 
     emit:
-        deepvariant_report = DEEPVARIANT.out.report    // channel: [ val(meta), path(html) ]
-        gvcf               = DEEPVARIANT.out.gvcf      // channel: [ val(meta), path(gvcf)]
-        gvcf_tabix         = DEEPVARIANT.out.gvcf_tbi  // channel: [ val(meta), path(gvcf_tbi)]
-        tabix              = BCFTOOLS_ANNOTATE.out.tbi // channel: [ val(meta), path(tbi) ]
-        vcf                = BCFTOOLS_ANNOTATE.out.vcf // channel: [ val(meta), path(vcf) ]
+        deepvariant_report = DEEPVARIANT.out.report     // channel: [ val(meta), path(html) ]
+        gvcf               = DEEPVARIANT.out.gvcf       // channel: [ val(meta), path(gvcf)]
+        gvcf_tabix         = DEEPVARIANT.out.gvcf_index // channel: [ val(meta), path(gvcf_tbi)]
+        tabix              = BCFTOOLS_ANNOTATE.out.tbi  // channel: [ val(meta), path(tbi) ]
+        vcf                = BCFTOOLS_ANNOTATE.out.vcf  // channel: [ val(meta), path(vcf) ]
 }

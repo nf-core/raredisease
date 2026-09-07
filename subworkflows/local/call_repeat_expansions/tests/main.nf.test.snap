@@ -5,133 +5,133 @@
                 "0": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_exphunter_sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A2_exphunter_sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "1": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_exphunter_sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A2_exphunter_sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "2": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_repeat_expansion.vcf:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A2_repeat_expansion.vcf:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "3": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
-                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "expansionhunter_bai": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_exphunter_sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A2_exphunter_sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "expansionhunter_bam": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_exphunter_sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A2_exphunter_sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "expansionhunter_vcf": [
                     [
                         {
-                            "id": "earlycasualcaiman",
-                            "sample": "earlycasualcaiman",
+                            "id": "ACC13778A2",
+                            "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 1,
+                            "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "justhusky"
+                            "case_id": "amusingmarmoset"
                         },
-                        "earlycasualcaiman_repeat_expansion.vcf:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "ACC13778A2_repeat_expansion.vcf:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "vcf": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
-                        "justhusky.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-06-26T00:25:14.58580944",
+        "timestamp": "2026-08-24T21:13:24.107073115",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     },
     "CALL_REPEAT_EXPANSIONS": {
@@ -139,34 +139,34 @@
             [
                 [
                     {
-                        "id": "earlycasualcaiman",
-                        "sample": "earlycasualcaiman",
+                        "id": "ACC13778A2",
+                        "sample": "ACC13778A2",
                         "single_end": false,
                         "num_lanes": 1,
-                        "read_group": "'@RG\\tID:earlycasualcaiman\\tPL:illumina\\tSM:earlycasualcaiman'",
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                         "lane": 1,
-                        "sex": 1,
+                        "sex": 2,
                         "phenotype": 1,
                         "paternal": 0,
                         "maternal": 0,
-                        "case_id": "justhusky"
+                        "case_id": "amusingmarmoset"
                     },
-                    "79adf682f13384ba13be973a64e2db48"
+                    "403b083e5ee8bc143b81b36980058e27"
                 ]
             ],
             [
-                "earlycasualcaiman_exphunter_sorted.bam.bai"
+                "ACC13778A2_exphunter_sorted.bam.bai"
             ],
             [
-                "earlycasualcaiman_repeat_expansion.vcf"
+                "ACC13778A2_repeat_expansion.vcf"
             ],
-            "5f06dccb7fc4ad3758bc23e3232f9abb",
-            "VcfFile [chromosomes=[21], sampleCount=1, variantCount=2, phased=false, phasedAutodetect=false]"
+            "545167fc7911c7f2de251b30d236f77e",
+            "VcfFile [chromosomes=[chrX, chr16, chr21, chr12, chr20], sampleCount=1, variantCount=7, phased=false, phasedAutodetect=false]"
         ],
-        "timestamp": "2026-06-26T00:35:51.559219111",
+        "timestamp": "2026-08-24T21:12:56.729555871",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     }
 }

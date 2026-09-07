@@ -4,64 +4,80 @@
             [
                 [
                     {
-                        "id": "slowlycivilbuck",
-                        "sample": "slowlycivilbuck",
+                        "id": "ACC13778A2",
+                        "sample": "ACC13778A2",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "lane": 1,
                         "sex": 2,
                         "phenotype": 1,
                         "paternal": 0,
                         "maternal": 0,
-                        "case_id": "justhusky"
+                        "case_id": "amusingmarmoset"
                     },
-                    "slowlycivilbuck_gens.baf.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    "ACC13778A2_gens.baf.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                 ]
             ],
             [
                 [
                     {
-                        "id": "slowlycivilbuck",
-                        "sample": "slowlycivilbuck",
+                        "id": "ACC13778A2",
+                        "sample": "ACC13778A2",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "lane": 1,
                         "sex": 2,
                         "phenotype": 1,
                         "paternal": 0,
                         "maternal": 0,
-                        "case_id": "justhusky"
+                        "case_id": "amusingmarmoset"
                     },
-                    "slowlycivilbuck_gens.baf.bed.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    "ACC13778A2_gens.baf.bed.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ]
             ],
             [
                 [
                     {
-                        "id": "slowlycivilbuck",
-                        "sample": "slowlycivilbuck",
+                        "id": "ACC13778A2",
+                        "sample": "ACC13778A2",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "lane": 1,
                         "sex": 2,
                         "phenotype": 1,
                         "paternal": 0,
                         "maternal": 0,
-                        "case_id": "justhusky"
+                        "case_id": "amusingmarmoset"
                     },
-                    "slowlycivilbuck_gens.cov.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    "ACC13778A2_gens.cov.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                 ]
             ],
             [
                 [
                     {
-                        "id": "slowlycivilbuck",
-                        "sample": "slowlycivilbuck",
+                        "id": "ACC13778A2",
+                        "sample": "ACC13778A2",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "lane": 1,
                         "sex": 2,
                         "phenotype": 1,
                         "paternal": 0,
                         "maternal": 0,
-                        "case_id": "justhusky"
+                        "case_id": "amusingmarmoset"
                     },
-                    "slowlycivilbuck_gens.cov.bed.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    "ACC13778A2_gens.cov.bed.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ]
             ]
         ],
-        "timestamp": "2026-03-17T11:26:00.382738988",
+        "timestamp": "2026-08-28T14:23:42.370440924",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     },
     "GENS - male sample, stub": {
@@ -69,64 +85,80 @@
             [
                 [
                     {
-                        "id": "earlycasualcaiman",
-                        "sample": "earlycasualcaiman",
+                        "id": "ACC13778A1",
+                        "sample": "ACC13778A1",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "lane": 1,
                         "sex": 1,
-                        "phenotype": 1,
-                        "paternal": 0,
-                        "maternal": 0,
-                        "case_id": "justhusky"
+                        "phenotype": 2,
+                        "paternal": "ACC13778A3",
+                        "maternal": "ACC13778A2",
+                        "case_id": "amusingmarmoset"
                     },
-                    "earlycasualcaiman_gens.baf.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    "ACC13778A1_gens.baf.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                 ]
             ],
             [
                 [
                     {
-                        "id": "earlycasualcaiman",
-                        "sample": "earlycasualcaiman",
+                        "id": "ACC13778A1",
+                        "sample": "ACC13778A1",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "lane": 1,
                         "sex": 1,
-                        "phenotype": 1,
-                        "paternal": 0,
-                        "maternal": 0,
-                        "case_id": "justhusky"
+                        "phenotype": 2,
+                        "paternal": "ACC13778A3",
+                        "maternal": "ACC13778A2",
+                        "case_id": "amusingmarmoset"
                     },
-                    "earlycasualcaiman_gens.baf.bed.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    "ACC13778A1_gens.baf.bed.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ]
             ],
             [
                 [
                     {
-                        "id": "earlycasualcaiman",
-                        "sample": "earlycasualcaiman",
+                        "id": "ACC13778A1",
+                        "sample": "ACC13778A1",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "lane": 1,
                         "sex": 1,
-                        "phenotype": 1,
-                        "paternal": 0,
-                        "maternal": 0,
-                        "case_id": "justhusky"
+                        "phenotype": 2,
+                        "paternal": "ACC13778A3",
+                        "maternal": "ACC13778A2",
+                        "case_id": "amusingmarmoset"
                     },
-                    "earlycasualcaiman_gens.cov.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    "ACC13778A1_gens.cov.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                 ]
             ],
             [
                 [
                     {
-                        "id": "earlycasualcaiman",
-                        "sample": "earlycasualcaiman",
+                        "id": "ACC13778A1",
+                        "sample": "ACC13778A1",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "lane": 1,
                         "sex": 1,
-                        "phenotype": 1,
-                        "paternal": 0,
-                        "maternal": 0,
-                        "case_id": "justhusky"
+                        "phenotype": 2,
+                        "paternal": "ACC13778A3",
+                        "maternal": "ACC13778A2",
+                        "case_id": "amusingmarmoset"
                     },
-                    "earlycasualcaiman_gens.cov.bed.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    "ACC13778A1_gens.cov.bed.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ]
             ]
         ],
-        "timestamp": "2026-03-17T11:25:27.677483077",
+        "timestamp": "2026-08-28T14:23:07.390166302",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     }
 }
