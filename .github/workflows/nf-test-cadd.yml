@@ -27,14 +27,19 @@ permissions:
 env:
   NFT_VER: "0.9.4"
   NFT_WORKDIR: "~"
-  NXF_VER: "25.10.4"
   NXF_ANSI_LOG: false
   TEST_FILE: "subworkflows/local/annotate_cadd/tests/cadd_scoring.nf.test"
 
 jobs:
   nf-test-cadd:
-    name: "cadd_scoring"
+    name: "cadd_scoring | ${{ matrix.NXF_VER }}"
     runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        NXF_VER:
+          - "25.10.4"
+          - "latest-everything"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -46,7 +51,7 @@ jobs:
       - name: Setup Nextflow
         uses: nf-core/setup-nextflow@893c28b667aedeba26e37f296d260ccc5bc4d914 # v3
         with:
-          version: "${{ env.NXF_VER }}"
+          version: "${{ matrix.NXF_VER }}"
 
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
@@ -63,6 +68,9 @@ jobs:
           install-pdiff: true
 
       - name: Run nf-test
+        continue-on-error: ${{ matrix.NXF_VER == 'latest-everything' }}
+        env:
+          NXF_VERSION: ${{ matrix.NXF_VER }}
         run: |
           nf-test test "${TEST_FILE}" \
             -c tests/nf-test-cadd.config \
