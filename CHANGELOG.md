@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add a real (non-stub) test to `gens` using the minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1017](https://github.com/nf-core/raredisease/pull/1017)
+- Add a real (non-stub) test to `call_sv_germlinecnvcaller` using the minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1017](https://github.com/nf-core/raredisease/pull/1017)
 - Convert the `test_singleton` pipeline test from a stub run to a real (non-stub) run, and set the optional `customer_id` column in its samplesheet fixture so it exercises the VCF2CYTOSURE output-rename / SV-VCF header-reheader branch and SaltShaker report labelling that replaced the removed `sample_id_map` [issue #860](https://github.com/nf-core/raredisease/issues/860) [PR #1009](https://github.com/nf-core/raredisease/pull/1009)
 - Add a real (non-stub) test to `annotate_genome_snvs` using the new minimal 9-region GIAB dataset in `--gtf` VEP mode, and migrate `annotate_mt_snvs`'s existing real test from the old large-genome fixtures to the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #984](https://github.com/nf-core/raredisease/pull/984)
 - Add a real (non-stub) test to `generate_cytosure_files` using the new minimal 9-region GIAB dataset, and migrate `call_sv_manta`'s existing real test to the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #986](https://github.com/nf-core/raredisease/pull/986)
