@@ -72,11 +72,12 @@ nextflow_workflow {
                 )
                 input[9]  = false
                 input[10] = "bwamem2"
-                input[11] = true
-                input[12] = false
-                input[13] = "illumina"
-                input[14] = true
+                input[11] = "markduplicates"
+                input[12] = true
+                input[13] = false
+                input[14] = "illumina"
                 input[15] = true
+                input[16] = true
                 """
             }
         }
@@ -155,11 +156,12 @@ nextflow_workflow {
                 )
                 input[9]  = false
                 input[10] = "bwamem2"
-                input[11] = false
+                input[11] = "markduplicates"
                 input[12] = false
-                input[13] = "illumina"
-                input[14] = true
-                input[15] = false
+                input[13] = false
+                input[14] = "illumina"
+                input[15] = true
+                input[16] = false
                 """
             }
         }
@@ -229,11 +231,12 @@ nextflow_workflow {
                 ])
                 input[9]  = true
                 input[10] = "bwameme"
-                input[11] = false
+                input[11] = "markduplicates"
                 input[12] = false
-                input[13] = "illumina"
-                input[14] = true
-                input[15] = false
+                input[13] = false
+                input[14] = "illumina"
+                input[15] = true
+                input[16] = false
                 """
             }
         }
@@ -307,11 +310,12 @@ nextflow_workflow {
                 ])
                 input[9]  = true
                 input[10] = "bwameme"
-                input[11] = false
+                input[11] = "markduplicates"
                 input[12] = false
-                input[13] = "illumina"
-                input[14] = true
-                input[15] = false
+                input[13] = false
+                input[14] = "illumina"
+                input[15] = true
+                input[16] = false
                 """
             }
         }

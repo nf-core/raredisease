@@ -5,41 +5,57 @@
                 "0": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
-                        "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "amusingmarmoset_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "1": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
-                        "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "tbi": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
-                        "justhusky_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "amusingmarmoset_mitochondria.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "vcf": [
                     [
                         {
-                            "id": "justhusky"
+                            "id": "amusingmarmoset"
                         },
-                        "justhusky_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "amusingmarmoset_mitochondria.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ]
             }
         ],
-        "timestamp": "2026-05-29T16:03:50.71832229",
+        "timestamp": "2026-08-27T15:25:35.163514169",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
+        }
+    },
+    "POSTPROCESS_MT_CALLS - wgs, minimal dataset": {
+        "content": [
+            "9cc00828765c79666f327efe3b071ca",
+            [
+                "amusingmarmoset_mitochondria.vcf.gz"
+            ],
+            [
+                "amusingmarmoset_mitochondria.vcf.gz.tbi"
+            ]
+        ],
+        "timestamp": "2026-08-24T15:32:53.157357124",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     }
 }

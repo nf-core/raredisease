@@ -3,14 +3,14 @@ Changes in component 'nf-core/deepvariant/rundeepvariant'
 Changes in 'deepvariant/rundeepvariant/main.nf':
 --- modules/nf-core/deepvariant/rundeepvariant/main.nf
 +++ modules/nf-core/deepvariant/rundeepvariant/main.nf
-@@ -46,7 +46,12 @@
+@@ -49,7 +49,12 @@
          ${regions} \\
          ${par_regions} \\
          --intermediate_results_dir=tmp \\
 -        --num_shards=${task.cpus}
 +        --num_shards=${task.cpus} 2>&1 | tee deepvariant.log
 +    
-+    if grep -qi "queue\.Empty" deepvariant.log; then
++    if grep -qi "queue\\.Empty\\|BrokenPipeError" deepvariant.log; then
 +        echo "ERROR: Fatal error detected in tool log" >&2
 +        exit 1
 +    fi

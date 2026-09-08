@@ -21,11 +21,10 @@ workflow CALL_SV_MT {
         ch_genome_chrsizes                    // channel: [mandatory] [ path(chrsizes) ]
         ch_genome_fai                         // channel: [mandatory] [ val(meta), path(genomefai) ]
         ch_genome_fasta                       // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_hisat2index                 // channel: [mandatory] [ val(meta), path(hisat2index) ]
         ch_mt_fai                             // channel: [mandatory] [ val(meta), path(mtfai) ]
         ch_mt_fasta                           // channel: [mandatory] [ val(meta), path(mtfasta) ]
         ch_mt_lastdb                          // channel: [mandatory] [ val(meta), path(lastindex) ]
-        ch_reads                              // channel: [mandatory] [ val(meta), [path(reads)] ]
+        ch_mt_fastq                           // channel: [mandatory] [ val(meta), [path(fastq)] ]
         ch_subdepth                           // channel: [mandatory] [ val(mitosalt_depth) ]
         ch_svcaller_priority                  // channel: [mandatory] [ val(["var caller tag 1", ...]) ]
         ch_mitosalt_config                    // channel: [mandatory] [val(mitosalt_breakspan),val(mitosalt_breakthreshold),...,val(mitosalt_split_length)]
@@ -45,33 +44,13 @@ workflow CALL_SV_MT {
         ch_saltshaker_plot  = channel.empty()
 
         if (!skip_mitosalt) {
-            ch_cat_fastq = ch_reads
-                .map { meta, reads ->
-                        def sample_group_key = meta.sample
-                        return [sample_group_key, meta, reads]
-                }
-                .groupTuple()
-                .map { sample_id, meta_list, reads_list ->
-                    def combined_meta = meta_list[0].clone()
-                    combined_meta.id = sample_id
-                    combined_meta.remove('lane')
-                    combined_meta.remove('read_group')
 
-                    def all_reads = reads_list.flatten()
-
-                    [combined_meta, all_reads]
-                }
-
-            CAT_FASTQ(ch_cat_fastq)
-
-            ch_reads_subdepth = CAT_FASTQ.out.reads.combine(ch_subdepth)
-
+            ch_reads_subdepth = ch_mt_fastq.combine(ch_subdepth)
             SEQTK_SAMPLE(ch_reads_subdepth)
 
             PREP_MITOSALT(
                 ch_genome_chrsizes,
                 ch_genome_fai,
-                ch_genome_hisat2index,
                 ch_mitosalt_config,
                 ch_mt_fai,
                 ch_mt_fasta,
@@ -87,7 +66,6 @@ workflow CALL_SV_MT {
                 ch_prepmitosalt_config,
                 ch_genome_chrsizes,
                 ch_genome_fai,
-                ch_genome_hisat2index,
                 ch_mt_fai,
                 ch_mt_fasta,
                 ch_mt_lastdb

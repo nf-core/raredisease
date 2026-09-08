@@ -74,7 +74,6 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
     - [Mobile element analysis](#mobile-element-analysis)
       - [Calling mobile elements](#calling-mobile-elements)
       - [Annotating mobile elements](#annotating-mobile-elements)
-    - [Variant evaluation](#variant-evaluation)
     - [Gens](#gens)
     - [Peddy](#peddy)
     - [Pedigree](#pedigree)
@@ -606,33 +605,6 @@ The mobile elements are annotated with allele frequencies and allele counts usin
 
 </details>
 
-### Variant evaluation
-
-Provided a truth set, SNVs can be evaluated using RTG Tools' vcfeval engine. Output files generated are listed below with a short description, but if you'd like to know more about what's in each of the files, refer to RTG Tools documentation [here](https://www.animalgenome.org/bioinfo/resources/manuals/RTGOperationsManual.pdf).
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `rtgvcfeval/`
-  - `<sample_id>_vcfeval.fn.vcf.gz`: contains variants from the baseline VCF which were not correctly called.
-  - `<sample_id>_vcfeval.fn.vcf.gz.tbi`: index of the \*fn.vcf file
-  - `<sample_id>_vcfeval.fp.vcf.gz`: contains variants from the calls VCF which do not agree with baseline variants.
-  - `<sample_id>_vcfeval.fp.vcf.gz.tbi`: index of the \*fp.vcf file
-  - `<sample_id>_vcfeval.non_snp_roc.tsv.gz`: contains ROC data derived from those variants which were not represented as
-    SNPs.
-  - `<sample_id>_vcfeval.phasing.txt`: containing the data on the phasing
-  - `<sample_id>_vcfeval.snp_roc.tsv.gz`: contains ROC data derived from only those variants which were represented as SNPs.
-  - `<sample_id>_vcfeval.summary.txt`: contains the match summary statistics printed to standard output.
-  - `<sample_id>_vcfeval.tp-baseline.vcf.gz`: contains those variants from the baseline VCF which agree with variants in the
-    calls VCF.
-  - `<sample_id>_vcfeval.tp-baseline.vcf.gz.tbi`: index of the \*tp-baseline.vcf file
-  - `<sample_id>_vcfeval.tp.vcf.gz`: contains those variants from the calls VCF which agree with variants in the baseline VCF
-  - `<sample_id>_vcfeval.tp.vcf.gz.tbi`: index of the \*tp.vcf file
-  - `<sample_id>_vcfeval.weighted_roc.tsv.gz`: contains ROC data derived from all analyzed call variants, regardless of their
-    representation.
-
-</details>
-
 ### Gens
 
 The sequencing data can be prepared for visualization of CNVs in [Gens](https://github.com/Clinical-Genomics-Lund/gens). You can turn it off by supplying the option `--skip_tools gens`. You can read more about how to setup Gens [here](https://github.com/Clinical-Genomics-Lund/gens).
@@ -683,7 +655,7 @@ The pipeline generates a PED file from the input samplesheet using an internal h
 
 ### Pipeline information
 
-[Nextflow](https://www.nextflow.io/docs/latest/tracing.html) provides excellent functionality for generating various reports relevant to the running and execution of the pipeline. This will allow you to troubleshoot errors with the running of the pipeline, and also provide you with other information such as launch commands, run times and resource usage.
+[Nextflow](https://docs.seqera.io/platform-cloud/reports/overview) provides excellent functionality for generating various reports relevant to the running and execution of the pipeline. This will allow you to troubleshoot errors with the running of the pipeline, and also provide you with other information such as launch commands, run times and resource usage.
 
 <details markdown="1">
 <summary>Output files</summary>

@@ -2,86 +2,86 @@
     "CONTAMINATION - gatk only - stub": {
         "content": [
             [
-                "test.contamination.table"
+                "ACC13778A2.contamination.table"
             ],
             [
-                "test.pileups.table"
+                "ACC13778A2.pileups.table"
             ],
             0
         ],
-        "timestamp": "2026-07-09T14:31:05.273772864",
+        "timestamp": "2026-08-24T21:25:27.489816988",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     },
     "CONTAMINATION - gatk only - real, WES with intervals": {
         "content": [
             [
-                "test.contamination.table"
+                "ACC13778A2.contamination.table"
             ],
             [
-                "test.pileups.table"
+                "ACC13778A2.pileups.table"
             ],
             0
         ],
-        "timestamp": "2026-07-16T13:16:10.526914689",
+        "timestamp": "2026-08-24T21:27:07.199802959",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     },
     "CONTAMINATION - gatk only - real, WGS no intervals": {
         "content": [
             [
-                "test.contamination.table"
+                "ACC13778A2.contamination.table"
             ],
             [
-                "test.pileups.table"
+                "ACC13778A2.pileups.table"
             ],
             0
         ],
-        "timestamp": "2026-07-16T13:15:31.156781331",
+        "timestamp": "2026-08-24T21:26:32.0838327",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     },
     "CONTAMINATION - verifybamid only - stub": {
         "content": [
             [
-                "test.selfSM"
+                "ACC13778A2.selfSM"
             ],
             [
-                "test.log"
+                "ACC13778A2.log"
             ],
             0
         ],
-        "timestamp": "2026-07-09T14:30:30.92194731",
+        "timestamp": "2026-08-24T21:24:56.555695007",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     },
     "CONTAMINATION - both - stub": {
         "content": [
             [
-                "test.selfSM"
+                "ACC13778A2.selfSM"
             ],
             [
-                "test.log"
+                "ACC13778A2.log"
             ],
             [
-                "test.contamination.table"
+                "ACC13778A2.contamination.table"
             ],
             [
-                "test.pileups.table"
+                "ACC13778A2.pileups.table"
             ]
         ],
-        "timestamp": "2026-07-09T14:31:36.069989905",
+        "timestamp": "2026-08-24T21:25:54.878311636",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.6"
         }
     }
 }

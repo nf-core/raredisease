@@ -24,8 +24,7 @@ Table of contents:
       - [9. Mitochondrial annotation](#9-mitochondrial-annotation)
       - [10. Mobile element calling](#10-mobile-element-calling)
       - [11. Mobile element annotation](#11-mobile-element-annotation)
-      - [12. Variant evaluation](#12-variant-evaluation)
-      - [13. Prepare data for CNV visualisation in Gens](#13-prepare-data-for-cnv-visualisation-in-gens)
+      - [12. Prepare data for CNV visualisation in Gens](#12-prepare-data-for-cnv-visualisation-in-gens)
     - [Run the pipeline](#run-the-pipeline)
       - [Direct input in CLI](#direct-input-in-cli)
       - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
@@ -270,6 +269,7 @@ The mandatory and optional parameters for each category are tabulated below.
 |                                | extract_alignments              |
 |                                | restrict_to_contigs<sup>7</sup> |
 |                                | exclude_alt<sup>8</sup>         |
+|                                | duplicates_marker<sup>9</sup>   |
 
 <sup>1</sup>Default value is bwamem2. Other alternatives are bwa, bwameme and sentieon (requires valid Sentieon license ).<br />
 <sup>2</sup>Analysis set reference genome in fasta format, first 25 contigs need to be chromosome 1-22, X, Y and the mitochondria.<br />
@@ -279,6 +279,7 @@ The mandatory and optional parameters for each category are tabulated below.
 <sup>6</sup>Default value is 40. Used only by fastp.<br />
 <sup>7</sup>Used to limit your analysis to specific contigs. Can be used to remove alignments to unplaced contigs to minimize potential errors. This parameter should be used in conjunction with the `extract_alignments` parameter.<br />
 <sup>8</sup>When set to true, alignments to alt/unplaced contigs are removed after alignment using samtools view, retaining only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM). Note that this will affect all downstream variant calling, as variants will only be called on these primary chromosomes.<br />
+<sup>9</sup>Default value is "markduplicates". Other alternative is "fastdup".<br />
 
 ### BAM QC metrics tool
 
@@ -444,17 +445,7 @@ Mitochondrial analysis runs automatically for `wgs` and `mito` analysis types. F
 
 <sup>1</sup> A CSV file that describes the databases (VCFs) used by SVDB for annotating mobile elements with allele frequencies. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv).
 
-##### 12. Variant evaluation
-
-| Mandatory                  | Optional |
-| -------------------------- | -------- |
-| run_rtgvcfeval<sup>1</sup> | sdf      |
-| rtg_truthvcfs<sup>2</sup>  |          |
-
-<sup>1</sup> This parameter is set to false by default, set it to true if if you'd like to run the evaluation subworkflow
-<sup>2</sup> A CSV file that describes the truth VCF files used by RTG Tools' vcfeval for evaluating SNVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rtg_example.csv). The file contains four columns `samplename,vcf,bedregions,evaluationregions` where samplename is the user assigned samplename in the input samplesheet, vcf is the path to the truth vcf file, bedregions and evaluationregions are the path to the bed files that are supposed to be passed through --bed_regions and --evaluation_regions options of vcfeval.
-
-##### 13. Prepare data for CNV visualisation in Gens
+##### 12. Prepare data for CNV visualisation in Gens
 
 Optionally the read data can be prepared for CNV visualization in [Gens](https://github.com/Clinical-Genomics-Lund/gens). You can turn it off it by supplying the option `--skip_tools gens`.
 
@@ -581,7 +572,7 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
 - `apptainer`
   - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
 - `wave`
-  - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow ` 24.03.0-edge` or later).
+  - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow `24.03.0-edge` or later).
 - `conda`
   - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
 

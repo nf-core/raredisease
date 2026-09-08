@@ -66,7 +66,7 @@ include { PREPARE_REFERENCES                                          } from '..
 include { QC_BAM                                                      } from '../subworkflows/local/qc_bam'
 include { SUBSAMPLE_MT_FRAC                                           } from '../subworkflows/local/subsample_mt_frac'
 include { SUBSAMPLE_MT_READS                                          } from '../subworkflows/local/subsample_mt_reads'
-include { VARIANT_EVALUATION                                          } from '../subworkflows/local/variant_evaluation'
+include { VCF_EXTRACT_RELATE_SOMALIER                                 } from '../subworkflows/nf-core/vcf_extract_relate_somalier'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,11 +97,11 @@ workflow RAREDISEASE {
     ch_genome_dictionary
     ch_genome_fai
     ch_genome_fasta
-    ch_genome_hisat2index
     ch_gens_gnomad_pos
     ch_gens_interval_list
     ch_gens_pon_female
     ch_gens_pon_male
+    ch_glnexus_config
     ch_gnomad_af
     ch_hgnc_ids
     ch_intervals_contamination
@@ -133,14 +133,12 @@ workflow RAREDISEASE {
     ch_readcount_intervals
     ch_reads
     ch_reduced_penetrance
-    ch_rtg_truthvcfs
     ch_sambamba_bed
     ch_samples
     ch_scatter_genome_split_intervals
     ch_score_config_mt
     ch_score_config_snv
     ch_score_config_sv
-    ch_sdf
     ch_sentieon_pcr_indel_model
     ch_subdepth
     ch_svcaller_priority
@@ -161,6 +159,7 @@ workflow RAREDISEASE {
     ch_vcfanno_toml
     ch_vep_cache
     ch_vep_extra_files
+    ch_vep_gtf
     ch_versions
     skip_fastp
     skip_fastqc
@@ -182,6 +181,7 @@ workflow RAREDISEASE {
     skip_smncopynumbercaller
     skip_snv_annotation
     skip_snv_calling
+    skip_somalier
     skip_sv_annotation
     skip_sv_calling
     skip_vcf2cytosure
@@ -190,6 +190,7 @@ workflow RAREDISEASE {
     val_analysis_type
     val_cadd_resources
     val_concatenate_snv_calls
+    val_duplicates_marker
     val_exclude_alt
     val_extract_alignments
     val_genome
@@ -231,7 +232,6 @@ workflow RAREDISEASE {
     val_platform
     val_qc_metrics_tool
     val_run_mt
-    val_run_rtgvcfeval
     val_run_vcfanno_db_sanity_check
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
@@ -306,19 +306,6 @@ workflow RAREDISEASE {
     ch_rank_mt_vcf                            = channel.empty()
     ch_rank_sv_tbi                            = channel.empty()
     ch_rank_sv_vcf                            = channel.empty()
-    ch_variant_evaluation_baseline_tbi        = channel.empty()
-    ch_variant_evaluation_baseline_vcf        = channel.empty()
-    ch_variant_evaluation_false_negatives_tbi = channel.empty()
-    ch_variant_evaluation_false_negatives_vcf = channel.empty()
-    ch_variant_evaluation_false_positives_tbi = channel.empty()
-    ch_variant_evaluation_false_positives_vcf = channel.empty()
-    ch_variant_evaluation_non_snp_roc         = channel.empty()
-    ch_variant_evaluation_phasing             = channel.empty()
-    ch_variant_evaluation_snp_roc             = channel.empty()
-    ch_variant_evaluation_summary             = channel.empty()
-    ch_variant_evaluation_true_positives_tbi  = channel.empty()
-    ch_variant_evaluation_true_positives_vcf  = channel.empty()
-    ch_variant_evaluation_weighted_roc        = channel.empty()
 
     //
     // Precalled VCFs supplied in the samplesheet, split out per variant type
@@ -408,6 +395,7 @@ workflow RAREDISEASE {
         ch_input_fastqs,
         skip_fastp,
         val_aligner,
+        val_duplicates_marker,
         val_exclude_alt,
         val_extract_alignments,
         val_platform,
@@ -439,10 +427,12 @@ workflow RAREDISEASE {
             ch_mtshift_fasta,
             val_mt_aligner
         )
+        ch_mt_fastq                  = ALIGN_MITOCHONDRIA.out.mt_fastq
         ch_mt_bam_bai                = ALIGN_MITOCHONDRIA.out.mt_bam_bai
         ch_mt_bam_bai_gatksubwf      = ALIGN_MITOCHONDRIA.out.mt_bam_bai_gatksubwf
         ch_mtshift_bam_bai_gatksubwf = ALIGN_MITOCHONDRIA.out.mtshift_bam_bai_gatksubwf
     } else {
+        ch_mt_fastq                  = channel.empty()
         ch_mt_bam_bai                = channel.empty()
         ch_mt_bam_bai_gatksubwf      = channel.empty()
         ch_mtshift_bam_bai_gatksubwf = channel.empty()
@@ -578,13 +568,14 @@ workflow RAREDISEASE {
             ch_genome_chrsizes,
             ch_genome_fasta,
             ch_genome_fai,
+            ch_glnexus_config,
             ch_ml_model,
             ch_par_bed,
             ch_sentieon_pcr_indel_model,
             ch_target_bed,
             val_analysis_type,
             val_skip_split_multiallelics,
-            val_variant_caller
+            val_variant_caller,
         )
         ch_call_snv_deepvariant_report  = CALL_SNV.out.deepvariant_report
         ch_call_snv_genome_tabix        = CALL_SNV.out.genome_tabix
@@ -627,6 +618,7 @@ workflow RAREDISEASE {
             ch_vcfanno_toml_final,
             ch_vep_cache,
             ch_vep_extra_files,
+            ch_vep_gtf,
             val_analysis_type,
             val_cadd_resources,
             val_genome,
@@ -716,6 +708,7 @@ workflow RAREDISEASE {
             ch_vcfanno_toml_final,
             ch_vep_cache,
             ch_vep_extra_files,
+            ch_vep_gtf,
             val_cadd_resources,
             val_genome,
             val_homoplasmy_af_threshold,
@@ -792,11 +785,10 @@ workflow RAREDISEASE {
                 ch_genome_chrsizes,
                 ch_genome_fai,
                 ch_genome_fasta,
-                ch_genome_hisat2index,
                 ch_mt_fai,
                 ch_mt_fasta,
                 ch_mt_lastdb,
-                ch_input_fastqs,
+                ch_mt_fastq,
                 ch_subdepth,
                 ch_svcaller_priority,
                 ch_mitosalt_config,
@@ -862,6 +854,7 @@ workflow RAREDISEASE {
             ch_call_sv_vcf,
             ch_vep_cache,
             ch_vep_extra_files,
+            ch_vep_gtf,
             val_svdb_query_bedpedbs,
             val_svdb_query_dbs,
             val_genome,
@@ -924,7 +917,8 @@ workflow RAREDISEASE {
             ch_vep_cache,
             val_genome,
             val_vep_cache_version,
-            ch_vep_extra_files
+            ch_vep_extra_files,
+            ch_vep_gtf
         )
 
         FILTER_ANNOTATE_RANK_ME(
@@ -978,10 +972,13 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
     if (!skip_peddy) {
+        ch_peddy_sites = params.peddy_sites
+            ? channel.fromPath(params.peddy_sites).map { sites -> [[:], sites] }.collect()
+            : channel.value([[:],[]])
         PEDDY (
             ch_call_snv_genome_vcf.join(ch_call_snv_genome_tabix, failOnMismatch:true, failOnDuplicate:true),
             ch_pedfile.map{ped -> return[[id:"pedigree"], ped]},
-            [[:],[]]
+            ch_peddy_sites
         )
         ch_peddy = PEDDY.out.vs_html
             .mix(PEDDY.out.html)
@@ -993,6 +990,38 @@ workflow RAREDISEASE {
             .mix(PEDDY.out.ped_check_csv)
             .mix(PEDDY.out.sex_check_csv)
             .mix(PEDDY.out.ped_check_rel_difference_csv)
+    }
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    SOMALIER
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+    // Somalier extract + relate (enabled unless skipped via `skip_subworkflows` / `skip_somalier`)
+    // Only run when `params.somalier_sites_vcf` is provided to avoid file(null) errors in test/profile runs
+    if (!skip_somalier && params.somalier_sites_vcf) {
+        // prepare VCF channel: [ meta, vcf, tbi, count ] as expected by the subworkflow
+        ch_vcfs_for_somalier = CALL_SNV.out.genome_vcf
+            .join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true)
+            .map { meta, vcf, tbi -> [ meta, vcf, tbi, [] ] }
+
+        // somalier sites VCF supplied via params.somalier_sites_vcf
+        ch_somalier_sites = channel.value( file(params.somalier_sites_vcf) )
+
+        VCF_EXTRACT_RELATE_SOMALIER(
+            ch_vcfs_for_somalier,
+            ch_genome_fasta,
+            ch_genome_fai,
+            ch_somalier_sites,
+            ch_pedfile.map{ ped -> return[[id:'pedigree'], ped] },
+            channel.empty(),
+            'case_id'
+        )
+
+        ch_somalier_publish = VCF_EXTRACT_RELATE_SOMALIER.out.publish
+            .map { meta, value -> ['somalier/', [meta, value]] }
+    } else if (!skip_somalier && !params.somalier_sites_vcf) {
+        log.warn "Skipping Somalier: params.somalier_sites_vcf is not set"
     }
 
 /*
@@ -1032,33 +1061,6 @@ workflow RAREDISEASE {
         ch_gens_baf_bed_tbi = GENS.out.gens_baf_bed_tbi
         ch_gens_cov_bed_gz  = GENS.out.gens_cov_bed_gz
         ch_gens_cov_bed_tbi = GENS.out.gens_cov_bed_tbi
-    }
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    VARIANT EVALUATION WITH RTGTOOLS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-    if (val_run_rtgvcfeval) {
-        VARIANT_EVALUATION (
-            ch_rtg_truthvcfs,
-            ch_sdf,
-            ch_call_snv_genome_vcf_tabix
-        )
-        ch_variant_evaluation_baseline_tbi        = VARIANT_EVALUATION.out.baseline_tbi
-        ch_variant_evaluation_baseline_vcf        = VARIANT_EVALUATION.out.baseline_vcf
-        ch_variant_evaluation_false_negatives_tbi = VARIANT_EVALUATION.out.false_negatives_tbi
-        ch_variant_evaluation_false_negatives_vcf = VARIANT_EVALUATION.out.false_negatives_vcf
-        ch_variant_evaluation_false_positives_tbi = VARIANT_EVALUATION.out.false_positives_tbi
-        ch_variant_evaluation_false_positives_vcf = VARIANT_EVALUATION.out.false_positives_vcf
-        ch_variant_evaluation_non_snp_roc         = VARIANT_EVALUATION.out.non_snp_roc
-        ch_variant_evaluation_phasing             = VARIANT_EVALUATION.out.phasing
-        ch_variant_evaluation_snp_roc             = VARIANT_EVALUATION.out.snp_roc
-        ch_variant_evaluation_summary             = VARIANT_EVALUATION.out.summary
-        ch_variant_evaluation_true_positives_tbi  = VARIANT_EVALUATION.out.true_positives_tbi
-        ch_variant_evaluation_true_positives_vcf  = VARIANT_EVALUATION.out.true_positives_vcf
-        ch_variant_evaluation_weighted_roc        = VARIANT_EVALUATION.out.weighted_roc
     }
 
 /*
@@ -1269,19 +1271,6 @@ workflow RAREDISEASE {
     rank_mt_vcf                                      = ch_rank_mt_vcf              // channel: [ val(meta), path(vcf) ]
     rank_sv_tbi                                      = ch_rank_sv_tbi              // channel: [ val(meta), path(tbi) ]
     rank_sv_vcf                                      = ch_rank_sv_vcf              // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_baseline_tbi                  = ch_variant_evaluation_baseline_tbi              // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_baseline_vcf                  = ch_variant_evaluation_baseline_vcf              // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_false_negatives_tbi           = ch_variant_evaluation_false_negatives_tbi       // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_false_negatives_vcf           = ch_variant_evaluation_false_negatives_vcf       // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_false_positives_tbi           = ch_variant_evaluation_false_positives_tbi       // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_false_positives_vcf           = ch_variant_evaluation_false_positives_vcf       // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_non_snp_roc                   = ch_variant_evaluation_non_snp_roc               // channel: [ val(meta), path(tsv) ]
-    variant_evaluation_phasing                       = ch_variant_evaluation_phasing                   // channel: [ val(meta), path(txt) ]
-    variant_evaluation_snp_roc                       = ch_variant_evaluation_snp_roc                   // channel: [ val(meta), path(tsv) ]
-    variant_evaluation_summary                       = ch_variant_evaluation_summary                   // channel: [ val(meta), path(txt) ]
-    variant_evaluation_true_positives_tbi            = ch_variant_evaluation_true_positives_tbi        // channel: [ val(meta), path(tbi) ]
-    variant_evaluation_true_positives_vcf            = ch_variant_evaluation_true_positives_vcf        // channel: [ val(meta), path(vcf) ]
-    variant_evaluation_weighted_roc                  = ch_variant_evaluation_weighted_roc              // channel: [ val(meta), path(tsv) ]
     subsample_mt_bai             = ch_subsample_mt_bai             // channel: [ val(meta), path(bai) ]
     subsample_mt_bam             = ch_subsample_mt_bam             // channel: [ val(meta), path(bam) ]
     versions                     = ch_versions

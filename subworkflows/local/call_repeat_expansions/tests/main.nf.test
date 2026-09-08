@@ -24,15 +24,15 @@ nextflow_workflow {
                 """
                 input[0] = channel.of(
                     [
-                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
-                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
+                        ${TestData.sample('ACC13778A2')},
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
                     ]
                 )
-                input[1] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + '/reference/variant_catalog.json', checkIfExists: true)).collect()
-                input[2] = channel.of([id:'justhusky'])
-                input[3] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
-                input[4] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[1] = channel.of([id:'genome'], file(params.resources_remapped + '/variant_catalog/grch38_expansionhunter_variant_catalog_remapped.json', checkIfExists: true)).collect()
+                input[2] = channel.of([id:'amusingmarmoset'])
+                input[3] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[4] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
                 """
             }
         }
@@ -60,15 +60,15 @@ nextflow_workflow {
                 """
                 input[0] = channel.of(
                     [
-                        [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true)],
-                        [file(params.pipelines_testdata_base_path + '/testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)]
+                        ${TestData.sample('ACC13778A2')},
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
                     ]
                 )
-                input[1] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + '/reference/variant_catalog.json', checkIfExists: true)).collect()
-                input[2] = channel.of([id:'justhusky'])
-                input[3] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)).collect()
-                input[4] = channel.of([id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)).collect()
+                input[1] = channel.of([id:'genome'], file(params.resources_remapped + '/variant_catalog/grch38_expansionhunter_variant_catalog_remapped.json', checkIfExists: true)).collect()
+                input[2] = channel.of([id:'amusingmarmoset'])
+                input[3] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[4] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
                 """
             }
         }

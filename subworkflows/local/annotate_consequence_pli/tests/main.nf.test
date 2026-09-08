@@ -23,8 +23,8 @@ nextflow_workflow {
                     file(params.pipelines_testdata_base_path + 'reference/variant_consequences_v2.txt', checkIfExists: true)
                 ]).collect()
                 input[1] = channel.of([
-                    [id:'justhusky'],
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/genmod_compound.vcf', checkIfExists: true)
+                    [id:'amusingmarmoset'],
+                    file(params.subworkflow_fixtures + '/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
                 ])
                 input[2] = false
                 """
@@ -52,8 +52,8 @@ nextflow_workflow {
                     file(params.pipelines_testdata_base_path + 'reference/variant_consequences_v2.txt', checkIfExists: true)
                 ]).collect()
                 input[1] = channel.of([
-                    [id:'justhusky'],
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/genmod_compound.vcf', checkIfExists: true)
+                    [id:'amusingmarmoset'],
+                    file(params.subworkflow_fixtures + '/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
                 ])
                 input[2] = true
                 """
@@ -84,8 +84,8 @@ nextflow_workflow {
                     file(params.pipelines_testdata_base_path + 'reference/variant_consequences_v2.txt', checkIfExists: true)
                 ]).collect()
                 input[1] = channel.of([
-                    [id:'justhusky'],
-                    file(params.modules_testdata_base_path + 'genomics/homo_sapiens/genome/vcf/genmod_compound.vcf', checkIfExists: true)
+                    [id:'amusingmarmoset'],
+                    file(params.subworkflow_fixtures + '/amusingmarmoset_vep_annotated_snv.vcf.gz', checkIfExists: true)
                 ])
                 input[2] = true
                 """

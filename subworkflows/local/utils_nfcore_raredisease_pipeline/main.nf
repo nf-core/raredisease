@@ -88,7 +88,8 @@ workflow PIPELINE_INITIALISATION {
         show_hidden,
         before_text,
         after_text,
-        command
+        command,
+        false
     )
 
     //
@@ -466,8 +467,7 @@ def checkRequiredParameters(params) {
     // Static requirements that are not influenced by user-defined skips
     def staticRequirements   = [
         analysis_type_wes        : ["target_bed"],
-        variant_caller_sentieon  : ["ml_model"],
-        run_rtgvcfeval           : ["rtg_truthvcfs"]
+        variant_caller_sentieon  : ["ml_model"]
     ]
 
     // Requirements that can be modified by the user using either skip_tools or skip_subworkflows here
@@ -475,11 +475,11 @@ def checkRequiredParameters(params) {
         repeat_calling           : ["variant_catalog"],
         repeat_annotation        : ["variant_catalog"],
         snv_calling              : ["genome"],
-        snv_annotation           : ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
+        snv_annotation           : ["genome", "vcfanno_resources", "vcfanno_toml",
                                     "gnomad_af", "score_config_snv", "variant_consequences_snv"],
-        sv_annotation            : ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"],
+        sv_annotation            : ["genome", "score_config_sv", "variant_consequences_sv"],
         mt_annotation            : ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "score_config_mt",
-                                    "vep_cache_version", "vep_cache", "variant_consequences_snv"],
+                                    "variant_consequences_snv"],
         me_calling               : ["mobile_element_references"],
         me_annotation            : ["mobile_element_svdb_annotations", "variant_consequences_snv"],
         gens                     : ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
@@ -491,8 +491,7 @@ def checkRequiredParameters(params) {
 
     staticRequirements.each { condition, paramsList ->
         if ((condition == "analysis_type_wes" && params.analysis_type == "wes") ||
-            (condition == "variant_caller_sentieon" && params.variant_caller == "sentieon") ||
-            (condition == "run_rtgvcfeval" && params.run_rtgvcfeval)) {
+            (condition == "variant_caller_sentieon" && params.variant_caller == "sentieon")) {
                 mandatoryParams += paramsList
         }
     }
@@ -515,6 +514,30 @@ def checkRequiredParameters(params) {
     if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('sv_annotation')) && !params.svdb_query_bedpedbs && !params.svdb_query_dbs) {
         println("params.svdb_query_bedpedbs or params.svdb_query_dbs should be set.")
         missingParamsCount += 1
+    }
+
+    // vep_cache and vep_gtf are mutually exclusive annotation sources for
+    // ENSEMBLVEP_VEP (SNV/SV/MT annotation): whichever subworkflows are
+    // active need EITHER a real cache (vep_cache + vep_cache_version) OR
+    // a gtf (vep_gtf, for non-standard/custom references with no Ensembl
+    // cache) -- not neither, and not both.
+    def vepAnnotationActive = ["snv_annotation", "sv_annotation", "mt_annotation"].any { condition ->
+        !all_skips.split(',').contains(condition)
+    }
+    if (vepAnnotationActive) {
+        if (!params.vep_cache && !params.vep_gtf) {
+            println("params.vep_cache or params.vep_gtf should be set.")
+            missingParamsCount += 1
+        } else if (params.vep_cache && params.vep_gtf) {
+            println("Either params.vep_cache or params.vep_gtf should be set, not both.")
+            missingParamsCount += 1
+        } else if (params.vep_cache && !params.vep_cache_version) {
+            println("params.vep_cache_version not set.")
+            missingParamsCount += 1
+        } else if (params.vep_gtf && !params.vep_gtf_tbi) {
+            println("params.vep_gtf_tbi not set.")
+            missingParamsCount += 1
+        }
     }
 
     if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('generate_clinical_set')) ) {
@@ -684,7 +707,6 @@ def toolCitationText() {
         "GATK (McKenna et al., 2010),",
         "MultiQC (Ewels et al. 2016),",
         (params.skip_tools && params.skip_tools.split(',').contains('peddy')) ? "" : "Peddy (Pedersen & Quinlan, 2017),",
-        params.run_rtgvcfeval ? "RTG Tools (Cleary et al., 2015)," : "",
         "SAMtools (Li et al., 2009),",
         (!(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) && params.analysis_type.equals("wgs")) ? "SMNCopyNumberCaller (Chen et al., 2020)," : "",
         "Tabix (Li, 2011)",
@@ -808,7 +830,6 @@ def toolBibliographyText() {
         "<li>McKenna, A., Hanna, M., Banks, E., Sivachenko, A., Cibulskis, K., Kernytsky, A., Garimella, K., Altshuler, D., Gabriel, S., Daly, M., & DePristo, M. A. (2010). The Genome Analysis Toolkit: A MapReduce framework for analyzing next-generation DNA sequencing data. Genome Research, 20(9), 1297–1303. https://doi.org/10.1101/gr.107524.110</li>",
         "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: Summarize analysis results for multiple tools and samples in a single report. Bioinformatics, 32(19), 3047–3048. https://doi.org/10.1093/bioinformatics/btw354</li>",
         (params.skip_tools && params.skip_tools.split(',').contains('peddy')) ? "" : "<li>Pedersen, B. S., & Quinlan, A. R. (2017). Who’s Who? Detecting and Resolving Sample Anomalies in Human DNA Sequencing Studies with Peddy. The American Journal of Human Genetics, 100(3), 406–413. https://doi.org/10.1016/j.ajhg.2017.01.017</li>",
-        params.run_rtgvcfeval ? "<li>Cleary, J. G., Braithwaite, R., Gaastra, K., Hilbush, B. S., Inglis, S., Irvine, S. A., Jackson, A., Littin, R., Rathod, M., Ware, D., Zook, J. M., Trigg, L., & Vega, F. M. D. L. (2015). Comparing Variant Call Files for Performance Benchmarking of Next-Generation Sequencing Variant Calling Pipelines (p. 023754). bioRxiv. https://doi.org/10.1101/023754</li>" : "",
         "<li>Li, H., Handsaker, B., Wysoker, A., Fennell, T., Ruan, J., Homer, N., Marth, G., Abecasis, G., Durbin, R., & 1000 Genome Project Data Processing Subgroup. (2009). The Sequence Alignment/Map format and SAMtools. Bioinformatics, 25(16), 2078–2079. https://doi.org/10.1093/bioinformatics/btp352</li>",
         (!(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) && params.analysis_type.equals("wgs")) ? "<li>Chen, X., Sanchis-Juan, A., French, C. E., Connell, A. J., Delon, I., Kingsbury, Z., Chawla, A., Halpern, A. L., Taft, R. J., Bentley, D. R., Butchbach, M. E. R., Raymond, F. L., & Eberle, M. A. (2020). Spinal muscular atrophy diagnosis and carrier screening from genome sequencing data. Genetics in Medicine, 22(5), 945–953. https://doi.org/10.1038/s41436-020-0754-0</li>" : "",
         "<li>Li, H. (2011). Tabix: Fast retrieval of sequence features from generic TAB-delimited files. Bioinformatics, 27(5), 718–719. https://doi.org/10.1093/bioinformatics/btq671</li>",

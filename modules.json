@@ -137,19 +137,23 @@
                     },
                     "deepvariant/rundeepvariant": {
                         "branch": "master",
-                        "git_sha": "f2b138ee1d91f67d31c187317d7e83e429bf0309",
+                        "git_sha": "29031bf70ae8117b235400aca32796a433c733f2",
                         "installed_by": ["modules"],
                         "patch": "modules/nf-core/deepvariant/rundeepvariant/deepvariant-rundeepvariant.diff"
                     },
                     "ensemblvep/vep": {
                         "branch": "master",
-                        "git_sha": "34505e1fc5e9f4fd641210ca440acff6bd33b842",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/ensemblvep/vep/ensemblvep-vep.diff"
+                        "git_sha": "7047ebe92547d7f029fa6e71d2c893d5fb131938",
+                        "installed_by": ["modules"]
                     },
                     "expansionhunter": {
                         "branch": "master",
                         "git_sha": "2ad28db4a5a82972c1210dfa7c85f035bb80c4de",
+                        "installed_by": ["modules"]
+                    },
+                    "fastdup": {
+                        "branch": "master",
+                        "git_sha": "4aab34a29f9ca1730e2f7d194261f5145f53d56d",
                         "installed_by": ["modules"]
                     },
                     "fastp": {
@@ -302,10 +306,10 @@
                         "git_sha": "824f8012c9ede97642fd23371c8784fb71074c63",
                         "installed_by": ["modules"]
                     },
-                    "hisat2/build": {
+                    "htslib/bgziptabix": {
                         "branch": "master",
-                        "git_sha": "66391ca86ea6a081d288afe6a93d242fefcd8c2c",
-                        "installed_by": ["modules"]
+                        "git_sha": "22edd7ce9462025093b25e3b55006f7720ff0d8e",
+                        "installed_by": ["vcf_extract_relate_somalier"]
                     },
                     "last/lastdb": {
                         "branch": "master",
@@ -324,7 +328,7 @@
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "008f9d3e61209bf995edac3ba531f54e269e1215",
+                        "git_sha": "98403d15b0e50edae1f3fec5eae5e24982f1fade",
                         "installed_by": ["modules"]
                     },
                     "ngsbits/samplegender": {
@@ -334,7 +338,7 @@
                     },
                     "peddy": {
                         "branch": "master",
-                        "git_sha": "7773ae1c42342cacb0b99794aa3827af0d523678",
+                        "git_sha": "a66627f24220a7a3ca7a83bd840f1a37c5083327",
                         "installed_by": ["modules"]
                     },
                     "picard/addorreplacereadgroups": {
@@ -390,16 +394,6 @@
                     "riker/multi": {
                         "branch": "master",
                         "git_sha": "da4b4aa519d032c6689cb7d27c6dda496f657989",
-                        "installed_by": ["modules"]
-                    },
-                    "rtgtools/format": {
-                        "branch": "master",
-                        "git_sha": "0f04646a9282049b16b3eb35b042e94dfb3340a0",
-                        "installed_by": ["modules"]
-                    },
-                    "rtgtools/vcfeval": {
-                        "branch": "master",
-                        "git_sha": "0f04646a9282049b16b3eb35b042e94dfb3340a0",
                         "installed_by": ["modules"]
                     },
                     "saltshaker/call": {
@@ -507,6 +501,16 @@
                         "git_sha": "d0afa49c7c23c9e99a47af9bafb4cee449853560",
                         "installed_by": ["modules"]
                     },
+                    "somalier/extract": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["vcf_extract_relate_somalier"]
+                    },
+                    "somalier/relate": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["vcf_extract_relate_somalier"]
+                    },
                     "spring/decompress": {
                         "branch": "master",
                         "git_sha": "d0afa49c7c23c9e99a47af9bafb4cee449853560",
@@ -544,12 +548,12 @@
                     },
                     "tiddit/cov": {
                         "branch": "master",
-                        "git_sha": "c00e3ab203bdbce7a6ed6b9cd0a3f6406e2f3d8b",
+                        "git_sha": "835cb29e8c360c64a0d1584a1325453b6ea6383c",
                         "installed_by": ["modules"]
                     },
                     "tiddit/sv": {
                         "branch": "master",
-                        "git_sha": "c00e3ab203bdbce7a6ed6b9cd0a3f6406e2f3d8b",
+                        "git_sha": "835cb29e8c360c64a0d1584a1325453b6ea6383c",
                         "installed_by": ["modules"]
                     },
                     "ucsc/wigtobigwig": {
@@ -569,7 +573,7 @@
                     },
                     "vcf2cytosure": {
                         "branch": "master",
-                        "git_sha": "2ad28db4a5a82972c1210dfa7c85f035bb80c4de",
+                        "git_sha": "f1eb4e27e85a454b7e7c5be881deba444abe736f",
                         "installed_by": ["modules"]
                     },
                     "vcfanno": {
@@ -588,7 +592,7 @@
                 "nf-core": {
                     "utils_nextflow_pipeline": {
                         "branch": "master",
-                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "git_sha": "c2b22d85f30a706a3073387f30380704fcae013b",
                         "installed_by": ["subworkflows"]
                     },
                     "utils_nfcore_pipeline": {
@@ -598,8 +602,14 @@
                     },
                     "utils_nfschema_plugin": {
                         "branch": "master",
-                        "git_sha": "fdc08b8b1ae74f56686ce21f7ea11ad11990ce57",
+                        "git_sha": "a7b27fd25bfa8dcc07d299e88bd790585901a436",
                         "installed_by": ["subworkflows"]
+                    },
+                    "vcf_extract_relate_somalier": {
+                        "branch": "master",
+                        "git_sha": "54e41f4ed3aead45054380a9befeb927612ffc91",
+                        "installed_by": ["subworkflows"],
+                        "patch": "subworkflows/nf-core/vcf_extract_relate_somalier/vcf_extract_relate_somalier.diff"
                     }
                 }
             }
