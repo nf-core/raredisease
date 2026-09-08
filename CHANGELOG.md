@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove the `test_bam` profile: its all-BAM trio was a strict subset of `test_align`'s coverage, which already exercises both plain-BAM ingestion and CRAM conversion in one run [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #977](https://github.com/nf-core/raredisease/pull/977)
 - Removed the `rtgtools`/`vcfeval` variant-evaluation feature entirely: the `VARIANT_EVALUATION` subworkflow, `rtgtools/format` and `rtgtools/vcfeval` modules, and the `--run_rtgvcfeval`, `--rtg_truthvcfs`, and `--sdf` parameters [issue #963](https://github.com/nf-core/raredisease/issues/963) [PR #964](https://github.com/nf-core/raredisease/pull/964)
+- Removed `hisat2`/`build` because hisat2 indexes are no longer needed for mitosalt [issue #1015](https://github.com/nf-core/raredisease/issues/1015) [PR #1014](https://github.com/nf-core/raredisease/pull/1014)
 
 ### `Changed`
 
