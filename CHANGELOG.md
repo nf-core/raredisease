@@ -134,17 +134,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter | New parameter                 |
-| ------------- | ----------------------------- |
-|               | contamination_sites           |
-|               | contamination_sites_tbi       |
-|               | pre_vep_snv_filter_expression |
-|               | glnexus_config                |
-|               | vep_gtf                       |
-|               | vep_gtf_tbi                   |
-|               | peddy_sites                   |
-|               | duplicates_marker             |
-|               | somalier_sites_vcf            |
+| Old parameter       | New parameter                 |
+| ------------------- | ----------------------------- |
+|                     | contamination_sites           |
+|                     | contamination_sites_tbi       |
+|                     | pre_vep_snv_filter_expression |
+|                     | glnexus_config                |
+|                     | vep_gtf                       |
+|                     | vep_gtf_tbi                   |
+|                     | peddy_sites                   |
+|                     | duplicates_marker             |
+|                     | somalier_sites_vcf            |
+| hisat2              |                               |
+| hisat2_build_memory |                               |
 
 ### Tool updates
 
