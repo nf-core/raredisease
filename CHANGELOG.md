@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add a real (non-stub) test to `gens` using the minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1017](https://github.com/nf-core/raredisease/pull/1017)
+- Add a real (non-stub) test to `call_sv_germlinecnvcaller` using the minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1017](https://github.com/nf-core/raredisease/pull/1017)
 - Convert the `test_singleton` pipeline test from a stub run to a real (non-stub) run, and set the optional `customer_id` column in its samplesheet fixture so it exercises the VCF2CYTOSURE output-rename / SV-VCF header-reheader branch and SaltShaker report labelling that replaced the removed `sample_id_map` [issue #860](https://github.com/nf-core/raredisease/issues/860) [PR #1009](https://github.com/nf-core/raredisease/pull/1009)
 - Add a real (non-stub) test to `annotate_genome_snvs` using the new minimal 9-region GIAB dataset in `--gtf` VEP mode, and migrate `annotate_mt_snvs`'s existing real test from the old large-genome fixtures to the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #984](https://github.com/nf-core/raredisease/pull/984)
 - Add a real (non-stub) test to `generate_cytosure_files` using the new minimal 9-region GIAB dataset, and migrate `call_sv_manta`'s existing real test to the same minimal dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #986](https://github.com/nf-core/raredisease/pull/986)
@@ -103,7 +105,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update saltshaker modules to version 1.1.1 so they can run on empty mitosalt output [#856](https://github.com/nf-core/raredisease/pull/856)
 - Update metromap to reflect the addition of mitosalt + saltshaker and removal of eklipse [#892](https://github.com/nf-core/raredisease/pull/892)
 - Changed default glnexus config from `DeepVariant_unfiltered` to a custom config in `assets/` due to unfixed [bug](https://github.com/dnanexus-rnd/GLnexus/issues/286) [issue #960](https://github.com/nf-core/raredisease/issues/960) [PR #961](https://github.com/nf-core/raredisease/pull/961)
-- Change input file for mitosalt from genome-wide fastq to mitochondrial fastq [PR #967](https://github.com/nf-core/raredisease/pull/967)
+- Change input file for mitosalt from genome-wide fastq to mitochondrial fastq and update mitosalt parameters to skip nuclear alignment [PR #967](https://github.com/nf-core/raredisease/pull/967)
 - Updated tiddit/cov and tiddit/sv to v3.9.7 [PR #1001](https://github.com/nf-core/raredisease/pull/1001)
 - Updated vcf2cytosure to v0.10.0 [PR #1003](https://github.com/nf-core/raredisease/pull/1003)
 - Updated `deepvariant/rundeepvariant` to v1.10.0 [PR #1010](https://github.com/nf-core/raredisease/pull/1010)
@@ -127,6 +129,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix inconsistent sample column order in Sentieon SNV family VCF by sorting per-sample VCFs by filename before merging, consistent with DeepVariant and MT paths [#908](https://github.com/nf-core/raredisease/pull/908)
 - Fix intermittent `CALL_SNV_DEEPVARIANT - wgs` test failure caused by non-deterministic GLnexus quality scores by replacing `variantsMD5` with `vcf.summary` [#850](https://github.com/nf-core/raredisease/pull/850)
 - Fix swapped `run_mt_for_wes`/`skip_split_multiallelics` arguments in the `CALL_SNV` call, which disabled multiallelic splitting (and inverted MT-for-WES) when `--run_mt_for_wes` was set [#854](https://github.com/nf-core/raredisease/issues/854)
+- Fix `multiqc_config.yml` to include all lanes per read direction in the General Statistics section. [#1008](https://github.com/nf-core/raredisease/pull/1008)
 
 ### Parameters
 
