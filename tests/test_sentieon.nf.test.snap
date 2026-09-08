@@ -217,9 +217,6 @@
                 "GET_CHROM_SIZES": {
                     "coreutils": 9.5
                 },
-                "HISAT2_INDEX_GENOME": {
-                    "hisat2": "2.2.1"
-                },
                 "INDEX_CNVNATOR": {
                     "bgzip": 1.21,
                     "tabix": 1.21
@@ -5470,7 +5467,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-03T11:47:33.483260781",
+        "timestamp": "2026-09-07T15:29:13.941434362",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
