@@ -49,9 +49,9 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = channel.of(
-                    [${TestData.sample('ACC13778A2')},
-                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
-                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                    [${TestData.sample('ACC13778A1')},
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)]
                 )
                 input[1] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
                 input[2] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
@@ -85,9 +85,9 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = channel.of(
-                    [${TestData.sample('ACC13778A2')},
-                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
-                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                    [${TestData.sample('ACC13778A1')},
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)]
                 )
                 input[1] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
                 input[2] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()

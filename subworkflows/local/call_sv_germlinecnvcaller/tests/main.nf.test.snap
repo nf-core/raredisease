@@ -4,20 +4,20 @@
             [
                 [
                     {
-                        "id": "ACC13778A2",
-                        "sample": "ACC13778A2",
+                        "id": "ACC13778A1",
+                        "sample": "ACC13778A1",
                         "single_end": false,
                         "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
                         "lane": 1,
-                        "sex": 2,
-                        "phenotype": 1,
-                        "paternal": 0,
-                        "maternal": 0,
+                        "sex": 1,
+                        "phenotype": 2,
+                        "paternal": "ACC13778A3",
+                        "maternal": "ACC13778A2",
                         "case_id": "amusingmarmoset"
                     },
-                    "ACC13778A2_genotyped_segments.vcf.gz",
-                    "92122f50bb6d77e530efddb07a764e21"
+                    "ACC13778A1_genotyped_segments.vcf.gz",
+                    "9c50d798c4464575fae3ff0a299c6023"
                 ]
             ],
             [
@@ -26,47 +26,47 @@
                         "id": "amusingmarmoset"
                     },
                     "amusingmarmoset_gcnvcaller.vcf.gz",
-                    "7eb1c3422fdd2123ac839524e9d9d880"
+                    "54962bdd40464adbcb77f083185f166f"
                 ]
             ],
             [
                 [
                     {
-                        "id": "ACC13778A2",
-                        "sample": "ACC13778A2",
+                        "id": "ACC13778A1",
+                        "sample": "ACC13778A1",
                         "single_end": false,
                         "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
                         "lane": 1,
-                        "sex": 2,
-                        "phenotype": 1,
-                        "paternal": 0,
-                        "maternal": 0,
+                        "sex": 1,
+                        "phenotype": 2,
+                        "paternal": "ACC13778A3",
+                        "maternal": "ACC13778A2",
                         "case_id": "amusingmarmoset"
                     },
-                    "ACC13778A2_genotyped_intervals.vcf.gz"
+                    "ACC13778A1_genotyped_intervals.vcf.gz"
                 ]
             ],
             [
                 [
                     {
-                        "id": "ACC13778A2",
-                        "sample": "ACC13778A2",
+                        "id": "ACC13778A1",
+                        "sample": "ACC13778A1",
                         "single_end": false,
                         "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
                         "lane": 1,
-                        "sex": 2,
-                        "phenotype": 1,
-                        "paternal": 0,
-                        "maternal": 0,
+                        "sex": 1,
+                        "phenotype": 2,
+                        "paternal": "ACC13778A3",
+                        "maternal": "ACC13778A2",
                         "case_id": "amusingmarmoset"
                     },
-                    "ACC13778A2_denoised.vcf.gz"
+                    "ACC13778A1_denoised.vcf.gz"
                 ]
             ]
         ],
-        "timestamp": "2026-09-04T11:24:52.734647687",
+        "timestamp": "2026-09-08T16:22:32.234263351",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
