@@ -92,59 +92,5 @@
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
         }
-    },
-    "ANNOTATE_CADD - GRCh38, minimal dataset": {
-        "content": [
-            "ac641afe5c3b7b93310aeabf261a61c9",
-            [
-                "chr1\t1840\tT\tA\tCADD=4.317",
-                "chr1\t4716\tCCCAAAGTG\tC\tCADD=0.622",
-                "chr1\t7497\tT\tA\tCADD=1.88",
-                "chr1\t15063\tGTC\tG\tCADD=0.745",
-                "chr1\t16509\tCT\tC\tCADD=0.92",
-                "chr1\t18225\tT\tA\tCADD=0.301",
-                "chr7\t1880\tT\tG\tCADD=2.906",
-                "chr7\t4360\tAG\tA\tCADD=0.664",
-                "chr7\t9463\tC\tCTG\tCADD=3.697",
-                "chr7\t11288\tG\tT\tCADD=3.907",
-                "chr7\t11890\tG\tGGGGAATAA\tCADD=0.887",
-                "chr7\t12267\tA\tC\tCADD=6.672",
-                "chr12\t2283\tA\tC\tCADD=0.673",
-                "chr12\t10636\tT\tTG\tCADD=0.4",
-                "chr12\t16390\tG\tGTCTGTGTGTAGTGTCAATGTGAGGTCTGTGTGGGGTGTC\tCADD=0.486",
-                "chr12\t27852\tC\tA\tCADD=2.159",
-                "chr12\t38899\tG\tA\tCADD=12.79",
-                "chr12\t40613\tT\tTCGAGATCGTG\tCADD=5.203",
-                "chr16\t1148\tCTT\tC\tCADD=5.378",
-                "chr16\t1751\tTTTTA\tT\tCADD=14.92",
-                "chr16\t4012\tC\tA\tCADD=10.18",
-                "chr16\t4724\tAAGAC\tA\tCADD=8.318",
-                "chr16\t8480\tC\tT\tCADD=2.156",
-                "chr16\t10064\tA\tC\tCADD=0.114",
-                "chr20\t3543\tCAT\tC\tCADD=2.263",
-                "chr20\t8731\tTTC\tT\tCADD=0.674",
-                "chr20\t11171\tTG\tT\tCADD=4.753",
-                "chr20\t15147\tC\tT\tCADD=10.16",
-                "chr20\t28194\tG\tC\tCADD=9.712",
-                "chr20\t30140\tC\tA\tCADD=9.078",
-                "chr21\t5432\tG\tT\tCADD=1.517",
-                "chr21\t7326\tTTCTC\tT\tCADD=0.396",
-                "chr21\t9724\tG\tGGCTCA\tCADD=0.602",
-                "chr21\t15315\tTACCCACTG\tT\tCADD=1.681",
-                "chr21\t25065\tG\tC\tCADD=0.6",
-                "chr21\t26606\tG\tC\tCADD=0.559",
-                "chrX\t10390\tG\tC\tCADD=1.888",
-                "chrX\t14311\tT\tA\tCADD=0.09",
-                "chrX\t14397\tC\tCCT\tCADD=4.366",
-                "chrX\t18371\tC\tCTT\tCADD=15.86",
-                "chrX\t18411\tG\tA\tCADD=7.622",
-                "chrX\t32499\tG\tGTCTTAATGAGCGGAGA\tCADD=0.516"
-            ]
-        ],
-        "timestamp": "2026-09-08T09:22:45.73765847",
-        "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
-        }
     }
 }
