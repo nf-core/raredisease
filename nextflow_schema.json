@@ -924,7 +924,7 @@
                 "mitosalt_depth": {
                     "type": "integer",
                     "default": 500000,
-                    "description": "depth to subsample fastq files to before running mitosalt"
+                    "description": "number of mitochondrial reads passed to mitosalt"
                 },
                 "mito_length": {
                     "type": "integer",
