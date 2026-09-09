@@ -306,11 +306,6 @@
                         "git_sha": "824f8012c9ede97642fd23371c8784fb71074c63",
                         "installed_by": ["modules"]
                     },
-                    "hisat2/build": {
-                        "branch": "master",
-                        "git_sha": "66391ca86ea6a081d288afe6a93d242fefcd8c2c",
-                        "installed_by": ["modules"]
-                    },
                     "htslib/bgziptabix": {
                         "branch": "master",
                         "git_sha": "22edd7ce9462025093b25e3b55006f7720ff0d8e",

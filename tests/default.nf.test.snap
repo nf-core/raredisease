@@ -221,9 +221,6 @@
                 "GLNEXUS": {
                     "glnexus": "1.4.1"
                 },
-                "HISAT2_INDEX_GENOME": {
-                    "hisat2": "2.2.1"
-                },
                 "INDEX_CNVNATOR": {
                     "bgzip": 1.21,
                     "tabix": 1.21
@@ -3711,7 +3708,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-03T08:32:16.762470799",
+        "timestamp": "2026-09-07T14:00:43.506261858",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

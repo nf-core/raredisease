@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove the `test_bam` profile: its all-BAM trio was a strict subset of `test_align`'s coverage, which already exercises both plain-BAM ingestion and CRAM conversion in one run [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #977](https://github.com/nf-core/raredisease/pull/977)
 - Removed the `rtgtools`/`vcfeval` variant-evaluation feature entirely: the `VARIANT_EVALUATION` subworkflow, `rtgtools/format` and `rtgtools/vcfeval` modules, and the `--run_rtgvcfeval`, `--rtg_truthvcfs`, and `--sdf` parameters [issue #963](https://github.com/nf-core/raredisease/issues/963) [PR #964](https://github.com/nf-core/raredisease/pull/964)
+- Removed `hisat2`/`build` because hisat2 indexes are no longer needed for mitosalt [issue #1015](https://github.com/nf-core/raredisease/issues/1015) [PR #1014](https://github.com/nf-core/raredisease/pull/1014)
 
 ### `Changed`
 
@@ -113,6 +114,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Pass `--allosomal-contig` to GATK `PostprocessGermlineCNVCalls` so X and Y take their reference copy-number from the `DetermineGermlineContigPloidy` contig-ploidy calls instead of the diploid autosomal default, which otherwise produces spurious sex-chromosome CNV calls (`X`/`Y` for GRCh37, `chrX`/`chrY` otherwise) [issue #965](https://github.com/nf-core/raredisease/issues/965) [PR #966](https://github.com/nf-core/raredisease/pull/966)
 - Fix `call_sv`'s standalone subworkflow test failing against the new minimal dataset with "Minimum memory limit allowed is 6MB": `BWA_INDEX`'s default memory (proportional to fasta size) computes below Docker's floor for the tiny sliced reference; the test's own setup step now applies the same `[6.B * fasta.size(), 100.MB].max()` floor already used for the real `PREPARE_REFERENCES:BWA_INDEX_GENOME` invocation in `conf/modules/prepare_references.config` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #983](https://github.com/nf-core/raredisease/pull/983)
 - Fix `call_snv_sentieon`'s standalone test passing the genome fasta and fai in the wrong argument order (a pre-existing bug masked by stub mode never touching file content) [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #987](https://github.com/nf-core/raredisease/pull/987)
 - Fix `call_snv_deepvariant`'s standalone test hardcoding `--regions="chr22:0-40001"`, left over from the old dataset; the new minimal dataset has no chr22 region, so DeepVariant errored with "regions to call is empty" [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #987](https://github.com/nf-core/raredisease/pull/987)
@@ -134,17 +136,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter | New parameter                 |
-| ------------- | ----------------------------- |
-|               | contamination_sites           |
-|               | contamination_sites_tbi       |
-|               | pre_vep_snv_filter_expression |
-|               | glnexus_config                |
-|               | vep_gtf                       |
-|               | vep_gtf_tbi                   |
-|               | peddy_sites                   |
-|               | duplicates_marker             |
-|               | somalier_sites_vcf            |
+| Old parameter       | New parameter                 |
+| ------------------- | ----------------------------- |
+|                     | contamination_sites           |
+|                     | contamination_sites_tbi       |
+|                     | pre_vep_snv_filter_expression |
+|                     | glnexus_config                |
+|                     | vep_gtf                       |
+|                     | vep_gtf_tbi                   |
+|                     | peddy_sites                   |
+|                     | duplicates_marker             |
+|                     | somalier_sites_vcf            |
+| hisat2              |                               |
+| hisat2_build_memory |                               |
 
 ### Tool updates
 
