@@ -7,6 +7,7 @@ include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { resolveAnalysisSex     } from '../subworkflows/local/utils_nfcore_raredisease_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -478,6 +479,27 @@ workflow RAREDISEASE {
     )
 
     //
+    // Effective sex per sample for sex-dependent analysis steps (see --sex_source).
+    // [ sample_id, analysis_sex ] — one row per sample, reused wherever meta.sex is a
+    // tool parameter (currently ExpansionHunter).
+    //
+    ch_analysis_sex = ch_mapped.genome_marked_bam_bai
+        .map { meta, _bam, _bai -> [ meta.id, meta.sex ] }
+        .join(
+            QC_BAM.out.ngsbits_samplegender_tsv
+                .splitCsv( elem: 1, sep: '\t', header: true )
+                .map { meta, row -> [ meta.id, row.gender ] },
+            remainder: true
+        )
+        .map { id, declared, predicted ->
+            def resolved = resolveAnalysisSex(declared, predicted, params.sex_source)
+            if (params.sex_source == 'estimated' && declared?.toString() in ['1', '2'] && resolved != declared?.toString()) {
+                log.warn("Sample '${id}': samplesheet sex '${declared}' replaced by the ngs-bits SampleGender estimate ('${predicted}' -> '${resolved}') because --sex_source is 'estimated'. Confirm against the peddy / somalier sex-check.")
+            }
+            [ id, resolved ]
+        }
+
+    //
     // SUBWORKFLOW: Check sample contamination using VerifyBamID2 and/or GATK
     //
     CONTAMINATION (
@@ -510,8 +532,14 @@ workflow RAREDISEASE {
 */
 
     if (!skip_repeat_calling && val_analysis_type.equals("wgs") && !has_any_precalled_vcf ) {
+        ch_repeat_bam = RENAME_BAM.out.output
+            .join(RENAME_BAI.out.output, failOnMismatch:true, failOnDuplicate:true)
+            .map { meta, bam, bai -> [ meta.id, meta, bam, bai ] }
+            .join(ch_analysis_sex)
+            .map { _id, meta, bam, bai, analysis_sex -> [ meta + [ analysis_sex: analysis_sex ], bam, bai ] }
+
         CALL_REPEAT_EXPANSIONS (
-            RENAME_BAM.out.output.join(RENAME_BAI.out.output, failOnMismatch:true, failOnDuplicate:true),
+            ch_repeat_bam,
             ch_variant_catalog,
             ch_case_info,
             ch_genome_fasta,

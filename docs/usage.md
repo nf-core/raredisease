@@ -291,6 +291,20 @@ When `riker` is selected it is used regardless of aligner for the alignment, ins
 
 Targeted (hybrid-capture) metrics are produced only when a target BED is supplied.
 
+### Estimated sex
+
+The pipeline estimates each sample's sex from the alignment with [ngs-bits `SampleGender`](https://github.com/imgag/ngs-bits) (method set by `--ngsbits_samplegender_method`, default `xy`), unless `ngsbits` is listed in `--skip_tools`. By default this estimate is only reported for QC (via MultiQC and the peddy/somalier sex checks) and is **not** used in the analysis.
+
+`--sex_source` controls whether the estimate feeds the sex-dependent analysis steps (currently ExpansionHunter):
+
+| `--sex_source`          | Behaviour                                                                                                            |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `samplesheet` (default) | Always use the samplesheet `sex`.                                                                                    |
+| `auto`                  | Use the estimate only for samples whose samplesheet `sex` is `0` or `other`; keep the samplesheet value for `1`/`2`. |
+| `estimated`             | Always use the estimate; the samplesheet `sex` is ignored for analysis (a warning is logged when it disagrees).      |
+
+`auto` and `estimated` require the ngs-bits step, so the pipeline exits at start-up if `ngsbits` is in `--skip_tools`. If the estimate is unavailable for a sample (e.g. it comes back `unknown`), that sample falls back to its samplesheet `sex`. The samplesheet `sex` itself is never changed — it is still what peddy/somalier compare the data against, and what goes into the pedigree file.
+
 ##### 2. QC stats from the alignment files
 
 | Mandatory                                                    | Optional                            |

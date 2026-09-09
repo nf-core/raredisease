@@ -404,6 +404,15 @@ def extractPrecalledVcfs(List rows) {
 def validateInputParameters() {
     genomeExistsError()
     validatePrecalledVcfCoverage()
+    validateSexSource()
+}
+
+// --sex_source 'auto'/'estimated' rely on the ngs-bits SampleGender estimate, which
+// is only produced when the ngs-bits step runs.
+def validateSexSource() {
+    if (params.sex_source != 'samplesheet' && parseSkipList(params.skip_tools, 'ngsbits')) {
+        error("--sex_source '${params.sex_source}' needs the ngs-bits SampleGender step, but 'ngsbits' is listed in --skip_tools. Remove it from --skip_tools, or set --sex_source samplesheet.")
+    }
 }
 
 // A case with any precalled VCF has no fastq/bam/cram rows (enforced by validateNoMixedCaseInput), so every
@@ -448,6 +457,33 @@ def validatePrecalledVcfCoverage() {
 //
 def parseSkipList(paramValue, toolName) {
     return paramValue ? paramValue.split(',').contains(toolName) : false
+}
+
+//
+// Resolve the sex used for sex-dependent analysis steps.
+//
+// Returns a string in the same domain as meta.sex ('1' | '2' | '0' | 'other').
+// `predicted_sex` is the ngs-bits SampleGender 'gender' value
+// ('male' | 'female' | 'unknown' | null when the estimate is unavailable).
+//   - 'samplesheet' : always the samplesheet value
+//   - 'auto'        : ngs-bits estimate only when the samplesheet value is '0'/'other'
+//   - 'estimated'   : ngs-bits estimate always, falling back to the samplesheet
+//                     value when the estimate is unusable
+// Throws on an unrecognised mode (the schema enum should prevent this).
+//
+def resolveAnalysisSex(samplesheet_sex, predicted_sex, mode) {
+    def declared = samplesheet_sex?.toString()
+    if (mode == 'samplesheet') {
+        return declared
+    }
+    def estimate = ['male': '1', 'female': '2'][predicted_sex?.toString()?.toLowerCase()]
+    if (mode == 'estimated') {
+        return estimate ?: declared
+    }
+    if (mode == 'auto') {
+        return (declared in ['1', '2']) ? declared : (estimate ?: declared)
+    }
+    error("resolveAnalysisSex: unknown sex_source mode '${mode}' (expected 'samplesheet', 'auto' or 'estimated')")
 }
 
 //
