@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `--sex_source` (`samplesheet` | `auto` | `estimated`) to optionally use the ngs-bits `SampleGender` estimated sex in place of the samplesheet sex for sex-dependent analysis. The effective sex is resolved once into `meta.analysis_sex`, leaving the samplesheet `meta.sex` untouched; currently applied to ExpansionHunter only [issue #465](https://github.com/nf-core/raredisease/issues/465) [PR #1018](https://github.com/nf-core/raredisease/pull/1018)
 - Add a real (non-stub) test to `gens` using the minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1017](https://github.com/nf-core/raredisease/pull/1017)
 - Add a real (non-stub) test to `call_sv_germlinecnvcaller` using the minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1017](https://github.com/nf-core/raredisease/pull/1017)
 - Convert the `test_singleton` pipeline test from a stub run to a real (non-stub) run, and set the optional `customer_id` column in its samplesheet fixture so it exercises the VCF2CYTOSURE output-rename / SV-VCF header-reheader branch and SaltShaker report labelling that replaced the removed `sample_id_map` [issue #860](https://github.com/nf-core/raredisease/issues/860) [PR #1009](https://github.com/nf-core/raredisease/pull/1009)
@@ -146,6 +147,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |                     | peddy_sites                   |
 |                     | duplicates_marker             |
 |                     | somalier_sites_vcf            |
+|                     | sex_source                    |
 | hisat2              |                               |
 | hisat2_build_memory |                               |
 
