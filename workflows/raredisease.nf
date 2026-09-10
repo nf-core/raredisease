@@ -480,8 +480,8 @@ workflow RAREDISEASE {
 
     //
     // Effective sex per sample for sex-dependent analysis steps (see --sex_source).
-    // [ sample_id, analysis_sex ] — one row per sample, reused wherever meta.sex is a
-    // tool parameter (currently ExpansionHunter).
+    // [ sample_id, analysis_sex ] — one row per sample; folded into meta.analysis_sex
+    // on ch_mapped_sexed below.
     //
     ch_analysis_sex = ch_mapped.genome_marked_bam_bai
         .map { meta, _bam, _bai -> [ meta.id, meta.sex ] }
@@ -498,6 +498,15 @@ workflow RAREDISEASE {
             }
             [ id, resolved ]
         }
+
+    //
+    // Aligned BAM channel carrying meta.analysis_sex, for the sex-dependent steps
+    // (ExpansionHunter, DeepVariant, vcf2cytosure, Gens).
+    //
+    ch_mapped_sexed = ch_mapped.genome_marked_bam_bai
+        .map { meta, bam, bai -> [ meta.id, meta, bam, bai ] }
+        .join(ch_analysis_sex)
+        .map { _id, meta, bam, bai, analysis_sex -> [ meta + [ analysis_sex: analysis_sex ], bam, bai ] }
 
     //
     // SUBWORKFLOW: Check sample contamination using VerifyBamID2 and/or GATK
@@ -521,8 +530,8 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
     if ( val_analysis_type.equals("wgs") && (!skip_smncopynumbercaller || !skip_repeat_calling) && !has_any_precalled_vcf) {
-        RENAME_BAM(ch_mapped.genome_marked_bam, "bam")
-        RENAME_BAI(ch_mapped.genome_marked_bai, "bam.bai")
+        RENAME_BAM(ch_mapped_sexed.map { meta, bam, _bai -> [ meta, bam ] }, "bam")
+        RENAME_BAI(ch_mapped_sexed.map { meta, _bam, bai -> [ meta, bai ] }, "bam.bai")
     }
 
 /*
@@ -534,9 +543,6 @@ workflow RAREDISEASE {
     if (!skip_repeat_calling && val_analysis_type.equals("wgs") && !has_any_precalled_vcf ) {
         ch_repeat_bam = RENAME_BAM.out.output
             .join(RENAME_BAI.out.output, failOnMismatch:true, failOnDuplicate:true)
-            .map { meta, bam, bai -> [ meta.id, meta, bam, bai ] }
-            .join(ch_analysis_sex)
-            .map { _id, meta, bam, bai, analysis_sex -> [ meta + [ analysis_sex: analysis_sex ], bam, bai ] }
 
         CALL_REPEAT_EXPANSIONS (
             ch_repeat_bam,
@@ -592,7 +598,7 @@ workflow RAREDISEASE {
             ch_dbsnp,
             ch_dbsnp_tbi,
             ch_foundin_header,
-            ch_mapped.genome_marked_bam_bai,
+            ch_mapped_sexed,
             ch_genome_chrsizes,
             ch_genome_fasta,
             ch_genome_fai,
@@ -1059,7 +1065,7 @@ workflow RAREDISEASE {
 */
     if (!skip_vcf2cytosure && val_analysis_type.equals("wgs") && !skip_sv_annotation && !has_any_precalled_vcf) {
         GENERATE_CYTOSURE_FILES (
-            ch_mapped.genome_marked_bam_bai,
+            ch_mapped_sexed,
             ch_vcf2cytosure_blacklist,
             ch_annotate_sv_tbi,
             ch_annotate_sv_vcf_ann
@@ -1074,7 +1080,7 @@ workflow RAREDISEASE {
 */
     if (!skip_gens && val_analysis_type.equals("wgs") && !skip_snv_calling) {
         GENS (
-            ch_mapped.genome_marked_bam_bai,
+            ch_mapped_sexed,
             ch_genome_dictionary,
             ch_genome_fai,
             ch_genome_fasta,
