@@ -13,10 +13,13 @@ nextflow_workflow {
     tag "gawk"
     tag "tabix/tabix"
 
-    config "./nextflow.config"
+    // The real (non-stub) scoring test lives in cadd_scoring.nf.test -- it is kept
+    // out of the routine nf-test run because the CADD container is ~20 GB. See that
+    // file and .github/workflows/nf-test-cadd.yml.
 
     test("ANNOTATE_CADD - GRCh37, stub") {
 
+        config "./nextflow.config"
         options "-stub"
 
         when {
@@ -49,6 +52,7 @@ nextflow_workflow {
 
     test("ANNOTATE_CADD - GRCh38, stub") {
 
+        config "./nextflow.config"
         options "-stub"
 
         when {

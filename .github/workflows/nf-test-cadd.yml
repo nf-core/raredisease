@@ -1,0 +1,79 @@
+name: Run CADD scoring nf-test
+# Heavyweight ANNOTATE_CADD scoring test (pulls the ~20 GB CADD container). Kept out
+# of the routine "Run nf-test" workflow (listed in `ignore` in nf-test.config) and run
+# here only on PRs that actually touch the annotate_cadd subworkflow or a module it
+# uses, plus on demand.
+on:
+  pull_request:
+    paths:
+      - "subworkflows/local/annotate_cadd/**"
+      - "modules/nf-core/cadd/**"
+      - "modules/nf-core/bcftools/annotate/**"
+      - "modules/nf-core/bcftools/view/**"
+      - "modules/nf-core/gawk/**"
+      - "modules/nf-core/tabix/tabix/**"
+      - "modules/nf-core/untar/**"
+      - "tests/nf-test-cadd.config"
+      - ".github/workflows/nf-test-cadd.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NFT_VER: "0.9.4"
+  NFT_WORKDIR: "~"
+  NXF_ANSI_LOG: false
+  TEST_FILE: "subworkflows/local/annotate_cadd/tests/cadd_scoring.nf.test"
+
+jobs:
+  nf-test-cadd:
+    name: "cadd_scoring | ${{ matrix.NXF_VER }}"
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        NXF_VER:
+          - "25.10.4"
+          - "latest-everything"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Clean up Disk space
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+
+      - name: Setup Nextflow
+        uses: nf-core/setup-nextflow@893c28b667aedeba26e37f296d260ccc5bc4d914 # v3
+        with:
+          version: "${{ matrix.NXF_VER }}"
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.14"
+
+      - name: Install pdiff
+        run: python -m pip install pdiff
+
+      - name: Install nf-test
+        uses: nf-core/setup-nf-test@4069fbbaabe94c08faba4ad261bfa88225ba133f # v2
+        with:
+          version: "${{ env.NFT_VER }}"
+          install-pdiff: true
+
+      - name: Run nf-test
+        continue-on-error: ${{ matrix.NXF_VER == 'latest-everything' }}
+        env:
+          NXF_VERSION: ${{ matrix.NXF_VER }}
+        run: |
+          nf-test test "${TEST_FILE}" \
+            -c tests/nf-test-cadd.config \
+            --profile=+docker \
+            --ci \
+            --verbose
