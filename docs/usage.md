@@ -113,7 +113,7 @@ The nf-core/raredisease pipeline accepts FASTQ files, SPRING files, BAM files, o
 | `bai`         | Full path to a BAM index file.                                                                                                                                                                                              |
 | `cram`        | Full path to a duplicate-marked CRAM file containing alignments.                                                                                                                                                            |
 | `crai`        | Full path to a CRAM index file.                                                                                                                                                                                             |
-| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                                                                                                                                   |
+| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other'). For `0`/`other` samples the estimated sex can be used in sex-dependent steps, see [Estimated sex](#estimated-sex).                                                |
 | `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                                         |
 | `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                                       |
 | `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                                       |
@@ -140,7 +140,7 @@ The nf-core/raredisease pipeline can handle duplicate-marked BAM files as input.
 | `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.                                                                                                               |
 | `bam`         | Absolute path to a duplicate-marked BAM file.                                                                                                                                                                               |
 | `bai`         | Absolute path to the BAM index file (.bai).                                                                                                                                                                                 |
-| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                                                                                                                                   |
+| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other'). For `0`/`other` samples the estimated sex can be used in sex-dependent steps, see [Estimated sex](#estimated-sex).                                                |
 | `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                                         |
 | `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                                       |
 | `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                                       |
@@ -158,7 +158,7 @@ The nf-core/raredisease pipeline can handle duplicate-marked CRAM files as input
 | `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.                                                                                                               |
 | `cram`        | Absolute path to a duplicate-marked CRAM file.                                                                                                                                                                              |
 | `crai`        | Absolute path to the CRAM index file (.crai).                                                                                                                                                                               |
-| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                                                                                                                                   |
+| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other'). For `0`/`other` samples the estimated sex can be used in sex-dependent steps, see [Estimated sex](#estimated-sex).                                                |
 | `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                                         |
 | `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                                       |
 | `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                                       |
@@ -290,6 +290,20 @@ Set `--qc_metrics_tool riker` to instead collect these metrics with a single [Ri
 When `riker` is selected it is used regardless of aligner for the alignment, insert-size and GC-bias metrics (and, when a target BED is set, the hybrid-capture metrics), but when `--aligner sentieon` is used the WGS coverage metrics are still produced by Sentieon (matching the Picard path).
 
 Targeted (hybrid-capture) metrics are produced only when a target BED is supplied.
+
+### Estimated sex
+
+The pipeline estimates each sample's sex from the alignment with [ngs-bits `SampleGender`](https://github.com/imgag/ngs-bits) (method set by `--ngsbits_samplegender_method`, default `xy`), unless `ngsbits` is listed in `--skip_tools`. By default this estimate is only reported for QC (via MultiQC and the peddy/somalier sex checks) and is **not** used in the analysis.
+
+`--sex_source` controls whether the estimate feeds the sex-dependent analysis steps (currently ExpansionHunter):
+
+| `--sex_source`          | Behaviour                                                                                                            |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `samplesheet` (default) | Always use the samplesheet `sex`.                                                                                    |
+| `auto`                  | Use the estimate only for samples whose samplesheet `sex` is `0` or `other`; keep the samplesheet value for `1`/`2`. |
+| `estimated`             | Always use the estimate; the samplesheet `sex` is ignored for analysis (a warning is logged when it disagrees).      |
+
+`auto` and `estimated` require the ngs-bits step, so the pipeline exits at start-up if `ngsbits` is in `--skip_tools`. If the estimate is unavailable for a sample (e.g. it comes back `unknown`), that sample falls back to its samplesheet `sex`. The samplesheet `sex` itself is never changed — it is still what peddy/somalier compare the data against, and what goes into the pedigree file.
 
 ##### 2. QC stats from the alignment files
 
