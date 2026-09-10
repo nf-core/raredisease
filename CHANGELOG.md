@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Enable `gens` in the default `test` profile (removed from `skip_tools`), with a minimal-dataset panel of normals, so the Gens preprocessing subworkflow is covered by the pipeline-level tests [issue #786](https://github.com/nf-core/raredisease/issues/786) [PR #1021](https://github.com/nf-core/raredisease/pull/1021)
 - Add a real (non-stub) test to `gens` using the minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1017](https://github.com/nf-core/raredisease/pull/1017)
 - Add a real (non-stub) test to `call_sv_germlinecnvcaller` using the minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1017](https://github.com/nf-core/raredisease/pull/1017)
 - Add a real (non-stub) test to `annotate_cadd` that scores 42 SNVs and indels across the minimal 9-region GIAB dataset against a trimmed CADD v1.7 GRCh38 prescored fixture (all-prescored path, no annotation bundle or reference needed); it runs from the dedicated `nf-test-cadd.yml` workflow (only on PRs touching `annotate_cadd` or its modules, plus on demand) rather than routine CI, as the CADD container is ~20 GB [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1018](https://github.com/nf-core/raredisease/pull/1018)

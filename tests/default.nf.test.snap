@@ -104,6 +104,9 @@
                 "CNVNATOR_STAT": {
                     "cnvnator": "0.4.1"
                 },
+                "COLLECTREADCOUNTS": {
+                    "gatk4": "4.6.2.0"
+                },
                 "CREATE_HGNCIDS_FILE": {
                     "create_hgncids_file": 1.0,
                     "python": "3.14.3"
@@ -121,6 +124,12 @@
                 },
                 "DEEPVARIANT": {
                     "deepvariant": "1.10.0"
+                },
+                "DENOISEREADCOUNTS_FEMALE": {
+                    "gatk4": "4.6.2.0"
+                },
+                "DENOISEREADCOUNTS_MALE": {
+                    "gatk4": "4.6.2.0"
                 },
                 "ENSEMBLVEP_ME": {
                     "ensemblvep": 116.1,
@@ -214,6 +223,9 @@
                 },
                 "GENOME_FAI_TO_BED": {
                     "gawk": "5.3.1"
+                },
+                "GENS_GENERATE": {
+                    "preparecovandbaf": "1.1.5"
                 },
                 "GET_CHROM_SIZES": {
                     "coreutils": 9.5
@@ -676,6 +688,19 @@
                 "fastqc/ACC13778A3_LNUMBER27/ACC13778A3_LNUMBER27_1_fastqc.zip",
                 "fastqc/ACC13778A3_LNUMBER27/ACC13778A3_LNUMBER27_2_fastqc.html",
                 "fastqc/ACC13778A3_LNUMBER27/ACC13778A3_LNUMBER27_2_fastqc.zip",
+                "gens",
+                "gens/ACC13778A1_gens.baf.bed.gz",
+                "gens/ACC13778A1_gens.baf.bed.gz.tbi",
+                "gens/ACC13778A1_gens.cov.bed.gz",
+                "gens/ACC13778A1_gens.cov.bed.gz.tbi",
+                "gens/ACC13778A2_gens.baf.bed.gz",
+                "gens/ACC13778A2_gens.baf.bed.gz.tbi",
+                "gens/ACC13778A2_gens.cov.bed.gz",
+                "gens/ACC13778A2_gens.cov.bed.gz.tbi",
+                "gens/ACC13778A3_gens.baf.bed.gz",
+                "gens/ACC13778A3_gens.baf.bed.gz.tbi",
+                "gens/ACC13778A3_gens.cov.bed.gz",
+                "gens/ACC13778A3_gens.cov.bed.gz.tbi",
                 "multiqc",
                 "multiqc/multiqc_data",
                 "multiqc/multiqc_data/llms-full.txt",
@@ -1064,6 +1089,18 @@
                 "ACC13778A3.saltshaker.png:md5,728b73f8efdcc8eb99251437aa7d21e0",
                 "ACC13778A3_mitochondria_deletions.txt:md5,849dd692a1ca83131b2c2d5b27fba063",
                 "amusingmarmoset.saltshaker_classify.html:md5,b1a6e6423d89734ce5a41b8b00ccad84",
+                "ACC13778A1_gens.baf.bed.gz:md5,09599a33ed08264b8ca20ed4ac2a7844",
+                "ACC13778A1_gens.baf.bed.gz.tbi:md5,f0311daf79b03a9814f1dd202bf45879",
+                "ACC13778A1_gens.cov.bed.gz:md5,16d2a7112e657050a1ada886cb925cc2",
+                "ACC13778A1_gens.cov.bed.gz.tbi:md5,bbb0344f00762897bf1dd968da852885",
+                "ACC13778A2_gens.baf.bed.gz:md5,8a2d04e493e399384f717497b1184f49",
+                "ACC13778A2_gens.baf.bed.gz.tbi:md5,4b4041e806b9e7a627147e0b2765a6a2",
+                "ACC13778A2_gens.cov.bed.gz:md5,30b51baf1b7ecd093df4fa7e40de9451",
+                "ACC13778A2_gens.cov.bed.gz.tbi:md5,21953a7942f057cc978726b7eed1691b",
+                "ACC13778A3_gens.baf.bed.gz:md5,87e40160d79004b831b2f52a41509577",
+                "ACC13778A3_gens.baf.bed.gz.tbi:md5,1bd79d6c41dd9c3fb22c1ebb88ecf2b6",
+                "ACC13778A3_gens.cov.bed.gz:md5,6782c085a7ffecef7e3efce26362efee",
+                "ACC13778A3_gens.cov.bed.gz.tbi:md5,4fb0316409bb6dd248628f67f94d13c1",
                 "mosdepth-coverage-per-contig-multi.txt:md5,fb83feb5906d33591ff17516e31384f8",
                 "mosdepth-cumcoverage-dist-id.txt:md5,3cef48841ed9c24f379b7a0bd6350ba9",
                 "mosdepth_cov_dist.txt:md5,181fc0b0c71a5394d910b6af12aa601b",
@@ -3708,10 +3745,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-07T14:00:43.506261858",
+        "timestamp": "2026-09-10T09:55:23.394120158",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.6"
         }
     }
 }
