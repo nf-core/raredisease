@@ -23,7 +23,7 @@ workflow GENERATE_CYTOSURE_FILES {
         ch_sample_vcf = ch_bam_bai.combine(ch_vcf_tbi)
             .map {
                 meta_sample, _bam, _bai, _meta_case, vcf, tbi ->
-                def new_meta = ['id':meta_sample.sample, 'sex':meta_sample.sex, 'custid':meta_sample.customer_id ?: meta_sample.sample]
+                def new_meta = ['id':meta_sample.sample, 'sex':meta_sample.sex, 'analysis_sex':meta_sample.analysis_sex, 'custid':meta_sample.customer_id ?: meta_sample.sample]
                 return [ new_meta, vcf, tbi ]
             }
 
