@@ -369,6 +369,8 @@ The pipeline performs variant calling using [Sentieon DNAscope](https://support.
 
 [Expansion Hunter](https://github.com/Illumina/ExpansionHunter) aims to estimate sizes of repeat sequences by performing a targeted search through alignments that span, flank, and are fully contained in each repeat. The files generated are ready to be used with [REViewer](https://github.com/Illumina/REViewer).
 
+ExpansionHunter is run per sample with `--sex` set from the samplesheet `sex`, or from the ngs-bits `SampleGender` estimate when `--sex_source` is `auto`/`estimated` (see [Estimated sex](usage.md#estimated-sex)); this determines the ploidy used for repeat loci on the sex chromosomes.
+
 <details markdown="1">
 <summary>Output files</summary>
 
@@ -643,7 +645,7 @@ The sequencing data can be prepared for visualization of CNVs in [Gens](https://
 
 ### Pedigree
 
-The pipeline generates a PED file from the input samplesheet using an internal helper module. This file encodes the family structure (sample IDs, sex, and affected status) and is used as input to tools such as Peddy and GENMOD.
+The pipeline generates a PED file from the input samplesheet using an internal helper module. This file encodes the family structure (sample IDs, sex, and affected status) and is used as input to tools such as Peddy and GENMOD. The `sex` column is always the samplesheet value, even when `--sex_source` is set to `auto`/`estimated` (which only affects the sex passed to analysis tools such as ExpansionHunter), so the Peddy/Somalier sex checks keep comparing the declared sex against the data.
 
 <details markdown="1">
 <summary>Output files</summary>
