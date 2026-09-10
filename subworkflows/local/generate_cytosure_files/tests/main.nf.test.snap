@@ -7,6 +7,7 @@
                         {
                             "id": "ACC13778A1",
                             "sex": 1,
+                            "analysis_sex": null,
                             "custid": "CUST_001"
                         },
                         "CUST_001.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -17,6 +18,7 @@
                         {
                             "id": "ACC13778A1",
                             "sex": 1,
+                            "analysis_sex": null,
                             "custid": "CUST_001"
                         },
                         "CUST_001.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -24,7 +26,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-08-27T15:54:36.545079668",
+        "timestamp": "2026-09-10T11:25:21.974811496",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
@@ -38,6 +40,7 @@
                         {
                             "id": "ACC13778A1",
                             "sex": 1,
+                            "analysis_sex": null,
                             "custid": "ACC13778A1"
                         },
                         "ACC13778A1.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -48,6 +51,7 @@
                         {
                             "id": "ACC13778A1",
                             "sex": 1,
+                            "analysis_sex": null,
                             "custid": "ACC13778A1"
                         },
                         "ACC13778A1.cgh:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -55,7 +59,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-08-27T15:54:14.939716515",
+        "timestamp": "2026-09-10T11:24:59.461326613",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
@@ -68,13 +72,14 @@
                     {
                         "id": "ACC13778A1",
                         "sex": 1,
+                        "analysis_sex": null,
                         "custid": "ACC13778A1"
                     },
-                    "ACC13778A1.cgh:md5,1b506c7eef4900f466ff23e7f71083f5"
+                    "ACC13778A1.cgh:md5,deb05bc14c0f6aa112382a35d1e702cf"
                 ]
             ]
         ],
-        "timestamp": "2026-08-27T16:53:28.363235806",
+        "timestamp": "2026-09-10T11:24:21.300752968",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
