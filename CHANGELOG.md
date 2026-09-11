@@ -112,6 +112,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated tiddit/cov and tiddit/sv to v3.9.7 [PR #1001](https://github.com/nf-core/raredisease/pull/1001)
 - Updated vcf2cytosure to v0.10.0 [PR #1003](https://github.com/nf-core/raredisease/pull/1003)
 - Updated `deepvariant/rundeepvariant` to v1.10.0 [PR #1010](https://github.com/nf-core/raredisease/pull/1010)
+- Updated `svdb/merge` and `svdb/query` to v2.12.0 [PR #1025](https://github.com/nf-core/raredisease/pull/1025)
 
 ### `Fixed`
 
@@ -163,6 +164,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | tiddit/cov                   | 3.9.5       | 3.9.7       |
 | vcf2cytosure                 | 0.9.3       | 0.10.0      |
 | deepvariant                  | 1.9.0       | 1.10.0      |
+| svdb                         | 2.8.4       | 2.12.0      |
 
 ## 3.1.2 - Princess Peach (patch) [2026-07-06]
 
