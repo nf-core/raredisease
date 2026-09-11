@@ -113,6 +113,9 @@
                 "CREATE_PEDIGREE_FILE": {
                     "coreutils": 9.5
                 },
+                "CREATE_RESOLVED_PEDIGREE_FILE": {
+                    "coreutils": 9.5
+                },
                 "CUSTOM_ADDMOSTSEVERECONSEQUENCE": {
                     "addmostsevereconsequence": "1.2.0",
                     "bgzip": 1.21
@@ -3453,10 +3456,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-07T14:04:49.76867582",
+        "timestamp": "2026-09-11T20:13:48.377179676",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.6"
         }
     }
 }

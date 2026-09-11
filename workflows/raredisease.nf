@@ -36,9 +36,10 @@ include { TABIX_TABIX as TABIX_NUCLEAR_AND_MT_SVS           } from '../modules/n
 // MODULE: Local modules
 //
 
-include { RENAME_ALIGN_FILES as RENAME_BAM } from '../modules/local/rename_align_files'
-include { RENAME_ALIGN_FILES as RENAME_BAI } from '../modules/local/rename_align_files'
-include { SANITY_CHECK_VCFANNO_DATABASES   } from '../modules/local/sanity_check_vcfanno_databases/main'
+include { CREATE_PEDIGREE_FILE as CREATE_RESOLVED_PEDIGREE_FILE } from '../modules/local/create_pedigree_file'
+include { RENAME_ALIGN_FILES as RENAME_BAM                      } from '../modules/local/rename_align_files'
+include { RENAME_ALIGN_FILES as RENAME_BAI                      } from '../modules/local/rename_align_files'
+include { SANITY_CHECK_VCFANNO_DATABASES                        } from '../modules/local/sanity_check_vcfanno_databases/main'
 
 //
 // SUBWORKFLOWS
@@ -509,6 +510,20 @@ workflow RAREDISEASE {
         .map { _id, meta, bam, bai, analysis_sex -> [ meta + [ analysis_sex: analysis_sex ], bam, bai ] }
 
     //
+    // Second PED file, sex resolved (see --sex_source), for GENMOD only.
+    // peddy/somalier keep the declared ch_pedfile above -- the sex-check has to
+    // compare data against what was actually declared, not another estimate.
+    // Samples with no analysis_sex (e.g. the precalled-VCF entry point, where
+    // QC_BAM never runs) fall back to their declared sex, same as ch_analysis_sex.
+    //
+    ch_resolved_samples = ch_samples
+        .map { sample -> [ sample.sample, sample ] }
+        .join(ch_analysis_sex, remainder: true)
+        .map { _sample_id, sample, resolved_sex -> sample + [ sex: (resolved_sex ?: sample.sex) ] }
+        .toList()
+    ch_resolved_pedfile = CREATE_RESOLVED_PEDIGREE_FILE(ch_resolved_samples).ped
+
+    //
     // SUBWORKFLOW: Check sample contamination using VerifyBamID2 and/or GATK
     //
     CONTAMINATION (
@@ -669,7 +684,7 @@ workflow RAREDISEASE {
 
         FILTER_ANNOTATE_RANK_SNV(
             ch_hgnc_ids,
-            ch_pedfile,
+            ch_resolved_pedfile,
             ch_reduced_penetrance,
             ch_score_config_snv,
             ch_variant_consequences_snv,
@@ -753,7 +768,7 @@ workflow RAREDISEASE {
 
         FILTER_ANNOTATE_RANK_MT(
             ch_hgnc_ids,
-            ch_pedfile,
+            ch_resolved_pedfile,
             ch_reduced_penetrance,
             ch_score_config_mt,
             ch_variant_consequences_snv,
@@ -900,7 +915,7 @@ workflow RAREDISEASE {
 
         FILTER_ANNOTATE_RANK_SV(
             ch_hgnc_ids,
-            ch_pedfile,
+            ch_resolved_pedfile,
             ch_reduced_penetrance,
             ch_score_config_sv,
             ch_variant_consequences_sv,
@@ -957,7 +972,7 @@ workflow RAREDISEASE {
 
         FILTER_ANNOTATE_RANK_ME(
             ch_hgnc_ids,
-            ch_pedfile,
+            ch_resolved_pedfile,
             ch_reduced_penetrance,
             ch_score_config_sv,
             ch_variant_consequences_sv,
