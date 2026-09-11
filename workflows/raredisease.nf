@@ -512,6 +512,7 @@ workflow RAREDISEASE {
     if (!skip_repeat_calling && val_analysis_type.equals("wgs") && !has_any_precalled_vcf ) {
         CALL_REPEAT_EXPANSIONS (
             RENAME_BAM.out.output.join(RENAME_BAI.out.output, failOnMismatch:true, failOnDuplicate:true),
+            QC_BAM.out.ngsbits_samplegender_tsv,
             ch_variant_catalog,
             ch_case_info,
             ch_genome_fasta,
