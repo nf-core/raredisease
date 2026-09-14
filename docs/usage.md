@@ -303,7 +303,9 @@ The pipeline estimates each sample's sex from the alignment with [ngs-bits `Samp
 | `auto`                  | Use the estimate only for samples whose samplesheet `sex` is `0` or `other`; keep the samplesheet value for `1`/`2`. |
 | `estimated`             | Always use the estimate; the samplesheet `sex` is ignored for analysis (a warning is logged when it disagrees).      |
 
-`auto` and `estimated` require the ngs-bits step, so the pipeline exits at start-up if `ngsbits` is in `--skip_tools`. If the estimate is unavailable for a sample (e.g. it comes back `unknown`), that sample falls back to its samplesheet `sex`. The samplesheet `sex` itself is never changed — it is still what peddy/somalier compare the data against, and what goes into the pedigree file.
+`auto` and `estimated` require the ngs-bits step, so the pipeline exits at start-up if `ngsbits` is in `--skip_tools`. If the estimate is unavailable for a sample (e.g. it comes back `unknown`), that sample falls back to its samplesheet `sex`. The samplesheet `sex` itself is never changed — it is still what peddy/somalier compare the data against, and it's what the PED file feeding peddy/somalier contains. GENMOD instead reads a second, sex-resolved PED, so its X-linked inheritance models can benefit from `--sex_source` too (see [Pedigree](output.md#pedigree)).
+
+If a sample plays a parental role in the pedigree (listed as another sample's `paternal_id`/`maternal_id`), an estimate that would make the resolved pedigree biologically inconsistent — e.g. an ngs-bits estimate of `female` for a father — is rejected in favour of the declared sex, with a warning logged; this does **not** fail the run. This matters most in `estimated` mode, since it would otherwise override even a correctly-declared parent; in `auto` mode it only comes into play when that parent's samplesheet sex is itself `0`/`other`.
 
 ##### 2. QC stats from the alignment files
 

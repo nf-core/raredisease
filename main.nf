@@ -713,6 +713,7 @@ workflow NFCORE_RAREDISEASE {
     peddy                                               = RAREDISEASE.out.peddy                       // channel: [ val(meta), path(*) ]
     multiqc                                             = RAREDISEASE.out.multiqc                     // channel: [ val(meta), path(*) ]
     pedigree                                            = ch_pedfile                                  // channel: [ path(ped) ]
+    resolved_pedigree                                   = RAREDISEASE.out.resolved_pedigree           // channel: [ path(ped) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -999,6 +1000,7 @@ workflow {
     peddy                             = NFCORE_RAREDISEASE.out.peddy
     multiqc                           = NFCORE_RAREDISEASE.out.multiqc
     pedigree                          = NFCORE_RAREDISEASE.out.pedigree
+    resolved_pedigree                 = NFCORE_RAREDISEASE.out.resolved_pedigree
 }
 
 output {
@@ -1083,6 +1085,9 @@ output {
         path { _meta, _file -> "multiqc/" }
     }
     pedigree {
+        path { _file -> "pedigree/" }
+    }
+    resolved_pedigree {
         path { _file -> "pedigree/" }
     }
 }

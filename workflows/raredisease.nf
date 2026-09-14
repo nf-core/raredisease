@@ -492,8 +492,10 @@ workflow RAREDISEASE {
                 .map { meta, row -> [ meta.id, row.gender ] },
             remainder: true
         )
-        .map { id, declared, predicted ->
-            def resolved = resolveAnalysisSex(declared, predicted, params.sex_source)
+        .combine(ch_case_info)
+        .map { id, declared, predicted, case_info ->
+            def pedigree_role = case_info.roles?.get(id)
+            def resolved = resolveAnalysisSex(declared, predicted, params.sex_source, pedigree_role, id)
             if (params.sex_source == 'estimated' && declared?.toString() in ['1', '2'] && resolved != declared?.toString()) {
                 log.warn("Sample '${id}': samplesheet sex '${declared}' replaced by the ngs-bits SampleGender estimate ('${predicted}' -> '${resolved}') because --sex_source is 'estimated'. Confirm against the peddy / somalier sex-check.")
             }
@@ -516,10 +518,12 @@ workflow RAREDISEASE {
     // Samples with no analysis_sex (e.g. the precalled-VCF entry point, where
     // QC_BAM never runs) fall back to their declared sex, same as ch_analysis_sex.
     //
+    ch_analysis_sex_by_sample = ch_analysis_sex
+        .toList()
+        .map { rows -> rows.collectEntries { id, sex -> [ (id): sex ] } }
     ch_resolved_samples = ch_samples
-        .map { sample -> [ sample.sample, sample ] }
-        .join(ch_analysis_sex, remainder: true)
-        .map { _sample_id, sample, resolved_sex -> sample + [ sex: (resolved_sex ?: sample.sex) ] }
+        .combine(ch_analysis_sex_by_sample)
+        .map { sample, sex_by_sample -> sample + [ sex: (sex_by_sample[sample.sample] ?: sample.sex) ] }
         .toList()
     ch_resolved_pedfile = CREATE_RESOLVED_PEDIGREE_FILE(ch_resolved_samples).ped
 
@@ -1327,6 +1331,7 @@ workflow RAREDISEASE {
     smncopynumbercaller = ch_smncopynumbercaller // channel: [ val(meta), path(*) ]
     peddy               = ch_peddy               // channel: [ val(meta), path(*) ]
     multiqc             = ch_multiqc             // channel: [ val(meta), path(*) ]
+    resolved_pedigree   = ch_resolved_pedfile     // channel: [ path(ped) ]
 }
 
 

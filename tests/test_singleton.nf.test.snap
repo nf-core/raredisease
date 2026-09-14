@@ -610,6 +610,7 @@
                 "multiqc/multiqc_report.html",
                 "pedigree",
                 "pedigree/amusingmarmoset.ped",
+                "pedigree/amusingmarmoset_resolved.ped",
                 "pipeline_info",
                 "pipeline_info/nf_core_raredisease_software_mqc_versions.yml",
                 "qc_bam",
@@ -724,6 +725,7 @@
                 "picard_wgs_metrics_histogram_Counts_Histogram.txt:md5,651c5f3c376784a43005ac8c42556b51",
                 "picard_wgs_metrics_histogram_Percentage_Drop-Off.txt:md5,4e13cc0ed911861f1ce050e17fc519b1",
                 "amusingmarmoset.ped:md5,4c8a9bf256c1a83508e2f6670233cdcd",
+                "amusingmarmoset_resolved.ped:md5,4c8a9bf256c1a83508e2f6670233cdcd",
                 "ACC13778A1_mosdepth.mosdepth.global.dist.txt:md5,392f2a5213cbaa4c00ce96e5d7a00a00",
                 "ACC13778A1_mosdepth.mosdepth.summary.txt:md5,d06722fb9cc82beffa88b44ebd2da2e5",
                 "ACC13778A1_mosdepth.per-base.bed.gz:md5,1f1fab9797ff256946d6a76346532bc6",
@@ -2313,7 +2315,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-11T20:34:40.259575217",
+        "timestamp": "2026-09-12T13:20:37.918691602",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
