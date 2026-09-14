@@ -54,6 +54,9 @@
                 "CREATE_PEDIGREE_FILE": {
                     "coreutils": 9.5
                 },
+                "CREATE_RESOLVED_PEDIGREE_FILE": {
+                    "coreutils": 9.5
+                },
                 "CUSTOM_ADDMOSTSEVERECONSEQUENCE": {
                     "addmostsevereconsequence": "1.2.0",
                     "bgzip": 1.21
@@ -238,6 +241,7 @@
                 "multiqc/multiqc_report.html",
                 "pedigree",
                 "pedigree/amusingmarmoset.ped",
+                "pedigree/amusingmarmoset_resolved.ped",
                 "pipeline_info",
                 "pipeline_info/nf_core_raredisease_software_mqc_versions.yml",
                 "rank_and_filter",
@@ -287,7 +291,8 @@
                 "ACC13778A1_rhocallviz_chrX.png:md5,090cdf270253fbc8ddfc28df2e3d0830",
                 "ACC13778A1_rhocallviz_chrY.png:md5,33d95212be5bf91fbea53500bcbba19c",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "amusingmarmoset.ped:md5,4c8a9bf256c1a83508e2f6670233cdcd"
+                "amusingmarmoset.ped:md5,4c8a9bf256c1a83508e2f6670233cdcd",
+                "amusingmarmoset_resolved.ped:md5,4c8a9bf256c1a83508e2f6670233cdcd"
             ],
             {
                 "amusingmarmoset_me_pli_clinical.vcf.gz": [
@@ -1211,10 +1216,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-07T14:22:16.478119819",
+        "timestamp": "2026-09-12T13:18:46.809647009",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.6"
         }
     }
 }
