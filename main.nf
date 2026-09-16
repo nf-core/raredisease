@@ -57,7 +57,7 @@ workflow NFCORE_RAREDISEASE {
     val_bwameme
     val_cadd_prescored
     val_cadd_resources
-    val_call_interval
+    val_snv_call_region
     val_concatenate_snv_calls
     val_contamination_sites
     val_contamination_sites_tbi
@@ -246,7 +246,9 @@ workflow NFCORE_RAREDISEASE {
     // Using channelFromPathWithMeta helper (with simpleName). If filepath is null, returns, [[:],[]]
     ch_cadd_prescored           = channelFromPathWithMeta(val_cadd_prescored, true)
     ch_cadd_resources           = channelFromPathWithMeta(val_cadd_resources, true)
-    ch_call_interval            = channelFromPathWithMeta(val_call_interval, true)
+    ch_snv_call_region          = val_snv_call_region
+                                    ? channelFromPathWithMeta(val_snv_call_region, true)
+                                    : ch_target_bed.map { meta, bed, _tbi -> [meta, bed] }
     ch_ml_model                 = channelFromPathWithMeta(val_ml_model, true)
     ch_variant_catalog          = channelFromPathWithMeta(val_variant_catalog, true)
     ch_variant_consequences_snv = channelFromPathWithMeta(val_variant_consequences_snv, true)
@@ -421,7 +423,7 @@ workflow NFCORE_RAREDISEASE {
         ch_cadd_header,
         ch_cadd_prescored,
         ch_cadd_resources,
-        ch_call_interval,
+        ch_snv_call_region,
         ch_case_info,
         ch_contamination_sites,
         ch_dbsnp,
@@ -754,7 +756,7 @@ workflow {
         params.bwameme,
         params.cadd_prescored,
         params.cadd_resources,
-        params.call_interval,
+        params.snv_call_region,
         params.concatenate_snv_calls,
         params.contamination_sites,
         params.contamination_sites_tbi,

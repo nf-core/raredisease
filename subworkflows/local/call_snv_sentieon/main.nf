@@ -15,7 +15,7 @@ include { SENTIEON_DNASCOPE                        } from '../../../modules/nf-c
 workflow CALL_SNV_SENTIEON {
     take:
         ch_bam_bai         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_call_interval   // channel: [mandatory] [ val(meta), path(interval) ]
+        ch_snv_call_region // channel: [optional] [ val(meta), path(bed) ]
         ch_case_info       // channel: [mandatory] [ val(case_info) ]
         ch_dbsnp           // channel: [mandatory] [ val(meta), path(vcf) ]
         ch_dbsnp_index     // channel: [mandatory] [ val(meta), path(tbi) ]
@@ -29,7 +29,7 @@ workflow CALL_SNV_SENTIEON {
 
     main:
         // Combine bam and intervals
-        bam_bai_intervals = ch_bam_bai.combine(ch_call_interval)
+        bam_bai_intervals = ch_bam_bai.combine(ch_snv_call_region)
             .map{
                 meta, bam, bai, _meta2, interval -> [meta, bam, bai, interval]
             }

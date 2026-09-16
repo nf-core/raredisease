@@ -11,7 +11,6 @@ nextflow_workflow {
     tag "bcftools/norm"
     tag "deepvariant/rundeepvariant"
     tag "glnexus"
-    tag "tabix/bgzip"
     tag "local/add_varcallername_to_bed"
 
     config "./nextflow.config"
@@ -42,9 +41,8 @@ nextflow_workflow {
                     file('../../../assets/glnexus_config_dp1.yml')
                 ])
                 input[7] = channel.of([[id:'par'], []]).collect()
-                input[8] = channel.of([[id:'target'], [], []])
-                input[9] = 'wgs'
-                input[10] = false
+                input[8] = channel.of([[id:'region'], []])
+                input[9] = false
                 """
             }
         }
@@ -85,9 +83,8 @@ nextflow_workflow {
 
                 input[6] = channel.of([[],[]])
                 input[7] = channel.of([[id:'par'], []]).collect()
-                input[8] = channel.of([[id:'target'], [], []])
-                input[9] = 'wgs'
-                input[10] = false
+                input[8] = channel.of([[id:'region'], []])
+                input[9] = false
                 """
             }
         }
