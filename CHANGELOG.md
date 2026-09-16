@@ -149,6 +149,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |                     | peddy_sites                   |
 |                     | duplicates_marker             |
 |                     | somalier_sites_vcf            |
+| call_interval       | snv_call_region               |
 | hisat2              |                               |
 | hisat2_build_memory |                               |
 
