@@ -340,10 +340,10 @@ Targeted (hybrid-capture) metrics are produced only when a target BED is supplie
 | --------- | ---------------------------------- |
 |           | target_bed                         |
 |           | bwa                                |
-|           | manta_call_regions<sup>1</sup>     |
-|           | manta_call_regions_tbi<sup>1</sup> |
+|           | sv_call_region<sup>1</sup>         |
+|           | sv_call_region_tbi<sup>1</sup>     |
 
-<sup>1</sup> A bgzipped BED file (`.bed.gz`) and its tabix index (`.bed.gz.tbi`) restricting Manta's SV calling to specific regions. Both parameters must be supplied together. Only applied for WGS; for WES, Manta always uses `target_bed` and these parameters have no effect. Useful for reducing runtime on references with many short contigs such as GRCh38 by limiting analysis to primary chromosomes.
+<sup>1</sup> A bgzipped BED file (`.bed.gz`) and its tabix index (`.bed.gz.tbi`) restricting SV calling to specific regions. Both parameters must be supplied together. Currently only consumed by Manta, and only for WGS; for WES, Manta always uses `target_bed` and these parameters have no effect. TIDDIT and CNVnator do not support region restriction and ignore this parameter. Useful for reducing runtime on references with many short contigs such as GRCh38 by limiting analysis to primary chromosomes.
 
 ##### 6. Copy number variant calling
 
