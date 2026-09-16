@@ -28,7 +28,8 @@ process MITOSALT {
     // memory than any real allocation provides and fails JVM startup outright.
     def javamem = Math.max(1, (task.memory.toGiga() * 0.8) as int)
     """
-    cat $msconfig | sed "s/threads = 1/threads = ${task.cpus}/" > new-${msconfig}
+    cat $msconfig > new-${msconfig}
+    echo "threads = ${task.cpus}" >> new-${msconfig}
     echo "javamem = ${javamem}" >> new-${msconfig}
     mkdir -p log indel bam tab bw plot
     MitoSAlt1.1.1.pl new-${msconfig} $reads $prefix
@@ -45,7 +46,8 @@ process MITOSALT {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    cat $msconfig | sed "s/threads = 1/threads = ${task.cpus}/" > new-${msconfig}
+    cat $msconfig > new-${msconfig}
+    echo "threads = ${task.cpus}" >> new-${msconfig}
     touch ${prefix}.breakpoint
     echo 'cluster' > ${prefix}.cluster
     """
