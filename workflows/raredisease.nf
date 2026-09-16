@@ -82,7 +82,6 @@ workflow RAREDISEASE {
     ch_cadd_header
     ch_cadd_prescored
     ch_cadd_resources
-    ch_snv_call_region
     ch_case_info
     ch_contamination_sites
     ch_dbsnp
@@ -140,6 +139,7 @@ workflow RAREDISEASE {
     ch_score_config_snv
     ch_score_config_sv
     ch_sentieon_pcr_indel_model
+    ch_snv_call_region
     ch_subdepth
     ch_svcaller_priority
     ch_svd_bed

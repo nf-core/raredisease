@@ -57,7 +57,6 @@ workflow NFCORE_RAREDISEASE {
     val_bwameme
     val_cadd_prescored
     val_cadd_resources
-    val_snv_call_region
     val_concatenate_snv_calls
     val_contamination_sites
     val_contamination_sites_tbi
@@ -135,6 +134,7 @@ workflow NFCORE_RAREDISEASE {
     val_sequence_dictionary
     val_skip_tools
     val_skip_subworkflows
+    val_snv_call_region
     val_subdepth
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
@@ -423,7 +423,6 @@ workflow NFCORE_RAREDISEASE {
         ch_cadd_header,
         ch_cadd_prescored,
         ch_cadd_resources,
-        ch_snv_call_region,
         ch_case_info,
         ch_contamination_sites,
         ch_dbsnp,
@@ -481,6 +480,7 @@ workflow NFCORE_RAREDISEASE {
         ch_score_config_snv,
         ch_score_config_sv,
         ch_sentieon_pcr_indel_model,
+        ch_snv_call_region,
         ch_subdepth,
         ch_svcaller_priority,
         ch_svd_bed,
@@ -756,7 +756,6 @@ workflow {
         params.bwameme,
         params.cadd_prescored,
         params.cadd_resources,
-        params.snv_call_region,
         params.concatenate_snv_calls,
         params.contamination_sites,
         params.contamination_sites_tbi,
@@ -834,6 +833,7 @@ workflow {
         params.sequence_dictionary,
         params.skip_tools,
         params.skip_subworkflows,
+        params.snv_call_region,
         params.mitosalt_depth,
         params.svdb_query_bedpedbs,
         params.svdb_query_dbs,
