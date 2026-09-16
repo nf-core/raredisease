@@ -47,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Rename `--manta_call_regions`/`--manta_call_regions_tbi` to `--sv_call_region`/`--sv_call_region_tbi` for naming consistency with `--snv_call_region` ([issue #740](https://github.com/nf-core/raredisease/issues/740), [PR #1028](https://github.com/nf-core/raredisease/pull/1028)); behavior is unchanged, and it is currently only consumed by Manta (TIDDIT and CNVnator do not support region-restricted calling) [issue #740](https://github.com/nf-core/raredisease/issues/740) [PR #XXXX](https://github.com/nf-core/raredisease/pull/XXXX)
 - Refactor the `then {}` blocks of the pipeline-level nf-tests (`default`, `test_align`, `test_align_singleton`, `test_sentieon`, `test_vcf`, `test_vcf_singleton`): assert `workflow.success` first, before any file parsing; use descriptive closure parameter names; drop the implicit `it` [PR #1015](https://github.com/nf-core/raredisease/pull/1016)
 - Add a `tests/lib/TestData.groovy` helper (`TestData.sample('ACC13778A2')`) and use it across the subworkflow nf-tests, replacing 124 repeated inline sample-meta literals [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1006](https://github.com/nf-core/raredisease/pull/1006)
 - Replace the repeated `setup { run("GET_CHROM_SIZES") {…} }` block in eight subworkflow nf-tests (`annotate_genome_snvs`, `annotate_rhocallviz`, `call_mt_snvs`, `call_snv`, `call_snv_deepvariant`, `call_snv_sentieon`, `call_sv_MT`, `postprocess_MT_calls`) with the pre-generated `subworkflow_fixtures/minimal_reference_chrom.sizes` fixture [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1007](https://github.com/nf-core/raredisease/pull/1007)
@@ -137,19 +138,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter       | New parameter                 |
-| ------------------- | ----------------------------- |
-|                     | contamination_sites           |
-|                     | contamination_sites_tbi       |
-|                     | pre_vep_snv_filter_expression |
-|                     | glnexus_config                |
-|                     | vep_gtf                       |
-|                     | vep_gtf_tbi                   |
-|                     | peddy_sites                   |
-|                     | duplicates_marker             |
-|                     | somalier_sites_vcf            |
-| hisat2              |                               |
-| hisat2_build_memory |                               |
+| Old parameter          | New parameter                 |
+| ---------------------- | ----------------------------- |
+|                        | contamination_sites           |
+|                        | contamination_sites_tbi       |
+|                        | pre_vep_snv_filter_expression |
+|                        | glnexus_config                |
+|                        | vep_gtf                       |
+|                        | vep_gtf_tbi                   |
+|                        | peddy_sites                   |
+|                        | duplicates_marker             |
+|                        | somalier_sites_vcf            |
+| manta_call_regions     | sv_call_region                |
+| manta_call_regions_tbi | sv_call_region_tbi            |
+| hisat2                 |                               |
+| hisat2_build_memory    |                               |
 
 ### Tool updates
 
