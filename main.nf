@@ -246,9 +246,13 @@ workflow NFCORE_RAREDISEASE {
     // Using channelFromPathWithMeta helper (with simpleName). If filepath is null, returns, [[:],[]]
     ch_cadd_prescored           = channelFromPathWithMeta(val_cadd_prescored, true)
     ch_cadd_resources           = channelFromPathWithMeta(val_cadd_resources, true)
+    // target_bed only doubles as the SNV calling-region fallback for WES; for WGS it may be
+    // set purely for QC/contamination purposes and must not restrict variant calling.
     ch_snv_call_region          = val_snv_call_region
                                     ? channelFromPathWithMeta(val_snv_call_region, true)
-                                    : ch_target_bed.map { meta, bed, _tbi -> [meta, bed] }
+                                    : (val_analysis_type.equals("wes")
+                                        ? ch_target_bed.map { meta, bed, _tbi -> [meta, bed] }
+                                        : channel.value([[:], []]))
     ch_ml_model                 = channelFromPathWithMeta(val_ml_model, true)
     ch_variant_catalog          = channelFromPathWithMeta(val_variant_catalog, true)
     ch_variant_consequences_snv = channelFromPathWithMeta(val_variant_consequences_snv, true)
