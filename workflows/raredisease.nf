@@ -152,8 +152,6 @@ workflow RAREDISEASE {
     ch_target_bed
     ch_target_intervals
     ch_variant_catalog
-    ch_variant_consequences_snv
-    ch_variant_consequences_sv
     ch_vcf2cytosure_blacklist
     ch_vcfanno_extra
     ch_vcfanno_lua
@@ -691,7 +689,6 @@ workflow RAREDISEASE {
             ch_resolved_pedfile,
             ch_reduced_penetrance,
             ch_score_config_snv,
-            ch_variant_consequences_snv,
             ch_annotate_genome_snvs_bcftools_concat_vcf,
             false,
             true,
@@ -775,7 +772,6 @@ workflow RAREDISEASE {
             ch_resolved_pedfile,
             ch_reduced_penetrance,
             ch_score_config_mt,
-            ch_variant_consequences_snv,
             ch_mt_annotate.vcf_ann,
             true,
             false,
@@ -922,7 +918,6 @@ workflow RAREDISEASE {
             ch_resolved_pedfile,
             ch_reduced_penetrance,
             ch_score_config_sv,
-            ch_variant_consequences_sv,
             ch_sv_annotate.vcf_ann,
             false,
             true,
@@ -979,7 +974,6 @@ workflow RAREDISEASE {
             ch_resolved_pedfile,
             ch_reduced_penetrance,
             ch_score_config_sv,
-            ch_variant_consequences_sv,
             ch_me_annotate.vcf_ann,
             false,
             true,
