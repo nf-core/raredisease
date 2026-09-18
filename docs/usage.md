@@ -376,16 +376,16 @@ If a sample plays a parental role in the pedigree (listed as another sample's `p
 
 ##### 7. SNV annotation & Ranking
 
-| Mandatory                            | Optional                                       |
-| ------------------------------------ | ---------------------------------------------- |
-| genome<sup>1</sup>                   | reduced_penetrance<sup>8</sup>                 |
-| vcfanno_resources<sup>2</sup>        | vcfanno_lua                                    |
-| vcfanno_toml<sup>3</sup>             | vep_filters/vep_filters_scout_fmt<sup>9</sup>  |
-| vep_cache_version                    | cadd_resources<sup>10</sup>                    |
-| vep_cache<sup>4</sup>                | run_vcfanno_db_sanity_check<sup>11</sup>       |
-| gnomad_af<sup>5</sup>                | pre_vep_snv_filter_expression<sup>12</sup>     |
-| score_config_snv<sup>6</sup>         |                                                |
-| vep_plugin_files<sup>7</sup>         |                                                |
+| Mandatory                     | Optional                                      |
+| ----------------------------- | --------------------------------------------- |
+| genome<sup>1</sup>            | reduced_penetrance<sup>8</sup>                |
+| vcfanno_resources<sup>2</sup> | vcfanno_lua                                   |
+| vcfanno_toml<sup>3</sup>      | vep_filters/vep_filters_scout_fmt<sup>9</sup> |
+| vep_cache_version             | cadd_resources<sup>10</sup>                   |
+| vep_cache<sup>4</sup>         | run_vcfanno_db_sanity_check<sup>11</sup>      |
+| gnomad_af<sup>5</sup>         | pre_vep_snv_filter_expression<sup>12</sup>    |
+| score_config_snv<sup>6</sup>  |                                               |
+| vep_plugin_files<sup>7</sup>  |                                               |
 
 <sup>1</sup>Genome version is used by VEP. You have the option to choose between GRCh37 and GRCh38.<br />
 <sup>2</sup>Path to VCF files and their indices used by vcfanno. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_resources.txt).<br />
@@ -424,15 +424,15 @@ We use CADD only to annotate small indels. To annotate SNVs with precomputed CAD
 
 Mitochondrial analysis runs automatically for `wgs` and `mito` analysis types. For WES runs, set `--run_mt_for_wes true` to enable it.
 
-| Mandatory                | Optional                          |
-| ------------------------ | --------------------------------- |
-| genome                   | run_mt_for_wes<sup>1</sup>        |
-| mito_name                | vep_filters/vep_filters_scout_fmt |
-| vcfanno_resources        | vep_plugin_files                  |
-| vcfanno_toml             |                                   |
-| vep_cache_version        |                                   |
-| vep_cache                |                                   |
-| score_config_mt          |                                   |
+| Mandatory         | Optional                          |
+| ----------------- | --------------------------------- |
+| genome            | run_mt_for_wes<sup>1</sup>        |
+| mito_name         | vep_filters/vep_filters_scout_fmt |
+| vcfanno_resources | vep_plugin_files                  |
+| vcfanno_toml      |                                   |
+| vep_cache_version |                                   |
+| vep_cache         |                                   |
+| score_config_mt   |                                   |
 
 <sup>1</sup>Set to `true` to enable mitochondrial analysis for WES runs. Default is `false`.<br />
 
