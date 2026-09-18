@@ -601,6 +601,11 @@
                     "help_text": "Set this to true, and specify the contig(s) using `restrict_to_contigs` parameter",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "genmod_skip_plugin_check": {
+                    "type": "boolean",
+                    "description": "Pass --skip_plugin_check to genmod score, so a rank model config missing an info_key/csq_key referenced in its scoring categories degrades that category to a warning instead of aborting the pipeline.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "homoplasmy_af_threshold": {
                     "type": "number",
                     "default": 1.0,
