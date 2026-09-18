@@ -421,7 +421,7 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 - SpliceAI
 - MaxEntScan
 
-Based on VEP annotations, custom scripts used by the pipeline further annotate each record with the most severe consequence, and pli scores.
+Based on VEP annotations, a custom script used by the pipeline further annotates each record with pli scores. The most severe consequence per variant is determined by GENMOD directly from VEP's `CSQ` annotation during scoring, rather than being pre-computed here.
 
 > **NB**: Output files described below do not include mitochondrial annotations only if --skip_subworklows includes mt_annotation.
 
@@ -475,7 +475,7 @@ Based on VEP annotations, custom scripts used by the pipeline further annotate e
 
 #### VEP
 
-[VEP](https://www.ensembl.org/info/docs/tools/vep/index.html) determines the effect of your variants on genes, transcripts, and protein sequence, as well as regulatory regions. We recommend annotating with pLI plugin, along with any other custom plugins you may want too use. Based on VEP annotations, custom scripts used by the pipeline further annotate each record with the most severe consequence, and pli scores.
+[VEP](https://www.ensembl.org/info/docs/tools/vep/index.html) determines the effect of your variants on genes, transcripts, and protein sequence, as well as regulatory regions. We recommend annotating with pLI plugin, along with any other custom plugins you may want too use. Based on VEP annotations, a custom script used by the pipeline further annotates each record with pli scores. The most severe consequence per variant is determined by GENMOD directly from VEP's `CSQ` annotation during scoring, rather than being pre-computed here.
 
 <details markdown="1">
 <summary>Output files</summary>

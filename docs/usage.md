@@ -360,17 +360,16 @@ Targeted (hybrid-capture) metrics are produced only when a target BED is supplie
 
 ##### 7. SNV annotation & Ranking
 
-| Mandatory                            | Optional                                       |
-| ------------------------------------ | ---------------------------------------------- |
-| genome<sup>1</sup>                   | reduced_penetrance<sup>9</sup>                 |
-| vcfanno_resources<sup>2</sup>        | vcfanno_lua                                    |
-| vcfanno_toml<sup>3</sup>             | vep_filters/vep_filters_scout_fmt<sup>10</sup> |
-| vep_cache_version                    | cadd_resources<sup>11</sup>                    |
-| vep_cache<sup>4</sup>                | run_vcfanno_db_sanity_check<sup>12</sup>       |
-| gnomad_af<sup>5</sup>                | pre_vep_snv_filter_expression<sup>13</sup>     |
-| score_config_snv<sup>6</sup>         |                                                |
-| variant_consequences_snv<sup>7</sup> |                                                |
-| vep_plugin_files<sup>8</sup>         |                                                |
+| Mandatory                     | Optional                                      |
+| ----------------------------- | --------------------------------------------- |
+| genome<sup>1</sup>            | reduced_penetrance<sup>8</sup>                |
+| vcfanno_resources<sup>2</sup> | vcfanno_lua                                   |
+| vcfanno_toml<sup>3</sup>      | vep_filters/vep_filters_scout_fmt<sup>9</sup> |
+| vep_cache_version             | cadd_resources<sup>10</sup>                   |
+| vep_cache<sup>4</sup>         | run_vcfanno_db_sanity_check<sup>11</sup>      |
+| gnomad_af<sup>5</sup>         | pre_vep_snv_filter_expression<sup>12</sup>    |
+| score_config_snv<sup>6</sup>  |                                               |
+| vep_plugin_files<sup>7</sup>  |                                               |
 
 <sup>1</sup>Genome version is used by VEP. You have the option to choose between GRCh37 and GRCh38.<br />
 <sup>2</sup>Path to VCF files and their indices used by vcfanno. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_resources.txt).<br />
@@ -380,14 +379,13 @@ VEP plugins may be installed in the cache directory. To supply files required by
 See example cache [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz).<br />
 <sup>5</sup> GnomAD VCF files can be downloaded from [here](https://gnomad.broadinstitute.org/downloads). The option `gnomad_af` expects a tab-delimited file with
 no header and the following columns: `CHROM POS REF_ALLELE,ALT_ALLELE AF`. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/gnomad_reformated.tab.gz).<br />
-<sup>6</sup>Used by GENMOD for ranking the variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_snv.ini).<br />
-<sup>7</sup>File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic and mitochondrial SNVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/variant_consequences_v2.txt). You can learn more about these terms [here](https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html).
-<sup>8</sup>A CSV file that describes the files used by VEP's named and custom plugins. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vep_files.csv). <br />
-<sup>9</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
-<sup>10</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into candidate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt). Not required if `--skip_subworkflows generate_clinical_set` is set.<br />
-<sup>11</sup>Path to a folder containing cadd annotations. Equivalent of the data/annotations/ folder described [here](https://github.com/kircherlab/CADD-scripts/#manual-installation), and it is used to calculate CADD scores for small indels. <br />
-<sup>12</sup>When set to `true`, each vcfanno database file listed in `vcfanno_resources` is checked for records (non-header lines). Any database with zero records is removed from the vcfanno TOML config before annotation runs to prevent vcfanno from crashing on default resource files. Default: `false`.<br />
-<sup>13</sup>bcftools expression used to exclude SNVs before VEP annotation, applied with `bcftools view --exclude`. Set stricter filters to reduce the number of variants processed downstream. Default: `INFO/GNOMADAF > 0.70 | INFO/GNOMADAF_popmax > 0.70`.<br />
+<sup>6</sup>Used by GENMOD for ranking the variants. The most severe consequence per variant is determined by GENMOD directly from VEP's `CSQ` annotation during scoring — no separate consequence-ranking file is needed. If your rank model config predates this, set `--genmod_skip_plugin_check true` so a missing `info_key`/`csq_key` degrades that scoring category to a warning instead of aborting the pipeline. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_snv.ini).<br />
+<sup>7</sup>A CSV file that describes the files used by VEP's named and custom plugins. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vep_files.csv). <br />
+<sup>8</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
+<sup>9</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into candidate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt). Not required if `--skip_subworkflows generate_clinical_set` is set.<br />
+<sup>10</sup>Path to a folder containing cadd annotations. Equivalent of the data/annotations/ folder described [here](https://github.com/kircherlab/CADD-scripts/#manual-installation), and it is used to calculate CADD scores for small indels. <br />
+<sup>11</sup>When set to `true`, each vcfanno database file listed in `vcfanno_resources` is checked for records (non-header lines). Any database with zero records is removed from the vcfanno TOML config before annotation runs to prevent vcfanno from crashing on default resource files. Default: `false`.<br />
+<sup>12</sup>bcftools expression used to exclude SNVs before VEP annotation, applied with `bcftools view --exclude`. Set stricter filters to reduce the number of variants processed downstream. Default: `INFO/GNOMADAF > 0.70 | INFO/GNOMADAF_popmax > 0.70`.<br />
 
 :::note
 We use CADD only to annotate small indels. To annotate SNVs with precomputed CADD scores, pass the file containing CADD scores as a resource to vcfanno instead. Files containing the precomputed CADD scores for SNVs can be downloaded from [here](https://cadd.gs.washington.edu/download) (download files listed under the description: "All possible SNVs of GRCh3<7/8>/hg3<7/8>")
@@ -401,26 +399,24 @@ We use CADD only to annotate small indels. To annotate SNVs with precomputed CAD
 | svdb_query_dbs/svdb_query_bedpedbs<sup>1</sup> |                                   |
 | vep_cache_version                              | vep_filters/vep_filters_scout_fmt |
 | vep_cache                                      | vep_plugin_files                  |
-| score_config_sv                                |                                   |
-| variant_consequences_sv<sup>2</sup>            |                                   |
+| score_config_sv<sup>2</sup>                    |                                   |
 
 <sup>1</sup> A CSV file that describes the databases (VCFs or BEDPEs) used by SVDB for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
-<sup>2</sup> File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic SVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/variant_consequences_v2.txt). You can learn more about these terms [here](https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html).
+<sup>2</sup>Used by GENMOD for ranking the variants. The most severe consequence per variant is determined by GENMOD directly from VEP's `CSQ` annotation during scoring — no separate consequence-ranking file is needed. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_sv.ini).
 
 ##### 9. Mitochondrial annotation
 
 Mitochondrial analysis runs automatically for `wgs` and `mito` analysis types. For WES runs, set `--run_mt_for_wes true` to enable it.
 
-| Mandatory                | Optional                          |
-| ------------------------ | --------------------------------- |
-| genome                   | run_mt_for_wes<sup>1</sup>        |
-| mito_name                | vep_filters/vep_filters_scout_fmt |
-| vcfanno_resources        | vep_plugin_files                  |
-| vcfanno_toml             |                                   |
-| vep_cache_version        |                                   |
-| vep_cache                |                                   |
-| score_config_mt          |                                   |
-| variant_consequences_snv |                                   |
+| Mandatory         | Optional                          |
+| ----------------- | --------------------------------- |
+| genome            | run_mt_for_wes<sup>1</sup>        |
+| mito_name         | vep_filters/vep_filters_scout_fmt |
+| vcfanno_resources | vep_plugin_files                  |
+| vcfanno_toml      |                                   |
+| vep_cache_version |                                   |
+| vep_cache         |                                   |
+| score_config_mt   |                                   |
 
 <sup>1</sup>Set to `true` to enable mitochondrial analysis for WES runs. Default is `false`.<br />
 
@@ -441,7 +437,6 @@ Mitochondrial analysis runs automatically for `wgs` and `mito` analysis types. F
 | mobile_element_svdb_annotations<sup>1</sup> |                                   |
 | vep_cache_version                           |                                   |
 | vep_cache                                   |                                   |
-| variant_consequences_sv                     |                                   |
 
 <sup>1</sup> A CSV file that describes the databases (VCFs) used by SVDB for annotating mobile elements with allele frequencies. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv).
 
