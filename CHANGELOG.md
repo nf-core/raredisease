@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `--genmod_skip_plugin_check`, passed through to `genmod score` as `--skip_plugin_check`: a rank model config whose `info_key`/`csq_key` for a scoring category is missing from the VCF header degrades that category to a warning instead of aborting the pipeline. Intended as a transition safety net for custom `score_config_*` files ahead of upcoming changes to how `most_severe_consequence` is scored [PR #XXXX](https://github.com/nf-core/raredisease/pull/XXXX)
 - Enable `gens` in the default `test` profile (removed from `skip_tools`), with a minimal-dataset panel of normals, so the Gens preprocessing subworkflow is covered by the pipeline-level tests [issue #786](https://github.com/nf-core/raredisease/issues/786) [PR #1021](https://github.com/nf-core/raredisease/pull/1021)
 - Add a real (non-stub) test to `gens` using the minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1017](https://github.com/nf-core/raredisease/pull/1017)
 - Add a real (non-stub) test to `call_sv_germlinecnvcaller` using the minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1017](https://github.com/nf-core/raredisease/pull/1017)
