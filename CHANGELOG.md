@@ -155,6 +155,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |                     | duplicates_marker             |
 |                     | somalier_sites_vcf            |
 |                     | sex_source                    |
+|                     | genmod_skip_plugin_check      |
 | hisat2              |                               |
 | hisat2_build_memory |                               |
 
