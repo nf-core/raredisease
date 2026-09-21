@@ -15,7 +15,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "case_id": "amusingmarmoset",
+                            "ngsbits_sex": "male"
                         },
                         "ACC13778A2_exphunter_sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -33,7 +34,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "case_id": "amusingmarmoset",
+                            "ngsbits_sex": "male"
                         },
                         "ACC13778A2_exphunter_sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -51,7 +53,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "case_id": "amusingmarmoset",
+                            "ngsbits_sex": "male"
                         },
                         "ACC13778A2_repeat_expansion.vcf:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -77,7 +80,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "case_id": "amusingmarmoset",
+                            "ngsbits_sex": "male"
                         },
                         "ACC13778A2_exphunter_sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -95,7 +99,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "case_id": "amusingmarmoset",
+                            "ngsbits_sex": "male"
                         },
                         "ACC13778A2_exphunter_sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -113,7 +118,8 @@
                             "phenotype": 1,
                             "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "case_id": "amusingmarmoset",
+                            "ngsbits_sex": "male"
                         },
                         "ACC13778A2_repeat_expansion.vcf:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -149,7 +155,8 @@
                         "phenotype": 1,
                         "paternal": 0,
                         "maternal": 0,
-                        "case_id": "amusingmarmoset"
+                        "case_id": "amusingmarmoset",
+                        "ngsbits_sex": "male"
                     },
                     "403b083e5ee8bc143b81b36980058e27"
                 ]
