@@ -44,11 +44,9 @@ workflow ANNOTATE_GENOME_SNVS {
         val_vep_cache_version           // string:  vep version ex: 107
 
     main:
-        ch_cadd_vcf                  = channel.empty()
         ch_chromograph_regions_plots = channel.empty()
         ch_chromograph_sites_plots   = channel.empty()
         ch_vcf_scatter_in            = channel.empty()
-        ch_vep_in                    = channel.empty()
 
         ch_roh_in = ch_vcf
             .filter { meta, _vcf, _tbi ->
@@ -139,20 +137,17 @@ workflow ANNOTATE_GENOME_SNVS {
                 ch_cadd_in,
                 val_genome
             )
-            ch_cadd_vcf = ANNOTATE_CADD.out.vcf
+
+            // Strict join: CADD was requested, so every shard must have a CADD result.
+            // A missing one here is a real failure and should error, not silently fall
+            // back to the non-CADD-annotated VCF.
+            ch_vep_in = BCFTOOLS_VIEW.out.vcf
+                .join(ANNOTATE_CADD.out.vcf, failOnMismatch:true, failOnDuplicate:true)
+                .map { meta, _selectvariants, cadd -> [meta + [prefix: meta.prefix + "_filter_cadd"], cadd, []] }
+        } else {
+            ch_vep_in = BCFTOOLS_VIEW.out.vcf
+                .map { meta, selectvariants -> [meta + [prefix: meta.prefix + "_filter"], selectvariants, []] }
         }
-
-        ch_annotated_vcfs = BCFTOOLS_VIEW.out.vcf
-            .join(ch_cadd_vcf, remainder: true)
-            .branch { meta, selectvariants, cadd  ->
-                selvar: cadd.equals(null)
-                    return [meta + [prefix: meta.prefix + "_filter"], selectvariants]
-                cadd: !(cadd.equals(null))
-                    return [meta + [prefix: meta.prefix + "_filter_cadd"], cadd]
-            }
-
-        ch_vep_in = ch_annotated_vcfs.selvar.mix(ch_annotated_vcfs.cadd)
-            .map { meta, vcf -> return [meta, vcf, []] }
 
         // Annotating with ensembl Vep
         ENSEMBLVEP_SNV(
