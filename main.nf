@@ -57,7 +57,6 @@ workflow NFCORE_RAREDISEASE {
     val_bwameme
     val_cadd_prescored
     val_cadd_resources
-    val_call_interval
     val_concatenate_snv_calls
     val_contamination_sites
     val_contamination_sites_tbi
@@ -135,6 +134,7 @@ workflow NFCORE_RAREDISEASE {
     val_sequence_dictionary
     val_skip_tools
     val_skip_subworkflows
+    val_snv_call_region
     val_subdepth
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
@@ -246,7 +246,13 @@ workflow NFCORE_RAREDISEASE {
     // Using channelFromPathWithMeta helper (with simpleName). If filepath is null, returns, [[:],[]]
     ch_cadd_prescored           = channelFromPathWithMeta(val_cadd_prescored, true)
     ch_cadd_resources           = channelFromPathWithMeta(val_cadd_resources, true)
-    ch_call_interval            = channelFromPathWithMeta(val_call_interval, true)
+    // target_bed only doubles as the SNV calling-region fallback for WES; for WGS it may be
+    // set purely for QC/contamination purposes and must not restrict variant calling.
+    ch_snv_call_region          = val_snv_call_region
+                                    ? channelFromPathWithMeta(val_snv_call_region, true)
+                                    : (val_analysis_type.equals("wes")
+                                        ? ch_target_bed.map { meta, bed, _tbi -> [meta, bed] }
+                                        : channel.value([[:], []]))
     ch_ml_model                 = channelFromPathWithMeta(val_ml_model, true)
     ch_variant_catalog          = channelFromPathWithMeta(val_variant_catalog, true)
     ch_variant_consequences_snv = channelFromPathWithMeta(val_variant_consequences_snv, true)
@@ -421,7 +427,6 @@ workflow NFCORE_RAREDISEASE {
         ch_cadd_header,
         ch_cadd_prescored,
         ch_cadd_resources,
-        ch_call_interval,
         ch_case_info,
         ch_contamination_sites,
         ch_dbsnp,
@@ -479,6 +484,7 @@ workflow NFCORE_RAREDISEASE {
         ch_score_config_snv,
         ch_score_config_sv,
         ch_sentieon_pcr_indel_model,
+        ch_snv_call_region,
         ch_subdepth,
         ch_svcaller_priority,
         ch_svd_bed,
@@ -754,7 +760,6 @@ workflow {
         params.bwameme,
         params.cadd_prescored,
         params.cadd_resources,
-        params.call_interval,
         params.concatenate_snv_calls,
         params.contamination_sites,
         params.contamination_sites_tbi,
@@ -832,6 +837,7 @@ workflow {
         params.sequence_dictionary,
         params.skip_tools,
         params.skip_subworkflows,
+        params.snv_call_region,
         params.mitosalt_depth,
         params.svdb_query_bedpedbs,
         params.svdb_query_dbs,

@@ -783,12 +783,13 @@
             "fa_icon": "fas fa-map-signs",
             "description": "Options to adjust parameters and filtering criteria for variant calling.",
             "properties": {
-                "call_interval": {
+                "snv_call_region": {
                     "type": "string",
                     "exists": true,
                     "format": "path",
                     "fa_icon": "fas fa-align-center",
-                    "description": "Interval in the reference that will be used in the software. Used only by sentieon."
+                    "description": "Restrict SNV calling (DeepVariant or Sentieon) to this region.",
+                    "help_text": "Path to a BED or Picard-style interval_list file used to restrict SNV calling to specific regions of the genome. Falls back to the padded --target_bed (as processed by the pipeline, not the raw file) when not supplied and analysis_type is wes; for wgs, target_bed is not used as a calling restriction (it may be set purely for QC/contamination purposes), so the whole genome is called unless --snv_call_region is set explicitly."
                 },
                 "cnvnator_binsize": {
                     "type": "integer",

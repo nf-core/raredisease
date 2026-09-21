@@ -8,20 +8,19 @@ include { GATK4_SELECTVARIANTS } from '../../../modules/nf-core/gatk4/selectvari
 
 workflow CALL_SNV {
     take:
-        ch_call_interval          // channel: [mandatory] [ path(intervals) ]
-        ch_case_info              // channel: [mandatory] [ val(case_info) ]
-        ch_dbsnp                  // channel: [optional] [ val(meta), path(vcf) ]
-        ch_dbsnp_tbi              // channel: [optional] [ val(meta), path(tbi) ]
-        ch_foundin_header         // channel: [mandatory] [ path(header) ]
-        ch_genome_bam_bai         // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
-        ch_genome_chrsizes        // channel: [mandatory] [ path(sizes) ]
-        ch_genome_fasta           // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_genome_fai             // channel: [mandatory] [ val(meta), path(fai) ]
-        ch_glnexus_config // path: [optional]  [ val(meta), path(config_file) ]
-        ch_ml_model               // channel: [mandatory] [ path(model) ]
-        ch_par_bed                // channel: [optional] [ val(meta), path(bed) ]
-        ch_pcr_indel_model        // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
-        ch_target_bed             // channel: [mandatory] [ val(meta), path(bed), path(index) ]
+        ch_case_info                  // channel: [mandatory] [ val(case_info) ]
+        ch_dbsnp                      // channel: [optional] [ val(meta), path(vcf) ]
+        ch_dbsnp_tbi                  // channel: [optional] [ val(meta), path(tbi) ]
+        ch_foundin_header             // channel: [mandatory] [ path(header) ]
+        ch_genome_bam_bai             // channel: [mandatory] [ val(meta), path(bam), path(bai) ]
+        ch_genome_chrsizes            // channel: [mandatory] [ path(sizes) ]
+        ch_genome_fasta               // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_genome_fai                 // channel: [mandatory] [ val(meta), path(fai) ]
+        ch_glnexus_config             // path: [optional]  [ val(meta), path(config_file) ]
+        ch_ml_model                   // channel: [mandatory] [ path(model) ]
+        ch_par_bed                    // channel: [optional] [ val(meta), path(bed) ]
+        ch_pcr_indel_model            // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
+        ch_snv_call_region            // channel: [optional] [ val(meta), path(bed) ]
         val_analysis_type             // string:  'wgs', 'wes', or 'mito'
         val_skip_split_multiallelics  // boolean
         val_variant_caller            // string:  'deepvariant' or 'sentieon'
@@ -47,8 +46,7 @@ workflow CALL_SNV {
                 ch_genome_fasta,
                 ch_glnexus_config,
                 ch_par_bed,
-                ch_target_bed,
-                val_analysis_type,
+                ch_snv_call_region,
                 val_skip_split_multiallelics,
             )
             ch_deepvariant_vcf    = CALL_SNV_DEEPVARIANT.out.vcf
@@ -59,7 +57,7 @@ workflow CALL_SNV {
         } else if (val_variant_caller.equals("sentieon")) {
             CALL_SNV_SENTIEON(
                 ch_genome_bam_bai,
-                ch_call_interval,
+                ch_snv_call_region,
                 ch_case_info,
                 ch_dbsnp,
                 ch_dbsnp_tbi,

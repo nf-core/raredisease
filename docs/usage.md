@@ -323,7 +323,7 @@ Targeted (hybrid-capture) metrics are produced only when a target BED is supplie
 | -------------------------- | ------------------------------------ |
 | variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>              |
 | ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup>          |
-| analysis_type<sup>3</sup>  | call_interval<sup>2</sup>            |
+| analysis_type<sup>3</sup>  | snv_call_region<sup>6</sup>          |
 |                            | known_dbsnp_tbi<sup>2</sup>          |
 |                            | par_bed<sup>4</sup>                  |
 |                            | skip_split_multiallelics<sup>5</sup> |
@@ -333,6 +333,7 @@ Targeted (hybrid-capture) metrics are produced only when a target BED is supplie
 <sup>3</sup>Default is `WGS`, but you have the option to choose `WES` and `mito` as well.<br />
 <sup>4</sup>This parameter is only used by Deepvariant.<br />
 <sup>5</sup>Skips `bcftools norm --multiallelics -both` in both DeepVariant and Sentieon SNV calling. Recommended for single-interval runs to avoid indel quality degradation. See [#813](https://github.com/nf-core/raredisease/issues/813) for details.<br />
+<sup>6</sup>Restricts SNV calling to this region for both DeepVariant and Sentieon. Falls back to the padded `--target_bed` (as processed by the pipeline, not the raw file) when not set and `analysis_type` is `wes`; for `wgs`, `target_bed` is not used as a calling restriction (it may be set purely for QC/contamination purposes), so the whole genome is called unless `--snv_call_region` is set explicitly.<br />
 
 ##### 5. Variant calling - Structural variants
 
