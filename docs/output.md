@@ -62,14 +62,13 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
     - [Mitochondrial analysis](#mitochondrial-analysis)
       - [Alignment and variant calling](#alignment-and-variant-calling)
         - [MT deletion script](#mt-deletion-script)
-        - [MitoSAlt](#mitosalt)
-        - [saltshaker](#saltshaker)
+        - [Saltshaker](#saltshaker)
       - [Annotation](#annotation)
         - [vcfanno](#vcfanno-1)
         - [CADD](#cadd-1)
         - [VEP](#vep-2)
     - [Filtering and ranking](#filtering-and-ranking)
-      - [Filter_vep](#filter_vep)
+      - [Filter\_vep](#filter_vep)
       - [GENMOD](#genmod)
     - [Mobile element analysis](#mobile-element-analysis)
       - [Calling mobile elements](#calling-mobile-elements)
@@ -649,13 +648,16 @@ Read counts are denoised against the female or male panel of normals (`gens_pon_
 
 ### Pedigree
 
-The pipeline generates a PED file from the input samplesheet using an internal helper module. This file encodes the family structure (sample IDs, sex, and affected status) and is used as input to tools such as Peddy and GENMOD. The `sex` column is always the samplesheet value, even when `--sex_source` is set to `auto`/`estimated` (which only affects the sex passed to analysis tools such as ExpansionHunter), so the Peddy/Somalier sex checks keep comparing the declared sex against the data.
+The pipeline generates a PED file from the input samplesheet using an internal helper module. This file encodes the family structure (sample IDs, sex, and affected status) and is used as input to Peddy and Somalier. Its `sex` column is always the samplesheet value, regardless of `--sex_source`, so the Peddy/Somalier sex checks keep comparing the declared sex against the data.
+
+GENMOD reads a second PED file instead, built the same way but with `sex` resolved according to `--sex_source` (see [Estimated sex](usage.md#estimated-sex)) — this lets its X-linked inheritance models apply to samples whose samplesheet sex was `0` or `other`. If a parent's resolved sex would contradict their role in the pedigree (e.g. a father resolved to `female`), the declared sex is kept instead and a warning is logged; this does **not** fail the run.
 
 <details markdown="1">
 <summary>Output files</summary>
 
 - `pedigree/`
   - `*.ped`: PED file describing the family structure of the case, derived from the input samplesheet.
+  - `*_resolved.ped`: Same file, but with `sex` resolved according to `--sex_source`; used by GENMOD only (see [Estimated sex](usage.md#estimated-sex)).
 
 </details>
 
