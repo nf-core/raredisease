@@ -144,10 +144,10 @@
                     "tabix": 1.23
                 },
                 "SVDB_QUERY_BEDPE": {
-                    "svdb": "2.8.4"
+                    "svdb": "2.12.0"
                 },
                 "SVDB_QUERY_DB": {
-                    "svdb": "2.8.4"
+                    "svdb": "2.12.0"
                 },
                 "TABIX_BGZIPINDEX_PADDED_BED": {
                     "bgzip": 1.21,
@@ -1211,10 +1211,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-07T14:22:16.478119819",
+        "timestamp": "2026-09-15T11:36:44.76216152",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.6"
         }
     }
 }
