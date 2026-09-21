@@ -468,4 +468,250 @@ nextflow_function {
             assert function.success
         }
     }
+
+    test("resolveAnalysisSex - samplesheet mode always keeps the declared value") {
+
+        function "resolveAnalysisSex"
+
+        when {
+            function {
+                """
+                input[0] = '1'
+                input[1] = 'female'
+                input[2] = 'samplesheet'
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == '1'
+        }
+    }
+
+    test("resolveAnalysisSex - auto fills a missing sex from the estimate") {
+
+        function "resolveAnalysisSex"
+
+        when {
+            function {
+                """
+                input[0] = '0'
+                input[1] = 'male'
+                input[2] = 'auto'
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == '1'
+        }
+    }
+
+    test("resolveAnalysisSex - auto keeps a declared sex even if the estimate differs") {
+
+        function "resolveAnalysisSex"
+
+        when {
+            function {
+                """
+                input[0] = '2'
+                input[1] = 'male'
+                input[2] = 'auto'
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == '2'
+        }
+    }
+
+    test("resolveAnalysisSex - auto keeps 'other' when the estimate is unusable") {
+
+        function "resolveAnalysisSex"
+
+        when {
+            function {
+                """
+                input[0] = 'other'
+                input[1] = 'unknown'
+                input[2] = 'auto'
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == 'other'
+        }
+    }
+
+    test("resolveAnalysisSex - estimated overrides a declared sex") {
+
+        function "resolveAnalysisSex"
+
+        when {
+            function {
+                """
+                input[0] = '1'
+                input[1] = 'female'
+                input[2] = 'estimated'
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == '2'
+        }
+    }
+
+    test("resolveAnalysisSex - estimated falls back to the declared value when the estimate is unknown") {
+
+        function "resolveAnalysisSex"
+
+        when {
+            function {
+                """
+                input[0] = '2'
+                input[1] = 'unknown'
+                input[2] = 'estimated'
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == '2'
+        }
+    }
+
+    test("resolveAnalysisSex - handles an integer samplesheet sex and a mixed-case estimate") {
+
+        function "resolveAnalysisSex"
+
+        when {
+            function {
+                """
+                input[0] = 0
+                input[1] = 'MALE'
+                input[2] = 'auto'
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == '1'
+        }
+    }
+
+    test("resolveAnalysisSex - auto with a missing sex and no estimate stays unknown") {
+
+        function "resolveAnalysisSex"
+
+        when {
+            function {
+                """
+                input[0] = '0'
+                input[1] = null
+                input[2] = 'auto'
+                """
+            }
+        }
+
+        then {
+            assert function.success
+            assert function.result == '0'
+        }
+    }
+
+    test("resolveAnalysisSex - unknown mode fails loudly") {
+
+        function "resolveAnalysisSex"
+
+        when {
+            function {
+                """
+                input[0] = '1'
+                input[1] = 'female'
+                input[2] = 'bogus'
+                """
+            }
+        }
+
+        then {
+            assert function.failed
+            assert function.stdout.any { it.contains("unknown sex_source mode 'bogus'") }
+        }
+    }
+
+    test("validateSexSource - default samplesheet source, ngsbits skipped, no error") {
+
+        function "validateSexSource"
+
+        when {
+            params {
+                sex_source = 'samplesheet'
+                skip_tools = 'ngsbits'
+            }
+        }
+
+        then {
+            assert function.success
+        }
+    }
+
+    test("validateSexSource - auto source with ngsbits available, no error") {
+
+        function "validateSexSource"
+
+        when {
+            params {
+                sex_source = 'auto'
+                skip_tools = 'fastp'
+            }
+        }
+
+        then {
+            assert function.success
+        }
+    }
+
+    test("validateSexSource - auto source with ngsbits skipped, errors") {
+
+        function "validateSexSource"
+
+        when {
+            params {
+                sex_source = 'auto'
+                skip_tools = 'fastp,ngsbits'
+            }
+        }
+
+        then {
+            assert function.failed
+            assert function.stdout.any { it.contains("needs the ngs-bits SampleGender step") }
+        }
+    }
+
+    test("validateSexSource - estimated source with ngsbits skipped, errors") {
+
+        function "validateSexSource"
+
+        when {
+            params {
+                sex_source = 'estimated'
+                skip_tools = 'ngsbits'
+            }
+        }
+
+        then {
+            assert function.failed
+            assert function.stdout.any { it.contains("--sex_source 'estimated'") }
+        }
+    }
 }

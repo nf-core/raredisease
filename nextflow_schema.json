@@ -627,6 +627,14 @@
                     "fa_icon": "fas fa-align-center",
                     "enum": ["xy", "hetx", "sry"]
                 },
+                "sex_source": {
+                    "type": "string",
+                    "default": "samplesheet",
+                    "description": "Source of sample sex for sex-dependent analysis steps (e.g. ExpansionHunter).",
+                    "help_text": "`samplesheet`: always use the samplesheet `sex` value. `auto`: use the ngs-bits SampleGender estimate only for samples whose samplesheet `sex` is `0` or `other`. `estimated`: always use the ngs-bits SampleGender estimate. `auto` and `estimated` require the ngs-bits SampleGender step (i.e. `ngsbits` must not be in `--skip_tools`).",
+                    "fa_icon": "fas fa-venus-mars",
+                    "enum": ["samplesheet", "auto", "estimated"]
+                },
                 "restrict_to_contigs": {
                     "type": "string",
                     "description": "Can be specified as RNAME[:STARTPOS[-ENDPOS]]. Multiple regions should be seperated by space",
