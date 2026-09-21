@@ -114,6 +114,9 @@
                 "CREATE_PEDIGREE_FILE": {
                     "coreutils": 9.5
                 },
+                "CREATE_RESOLVED_PEDIGREE_FILE": {
+                    "coreutils": 9.5
+                },
                 "CUSTOM_ADDMOSTSEVEREPLI": {
                     "addmostseverepli": "1.2.0",
                     "bgzip": 1.21
@@ -761,6 +764,7 @@
                 "peddy/amusingmarmoset.vs.html",
                 "pedigree",
                 "pedigree/amusingmarmoset.ped",
+                "pedigree/amusingmarmoset_resolved.ped",
                 "pipeline_info",
                 "pipeline_info/nf_core_raredisease_software_mqc_versions.yml",
                 "qc_bam",
@@ -1141,6 +1145,7 @@
                 "amusingmarmoset.peddy.ped:md5,319190ff3441951c5b838a3d4d2d4326",
                 "amusingmarmoset.vs.html:md5,f3726e1b59bf0a0ce119faed3d7d6c62",
                 "amusingmarmoset.ped:md5,4f0d029f02330d5906d1cf5c34cb9c08",
+                "amusingmarmoset_resolved.ped:md5,4f0d029f02330d5906d1cf5c34cb9c08",
                 "ACC13778A1_mosdepth.mosdepth.global.dist.txt:md5,392f2a5213cbaa4c00ce96e5d7a00a00",
                 "ACC13778A1_mosdepth.mosdepth.summary.txt:md5,6af7f0ad572737c96ad176ca77c872fc",
                 "ACC13778A1_mosdepth.per-base.bed.gz:md5,3a93fbedb1d3ac115ac2157209379e04",
@@ -3741,7 +3746,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-18T15:43:43.006469585",
+        "timestamp": "2026-09-21T18:04:59.627235942",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"

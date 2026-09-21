@@ -107,6 +107,9 @@
                 "CREATE_PEDIGREE_FILE": {
                     "coreutils": 9.5
                 },
+                "CREATE_RESOLVED_PEDIGREE_FILE": {
+                    "coreutils": 9.5
+                },
                 "CUSTOM_ADDMOSTSEVEREPLI": {
                     "addmostseverepli": "1.2.0",
                     "bgzip": 1.21
@@ -554,6 +557,7 @@
                 "multiqc/multiqc_report.html",
                 "pedigree",
                 "pedigree/amusingmarmoset.ped",
+                "pedigree/amusingmarmoset_resolved.ped",
                 "pipeline_info",
                 "pipeline_info/nf_core_raredisease_software_mqc_versions.yml",
                 "qc_bam",
@@ -691,6 +695,7 @@
                 "picard_wgs_metrics_histogram_Counts_Histogram.txt:md5,1ce79bcb99640930fbd1e89d0c4d5279",
                 "picard_wgs_metrics_histogram_Percentage_Drop-Off.txt:md5,f2d16d37c9eeab045ceb7b36dbc14835",
                 "amusingmarmoset.ped:md5,4c8a9bf256c1a83508e2f6670233cdcd",
+                "amusingmarmoset_resolved.ped:md5,4c8a9bf256c1a83508e2f6670233cdcd",
                 "ACC13778A1_mosdepth.mosdepth.global.dist.txt:md5,392f2a5213cbaa4c00ce96e5d7a00a00",
                 "ACC13778A1_mosdepth.mosdepth.summary.txt:md5,6af7f0ad572737c96ad176ca77c872fc",
                 "ACC13778A1_mosdepth.per-base.bed.gz:md5,3a93fbedb1d3ac115ac2157209379e04",
@@ -2280,7 +2285,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-18T15:42:20.293845032",
+        "timestamp": "2026-09-21T18:03:19.510510204",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
