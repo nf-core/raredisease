@@ -47,22 +47,17 @@ workflow ANNOTATE_MT_SNVS {
                 VCFANNO_MT.out.vcf.join(VCFANNO_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true),
                 val_genome
             )
-            ch_cadd_vcf = ANNOTATE_CADD.out.vcf
+
+            // Strict join: CADD was requested, so every item must have a CADD result.
+            // A missing one here is a real failure and should error, not silently fall
+            // back to the non-CADD-annotated VCF.
+            ch_vep_in = VCFANNO_MT.out.vcf
+                .join(ANNOTATE_CADD.out.vcf, failOnMismatch:true, failOnDuplicate:true)
+                .map { meta, _vcfanno, cadd -> [meta + [prefix: meta.prefix + "_cadd_vep"], cadd, []] }
         } else {
-            ch_cadd_vcf = channel.empty()
+            ch_vep_in = VCFANNO_MT.out.vcf
+                .map { meta, vcfanno -> [meta + [prefix: meta.prefix + "_vep"], vcfanno, []] }
         }
-
-        ch_annotated_vcfs = VCFANNO_MT.out.vcf
-            .join(ch_cadd_vcf, remainder: true)
-            .branch { meta, vcfanno, cadd  ->
-                vcfanno: cadd.equals(null)
-                    return [meta+ [prefix: meta.prefix + "_vep"], vcfanno]
-                cadd: !(cadd.equals(null))
-                    return [meta + [prefix: meta.prefix + "_cadd_vep"], cadd]
-            }
-
-        ch_vep_in = ch_annotated_vcfs.vcfanno.mix(ch_annotated_vcfs.cadd)
-            .map { meta, vcf -> return [meta, vcf, []] }
 
         // Annotating with ensembl Vep
         ENSEMBLVEP_MT(
