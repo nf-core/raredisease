@@ -33,7 +33,10 @@ env:
 jobs:
   nf-test-cadd:
     name: "cadd_scoring | ${{ matrix.NXF_VER }}"
-    runs-on: "ubuntu-latest"
+    runs-on: # use self-hosted runners
+      - runs-on=${{ github.run_id }}-nf-test-cadd
+      - runner=4cpu-linux-x64
+      - volume=80gb
     strategy:
       fail-fast: false
       matrix:

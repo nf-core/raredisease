@@ -601,6 +601,11 @@
                     "help_text": "Set this to true, and specify the contig(s) using `restrict_to_contigs` parameter",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "genmod_skip_plugin_check": {
+                    "type": "boolean",
+                    "description": "Pass --skip_plugin_check to genmod score, so a rank model config missing an info_key/csq_key referenced in its scoring categories degrades that category to a warning instead of aborting the pipeline.",
+                    "fa_icon": "fas fa-toggle-on"
+                },
                 "homoplasmy_af_threshold": {
                     "type": "number",
                     "default": 1.0,
@@ -626,6 +631,14 @@
                     "description": "Method selection for ngs-bits samplegender",
                     "fa_icon": "fas fa-align-center",
                     "enum": ["xy", "hetx", "sry"]
+                },
+                "sex_source": {
+                    "type": "string",
+                    "default": "samplesheet",
+                    "description": "Source of sample sex for sex-dependent analysis steps (e.g. ExpansionHunter).",
+                    "help_text": "`samplesheet`: always use the samplesheet `sex` value. `auto`: use the ngs-bits SampleGender estimate only for samples whose samplesheet `sex` is `0` or `other`. `estimated`: always use the ngs-bits SampleGender estimate. `auto` and `estimated` require the ngs-bits SampleGender step (i.e. `ngsbits` must not be in `--skip_tools`).",
+                    "fa_icon": "fas fa-venus-mars",
+                    "enum": ["samplesheet", "auto", "estimated"]
                 },
                 "restrict_to_contigs": {
                     "type": "string",
@@ -827,18 +840,6 @@
             "fa_icon": "fas fa-user-cog",
             "description": "Options used to facilitate the annotation of the variants.",
             "properties": {
-                "variant_consequences_snv": {
-                    "type": "string",
-                    "description": "File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic and mitochondrial SNVs.",
-                    "help_text": "For more information check https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html",
-                    "fa_icon": "fas fa-file-csv"
-                },
-                "variant_consequences_sv": {
-                    "type": "string",
-                    "description": "File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic SVs.",
-                    "help_text": "For more information check https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html",
-                    "fa_icon": "fas fa-file-csv"
-                },
                 "vep_cache_version": {
                     "type": "integer",
                     "default": 116,

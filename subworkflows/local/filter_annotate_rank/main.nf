@@ -1,5 +1,5 @@
 include { VCF_FILTER_BCFTOOLS_FILTERVEP as GENERATE_CLINICAL_SET } from '../vcf_filter_bcftools_filtervep'
-include { ANNOTATE_CSQ_PLI                                       } from '../annotate_consequence_pli'
+include { ANNOTATE_PLI                                           } from '../annotate_pli'
 include { RANK_VARIANTS                                          } from '../rank_variants'
 
 workflow FILTER_ANNOTATE_RANK {
@@ -8,7 +8,6 @@ workflow FILTER_ANNOTATE_RANK {
     ch_pedfile                 // channel: [ path(ped) ]
     ch_reduced_penetrance      // channel: [ path(txt) ]
     ch_score_config            // channel: [ path(ini) ]
-    ch_variant_consequences    // channel: [ path(txt) ]
     ch_vcf                     // channel: [ val(meta), path(vcf) ]  - VEP-annotated vcf entering this stage
     filter_with_bcftools       // boolean
     filter_with_filter_vep     // boolean
@@ -37,17 +36,16 @@ workflow FILTER_ANNOTATE_RANK {
 
     ch_ann_csq_in = ch_clinical_vcf.mix(ch_clin_research_vcf.research)
 
-    ANNOTATE_CSQ_PLI(
-        ch_variant_consequences,
+    ANNOTATE_PLI(
         ch_ann_csq_in,
         !run_rank
     )
 
-    ch_out_vcf = ANNOTATE_CSQ_PLI.out.vcf_ann
-    ch_out_tbi = ANNOTATE_CSQ_PLI.out.tbi
+    ch_out_vcf = ANNOTATE_PLI.out.vcf_ann
+    ch_out_tbi = ANNOTATE_PLI.out.tbi
 
     if (run_rank) {
-        ch_rank_in = ANNOTATE_CSQ_PLI.out.vcf_ann
+        ch_rank_in = ANNOTATE_PLI.out.vcf_ann
             .filter { meta, _vcf ->
                 if (meta.probands.size()==0) {
                     log.warn("Skipping ${val_type_label} ranking since no affected samples are detected in the case")

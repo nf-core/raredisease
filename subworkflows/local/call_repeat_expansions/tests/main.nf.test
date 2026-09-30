@@ -51,6 +51,40 @@ nextflow_workflow {
     }
 
 
+    test("CALL_REPEAT_EXPANSIONS - ExpansionHunter uses meta.analysis_sex") {
+
+        // ACC13778A2 is female (sex: 2); analysis_sex '1' forces ExpansionHunter to
+        // genotype the catalog's chrX locus as haploid instead of diploid, so the
+        // repeat VCF differs from the "CALL_REPEAT_EXPANSIONS" case above.
+        when {
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2', "analysis_sex:'1'")},
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1] = channel.of([id:'genome'], file(params.resources_remapped + '/variant_catalog/grch38_expansionhunter_variant_catalog_remapped.json', checkIfExists: true)).collect()
+                input[2] = channel.of([id:'amusingmarmoset'])
+                input[3] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[4] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert snapshot(
+                path(workflow.out.vcf[0][1].toString()).vcf.variantsMD5,
+                path(workflow.out.vcf[0][1].toString()).vcf.summary
+            ).match()
+        }
+
+    }
+
+
     test("CALL_REPEAT_EXPANSIONS, stub") {
 
         options "-stub"

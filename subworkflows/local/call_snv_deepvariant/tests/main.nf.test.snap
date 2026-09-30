@@ -194,6 +194,16 @@
             "nextflow": "26.04.6"
         }
     },
+    "CALL_SNV_DEEPVARIANT - DeepVariant uses meta.analysis_sex": {
+        "content": [
+            "656219a3a09b694fd648a81f3fc5827d"
+        ],
+        "timestamp": "2026-09-10T11:27:09.600550962",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
     "CALL_SNV_DEEPVARIANT - wgs, minimal dataset": {
         "content": [
             "11996f7ce5061eadc3b58c845983d3c1",

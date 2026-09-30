@@ -141,8 +141,6 @@ workflow NFCORE_RAREDISEASE {
     val_target_bed
     val_variant_caller
     val_variant_catalog
-    val_variant_consequences_snv
-    val_variant_consequences_sv
     val_vcf2cytosure_blacklist
     val_vcfanno_extra_resources
     val_vcfanno_lua
@@ -255,8 +253,6 @@ workflow NFCORE_RAREDISEASE {
                                         : channel.value([[:], []]))
     ch_ml_model                 = channelFromPathWithMeta(val_ml_model, true)
     ch_variant_catalog          = channelFromPathWithMeta(val_variant_catalog, true)
-    ch_variant_consequences_snv = channelFromPathWithMeta(val_variant_consequences_snv, true)
-    ch_variant_consequences_sv  = channelFromPathWithMeta(val_variant_consequences_sv, true)
 
     // Using channelFromPathWithMeta helper (with simpleName). If filepath is null, returns, empty channel
     ch_gens_pon_female          = channelFromPathWithMeta(val_gens_pon_female)
@@ -495,8 +491,6 @@ workflow NFCORE_RAREDISEASE {
         ch_target_bed,
         ch_target_intervals,
         ch_variant_catalog,
-        ch_variant_consequences_snv,
-        ch_variant_consequences_sv,
         ch_vcf2cytosure_blacklist,
         ch_vcfanno_extra,
         ch_vcfanno_lua,
@@ -719,6 +713,7 @@ workflow NFCORE_RAREDISEASE {
     peddy                                               = RAREDISEASE.out.peddy                       // channel: [ val(meta), path(*) ]
     multiqc                                             = RAREDISEASE.out.multiqc                     // channel: [ val(meta), path(*) ]
     pedigree                                            = ch_pedfile                                  // channel: [ path(ped) ]
+    resolved_pedigree                                   = RAREDISEASE.out.resolved_pedigree           // channel: [ path(ped) ]
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -844,8 +839,6 @@ workflow {
         params.target_bed,
         params.variant_caller,
         params.variant_catalog,
-        params.variant_consequences_snv,
-        params.variant_consequences_sv,
         params.vcf2cytosure_blacklist,
         params.vcfanno_extra_resources,
         params.vcfanno_lua,
@@ -1005,6 +998,7 @@ workflow {
     peddy                             = NFCORE_RAREDISEASE.out.peddy
     multiqc                           = NFCORE_RAREDISEASE.out.multiqc
     pedigree                          = NFCORE_RAREDISEASE.out.pedigree
+    resolved_pedigree                 = NFCORE_RAREDISEASE.out.resolved_pedigree
 }
 
 output {
@@ -1089,6 +1083,9 @@ output {
         path { _meta, _file -> "multiqc/" }
     }
     pedigree {
+        path { _file -> "pedigree/" }
+    }
+    resolved_pedigree {
         path { _file -> "pedigree/" }
     }
 }

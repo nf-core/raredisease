@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `--sex_source` (`samplesheet` | `auto` | `estimated`) to optionally use the ngs-bits `SampleGender` estimated sex in place of the samplesheet sex for sex-dependent analysis. The effective sex is resolved once into `meta.analysis_sex`, leaving the samplesheet `meta.sex` untouched; currently applied to ExpansionHunter only [issue #465](https://github.com/nf-core/raredisease/issues/465) [PR #1020](https://github.com/nf-core/raredisease/pull/1020)
+- Extend `meta.analysis_sex` (`--sex_source`) to the remaining sex-dependent steps: DeepVariant (`--haploid_contigs` on the sex chromosomes), vcf2cytosure (`--sex`), and Gens (female/male panel-of-normals selection) [issue #465](https://github.com/nf-core/raredisease/issues/465) [PR #1022](https://github.com/nf-core/raredisease/pull/1022)
+- Add a second, sex-resolved PED file for GENMOD only. Peddy/somalier keep comparing against the declared PED, so X-linked inheritance models can apply to samples whose samplesheet sex was `0`/`other` once `--sex_source` resolves it; guards against an ngs-bits estimate that contradicts a sample's pedigree role (father/mother) by keeping the declared sex instead [issue #465](https://github.com/nf-core/raredisease/issues/465) [PR #1026](https://github.com/nf-core/raredisease/pull/1026)
+- Add `--genmod_skip_plugin_check`, passed through to `genmod score` as `--skip_plugin_check`: a rank model config whose `info_key`/`csq_key` for a scoring category is missing from the VCF header degrades that category to a warning instead of aborting the pipeline. Intended as a transition safety net for custom `score_config_*` files ahead of upcoming changes to how `most_severe_consequence` is scored [PR #1031](https://github.com/nf-core/raredisease/pull/1031)
 - Enable `gens` in the default `test` profile (removed from `skip_tools`), with a minimal-dataset panel of normals, so the Gens preprocessing subworkflow is covered by the pipeline-level tests [issue #786](https://github.com/nf-core/raredisease/issues/786) [PR #1021](https://github.com/nf-core/raredisease/pull/1021)
 - Add a real (non-stub) test to `gens` using the minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1017](https://github.com/nf-core/raredisease/pull/1017)
 - Add a real (non-stub) test to `call_sv_germlinecnvcaller` using the minimal 9-region GIAB dataset [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1017](https://github.com/nf-core/raredisease/pull/1017)
@@ -41,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Removed`
 
+- **Breaking:** Removed `CUSTOM_ADDMOSTSEVERECONSEQUENCE`/`bin/add_most_severe_consequence.py` and the `--variant_consequences_snv`/`--variant_consequences_sv` params. GENMOD's rank-model scoring already picks the most severe consequence directly from VEP's `CSQ` field (`record_rule = max`, matched against `csq_key = Consequence`), making the separate per-gene consequence-ranking script and its externally-supplied SO-term list redundant. **Any custom `score_config_snv`/`score_config_sv`/`score_config_mt` rank model must update its `most_severe_consequence` category to `info_key = CSQ` / `csq_key = Consequence` (instead of `info_key = most_severe_consequence`)** before upgrading, or set `--genmod_skip_plugin_check true` as a transition fallback [PR #1032](https://github.com/nf-core/raredisease/pull/1032)
 - Remove the `test_bam` profile: its all-BAM trio was a strict subset of `test_align`'s coverage, which already exercises both plain-BAM ingestion and CRAM conversion in one run [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #977](https://github.com/nf-core/raredisease/pull/977)
 - Removed the `rtgtools`/`vcfeval` variant-evaluation feature entirely: the `VARIANT_EVALUATION` subworkflow, `rtgtools/format` and `rtgtools/vcfeval` modules, and the `--run_rtgvcfeval`, `--rtg_truthvcfs`, and `--sdf` parameters [issue #963](https://github.com/nf-core/raredisease/issues/963) [PR #964](https://github.com/nf-core/raredisease/pull/964)
 - Removed `hisat2`/`build` because hisat2 indexes are no longer needed for mitosalt [issue #1015](https://github.com/nf-core/raredisease/issues/1015) [PR #1014](https://github.com/nf-core/raredisease/pull/1014)
@@ -48,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - Replace `--call_interval` (Sentieon-only) with `--snv_call_region`, which restricts SNV calling to a given region for both DeepVariant and Sentieon and falls back to the padded `--target_bed` as processed by the pipeline (not the raw file) when not set and `analysis_type` is `wes`; for `wgs`, `target_bed` is not used as a calling restriction, since it may be set purely for QC/contamination purposes [issue #740](https://github.com/nf-core/raredisease/issues/740) [PR #1028](https://github.com/nf-core/raredisease/pull/1028)
+- Run the nf-test workflows on the nf-core self-hosted runners, matching the nf-core template [PR #1036](https://github.com/nf-core/raredisease/pull/1036)
 - Refactor the `then {}` blocks of the pipeline-level nf-tests (`default`, `test_align`, `test_align_singleton`, `test_sentieon`, `test_vcf`, `test_vcf_singleton`): assert `workflow.success` first, before any file parsing; use descriptive closure parameter names; drop the implicit `it` [PR #1015](https://github.com/nf-core/raredisease/pull/1016)
 - Add a `tests/lib/TestData.groovy` helper (`TestData.sample('ACC13778A2')`) and use it across the subworkflow nf-tests, replacing 124 repeated inline sample-meta literals [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1006](https://github.com/nf-core/raredisease/pull/1006)
 - Replace the repeated `setup { run("GET_CHROM_SIZES") {…} }` block in eight subworkflow nf-tests (`annotate_genome_snvs`, `annotate_rhocallviz`, `call_mt_snvs`, `call_snv`, `call_snv_deepvariant`, `call_snv_sentieon`, `call_sv_MT`, `postprocess_MT_calls`) with the pre-generated `subworkflow_fixtures/minimal_reference_chrom.sizes` fixture [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1007](https://github.com/nf-core/raredisease/pull/1007)
@@ -113,9 +119,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated tiddit/cov and tiddit/sv to v3.9.7 [PR #1001](https://github.com/nf-core/raredisease/pull/1001)
 - Updated vcf2cytosure to v0.10.0 [PR #1003](https://github.com/nf-core/raredisease/pull/1003)
 - Updated `deepvariant/rundeepvariant` to v1.10.0 [PR #1010](https://github.com/nf-core/raredisease/pull/1010)
+- Updated `svdb/merge` and `svdb/query` to v2.12.0 [PR #1025](https://github.com/nf-core/raredisease/pull/1025)
 
 ### `Fixed`
 
+- Fix `annotate_genome_snvs`/`annotate_mt_snvs` silently falling back to the non-CADD-annotated VCF if a CADD result is ever missing when CADD was requested, instead of failing the run [issue #868](https://github.com/nf-core/raredisease/issues/868) [PR #1034](https://github.com/nf-core/raredisease/pull/1034)
+- Fix `MITOSALT` silently succeeding with empty output on a JVM out-of-memory crash in its `reformat.sh` step: heap size is now based on `task.memory` instead of a hardcoded `-Xmx100g`, and a log check turns a JVM OOM into `exit 137` so Nextflow retries with more memory instead of shipping empty files [PR #1027](https://github.com/nf-core/raredisease/pull/1027)
 - Pass `--allosomal-contig` to GATK `PostprocessGermlineCNVCalls` so X and Y take their reference copy-number from the `DetermineGermlineContigPloidy` contig-ploidy calls instead of the diploid autosomal default, which otherwise produces spurious sex-chromosome CNV calls (`X`/`Y` for GRCh37, `chrX`/`chrY` otherwise) [issue #965](https://github.com/nf-core/raredisease/issues/965) [PR #966](https://github.com/nf-core/raredisease/pull/966)
 - Fix `call_sv`'s standalone subworkflow test failing against the new minimal dataset with "Minimum memory limit allowed is 6MB": `BWA_INDEX`'s default memory (proportional to fasta size) computes below Docker's floor for the tiny sliced reference; the test's own setup step now applies the same `[6.B * fasta.size(), 100.MB].max()` floor already used for the real `PREPARE_REFERENCES:BWA_INDEX_GENOME` invocation in `conf/modules/prepare_references.config` [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #983](https://github.com/nf-core/raredisease/pull/983)
 - Fix `call_snv_sentieon`'s standalone test passing the genome fasta and fai in the wrong argument order (a pre-existing bug masked by stub mode never touching file content) [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #987](https://github.com/nf-core/raredisease/pull/987)
@@ -150,6 +159,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |                     | duplicates_marker             |
 |                     | somalier_sites_vcf            |
 | call_interval       | snv_call_region               |
+|                     | sex_source                    |
+|                     | genmod_skip_plugin_check      |
 | hisat2              |                               |
 | hisat2_build_memory |                               |
 
@@ -165,6 +176,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | tiddit/cov                   | 3.9.5       | 3.9.7       |
 | vcf2cytosure                 | 0.9.3       | 0.10.0      |
 | deepvariant                  | 1.9.0       | 1.10.0      |
+| svdb                         | 2.8.4       | 2.12.0      |
 
 ## 3.1.2 - Princess Peach (patch) [2026-07-06]
 
