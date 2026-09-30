@@ -2,21 +2,23 @@
 // A subworkflow to annotate snvs in the genome
 //
 
-include { ANNOTATE_CADD                              } from '../annotate_cadd'
-include { ANNOTATE_RHOCALLVIZ                        } from '../annotate_rhocallviz'
-include { BCFTOOLS_CONCAT                            } from '../../../modules/nf-core/bcftools/concat/main'
-include { BCFTOOLS_CONCAT as BCFTOOLS_CONCAT_VCFANNO } from '../../../modules/nf-core/bcftools/concat/main'
-include { BCFTOOLS_ROH                               } from '../../../modules/nf-core/bcftools/roh/main'
-include { BCFTOOLS_VIEW                              } from '../../../modules/nf-core/bcftools/view/main'
-include { CHROMOGRAPH as CHROMOGRAPH_REGIONS         } from '../../../modules/nf-core/chromograph/main'
-include { CHROMOGRAPH as CHROMOGRAPH_SITES           } from '../../../modules/nf-core/chromograph/main'
-include { ENSEMBLVEP_VEP as ENSEMBLVEP_SNV           } from '../../../modules/nf-core/ensemblvep/vep/main'
-include { GATK4_SELECTVARIANTS                       } from '../../../modules/nf-core/gatk4/selectvariants/main'
-include { RHOCALL_ANNOTATE                           } from '../../../modules/nf-core/rhocall/annotate/main'
-include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL      } from '../../../modules/nf-core/tabix/bgziptabix/main'
-include { UPD as UPD_REGIONS                         } from '../../../modules/nf-core/upd/main'
-include { UPD as UPD_SITES                           } from '../../../modules/nf-core/upd/main'
-include { VCFANNO                                    } from '../../../modules/nf-core/vcfanno/main'
+include { ANNOTATE_CADD                                    } from '../annotate_cadd'
+include { ANNOTATE_RHOCALLVIZ                              } from '../annotate_rhocallviz'
+include { BCFTOOLS_CONCAT                                  } from '../../../modules/nf-core/bcftools/concat/main'
+include { BCFTOOLS_CONCAT as BCFTOOLS_CONCAT_VCFANNO       } from '../../../modules/nf-core/bcftools/concat/main'
+include { BCFTOOLS_ROH                                     } from '../../../modules/nf-core/bcftools/roh/main'
+include { BCFTOOLS_VIEW                                    } from '../../../modules/nf-core/bcftools/view/main'
+include { CHROMOGRAPH as CHROMOGRAPH_REGIONS.              } from '../../../modules/nf-core/chromograph/main'
+include { CHROMOGRAPH as CHROMOGRAPH_SITES                 } from '../../../modules/nf-core/chromograph/main'
+include { ENSEMBLVEP_VEP as ENSEMBLVEP_SNV.                } from '../../../modules/nf-core/ensemblvep/vep/main'
+include { GATK4_SELECTVARIANTS                             } from '../../../modules/nf-core/gatk4/selectvariants/main'
+include { RHOCALL_ANNOTATE                                 } from '../../../modules/nf-core/rhocall/annotate/main'
+include { TABIX_BGZIPTABIX as ZIP_TABIX_ROHCALL            } from '../../../modules/nf-core/tabix/bgziptabix/main'
+include { UCSC_BEDTOBIGBED as UCSC_BEDTOBIGBED_UPD_REGIONS } from '../../../modules/nf-core/ucsc/bedtobigbed/main'
+include { UCSC_BEDTOBIGBED as UCSC_BEDTOBIGBED_UPD_SITES   } from '../../../modules/nf-core/ucsc/bedtobigbed/main'
+include { UPD as UPD_REGIONS                               } from '../../../modules/nf-core/upd/main'
+include { UPD as UPD_SITES                                 } from '../../../modules/nf-core/upd/main'
+include { VCFANNO                                          } from '../../../modules/nf-core/vcfanno/main'
 
 workflow ANNOTATE_GENOME_SNVS {
 
@@ -46,6 +48,8 @@ workflow ANNOTATE_GENOME_SNVS {
     main:
         ch_chromograph_regions_plots = channel.empty()
         ch_chromograph_sites_plots   = channel.empty()
+        ch_upd_regions_bigbed        = channel.empty()
+        ch_upd_sites_bigbed          = channel.empty()
         ch_vcf_scatter_in            = channel.empty()
 
         ch_roh_in = ch_vcf
@@ -183,6 +187,11 @@ workflow ANNOTATE_GENOME_SNVS {
             CHROMOGRAPH_REGIONS([[],[]], [[],[]], [[],[]], [[],[]], [[],[]], UPD_REGIONS.out.bed, [[],[]])
             ch_chromograph_sites_plots   = CHROMOGRAPH_SITES.out.plots
             ch_chromograph_regions_plots = CHROMOGRAPH_REGIONS.out.plots
+
+            UCSC_BEDTOBIGBED_UPD_SITES(UPD_SITES.out.bed, ch_genome_chrsizes, [])
+            UCSC_BEDTOBIGBED_UPD_REGIONS(UPD_REGIONS.out.bed, ch_genome_chrsizes, [])
+            ch_upd_sites_bigbed   = UCSC_BEDTOBIGBED_UPD_SITES.out.bigbed
+            ch_upd_regions_bigbed = UCSC_BEDTOBIGBED_UPD_REGIONS.out.bigbed
         }
 
         ch_concat_vcf_out = BCFTOOLS_CONCAT.out.vcf
@@ -203,4 +212,6 @@ workflow ANNOTATE_GENOME_SNVS {
         rhocall_viz_bed           = ANNOTATE_RHOCALLVIZ.out.rhocall_viz_bed          // channel: [ val(meta), path(bed) ]
         rhocall_viz_wig           = ANNOTATE_RHOCALLVIZ.out.rhocall_viz_wig          // channel: [ val(meta), path(wig) ]
         ucsc_wigtobigwig_bw       = ANNOTATE_RHOCALLVIZ.out.ucsc_wigtobigwig_bw     // channel: [ val(meta), path(bw) ]
+        upd_regions_bigbed        = ch_upd_regions_bigbed                            // channel: [ val(meta), path(bigBed) ]
+        upd_sites_bigbed          = ch_upd_sites_bigbed                              // channel: [ val(meta), path(bigBed) ]
 }

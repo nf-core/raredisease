@@ -16,6 +16,7 @@ nextflow_workflow {
     tag "rhocall/annotate"
     tag "upd"
     tag "chromograph"
+    tag "ucsc/bedtobigbed"
     tag "ensemblvep/vep"
     tag "tabix/bgziptabix"
     tag "gatk4/selectvariants"
@@ -85,7 +86,9 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert snapshot(
                     "${file(workflow.out.bcftools_concat_vcf[0][1]).name}:md5,${path(workflow.out.bcftools_concat_vcf[0][1]).vcf.variantsMD5}",
-                    path(workflow.out.bcftools_concat_vcf[0][1]).vcf.summary
+                    path(workflow.out.bcftools_concat_vcf[0][1]).vcf.summary,
+                    "${file(workflow.out.upd_regions_bigbed[0][1]).name}:md5,${path(workflow.out.upd_regions_bigbed[0][1]).md5}",
+                    "${file(workflow.out.upd_sites_bigbed[0][1]).name}:md5,${path(workflow.out.upd_sites_bigbed[0][1]).md5}"
                 ).match() }
             )
         }

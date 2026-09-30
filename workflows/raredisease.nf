@@ -286,6 +286,8 @@ workflow RAREDISEASE {
     ch_annotate_genome_snvs_rhocall_viz_bed           = channel.empty()
     ch_annotate_genome_snvs_rhocall_viz_wig           = channel.empty()
     ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       = channel.empty()
+    ch_annotate_genome_snvs_upd_regions_bigbed        = channel.empty()
+    ch_annotate_genome_snvs_upd_sites_bigbed          = channel.empty()
     ch_annotate_mt_snvs_ensemblvep_mt_tbi             = channel.empty()
     ch_annotate_mt_snvs_ensemblvep_mt_vcf             = channel.empty()
     ch_annotate_sv_report               = channel.empty()
@@ -683,6 +685,8 @@ workflow RAREDISEASE {
         ch_annotate_genome_snvs_rhocall_viz_bed           = ANNOTATE_GENOME_SNVS.out.rhocall_viz_bed
         ch_annotate_genome_snvs_rhocall_viz_wig           = ANNOTATE_GENOME_SNVS.out.rhocall_viz_wig
         ch_annotate_genome_snvs_ucsc_wigtobigwig_bw       = ANNOTATE_GENOME_SNVS.out.ucsc_wigtobigwig_bw
+        ch_annotate_genome_snvs_upd_regions_bigbed        = ANNOTATE_GENOME_SNVS.out.upd_regions_bigbed
+        ch_annotate_genome_snvs_upd_sites_bigbed          = ANNOTATE_GENOME_SNVS.out.upd_sites_bigbed
 
         FILTER_ANNOTATE_RANK_SNV(
             ch_hgnc_ids,
@@ -1303,6 +1307,8 @@ workflow RAREDISEASE {
     annotate_genome_snvs_rhocall_viz_bed             = ch_annotate_genome_snvs_rhocall_viz_bed             // channel: [ val(meta), path(bed) ]
     annotate_genome_snvs_rhocall_viz_wig             = ch_annotate_genome_snvs_rhocall_viz_wig             // channel: [ val(meta), path(wig) ]
     annotate_genome_snvs_ucsc_wigtobigwig_bw         = ch_annotate_genome_snvs_ucsc_wigtobigwig_bw         // channel: [ val(meta), path(bw) ]
+    annotate_genome_snvs_upd_regions_bigbed          = ch_annotate_genome_snvs_upd_regions_bigbed          // channel: [ val(meta), path(bigBed) ]
+    annotate_genome_snvs_upd_sites_bigbed            = ch_annotate_genome_snvs_upd_sites_bigbed            // channel: [ val(meta), path(bigBed) ]
     annotate_mt_snvs_ensemblvep_mt_tbi               = ch_annotate_mt_snvs_ensemblvep_mt_tbi // channel: [ val(meta), path(tbi) ]
     annotate_mt_snvs_ensemblvep_mt_vcf               = ch_annotate_mt_snvs_ensemblvep_mt_vcf // channel: [ val(meta), path(vcf) ]
     call_mobile_elements_tbi                         = ch_call_mobile_elements_tbi // channel: [ val(meta), path(tbi) ]
