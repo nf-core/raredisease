@@ -167,7 +167,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | hisat2                 |                               |
 | hisat2_build_memory    |                               |
 
-
 ### Tool updates
 
 | Tool                         | Old version | New version |
