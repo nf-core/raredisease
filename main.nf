@@ -57,7 +57,6 @@ workflow NFCORE_RAREDISEASE {
     val_bwameme
     val_cadd_prescored
     val_cadd_resources
-    val_call_interval
     val_concatenate_snv_calls
     val_contamination_sites
     val_contamination_sites_tbi
@@ -85,8 +84,6 @@ workflow NFCORE_RAREDISEASE {
     val_known_dbsnp_tbi
     val_light_strand_origin_end
     val_light_strand_origin_start
-    val_manta_call_regions
-    val_manta_call_regions_tbi
     val_mito_length
     val_mito_name
     val_mitosalt_breakspan
@@ -135,7 +132,10 @@ workflow NFCORE_RAREDISEASE {
     val_sequence_dictionary
     val_skip_tools
     val_skip_subworkflows
+    val_snv_call_region
     val_subdepth
+    val_sv_call_region
+    val_sv_call_region_tbi
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
     val_target_bed
@@ -244,7 +244,13 @@ workflow NFCORE_RAREDISEASE {
     // Using channelFromPathWithMeta helper (with simpleName). If filepath is null, returns, [[:],[]]
     ch_cadd_prescored           = channelFromPathWithMeta(val_cadd_prescored, true)
     ch_cadd_resources           = channelFromPathWithMeta(val_cadd_resources, true)
-    ch_call_interval            = channelFromPathWithMeta(val_call_interval, true)
+    // target_bed only doubles as the SNV calling-region fallback for WES; for WGS it may be
+    // set purely for QC/contamination purposes and must not restrict variant calling.
+    ch_snv_call_region          = val_snv_call_region
+                                    ? channelFromPathWithMeta(val_snv_call_region, true)
+                                    : (val_analysis_type.equals("wes")
+                                        ? ch_target_bed.map { meta, bed, _tbi -> [meta, bed] }
+                                        : channel.value([[:], []]))
     ch_ml_model                 = channelFromPathWithMeta(val_ml_model, true)
     ch_variant_catalog          = channelFromPathWithMeta(val_variant_catalog, true)
 
@@ -268,9 +274,10 @@ workflow NFCORE_RAREDISEASE {
     ch_cadd_header              = channel.fromPath("$projectDir/assets/cadd_to_vcf_header_-1.0-.txt", checkIfExists: true).collect()
     ch_foundin_header           = channel.fromPath("$projectDir/assets/foundin.hdr", checkIfExists: true).collect()
     ch_glnexus_config           = val_glnexus_config ? channel.value([[id: 'glnexus_config'], file(val_glnexus_config)]) : channelFromPathWithMeta("${projectDir}/assets/glnexus_config_dp1.yml", true)
+    // sv_call_region is currently only consumed by Manta (TIDDIT/CNVnator have no region-restriction support)
     ch_manta_regions            = val_analysis_type.equals("wgs")
-                                    ? (val_manta_call_regions
-                                        ? channel.value([file(val_manta_call_regions), file(val_manta_call_regions_tbi)])
+                                    ? (val_sv_call_region
+                                        ? channel.value([file(val_sv_call_region), file(val_sv_call_region_tbi)])
                                         : channel.value([[], []]))
                                     : ch_target_bed.map { _meta, bed, tbi -> [bed, tbi] }
     ch_ngsbits_method           = channel.value(val_ngsbits_samplegender_method)
@@ -417,7 +424,6 @@ workflow NFCORE_RAREDISEASE {
         ch_cadd_header,
         ch_cadd_prescored,
         ch_cadd_resources,
-        ch_call_interval,
         ch_case_info,
         ch_contamination_sites,
         ch_dbsnp,
@@ -475,6 +481,7 @@ workflow NFCORE_RAREDISEASE {
         ch_score_config_snv,
         ch_score_config_sv,
         ch_sentieon_pcr_indel_model,
+        ch_snv_call_region,
         ch_subdepth,
         ch_svcaller_priority,
         ch_svd_bed,
@@ -751,7 +758,6 @@ workflow {
         params.bwameme,
         params.cadd_prescored,
         params.cadd_resources,
-        params.call_interval,
         params.concatenate_snv_calls,
         params.contamination_sites,
         params.contamination_sites_tbi,
@@ -779,8 +785,6 @@ workflow {
         params.known_dbsnp_tbi,
         params.light_strand_origin_end,
         params.light_strand_origin_start,
-        params.manta_call_regions,
-        params.manta_call_regions_tbi,
         params.mito_length,
         params.mito_name,
         params.mitosalt_breakspan,
@@ -829,7 +833,10 @@ workflow {
         params.sequence_dictionary,
         params.skip_tools,
         params.skip_subworkflows,
+        params.snv_call_region,
         params.mitosalt_depth,
+        params.sv_call_region,
+        params.sv_call_region_tbi,
         params.svdb_query_bedpedbs,
         params.svdb_query_dbs,
         params.target_bed,

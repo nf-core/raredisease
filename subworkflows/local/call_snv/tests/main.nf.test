@@ -21,12 +21,11 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0]  = channel.of([[id:'interval'], []])
-                input[1]  = channel.of([id:'amusingmarmoset'])
-                input[2]  = channel.of([[:], []])
-                input[3]  = channel.of([[id:'genome'], []])
-                input[4]  = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
-                input[5]  = channel.of(
+                input[0]  = channel.of([id:'amusingmarmoset'])
+                input[1]  = channel.of([[:], []])
+                input[2]  = channel.of([[id:'genome'], []])
+                input[3]  = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[4]  = channel.of(
                     [${TestData.sample('ACC13778A2')},
                      file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
                      file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
@@ -34,20 +33,20 @@ nextflow_workflow {
                      file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
                      file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
                 )
-                input[6]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
-                input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
-                input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
-                input[9] = channel.of([
+                input[5]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[6]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[8] = channel.of([
                     [ id:'glnexus_config'],
                     file('../../../assets/glnexus_config_dp1.yml')
                 ])
-                input[10]  = channel.of([[id:'model'], []])
-                input[11] = channel.of([[id:'par'], []]).collect()
-                input[12] = channel.of([[id:'model'], []])
-                input[13] = channel.of([[id:'target'], [], []])
-                input[14] = 'wgs'
-                input[15] = false
-                input[16] = 'deepvariant'
+                input[9]  = channel.of([[id:'model'], []])
+                input[10] = channel.of([[id:'par'], []]).collect()
+                input[11] = channel.of([[id:'model'], []])
+                input[12] = channel.of([[id:'region'], []])
+                input[13] = 'wgs'
+                input[14] = false
+                input[15] = 'deepvariant'
                 """
             }
         }
@@ -74,12 +73,11 @@ nextflow_workflow {
             }
             workflow {
                 """
-                input[0]  = channel.of([[id:'interval'], []])
-                input[1]  = channel.of([id:'amusingmarmoset'])
-                input[2]  = channel.of([[:], []])
-                input[3]  = channel.of([[id:'genome'], []])
-                input[4]  = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
-                input[5]  = channel.of(
+                input[0]  = channel.of([id:'amusingmarmoset'])
+                input[1]  = channel.of([[:], []])
+                input[2]  = channel.of([[id:'genome'], []])
+                input[3]  = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[4]  = channel.of(
                     [${TestData.sample('ACC13778A2')},
                      file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
                      file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
@@ -87,20 +85,20 @@ nextflow_workflow {
                      file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
                      file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
                 )
-                input[6]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
-                input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
-                input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
-                input[9] = channel.of([
+                input[5]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[6]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[8] = channel.of([
                     [ id:'glnexus_config'],
                     file('../../../assets/glnexus_config_dp1.yml')
                 ])
-                input[10] = channel.of([[id:'model'], []])
-                input[11] = channel.of([[id:'par'], []]).collect()
-                input[12] = channel.of([[id:'model'], []])
-                input[13] = channel.of([[id:'target'], [], []])
-                input[14] = 'wgs'
-                input[15] = false
-                input[16] = 'deepvariant'
+                input[9] = channel.of([[id:'model'], []])
+                input[10] = channel.of([[id:'par'], []]).collect()
+                input[11] = channel.of([[id:'model'], []])
+                input[12] = channel.of([[id:'region'], []])
+                input[13] = 'wgs'
+                input[14] = false
+                input[15] = 'deepvariant'
                 """
             }
         }

@@ -260,23 +260,6 @@
                     "description": "Local directory base for genome references that map to the config.",
                     "help_text": "This folder is a flat structure with file names that map to the config."
                 },
-                "manta_call_regions": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "file-path",
-                    "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.bed\\.gz$",
-                    "description": "Path to a bgzipped BED file restricting Manta SV calling to specific regions (e.g. primary chromosomes). Only applied for WGS; for WES, Manta always uses target_bed instead.",
-                    "help_text": "Must be supplied together with --manta_call_regions_tbi. Only used when analysis_type is wgs — for wes, Manta uses the target_bed supplied via --target_bed and this parameter has no effect. Useful for reducing runtime on references with many short contigs such as GRCh38."
-                },
-                "manta_call_regions_tbi": {
-                    "type": "string",
-                    "exists": true,
-                    "format": "file-path",
-                    "fa_icon": "fas fa-file",
-                    "pattern": "^\\S+\\.bed\\.gz\\.tbi$",
-                    "description": "Tabix index for the file supplied via --manta_call_regions."
-                },
                 "mito_name": {
                     "type": "string",
                     "description": "Name of the mitochondrial contig in the reference fasta file",
@@ -397,6 +380,23 @@
                     "fa_icon": "fas fa-file",
                     "pattern": "^\\S+\\.dict$",
                     "description": "Path to the genome dictionary file"
+                },
+                "sv_call_region": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.bed\\.gz$",
+                    "description": "Path to a bgzipped BED file restricting SV calling to specific regions (e.g. primary chromosomes). Currently only used by Manta, and only for WGS; for WES, Manta always uses target_bed instead.",
+                    "help_text": "Must be supplied together with --sv_call_region_tbi. Currently only consumed by Manta SV calling, and only when analysis_type is wgs — for wes, Manta uses the target_bed supplied via --target_bed and this parameter has no effect. TIDDIT and CNVnator do not support region restriction and ignore this parameter entirely. Useful for reducing runtime on references with many short contigs such as GRCh38."
+                },
+                "sv_call_region_tbi": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "pattern": "^\\S+\\.bed\\.gz\\.tbi$",
+                    "description": "Tabix index for the file supplied via --sv_call_region."
                 },
                 "svdb_query_bedpedbs": {
                     "type": "string",
@@ -796,12 +796,13 @@
             "fa_icon": "fas fa-map-signs",
             "description": "Options to adjust parameters and filtering criteria for variant calling.",
             "properties": {
-                "call_interval": {
+                "snv_call_region": {
                     "type": "string",
                     "exists": true,
                     "format": "path",
                     "fa_icon": "fas fa-align-center",
-                    "description": "Interval in the reference that will be used in the software. Used only by sentieon."
+                    "description": "Restrict SNV calling (DeepVariant or Sentieon) to this region.",
+                    "help_text": "Path to a BED or Picard-style interval_list file used to restrict SNV calling to specific regions of the genome. Falls back to the padded --target_bed (as processed by the pipeline, not the raw file) when not supplied and analysis_type is wes; for wgs, target_bed is not used as a calling restriction (it may be set purely for QC/contamination purposes), so the whole genome is called unless --snv_call_region is set explicitly."
                 },
                 "cnvnator_binsize": {
                     "type": "integer",
