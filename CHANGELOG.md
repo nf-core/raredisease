@@ -52,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Replace `--call_interval` (Sentieon-only) with `--snv_call_region`, which restricts SNV calling to a given region for both DeepVariant and Sentieon and falls back to the padded `--target_bed` as processed by the pipeline (not the raw file) when not set and `analysis_type` is `wes`; for `wgs`, `target_bed` is not used as a calling restriction, since it may be set purely for QC/contamination purposes [issue #740](https://github.com/nf-core/raredisease/issues/740) [PR #1028](https://github.com/nf-core/raredisease/pull/1028)
 - Run the nf-test workflows on the nf-core self-hosted runners, matching the nf-core template [PR #1036](https://github.com/nf-core/raredisease/pull/1036)
 - Refactor the `then {}` blocks of the pipeline-level nf-tests (`default`, `test_align`, `test_align_singleton`, `test_sentieon`, `test_vcf`, `test_vcf_singleton`): assert `workflow.success` first, before any file parsing; use descriptive closure parameter names; drop the implicit `it` [PR #1015](https://github.com/nf-core/raredisease/pull/1016)
 - Add a `tests/lib/TestData.groovy` helper (`TestData.sample('ACC13778A2')`) and use it across the subworkflow nf-tests, replacing 124 repeated inline sample-meta literals [issue #795](https://github.com/nf-core/raredisease/issues/795) [PR #1006](https://github.com/nf-core/raredisease/pull/1006)
@@ -157,6 +158,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |                     | peddy_sites                   |
 |                     | duplicates_marker             |
 |                     | somalier_sites_vcf            |
+| call_interval       | snv_call_region               |
 |                     | sex_source                    |
 |                     | genmod_skip_plugin_check      |
 | hisat2              |                               |

@@ -84,7 +84,6 @@ workflow RAREDISEASE {
     ch_cadd_header
     ch_cadd_prescored
     ch_cadd_resources
-    ch_call_interval
     ch_case_info
     ch_contamination_sites
     ch_dbsnp
@@ -142,6 +141,7 @@ workflow RAREDISEASE {
     ch_score_config_snv
     ch_score_config_sv
     ch_sentieon_pcr_indel_model
+    ch_snv_call_region
     ch_subdepth
     ch_svcaller_priority
     ch_svd_bed
@@ -610,7 +610,6 @@ workflow RAREDISEASE {
 
     if (!skip_snv_calling) {
         CALL_SNV (
-            ch_call_interval,
             ch_case_info,
             ch_dbsnp,
             ch_dbsnp_tbi,
@@ -623,7 +622,7 @@ workflow RAREDISEASE {
             ch_ml_model,
             ch_par_bed,
             ch_sentieon_pcr_indel_model,
-            ch_target_bed,
+            ch_snv_call_region,
             val_analysis_type,
             val_skip_split_multiallelics,
             val_variant_caller,
