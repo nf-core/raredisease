@@ -19,6 +19,7 @@ process CREATE_PEDIGREE_FILE {
 
     script:
     def case_name = samples[0].case_id
+    def prefix    = task.ext.prefix ?: case_name
     outfile_text = ['#family_id', 'sample_id', 'father', 'mother', 'sex', 'phenotype'].join('\\t')
     def samples_list = []
     samples.each { sample ->
@@ -29,12 +30,13 @@ process CREATE_PEDIGREE_FILE {
         }
     }
     """
-    echo -e "$outfile_text" >${case_name}.ped
+    echo -e "$outfile_text" >${prefix}.ped
     """
 
     stub:
     def case_name = samples[0].case_id
+    def prefix    = task.ext.prefix ?: case_name
     """
-    touch ${case_name}.ped
+    touch ${prefix}.ped
     """
 }

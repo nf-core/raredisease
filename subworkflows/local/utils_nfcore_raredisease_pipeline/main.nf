@@ -368,6 +368,12 @@ def createCaseChannel(List rows) {
     case_info.upd_children = upd_children.toList()
     case_info.id           = rows[0].case_id
 
+    // [ sample_id: 'father' | 'mother' ] -- who plays a pedigree role in this case,
+    // for the --sex_source estimate-vs-role consistency guard in resolveAnalysisSex.
+    case_info.roles = [:]
+    if (isNonZeroNonEmpty(father)) { case_info.roles[father] = 'father' }
+    if (isNonZeroNonEmpty(mother)) { case_info.roles[mother] = 'mother' }
+
     return case_info
 }
 
@@ -404,6 +410,15 @@ def extractPrecalledVcfs(List rows) {
 def validateInputParameters() {
     genomeExistsError()
     validatePrecalledVcfCoverage()
+    validateSexSource()
+}
+
+// --sex_source 'auto'/'estimated' rely on the ngs-bits SampleGender estimate, which
+// is only produced when the ngs-bits step runs.
+def validateSexSource() {
+    if (params.sex_source != 'samplesheet' && parseSkipList(params.skip_tools, 'ngsbits')) {
+        error("--sex_source '${params.sex_source}' needs the ngs-bits SampleGender step, but 'ngsbits' is listed in --skip_tools. Remove it from --skip_tools, or set --sex_source samplesheet.")
+    }
 }
 
 // A case with any precalled VCF has no fastq/bam/cram rows (enforced by validateNoMixedCaseInput), so every
@@ -451,6 +466,41 @@ def parseSkipList(paramValue, toolName) {
 }
 
 //
+// Resolve the sex used for sex-dependent analysis steps.
+//
+// Returns a string in the same domain as meta.sex ('1' | '2' | '0' | 'other').
+// `predicted_sex` is the ngs-bits SampleGender 'gender' value
+// ('male' | 'female' | 'unknown' | null when the estimate is unavailable).
+//   - 'samplesheet' : always the samplesheet value
+//   - 'auto'        : ngs-bits estimate only when the samplesheet value is '0'/'other'
+//   - 'estimated'   : ngs-bits estimate always, falling back to the samplesheet
+//                     value when the estimate is unusable
+// Throws on an unrecognised mode (the schema enum should prevent this).
+//
+def resolveAnalysisSex(samplesheet_sex, predicted_sex, mode, pedigree_role = null, sample_id = null) {
+    def declared = samplesheet_sex?.toString()
+    if (mode == 'samplesheet') {
+        return declared
+    }
+    // Only relevant when the estimate would actually be used: always for 'estimated',
+    // and for 'auto' only while filling a gap (declared sex isn't already 1/2).
+    def estimate_would_apply = (mode == 'estimated') || (mode == 'auto' && !(declared in ['1', '2']))
+    def estimate = ['male': '1', 'female': '2'][predicted_sex?.toString()?.toLowerCase()]
+    def expected_by_role = ['father': '1', 'mother': '2'][pedigree_role]
+    if (estimate_would_apply && estimate && expected_by_role && estimate != expected_by_role) {
+        log.warn("Sample '${sample_id}' is the pedigree ${pedigree_role} but the ngs-bits SampleGender estimate ('${predicted_sex}' -> '${estimate}') contradicts that role; keeping the declared sex ('${declared}') instead. Confirm against the peddy / somalier sex-check.")
+        estimate = null
+    }
+    if (mode == 'estimated') {
+        return estimate ?: declared
+    }
+    if (mode == 'auto') {
+        return (declared in ['1', '2']) ? declared : (estimate ?: declared)
+    }
+    error("resolveAnalysisSex: unknown sex_source mode '${mode}' (expected 'samplesheet', 'auto' or 'estimated')")
+}
+
+//
 // Validate parameters
 //
 
@@ -476,12 +526,11 @@ def checkRequiredParameters(params) {
         repeat_annotation        : ["variant_catalog"],
         snv_calling              : ["genome"],
         snv_annotation           : ["genome", "vcfanno_resources", "vcfanno_toml",
-                                    "gnomad_af", "score_config_snv", "variant_consequences_snv"],
-        sv_annotation            : ["genome", "score_config_sv", "variant_consequences_sv"],
-        mt_annotation            : ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "score_config_mt",
-                                    "variant_consequences_snv"],
+                                    "gnomad_af", "score_config_snv"],
+        sv_annotation            : ["genome", "score_config_sv"],
+        mt_annotation            : ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "score_config_mt"],
         me_calling               : ["mobile_element_references"],
-        me_annotation            : ["mobile_element_svdb_annotations", "variant_consequences_snv"],
+        me_annotation            : ["mobile_element_svdb_annotations"],
         gens                     : ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
         germlinecnvcaller        : ["ploidy_model", "gcnvcaller_model", "readcount_intervals"],
         smncopynumbercaller      : ["genome"]

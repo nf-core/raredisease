@@ -1,4 +1,15 @@
 {
+    "CALL_REPEAT_EXPANSIONS - ExpansionHunter uses meta.analysis_sex": {
+        "content": [
+            "ff44bea270322dac37e15e40fde1fb48",
+            "VcfFile [chromosomes=[chrX, chr16, chr21, chr12, chr20], sampleCount=1, variantCount=7, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-09-09T22:28:30.342693745",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
     "CALL_REPEAT_EXPANSIONS, stub": {
         "content": [
             {

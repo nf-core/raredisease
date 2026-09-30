@@ -11,7 +11,6 @@ nextflow_workflow {
     tag "bcftools/norm"
     tag "deepvariant/rundeepvariant"
     tag "glnexus"
-    tag "tabix/bgzip"
     tag "local/add_varcallername_to_bed"
 
     config "./nextflow.config"
@@ -42,9 +41,8 @@ nextflow_workflow {
                     file('../../../assets/glnexus_config_dp1.yml')
                 ])
                 input[7] = channel.of([[id:'par'], []]).collect()
-                input[8] = channel.of([[id:'target'], [], []])
-                input[9] = 'wgs'
-                input[10] = false
+                input[8] = channel.of([[id:'region'], []])
+                input[9] = false
                 """
             }
         }
@@ -57,6 +55,50 @@ nextflow_workflow {
                     workflow.out.deepvariant_report.collect { meta, report -> file(report).name },
                     workflow.out.tabix.collect { meta, tbi -> file(tbi).name },
                     workflow.out.gvcf.collect { meta, gvcf -> file(gvcf).name }
+                ).match() }
+            )
+        }
+    }
+
+    test("CALL_SNV_DEEPVARIANT - DeepVariant uses meta.analysis_sex") {
+
+        // ACC13778A2 is female (sex: 2); analysis_sex '1' makes DeepVariant treat
+        // chrX/chrY as haploid (--haploid_contigs) rather than diploid, changing the
+        // sex-chromosome genotypes in the output VCF. A regression that stops honouring
+        // meta.analysis_sex changes this variantsMD5.
+        when {
+            params {
+                bcftools_args = "--write-index=tbi --output-type z"
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [${TestData.sample('ACC13778A2', "analysis_sex:'1'")},
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                )
+                input[1] = channel.of([id:'amusingmarmoset'])
+                input[2] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[3] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[4] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[5] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[6] = channel.of([
+                    [ id:'glnexus_config'],
+                    file('../../../assets/glnexus_config_dp1.yml')
+                ])
+                input[7] = channel.of([[id:'par'], []]).collect()
+                input[8] = channel.of([[id:'target'], [], []])
+                input[9] = 'wgs'
+                input[10] = false
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(workflow.out.vcf[0][1]).vcf.variantsMD5
                 ).match() }
             )
         }
@@ -85,9 +127,8 @@ nextflow_workflow {
 
                 input[6] = channel.of([[],[]])
                 input[7] = channel.of([[id:'par'], []]).collect()
-                input[8] = channel.of([[id:'target'], [], []])
-                input[9] = 'wgs'
-                input[10] = false
+                input[8] = channel.of([[id:'region'], []])
+                input[9] = false
                 """
             }
         }

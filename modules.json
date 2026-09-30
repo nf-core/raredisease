@@ -523,12 +523,12 @@
                     },
                     "svdb/merge": {
                         "branch": "master",
-                        "git_sha": "7d09b5f86908bdd951e42aef9994ad5bb0f6c307",
+                        "git_sha": "56155f73713bc32c5343b59f05d968794c1b596d",
                         "installed_by": ["modules"]
                     },
                     "svdb/query": {
                         "branch": "master",
-                        "git_sha": "7d09b5f86908bdd951e42aef9994ad5bb0f6c307",
+                        "git_sha": "56155f73713bc32c5343b59f05d968794c1b596d",
                         "installed_by": ["modules"]
                     },
                     "tabix/bgzip": {

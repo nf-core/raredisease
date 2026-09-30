@@ -8,7 +8,6 @@ include { BCFTOOLS_NORM as REMOVE_DUPLICATES_GL     } from '../../../modules/nf-
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_GL   } from '../../../modules/nf-core/bcftools/norm/main'
 include { DEEPVARIANT_RUNDEEPVARIANT as DEEPVARIANT } from '../../../modules/nf-core/deepvariant/rundeepvariant/main'
 include { GLNEXUS                                   } from '../../../modules/nf-core/glnexus/main'
-include { TABIX_BGZIP                               } from '../../../modules/nf-core/tabix/bgzip/main'
 
 workflow CALL_SNV_DEEPVARIANT {
     take:
@@ -20,21 +19,13 @@ workflow CALL_SNV_DEEPVARIANT {
         ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_glnexus_config // path: [optional]  [ val(meta), path(config_file) ]
         ch_par_bed                   // channel: [optional] [ val(meta), path(bed) ]
-        ch_target_bed                // channel: [mandatory] [ val(meta), path(bed), path(index) ]
-        val_analysis_type            // boolean
+        ch_snv_call_region            // channel: [optional] [ val(meta), path(bed) ]
         val_skip_split_multiallelics // boolean
 
     main:
 
-        if (val_analysis_type.equals("wes")) {
-            TABIX_BGZIP(ch_target_bed.map{meta, gzbed, _index -> return [meta, gzbed]})
-            ch_deepvar_in = ch_bam_bai
-                .combine (TABIX_BGZIP.out.output.map {_meta, bed -> return bed})
-        } else if (val_analysis_type.equals("wgs")) {
-            ch_deepvar_in = ch_bam_bai
-                .map { meta, bam, bai ->
-                        return [meta, bam, bai, []] }
-        }
+        ch_deepvar_in = ch_bam_bai.combine(ch_snv_call_region)
+            .map { meta, bam, bai, _meta2, region -> [meta, bam, bai, region] }
 
         DEEPVARIANT ( ch_deepvar_in, ch_genome_fasta, ch_genome_fai, [[],[]], ch_par_bed )
         ch_file_list = DEEPVARIANT.out.gvcf

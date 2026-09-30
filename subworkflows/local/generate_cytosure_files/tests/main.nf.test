@@ -47,6 +47,41 @@ nextflow_workflow {
         }
     }
 
+    test("GENERATE_CYTOSURE_FILES - vcf2cytosure uses meta.analysis_sex") {
+
+        // ACC13778A2 is female (sex: 2); analysis_sex '1' must make vcf2cytosure
+        // emit a male CGH (--sex male), i.e. male="true" in the sample element.
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    ${TestData.sample('ACC13778A2', "analysis_sex:'1'")},
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[1] = channel.value([])
+                input[2] = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz.tbi', checkIfExists: true)
+                ])
+                input[3] = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert path(workflow.out.cgh[0][1]).readLines().any { cgh_line ->
+                    cgh_line.contains('<sample sampleId="ACC13778A2" male="true">')
+                } }
+            )
+        }
+    }
+
     test("GENERATE_CYTOSURE_FILES - no customer_id, stub") {
 
         options "-stub"

@@ -7,6 +7,7 @@ include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_raredisease_pipeline'
+include { resolveAnalysisSex     } from '../subworkflows/local/utils_nfcore_raredisease_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,9 +36,10 @@ include { TABIX_TABIX as TABIX_NUCLEAR_AND_MT_SVS           } from '../modules/n
 // MODULE: Local modules
 //
 
-include { RENAME_ALIGN_FILES as RENAME_BAM } from '../modules/local/rename_align_files'
-include { RENAME_ALIGN_FILES as RENAME_BAI } from '../modules/local/rename_align_files'
-include { SANITY_CHECK_VCFANNO_DATABASES   } from '../modules/local/sanity_check_vcfanno_databases/main'
+include { CREATE_PEDIGREE_FILE as CREATE_RESOLVED_PEDIGREE_FILE } from '../modules/local/create_pedigree_file'
+include { RENAME_ALIGN_FILES as RENAME_BAM                      } from '../modules/local/rename_align_files'
+include { RENAME_ALIGN_FILES as RENAME_BAI                      } from '../modules/local/rename_align_files'
+include { SANITY_CHECK_VCFANNO_DATABASES                        } from '../modules/local/sanity_check_vcfanno_databases/main'
 
 //
 // SUBWORKFLOWS
@@ -82,7 +84,6 @@ workflow RAREDISEASE {
     ch_cadd_header
     ch_cadd_prescored
     ch_cadd_resources
-    ch_call_interval
     ch_case_info
     ch_contamination_sites
     ch_dbsnp
@@ -140,6 +141,7 @@ workflow RAREDISEASE {
     ch_score_config_snv
     ch_score_config_sv
     ch_sentieon_pcr_indel_model
+    ch_snv_call_region
     ch_subdepth
     ch_svcaller_priority
     ch_svd_bed
@@ -150,8 +152,6 @@ workflow RAREDISEASE {
     ch_target_bed
     ch_target_intervals
     ch_variant_catalog
-    ch_variant_consequences_snv
-    ch_variant_consequences_sv
     ch_vcf2cytosure_blacklist
     ch_vcfanno_extra
     ch_vcfanno_lua
@@ -478,6 +478,54 @@ workflow RAREDISEASE {
     )
 
     //
+    // Effective sex per sample for sex-dependent analysis steps (see --sex_source).
+    // [ sample_id, analysis_sex ] — one row per sample; folded into meta.analysis_sex
+    // on ch_mapped_sexed below.
+    //
+    ch_analysis_sex = ch_mapped.genome_marked_bam_bai
+        .map { meta, _bam, _bai -> [ meta.id, meta.sex ] }
+        .join(
+            QC_BAM.out.ngsbits_samplegender_tsv
+                .splitCsv( elem: 1, sep: '\t', header: true )
+                .map { meta, row -> [ meta.id, row.gender ] },
+            remainder: true
+        )
+        .combine(ch_case_info)
+        .map { id, declared, predicted, case_info ->
+            def pedigree_role = case_info.roles?.get(id)
+            def resolved = resolveAnalysisSex(declared, predicted, params.sex_source, pedigree_role, id)
+            if (params.sex_source == 'estimated' && declared?.toString() in ['1', '2'] && resolved != declared?.toString()) {
+                log.warn("Sample '${id}': samplesheet sex '${declared}' replaced by the ngs-bits SampleGender estimate ('${predicted}' -> '${resolved}') because --sex_source is 'estimated'. Confirm against the peddy / somalier sex-check.")
+            }
+            [ id, resolved ]
+        }
+
+    //
+    // Aligned BAM channel carrying meta.analysis_sex, for the sex-dependent steps
+    // (ExpansionHunter, DeepVariant, vcf2cytosure, Gens).
+    //
+    ch_mapped_sexed = ch_mapped.genome_marked_bam_bai
+        .map { meta, bam, bai -> [ meta.id, meta, bam, bai ] }
+        .join(ch_analysis_sex)
+        .map { _id, meta, bam, bai, analysis_sex -> [ meta + [ analysis_sex: analysis_sex ], bam, bai ] }
+
+    //
+    // Second PED file, sex resolved (see --sex_source), for GENMOD only.
+    // peddy/somalier keep the declared ch_pedfile above -- the sex-check has to
+    // compare data against what was actually declared, not another estimate.
+    // Samples with no analysis_sex (e.g. the precalled-VCF entry point, where
+    // QC_BAM never runs) fall back to their declared sex, same as ch_analysis_sex.
+    //
+    ch_analysis_sex_by_sample = ch_analysis_sex
+        .toList()
+        .map { rows -> rows.collectEntries { id, sex -> [ (id): sex ] } }
+    ch_resolved_samples = ch_samples
+        .combine(ch_analysis_sex_by_sample)
+        .map { sample, sex_by_sample -> sample + [ sex: (sex_by_sample[sample.sample] ?: sample.sex) ] }
+        .toList()
+    ch_resolved_pedfile = CREATE_RESOLVED_PEDIGREE_FILE(ch_resolved_samples).ped
+
+    //
     // SUBWORKFLOW: Check sample contamination using VerifyBamID2 and/or GATK
     //
     CONTAMINATION (
@@ -499,8 +547,8 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
     if ( val_analysis_type.equals("wgs") && (!skip_smncopynumbercaller || !skip_repeat_calling) && !has_any_precalled_vcf) {
-        RENAME_BAM(ch_mapped.genome_marked_bam, "bam")
-        RENAME_BAI(ch_mapped.genome_marked_bai, "bam.bai")
+        RENAME_BAM(ch_mapped_sexed.map { meta, bam, _bai -> [ meta, bam ] }, "bam")
+        RENAME_BAI(ch_mapped_sexed.map { meta, _bam, bai -> [ meta, bai ] }, "bam.bai")
     }
 
 /*
@@ -510,8 +558,11 @@ workflow RAREDISEASE {
 */
 
     if (!skip_repeat_calling && val_analysis_type.equals("wgs") && !has_any_precalled_vcf ) {
+        ch_repeat_bam = RENAME_BAM.out.output
+            .join(RENAME_BAI.out.output, failOnMismatch:true, failOnDuplicate:true)
+
         CALL_REPEAT_EXPANSIONS (
-            RENAME_BAM.out.output.join(RENAME_BAI.out.output, failOnMismatch:true, failOnDuplicate:true),
+            ch_repeat_bam,
             ch_variant_catalog,
             ch_case_info,
             ch_genome_fasta,
@@ -559,12 +610,11 @@ workflow RAREDISEASE {
 
     if (!skip_snv_calling) {
         CALL_SNV (
-            ch_call_interval,
             ch_case_info,
             ch_dbsnp,
             ch_dbsnp_tbi,
             ch_foundin_header,
-            ch_mapped.genome_marked_bam_bai,
+            ch_mapped_sexed,
             ch_genome_chrsizes,
             ch_genome_fasta,
             ch_genome_fai,
@@ -572,7 +622,7 @@ workflow RAREDISEASE {
             ch_ml_model,
             ch_par_bed,
             ch_sentieon_pcr_indel_model,
-            ch_target_bed,
+            ch_snv_call_region,
             val_analysis_type,
             val_skip_split_multiallelics,
             val_variant_caller,
@@ -635,10 +685,9 @@ workflow RAREDISEASE {
 
         FILTER_ANNOTATE_RANK_SNV(
             ch_hgnc_ids,
-            ch_pedfile,
+            ch_resolved_pedfile,
             ch_reduced_penetrance,
             ch_score_config_snv,
-            ch_variant_consequences_snv,
             ch_annotate_genome_snvs_bcftools_concat_vcf,
             false,
             true,
@@ -719,10 +768,9 @@ workflow RAREDISEASE {
 
         FILTER_ANNOTATE_RANK_MT(
             ch_hgnc_ids,
-            ch_pedfile,
+            ch_resolved_pedfile,
             ch_reduced_penetrance,
             ch_score_config_mt,
-            ch_variant_consequences_snv,
             ch_mt_annotate.vcf_ann,
             true,
             false,
@@ -866,10 +914,9 @@ workflow RAREDISEASE {
 
         FILTER_ANNOTATE_RANK_SV(
             ch_hgnc_ids,
-            ch_pedfile,
+            ch_resolved_pedfile,
             ch_reduced_penetrance,
             ch_score_config_sv,
-            ch_variant_consequences_sv,
             ch_sv_annotate.vcf_ann,
             false,
             true,
@@ -923,10 +970,9 @@ workflow RAREDISEASE {
 
         FILTER_ANNOTATE_RANK_ME(
             ch_hgnc_ids,
-            ch_pedfile,
+            ch_resolved_pedfile,
             ch_reduced_penetrance,
             ch_score_config_sv,
-            ch_variant_consequences_sv,
             ch_me_annotate.vcf_ann,
             false,
             true,
@@ -1031,7 +1077,7 @@ workflow RAREDISEASE {
 */
     if (!skip_vcf2cytosure && val_analysis_type.equals("wgs") && !skip_sv_annotation && !has_any_precalled_vcf) {
         GENERATE_CYTOSURE_FILES (
-            ch_mapped.genome_marked_bam_bai,
+            ch_mapped_sexed,
             ch_vcf2cytosure_blacklist,
             ch_annotate_sv_tbi,
             ch_annotate_sv_vcf_ann
@@ -1046,7 +1092,7 @@ workflow RAREDISEASE {
 */
     if (!skip_gens && val_analysis_type.equals("wgs") && !skip_snv_calling) {
         GENS (
-            ch_mapped.genome_marked_bam_bai,
+            ch_mapped_sexed,
             ch_genome_dictionary,
             ch_genome_fai,
             ch_genome_fasta,
@@ -1278,6 +1324,7 @@ workflow RAREDISEASE {
     smncopynumbercaller = ch_smncopynumbercaller // channel: [ val(meta), path(*) ]
     peddy               = ch_peddy               // channel: [ val(meta), path(*) ]
     multiqc             = ch_multiqc             // channel: [ val(meta), path(*) ]
+    resolved_pedigree   = ch_resolved_pedfile     // channel: [ path(ped) ]
 }
 
 
