@@ -52,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
+- Rename `--manta_call_regions`/`--manta_call_regions_tbi` to `--sv_call_region`/`--sv_call_region_tbi` for naming consistency with `--snv_call_region` ([issue #740](https://github.com/nf-core/raredisease/issues/740), [PR #1028](https://github.com/nf-core/raredisease/pull/1028)); behavior is unchanged, and it is currently only consumed by Manta (TIDDIT and CNVnator do not support region-restricted calling) [issue #740](https://github.com/nf-core/raredisease/issues/740) [PR #XXXX](https://github.com/nf-core/raredisease/pull/XXXX)
 - Replace `--call_interval` (Sentieon-only) with `--snv_call_region`, which restricts SNV calling to a given region for both DeepVariant and Sentieon and falls back to the padded `--target_bed` as processed by the pipeline (not the raw file) when not set and `analysis_type` is `wes`; for `wgs`, `target_bed` is not used as a calling restriction, since it may be set purely for QC/contamination purposes [issue #740](https://github.com/nf-core/raredisease/issues/740) [PR #1028](https://github.com/nf-core/raredisease/pull/1028)
 - Run the nf-test workflows on the nf-core self-hosted runners, matching the nf-core template [PR #1036](https://github.com/nf-core/raredisease/pull/1036)
 - Refactor the `then {}` blocks of the pipeline-level nf-tests (`default`, `test_align`, `test_align_singleton`, `test_sentieon`, `test_vcf`, `test_vcf_singleton`): assert `workflow.success` first, before any file parsing; use descriptive closure parameter names; drop the implicit `it` [PR #1015](https://github.com/nf-core/raredisease/pull/1016)
@@ -147,22 +148,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter       | New parameter                 |
-| ------------------- | ----------------------------- |
-|                     | contamination_sites           |
-|                     | contamination_sites_tbi       |
-|                     | pre_vep_snv_filter_expression |
-|                     | glnexus_config                |
-|                     | vep_gtf                       |
-|                     | vep_gtf_tbi                   |
-|                     | peddy_sites                   |
-|                     | duplicates_marker             |
-|                     | somalier_sites_vcf            |
-| call_interval       | snv_call_region               |
-|                     | sex_source                    |
-|                     | genmod_skip_plugin_check      |
-| hisat2              |                               |
-| hisat2_build_memory |                               |
+| Old parameter          | New parameter                 |
+| ---------------------- | ----------------------------- |
+|                        | contamination_sites           |
+|                        | contamination_sites_tbi       |
+|                        | pre_vep_snv_filter_expression |
+|                        | glnexus_config                |
+|                        | vep_gtf                       |
+|                        | vep_gtf_tbi                   |
+|                        | peddy_sites                   |
+|                        | duplicates_marker             |
+|                        | somalier_sites_vcf            |
+| manta_call_regions     | sv_call_region                |
+| manta_call_regions_tbi | sv_call_region_tbi            |
+| call_interval          | snv_call_region               |
+|                        | sex_source                    |
+|                        | genmod_skip_plugin_check      |
+| hisat2                 |                               |
+| hisat2_build_memory    |                               |
 
 ### Tool updates
 
