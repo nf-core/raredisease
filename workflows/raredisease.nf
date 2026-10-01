@@ -1056,7 +1056,7 @@ workflow RAREDISEASE {
             .map { meta, vcf, tbi -> [ meta, vcf, tbi, [] ] }
 
         // somalier sites VCF supplied via params.somalier_sites_vcf
-        ch_somalier_sites = channel.value( file(params.somalier_sites_vcf) )
+        ch_somalier_sites = channel.value( [ [id:'sites'], file(params.somalier_sites_vcf) ] )
 
         VCF_EXTRACT_RELATE_SOMALIER(
             ch_vcfs_for_somalier,
