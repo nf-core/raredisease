@@ -209,6 +209,48 @@
                     ]
                 ],
                 [
+                    "8",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset",
+                                "probands": [
+                                    "ACC13778A1"
+                                ],
+                                "upd_children": [
+                                    "ACC13778A1"
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3",
+                                "prefix": "amusingmarmoset_rhocall_vcfanno",
+                                "upd_child": "ACC13778A1"
+                            },
+                            "amusingmarmoset.bigBed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "9",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset",
+                                "probands": [
+                                    "ACC13778A1"
+                                ],
+                                "upd_children": [
+                                    "ACC13778A1"
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3",
+                                "prefix": "amusingmarmoset_rhocall_vcfanno",
+                                "upd_child": "ACC13778A1"
+                            },
+                            "amusingmarmoset.bigBed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
                     "bcftools_concat_tbi",
                     [
                         [
@@ -413,10 +455,52 @@
                             "ACC13778A1_rhocallviz.bw:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
+                ],
+                [
+                    "upd_regions_bigbed",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset",
+                                "probands": [
+                                    "ACC13778A1"
+                                ],
+                                "upd_children": [
+                                    "ACC13778A1"
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3",
+                                "prefix": "amusingmarmoset_rhocall_vcfanno",
+                                "upd_child": "ACC13778A1"
+                            },
+                            "amusingmarmoset.bigBed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                [
+                    "upd_sites_bigbed",
+                    [
+                        [
+                            {
+                                "id": "amusingmarmoset",
+                                "probands": [
+                                    "ACC13778A1"
+                                ],
+                                "upd_children": [
+                                    "ACC13778A1"
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3",
+                                "prefix": "amusingmarmoset_rhocall_vcfanno",
+                                "upd_child": "ACC13778A1"
+                            },
+                            "amusingmarmoset.bigBed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
                 ]
             ]
         ],
-        "timestamp": "2026-08-26T11:10:15.038586579",
+        "timestamp": "2026-09-30T10:09:18.922225174",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
@@ -570,6 +654,18 @@
                     ]
                 ],
                 [
+                    "8",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "9",
+                    [
+                        
+                    ]
+                ],
+                [
                     "bcftools_concat_tbi",
                     [
                         [
@@ -712,10 +808,22 @@
                             "ACC13778A1_rhocallviz.bw:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
+                ],
+                [
+                    "upd_regions_bigbed",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "upd_sites_bigbed",
+                    [
+                        
+                    ]
                 ]
             ]
         ],
-        "timestamp": "2026-08-26T11:10:56.778126387",
+        "timestamp": "2026-09-30T10:10:01.739468252",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
@@ -724,9 +832,11 @@
     "ANNOTATE_GENOME_SNVS - GRCh38, wgs, minimal dataset": {
         "content": [
             "amusingmarmoset_rhocall_filter_vep.vcf.gz:md5,2d75e854d4e2dc5d44c8205f56173966",
-            "VcfFile [chromosomes=[chr7, chrX, chr16, chr21, chr1, chr12, chr20], sampleCount=3, variantCount=783, phased=false, phasedAutodetect=false]"
+            "VcfFile [chromosomes=[chr7, chrX, chr16, chr21, chr1, chr12, chr20], sampleCount=3, variantCount=783, phased=false, phasedAutodetect=false]",
+            "amusingmarmoset.bigBed:md5,541dc8c1ece29436fb443ac60e77400d",
+            "amusingmarmoset.bigBed:md5,f4ac2bb9dc943c70696c930ba6adb888"
         ],
-        "timestamp": "2026-08-21T10:49:34.762710756",
+        "timestamp": "2026-09-30T10:28:49.817421063",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"

@@ -666,6 +666,8 @@ workflow NFCORE_RAREDISEASE {
     annotate_genome_snvs_rhocall_viz_bed                = RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_bed           // channel: [ val(meta), path(bed) ]
     annotate_genome_snvs_rhocall_viz_wig                = RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_wig           // channel: [ val(meta), path(wig) ]
     annotate_genome_snvs_ucsc_wigtobigwig_bw            = RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw       // channel: [ val(meta), path(bw) ]
+    annotate_genome_snvs_upd_regions_bigbed             = RAREDISEASE.out.annotate_genome_snvs_upd_regions_bigbed        // channel: [ val(meta), path(bigBed) ]
+    annotate_genome_snvs_upd_sites_bigbed               = RAREDISEASE.out.annotate_genome_snvs_upd_sites_bigbed          // channel: [ val(meta), path(bigBed) ]
     annotate_mt_snvs_ensemblvep_mt_tbi                  = RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_tbi             // channel: [ val(meta), path(tbi) ]
     annotate_mt_snvs_ensemblvep_mt_vcf                  = RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf             // channel: [ val(meta), path(vcf) ]
     rank_snv_tbi                                        = RAREDISEASE.out.rank_snv_tbi                                  // channel: [ val(meta), path(tbi) ]
@@ -950,6 +952,8 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_bed)
                                             .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_rhocall_viz_wig)
     annotate_snv_genome_rhocallviz_bw = NFCORE_RAREDISEASE.out.annotate_genome_snvs_ucsc_wigtobigwig_bw
+    annotate_snv_genome_upd_bigbed    = NFCORE_RAREDISEASE.out.annotate_genome_snvs_upd_regions_bigbed
+                                            .mix(NFCORE_RAREDISEASE.out.annotate_genome_snvs_upd_sites_bigbed)
     annotate_snv_mt                   = NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_vcf
                                             .mix(NFCORE_RAREDISEASE.out.annotate_mt_snvs_ensemblvep_mt_tbi)
     contamination_gatk                = NFCORE_RAREDISEASE.out.contamination_gatk_table
@@ -1047,6 +1051,9 @@ output {
     }
     annotate_snv_genome_rhocallviz_bw {
         path { meta, _file -> "annotate_snv/genome/${meta.sample}_rhocallviz/" }
+    }
+    annotate_snv_genome_upd_bigbed {
+        path { _meta, _file -> "annotate_snv/genome/upd/" }
     }
     annotate_snv_mt {
         path { _meta, _file -> "annotate_snv/mitochondria/" }

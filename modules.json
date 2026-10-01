@@ -556,6 +556,11 @@
                         "git_sha": "835cb29e8c360c64a0d1584a1325453b6ea6383c",
                         "installed_by": ["modules"]
                     },
+                    "ucsc/bedtobigbed": {
+                        "branch": "master",
+                        "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+                        "installed_by": ["modules"]
+                    },
                     "ucsc/wigtobigwig": {
                         "branch": "master",
                         "git_sha": "d0afa49c7c23c9e99a47af9bafb4cee449853560",

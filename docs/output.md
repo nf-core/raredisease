@@ -439,7 +439,16 @@ Based on VEP annotations, a custom script used by the pipeline further annotates
 
 #### UPD
 
-[UPD](https://github.com/bjhall/upd) calls regions of uniparental disomy from germline exome/wgs trios. Output from UPD is passed to chromograph for making plots.
+[UPD](https://github.com/bjhall/upd) calls regions of uniparental disomy from germline exome/wgs trios. Output from UPD is passed to chromograph for making plots, and converted to the indexed bigBed format for browsing in IGV.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `annotate_snv/genome/upd/`
+  - `<upd_child>_upd_sites.bigBed`: bigBed file with upd sites, for loading into a genome browser.
+  - `<upd_child>_upd_regions.bigBed`: bigBed file with upd regions, for loading into a genome browser.
+
+</details>
 
 #### Chromograph
 
