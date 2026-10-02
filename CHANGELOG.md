@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `--filter_expansionhunter`, a bcftools `-e` expression applied to each sample's ExpansionHunter VCF before the per-case merge (e.g. `'INFO/REPID="HTT" || INFO/REPID~"^HTT_"'` to remove HTT/Huntington's disease records); disabled by default [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1040](https://github.com/nf-core/raredisease/pull/1040)
 - Convert UPD sites and regions bed files to indexed bigBed format via `ucsc/bedtobigbed`, for faster browsing in IGV [issue #1029](https://github.com/nf-core/raredisease/issues/1029) [PR #1037](https://github.com/nf-core/raredisease/pull/1037)
 - Add `--sex_source` (`samplesheet` | `auto` | `estimated`) to optionally use the ngs-bits `SampleGender` estimated sex in place of the samplesheet sex for sex-dependent analysis. The effective sex is resolved once into `meta.analysis_sex`, leaving the samplesheet `meta.sex` untouched; currently applied to ExpansionHunter only [issue #465](https://github.com/nf-core/raredisease/issues/465) [PR #1020](https://github.com/nf-core/raredisease/pull/1020)
 - Extend `meta.analysis_sex` (`--sex_source`) to the remaining sex-dependent steps: DeepVariant (`--haploid_contigs` on the sex chromosomes), vcf2cytosure (`--sex`), and Gens (female/male panel-of-normals selection) [issue #465](https://github.com/nf-core/raredisease/issues/465) [PR #1022](https://github.com/nf-core/raredisease/pull/1022)
@@ -151,6 +152,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Old parameter          | New parameter                 |
 | ---------------------- | ----------------------------- |
+|                        | filter_expansionhunter        |
 |                        | contamination_sites           |
 |                        | contamination_sites_tbi       |
 |                        | pre_vep_snv_filter_expression |
