@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `--ml_prob_threshold` to control the `INFO/ML_PROB` cutoff used to tag and remove Sentieon DNAscope variants as `ML_FAIL`; defaults to `0.70` when not set, replacing the pipeline's previous hardcoded `0.95` [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #TBD](https://github.com/nf-core/raredisease/pull/TBD)
 - Convert UPD sites and regions bed files to indexed bigBed format via `ucsc/bedtobigbed`, for faster browsing in IGV [issue #1029](https://github.com/nf-core/raredisease/issues/1029) [PR #1037](https://github.com/nf-core/raredisease/pull/1037)
 - Add `--sex_source` (`samplesheet` | `auto` | `estimated`) to optionally use the ngs-bits `SampleGender` estimated sex in place of the samplesheet sex for sex-dependent analysis. The effective sex is resolved once into `meta.analysis_sex`, leaving the samplesheet `meta.sex` untouched; currently applied to ExpansionHunter only [issue #465](https://github.com/nf-core/raredisease/issues/465) [PR #1020](https://github.com/nf-core/raredisease/pull/1020)
 - Extend `meta.analysis_sex` (`--sex_source`) to the remaining sex-dependent steps: DeepVariant (`--haploid_contigs` on the sex chromosomes), vcf2cytosure (`--sex`), and Gens (female/male panel-of-normals selection) [issue #465](https://github.com/nf-core/raredisease/issues/465) [PR #1022](https://github.com/nf-core/raredisease/pull/1022)
