@@ -485,6 +485,8 @@ Based on VEP annotations, a custom script used by the pipeline further annotates
 
 [SVDB query](https://github.com/J35P312/SVDB#Query) allows you to quickly annotate your VCF with data from one or more structural variant databases. The output files are not published in the output folder, and is passed to vep for further annotation.
 
+After SVDB query, SVs can optionally be filtered by population frequency using `--sv_freq_filter_expression`, a bcftools `-e` expression, e.g. `'INFO/gnomad_svAF >= 0.01'` to remove SVs with a gnomAD SV allele frequency of 1% or higher. Multiple conditions can be combined, e.g. `'INFO/gnomad_svAF >= 0.01 || INFO/clinvar_pathogenicFrq >= 0.01'`. When not set, no frequency filtering is applied.
+
 #### VEP
 
 [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html) determines the effect of your variants on genes, transcripts, and protein sequence, as well as regulatory regions. We recommend annotating with pLI plugin, along with any other custom plugins you may want too use. Based on VEP annotations, a custom script used by the pipeline further annotates each record with pli scores. The most severe consequence per variant is determined by GENMOD directly from VEP's `CSQ` annotation during scoring, rather than being pre-computed here.
