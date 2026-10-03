@@ -411,12 +411,12 @@ We use CADD only to annotate small indels. To annotate SNVs with precomputed CAD
 ##### 8. SV annotation & Ranking
 
 | Mandatory                                      | Optional                              |
-| ---------------------------------------------- | -------------------------------------- |
-| genome                                         | reduced_penetrance                     |
-| svdb_query_dbs/svdb_query_bedpedbs<sup>1</sup> | sv_freq_filter_expression<sup>3</sup>  |
-| vep_cache_version                              | vep_filters/vep_filters_scout_fmt      |
-| vep_cache                                      | vep_plugin_files                       |
-| score_config_sv<sup>2</sup>                    |                                         |
+| ---------------------------------------------- | ------------------------------------- |
+| genome                                         | reduced_penetrance                    |
+| svdb_query_dbs/svdb_query_bedpedbs<sup>1</sup> | sv_freq_filter_expression<sup>3</sup> |
+| vep_cache_version                              | vep_filters/vep_filters_scout_fmt     |
+| vep_cache                                      | vep_plugin_files                      |
+| score_config_sv<sup>2</sup>                    |                                       |
 
 <sup>1</sup> A CSV file that describes the databases (VCFs or BEDPEs) used by SVDB for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
 <sup>2</sup>Used by GENMOD for ranking the variants. The most severe consequence per variant is determined by GENMOD directly from VEP's `CSQ` annotation during scoring — no separate consequence-ranking file is needed. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_sv.ini).
