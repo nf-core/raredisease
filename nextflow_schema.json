@@ -837,6 +837,13 @@
                     "description": "Specifies the variant types for sentieon variant caller.",
                     "fa_icon": "fas fa-align-center",
                     "enum": ["snp", "indel", "snp,indel"]
+                },
+                "ml_prob_threshold": {
+                    "type": "number",
+                    "default": 0.7,
+                    "fa_icon": "fas fa-sliders-h",
+                    "description": "ML_PROB threshold used to filter Sentieon DNAscope variants.",
+                    "help_text": "Variants with INFO/ML_PROB less than or equal to this value are tagged ML_FAIL and removed. Only used when --variant_caller is sentieon. Defaults to 0.70 when not set."
                 }
             }
         },
