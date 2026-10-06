@@ -704,6 +704,12 @@
                     "description": "Path to the somalier sites VCF (bgzipped).",
                     "pattern": "^\\S+\\.vcf(\\.gz)?$",
                     "fa_icon": "fas fa-file"
+                },
+                "sv_freq_filter_expression": {
+                    "type": "string",
+                    "fa_icon": "fas fa-filter",
+                    "description": "bcftools -e expression to filter SVs by population frequency after SVDB query.",
+                    "help_text": "Passed as the --exclude expression to bcftools view on the SV VCF, after SVDB query and before VEP annotation. For example, 'INFO/SWEFRQ >= 0.02' removes SVs with a Swedish allele frequency of 2% or higher. Null disables the filter."
                 }
             }
         },

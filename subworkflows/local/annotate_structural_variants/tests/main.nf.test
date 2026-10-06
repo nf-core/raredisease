@@ -18,8 +18,9 @@ nextflow_workflow {
 
         when {
             params {
-                bcftools_view = "--output-type z"
-                vep           = "--dir_plugins . --plugin pLI,pLI_values.txt --appris --biotype --buffer_size 100 --canonical --ccds --compress_output bgzip --distance 5000 --domains --exclude_predicted --force_overwrite --format vcf --hgvs --humdiv --max_sv_size 248956422 --no_progress --numbers --per_gene --polyphen p --protein --regulatory --sift p --symbol --tsl --uniprot --vcf"
+                bcftools_view             = "--output-type z"
+                sv_freq_filter_expression = 'INFO/gnomad_svAF >= 0.01'
+                vep                       = "--dir_plugins . --plugin pLI,pLI_values.txt --appris --biotype --buffer_size 100 --canonical --ccds --compress_output bgzip --distance 5000 --domains --exclude_predicted --force_overwrite --format vcf --hgvs --humdiv --max_sv_size 248956422 --no_progress --numbers --per_gene --polyphen p --protein --regulatory --sift p --symbol --tsl --uniprot --vcf"
             }
             workflow {
                 """
