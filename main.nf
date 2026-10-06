@@ -77,6 +77,7 @@ workflow NFCORE_RAREDISEASE {
     val_gnomad_af_idx
     val_heavy_strand_origin_end
     val_heavy_strand_origin_start
+    val_hisat2
     val_homoplasmy_af_threshold
     val_intervals_wgs
     val_intervals_y
@@ -176,6 +177,7 @@ workflow NFCORE_RAREDISEASE {
         val_fasta,
         val_gnomad_af,
         val_gnomad_af_idx,
+        val_hisat2,
         val_known_dbsnp,
         val_known_dbsnp_tbi,
         val_mt_aligner,
@@ -197,6 +199,7 @@ workflow NFCORE_RAREDISEASE {
     ch_genome_chrsizes          = ch_references.genome_chrom_sizes
     ch_genome_fai               = ch_references.genome_fai
     ch_genome_fasta             = ch_references.genome_fasta
+    ch_genome_hisat2index       = ch_references.genome_hisat2_index
     ch_genome_dictionary        = ch_references.genome_dict
     ch_gnomad_af                = ch_references.gnomad_af_idx
     ch_mt_bwaindex              = ch_references.mt_bwa_index
@@ -438,6 +441,7 @@ workflow NFCORE_RAREDISEASE {
         ch_genome_dictionary,
         ch_genome_fai,
         ch_genome_fasta,
+        ch_genome_hisat2index,
         ch_gens_gnomad_pos,
         ch_gens_interval_list,
         ch_gens_pon_female,
@@ -687,6 +691,7 @@ workflow NFCORE_RAREDISEASE {
     prepare_references_genome_dictionary                = ch_genome_dictionary
     prepare_references_genome_fai                       = ch_genome_fai
     prepare_references_genome_fasta                     = ch_genome_fasta
+    prepare_references_genome_hisat2index               = ch_genome_hisat2index
     prepare_references_gnomad_af                        = ch_gnomad_af
     prepare_references_mt_bwaindex                      = ch_mt_bwaindex
     prepare_references_mt_bwamem2index                  = ch_mt_bwamem2index
@@ -778,6 +783,7 @@ workflow {
         params.gnomad_af_idx,
         params.heavy_strand_origin_end,
         params.heavy_strand_origin_start,
+        params.hisat2,
         params.homoplasmy_af_threshold,
         params.intervals_wgs,
         params.intervals_y,
@@ -972,6 +978,7 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_bwamemeindex)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_fai)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_fasta)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_hisat2index)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_dictionary)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_chrsizes)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_bait_intervals)

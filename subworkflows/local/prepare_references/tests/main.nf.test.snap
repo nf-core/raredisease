@@ -13,6 +13,25 @@
             "nextflow": "26.04.3"
         }
     },
+    "Should use pre-built BWA and HISAT2 indexes when provided, stub": {
+        "content": [
+            [
+                {
+                    "id": "bwa"
+                }
+            ],
+            [
+                {
+                    "id": "hisat2_index"
+                }
+            ]
+        ],
+        "timestamp": "2026-10-06T14:59:03.297304",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
     "Should run without failures, stub": {
         "content": [
             [
@@ -685,7 +704,9 @@
                     "0",
                     [
                         [
-                            "target_bed_bait.intervals_list:md5,3af4018aa88e6eb1c7953554eba02f8e"
+                            [
+                                
+                            ]
                         ]
                     ]
                 ],
@@ -703,6 +724,12 @@
                 [
                     "10",
                     [
+                        
+                    ]
+                ],
+                [
+                    "11",
+                    [
                         [
                             {
                                 "id": "minimal_reference"
@@ -712,7 +739,7 @@
                     ]
                 ],
                 [
-                    "11",
+                    "12",
                     [
                         [
                             "/nf-core/test-datasets/raredisease/resources_remapped/vcfanno/grch38_gnomad_af.remapped.tab.gz",
@@ -721,7 +748,7 @@
                     ]
                 ],
                 [
-                    "12",
+                    "13",
                     [
                         [
                             {
@@ -738,13 +765,13 @@
                     ]
                 ],
                 [
-                    "13",
+                    "14",
                     [
                         
                     ]
                 ],
                 [
-                    "14",
+                    "15",
                     [
                         [
                             {
@@ -755,7 +782,7 @@
                     ]
                 ],
                 [
-                    "15",
+                    "16",
                     [
                         [
                             {
@@ -766,7 +793,7 @@
                     ]
                 ],
                 [
-                    "16",
+                    "17",
                     [
                         [
                             {
@@ -777,15 +804,13 @@
                     ]
                 ],
                 [
-                    "17",
+                    "18",
                     [
-                        [
-                            "minimal_reference_mt.intervals:md5,f2936095201aec51cbd45fd428b5bf9a"
-                        ]
+                        
                     ]
                 ],
                 [
-                    "18",
+                    "19",
                     [
                         [
                             {
@@ -804,17 +829,6 @@
                     ]
                 ],
                 [
-                    "19",
-                    [
-                        [
-                            {
-                                "id": "minimal_reference"
-                            },
-                            "minimal_reference_shift.back_chain:md5,1aced5935cd48b7b232ba03d6164298e"
-                        ]
-                    ]
-                ],
-                [
                     "2",
                     [
                         [
@@ -828,18 +842,7 @@
                 [
                     "20",
                     [
-                        [
-                            {
-                                "id": "minimal_reference"
-                            },
-                            [
-                                "minimal_reference_shift.amb:md5,ad1d6545efc080e69ad54ecdbcd0720c",
-                                "minimal_reference_shift.ann:md5,c3108c09f22a99003ddda33a5251b383",
-                                "minimal_reference_shift.bwt:md5,c13d3e8c5ac29b56b31e1882e2111491",
-                                "minimal_reference_shift.pac:md5,0ead764b2f8fa112e3351ca517d2e125",
-                                "minimal_reference_shift.sa:md5,9ef1b52de302c6957f4dc82ed2f21bd1"
-                            ]
-                        ]
+                        
                     ]
                 ],
                 [
@@ -851,46 +854,35 @@
                 [
                     "22",
                     [
-                        [
-                            {
-                                "id": "minimal_reference"
-                            },
-                            "minimal_reference_shift.dict:md5,9c1a67a426dec30db3ba9985fac77ced"
-                        ]
+                        
                     ]
                 ],
                 [
                     "23",
                     [
-                        [
-                            {
-                                "id": "minimal_reference"
-                            },
-                            "minimal_reference_shift.fasta.fai:md5,5340dc8203d9bf0824846e3241e00c53"
-                        ]
+                        
                     ]
                 ],
                 [
                     "24",
                     [
-                        [
-                            {
-                                "id": "minimal_reference"
-                            },
-                            "minimal_reference_shift.fasta:md5,32934cc94ad8a2ceaf263a7da44d30df"
-                        ]
+                        
                     ]
                 ],
                 [
                     "25",
                     [
-                        [
-                            "minimal_reference_mt.shifted.intervals:md5,b44b27549333098faf3a76d8e3cbbcb8"
-                        ]
+                        
                     ]
                 ],
                 [
                     "26",
+                    [
+                        
+                    ]
+                ],
+                [
+                    "27",
                     [
                         [
                             {
@@ -902,15 +894,13 @@
                     ]
                 ],
                 [
-                    "27",
+                    "28",
                     [
-                        [
-                            "target_bed_target.interval_list:md5,0e85cf958af15bab01e9b111bcac53a6"
-                        ]
+                        
                     ]
                 ],
                 [
-                    "28",
+                    "29",
                     [
                         [
                             [
@@ -920,7 +910,24 @@
                     ]
                 ],
                 [
-                    "29",
+                    "3",
+                    [
+                        [
+                            {
+                                "id": "minimal_reference"
+                            },
+                            [
+                                "minimal_reference.amb:md5,db605a7cacc5017abdc89fa3de4fff14",
+                                "minimal_reference.ann:md5,d826ebb57a742074d466e13c64759668",
+                                "minimal_reference.bwt:md5,5624f983f3866e17c99478a32f6495f7",
+                                "minimal_reference.pac:md5,4d02cbd04f97c7bc1d4f017211c793a8",
+                                "minimal_reference.sa:md5,e928db565fb0c1c960ae250b2444af28"
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    "30",
                     [
                         [
                             {
@@ -1157,23 +1164,6 @@
                     ]
                 ],
                 [
-                    "3",
-                    [
-                        [
-                            {
-                                "id": "minimal_reference"
-                            },
-                            [
-                                "minimal_reference.amb:md5,db605a7cacc5017abdc89fa3de4fff14",
-                                "minimal_reference.ann:md5,d826ebb57a742074d466e13c64759668",
-                                "minimal_reference.bwt:md5,5624f983f3866e17c99478a32f6495f7",
-                                "minimal_reference.pac:md5,4d02cbd04f97c7bc1d4f017211c793a8",
-                                "minimal_reference.sa:md5,e928db565fb0c1c960ae250b2444af28"
-                            ]
-                        ]
-                    ]
-                ],
-                [
                     "4",
                     [
                         
@@ -1236,7 +1226,9 @@
                     "bait_intervals",
                     [
                         [
-                            "target_bed_bait.intervals_list:md5,3af4018aa88e6eb1c7953554eba02f8e"
+                            [
+                                
+                            ]
                         ]
                     ]
                 ],
@@ -1350,6 +1342,12 @@
                     ]
                 ],
                 [
+                    "genome_hisat2_index",
+                    [
+                        
+                    ]
+                ],
+                [
                     "gnomad_af_idx",
                     [
                         [
@@ -1417,9 +1415,7 @@
                 [
                     "mt_intervals",
                     [
-                        [
-                            "minimal_reference_mt.intervals:md5,f2936095201aec51cbd45fd428b5bf9a"
-                        ]
+                        
                     ]
                 ],
                 [
@@ -1444,29 +1440,13 @@
                 [
                     "mtshift_backchain",
                     [
-                        [
-                            {
-                                "id": "minimal_reference"
-                            },
-                            "minimal_reference_shift.back_chain:md5,1aced5935cd48b7b232ba03d6164298e"
-                        ]
+                        
                     ]
                 ],
                 [
                     "mtshift_bwa_index",
                     [
-                        [
-                            {
-                                "id": "minimal_reference"
-                            },
-                            [
-                                "minimal_reference_shift.amb:md5,ad1d6545efc080e69ad54ecdbcd0720c",
-                                "minimal_reference_shift.ann:md5,c3108c09f22a99003ddda33a5251b383",
-                                "minimal_reference_shift.bwt:md5,c13d3e8c5ac29b56b31e1882e2111491",
-                                "minimal_reference_shift.pac:md5,0ead764b2f8fa112e3351ca517d2e125",
-                                "minimal_reference_shift.sa:md5,9ef1b52de302c6957f4dc82ed2f21bd1"
-                            ]
-                        ]
+                        
                     ]
                 ],
                 [
@@ -1478,42 +1458,25 @@
                 [
                     "mtshift_dict",
                     [
-                        [
-                            {
-                                "id": "minimal_reference"
-                            },
-                            "minimal_reference_shift.dict:md5,9c1a67a426dec30db3ba9985fac77ced"
-                        ]
+                        
                     ]
                 ],
                 [
                     "mtshift_fai",
                     [
-                        [
-                            {
-                                "id": "minimal_reference"
-                            },
-                            "minimal_reference_shift.fasta.fai:md5,5340dc8203d9bf0824846e3241e00c53"
-                        ]
+                        
                     ]
                 ],
                 [
                     "mtshift_fasta",
                     [
-                        [
-                            {
-                                "id": "minimal_reference"
-                            },
-                            "minimal_reference_shift.fasta:md5,32934cc94ad8a2ceaf263a7da44d30df"
-                        ]
+                        
                     ]
                 ],
                 [
                     "mtshift_intervals",
                     [
-                        [
-                            "minimal_reference_mt.shifted.intervals:md5,b44b27549333098faf3a76d8e3cbbcb8"
-                        ]
+                        
                     ]
                 ],
                 [
@@ -1531,9 +1494,7 @@
                 [
                     "target_intervals",
                     [
-                        [
-                            "target_bed_target.interval_list:md5,0e85cf958af15bab01e9b111bcac53a6"
-                        ]
+                        
                     ]
                 ],
                 [
@@ -1785,7 +1746,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-09-07T11:51:22.844726",
+        "timestamp": "2026-10-06T15:10:00.64302",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

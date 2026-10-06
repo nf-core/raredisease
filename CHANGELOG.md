@@ -169,8 +169,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | call_interval          | snv_call_region               |
 |                        | sex_source                    |
 |                        | genmod_skip_plugin_check      |
-| hisat2                 |                               |
-| hisat2_build_memory    |                               |
 
 ### Tool updates
 
