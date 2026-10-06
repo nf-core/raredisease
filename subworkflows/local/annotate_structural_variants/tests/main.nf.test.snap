@@ -1,10 +1,10 @@
 {
     "ANNOTATE_STRUCTURAL_VARIANTS - minimal dataset": {
         "content": [
-            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,3a26cff9fd2ecff9b39548cbd2d12a78",
-            "VcfFile [chromosomes=[chr7, chrX, chr16, chr21, chr1, chr12, chrM, chr20], sampleCount=3, variantCount=35, phased=false, phasedAutodetect=false]"
+            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,5f02aac5bcc6d60bd915ad03f3e5293",
+            "VcfFile [chromosomes=[chr7, chr16, chr21, chr1, chr12, chrM, chr20], sampleCount=3, variantCount=31, phased=false, phasedAutodetect=false]"
         ],
-        "timestamp": "2026-09-11T16:57:07.867550286",
+        "timestamp": "2026-10-03T22:28:54.175747753",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
