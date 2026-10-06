@@ -260,6 +260,14 @@
                     "description": "Local directory base for genome references that map to the config.",
                     "help_text": "This folder is a flat structure with file names that map to the config."
                 },
+                "manta_config": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to a custom Manta configuration file (configManta.py --config).",
+                    "help_text": "Optional. If supplied, this file is passed to Manta's configManta.py via --config to override its default settings. If omitted, Manta runs with its built-in defaults."
+                },
                 "mito_name": {
                     "type": "string",
                     "description": "Name of the mitochondrial contig in the reference fasta file",

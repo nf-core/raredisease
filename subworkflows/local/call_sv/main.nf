@@ -19,6 +19,7 @@ workflow CALL_SV {
         ch_genome_dictionary                  // channel: [optional; used by mandatory for GATK's cnvcaller][ val(meta), path(dict) ]
         ch_genome_fai                         // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_fasta                       // channel: [mandatory] [ val(meta), path(fasta) ]
+        ch_manta_config                       // channel: [optional] [ path(config) ]
         ch_manta_regions                      // channel: [mandatory] [ path(bed), path(tbi) ]
         ch_ploidy_model                       // channel: [optional; used by mandatory for GATK's cnvcaller][ path(ploidy_model) ]
         ch_readcount_intervals                // channel: [optional; used by mandatory for GATK's cnvcaller][ path(intervals) ]
@@ -33,7 +34,7 @@ workflow CALL_SV {
 
         // CALL_SV is only invoked for non-mito analysis types (gated at the call site in
         // raredisease.nf, mirroring CALL_SV_MT's val_run_mt gate), so no mito check is needed here.
-        ch_manta_vcf = CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_manta_regions)
+        ch_manta_vcf = CALL_SV_MANTA (ch_genome_bam, ch_genome_bai, ch_genome_fasta, ch_genome_fai, ch_case_info, ch_manta_regions, ch_manta_config)
             .filtered_diploid_sv_vcf
             .collect{ _meta, vcf -> vcf }
 

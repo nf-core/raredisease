@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `--manta_config`, an optional path to a custom Manta configuration file passed to `configManta.py --config`; when not supplied, Manta runs with its built-in defaults
 - Add `--sv_freq_filter_expression`, a bcftools `-e` expression applied to the SV VCF after SVDB query and before VEP annotation, to filter SVs by population frequency (e.g. `'INFO/gnomad_svAF >= 0.01'`); disabled by default [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1041](https://github.com/nf-core/raredisease/pull/1041)
 - Add `--ml_prob_threshold` to control the `INFO/ML_PROB` cutoff used to tag and remove Sentieon DNAscope variants as `ML_FAIL`; defaults to `0.70` when not set, replacing the pipeline's previous hardcoded `0.95` [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1039](https://github.com/nf-core/raredisease/pull/1039)
 - Convert UPD sites and regions bed files to indexed bigBed format via `ucsc/bedtobigbed`, for faster browsing in IGV [issue #1029](https://github.com/nf-core/raredisease/issues/1029) [PR #1037](https://github.com/nf-core/raredisease/pull/1037)
