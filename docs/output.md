@@ -320,6 +320,8 @@ For male samples the sex chromosomes are called as haploid (`--haploid_contigs`)
 
 The pipeline performs variant calling using [Sentieon DNAscope](https://support.sentieon.com/manual/DNAscope_usage/dnascope/) with a machine learning model. This approach identifies the candidate sites with a higher accuracy, and calculates genotypes for each sample at that site. These files are treated as intermediates and are not placed in the output folder by default. DNAscope is not run by default. To use DNAscope instead of DeepVariant, set `--variant_caller` to sentieon.
 
+Variants are filtered on the ML model's `INFO/ML_PROB` score: those with a value less than or equal to the threshold are tagged `ML_FAIL` and removed. The threshold defaults to `0.70` and can be adjusted with `--ml_prob_threshold`.
+
 <details markdown="1">
 <summary>Output files</summary>
 

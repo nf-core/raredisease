@@ -20,6 +20,9 @@ nextflow_workflow {
     test("CALL_SNV_SENTIEON - two samples (merge), minimal dataset") {
 
         when {
+            params {
+                ml_prob_threshold = 0.99
+            }
             workflow {
                 """
                 input[0] = channel.of(
