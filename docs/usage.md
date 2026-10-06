@@ -331,7 +331,7 @@ If a sample plays a parental role in the pedigree (listed as another sample's `p
 | --------------------------- | ------------------------------------ |
 | variant_catalog<sup>1</sup> | filter_expansionhunter<sup>2</sup>   |
 
-<sup>1</sup> We reccomend using the catalogs found [here](https://github.com/Clinical-Genomics/reference-files/tree/master/rare-disease/disease_loci/ExpansionHunter-v5.0.0). These catalogs have been extended from the illumina ones to include information on pathogenicity, which is neccesarry for the workflow.<br />
+<sup>1</sup> We recommend using the catalogs found [here](https://github.com/Clinical-Genomics/reference-files/tree/master/rare-disease/disease_loci/ExpansionHunter-v5.0.0). These catalogs have been extended from the illumina ones to include information on pathogenicity, which is necessary for the workflow.<br />
 <sup>2</sup> A bcftools `-e` expression used to exclude repeat expansion calls, applied to each sample's ExpansionHunter VCF before the per-case merge. For example, `'INFO/REPID="HTT" || INFO/REPID~"^HTT_"'` removes HTT (Huntington's disease) records. Default is `null` (no filter).<br />
 
 ##### 4. Variant calling - SNV

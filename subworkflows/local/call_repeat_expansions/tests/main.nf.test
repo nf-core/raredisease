@@ -45,7 +45,9 @@ nextflow_workflow {
                 workflow.out.expansionhunter_bai.collect { meta, f -> file(f).name },
                 workflow.out.expansionhunter_vcf.collect { meta, f -> file(f).name },
                 path(workflow.out.vcf[0][1].toString()).vcf.variantsMD5,
-                path(workflow.out.vcf[0][1].toString()).vcf.summary
+                path(workflow.out.vcf[0][1].toString()).vcf.summary,
+                path(workflow.out.vcf[0][1].toString()).vcf.variants.collect { variant -> variant.getAttribute('REPID') }.sort(),
+                path(workflow.out.vcf[0][1].toString()).vcf.variants.any { variant -> variant.getAttribute('REPID') == 'CSTB' }
             ).match()
         }
 
@@ -77,11 +79,15 @@ nextflow_workflow {
         }
 
         then {
-            assert workflow.success
-            assert snapshot(
-                path(workflow.out.vcf[0][1].toString()).vcf.variantsMD5,
-                path(workflow.out.vcf[0][1].toString()).vcf.summary
-            ).match()
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    path(workflow.out.vcf[0][1].toString()).vcf.variantsMD5,
+                    path(workflow.out.vcf[0][1].toString()).vcf.summary,
+                    path(workflow.out.vcf[0][1].toString()).vcf.variants.collect { variant -> variant.getAttribute('REPID') }.sort(),
+                    path(workflow.out.vcf[0][1].toString()).vcf.variants.any { variant -> variant.getAttribute('REPID') == 'CSTB' }
+                ).match() }
+            )
         }
 
     }
