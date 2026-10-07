@@ -210,6 +210,9 @@
                 "GLNEXUS": {
                     "glnexus": "1.4.1"
                 },
+                "HISAT2_INDEX_GENOME": {
+                    "hisat2": "2.2.3"
+                },
                 "INDEX_CNVNATOR": {
                     "bgzip": 1.21,
                     "tabix": 1.21
@@ -230,9 +233,6 @@
                 },
                 "ME_SPLIT_ALIGNMENT": {
                     "samtools": "1.22.1"
-                },
-                "MITOSALT": {
-                    "mitosalt": "1.1.1"
                 },
                 "MOSDEPTH": {
                     "mosdepth": "0.3.11"
@@ -292,15 +292,6 @@
                 "RHOCALL_VIZ": {
                     "rhocall": "0.5.1"
                 },
-                "SALTSHAKER_CALL": {
-                    "saltshaker": "1.1.1"
-                },
-                "SALTSHAKER_CLASSIFY": {
-                    "saltshaker": "1.1.1"
-                },
-                "SALTSHAKER_PLOT": {
-                    "saltshaker": "1.1.1"
-                },
                 "SAMTOOLS_COLLATE": {
                     "samtools": "1.22.1"
                 },
@@ -325,9 +316,6 @@
                 "SAM_TO_BAM": {
                     "samtools": "1.22.1"
                 },
-                "SEQTK_SAMPLE": {
-                    "seqtk": "1.4-r122"
-                },
                 "SPLIT_AND_FILTER_SV_VCF": {
                     "bcftools": 1.22
                 },
@@ -346,10 +334,6 @@
                 "STRANGER": {
                     "stranger": "0.10.0",
                     "tabix": 1.23
-                },
-                "SVDB_MERGE": {
-                    "bcftools": 1.24,
-                    "svdb": "2.12.0"
                 },
                 "SVDB_MERGE_CNVNATOR": {
                     "bcftools": 1.24,
@@ -501,9 +485,7 @@
                 "call_snv/mitochondria/amusingmarmoset_mitochondria.vcf.gz",
                 "call_snv/mitochondria/amusingmarmoset_mitochondria.vcf.gz.tbi",
                 "call_sv",
-                "call_sv/ACC13778A1.saltshaker.png",
                 "call_sv/ACC13778A1_mitochondria_deletions.txt",
-                "call_sv/amusingmarmoset.saltshaker_classify.html",
                 "call_sv/amusingmarmoset_sv.vcf.gz",
                 "call_sv/amusingmarmoset_sv.vcf.gz.tbi",
                 "multiqc",
@@ -658,9 +640,7 @@
                 "ACC13778A1_rhocallviz_chrX.png:md5,090cdf270253fbc8ddfc28df2e3d0830",
                 "ACC13778A1_rhocallviz_chrY.png:md5,33d95212be5bf91fbea53500bcbba19c",
                 "ACC13778A1_deepvar.visual_report.html:md5,a6680997f01689d4baa29cb2efbac088",
-                "ACC13778A1.saltshaker.png:md5,728b73f8efdcc8eb99251437aa7d21e0",
                 "ACC13778A1_mitochondria_deletions.txt:md5,0ad0626a86aee2c1fb115373ba3c8ae7",
-                "amusingmarmoset.saltshaker_classify.html:md5,0368db0c363264ec926e063040688b98",
                 "mosdepth-coverage-per-contig-multi.txt:md5,97d51ac018d2ca3552edd8467b1be1de",
                 "mosdepth-cumcoverage-dist-id.txt:md5,3fb8960b4c819261448e94d912e80889",
                 "mosdepth_cov_dist.txt:md5,aade151c86704f946860d7f1732b28e4",
@@ -2285,10 +2265,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-21T18:03:19.510510204",
+        "timestamp": "2026-10-07T12:18:40.140088513",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.3"
         }
     }
 }

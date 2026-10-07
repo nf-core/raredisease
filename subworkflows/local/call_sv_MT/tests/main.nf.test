@@ -258,7 +258,6 @@ nextflow_workflow {
                 input[7]  = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
                 input[8]  = channel.of([[id:'mt'], file("${projectDir}/subworkflows/local/prepare_references/tests")]).collect()
                 input[9]  = channel.of(
-                input[8]  = channel.of(
                     [
                         ${TestData.sample('ACC13778A2', "customer_id:'cust_a2'")},
                         [
