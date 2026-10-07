@@ -337,13 +337,13 @@ If a sample plays a parental role in the pedigree (listed as another sample's `p
 ##### 4. Variant calling - SNV
 
 | Mandatory                  | Optional                        |
-| -------------------------- | -------------------------------- |
-| variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>          |
-| ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup>      |
-| analysis_type<sup>3</sup>  | snv_call_region<sup>5</sup>      |
-|                            | known_dbsnp_tbi<sup>2</sup>      |
-|                            | par_bed<sup>4</sup>              |
-|                            | ml_prob_threshold<sup>2,6</sup>  |
+| -------------------------- | ------------------------------- |
+| variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>         |
+| ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup>     |
+| analysis_type<sup>3</sup>  | snv_call_region<sup>5</sup>     |
+|                            | known_dbsnp_tbi<sup>2</sup>     |
+|                            | par_bed<sup>4</sup>             |
+|                            | ml_prob_threshold<sup>2,6</sup> |
 
 <sup>1</sup>Default variant caller is DeepVariant, but you have the option to use Sentieon as well.<br />
 <sup>2</sup>These parameters are only used by Sentieon. The `ml_model` parameter expects a path to a model file (e.g. `dnascope.model`). If Sentieon provides the model in `.bundle` format, unpack it first with `ar models.bundle` and point `--ml_model` to the extracted `dnascope.model` file. `ar` is part of the GNU binutils package.<br />

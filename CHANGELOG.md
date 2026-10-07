@@ -153,28 +153,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter          | New parameter                 |
-| ---------------------- | ----------------------------- |
-|                        | filter_expansionhunter        |
-|                        | sv_freq_filter_expression     |
-|                        | ml_prob_threshold             |
-|                        | contamination_sites           |
-|                        | contamination_sites_tbi       |
-|                        | pre_vep_snv_filter_expression |
-|                        | glnexus_config                |
-|                        | vep_gtf                       |
-|                        | vep_gtf_tbi                   |
-|                        | peddy_sites                   |
-|                        | duplicates_marker             |
-|                        | somalier_sites_vcf            |
-| manta_call_regions     | sv_call_region                |
-| manta_call_regions_tbi | sv_call_region_tbi            |
-| call_interval          | snv_call_region               |
-|                        | sex_source                    |
-|                        | genmod_skip_plugin_check      |
-| hisat2                 |                               |
-| hisat2_build_memory    |                               |
-| skip_split_multiallelics |                           |
+| Old parameter            | New parameter                 |
+| ------------------------ | ----------------------------- |
+|                          | filter_expansionhunter        |
+|                          | sv_freq_filter_expression     |
+|                          | ml_prob_threshold             |
+|                          | contamination_sites           |
+|                          | contamination_sites_tbi       |
+|                          | pre_vep_snv_filter_expression |
+|                          | glnexus_config                |
+|                          | vep_gtf                       |
+|                          | vep_gtf_tbi                   |
+|                          | peddy_sites                   |
+|                          | duplicates_marker             |
+|                          | somalier_sites_vcf            |
+| manta_call_regions       | sv_call_region                |
+| manta_call_regions_tbi   | sv_call_region_tbi            |
+| call_interval            | snv_call_region               |
+|                          | sex_source                    |
+|                          | genmod_skip_plugin_check      |
+| hisat2                   |                               |
+| hisat2_build_memory      |                               |
+| skip_split_multiallelics |                               |
 
 ### Tool updates
 
