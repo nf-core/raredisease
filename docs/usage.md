@@ -361,8 +361,10 @@ If a sample plays a parental role in the pedigree (listed as another sample's `p
 |           | bwa                            |
 |           | sv_call_region<sup>1</sup>     |
 |           | sv_call_region_tbi<sup>1</sup> |
+|           | sv_size_threshold<sup>2</sup>  |
 
 <sup>1</sup> A bgzipped BED file (`.bed.gz`) and its tabix index (`.bed.gz.tbi`) restricting SV calling to specific regions. Both parameters must be supplied together. Currently only consumed by Manta, and only for WGS; for WES, Manta always uses `target_bed` and these parameters have no effect. TIDDIT and CNVnator do not support region restriction and ignore this parameter. Useful for reducing runtime on references with many short contigs such as GRCh38 by limiting analysis to primary chromosomes.
+<sup>2</sup> Filters out SVs larger than this value in bp from the merged SV VCF (all callers), after calling and before annotation, e.g. `--sv_size_threshold 1000000` removes SVs larger than 1 Mb. Default is `null` (no filter).
 
 ##### 6. Copy number variant calling
 

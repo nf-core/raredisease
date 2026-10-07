@@ -136,6 +136,7 @@ workflow NFCORE_RAREDISEASE {
     val_subdepth
     val_sv_call_region
     val_sv_call_region_tbi
+    val_sv_size_threshold
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
     val_target_bed
@@ -576,6 +577,7 @@ workflow NFCORE_RAREDISEASE {
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram,
         val_skip_split_multiallelics,
+        val_sv_size_threshold,
         val_svdb_query_bedpedbs,
         val_svdb_query_dbs,
         val_target_bed,
@@ -837,6 +839,7 @@ workflow {
         params.mitosalt_depth,
         params.sv_call_region,
         params.sv_call_region_tbi,
+        params.sv_size_threshold,
         params.svdb_query_bedpedbs,
         params.svdb_query_dbs,
         params.target_bed,

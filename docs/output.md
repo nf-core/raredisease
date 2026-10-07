@@ -355,12 +355,16 @@ Variants are filtered on the ML model's `INFO/ML_PROB` score: those with a value
 
 [SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if `skip_tools` doesn't include germlinecnvcaller), Manta, and TIDDIT. Output files are published in the output folder.
 
+After merging, SVs can optionally be filtered by size using `--sv_size_threshold` (bp). This applies uniformly across all callers (including mitochondrial calls), e.g. `--sv_size_threshold 1000000` removes SVs larger than 1 Mb. When not set, no size filtering is applied.
+
 <details markdown="1">
 <summary>Output files</summary>
 
 - `call_sv/genome`
-  - `<case_id>_sv_merge.vcf.gz`: file containing the merged variant calls. As of version 2.3.0, this file also contains mitochondrial structural variants.
+  - `<case_id>_sv_merge.vcf.gz`: file containing the merged variant calls (default). As of version 2.3.0, this file also contains mitochondrial structural variants.
   - `<case_id>_sv_merge.vcf.gz.tbi`: index of the file containing the merged variant calls.
+  - `<case_id>_sv_sizefiltered.vcf.gz`: file containing the merged variant calls with large SVs removed (published instead of `<case_id>_sv_merge.vcf.gz` when `--sv_size_threshold` is set).
+  - `<case_id>_sv_sizefiltered.vcf.gz.tbi`: index of the size-filtered file.
 
 </details>
 
