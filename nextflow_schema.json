@@ -816,6 +816,13 @@
                     "default": 1000,
                     "fa_icon": "fas fa-align-center"
                 },
+                "normalize_multiallelics": {
+                    "type": "boolean",
+                    "default": true,
+                    "fa_icon": "fas fa-align-center",
+                    "description": "Decompose multiallelic sites into biallelic records during variant calling (Sentieon, DeepVariant) and repeat expansion calling (ExpansionHunter).",
+                    "help_text": "Controls whether `bcftools norm --multiallelics -both` is used when normalizing multiallelic sites. `bcftools norm` always runs (indels are always left-aligned); setting this to false only omits the `--multiallelics -both` decomposition. See [issue #813](https://github.com/nf-core/raredisease/issues/813) for background on why the decomposition can be undesirable for some single-interval runs."
+                },
                 "sentieon_dnascope_pcr_indel_model": {
                     "type": "string",
                     "default": "CONSERVATIVE",
