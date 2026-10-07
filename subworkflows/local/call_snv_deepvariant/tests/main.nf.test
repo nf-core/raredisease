@@ -42,7 +42,6 @@ nextflow_workflow {
                 ])
                 input[7] = channel.of([[id:'par'], []]).collect()
                 input[8] = channel.of([[id:'region'], []])
-                input[9] = false
                 """
             }
         }
@@ -88,7 +87,6 @@ nextflow_workflow {
                 ])
                 input[7] = channel.of([[id:'par'], []]).collect()
                 input[8] = channel.of([[id:'region'], []])
-                input[9] = false
                 """
             }
         }
@@ -127,7 +125,6 @@ nextflow_workflow {
                 input[6] = channel.of([[],[]])
                 input[7] = channel.of([[id:'par'], []]).collect()
                 input[8] = channel.of([[id:'region'], []])
-                input[9] = false
                 """
             }
         }

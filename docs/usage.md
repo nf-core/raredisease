@@ -336,23 +336,21 @@ If a sample plays a parental role in the pedigree (listed as another sample's `p
 
 ##### 4. Variant calling - SNV
 
-| Mandatory                  | Optional                             |
-| -------------------------- | ------------------------------------ |
-| variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>              |
-| ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup>          |
-| analysis_type<sup>3</sup>  | snv_call_region<sup>6</sup>          |
-|                            | known_dbsnp_tbi<sup>2</sup>          |
-|                            | par_bed<sup>4</sup>                  |
-|                            | skip_split_multiallelics<sup>5</sup> |
-|                            | ml_prob_threshold<sup>2,7</sup>      |
+| Mandatory                  | Optional                        |
+| -------------------------- | -------------------------------- |
+| variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>          |
+| ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup>      |
+| analysis_type<sup>3</sup>  | snv_call_region<sup>5</sup>      |
+|                            | known_dbsnp_tbi<sup>2</sup>      |
+|                            | par_bed<sup>4</sup>              |
+|                            | ml_prob_threshold<sup>2,6</sup>  |
 
 <sup>1</sup>Default variant caller is DeepVariant, but you have the option to use Sentieon as well.<br />
 <sup>2</sup>These parameters are only used by Sentieon. The `ml_model` parameter expects a path to a model file (e.g. `dnascope.model`). If Sentieon provides the model in `.bundle` format, unpack it first with `ar models.bundle` and point `--ml_model` to the extracted `dnascope.model` file. `ar` is part of the GNU binutils package.<br />
 <sup>3</sup>Default is `WGS`, but you have the option to choose `WES` and `mito` as well.<br />
 <sup>4</sup>This parameter is only used by Deepvariant.<br />
-<sup>5</sup>Skips `bcftools norm --multiallelics -both` in both DeepVariant and Sentieon SNV calling. Recommended for single-interval runs to avoid indel quality degradation. See [#813](https://github.com/nf-core/raredisease/issues/813) for details.<br />
-<sup>6</sup>Restricts SNV calling to this region for both DeepVariant and Sentieon. Falls back to the padded `--target_bed` (as processed by the pipeline, not the raw file) when not set and `analysis_type` is `wes`; for `wgs`, `target_bed` is not used as a calling restriction (it may be set purely for QC/contamination purposes), so the whole genome is called unless `--snv_call_region` is set explicitly.<br />
-<sup>7</sup>Variants with `INFO/ML_PROB` less than or equal to this value are tagged `ML_FAIL` and removed. Defaults to `0.70` when not set.<br />
+<sup>5</sup>Restricts SNV calling to this region for both DeepVariant and Sentieon. Falls back to the padded `--target_bed` (as processed by the pipeline, not the raw file) when not set and `analysis_type` is `wes`; for `wgs`, `target_bed` is not used as a calling restriction (it may be set purely for QC/contamination purposes), so the whole genome is called unless `--snv_call_region` is set explicitly.<br />
+<sup>6</sup>Variants with `INFO/ML_PROB` less than or equal to this value are tagged `ML_FAIL` and removed. Defaults to `0.70` when not set.<br />
 
 ##### 5. Variant calling - Structural variants
 

@@ -47,7 +47,6 @@ nextflow_workflow {
                 input[8] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[9] = channel.of([[id:'model'], file('https://s3.amazonaws.com/sentieon-release/other/SentieonDNAscopeModel1.1.model', checkIfExists: true)]).collect()
                 input[10] = channel.value([])
-                input[11] = false
                 """
             }
         }
@@ -85,7 +84,6 @@ nextflow_workflow {
                 input[8] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[9] = channel.of([[id:'model'], []])
                 input[10] = channel.value([])
-                input[11] = false
                 """
             }
         }
@@ -127,7 +125,6 @@ nextflow_workflow {
                 input[8] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
                 input[9] = channel.of([[id:'model'], []])
                 input[10] = channel.value([])
-                input[11] = false
                 """
             }
         }
