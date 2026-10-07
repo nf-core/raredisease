@@ -172,9 +172,39 @@
                 "ACC13778A2_repeat_expansion.vcf"
             ],
             "545167fc7911c7f2de251b30d236f77e",
-            "VcfFile [chromosomes=[chrX, chr16, chr21, chr12, chr20], sampleCount=1, variantCount=7, phased=false, phasedAutodetect=false]"
+            "VcfFile [chromosomes=[chrX, chr16, chr21, chr12, chr20], sampleCount=1, variantCount=7, phased=false, phasedAutodetect=false]",
+            [
+                "CSTB",
+                "NOP56",
+                "NOP56_CGCCTG",
+                "RILPL1",
+                "SOX3",
+                "XYLT1",
+                "XYLT1"
+            ],
+            true
         ],
-        "timestamp": "2026-08-24T21:12:56.729555871",
+        "timestamp": "2026-10-06T10:44:23.996751752",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "CALL_REPEAT_EXPANSIONS - filter_expansionhunter": {
+        "content": [
+            "bdecc665c3d3c4f9dc486cd6e9619c8b",
+            "VcfFile [chromosomes=[chrX, chr16, chr12, chr20], sampleCount=1, variantCount=6, phased=false, phasedAutodetect=false]",
+            [
+                "NOP56",
+                "NOP56_CGCCTG",
+                "RILPL1",
+                "SOX3",
+                "XYLT1",
+                "XYLT1"
+            ],
+            false
+        ],
+        "timestamp": "2026-10-06T10:44:54.869652872",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"

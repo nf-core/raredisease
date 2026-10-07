@@ -66,6 +66,7 @@ workflow NFCORE_RAREDISEASE {
     val_extract_alignments
     val_fai
     val_fasta
+    val_filter_expansionhunter
     val_gcnvcaller_model
     val_genome
     val_gens_gnomad_pos
@@ -537,6 +538,7 @@ workflow NFCORE_RAREDISEASE {
         val_duplicates_marker,
         val_exclude_alt,
         val_extract_alignments,
+        val_filter_expansionhunter,
         val_genome,
         val_has_precalled_me,
         val_has_precalled_mt,
@@ -772,6 +774,7 @@ workflow {
         params.extract_alignments,
         params.fai,
         params.fasta,
+        params.filter_expansionhunter,
         params.gcnvcaller_model,
         params.genome,
         params.gens_gnomad_pos,
