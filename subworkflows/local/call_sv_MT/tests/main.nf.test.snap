@@ -25,8 +25,6 @@
                             "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
-                            "lane": 1,
                             "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
@@ -42,8 +40,6 @@
                             "sample": "ACC13778A3",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
-                            "lane": 1,
                             "sex": 1,
                             "phenotype": 1,
                             "paternal": 0,
@@ -145,8 +141,6 @@
                             "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
-                            "lane": 1,
                             "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
@@ -162,8 +156,6 @@
                             "sample": "ACC13778A3",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
-                            "lane": 1,
                             "sex": 1,
                             "phenotype": 1,
                             "paternal": 0,
@@ -192,7 +184,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-02T13:25:43.631377",
+        "timestamp": "2026-10-06T15:48:52.507131556",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
@@ -375,8 +367,6 @@
                             "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
-                            "lane": 1,
                             "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
@@ -445,8 +435,6 @@
                             "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
-                            "lane": 1,
                             "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
@@ -474,7 +462,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-02T13:25:20.178872",
+        "timestamp": "2026-10-06T15:48:05.957803426",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"
@@ -506,8 +494,6 @@
                             "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
-                            "lane": 1,
                             "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
@@ -523,8 +509,6 @@
                             "sample": "ACC13778A3",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
-                            "lane": 1,
                             "sex": 1,
                             "phenotype": 1,
                             "paternal": 0,
@@ -625,8 +609,6 @@
                             "sample": "ACC13778A2",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
-                            "lane": 1,
                             "sex": 2,
                             "phenotype": 1,
                             "paternal": 0,
@@ -642,8 +624,6 @@
                             "sample": "ACC13778A3",
                             "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
-                            "lane": 1,
                             "sex": 1,
                             "phenotype": 1,
                             "paternal": 0,
@@ -671,7 +651,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-02T13:25:01.043537",
+        "timestamp": "2026-10-07T08:38:34.781795742",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.3"

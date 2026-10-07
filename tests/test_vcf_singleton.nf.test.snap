@@ -120,6 +120,9 @@
                 "GET_CHROM_SIZES": {
                     "coreutils": 9.5
                 },
+                "HISAT2_INDEX_GENOME": {
+                    "hisat2": "2.2.3"
+                },
                 "LAST_INDEX_MT": {
                     "last": 1611
                 },
@@ -1212,10 +1215,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-21T18:00:03.406142947",
+        "timestamp": "2026-10-07T13:18:42.008927622",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.3"
         }
     }
 }

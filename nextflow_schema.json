@@ -935,8 +935,17 @@
                 },
                 "mitosalt_depth": {
                     "type": "integer",
-                    "default": 500000,
-                    "description": "number of mitochondrial reads passed to mitosalt"
+                    "default": 10000000,
+                    "description": "depth to subsample fastq files to before running mitosalt"
+                },
+                "hisat2": {
+                    "type": "string",
+                    "description": "Path to a pre-built HISAT2 genome index directory. If not provided, the index is built at runtime."
+                },
+                "hisat2_build_memory": {
+                    "type": "integer",
+                    "description": "Minimum memory required to build HISAT2 index with splice sites and exons. If available memory is below this threshold, a simpler index is built without splice sites.",
+                    "fa_icon": "fas fa-memory"
                 },
                 "mito_length": {
                     "type": "integer",
