@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- Add `--sv_size_threshold`, applied to the merged SV VCF (all callers) after calling and before annotation, to filter out SVs larger than a given size in bp (e.g. `1000000` removes SVs larger than 1 Mb); disabled by default [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #TBD](https://github.com/nf-core/raredisease/pull/TBD)
+- Add `--sv_size_threshold`, applied to the merged SV VCF (all callers) after calling and before annotation, to filter out SVs larger than a given size in bp (e.g. `1000000` removes SVs larger than 1 Mb); disabled by default [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1046](https://github.com/nf-core/raredisease/pull/1046)
 - Add `--sv_freq_filter_expression`, a bcftools `-e` expression applied to the SV VCF after SVDB query and before VEP annotation, to filter SVs by population frequency (e.g. `'INFO/gnomad_svAF >= 0.01'`); disabled by default [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1041](https://github.com/nf-core/raredisease/pull/1041)
 - Add `--ml_prob_threshold` to control the `INFO/ML_PROB` cutoff used to tag and remove Sentieon DNAscope variants as `ML_FAIL`; defaults to `0.70` when not set, replacing the pipeline's previous hardcoded `0.95` [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1039](https://github.com/nf-core/raredisease/pull/1039)
 - Convert UPD sites and regions bed files to indexed bigBed format via `ucsc/bedtobigbed`, for faster browsing in IGV [issue #1029](https://github.com/nf-core/raredisease/issues/1029) [PR #1037](https://github.com/nf-core/raredisease/pull/1037)
