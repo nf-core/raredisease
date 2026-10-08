@@ -716,6 +716,7 @@ workflow NFCORE_RAREDISEASE {
     fastqc                                              = RAREDISEASE.out.fastqc                      // channel: [ val(meta), path(html|zip) ]
     smncopynumbercaller                                 = RAREDISEASE.out.smncopynumbercaller         // channel: [ val(meta), path(*) ]
     peddy                                               = RAREDISEASE.out.peddy                       // channel: [ val(meta), path(*) ]
+    somalier                                            = RAREDISEASE.out.somalier
     multiqc                                             = RAREDISEASE.out.multiqc                     // channel: [ val(meta), path(*) ]
     pedigree                                            = ch_pedfile                                  // channel: [ path(ped) ]
     resolved_pedigree                                   = RAREDISEASE.out.resolved_pedigree           // channel: [ path(ped) ]
@@ -1004,6 +1005,7 @@ workflow {
     fastqc                            = NFCORE_RAREDISEASE.out.fastqc
     smncopynumbercaller               = NFCORE_RAREDISEASE.out.smncopynumbercaller
     peddy                             = NFCORE_RAREDISEASE.out.peddy
+    somalier                          = NFCORE_RAREDISEASE.out.somalier
     multiqc                           = NFCORE_RAREDISEASE.out.multiqc
     pedigree                          = NFCORE_RAREDISEASE.out.pedigree
     resolved_pedigree                 = NFCORE_RAREDISEASE.out.resolved_pedigree
@@ -1089,6 +1091,9 @@ output {
     }
     peddy {
         path { _meta, _file -> "peddy/" }
+    }
+    somalier {
+        path { _meta, _file -> "somalier/" }
     }
     multiqc {
         path { _meta, _file -> "multiqc/" }
