@@ -194,6 +194,7 @@ workflow RAREDISEASE {
     val_duplicates_marker
     val_exclude_alt
     val_extract_alignments
+    val_filter_expansionhunter
     val_genome
     val_has_precalled_me
     val_has_precalled_mt
@@ -569,7 +570,8 @@ workflow RAREDISEASE {
             ch_variant_catalog,
             ch_case_info,
             ch_genome_fasta,
-            ch_genome_fai
+            ch_genome_fai,
+            val_filter_expansionhunter
         )
         ch_call_repeat_expansions_expansionhunter_bai = CALL_REPEAT_EXPANSIONS.out.expansionhunter_bai
         ch_call_repeat_expansions_expansionhunter_bam = CALL_REPEAT_EXPANSIONS.out.expansionhunter_bam

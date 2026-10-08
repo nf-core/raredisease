@@ -609,6 +609,12 @@
                     "help_text": "Set this to true, and specify the contig(s) using `restrict_to_contigs` parameter",
                     "fa_icon": "fas fa-toggle-on"
                 },
+                "filter_expansionhunter": {
+                    "type": "string",
+                    "fa_icon": "fas fa-filter",
+                    "description": "bcftools -e expression to filter ExpansionHunter repeat calls before merging.",
+                    "help_text": "Passed as the --exclude expression to bcftools view on each sample's ExpansionHunter VCF, before the per-case SVDB merge. For example, `'INFO/REPID=\"HTT\" || INFO/REPID~\"^HTT_\"'` removes HTT (Huntington's disease) records. Null disables the filter."
+                },
                 "genmod_skip_plugin_check": {
                     "type": "boolean",
                     "description": "Pass --skip_plugin_check to genmod score, so a rank model config missing an info_key/csq_key referenced in its scoring categories degrades that category to a warning instead of aborting the pipeline.",

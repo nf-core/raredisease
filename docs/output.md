@@ -374,6 +374,8 @@ Variants are filtered on the ML model's `INFO/ML_PROB` score: those with a value
 
 ExpansionHunter is run per sample with `--sex` set from the samplesheet `sex`, or from the ngs-bits `SampleGender` estimate when `--sex_source` is `auto`/`estimated` (see [Estimated sex](usage.md#estimated-sex)); this determines the ploidy used for repeat loci on the sex chromosomes.
 
+The optional `--filter_expansionhunter` parameter takes a bcftools `-e` expression used to exclude repeat expansion calls before the per-case merge, e.g. `'INFO/REPID="HTT" || INFO/REPID~"^HTT_"'` to remove HTT (Huntington's disease) records. This only affects the merged, Stranger-annotated output below; the per-sample `<sample_id>_repeat_expansion.vcf` file is unfiltered.
+
 <details markdown="1">
 <summary>Output files</summary>
 
