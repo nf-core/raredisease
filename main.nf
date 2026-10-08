@@ -60,7 +60,6 @@ workflow NFCORE_RAREDISEASE {
     val_concatenate_snv_calls
     val_contamination_sites
     val_contamination_sites_tbi
-    val_skip_split_multiallelics
     val_duplicates_marker
     val_exclude_alt
     val_extract_alignments
@@ -577,7 +576,6 @@ workflow NFCORE_RAREDISEASE {
         val_run_vcfanno_db_sanity_check,
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram,
-        val_skip_split_multiallelics,
         val_svdb_query_bedpedbs,
         val_svdb_query_dbs,
         val_target_bed,
@@ -763,7 +761,6 @@ workflow {
         params.concatenate_snv_calls,
         params.contamination_sites,
         params.contamination_sites_tbi,
-        params.skip_split_multiallelics,
         params.duplicates_marker,
         params.exclude_alt,
         params.extract_alignments,
