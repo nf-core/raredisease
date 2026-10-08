@@ -108,6 +108,7 @@ workflow RAREDISEASE {
     ch_intervals_contamination
     ch_intervals_wgs
     ch_intervals_y
+    ch_manta_config
     ch_manta_regions
     ch_me_references
     ch_me_svdb_resources
@@ -822,6 +823,7 @@ workflow RAREDISEASE {
                 ch_genome_dictionary,
                 ch_genome_fai,
                 ch_genome_fasta,
+                ch_manta_config,
                 ch_manta_regions,
                 ch_ploidy_model,
                 ch_readcount_intervals,

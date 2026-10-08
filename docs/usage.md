@@ -362,8 +362,10 @@ If a sample plays a parental role in the pedigree (listed as another sample's `p
 |           | bwa                            |
 |           | sv_call_region<sup>1</sup>     |
 |           | sv_call_region_tbi<sup>1</sup> |
+|           | manta_config<sup>2</sup>       |
 
 <sup>1</sup> A bgzipped BED file (`.bed.gz`) and its tabix index (`.bed.gz.tbi`) restricting SV calling to specific regions. Both parameters must be supplied together. Currently only consumed by Manta, and only for WGS; for WES, Manta always uses `target_bed` and these parameters have no effect. TIDDIT and CNVnator do not support region restriction and ignore this parameter. Useful for reducing runtime on references with many short contigs such as GRCh38 by limiting analysis to primary chromosomes.
+<sup>2</sup> Path to a custom Manta configuration file, passed to `configManta.py` via `--config`. Optional; when not supplied, Manta runs with its built-in defaults.
 
 ##### 6. Copy number variant calling
 
