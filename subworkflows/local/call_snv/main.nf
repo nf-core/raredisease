@@ -64,7 +64,7 @@ workflow CALL_SNV {
                 ch_genome_fai,
                 ch_genome_fasta,
                 ch_ml_model,
-                ch_pcr_indel_model
+                ch_pcr_indel_model,
             )
             ch_sentieon_vcf  = CALL_SNV_SENTIEON.out.vcf
             ch_sentieon_tbi  = CALL_SNV_SENTIEON.out.tabix
