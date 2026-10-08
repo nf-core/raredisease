@@ -302,6 +302,7 @@ workflow RAREDISEASE {
     ch_fastqc                           = channel.empty()
     ch_smncopynumbercaller              = channel.empty()
     ch_peddy                            = channel.empty()
+    ch_somalier                         = channel.empty()
     ch_multiqc                          = channel.empty()
     ch_rank_snv_tbi                           = channel.empty()
     ch_rank_snv_vcf                           = channel.empty()
@@ -1066,12 +1067,11 @@ workflow RAREDISEASE {
             ch_genome_fai,
             ch_somalier_sites,
             ch_case_info.combine(ch_pedfile),
-            channel.empty(),
+            channel.value([]),
             ''
         )
 
-        ch_somalier_publish = VCF_EXTRACT_RELATE_SOMALIER.out.publish
-            .map { meta, value -> ['somalier/', [meta, value]] }
+        ch_somalier = VCF_EXTRACT_RELATE_SOMALIER.out.publish
     } else if (!skip_somalier && !params.somalier_sites_vcf) {
         log.warn "Skipping Somalier: params.somalier_sites_vcf is not set"
     }
@@ -1331,6 +1331,7 @@ workflow RAREDISEASE {
     fastqc              = ch_fastqc              // channel: [ val(meta), path(html|zip) ]
     smncopynumbercaller = ch_smncopynumbercaller // channel: [ val(meta), path(*) ]
     peddy               = ch_peddy               // channel: [ val(meta), path(*) ]
+    somalier            = ch_somalier
     multiqc             = ch_multiqc             // channel: [ val(meta), path(*) ]
     resolved_pedigree   = ch_resolved_pedfile     // channel: [ path(ped) ]
 }
