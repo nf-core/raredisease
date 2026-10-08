@@ -46,7 +46,7 @@ workflow CALL_SV_GERMLINECNVCALLER {
             .groupTuple(by: 0)
             .map { _sample, metas, model_calls ->
                 def meta = metas[0] // All metas should be the same for a given sample
-                def models = model_calls.collect { file -> file.toString() }
+                def models = model_calls.collect { file -> file.toUriString() }
                 return [meta, models]
             }
             .combine(ch_gcnvcaller_model.collect{_meta, model -> model}.toList())
