@@ -327,14 +327,17 @@ workflow NFCORE_RAREDISEASE {
     ch_pedfile = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
 
     // Tools
+    skip_cnvnator              = parseSkipList(val_skip_tools, 'cnvnator')
     skip_fastp                 = parseSkipList(val_skip_tools, 'fastp')
     skip_fastqc                = parseSkipList(val_skip_tools, 'fastqc')
     skip_gens                  = parseSkipList(val_skip_tools, 'gens')
     skip_germlinecnvcaller     = parseSkipList(val_skip_tools, 'germlinecnvcaller')
+    skip_manta                 = parseSkipList(val_skip_tools, 'manta')
     skip_mitosalt              = parseSkipList(val_skip_tools, 'mitosalt')
     skip_ngsbits               = parseSkipList(val_skip_tools, 'ngsbits')
     skip_peddy                 = parseSkipList(val_skip_tools, 'peddy')
     skip_smncopynumbercaller   = parseSkipList(val_skip_tools, 'smncopynumbercaller')
+    skip_tiddit                = parseSkipList(val_skip_tools, 'tiddit')
     skip_vcf2cytosure          = parseSkipList(val_skip_tools, 'vcf2cytosure')
     // GATK contamination check is also skipped when no contamination sites are supplied
     skip_gatkcontamination     = parseSkipList(val_skip_tools, 'gatkcontamination') || !val_contamination_sites
@@ -391,20 +394,19 @@ workflow NFCORE_RAREDISEASE {
 
     //
     // SV caller priority
+    // tiddit and cnvnator only ever run for WGS; germlinecnvcaller runs for both WGS and WES.
     //
-    if (skip_germlinecnvcaller) {
-        if (val_analysis_type.equals("wgs")) {
-            ch_svcaller_priority = channel.value(["tiddit", "manta", "cnvnator"])
-        } else {
-            ch_svcaller_priority = channel.value([])
-        }
-    } else {
-        if (val_analysis_type.equals("wgs")) {
-            ch_svcaller_priority = channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
-        } else {
-            ch_svcaller_priority = channel.value(["manta", "gcnvcaller"])
-        }
+    def active_sv_callers = val_analysis_type.equals("wgs")
+        ? (skip_tiddit ? [] : ["tiddit"]) + (skip_manta ? [] : ["manta"]) + (skip_germlinecnvcaller ? [] : ["gcnvcaller"]) + (skip_cnvnator ? [] : ["cnvnator"])
+        : (skip_manta ? [] : ["manta"]) + (skip_germlinecnvcaller ? [] : ["gcnvcaller"])
+
+    if (!skip_sv_calling && !val_analysis_type.equals("mito") && active_sv_callers.isEmpty()) {
+        error("All nuclear structural variant callers are disabled via --skip_tools, but sv_calling is not skipped. Either enable at least one caller (manta" +
+            (val_analysis_type.equals("wgs") ? ", tiddit, cnvnator" : "") +
+            ", germlinecnvcaller) or set --skip_subworkflows sv_calling.")
     }
+
+    ch_svcaller_priority = channel.value(active_sv_callers.size() > 1 ? active_sv_callers : [])
 
     //
     // Create chromosome bed and intervals for splitting and gathering operations
@@ -502,12 +504,14 @@ workflow NFCORE_RAREDISEASE {
         ch_vep_extra_files,
         ch_vep_gtf,
         ch_versions,
+        skip_cnvnator,
         skip_fastp,
         skip_fastqc,
         skip_gatkcontamination,
         skip_generate_clinical_set,
         skip_gens,
         skip_germlinecnvcaller,
+        skip_manta,
         skip_me_annotation,
         skip_me_calling,
         skip_mitosalt,
@@ -525,6 +529,7 @@ workflow NFCORE_RAREDISEASE {
         skip_somalier,
         skip_sv_annotation,
         skip_sv_calling,
+        skip_tiddit,
         skip_vcf2cytosure,
         skip_verifybamid,
         val_aligner,

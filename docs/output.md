@@ -353,7 +353,7 @@ Variants are filtered on the ML model's `INFO/ML_PROB` score: those with a value
 
 #### SVDB merge
 
-[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if `skip_tools` doesn't include germlinecnvcaller), Manta, and TIDDIT. Output files are published in the output folder.
+[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from Manta, TIDDIT, CNVnator, and GATK's GermlineCNVCaller — each included only if not disabled via `--skip_tools` (`manta`, `tiddit`, `cnvnator`, `germlinecnvcaller`); TIDDIT and CNVnator only run for WGS regardless of `skip_tools`. Output files are published in the output folder.
 
 <details markdown="1">
 <summary>Output files</summary>

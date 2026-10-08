@@ -161,12 +161,14 @@ workflow RAREDISEASE {
     ch_vep_extra_files
     ch_vep_gtf
     ch_versions
+    skip_cnvnator
     skip_fastp
     skip_fastqc
     skip_gatkcontamination
     skip_generate_clinical_set
     skip_gens
     skip_germlinecnvcaller
+    skip_manta
     skip_me_annotation
     skip_me_calling
     skip_mitosalt
@@ -184,6 +186,7 @@ workflow RAREDISEASE {
     skip_somalier
     skip_sv_annotation
     skip_sv_calling
+    skip_tiddit
     skip_vcf2cytosure
     skip_verifybamid
     val_aligner
@@ -825,7 +828,10 @@ workflow RAREDISEASE {
                 ch_manta_regions,
                 ch_ploidy_model,
                 ch_readcount_intervals,
+                skip_cnvnator,
                 skip_germlinecnvcaller,
+                skip_manta,
+                skip_tiddit,
                 val_analysis_type
             )
             ch_call_sv_nuclear_vcfs = CALL_SV.out.vcfs
