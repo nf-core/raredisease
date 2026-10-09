@@ -359,12 +359,16 @@ As with DeepVariant, the resulting calls are normalized with `bcftools norm`; `-
 
 [SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from Manta, TIDDIT, CNVnator, and GATK's GermlineCNVCaller — each included only if not disabled via `--skip_tools` (`manta`, `tiddit`, `cnvnator`, `germlinecnvcaller`); TIDDIT and CNVnator only run for WGS regardless of `skip_tools`. Output files are published in the output folder.
 
+After merging, SVs can optionally be filtered by size using `--sv_size_threshold` (bp). This applies uniformly across all callers (including mitochondrial calls), e.g. `--sv_size_threshold 1000000` removes SVs larger than 1 Mb. When not set, no size filtering is applied.
+
 <details markdown="1">
 <summary>Output files</summary>
 
 - `call_sv/genome`
-  - `<case_id>_sv_merge.vcf.gz`: file containing the merged variant calls. As of version 2.3.0, this file also contains mitochondrial structural variants.
+  - `<case_id>_sv_merge.vcf.gz`: file containing the merged variant calls (default). As of version 2.3.0, this file also contains mitochondrial structural variants.
   - `<case_id>_sv_merge.vcf.gz.tbi`: index of the file containing the merged variant calls.
+  - `<case_id>_sv_sizefiltered.vcf.gz`: file containing the merged variant calls with large SVs removed (published instead of `<case_id>_sv_merge.vcf.gz` when `--sv_size_threshold` is set).
+  - `<case_id>_sv_sizefiltered.vcf.gz.tbi`: index of the size-filtered file.
 
 </details>
 
