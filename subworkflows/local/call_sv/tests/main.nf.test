@@ -70,8 +70,11 @@ nextflow_workflow {
                 input[9]  = channel.value([[], []])
                 input[10] = channel.of([[id:'ploidy'], []])
                 input[11] = channel.of([[]])
-                input[12] = true
-                input[13] = 'wgs'
+                input[12] = false
+                input[13] = true
+                input[14] = false
+                input[15] = false
+                input[16] = 'wgs'
                 """
             }
         }
@@ -129,8 +132,11 @@ nextflow_workflow {
                 input[9]  = channel.value([[], []])
                 input[10] = channel.of([[id:'ploidy'], []])
                 input[11] = channel.of([[]])
-                input[12] = true
-                input[13] = 'wgs'
+                input[12] = false
+                input[13] = true
+                input[14] = false
+                input[15] = false
+                input[16] = 'wgs'
                 """
             }
         }
@@ -140,6 +146,132 @@ nextflow_workflow {
                 { assert workflow.success },
                 { assert snapshot(
                     workflow.out
+                ).match() }
+            )
+        }
+    }
+
+    test("CALL_SV - wgs, stub, skip_tiddit and skip_cnvnator") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0]  = channel.of([[id:'bwa'], []])
+                input[1]  = channel.of([id:'amusingmarmoset'])
+                input[2]  = channel.of([[id:'gcnvcaller'], []])
+                input[3]  = channel.of(
+                    [${TestData.sample('ACC13778A1')},
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A2')},
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A3')},
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
+                )
+                input[4]  = channel.of(
+                    [${TestData.sample('ACC13778A1')},
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A2')},
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A3')},
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true)]
+                )
+                input[5]  = channel.of(
+                    [${TestData.sample('ACC13778A1')},
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A2')},
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A3')},
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
+                )
+                input[6]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[9]  = channel.value([[], []])
+                input[10] = channel.of([[id:'ploidy'], []])
+                input[11] = channel.of([[]])
+                input[12] = true
+                input[13] = true
+                input[14] = false
+                input[15] = true
+                input[16] = 'wgs'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.vcfs.collect { vcfs -> vcfs.collect { vcf -> file(vcf).name } }[0].size() == 1 },
+                { assert snapshot(
+                    workflow.out.vcfs.collect { vcfs -> vcfs.collect { vcf -> file(vcf).name } }
+                ).match() }
+            )
+        }
+    }
+
+    test("CALL_SV - wgs, stub, skip_manta and skip_germlinecnvcaller") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0]  = channel.of([[id:'bwa'], []])
+                input[1]  = channel.of([id:'amusingmarmoset'])
+                input[2]  = channel.of([[id:'gcnvcaller'], []])
+                input[3]  = channel.of(
+                    [${TestData.sample('ACC13778A1')},
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A2')},
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A3')},
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
+                )
+                input[4]  = channel.of(
+                    [${TestData.sample('ACC13778A1')},
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A2')},
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A3')},
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true)]
+                )
+                input[5]  = channel.of(
+                    [${TestData.sample('ACC13778A1')},
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A1_sorted_md.bam.bai', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A2')},
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)],
+                    [${TestData.sample('ACC13778A3')},
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true),
+                     file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
+                )
+                input[6]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
+                input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[9]  = channel.value([[], []])
+                input[10] = channel.of([[id:'ploidy'], []])
+                input[11] = channel.of([[]])
+                input[12] = false
+                input[13] = true
+                input[14] = true
+                input[15] = false
+                input[16] = 'wgs'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.vcfs.collect { vcfs -> vcfs.collect { vcf -> file(vcf).name } }[0].size() == 2 },
+                { assert snapshot(
+                    workflow.out.vcfs.collect { vcfs -> vcfs.collect { vcf -> file(vcf).name } }
                 ).match() }
             )
         }

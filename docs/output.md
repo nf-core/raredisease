@@ -357,7 +357,7 @@ As with DeepVariant, the resulting calls are normalized with `bcftools norm`; `-
 
 #### SVDB merge
 
-[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from GATK's GermlineCNVCaller (only if `skip_tools` doesn't include germlinecnvcaller), Manta, and TIDDIT. Output files are published in the output folder.
+[SVDB merge](https://github.com/J35P312/SVDB#merge) is used to merge the variant calls from Manta, TIDDIT, CNVnator, and GATK's GermlineCNVCaller — each included only if not disabled via `--skip_tools` (`manta`, `tiddit`, `cnvnator`, `germlinecnvcaller`); TIDDIT and CNVnator only run for WGS regardless of `skip_tools`. Output files are published in the output folder.
 
 After merging, SVs can optionally be filtered by size using `--sv_size_threshold` (bp). This applies uniformly across all callers (including mitochondrial calls), e.g. `--sv_size_threshold 1000000` removes SVs larger than 1 Mb. When not set, no size filtering is applied.
 

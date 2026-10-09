@@ -233,9 +233,9 @@ Note that the pipeline is modular in architecture. It offers you the flexibility
 
 The pipeline is modular — individual tools and subworkflows can be skipped using `--skip_tools` and `--skip_subworkflows` (comma-separated). The valid values are:
 
-| `--skip_tools`                                                                                                                                |
-| --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `fastp`, `fastqc`, `gatkcontamination`, `gens`, `germlinecnvcaller`, `ngsbits`, `peddy`, `smncopynumbercaller`, `vcf2cytosure`, `verifybamid` |
+| `--skip_tools`                                                                                                                                                               |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cnvnator`, `fastp`, `fastqc`, `gatkcontamination`, `gens`, `germlinecnvcaller`, `manta`, `ngsbits`, `peddy`, `smncopynumbercaller`, `tiddit`, `vcf2cytosure`, `verifybamid` |
 
 | `--skip_subworkflows`                                                                                                                                                                                                             |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -372,6 +372,8 @@ If a sample plays a parental role in the pedigree (listed as another sample's `p
 
 <sup>1</sup> A bgzipped BED file (`.bed.gz`) and its tabix index (`.bed.gz.tbi`) restricting SV calling to specific regions. Both parameters must be supplied together. Currently only consumed by Manta, and only for WGS; for WES, Manta always uses `target_bed` and these parameters have no effect. TIDDIT and CNVnator do not support region restriction and ignore this parameter. Useful for reducing runtime on references with many short contigs such as GRCh38 by limiting analysis to primary chromosomes.
 <sup>2</sup> Filters out SVs larger than this value in bp from the merged SV VCF (all callers), after calling and before annotation, e.g. `--sv_size_threshold 1000000` removes SVs larger than 1 Mb. Default is `null` (no filter).
+
+Manta, TIDDIT, and CNVnator can each be disabled independently via `--skip_tools` (`manta`, `tiddit`, `cnvnator`). TIDDIT and CNVnator run only for WGS, so skipping either is a no-op for WES, where neither tool runs regardless; Manta runs for both WGS and WES and can be skipped in either.
 
 ##### 6. Copy number variant calling
 
