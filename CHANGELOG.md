@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Added`
 
 - Add `manta`, `tiddit`, and `cnvnator` as valid `--skip_tools` values, letting users disable any of the nuclear structural variant callers independently; `tiddit` and `cnvnator` are no-ops for WES, where neither tool runs regardless. The pipeline now errors out at start-up if every nuclear SV caller ends up disabled while `sv_calling` itself is not skipped [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #TBD](https://github.com/nf-core/raredisease/pull/TBD)
+- Add `--normalize_multiallelics` to control whether `bcftools norm --multiallelics -both` decomposes multiallelic sites into biallelic records, for Sentieon and DeepVariant SNV calling and ExpansionHunter repeat expansion calling; `bcftools norm` always runs (indels are always left-aligned), only the `-both` decomposition is toggled. Defaults to `true` (current behavior unchanged); set to `false` for a more targeted fix than the removed `--skip_split_multiallelics` to the indel-precision regression described in [issue #813](https://github.com/nf-core/raredisease/issues/813) [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1049](https://github.com/nf-core/raredisease/pull/1049)
 - Add `--filter_expansionhunter`, a bcftools `-e` expression applied to each sample's ExpansionHunter VCF before the per-case merge (e.g. `'INFO/REPID="HTT" || INFO/REPID~"^HTT_"'` to remove HTT/Huntington's disease records); disabled by default [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1040](https://github.com/nf-core/raredisease/pull/1040)
 - Add `--sv_freq_filter_expression`, a bcftools `-e` expression applied to the SV VCF after SVDB query and before VEP annotation, to filter SVs by population frequency (e.g. `'INFO/gnomad_svAF >= 0.01'`); disabled by default [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1041](https://github.com/nf-core/raredisease/pull/1041)
 - Add `--ml_prob_threshold` to control the `INFO/ML_PROB` cutoff used to tag and remove Sentieon DNAscope variants as `ML_FAIL`; defaults to `0.70` when not set, replacing the pipeline's previous hardcoded `0.95` [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1039](https://github.com/nf-core/raredisease/pull/1039)
@@ -54,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove the `test_bam` profile: its all-BAM trio was a strict subset of `test_align`'s coverage, which already exercises both plain-BAM ingestion and CRAM conversion in one run [issue #869](https://github.com/nf-core/raredisease/issues/869) [PR #977](https://github.com/nf-core/raredisease/pull/977)
 - Removed the `rtgtools`/`vcfeval` variant-evaluation feature entirely: the `VARIANT_EVALUATION` subworkflow, `rtgtools/format` and `rtgtools/vcfeval` modules, and the `--run_rtgvcfeval`, `--rtg_truthvcfs`, and `--sdf` parameters [issue #963](https://github.com/nf-core/raredisease/issues/963) [PR #964](https://github.com/nf-core/raredisease/pull/964)
 - Removed `hisat2`/`build` because hisat2 indexes are no longer needed for mitosalt [issue #1015](https://github.com/nf-core/raredisease/issues/1015) [PR #1014](https://github.com/nf-core/raredisease/pull/1014)
+- Removed `--skip_split_multiallelics`. Skipping the step entirely also drops indel left-alignment, not just the `--multiallelics -both` decomposition that [issue #813](https://github.com/nf-core/raredisease/issues/813) was about; a more targeted fix, scoped to the decomposition alone, is planned as a follow-up [issue #813](https://github.com/nf-core/raredisease/issues/813) [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1048](https://github.com/nf-core/raredisease/pull/1048)
 
 ### `Changed`
 
@@ -153,27 +155,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Parameters
 
-| Old parameter          | New parameter                 |
-| ---------------------- | ----------------------------- |
-|                        | filter_expansionhunter        |
-|                        | sv_freq_filter_expression     |
-|                        | ml_prob_threshold             |
-|                        | contamination_sites           |
-|                        | contamination_sites_tbi       |
-|                        | pre_vep_snv_filter_expression |
-|                        | glnexus_config                |
-|                        | vep_gtf                       |
-|                        | vep_gtf_tbi                   |
-|                        | peddy_sites                   |
-|                        | duplicates_marker             |
-|                        | somalier_sites_vcf            |
-| manta_call_regions     | sv_call_region                |
-| manta_call_regions_tbi | sv_call_region_tbi            |
-| call_interval          | snv_call_region               |
-|                        | sex_source                    |
-|                        | genmod_skip_plugin_check      |
-| hisat2                 |                               |
-| hisat2_build_memory    |                               |
+| Old parameter            | New parameter                 |
+| ------------------------ | ----------------------------- |
+|                          | filter_expansionhunter        |
+|                          | sv_freq_filter_expression     |
+|                          | ml_prob_threshold             |
+|                          | contamination_sites           |
+|                          | contamination_sites_tbi       |
+|                          | pre_vep_snv_filter_expression |
+|                          | glnexus_config                |
+|                          | vep_gtf                       |
+|                          | vep_gtf_tbi                   |
+|                          | peddy_sites                   |
+|                          | duplicates_marker             |
+|                          | somalier_sites_vcf            |
+| manta_call_regions       | sv_call_region                |
+| manta_call_regions_tbi   | sv_call_region_tbi            |
+| call_interval            | snv_call_region               |
+|                          | sex_source                    |
+|                          | genmod_skip_plugin_check      |
+| hisat2                   |                               |
+| hisat2_build_memory      |                               |
+| skip_split_multiallelics |                               |
 
 ### Tool updates
 

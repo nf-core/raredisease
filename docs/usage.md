@@ -12,8 +12,12 @@ Table of contents:
   - [Run nf-core/raredisease with your data](#run-nf-coreraredisease-with-your-data)
     - [Samplesheet](#samplesheet)
       - [Samplesheet for BAM file input](#samplesheet-for-bam-file-input)
+      - [Samplesheet for CRAM file input](#samplesheet-for-cram-file-input)
+      - [Samplesheet for VCF file input](#samplesheet-for-vcf-file-input)
     - [Reference files and parameters](#reference-files-and-parameters)
       - [1. Alignment](#1-alignment)
+    - [BAM QC metrics tool](#bam-qc-metrics-tool)
+    - [Estimated sex](#estimated-sex)
       - [2. QC stats from the alignment files](#2-qc-stats-from-the-alignment-files)
       - [3. Repeat expansions](#3-repeat-expansions)
       - [4. Variant calling - SNV](#4-variant-calling---snv)
@@ -25,9 +29,9 @@ Table of contents:
       - [10. Mobile element calling](#10-mobile-element-calling)
       - [11. Mobile element annotation](#11-mobile-element-annotation)
       - [12. Prepare data for CNV visualisation in Gens](#12-prepare-data-for-cnv-visualisation-in-gens)
-    - [Run the pipeline](#run-the-pipeline)
-      - [Direct input in CLI](#direct-input-in-cli)
-      - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
+      - [Run the pipeline](#run-the-pipeline)
+        - [Direct input in CLI](#direct-input-in-cli)
+        - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
   - [Best practices](#best-practices)
   - [Core Nextflow arguments](#core-nextflow-arguments)
     - [`-profile`](#-profile)
@@ -327,32 +331,34 @@ If a sample plays a parental role in the pedigree (listed as another sample's `p
 
 ##### 3. Repeat expansions
 
-| Mandatory                   | Optional                           |
-| --------------------------- | ---------------------------------- |
-| variant_catalog<sup>1</sup> | filter_expansionhunter<sup>2</sup> |
+| Mandatory                   | Optional                            |
+| --------------------------- | ----------------------------------- |
+| variant_catalog<sup>1</sup> | filter_expansionhunter<sup>2</sup>  |
+|                             | normalize_multiallelics<sup>3</sup> |
 
 <sup>1</sup> We recommend using the catalogs found [here](https://github.com/Clinical-Genomics/reference-files/tree/master/rare-disease/disease_loci/ExpansionHunter-v5.0.0). These catalogs have been extended from the illumina ones to include information on pathogenicity, which is necessary for the workflow.<br />
 <sup>2</sup> A bcftools `-e` expression used to exclude repeat expansion calls, applied to each sample's ExpansionHunter VCF before the per-case merge. For example, `'INFO/REPID="HTT" || INFO/REPID~"^HTT_"'` removes HTT (Huntington's disease) records. Default is `null` (no filter).<br />
+<sup>3</sup> See section 4 (Variant calling - SNV) for details; this also controls `bcftools norm --multiallelics -both` for ExpansionHunter's own normalization step. Default is `true` (current behavior unchanged).<br />
 
 ##### 4. Variant calling - SNV
 
-| Mandatory                  | Optional                             |
-| -------------------------- | ------------------------------------ |
-| variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>              |
-| ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup>          |
-| analysis_type<sup>3</sup>  | snv_call_region<sup>6</sup>          |
-|                            | known_dbsnp_tbi<sup>2</sup>          |
-|                            | par_bed<sup>4</sup>                  |
-|                            | skip_split_multiallelics<sup>5</sup> |
-|                            | ml_prob_threshold<sup>2,7</sup>      |
+| Mandatory                  | Optional                            |
+| -------------------------- | ----------------------------------- |
+| variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>             |
+| ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup>         |
+| analysis_type<sup>3</sup>  | snv_call_region<sup>5</sup>         |
+|                            | known_dbsnp_tbi<sup>2</sup>         |
+|                            | par_bed<sup>4</sup>                 |
+|                            | ml_prob_threshold<sup>2,6</sup>     |
+|                            | normalize_multiallelics<sup>7</sup> |
 
 <sup>1</sup>Default variant caller is DeepVariant, but you have the option to use Sentieon as well.<br />
 <sup>2</sup>These parameters are only used by Sentieon. The `ml_model` parameter expects a path to a model file (e.g. `dnascope.model`). If Sentieon provides the model in `.bundle` format, unpack it first with `ar models.bundle` and point `--ml_model` to the extracted `dnascope.model` file. `ar` is part of the GNU binutils package.<br />
 <sup>3</sup>Default is `WGS`, but you have the option to choose `WES` and `mito` as well.<br />
 <sup>4</sup>This parameter is only used by Deepvariant.<br />
-<sup>5</sup>Skips `bcftools norm --multiallelics -both` in both DeepVariant and Sentieon SNV calling. Recommended for single-interval runs to avoid indel quality degradation. See [#813](https://github.com/nf-core/raredisease/issues/813) for details.<br />
-<sup>6</sup>Restricts SNV calling to this region for both DeepVariant and Sentieon. Falls back to the padded `--target_bed` (as processed by the pipeline, not the raw file) when not set and `analysis_type` is `wes`; for `wgs`, `target_bed` is not used as a calling restriction (it may be set purely for QC/contamination purposes), so the whole genome is called unless `--snv_call_region` is set explicitly.<br />
-<sup>7</sup>Variants with `INFO/ML_PROB` less than or equal to this value are tagged `ML_FAIL` and removed. Defaults to `0.70` when not set.<br />
+<sup>5</sup>Restricts SNV calling to this region for both DeepVariant and Sentieon. Falls back to the padded `--target_bed` (as processed by the pipeline, not the raw file) when not set and `analysis_type` is `wes`; for `wgs`, `target_bed` is not used as a calling restriction (it may be set purely for QC/contamination purposes), so the whole genome is called unless `--snv_call_region` is set explicitly.<br />
+<sup>6</sup>Variants with `INFO/ML_PROB` less than or equal to this value are tagged `ML_FAIL` and removed. Defaults to `0.70` when not set.<br />
+<sup>7</sup>Controls whether `bcftools norm --multiallelics -both` decomposes multiallelic sites into biallelic records, for both DeepVariant and Sentieon SNV calling (also applies to ExpansionHunter repeat expansion calling, see section 3). `bcftools norm` always runs — indels are always left-aligned — this only toggles the `-both` decomposition. Default is `true` (current behavior unchanged). Set to `false` to keep multiallelic sites undecomposed, which can improve indel precision for single-interval runs; see [issue #813](https://github.com/nf-core/raredisease/issues/813) for background.<br />
 
 ##### 5. Variant calling - Structural variants
 
