@@ -21,6 +21,7 @@ include { resolveAnalysisSex     } from '../subworkflows/local/utils_nfcore_rare
 //
 
 include { BCFTOOLS_CONCAT as CONCAT_NUCLEAR_AND_MT_SNVS     } from '../modules/nf-core/bcftools/concat'
+include { BCFTOOLS_VIEW as FILTER_SV_SIZE                   } from '../modules/nf-core/bcftools/view/main'
 include { FASTQC                                            } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                                           } from '../modules/nf-core/multiqc/main'
 include { PEDDY                                             } from '../modules/nf-core/peddy/main'
@@ -236,6 +237,7 @@ workflow RAREDISEASE {
     val_run_vcfanno_db_sanity_check
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
+    val_sv_size_threshold
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
     val_target_bed
@@ -887,6 +889,15 @@ workflow RAREDISEASE {
     } else if (skip_sv_calling) {
         ch_call_sv_vcf = ch_precalled_sv_vcf
         ch_call_sv_tbi = ch_precalled_sv_tbi
+    }
+
+    if (val_sv_size_threshold) {
+        FILTER_SV_SIZE (
+            ch_call_sv_vcf.join(ch_call_sv_tbi, failOnMismatch:true, failOnDuplicate:true),
+            [], [], []
+        )
+        ch_call_sv_vcf = FILTER_SV_SIZE.out.vcf
+        ch_call_sv_tbi = FILTER_SV_SIZE.out.tbi
     }
 
     //

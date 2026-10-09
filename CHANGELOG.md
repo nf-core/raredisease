@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `--sv_size_threshold`, applied to the merged SV VCF (all callers) after calling and before annotation, to filter out SVs larger than a given size in bp (e.g. `1000000` removes SVs larger than 1 Mb); disabled by default [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1046](https://github.com/nf-core/raredisease/pull/1046)
 - Add `--normalize_multiallelics` to control whether `bcftools norm --multiallelics -both` decomposes multiallelic sites into biallelic records, for Sentieon and DeepVariant SNV calling and ExpansionHunter repeat expansion calling; `bcftools norm` always runs (indels are always left-aligned), only the `-both` decomposition is toggled. Defaults to `true` (current behavior unchanged); set to `false` for a more targeted fix than the removed `--skip_split_multiallelics` to the indel-precision regression described in [issue #813](https://github.com/nf-core/raredisease/issues/813) [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1049](https://github.com/nf-core/raredisease/pull/1049)
 - Add `--filter_expansionhunter`, a bcftools `-e` expression applied to each sample's ExpansionHunter VCF before the per-case merge (e.g. `'INFO/REPID="HTT" || INFO/REPID~"^HTT_"'` to remove HTT/Huntington's disease records); disabled by default [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1040](https://github.com/nf-core/raredisease/pull/1040)
 - Add `--sv_freq_filter_expression`, a bcftools `-e` expression applied to the SV VCF after SVDB query and before VEP annotation, to filter SVs by population frequency (e.g. `'INFO/gnomad_svAF >= 0.01'`); disabled by default [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1041](https://github.com/nf-core/raredisease/pull/1041)
@@ -156,6 +157,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Old parameter            | New parameter                 |
 | ------------------------ | ----------------------------- |
+|                          | sv_size_threshold             |
 |                          | filter_expansionhunter        |
 |                          | sv_freq_filter_expression     |
 |                          | ml_prob_threshold             |
