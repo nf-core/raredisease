@@ -233,8 +233,8 @@ Note that the pipeline is modular in architecture. It offers you the flexibility
 
 The pipeline is modular — individual tools and subworkflows can be skipped using `--skip_tools` and `--skip_subworkflows` (comma-separated). The valid values are:
 
-| `--skip_tools`                                                                                                                                                 |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--skip_tools`                                                                                                                                                               |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `cnvnator`, `fastp`, `fastqc`, `gatkcontamination`, `gens`, `germlinecnvcaller`, `manta`, `ngsbits`, `peddy`, `smncopynumbercaller`, `tiddit`, `vcf2cytosure`, `verifybamid` |
 
 | `--skip_subworkflows`                                                                                                                                                                                                             |
