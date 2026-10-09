@@ -677,12 +677,6 @@
                     "description": "Number of intervals to split your genome into (used to parallelize annotations)",
                     "fa_icon": "fas fa-less-than"
                 },
-                "skip_split_multiallelics": {
-                    "type": "boolean",
-                    "fa_icon": "fas fa-forward",
-                    "description": "Skip the split multiallelics step in SNV calling.",
-                    "help_text": "Skips bcftools norm --multiallelics -both in CALL_SNV_SENTIEON and CALL_SNV_DEEPVARIANT. Useful for single-interval runs where the step is unnecessary and can degrade indel quality."
-                },
                 "skip_subworkflows": {
                     "type": "string",
                     "fa_icon": "fas fa-forward",
@@ -827,6 +821,13 @@
                     "description": "Bin size for CNVnator",
                     "default": 1000,
                     "fa_icon": "fas fa-align-center"
+                },
+                "normalize_multiallelics": {
+                    "type": "boolean",
+                    "default": true,
+                    "fa_icon": "fas fa-align-center",
+                    "description": "Decompose multiallelic sites into biallelic records during variant calling (Sentieon, DeepVariant) and repeat expansion calling (ExpansionHunter).",
+                    "help_text": "Controls whether `bcftools norm --multiallelics -both` is used when normalizing multiallelic sites. `bcftools norm` always runs (indels are always left-aligned); setting this to false only omits the `--multiallelics -both` decomposition. See [issue #813](https://github.com/nf-core/raredisease/issues/813) for background on why the decomposition can be undesirable for some single-interval runs."
                 },
                 "sentieon_dnascope_pcr_indel_model": {
                     "type": "string",

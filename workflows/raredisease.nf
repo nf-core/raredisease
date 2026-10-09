@@ -237,7 +237,6 @@ workflow RAREDISEASE {
     val_run_vcfanno_db_sanity_check
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
-    val_skip_split_multiallelics
     val_sv_size_threshold
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
@@ -630,7 +629,6 @@ workflow RAREDISEASE {
             ch_sentieon_pcr_indel_model,
             ch_snv_call_region,
             val_analysis_type,
-            val_skip_split_multiallelics,
             val_variant_caller,
         )
         ch_call_snv_deepvariant_report  = CALL_SNV.out.deepvariant_report
