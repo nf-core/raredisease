@@ -21,6 +21,7 @@ include { resolveAnalysisSex     } from '../subworkflows/local/utils_nfcore_rare
 //
 
 include { BCFTOOLS_CONCAT as CONCAT_NUCLEAR_AND_MT_SNVS     } from '../modules/nf-core/bcftools/concat'
+include { BCFTOOLS_VIEW as FILTER_SV_SIZE                   } from '../modules/nf-core/bcftools/view/main'
 include { FASTQC                                            } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                                           } from '../modules/nf-core/multiqc/main'
 include { PEDDY                                             } from '../modules/nf-core/peddy/main'
@@ -161,12 +162,14 @@ workflow RAREDISEASE {
     ch_vep_extra_files
     ch_vep_gtf
     ch_versions
+    skip_cnvnator
     skip_fastp
     skip_fastqc
     skip_gatkcontamination
     skip_generate_clinical_set
     skip_gens
     skip_germlinecnvcaller
+    skip_manta
     skip_me_annotation
     skip_me_calling
     skip_mitosalt
@@ -184,6 +187,7 @@ workflow RAREDISEASE {
     skip_somalier
     skip_sv_annotation
     skip_sv_calling
+    skip_tiddit
     skip_vcf2cytosure
     skip_verifybamid
     val_aligner
@@ -236,7 +240,7 @@ workflow RAREDISEASE {
     val_run_vcfanno_db_sanity_check
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
-    val_skip_split_multiallelics
+    val_sv_size_threshold
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
     val_target_bed
@@ -629,7 +633,6 @@ workflow RAREDISEASE {
             ch_sentieon_pcr_indel_model,
             ch_snv_call_region,
             val_analysis_type,
-            val_skip_split_multiallelics,
             val_variant_caller,
         )
         ch_call_snv_deepvariant_report  = CALL_SNV.out.deepvariant_report
@@ -826,7 +829,10 @@ workflow RAREDISEASE {
                 ch_manta_regions,
                 ch_ploidy_model,
                 ch_readcount_intervals,
+                skip_cnvnator,
                 skip_germlinecnvcaller,
+                skip_manta,
+                skip_tiddit,
                 val_analysis_type
             )
             ch_call_sv_nuclear_vcfs = CALL_SV.out.vcfs
@@ -890,6 +896,15 @@ workflow RAREDISEASE {
     } else if (skip_sv_calling) {
         ch_call_sv_vcf = ch_precalled_sv_vcf
         ch_call_sv_tbi = ch_precalled_sv_tbi
+    }
+
+    if (val_sv_size_threshold) {
+        FILTER_SV_SIZE (
+            ch_call_sv_vcf.join(ch_call_sv_tbi, failOnMismatch:true, failOnDuplicate:true),
+            [], [], []
+        )
+        ch_call_sv_vcf = FILTER_SV_SIZE.out.vcf
+        ch_call_sv_tbi = FILTER_SV_SIZE.out.tbi
     }
 
     //

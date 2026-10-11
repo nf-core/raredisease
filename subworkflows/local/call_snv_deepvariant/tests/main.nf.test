@@ -42,7 +42,6 @@ nextflow_workflow {
                 ])
                 input[7] = channel.of([[id:'par'], []]).collect()
                 input[8] = channel.of([[id:'region'], []])
-                input[9] = false
                 """
             }
         }
@@ -69,6 +68,7 @@ nextflow_workflow {
         when {
             params {
                 bcftools_args = "--write-index=tbi --output-type z"
+                normalize_multiallelics = false
             }
             workflow {
                 """
@@ -88,7 +88,6 @@ nextflow_workflow {
                 ])
                 input[7] = channel.of([[id:'par'], []]).collect()
                 input[8] = channel.of([[id:'region'], []])
-                input[9] = false
                 """
             }
         }
@@ -96,6 +95,7 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
+                { assert path(workflow.out.vcf[0][1]).vcf.variants.any { variant -> variant.alternateAlleles.size() > 1 } },
                 { assert snapshot(
                     path(workflow.out.vcf[0][1]).vcf.variantsMD5
                 ).match() }
@@ -127,7 +127,6 @@ nextflow_workflow {
                 input[6] = channel.of([[],[]])
                 input[7] = channel.of([[id:'par'], []]).collect()
                 input[8] = channel.of([[id:'region'], []])
-                input[9] = false
                 """
             }
         }

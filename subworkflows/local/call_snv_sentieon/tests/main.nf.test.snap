@@ -1,4 +1,17 @@
 {
+    "CALL_SNV_SENTIEON - normalize_multiallelics": {
+        "content": [
+            "b746fb1a6cacd9e04ab9311ce46cd4a7",
+            [
+                "amusingmarmoset_split_rmdup_info.vcf.gz.tbi"
+            ]
+        ],
+        "timestamp": "2026-10-07T21:25:49.338424658",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
     "CALL_SNV_SENTIEON - two samples (merge), stub": {
         "content": [
             {
