@@ -22,7 +22,6 @@ workflow CALL_SNV {
         ch_pcr_indel_model            // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
         ch_snv_call_region            // channel: [optional] [ val(meta), path(bed) ]
         val_analysis_type             // string:  'wgs', 'wes', or 'mito'
-        val_skip_split_multiallelics  // boolean
         val_variant_caller            // string:  'deepvariant' or 'sentieon'
 
     main:
@@ -47,7 +46,6 @@ workflow CALL_SNV {
                 ch_glnexus_config,
                 ch_par_bed,
                 ch_snv_call_region,
-                val_skip_split_multiallelics,
             )
             ch_deepvariant_vcf    = CALL_SNV_DEEPVARIANT.out.vcf
             ch_deepvariant_tbi    = CALL_SNV_DEEPVARIANT.out.tabix
@@ -67,7 +65,6 @@ workflow CALL_SNV {
                 ch_genome_fasta,
                 ch_ml_model,
                 ch_pcr_indel_model,
-                val_skip_split_multiallelics
             )
             ch_sentieon_vcf  = CALL_SNV_SENTIEON.out.vcf
             ch_sentieon_tbi  = CALL_SNV_SENTIEON.out.tabix

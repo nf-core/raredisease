@@ -24,6 +24,20 @@
             "nextflow": "26.04.6"
         }
     },
+    "CALL_SV - wgs, stub, skip_tiddit and skip_cnvnator": {
+        "content": [
+            [
+                [
+                    "amusingmarmoset_manta.vcf.gz"
+                ]
+            ]
+        ],
+        "timestamp": "2026-10-08T12:53:51.280149025",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
     "CALL_SV - wgs, minimal dataset": {
         "content": [
             [
@@ -35,6 +49,21 @@
             ]
         ],
         "timestamp": "2026-08-21T14:24:20.169277138",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "CALL_SV - wgs, stub, skip_manta and skip_germlinecnvcaller": {
+        "content": [
+            [
+                [
+                    "amusingmarmoset_tiddit.vcf.gz",
+                    "amusingmarmoset_cnvnator.vcf.gz"
+                ]
+            ]
+        ],
+        "timestamp": "2026-10-08T15:19:15.836159309",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
