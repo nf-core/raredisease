@@ -121,7 +121,7 @@ The nf-core/raredisease pipeline accepts FASTQ files, SPRING files, BAM files, o
 | `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                                         |
 | `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                                       |
 | `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                                       |
-| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                                                                                                                |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF. All rows in a samplesheet must belong to the same case and share one `case_id`; to analyse several cases or unrelated singletons, run the pipeline once per case. |
 | `customer_id` | Optional external/customer identifier for the sample. If provided, it is used instead of `sample` to label Saltshaker HTML reports and to rename the sample in the VCF2CYTOSURE output; defaults to `sample` if left blank. |
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
@@ -148,7 +148,7 @@ The nf-core/raredisease pipeline can handle duplicate-marked BAM files as input.
 | `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                                         |
 | `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                                       |
 | `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                                       |
-| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                                                                                                                |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF. All rows in a samplesheet must belong to the same case and share one `case_id`; to analyse several cases or unrelated singletons, run the pipeline once per case. |
 | `customer_id` | Optional external/customer identifier for the sample. If provided, it is used instead of `sample` to label Saltshaker HTML reports and to rename the sample in the VCF2CYTOSURE output; defaults to `sample` if left blank. |
 
 If you would like to see an example of what a typical samplesheet looks like in this case, follow this [link.](https://github.com/nf-core/test-datasets/blob/raredisease/testdata/samplesheet_bam.csv)
@@ -166,7 +166,7 @@ The nf-core/raredisease pipeline can handle duplicate-marked CRAM files as input
 | `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                                         |
 | `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                                       |
 | `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                                       |
-| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                                                                                                                |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF. All rows in a samplesheet must belong to the same case and share one `case_id`; to analyse several cases or unrelated singletons, run the pipeline once per case. |
 | `customer_id` | Optional external/customer identifier for the sample. If provided, it is used instead of `sample` to label Saltshaker HTML reports and to rename the sample in the VCF2CYTOSURE output; defaults to `sample` if left blank. |
 
 > [!NOTE]
