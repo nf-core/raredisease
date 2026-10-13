@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- Add `vep_sv` as a valid `--skip_tools` value, disabling VEP annotation of structural variants while SVDB frequency annotation still runs [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #TBD](https://github.com/nf-core/raredisease/pull/TBD)
+- Add `vep_sv` as a valid `--skip_tools` value, disabling VEP annotation of structural variants while SVDB frequency annotation still runs [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1056](https://github.com/nf-core/raredisease/pull/1056)
 - Add `--manta_config`, an optional path to a custom Manta configuration file passed to `configManta.py --config`; when not supplied, Manta runs with its built-in defaults
 - Add `manta`, `tiddit`, and `cnvnator` as valid `--skip_tools` values, letting users disable any of the nuclear structural variant callers independently; `tiddit` and `cnvnator` are no-ops for WES, where neither tool runs regardless. The pipeline now errors out at start-up if every nuclear SV caller ends up disabled while `sv_calling` itself is not skipped [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #TBD](https://github.com/nf-core/raredisease/pull/TBD)
 - Add `--sv_size_threshold`, applied to the merged SV VCF (all callers) after calling and before annotation, to filter out SVs larger than a given size in bp (e.g. `1000000` removes SVs larger than 1 Mb); disabled by default [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1046](https://github.com/nf-core/raredisease/pull/1046)
