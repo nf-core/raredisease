@@ -172,6 +172,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |                          | peddy_sites                   |
 |                          | duplicates_marker             |
 |                          | somalier_sites_vcf            |
+|                          | manta_config                  |
 | manta_call_regions       | sv_call_region                |
 | manta_call_regions_tbi   | sv_call_region_tbi            |
 | call_interval            | snv_call_region               |
