@@ -216,6 +216,9 @@
                 "GLNEXUS": {
                     "glnexus": "1.4.1"
                 },
+                "HISAT2_INDEX_GENOME": {
+                    "hisat2": "2.2.3"
+                },
                 "INDEX_CNVNATOR": {
                     "bgzip": 1.21,
                     "tabix": 1.21
@@ -236,9 +239,6 @@
                 },
                 "ME_SPLIT_ALIGNMENT": {
                     "samtools": "1.22.1"
-                },
-                "MITOSALT": {
-                    "mitosalt": "1.1.1"
                 },
                 "MOSDEPTH": {
                     "mosdepth": "0.3.11"
@@ -298,15 +298,6 @@
                 "RHOCALL_VIZ": {
                     "rhocall": "0.5.1"
                 },
-                "SALTSHAKER_CALL": {
-                    "saltshaker": "1.1.1"
-                },
-                "SALTSHAKER_CLASSIFY": {
-                    "saltshaker": "1.1.1"
-                },
-                "SALTSHAKER_PLOT": {
-                    "saltshaker": "1.1.1"
-                },
                 "SAMTOOLS_COLLATE": {
                     "samtools": "1.22.1"
                 },
@@ -331,9 +322,6 @@
                 "SAM_TO_BAM": {
                     "samtools": "1.22.1"
                 },
-                "SEQTK_SAMPLE": {
-                    "seqtk": "1.4-r122"
-                },
                 "SPLIT_AND_FILTER_SV_VCF": {
                     "bcftools": 1.22
                 },
@@ -355,10 +343,6 @@
                 "STRANGER": {
                     "stranger": "0.10.0",
                     "tabix": 1.23
-                },
-                "SVDB_MERGE": {
-                    "bcftools": 1.24,
-                    "svdb": "2.12.0"
                 },
                 "SVDB_MERGE_CNVNATOR": {
                     "bcftools": 1.24,
@@ -576,13 +560,9 @@
                 "call_snv/mitochondria/amusingmarmoset_mitochondria.vcf.gz",
                 "call_snv/mitochondria/amusingmarmoset_mitochondria.vcf.gz.tbi",
                 "call_sv",
-                "call_sv/ACC13778A1.saltshaker.png",
                 "call_sv/ACC13778A1_mitochondria_deletions.txt",
-                "call_sv/ACC13778A2.saltshaker.png",
                 "call_sv/ACC13778A2_mitochondria_deletions.txt",
-                "call_sv/ACC13778A3.saltshaker.png",
                 "call_sv/ACC13778A3_mitochondria_deletions.txt",
-                "call_sv/amusingmarmoset.saltshaker_classify.html",
                 "call_sv/amusingmarmoset_sv.vcf.gz",
                 "call_sv/amusingmarmoset_sv.vcf.gz.tbi",
                 "multiqc",
@@ -893,13 +873,9 @@
                 "ACC13778A1_deepvar.visual_report.html:md5,a6680997f01689d4baa29cb2efbac088",
                 "ACC13778A2_deepvar.visual_report.html:md5,d6d2acbb6c7bc62e51d67ce2b11266bc",
                 "ACC13778A3_deepvar.visual_report.html:md5,515326f6f23417e6f5ba7f232ae156a5",
-                "ACC13778A1.saltshaker.png:md5,728b73f8efdcc8eb99251437aa7d21e0",
                 "ACC13778A1_mitochondria_deletions.txt:md5,0ad0626a86aee2c1fb115373ba3c8ae7",
-                "ACC13778A2.saltshaker.png:md5,728b73f8efdcc8eb99251437aa7d21e0",
                 "ACC13778A2_mitochondria_deletions.txt:md5,a2df91568e91af96c838c78be21e0861",
-                "ACC13778A3.saltshaker.png:md5,728b73f8efdcc8eb99251437aa7d21e0",
                 "ACC13778A3_mitochondria_deletions.txt:md5,849dd692a1ca83131b2c2d5b27fba063",
-                "amusingmarmoset.saltshaker_classify.html:md5,b1a6e6423d89734ce5a41b8b00ccad84",
                 "mosdepth-coverage-per-contig-multi.txt:md5,fb83feb5906d33591ff17516e31384f8",
                 "mosdepth-cumcoverage-dist-id.txt:md5,3cef48841ed9c24f379b7a0bd6350ba9",
                 "mosdepth_cov_dist.txt:md5,181fc0b0c71a5394d910b6af12aa601b",
@@ -3454,10 +3430,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-09-21T18:03:40.274093403",
+        "timestamp": "2026-10-07T12:00:48.815356053",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.3"
         }
     }
 }

@@ -12,9 +12,10 @@ process MITOSALT {
     path msconfig
     path chrsizes
     tuple val(meta2), path(genomefai)
-    tuple val(meta3), path(mtfai)
-    tuple val(meta4), path(mtfasta)
-    tuple val(meta5), path(lastindex)
+    tuple val(meta3), path(hisat2index)
+    tuple val(meta4), path(mtfai)
+    tuple val(meta5), path(mtfasta)
+    tuple val(meta6), path(lastindex)
 
     output:
     tuple val(meta), path("*breakpoint") , emit: breakpoint
