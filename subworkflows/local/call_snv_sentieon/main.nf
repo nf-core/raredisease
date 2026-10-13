@@ -23,9 +23,8 @@ workflow CALL_SNV_SENTIEON {
         ch_genome_chrsizes // channel: [mandatory] [ path(chrsizes) ]
         ch_genome_fai      // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_fasta    // channel: [mandatory] [ val(meta), path(fasta) ]
-        ch_ml_model                  // channel: [mandatory] [ val(meta), path(model) ]
-        ch_pcr_indel_model           // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
-        val_skip_split_multiallelics // boolean
+        ch_ml_model        // channel: [mandatory] [ val(meta), path(model) ]
+        ch_pcr_indel_model // channel: [optional] [ val(sentieon_dnascope_pcr_indel_model) ]
 
     main:
         // Combine bam and intervals
@@ -82,16 +81,10 @@ workflow CALL_SNV_SENTIEON {
 
         ch_vcf_idx_case =  ch_vcf_idx_merge_in.single.mix(ch_split_multi_in)
 
-        if (!val_skip_split_multiallelics) {
-            SPLIT_MULTIALLELICS_SEN(ch_vcf_idx_case, ch_genome_fasta)
-            ch_remove_dup_in = SPLIT_MULTIALLELICS_SEN.out.vcf
-                                .map{meta, vcf ->
-                                        return [meta, vcf, []]}
-        } else {
-            ch_remove_dup_in = ch_vcf_idx_case
-                                .map{meta, vcf, _idx ->
-                                        return [meta, vcf, []]}
-        }
+        SPLIT_MULTIALLELICS_SEN(ch_vcf_idx_case, ch_genome_fasta)
+        ch_remove_dup_in = SPLIT_MULTIALLELICS_SEN.out.vcf
+                            .map{meta, vcf ->
+                                    return [meta, vcf, []]}
 
         REMOVE_DUPLICATES_SEN(ch_remove_dup_in, ch_genome_fasta)
 

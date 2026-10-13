@@ -99,6 +99,9 @@ nextflow_workflow {
         // genotype the catalog's chrX locus as haploid instead of diploid, so the
         // repeat VCF differs from the "CALL_REPEAT_EXPANSIONS" case above.
         when {
+            params {
+                normalize_multiallelics = false
+            }
             workflow {
                 """
                 input[0] = channel.of(
@@ -118,11 +121,14 @@ nextflow_workflow {
         }
 
         then {
-            assert workflow.success
-            assert snapshot(
-                path(workflow.out.vcf[0][1].toString()).vcf.variantsMD5,
-                path(workflow.out.vcf[0][1].toString()).vcf.summary
-            ).match()
+            assertAll(
+                { assert workflow.success },
+                { assert path(workflow.out.vcf[0][1].toString()).vcf.variants.any { variant -> variant.alternateAlleles.size() > 1 } },
+                { assert snapshot(
+                    path(workflow.out.vcf[0][1].toString()).vcf.variantsMD5,
+                    path(workflow.out.vcf[0][1].toString()).vcf.summary
+                ).match() }
+            )
         }
 
     }
