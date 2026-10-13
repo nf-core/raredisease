@@ -224,6 +224,7 @@ workflow NFCORE_RAREDISEASE {
         : channel.value([[],[]])
 
     // Using channelFromPath helper (val_x ? channel.fromPath(val_x).collect() : channel.value([]))
+    ch_manta_config             = channelFromPath(val_manta_config, true)
     ch_reduced_penetrance       = channelFromPath(val_reduced_penetrance, true)
     ch_score_config_mt          = channelFromPath(val_score_config_mt, true)
     ch_score_config_snv         = channelFromPath(val_score_config_snv, true)
@@ -282,7 +283,6 @@ workflow NFCORE_RAREDISEASE {
                                         ? channel.value([file(val_sv_call_region), file(val_sv_call_region_tbi)])
                                         : channel.value([[], []]))
                                     : ch_target_bed.map { _meta, bed, tbi -> [bed, tbi] }
-    ch_manta_config             = channelFromPath(val_manta_config, true)
     ch_ngsbits_method           = channel.value(val_ngsbits_samplegender_method)
     ch_sentieon_pcr_indel_model = channel.value(val_sentieon_dnascope_pcr_indel_model)
     ch_subdepth                 = channel.value(val_subdepth)
