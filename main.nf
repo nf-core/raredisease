@@ -77,6 +77,7 @@ workflow NFCORE_RAREDISEASE {
     val_gnomad_af_idx
     val_heavy_strand_origin_end
     val_heavy_strand_origin_start
+    val_hisat2
     val_homoplasmy_af_threshold
     val_intervals_wgs
     val_intervals_y
@@ -84,6 +85,7 @@ workflow NFCORE_RAREDISEASE {
     val_known_dbsnp_tbi
     val_light_strand_origin_end
     val_light_strand_origin_start
+    val_manta_config
     val_mito_length
     val_mito_name
     val_mitosalt_breakspan
@@ -136,6 +138,7 @@ workflow NFCORE_RAREDISEASE {
     val_subdepth
     val_sv_call_region
     val_sv_call_region_tbi
+    val_sv_size_threshold
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
     val_target_bed
@@ -176,6 +179,7 @@ workflow NFCORE_RAREDISEASE {
         val_fasta,
         val_gnomad_af,
         val_gnomad_af_idx,
+        val_hisat2,
         val_known_dbsnp,
         val_known_dbsnp_tbi,
         val_mt_aligner,
@@ -197,6 +201,7 @@ workflow NFCORE_RAREDISEASE {
     ch_genome_chrsizes          = ch_references.genome_chrom_sizes
     ch_genome_fai               = ch_references.genome_fai
     ch_genome_fasta             = ch_references.genome_fasta
+    ch_genome_hisat2index       = ch_references.genome_hisat2_index
     ch_genome_dictionary        = ch_references.genome_dict
     ch_gnomad_af                = ch_references.gnomad_af_idx
     ch_mt_bwaindex              = ch_references.mt_bwa_index
@@ -222,6 +227,7 @@ workflow NFCORE_RAREDISEASE {
         : channel.value([[],[]])
 
     // Using channelFromPath helper (val_x ? channel.fromPath(val_x).collect() : channel.value([]))
+    ch_manta_config             = channelFromPath(val_manta_config, true)
     ch_reduced_penetrance       = channelFromPath(val_reduced_penetrance, true)
     ch_score_config_mt          = channelFromPath(val_score_config_mt, true)
     ch_score_config_snv         = channelFromPath(val_score_config_snv, true)
@@ -326,14 +332,17 @@ workflow NFCORE_RAREDISEASE {
     ch_pedfile = CREATE_PEDIGREE_FILE(ch_samples.toList()).ped
 
     // Tools
+    skip_cnvnator              = parseSkipList(val_skip_tools, 'cnvnator')
     skip_fastp                 = parseSkipList(val_skip_tools, 'fastp')
     skip_fastqc                = parseSkipList(val_skip_tools, 'fastqc')
     skip_gens                  = parseSkipList(val_skip_tools, 'gens')
     skip_germlinecnvcaller     = parseSkipList(val_skip_tools, 'germlinecnvcaller')
+    skip_manta                 = parseSkipList(val_skip_tools, 'manta')
     skip_mitosalt              = parseSkipList(val_skip_tools, 'mitosalt')
     skip_ngsbits               = parseSkipList(val_skip_tools, 'ngsbits')
     skip_peddy                 = parseSkipList(val_skip_tools, 'peddy')
     skip_smncopynumbercaller   = parseSkipList(val_skip_tools, 'smncopynumbercaller')
+    skip_tiddit                = parseSkipList(val_skip_tools, 'tiddit')
     skip_vcf2cytosure          = parseSkipList(val_skip_tools, 'vcf2cytosure')
     // GATK contamination check is also skipped when no contamination sites are supplied
     skip_gatkcontamination     = parseSkipList(val_skip_tools, 'gatkcontamination') || !val_contamination_sites
@@ -390,20 +399,19 @@ workflow NFCORE_RAREDISEASE {
 
     //
     // SV caller priority
+    // tiddit and cnvnator only ever run for WGS; germlinecnvcaller runs for both WGS and WES.
     //
-    if (skip_germlinecnvcaller) {
-        if (val_analysis_type.equals("wgs")) {
-            ch_svcaller_priority = channel.value(["tiddit", "manta", "cnvnator"])
-        } else {
-            ch_svcaller_priority = channel.value([])
-        }
-    } else {
-        if (val_analysis_type.equals("wgs")) {
-            ch_svcaller_priority = channel.value(["tiddit", "manta", "gcnvcaller", "cnvnator"])
-        } else {
-            ch_svcaller_priority = channel.value(["manta", "gcnvcaller"])
-        }
+    def active_sv_callers = val_analysis_type.equals("wgs")
+        ? (skip_tiddit ? [] : ["tiddit"]) + (skip_manta ? [] : ["manta"]) + (skip_germlinecnvcaller ? [] : ["gcnvcaller"]) + (skip_cnvnator ? [] : ["cnvnator"])
+        : (skip_manta ? [] : ["manta"]) + (skip_germlinecnvcaller ? [] : ["gcnvcaller"])
+
+    if (!skip_sv_calling && !val_analysis_type.equals("mito") && active_sv_callers.isEmpty()) {
+        error("All nuclear structural variant callers are disabled via --skip_tools, but sv_calling is not skipped. Either enable at least one caller (manta" +
+            (val_analysis_type.equals("wgs") ? ", tiddit, cnvnator" : "") +
+            ", germlinecnvcaller) or set --skip_subworkflows sv_calling.")
     }
+
+    ch_svcaller_priority = channel.value(active_sv_callers.size() > 1 ? active_sv_callers : [])
 
     //
     // Create chromosome bed and intervals for splitting and gathering operations
@@ -438,6 +446,7 @@ workflow NFCORE_RAREDISEASE {
         ch_genome_dictionary,
         ch_genome_fai,
         ch_genome_fasta,
+        ch_genome_hisat2index,
         ch_gens_gnomad_pos,
         ch_gens_interval_list,
         ch_gens_pon_female,
@@ -448,6 +457,7 @@ workflow NFCORE_RAREDISEASE {
         ch_intervals_contamination,
         ch_intervals_wgs,
         ch_intervals_y,
+        ch_manta_config,
         ch_manta_regions,
         ch_me_references,
         ch_me_svdb_resources,
@@ -501,12 +511,14 @@ workflow NFCORE_RAREDISEASE {
         ch_vep_extra_files,
         ch_vep_gtf,
         ch_versions,
+        skip_cnvnator,
         skip_fastp,
         skip_fastqc,
         skip_gatkcontamination,
         skip_generate_clinical_set,
         skip_gens,
         skip_germlinecnvcaller,
+        skip_manta,
         skip_me_annotation,
         skip_me_calling,
         skip_mitosalt,
@@ -524,6 +536,7 @@ workflow NFCORE_RAREDISEASE {
         skip_somalier,
         skip_sv_annotation,
         skip_sv_calling,
+        skip_tiddit,
         skip_vcf2cytosure,
         skip_verifybamid,
         val_aligner,
@@ -576,6 +589,7 @@ workflow NFCORE_RAREDISEASE {
         val_run_vcfanno_db_sanity_check,
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram,
+        val_sv_size_threshold,
         val_svdb_query_bedpedbs,
         val_svdb_query_dbs,
         val_target_bed,
@@ -687,6 +701,7 @@ workflow NFCORE_RAREDISEASE {
     prepare_references_genome_dictionary                = ch_genome_dictionary
     prepare_references_genome_fai                       = ch_genome_fai
     prepare_references_genome_fasta                     = ch_genome_fasta
+    prepare_references_genome_hisat2index               = ch_genome_hisat2index
     prepare_references_gnomad_af                        = ch_gnomad_af
     prepare_references_mt_bwaindex                      = ch_mt_bwaindex
     prepare_references_mt_bwamem2index                  = ch_mt_bwamem2index
@@ -714,6 +729,7 @@ workflow NFCORE_RAREDISEASE {
     fastqc                                              = RAREDISEASE.out.fastqc                      // channel: [ val(meta), path(html|zip) ]
     smncopynumbercaller                                 = RAREDISEASE.out.smncopynumbercaller         // channel: [ val(meta), path(*) ]
     peddy                                               = RAREDISEASE.out.peddy                       // channel: [ val(meta), path(*) ]
+    somalier                                            = RAREDISEASE.out.somalier
     multiqc                                             = RAREDISEASE.out.multiqc                     // channel: [ val(meta), path(*) ]
     pedigree                                            = ch_pedfile                                  // channel: [ path(ped) ]
     resolved_pedigree                                   = RAREDISEASE.out.resolved_pedigree           // channel: [ path(ped) ]
@@ -778,6 +794,7 @@ workflow {
         params.gnomad_af_idx,
         params.heavy_strand_origin_end,
         params.heavy_strand_origin_start,
+        params.hisat2,
         params.homoplasmy_af_threshold,
         params.intervals_wgs,
         params.intervals_y,
@@ -785,6 +802,7 @@ workflow {
         params.known_dbsnp_tbi,
         params.light_strand_origin_end,
         params.light_strand_origin_start,
+        params.manta_config,
         params.mito_length,
         params.mito_name,
         params.mitosalt_breakspan,
@@ -837,6 +855,7 @@ workflow {
         params.mitosalt_depth,
         params.sv_call_region,
         params.sv_call_region_tbi,
+        params.sv_size_threshold,
         params.svdb_query_bedpedbs,
         params.svdb_query_dbs,
         params.target_bed,
@@ -972,6 +991,7 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_bwamemeindex)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_fai)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_fasta)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_hisat2index)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_dictionary)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_chrsizes)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_bait_intervals)
@@ -1001,6 +1021,7 @@ workflow {
     fastqc                            = NFCORE_RAREDISEASE.out.fastqc
     smncopynumbercaller               = NFCORE_RAREDISEASE.out.smncopynumbercaller
     peddy                             = NFCORE_RAREDISEASE.out.peddy
+    somalier                          = NFCORE_RAREDISEASE.out.somalier
     multiqc                           = NFCORE_RAREDISEASE.out.multiqc
     pedigree                          = NFCORE_RAREDISEASE.out.pedigree
     resolved_pedigree                 = NFCORE_RAREDISEASE.out.resolved_pedigree
@@ -1086,6 +1107,9 @@ output {
     }
     peddy {
         path { _meta, _file -> "peddy/" }
+    }
+    somalier {
+        path { _meta, _file -> "somalier/" }
     }
     multiqc {
         path { _meta, _file -> "multiqc/" }

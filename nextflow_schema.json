@@ -260,6 +260,14 @@
                     "description": "Local directory base for genome references that map to the config.",
                     "help_text": "This folder is a flat structure with file names that map to the config."
                 },
+                "manta_config": {
+                    "type": "string",
+                    "exists": true,
+                    "format": "file-path",
+                    "fa_icon": "fas fa-file",
+                    "description": "Path to a custom Manta configuration file (configManta.py --config).",
+                    "help_text": "Optional. If supplied, this file is passed to Manta's configManta.py via --config to override its default settings. If omitted, Manta runs with its built-in defaults."
+                },
                 "mito_name": {
                     "type": "string",
                     "description": "Name of the mitochondrial contig in the reference fasta file",
@@ -688,8 +696,8 @@
                     "type": "string",
                     "fa_icon": "fas fa-forward",
                     "description": "Disable specified tools.",
-                    "help_text": "Multiple tools can be specified, separated by commas. The GATK contamination check (`gatkcontamination`) additionally requires `contamination_sites` to be set; it is skipped automatically when that file is not provided. VerifyBamID2 (`verifybamid`) is skipped automatically when `verifybamid_svd_bed` is not provided.",
-                    "pattern": "^((fastp|gens|germlinecnvcaller|peddy|smncopynumbercaller|vcf2cytosure|fastqc|ngsbits|mitosalt|gatkcontamination|verifybamid)?,?)*(?<!,)$"
+                    "help_text": "Multiple tools can be specified, separated by commas. The GATK contamination check (`gatkcontamination`) additionally requires `contamination_sites` to be set; it is skipped automatically when that file is not provided. VerifyBamID2 (`verifybamid`) is skipped automatically when `verifybamid_svd_bed` is not provided. `manta`, `tiddit`, and `cnvnator` are structural variant callers; `tiddit` and `cnvnator` only affect WGS runs (neither runs for WES), while `manta` can be skipped for either analysis type.",
+                    "pattern": "^((fastp|gens|germlinecnvcaller|peddy|smncopynumbercaller|vcf2cytosure|fastqc|ngsbits|mitosalt|gatkcontamination|verifybamid|tiddit|cnvnator|manta)?,?)*(?<!,)$"
                 },
                 "somalier_sites_vcf": {
                     "type": "string",
@@ -704,6 +712,12 @@
                     "fa_icon": "fas fa-filter",
                     "description": "bcftools -e expression to filter SVs by population frequency after SVDB query.",
                     "help_text": "Passed as the --exclude expression to bcftools view on the SV VCF, after SVDB query and before VEP annotation. For example, 'INFO/SWEFRQ >= 0.02' removes SVs with a Swedish allele frequency of 2% or higher. Null disables the filter."
+                },
+                "sv_size_threshold": {
+                    "type": "integer",
+                    "fa_icon": "fas fa-filter",
+                    "description": "Filter out SVs larger than this value in bp, after calling/merging and before annotation.",
+                    "help_text": "Applied to the merged SV VCF (all callers: Manta, TIDDIT, gCNVcaller, CNVnator, saltshaker) via bcftools view --exclude 'abs(INFO/SVLEN) > threshold'. For example, 1000000 removes SVs larger than 1 Mb. Null disables the filter."
                 }
             }
         },
@@ -936,8 +950,17 @@
                 },
                 "mitosalt_depth": {
                     "type": "integer",
-                    "default": 500000,
-                    "description": "number of mitochondrial reads passed to mitosalt"
+                    "default": 10000000,
+                    "description": "depth to subsample fastq files to before running mitosalt"
+                },
+                "hisat2": {
+                    "type": "string",
+                    "description": "Path to a pre-built HISAT2 genome index directory. If not provided, the index is built at runtime."
+                },
+                "hisat2_build_memory": {
+                    "type": "integer",
+                    "description": "Minimum memory required to build HISAT2 index with splice sites and exons. If available memory is below this threshold, a simpler index is built without splice sites.",
+                    "fa_icon": "fas fa-memory"
                 },
                 "mito_length": {
                     "type": "integer",

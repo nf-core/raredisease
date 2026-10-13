@@ -31,7 +31,6 @@ workflow ALIGN_MITOCHONDRIA {
             ch_genome_fai,
             ch_genome_fasta
         )
-        ch_mt_fastq = CONVERT_MT_BAM_TO_FASTQ.out.fastq
 
         ALIGN_MT (
             ch_mt_bwaindex,
@@ -39,7 +38,7 @@ workflow ALIGN_MITOCHONDRIA {
             ch_mt_dictionary,
             ch_mt_fai,
             ch_mt_fasta,
-            ch_mt_fastq,
+            CONVERT_MT_BAM_TO_FASTQ.out.fastq,
             CONVERT_MT_BAM_TO_FASTQ.out.ubam,
             val_mt_aligner
         )
@@ -50,7 +49,7 @@ workflow ALIGN_MITOCHONDRIA {
             ch_mtshift_dictionary,
             ch_mtshift_fai,
             ch_mtshift_fasta,
-            ch_mt_fastq,
+            CONVERT_MT_BAM_TO_FASTQ.out.fastq,
             CONVERT_MT_BAM_TO_FASTQ.out.ubam,
             val_mt_aligner
         )
@@ -62,7 +61,6 @@ workflow ALIGN_MITOCHONDRIA {
                                         .join(ALIGN_MT_SHIFT.out.marked_bai, failOnMismatch:true, failOnDuplicate:true) // Only for SNV calling
 
     emit:
-        mt_fastq                  = ch_mt_fastq                  // channel: [ val(meta), [ path(fastq) ] ]
         mt_bam_bai                = ch_mt_bam_bai                // channel: [ val(meta), path(bam), path(bai) ]
         mt_bam_bai_gatksubwf      = ch_mt_bam_bai_gatksubwf      // channel: [ val(meta), path(bam), path(bai) ]
         mtshift_bam_bai_gatksubwf = ch_mtshift_bam_bai_gatksubwf // channel: [ val(meta), path(bam), path(bai) ]

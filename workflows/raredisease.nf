@@ -21,6 +21,7 @@ include { resolveAnalysisSex     } from '../subworkflows/local/utils_nfcore_rare
 //
 
 include { BCFTOOLS_CONCAT as CONCAT_NUCLEAR_AND_MT_SNVS     } from '../modules/nf-core/bcftools/concat'
+include { BCFTOOLS_VIEW as FILTER_SV_SIZE                   } from '../modules/nf-core/bcftools/view/main'
 include { FASTQC                                            } from '../modules/nf-core/fastqc/main'
 include { MULTIQC                                           } from '../modules/nf-core/multiqc/main'
 include { PEDDY                                             } from '../modules/nf-core/peddy/main'
@@ -98,6 +99,7 @@ workflow RAREDISEASE {
     ch_genome_dictionary
     ch_genome_fai
     ch_genome_fasta
+    ch_genome_hisat2index
     ch_gens_gnomad_pos
     ch_gens_interval_list
     ch_gens_pon_female
@@ -108,6 +110,7 @@ workflow RAREDISEASE {
     ch_intervals_contamination
     ch_intervals_wgs
     ch_intervals_y
+    ch_manta_config
     ch_manta_regions
     ch_me_references
     ch_me_svdb_resources
@@ -161,12 +164,14 @@ workflow RAREDISEASE {
     ch_vep_extra_files
     ch_vep_gtf
     ch_versions
+    skip_cnvnator
     skip_fastp
     skip_fastqc
     skip_gatkcontamination
     skip_generate_clinical_set
     skip_gens
     skip_germlinecnvcaller
+    skip_manta
     skip_me_annotation
     skip_me_calling
     skip_mitosalt
@@ -184,6 +189,7 @@ workflow RAREDISEASE {
     skip_somalier
     skip_sv_annotation
     skip_sv_calling
+    skip_tiddit
     skip_vcf2cytosure
     skip_verifybamid
     val_aligner
@@ -236,6 +242,7 @@ workflow RAREDISEASE {
     val_run_vcfanno_db_sanity_check
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
+    val_sv_size_threshold
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
     val_target_bed
@@ -301,6 +308,7 @@ workflow RAREDISEASE {
     ch_fastqc                           = channel.empty()
     ch_smncopynumbercaller              = channel.empty()
     ch_peddy                            = channel.empty()
+    ch_somalier                         = channel.empty()
     ch_multiqc                          = channel.empty()
     ch_rank_snv_tbi                           = channel.empty()
     ch_rank_snv_vcf                           = channel.empty()
@@ -429,12 +437,10 @@ workflow RAREDISEASE {
             ch_mtshift_fasta,
             val_mt_aligner
         )
-        ch_mt_fastq                  = ALIGN_MITOCHONDRIA.out.mt_fastq
         ch_mt_bam_bai                = ALIGN_MITOCHONDRIA.out.mt_bam_bai
         ch_mt_bam_bai_gatksubwf      = ALIGN_MITOCHONDRIA.out.mt_bam_bai_gatksubwf
         ch_mtshift_bam_bai_gatksubwf = ALIGN_MITOCHONDRIA.out.mtshift_bam_bai_gatksubwf
     } else {
-        ch_mt_fastq                  = channel.empty()
         ch_mt_bam_bai                = channel.empty()
         ch_mt_bam_bai_gatksubwf      = channel.empty()
         ch_mtshift_bam_bai_gatksubwf = channel.empty()
@@ -820,10 +826,14 @@ workflow RAREDISEASE {
                 ch_genome_dictionary,
                 ch_genome_fai,
                 ch_genome_fasta,
+                ch_manta_config,
                 ch_manta_regions,
                 ch_ploidy_model,
                 ch_readcount_intervals,
+                skip_cnvnator,
                 skip_germlinecnvcaller,
+                skip_manta,
+                skip_tiddit,
                 val_analysis_type
             )
             ch_call_sv_nuclear_vcfs = CALL_SV.out.vcfs
@@ -837,10 +847,11 @@ workflow RAREDISEASE {
                 ch_genome_chrsizes,
                 ch_genome_fai,
                 ch_genome_fasta,
+                ch_genome_hisat2index,
                 ch_mt_fai,
                 ch_mt_fasta,
                 ch_mt_lastdb,
-                ch_mt_fastq,
+                ch_input_fastqs,
                 ch_subdepth,
                 ch_svcaller_priority,
                 ch_mitosalt_config,
@@ -887,6 +898,15 @@ workflow RAREDISEASE {
     } else if (skip_sv_calling) {
         ch_call_sv_vcf = ch_precalled_sv_vcf
         ch_call_sv_tbi = ch_precalled_sv_tbi
+    }
+
+    if (val_sv_size_threshold) {
+        FILTER_SV_SIZE (
+            ch_call_sv_vcf.join(ch_call_sv_tbi, failOnMismatch:true, failOnDuplicate:true),
+            [], [], []
+        )
+        ch_call_sv_vcf = FILTER_SV_SIZE.out.vcf
+        ch_call_sv_tbi = FILTER_SV_SIZE.out.tbi
     }
 
     //
@@ -1064,12 +1084,11 @@ workflow RAREDISEASE {
             ch_genome_fai,
             ch_somalier_sites,
             ch_case_info.combine(ch_pedfile),
-            channel.empty(),
+            channel.value([]),
             ''
         )
 
-        ch_somalier_publish = VCF_EXTRACT_RELATE_SOMALIER.out.publish
-            .map { meta, value -> ['somalier/', [meta, value]] }
+        ch_somalier = VCF_EXTRACT_RELATE_SOMALIER.out.publish
     } else if (!skip_somalier && !params.somalier_sites_vcf) {
         log.warn "Skipping Somalier: params.somalier_sites_vcf is not set"
     }
@@ -1329,6 +1348,7 @@ workflow RAREDISEASE {
     fastqc              = ch_fastqc              // channel: [ val(meta), path(html|zip) ]
     smncopynumbercaller = ch_smncopynumbercaller // channel: [ val(meta), path(*) ]
     peddy               = ch_peddy               // channel: [ val(meta), path(*) ]
+    somalier            = ch_somalier
     multiqc             = ch_multiqc             // channel: [ val(meta), path(*) ]
     resolved_pedigree   = ch_resolved_pedfile     // channel: [ path(ped) ]
 }

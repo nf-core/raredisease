@@ -37,6 +37,7 @@ nextflow_workflow {
                 input[3] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
                 input[4] = channel.of([id:'amusingmarmoset'])
                 input[5] = channel.value([[], []])
+                input[6] = channel.value([])
                 """
             }
         }
@@ -78,6 +79,7 @@ nextflow_workflow {
                 input[3] = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
                 input[4] = channel.of([id:'amusingmarmoset'])
                 input[5] = channel.value([[], []])
+                input[6] = channel.value([])
                 """
             }
         }
