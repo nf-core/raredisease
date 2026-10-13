@@ -77,6 +77,7 @@ workflow NFCORE_RAREDISEASE {
     val_gnomad_af_idx
     val_heavy_strand_origin_end
     val_heavy_strand_origin_start
+    val_hisat2
     val_homoplasmy_af_threshold
     val_intervals_wgs
     val_intervals_y
@@ -84,6 +85,7 @@ workflow NFCORE_RAREDISEASE {
     val_known_dbsnp_tbi
     val_light_strand_origin_end
     val_light_strand_origin_start
+    val_manta_config
     val_mito_length
     val_mito_name
     val_mitosalt_breakspan
@@ -177,6 +179,7 @@ workflow NFCORE_RAREDISEASE {
         val_fasta,
         val_gnomad_af,
         val_gnomad_af_idx,
+        val_hisat2,
         val_known_dbsnp,
         val_known_dbsnp_tbi,
         val_mt_aligner,
@@ -198,6 +201,7 @@ workflow NFCORE_RAREDISEASE {
     ch_genome_chrsizes          = ch_references.genome_chrom_sizes
     ch_genome_fai               = ch_references.genome_fai
     ch_genome_fasta             = ch_references.genome_fasta
+    ch_genome_hisat2index       = ch_references.genome_hisat2_index
     ch_genome_dictionary        = ch_references.genome_dict
     ch_gnomad_af                = ch_references.gnomad_af_idx
     ch_mt_bwaindex              = ch_references.mt_bwa_index
@@ -223,6 +227,7 @@ workflow NFCORE_RAREDISEASE {
         : channel.value([[],[]])
 
     // Using channelFromPath helper (val_x ? channel.fromPath(val_x).collect() : channel.value([]))
+    ch_manta_config             = channelFromPath(val_manta_config, true)
     ch_reduced_penetrance       = channelFromPath(val_reduced_penetrance, true)
     ch_score_config_mt          = channelFromPath(val_score_config_mt, true)
     ch_score_config_snv         = channelFromPath(val_score_config_snv, true)
@@ -441,6 +446,7 @@ workflow NFCORE_RAREDISEASE {
         ch_genome_dictionary,
         ch_genome_fai,
         ch_genome_fasta,
+        ch_genome_hisat2index,
         ch_gens_gnomad_pos,
         ch_gens_interval_list,
         ch_gens_pon_female,
@@ -451,6 +457,7 @@ workflow NFCORE_RAREDISEASE {
         ch_intervals_contamination,
         ch_intervals_wgs,
         ch_intervals_y,
+        ch_manta_config,
         ch_manta_regions,
         ch_me_references,
         ch_me_svdb_resources,
@@ -694,6 +701,7 @@ workflow NFCORE_RAREDISEASE {
     prepare_references_genome_dictionary                = ch_genome_dictionary
     prepare_references_genome_fai                       = ch_genome_fai
     prepare_references_genome_fasta                     = ch_genome_fasta
+    prepare_references_genome_hisat2index               = ch_genome_hisat2index
     prepare_references_gnomad_af                        = ch_gnomad_af
     prepare_references_mt_bwaindex                      = ch_mt_bwaindex
     prepare_references_mt_bwamem2index                  = ch_mt_bwamem2index
@@ -786,6 +794,7 @@ workflow {
         params.gnomad_af_idx,
         params.heavy_strand_origin_end,
         params.heavy_strand_origin_start,
+        params.hisat2,
         params.homoplasmy_af_threshold,
         params.intervals_wgs,
         params.intervals_y,
@@ -793,6 +802,7 @@ workflow {
         params.known_dbsnp_tbi,
         params.light_strand_origin_end,
         params.light_strand_origin_start,
+        params.manta_config,
         params.mito_length,
         params.mito_name,
         params.mitosalt_breakspan,
@@ -981,6 +991,7 @@ workflow {
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_bwamemeindex)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_fai)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_fasta)
+                                            .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_hisat2index)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_dictionary)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_genome_chrsizes)
                                             .mix(NFCORE_RAREDISEASE.out.prepare_references_bait_intervals)

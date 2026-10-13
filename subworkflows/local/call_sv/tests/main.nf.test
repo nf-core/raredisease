@@ -67,14 +67,15 @@ nextflow_workflow {
                 input[6]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
                 input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
                 input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
-                input[9]  = channel.value([[], []])
-                input[10] = channel.of([[id:'ploidy'], []])
-                input[11] = channel.of([[]])
-                input[12] = false
-                input[13] = true
-                input[14] = false
+                input[9]  = channel.value([])
+                input[10] = channel.value([[], []])
+                input[11] = channel.of([[id:'ploidy'], []])
+                input[12] = channel.of([[]])
+                input[13] = false
+                input[14] = true
                 input[15] = false
-                input[16] = 'wgs'
+                input[16] = false
+                input[17] = 'wgs'
                 """
             }
         }
@@ -129,14 +130,15 @@ nextflow_workflow {
                 input[6]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
                 input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
                 input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
-                input[9]  = channel.value([[], []])
-                input[10] = channel.of([[id:'ploidy'], []])
-                input[11] = channel.of([[]])
-                input[12] = false
-                input[13] = true
-                input[14] = false
+                input[9]  = channel.value([])
+                input[10] = channel.value([[], []])
+                input[11] = channel.of([[id:'ploidy'], []])
+                input[12] = channel.of([[]])
+                input[13] = false
+                input[14] = true
                 input[15] = false
-                input[16] = 'wgs'
+                input[16] = false
+                input[17] = 'wgs'
                 """
             }
         }
@@ -191,14 +193,15 @@ nextflow_workflow {
                 input[6]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
                 input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
                 input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
-                input[9]  = channel.value([[], []])
-                input[10] = channel.of([[id:'ploidy'], []])
-                input[11] = channel.of([[]])
-                input[12] = true
+                input[9]  = channel.value([])
+                input[10] = channel.value([[], []])
+                input[11] = channel.of([[id:'ploidy'], []])
+                input[12] = channel.of([[]])
                 input[13] = true
-                input[14] = false
-                input[15] = true
-                input[16] = 'wgs'
+                input[14] = true
+                input[15] = false
+                input[16] = true
+                input[17] = 'wgs'
                 """
             }
         }
@@ -254,14 +257,15 @@ nextflow_workflow {
                 input[6]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
                 input[7]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
                 input[8]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
-                input[9]  = channel.value([[], []])
-                input[10] = channel.of([[id:'ploidy'], []])
-                input[11] = channel.of([[]])
-                input[12] = false
-                input[13] = true
+                input[9]  = channel.value([])
+                input[10] = channel.value([[], []])
+                input[11] = channel.of([[id:'ploidy'], []])
+                input[12] = channel.of([[]])
+                input[13] = false
                 input[14] = true
-                input[15] = false
-                input[16] = 'wgs'
+                input[15] = true
+                input[16] = false
+                input[17] = 'wgs'
                 """
             }
         }

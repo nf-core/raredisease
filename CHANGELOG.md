@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `--manta_config`, an optional path to a custom Manta configuration file passed to `configManta.py --config`; when not supplied, Manta runs with its built-in defaults
 - Add `manta`, `tiddit`, and `cnvnator` as valid `--skip_tools` values, letting users disable any of the nuclear structural variant callers independently; `tiddit` and `cnvnator` are no-ops for WES, where neither tool runs regardless. The pipeline now errors out at start-up if every nuclear SV caller ends up disabled while `sv_calling` itself is not skipped [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #TBD](https://github.com/nf-core/raredisease/pull/TBD)
 - Add `--sv_size_threshold`, applied to the merged SV VCF (all callers) after calling and before annotation, to filter out SVs larger than a given size in bp (e.g. `1000000` removes SVs larger than 1 Mb); disabled by default [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1046](https://github.com/nf-core/raredisease/pull/1046)
 - Add `--normalize_multiallelics` to control whether `bcftools norm --multiallelics -both` decomposes multiallelic sites into biallelic records, for Sentieon and DeepVariant SNV calling and ExpansionHunter repeat expansion calling; `bcftools norm` always runs (indels are always left-aligned), only the `-both` decomposition is toggled. Defaults to `true` (current behavior unchanged); set to `false` for a more targeted fix than the removed `--skip_split_multiallelics` to the indel-precision regression described in [issue #813](https://github.com/nf-core/raredisease/issues/813) [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1049](https://github.com/nf-core/raredisease/pull/1049)
@@ -133,6 +134,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Fixed`
 
 - Fix samplesheets containing multiple `case_id`s being silently accepted and merged into a single case named after the first row, instead of being rejected: `createCaseChannel` now errors out at start-up if a samplesheet's rows don't all share one `case_id` [issue #1054](https://github.com/nf-core/raredisease/issues/1054) [PR #1055](https://github.com/nf-core/raredisease/pull/1055)
+- Fix `GATK4_POSTPROCESSGERMLINECNVCALLS` failing to stage gCNV model calls on cloud storage (Azure Blob, S3, GCS): use `toUriString()` instead of `toString()` so the URI scheme is kept [PR #1053](https://github.com/nf-core/raredisease/pull/1053)
 - Fix `annotate_genome_snvs`/`annotate_mt_snvs` silently falling back to the non-CADD-annotated VCF if a CADD result is ever missing when CADD was requested, instead of failing the run [issue #868](https://github.com/nf-core/raredisease/issues/868) [PR #1034](https://github.com/nf-core/raredisease/pull/1034)
 - Fix `MITOSALT` silently succeeding with empty output on a JVM out-of-memory crash in its `reformat.sh` step: heap size is now based on `task.memory` instead of a hardcoded `-Xmx100g`, and a log check turns a JVM OOM into `exit 137` so Nextflow retries with more memory instead of shipping empty files [PR #1027](https://github.com/nf-core/raredisease/pull/1027)
 - Pass `--allosomal-contig` to GATK `PostprocessGermlineCNVCalls` so X and Y take their reference copy-number from the `DetermineGermlineContigPloidy` contig-ploidy calls instead of the diploid autosomal default, which otherwise produces spurious sex-chromosome CNV calls (`X`/`Y` for GRCh37, `chrX`/`chrY` otherwise) [issue #965](https://github.com/nf-core/raredisease/issues/965) [PR #966](https://github.com/nf-core/raredisease/pull/966)
@@ -172,13 +174,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |                          | peddy_sites                   |
 |                          | duplicates_marker             |
 |                          | somalier_sites_vcf            |
+|                          | manta_config                  |
 | manta_call_regions       | sv_call_region                |
 | manta_call_regions_tbi   | sv_call_region_tbi            |
 | call_interval            | snv_call_region               |
 |                          | sex_source                    |
 |                          | genmod_skip_plugin_check      |
-| hisat2                   |                               |
-| hisat2_build_memory      |                               |
 | skip_split_multiallelics |                               |
 
 ### Tool updates
