@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Add `--manta_config`, an optional path to a custom Manta configuration file passed to `configManta.py --config`; when not supplied, Manta runs with its built-in defaults
 - Add `manta`, `tiddit`, and `cnvnator` as valid `--skip_tools` values, letting users disable any of the nuclear structural variant callers independently; `tiddit` and `cnvnator` are no-ops for WES, where neither tool runs regardless. The pipeline now errors out at start-up if every nuclear SV caller ends up disabled while `sv_calling` itself is not skipped [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #TBD](https://github.com/nf-core/raredisease/pull/TBD)
 - Add `--sv_size_threshold`, applied to the merged SV VCF (all callers) after calling and before annotation, to filter out SVs larger than a given size in bp (e.g. `1000000` removes SVs larger than 1 Mb); disabled by default [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1046](https://github.com/nf-core/raredisease/pull/1046)
 - Add `--normalize_multiallelics` to control whether `bcftools norm --multiallelics -both` decomposes multiallelic sites into biallelic records, for Sentieon and DeepVariant SNV calling and ExpansionHunter repeat expansion calling; `bcftools norm` always runs (indels are always left-aligned), only the `-both` decomposition is toggled. Defaults to `true` (current behavior unchanged); set to `false` for a more targeted fix than the removed `--skip_split_multiallelics` to the indel-precision regression described in [issue #813](https://github.com/nf-core/raredisease/issues/813) [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1049](https://github.com/nf-core/raredisease/pull/1049)
@@ -171,6 +172,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |                          | peddy_sites                   |
 |                          | duplicates_marker             |
 |                          | somalier_sites_vcf            |
+|                          | manta_config                  |
 | manta_call_regions       | sv_call_region                |
 | manta_call_regions_tbi   | sv_call_region_tbi            |
 | call_interval            | snv_call_region               |

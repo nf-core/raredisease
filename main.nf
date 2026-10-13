@@ -85,6 +85,7 @@ workflow NFCORE_RAREDISEASE {
     val_known_dbsnp_tbi
     val_light_strand_origin_end
     val_light_strand_origin_start
+    val_manta_config
     val_mito_length
     val_mito_name
     val_mitosalt_breakspan
@@ -226,6 +227,7 @@ workflow NFCORE_RAREDISEASE {
         : channel.value([[],[]])
 
     // Using channelFromPath helper (val_x ? channel.fromPath(val_x).collect() : channel.value([]))
+    ch_manta_config             = channelFromPath(val_manta_config, true)
     ch_reduced_penetrance       = channelFromPath(val_reduced_penetrance, true)
     ch_score_config_mt          = channelFromPath(val_score_config_mt, true)
     ch_score_config_snv         = channelFromPath(val_score_config_snv, true)
@@ -455,6 +457,7 @@ workflow NFCORE_RAREDISEASE {
         ch_intervals_contamination,
         ch_intervals_wgs,
         ch_intervals_y,
+        ch_manta_config,
         ch_manta_regions,
         ch_me_references,
         ch_me_svdb_resources,
@@ -799,6 +802,7 @@ workflow {
         params.known_dbsnp_tbi,
         params.light_strand_origin_end,
         params.light_strand_origin_start,
+        params.manta_config,
         params.mito_length,
         params.mito_name,
         params.mitosalt_breakspan,
