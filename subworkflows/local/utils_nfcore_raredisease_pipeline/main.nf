@@ -341,6 +341,12 @@ def boolean isNonZeroNonEmpty(value) {
 
     // Function to get a list of metadata (e.g. case id) for the case [ meta ]
 def createCaseChannel(List rows) {
+    def case_ids = rows.collect { row -> row.case_id }.unique()
+    if (case_ids.size() > 1) {
+        error("Samplesheet contains multiple case_ids (${case_ids.join(', ')}). " +
+              "raredisease analyses one case per run; use one samplesheet per case.")
+    }
+
     def case_info    = [:]
     def probands     = [] as Set
     def upd_children = [] as Set

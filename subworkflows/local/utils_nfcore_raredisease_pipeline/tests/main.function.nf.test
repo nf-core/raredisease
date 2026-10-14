@@ -69,6 +69,53 @@ nextflow_function {
         }
     }
 
+    test("createCaseChannel - single case_id, no error") {
+
+        function "createCaseChannel"
+
+        when {
+            function {
+                """
+                input[0] = [
+                    [case_id: 'fam1', sample: 'proband1', phenotype: 2, paternal: 'father1', maternal: 'mother1'],
+                    [case_id: 'fam1', sample: 'father1', phenotype: 1, paternal: '0', maternal: '0'],
+                    [case_id: 'fam1', sample: 'mother1', phenotype: 1, paternal: '0', maternal: '0']
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert function.success },
+                { assert function.result.id == 'fam1' }
+            )
+        }
+    }
+
+    test("createCaseChannel - multiple case_ids, errors") {
+
+        function "createCaseChannel"
+
+        when {
+            function {
+                """
+                input[0] = [
+                    [case_id: 'fam1', sample: 'sample1', phenotype: 2, paternal: '0', maternal: '0'],
+                    [case_id: 'fam2', sample: 'sample2', phenotype: 2, paternal: '0', maternal: '0']
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert function.failed },
+                { assert function.stdout.any { it.contains("Samplesheet contains multiple case_ids (fam1, fam2)") } }
+            )
+        }
+    }
+
     test("extractPrecalledVcfs - normal grouping") {
 
         function "extractPrecalledVcfs"
