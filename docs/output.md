@@ -505,13 +505,15 @@ After SVDB query, SVs can optionally be filtered by population frequency using `
 
 [VEP](https://www.ensembl.org/info/docs/tools/vep/index.html) determines the effect of your variants on genes, transcripts, and protein sequence, as well as regulatory regions. We recommend annotating with pLI plugin, along with any other custom plugins you may want too use. Based on VEP annotations, a custom script used by the pipeline further annotates each record with pli scores. The most severe consequence per variant is determined by GENMOD directly from VEP's `CSQ` annotation during scoring, rather than being pre-computed here.
 
+VEP annotation of SVs can be disabled with `--skip_tools vep_sv`; SVDB frequency annotation still runs and feeds annotation/ranking directly. See [usage docs](usage.md#8-sv-annotation--ranking) for the `score_config_sv`/`genmod_skip_plugin_check` interaction this has.
+
 <details markdown="1">
 <summary>Output files</summary>
 
 - `annotate_sv/`
-  - `<case_id>_svdbquery_vep.vcf.gz`: file containing svdb query, and vep annotations.
+  - `<case_id>_svdbquery_vep.vcf.gz`: file containing svdb query, and vep annotations. If `vep_sv` is in `--skip_tools`, this file (named `<case_id>_view.vcf.gz` instead) contains the SVDB-annotated, unfiltered-by-VEP calls.
   - `<case_id>_svdbquery_vep.vcf.gz.tbi`: index of the file containing bcftools roh, vcfanno, and vep annotations.
-  - `<case_id>_svdbquery_vep_summary.html`: vep summary.
+  - `<case_id>_svdbquery_vep_summary.html`: vep summary. Not produced when `vep_sv` is in `--skip_tools`.
 
 </details>
 

@@ -344,6 +344,7 @@ workflow NFCORE_RAREDISEASE {
     skip_smncopynumbercaller   = parseSkipList(val_skip_tools, 'smncopynumbercaller')
     skip_tiddit                = parseSkipList(val_skip_tools, 'tiddit')
     skip_vcf2cytosure          = parseSkipList(val_skip_tools, 'vcf2cytosure')
+    skip_vep_sv                = parseSkipList(val_skip_tools, 'vep_sv')
     // GATK contamination check is also skipped when no contamination sites are supplied
     skip_gatkcontamination     = parseSkipList(val_skip_tools, 'gatkcontamination') || !val_contamination_sites
     // VerifyBamID2 is skipped when no SVD bed file is supplied
@@ -538,6 +539,7 @@ workflow NFCORE_RAREDISEASE {
         skip_sv_calling,
         skip_tiddit,
         skip_vcf2cytosure,
+        skip_vep_sv,
         skip_verifybamid,
         val_aligner,
         val_analysis_type,
