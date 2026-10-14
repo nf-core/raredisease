@@ -55,8 +55,8 @@ workflow CONTAMINATION {
                     [ meta, bam, bai, intervals ]
                 }
 
-            ch_variants_vcf = ch_contamination_sites.map { vcf, tbi -> vcf }.collect()
-            ch_variants_tbi = ch_contamination_sites.map { vcf, tbi -> tbi }.collect()
+            ch_variants_vcf = ch_contamination_sites.map { vcf, _tbi -> vcf }.collect()
+            ch_variants_tbi = ch_contamination_sites.map { _vcf, tbi -> tbi }.collect()
 
             GATK4_GETPILEUPSUMMARIES(
                 ch_bam_with_intervals,

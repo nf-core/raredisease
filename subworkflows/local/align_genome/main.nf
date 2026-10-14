@@ -17,7 +17,6 @@ workflow ALIGN_GENOME {
         ch_genome_bwaindex            // channel: [mandatory] [ val(meta), path(index) ]
         ch_genome_bwamem2index        // channel: [mandatory] [ val(meta), path(index) ]
         ch_genome_bwamemeindex        // channel: [mandatory] [ val(meta), path(index) ]
-        ch_genome_dictionary          // channel: [mandatory] [ val(meta), path(dict) ]
         ch_genome_fai                 // channel: [mandatory] [ val(meta), path(fai) ]
         ch_genome_fasta               // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_input_reads                // channel: [optional] [ val(meta), [path(reads)]  ]

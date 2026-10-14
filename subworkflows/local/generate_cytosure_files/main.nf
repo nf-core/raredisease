@@ -32,7 +32,7 @@ workflow GENERATE_CYTOSURE_FILES {
 
         // Only rows with a distinct customer id need their VCF header renamed
         ch_split = SPLIT_AND_FILTER_SV_VCF.out.vcf
-            .branch { meta, vcf ->
+            .branch { meta, _vcf ->
                 reheader: meta.custid != meta.id
                 as_is:    true
             }

@@ -48,12 +48,11 @@ nextflow_workflow {
                 input[2]  = channel.empty()
                 input[3]  = GENOME_MEM2.out.index.collect()
                 input[4]  = channel.empty()
-                input[5]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
-                input[6]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
-                input[7]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[6]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
                 def read1 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true)
                 def read2 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
-                input[8]  = channel.of(
+                input[7]  = channel.of(
                     [
                         [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
                         [ read1, read2 ]
@@ -70,14 +69,14 @@ nextflow_workflow {
                         [ read1, read2 ]
                     ]
                 )
-                input[9]  = false
-                input[10] = "bwamem2"
-                input[11] = "markduplicates"
-                input[12] = true
-                input[13] = false
-                input[14] = "illumina"
+                input[8]  = false
+                input[9]  = "bwamem2"
+                input[10] = "markduplicates"
+                input[11] = true
+                input[12] = false
+                input[13] = "illumina"
+                input[14] = true
                 input[15] = true
-                input[16] = true
                 """
             }
         }
@@ -132,12 +131,11 @@ nextflow_workflow {
                 input[2]  = channel.empty()
                 input[3]  = GENOME_MEM2.out.index.collect()
                 input[4]  = channel.empty()
-                input[5]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
-                input[6]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
-                input[7]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[6]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
                 def read1 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true)
                 def read2 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
-                input[8]  = channel.of(
+                input[7]  = channel.of(
                     [
                         [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
                         [ read1, read2 ]
@@ -154,14 +152,14 @@ nextflow_workflow {
                         [ read1, read2 ]
                     ]
                 )
-                input[9]  = false
-                input[10] = "bwamem2"
-                input[11] = "markduplicates"
+                input[8]  = false
+                input[9]  = "bwamem2"
+                input[10] = "markduplicates"
+                input[11] = false
                 input[12] = false
-                input[13] = false
-                input[14] = "illumina"
-                input[15] = true
-                input[16] = false
+                input[13] = "illumina"
+                input[14] = true
+                input[15] = false
                 """
             }
         }
@@ -213,12 +211,11 @@ nextflow_workflow {
                 input[2]  = channel.empty()
                 input[3]  = channel.empty()
                 input[4]  = GENOME_MEME.out.index.collect()
-                input[5]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
-                input[6]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
-                input[7]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[6]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
                 def read1 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true)
                 def read2 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
-                input[8]  = channel.fromList([
+                input[7]  = channel.fromList([
                     [[ id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", 'lane':1, 'sex':1, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
                     [ read1, read2 ]],
                     [[ id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", 'lane':1, 'sex':1, 'phenotype':2, 'paternal':'earlycasualcaiman', 'maternal':'slowlycivilbuck', 'case_id':'justhusky'  ], // meta map
@@ -229,14 +226,14 @@ nextflow_workflow {
                     [[ id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'",  'lane':1, 'sex':2, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
                     [ read1, read2 ]]
                 ])
-                input[9]  = true
-                input[10] = "bwameme"
-                input[11] = "markduplicates"
+                input[8]  = true
+                input[9]  = "bwameme"
+                input[10] = "markduplicates"
+                input[11] = false
                 input[12] = false
-                input[13] = false
-                input[14] = "illumina"
-                input[15] = true
-                input[16] = false
+                input[13] = "illumina"
+                input[14] = true
+                input[15] = false
                 """
             }
         }
@@ -292,12 +289,11 @@ nextflow_workflow {
                 input[2]  = channel.empty()
                 input[3]  = channel.empty()
                 input[4]  = GENOME_MEME.out.index.collect()
-                input[5]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.dict', checkIfExists: true)).collect()
-                input[6]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
-                input[7]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)).collect()
+                input[6]  = channel.of([id:'genome'], file(params.sarscov_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)).collect()
                 def read1 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true)
                 def read2 = file(params.sarscov_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true)
-                input[8]  = channel.fromList([
+                input[7]  = channel.fromList([
                     [[ id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", 'lane':1, 'sex':1, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
                     [ read1, read2 ]],
                     [[ id:'hugelymodelbat', sample:'hugelymodelbat', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:hugelymodelbat\\\\tPL:illumina\\\\tSM:hugelymodelbat'", 'lane':1, 'sex':1, 'phenotype':2, 'paternal':'earlycasualcaiman', 'maternal':'slowlycivilbuck', 'case_id':'justhusky'  ], // meta map
@@ -308,14 +304,14 @@ nextflow_workflow {
                     [[ id:'slowlycivilbuck', sample:'slowlycivilbuck', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:slowlycivilbuck\\\\tPL:illumina\\\\tSM:slowlycivilbuck'",  'lane':1, 'sex':2, 'phenotype':1, 'paternal':0, 'maternal':0, 'case_id':'justhusky'  ], // meta map
                     [ read1, read2 ]]
                 ])
-                input[9]  = true
-                input[10] = "bwameme"
-                input[11] = "markduplicates"
+                input[8]  = true
+                input[9]  = "bwameme"
+                input[10] = "markduplicates"
+                input[11] = false
                 input[12] = false
-                input[13] = false
-                input[14] = "illumina"
-                input[15] = true
-                input[16] = false
+                input[13] = "illumina"
+                input[14] = true
+                input[15] = false
                 """
             }
         }

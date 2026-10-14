@@ -500,7 +500,6 @@ workflow NFCORE_RAREDISEASE {
         ch_svd_ud,
         ch_svdb_bedpedbs,
         ch_svdb_dbs,
-        ch_target_bed,
         ch_target_intervals,
         ch_variant_catalog,
         ch_vcf2cytosure_blacklist,

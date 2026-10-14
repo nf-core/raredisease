@@ -62,8 +62,8 @@ workflow CALL_SNV_SENTIEON {
             .combine(ch_vcf_idx)
             .groupTuple()
             .map { meta, vcfs, idxs ->
-                def sorted = [vcfs, idxs].transpose().sort { it[0].name }
-                return [meta, sorted.collect { it[0] }, sorted.collect { it[1] }]
+                def sorted = [vcfs, idxs].transpose().sort { pair -> pair[0].name }
+                return [meta, sorted.collect { pair -> pair[0] }, sorted.collect { pair -> pair[1] }]
             }
             .branch{ _meta, vcfs, _idx ->
                 single: vcfs.size() == 1
