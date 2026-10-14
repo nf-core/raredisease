@@ -233,9 +233,9 @@ Note that the pipeline is modular in architecture. It offers you the flexibility
 
 The pipeline is modular — individual tools and subworkflows can be skipped using `--skip_tools` and `--skip_subworkflows` (comma-separated). The valid values are:
 
-| `--skip_tools`                                                                                                                                                               |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cnvnator`, `fastp`, `fastqc`, `gatkcontamination`, `gens`, `germlinecnvcaller`, `manta`, `ngsbits`, `peddy`, `smncopynumbercaller`, `tiddit`, `vcf2cytosure`, `verifybamid` |
+| `--skip_tools`                                                                                                                                                                         |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cnvnator`, `fastp`, `fastqc`, `gatkcontamination`, `gens`, `germlinecnvcaller`, `manta`, `ngsbits`, `peddy`, `smncopynumbercaller`, `tiddit`, `vcf2cytosure`, `vep_sv`, `verifybamid` |
 
 | `--skip_subworkflows`                                                                                                                                                                                                             |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -435,6 +435,8 @@ We use CADD only to annotate small indels. To annotate SNVs with precomputed CAD
 <sup>1</sup> A CSV file that describes the databases (VCFs or BEDPEs) used by SVDB for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
 <sup>2</sup>Used by GENMOD for ranking the variants. The most severe consequence per variant is determined by GENMOD directly from VEP's `CSQ` annotation during scoring — no separate consequence-ranking file is needed. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_sv.ini).
 <sup>3</sup> A bcftools `-e` expression to filter SVs by population frequency after SVDB query, e.g. `'INFO/gnomad_svAF >= 0.01'`. Supports any INFO field and multiple conditions. Default is `null` (no filter).
+
+VEP annotation of SVs can be skipped with `--skip_tools vep_sv`; SVDB frequency annotation still runs. If `score_config_sv` includes a category that reads VEP's `CSQ` field (e.g. `most_severe_consequence`, see footnote 2 above), GENMOD will fail on the missing annotation unless `--genmod_skip_plugin_check` is also set, which degrades that category to a warning instead of aborting the run.
 
 ##### 9. Mitochondrial annotation
 

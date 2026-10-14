@@ -53,6 +53,7 @@ nextflow_workflow {
                 input[9]  = 'grch38_gnomad.v4.1.sv.sites.no_cnv.remapped.vcf.gz'
                 input[10] = 'GRCh38'
                 input[11] = 116
+                input[12] = false
                 """
             }
         }
@@ -118,6 +119,7 @@ nextflow_workflow {
                 input[9]  = null
                 input[10] = 'GRCh38'
                 input[11] = 116
+                input[12] = false
                 """
             }
         }
@@ -178,6 +180,7 @@ nextflow_workflow {
                 input[9]  = 'grch38_gnomad.v4.1.sv.sites.no_cnv.remapped.vcf.gz'
                 input[10] = 'GRCh38'
                 input[11] = 116
+                input[12] = false
                 """
             }
         }
@@ -196,6 +199,62 @@ nextflow_workflow {
                         }
                         [name, sorted_channel]
                     }.sort { it[0] }  // Sort by channel name
+                ).match() }
+            )
+        }
+    }
+
+    test("ANNOTATE_STRUCTURAL_VARIANTS - skip_vep_sv") {
+
+        when {
+            params {
+                bcftools_view             = "--output-type z --write-index=tbi"
+                sv_freq_filter_expression = 'INFO/gnomad_svAF >= 0.01'
+            }
+            workflow {
+                """
+                input[0]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.dict', checkIfExists: true)]).collect()
+                input[1]  = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[2]  = channel.of(
+                    [file(params.resources_remapped + '/svdb/grch38_clinvar_sv_pathogenic_-20250728-.remapped.bedpe', checkIfExists: true), '', '', 'clinvar_pathogenicFrq', 'clinvar_pathogenicOcc'],
+                    [file(params.resources_remapped + '/svdb/grch38_clinvar_sv_non_pathogenic_-20250728-.remapped.bedpe', checkIfExists: true), '', '', 'clinvar_non_pathogenicFrq', 'clinvar_non_pathogenicOcc']
+                )
+                input[3]  = channel.of(
+                    [file(params.resources_remapped + '/svdb/grch38_gnomad.v4.1.sv.sites.no_cnv.remapped.vcf.gz', checkIfExists: true), 'AF', 'AC', 'gnomad_svAF', 'gnomad_svAC']
+                )
+                input[4]  = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_sv.vcf.gz', checkIfExists: true)
+                ])
+                input[5]  = channel.value([[:], []])
+                input[6]  = [
+                                file(params.resources_remapped + '/vep_gtf/LoFtool.pm', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/pLI.pm', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/SpliceAI.pm', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/plugin_config.txt', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/pLI_values.txt', checkIfExists: true)
+                            ]
+                input[7]  = channel.of(
+                                file(params.resources_remapped + '/vep_gtf/minimal_reference.sorted.gtf.gz', checkIfExists: true),
+                                file(params.resources_remapped + '/vep_gtf/minimal_reference.sorted.gtf.gz.tbi', checkIfExists: true)
+                            ).collect()
+                input[8]  = 'resources_remapped/svdb/grch38_clinvar_sv_pathogenic_-20250728-.remapped.bedpe,resources_remapped/svdb/grch38_clinvar_sv_non_pathogenic_-20250728-.remapped.bedpe'
+                input[9]  = 'grch38_gnomad.v4.1.sv.sites.no_cnv.remapped.vcf.gz'
+                input[10] = 'GRCh38'
+                input[11] = 116
+                input[12] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert workflow.out.report == [] },
+                { assert !path(workflow.out.vcf_ann[0][1]).linesGzip.any { it.contains('CSQ=') } },
+                { assert snapshot(
+                    "${file(workflow.out.vcf_ann[0][1]).name}:md5,${path(workflow.out.vcf_ann[0][1]).vcf.variantsMD5}",
+                    path(workflow.out.vcf_ann[0][1]).vcf.summary
                 ).match() }
             )
         }

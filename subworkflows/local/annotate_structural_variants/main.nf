@@ -23,6 +23,7 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
         val_svdb_query_dbs      // String: [optional] params.svdb_query_dbs
         val_genome              // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version   // string: [mandatory] default: 107
+        skip_vep_sv             // boolean
 
     main:
         if (val_svdb_query_dbs) {
@@ -77,22 +78,33 @@ workflow ANNOTATE_STRUCTURAL_VARIANTS {
             .map { meta, vcf -> return [meta,vcf,[]] }
 
         BCFTOOLS_VIEW(ch_sortvcf, [], [], [])
-        ch_vep_in = BCFTOOLS_VIEW.out.vcf
-            .map { meta, vcf -> return [meta, vcf, []]}
 
-        ENSEMBLVEP_SV(
-            ch_vep_in,
-            val_genome,
-            "homo_sapiens",
-            val_vep_cache_version,
-            ch_vep_cache,
-            ch_genome_fasta,
-            ch_vep_extra_files,
-            ch_vep_gtf
-        )
+        if (!skip_vep_sv) {
+            ch_vep_in = BCFTOOLS_VIEW.out.vcf
+                .map { meta, vcf -> return [meta, vcf, []]}
+
+            ENSEMBLVEP_SV(
+                ch_vep_in,
+                val_genome,
+                "homo_sapiens",
+                val_vep_cache_version,
+                ch_vep_cache,
+                ch_genome_fasta,
+                ch_vep_extra_files,
+                ch_vep_gtf
+            )
+
+            ch_report  = ENSEMBLVEP_SV.out.report.map { meta, _process, _tool, html -> [meta, html] }
+            ch_vep_tbi = ENSEMBLVEP_SV.out.tbi
+            ch_vep_vcf = ENSEMBLVEP_SV.out.vcf
+        } else {
+            ch_report  = channel.empty()
+            ch_vep_tbi = BCFTOOLS_VIEW.out.tbi
+            ch_vep_vcf = BCFTOOLS_VIEW.out.vcf
+        }
 
     emit:
-        report   = ENSEMBLVEP_SV.out.report.map { meta, _process, _tool, html -> [meta, html] } // channel: [ val(meta), path(html) ]
-        tbi      = ENSEMBLVEP_SV.out.tbi    // channel: [ val(meta), path(tbi) ]
-        vcf_ann  = ENSEMBLVEP_SV.out.vcf    // channel: [ val(meta), path(vcf) ]
+        report   = ch_report  // channel: [ val(meta), path(html) ]
+        tbi      = ch_vep_tbi // channel: [ val(meta), path(tbi) ]
+        vcf_ann  = ch_vep_vcf // channel: [ val(meta), path(vcf) ]
 }

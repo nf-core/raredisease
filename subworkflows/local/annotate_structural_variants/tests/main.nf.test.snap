@@ -87,6 +87,17 @@
             "nextflow": "26.04.6"
         }
     },
+    "ANNOTATE_STRUCTURAL_VARIANTS - skip_vep_sv": {
+        "content": [
+            "amusingmarmoset_view.vcf.gz:md5,e44b49690d9d29fe3317ea2fb0c74de5",
+            "VcfFile [chromosomes=[chr7, chr16, chr21, chr1, chr12, chrM, chr20], sampleCount=3, variantCount=31, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-10-13T14:13:12.610223635",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
     "ANNOTATE_STRUCTURAL_VARIANTS - with SVDB_QUERY_DB, stub": {
         "content": [
             [

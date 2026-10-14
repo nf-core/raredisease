@@ -191,6 +191,7 @@ workflow RAREDISEASE {
     skip_sv_calling
     skip_tiddit
     skip_vcf2cytosure
+    skip_vep_sv
     skip_verifybamid
     val_aligner
     val_analysis_type
@@ -930,7 +931,8 @@ workflow RAREDISEASE {
             val_svdb_query_bedpedbs,
             val_svdb_query_dbs,
             val_genome,
-            val_vep_cache_version
+            val_vep_cache_version,
+            skip_vep_sv
         )
         ch_annotate_sv_report  = ch_sv_annotate.report
         ch_annotate_sv_tbi     = ch_sv_annotate.tbi
