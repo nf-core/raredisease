@@ -152,7 +152,6 @@ workflow RAREDISEASE {
     ch_svd_ud
     ch_svdb_bedpedbs
     ch_svdb_dbs
-    ch_target_bed
     ch_target_intervals
     ch_variant_catalog
     ch_vcf2cytosure_blacklist
@@ -400,7 +399,6 @@ workflow RAREDISEASE {
         ch_genome_bwaindex,
         ch_genome_bwamem2index,
         ch_genome_bwamemeindex,
-        ch_genome_dictionary,
         ch_genome_fai,
         ch_genome_fasta,
         ch_input_fastqs,
@@ -1172,15 +1170,6 @@ workflow RAREDISEASE {
     //
     // MODULE: MultiQC
     //
-    ch_multiqc_config        = channel.fromPath(
-        "$projectDir/assets/multiqc_config.yml", checkIfExists: true)
-    ch_multiqc_custom_config = val_multiqc_config ?
-        channel.fromPath(val_multiqc_config, checkIfExists: true) :
-        channel.empty()
-    ch_multiqc_logo          = val_multiqc_logo ?
-        channel.fromPath(val_multiqc_logo, checkIfExists: true) :
-        channel.fromPath("$projectDir/docs/images/nf-core-raredisease_logo_light.png", checkIfExists: true)
-
     summary_params      = paramsSummaryMap(
         workflow, parameters_schema: "nextflow_schema.json")
     ch_workflow_summary = channel.value(paramsSummaryMultiqc(summary_params))

@@ -482,7 +482,7 @@
                     "vcfanno": "0.3.7"
                 },
                 "Workflow": {
-                    "nf-core/raredisease": "v3.2.0dev"
+                    "nf-core/raredisease": "v4.0.0"
                 },
                 "ZIP_TABIX_ROHCALL": {
                     "bgzip": 1.21,
@@ -3752,10 +3752,10 @@
                 ]
             }
         ],
-        "timestamp": "2026-10-07T11:41:18.429814064",
+        "timestamp": "2026-10-14T16:17:37.794390006",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.6"
         }
     }
 }

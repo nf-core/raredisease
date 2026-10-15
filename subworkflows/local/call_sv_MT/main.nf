@@ -133,7 +133,7 @@ workflow CALL_SV_MT {
             // a 1-element channel item that breaks 2-param destructuring closures downstream).
             ch_vcf_file_list = SALTSHAKER_CLASSIFY.out.vcf
                 .collect { _meta, vcf -> vcf }
-                .filter { !it.isEmpty() }
+                .filter { vcfs -> !vcfs.isEmpty() }
                 .map { vcf_list -> [vcf_list] }
 
             ch_merge_input_vcfs = ch_case_info
