@@ -14,7 +14,6 @@ include { samplesheetToList         } from 'plugin/nf-schema'
 include { paramsHelp                } from 'plugin/nf-schema'
 include { completionEmail           } from '../../nf-core/utils_nfcore_pipeline'
 include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
-include { imNotification            } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
 
@@ -34,6 +33,7 @@ workflow PIPELINE_INITIALISATION {
     input             //  string: Path to input samplesheet
     help              // boolean: Display help message and exit
     help_full         // boolean: Show the full help message
+    monochrome_logs   // boolean: Disable ANSI colour codes in log output
     show_hidden       // boolean: Show hidden parameters in the help message
 
     main:
@@ -53,6 +53,9 @@ workflow PIPELINE_INITIALISATION {
     //
     // Validate parameters and generate parameter summary to stdout
     //
+
+    def before_text = ""
+    def after_text = ""
     before_text = """
 -\033[2m----------------------------------------------------\033[0m-
                                         \033[0;32m,--.\033[0;30m/\033[0;32m,-.\033[0m
@@ -70,6 +73,10 @@ workflow PIPELINE_INITIALISATION {
 * Software dependencies
     https://github.com/nf-core/raredisease/blob/master/CITATIONS.md
 """
+    if (monochrome_logs) {
+        before_text = before_text.replaceAll(/\033\[[0-9;]*m/, '')
+    }
+
     command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
 
     UTILS_NFSCHEMA_PLUGIN (
@@ -81,7 +88,8 @@ workflow PIPELINE_INITIALISATION {
         show_hidden,
         before_text,
         after_text,
-        command
+        command,
+        false
     )
 
     //
@@ -100,16 +108,17 @@ workflow PIPELINE_INITIALISATION {
     //
     // Create channel from input file provided through params.input
     //
-    channel
+    ch_original_input = channel
         .fromList(samplesheetToList(input, "${projectDir}/assets/schema_input.json"))
-        .tap { ch_original_input }
-        .map { meta, _fastq1, _fastq2, _spring1, _spring2, _bam, _bai -> meta.id }
+
+    ch_input_counts = ch_original_input
+        .map { meta, _fastq1, _fastq2, _spring1, _spring2, _bam, _bai, _cram, _crai, _vcf, _tbi, _type -> meta.id }
         .reduce([:]) { counts, sample -> //get counts of each sample in the samplesheet - for groupTuple
             counts[sample] = (counts[sample] ?: 0) + 1
             counts
         }
         .combine( ch_original_input )
-        .map { counts, meta, fastq1, fastq2, spring1, spring2, bam, bai ->
+        .map { counts, meta, fastq1, fastq2, spring1, spring2, bam, bai, cram, crai, vcf, tbi, type ->
             def new_meta = meta + [num_lanes:counts[meta.id]]
             if (fastq1 && fastq2) {
                 new_meta += [read_group: generateReadGroupLine(fastq1, meta, params)]
@@ -125,10 +134,16 @@ workflow PIPELINE_INITIALISATION {
                 return [new_meta + [single_end: false, data_type: "interleaved_spring"], [spring1]]
             } else if (bam && bai) {
                 new_meta += [read_group: generateReadGroupLine(bam, meta, params)]
-                return [new_meta, [bam, bai]]
+                return [new_meta + [data_type: "bam"], [bam, bai]]
+            } else if (cram && crai) {
+                new_meta += [read_group: generateReadGroupLine(cram, meta, params)]
+                return [new_meta + [data_type: "cram"], [cram, crai]]
+            } else if (vcf && tbi && type) {
+                return [new_meta + [data_type: "${type}_vcf"], [vcf, tbi]]
             }
         }
-        .tap{ ch_input_counts }
+
+    ch_samplesheet = ch_input_counts
         .map { _meta, files -> files }
         .reduce([:]) { counts, files -> //get line number for each row to construct unique sample ids
             counts[files] = counts.size() + 1
@@ -139,14 +154,16 @@ workflow PIPELINE_INITIALISATION {
             def new_meta = meta + [id:meta.id+"_LNUMBER"+lineno[files]]
             return [ new_meta, files ]
         }
-        .tap { ch_samplesheet }
+
+    ch_samplesheet_by_type = ch_samplesheet
         .branch { meta, files  ->
-            fastq: !files[0].toString().endsWith("bam")
+            fastq:     meta.data_type in ["fastq_gz", "separate_spring", "interleaved_spring"]
                 return [meta, files]
-            align: files[0].toString().endsWith("bam")
+            align:     meta.data_type in ["bam", "cram"]
+                return [meta, files]
+            precalled: meta.data_type.endsWith("_vcf")
                 return [meta, files]
         }
-        .set {ch_samplesheet_by_type}
 
     ch_samples  = ch_samplesheet.map { meta, _files ->
                     def new_id = meta.sample
@@ -154,14 +171,19 @@ workflow PIPELINE_INITIALISATION {
                     return new_meta
                     }.unique()
 
-    ch_case_info = ch_samples.toList().map { it -> createCaseChannel(it) }
+    ch_case_info = ch_samples.toList().map { it -> validateNoMixedCaseInput(it); createCaseChannel(it) }
+
+    ch_precalled_vcfs = ch_samplesheet_by_type.precalled
+        .toList()
+        .map { rows -> extractPrecalledVcfs(rows) }
 
     emit:
-    reads     = ch_samplesheet_by_type.fastq
-    align     = ch_samplesheet_by_type.align
-    samples   = ch_samples
-    case_info = ch_case_info
-    versions  = ch_versions
+    reads          = ch_samplesheet_by_type.fastq // channel: [ val(meta), [ path(reads) ] ]
+    align          = ch_samplesheet_by_type.align // channel: [ val(meta), [ path(bam/cram), path(bai/crai) ] ]
+    samples        = ch_samples                   // channel: [ val(meta) ]
+    case_info      = ch_case_info                 // channel: [ val(case_info) ]
+    precalled_vcfs = ch_precalled_vcfs             // channel: [ val([snv:[vcf,tbi]|null, sv:[...]|null, mt:[...]|null, me:[...]|null, repeat:[...]|null]) ]
+    versions       = ch_versions                  // channel: [ path(versions) ]
 }
 
 /*
@@ -178,7 +200,6 @@ workflow PIPELINE_COMPLETION {
     plaintext_email // boolean: Send plain-text email instead of HTML
     outdir          //    path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
-    hook_url        //  string: hook URL for notifications
     multiqc_report  //  string: Path to MultiQC report
 
     main:
@@ -202,13 +223,11 @@ workflow PIPELINE_COMPLETION {
         }
 
         completionSummary(monochrome_logs)
-        if (hook_url) {
-            imNotification(summary_params, hook_url)
-        }
+
     }
 
     workflow.onError {
-        log.error "Pipeline failed. Please refer to troubleshooting docs: https://nf-co.re/docs/usage/troubleshooting"
+        log.error "Pipeline failed. Please refer to troubleshooting docs for common issues: https://nf-co.re/docs/running/troubleshooting"
     }
 }
 
@@ -267,6 +286,50 @@ def boolean hasSpringInput() {
     return file(params.input).readLines().any { line -> line.contains('.spring') }
 }
 
+// Checks whether any samplesheet row has its 'type' column set to the given precalled-VCF type (snv/sv/mt/me/repeat)
+def boolean hasPrecalledVcfOfType(String type) {
+    def lines = file(params.input).readLines()
+    if (!lines) {
+        return false
+    }
+    def header   = lines[0].split(',', -1)*.trim()
+    def type_idx = header.indexOf('type')
+    if (type_idx == -1) {
+        return false
+    }
+    return lines.drop(1).any { line ->
+        def fields = line.split(',', -1)
+        type_idx < fields.size() && fields[type_idx].trim() == type
+    }
+}
+
+// Per-type wrappers used to compute the has_precalled_* emits and gate calling/annotation downstream
+def boolean hasPrecalledSnvVcf() {
+    return hasPrecalledVcfOfType('snv')
+}
+
+def boolean hasPrecalledSvVcf() {
+    return hasPrecalledVcfOfType('sv')
+}
+
+def boolean hasPrecalledMtVcf() {
+    return hasPrecalledVcfOfType('mt')
+}
+
+def boolean hasPrecalledMeVcf() {
+    return hasPrecalledVcfOfType('me')
+}
+
+def boolean hasPrecalledRepeatVcf() {
+    return hasPrecalledVcfOfType('repeat')
+}
+
+// True whenever the case is fully precalled for at least one type - since validateNoMixedCaseInput
+// guarantees such a case has zero fastq/bam/cram rows, this also means no alignment data exists at all
+def boolean hasAnyPrecalledVcf() {
+    return hasPrecalledSnvVcf() || hasPrecalledSvVcf() || hasPrecalledMtVcf() || hasPrecalledMeVcf() || hasPrecalledRepeatVcf()
+}
+
 def generateReadGroupLine(file, meta, params) {
     return "\'@RG\\tID:" + file.simpleName + "_" + meta.lane + "\\tPL:" + params.platform.toUpperCase() + "\\tSM:" + meta.id + "\'"
 }
@@ -278,6 +341,12 @@ def boolean isNonZeroNonEmpty(value) {
 
     // Function to get a list of metadata (e.g. case id) for the case [ meta ]
 def createCaseChannel(List rows) {
+    def case_ids = rows.collect { row -> row.case_id }.unique()
+    if (case_ids.size() > 1) {
+        error("Samplesheet contains multiple case_ids (${case_ids.join(', ')}). " +
+              "raredisease analyses one case per run; use one samplesheet per case.")
+    }
+
     def case_info    = [:]
     def probands     = [] as Set
     def upd_children = [] as Set
@@ -305,7 +374,40 @@ def createCaseChannel(List rows) {
     case_info.upd_children = upd_children.toList()
     case_info.id           = rows[0].case_id
 
+    // [ sample_id: 'father' | 'mother' ] -- who plays a pedigree role in this case,
+    // for the --sex_source estimate-vs-role consistency guard in resolveAnalysisSex.
+    case_info.roles = [:]
+    if (isNonZeroNonEmpty(father)) { case_info.roles[father] = 'father' }
+    if (isNonZeroNonEmpty(mother)) { case_info.roles[mother] = 'mother' }
+
     return case_info
+}
+
+// A case must be either fully precalled (vcf/tbi/type rows) or fully processed from raw/aligned reads, never both
+def validateNoMixedCaseInput(List rows) {
+    def groups_by_case = [:]
+    rows.each { row ->
+        def group = row.data_type.endsWith('_vcf') ? 'vcf' : 'align'
+        groups_by_case.computeIfAbsent(row.case_id) { [] as Set }.add(group)
+    }
+    groups_by_case.each { case_id, groups ->
+        if (groups.size() > 1) {
+            error("Case '${case_id}' mixes precalled VCF input (vcf/tbi/type columns) with fastq/spring/bam/cram input. A case must be either fully precalled or fully processed from raw/aligned reads, not both.")
+        }
+    }
+}
+
+// Function to collect precalled vcf/tbi pairs per variant type from rows tagged with a "*_vcf" data_type
+def extractPrecalledVcfs(List rows) {
+    def precalled = [snv: null, sv: null, mt: null, me: null, repeat: null]
+    rows.each { meta, files ->
+        def type = meta.data_type - "_vcf"
+        if (precalled[type] && precalled[type] != files) {
+            error("Conflicting precalled '${type}' VCFs supplied in samplesheet for the same case.")
+        }
+        precalled[type] = files
+    }
+    return precalled
 }
 
 //
@@ -313,6 +415,52 @@ def createCaseChannel(List rows) {
 //
 def validateInputParameters() {
     genomeExistsError()
+    validatePrecalledVcfCoverage()
+    validateSexSource()
+}
+
+// --sex_source 'auto'/'estimated' rely on the ngs-bits SampleGender estimate, which
+// is only produced when the ngs-bits step runs.
+def validateSexSource() {
+    if (params.sex_source != 'samplesheet' && parseSkipList(params.skip_tools, 'ngsbits')) {
+        error("--sex_source '${params.sex_source}' needs the ngs-bits SampleGender step, but 'ngsbits' is listed in --skip_tools. Remove it from --skip_tools, or set --sex_source samplesheet.")
+    }
+}
+
+// A case with any precalled VCF has no fastq/bam/cram rows (enforced by validateNoMixedCaseInput), so every
+// relevant type must either have a precalled VCF or have its calling explicitly skipped, otherwise it would
+// silently run calling with no input data
+def validatePrecalledVcfCoverage() {
+    def has_snv    = hasPrecalledSnvVcf()
+    def has_sv     = hasPrecalledSvVcf()
+    def has_mt     = hasPrecalledMtVcf()
+    def has_me     = hasPrecalledMeVcf()
+    def has_repeat = hasPrecalledRepeatVcf()
+    if (!has_snv && !has_sv && !has_mt && !has_me && !has_repeat) {
+        return
+    }
+    def run_mt     = params.analysis_type.matches("wgs|mito") || params.run_mt_for_wes
+    def run_me     = params.analysis_type.equals("wgs")
+    def run_repeat = params.analysis_type.equals("wgs")
+    def missing = []
+    if (!has_snv && !parseSkipList(params.skip_subworkflows, 'snv_calling')) {
+        missing << 'snv'
+    }
+    if (!has_sv && !parseSkipList(params.skip_subworkflows, 'sv_calling')) {
+        missing << 'sv'
+    }
+    if (run_mt && !has_mt && !parseSkipList(params.skip_subworkflows, 'mt_snv_calling')) {
+        missing << 'mt'
+    }
+    if (run_me && !has_me && !parseSkipList(params.skip_subworkflows, 'me_calling')) {
+        missing << 'me'
+    }
+    if (run_repeat && !has_repeat && !parseSkipList(params.skip_subworkflows, 'repeat_calling')) {
+        missing << 'repeat'
+    }
+    if (missing) {
+        error("The samplesheet supplies a precalled VCF for at least one variant type, making this a fully-precalled case with no fastq/bam/cram input for calling. But no precalled VCF was supplied for: ${missing.join(', ')}. Either add a precalled VCF for ${missing.join(', ')}, or skip that calling explicitly via --skip_subworkflows.")
+    }
 }
 
 
@@ -321,6 +469,41 @@ def validateInputParameters() {
 //
 def parseSkipList(paramValue, toolName) {
     return paramValue ? paramValue.split(',').contains(toolName) : false
+}
+
+//
+// Resolve the sex used for sex-dependent analysis steps.
+//
+// Returns a string in the same domain as meta.sex ('1' | '2' | '0' | 'other').
+// `predicted_sex` is the ngs-bits SampleGender 'gender' value
+// ('male' | 'female' | 'unknown' | null when the estimate is unavailable).
+//   - 'samplesheet' : always the samplesheet value
+//   - 'auto'        : ngs-bits estimate only when the samplesheet value is '0'/'other'
+//   - 'estimated'   : ngs-bits estimate always, falling back to the samplesheet
+//                     value when the estimate is unusable
+// Throws on an unrecognised mode (the schema enum should prevent this).
+//
+def resolveAnalysisSex(samplesheet_sex, predicted_sex, mode, pedigree_role = null, sample_id = null) {
+    def declared = samplesheet_sex?.toString()
+    if (mode == 'samplesheet') {
+        return declared
+    }
+    // Only relevant when the estimate would actually be used: always for 'estimated',
+    // and for 'auto' only while filling a gap (declared sex isn't already 1/2).
+    def estimate_would_apply = (mode == 'estimated') || (mode == 'auto' && !(declared in ['1', '2']))
+    def estimate = ['male': '1', 'female': '2'][predicted_sex?.toString()?.toLowerCase()]
+    def expected_by_role = ['father': '1', 'mother': '2'][pedigree_role]
+    if (estimate_would_apply && estimate && expected_by_role && estimate != expected_by_role) {
+        log.warn("Sample '${sample_id}' is the pedigree ${pedigree_role} but the ngs-bits SampleGender estimate ('${predicted_sex}' -> '${estimate}') contradicts that role; keeping the declared sex ('${declared}') instead. Confirm against the peddy / somalier sex-check.")
+        estimate = null
+    }
+    if (mode == 'estimated') {
+        return estimate ?: declared
+    }
+    if (mode == 'auto') {
+        return (declared in ['1', '2']) ? declared : (estimate ?: declared)
+    }
+    error("resolveAnalysisSex: unknown sex_source mode '${mode}' (expected 'samplesheet', 'auto' or 'estimated')")
 }
 
 //
@@ -340,8 +523,7 @@ def checkRequiredParameters(params) {
     // Static requirements that are not influenced by user-defined skips
     def staticRequirements   = [
         analysis_type_wes        : ["target_bed"],
-        variant_caller_sentieon  : ["ml_model"],
-        run_rtgvcfeval           : ["rtg_truthvcfs"]
+        variant_caller_sentieon  : ["ml_model"]
     ]
 
     // Requirements that can be modified by the user using either skip_tools or skip_subworkflows here
@@ -349,13 +531,12 @@ def checkRequiredParameters(params) {
         repeat_calling           : ["variant_catalog"],
         repeat_annotation        : ["variant_catalog"],
         snv_calling              : ["genome"],
-        snv_annotation           : ["genome", "vcfanno_resources", "vcfanno_toml", "vep_cache", "vep_cache_version",
-                                    "gnomad_af", "score_config_snv", "variant_consequences_snv"],
-        sv_annotation            : ["genome", "vep_cache", "vep_cache_version", "score_config_sv", "variant_consequences_sv"],
-        mt_annotation            : ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "score_config_mt",
-                                    "vep_cache_version", "vep_cache", "variant_consequences_snv"],
+        snv_annotation           : ["genome", "vcfanno_resources", "vcfanno_toml",
+                                    "gnomad_af", "score_config_snv"],
+        sv_annotation            : ["genome", "score_config_sv"],
+        mt_annotation            : ["genome", "mito_name", "vcfanno_resources", "vcfanno_toml", "score_config_mt"],
         me_calling               : ["mobile_element_references"],
-        me_annotation            : ["mobile_element_svdb_annotations", "variant_consequences_snv"],
+        me_annotation            : ["mobile_element_svdb_annotations"],
         gens                     : ["gens_gnomad_pos", "gens_interval_list", "gens_pon_female", "gens_pon_male"],
         germlinecnvcaller        : ["ploidy_model", "gcnvcaller_model", "readcount_intervals"],
         smncopynumbercaller      : ["genome"]
@@ -365,15 +546,22 @@ def checkRequiredParameters(params) {
 
     staticRequirements.each { condition, paramsList ->
         if ((condition == "analysis_type_wes" && params.analysis_type == "wes") ||
-            (condition == "variant_caller_sentieon" && params.variant_caller == "sentieon") ||
-            (condition == "run_rtgvcfeval" && params.run_rtgvcfeval)) {
+            (condition == "variant_caller_sentieon" && params.variant_caller == "sentieon")) {
                 mandatoryParams += paramsList
         }
     }
 
     def all_skips = params.skip_subworkflows+","+params.skip_tools
+    // These are all BAM/alignment-dependent auxiliary steps that are also skipped at runtime whenever
+    // the case is fully precalled (no alignment data exists at all), even though that isn't reflected
+    // in --skip_tools/--skip_subworkflows, so their extra params shouldn't be forced mandatory either.
+    // me_annotation/repeat_annotation are deliberately excluded: like snv/sv/mt_annotation, they have
+    // their own precalled substitute and stay mandatory unless explicitly skipped, regardless of
+    // whether calling ran.
+    def alignmentDependentConditions = ['repeat_calling', 'me_calling', 'gens', 'germlinecnvcaller']
     dynamicRequirements.each { condition, paramsList ->
-        if (!all_skips.split(',').contains(condition)) {
+        def auto_skipped = condition in alignmentDependentConditions && hasAnyPrecalledVcf()
+        if (!all_skips.split(',').contains(condition) && !auto_skipped) {
                 mandatoryParams += paramsList
         }
     }
@@ -383,6 +571,30 @@ def checkRequiredParameters(params) {
         missingParamsCount += 1
     }
 
+    // vep_cache and vep_gtf are mutually exclusive annotation sources for
+    // ENSEMBLVEP_VEP (SNV/SV/MT annotation): whichever subworkflows are
+    // active need EITHER a real cache (vep_cache + vep_cache_version) OR
+    // a gtf (vep_gtf, for non-standard/custom references with no Ensembl
+    // cache) -- not neither, and not both.
+    def vepAnnotationActive = ["snv_annotation", "sv_annotation", "mt_annotation"].any { condition ->
+        !all_skips.split(',').contains(condition)
+    }
+    if (vepAnnotationActive) {
+        if (!params.vep_cache && !params.vep_gtf) {
+            println("params.vep_cache or params.vep_gtf should be set.")
+            missingParamsCount += 1
+        } else if (params.vep_cache && params.vep_gtf) {
+            println("Either params.vep_cache or params.vep_gtf should be set, not both.")
+            missingParamsCount += 1
+        } else if (params.vep_cache && !params.vep_cache_version) {
+            println("params.vep_cache_version not set.")
+            missingParamsCount += 1
+        } else if (params.vep_gtf && !params.vep_gtf_tbi) {
+            println("params.vep_gtf_tbi not set.")
+            missingParamsCount += 1
+        }
+    }
+
     if (!(params.skip_subworkflows && params.skip_subworkflows.split(',').contains('generate_clinical_set')) ) {
         if (!params.vep_filters && !params.vep_filters_scout_fmt) {
             println("params.vep_filters or params.vep_filters_scout_fmt should be set.")
@@ -390,6 +602,12 @@ def checkRequiredParameters(params) {
         } else if (params.vep_filters && params.vep_filters_scout_fmt) {
             println("Either params.vep_filters or params.vep_filters_scout_fmt should be set.")
             missingParamsCount += 1
+        } else {
+            def filtersFile = params.vep_filters_scout_fmt ?: params.vep_filters
+            def nonHeaderLines = file(filtersFile).readLines().count { line -> !line.startsWith('#') && line.trim() }
+            if (nonHeaderLines == 0) {
+                error("The file '${filtersFile}' contains no records (only headers or empty lines). The clinical set will contain 0 variants.")
+            }
         }
     }
 
@@ -526,6 +744,7 @@ def toolCitationText() {
     }
     qc_bam_text = [
         "Picard (Broad Institute, 2023)",
+        params.qc_metrics_tool.equals("riker") ? "Riker (Fulcrum Genomics, 2026)," : "",
         "Sambamba (Tarasov et al., 2015),",
         "TIDDIT (Eisfeldt et al., 2017),",
         "UCSC Bigwig and Bigbed (Kent et al., 2010),",
@@ -543,7 +762,6 @@ def toolCitationText() {
         "GATK (McKenna et al., 2010),",
         "MultiQC (Ewels et al. 2016),",
         (params.skip_tools && params.skip_tools.split(',').contains('peddy')) ? "" : "Peddy (Pedersen & Quinlan, 2017),",
-        params.run_rtgvcfeval ? "RTG Tools (Cleary et al., 2015)," : "",
         "SAMtools (Li et al., 2009),",
         (!(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) && params.analysis_type.equals("wgs")) ? "SMNCopyNumberCaller (Chen et al., 2020)," : "",
         "Tabix (Li, 2011)",
@@ -649,6 +867,7 @@ def toolBibliographyText() {
     }
     qc_bam_text = [
         "<li>Broad Institute. (2023). Picard Tools. In Broad Institute, GitHub repository. http://broadinstitute.github.io/picard/</li>",
+        params.qc_metrics_tool.equals("riker") ? "<li>Fulcrum Genomics. (2026). Riker. In Fulcrum Genomics, GitHub repository. https://github.com/fulcrumgenomics/riker</li>" : "",
         "<li>Tarasov, A., Vilella, A. J., Cuppen, E., Nijman, I. J., & Prins, P. (2015). Sambamba: Fast processing of NGS alignment formats. Bioinformatics, 31(12), 2032–2034. https://doi.org/10.1093/bioinformatics/btv098</li>",
         "<li>Eisfeldt, J., Vezzi, F., Olason, P., Nilsson, D., & Lindstrand, A. (2017). TIDDIT, an efficient and comprehensive structural variant caller for massive parallel sequencing data. F1000Research, 6, 664. https://doi.org/10.12688/f1000research.11168.2</li>",
         "<li>Kent, W. J., Zweig, A. S., Barber, G., Hinrichs, A. S., & Karolchik, D. (2010). BigWig and BigBed: Enabling browsing of large distributed datasets. Bioinformatics, 26(17), 2204–2207. https://doi.org/10.1093/bioinformatics/btq351</li>",
@@ -666,7 +885,6 @@ def toolBibliographyText() {
         "<li>McKenna, A., Hanna, M., Banks, E., Sivachenko, A., Cibulskis, K., Kernytsky, A., Garimella, K., Altshuler, D., Gabriel, S., Daly, M., & DePristo, M. A. (2010). The Genome Analysis Toolkit: A MapReduce framework for analyzing next-generation DNA sequencing data. Genome Research, 20(9), 1297–1303. https://doi.org/10.1101/gr.107524.110</li>",
         "<li>Ewels, P., Magnusson, M., Lundin, S., & Käller, M. (2016). MultiQC: Summarize analysis results for multiple tools and samples in a single report. Bioinformatics, 32(19), 3047–3048. https://doi.org/10.1093/bioinformatics/btw354</li>",
         (params.skip_tools && params.skip_tools.split(',').contains('peddy')) ? "" : "<li>Pedersen, B. S., & Quinlan, A. R. (2017). Who’s Who? Detecting and Resolving Sample Anomalies in Human DNA Sequencing Studies with Peddy. The American Journal of Human Genetics, 100(3), 406–413. https://doi.org/10.1016/j.ajhg.2017.01.017</li>",
-        params.run_rtgvcfeval ? "<li>Cleary, J. G., Braithwaite, R., Gaastra, K., Hilbush, B. S., Inglis, S., Irvine, S. A., Jackson, A., Littin, R., Rathod, M., Ware, D., Zook, J. M., Trigg, L., & Vega, F. M. D. L. (2015). Comparing Variant Call Files for Performance Benchmarking of Next-Generation Sequencing Variant Calling Pipelines (p. 023754). bioRxiv. https://doi.org/10.1101/023754</li>" : "",
         "<li>Li, H., Handsaker, B., Wysoker, A., Fennell, T., Ruan, J., Homer, N., Marth, G., Abecasis, G., Durbin, R., & 1000 Genome Project Data Processing Subgroup. (2009). The Sequence Alignment/Map format and SAMtools. Bioinformatics, 25(16), 2078–2079. https://doi.org/10.1093/bioinformatics/btp352</li>",
         (!(params.skip_tools && params.skip_tools.split(',').contains('smncopynumbercaller')) && params.analysis_type.equals("wgs")) ? "<li>Chen, X., Sanchis-Juan, A., French, C. E., Connell, A. J., Delon, I., Kingsbury, Z., Chawla, A., Halpern, A. L., Taft, R. J., Bentley, D. R., Butchbach, M. E. R., Raymond, F. L., & Eberle, M. A. (2020). Spinal muscular atrophy diagnosis and carrier screening from genome sequencing data. Genetics in Medicine, 22(5), 945–953. https://doi.org/10.1038/s41436-020-0754-0</li>" : "",
         "<li>Li, H. (2011). Tabix: Fast retrieval of sequence features from generic TAB-delimited files. Bioinformatics, 27(5), 718–719. https://doi.org/10.1093/bioinformatics/btq671</li>",

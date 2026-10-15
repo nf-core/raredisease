@@ -1,5 +1,5 @@
 {
-    "align sentieon": {
+    "align sentieon, stub": {
         "content": [
             [
                 [
@@ -13,7 +13,7 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "test_dedup.bam:md5,489a7a6b515bfeb9e22b10732d7586e4"
+                    "d41d8cd98f00b204e9800998ecf8427e"
                 ]
             ],
             [
@@ -28,7 +28,181 @@
                             "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
                         }
                     },
-                    "test_dedup.bam.bai:md5,14bc034b61e9f46cc0c0224b8915d7aa"
+                    "test_dedup.bam.bai"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_datametrics_aln_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_datametrics_gc_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_datametrics_gc_summary.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_datametrics_is_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_datametrics_mq_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_datametrics_qd_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.bam.metrics:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.bam.metrics.multiqc.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.score:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ]
+        ],
+        "timestamp": "2026-06-15T14:36:45.068348415",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
+    },
+    "align sentieon": {
+        "content": [
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "2d64e4363d9f3c0e2167fce49d5087cf"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.bam.bai"
                 ]
             ],
             [
@@ -122,17 +296,55 @@
                 ]
             ],
             [
-                "test_dedup.bam",
-                "test_dedup.bam.bai",
-                "test_dedup.bam.metrics",
-                "test_dedup.bam.metrics.multiqc.tsv",
-                "test_dedup.score"
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.bam.metrics:md5,67c42dfe156b0613d30966768d01b55c"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.bam.metrics.multiqc.tsv:md5,67c42dfe156b0613d30966768d01b55c"
+                ]
+            ],
+            [
+                [
+                    {
+                        "groupSize": 1,
+                        "groupTarget": {
+                            "id": "test",
+                            "sample": "test",
+                            "single_end": false,
+                            "num_lanes": 1,
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                        }
+                    },
+                    "test_dedup.score:md5,107725946bfe75d63c82d4f330872833"
+                ]
             ]
         ],
-        "timestamp": "2026-03-14T00:02:24.597092362",
+        "timestamp": "2026-06-15T14:42:21.699949612",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
         }
     }
 }

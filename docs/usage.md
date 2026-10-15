@@ -12,8 +12,12 @@ Table of contents:
   - [Run nf-core/raredisease with your data](#run-nf-coreraredisease-with-your-data)
     - [Samplesheet](#samplesheet)
       - [Samplesheet for BAM file input](#samplesheet-for-bam-file-input)
+      - [Samplesheet for CRAM file input](#samplesheet-for-cram-file-input)
+      - [Samplesheet for VCF file input](#samplesheet-for-vcf-file-input)
     - [Reference files and parameters](#reference-files-and-parameters)
       - [1. Alignment](#1-alignment)
+    - [BAM QC metrics tool](#bam-qc-metrics-tool)
+    - [Estimated sex](#estimated-sex)
       - [2. QC stats from the alignment files](#2-qc-stats-from-the-alignment-files)
       - [3. Repeat expansions](#3-repeat-expansions)
       - [4. Variant calling - SNV](#4-variant-calling---snv)
@@ -24,11 +28,10 @@ Table of contents:
       - [9. Mitochondrial annotation](#9-mitochondrial-annotation)
       - [10. Mobile element calling](#10-mobile-element-calling)
       - [11. Mobile element annotation](#11-mobile-element-annotation)
-      - [12. Variant evaluation](#12-variant-evaluation)
-      - [13. Prepare data for CNV visualisation in Gens](#13-prepare-data-for-cnv-visualisation-in-gens)
-    - [Run the pipeline](#run-the-pipeline)
-      - [Direct input in CLI](#direct-input-in-cli)
-      - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
+      - [12. Prepare data for CNV visualisation in Gens](#12-prepare-data-for-cnv-visualisation-in-gens)
+      - [Run the pipeline](#run-the-pipeline)
+        - [Direct input in CLI](#direct-input-in-cli)
+        - [Import from a config file (recommended)](#import-from-a-config-file-recommended)
   - [Best practices](#best-practices)
   - [Core Nextflow arguments](#core-nextflow-arguments)
     - [`-profile`](#-profile)
@@ -100,23 +103,26 @@ Running the pipeline involves three steps:
 
 A samplesheet is used to provide information about the sample(s) to the pipeline in CSV format, including the path to the FASTQ files and other metadata such as sex and phenotype.
 
-The nf-core/raredisease pipeline accepts FASTQ files, SPRING files, or BAM files as input. Currently, the pipeline does not support single-end data from Illumina. The pedigree information in the samplesheet (sex and phenotype) should be provided in the same format as a [PED file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format), with sex indicated as 1 for male, 2 for female, and other for unknown.
+The nf-core/raredisease pipeline accepts FASTQ files, SPRING files, BAM files, or CRAM files as input. Currently, the pipeline does not support single-end data from Illumina, and mitochondrial SV calling with MitoSAlt and saltshaker does not run with BAM or CRAM file input. The pedigree information in the samplesheet (sex and phenotype) should be provided in the same format as a [PED file](https://gatk.broadinstitute.org/hc/en-us/articles/360035531972-PED-Pedigree-format), with sex indicated as 1 for male, 2 for female, and other for unknown.
 
-| Fields        | Description                                                                                                                                                                                             |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.                                                                                           |
-| `lane`        | Used to generate separate channels during the alignment step. It is of string type, and we recommend using a combination of flowcell and lane to distinguish between different runs of the same sample. |
-| `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                          |
-| `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                          |
-| `spring_1`    | Full path to spring-compressed file for read 1 or for reads 1 and 2. The Fastq file has to be first gzipped, then spring-compressed, and it must have the extension `.spring`.                          |
-| `spring_2`    | Full path to spring-compressed file for read 2. The Fastq file has to be first gzipped, then spring-compressed, and it must have the extension `.spring`.                                               |
-| `bam`         | Full path to a bam file containing alignments.                                                                                                                                                          |
-| `bai`         | Full path to a bam index file.                                                                                                                                                                          |
-| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                                                                                                               |
-| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                     |
-| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                   |
-| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                   |
-| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                                                                                                            |
+| Fields        | Description                                                                                                                                                                                                                    |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.                                                                                                                  |
+| `lane`        | Used to generate separate channels during the alignment step. It is of string type, and we recommend using a combination of flowcell and lane to distinguish between different runs of the same sample.                        |
+| `fastq_1`     | Absolute path to FASTQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                                                 |
+| `fastq_2`     | Absolute path to FASTQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                                                                 |
+| `spring_1`    | Full path to spring-compressed file for read 1 or for reads 1 and 2. The Fastq file has to be first gzipped, then spring-compressed, and it must have the extension `.spring`.                                                 |
+| `spring_2`    | Full path to spring-compressed file for read 2. The Fastq file has to be first gzipped, then spring-compressed, and it must have the extension `.spring`.                                                                      |
+| `bam`         | Full path to a duplicate-marked BAM file containing alignments.                                                                                                                                                                |
+| `bai`         | Full path to a BAM index file.                                                                                                                                                                                                 |
+| `cram`        | Full path to a duplicate-marked CRAM file containing alignments.                                                                                                                                                               |
+| `crai`        | Full path to a CRAM index file.                                                                                                                                                                                                |
+| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other'). For `0`/`other` samples, the estimated sex can be used in sex-dependent steps, see [Estimated sex](#estimated-sex).                                                  |
+| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                                            |
+| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                                          |
+| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                                          |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF. All rows in a samplesheet must belong to the same case and share one `case_id`; to analyse several cases or unrelated singletons, run the pipeline once per case. |
+| `customer_id` | Optional external/customer identifier for the sample. If provided, it is used instead of `sample` to label Saltshaker HTML reports and to rename the sample in the VCF2CYTOSURE output; defaults to `sample` if left blank.    |
 
 It is also possible to include multiple runs of the same sample in a samplesheet. For example, when you have re-sequenced the same sample more than once to increase sequencing depth. In that case, the `sample` identifiers in the samplesheet have to be the same. The pipeline will align the raw read/read-pairs independently before merging the alignments belonging to the same sample. Below is an example for a trio with the proband sequenced across two lanes:
 
@@ -133,25 +139,81 @@ If you would like to see more examples of what a typical samplesheet looks like 
 
 The nf-core/raredisease pipeline can handle duplicate-marked BAM files as input. In such cases, samplesheet should contain the following columns:
 
-| Fields        | Description                                                                                                           |
-| ------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.         |
-| `bam`         | Absolute path to a duplicate-marked BAM file.                                                                         |
-| `bai`         | Absolute path to the BAM index file (.bai).                                                                           |
-| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other').                                                             |
-| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                   |
-| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband. |
-| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband. |
-| `case_id`     | Case ID, for the analysis used when generating a family VCF.                                                          |
+| Fields        | Description                                                                                                                                                                                                                    |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.                                                                                                                  |
+| `bam`         | Absolute path to a duplicate-marked BAM file.                                                                                                                                                                                  |
+| `bai`         | Absolute path to the BAM index file (.bai).                                                                                                                                                                                    |
+| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other'). For `0`/`other` samples, the estimated sex can be used in sex-dependent steps, see [Estimated sex](#estimated-sex).                                                  |
+| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                                            |
+| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                                          |
+| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                                          |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF. All rows in a samplesheet must belong to the same case and share one `case_id`; to analyse several cases or unrelated singletons, run the pipeline once per case. |
+| `customer_id` | Optional external/customer identifier for the sample. If provided, it is used instead of `sample` to label Saltshaker HTML reports and to rename the sample in the VCF2CYTOSURE output; defaults to `sample` if left blank.    |
 
 If you would like to see an example of what a typical samplesheet looks like in this case, follow this [link.](https://github.com/nf-core/test-datasets/blob/raredisease/testdata/samplesheet_bam.csv)
+
+##### Samplesheet for CRAM file input
+
+The nf-core/raredisease pipeline can handle duplicate-marked CRAM files as input. CRAM is a more space-efficient alternative to BAM and requires the reference genome FASTA (`--fasta`) to decode. In such cases, samplesheet should contain the following columns:
+
+| Fields        | Description                                                                                                                                                                                                                    |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `sample`      | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample.                                                                                                                  |
+| `cram`        | Absolute path to a duplicate-marked CRAM file.                                                                                                                                                                                 |
+| `crai`        | Absolute path to the CRAM index file (.crai).                                                                                                                                                                                  |
+| `sex`         | Sex (1=male; 2=female; for unknown sex use 0 or 'other'). For `0`/`other` samples, the estimated sex can be used in sex-dependent steps, see [Estimated sex](#estimated-sex).                                                  |
+| `phenotype`   | Affected status of patient (0 = missing; 1=unaffected; 2=affected).                                                                                                                                                            |
+| `paternal_id` | Sample ID of the father, can be blank if the father isn't part of the analysis or for samples other than the proband.                                                                                                          |
+| `maternal_id` | Sample ID of the mother, can be blank if the mother isn't part of the analysis or for samples other than the proband.                                                                                                          |
+| `case_id`     | Case ID, for the analysis used when generating a family VCF. All rows in a samplesheet must belong to the same case and share one `case_id`; to analyse several cases or unrelated singletons, run the pipeline once per case. |
+| `customer_id` | Optional external/customer identifier for the sample. If provided, it is used instead of `sample` to label Saltshaker HTML reports and to rename the sample in the VCF2CYTOSURE output; defaults to `sample` if left blank.    |
+
+> [!NOTE]
+> CRAM decoding requires the reference genome FASTA. Make sure `--fasta` (or `--genome`) is set when running with CRAM input. Mitochondrial SV calling with MitoSAlt and saltshaker does not support CRAM input.
+
+##### Samplesheet for VCF file input
+
+The nf-core/raredisease pipeline can also accept precalled, case-level VCF files, skipping the corresponding calling step(s) and feeding the supplied VCF directly into annotation. This is useful for reannotating or re-ranking variants without rerunning calling from FASTQ/BAM/CRAM. Precalled VCFs are supplied via three generic columns, one row per variant type:
+
+| Fields   | Description                                                                                                   |
+| -------- | ------------------------------------------------------------------------------------------------------------- |
+| `sample` | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. |
+| `vcf`    | Absolute path to a bgzipped, precalled VCF file (`.vcf.gz`).                                                  |
+| `tbi`    | Absolute path to the tabix index of the VCF file (`.vcf.gz.tbi`).                                             |
+| `type`   | The variant type contained in the VCF. One of `snv`, `sv`, `mt`, `me`, or `repeat`.                           |
+
+Each precalled VCF must contain only the variant type it declares in `type`: a nuclear (non-mitochondrial) VCF for `snv`, an MT-only VCF for `mt`, an SVDB-merged structural variant VCF for `sv`, an SVDB-merged mobile-element VCF (matching `CALL_MOBILE_ELEMENTS` output) for `me`, and an SVDB-merged repeat-expansion VCF (matching `CALL_REPEAT_EXPANSIONS` output, before Stranger annotation) for `repeat`. Since a precalled VCF represents the whole case (it's already jointly called across the family, not a single sample), parents and other unaffected relatives are referenced purely through the existing `paternal_id`/`maternal_id` columns on the proband's row(s) and never get their own samplesheet row — they're assumed to already be genotyped inside the supplied VCF.
+
+Below is an example samplesheet for a trio where all five variant types have been precalled for the case. Note that `father` and `mother` are referenced by ID only and never appear as their own rows:
+
+| sample  | vcf                   | tbi                       | type   | sex | phenotype | paternal_id | maternal_id | case_id |
+| ------- | --------------------- | ------------------------- | ------ | --- | --------- | ----------- | ----------- | ------- |
+| proband | proband_snv.vcf.gz    | proband_snv.vcf.gz.tbi    | snv    | 1   | 2         | father      | mother      | fam_1   |
+| proband | proband_sv.vcf.gz     | proband_sv.vcf.gz.tbi     | sv     | 1   | 2         | father      | mother      | fam_1   |
+| proband | proband_mt.vcf.gz     | proband_mt.vcf.gz.tbi     | mt     | 1   | 2         | father      | mother      | fam_1   |
+| proband | proband_me.vcf.gz     | proband_me.vcf.gz.tbi     | me     | 1   | 2         | father      | mother      | fam_1   |
+| proband | proband_repeat.vcf.gz | proband_repeat.vcf.gz.tbi | repeat | 1   | 2         | father      | mother      | fam_1   |
+
+**What's possible:**
+
+- Supplying precalled VCFs for all variant types applicable to the case (`snv` + `sv` + `mt` + `me` + `repeat` for WGS, `snv` + `sv` + `mt` for mito, or just `snv` + `sv` for WES without `--run_mt_for_wes`) to run annotation/ranking only, with no calling at all.
+- Supplying precalled VCFs for only a subset of types, as long as calling for the remaining type(s) is explicitly disabled with `--skip_subworkflows`. For example, a WGS case with only `snv`/`sv` VCFs needs `--skip_subworkflows mt_snv_calling,me_calling,repeat_calling` added on the command line, since MT, mobile-element, and repeat-expansion calling would otherwise run by default for WGS but there's no alignment data to call them from.
+- Mixing precalled and freshly-called cases across **different** runs/samplesheets — the restrictions below apply per case, not pipeline-wide.
+
+**What's not possible** (the pipeline validates these and errors out with a specific message rather than silently producing empty output):
+
+- Mixing `vcf` rows with `fastq`/`spring`/`bam`/`cram` rows for the **same case**. A row in the samplesheet may only specify one data type (`fastq`, `spring`, `bam`, `cram`, or `vcf`) — mixing, for example, `fastq_1` and `vcf` in the same row is rejected by the schema — and a case as a whole must be either fully precalled or fully processed from raw/aligned reads, never both.
+- Leaving a variant type uncovered. If a case has any precalled VCF, every other type that's still relevant to the analysis must either also have a precalled VCF or have its calling explicitly skipped via `--skip_subworkflows` — the pipeline checks this upfront and errors out immediately, before any channels are built, naming exactly which type(s) are missing.
+- Supplying two different VCFs for the same `type` within the same case (conflicting precalled VCFs for one case).
+- A `type` value other than `snv`, `sv`, `mt`, `me`, or `repeat` (schema-enforced). Note there is no separate `mt_sv` type: nuclear and mitochondrial SV calls (MitoSalt/SaltShaker) are merged into one VCF before annotation/ranking, so a `sv` VCF is expected to already include mitochondrial SV calls if you want them represented — merge them in yourself before supplying it.
 
 #### Reference files and parameters
 
 In nf-core/raredisease, references can be supplied using parameters listed [here](https://nf-co.re/raredisease/dev/parameters).
 
 > [!WARNING]
-> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources), other infrastructural tweaks (such as output directories), or module arguments (args).
+> Do not use `-c <file>` to specify parameters as this will result in errors. Custom config files specified with `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/running/run-pipelines#configuring-pipelines), other infrastructural tweaks (such as output directories), or module arguments (args).
 
 The above pipeline run specified with a params file in yaml format:
 
@@ -171,13 +233,13 @@ Note that the pipeline is modular in architecture. It offers you the flexibility
 
 The pipeline is modular — individual tools and subworkflows can be skipped using `--skip_tools` and `--skip_subworkflows` (comma-separated). The valid values are:
 
-| `--skip_tools`                                                                                            |
-| --------------------------------------------------------------------------------------------------------- |
-| `fastp`, `fastqc`, `gens`, `germlinecnvcaller`, `ngsbits`, `peddy`, `smncopynumbercaller`, `vcf2cytosure` |
+| `--skip_tools`                                                                                                                                                                         |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cnvnator`, `fastp`, `fastqc`, `gatkcontamination`, `gens`, `germlinecnvcaller`, `manta`, `ngsbits`, `peddy`, `smncopynumbercaller`, `tiddit`, `vcf2cytosure`, `vep_sv`, `verifybamid` |
 
-| `--skip_subworkflows`                                                                                                                                                                          |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `generate_clinical_set`, `me_annotation`, `me_calling`, `mt_annotation`, `mt_subsample`, `repeat_annotation`, `repeat_calling`, `snv_annotation`, `snv_calling`, `sv_annotation`, `sv_calling` |
+| `--skip_subworkflows`                                                                                                                                                                                                             |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `generate_clinical_set`, `me_annotation`, `me_calling`, `mt_annotation`, `mt_snv_calling`, `mt_subsample`, `mt_sv_calling`, `repeat_annotation`, `repeat_calling`, `snv_annotation`, `snv_calling`, `sv_annotation`, `sv_calling` |
 
 nf-core/raredisease consists of several tools used for various purposes. For convenience, we have grouped those tools under the following categories:
 
@@ -211,6 +273,7 @@ The mandatory and optional parameters for each category are tabulated below.
 |                                | extract_alignments              |
 |                                | restrict_to_contigs<sup>7</sup> |
 |                                | exclude_alt<sup>8</sup>         |
+|                                | duplicates_marker<sup>9</sup>   |
 
 <sup>1</sup>Default value is bwamem2. Other alternatives are bwa, bwameme and sentieon (requires valid Sentieon license ).<br />
 <sup>2</sup>Analysis set reference genome in fasta format, first 25 contigs need to be chromosome 1-22, X, Y and the mitochondria.<br />
@@ -220,57 +283,98 @@ The mandatory and optional parameters for each category are tabulated below.
 <sup>6</sup>Default value is 40. Used only by fastp.<br />
 <sup>7</sup>Used to limit your analysis to specific contigs. Can be used to remove alignments to unplaced contigs to minimize potential errors. This parameter should be used in conjunction with the `extract_alignments` parameter.<br />
 <sup>8</sup>When set to true, alignments to alt/unplaced contigs are removed after alignment using samtools view, retaining only primary chromosomes (GRCh37: 1-22,X,Y,MT / GRCh38: chr1-chr22,chrX,chrY,chrM). Note that this will affect all downstream variant calling, as variants will only be called on these primary chromosomes.<br />
+<sup>9</sup>Default value is "markduplicates". Other alternative is "fastdup".<br />
+
+### BAM QC metrics tool
+
+By default, BAM-level QC metrics are collected with Picard (`CollectMultipleMetrics`, `CollectHsMetrics`, `CollectWgsMetrics`).
+
+Set `--qc_metrics_tool riker` to instead collect these metrics with a single [Riker](https://github.com/fulcrumgenomics/riker) `multi` run.
+
+When `riker` is selected it is used regardless of aligner for the alignment, insert-size and GC-bias metrics (and, when a target BED is set, the hybrid-capture metrics), but when `--aligner sentieon` is used the WGS coverage metrics are still produced by Sentieon (matching the Picard path).
+
+Targeted (hybrid-capture) metrics are produced only when a target BED is supplied.
+
+### Estimated sex
+
+The pipeline estimates each sample's sex from the alignment with [ngs-bits `SampleGender`](https://github.com/imgag/ngs-bits) (method set by `--ngsbits_samplegender_method`, default `xy`), unless `ngsbits` is listed in `--skip_tools`. By default this estimate is only reported for QC (via MultiQC and the peddy/somalier sex checks) and is **not** used in the analysis.
+
+`--sex_source` controls whether the estimate feeds the sex-dependent analysis steps (ExpansionHunter, DeepVariant, vcf2cytosure and Gens):
+
+| `--sex_source`          | Behaviour                                                                                                            |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `samplesheet` (default) | Always use the samplesheet `sex`.                                                                                    |
+| `auto`                  | Use the estimate only for samples whose samplesheet `sex` is `0` or `other`; keep the samplesheet value for `1`/`2`. |
+| `estimated`             | Always use the estimate; the samplesheet `sex` is ignored for analysis (a warning is logged when it disagrees).      |
+
+`auto` and `estimated` require the ngs-bits step, so the pipeline exits at start-up if `ngsbits` is in `--skip_tools`. If the estimate is unavailable for a sample (e.g. it comes back `unknown`), that sample falls back to its samplesheet `sex`. The samplesheet `sex` itself is never changed — it is still what peddy/somalier compare the data against, and it's what the PED file feeding peddy/somalier contains. GENMOD instead reads a second, sex-resolved PED, so its X-linked inheritance models can benefit from `--sex_source` too (see [Pedigree](output.md#pedigree)).
+
+If a sample plays a parental role in the pedigree (listed as another sample's `paternal_id`/`maternal_id`), an estimate that would make the resolved pedigree biologically inconsistent — e.g. an ngs-bits estimate of `female` for a father — is rejected in favour of the declared sex, with a warning logged; this does **not** fail the run. This matters most in `estimated` mode, since it would otherwise override even a correctly-declared parent; in `auto` mode it only comes into play when that parent's samplesheet sex is itself `0`/`other`.
 
 ##### 2. QC stats from the alignment files
 
-| Mandatory                                                    | Optional                        |
-| ------------------------------------------------------------ | ------------------------------- |
-| intervals_wgs<sup>1</sup>                                    |                                 |
-| intervals_y<sup>1</sup>                                      |                                 |
-| target_bed / (bait_intervals & target_intervals)<sup>2</sup> |                                 |
-|                                                              | verifybamid_svd_bed<sup>3</sup> |
-|                                                              | verifybamid_svd_mu<sup>3</sup>  |
-|                                                              | verifybamid_svd_ud<sup>3</sup>  |
+| Mandatory                                                    | Optional                            |
+| ------------------------------------------------------------ | ----------------------------------- |
+| intervals_wgs<sup>1</sup>                                    |                                     |
+| intervals_y<sup>1</sup>                                      |                                     |
+| target_bed / (bait_intervals & target_intervals)<sup>2</sup> |                                     |
+|                                                              | verifybamid_svd_bed<sup>3</sup>     |
+|                                                              | verifybamid_svd_mu<sup>3</sup>      |
+|                                                              | verifybamid_svd_ud<sup>3</sup>      |
+|                                                              | contamination_sites<sup>4</sup>     |
+|                                                              | contamination_sites_tbi<sup>4</sup> |
 
 <sup>1</sup>These files are Picard's style interval list files, comprising the entire genome or only the chromosome Y. A version of these files for GRCh37 and for GRCh38 is supplied in the pipeline assets. These files are not necessary if you are using Sentieon.<br />
 <sup>2</sup> If a target_bed file is provided, bait_intervals and target_intervals can be generated by the pipeline.<br />
-<sup>3</sup> Used by VerifyBamID2 to check for contamination. These files can either be downloaded from [VerifyBamID2 repository](https://github.com/Griffan/VerifyBamID/tree/master/resource) or created using VerifyBamID2 with custom files as described [here](https://github.com/Griffan/VerifyBamID?tab=readme-ov-file#generating-your-own-resource-files).
+<sup>3</sup> Used by VerifyBamID2 to check for contamination. These files can either be downloaded from [VerifyBamID2 repository](https://github.com/Griffan/VerifyBamID/tree/master/resource) or created using VerifyBamID2 with custom files as described [here](https://github.com/Griffan/VerifyBamID?tab=readme-ov-file#generating-your-own-resource-files).<br />
+<sup>4</sup> Used by GATK CalculateContamination to estimate cross-sample contamination. Provide a VCF of common variants (e.g. `small_exac_common_3.hg38.vcf.gz`) and its tabix index. When not provided, GATK contamination is skipped automatically. Can also be skipped explicitly via `--skip_tools gatkcontamination`.
 
 ##### 3. Repeat expansions
 
-| Mandatory                   | Optional |
-| --------------------------- | -------- |
-| variant_catalog<sup>1</sup> |          |
+| Mandatory                   | Optional                            |
+| --------------------------- | ----------------------------------- |
+| variant_catalog<sup>1</sup> | filter_expansionhunter<sup>2</sup>  |
+|                             | normalize_multiallelics<sup>3</sup> |
 
-<sup>1</sup> We reccomend using the catalogs found [here](https://github.com/Clinical-Genomics/reference-files/tree/master/rare-disease/disease_loci/ExpansionHunter-v5.0.0). These catalogs have been extended from the illumina ones to include information on pathogenicity, which is neccesarry for the workflow.
+<sup>1</sup> We recommend using the catalogs found [here](https://github.com/Clinical-Genomics/reference-files/tree/master/rare-disease/disease_loci/ExpansionHunter-v5.0.0). These catalogs have been extended from the illumina ones to include information on pathogenicity, which is necessary for the workflow.<br />
+<sup>2</sup> A bcftools `-e` expression used to exclude repeat expansion calls, applied to each sample's ExpansionHunter VCF before the per-case merge. For example, `'INFO/REPID="HTT" || INFO/REPID~"^HTT_"'` removes HTT (Huntington's disease) records. Default is `null` (no filter).<br />
+<sup>3</sup> See section 4 (Variant calling - SNV) for details; this also controls `bcftools norm --multiallelics -both` for ExpansionHunter's own normalization step. Default is `true` (current behavior unchanged).<br />
 
 ##### 4. Variant calling - SNV
 
-| Mandatory                  | Optional                             |
-| -------------------------- | ------------------------------------ |
-| variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>              |
-| ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup>          |
-| analysis_type<sup>3</sup>  | call_interval<sup>2</sup>            |
-|                            | known_dbsnp_tbi<sup>2</sup>          |
-|                            | par_bed<sup>4</sup>                  |
-|                            | skip_split_multiallelics<sup>5</sup> |
+| Mandatory                  | Optional                            |
+| -------------------------- | ----------------------------------- |
+| variant_caller<sup>1</sup> | known_dbsnp<sup>2</sup>             |
+| ml_model<sup>2</sup>       | known_dbsnp_tbi<sup>2</sup>         |
+| analysis_type<sup>3</sup>  | snv_call_region<sup>5</sup>         |
+|                            | known_dbsnp_tbi<sup>2</sup>         |
+|                            | par_bed<sup>4</sup>                 |
+|                            | ml_prob_threshold<sup>2,6</sup>     |
+|                            | normalize_multiallelics<sup>7</sup> |
 
 <sup>1</sup>Default variant caller is DeepVariant, but you have the option to use Sentieon as well.<br />
-<sup>2</sup>These parameters are only used by Sentieon.<br />
+<sup>2</sup>These parameters are only used by Sentieon. The `ml_model` parameter expects a path to a model file (e.g. `dnascope.model`). If Sentieon provides the model in `.bundle` format, unpack it first with `ar models.bundle` and point `--ml_model` to the extracted `dnascope.model` file. `ar` is part of the GNU binutils package.<br />
 <sup>3</sup>Default is `WGS`, but you have the option to choose `WES` and `mito` as well.<br />
 <sup>4</sup>This parameter is only used by Deepvariant.<br />
-<sup>5</sup>Skips `bcftools norm --multiallelics -both` in both DeepVariant and Sentieon SNV calling. Recommended for single-interval runs to avoid indel quality degradation. See [#813](https://github.com/nf-core/raredisease/issues/813) for details.<br />
+<sup>5</sup>Restricts SNV calling to this region for both DeepVariant and Sentieon. Falls back to the padded `--target_bed` (as processed by the pipeline, not the raw file) when not set and `analysis_type` is `wes`; for `wgs`, `target_bed` is not used as a calling restriction (it may be set purely for QC/contamination purposes), so the whole genome is called unless `--snv_call_region` is set explicitly.<br />
+<sup>6</sup>Variants with `INFO/ML_PROB` less than or equal to this value are tagged `ML_FAIL` and removed. Defaults to `0.70` when not set.<br />
+<sup>7</sup>Controls whether `bcftools norm --multiallelics -both` decomposes multiallelic sites into biallelic records, for both DeepVariant and Sentieon SNV calling (also applies to ExpansionHunter repeat expansion calling, see section 3). `bcftools norm` always runs — indels are always left-aligned — this only toggles the `-both` decomposition. Default is `true` (current behavior unchanged). Set to `false` to keep multiallelic sites undecomposed, which can improve indel precision for single-interval runs; see [issue #813](https://github.com/nf-core/raredisease/issues/813) for background.<br />
 
 ##### 5. Variant calling - Structural variants
 
-| Mandatory | Optional                           |
-| --------- | ---------------------------------- |
-|           | target_bed                         |
-|           | bwa                                |
-|           | manta_call_regions<sup>1</sup>     |
-|           | manta_call_regions_tbi<sup>1</sup> |
+| Mandatory | Optional                       |
+| --------- | ------------------------------ |
+|           | target_bed                     |
+|           | bwa                            |
+|           | sv_call_region<sup>1</sup>     |
+|           | sv_call_region_tbi<sup>1</sup> |
+|           | sv_size_threshold<sup>2</sup>  |
 
-<sup>1</sup> A bgzipped BED file (`.bed.gz`) and its tabix index (`.bed.gz.tbi`) restricting Manta's SV calling to specific regions. Both parameters must be supplied together. Only applied for WGS; for WES, Manta always uses `target_bed` and these parameters have no effect. Useful for reducing runtime on references with many short contigs such as GRCh38 by limiting analysis to primary chromosomes.
+<sup>1</sup> A bgzipped BED file (`.bed.gz`) and its tabix index (`.bed.gz.tbi`) restricting SV calling to specific regions. Both parameters must be supplied together. Currently only consumed by Manta, and only for WGS; for WES, Manta always uses `target_bed` and these parameters have no effect. TIDDIT and CNVnator do not support region restriction and ignore this parameter. Useful for reducing runtime on references with many short contigs such as GRCh38 by limiting analysis to primary chromosomes.
+<sup>2</sup> Filters out SVs larger than this value in bp from the merged SV VCF (all callers), after calling and before annotation, e.g. `--sv_size_threshold 1000000` removes SVs larger than 1 Mb. Default is `null` (no filter).
+<sup>3</sup> Path to a custom Manta configuration file, passed to `configManta.py` via `--config`. Optional; when not supplied, Manta runs with its built-in defaults.
+
+Manta, TIDDIT, and CNVnator can each be disabled independently via `--skip_tools` (`manta`, `tiddit`, `cnvnator`). TIDDIT and CNVnator run only for WGS, so skipping either is a no-op for WES, where neither tool runs regardless; Manta runs for both WGS and WES and can be skipped in either.
 
 ##### 6. Copy number variant calling
 
@@ -287,33 +391,32 @@ The mandatory and optional parameters for each category are tabulated below.
 
 ##### 7. SNV annotation & Ranking
 
-| Mandatory                            | Optional                                       |
-| ------------------------------------ | ---------------------------------------------- |
-| genome<sup>1</sup>                   | reduced_penetrance<sup>9</sup>                 |
-| vcfanno_resources<sup>2</sup>        | vcfanno_lua                                    |
-| vcfanno_toml<sup>3</sup>             | vep_filters/vep_filters_scout_fmt<sup>10</sup> |
-| vep_cache_version                    | cadd_resources<sup>11</sup>                    |
-| vep_cache<sup>4</sup>                | run_vcfanno_db_sanity_check<sup>12</sup>       |
-| gnomad_af<sup>5</sup>                |                                                |
-| score_config_snv<sup>6</sup>         |                                                |
-| variant_consequences_snv<sup>7</sup> |                                                |
-| vep_plugin_files<sup>8</sup>         |                                                |
+| Mandatory                     | Optional                                      |
+| ----------------------------- | --------------------------------------------- |
+| genome<sup>1</sup>            | reduced_penetrance<sup>8</sup>                |
+| vcfanno_resources<sup>2</sup> | vcfanno_lua                                   |
+| vcfanno_toml<sup>3</sup>      | vep_filters/vep_filters_scout_fmt<sup>9</sup> |
+| vep_cache_version             | cadd_resources<sup>10</sup>                   |
+| vep_cache<sup>4</sup>         | run_vcfanno_db_sanity_check<sup>11</sup>      |
+| gnomad_af<sup>5</sup>         | pre_vep_snv_filter_expression<sup>12</sup>    |
+| score_config_snv<sup>6</sup>  |                                               |
+| vep_plugin_files<sup>7</sup>  |                                               |
 
 <sup>1</sup>Genome version is used by VEP. You have the option to choose between GRCh37 and GRCh38.<br />
 <sup>2</sup>Path to VCF files and their indices used by vcfanno. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_resources.txt).<br />
 <sup>3</sup>Path to a vcfanno configuration file. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vcfanno_config.toml).<br />
 <sup>4</sup> VEP caches can be downloaded [here](https://www.ensembl.org/info/docs/tools/vep/script/vep_cache.html#cache).
-VEP plugins may be installed in the cache directory, and the plugin pLI is mandatory to install. To supply files required by VEP plugins, use `vep_plugin_files` parameter.
+VEP plugins may be installed in the cache directory. To supply files required by VEP plugins, use the `vep_plugin_files` parameter. The pLI plugin is **mandatory when annotation is enabled** — a downstream step (`bin/add_most_severe_pli.py`) expects the `pLI_gene_value` field in the VEP output and will crash with an error if it is absent. You can skip annotation entirely with `--skip_subworkflows snv_annotation` (or `mt_annotation`), in which case pLI is not required. The LoFtool plugin is optional at the pipeline level; include it in `vep_plugin_files` only if your `score_config_*` rank model references it.
 See example cache [here](https://raw.githubusercontent.com/nf-core/test-datasets/raredisease/reference/vep_cache_and_plugins.tar.gz).<br />
 <sup>5</sup> GnomAD VCF files can be downloaded from [here](https://gnomad.broadinstitute.org/downloads). The option `gnomad_af` expects a tab-delimited file with
 no header and the following columns: `CHROM POS REF_ALLELE,ALT_ALLELE AF`. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/gnomad_reformated.tab.gz).<br />
-<sup>6</sup>Used by GENMOD for ranking the variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_snv.ini).<br />
-<sup>7</sup>File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic and mitochondrial SNVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/variant_consequences_v2.txt). You can learn more about these terms [here](https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html).
-<sup>8</sup>A CSV file that describes the files used by VEP's named and custom plugins. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vep_files.csv). <br />
-<sup>9</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
-<sup>10</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into candidate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt). Not required if `--skip_subworkflows generate_clinical_set` is set.<br />
-<sup>11</sup>Path to a folder containing cadd annotations. Equivalent of the data/annotations/ folder described [here](https://github.com/kircherlab/CADD-scripts/#manual-installation), and it is used to calculate CADD scores for small indels. <br />
-<sup>12</sup>When set to `true`, each vcfanno database file listed in `vcfanno_resources` is checked for records (non-header lines). Any database with zero records is removed from the vcfanno TOML config before annotation runs to prevent vcfanno from crashing on default resource files. Default: `false`.<br />
+<sup>6</sup>Used by GENMOD for ranking the variants. The most severe consequence per variant is determined by GENMOD directly from VEP's `CSQ` annotation during scoring — no separate consequence-ranking file is needed. If your rank model config predates this, set `--genmod_skip_plugin_check true` so a missing `info_key`/`csq_key` degrades that scoring category to a warning instead of aborting the pipeline. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_snv.ini).<br />
+<sup>7</sup>A CSV file that describes the files used by VEP's named and custom plugins. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/vep_files.csv). <br />
+<sup>8</sup>Used by GENMOD while modeling the variants. Contains a list of loci that show [reduced penetrance](https://medlineplus.gov/genetics/understanding/inheritance/penetranceexpressivity/) in people. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/reduced_penetrance.tsv).<br />
+<sup>9</sup> This file contains a list of candidate genes (with [HGNC](https://www.genenames.org/) IDs) that is used to split the variants into candidate variants and research variants. Research variants contain all the variants, while candidate variants are a subset of research variants and are associated with candidate genes. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/hgnc.txt). Not required if `--skip_subworkflows generate_clinical_set` is set.<br />
+<sup>10</sup>Path to a folder containing cadd annotations. Equivalent of the data/annotations/ folder described [here](https://github.com/kircherlab/CADD-scripts/#manual-installation), and it is used to calculate CADD scores for small indels. <br />
+<sup>11</sup>When set to `true`, each vcfanno database file listed in `vcfanno_resources` is checked for records (non-header lines). Any database with zero records is removed from the vcfanno TOML config before annotation runs to prevent vcfanno from crashing on default resource files. Default: `false`.<br />
+<sup>12</sup>bcftools expression used to exclude SNVs before VEP annotation, applied with `bcftools view --exclude`. Set stricter filters to reduce the number of variants processed downstream. Default: `INFO/GNOMADAF > 0.70 | INFO/GNOMADAF_popmax > 0.70`.<br />
 
 :::note
 We use CADD only to annotate small indels. To annotate SNVs with precomputed CADD scores, pass the file containing CADD scores as a resource to vcfanno instead. Files containing the precomputed CADD scores for SNVs can be downloaded from [here](https://cadd.gs.washington.edu/download) (download files listed under the description: "All possible SNVs of GRCh3<7/8>/hg3<7/8>")
@@ -321,32 +424,33 @@ We use CADD only to annotate small indels. To annotate SNVs with precomputed CAD
 
 ##### 8. SV annotation & Ranking
 
-| Mandatory                                      | Optional                          |
-| ---------------------------------------------- | --------------------------------- |
-| genome                                         | reduced_penetrance                |
-| svdb_query_dbs/svdb_query_bedpedbs<sup>1</sup> |                                   |
-| vep_cache_version                              | vep_filters/vep_filters_scout_fmt |
-| vep_cache                                      | vep_plugin_files                  |
-| score_config_sv                                |                                   |
-| variant_consequences_sv<sup>2</sup>            |                                   |
+| Mandatory                                      | Optional                              |
+| ---------------------------------------------- | ------------------------------------- |
+| genome                                         | reduced_penetrance                    |
+| svdb_query_dbs/svdb_query_bedpedbs<sup>1</sup> | sv_freq_filter_expression<sup>3</sup> |
+| vep_cache_version                              | vep_filters/vep_filters_scout_fmt     |
+| vep_cache                                      | vep_plugin_files                      |
+| score_config_sv<sup>2</sup>                    |                                       |
 
 <sup>1</sup> A CSV file that describes the databases (VCFs or BEDPEs) used by SVDB for annotating structural variants. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv). Information about the column headers can be found [here](https://github.com/J35P312/SVDB#Query).
-<sup>2</sup> File containing list of SO terms listed in the order of severity from most severe to lease severe for annotating genomic SVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/variant_consequences_v2.txt). You can learn more about these terms [here](https://grch37.ensembl.org/info/genome/variation/prediction/predicted_data.html).
+<sup>2</sup>Used by GENMOD for ranking the variants. The most severe consequence per variant is determined by GENMOD directly from VEP's `CSQ` annotation during scoring — no separate consequence-ranking file is needed. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rank_model_sv.ini).
+<sup>3</sup> A bcftools `-e` expression to filter SVs by population frequency after SVDB query, e.g. `'INFO/gnomad_svAF >= 0.01'`. Supports any INFO field and multiple conditions. Default is `null` (no filter).
+
+VEP annotation of SVs can be skipped with `--skip_tools vep_sv`; SVDB frequency annotation still runs. If `score_config_sv` includes a category that reads VEP's `CSQ` field (e.g. `most_severe_consequence`, see footnote 2 above), GENMOD will fail on the missing annotation unless `--genmod_skip_plugin_check` is also set, which degrades that category to a warning instead of aborting the run.
 
 ##### 9. Mitochondrial annotation
 
 Mitochondrial analysis runs automatically for `wgs` and `mito` analysis types. For WES runs, set `--run_mt_for_wes true` to enable it.
 
-| Mandatory                | Optional                          |
-| ------------------------ | --------------------------------- |
-| genome                   | run_mt_for_wes<sup>1</sup>        |
-| mito_name                | vep_filters/vep_filters_scout_fmt |
-| vcfanno_resources        | vep_plugin_files                  |
-| vcfanno_toml             |                                   |
-| vep_cache_version        |                                   |
-| vep_cache                |                                   |
-| score_config_mt          |                                   |
-| variant_consequences_snv |                                   |
+| Mandatory         | Optional                          |
+| ----------------- | --------------------------------- |
+| genome            | run_mt_for_wes<sup>1</sup>        |
+| mito_name         | vep_filters/vep_filters_scout_fmt |
+| vcfanno_resources | vep_plugin_files                  |
+| vcfanno_toml      |                                   |
+| vep_cache_version |                                   |
+| vep_cache         |                                   |
+| score_config_mt   |                                   |
 
 <sup>1</sup>Set to `true` to enable mitochondrial analysis for WES runs. Default is `false`.<br />
 
@@ -367,21 +471,10 @@ Mitochondrial analysis runs automatically for `wgs` and `mito` analysis types. F
 | mobile_element_svdb_annotations<sup>1</sup> |                                   |
 | vep_cache_version                           |                                   |
 | vep_cache                                   |                                   |
-| variant_consequences_sv                     |                                   |
 
 <sup>1</sup> A CSV file that describes the databases (VCFs) used by SVDB for annotating mobile elements with allele frequencies. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/svdb_querydb_files.csv).
 
-##### 12. Variant evaluation
-
-| Mandatory                  | Optional |
-| -------------------------- | -------- |
-| run_rtgvcfeval<sup>1</sup> | sdf      |
-| rtg_truthvcfs<sup>2</sup>  |          |
-
-<sup>1</sup> This parameter is set to false by default, set it to true if if you'd like to run the evaluation subworkflow
-<sup>2</sup> A CSV file that describes the truth VCF files used by RTG Tools' vcfeval for evaluating SNVs. Sample file [here](https://github.com/nf-core/test-datasets/blob/raredisease/reference/rtg_example.csv). The file contains four columns `samplename,vcf,bedregions,evaluationregions` where samplename is the user assigned samplename in the input samplesheet, vcf is the path to the truth vcf file, bedregions and evaluationregions are the path to the bed files that are supposed to be passed through --bed_regions and --evaluation_regions options of vcfeval.
-
-##### 13. Prepare data for CNV visualisation in Gens
+##### 12. Prepare data for CNV visualisation in Gens
 
 Optionally the read data can be prepared for CNV visualization in [Gens](https://github.com/Clinical-Genomics-Lund/gens). You can turn it off it by supplying the option `--skip_tools gens`.
 
@@ -508,7 +601,7 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
 - `apptainer`
   - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
 - `wave`
-  - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow ` 24.03.0-edge` or later).
+  - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow `24.03.0-edge` or later).
 - `conda`
   - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
 
@@ -528,19 +621,19 @@ Specify the path to a specific config file (this is a core Nextflow command). Se
 
 Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the pipeline steps, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher resources request (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
 
-To change the resource requests, please see the [max resources](https://nf-co.re/docs/usage/configuration#max-resources) and [tuning workflow resources](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) section of the nf-core website.
+To change the resource requests, please see the [max resources](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#set-max-resources) and [customise process resources](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#customize-process-resources) section of the nf-core website.
 
 ### Custom Containers
 
 In some cases, you may wish to change the container or conda environment used by a pipeline steps for a particular tool. By default, nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However, in some cases the pipeline specified version maybe out of date.
 
-To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/usage/configuration#updating-tool-versions) section of the nf-core website.
+To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#update-tool-versions) section of the nf-core website.
 
 ### Custom Tool Arguments
 
 A pipeline might not always support every possible argument or option of a particular tool used in pipeline. Fortunately, nf-core pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default.
 
-To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/usage/configuration#customising-tool-arguments) section of the nf-core website.
+To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#modifying-tool-arguments) section of the nf-core website.
 
 #### nf-core/configs
 

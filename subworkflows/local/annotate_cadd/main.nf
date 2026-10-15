@@ -29,19 +29,16 @@ workflow ANNOTATE_CADD {
 
             CADD_TO_REFERENCE_CHRNAMES ( ch_fai , [], false )
 
-            CADD_TO_REFERENCE_CHRNAMES.out.output.map { _meta, txt -> txt }
-                .set { ch_rename_chrs }
+            ch_rename_chrs = CADD_TO_REFERENCE_CHRNAMES.out.output.map { _meta, txt -> txt }
 
-            ch_vcf
+            ch_rename_chrnames_in = ch_vcf
                 .map { meta, vcf, tbi -> [ meta, vcf, tbi, [], [], [], [] ] }
                 .combine(REFERENCE_TO_CADD_CHRNAMES.out.output.map { _meta, txt -> txt })
-                .set { ch_rename_chrnames_in }
 
             RENAME_CHRNAMES ( ch_rename_chrnames_in )
 
-            RENAME_CHRNAMES.out.vcf
+            ch_vcf = RENAME_CHRNAMES.out.vcf
                 .map { meta, vcf -> [ meta, vcf, [] ] }
-                .set { ch_vcf }
         }
 
         BCFTOOLS_VIEW(ch_vcf, [], [], [])
@@ -50,13 +47,12 @@ workflow ANNOTATE_CADD {
 
         TABIX_CADD(CADD.out.tsv)
 
-        ch_vcf
+        ch_annotate_in = ch_vcf
             .join(CADD.out.tsv)
             .join(TABIX_CADD.out.index)
             .map { meta, vcf, tbi, ann, ann_tbi  -> [ meta, vcf, tbi, ann, ann_tbi, [] ] }
             .combine(ch_header)
             .combine(ch_rename_chrs)
-            .set { ch_annotate_in }
 
         BCFTOOLS_ANNOTATE(ch_annotate_in)
 
