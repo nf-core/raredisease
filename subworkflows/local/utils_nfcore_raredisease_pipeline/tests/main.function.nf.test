@@ -134,8 +134,8 @@ nextflow_function {
         then {
             assertAll(
                 { assert function.success },
-                { assert function.result.snv == ['snv.vcf.gz', 'snv.vcf.gz.tbi'] },
-                { assert function.result.sv  == ['sv.vcf.gz', 'sv.vcf.gz.tbi'] },
+                { assert function.result.snv == [vcf: 'snv.vcf.gz', tbi: 'snv.vcf.gz.tbi'] },
+                { assert function.result.sv  == [vcf: 'sv.vcf.gz', tbi: 'sv.vcf.gz.tbi'] },
                 { assert function.result.mt  == null },
                 { assert function.result.me  == null },
                 { assert function.result.repeat == null }
@@ -160,7 +160,7 @@ nextflow_function {
         then {
             assertAll(
                 { assert function.success },
-                { assert function.result.me == ['me.vcf.gz', 'me.vcf.gz.tbi'] }
+                { assert function.result.me == [vcf: 'me.vcf.gz', tbi: 'me.vcf.gz.tbi'] }
             )
         }
     }
@@ -182,7 +182,7 @@ nextflow_function {
         then {
             assertAll(
                 { assert function.success },
-                { assert function.result.repeat == ['repeat.vcf.gz', 'repeat.vcf.gz.tbi'] }
+                { assert function.result.repeat == [vcf: 'repeat.vcf.gz', tbi: 'repeat.vcf.gz.tbi'] }
             )
         }
     }

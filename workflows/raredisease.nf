@@ -242,6 +242,7 @@ workflow RAREDISEASE {
     val_run_vcfanno_db_sanity_check
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
+    val_somalier_sites_vcf
     val_sv_size_threshold
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
@@ -324,31 +325,31 @@ workflow RAREDISEASE {
 
     ch_precalled_snv_vcf_tbi = ch_case_info_precalled
         .filter { _case_info, precalled -> precalled.snv }
-        .map { case_info, precalled -> [case_info, precalled.snv[0], precalled.snv[1]] }
+        .map { case_info, precalled -> [case_info, precalled.snv.vcf, precalled.snv.tbi] }
 
     ch_precalled_sv_vcf = ch_case_info_precalled
         .filter { _case_info, precalled -> precalled.sv }
-        .map { case_info, precalled -> [case_info, precalled.sv[0]] }
+        .map { case_info, precalled -> [case_info, precalled.sv.vcf] }
 
     ch_precalled_sv_tbi = ch_case_info_precalled
         .filter { _case_info, precalled -> precalled.sv }
-        .map { case_info, precalled -> [case_info, precalled.sv[1]] }
+        .map { case_info, precalled -> [case_info, precalled.sv.tbi] }
 
     ch_precalled_mt_vcf_tbi = ch_case_info_precalled
         .filter { _case_info, precalled -> precalled.mt }
-        .map { case_info, precalled -> [case_info, precalled.mt[0], precalled.mt[1]] }
+        .map { case_info, precalled -> [case_info, precalled.mt.vcf, precalled.mt.tbi] }
 
     ch_precalled_me_vcf = ch_case_info_precalled
         .filter { _case_info, precalled -> precalled.me }
-        .map { case_info, precalled -> [case_info, precalled.me[0]] }
+        .map { case_info, precalled -> [case_info, precalled.me.vcf] }
 
     ch_precalled_me_tbi = ch_case_info_precalled
         .filter { _case_info, precalled -> precalled.me }
-        .map { case_info, precalled -> [case_info, precalled.me[1]] }
+        .map { case_info, precalled -> [case_info, precalled.me.tbi] }
 
     ch_precalled_repeat_vcf = ch_case_info_precalled
         .filter { _case_info, precalled -> precalled.repeat }
-        .map { case_info, precalled -> [case_info, precalled.repeat[0]] }
+        .map { case_info, precalled -> [case_info, precalled.repeat.vcf] }
 
     // A case with any precalled VCF has zero fastq/bam/cram rows (enforced by validateNoMixedCaseInput),
     // so no alignment data exists at all for it - used to gate BAM-only auxiliary steps that have no
@@ -1067,16 +1068,12 @@ workflow RAREDISEASE {
     SOMALIER
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-    // Somalier extract + relate (enabled unless skipped via `skip_subworkflows` / `skip_somalier`)
-    // Only run when `params.somalier_sites_vcf` is provided to avoid file(null) errors in test/profile runs
-    if (!skip_somalier && params.somalier_sites_vcf) {
-        // prepare VCF channel: [ meta, vcf, tbi, count ] as expected by the subworkflow
+    if (!skip_somalier && val_somalier_sites_vcf) {
         ch_vcfs_for_somalier = CALL_SNV.out.genome_vcf
             .join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true)
             .map { meta, vcf, tbi -> [ meta, vcf, tbi, [] ] }
 
-        // somalier sites VCF supplied via params.somalier_sites_vcf
-        ch_somalier_sites = channel.value( [ [id:'sites'], file(params.somalier_sites_vcf) ] )
+        ch_somalier_sites = channel.value( [ [id:'sites'], file(val_somalier_sites_vcf) ] )
 
         VCF_EXTRACT_RELATE_SOMALIER(
             ch_vcfs_for_somalier,
@@ -1089,7 +1086,7 @@ workflow RAREDISEASE {
         )
 
         ch_somalier = VCF_EXTRACT_RELATE_SOMALIER.out.publish
-    } else if (!skip_somalier && !params.somalier_sites_vcf) {
+    } else if (!skip_somalier && !val_somalier_sites_vcf) {
         log.warn "Skipping Somalier: params.somalier_sites_vcf is not set"
     }
 

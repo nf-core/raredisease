@@ -51,7 +51,7 @@ workflow CONTAMINATION {
                 .combine(ch_intervals.ifEmpty([[]]))
                 .map { meta, bam, bai, bed ->
                     // If bed is an empty list, pass empty list; otherwise pass bed file
-                    def intervals = (bed instanceof List && bed.isEmpty()) ? [] : (bed ?: [])
+                    def intervals = (bed instanceof List && bed.isEmpty()) ? [] : bed
                     [ meta, bam, bai, intervals ]
                 }
 
