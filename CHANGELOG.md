@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
+- Include Somalier sample and pair TSV outputs in MultiQC inputs and enable the Somalier module in the default MultiQC config
 - Add `vep_sv` as a valid `--skip_tools` value, disabling VEP annotation of structural variants while SVDB frequency annotation still runs [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1056](https://github.com/nf-core/raredisease/pull/1056)
 - Add `--manta_config`, an optional path to a custom Manta configuration file passed to `configManta.py --config`; when not supplied, Manta runs with its built-in defaults
 - Add `manta`, `tiddit`, and `cnvnator` as valid `--skip_tools` values, letting users disable any of the nuclear structural variant callers independently; `tiddit` and `cnvnator` are no-ops for WES, where neither tool runs regardless. The pipeline now errors out at start-up if every nuclear SV caller ends up disabled while `sv_calling` itself is not skipped [issue #822](https://github.com/nf-core/raredisease/issues/822) [PR #1052](https://github.com/nf-core/raredisease/pull/1052)
