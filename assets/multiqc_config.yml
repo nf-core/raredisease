@@ -21,6 +21,7 @@ run_modules:
   - mosdepth
   - ngsbits
   - peddy
+  - somalier
   - verifybamid
   - custom_content
 module_order:
@@ -38,6 +39,8 @@ module_order:
       name: "ngsbits"
   - peddy:
       name: "Peddy"
+  - somalier:
+      name: "Somalier"
   - verifybamid:
       name: "VerifyBamID2"
 
