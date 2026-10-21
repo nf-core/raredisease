@@ -1206,6 +1206,11 @@ workflow RAREDISEASE {
     ch_multiqc_files = ch_multiqc_files.mix(CONTAMINATION.out.verifybamid_self_sm.map{_meta, reports -> reports}.collect().ifEmpty([]))
     ch_multiqc_files = ch_multiqc_files.mix(CONTAMINATION.out.gatk_contamination_mqc.map { _meta, file -> file })
 
+    if (!skip_somalier && val_somalier_sites_vcf) {
+        ch_multiqc_files = ch_multiqc_files.mix(VCF_EXTRACT_RELATE_SOMALIER.out.samples_tsv.map{_meta, reports -> reports}.collect().ifEmpty([]))
+        ch_multiqc_files = ch_multiqc_files.mix(VCF_EXTRACT_RELATE_SOMALIER.out.pairs_tsv.map{_meta, reports -> reports}.collect().ifEmpty([]))
+    }
+
     if (!skip_peddy) {
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.ped.map{_meta, reports -> reports}.collect().ifEmpty([]))
         ch_multiqc_files = ch_multiqc_files.mix(PEDDY.out.het_check_csv.map{_meta, reports -> reports}.collect().ifEmpty([]))
