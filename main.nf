@@ -135,6 +135,7 @@ workflow NFCORE_RAREDISEASE {
     val_skip_tools
     val_skip_subworkflows
     val_snv_call_region
+    val_somalier_sites_vcf
     val_subdepth
     val_sv_call_region
     val_sv_call_region_tbi
@@ -590,6 +591,7 @@ workflow NFCORE_RAREDISEASE {
         val_run_vcfanno_db_sanity_check,
         val_save_all_mapped_as_cram,
         val_save_noalt_mapped_as_cram,
+        val_somalier_sites_vcf,
         val_sv_size_threshold,
         val_svdb_query_bedpedbs,
         val_svdb_query_dbs,
@@ -853,6 +855,7 @@ workflow {
         params.skip_tools,
         params.skip_subworkflows,
         params.snv_call_region,
+        params.somalier_sites_vcf,
         params.mitosalt_depth,
         params.sv_call_region,
         params.sv_call_region_tbi,

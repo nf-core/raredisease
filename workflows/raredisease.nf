@@ -242,6 +242,7 @@ workflow RAREDISEASE {
     val_run_vcfanno_db_sanity_check
     val_save_all_mapped_as_cram
     val_save_noalt_mapped_as_cram
+    val_somalier_sites_vcf
     val_sv_size_threshold
     val_svdb_query_bedpedbs
     val_svdb_query_dbs
@@ -1068,15 +1069,15 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
     // Somalier extract + relate (enabled unless skipped via `skip_subworkflows` / `skip_somalier`)
-    // Only run when `params.somalier_sites_vcf` is provided to avoid file(null) errors in test/profile runs
-    if (!skip_somalier && params.somalier_sites_vcf) {
+    // Only run when `val_somalier_sites_vcf` is provided to avoid file(null) errors in test/profile runs
+    if (!skip_somalier && val_somalier_sites_vcf) {
         // prepare VCF channel: [ meta, vcf, tbi, count ] as expected by the subworkflow
         ch_vcfs_for_somalier = CALL_SNV.out.genome_vcf
             .join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true)
             .map { meta, vcf, tbi -> [ meta, vcf, tbi, [] ] }
 
-        // somalier sites VCF supplied via params.somalier_sites_vcf
-        ch_somalier_sites = channel.value( [ [id:'sites'], file(params.somalier_sites_vcf) ] )
+        // somalier sites VCF supplied via val_somalier_sites_vcf
+        ch_somalier_sites = channel.value( [ [id:'sites'], file(val_somalier_sites_vcf) ] )
 
         VCF_EXTRACT_RELATE_SOMALIER(
             ch_vcfs_for_somalier,
@@ -1089,7 +1090,7 @@ workflow RAREDISEASE {
         )
 
         ch_somalier = VCF_EXTRACT_RELATE_SOMALIER.out.publish
-    } else if (!skip_somalier && !params.somalier_sites_vcf) {
+    } else if (!skip_somalier && !val_somalier_sites_vcf) {
         log.warn "Skipping Somalier: params.somalier_sites_vcf is not set"
     }
 
