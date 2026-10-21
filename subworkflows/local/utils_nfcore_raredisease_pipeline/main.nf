@@ -182,7 +182,7 @@ workflow PIPELINE_INITIALISATION {
     align          = ch_samplesheet_by_type.align // channel: [ val(meta), [ path(bam/cram), path(bai/crai) ] ]
     samples        = ch_samples                   // channel: [ val(meta) ]
     case_info      = ch_case_info                 // channel: [ val(case_info) ]
-    precalled_vcfs = ch_precalled_vcfs             // channel: [ val([snv:[vcf,tbi]|null, sv:[...]|null, mt:[...]|null, me:[...]|null, repeat:[...]|null]) ]
+    precalled_vcfs = ch_precalled_vcfs            // channel: [ val([snv:[vcf:path,tbi:path]|null, sv:[...]|null, mt:[...]|null, me:[...]|null, repeat:[...]|null]) ]
     versions       = ch_versions                  // channel: [ path(versions) ]
 }
 
@@ -402,10 +402,11 @@ def extractPrecalledVcfs(List rows) {
     def precalled = [snv: null, sv: null, mt: null, me: null, repeat: null]
     rows.each { meta, files ->
         def type = meta.data_type - "_vcf"
-        if (precalled[type] && precalled[type] != files) {
+        def vcf_tbi = [vcf: files[0], tbi: files[1]]
+        if (precalled[type] && precalled[type] != vcf_tbi) {
             error("Conflicting precalled '${type}' VCFs supplied in samplesheet for the same case.")
         }
-        precalled[type] = files
+        precalled[type] = vcf_tbi
     }
     return precalled
 }
