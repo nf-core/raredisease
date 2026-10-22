@@ -12,7 +12,7 @@
 [![GitHub Actions Linting Status](https://github.com/nf-core/raredisease/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/raredisease/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/raredisease/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.7995798-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.7995798)
 
 [![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.10.4-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
-[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.5.1-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.5.1)
+[![nf-core template version](https://img.shields.io/badge/nf--core_template-4.1.0-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/4.1.0)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
@@ -33,6 +33,8 @@
 ## Introduction
 
 **nf-core/raredisease** is a best-practice bioinformatic pipeline for calling and scoring variants from WGS/WES data from rare disease patients. This pipeline is heavily inspired by [MIP](https://github.com/Clinical-Genomics/MIP).
+
+The pipeline offers multiple entry points depending on how far along your data already is: start from raw FASTQ/SPRING files, from pre-aligned BAM/CRAM files, or from precalled SNV/SV/mitochondrial VCF files to skip calling entirely and go straight to annotation and ranking. See [Samplesheet](docs/usage.md#samplesheet) for details.
 
 > [!NOTE]
 > Right now, we only support paired-end data from Illumina. If you've got other types of data and the pipeline doesn't work for you, just open an issue. We'd be happy to chat about a solution.
@@ -66,10 +68,12 @@ On release, automated continuous integration tests run the pipeline on a full-si
 - [Mosdepth](https://github.com/brentp/mosdepth)
 - [MultiQC](http://multiqc.info/)
 - [Picard's CollectMultipleMetrics, CollectHsMetrics, and CollectWgsMetrics](https://broadinstitute.github.io/picard/)
+- [Riker's multi](https://github.com/fulcrumgenomics/riker)
 - [Sambamba](https://github.com/biod/sambamba)
 - [Sentieon's WgsMetricsAlgo](https://support.sentieon.com/manual/usages/general/)
 - [TIDDIT's cov](https://github.com/J35P312/)
 - [VerifyBamID2](https://github.com/Griffan/VerifyBamID)
+- [GATK Contamination](https://gatk.broadinstitute.org/hc/en-us)
 
 **4. Sex check:**
 
@@ -128,16 +132,12 @@ On release, automated continuous integration tests run the pipeline on a full-si
 
 - [GENMOD](https://github.com/Clinical-Genomics/genmod)
 
-**13. Variant evaluation:**
-
-- [RTG Tools](https://github.com/RealTimeGenomics/rtg-tools)
-
 Note that it is possible to include/exclude certain tools or steps.
 
 ## Usage
 
 > [!NOTE]
-> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/get_started/environment_setup/overview) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/get_started/run-your-first-pipeline) with `-profile test` before running the workflow on actual data.
 
 First, prepare a samplesheet with your input data that looks as follows:
 
@@ -162,7 +162,7 @@ nextflow run nf-core/raredisease \
 ```
 
 > [!WARNING]
-> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
+> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/running/run-pipelines#using-parameter-files).
 
 For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/raredisease/usage) and the [parameter documentation](https://nf-co.re/raredisease/parameters).
 
@@ -175,7 +175,7 @@ For more details about the output files and reports, please refer to the
 
 nf-core/raredisease was written in a collaboration between the Clinical Genomics nodes in Sweden, with major contributions from [Ramprasad Neethiraj](https://github.com/ramprasadn), [Anders Jemt](https://github.com/jemten), [Lucia Pena Perez](https://github.com/Lucpen), and [Mei Wu](https://github.com/projectoriented) at Clinical Genomics Stockholm.
 
-Additional contributors were [Sima Rahimi](https://github.com/sima-r), [Gwenna Breton](https://github.com/Gwennid) and [Emma Västerviga](https://github.com/EmmaCAndersson) (Clinical Genomics Gothenburg); [Halfdan Rydbeck](https://github.com/hrydbeck) and [Lauri Mesilaakso](https://github.com/ljmesi) (Clinical Genomics Linköping); [Subazini Thankaswamy Kosalai](https://github.com/sysbiocoder) (Clinical Genomics Örebro); [Annick Renevey](https://github.com/rannick), [Peter Pruisscher](https://github.com/peterpru) and [Eva Caceres](https://github.com/fevac) (Clinical Genomics Stockholm); [Ryan Kennedy](https://github.com/ryanjameskennedy) (Clinical Genomics Lund); [Anders Sune Pedersen](https://github.com/asp8200) (Danish National Genome Center) and [Lucas Taniguti](https://github.com/lmtani).
+Additional contributors were [Sima Rahimi](https://github.com/sima-r), [Gwenna Breton](https://github.com/Gwennid) and [Emma Västerviga](https://github.com/EmmaCAndersson) (Clinical Genomics Gothenburg); [Halfdan Rydbeck](https://github.com/hrydbeck) and [Lauri Mesilaakso](https://github.com/ljmesi) (Clinical Genomics Linköping); [Subazini Thankaswamy Kosalai](https://github.com/sysbiocoder) (Clinical Genomics Örebro); [Annick Renevey](https://github.com/rannick), [Peter Keehnen](https://github.com/peterpru) and [Eva Caceres](https://github.com/fevac) (Clinical Genomics Stockholm); [Ryan Kennedy](https://github.com/ryanjameskennedy) (Clinical Genomics Lund); [Anders Sune Pedersen](https://github.com/asp8200) (Danish National Genome Center) and [Lucas Taniguti](https://github.com/lmtani).
 
 We thank the nf-core community for their extensive assistance in the development of this pipeline.
 

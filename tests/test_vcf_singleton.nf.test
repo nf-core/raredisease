@@ -1,0 +1,108 @@
+nextflow_pipeline {
+
+    name "Test pipeline - precalled VCF singleton input"
+    script "../main.nf"
+    tag "pipeline"
+    profile "test_vcf_singleton"
+
+    test("-profile test_vcf_singleton") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+
+            // stable_path: All files + folders in ${params.outdir}/ with a stable path (including file name)
+            def stable_path = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: [
+                'pipeline_info/*.{html,json,txt}',
+                'multiqc/multiqc_data/fastp*.txt',
+                'multiqc/multiqc_data/fastqc*.txt',
+                'multiqc/multiqc_plots/{svg,pdf,png}/*.{svg,pdf,png}'
+            ])
+
+            // stable_content: All files in ${params.outdir}/ with stable content
+            // (VCFs excluded here -- see vcf_records/sv_records below -- since their
+            // headers embed run-specific command lines/timestamps that vary even when
+            // the records don't)
+            def stable_content = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+
+            // vcf_records: every VCF's variant lines, header stripped, INFO sub-fields sorted, and
+            // CSQ's transcript consequences sorted -- see tests/default.nf.test for the full
+            // rationale. TIDDIT-derived SV files are excluded here -- see sv_records below.
+            def vcf_records = getAllFilesFromDir(params.outdir, include: ['**/*.vcf.gz', '**/*.vcf'], ignore: ['**/*sv*.vcf.gz'])
+                .sort { vcfFile -> vcfFile.name }
+                .collectEntries { vcfFile ->
+                    def lines = vcfFile.name.endsWith('.gz')
+                        ? new java.util.zip.GZIPInputStream(new FileInputStream(vcfFile)).withReader { reader -> reader.readLines() }
+                        : vcfFile.readLines()
+                    def records = lines
+                        .findAll { line -> !line.startsWith('#') }
+                        .collect { line ->
+                            def columns = line.split('\t', -1)
+                            if (columns.size() > 7) {
+                                columns[7] = columns[7]
+                                    .split(';')
+                                    .collect { infoEntry ->
+                                        infoEntry.startsWith('CSQ=') ? 'CSQ=' + infoEntry.substring(4).split(',').sort().join(',') : infoEntry
+                                    }
+                                    .sort()
+                                    .join(';')
+                            }
+                            columns.join('\t')
+                        }
+                        .sort()
+                    [(vcfFile.name): records]
+                }
+            // sv_records: TIDDIT-derived SV calls reduced to their essential fields -- see
+            // tests/default.nf.test for the full rationale.
+            def sv_records = getAllFilesFromDir(params.outdir, include: ['**/*sv*.vcf.gz'])
+                .sort { svVcfFile -> svVcfFile.name }
+                .collectEntries { svVcfFile ->
+                    def summaries = path(svVcfFile.toString()).vcf.variants.collect { variant ->
+                        def sampleGenotypes = variant.genotypes.collect { genotype -> "${genotype.sampleName}:${genotype.genotypeString}" }.sort().join(',')
+                        "${variant.contig}:${variant.start}-${variant.end}\t${variant.reference}>${variant.alternateAlleles}\tSVTYPE=${variant.getAttribute('SVTYPE')}\tSVLEN=${variant.getAttribute('SVLEN')}\tGT=[${sampleGenotypes}]"
+                    }.sort()
+                    [(svVcfFile.name): summaries]
+                }
+            def versions_yml = file("$outputDir/pipeline_info/nf_core_raredisease_software_mqc_versions.yml").text
+            assertAll(
+                // Calling must be skipped in favor of the precalled VCFs
+                { assert !versions_yml.contains("DEEPVARIANT") },
+                { assert !versions_yml.contains("GLNEXUS") },
+                { assert !versions_yml.contains("MANTA") },
+                { assert !versions_yml.contains("TIDDIT_SV") },
+                { assert !versions_yml.contains("CNVNATOR_CALL") },
+                { assert !versions_yml.contains("GATK4_MUTECT2_MT") },
+                { assert !versions_yml.contains("RETROSEQ") },
+                { assert !versions_yml.contains("EXPANSIONHUNTER") },
+                // GENS/germlinecnvcaller are already moot here without any --skip_tools override:
+                // GENS is gated on !skip_snv_calling, and germlinecnvcaller only affects SV-caller
+                // priority inside CALL_STRUCTURAL_VARIANTS, which is skipped entirely
+                { assert !versions_yml.contains("GERMLINECNVCALLER") },
+                // Annotation/ranking must still run off the substituted precalled data
+                { assert versions_yml.contains("ENSEMBLVEP_SNV") },
+                { assert versions_yml.contains("ENSEMBLVEP_SV") },
+                { assert versions_yml.contains("ENSEMBLVEP_MT") },
+                { assert versions_yml.contains("ENSEMBLVEP_ME") },
+                { assert versions_yml.contains("GENMOD_SCORE") },
+                { assert versions_yml.contains("STRANGER") },
+                { assert snapshot(
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_raredisease_software_mqc_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_path,
+                    // All files with stable contents
+                    stable_content,
+                    // All VCFs' variant records, header-independent
+                    vcf_records,
+                    // TIDDIT-derived SV calls, reduced to their essential fields
+                    sv_records
+                ).match() }
+            )
+        }
+    }
+}

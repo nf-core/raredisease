@@ -42,11 +42,10 @@ process PREP_MITOSALT {
     echo "bg2bw = bedGraphToBigWig"                               >> mitosalt_config.txt
     echo "hsindex = \$hisat2path"                                  >> mitosalt_config.txt
     echo "faindex = ${genomefai}"                                 >> mitosalt_config.txt
-    echo "lastindex = \$lastpath"                                  >> mitosalt_config.txt
+    echo "lastindex = \$lastpath"                                 >> mitosalt_config.txt
     echo "mtfaindex = ${mtfai}"                                   >> mitosalt_config.txt
     echo "gsize = ${chrsizes}"                                    >> mitosalt_config.txt
     echo "MT_fasta = ${mtfasta}"                                  >> mitosalt_config.txt
-    echo "threads = 1"                                            >> mitosalt_config.txt
     echo "refchr = ${mitochondria_name}"                          >> mitosalt_config.txt
     echo "msize = 16569"                                          >> mitosalt_config.txt
     echo "exclude = ${exclude}"                                   >> mitosalt_config.txt

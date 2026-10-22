@@ -11,7 +11,7 @@ lint:
     - .github/workflows/branch.yml
     - .github/workflows/linting.yml
   modules_config: false
-nf_core_version: 3.5.1
+nf_core_version: 4.1.0
 repository_type: pipeline
 template:
   author: Clinical Genomics Stockholm
@@ -21,4 +21,4 @@ template:
   name: raredisease
   org: nf-core
   outdir: .
-  version: 3.1.2
+  version: 4.0.0
