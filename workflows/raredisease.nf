@@ -889,10 +889,9 @@ workflow RAREDISEASE {
             ch_call_sv_vcf = MERGE_NUCLEAR_AND_MT_SVS.out.vcf
             ch_call_sv_tbi = TABIX_NUCLEAR_AND_MT_SVS.out.index
         } else {
-            // For mito-only analysis, use saltshaker_vcf with meta directly (ch_saltshaker_vcf
-            // holds collected paths only, CALL_SV_MT.out.saltshaker_vcf holds [meta, vcf] tuples)
-            TABIX_NUCLEAR_AND_MT_SVS (CALL_SV_MT.out.saltshaker_vcf)
-            ch_call_sv_vcf = CALL_SV_MT.out.saltshaker_vcf
+            // For mito-only analysis, use saltshaker_vcf with meta directly
+            TABIX_NUCLEAR_AND_MT_SVS (ch_saltshaker_vcf)
+            ch_call_sv_vcf = ch_saltshaker_vcf
             ch_call_sv_tbi = TABIX_NUCLEAR_AND_MT_SVS.out.index
         }
     } else if (skip_sv_calling) {
@@ -1069,8 +1068,8 @@ workflow RAREDISEASE {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
     if (!skip_somalier && val_somalier_sites_vcf) {
-        ch_vcfs_for_somalier = CALL_SNV.out.genome_vcf
-            .join(CALL_SNV.out.genome_tabix, failOnMismatch:true, failOnDuplicate:true)
+        ch_vcfs_for_somalier = ch_call_snv_genome_vcf
+            .join(ch_call_snv_genome_tabix, failOnMismatch:true, failOnDuplicate:true)
             .map { meta, vcf, tbi -> [ meta, vcf, tbi, [] ] }
 
         ch_somalier_sites = channel.value( [ [id:'sites'], file(val_somalier_sites_vcf) ] )
