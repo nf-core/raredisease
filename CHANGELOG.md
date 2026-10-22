@@ -204,6 +204,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | vcf2cytosure                 | 0.9.3       | 0.10.0      |
 | deepvariant                  | 1.9.0       | 1.10.0      |
 | multiqc                      | 1.33        | 1.35        |
+| hisat2                       | 2.2.1       | 2.2.3       |
+| bcftools                     | 1.23        | 1.24        |
+| fastdup                      |             | 1.0.0       |
+| riker                        |             | 0.4.0       |
+| somalier                     |             | 0.2.19      |
+| ucsc/bedtobigbed             |             | 482         |
 | svdb                         | 2.8.4       | 2.12.0      |
 
 ## 3.1.2 - Princess Peach (patch) [2026-07-06]
