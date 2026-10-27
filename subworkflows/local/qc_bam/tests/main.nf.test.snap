@@ -1,0 +1,478 @@
+{
+    "QC_BAM - test, bwamem2, stub": {
+        "content": [
+            [
+                [
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics"
+                ]
+            ],
+            [
+                [
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf"
+                ]
+            ],
+            [
+                "ACC13778A2_hsmetrics.CollectHsMetrics.coverage_metrics"
+            ],
+            [
+                "ACC13778A2_mosdepth.global.dist.txt"
+            ],
+            [
+                "ACC13778A2_mosdepth.summary.txt"
+            ],
+            [
+                "ACC13778A2_mosdepth.per-base.bed.gz"
+            ],
+            [
+                "ACC13778A2_mosdepth.per-base.bed.gz.csi"
+            ],
+            [
+                "ACC13778A2_mosdepth.per-base.d4"
+            ],
+            [
+                "ACC13778A2_wgsmetrics.CollectWgsMetrics.coverage_metrics"
+            ],
+            [
+                
+            ],
+            [
+                "ACC13778A2_tidditcov.wig"
+            ],
+            [
+                "ACC13778A2_tidditcov.bed"
+            ],
+            [
+                "ACC13778A2_tidditcov.bw"
+            ],
+            [
+                [
+                    "ACC13778A2_tidditcov.wig_chr1.png",
+                    "ACC13778A2_tidditcov.wig_chr10.png",
+                    "ACC13778A2_tidditcov.wig_chr11.png",
+                    "ACC13778A2_tidditcov.wig_chr12.png",
+                    "ACC13778A2_tidditcov.wig_chr13.png",
+                    "ACC13778A2_tidditcov.wig_chr14.png",
+                    "ACC13778A2_tidditcov.wig_chr15.png",
+                    "ACC13778A2_tidditcov.wig_chr16.png",
+                    "ACC13778A2_tidditcov.wig_chr17.png",
+                    "ACC13778A2_tidditcov.wig_chr18.png",
+                    "ACC13778A2_tidditcov.wig_chr19.png",
+                    "ACC13778A2_tidditcov.wig_chr2.png",
+                    "ACC13778A2_tidditcov.wig_chr20.png",
+                    "ACC13778A2_tidditcov.wig_chr21.png",
+                    "ACC13778A2_tidditcov.wig_chr22.png",
+                    "ACC13778A2_tidditcov.wig_chr3.png",
+                    "ACC13778A2_tidditcov.wig_chr4.png",
+                    "ACC13778A2_tidditcov.wig_chr5.png",
+                    "ACC13778A2_tidditcov.wig_chr6.png",
+                    "ACC13778A2_tidditcov.wig_chr7.png",
+                    "ACC13778A2_tidditcov.wig_chr8.png",
+                    "ACC13778A2_tidditcov.wig_chr9.png",
+                    "ACC13778A2_tidditcov.wig_chrM.png",
+                    "ACC13778A2_tidditcov.wig_chrX.png",
+                    "ACC13778A2_tidditcov.wig_chrY.png"
+                ]
+            ],
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ]
+        ],
+        "timestamp": "2026-08-24T21:42:42.262055499",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "QC_BAM - test, sentieon, stub": {
+        "content": [
+            [
+                [
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics"
+                ]
+            ],
+            [
+                [
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf"
+                ]
+            ],
+            [
+                "ACC13778A2_hsmetrics.CollectHsMetrics.coverage_metrics"
+            ],
+            [
+                "ACC13778A2_mosdepth.global.dist.txt"
+            ],
+            [
+                "ACC13778A2_mosdepth.summary.txt"
+            ],
+            [
+                "ACC13778A2_mosdepth.per-base.bed.gz"
+            ],
+            [
+                "ACC13778A2_mosdepth.per-base.bed.gz.csi"
+            ],
+            [
+                "ACC13778A2_mosdepth.per-base.d4"
+            ],
+            [
+                "ACC13778A2_wgsmetrics.txt"
+            ],
+            [
+                
+            ],
+            [
+                "ACC13778A2_tidditcov.wig"
+            ],
+            [
+                "ACC13778A2_tidditcov.bed"
+            ],
+            [
+                "ACC13778A2_tidditcov.bw"
+            ],
+            [
+                [
+                    "ACC13778A2_tidditcov.wig_chr1.png",
+                    "ACC13778A2_tidditcov.wig_chr10.png",
+                    "ACC13778A2_tidditcov.wig_chr11.png",
+                    "ACC13778A2_tidditcov.wig_chr12.png",
+                    "ACC13778A2_tidditcov.wig_chr13.png",
+                    "ACC13778A2_tidditcov.wig_chr14.png",
+                    "ACC13778A2_tidditcov.wig_chr15.png",
+                    "ACC13778A2_tidditcov.wig_chr16.png",
+                    "ACC13778A2_tidditcov.wig_chr17.png",
+                    "ACC13778A2_tidditcov.wig_chr18.png",
+                    "ACC13778A2_tidditcov.wig_chr19.png",
+                    "ACC13778A2_tidditcov.wig_chr2.png",
+                    "ACC13778A2_tidditcov.wig_chr20.png",
+                    "ACC13778A2_tidditcov.wig_chr21.png",
+                    "ACC13778A2_tidditcov.wig_chr22.png",
+                    "ACC13778A2_tidditcov.wig_chr3.png",
+                    "ACC13778A2_tidditcov.wig_chr4.png",
+                    "ACC13778A2_tidditcov.wig_chr5.png",
+                    "ACC13778A2_tidditcov.wig_chr6.png",
+                    "ACC13778A2_tidditcov.wig_chr7.png",
+                    "ACC13778A2_tidditcov.wig_chr8.png",
+                    "ACC13778A2_tidditcov.wig_chr9.png",
+                    "ACC13778A2_tidditcov.wig_chrM.png",
+                    "ACC13778A2_tidditcov.wig_chrX.png",
+                    "ACC13778A2_tidditcov.wig_chrY.png"
+                ]
+            ],
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ]
+        ],
+        "timestamp": "2026-08-24T21:46:42.382426096",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "QC_BAM - test, riker": {
+        "content": [
+            [
+                "ACC13778A2_riker.alignment-metrics.txt"
+            ],
+            [
+                "ACC13778A2_riker.wgs-metrics.txt"
+            ],
+            [
+                "ACC13778A2_riker_y.wgs-metrics.txt"
+            ],
+            [
+                "ACC13778A2_riker.isize-metrics.txt"
+            ],
+            [
+                "ACC13778A2_riker.hybcap-metrics.txt"
+            ],
+            [
+                "ACC13778A2_mosdepth.mosdepth.global.dist.txt"
+            ]
+        ],
+        "timestamp": "2026-08-24T21:40:57.995384426",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "QC_BAM - test, riker, sentieon, stub": {
+        "content": [
+            [
+                "ACC13778A2_riker.alignment-metrics.txt"
+            ],
+            [
+                "ACC13778A2_riker.wgs-metrics.txt"
+            ],
+            [
+                
+            ],
+            [
+                "ACC13778A2_riker.isize-metrics.txt"
+            ],
+            [
+                "ACC13778A2_riker.hybcap-metrics.txt"
+            ],
+            [
+                "ACC13778A2_wgsmetrics.txt"
+            ],
+            [
+                "ACC13778A2_mosdepth.global.dist.txt"
+            ]
+        ],
+        "timestamp": "2026-08-24T21:47:02.336871492",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "QC_BAM - test, bwamem2": {
+        "content": [
+            [
+                [
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics"
+                ]
+            ],
+            [
+                [
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf"
+                ]
+            ],
+            [
+                "ACC13778A2_hsmetrics.CollectHsMetrics.coverage_metrics"
+            ],
+            [
+                "ACC13778A2_mosdepth.mosdepth.global.dist.txt"
+            ],
+            [
+                "ACC13778A2_mosdepth.mosdepth.summary.txt"
+            ],
+            [
+                "ACC13778A2_mosdepth.per-base.bed.gz"
+            ],
+            [
+                "ACC13778A2_mosdepth.per-base.bed.gz.csi"
+            ],
+            [
+                
+            ],
+            [
+                "ACC13778A2_wgsmetrics.CollectWgsMetrics.coverage_metrics"
+            ],
+            [
+                
+            ],
+            [
+                "ACC13778A2_tidditcov.wig"
+            ],
+            [
+                
+            ],
+            [
+                "ACC13778A2_tidditcov.bw"
+            ],
+            [
+                [
+                    "ACC13778A2_tidditcov_chr1.png",
+                    "ACC13778A2_tidditcov_chr10.png",
+                    "ACC13778A2_tidditcov_chr11.png",
+                    "ACC13778A2_tidditcov_chr12.png",
+                    "ACC13778A2_tidditcov_chr13.png",
+                    "ACC13778A2_tidditcov_chr14.png",
+                    "ACC13778A2_tidditcov_chr15.png",
+                    "ACC13778A2_tidditcov_chr16.png",
+                    "ACC13778A2_tidditcov_chr17.png",
+                    "ACC13778A2_tidditcov_chr18.png",
+                    "ACC13778A2_tidditcov_chr19.png",
+                    "ACC13778A2_tidditcov_chr2.png",
+                    "ACC13778A2_tidditcov_chr20.png",
+                    "ACC13778A2_tidditcov_chr21.png",
+                    "ACC13778A2_tidditcov_chr22.png",
+                    "ACC13778A2_tidditcov_chr3.png",
+                    "ACC13778A2_tidditcov_chr4.png",
+                    "ACC13778A2_tidditcov_chr5.png",
+                    "ACC13778A2_tidditcov_chr6.png",
+                    "ACC13778A2_tidditcov_chr7.png",
+                    "ACC13778A2_tidditcov_chr8.png",
+                    "ACC13778A2_tidditcov_chr9.png",
+                    "ACC13778A2_tidditcov_chrM.png",
+                    "ACC13778A2_tidditcov_chrX.png",
+                    "ACC13778A2_tidditcov_chrY.png"
+                ]
+            ],
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ]
+        ],
+        "timestamp": "2026-08-24T21:40:32.448851556",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "QC_BAM - test, riker, stub": {
+        "content": [
+            [
+                "ACC13778A2_riker.alignment-metrics.txt"
+            ],
+            [
+                "ACC13778A2_riker.wgs-metrics.txt"
+            ],
+            [
+                "ACC13778A2_riker_y.wgs-metrics.txt"
+            ],
+            [
+                "ACC13778A2_riker.isize-metrics.txt"
+            ],
+            [
+                "ACC13778A2_riker.hybcap-metrics.txt"
+            ],
+            [
+                "ACC13778A2_mosdepth.global.dist.txt"
+            ]
+        ],
+        "timestamp": "2026-08-24T21:40:15.579202012",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "QC_BAM - test, sentieon": {
+        "content": [
+            [
+                [
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.alignment_summary_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle_metrics",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution_metrics"
+                ]
+            ],
+            [
+                [
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.base_distribution_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.insert_size_histogram.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_by_cycle.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.quality_distribution.pdf",
+                    "ACC13778A2_multiplemetrics.CollectMultipleMetrics.read_length_histogram.pdf"
+                ]
+            ],
+            [
+                "ACC13778A2_hsmetrics.CollectHsMetrics.coverage_metrics"
+            ],
+            [
+                "ACC13778A2_mosdepth.mosdepth.global.dist.txt"
+            ],
+            [
+                "ACC13778A2_mosdepth.mosdepth.summary.txt"
+            ],
+            [
+                "ACC13778A2_mosdepth.per-base.bed.gz"
+            ],
+            [
+                "ACC13778A2_mosdepth.per-base.bed.gz.csi"
+            ],
+            [
+                
+            ],
+            [
+                "ACC13778A2_wgsmetrics.txt"
+            ],
+            [
+                
+            ],
+            [
+                "ACC13778A2_tidditcov.wig"
+            ],
+            [
+                
+            ],
+            [
+                "ACC13778A2_tidditcov.bw"
+            ],
+            [
+                [
+                    "ACC13778A2_tidditcov_chr1.png",
+                    "ACC13778A2_tidditcov_chr10.png",
+                    "ACC13778A2_tidditcov_chr11.png",
+                    "ACC13778A2_tidditcov_chr12.png",
+                    "ACC13778A2_tidditcov_chr13.png",
+                    "ACC13778A2_tidditcov_chr14.png",
+                    "ACC13778A2_tidditcov_chr15.png",
+                    "ACC13778A2_tidditcov_chr16.png",
+                    "ACC13778A2_tidditcov_chr17.png",
+                    "ACC13778A2_tidditcov_chr18.png",
+                    "ACC13778A2_tidditcov_chr19.png",
+                    "ACC13778A2_tidditcov_chr2.png",
+                    "ACC13778A2_tidditcov_chr20.png",
+                    "ACC13778A2_tidditcov_chr21.png",
+                    "ACC13778A2_tidditcov_chr22.png",
+                    "ACC13778A2_tidditcov_chr3.png",
+                    "ACC13778A2_tidditcov_chr4.png",
+                    "ACC13778A2_tidditcov_chr5.png",
+                    "ACC13778A2_tidditcov_chr6.png",
+                    "ACC13778A2_tidditcov_chr7.png",
+                    "ACC13778A2_tidditcov_chr8.png",
+                    "ACC13778A2_tidditcov_chr9.png",
+                    "ACC13778A2_tidditcov_chrM.png",
+                    "ACC13778A2_tidditcov_chrX.png",
+                    "ACC13778A2_tidditcov_chrY.png"
+                ]
+            ],
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ]
+        ],
+        "timestamp": "2026-08-25T15:26:45.911276815",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    }
+}

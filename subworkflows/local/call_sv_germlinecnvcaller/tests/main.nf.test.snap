@@ -1,0 +1,87 @@
+{
+    "CALL_SV_GERMLINECNVCALLER - minimal dataset": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "ACC13778A1",
+                        "sample": "ACC13778A1",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "lane": 1,
+                        "sex": 1,
+                        "phenotype": 2,
+                        "paternal": "ACC13778A3",
+                        "maternal": "ACC13778A2",
+                        "case_id": "amusingmarmoset"
+                    },
+                    "ACC13778A1_genotyped_segments.vcf.gz",
+                    "9c50d798c4464575fae3ff0a299c6023"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "amusingmarmoset"
+                    },
+                    "amusingmarmoset_gcnvcaller.vcf.gz",
+                    "54962bdd40464adbcb77f083185f166f"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "ACC13778A1",
+                        "sample": "ACC13778A1",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "lane": 1,
+                        "sex": 1,
+                        "phenotype": 2,
+                        "paternal": "ACC13778A3",
+                        "maternal": "ACC13778A2",
+                        "case_id": "amusingmarmoset"
+                    },
+                    "ACC13778A1_genotyped_intervals.vcf.gz"
+                ]
+            ],
+            [
+                [
+                    {
+                        "id": "ACC13778A1",
+                        "sample": "ACC13778A1",
+                        "single_end": false,
+                        "num_lanes": 1,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "lane": 1,
+                        "sex": 1,
+                        "phenotype": 2,
+                        "paternal": "ACC13778A3",
+                        "maternal": "ACC13778A2",
+                        "case_id": "amusingmarmoset"
+                    },
+                    "ACC13778A1_denoised.vcf.gz"
+                ]
+            ]
+        ],
+        "timestamp": "2026-09-08T16:22:32.234263351",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "CALL_SV_GERMLINECNVCALLER - stub": {
+        "content": [
+            [
+                "amusingmarmoset_gcnvcaller.vcf.gz"
+            ]
+        ],
+        "timestamp": "2026-08-27T23:32:55.601934529",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}
