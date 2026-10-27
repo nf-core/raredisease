@@ -1,0 +1,62 @@
+{
+    "test-gatk4-mergebamalignment-stubs": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        "GATK4_MERGEBAMALIGNMENT",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ],
+                "bam": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions_gatk4": [
+                    [
+                        "GATK4_MERGEBAMALIGNMENT",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-05T16:39:42.649628142"
+    },
+    "test-gatk4-mergebamalignment": {
+        "content": [
+            "30c325e1e032eb1782a280d34c0fb1c7",
+            {
+                "versions_gatk4": [
+                    [
+                        "GATK4_MERGEBAMALIGNMENT",
+                        "gatk4",
+                        "4.6.2.0"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-05T16:39:36.797699941"
+    }
+}

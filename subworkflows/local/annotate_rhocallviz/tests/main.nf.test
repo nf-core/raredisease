@@ -1,0 +1,101 @@
+nextflow_workflow {
+
+    name "Test Workflow ANNOTATE_RHOCALLVIZ"
+    script "subworkflows/local/annotate_rhocallviz/main.nf"
+    workflow "ANNOTATE_RHOCALLVIZ"
+
+    tag "subworkflows"
+    tag "annotate_rhocallviz"
+
+    tag "bcftools/view"
+    tag "bcftools/roh"
+    tag "rhocall/viz"
+    tag "ucsc/wigtobigwig"
+    tag "chromograph"
+
+    config "./nextflow.config"
+
+    test("ANNOTATE_RHOCALLVIZ - minimal dataset") {
+
+        when {
+            params {
+                bcftools_view_rhocall      = "--output-type z --write-index=tbi --min-ac 1 --samples ACC13778A1"
+                bcftools_roh               = "--AF-tag GNOMADAF --skip-indels"
+                bcftools_view_uncompressed = "--output-type v"
+                rhocall_viz                = "--aftag GNOMADAF --wig"
+                chromograph_autozyg        = "--euploid"
+                ucsc_wigtobigwig           = "-clip"
+            }
+            workflow {
+                """
+                input[0] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[1] = channel.of(${TestData.sample('ACC13778A1')})
+                input[2] = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz', checkIfExists: true),
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz.tbi', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.rhocall_viz_bed
+                        .collect { meta, bedfile -> [file(bedfile)] },
+                    workflow.out.rhocall_viz_wig
+                        .collect { meta, wigfile -> [file(wigfile)] },
+                    workflow.out.ucsc_wigtobigwig_bw
+                        .collect { meta, bwfile -> [file(bwfile)] },
+                    workflow.out.chromograph_autozyg_plots
+                        .collect { meta, plots -> [plots.collect { png -> file(png) }.sort()] }
+                ).match() }
+            )
+        }
+    }
+
+    test("ANNOTATE_RHOCALLVIZ - stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                bcftools_view_rhocall      = "--output-type z --write-index=tbi --min-ac 1 --samples ACC13778A1"
+                bcftools_roh               = "--AF-tag GNOMADAF --skip-indels"
+                bcftools_view_uncompressed = "--output-type v"
+                rhocall_viz                = "--aftag GNOMADAF --wig"
+                chromograph_autozyg        = "--euploid"
+                ucsc_wigtobigwig           = "-clip"
+            }
+            workflow {
+                """
+                input[0] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[1] = channel.of(${TestData.sample('ACC13778A1')})
+                input[2] = channel.of([
+                    [id:'amusingmarmoset'],
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz', checkIfExists: true),
+                    file(params.precalled + '/trio/amusingmarmoset_precalled_snv.vcf.gz.tbi', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.rhocall_viz_bed
+                        .collect { meta, bedfile -> [file(bedfile)] },
+                    workflow.out.rhocall_viz_wig
+                        .collect { meta, wigfile -> [file(wigfile)] },
+                    workflow.out.ucsc_wigtobigwig_bw
+                        .collect { meta, bwfile -> [file(bwfile)] },
+                    workflow.out.chromograph_autozyg_plots
+                        .collect { meta, plots -> [plots.collect { png -> file(png) }.sort()] }
+                ).match() }
+            )
+        }
+    }
+}

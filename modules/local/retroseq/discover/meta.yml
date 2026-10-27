@@ -1,0 +1,54 @@
+name: "retroseq_discover"
+description: RetroSeq is a tool for discovery and genotyping of transposable element variants (TEVs) from next-gen sequencing reads aligned to a reference genome in BAM format.
+keywords:
+  - retroseq
+  - transposable elements
+  - genomics
+tools:
+  - "retroseq":
+      description: "RetroSeq: discovery and genotyping of TEVs from reads in BAM format."
+      homepage: "https://github.com/tk2/RetroSeq"
+      documentation: "https://github.com/tk2/RetroSeq"
+      tool_dev_url: "https://github.com/tk2/RetroSeq"
+      doi: "10.1093/bioinformatics/bts697"
+      licence: "['GPL']"
+
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'test', single_end:false ]`
+  - bam:
+      type: file
+      description: Sorted BAM file
+      pattern: "*.bam"
+  - bai:
+      type: file
+      description: Index of the sorted BAM file
+      pattern: "*.bai"
+  - me_references:
+      type: file
+      description: Paths to bed files containing transposable element coordinates in the genome.
+      pattern: "*.bed"
+  - me_types:
+      type: list
+      description: List of transposable element types to discover. Needs to be in sync with me_references.
+
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'test', single_end:false ]`
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+  - tab:
+      type: file
+      description: Output file containing lists of read pair names per TE type
+      pattern: "*.tab"
+
+authors:
+  - "@peterpru"

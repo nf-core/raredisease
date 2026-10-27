@@ -1,0 +1,90 @@
+nextflow_workflow {
+
+    name "Test Workflow CALL_MOBILE_ELEMENTS"
+    script "subworkflows/local/call_mobile_elements/main.nf"
+    workflow "CALL_MOBILE_ELEMENTS"
+
+    tag "subworkflows"
+    tag "call_mobile_elements"
+
+    tag "bcftools/reheader"
+    tag "bcftools/concat"
+    tag "bcftools/sort"
+    tag "retroseq/discover"
+    tag "retroseq/call"
+    tag "samtools/view"
+    tag "tabix/tabix"
+    tag "svdb/merge"
+
+    config "./nextflow.config"
+
+    test("CALL_MOBILE_ELEMENTS - wgs, minimal dataset") {
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([id:'amusingmarmoset'])
+                input[1] = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[2] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[4] = channel
+                    .fromPath(params.resources_remapped + '/mobile_elements/mobile_element_references_remapped.tsv', checkIfExists: true)
+                    .splitText()
+                    .map { line -> line.trim() }
+                    .map { line -> line.split('\\t') as List }
+                    .filter { cols -> !(cols[0].equalsIgnoreCase('type') && cols[1].equalsIgnoreCase('path')) }
+                    .map { cols -> [cols[0], file(cols[1], checkIfExists: true)] }
+                """
+            }
+        }
+
+        then {
+             assertAll(
+                { assert workflow.success },
+                { assert workflow.out.tbi },
+                { assert snapshot(
+                    "${file(workflow.out.vcf[0][1]).name}",
+                    path(workflow.out.vcf[0][1]).vcf.summary
+                ).match() }
+             )
+        }
+    }
+
+    test("CALL_MOBILE_ELEMENTS - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([id:'amusingmarmoset'])
+                input[1] = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[2] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[4] = channel
+                    .fromPath(params.resources_remapped + '/mobile_elements/mobile_element_references_remapped.tsv', checkIfExists: true)
+                    .splitText()
+                    .map { line -> line.trim() }
+                    .map { line -> line.split('\\t') as List }
+                    .filter { cols -> !(cols[0].equalsIgnoreCase('type') && cols[1].equalsIgnoreCase('path')) }
+                    .map { cols -> [cols[0], file(cols[1], checkIfExists: true)] }
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}

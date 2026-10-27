@@ -1,0 +1,42 @@
+{
+    "ANNOTATE_MOBILE_ELEMENTS - wgs, minimal dataset": {
+        "content": [
+            "amusingmarmoset_filter.vcf.gz",
+            "VcfFile [chromosomes=[chr12, chr20], sampleCount=1, variantCount=3, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-08-24T16:47:20.772701395",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "ANNOTATE_MOBILE_ELEMENTS - wgs, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "amusingmarmoset",
+                            "single_end": false
+                        },
+                        "amusingmarmoset_filter.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "vcf_ann": [
+                    [
+                        {
+                            "id": "amusingmarmoset",
+                            "single_end": false
+                        },
+                        "amusingmarmoset_filter.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-24T16:47:44.031176068",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

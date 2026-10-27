@@ -1,0 +1,1 @@
+##INFO=<ID=CADD,Number=1,Type=Float,Description="PHRED-like scaled CADD score.">

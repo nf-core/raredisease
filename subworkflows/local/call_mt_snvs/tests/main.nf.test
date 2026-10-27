@@ -1,0 +1,96 @@
+nextflow_workflow {
+
+    name "Test Workflow CALL_MT_SNVS"
+    script "subworkflows/local/call_mt_snvs/main.nf"
+    workflow "CALL_MT_SNVS"
+
+    tag "subworkflows"
+    tag "call_mt_snvs"
+    tag "call_snv_MT"
+    tag "postprocess_MT_calls"
+
+    test("CALL_MT_SNVS - wgs, minimal dataset") {
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([id:'amusingmarmoset'])
+                input[1] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[2] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3] = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam', checkIfExists: true),
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam.bai', checkIfExists: true)
+                ])
+                input[4] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.dict', checkIfExists: true)]).collect()
+                input[5] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
+                input[6] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
+                input[7] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_mt.intervals', checkIfExists: true)).collect()
+                input[8] = channel.of([[id:'genome'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.back_chain', checkIfExists: true)]).collect()
+                input[9] = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mtshift_aligned.bam', checkIfExists: true),
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mtshift_aligned.bam.bai', checkIfExists: true)
+                ])
+                input[10] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.dict', checkIfExists: true)]).collect()
+                input[11] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.fasta.fai', checkIfExists: true)]).collect()
+                input[12] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.fasta', checkIfExists: true)]).collect()
+                input[13] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_mtshift.intervals', checkIfExists: true)).collect()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.vcf.collect { meta, vcf -> file(vcf).name },
+                    workflow.out.tbi.collect { meta, tbi -> file(tbi).name }
+                ).match() }
+            )
+        }
+    }
+
+    test("CALL_MT_SNVS - wgs, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([id:'amusingmarmoset'])
+                input[1] = channel.of(file('https://raw.githubusercontent.com/nf-core/raredisease/refs/heads/master/assets/foundin.hdr', checkIfExists: true)).collect()
+                input[2] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3] = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam', checkIfExists: true),
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam.bai', checkIfExists: true)
+                ])
+                input[4] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.dict', checkIfExists: true)]).collect()
+                input[5] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta.fai', checkIfExists: true)]).collect()
+                input[6] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mt.fasta', checkIfExists: true)]).collect()
+                input[7] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_mt.intervals', checkIfExists: true)).collect()
+                input[8] = channel.of([[id:'genome'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.back_chain', checkIfExists: true)]).collect()
+                input[9] = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mtshift_aligned.bam', checkIfExists: true),
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mtshift_aligned.bam.bai', checkIfExists: true)
+                ])
+                input[10] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.dict', checkIfExists: true)]).collect()
+                input[11] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.fasta.fai', checkIfExists: true)]).collect()
+                input[12] = channel.of([[id:'mt'], file(params.subworkflow_fixtures + '/minimal_reference_mtshift.fasta', checkIfExists: true)]).collect()
+                input[13] = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_mtshift.intervals', checkIfExists: true)).collect()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out
+                ).match() }
+            )
+        }
+    }
+}

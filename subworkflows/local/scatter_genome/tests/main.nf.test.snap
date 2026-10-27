@@ -1,0 +1,112 @@
+{
+    "Should run without failures, minimal dataset": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        [
+                            "0000-scattered.interval_list:md5,a7f45bb804bc8d7bdbe64e5e94382ad6",
+                            "0001-scattered.interval_list:md5,caea03e01567983b7d1711b5263f045b",
+                            "0002-scattered.interval_list:md5,613c346e74a338f7f37bb50a78afcb3b",
+                            "0003-scattered.interval_list:md5,408d483d660d0650db8c44fa176e41e2",
+                            "0004-scattered.interval_list:md5,b29e881332fddfdc1564987c99f04871",
+                            "0005-scattered.interval_list:md5,a9ad0b710243ed718dc863391f15491c",
+                            "0006-scattered.interval_list:md5,d5f50c294d3d309f57daae8f641d80a2",
+                            "0007-scattered.interval_list:md5,6db663adc9ca8b903414ebd74d6e5679"
+                        ]
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome.bed:md5,56bc485b563a0d4fe399257236973533"
+                    ]
+                ],
+                "gatk4_splitintervals_split_intervals": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        [
+                            "0000-scattered.interval_list:md5,a7f45bb804bc8d7bdbe64e5e94382ad6",
+                            "0001-scattered.interval_list:md5,caea03e01567983b7d1711b5263f045b",
+                            "0002-scattered.interval_list:md5,613c346e74a338f7f37bb50a78afcb3b",
+                            "0003-scattered.interval_list:md5,408d483d660d0650db8c44fa176e41e2",
+                            "0004-scattered.interval_list:md5,b29e881332fddfdc1564987c99f04871",
+                            "0005-scattered.interval_list:md5,a9ad0b710243ed718dc863391f15491c",
+                            "0006-scattered.interval_list:md5,d5f50c294d3d309f57daae8f641d80a2",
+                            "0007-scattered.interval_list:md5,6db663adc9ca8b903414ebd74d6e5679"
+                        ]
+                    ]
+                ],
+                "genome_fai_to_bed_output": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome.bed:md5,56bc485b563a0d4fe399257236973533"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-24T20:27:58.497813383",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "Should run without failures, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        [
+                            "0000-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "0001-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "gatk4_splitintervals_split_intervals": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        [
+                            "0000-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "0001-scattered.interval_list:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "genome_fai_to_bed_output": [
+                    [
+                        {
+                            "id": "genome"
+                        },
+                        "genome.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-05-25T23:14:53.489816823",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "25.10.4"
+        }
+    }
+}

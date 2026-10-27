@@ -1,0 +1,73 @@
+nextflow_workflow {
+
+    name "Test Workflow CALL_SNV_MT"
+    script "subworkflows/local/call_snv_MT/main.nf"
+    workflow "CALL_SNV_MT"
+
+    tag "subworkflows"
+    tag "call_snv_MT"
+
+    tag "gatk4/mutect2"
+    tag "gatk4/filtermutectcalls"
+
+    config "./nextflow.config"
+
+    test("CALL_SNV_MT") {
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/ACC13778A2_mt_aligned.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/ACC13778A2_mt_aligned.bam.bai', checkIfExists: true)
+                ])
+                input[1] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mt.dict', checkIfExists: true)).collect()
+                input[2] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mt.fasta.fai', checkIfExists: true)).collect()
+                input[3] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mt.fasta', checkIfExists: true)).collect()
+                input[4] = channel.of(file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mt.intervals', checkIfExists: true)).collect()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.vcf.collect { meta, vcf -> file(vcf).name },
+                    workflow.out.tbi.collect { meta, tbi -> file(tbi).name }
+                ).match() }
+            )
+        }
+    }
+    test("CALL_SNV_MT, stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([
+                    [id:'ACC13778A2', sample:'ACC13778A2', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:ACC13778A2\\\\tPL:illumina\\\\tSM:ACC13778A2'", lane:1, sex:2, phenotype:1, paternal:0, maternal:0, case_id:'amusingmarmoset'],
+                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/ACC13778A2_mt_aligned.bam', checkIfExists: true),
+                    file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/ACC13778A2_mt_aligned.bam.bai', checkIfExists: true)
+                ])
+                input[1] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mt.dict', checkIfExists: true)).collect()
+                input[2] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mt.fasta.fai', checkIfExists: true)).collect()
+                input[3] = channel.of([id:'mt'], file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mt.fasta', checkIfExists: true)).collect()
+                input[4] = channel.of(file(params.pipelines_testdata_base_path + 'subworkflow_fixtures/minimal_reference_mt.intervals', checkIfExists: true)).collect()
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.out.vcf.collect { meta, vcf -> file(vcf).name },
+                    workflow.out.tbi.collect { meta, tbi -> file(tbi).name }
+                ).match() }
+            )
+        }
+    }
+}
