@@ -2,9 +2,7 @@
     "cram_to_bam_index": {
         "content": [
             {
-                "bai": [
-                    
-                ],
+                "bai": [],
                 "bam": [
                     [
                         {
@@ -13,12 +11,8 @@
                         "test.bam"
                     ]
                 ],
-                "crai": [
-                    
-                ],
-                "cram": [
-                    
-                ],
+                "crai": [],
+                "cram": [],
                 "csi": [
                     [
                         {
@@ -27,15 +21,9 @@
                         "test.bam.csi"
                     ]
                 ],
-                "sam": [
-                    
-                ],
-                "unselected": [
-                    
-                ],
-                "unselected_index": [
-                    
-                ],
+                "sam": [],
+                "unselected": [],
+                "unselected_index": [],
                 "versions_samtools": [
                     [
                         "SAMTOOLS_VIEW",
@@ -46,8 +34,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-03T16:49:14.82588493"
     },
@@ -62,15 +50,9 @@
                         "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "1": [
-                    
-                ],
-                "2": [
-                    
-                ],
-                "3": [
-                    
-                ],
+                "1": [],
+                "2": [],
+                "3": [],
                 "4": [
                     [
                         {
@@ -79,15 +61,9 @@
                         "test.bam.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "5": [
-                    
-                ],
-                "6": [
-                    
-                ],
-                "7": [
-                    
-                ],
+                "5": [],
+                "6": [],
+                "7": [],
                 "8": [
                     [
                         "SAMTOOLS_VIEW",
@@ -95,9 +71,7 @@
                         "1.22.1"
                     ]
                 ],
-                "bai": [
-                    
-                ],
+                "bai": [],
                 "bam": [
                     [
                         {
@@ -106,12 +80,8 @@
                         "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "crai": [
-                    
-                ],
-                "cram": [
-                    
-                ],
+                "crai": [],
+                "cram": [],
                 "csi": [
                     [
                         {
@@ -120,15 +90,9 @@
                         "test.bam.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "sam": [
-                    
-                ],
-                "unselected": [
-                    
-                ],
-                "unselected_index": [
-                    
-                ],
+                "sam": [],
+                "unselected": [],
+                "unselected_index": [],
                 "versions_samtools": [
                     [
                         "SAMTOOLS_VIEW",
@@ -139,17 +103,15 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-03T16:49:31.409368544"
     },
     "bam_csi_index": {
         "content": [
             {
-                "bai": [
-                    
-                ],
+                "bai": [],
                 "bam": [
                     [
                         {
@@ -158,12 +120,8 @@
                         "test.bam"
                     ]
                 ],
-                "crai": [
-                    
-                ],
-                "cram": [
-                    
-                ],
+                "crai": [],
+                "cram": [],
                 "csi": [
                     [
                         {
@@ -172,15 +130,9 @@
                         "test.bam.csi"
                     ]
                 ],
-                "sam": [
-                    
-                ],
-                "unselected": [
-                    
-                ],
-                "unselected_index": [
-                    
-                ],
+                "sam": [],
+                "unselected": [],
+                "unselected_index": [],
                 "versions_samtools": [
                     [
                         "SAMTOOLS_VIEW",
@@ -191,17 +143,15 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-03T16:48:46.36824035"
     },
     "cram_to_bam_index_qname": {
         "content": [
             {
-                "bai": [
-                    
-                ],
+                "bai": [],
                 "bam": [
                     [
                         {
@@ -210,12 +160,8 @@
                         "test.bam"
                     ]
                 ],
-                "crai": [
-                    
-                ],
-                "cram": [
-                    
-                ],
+                "crai": [],
+                "cram": [],
                 "csi": [
                     [
                         {
@@ -224,9 +170,7 @@
                         "test.bam.csi:md5,15d725bced7ececd45b4312b2af99a6b"
                     ]
                 ],
-                "sam": [
-                    
-                ],
+                "sam": [],
                 "unselected": [
                     [
                         {
@@ -253,8 +197,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-03T16:49:20.747636525"
     },
@@ -277,18 +221,10 @@
                         "test.bam"
                     ]
                 ],
-                "crai": [
-                    
-                ],
-                "cram": [
-                    
-                ],
-                "csi": [
-                    
-                ],
-                "sam": [
-                    
-                ],
+                "crai": [],
+                "cram": [],
+                "csi": [],
+                "sam": [],
                 "unselected": [
                     [
                         {
@@ -315,17 +251,15 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-03T16:48:57.713608154"
     },
     "cram_crai_index_unselected - stub": {
         "content": [
             {
-                "0": [
-                    
-                ],
+                "0": [],
                 "1": [
                     [
                         {
@@ -334,15 +268,9 @@
                         "test.cram:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "2": [
-                    
-                ],
-                "3": [
-                    
-                ],
-                "4": [
-                    
-                ],
+                "2": [],
+                "3": [],
+                "4": [],
                 "5": [
                     [
                         {
@@ -374,12 +302,8 @@
                         "1.22.1"
                     ]
                 ],
-                "bai": [
-                    
-                ],
-                "bam": [
-                    
-                ],
+                "bai": [],
+                "bam": [],
                 "crai": [
                     [
                         {
@@ -396,12 +320,8 @@
                         "test.cram:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "csi": [
-                    
-                ],
-                "sam": [
-                    
-                ],
+                "csi": [],
+                "sam": [],
                 "unselected": [
                     [
                         {
@@ -428,17 +348,15 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-03T16:49:48.092654899"
     },
     "bam": {
         "content": [
             {
-                "bai": [
-                    
-                ],
+                "bai": [],
                 "bam": [
                     [
                         {
@@ -447,24 +365,12 @@
                         "test.bam"
                     ]
                 ],
-                "crai": [
-                    
-                ],
-                "cram": [
-                    
-                ],
-                "csi": [
-                    
-                ],
-                "sam": [
-                    
-                ],
-                "unselected": [
-                    
-                ],
-                "unselected_index": [
-                    
-                ],
+                "crai": [],
+                "cram": [],
+                "csi": [],
+                "sam": [],
+                "unselected": [],
+                "unselected_index": [],
                 "versions_samtools": [
                     [
                         "SAMTOOLS_VIEW",
@@ -475,8 +381,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-03T16:48:27.608944526"
     },
@@ -499,24 +405,12 @@
                         "test.bam"
                     ]
                 ],
-                "crai": [
-                    
-                ],
-                "cram": [
-                    
-                ],
-                "csi": [
-                    
-                ],
-                "sam": [
-                    
-                ],
-                "unselected": [
-                    
-                ],
-                "unselected_index": [
-                    
-                ],
+                "crai": [],
+                "cram": [],
+                "csi": [],
+                "sam": [],
+                "unselected": [],
+                "unselected_index": [],
                 "versions_samtools": [
                     [
                         "SAMTOOLS_VIEW",
@@ -527,17 +421,15 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-03T16:48:52.047178732"
     },
     "cram_to_bam": {
         "content": [
             {
-                "bai": [
-                    
-                ],
+                "bai": [],
                 "bam": [
                     [
                         {
@@ -546,24 +438,12 @@
                         "test.bam"
                     ]
                 ],
-                "crai": [
-                    
-                ],
-                "cram": [
-                    
-                ],
-                "csi": [
-                    
-                ],
-                "sam": [
-                    
-                ],
-                "unselected": [
-                    
-                ],
-                "unselected_index": [
-                    
-                ],
+                "crai": [],
+                "cram": [],
+                "csi": [],
+                "sam": [],
+                "unselected": [],
+                "unselected_index": [],
                 "versions_samtools": [
                     [
                         "SAMTOOLS_VIEW",
@@ -574,8 +454,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-03T16:50:41.727031999"
     },
@@ -590,12 +470,8 @@
                         "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "1": [
-                    
-                ],
-                "2": [
-                    
-                ],
+                "1": [],
+                "2": [],
                 "3": [
                     [
                         {
@@ -604,18 +480,10 @@
                         "test.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "4": [
-                    
-                ],
-                "5": [
-                    
-                ],
-                "6": [
-                    
-                ],
-                "7": [
-                    
-                ],
+                "4": [],
+                "5": [],
+                "6": [],
+                "7": [],
                 "8": [
                     [
                         "SAMTOOLS_VIEW",
@@ -639,24 +507,12 @@
                         "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "crai": [
-                    
-                ],
-                "cram": [
-                    
-                ],
-                "csi": [
-                    
-                ],
-                "sam": [
-                    
-                ],
-                "unselected": [
-                    
-                ],
-                "unselected_index": [
-                    
-                ],
+                "crai": [],
+                "cram": [],
+                "csi": [],
+                "sam": [],
+                "unselected": [],
+                "unselected_index": [],
                 "versions_samtools": [
                     [
                         "SAMTOOLS_VIEW",
@@ -667,23 +523,17 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-03T16:49:36.783381688"
     },
     "cram": {
         "content": [
             {
-                "bai": [
-                    
-                ],
-                "bam": [
-                    
-                ],
-                "crai": [
-                    
-                ],
+                "bai": [],
+                "bam": [],
+                "crai": [],
                 "cram": [
                     [
                         {
@@ -692,18 +542,10 @@
                         "test.cram"
                     ]
                 ],
-                "csi": [
-                    
-                ],
-                "sam": [
-                    
-                ],
-                "unselected": [
-                    
-                ],
-                "unselected_index": [
-                    
-                ],
+                "csi": [],
+                "sam": [],
+                "unselected": [],
+                "unselected_index": [],
                 "versions_samtools": [
                     [
                         "SAMTOOLS_VIEW",
@@ -714,8 +556,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-03T16:49:09.393102901"
     },
@@ -730,12 +572,8 @@
                         "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "1": [
-                    
-                ],
-                "2": [
-                    
-                ],
+                "1": [],
+                "2": [],
                 "3": [
                     [
                         {
@@ -744,12 +582,8 @@
                         "test.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "4": [
-                    
-                ],
-                "5": [
-                    
-                ],
+                "4": [],
+                "5": [],
                 "6": [
                     [
                         {
@@ -789,18 +623,10 @@
                         "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "crai": [
-                    
-                ],
-                "cram": [
-                    
-                ],
-                "csi": [
-                    
-                ],
-                "sam": [
-                    
-                ],
+                "crai": [],
+                "cram": [],
+                "csi": [],
+                "sam": [],
                 "unselected": [
                     [
                         {
@@ -827,20 +653,16 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-03T16:49:42.344755528"
     },
     "cram_crai_index_unselected": {
         "content": [
             {
-                "bai": [
-                    
-                ],
-                "bam": [
-                    
-                ],
+                "bai": [],
+                "bam": [],
                 "crai": [
                     [
                         {
@@ -857,12 +679,8 @@
                         "test.cram:md5,9b6eeca8f6b4b744297ae7cc87c031a4"
                     ]
                 ],
-                "csi": [
-                    
-                ],
-                "sam": [
-                    
-                ],
+                "csi": [],
+                "sam": [],
                 "unselected": [
                     [
                         {
@@ -889,17 +707,15 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-03T16:49:03.431621547"
     },
     "bam_stub": {
         "content": [
             {
-                "bai": [
-                    
-                ],
+                "bai": [],
                 "bam": [
                     [
                         {
@@ -908,12 +724,8 @@
                         "test.bam"
                     ]
                 ],
-                "crai": [
-                    
-                ],
-                "cram": [
-                    
-                ],
+                "crai": [],
+                "cram": [],
                 "csi": [
                     [
                         {
@@ -922,15 +734,9 @@
                         "test.bam.csi"
                     ]
                 ],
-                "sam": [
-                    
-                ],
-                "unselected": [
-                    
-                ],
-                "unselected_index": [
-                    
-                ],
+                "sam": [],
+                "unselected": [],
+                "unselected_index": [],
                 "versions_samtools": [
                     [
                         "SAMTOOLS_VIEW",
@@ -941,8 +747,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-03T16:49:26.152824543"
     }

@@ -29,8 +29,8 @@
         ],
         "timestamp": "2026-02-20T10:38:09.430447871",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "test-picard-liftovervcf": {
@@ -49,8 +49,8 @@
         ],
         "timestamp": "2026-02-02T11:40:19.064084452",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         }
     }
 }

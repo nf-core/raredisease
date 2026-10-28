@@ -20,9 +20,7 @@
                         "test.md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "cram": [
-                    
-                ],
+                "cram": [],
                 "metrics": [
                     [
                         {
@@ -43,8 +41,8 @@
         ],
         "timestamp": "2026-02-19T17:43:13.544887277",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "sarscov2 [unsorted bam] - stub": {
@@ -68,9 +66,7 @@
                         "test.md.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "cram": [
-                    
-                ],
+                "cram": [],
                 "metrics": [
                     [
                         {
@@ -91,8 +87,8 @@
         ],
         "timestamp": "2026-02-19T17:43:06.193033248",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "sarscov2 [unsorted bam]": {
@@ -115,8 +111,8 @@
         ],
         "timestamp": "2026-02-19T17:42:40.574463587",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "sarscov2 [sorted bam]": {
@@ -139,8 +135,8 @@
         ],
         "timestamp": "2026-02-19T17:42:49.374645492",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "homo_sapiens [cram]": {
@@ -163,8 +159,8 @@
         ],
         "timestamp": "2026-02-19T17:42:59.07843756",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "homo_sapiens [cram] - stub": {
@@ -179,9 +175,7 @@
                         "test.md.cram.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "bam": [
-                    
-                ],
+                "bam": [],
                 "cram": [
                     [
                         {
@@ -211,8 +205,8 @@
         ],
         "timestamp": "2026-02-19T17:43:20.676018462",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     }
 }

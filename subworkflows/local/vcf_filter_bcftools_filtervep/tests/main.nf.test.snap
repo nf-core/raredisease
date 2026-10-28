@@ -1,47 +1,41 @@
 {
     "vcf, hgnc_ids - filter on hgnc ids": {
         "content": [
-            [
-                
-            ],
+            [],
             "test.vcf.gz.tbi",
             "18e010447bd23a05a202d44daf66bcd2",
             "VcfFile [chromosomes=[1], sampleCount=3, variantCount=1, phased=false, phasedAutodetect=false]"
         ],
         "timestamp": "2026-01-27T19:43:16.754963",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         }
     },
     "vcf, hgnc_ids - filter on hgnc ids and expression": {
         "content": [
-            [
-                
-            ],
+            [],
             "test.vcf.gz.tbi",
             "18e010447bd23a05a202d44daf66bcd2",
             "VcfFile [chromosomes=[1], sampleCount=3, variantCount=1, phased=false, phasedAutodetect=false]"
         ],
         "timestamp": "2026-01-27T19:43:25.968654",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         }
     },
     "vcf, hgnc_ids - filter on expression": {
         "content": [
-            [
-                
-            ],
+            [],
             "test_filtered.vcf.gz.tbi",
             "9236236d782191442193a20355604927",
             "VcfFile [chromosomes=[1], sampleCount=3, variantCount=37, phased=false, phasedAutodetect=false]"
         ],
         "timestamp": "2026-01-20T12:44:40.698598144",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         }
     },
     "vcf, hgnc_ids - filter on hgnc ids and expression - stub": {
@@ -83,8 +77,8 @@
         ],
         "timestamp": "2026-01-27T19:43:35.16804",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         }
     }
 }

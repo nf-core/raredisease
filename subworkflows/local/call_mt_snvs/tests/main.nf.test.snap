@@ -10,8 +10,8 @@
         ],
         "timestamp": "2026-08-24T14:59:59.603664793",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "CALL_MT_SNVS - wgs, stub": {
@@ -71,8 +71,8 @@
         ],
         "timestamp": "2026-08-27T15:26:13.770638417",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

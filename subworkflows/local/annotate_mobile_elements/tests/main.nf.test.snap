@@ -6,8 +6,8 @@
         ],
         "timestamp": "2026-08-24T16:47:20.772701395",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "ANNOTATE_MOBILE_ELEMENTS - wgs, stub": {
@@ -35,8 +35,8 @@
         ],
         "timestamp": "2026-08-24T16:47:44.031176068",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

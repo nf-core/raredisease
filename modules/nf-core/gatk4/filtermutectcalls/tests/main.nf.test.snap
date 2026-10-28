@@ -15,8 +15,8 @@
             "#<METADATA>Ln prior of deletion of length 10=-20.72326583694641"
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-05T14:24:16.387135961"
     },
@@ -88,8 +88,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-05T12:44:42.986778135"
     },
@@ -116,8 +116,8 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-05T14:24:03.785317232"
     },
@@ -137,8 +137,8 @@
             "#<METADATA>Ln prior of deletion of length 10=-20.72326583694641"
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-05T14:22:02.165177275"
     }

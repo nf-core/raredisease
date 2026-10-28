@@ -21,8 +21,8 @@
         ],
         "timestamp": "2026-08-27T14:30:45.343095658",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "homo sapiens - vcf - bed - stub": {
@@ -47,8 +47,8 @@
         ],
         "timestamp": "2026-08-27T14:30:53.746256784",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

@@ -6,8 +6,8 @@
         ],
         "timestamp": "2026-08-24T09:31:32.314595189",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "CALL_SV_MANTA - stub": {
@@ -129,8 +129,8 @@
         ],
         "timestamp": "2026-08-27T15:54:03.361303846",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

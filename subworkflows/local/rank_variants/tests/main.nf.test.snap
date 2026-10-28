@@ -42,8 +42,8 @@
         ],
         "timestamp": "2026-08-26T11:21:40.898511921",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "RANK_VARIANTS - SNV (process_with_sort = false), minimal dataset": {
@@ -58,8 +58,8 @@
         ],
         "timestamp": "2026-09-18T16:51:02.883329107",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "RANK_VARIANTS - SNV (process_with_sort = false), stub": {
@@ -105,8 +105,8 @@
         ],
         "timestamp": "2026-08-26T11:21:18.395482016",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

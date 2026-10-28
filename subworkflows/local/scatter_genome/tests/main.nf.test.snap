@@ -56,8 +56,8 @@
         ],
         "timestamp": "2026-08-24T20:27:58.497813383",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "Should run without failures, stub": {
@@ -105,8 +105,8 @@
         ],
         "timestamp": "2026-05-25T23:14:53.489816823",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.5"
         }
     }
 }

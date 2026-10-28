@@ -22,8 +22,8 @@
         ],
         "timestamp": "2026-02-19T11:51:27.481278728",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "sarscov2 - [fastq1, fastq2], index, fasta, true - stub": {
@@ -38,12 +38,8 @@
                         "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "crai": [
-                    
-                ],
-                "cram": [
-                    
-                ],
+                "crai": [],
+                "cram": [],
                 "csi": [
                     [
                         {
@@ -53,9 +49,7 @@
                         "test.csi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "sam": [
-                    
-                ],
+                "sam": [],
                 "versions_bwamem2": [
                     [
                         "BWAMEM2_MEM",
@@ -74,8 +68,8 @@
         ],
         "timestamp": "2026-02-19T11:54:06.902806102",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "sarscov2 - [fastq1, fastq2], index, fasta, true": {
@@ -101,8 +95,8 @@
         ],
         "timestamp": "2026-02-19T11:51:40.483217643",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "sarscov2 - fastq, index, fasta, false": {
@@ -128,8 +122,8 @@
         ],
         "timestamp": "2026-02-19T11:51:02.459481643",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "sarscov2 - fastq, index, fasta, true": {
@@ -155,8 +149,8 @@
         ],
         "timestamp": "2026-02-19T11:51:15.170720681",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     }
 }

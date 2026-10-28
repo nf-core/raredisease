@@ -20,12 +20,8 @@
                     "test.genome.vcf.mu:md5,0810db02af2a176fa5ddc0f404911b66"
                 ]
             ],
-            [
-                
-            ],
-            [
-                
-            ],
+            [],
+            [],
             {
                 "versions_verifybamid2": [
                     [
@@ -38,8 +34,8 @@
             "test.genome.vcf.UD"
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-04T15:06:31.079305"
     },
@@ -57,8 +53,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-04T15:06:11.925134"
     },
@@ -110,9 +106,7 @@
                         "test.selfSM"
                     ]
                 ],
-                "ud": [
-                    
-                ],
+                "ud": [],
                 "versions_verifybamid2": [
                     [
                         "VERIFYBAMID_VERIFYBAMID2",
@@ -123,8 +117,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-04T15:12:24.048732"
     },
@@ -176,9 +170,7 @@
                         "test.selfSM"
                     ]
                 ],
-                "ud": [
-                    
-                ],
+                "ud": [],
                 "versions_verifybamid2": [
                     [
                         "VERIFYBAMID_VERIFYBAMID2",
@@ -189,8 +181,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-04T15:12:19.940733"
     },
@@ -242,9 +234,7 @@
                         "test.selfSM"
                     ]
                 ],
-                "ud": [
-                    
-                ],
+                "ud": [],
                 "versions_verifybamid2": [
                     [
                         "VERIFYBAMID_VERIFYBAMID2",
@@ -255,8 +245,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-04T15:12:37.072815"
     },
@@ -272,15 +262,9 @@
                         "test.log:md5,32a9811d143450f9f5b99c21b6ecff61"
                     ]
                 ],
-                "1": [
-                    
-                ],
-                "2": [
-                    
-                ],
-                "3": [
-                    
-                ],
+                "1": [],
+                "2": [],
+                "3": [],
                 "4": [
                     [
                         {
@@ -315,9 +299,7 @@
                         "result.Ancestry:md5,fe39ad1aced7cbb1eb21a74332389ad2"
                     ]
                 ],
-                "bed": [
-                    
-                ],
+                "bed": [],
                 "log": [
                     [
                         {
@@ -327,9 +309,7 @@
                         "test.log:md5,32a9811d143450f9f5b99c21b6ecff61"
                     ]
                 ],
-                "mu": [
-                    
-                ],
+                "mu": [],
                 "self_sm": [
                     [
                         {
@@ -339,9 +319,7 @@
                         "result.selfSM:md5,9a10860a7e79e393c773aa801ec9f84a"
                     ]
                 ],
-                "ud": [
-                    
-                ],
+                "ud": [],
                 "versions_verifybamid2": [
                     [
                         "VERIFYBAMID_VERIFYBAMID2",
@@ -352,8 +330,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-04T15:00:42.110941"
     },
@@ -378,12 +356,8 @@
                     "test.genome.vcf.mu:md5,0810db02af2a176fa5ddc0f404911b66"
                 ]
             ],
-            [
-                
-            ],
-            [
-                
-            ],
+            [],
+            [],
             {
                 "versions_verifybamid2": [
                     [
@@ -396,8 +370,8 @@
             "test.genome.vcf.UD"
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-04T15:06:07.266104"
     },
@@ -449,9 +423,7 @@
                         "test.selfSM"
                     ]
                 ],
-                "ud": [
-                    
-                ],
+                "ud": [],
                 "versions_verifybamid2": [
                     [
                         "VERIFYBAMID_VERIFYBAMID2",
@@ -462,8 +434,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-04T15:12:16.230109"
     }

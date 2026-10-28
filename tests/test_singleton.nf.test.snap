@@ -770,9 +770,7 @@
                     "chr21\t4444\t.\tG\t<STR2>\t.\tPASS\tEND=4480;REF=3;REPID=CSTB;RL=36;RU=CGCGGGGCGGGG;VARID=CSTB\tGT:SO:REPCN:REPCI:ADSP:ADFL:ADIR:LC\t1/1:SPANNING/SPANNING:2/2:2-2/2-2:27/27:5/5:0/0:37.1091",
                     "chrX\t19317\t.\tT\t.\t.\tPASS\tEND=19362;REF=15;REPID=SOX3;RL=45;RU=NGC;VARID=SOX3\tGT:SO:REPCN:REPCI:ADSP:ADFL:ADIR:LC\t0:SPANNING:15:15-15:6:6:0:11.5965"
                 ],
-                "amusingmarmoset_me_pli_clinical.vcf.gz": [
-                    
-                ],
+                "amusingmarmoset_me_pli_clinical.vcf.gz": [],
                 "amusingmarmoset_me_pli_research.vcf.gz": [
                     "chr1\t10534\t.\tT\t<INS:ME>\t14\t.\tACC13778A1_mobile_elements_concat_CHROM=.|chr1;ACC13778A1_mobile_elements_concat_FILTERS=.|.;ACC13778A1_mobile_elements_concat_INFO=.|MEINFO:ALU:10534:10535:NA|NOT_VALIDATED|SVTYPE:INS;ACC13778A1_mobile_elements_concat_POS=.|10534;ACC13778A1_mobile_elements_concat_QUAL=.|14;ACC13778A1_mobile_elements_concat_SAMPLE=.|ACC13778A1|GT:1/1|GQ:14|FL:3|SP:29|CLIP5:6|CLIP3:3;CSQ=mobile_element_insertion|intergenic_variant|MODIFIER|||||||||||||||||||||||||||||||||||||||||;FOUNDBY=1;MEINFO=ALU,10534,10535,NA;NOT_VALIDATED;SUPP_VEC=1;SVTYPE=INS;set=Intersection;svdb_origin=ACC13778A1_mobile_elements_concat\tGT:GQ:FL:SP:CLIP5:CLIP3\t1/1:14:3:29:6:3",
                     "chr1\t15300\t.\tG\t<INS:ME>\t10\t.\tACC13778A1_mobile_elements_concat_CHROM=.|chr1;ACC13778A1_mobile_elements_concat_FILTERS=.|.;ACC13778A1_mobile_elements_concat_INFO=.|MEINFO:ALU:15300:15301:NA|NOT_VALIDATED|SVTYPE:INS;ACC13778A1_mobile_elements_concat_POS=.|15300;ACC13778A1_mobile_elements_concat_QUAL=.|10;ACC13778A1_mobile_elements_concat_SAMPLE=.|ACC13778A1|GT:1/1|GQ:10|FL:3|SP:35|CLIP5:0|CLIP3:4;CSQ=mobile_element_insertion|intergenic_variant|MODIFIER|||||||||||||||||||||||||||||||||||||||||;FOUNDBY=1;MEINFO=ALU,15300,15301,NA;NOT_VALIDATED;SUPP_VEC=1;SVTYPE=INS;set=Intersection;svdb_origin=ACC13778A1_mobile_elements_concat\tGT:GQ:FL:SP:CLIP5:CLIP3\t1/1:10:3:35:0:4",
@@ -1842,9 +1840,7 @@
                     "chrX\t34816\tchrX_34816_TTTTG_T\tTTTTG\tT\t24\t.\tAF=1;AQ=24;FOUND_IN=deepvariant\tGT:DP:AD:GQ:PL:RNC\t1/1:8:0,8:24:24,99,0:..",
                     "chrX\t8295\tchrX_8295_C_CAA\tC\tCAA\t24\t.\tAF=1;AQ=24;FOUND_IN=deepvariant\tGT:DP:AD:GQ:PL:RNC\t1/1:15:2,11:25:24,99,0:.."
                 ],
-                "amusingmarmoset_snv_ranked_clinical.vcf.gz": [
-                    
-                ],
+                "amusingmarmoset_snv_ranked_clinical.vcf.gz": [],
                 "amusingmarmoset_snv_ranked_research.vcf.gz": [
                     "chr1\t14842\tchr1_14842_C_T\tC\tT\t36\t.\tAF=0.5;AQ=36;Annotation=MIR6859-1,WASH7P;CSQ=T|intergenic_variant|MODIFIER|||||||||||||||||||||||||||||||||||||||||||||||||||;Compounds=amusingmarmoset:chr1_15067_CAA_C>-22.0|chr1_16868_C_CT>-22.0|chr1_16894_T_G>-22.0|chr1_17329_C_T>-22.0|chr1_18378_G_C>-22.0|chr1_21213_C_T>-22.0|chr1_22432_C_CT>-22.0|chr1_23232_G_A>-22.0|chr1_24203_C_T>-22.0;CompoundsNormalized=amusingmarmoset:chr1_15067_CAA_C>0.6206896551724138|chr1_16868_C_CT>0.6206896551724138|chr1_16894_T_G>0.6206896551724138|chr1_17329_C_T>0.6206896551724138|chr1_18378_G_C>0.6206896551724138|chr1_21213_C_T>0.6206896551724138|chr1_22432_C_CT>0.6206896551724138|chr1_23232_G_A>0.6206896551724138|chr1_24203_C_T>0.6206896551724138;FOUND_IN=deepvariant;GNOMADAF=0.1958;GNOMADAF_grpmax=0.2476;GeneticModels=amusingmarmoset:AD|AR_comp;ModelScore=amusingmarmoset:34;RankResult=-12|0|0|1|0|0|3|0|0|0;RankScore=amusingmarmoset:-14.0;RankScoreMinMax=amusingmarmoset:-29.0:29.0;RankScoreNormalized=amusingmarmoset:0.25862068965517243\tGT:DP:AD:GQ:PL:RNC\t0/1:35:18,17:34:36,0,39:..",
                     "chr1\t15067\tchr1_15067_CA_C;chr1_15067_CAA_C\tCAA\tC\t49\t.\tAF=0.5;AQ=45;Annotation=MIR6859-1,WASH7P;CSQ=-|intergenic_variant|MODIFIER|||||||||||||||||||||||||||||||||||||||||||||||||||;Compounds=amusingmarmoset:chr1_14842_C_T>-22.0|chr1_16868_C_CT>-22.0|chr1_16894_T_G>-22.0|chr1_17329_C_T>-22.0|chr1_18378_G_C>-22.0|chr1_21213_C_T>-22.0|chr1_22432_C_CT>-22.0|chr1_23232_G_A>-22.0|chr1_24203_C_T>-22.0;CompoundsNormalized=amusingmarmoset:chr1_14842_C_T>0.6206896551724138|chr1_16868_C_CT>0.6206896551724138|chr1_16894_T_G>0.6206896551724138|chr1_17329_C_T>0.6206896551724138|chr1_18378_G_C>0.6206896551724138|chr1_21213_C_T>0.6206896551724138|chr1_22432_C_CT>0.6206896551724138|chr1_23232_G_A>0.6206896551724138|chr1_24203_C_T>0.6206896551724138;FOUND_IN=deepvariant;GNOMADAF=0.2297;GNOMADAF_grpmax=0.2657;GeneticModels=amusingmarmoset:AD|AR_comp;ModelScore=amusingmarmoset:43;RankResult=-12|0|0|1|0|0|3|0|0|0;RankScore=amusingmarmoset:-14.0;RankScoreMinMax=amusingmarmoset:-29.0:29.0;RankScoreNormalized=amusingmarmoset:0.25862068965517243\tGT:DP:AD:GQ:PL:RNC\t0/1:37:0,14:43:87,61,49:..",
@@ -2264,9 +2260,7 @@
                     "chrM:1-17000\tN*>[<DUP>]\tSVTYPE=DUP\tSVLEN=17000\tGT=[ACC13778A1:./]",
                     "chrX:29503-29522\tAATAAAAATGTGTCACACTT*>[ATTTATTAATAGACACATTTTTATTGAAGGTCTACTATAGGCCAGATATTCTTCAAGAACTTGGGGGTACA]\tSVTYPE=INS\tSVLEN=70\tGT=[ACC13778A1:ATTTATTAATAGACACATTTTTATTGAAGGTCTACTATAGGCCAGATATTCTTCAAGAACTTGGGGGTACA/ATTTATTAATAGACACATTTTTATTGAAGGTCTACTATAGGCCAGATATTCTTCAAGAACTTGGGGGTACA]"
                 ],
-                "amusingmarmoset_sv_ranked_clinical.vcf.gz": [
-                    
-                ],
+                "amusingmarmoset_sv_ranked_clinical.vcf.gz": [],
                 "amusingmarmoset_sv_ranked_research.vcf.gz": [
                     "chr12:26561-26677\tTATTAATATATATACACACATATGTGTATATATATATTAATATATATACACACATATGTGTATATATATACACACATATGTGTATATATATACACATATATGTATATATATAAATAT*>[TTA]\tSVTYPE=DEL\tSVLEN=-116\tGT=[ACC13778A1:TTA/TTA]",
                     "chr12:26609-26697\tN*>[<DEL>]\tSVTYPE=DEL\tSVLEN=88\tGT=[ACC13778A1:/]",
@@ -2319,8 +2313,8 @@
         ],
         "timestamp": "2026-10-07T13:05:25.407092401",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

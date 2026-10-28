@@ -4,8 +4,8 @@
             "  Could not find any FASTQ file pairs to concatenate in the process input"
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "24.10.4",
+            "nf-test": "0.9.2"
         },
         "timestamp": "2025-02-25T17:14:51.248685461"
     },
@@ -47,8 +47,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T14:31:42.84401526"
     },
@@ -96,8 +96,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T14:31:36.820489323"
     },
@@ -145,8 +145,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T14:32:06.262192935"
     },
@@ -188,8 +188,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-09T10:03:24.344628"
     },
@@ -237,8 +237,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-09T10:03:37.568053"
     },
@@ -280,8 +280,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T14:31:18.859169785"
     },
@@ -323,8 +323,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T14:31:30.942615287"
     },
@@ -366,8 +366,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T14:31:48.827990633"
     },
@@ -376,8 +376,8 @@
             "  Could not find any FASTQ file pairs to concatenate in the process input"
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "24.10.4",
+            "nf-test": "0.9.2"
         },
         "timestamp": "2025-02-25T17:14:40.806088747"
     },
@@ -386,8 +386,8 @@
             "  Could not find any FASTQ files to concatenate in the process input"
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "24.10.4",
+            "nf-test": "0.9.2"
         },
         "timestamp": "2025-02-25T17:14:45.852365218"
     },
@@ -429,8 +429,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T14:32:00.586584379"
     },
@@ -478,8 +478,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T14:31:25.159365603"
     },
@@ -488,8 +488,8 @@
             "  Could not find any FASTQ files to concatenate in the process input"
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "24.10.4",
+            "nf-test": "0.9.2"
         },
         "timestamp": "2025-02-25T17:14:35.695192409"
     },
@@ -537,8 +537,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T14:31:54.850702874"
     },
@@ -580,8 +580,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T14:32:11.746498148"
     }

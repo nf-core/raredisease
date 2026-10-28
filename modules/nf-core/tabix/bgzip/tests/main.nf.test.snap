@@ -4,8 +4,8 @@
             "gzi_compress_test.vcf.gz.gzi"
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.2"
+            "nextflow": "24.04.2",
+            "nf-test": "0.8.4"
         },
         "timestamp": "2024-02-19T14:52:29.328146"
     },
@@ -20,9 +20,7 @@
                         "bedgz_test.bed:md5,87a15eb9c2ff20ccd5cd8735a28708f7"
                     ]
                 ],
-                "1": [
-                    
-                ],
+                "1": [],
                 "2": [
                     [
                         "TABIX_BGZIP",
@@ -30,9 +28,7 @@
                         "1.21"
                     ]
                 ],
-                "gzi": [
-                    
-                ],
+                "gzi": [],
                 "output": [
                     [
                         {
@@ -51,8 +47,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-01-27T15:05:31.678626"
     },
@@ -61,8 +57,8 @@
             "test_stub.vcf.gz"
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.2"
+            "nextflow": "24.04.2",
+            "nf-test": "0.8.4"
         },
         "timestamp": "2024-02-19T14:52:20.811489"
     },
@@ -77,9 +73,7 @@
                         "bgzip_test.vcf.gz:md5,8e722884ffb75155212a3fc053918766"
                     ]
                 ],
-                "1": [
-                    
-                ],
+                "1": [],
                 "2": [
                     [
                         "TABIX_BGZIP",
@@ -87,9 +81,7 @@
                         "1.21"
                     ]
                 ],
-                "gzi": [
-                    
-                ],
+                "gzi": [],
                 "output": [
                     [
                         {
@@ -108,8 +100,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-01-27T15:05:27.928712"
     },
@@ -165,8 +157,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-01-27T15:05:39.49628"
     },
@@ -175,8 +167,8 @@
             "bgzip_test.vcf.gz"
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.2"
+            "nextflow": "24.04.2",
+            "nf-test": "0.8.4"
         },
         "timestamp": "2024-02-19T14:52:03.768295"
     },
@@ -185,8 +177,8 @@
             "bedgz_test.bed"
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.2"
+            "nextflow": "24.04.2",
+            "nf-test": "0.8.4"
         },
         "timestamp": "2024-02-19T14:52:12.453855"
     },
@@ -242,8 +234,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-01-27T15:05:35.726067"
     }

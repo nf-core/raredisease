@@ -200,8 +200,8 @@
         ],
         "timestamp": "2026-03-24T11:53:32.465432",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "test - peddy - no_plot": {
@@ -241,15 +241,9 @@
                         "test.peddy.ped:md5,8378f6599ee4ad6a9db42bfe226968a6"
                     ]
                 ],
-                "3": [
-                    
-                ],
-                "4": [
-                    
-                ],
-                "5": [
-                    
-                ],
+                "3": [],
+                "4": [],
+                "5": [],
                 "6": [
                     [
                         {
@@ -277,9 +271,7 @@
                         "test.sex_check.csv:md5,763950d0eff48b64da29a6a883d6b11c"
                     ]
                 ],
-                "9": [
-                    
-                ],
+                "9": [],
                 "het_check_csv": [
                     [
                         {
@@ -289,9 +281,7 @@
                         "test.het_check.csv:md5,b8623fa750218dade5468542d459fafe"
                     ]
                 ],
-                "het_check_png": [
-                    
-                ],
+                "het_check_png": [],
                 "html": [
                     [
                         {
@@ -319,12 +309,8 @@
                         "test.ped_check.csv:md5,21dded6c03dab39859d2936d4820c426"
                     ]
                 ],
-                "ped_check_png": [
-                    
-                ],
-                "ped_check_rel_difference_csv": [
-                    
-                ],
+                "ped_check_png": [],
+                "ped_check_rel_difference_csv": [],
                 "sex_check_csv": [
                     [
                         {
@@ -334,9 +320,7 @@
                         "test.sex_check.csv:md5,763950d0eff48b64da29a6a883d6b11c"
                     ]
                 ],
-                "sex_check_png": [
-                    
-                ],
+                "sex_check_png": [],
                 "versions_peddy": [
                     [
                         "PEDDY",
@@ -357,8 +341,8 @@
         ],
         "timestamp": "2026-08-12T14:27:59.211934009",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "test - peddy": {
@@ -441,8 +425,8 @@
         ],
         "timestamp": "2026-08-12T15:22:21.013049062",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

@@ -11,8 +11,8 @@
         ],
         "timestamp": "2026-08-24T21:25:27.489816988",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "CONTAMINATION - gatk only - real, WES with intervals": {
@@ -27,8 +27,8 @@
         ],
         "timestamp": "2026-08-24T21:27:07.199802959",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "CONTAMINATION - gatk only - real, WGS no intervals": {
@@ -43,8 +43,8 @@
         ],
         "timestamp": "2026-08-24T21:26:32.0838327",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "CONTAMINATION - verifybamid only - stub": {
@@ -59,8 +59,8 @@
         ],
         "timestamp": "2026-08-24T21:24:56.555695007",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "CONTAMINATION - both - stub": {
@@ -80,8 +80,8 @@
         ],
         "timestamp": "2026-08-24T21:25:54.878311636",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

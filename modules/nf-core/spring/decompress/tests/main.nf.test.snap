@@ -42,8 +42,8 @@
         ],
         "timestamp": "2026-02-11T11:16:00.074323",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         }
     },
     "Write-One-File": {
@@ -83,8 +83,8 @@
         ],
         "timestamp": "2026-02-11T11:15:54.633046",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         }
     },
     "Write-One-File-stub": {
@@ -124,8 +124,8 @@
         ],
         "timestamp": "2026-02-11T11:16:04.953817",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         }
     },
     "Write-Two-Files-stub": {
@@ -171,8 +171,8 @@
         ],
         "timestamp": "2026-02-11T11:16:09.98067",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         }
     }
 }

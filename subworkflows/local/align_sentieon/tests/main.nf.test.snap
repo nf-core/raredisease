@@ -7,10 +7,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "d41d8cd98f00b204e9800998ecf8427e"
@@ -22,10 +22,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_dedup.bam.bai"
@@ -37,10 +37,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_datametrics_aln_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -52,10 +52,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_datametrics_gc_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -67,10 +67,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_datametrics_gc_summary.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -82,10 +82,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_datametrics_is_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -97,10 +97,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_datametrics_mq_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -112,10 +112,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_datametrics_qd_metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -127,10 +127,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_dedup.bam.metrics:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -142,10 +142,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_dedup.bam.metrics.multiqc.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -157,10 +157,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_dedup.score:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -169,8 +169,8 @@
         ],
         "timestamp": "2026-06-15T14:36:45.068348415",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.3",
+            "nf-test": "0.9.5"
         }
     },
     "align sentieon": {
@@ -181,10 +181,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "2d64e4363d9f3c0e2167fce49d5087cf"
@@ -196,10 +196,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_dedup.bam.bai"
@@ -211,10 +211,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_datametrics_aln_metrics.txt:md5,e016dd74f156d0b31a787903b8fef29c"
@@ -226,10 +226,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_datametrics_gc_metrics.txt:md5,003ed2dae28d295e5005fc2be942fd24"
@@ -241,10 +241,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_datametrics_gc_summary.txt:md5,c238cb8240e7145ea62fd7bc26787cf5"
@@ -256,10 +256,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_datametrics_is_metrics.txt:md5,47dec263ece77d2f5816012a345e8531"
@@ -271,10 +271,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_datametrics_mq_metrics.txt:md5,a0ee4d2b9970df49fed3f262c10b5e16"
@@ -286,10 +286,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_datametrics_qd_metrics.txt:md5,8192ba26ccf5cea0778e9ed2cf187430"
@@ -301,10 +301,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_dedup.bam.metrics:md5,67c42dfe156b0613d30966768d01b55c"
@@ -316,10 +316,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_dedup.bam.metrics.multiqc.tsv:md5,67c42dfe156b0613d30966768d01b55c"
@@ -331,10 +331,10 @@
                         "groupSize": 1,
                         "groupTarget": {
                             "id": "test",
-                            "sample": "test",
-                            "single_end": false,
                             "num_lanes": 1,
-                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'"
+                            "read_group": "'@RG\\tID:test\\tPL:illumina\\tSM:test'",
+                            "sample": "test",
+                            "single_end": false
                         }
                     },
                     "test_dedup.score:md5,107725946bfe75d63c82d4f330872833"
@@ -343,8 +343,8 @@
         ],
         "timestamp": "2026-06-15T14:42:21.699949612",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.3",
+            "nf-test": "0.9.5"
         }
     }
 }

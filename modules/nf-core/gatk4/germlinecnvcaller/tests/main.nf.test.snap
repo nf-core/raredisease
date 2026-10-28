@@ -35,19 +35,15 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-05T15:54:16.716891653"
     },
     "homo sapiens - bam - stub": {
         "content": [
-            [
-                
-            ],
-            [
-                
-            ],
+            [],
+            [],
             {
                 "versions_gatk4": [
                     [
@@ -59,8 +55,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2026-02-05T15:54:30.034729289"
     }

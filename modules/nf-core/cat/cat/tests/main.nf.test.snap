@@ -37,8 +37,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T09:08:31.479828"
     },
@@ -80,8 +80,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T16:16:28.118094"
     },
@@ -123,31 +123,23 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T16:15:56.529595"
     },
     "sarscov2 - genome - error: name conflict": {
         "content": [
             {
-                "0": [
-
-                ],
-                "1": [
-
-                ],
-                "file_out": [
-
-                ],
-                "versions_cat": [
-
-                ]
+                "0": [],
+                "1": [],
+                "file_out": [],
+                "versions_cat": []
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T16:14:54.496538"
     },
@@ -189,8 +181,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T11:26:29.942203"
     },
@@ -232,8 +224,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T11:26:45.679401"
     },
@@ -275,8 +267,8 @@
             }
         ],
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
+            "nextflow": "25.10.2",
+            "nf-test": "0.9.3"
         },
         "timestamp": "2025-12-10T16:16:12.439911"
     }

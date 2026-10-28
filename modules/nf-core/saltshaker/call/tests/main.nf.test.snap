@@ -21,8 +21,8 @@
         ],
         "timestamp": "2026-06-01T13:42:19.667355",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.3",
+            "nf-test": "0.9.5"
         }
     },
     "call - tsv - stub": {
@@ -47,8 +47,8 @@
         ],
         "timestamp": "2026-06-01T13:41:08.005824",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.3",
+            "nf-test": "0.9.5"
         }
     }
 }

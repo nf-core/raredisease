@@ -38,9 +38,7 @@
                         "test_out.g.vcf.gz.tbi:md5,90732f1ea2188c12fc4dab62da039f63"
                     ]
                 ],
-                "4": [
-                    
-                ],
+                "4": [],
                 "5": [
                     [
                         "DEEPVARIANT_RUNDEEPVARIANT",
@@ -66,9 +64,7 @@
                         "test_out.g.vcf.gz.tbi:md5,90732f1ea2188c12fc4dab62da039f63"
                     ]
                 ],
-                "report": [
-                    
-                ],
+                "report": [],
                 "vcf": [
                     [
                         {
@@ -98,8 +94,8 @@
         ],
         "timestamp": "2026-03-06T08:23:13.771156383",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "26.02.0"
+            "nextflow": "26.02.0",
+            "nf-test": "0.9.4"
         }
     },
     "homo_sapiens - [bam, bai] - fasta - fai": {
@@ -141,9 +137,7 @@
                         "test_out.g.vcf.gz.tbi:md5,90732f1ea2188c12fc4dab62da039f63"
                     ]
                 ],
-                "4": [
-                    
-                ],
+                "4": [],
                 "5": [
                     [
                         "DEEPVARIANT_RUNDEEPVARIANT",
@@ -169,9 +163,7 @@
                         "test_out.g.vcf.gz.tbi:md5,90732f1ea2188c12fc4dab62da039f63"
                     ]
                 ],
-                "report": [
-                    
-                ],
+                "report": [],
                 "vcf": [
                     [
                         {
@@ -201,8 +193,8 @@
         ],
         "timestamp": "2026-03-06T08:21:37.901284416",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "26.02.0"
+            "nextflow": "26.02.0",
+            "nf-test": "0.9.4"
         }
     },
     "homo_sapiens - [cram, crai, genome_bed] - fasta - fai": {
@@ -244,9 +236,7 @@
                         "test_out.g.vcf.gz.tbi:md5,90732f1ea2188c12fc4dab62da039f63"
                     ]
                 ],
-                "4": [
-                    
-                ],
+                "4": [],
                 "5": [
                     [
                         "DEEPVARIANT_RUNDEEPVARIANT",
@@ -272,9 +262,7 @@
                         "test_out.g.vcf.gz.tbi:md5,90732f1ea2188c12fc4dab62da039f63"
                     ]
                 ],
-                "report": [
-                    
-                ],
+                "report": [],
                 "vcf": [
                     [
                         {
@@ -304,8 +292,8 @@
         ],
         "timestamp": "2026-03-06T08:22:05.081809435",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "26.02.0"
+            "nextflow": "26.02.0",
+            "nf-test": "0.9.4"
         }
     },
     "homo_sapiens - [cram, crai, genome_bed] - fasta - fai - par_bed": {
@@ -347,9 +335,7 @@
                         "test_out.g.vcf.gz.tbi:md5,3cb9cc54bbcd6bf44d2b835aeeaa5f9e"
                     ]
                 ],
-                "4": [
-                    
-                ],
+                "4": [],
                 "5": [
                     [
                         "DEEPVARIANT_RUNDEEPVARIANT",
@@ -375,9 +361,7 @@
                         "test_out.g.vcf.gz.tbi:md5,3cb9cc54bbcd6bf44d2b835aeeaa5f9e"
                     ]
                 ],
-                "report": [
-                    
-                ],
+                "report": [],
                 "vcf": [
                     [
                         {
@@ -407,8 +391,8 @@
         ],
         "timestamp": "2026-03-06T08:22:41.458490971",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "26.02.0"
+            "nextflow": "26.02.0",
+            "nf-test": "0.9.4"
         }
     },
     "homo_sapiens - [bam, bai] - fasta - fai - stub": {
@@ -450,9 +434,7 @@
                         "test_out.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
                     ]
                 ],
-                "4": [
-                    
-                ],
+                "4": [],
                 "5": [
                     [
                         "DEEPVARIANT_RUNDEEPVARIANT",
@@ -478,9 +460,7 @@
                         "test_out.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
                     ]
                 ],
-                "report": [
-                    
-                ],
+                "report": [],
                 "vcf": [
                     [
                         {
@@ -510,8 +490,8 @@
         ],
         "timestamp": "2026-03-06T08:23:21.308862133",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "26.02.0"
+            "nextflow": "26.02.0",
+            "nf-test": "0.9.4"
         }
     },
     "homo_sapiens - [bam, bai] - fasta_gz - fasta_gz_fai - stub": {
@@ -553,9 +533,7 @@
                         "test_out.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
                     ]
                 ],
-                "4": [
-                    
-                ],
+                "4": [],
                 "5": [
                     [
                         "DEEPVARIANT_RUNDEEPVARIANT",
@@ -581,9 +559,7 @@
                         "test_out.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
                     ]
                 ],
-                "report": [
-                    
-                ],
+                "report": [],
                 "vcf": [
                     [
                         {
@@ -613,8 +589,8 @@
         ],
         "timestamp": "2026-03-06T08:23:28.331049387",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "26.02.0"
+            "nextflow": "26.02.0",
+            "nf-test": "0.9.4"
         }
     }
 }

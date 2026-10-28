@@ -6,9 +6,7 @@
                     [
                         {
                             "id": "amusingmarmoset",
-                            "probands": [
-                                
-                            ],
+                            "probands": [],
                             "set": "clinical"
                         },
                         "amusingmarmoset_csq_pli_clinical.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
@@ -16,9 +14,7 @@
                     [
                         {
                             "id": "amusingmarmoset",
-                            "probands": [
-                                
-                            ],
+                            "probands": [],
                             "set": "research"
                         },
                         "amusingmarmoset_csq_pli_research.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
@@ -28,9 +24,7 @@
                     [
                         {
                             "id": "amusingmarmoset",
-                            "probands": [
-                                
-                            ],
+                            "probands": [],
                             "set": "clinical"
                         },
                         "amusingmarmoset_csq_pli_clinical.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -38,9 +32,7 @@
                     [
                         {
                             "id": "amusingmarmoset",
-                            "probands": [
-                                
-                            ],
+                            "probands": [],
                             "set": "research"
                         },
                         "amusingmarmoset_csq_pli_research.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -50,9 +42,7 @@
                     [
                         {
                             "id": "amusingmarmoset",
-                            "probands": [
-                                
-                            ],
+                            "probands": [],
                             "set": "clinical"
                         },
                         "amusingmarmoset_csq_pli_clinical.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -60,9 +50,7 @@
                     [
                         {
                             "id": "amusingmarmoset",
-                            "probands": [
-                                
-                            ],
+                            "probands": [],
                             "set": "research"
                         },
                         "amusingmarmoset_csq_pli_research.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -72,9 +60,7 @@
                     [
                         {
                             "id": "amusingmarmoset",
-                            "probands": [
-                                
-                            ],
+                            "probands": [],
                             "set": "clinical"
                         },
                         "amusingmarmoset_csq_pli_clinical.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
@@ -82,9 +68,7 @@
                     [
                         {
                             "id": "amusingmarmoset",
-                            "probands": [
-                                
-                            ],
+                            "probands": [],
                             "set": "research"
                         },
                         "amusingmarmoset_csq_pli_research.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
@@ -94,8 +78,8 @@
         ],
         "timestamp": "2026-08-26T11:21:50.603597862",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "FILTER_ANNOTATE_RANK - clinical set + rank, stub": {
@@ -193,8 +177,8 @@
         ],
         "timestamp": "2026-08-26T11:21:28.029257401",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "FILTER_ANNOTATE_RANK - clinical set + rank, minimal dataset": {
@@ -211,8 +195,8 @@
         ],
         "timestamp": "2026-08-24T13:16:35.507244655",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

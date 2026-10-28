@@ -38,8 +38,8 @@
         ],
         "timestamp": "2026-08-27T15:25:35.163514169",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "POSTPROCESS_MT_CALLS - wgs, minimal dataset": {
@@ -54,8 +54,8 @@
         ],
         "timestamp": "2026-08-24T15:32:53.157357124",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

@@ -12,46 +12,44 @@
         ],
         "timestamp": "2026-08-28T17:31:29.135821694",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "CALL_SNV - deepvariant wgs, stub": {
         "content": [
             {
-                "0": [
-                    
-                ],
+                "0": [],
                 "1": [
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
                     ],
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A3",
-                            "sample": "ACC13778A3",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
                             "lane": 1,
-                            "sex": 1,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
+                            "sample": "ACC13778A3",
+                            "sex": 1,
+                            "single_end": false
                         },
                         "ACC13778A3_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
                     ]
@@ -59,33 +57,33 @@
                 "2": [
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
                     ],
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A3",
-                            "sample": "ACC13778A3",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
                             "lane": 1,
-                            "sex": 1,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
+                            "sample": "ACC13778A3",
+                            "sex": 1,
+                            "single_end": false
                         },
                         "ACC13778A3_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
                     ]
@@ -115,39 +113,37 @@
                         "amusingmarmoset.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "deepvariant_report": [
-                    
-                ],
+                "deepvariant_report": [],
                 "genome_gtabix": [
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
                     ],
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A3",
-                            "sample": "ACC13778A3",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
                             "lane": 1,
-                            "sex": 1,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
+                            "sample": "ACC13778A3",
+                            "sex": 1,
+                            "single_end": false
                         },
                         "ACC13778A3_deepvar.g.vcf.gz.tbi:md5,1f7f65ca1a1b41bec29194966ca37228"
                     ]
@@ -155,33 +151,33 @@
                 "genome_gvcf": [
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
                     ],
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A3",
-                            "sample": "ACC13778A3",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
                             "lane": 1,
-                            "sex": 1,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
+                            "sample": "ACC13778A3",
+                            "sex": 1,
+                            "single_end": false
                         },
                         "ACC13778A3_deepvar.g.vcf.gz:md5,f50b84b1db4b83ba62ec1deacc69c260"
                     ]
@@ -215,8 +211,8 @@
         ],
         "timestamp": "2026-08-26T10:45:59.810958282",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

@@ -22,8 +22,8 @@
         ],
         "timestamp": "2026-08-24T15:31:59.604385",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.5"
         }
     },
     "homo_sapiens - cram - wig": {
@@ -49,8 +49,8 @@
         ],
         "timestamp": "2026-08-24T15:31:56.017011",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.5"
         }
     },
     "homo_sapiens - stub": {
@@ -110,8 +110,8 @@
         ],
         "timestamp": "2026-08-24T15:32:03.257256",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.5"
         }
     },
     "homo_sapiens - bam - bed": {
@@ -137,8 +137,8 @@
         ],
         "timestamp": "2026-08-24T15:31:52.596883",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.5"
         }
     },
     "homo_sapiens - cram - bed": {
@@ -164,8 +164,8 @@
         ],
         "timestamp": "2026-08-24T15:31:48.689709",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.5"
         }
     }
 }

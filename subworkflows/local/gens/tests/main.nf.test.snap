@@ -4,17 +4,17 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A1",
-                        "sample": "ACC13778A1",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
                         "lane": 1,
-                        "sex": 1,
-                        "phenotype": 2,
-                        "paternal": "ACC13778A3",
                         "maternal": "ACC13778A2",
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": "ACC13778A3",
+                        "phenotype": 2,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "sample": "ACC13778A1",
+                        "sex": 1,
+                        "single_end": false
                     },
                     "ACC13778A1_gens.cov.bed.gz",
                     [
@@ -527,17 +527,17 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A1",
-                        "sample": "ACC13778A1",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
                         "lane": 1,
-                        "sex": 1,
-                        "phenotype": 2,
-                        "paternal": "ACC13778A3",
                         "maternal": "ACC13778A2",
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": "ACC13778A3",
+                        "phenotype": 2,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "sample": "ACC13778A1",
+                        "sex": 1,
+                        "single_end": false
                     },
                     "ACC13778A1_gens.baf.bed.gz",
                     [
@@ -984,17 +984,17 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A1",
-                        "sample": "ACC13778A1",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
                         "lane": 1,
-                        "sex": 1,
-                        "phenotype": 2,
-                        "paternal": "ACC13778A3",
                         "maternal": "ACC13778A2",
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": "ACC13778A3",
+                        "phenotype": 2,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "sample": "ACC13778A1",
+                        "sex": 1,
+                        "single_end": false
                     },
                     "ACC13778A1_gens.cov.bed.gz.tbi"
                 ]
@@ -1002,17 +1002,17 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A1",
-                        "sample": "ACC13778A1",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
                         "lane": 1,
-                        "sex": 1,
-                        "phenotype": 2,
-                        "paternal": "ACC13778A3",
                         "maternal": "ACC13778A2",
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": "ACC13778A3",
+                        "phenotype": 2,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "sample": "ACC13778A1",
+                        "sex": 1,
+                        "single_end": false
                     },
                     "ACC13778A1_gens.baf.bed.gz.tbi"
                 ]
@@ -1020,8 +1020,8 @@
         ],
         "timestamp": "2026-09-04T10:23:13.907325738",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "GENS - female sample, stub": {
@@ -1029,17 +1029,17 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A2",
-                        "sample": "ACC13778A2",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                         "lane": 1,
-                        "sex": 2,
-                        "phenotype": 1,
-                        "paternal": 0,
                         "maternal": 0,
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": 0,
+                        "phenotype": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "sample": "ACC13778A2",
+                        "sex": 2,
+                        "single_end": false
                     },
                     "ACC13778A2_gens.baf.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                 ]
@@ -1047,17 +1047,17 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A2",
-                        "sample": "ACC13778A2",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                         "lane": 1,
-                        "sex": 2,
-                        "phenotype": 1,
-                        "paternal": 0,
                         "maternal": 0,
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": 0,
+                        "phenotype": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "sample": "ACC13778A2",
+                        "sex": 2,
+                        "single_end": false
                     },
                     "ACC13778A2_gens.baf.bed.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ]
@@ -1065,17 +1065,17 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A2",
-                        "sample": "ACC13778A2",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                         "lane": 1,
-                        "sex": 2,
-                        "phenotype": 1,
-                        "paternal": 0,
                         "maternal": 0,
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": 0,
+                        "phenotype": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "sample": "ACC13778A2",
+                        "sex": 2,
+                        "single_end": false
                     },
                     "ACC13778A2_gens.cov.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                 ]
@@ -1083,17 +1083,17 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A2",
-                        "sample": "ACC13778A2",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                         "lane": 1,
-                        "sex": 2,
-                        "phenotype": 1,
-                        "paternal": 0,
                         "maternal": 0,
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": 0,
+                        "phenotype": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "sample": "ACC13778A2",
+                        "sex": 2,
+                        "single_end": false
                     },
                     "ACC13778A2_gens.cov.bed.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ]
@@ -1101,8 +1101,8 @@
         ],
         "timestamp": "2026-08-28T14:23:42.370440924",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "GENS - male sample, stub": {
@@ -1110,17 +1110,17 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A1",
-                        "sample": "ACC13778A1",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
                         "lane": 1,
-                        "sex": 1,
-                        "phenotype": 2,
-                        "paternal": "ACC13778A3",
                         "maternal": "ACC13778A2",
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": "ACC13778A3",
+                        "phenotype": 2,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "sample": "ACC13778A1",
+                        "sex": 1,
+                        "single_end": false
                     },
                     "ACC13778A1_gens.baf.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                 ]
@@ -1128,17 +1128,17 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A1",
-                        "sample": "ACC13778A1",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
                         "lane": 1,
-                        "sex": 1,
-                        "phenotype": 2,
-                        "paternal": "ACC13778A3",
                         "maternal": "ACC13778A2",
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": "ACC13778A3",
+                        "phenotype": 2,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "sample": "ACC13778A1",
+                        "sex": 1,
+                        "single_end": false
                     },
                     "ACC13778A1_gens.baf.bed.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ]
@@ -1146,17 +1146,17 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A1",
-                        "sample": "ACC13778A1",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
                         "lane": 1,
-                        "sex": 1,
-                        "phenotype": 2,
-                        "paternal": "ACC13778A3",
                         "maternal": "ACC13778A2",
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": "ACC13778A3",
+                        "phenotype": 2,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "sample": "ACC13778A1",
+                        "sex": 1,
+                        "single_end": false
                     },
                     "ACC13778A1_gens.cov.bed.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                 ]
@@ -1164,17 +1164,17 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A1",
-                        "sample": "ACC13778A1",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
                         "lane": 1,
-                        "sex": 1,
-                        "phenotype": 2,
-                        "paternal": "ACC13778A3",
                         "maternal": "ACC13778A2",
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": "ACC13778A3",
+                        "phenotype": 2,
+                        "read_group": "'@RG\\tID:ACC13778A1\\tPL:illumina\\tSM:ACC13778A1'",
+                        "sample": "ACC13778A1",
+                        "sex": 1,
+                        "single_end": false
                     },
                     "ACC13778A1_gens.cov.bed.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ]
@@ -1182,8 +1182,8 @@
         ],
         "timestamp": "2026-08-28T14:23:07.390166302",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

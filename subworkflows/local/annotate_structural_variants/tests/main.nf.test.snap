@@ -6,8 +6,8 @@
         ],
         "timestamp": "2026-10-03T22:28:54.175747753",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "ANNOTATE_STRUCTURAL_VARIANTS - no SVDB queries, stub": {
@@ -83,8 +83,8 @@
         ],
         "timestamp": "2026-08-26T11:05:33.04466467",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "ANNOTATE_STRUCTURAL_VARIANTS - skip_vep_sv": {
@@ -94,8 +94,8 @@
         ],
         "timestamp": "2026-10-13T14:13:12.610223635",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "ANNOTATE_STRUCTURAL_VARIANTS - with SVDB_QUERY_DB, stub": {
@@ -171,8 +171,8 @@
         ],
         "timestamp": "2026-08-26T11:05:58.80980936",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

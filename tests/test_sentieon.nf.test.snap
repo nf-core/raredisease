@@ -1330,9 +1330,7 @@
                     "chr21\t4444\t.\tG\t<STR2>\t.\tPASS\tEND=4480;REF=3;REPID=CSTB;RL=36;RU=CGCGGGGCGGGG;VARID=CSTB\tGT:SO:REPCN:REPCI:ADSP:ADFL:ADIR:LC\t1/1:SPANNING/SPANNING:2/2:2-2/2-2:20/20:6/6:0/0:40.676",
                     "chrX\t19317\t.\tT\t.\t.\tPASS\tEND=19362;REF=15;REPID=SOX3;RL=45;RU=NGC;VARID=SOX3\tGT:SO:REPCN:REPCI:ADSP:ADFL:ADIR:LC\t0:SPANNING:15:15-15:4:5:0:15.1898"
                 ],
-                "amusingmarmoset_me_pli_clinical.vcf.gz": [
-                    
-                ],
+                "amusingmarmoset_me_pli_clinical.vcf.gz": [],
                 "amusingmarmoset_me_pli_research.vcf.gz": [
                     "chr1\t10534\t.\tT\t<INS:ME>\t14\t.\tACC13778A1_mobile_elements_concat_CHROM=.|chr1;ACC13778A1_mobile_elements_concat_FILTERS=.|.;ACC13778A1_mobile_elements_concat_INFO=.|MEINFO:ALU:10534:10535:NA|NOT_VALIDATED|SVTYPE:INS;ACC13778A1_mobile_elements_concat_POS=.|10534;ACC13778A1_mobile_elements_concat_QUAL=.|14;ACC13778A1_mobile_elements_concat_SAMPLE=.|ACC13778A1|GT:1/1|GQ:14|FL:3|SP:29|CLIP5:6|CLIP3:3;CSQ=mobile_element_insertion|intergenic_variant|MODIFIER|||||||||||||||||||||||||||||||||||||||||;FOUNDBY=1;MEINFO=ALU,10534,10535,NA;NOT_VALIDATED;SUPP_VEC=100;SVTYPE=INS;set=ACC13778A1_mobile_elements_concat;svdb_origin=ACC13778A1_mobile_elements_concat\tGT:GQ:FL:SP:CLIP5:CLIP3\t1/1:14:3:29:6:3\t./.:.:.:.:.:.\t./.:.:.:.:.:.",
                     "chr1\t15300\t.\tG\t<INS:ME>\t10\t.\tACC13778A1_mobile_elements_concat_CHROM=.|chr1;ACC13778A1_mobile_elements_concat_FILTERS=.|.;ACC13778A1_mobile_elements_concat_INFO=.|MEINFO:ALU:15300:15301:NA|NOT_VALIDATED|SVTYPE:INS;ACC13778A1_mobile_elements_concat_POS=.|15300;ACC13778A1_mobile_elements_concat_QUAL=.|10;ACC13778A1_mobile_elements_concat_SAMPLE=.|ACC13778A1|GT:1/1|GQ:10|FL:3|SP:35|CLIP5:0|CLIP3:4;CSQ=mobile_element_insertion|intergenic_variant|MODIFIER|||||||||||||||||||||||||||||||||||||||||;FOUNDBY=1;MEINFO=ALU,15300,15301,NA;NOT_VALIDATED;SUPP_VEC=100;SVTYPE=INS;set=ACC13778A1_mobile_elements_concat;svdb_origin=ACC13778A1_mobile_elements_concat\tGT:GQ:FL:SP:CLIP5:CLIP3\t1/1:10:3:35:0:4\t./.:.:.:.:.:.\t./.:.:.:.:.:.",
@@ -3417,9 +3415,7 @@
                     "chrX\t8295\t.\tC\tCAA\t219.77\tPASS\tAC=2;AF=1;AN=6;BaseQRankSum=-0.732;ClippingRankSum=0;DP=53;Entropy=0.64;ExcessHet=3.0103;FOUND_IN=sentieon_dnascope;FS=0;GC=49.57;MLEAC=2;MLEAF=1;ML_PROB=0.23;MQ0=0;MQ=60;MQRankSum=2.762;NBQ=36.603;QD=31.4;RPA=28,30;RU=A;ReadPosEndDist=34.143;ReadPosRankSum=0.942;SOR=0.941;STR;UDP=15\tGT:AD:DP:GQ:PL\t1/1:0,7:7:21:233,21,0\t0/0:0,.:12:33:162,.,.\t0/0:1,.:13:19:208,.,.",
                     "chrX\t9377\t.\tT\tC\t971.13\tPASS\tAC=1;AF=0.5;AN=2;BaseQRankSum=-1.884;ClippingRankSum=0;DP=50;Entropy=0.73;ExcessHet=3.0103;FOUND_IN=sentieon_dnascope;FS=13.391;GC=26.55;MLEAC=1;MLEAF=0.5;ML_PROB=0;MQ0=0;MQ=60;MQRankSum=0;NBQ=36.164;QD=19.42;ReadPosEndDist=30.64;ReadPosRankSum=0.888;SOR=1.368;UDP=50\tGT:AD:DP:GQ:PL\t./.:.:.:.:.\t0/1:23,27:50:99:972,0,879\t./.:.:.:.:."
                 ],
-                "amusingmarmoset_snv_ranked_clinical.vcf.gz": [
-                    
-                ],
+                "amusingmarmoset_snv_ranked_clinical.vcf.gz": [],
                 "amusingmarmoset_snv_ranked_research.vcf.gz": [
                     "chr1\t11483\t.\tG\tGT\t491.7\tPASS\tAC=1;AF=0.5;AN=2;Annotation=DDX11L1,WASH7P;BaseQRankSum=0.055;CSQ=T|intergenic_variant|MODIFIER|||||||||||||||||||||||||||||||||||||||||||||||||||;ClippingRankSum=0;DP=37;Entropy=0.74;ExcessHet=3.0103;FOUND_IN=sentieon_dnascope;FS=0;GC=38.46;GNOMADAF=0.0226;GNOMADAF_grpmax=0.0517;GeneticModels=amusingmarmoset:AR_hom|AR_hom_dn;MLEAC=1;MLEAF=0.5;ML_PROB=0;MQ0=0;MQ=60;MQRankSum=0;ModelScore=amusingmarmoset:99;NBQ=38.6;QD=14.05;RPA=7,8;RU=T;RankResult=-12|0|0|1|0|0|3|0|0|0;RankScore=amusingmarmoset:-8.0;RankScoreMinMax=amusingmarmoset:-29.0:29.0;RankScoreNormalized=amusingmarmoset:0.3620689655172414;ReadPosEndDist=42.886;ReadPosRankSum=-2.072;SOR=0.534;STR;UDP=37\tGT:AD:DP:GQ:PL\t./.:.:.:.:.\t0/1:15,20:35:99:505,0,353\t./.:.:.:.:.",
                     "chr1\t14842\t.\tC\tT\t2024.1\tPASS\tAC=3;AF=1;AN=4;Annotation=MIR6859-1,WASH7P;BaseQRankSum=-0.699;CSQ=T|intergenic_variant|MODIFIER|||||||||||||||||||||||||||||||||||||||||||||||||||;ClippingRankSum=0;DP=78;Entropy=0.69;ExcessHet=3.0103;FOUND_IN=sentieon_dnascope;FS=1.348;GC=46.6;GNOMADAF=0.1958;GNOMADAF_grpmax=0.2476;MLEAC=2;MLEAF=1;ML_PROB=0;MQ0=0;MQ=60;MQRankSum=0;NBQ=33.87;QD=15.95;RankResult=-12|0|0|-12|0|0|3|0|0|0;RankScore=amusingmarmoset:-21.0;RankScoreMinMax=amusingmarmoset:-29.0:29.0;RankScoreNormalized=amusingmarmoset:0.13793103448275862;ReadPosEndDist=24.486;ReadPosRankSum=0.662;SOR=1.088;UDP=35\tGT:AD:DP:GQ:PGT:PID:PL\t0/1:18,17:35:99:0|1:14833_C_T:559,0,632\t./.:.:.:.:.:.:.\t1/1:0,43:43:99:0|1:14833_C_T:2025,135,0",
@@ -4264,9 +4260,7 @@
                     "chrM:1-17000\tN*>[<DUP>]\tSVTYPE=DUP\tSVLEN=17000\tGT=[ACC13778A1:./,ACC13778A2:./,ACC13778A3:./]",
                     "chrX:29503-29522\tAATAAAAATGTGTCACACTT*>[ATTTATTAATAGACACATTTTTATTGAAGGTCTACTATAGGCCAGATATTCTTCAAGAACTTGGGGGTACA]\tSVTYPE=INS\tSVLEN=70\tGT=[ACC13778A1:ATTTATTAATAGACACATTTTTATTGAAGGTCTACTATAGGCCAGATATTCTTCAAGAACTTGGGGGTACA/ATTTATTAATAGACACATTTTTATTGAAGGTCTACTATAGGCCAGATATTCTTCAAGAACTTGGGGGTACA,ACC13778A2:ATTTATTAATAGACACATTTTTATTGAAGGTCTACTATAGGCCAGATATTCTTCAAGAACTTGGGGGTACA/ATTTATTAATAGACACATTTTTATTGAAGGTCTACTATAGGCCAGATATTCTTCAAGAACTTGGGGGTACA,ACC13778A3:ATTTATTAATAGACACATTTTTATTGAAGGTCTACTATAGGCCAGATATTCTTCAAGAACTTGGGGGTACA/ATTTATTAATAGACACATTTTTATTGAAGGTCTACTATAGGCCAGATATTCTTCAAGAACTTGGGGGTACA]"
                 ],
-                "amusingmarmoset_sv_ranked_clinical.vcf.gz": [
-                    
-                ],
+                "amusingmarmoset_sv_ranked_clinical.vcf.gz": [],
                 "amusingmarmoset_sv_ranked_research.vcf.gz": [
                     "chr12:26561-26677\tTATTAATATATATACACACATATGTGTATATATATATTAATATATATACACACATATGTGTATATATATACACACATATGTGTATATATATACACATATATGTATATATATAAATAT*>[TTA]\tSVTYPE=DEL\tSVLEN=-116\tGT=[ACC13778A1:TTA/TTA,ACC13778A2:TTA/TTA,ACC13778A3:TATTAATATATATACACACATATGTGTATATATATATTAATATATATACACACATATGTGTATATATATACACACATATGTGTATATATATACACATATATGTATATATATAAATAT/TATTAATATATATACACACATATGTGTATATATATATTAATATATATACACACATATGTGTATATATATACACACATATGTGTATATATATACACATATATGTATATATATAAATAT]",
                     "chr12:26609-26697\tN*>[<DEL>]\tSVTYPE=DEL\tSVLEN=88\tGT=[ACC13778A1:/,ACC13778A2:./.,ACC13778A3:./.]",
@@ -4345,8 +4339,8 @@
         ],
         "timestamp": "2026-10-07T12:41:35.565212108",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

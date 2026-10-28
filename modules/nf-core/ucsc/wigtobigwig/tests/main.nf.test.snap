@@ -38,8 +38,8 @@
         ],
         "timestamp": "2026-02-16T09:50:37.235738",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "test-ucsc-wigtobigwig-stub": {
@@ -81,8 +81,8 @@
         ],
         "timestamp": "2026-02-16T09:50:41.464164",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     }
 }

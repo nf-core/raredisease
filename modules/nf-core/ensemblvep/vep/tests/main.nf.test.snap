@@ -28,8 +28,8 @@
         ],
         "timestamp": "2026-06-10T11:55:47.928083",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.2"
+            "nextflow": "26.04.2",
+            "nf-test": "0.9.5"
         }
     },
     "test_ensemblvep_vep_fasta_vcf - stub (not really but linting complains otherwise)": {
@@ -62,8 +62,8 @@
         ],
         "timestamp": "2026-06-10T11:55:16.566537",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.2"
+            "nextflow": "26.04.2",
+            "nf-test": "0.9.5"
         }
     }
 }

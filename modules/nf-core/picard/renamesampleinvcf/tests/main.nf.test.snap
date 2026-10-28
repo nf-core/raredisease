@@ -14,8 +14,8 @@
         ],
         "timestamp": "2026-02-02T15:51:56.010473",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.3"
+            "nextflow": "25.10.3",
+            "nf-test": "0.9.3"
         }
     },
     "test-picard-renamesampleinvcf - stub": {
@@ -40,8 +40,8 @@
         ],
         "timestamp": "2026-02-20T10:39:17.132250662",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     }
 }

@@ -7,8 +7,8 @@
         ],
         "timestamp": "2026-08-24T19:45:59.106418568",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "CALL_SV_CNVNATOR - wgs, minimal dataset": {
@@ -19,8 +19,8 @@
         ],
         "timestamp": "2026-08-24T19:45:31.26589836",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

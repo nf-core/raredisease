@@ -21,31 +21,31 @@
                 "2": [
                     [
                         {
-                            "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
-                            "maternal": 0,
                             "case_id": "amusingmarmoset",
-                            "customer_id": "cust_a2"
+                            "customer_id": "cust_a2",
+                            "id": "ACC13778A2",
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ],
                     [
                         {
-                            "id": "ACC13778A3",
-                            "sample": "ACC13778A3",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "sex": 1,
-                            "phenotype": 1,
-                            "paternal": 0,
-                            "maternal": 0,
                             "case_id": "amusingmarmoset",
-                            "customer_id": "cust_a3"
+                            "customer_id": "cust_a3",
+                            "id": "ACC13778A3",
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "sample": "ACC13778A3",
+                            "sex": 1,
+                            "single_end": false
                         },
                         "ACC13778A3.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -53,33 +53,33 @@
                 "3": [
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ],
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A3",
-                            "sample": "ACC13778A3",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
                             "lane": 1,
-                            "sex": 1,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
+                            "sample": "ACC13778A3",
+                            "sex": 1,
+                            "single_end": false
                         },
                         "ACC13778A3_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -95,33 +95,33 @@
                 "mt_del_result": [
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ],
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A3",
-                            "sample": "ACC13778A3",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
                             "lane": 1,
-                            "sex": 1,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
+                            "sample": "ACC13778A3",
+                            "sex": 1,
+                            "single_end": false
                         },
                         "ACC13778A3_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -137,31 +137,31 @@
                 "saltshaker_plot": [
                     [
                         {
-                            "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
-                            "maternal": 0,
                             "case_id": "amusingmarmoset",
-                            "customer_id": "cust_a2"
+                            "customer_id": "cust_a2",
+                            "id": "ACC13778A2",
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ],
                     [
                         {
-                            "id": "ACC13778A3",
-                            "sample": "ACC13778A3",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "sex": 1,
-                            "phenotype": 1,
-                            "paternal": 0,
-                            "maternal": 0,
                             "case_id": "amusingmarmoset",
-                            "customer_id": "cust_a3"
+                            "customer_id": "cust_a3",
+                            "id": "ACC13778A3",
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "sample": "ACC13778A3",
+                            "sex": 1,
+                            "single_end": false
                         },
                         "ACC13778A3.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -186,8 +186,8 @@
         ],
         "timestamp": "2026-10-06T15:48:52.507131556",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.3",
+            "nf-test": "0.9.5"
         }
     },
     "CALL_SV_MT - 1 sample - wgs, minimal dataset": {
@@ -205,17 +205,17 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A2",
-                        "sample": "ACC13778A2",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                         "lane": 1,
-                        "sex": 2,
-                        "phenotype": 1,
-                        "paternal": 0,
                         "maternal": 0,
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": 0,
+                        "phenotype": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "sample": "ACC13778A2",
+                        "sex": 2,
+                        "single_end": false
                     },
                     "ACC13778A2_mitochondria_deletions.txt:md5,d167fb6ec57e7f702a597d6365f68f41"
                 ]
@@ -231,8 +231,8 @@
         ],
         "timestamp": "2026-08-24T20:00:19.183608559",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "CALL_SV_MT - 2 samples - wgs, minimal dataset": {
@@ -250,33 +250,33 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A2",
-                        "sample": "ACC13778A2",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                         "lane": 1,
-                        "sex": 2,
-                        "phenotype": 1,
-                        "paternal": 0,
                         "maternal": 0,
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": 0,
+                        "phenotype": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "sample": "ACC13778A2",
+                        "sex": 2,
+                        "single_end": false
                     },
                     "ACC13778A2_mitochondria_deletions.txt:md5,d167fb6ec57e7f702a597d6365f68f41"
                 ],
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A3",
-                        "sample": "ACC13778A3",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
                         "lane": 1,
-                        "sex": 1,
-                        "phenotype": 1,
-                        "paternal": 0,
                         "maternal": 0,
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": 0,
+                        "phenotype": 1,
+                        "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
+                        "sample": "ACC13778A3",
+                        "sex": 1,
+                        "single_end": false
                     },
                     "ACC13778A3_mitochondria_deletions.txt:md5,c6de55ee5d694e8e0866ba08790ed13a"
                 ]
@@ -292,8 +292,8 @@
         ],
         "timestamp": "2026-08-24T20:01:41.273422409",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "CALL_SV_MT - 1 sample - no customer_id - wgs, minimal dataset": {
@@ -311,17 +311,17 @@
             [
                 [
                     {
+                        "case_id": "amusingmarmoset",
                         "id": "ACC13778A2",
-                        "sample": "ACC13778A2",
-                        "single_end": false,
-                        "num_lanes": 1,
-                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                         "lane": 1,
-                        "sex": 2,
-                        "phenotype": 1,
-                        "paternal": 0,
                         "maternal": 0,
-                        "case_id": "amusingmarmoset"
+                        "num_lanes": 1,
+                        "paternal": 0,
+                        "phenotype": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "sample": "ACC13778A2",
+                        "sex": 2,
+                        "single_end": false
                     },
                     "ACC13778A2_mitochondria_deletions.txt:md5,d167fb6ec57e7f702a597d6365f68f41"
                 ]
@@ -337,8 +337,8 @@
         ],
         "timestamp": "2026-08-24T20:00:59.706091674",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "CALL_SV_MT - 1 sample - no customer_id - wgs, stub": {
@@ -363,15 +363,15 @@
                 "2": [
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -379,17 +379,17 @@
                 "3": [
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -405,17 +405,17 @@
                 "mt_del_result": [
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -431,15 +431,15 @@
                 "saltshaker_plot": [
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -464,8 +464,8 @@
         ],
         "timestamp": "2026-10-06T15:48:05.957803426",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.3",
+            "nf-test": "0.9.5"
         }
     },
     "CALL_SV_MT - 1 sample - wgs, stub": {
@@ -490,30 +490,30 @@
                 "2": [
                     [
                         {
-                            "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
-                            "maternal": 0,
                             "case_id": "amusingmarmoset",
-                            "customer_id": "cust_a2"
+                            "customer_id": "cust_a2",
+                            "id": "ACC13778A2",
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ],
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A3",
-                            "sample": "ACC13778A3",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "sex": 1,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "sample": "ACC13778A3",
+                            "sex": 1,
+                            "single_end": false
                         },
                         "ACC13778A3.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -521,33 +521,33 @@
                 "3": [
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ],
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A3",
-                            "sample": "ACC13778A3",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
                             "lane": 1,
-                            "sex": 1,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
+                            "sample": "ACC13778A3",
+                            "sex": 1,
+                            "single_end": false
                         },
                         "ACC13778A3_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -563,33 +563,33 @@
                 "mt_del_result": [
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
                             "lane": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ],
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A3",
-                            "sample": "ACC13778A3",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
                             "lane": 1,
-                            "sex": 1,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A3\\tPL:illumina\\tSM:ACC13778A3'",
+                            "sample": "ACC13778A3",
+                            "sex": 1,
+                            "single_end": false
                         },
                         "ACC13778A3_mitochondria_deletions.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -605,30 +605,30 @@
                 "saltshaker_plot": [
                     [
                         {
-                            "id": "ACC13778A2",
-                            "sample": "ACC13778A2",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "sex": 2,
-                            "phenotype": 1,
-                            "paternal": 0,
-                            "maternal": 0,
                             "case_id": "amusingmarmoset",
-                            "customer_id": "cust_a2"
+                            "customer_id": "cust_a2",
+                            "id": "ACC13778A2",
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
                         },
                         "ACC13778A2.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ],
                     [
                         {
+                            "case_id": "amusingmarmoset",
                             "id": "ACC13778A3",
-                            "sample": "ACC13778A3",
-                            "single_end": false,
-                            "num_lanes": 1,
-                            "sex": 1,
-                            "phenotype": 1,
-                            "paternal": 0,
                             "maternal": 0,
-                            "case_id": "amusingmarmoset"
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "sample": "ACC13778A3",
+                            "sex": 1,
+                            "single_end": false
                         },
                         "ACC13778A3.saltshaker.png:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
@@ -653,8 +653,8 @@
         ],
         "timestamp": "2026-10-07T08:38:34.781795742",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.3"
+            "nextflow": "26.04.3",
+            "nf-test": "0.9.5"
         }
     }
 }

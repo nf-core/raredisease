@@ -6,8 +6,8 @@
         ],
         "timestamp": "2026-08-24T16:39:26.786425436",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "CALL_MOBILE_ELEMENTS - stub": {
@@ -49,8 +49,8 @@
         ],
         "timestamp": "2026-08-27T15:35:08.744703294",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }

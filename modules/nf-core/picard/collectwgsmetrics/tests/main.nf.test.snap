@@ -22,8 +22,8 @@
         ],
         "timestamp": "2026-02-20T10:35:04.636691319",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "test-picard-collectwgsmetrics-with-interval": {
@@ -41,8 +41,8 @@
         ],
         "timestamp": "2026-02-20T10:34:45.059411647",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "test-picard-collectwgsmetrics - stub": {
@@ -68,8 +68,8 @@
         ],
         "timestamp": "2026-02-20T10:34:54.347278951",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "test-picard-collectwgsmetrics": {
@@ -87,8 +87,8 @@
         ],
         "timestamp": "2026-02-20T10:34:25.744978033",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     }
 }

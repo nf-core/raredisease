@@ -12,8 +12,8 @@
         ],
         "timestamp": "2026-08-21T13:36:59.855730249",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "ANNOTATE_PLI - no index": {
@@ -23,8 +23,8 @@
         ],
         "timestamp": "2026-08-21T13:36:42.840030621",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     },
     "ANNOTATE_PLI - with index, stub": {
@@ -66,8 +66,8 @@
         ],
         "timestamp": "2026-08-21T11:12:08.884893384",
         "meta": {
-            "nf-test": "0.9.5",
-            "nextflow": "26.04.6"
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
         }
     }
 }
