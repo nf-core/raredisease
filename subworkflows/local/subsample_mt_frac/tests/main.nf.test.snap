@@ -1,0 +1,136 @@
+{
+    "SUBSAMPLE_MT_FRAC - wgs, minimal dataset": {
+        "content": [
+            [
+                [
+                    {
+                        "case_id": "amusingmarmoset",
+                        "id": "ACC13778A2",
+                        "lane": 1,
+                        "maternal": 0,
+                        "num_lanes": 1,
+                        "paternal": 0,
+                        "phenotype": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "sample": "ACC13778A2",
+                        "seedfrac": "31.020741",
+                        "sex": 2,
+                        "single_end": false
+                    },
+                    "9ffc263bc5ed9612592908d38e28ad8d"
+                ]
+            ],
+            [
+                [
+                    {
+                        "case_id": "amusingmarmoset",
+                        "id": "ACC13778A2",
+                        "lane": 1,
+                        "maternal": 0,
+                        "num_lanes": 1,
+                        "paternal": 0,
+                        "phenotype": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "sample": "ACC13778A2",
+                        "seedfrac": "31.020741",
+                        "sex": 2,
+                        "single_end": false
+                    },
+                    "ACC13778A2_mt_subsample.bam.bai"
+                ]
+            ]
+        ],
+        "timestamp": "2026-08-28T14:25:48.028886271",
+        "meta": {
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
+        }
+    },
+    "SUBSAMPLE_MT_FRAC - wgs, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "case_id": "amusingmarmoset",
+                            "id": "ACC13778A2",
+                            "lane": 1,
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "seedfrac": null,
+                            "sex": 2,
+                            "single_end": false
+                        },
+                        "ACC13778A2_mt_subsample.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "case_id": "amusingmarmoset",
+                            "id": "ACC13778A2",
+                            "lane": 1,
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "seedfrac": null,
+                            "sex": 2,
+                            "single_end": false
+                        },
+                        "ACC13778A2_mt_subsample.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bai": [
+                    [
+                        {
+                            "case_id": "amusingmarmoset",
+                            "id": "ACC13778A2",
+                            "lane": 1,
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "seedfrac": null,
+                            "sex": 2,
+                            "single_end": false
+                        },
+                        "ACC13778A2_mt_subsample.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bam": [
+                    [
+                        {
+                            "case_id": "amusingmarmoset",
+                            "id": "ACC13778A2",
+                            "lane": 1,
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "seedfrac": null,
+                            "sex": 2,
+                            "single_end": false
+                        },
+                        "ACC13778A2_mt_subsample.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-28T14:26:09.539520018",
+        "meta": {
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
+        }
+    }
+}

@@ -88,8 +88,8 @@
         ],
         "timestamp": "2026-03-17T16:15:42.577775492",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "sarscov2 single-end [fastqc]": {
@@ -182,8 +182,8 @@
         ],
         "timestamp": "2026-03-17T16:21:17.072841555",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "sarscov2 single-end [fastqc] - stub": {
@@ -228,8 +228,8 @@
         ],
         "timestamp": "2026-02-26T15:14:39.789193051",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "sarscov2 single-end [fastqc] [config]": {
@@ -321,8 +321,8 @@
         ],
         "timestamp": "2026-03-17T16:15:30.372239611",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     },
     "sarscov2 single-end [fastqc] - custom prefix": {
@@ -415,8 +415,8 @@
         ],
         "timestamp": "2026-03-17T16:15:18.189023981",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nextflow": "25.10.4",
+            "nf-test": "0.9.4"
         }
     }
 }

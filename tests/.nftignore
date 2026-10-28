@@ -1,5 +1,44 @@
 .DS_Store
-multiqc/multiqc_data/fastqc_top_overrepresented_sequences_table.txt
+
+# VCF/BAM content is verified separately (VCFs via each test's own
+# vcf_records/sv_records checks; BAMs by existence only) since both formats
+# embed run-specific header metadata (command lines, timestamps, temp paths)
+# that make a whole-file hash non-reproducible across otherwise identical
+# runs. .tbi/.csi indices pair with a .vcf.gz body and shift their own byte
+# layout whenever that body's header size changes, so they're not
+# independently meaningful to content-check either.
+**/*.vcf.gz
+**/*.vcf
+**/*.vcf.gz.tbi
+**/*.vcf.gz.csi
+**/*.bam
+**/*.bam.bai
+
+# fastp/fastqc per-lane reports and every MultiQC data file derived from them
+# embed a generation timestamp and/or are threshold-triggered (e.g.
+# overrepresented-sequences, duplication-levels) on this dataset's low read
+# counts, so both their content and, in some cases, their very existence can
+# vary between identical runs. Existence is still covered by each test's own
+# stable_path ignore list where that additionally applies.
+**/*.fastp.html
+**/*.fastp.log
+**/*_fastqc.{html,zip}
+multiqc/multiqc_data/fastp*.txt
+multiqc/multiqc_data/fastqc*.txt
+multiqc/multiqc_data/fastqc-status-check-heatmap.txt
+multiqc/multiqc_data/multiqc_fastp.txt
+multiqc/multiqc_data/multiqc_fastqc.txt
+multiqc/multiqc_data/multiqc_general_stats.txt
+
+# Picard metrics files embed a "# Started on:"-style run timestamp header;
+# vcf2cytosure's .cgh and VEP's HTML stats summary embed a run date too.
+**/*multiplemetrics*
+**/*wgsmetrics*
+**/*hsmetrics*
+**/*_sorted_md.metrics.txt
+**/*.cgh
+**/*_summary.html
+
 multiqc/multiqc_data/multiqc.parquet
 multiqc/multiqc_data/multiqc.log
 multiqc/multiqc_data/multiqc_data.json
@@ -8,5 +47,4 @@ multiqc/multiqc_data/multiqc_software_versions.txt
 multiqc/multiqc_data/llms-full.txt
 multiqc/multiqc_plots/{svg,pdf,png}/*.{svg,pdf,png}
 multiqc/multiqc_report.html
-fastqc/*_fastqc.{html,zip}
 pipeline_info/*.{html,json,txt,yml}

@@ -1,0 +1,198 @@
+{
+    "CONVERT_MT_BAM_TO_FASTQ - wgs, minimal dataset": {
+        "content": [
+            [
+                [
+                    {
+                        "case_id": "amusingmarmoset",
+                        "id": "ACC13778A2",
+                        "lane": 1,
+                        "maternal": 0,
+                        "num_lanes": 1,
+                        "paternal": 0,
+                        "phenotype": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "sample": "ACC13778A2",
+                        "sex": 2,
+                        "single_end": false
+                    },
+                    "bd3eee7449b10d69b68bf51b5a6ae181",
+                    "ACC13778A2.bam.bai"
+                ]
+            ],
+            [
+                [
+                    {
+                        "case_id": "amusingmarmoset",
+                        "id": "ACC13778A2",
+                        "lane": 1,
+                        "maternal": 0,
+                        "num_lanes": 1,
+                        "paternal": 0,
+                        "phenotype": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "sample": "ACC13778A2",
+                        "sex": 2,
+                        "single_end": false
+                    },
+                    [
+                        "ACC13778A2_1.fastq.gz",
+                        "ACC13778A2_2.fastq.gz"
+                    ]
+                ]
+            ],
+            [
+                [
+                    {
+                        "case_id": "amusingmarmoset",
+                        "id": "ACC13778A2",
+                        "lane": 1,
+                        "maternal": 0,
+                        "num_lanes": 1,
+                        "paternal": 0,
+                        "phenotype": 1,
+                        "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                        "sample": "ACC13778A2",
+                        "sex": 2,
+                        "single_end": false
+                    },
+                    "e3f82c08e8b823ca6977d2a5de27e35c"
+                ]
+            ]
+        ],
+        "timestamp": "2026-08-24T16:03:03.517708231",
+        "meta": {
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
+        }
+    },
+    "CONVERT_MT_BAM_TO_FASTQ - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "case_id": "amusingmarmoset",
+                            "id": "ACC13778A2",
+                            "lane": 1,
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
+                        },
+                        "ACC13778A2.bam:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "ACC13778A2.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "case_id": "amusingmarmoset",
+                            "id": "ACC13778A2",
+                            "lane": 1,
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
+                        },
+                        [
+                            "ACC13778A2.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                            "ACC13778A2_1.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                            "ACC13778A2_2.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "case_id": "amusingmarmoset",
+                            "id": "ACC13778A2",
+                            "lane": 1,
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
+                        },
+                        "ACC13778A2.reverted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bam_bai": [
+                    [
+                        {
+                            "case_id": "amusingmarmoset",
+                            "id": "ACC13778A2",
+                            "lane": 1,
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
+                        },
+                        "ACC13778A2.bam:md5,d41d8cd98f00b204e9800998ecf8427e",
+                        "ACC13778A2.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "fastq": [
+                    [
+                        {
+                            "case_id": "amusingmarmoset",
+                            "id": "ACC13778A2",
+                            "lane": 1,
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
+                        },
+                        [
+                            "ACC13778A2.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                            "ACC13778A2_1.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                            "ACC13778A2_2.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                "ubam": [
+                    [
+                        {
+                            "case_id": "amusingmarmoset",
+                            "id": "ACC13778A2",
+                            "lane": 1,
+                            "maternal": 0,
+                            "num_lanes": 1,
+                            "paternal": 0,
+                            "phenotype": 1,
+                            "read_group": "'@RG\\tID:ACC13778A2\\tPL:illumina\\tSM:ACC13778A2'",
+                            "sample": "ACC13778A2",
+                            "sex": 2,
+                            "single_end": false
+                        },
+                        "ACC13778A2.reverted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-27T15:15:35.022687708",
+        "meta": {
+            "nextflow": "26.04.6",
+            "nf-test": "0.9.5"
+        }
+    }
+}
