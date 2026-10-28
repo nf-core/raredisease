@@ -398,10 +398,10 @@
                 "TABIX_TABIX_MERGE": {
                     "tabix": 1.21
                 },
-                "TABIX_TABIX_MT2": {
+                "TABIX_TABIX_MT": {
                     "tabix": 1.21
                 },
-                "TABIX_TABIX_MT": {
+                "TABIX_TABIX_MT2": {
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
@@ -3430,7 +3430,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-10-07T12:00:48.815356053",
+        "timestamp": "2026-10-28T10:06:21.380284484",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
