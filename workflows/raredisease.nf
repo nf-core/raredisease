@@ -876,6 +876,7 @@ workflow RAREDISEASE {
         // Merge all individual caller VCFs (nuclear + saltshaker) in a single SVDB_MERGE call so
         // there is exactly one priority list (ch_svcaller_priority, updated above with "mitosalt"
         // only if saltshaker actually produced a VCF) matching exactly one VCF count.
+        // A priority is only passed when more than one VCF is merged.
         if (!val_analysis_type.equals("mito")) {
             ch_vcf_paths = ch_call_sv_nuclear_vcfs
                 .concat(ch_saltshaker_vcf.collect{ _meta, vcf -> vcf })
@@ -883,7 +884,9 @@ workflow RAREDISEASE {
                 .map { vcf_list -> [vcf_list] }
             ch_merge_vcfs_in = ch_case_info
                 .combine(ch_vcf_paths)
-            MERGE_NUCLEAR_AND_MT_SVS (ch_merge_vcfs_in, ch_svcaller_priority, false)
+            ch_merge_priority = ch_svcaller_priority
+                .map { priority -> priority.size() > 1 ? priority : [] }
+            MERGE_NUCLEAR_AND_MT_SVS (ch_merge_vcfs_in, ch_merge_priority, false)
 
             TABIX_NUCLEAR_AND_MT_SVS (MERGE_NUCLEAR_AND_MT_SVS.out.vcf)
             ch_call_sv_vcf = MERGE_NUCLEAR_AND_MT_SVS.out.vcf

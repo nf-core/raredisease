@@ -134,6 +134,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Fix `MERGE_NUCLEAR_AND_MT_SVS` failing with "If priority is used, one tag per VCF is needed" when only one nuclear SV caller is active and SaltShaker (mitosalt) produces a VCF: the SV caller priority list now always contains every active caller, and the priority is only dropped at merge time when a single VCF is merged. [issue #1066](https://github.com/nf-core/raredisease/issues/1066) [PR #1067](https://github.com/nf-core/raredisease/pull/1067)
 - Fix samplesheets containing multiple `case_id`s being silently accepted and merged into a single case named after the first row, instead of being rejected: `createCaseChannel` now errors out at start-up if a samplesheet's rows don't all share one `case_id` [issue #1054](https://github.com/nf-core/raredisease/issues/1054) [PR #1055](https://github.com/nf-core/raredisease/pull/1055)
 - Fix `GATK4_POSTPROCESSGERMLINECNVCALLS` failing to stage gCNV model calls on cloud storage (Azure Blob, S3, GCS): use `toUriString()` instead of `toString()` so the URI scheme is kept [PR #1053](https://github.com/nf-core/raredisease/pull/1053)
 - Fix `annotate_genome_snvs`/`annotate_mt_snvs` silently falling back to the non-CADD-annotated VCF if a CADD result is ever missing when CADD was requested, instead of failing the run [issue #868](https://github.com/nf-core/raredisease/issues/868) [PR #1034](https://github.com/nf-core/raredisease/pull/1034)
