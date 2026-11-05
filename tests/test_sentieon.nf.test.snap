@@ -445,10 +445,10 @@
                 "TABIX_TABIX_MERGE": {
                     "tabix": 1.21
                 },
-                "TABIX_TABIX_MT2": {
+                "TABIX_TABIX_MT": {
                     "tabix": 1.21
                 },
-                "TABIX_TABIX_MT": {
+                "TABIX_TABIX_MT2": {
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
