@@ -2,7 +2,9 @@
     "test_samtools_faidx": {
         "content": [
             {
-                "fa": [],
+                "fa": [
+                    
+                ],
                 "fai": [
                     [
                         {
@@ -11,8 +13,12 @@
                         "genome.fasta.fai:md5,9da2a56e2853dc8c0b86a9e7229c9fe5"
                     ]
                 ],
-                "gzi": [],
-                "sizes": [],
+                "gzi": [
+                    
+                ],
+                "sizes": [
+                    
+                ],
                 "versions_samtools": [
                     [
                         "SAMTOOLS_FAIDX",
@@ -23,15 +29,17 @@
             }
         ],
         "meta": {
-            "nextflow": "25.10.3",
-            "nf-test": "0.9.3"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T15:39:12.541649151"
     },
     "test_samtools_faidx_get_sizes_bgzip - stub": {
         "content": [
             {
-                "fa": [],
+                "fa": [
+                    
+                ],
                 "fai": [
                     [
                         {
@@ -66,15 +74,17 @@
             }
         ],
         "meta": {
-            "nextflow": "25.10.3",
-            "nf-test": "0.9.3"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T15:41:44.040426987"
     },
     "test_samtools_faidx_get_sizes": {
         "content": [
             {
-                "fa": [],
+                "fa": [
+                    
+                ],
                 "fai": [
                     [
                         {
@@ -83,7 +93,9 @@
                         "genome.fasta.fai:md5,9da2a56e2853dc8c0b86a9e7229c9fe5"
                     ]
                 ],
-                "gzi": [],
+                "gzi": [
+                    
+                ],
                 "sizes": [
                     [
                         {
@@ -102,15 +114,17 @@
             }
         ],
         "meta": {
-            "nextflow": "25.10.3",
-            "nf-test": "0.9.3"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T15:47:03.653912015"
     },
     "test_samtools_faidx_bgzip": {
         "content": [
             {
-                "fa": [],
+                "fa": [
+                    
+                ],
                 "fai": [
                     [
                         {
@@ -127,7 +141,9 @@
                         "genome.fasta.gz.gzi:md5,7dea362b3fac8e00956a4952a3d4f474"
                     ]
                 ],
-                "sizes": [],
+                "sizes": [
+                    
+                ],
                 "versions_samtools": [
                     [
                         "SAMTOOLS_FAIDX",
@@ -138,8 +154,8 @@
             }
         ],
         "meta": {
-            "nextflow": "25.10.3",
-            "nf-test": "0.9.3"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T15:50:04.023566795"
     },
@@ -154,9 +170,15 @@
                         "extract.fa:md5,6a0774a0ad937ba0bfd2ac7457d90f36"
                     ]
                 ],
-                "fai": [],
-                "gzi": [],
-                "sizes": [],
+                "fai": [
+                    
+                ],
+                "gzi": [
+                    
+                ],
+                "sizes": [
+                    
+                ],
                 "versions_samtools": [
                     [
                         "SAMTOOLS_FAIDX",
@@ -167,15 +189,17 @@
             }
         ],
         "meta": {
-            "nextflow": "25.10.3",
-            "nf-test": "0.9.3"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T15:39:23.529404162"
     },
     "test_samtools_faidx_get_sizes - stub": {
         "content": [
             {
-                "fa": [],
+                "fa": [
+                    
+                ],
                 "fai": [
                     [
                         {
@@ -184,7 +208,9 @@
                         "genome.fasta.fai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "gzi": [],
+                "gzi": [
+                    
+                ],
                 "sizes": [
                     [
                         {
@@ -203,8 +229,8 @@
             }
         ],
         "meta": {
-            "nextflow": "25.10.3",
-            "nf-test": "0.9.3"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T15:41:39.039834304"
     },
@@ -219,9 +245,15 @@
                         "extract.fa:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "fai": [],
-                "gzi": [],
-                "sizes": [],
+                "fai": [
+                    
+                ],
+                "gzi": [
+                    
+                ],
+                "sizes": [
+                    
+                ],
                 "versions_samtools": [
                     [
                         "SAMTOOLS_FAIDX",
@@ -232,15 +264,17 @@
             }
         ],
         "meta": {
-            "nextflow": "25.10.3",
-            "nf-test": "0.9.3"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T15:39:28.961701609"
     },
     "test_samtools_faidx_stub_fai": {
         "content": [
             {
-                "fa": [],
+                "fa": [
+                    
+                ],
                 "fai": [
                     [
                         {
@@ -249,8 +283,12 @@
                         "genome.fasta.fai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "gzi": [],
-                "sizes": [],
+                "gzi": [
+                    
+                ],
+                "sizes": [
+                    
+                ],
                 "versions_samtools": [
                     [
                         "SAMTOOLS_FAIDX",
@@ -261,15 +299,17 @@
             }
         ],
         "meta": {
-            "nextflow": "25.10.3",
-            "nf-test": "0.9.3"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T15:39:34.471028474"
     },
     "test_samtools_faidx_get_sizes_bgzip": {
         "content": [
             {
-                "fa": [],
+                "fa": [
+                    
+                ],
                 "fai": [
                     [
                         {
@@ -304,8 +344,8 @@
             }
         ],
         "meta": {
-            "nextflow": "25.10.3",
-            "nf-test": "0.9.3"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
         },
         "timestamp": "2026-02-10T15:39:45.439016495"
     }

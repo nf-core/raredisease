@@ -2,7 +2,9 @@
     "test-gatk4-collectreadcounts-cram": {
         "content": [
             {
-                "0": [],
+                "0": [
+                    
+                ],
                 "1": [
                     [
                         {
@@ -19,7 +21,9 @@
                         "4.6.2.0"
                     ]
                 ],
-                "hdf5": [],
+                "hdf5": [
+                    
+                ],
                 "tsv": [
                     [
                         {
@@ -39,15 +43,17 @@
             }
         ],
         "meta": {
-            "nextflow": "25.10.2",
-            "nf-test": "0.9.3"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
         },
         "timestamp": "2026-01-21T15:57:24.675555145"
     },
     "test-gatk4-collectreadcounts-hdf5": {
         "content": [
             "test.hdf5",
-            [],
+            [
+                
+            ],
             {
                 "versions_gatk4": [
                     [
@@ -59,15 +65,17 @@
             }
         ],
         "meta": {
-            "nextflow": "25.10.2",
-            "nf-test": "0.9.3"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
         },
         "timestamp": "2026-01-21T15:56:53.979162756"
     },
     "test-gatk4-collectreadcounts-tsv": {
         "content": [
             {
-                "0": [],
+                "0": [
+                    
+                ],
                 "1": [
                     [
                         {
@@ -84,7 +92,9 @@
                         "4.6.2.0"
                     ]
                 ],
-                "hdf5": [],
+                "hdf5": [
+                    
+                ],
                 "tsv": [
                     [
                         {
@@ -104,8 +114,8 @@
             }
         ],
         "meta": {
-            "nextflow": "25.10.2",
-            "nf-test": "0.9.3"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
         },
         "timestamp": "2026-01-21T15:57:08.386074318"
     }

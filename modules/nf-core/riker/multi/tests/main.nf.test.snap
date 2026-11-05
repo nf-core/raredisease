@@ -20,14 +20,30 @@
                         "test.base-distribution-by-cycle.txt:md5,921d4ed3fc1ddb54b8e7c616d78e0736"
                     ]
                 ],
-                "error_indel": [],
-                "error_mismatch": [],
-                "error_overlap": [],
-                "gcbias_detail": [],
-                "gcbias_summary": [],
-                "hybcap_metrics": [],
-                "hybcap_per_base": [],
-                "hybcap_per_target": [],
+                "error_indel": [
+                    
+                ],
+                "error_mismatch": [
+                    
+                ],
+                "error_overlap": [
+                    
+                ],
+                "gcbias_detail": [
+                    
+                ],
+                "gcbias_summary": [
+                    
+                ],
+                "hybcap_metrics": [
+                    
+                ],
+                "hybcap_per_base": [
+                    
+                ],
+                "hybcap_per_target": [
+                    
+                ],
                 "isize_histogram": [
                     [
                         {
@@ -78,10 +94,18 @@
                         "test.quality-score-distribution.txt:md5,d5f17682727e31f05dc8b29b7c06b3ab"
                     ]
                 ],
-                "rna_biotype": [],
-                "rna_insert_size": [],
-                "rna_insert_size_histogram": [],
-                "rna_metrics": [],
+                "rna_biotype": [
+                    
+                ],
+                "rna_insert_size": [
+                    
+                ],
+                "rna_insert_size_histogram": [
+                    
+                ],
+                "rna_metrics": [
+                    
+                ],
                 "versions_riker": [
                     [
                         "RIKER_MULTI",
@@ -89,26 +113,44 @@
                         "0.4.0"
                     ]
                 ],
-                "wgs_coverage": [],
-                "wgs_metrics": []
+                "wgs_coverage": [
+                    
+                ],
+                "wgs_metrics": [
+                    
+                ]
             }
         ],
         "timestamp": "2026-07-07T09:44:52.527265",
         "meta": {
-            "nextflow": "26.04.4",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
         }
     },
     "sarscov2 - paired_end - bam - hybcap": {
         "content": [
             {
-                "alignment_metrics": [],
-                "base_dist": [],
-                "error_indel": [],
-                "error_mismatch": [],
-                "error_overlap": [],
-                "gcbias_detail": [],
-                "gcbias_summary": [],
+                "alignment_metrics": [
+                    
+                ],
+                "base_dist": [
+                    
+                ],
+                "error_indel": [
+                    
+                ],
+                "error_mismatch": [
+                    
+                ],
+                "error_overlap": [
+                    
+                ],
+                "gcbias_detail": [
+                    
+                ],
+                "gcbias_summary": [
+                    
+                ],
                 "hybcap_metrics": [
                     [
                         {
@@ -118,17 +160,39 @@
                         "test.hybcap-metrics.txt:md5,65d0a112bd3508d6c3b5328c8fcfcbdb"
                     ]
                 ],
-                "hybcap_per_base": [],
-                "hybcap_per_target": [],
-                "isize_histogram": [],
-                "isize_metrics": [],
-                "mean_qual": [],
-                "pdf": [],
-                "qual_dist": [],
-                "rna_biotype": [],
-                "rna_insert_size": [],
-                "rna_insert_size_histogram": [],
-                "rna_metrics": [],
+                "hybcap_per_base": [
+                    
+                ],
+                "hybcap_per_target": [
+                    
+                ],
+                "isize_histogram": [
+                    
+                ],
+                "isize_metrics": [
+                    
+                ],
+                "mean_qual": [
+                    
+                ],
+                "pdf": [
+                    
+                ],
+                "qual_dist": [
+                    
+                ],
+                "rna_biotype": [
+                    
+                ],
+                "rna_insert_size": [
+                    
+                ],
+                "rna_insert_size_histogram": [
+                    
+                ],
+                "rna_metrics": [
+                    
+                ],
                 "versions_riker": [
                     [
                         "RIKER_MULTI",
@@ -136,32 +200,62 @@
                         "0.4.0"
                     ]
                 ],
-                "wgs_coverage": [],
-                "wgs_metrics": []
+                "wgs_coverage": [
+                    
+                ],
+                "wgs_metrics": [
+                    
+                ]
             }
         ],
         "timestamp": "2026-07-07T09:26:06.548242",
         "meta": {
-            "nextflow": "26.04.4",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
         }
     },
     "homo_sapiens - paired_end - bam - rna": {
         "content": [
             {
-                "alignment_metrics": [],
-                "base_dist": [],
-                "error_indel": [],
-                "error_mismatch": [],
-                "error_overlap": [],
-                "gcbias_detail": [],
-                "gcbias_summary": [],
-                "hybcap_metrics": [],
-                "hybcap_per_base": [],
-                "hybcap_per_target": [],
-                "isize_histogram": [],
-                "isize_metrics": [],
-                "mean_qual": [],
+                "alignment_metrics": [
+                    
+                ],
+                "base_dist": [
+                    
+                ],
+                "error_indel": [
+                    
+                ],
+                "error_mismatch": [
+                    
+                ],
+                "error_overlap": [
+                    
+                ],
+                "gcbias_detail": [
+                    
+                ],
+                "gcbias_summary": [
+                    
+                ],
+                "hybcap_metrics": [
+                    
+                ],
+                "hybcap_per_base": [
+                    
+                ],
+                "hybcap_per_target": [
+                    
+                ],
+                "isize_histogram": [
+                    
+                ],
+                "isize_metrics": [
+                    
+                ],
+                "mean_qual": [
+                    
+                ],
                 "pdf": [
                     [
                         {
@@ -171,7 +265,9 @@
                         "test.rna-coverage.pdf"
                     ]
                 ],
-                "qual_dist": [],
+                "qual_dist": [
+                    
+                ],
                 "rna_biotype": [
                     [
                         {
@@ -215,14 +311,18 @@
                         "0.4.0"
                     ]
                 ],
-                "wgs_coverage": [],
-                "wgs_metrics": []
+                "wgs_coverage": [
+                    
+                ],
+                "wgs_metrics": [
+                    
+                ]
             }
         ],
         "timestamp": "2026-07-07T10:27:34.959307",
         "meta": {
-            "nextflow": "26.04.4",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
         }
     },
     "sarscov2 - paired_end - bam - stub": {
@@ -298,10 +398,18 @@
                         "test.quality-score-distribution.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "15": [],
-                "16": [],
-                "17": [],
-                "18": [],
+                "15": [
+                    
+                ],
+                "16": [
+                    
+                ],
+                "17": [
+                    
+                ],
+                "18": [
+                    
+                ],
                 "19": [
                     [
                         {
@@ -541,10 +649,18 @@
                         "test.quality-score-distribution.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "rna_biotype": [],
-                "rna_insert_size": [],
-                "rna_insert_size_histogram": [],
-                "rna_metrics": [],
+                "rna_biotype": [
+                    
+                ],
+                "rna_insert_size": [
+                    
+                ],
+                "rna_insert_size_histogram": [
+                    
+                ],
+                "rna_metrics": [
+                    
+                ],
                 "versions_riker": [
                     [
                         "RIKER_MULTI",
@@ -574,8 +690,8 @@
         ],
         "timestamp": "2026-07-07T09:45:41.308154",
         "meta": {
-            "nextflow": "26.04.4",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
         }
     },
     "sarscov2 - paired_end - bam - wgs gcbias alignment basic isize": {
@@ -599,9 +715,15 @@
                         "test.base-distribution-by-cycle.txt:md5,921d4ed3fc1ddb54b8e7c616d78e0736"
                     ]
                 ],
-                "error_indel": [],
-                "error_mismatch": [],
-                "error_overlap": [],
+                "error_indel": [
+                    
+                ],
+                "error_mismatch": [
+                    
+                ],
+                "error_overlap": [
+                    
+                ],
                 "gcbias_detail": [
                     [
                         {
@@ -620,9 +742,15 @@
                         "test.gcbias-summary.txt:md5,4915d05211aaae398fc0f29ab3cc79b8"
                     ]
                 ],
-                "hybcap_metrics": [],
-                "hybcap_per_base": [],
-                "hybcap_per_target": [],
+                "hybcap_metrics": [
+                    
+                ],
+                "hybcap_per_base": [
+                    
+                ],
+                "hybcap_per_target": [
+                    
+                ],
                 "isize_histogram": [
                     [
                         {
@@ -675,10 +803,18 @@
                         "test.quality-score-distribution.txt:md5,d5f17682727e31f05dc8b29b7c06b3ab"
                     ]
                 ],
-                "rna_biotype": [],
-                "rna_insert_size": [],
-                "rna_insert_size_histogram": [],
-                "rna_metrics": [],
+                "rna_biotype": [
+                    
+                ],
+                "rna_insert_size": [
+                    
+                ],
+                "rna_insert_size_histogram": [
+                    
+                ],
+                "rna_metrics": [
+                    
+                ],
                 "versions_riker": [
                     [
                         "RIKER_MULTI",
@@ -708,15 +844,19 @@
         ],
         "timestamp": "2026-07-07T09:25:55.275289",
         "meta": {
-            "nextflow": "26.04.4",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
         }
     },
     "sarscov2 - paired_end - bam - error": {
         "content": [
             {
-                "alignment_metrics": [],
-                "base_dist": [],
+                "alignment_metrics": [
+                    
+                ],
+                "base_dist": [
+                    
+                ],
                 "error_indel": [
                     [
                         {
@@ -744,20 +884,48 @@
                         "test.error-overlap.txt:md5,4426d9733ae3e59dc2496b0c247c22f2"
                     ]
                 ],
-                "gcbias_detail": [],
-                "gcbias_summary": [],
-                "hybcap_metrics": [],
-                "hybcap_per_base": [],
-                "hybcap_per_target": [],
-                "isize_histogram": [],
-                "isize_metrics": [],
-                "mean_qual": [],
-                "pdf": [],
-                "qual_dist": [],
-                "rna_biotype": [],
-                "rna_insert_size": [],
-                "rna_insert_size_histogram": [],
-                "rna_metrics": [],
+                "gcbias_detail": [
+                    
+                ],
+                "gcbias_summary": [
+                    
+                ],
+                "hybcap_metrics": [
+                    
+                ],
+                "hybcap_per_base": [
+                    
+                ],
+                "hybcap_per_target": [
+                    
+                ],
+                "isize_histogram": [
+                    
+                ],
+                "isize_metrics": [
+                    
+                ],
+                "mean_qual": [
+                    
+                ],
+                "pdf": [
+                    
+                ],
+                "qual_dist": [
+                    
+                ],
+                "rna_biotype": [
+                    
+                ],
+                "rna_insert_size": [
+                    
+                ],
+                "rna_insert_size_histogram": [
+                    
+                ],
+                "rna_metrics": [
+                    
+                ],
                 "versions_riker": [
                     [
                         "RIKER_MULTI",
@@ -765,14 +933,18 @@
                         "0.4.0"
                     ]
                 ],
-                "wgs_coverage": [],
-                "wgs_metrics": []
+                "wgs_coverage": [
+                    
+                ],
+                "wgs_metrics": [
+                    
+                ]
             }
         ],
         "timestamp": "2026-07-07T09:26:11.118178",
         "meta": {
-            "nextflow": "26.04.4",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
         }
     },
     "homo_sapiens - paired_end - cram - alignment basic isize": {
@@ -796,14 +968,30 @@
                         "test.base-distribution-by-cycle.txt:md5,995374424608c109ad6603e6b56adf87"
                     ]
                 ],
-                "error_indel": [],
-                "error_mismatch": [],
-                "error_overlap": [],
-                "gcbias_detail": [],
-                "gcbias_summary": [],
-                "hybcap_metrics": [],
-                "hybcap_per_base": [],
-                "hybcap_per_target": [],
+                "error_indel": [
+                    
+                ],
+                "error_mismatch": [
+                    
+                ],
+                "error_overlap": [
+                    
+                ],
+                "gcbias_detail": [
+                    
+                ],
+                "gcbias_summary": [
+                    
+                ],
+                "hybcap_metrics": [
+                    
+                ],
+                "hybcap_per_base": [
+                    
+                ],
+                "hybcap_per_target": [
+                    
+                ],
                 "isize_histogram": [
                     [
                         {
@@ -854,10 +1042,18 @@
                         "test.quality-score-distribution.txt:md5,1e4ceaf9de78390f1f542eec5dc7275f"
                     ]
                 ],
-                "rna_biotype": [],
-                "rna_insert_size": [],
-                "rna_insert_size_histogram": [],
-                "rna_metrics": [],
+                "rna_biotype": [
+                    
+                ],
+                "rna_insert_size": [
+                    
+                ],
+                "rna_insert_size_histogram": [
+                    
+                ],
+                "rna_metrics": [
+                    
+                ],
                 "versions_riker": [
                     [
                         "RIKER_MULTI",
@@ -865,14 +1061,18 @@
                         "0.4.0"
                     ]
                 ],
-                "wgs_coverage": [],
-                "wgs_metrics": []
+                "wgs_coverage": [
+                    
+                ],
+                "wgs_metrics": [
+                    
+                ]
             }
         ],
         "timestamp": "2026-07-07T09:26:01.234753",
         "meta": {
-            "nextflow": "26.04.4",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
         }
     },
     "sarscov2 - paired_end - bam - all tools": {
@@ -950,8 +1150,12 @@
                         "test.hybcap-metrics.txt:md5,65d0a112bd3508d6c3b5328c8fcfcbdb"
                     ]
                 ],
-                "hybcap_per_base": [],
-                "hybcap_per_target": [],
+                "hybcap_per_base": [
+                    
+                ],
+                "hybcap_per_target": [
+                    
+                ],
                 "isize_histogram": [
                     [
                         {
@@ -1004,10 +1208,18 @@
                         "test.quality-score-distribution.txt:md5,d5f17682727e31f05dc8b29b7c06b3ab"
                     ]
                 ],
-                "rna_biotype": [],
-                "rna_insert_size": [],
-                "rna_insert_size_histogram": [],
-                "rna_metrics": [],
+                "rna_biotype": [
+                    
+                ],
+                "rna_insert_size": [
+                    
+                ],
+                "rna_insert_size_histogram": [
+                    
+                ],
+                "rna_metrics": [
+                    
+                ],
                 "versions_riker": [
                     [
                         "RIKER_MULTI",
@@ -1037,8 +1249,8 @@
         ],
         "timestamp": "2026-07-07T09:26:20.013113",
         "meta": {
-            "nextflow": "26.04.4",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
         }
     },
     "sarscov2 - paired_end - bam - error alignment": {
@@ -1053,7 +1265,9 @@
                         "test.alignment-metrics.txt:md5,ef2421780f4e1127dac0ae3d6702d33f"
                     ]
                 ],
-                "base_dist": [],
+                "base_dist": [
+                    
+                ],
                 "error_indel": [
                     [
                         {
@@ -1081,20 +1295,48 @@
                         "test.error-overlap.txt:md5,4426d9733ae3e59dc2496b0c247c22f2"
                     ]
                 ],
-                "gcbias_detail": [],
-                "gcbias_summary": [],
-                "hybcap_metrics": [],
-                "hybcap_per_base": [],
-                "hybcap_per_target": [],
-                "isize_histogram": [],
-                "isize_metrics": [],
-                "mean_qual": [],
-                "pdf": [],
-                "qual_dist": [],
-                "rna_biotype": [],
-                "rna_insert_size": [],
-                "rna_insert_size_histogram": [],
-                "rna_metrics": [],
+                "gcbias_detail": [
+                    
+                ],
+                "gcbias_summary": [
+                    
+                ],
+                "hybcap_metrics": [
+                    
+                ],
+                "hybcap_per_base": [
+                    
+                ],
+                "hybcap_per_target": [
+                    
+                ],
+                "isize_histogram": [
+                    
+                ],
+                "isize_metrics": [
+                    
+                ],
+                "mean_qual": [
+                    
+                ],
+                "pdf": [
+                    
+                ],
+                "qual_dist": [
+                    
+                ],
+                "rna_biotype": [
+                    
+                ],
+                "rna_insert_size": [
+                    
+                ],
+                "rna_insert_size_histogram": [
+                    
+                ],
+                "rna_metrics": [
+                    
+                ],
                 "versions_riker": [
                     [
                         "RIKER_MULTI",
@@ -1102,24 +1344,38 @@
                         "0.4.0"
                     ]
                 ],
-                "wgs_coverage": [],
-                "wgs_metrics": []
+                "wgs_coverage": [
+                    
+                ],
+                "wgs_metrics": [
+                    
+                ]
             }
         ],
         "timestamp": "2026-07-07T09:26:15.635157",
         "meta": {
-            "nextflow": "26.04.4",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
         }
     },
     "sarscov2 - paired_end - bam - wgs gcbias": {
         "content": [
             {
-                "alignment_metrics": [],
-                "base_dist": [],
-                "error_indel": [],
-                "error_mismatch": [],
-                "error_overlap": [],
+                "alignment_metrics": [
+                    
+                ],
+                "base_dist": [
+                    
+                ],
+                "error_indel": [
+                    
+                ],
+                "error_mismatch": [
+                    
+                ],
+                "error_overlap": [
+                    
+                ],
                 "gcbias_detail": [
                     [
                         {
@@ -1138,12 +1394,24 @@
                         "test.gcbias-summary.txt:md5,4915d05211aaae398fc0f29ab3cc79b8"
                     ]
                 ],
-                "hybcap_metrics": [],
-                "hybcap_per_base": [],
-                "hybcap_per_target": [],
-                "isize_histogram": [],
-                "isize_metrics": [],
-                "mean_qual": [],
+                "hybcap_metrics": [
+                    
+                ],
+                "hybcap_per_base": [
+                    
+                ],
+                "hybcap_per_target": [
+                    
+                ],
+                "isize_histogram": [
+                    
+                ],
+                "isize_metrics": [
+                    
+                ],
+                "mean_qual": [
+                    
+                ],
                 "pdf": [
                     [
                         {
@@ -1156,11 +1424,21 @@
                         ]
                     ]
                 ],
-                "qual_dist": [],
-                "rna_biotype": [],
-                "rna_insert_size": [],
-                "rna_insert_size_histogram": [],
-                "rna_metrics": [],
+                "qual_dist": [
+                    
+                ],
+                "rna_biotype": [
+                    
+                ],
+                "rna_insert_size": [
+                    
+                ],
+                "rna_insert_size_histogram": [
+                    
+                ],
+                "rna_metrics": [
+                    
+                ],
                 "versions_riker": [
                     [
                         "RIKER_MULTI",
@@ -1190,8 +1468,8 @@
         ],
         "timestamp": "2026-07-07T09:25:50.544718",
         "meta": {
-            "nextflow": "26.04.4",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.4"
         }
     }
 }

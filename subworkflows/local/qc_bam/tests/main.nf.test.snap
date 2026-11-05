@@ -40,7 +40,9 @@
             [
                 "ACC13778A2_wgsmetrics.CollectWgsMetrics.coverage_metrics"
             ],
-            [],
+            [
+                
+            ],
             [
                 "ACC13778A2_tidditcov.wig"
             ],
@@ -79,14 +81,20 @@
                     "ACC13778A2_tidditcov.wig_chrY.png"
                 ]
             ],
-            [],
-            [],
-            []
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ]
         ],
         "timestamp": "2026-08-24T21:42:42.262055499",
         "meta": {
-            "nextflow": "26.04.6",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     },
     "QC_BAM - test, sentieon, stub": {
@@ -130,7 +138,9 @@
             [
                 "ACC13778A2_wgsmetrics.txt"
             ],
-            [],
+            [
+                
+            ],
             [
                 "ACC13778A2_tidditcov.wig"
             ],
@@ -169,14 +179,20 @@
                     "ACC13778A2_tidditcov.wig_chrY.png"
                 ]
             ],
-            [],
-            [],
-            []
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ]
         ],
         "timestamp": "2026-08-24T21:46:42.382426096",
         "meta": {
-            "nextflow": "26.04.6",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     },
     "QC_BAM - test, riker": {
@@ -202,8 +218,8 @@
         ],
         "timestamp": "2026-08-24T21:40:57.995384426",
         "meta": {
-            "nextflow": "26.04.6",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     },
     "QC_BAM - test, riker, sentieon, stub": {
@@ -214,7 +230,9 @@
             [
                 "ACC13778A2_riker.wgs-metrics.txt"
             ],
-            [],
+            [
+                
+            ],
             [
                 "ACC13778A2_riker.isize-metrics.txt"
             ],
@@ -230,8 +248,8 @@
         ],
         "timestamp": "2026-08-24T21:47:02.336871492",
         "meta": {
-            "nextflow": "26.04.6",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     },
     "QC_BAM - test, bwamem2": {
@@ -269,15 +287,21 @@
             [
                 "ACC13778A2_mosdepth.per-base.bed.gz.csi"
             ],
-            [],
+            [
+                
+            ],
             [
                 "ACC13778A2_wgsmetrics.CollectWgsMetrics.coverage_metrics"
             ],
-            [],
+            [
+                
+            ],
             [
                 "ACC13778A2_tidditcov.wig"
             ],
-            [],
+            [
+                
+            ],
             [
                 "ACC13778A2_tidditcov.bw"
             ],
@@ -310,14 +334,20 @@
                     "ACC13778A2_tidditcov_chrY.png"
                 ]
             ],
-            [],
-            [],
-            []
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ]
         ],
         "timestamp": "2026-08-24T21:40:32.448851556",
         "meta": {
-            "nextflow": "26.04.6",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     },
     "QC_BAM - test, riker, stub": {
@@ -343,8 +373,8 @@
         ],
         "timestamp": "2026-08-24T21:40:15.579202012",
         "meta": {
-            "nextflow": "26.04.6",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     },
     "QC_BAM - test, sentieon": {
@@ -382,15 +412,21 @@
             [
                 "ACC13778A2_mosdepth.per-base.bed.gz.csi"
             ],
-            [],
+            [
+                
+            ],
             [
                 "ACC13778A2_wgsmetrics.txt"
             ],
-            [],
+            [
+                
+            ],
             [
                 "ACC13778A2_tidditcov.wig"
             ],
-            [],
+            [
+                
+            ],
             [
                 "ACC13778A2_tidditcov.bw"
             ],
@@ -423,14 +459,20 @@
                     "ACC13778A2_tidditcov_chrY.png"
                 ]
             ],
-            [],
-            [],
-            []
+            [
+                
+            ],
+            [
+                
+            ],
+            [
+                
+            ]
         ],
         "timestamp": "2026-08-25T15:26:45.911276815",
         "meta": {
-            "nextflow": "25.10.4",
-            "nf-test": "0.9.4"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
         }
     }
 }

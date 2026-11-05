@@ -7,15 +7,15 @@
                     [
                         [
                             {
-                                "father": "ACC13778A3",
                                 "id": "amusingmarmoset",
-                                "mother": "ACC13778A2",
                                 "probands": [
                                     "ACC13778A1"
                                 ],
                                 "upd_children": [
                                     "ACC13778A1"
-                                ]
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3"
                             },
                             "amusingmarmoset_rhocall_filter_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -26,15 +26,15 @@
                     [
                         [
                             {
-                                "father": "ACC13778A3",
                                 "id": "amusingmarmoset",
-                                "mother": "ACC13778A2",
                                 "probands": [
                                     "ACC13778A1"
                                 ],
                                 "upd_children": [
                                     "ACC13778A1"
-                                ]
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3"
                             },
                             "amusingmarmoset_rhocall_filter_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
@@ -45,13 +45,13 @@
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             [
                                 "ACC13778A1_rhocallviz.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -87,7 +87,9 @@
                     "3",
                     [
                         [
-                            [],
+                            [
+                                
+                            ],
                             [
                                 "ACC13778A1_upd_regions.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
                                 "ACC13778A1_upd_regions.bed_chr10.png:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -122,7 +124,9 @@
                     "4",
                     [
                         [
-                            [],
+                            [
+                                
+                            ],
                             [
                                 "ACC13778A1_upd_sites.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
                                 "ACC13778A1_upd_sites.bed_chr10.png:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -158,13 +162,13 @@
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             "ACC13778A1_rhocallviz.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -175,13 +179,13 @@
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             "ACC13778A1_rhocallviz.wig:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -192,13 +196,13 @@
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             "ACC13778A1_rhocallviz.bw:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -209,17 +213,17 @@
                     [
                         [
                             {
-                                "father": "ACC13778A3",
                                 "id": "amusingmarmoset",
-                                "mother": "ACC13778A2",
-                                "prefix": "amusingmarmoset_rhocall_vcfanno",
                                 "probands": [
                                     "ACC13778A1"
                                 ],
-                                "upd_child": "ACC13778A1",
                                 "upd_children": [
                                     "ACC13778A1"
-                                ]
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3",
+                                "prefix": "amusingmarmoset_rhocall_vcfanno",
+                                "upd_child": "ACC13778A1"
                             },
                             "amusingmarmoset.bigBed:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -230,17 +234,17 @@
                     [
                         [
                             {
-                                "father": "ACC13778A3",
                                 "id": "amusingmarmoset",
-                                "mother": "ACC13778A2",
-                                "prefix": "amusingmarmoset_rhocall_vcfanno",
                                 "probands": [
                                     "ACC13778A1"
                                 ],
-                                "upd_child": "ACC13778A1",
                                 "upd_children": [
                                     "ACC13778A1"
-                                ]
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3",
+                                "prefix": "amusingmarmoset_rhocall_vcfanno",
+                                "upd_child": "ACC13778A1"
                             },
                             "amusingmarmoset.bigBed:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -251,15 +255,15 @@
                     [
                         [
                             {
-                                "father": "ACC13778A3",
                                 "id": "amusingmarmoset",
-                                "mother": "ACC13778A2",
                                 "probands": [
                                     "ACC13778A1"
                                 ],
                                 "upd_children": [
                                     "ACC13778A1"
-                                ]
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3"
                             },
                             "amusingmarmoset_rhocall_filter_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -270,15 +274,15 @@
                     [
                         [
                             {
-                                "father": "ACC13778A3",
                                 "id": "amusingmarmoset",
-                                "mother": "ACC13778A2",
                                 "probands": [
                                     "ACC13778A1"
                                 ],
                                 "upd_children": [
                                     "ACC13778A1"
-                                ]
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3"
                             },
                             "amusingmarmoset_rhocall_filter_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
@@ -289,13 +293,13 @@
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             [
                                 "ACC13778A1_rhocallviz.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -331,7 +335,9 @@
                     "chromograph_regions_plots",
                     [
                         [
-                            [],
+                            [
+                                
+                            ],
                             [
                                 "ACC13778A1_upd_regions.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
                                 "ACC13778A1_upd_regions.bed_chr10.png:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -366,7 +372,9 @@
                     "chromograph_sites_plots",
                     [
                         [
-                            [],
+                            [
+                                
+                            ],
                             [
                                 "ACC13778A1_upd_sites.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
                                 "ACC13778A1_upd_sites.bed_chr10.png:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -402,13 +410,13 @@
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             "ACC13778A1_rhocallviz.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -419,13 +427,13 @@
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             "ACC13778A1_rhocallviz.wig:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -436,13 +444,13 @@
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             "ACC13778A1_rhocallviz.bw:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -453,17 +461,17 @@
                     [
                         [
                             {
-                                "father": "ACC13778A3",
                                 "id": "amusingmarmoset",
-                                "mother": "ACC13778A2",
-                                "prefix": "amusingmarmoset_rhocall_vcfanno",
                                 "probands": [
                                     "ACC13778A1"
                                 ],
-                                "upd_child": "ACC13778A1",
                                 "upd_children": [
                                     "ACC13778A1"
-                                ]
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3",
+                                "prefix": "amusingmarmoset_rhocall_vcfanno",
+                                "upd_child": "ACC13778A1"
                             },
                             "amusingmarmoset.bigBed:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -474,17 +482,17 @@
                     [
                         [
                             {
-                                "father": "ACC13778A3",
                                 "id": "amusingmarmoset",
-                                "mother": "ACC13778A2",
-                                "prefix": "amusingmarmoset_rhocall_vcfanno",
                                 "probands": [
                                     "ACC13778A1"
                                 ],
-                                "upd_child": "ACC13778A1",
                                 "upd_children": [
                                     "ACC13778A1"
-                                ]
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3",
+                                "prefix": "amusingmarmoset_rhocall_vcfanno",
+                                "upd_child": "ACC13778A1"
                             },
                             "amusingmarmoset.bigBed:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -494,8 +502,8 @@
         ],
         "timestamp": "2026-09-30T10:09:18.922225174",
         "meta": {
-            "nextflow": "26.04.6",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     },
     "ANNOTATE_GENOME_SNVS - GRCh38, wes, stub": {
@@ -506,15 +514,15 @@
                     [
                         [
                             {
-                                "father": "ACC13778A3",
                                 "id": "amusingmarmoset",
-                                "mother": "ACC13778A2",
                                 "probands": [
                                     "ACC13778A1"
                                 ],
                                 "upd_children": [
                                     "ACC13778A1"
-                                ]
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3"
                             },
                             "amusingmarmoset_rhocall_filter_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -525,15 +533,15 @@
                     [
                         [
                             {
-                                "father": "ACC13778A3",
                                 "id": "amusingmarmoset",
-                                "mother": "ACC13778A2",
                                 "probands": [
                                     "ACC13778A1"
                                 ],
                                 "upd_children": [
                                     "ACC13778A1"
-                                ]
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3"
                             },
                             "amusingmarmoset_rhocall_filter_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
@@ -544,13 +552,13 @@
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             [
                                 "ACC13778A1_rhocallviz.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -584,24 +592,28 @@
                 ],
                 [
                     "3",
-                    []
+                    [
+                        
+                    ]
                 ],
                 [
                     "4",
-                    []
+                    [
+                        
+                    ]
                 ],
                 [
                     "5",
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             "ACC13778A1_rhocallviz.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -612,13 +624,13 @@
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             "ACC13778A1_rhocallviz.wig:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -629,13 +641,13 @@
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             "ACC13778A1_rhocallviz.bw:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -643,26 +655,30 @@
                 ],
                 [
                     "8",
-                    []
+                    [
+                        
+                    ]
                 ],
                 [
                     "9",
-                    []
+                    [
+                        
+                    ]
                 ],
                 [
                     "bcftools_concat_tbi",
                     [
                         [
                             {
-                                "father": "ACC13778A3",
                                 "id": "amusingmarmoset",
-                                "mother": "ACC13778A2",
                                 "probands": [
                                     "ACC13778A1"
                                 ],
                                 "upd_children": [
                                     "ACC13778A1"
-                                ]
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3"
                             },
                             "amusingmarmoset_rhocall_filter_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -673,15 +689,15 @@
                     [
                         [
                             {
-                                "father": "ACC13778A3",
                                 "id": "amusingmarmoset",
-                                "mother": "ACC13778A2",
                                 "probands": [
                                     "ACC13778A1"
                                 ],
                                 "upd_children": [
                                     "ACC13778A1"
-                                ]
+                                ],
+                                "mother": "ACC13778A2",
+                                "father": "ACC13778A3"
                             },
                             "amusingmarmoset_rhocall_filter_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
@@ -692,13 +708,13 @@
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             [
                                 "ACC13778A1_rhocallviz.bed_chr1.png:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -732,24 +748,28 @@
                 ],
                 [
                     "chromograph_regions_plots",
-                    []
+                    [
+                        
+                    ]
                 ],
                 [
                     "chromograph_sites_plots",
-                    []
+                    [
+                        
+                    ]
                 ],
                 [
                     "rhocall_viz_bed",
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             "ACC13778A1_rhocallviz.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -760,13 +780,13 @@
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             "ACC13778A1_rhocallviz.wig:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -777,13 +797,13 @@
                     [
                         [
                             {
-                                "case_id": "amusingmarmoset",
                                 "id": "ACC13778A1",
-                                "maternal": "ACC13778A2",
-                                "paternal": "ACC13778A3",
-                                "phenotype": 2,
                                 "sample": "ACC13778A1",
-                                "sex": 1
+                                "sex": 1,
+                                "phenotype": 2,
+                                "paternal": "ACC13778A3",
+                                "maternal": "ACC13778A2",
+                                "case_id": "amusingmarmoset"
                             },
                             "ACC13778A1_rhocallviz.bw:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
@@ -791,18 +811,22 @@
                 ],
                 [
                     "upd_regions_bigbed",
-                    []
+                    [
+                        
+                    ]
                 ],
                 [
                     "upd_sites_bigbed",
-                    []
+                    [
+                        
+                    ]
                 ]
             ]
         ],
         "timestamp": "2026-09-30T10:10:01.739468252",
         "meta": {
-            "nextflow": "26.04.6",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     },
     "ANNOTATE_GENOME_SNVS - GRCh38, wgs, minimal dataset": {
@@ -814,8 +838,8 @@
         ],
         "timestamp": "2026-09-30T10:28:49.817421063",
         "meta": {
-            "nextflow": "26.04.6",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     }
 }

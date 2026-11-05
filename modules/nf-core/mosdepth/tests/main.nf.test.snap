@@ -235,8 +235,8 @@
             }
         ],
         "meta": {
-            "nextflow": "25.04.7",
-            "nf-test": "0.9.2"
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.7"
         },
         "timestamp": "2025-09-23T13:06:13.219131"
     },
@@ -261,8 +261,12 @@
                         "test.mosdepth.summary.txt:md5,96c037f769974b904beb53edc4f56d82"
                     ]
                 ],
-                "10": [],
-                "11": [],
+                "10": [
+                    
+                ],
+                "11": [
+                    
+                ],
                 "12": [
                     [
                         "MOSDEPTH",
@@ -279,7 +283,9 @@
                         "test.mosdepth.region.dist.txt:md5,e82e90c7d508a135b5a8a7cd6933452e"
                     ]
                 ],
-                "3": [],
+                "3": [
+                    
+                ],
                 "4": [
                     [
                         {
@@ -316,8 +322,12 @@
                         "test.regions.bed.gz.csi:md5,c33ac5c86370039463796f01434fc0e4"
                     ]
                 ],
-                "8": [],
-                "9": [],
+                "8": [
+                    
+                ],
+                "9": [
+                    
+                ],
                 "global_txt": [
                     [
                         {
@@ -345,9 +355,15 @@
                         "test.per-base.bed.gz.csi:md5,6adccf94ed775c9f53422e3e9c7af27f"
                     ]
                 ],
-                "per_base_d4": [],
-                "quantized_bed": [],
-                "quantized_csi": [],
+                "per_base_d4": [
+                    
+                ],
+                "quantized_bed": [
+                    
+                ],
+                "quantized_csi": [
+                    
+                ],
                 "regions_bed": [
                     [
                         {
@@ -384,8 +400,12 @@
                         "test.mosdepth.summary.txt:md5,96c037f769974b904beb53edc4f56d82"
                     ]
                 ],
-                "thresholds_bed": [],
-                "thresholds_csi": [],
+                "thresholds_bed": [
+                    
+                ],
+                "thresholds_csi": [
+                    
+                ],
                 "versions_mosdepth": [
                     [
                         "MOSDEPTH",
@@ -396,8 +416,8 @@
             }
         ],
         "meta": {
-            "nextflow": "25.04.7",
-            "nf-test": "0.9.2"
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.7"
         },
         "timestamp": "2025-09-23T13:22:14.011309"
     },
@@ -422,8 +442,12 @@
                         "test.mosdepth.summary.txt:md5,4f0d231060cbde4efdd673863bd2fb59"
                     ]
                 ],
-                "10": [],
-                "11": [],
+                "10": [
+                    
+                ],
+                "11": [
+                    
+                ],
                 "12": [
                     [
                         "MOSDEPTH",
@@ -431,8 +455,12 @@
                         "0.3.11"
                     ]
                 ],
-                "2": [],
-                "3": [],
+                "2": [
+                    
+                ],
+                "3": [
+                    
+                ],
                 "4": [
                     [
                         {
@@ -451,8 +479,12 @@
                         "test.per-base.bed.gz.csi:md5,6adccf94ed775c9f53422e3e9c7af27f"
                     ]
                 ],
-                "6": [],
-                "7": [],
+                "6": [
+                    
+                ],
+                "7": [
+                    
+                ],
                 "8": [
                     [
                         {
@@ -498,7 +530,9 @@
                         "test.per-base.bed.gz.csi:md5,6adccf94ed775c9f53422e3e9c7af27f"
                     ]
                 ],
-                "per_base_d4": [],
+                "per_base_d4": [
+                    
+                ],
                 "quantized_bed": [
                     [
                         {
@@ -517,9 +551,15 @@
                         "test.quantized.bed.gz.csi:md5,c0a3176a59010639455a4aefb3f247ef"
                     ]
                 ],
-                "regions_bed": [],
-                "regions_csi": [],
-                "regions_txt": [],
+                "regions_bed": [
+                    
+                ],
+                "regions_csi": [
+                    
+                ],
+                "regions_txt": [
+                    
+                ],
                 "summary_txt": [
                     [
                         {
@@ -529,8 +569,12 @@
                         "test.mosdepth.summary.txt:md5,4f0d231060cbde4efdd673863bd2fb59"
                     ]
                 ],
-                "thresholds_bed": [],
-                "thresholds_csi": [],
+                "thresholds_bed": [
+                    
+                ],
+                "thresholds_csi": [
+                    
+                ],
                 "versions_mosdepth": [
                     [
                         "MOSDEPTH",
@@ -541,8 +585,8 @@
             }
         ],
         "meta": {
-            "nextflow": "25.04.7",
-            "nf-test": "0.9.2"
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.7"
         },
         "timestamp": "2025-09-23T13:22:22.818082"
     },
@@ -567,8 +611,12 @@
                         "test.mosdepth.summary.txt:md5,96c037f769974b904beb53edc4f56d82"
                     ]
                 ],
-                "10": [],
-                "11": [],
+                "10": [
+                    
+                ],
+                "11": [
+                    
+                ],
                 "12": [
                     [
                         "MOSDEPTH",
@@ -585,7 +633,9 @@
                         "test.mosdepth.region.dist.txt:md5,e82e90c7d508a135b5a8a7cd6933452e"
                     ]
                 ],
-                "3": [],
+                "3": [
+                    
+                ],
                 "4": [
                     [
                         {
@@ -622,8 +672,12 @@
                         "test.regions.bed.gz.csi:md5,c33ac5c86370039463796f01434fc0e4"
                     ]
                 ],
-                "8": [],
-                "9": [],
+                "8": [
+                    
+                ],
+                "9": [
+                    
+                ],
                 "global_txt": [
                     [
                         {
@@ -651,9 +705,15 @@
                         "test.per-base.bed.gz.csi:md5,6adccf94ed775c9f53422e3e9c7af27f"
                     ]
                 ],
-                "per_base_d4": [],
-                "quantized_bed": [],
-                "quantized_csi": [],
+                "per_base_d4": [
+                    
+                ],
+                "quantized_bed": [
+                    
+                ],
+                "quantized_csi": [
+                    
+                ],
                 "regions_bed": [
                     [
                         {
@@ -690,8 +750,12 @@
                         "test.mosdepth.summary.txt:md5,96c037f769974b904beb53edc4f56d82"
                     ]
                 ],
-                "thresholds_bed": [],
-                "thresholds_csi": [],
+                "thresholds_bed": [
+                    
+                ],
+                "thresholds_csi": [
+                    
+                ],
                 "versions_mosdepth": [
                     [
                         "MOSDEPTH",
@@ -702,8 +766,8 @@
             }
         ],
         "meta": {
-            "nextflow": "25.04.7",
-            "nf-test": "0.9.2"
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.7"
         },
         "timestamp": "2025-09-23T13:22:04.449943"
     },
@@ -728,8 +792,12 @@
                         "test.mosdepth.summary.txt:md5,96c037f769974b904beb53edc4f56d82"
                     ]
                 ],
-                "10": [],
-                "11": [],
+                "10": [
+                    
+                ],
+                "11": [
+                    
+                ],
                 "12": [
                     [
                         "MOSDEPTH",
@@ -746,7 +814,9 @@
                         "test.mosdepth.region.dist.txt:md5,0b6ea9f0da1228252d9aef2d3b6f7f76"
                     ]
                 ],
-                "3": [],
+                "3": [
+                    
+                ],
                 "4": [
                     [
                         {
@@ -783,8 +853,12 @@
                         "test.regions.bed.gz.csi:md5,17a2cbe22a948d7c004b90a1f28347a1"
                     ]
                 ],
-                "8": [],
-                "9": [],
+                "8": [
+                    
+                ],
+                "9": [
+                    
+                ],
                 "global_txt": [
                     [
                         {
@@ -812,9 +886,15 @@
                         "test.per-base.bed.gz.csi:md5,6adccf94ed775c9f53422e3e9c7af27f"
                     ]
                 ],
-                "per_base_d4": [],
-                "quantized_bed": [],
-                "quantized_csi": [],
+                "per_base_d4": [
+                    
+                ],
+                "quantized_bed": [
+                    
+                ],
+                "quantized_csi": [
+                    
+                ],
                 "regions_bed": [
                     [
                         {
@@ -851,8 +931,12 @@
                         "test.mosdepth.summary.txt:md5,96c037f769974b904beb53edc4f56d82"
                     ]
                 ],
-                "thresholds_bed": [],
-                "thresholds_csi": [],
+                "thresholds_bed": [
+                    
+                ],
+                "thresholds_csi": [
+                    
+                ],
                 "versions_mosdepth": [
                     [
                         "MOSDEPTH",
@@ -863,8 +947,8 @@
             }
         ],
         "meta": {
-            "nextflow": "25.04.7",
-            "nf-test": "0.9.2"
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.7"
         },
         "timestamp": "2025-09-23T13:22:18.435089"
     },
@@ -889,8 +973,12 @@
                         "test.mosdepth.summary.txt:md5,4f0d231060cbde4efdd673863bd2fb59"
                     ]
                 ],
-                "10": [],
-                "11": [],
+                "10": [
+                    
+                ],
+                "11": [
+                    
+                ],
                 "12": [
                     [
                         "MOSDEPTH",
@@ -898,8 +986,12 @@
                         "0.3.11"
                     ]
                 ],
-                "2": [],
-                "3": [],
+                "2": [
+                    
+                ],
+                "3": [
+                    
+                ],
                 "4": [
                     [
                         {
@@ -918,10 +1010,18 @@
                         "test.per-base.bed.gz.csi:md5,6adccf94ed775c9f53422e3e9c7af27f"
                     ]
                 ],
-                "6": [],
-                "7": [],
-                "8": [],
-                "9": [],
+                "6": [
+                    
+                ],
+                "7": [
+                    
+                ],
+                "8": [
+                    
+                ],
+                "9": [
+                    
+                ],
                 "global_txt": [
                     [
                         {
@@ -949,12 +1049,24 @@
                         "test.per-base.bed.gz.csi:md5,6adccf94ed775c9f53422e3e9c7af27f"
                     ]
                 ],
-                "per_base_d4": [],
-                "quantized_bed": [],
-                "quantized_csi": [],
-                "regions_bed": [],
-                "regions_csi": [],
-                "regions_txt": [],
+                "per_base_d4": [
+                    
+                ],
+                "quantized_bed": [
+                    
+                ],
+                "quantized_csi": [
+                    
+                ],
+                "regions_bed": [
+                    
+                ],
+                "regions_csi": [
+                    
+                ],
+                "regions_txt": [
+                    
+                ],
                 "summary_txt": [
                     [
                         {
@@ -964,8 +1076,12 @@
                         "test.mosdepth.summary.txt:md5,4f0d231060cbde4efdd673863bd2fb59"
                     ]
                 ],
-                "thresholds_bed": [],
-                "thresholds_csi": [],
+                "thresholds_bed": [
+                    
+                ],
+                "thresholds_csi": [
+                    
+                ],
                 "versions_mosdepth": [
                     [
                         "MOSDEPTH",
@@ -976,8 +1092,8 @@
             }
         ],
         "meta": {
-            "nextflow": "25.04.7",
-            "nf-test": "0.9.2"
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.7"
         },
         "timestamp": "2025-09-23T13:21:59.785829"
     },
@@ -1002,8 +1118,12 @@
                         "test.mosdepth.summary.txt:md5,4f0d231060cbde4efdd673863bd2fb59"
                     ]
                 ],
-                "10": [],
-                "11": [],
+                "10": [
+                    
+                ],
+                "11": [
+                    
+                ],
                 "12": [
                     [
                         "MOSDEPTH",
@@ -1011,8 +1131,12 @@
                         "0.3.11"
                     ]
                 ],
-                "2": [],
-                "3": [],
+                "2": [
+                    
+                ],
+                "3": [
+                    
+                ],
                 "4": [
                     [
                         {
@@ -1031,10 +1155,18 @@
                         "test.per-base.bed.gz.csi:md5,6adccf94ed775c9f53422e3e9c7af27f"
                     ]
                 ],
-                "6": [],
-                "7": [],
-                "8": [],
-                "9": [],
+                "6": [
+                    
+                ],
+                "7": [
+                    
+                ],
+                "8": [
+                    
+                ],
+                "9": [
+                    
+                ],
                 "global_txt": [
                     [
                         {
@@ -1062,12 +1194,24 @@
                         "test.per-base.bed.gz.csi:md5,6adccf94ed775c9f53422e3e9c7af27f"
                     ]
                 ],
-                "per_base_d4": [],
-                "quantized_bed": [],
-                "quantized_csi": [],
-                "regions_bed": [],
-                "regions_csi": [],
-                "regions_txt": [],
+                "per_base_d4": [
+                    
+                ],
+                "quantized_bed": [
+                    
+                ],
+                "quantized_csi": [
+                    
+                ],
+                "regions_bed": [
+                    
+                ],
+                "regions_csi": [
+                    
+                ],
+                "regions_txt": [
+                    
+                ],
                 "summary_txt": [
                     [
                         {
@@ -1077,8 +1221,12 @@
                         "test.mosdepth.summary.txt:md5,4f0d231060cbde4efdd673863bd2fb59"
                     ]
                 ],
-                "thresholds_bed": [],
-                "thresholds_csi": [],
+                "thresholds_bed": [
+                    
+                ],
+                "thresholds_csi": [
+                    
+                ],
                 "versions_mosdepth": [
                     [
                         "MOSDEPTH",
@@ -1089,8 +1237,8 @@
             }
         ],
         "meta": {
-            "nextflow": "25.04.7",
-            "nf-test": "0.9.2"
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.7"
         },
         "timestamp": "2025-09-23T13:22:09.294766"
     },
@@ -1149,7 +1297,9 @@
                         "test.mosdepth.region.dist.txt:md5,e82e90c7d508a135b5a8a7cd6933452e"
                     ]
                 ],
-                "3": [],
+                "3": [
+                    
+                ],
                 "4": [
                     [
                         {
@@ -1186,8 +1336,12 @@
                         "test.regions.bed.gz.csi:md5,c33ac5c86370039463796f01434fc0e4"
                     ]
                 ],
-                "8": [],
-                "9": [],
+                "8": [
+                    
+                ],
+                "9": [
+                    
+                ],
                 "global_txt": [
                     [
                         {
@@ -1215,9 +1369,15 @@
                         "test.per-base.bed.gz.csi:md5,6adccf94ed775c9f53422e3e9c7af27f"
                     ]
                 ],
-                "per_base_d4": [],
-                "quantized_bed": [],
-                "quantized_csi": [],
+                "per_base_d4": [
+                    
+                ],
+                "quantized_bed": [
+                    
+                ],
+                "quantized_csi": [
+                    
+                ],
                 "regions_bed": [
                     [
                         {
@@ -1282,8 +1442,8 @@
             }
         ],
         "meta": {
-            "nextflow": "25.04.7",
-            "nf-test": "0.9.2"
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.7"
         },
         "timestamp": "2025-09-23T13:22:27.300204"
     }

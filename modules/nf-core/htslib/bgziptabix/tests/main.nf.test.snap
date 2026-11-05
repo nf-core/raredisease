@@ -2,7 +2,9 @@
     "sarscov2 - gzip - (re)compress - no index": {
         "content": [
             {
-                "index": [],
+                "index": [
+                    
+                ],
                 "output": [
                     [
                         {
@@ -29,14 +31,16 @@
         ],
         "timestamp": "2026-05-19T10:21:33.710007592",
         "meta": {
-            "nextflow": "26.04.0",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     },
     "metagenome - xz - (re)compress - no index": {
         "content": [
             {
-                "index": [],
+                "index": [
+                    
+                ],
                 "output": [
                     [
                         {
@@ -63,14 +67,16 @@
         ],
         "timestamp": "2026-05-19T10:22:42.445692755",
         "meta": {
-            "nextflow": "26.04.0",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     },
     "metagenome - bz2 - decompress": {
         "content": [
             {
-                "index": [],
+                "index": [
+                    
+                ],
                 "output": [
                     [
                         {
@@ -97,14 +103,16 @@
         ],
         "timestamp": "2026-05-19T10:21:48.804507455",
         "meta": {
-            "nextflow": "26.04.0",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     },
     "sarscov2 - vcf - decompress - stub": {
         "content": [
             {
-                "index": [],
+                "index": [
+                    
+                ],
                 "output": [
                     [
                         {
@@ -131,14 +139,16 @@
         ],
         "timestamp": "2026-05-19T10:23:14.567213835",
         "meta": {
-            "nextflow": "26.04.0",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     },
     "sarscov2 - gzip - decompress": {
         "content": [
             {
-                "index": [],
+                "index": [
+                    
+                ],
                 "output": [
                     [
                         {
@@ -165,8 +175,8 @@
         ],
         "timestamp": "2026-05-19T10:21:27.607706101",
         "meta": {
-            "nextflow": "26.04.0",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     },
     "sarscov2 - vcf - compress - index - stub": {
@@ -206,14 +216,16 @@
         ],
         "timestamp": "2026-05-19T10:22:57.854824265",
         "meta": {
-            "nextflow": "26.04.0",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     },
     "sarscov2 - vcf - decompress": {
         "content": [
             {
-                "index": [],
+                "index": [
+                    
+                ],
                 "output": [
                     [
                         {
@@ -240,14 +252,16 @@
         ],
         "timestamp": "2026-05-19T10:20:56.277612816",
         "meta": {
-            "nextflow": "26.04.0",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     },
     "metagenome - bz2 - (re)compress - no index": {
         "content": [
             {
-                "index": [],
+                "index": [
+                    
+                ],
                 "output": [
                     [
                         {
@@ -274,8 +288,8 @@
         ],
         "timestamp": "2026-05-19T10:21:57.137689117",
         "meta": {
-            "nextflow": "26.04.0",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     },
     "sarscov2 - vcf - compress - index": {
@@ -315,8 +329,8 @@
         ],
         "timestamp": "2026-05-19T10:21:02.256241871",
         "meta": {
-            "nextflow": "26.04.0",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     },
     "metagenome - xz - decompress": {
@@ -330,7 +344,9 @@
                         "test:md5,b8d852a2b1ee52ed64d83046dcdb9de2"
                     ]
                 ],
-                "1": [],
+                "1": [
+                    
+                ],
                 "2": [
                     [
                         "HTSLIB_BGZIPTABIX",
@@ -345,7 +361,9 @@
                         "5.8.3"
                     ]
                 ],
-                "index": [],
+                "index": [
+                    
+                ],
                 "output": [
                     [
                         {
@@ -388,8 +406,8 @@
         ],
         "timestamp": "2026-05-12T11:31:30.587093278",
         "meta": {
-            "nextflow": "26.04.0",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     },
     "sarscov2 - vcf - compress - no index - stub": {
@@ -403,7 +421,9 @@
                         "test.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
-                "1": [],
+                "1": [
+                    
+                ],
                 "2": [
                     [
                         "HTSLIB_BGZIPTABIX",
@@ -411,7 +431,9 @@
                         "1.23.1"
                     ]
                 ],
-                "index": [],
+                "index": [
+                    
+                ],
                 "output": [
                     [
                         {
@@ -431,14 +453,16 @@
         ],
         "timestamp": "2026-05-06T15:27:48.766118732",
         "meta": {
-            "nextflow": "26.04.0",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     },
     "sarscov2 - bgzip - compress - no index": {
         "content": [
             {
-                "index": [],
+                "index": [
+                    
+                ],
                 "output": [
                     [
                         {
@@ -465,8 +489,8 @@
         ],
         "timestamp": "2026-05-19T10:21:21.172365408",
         "meta": {
-            "nextflow": "26.04.0",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     },
     "sarscov2 - vcf + regions - compress - index": {
@@ -507,14 +531,16 @@
         ],
         "timestamp": "2026-05-19T10:34:19.00293386",
         "meta": {
-            "nextflow": "26.04.0",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     },
     "sarscov2 - bgzip - decompress": {
         "content": [
             {
-                "index": [],
+                "index": [
+                    
+                ],
                 "output": [
                     [
                         {
@@ -541,8 +567,8 @@
         ],
         "timestamp": "2026-05-19T10:21:14.663326257",
         "meta": {
-            "nextflow": "26.04.0",
-            "nf-test": "0.9.5"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
         }
     }
 }
