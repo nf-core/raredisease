@@ -1,0 +1,144 @@
+{
+    "homo_sapiens - vcf, repeat_catalogue - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "stranger.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "stranger.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        "STRANGER",
+                        "stranger",
+                        "0.10.0"
+                    ]
+                ],
+                "3": [
+                    [
+                        "STRANGER",
+                        "tabix",
+                        "1.23"
+                    ]
+                ],
+                "tbi": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "stranger.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "stranger.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "versions_stranger": [
+                    [
+                        "STRANGER",
+                        "stranger",
+                        "0.10.0"
+                    ]
+                ],
+                "versions_tabix": [
+                    [
+                        "STRANGER",
+                        "tabix",
+                        "1.23"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
+        },
+        "timestamp": "2026-01-30T15:59:31.211437829"
+    },
+    "homo_sapiens - vcf, repeat_catalogue": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "stranger.vcf.gz:md5,5c55cbc7404f2d03b8cac82733175783"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "stranger.vcf.gz.tbi:md5,9ac34e9ea9d9e3eee971b542629259c3"
+                    ]
+                ],
+                "2": [
+                    [
+                        "STRANGER",
+                        "stranger",
+                        "0.10.0"
+                    ]
+                ],
+                "3": [
+                    [
+                        "STRANGER",
+                        "tabix",
+                        "1.23"
+                    ]
+                ],
+                "tbi": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "stranger.vcf.gz.tbi:md5,9ac34e9ea9d9e3eee971b542629259c3"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "stranger.vcf.gz:md5,5c55cbc7404f2d03b8cac82733175783"
+                    ]
+                ],
+                "versions_stranger": [
+                    [
+                        "STRANGER",
+                        "stranger",
+                        "0.10.0"
+                    ]
+                ],
+                "versions_tabix": [
+                    [
+                        "STRANGER",
+                        "tabix",
+                        "1.23"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
+        },
+        "timestamp": "2026-01-30T15:59:14.37967244"
+    }
+}

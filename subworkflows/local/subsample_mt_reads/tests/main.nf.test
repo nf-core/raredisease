@@ -1,0 +1,71 @@
+nextflow_workflow {
+
+    name "Test Workflow SUBSAMPLE_MT_READS"
+    script "subworkflows/local/subsample_mt_reads/main.nf"
+    workflow "SUBSAMPLE_MT_READS"
+    tag "subworkflows"
+    tag "subsample_mt_reads"
+
+    tag "samtools/view"
+    tag "samtools/collate"
+    tag "samtools/sort"
+    tag "gawk"
+
+    config "./nextflow.config"
+
+    test("SUBSAMPLE_MT_READS - wgs, minimal dataset") {
+
+        when {
+            params {
+                mt_subsample_reads = 5000
+            }
+            workflow {
+                """
+                input[0] = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam', checkIfExists: true),
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam.bai', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.bam.collect { meta, bamfile -> [ meta, bam(bamfile).getReadsMD5() ] },
+                        workflow.out.bai.collect { meta, baifile -> [ meta, file(baifile).name ] }
+                    ).match()
+                }
+            )
+        }
+    }
+
+    test("SUBSAMPLE_MT_READS - wgs, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                mt_subsample_reads = 18000
+            }
+            workflow {
+                """
+                input[0] = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam', checkIfExists: true),
+                    file(params.subworkflow_fixtures + '/ACC13778A2_mt_aligned.bam.bai', checkIfExists: true)
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}
