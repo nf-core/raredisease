@@ -13,27 +13,24 @@ workflow CALL_SV_MANTA {
         ch_genome_fai   // channel: [mandatory] [ val(meta), path(fai) ]
         ch_case_info    // channel: [mandatory] [ val(case_info) ]
         ch_regions      // channel: [mandatory] [ path(bed), path(tbi) ]
+        ch_config       // channel: [optional] [ path(config) ]
 
     main:
-        ch_bam.map{ _meta, bam -> bam }
+        bam_file_list = ch_bam.map{ _meta, bam -> bam }
             .collect(sort: { a, b -> a.getName() <=> b.getName() })
             .toList()
-            .set { bam_file_list }
 
-        ch_bai.map{ _meta, bai -> bai }
+        bai_file_list = ch_bai.map{ _meta, bai -> bai }
             .collect(sort: { a, b -> a.getName() <=> b.getName() })
             .toList()
-            .set { bai_file_list }
 
-        ch_case_info.combine(bam_file_list)
+        manta_input = ch_case_info.combine(bam_file_list)
             .combine(bai_file_list)
             .combine(ch_regions)
-            .set { manta_input }
-        MANTA ( manta_input, ch_genome_fasta, ch_genome_fai, [] )
+        MANTA ( manta_input, ch_genome_fasta, ch_genome_fai, ch_config )
 
-        MANTA.out.diploid_sv_vcf
+        ch_filter_in = MANTA.out.diploid_sv_vcf
             .join(MANTA.out.diploid_sv_vcf_tbi)
-            .set {ch_filter_in}
         BCFTOOLS_VIEW_MANTA (ch_filter_in, [], [], [])
 
     emit:

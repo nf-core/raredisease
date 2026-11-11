@@ -16,6 +16,44 @@ nextflow_workflow {
     tag "tabix/tabix"
     tag "svdb/merge"
 
+    config "./nextflow.config"
+
+    test("CALL_MOBILE_ELEMENTS - wgs, minimal dataset") {
+
+        when {
+            workflow {
+                """
+                input[0] = channel.of([id:'amusingmarmoset'])
+                input[1] = channel.of([
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
+                ])
+                input[2] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[4] = channel
+                    .fromPath(params.resources_remapped + '/mobile_elements/mobile_element_references_remapped.tsv', checkIfExists: true)
+                    .splitText()
+                    .map { line -> line.trim() }
+                    .map { line -> line.split('\\t') as List }
+                    .filter { cols -> !(cols[0].equalsIgnoreCase('type') && cols[1].equalsIgnoreCase('path')) }
+                    .map { cols -> [cols[0], file(cols[1], checkIfExists: true)] }
+                """
+            }
+        }
+
+        then {
+             assertAll(
+                { assert workflow.success },
+                { assert workflow.out.tbi },
+                { assert snapshot(
+                    "${file(workflow.out.vcf[0][1]).name}",
+                    path(workflow.out.vcf[0][1]).vcf.summary
+                ).match() }
+             )
+        }
+    }
+
     test("CALL_MOBILE_ELEMENTS - stub") {
 
         options "-stub"
@@ -23,15 +61,21 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = channel.of([id:'justhusky'])
+                input[0] = channel.of([id:'amusingmarmoset'])
                 input[1] = channel.of([
-                    [id:'earlycasualcaiman', sample:'earlycasualcaiman', single_end:false, num_lanes:1, read_group: "'@RG\\\\tID:earlycasualcaiman\\\\tPL:illumina\\\\tSM:earlycasualcaiman'", lane:1, sex:1, phenotype:1, paternal:0, maternal:0, case_id:'justhusky'],
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam', checkIfExists: true),
-                    file(params.pipelines_testdata_base_path + 'testdata/earlycasualcaiman_sorted_md.bam.bai', checkIfExists: true)
+                    ${TestData.sample('ACC13778A2')},
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true),
+                    file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)
                 ])
-                input[2] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta.fai', checkIfExists: true)]).collect()
-                input[3] = channel.of([[id:'genome'], file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)]).collect()
-                input[4] = channel.of(['LINE', file(params.pipelines_testdata_base_path + 'reference/reference.fasta', checkIfExists: true)])
+                input[2] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)]).collect()
+                input[3] = channel.of([[id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)]).collect()
+                input[4] = channel
+                    .fromPath(params.resources_remapped + '/mobile_elements/mobile_element_references_remapped.tsv', checkIfExists: true)
+                    .splitText()
+                    .map { line -> line.trim() }
+                    .map { line -> line.split('\\t') as List }
+                    .filter { cols -> !(cols[0].equalsIgnoreCase('type') && cols[1].equalsIgnoreCase('path')) }
+                    .map { cols -> [cols[0], file(cols[1], checkIfExists: true)] }
                 """
             }
         }

@@ -21,7 +21,6 @@ include { GATK4_SHIFTFASTA as GATK_SHIFTFASTA               } from '../../../mod
 include { GET_CHROM_SIZES                                   } from '../../../modules/local/get_chrom_sizes'
 include { HISAT2_BUILD as HISAT2_INDEX_GENOME               } from '../../../modules/nf-core/hisat2/build'
 include { LAST_LASTDB as LAST_INDEX_MT                      } from '../../../modules/nf-core/last/lastdb'
-include { RTGTOOLS_FORMAT                                   } from '../../../modules/nf-core/rtgtools/format/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_EXTRACT_MT             } from '../../../modules/nf-core/samtools/faidx/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_GENOME           } from '../../../modules/nf-core/samtools/faidx/main'
 include { SAMTOOLS_FAIDX as SAMTOOLS_FAIDX_MT               } from '../../../modules/nf-core/samtools/faidx/main'
@@ -38,7 +37,6 @@ include { UNTAR as UNTAR_VEP_CACHE                          } from '../../../mod
 workflow PREPARE_REFERENCES {
     take:
         val_aligner                  // String: "bwa", "bwafastalign", "bwamem2", "sentieon" or "bwameme"
-        val_analysis_type            // String: "wgs", "wes", or "mito"
         val_bwa                      // String: path to bwa index
         val_bwafastalign             // String: path to bwafastalign index
         val_bwamem2                  // String: path to bwamem2 index
@@ -47,18 +45,16 @@ workflow PREPARE_REFERENCES {
         val_fasta                    // String: path to genome fasta
         val_gnomad_af                // String: path to gnomad allele frequency file
         val_gnomad_af_idx            // String: path to gnomad allele frequency file's index
+        val_hisat2                   // String: [optional] path to pre-built HISAT2 genome index
         val_known_dbsnp              // String: path to dbsnp file
         val_known_dbsnp_tbi          // String: path to dbsnp file's index
         val_mtaligner                // String: "bwa", "bwamem2", or "sentieon"
         val_mtfasta                  // String: path to mitochondrial fasta
-        val_run_mt_for_wes           // Boolean
-        val_run_rtgvcfeval           // Boolean
-        val_sdf                      // String: path to sdf file
+        val_run_mt                   // boolean: true if MT analysis will run
         val_genome_dict              // String: path to genome dictionary
         val_target_bed               // String: path to target bed file
         val_vcfanno_extra            // String: path to additional annotation files used by vcfanno
         val_vep_cache                // String: path to vep cache folder
-        val_save_reference           // Boolean: whether to save generated reference files
 
 
     main:
@@ -67,7 +63,7 @@ workflow PREPARE_REFERENCES {
         ch_genome_bwafastalign_index   = channel.empty()
         ch_genome_bwameme_index        = channel.empty()
         ch_genome_bwamem2_index        = channel.empty()
-        ch_genome_hisat2_index         = channel.empty()
+        ch_genome_hisat2_index          = channel.empty()
         ch_mt_last_index               = channel.empty()
         ch_gnomad_af_idx               = channel.empty()
         ch_dbsnp                       = channel.value([[:],[]])
@@ -83,13 +79,12 @@ workflow PREPARE_REFERENCES {
         ch_mt_dict                     = channel.empty()
         ch_mt_fai                      = channel.empty()
         ch_mt_fasta                    = channel.empty()
-        ch_sdf                         = channel.empty()
         ch_shiftfasta_mtintervals      = channel.empty()
         ch_shiftfasta_mtshiftintervals = channel.empty()
         ch_target_bed_gz_tbi           = channel.value([[:],[],[]])
         ch_target_intervals            = channel.empty()
         ch_vcfanno_extra               = channel.value([[]])
-        ch_vep_resources               = channel.value([[]])
+        ch_vep_resources               = channel.value([[:], []])
 
         ch_genome_fasta = channel.fromPath(val_fasta).map { it -> [[id:it.simpleName], it] }.collect()
         //
@@ -121,40 +116,45 @@ workflow PREPARE_REFERENCES {
                 ch_genome_bwa_index = SENTIEON_BWAINDEX_GENOME(ch_genome_fasta).index.collect()
             }
         } else if (val_bwa) {
-            ch_genome_bwa_index = channel.fromPath(val_bwa).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_bwa_index = channel.fromPath(val_bwa).map {it -> [[id:"bwa"], it]}.collect()
         }
 
         if (!val_bwamem2 && (val_aligner.equals("bwamem2") || val_mtaligner.equals("bwamem2"))) {
             ch_genome_bwamem2_index = BWAMEM2_INDEX_GENOME(ch_genome_fasta).index.collect()
         } else if (val_bwamem2) {
-            ch_genome_bwamem2_index = channel.fromPath(val_bwamem2).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_bwamem2_index = channel.fromPath(val_bwamem2).map {it -> [[id:"bwamem2"], it]}.collect()
         }
 
         if (!val_bwamem2 && val_aligner.equals("bwameme")) {
             ch_genome_bwameme_index = BWAMEME_INDEX_GENOME(ch_genome_fasta).index.collect()
         } else if (val_bwameme) {
-            ch_genome_bwameme_index = channel.fromPath(val_bwameme).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_bwameme_index = channel.fromPath(val_bwameme).map {it -> [[id:"bwameme"], it]}.collect()
         }
 
         if (!val_bwafastalign && val_aligner.equals("bwafastalign")) {
             ch_genome_bwafastalign_index = BWAFASTALIGN_INDEX_GENOME(ch_genome_fasta).index.collect()
         } else if (val_bwafastalign) {
-            ch_genome_bwafastalign_index = channel.fromPath(val_bwafastalign).map {it -> [[id:it.simpleName], it]}.collect()
+            ch_genome_bwafastalign_index = channel.fromPath(val_bwafastalign).map {it -> [[id:"bwafastalign_index"], it]}.collect()
         }
         //
         // MT genome indices
         //
-        if (val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) {
+        if (val_run_mt) {
             if (!val_mtfasta) {
                 ch_mt_fasta = SAMTOOLS_EXTRACT_MT(ch_genome_fasta.join(ch_genome_fai), false).fa.collect()
             } else {
-                ch_mt_fasta = channel.fromPath(val_mtfasta).map { it -> [[id:it.simpleName], it] }.collect()
+                ch_mt_fasta = channel.fromPath(val_mtfasta).map { it -> [[id:"mt_fasta_index"], it] }.collect()
             }
 
             ch_mt_fai  = SAMTOOLS_FAIDX_MT(ch_mt_fasta.map{meta, fasta -> return [meta, fasta,[]]}, false).fai.collect()
             ch_mt_dict = GATK_SD_MT(ch_mt_fasta).dict.collect()
 
-            ch_genome_hisat2_index = HISAT2_INDEX_GENOME(ch_genome_fasta,[[:],[]], [[:],[]]).index.collect()
+            if (!val_hisat2){
+                ch_genome_hisat2_index = HISAT2_INDEX_GENOME(ch_genome_fasta.map{meta, fasta -> [meta, fasta, [], []]}, params.hisat2_build_memory).index.collect()
+            } else {
+                ch_genome_hisat2_index = channel.fromPath(val_hisat2).map { it -> [[id:"hisat2_index"], it] }.collect()
+            }
+
             ch_mt_last_index       = LAST_INDEX_MT(ch_mt_fasta).index.collect()
 
             GATK_SHIFTFASTA(ch_mt_fasta, ch_mt_fai, ch_mt_dict)
@@ -164,7 +164,7 @@ workflow PREPARE_REFERENCES {
             ch_mtshift_fai           = GATK_SHIFTFASTA.out.shift_fai.collect()
             ch_mtshift_fasta         = GATK_SHIFTFASTA.out.shift_fa.collect()
 
-            GATK_SHIFTFASTA.out.intervals
+            ch_mtintervals = GATK_SHIFTFASTA.out.intervals
                 .multiMap{ _meta, files ->
                         shift_intervals:
                             def ind = files.findIndexValues {file -> file.toString().endsWith("shifted.intervals")}
@@ -173,7 +173,6 @@ workflow PREPARE_REFERENCES {
                             ind = files.findIndexValues {file -> !(file.toString().endsWith("shifted.intervals"))}
                             files[ind]
                 }
-                .set {ch_mtintervals}
             ch_shiftfasta_mtintervals      = ch_mtintervals.intervals.collect()
             ch_shiftfasta_mtshiftintervals = ch_mtintervals.shift_intervals.collect()
 
@@ -182,15 +181,15 @@ workflow PREPARE_REFERENCES {
         //
         // MT alignment indices
         //
-        if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("bwamem2")) {
+        if (val_run_mt && val_mtaligner.equals("bwamem2")) {
             ch_mt_bwamem2_index      = BWAMEM2_INDEX_MT(ch_mt_fasta).index.collect()
             ch_mtshift_bwamem2_index = BWAMEM2_INDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
         }
-        if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("bwa")) {
+        if (val_run_mt && val_mtaligner.equals("bwa")) {
             ch_mt_bwa_index          = BWA_INDEX_MT(ch_mt_fasta).index.collect()
             ch_mtshift_bwa_index     = BWA_INDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
         }
-        if ((val_analysis_type.matches("wgs|mito") || val_run_mt_for_wes) && val_mtaligner.equals("sentieon")) {
+        if (val_run_mt && val_mtaligner.equals("sentieon")) {
             ch_mt_bwa_index          = SENTIEON_BWAINDEX_MT(ch_mt_fasta).index.collect()
             ch_mtshift_bwa_index     = SENTIEON_BWAINDEX_MT_SHIFT(ch_mtshift_fasta).index.collect()
         }
@@ -231,7 +230,7 @@ workflow PREPARE_REFERENCES {
 
             GATK_ILT(GATK_BILT.out.interval_list)
 
-            GATK_ILT.out.interval_list
+            ch_bait_intervals_cat_in = GATK_ILT.out.interval_list
                 .collect{ _meta, list -> list }
                 .map { list ->
                     // list is e.g. [/path/mybed_split_0001.interval_list, ...]; strip the _split suffix
@@ -239,7 +238,6 @@ workflow PREPARE_REFERENCES {
                     def meta = list.toString().split("_split")[0].split("/")[-1] + "_bait.intervals_list"
                     return [[id:meta], list]
                 }
-                .set { ch_bait_intervals_cat_in }
 
             ch_bait_intervals = CAT_CAT_BAIT ( ch_bait_intervals_cat_in ).file_out.map {_meta, inter -> inter}.collect().ifEmpty([[]])
 
@@ -251,16 +249,15 @@ workflow PREPARE_REFERENCES {
             ch_vcfanno_tabix_in = channel.fromPath(val_vcfanno_extra).map { it -> [[id:it.baseName], it] }
 
             if (val_vcfanno_extra.endsWith(".gz")) {
-                TABIX_VCFANNOEXTRA(ch_vcfanno_tabix_in).index
+                TABIX_VCFANNOEXTRA(ch_vcfanno_tabix_in)
+                ch_vcfanno_extra = TABIX_VCFANNOEXTRA.out.index
                     .join(ch_vcfanno_tabix_in)
                     .map { _meta, tbi, vcf -> return [[vcf,tbi]]}
-                    .set {ch_vcfanno_extra}
             } else {
                 TABIX_BGZIPINDEX_VCFANNOEXTRA(ch_vcfanno_tabix_in)
-                channel.empty()
+                ch_vcfanno_extra = channel.empty()
                     .mix(TABIX_BGZIPINDEX_VCFANNOEXTRA.out.gz_index)
                     .map { _meta, vcf, index -> return [[vcf,index]] }
-                    .set {ch_vcfanno_extra}
             }
         }
         //
@@ -268,61 +265,10 @@ workflow PREPARE_REFERENCES {
         //
         if (val_vep_cache) {
             if (val_vep_cache.endsWith("tar.gz")) {
-                ch_vep_resources = UNTAR_VEP_CACHE (channel.fromPath(val_vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()).untar.map{ _meta, files -> [files]}.collect()
+                ch_vep_resources = UNTAR_VEP_CACHE (channel.fromPath(val_vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()).untar.collect()
             } else {
-                ch_vep_resources = channel.fromPath(val_vep_cache).collect()
+                ch_vep_resources = channel.fromPath(val_vep_cache).map { it -> [[id:'vep_cache'], it] }.collect()
             }
-        }
-        //
-        // RTG tools
-        //
-        if (!val_sdf && val_run_rtgvcfeval) {
-            ch_genome_fasta.map { meta, fasta -> return [meta, fasta, [], [] ] }
-                .set {ch_rtgformat_in}
-            ch_sdf      = RTGTOOLS_FORMAT(ch_rtgformat_in).out.sdf
-        }
-
-        ch_publish = channel.empty()
-        if (val_save_reference) {
-            ch_publish = ch_dbsnp
-                .mix(ch_dbsnp_tbi)
-                .mix(ch_genome_bwa_index)
-                .mix(ch_genome_bwafastalign_index)
-                .mix(ch_genome_bwamem2_index)
-                .mix(ch_genome_bwameme_index)
-                .mix(ch_genome_fai)
-                .mix(ch_genome_fasta)
-                .mix(ch_genome_hisat2_index)
-                .mix(ch_genome_dict)
-                .mix(ch_mt_bwa_index)
-                .mix(ch_mt_bwamem2_index)
-                .mix(ch_mt_dict)
-                .mix(ch_mt_fai)
-                .mix(ch_mt_fasta)
-                .mix(ch_mt_last_index)
-                .mix(ch_mtshift_backchain)
-                .mix(ch_mtshift_bwa_index)
-                .mix(ch_mtshift_bwamem2_index)
-                .mix(ch_mtshift_dict)
-                .mix(ch_mtshift_fai)
-                .mix(ch_mtshift_fasta)
-                .mix(ch_sdf)
-                .map { meta, value -> ['references/', [meta, value]] }
-                .mix(
-                    ch_target_bed_gz_tbi
-                        .map { meta, gz, index -> ['references/', [meta, gz, index]] }
-                )
-                .mix(
-                    ch_bait_intervals
-                        .mix(ch_chrom_sizes)
-                        .mix(ch_shiftfasta_mtintervals)
-                        .mix(ch_shiftfasta_mtshiftintervals)
-                        .mix(ch_target_intervals)
-                        .mix(ch_gnomad_af_idx)
-                        .mix(ch_vcfanno_extra)
-                        .mix(ch_vep_resources)
-                        .map { value -> ['references/', [value]] }
-                )
         }
 
     emit:
@@ -353,10 +299,8 @@ workflow PREPARE_REFERENCES {
         mtshift_fai               = ch_mtshift_fai                 // channel:[ val(meta), path(fai) ]
         mtshift_fasta             = ch_mtshift_fasta               // channel:[ val(meta), path(fasta) ]
         mtshift_intervals         = ch_shiftfasta_mtshiftintervals // channel:[ path(intervals) ]
-        sdf                       = ch_sdf                         // channel:[ val (meta), path(sdf) ]
         target_bed                = ch_target_bed_gz_tbi.collect() // channel:[ val(meta), path(bed), path(tbi) ]
         target_intervals          = ch_target_intervals            // channel:[ path(interval_list) ]
         vcfanno_extra             = ch_vcfanno_extra               // channel:[ [path(vcf), path(tbi)] ]
-        vep_resources             = ch_vep_resources               // channel:[ path(cache) ]
-        publish                   = ch_publish                     // channel: [ val(destination), val(value) ]
+        vep_resources             = ch_vep_resources               // channel:[ val(meta), path(cache) ]
 }

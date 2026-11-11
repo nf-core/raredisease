@@ -101,6 +101,7 @@ my $rmtmp = $User_Preferences->{rmtmp}; #REMOVE TEMPORARY FILES
 my $o_mt = $User_Preferences->{o_mt}; #MITOCHONDRIAL READ EXTRACTION AND REMAPPING TO ONLY MITOCHONDRIAL GENOME WITH LASTAL
 my $i_del = $User_Preferences->{i_del}; #IDENTIFICATION AND CLUSTERING OF DELETIONS/DUPLICATIONS
 my $cn_mt = $User_Preferences->{cn_mt}; #ESTIMATION OF MT DNA COPY NUMBER
+my $javamem = $User_Preferences->{javamem} || 4; #HEAP SIZE (GB) FOR THE REFORMAT.SH (BBMAP) JVM; FALLS BACK TO 4 IF NOT SET IN THE CONFIG
 
 #EXIT IF THE CONFIGURATION STEPS DO NOT MATCH
 if(($nu_mt eq 'yes' && $enriched eq 'yes')||($nu_mt eq 'no' && $o_mt eq 'no' && $i_del eq 'no')||($cn_mt eq 'yes' && $nu_mt eq 'no')||($cn_mt eq 'yes' && $o_mt eq 'no')||($i_del eq 'yes' && $o_mt eq 'no' && $nu_mt eq 'yes')){
@@ -150,7 +151,7 @@ if($nu_mt eq 'yes' && $o_mt eq 'yes' && $enriched eq 'no'){
 if($nu_mt eq 'no' && $o_mt eq 'yes' && $enriched eq 'yes'){
   #REMAP ON MT GENOME
   print scalar(localtime).": Map to MT genome\n";
-  system("$reformat in=$p1 in2=$p2 out=tmp_$tag.fq overwrite=true addslash=t trimreaddescription=t spaceslash=f -Xmx100g 2>> log/$tag.log");
+  system("$reformat in=$p1 in2=$p2 out=tmp_$tag.fq overwrite=true addslash=t trimreaddescription=t spaceslash=f -Xmx${javamem}g 2>> log/$tag.log");
   system("$lastal -Q1 -e80 -P$threads $lastindex tmp_$tag.fq|$lastsp > tmp_$tag.maf");
   system("$mfcv sam -d tmp_$tag.maf|$samtools view -@ $threads -bt $mtfaindex -|$samtools sort -@ $threads -o bam/$tag.bam -");
   system("$samtools index bam/$tag.bam");

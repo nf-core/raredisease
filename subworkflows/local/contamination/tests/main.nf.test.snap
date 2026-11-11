@@ -1,0 +1,87 @@
+{
+    "CONTAMINATION - gatk only - stub": {
+        "content": [
+            [
+                "ACC13778A2.contamination.table"
+            ],
+            [
+                "ACC13778A2.pileups.table"
+            ],
+            0
+        ],
+        "timestamp": "2026-08-24T21:25:27.489816988",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "CONTAMINATION - gatk only - real, WES with intervals": {
+        "content": [
+            [
+                "ACC13778A2.contamination.table"
+            ],
+            [
+                "ACC13778A2.pileups.table"
+            ],
+            0
+        ],
+        "timestamp": "2026-08-24T21:27:07.199802959",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "CONTAMINATION - gatk only - real, WGS no intervals": {
+        "content": [
+            [
+                "ACC13778A2.contamination.table"
+            ],
+            [
+                "ACC13778A2.pileups.table"
+            ],
+            0
+        ],
+        "timestamp": "2026-08-24T21:26:32.0838327",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "CONTAMINATION - verifybamid only - stub": {
+        "content": [
+            [
+                "ACC13778A2.selfSM"
+            ],
+            [
+                "ACC13778A2.log"
+            ],
+            0
+        ],
+        "timestamp": "2026-08-24T21:24:56.555695007",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "CONTAMINATION - both - stub": {
+        "content": [
+            [
+                "ACC13778A2.selfSM"
+            ],
+            [
+                "ACC13778A2.log"
+            ],
+            [
+                "ACC13778A2.contamination.table"
+            ],
+            [
+                "ACC13778A2.pileups.table"
+            ]
+        ],
+        "timestamp": "2026-08-24T21:25:54.878311636",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

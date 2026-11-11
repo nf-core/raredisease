@@ -1,0 +1,62 @@
+name: "parse_contamination"
+description: Parse GATK CalculateContamination output into a MultiQC custom-content table
+keywords:
+  - contamination
+  - multiqc
+  - parsing
+tools:
+  - "python":
+      description: "Python programming language"
+      homepage: "https://www.python.org/"
+      documentation: "https://docs.python.org/"
+      licence:
+        - "PSF"
+      identifier: ""
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. `[ id:'sample1' ]`
+    - contamination_table:
+        type: file
+        description: GATK CalculateContamination output table
+        pattern: "*.contamination.table"
+        ontologies: []
+output:
+  mqc_table:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. `[ id:'sample1' ]`
+      - "*_contamination_mqc.tsv":
+          type: file
+          description: MultiQC custom-content table
+          pattern: "*_contamination_mqc.tsv"
+          ontologies: []
+  versions_python:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - python:
+          type: string
+          description: The name of the tool
+      - python3 --version | sed 's/Python //':
+          type: eval
+          description: The expression to obtain the version of the tool
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The name of the process
+      - python:
+          type: string
+          description: The name of the tool
+      - python3 --version | sed 's/Python //':
+          type: eval
+          description: The expression to obtain the version of the tool
+authors:
+  - "@dorotejavujinovic"
+maintainers:
+  - "@dorotejavujinovic"

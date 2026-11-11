@@ -20,14 +20,13 @@ workflow CALL_SV_TIDDIT {
         TIDDIT_SV ( ch_bam_bai, ch_genome_fa_fai, ch_bwa_index )
 
         INDEX_TIDDIT (TIDDIT_SV.out.vcf)
-        BCFTOOLS_VIEW_TIDDIT (INDEX_TIDDIT.out.gz_index, [], [], []).vcf
+        BCFTOOLS_VIEW_TIDDIT (INDEX_TIDDIT.out.gz_index, [], [], [])
+        vcf_file_list = BCFTOOLS_VIEW_TIDDIT.out.vcf
             .collect{ _meta, vcf -> vcf}
             .toList()
-            .set { vcf_file_list }
 
-        ch_case_info
+        merge_input_vcfs = ch_case_info
             .combine(vcf_file_list)
-            .set { merge_input_vcfs }
 
         SVDB_MERGE_TIDDIT ( merge_input_vcfs, [], true )
 

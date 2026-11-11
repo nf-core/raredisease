@@ -40,8 +40,9 @@ Contributions to the code are even more welcome ;)
 1. Check that there isn't already an issue about your idea in the [nf-core/raredisease issues](https://github.com/nf-core/raredisease/issues) to avoid duplicating work. If there isn't one already, please create one so that others know you're working on this.
 2. [Fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) the [nf-core/raredisease repository](https://github.com/nf-core/raredisease) to your GitHub account.
 3. Make the necessary changes / additions within your forked repository following the conventions below.
-4. Use `nf-core pipelines schema build` to add any new parameters to `nextflow_schema.json`.
-5. Submit a Pull Request against the `dev` branch and wait for the code to be reviewed and merged.
+4. Update `CHANGELOG.md` with a description of your changes under the relevant section (`Added`, `Changed`, `Fixed`, or `Tool updates`). If you added, renamed, or removed parameters, also update the `Parameters` table.
+5. Use `nf-core pipelines schema build` to add any new parameters to `nextflow_schema.json`.
+6. Submit a Pull Request against the `dev` branch and wait for the code to be reviewed and merged.
 
 If you're not used to this workflow with git, you can start with some [docs from GitHub](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests) or even their [excellent `git` resources](https://try.github.io/).
 
@@ -116,7 +117,7 @@ Devcontainer specs:
 ### Architecture & structure
 
 - **One subworkflow per biological task** — alignment, QC, variant calling, annotation, and ranking are each their own subworkflow under `subworkflows/local/`. Don't add logic to `workflows/raredisease.nf` that belongs in a subworkflow.
-- **Reuse over duplication** — `RANK_VARIANTS`, `ANNOTATE_CSQ_PLI`, and `VCF_FILTER_BCFTOOLS_ENSEMBLVEP` are intentionally included multiple times under different aliases. Follow this pattern before creating a near-identical subworkflow.
+- **Reuse over duplication** — `RANK_VARIANTS`, `ANNOTATE_PLI`, `VCF_FILTER_BCFTOOLS_FILTERVEP`, and their composite `FILTER_ANNOTATE_RANK` wrapper are intentionally included multiple times under different aliases. Follow this pattern before creating a near-identical subworkflow.
 - **nf-core modules first** — prefer a module from `modules/nf-core/` over writing a local one. Only add to `modules/local/` when no nf-core module exists or the use case is too pipeline-specific.
 
 ### Adding a new step
@@ -147,11 +148,36 @@ Devcontainer specs:
 
 ### Publishing
 
-- Build a single `ch_publish` channel inside each subworkflow by mixing all publishable outputs into `[destination, value]` tuples.
-- The emit name must always be `publish = ch_publish` — never the bare shorthand.
-- Group channels that share a destination with `mix` first, then apply **one** `.map` per destination group — never one map per channel.
-- If your subworkflow calls inner subworkflows, always mix their `.out.publish` into the outer `ch_publish`. Never discard it.
-- Remove the corresponding `publishDir` entry from `conf/modules/` when adding a process to `ch_publish`.
+The pipeline uses Nextflow's `publish:` block and `output {}` API for file publishing. Each subworkflow exposes its outputs as named typed channel emits; the top-level `publish:` block in `main.nf` mixes them into destination-named entries.
+
+- Emit every publishable output as its own named typed channel — one emit per file type, no `ch_publish` tuple wrapping and no grouped mix inside the subworkflow.
+- In `main.nf`, mix all channels that share a destination into **one** `publish:` entry and **one** `output {}` entry. The mixing belongs at the routing layer, not inside the subworkflow.
+- Channels consumed by downstream processes (e.g. MultiQC) and also published are emitted once; the caller wires the same channel to both consumers.
+
+#### Emit naming convention
+
+Use `<process_or_alias>_<emit_name>` (lowercase, underscored) inside the subworkflow's `emit:` block:
+
+- Use the **alias name** as the prefix when a process is imported with `as` — the alias already encodes the distinction (e.g. `PICARD_COLLECTWGSMETRICS as PICARD_COLLECTWGSMETRICS_WG` → prefix `picard_collectwgsmetrics_wg`).
+- Append the **module's emit name** verbatim.
+- Drop obvious redundancy when the emit name exactly repeats a word already in the process/alias name (e.g. `sentieon_wgsmetrics_wg_wgs_metrics` → `sentieon_wgsmetrics_wg_metrics`). Do not rename to describe the file format — always use the emit name.
+- For `VERIFYBAMID_VERIFYBAMID2`, drop the repetition: use prefix `verifybamid_`.
+
+| Layer                     | Convention                                                          | Example                                                               |
+| ------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Subworkflow `emit:`       | `<process_or_alias>_<emit_name>`                                    | `mosdepth_global_txt`                                                 |
+| `raredisease.nf` variable | `ch_<subworkflow>_<semantic_suffix>`                                | `ch_qc_bam_mosdepth_global_txt`                                       |
+| `NFCORE_RAREDISEASE` emit | `<subworkflow>_<emit_name>`                                         | `qc_bam_mosdepth_global_txt`                                          |
+| `publish:` entry          | one entry per destination, mixing all channels for that destination | `qc_bam = NFCORE_RAREDISEASE.out.qc_bam_mosdepth_global_txt.mix(...)` |
+
+The **semantic suffix** is the part of the emit name that describes what the data is, not which tool produced it. When the subworkflow emit name starts with a process/module name, drop that prefix in the `raredisease.nf` variable if the remainder is unambiguous within the subworkflow's outputs:
+
+- `scatter_genome` emits `gatk4_splitintervals_split_intervals` → variable is `ch_scatter_genome_split_intervals` (drop `gatk4_splitintervals_`)
+- `qc_bam` emits `mosdepth_global_txt` → variable stays `ch_qc_bam_mosdepth_global_txt` (`global_txt` alone would be ambiguous among the many txt outputs in that subworkflow)
+
+When in doubt, keep enough of the process name to remain unambiguous.
+
+> **Note:** Some subworkflows still use the legacy `ch_publish`/`subworkflow_results` pattern and are being migrated incrementally. Until a subworkflow is migrated, follow the existing pattern for that subworkflow so it continues to publish correctly via `subworkflow_results`.
 
 ### Configuration
 
@@ -165,7 +191,7 @@ Devcontainer specs:
 - Every subworkflow should have a test at `subworkflows/local/<name>/tests/main.nf.test`.
 - Use `-stub` in the `when:` block only when real test data is difficult to generate. Prefer running with real data where it is reasonably available.
 - Snapshot files (`*.nf.test.snap`) are committed alongside tests — update them when outputs change.
-- Pipeline-level tests live in `tests/` and cover `default`, `test_bam`, and `test_singleton` profiles.
+- Pipeline-level tests live in `tests/` and cover `default`, `test_align`, and `test_singleton` profiles.
 - Run `nf-test test <path>` for a single test, `nf-test test` for all.
 
 ### Style
@@ -191,12 +217,8 @@ Devcontainer specs:
       process_with_sort     // Boolean
 
   emit:
-      vcf     = ch_vcf      // channel: [ val(meta), path(vcf) ]
-      publish = ch_publish  // channel: [ val(destination), val(value) ]
+      vcf = ch_vcf // channel: [ val(meta), path(vcf) ]
   ```
-
-- Intermediate publish channels in `workflows/raredisease.nf` follow the `ch_<subworkflow_name>_publish` naming convention and are assigned immediately after the subworkflow call, not inline in the emit block.
-- Initialize all `ch_*_publish` variables at the top of the `main:` block alongside `ch_multiqc_files`.
 
 ### Adding citations
 

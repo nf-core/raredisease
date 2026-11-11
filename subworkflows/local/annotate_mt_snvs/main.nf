@@ -21,8 +21,9 @@ workflow ANNOTATE_MT_SNVS {
         ch_vcfanno_lua              // channel: [mandatory] [ path(lua) ]
         ch_vcfanno_resources        // channel: [mandatory] [ [path(vcf1),path(index1),...,path(vcfn),path(indexn)] ]
         ch_vcfanno_toml             // channel: [mandatory] [ path(toml) ]
-        ch_vep_cache                // channel: [mandatory] [ path(cache) ]
+        ch_vep_cache                // channel: [mandatory] [ val(meta), path(cache) ]
         ch_vep_extra_files          // channel: [mandatory] [ path(files) ]
+        ch_vep_gtf                  // channel: [optional]  [ path(gtf) ]
         val_cadd_resources          //  string:  path to cadd resources file
         val_genome                  //  string:  GRCh37 or GRCh38
         val_homoplasmy_af_threshold //   float: 0-1
@@ -30,10 +31,9 @@ workflow ANNOTATE_MT_SNVS {
 
     main:
         // Vcfanno
-        ch_mt_vcf_tbi
+        ch_in_vcfanno = ch_mt_vcf_tbi
             .combine(ch_vcfanno_extra)
             .map { meta, vcf, tbi, resources -> return [meta + [prefix: vcf.simpleName + "_vcfanno"], vcf, tbi, resources]}
-            .set { ch_in_vcfanno }
 
         VCFANNO_MT(ch_in_vcfanno, ch_vcfanno_toml, ch_vcfanno_lua, ch_vcfanno_resources)
 
@@ -47,24 +47,17 @@ workflow ANNOTATE_MT_SNVS {
                 VCFANNO_MT.out.vcf.join(VCFANNO_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true),
                 val_genome
             )
-            ch_cadd_vcf = ANNOTATE_CADD.out.vcf
+
+            // Strict join: CADD was requested, so every item must have a CADD result.
+            // A missing one here is a real failure and should error, not silently fall
+            // back to the non-CADD-annotated VCF.
+            ch_vep_in = VCFANNO_MT.out.vcf
+                .join(ANNOTATE_CADD.out.vcf, failOnMismatch:true, failOnDuplicate:true)
+                .map { meta, _vcfanno, cadd -> [meta + [prefix: meta.prefix + "_cadd_vep"], cadd, []] }
         } else {
-            ch_cadd_vcf = channel.empty()
+            ch_vep_in = VCFANNO_MT.out.vcf
+                .map { meta, vcfanno -> [meta + [prefix: meta.prefix + "_vep"], vcfanno, []] }
         }
-
-        VCFANNO_MT.out.vcf
-            .join(ch_cadd_vcf, remainder: true)
-            .branch { meta, vcfanno, cadd  ->
-                vcfanno: cadd.equals(null)
-                    return [meta+ [prefix: meta.prefix + "_vep"], vcfanno]
-                cadd: !(cadd.equals(null))
-                    return [meta + [prefix: meta.prefix + "_cadd_vep"], cadd]
-            }
-            .set { ch_annotated_vcfs }
-
-        ch_annotated_vcfs.vcfanno.mix(ch_annotated_vcfs.cadd)
-            .map { meta, vcf -> return [meta, vcf, []] }
-            .set { ch_vep_in }
 
         // Annotating with ensembl Vep
         ENSEMBLVEP_MT(
@@ -74,7 +67,8 @@ workflow ANNOTATE_MT_SNVS {
             val_vep_cache_version,
             ch_vep_cache,
             ch_genome_fasta,
-            ch_vep_extra_files
+            ch_vep_extra_files,
+            ch_vep_gtf
         )
 
         ch_vcf = ENSEMBLVEP_MT.out.vcf
@@ -92,13 +86,10 @@ workflow ANNOTATE_MT_SNVS {
             ch_tbi = BCFTOOLS_PLUGINSETGT.out.tbi
         }
 
-        ch_publish = ENSEMBLVEP_MT.out.vcf
-            .mix(ENSEMBLVEP_MT.out.tbi)
-            .map { meta, value -> ['annotate_snv/mitochondria/', [meta, value]] }
-
     emit:
-        publish   = ch_publish               // channel: [ val(destination), val(value) ]
-        report    = ENSEMBLVEP_MT.out.report // channel: [ path(html) ]
-        tbi       = ch_tbi                   // channel: [ val(meta), path(tbi) ]
-        vcf_ann   = ch_vcf                   // channel: [ val(meta), path(vcf) ]
+        ensemblvep_mt_tbi = ENSEMBLVEP_MT.out.tbi    // channel: [ val(meta), path(tbi) ]
+        ensemblvep_mt_vcf = ENSEMBLVEP_MT.out.vcf    // channel: [ val(meta), path(vcf) ]
+        report            = ENSEMBLVEP_MT.out.report // channel: [ val(meta), val(tool), val(toolver), path(html) ]
+        tbi               = ch_tbi                   // channel: [ val(meta), path(tbi) ]
+        vcf_ann           = ch_vcf                   // channel: [ val(meta), path(vcf) ]
 }

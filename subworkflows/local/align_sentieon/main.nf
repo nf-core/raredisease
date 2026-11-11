@@ -21,7 +21,7 @@ workflow ALIGN_SENTIEON {
 
         SENTIEON_BWAMEM ( ch_input_reads, ch_bwa_index, ch_genome_fasta, ch_genome_fai )
 
-        SENTIEON_BWAMEM.out
+        merge_bams_in = SENTIEON_BWAMEM.out
             .bam_and_bai
             .map{ meta, bam, bai ->
                 def new_id   = meta.sample
@@ -33,7 +33,6 @@ workflow ALIGN_SENTIEON {
                 single: bam.size() == 1
                 multiple: bam.size() > 1
                 }
-            .set{ merge_bams_in }
 
         SENTIEON_READWRITER ( merge_bams_in.multiple, ch_genome_fasta, ch_genome_fai )
         ch_bam_bai = merge_bams_in.single.mix(SENTIEON_READWRITER.out.output_index)
@@ -48,21 +47,16 @@ workflow ALIGN_SENTIEON {
 
         SENTIEON_DEDUP ( ch_bam_bai, ch_genome_fasta, ch_genome_fai )
 
-        ch_publish = SENTIEON_DEDUP.out.bam
-            .mix(SENTIEON_DEDUP.out.bai)
-            .mix(SENTIEON_DEDUP.out.score)
-            .mix(SENTIEON_DEDUP.out.metrics)
-            .mix(SENTIEON_DEDUP.out.metrics_multiqc_tsv)
-            .map { meta, value -> ['alignment/', [meta, value]] }
-
     emit:
-        marked_bam  = SENTIEON_DEDUP.out.bam                             // channel: [ val(meta), path(bam) ]
-        marked_bai  = SENTIEON_DEDUP.out.bai                             // channel: [ val(meta), path(bai) ]
-        mq_metrics  = SENTIEON_DATAMETRICS.out.mq_metrics.ifEmpty(null)  // channel: [ val(meta), path(mq_metrics) ]
-        qd_metrics  = SENTIEON_DATAMETRICS.out.qd_metrics.ifEmpty(null)  // channel: [ val(meta), path(qd_metrics) ]
-        gc_metrics  = SENTIEON_DATAMETRICS.out.gc_metrics.ifEmpty(null)  // channel: [ val(meta), path(gc_metrics) ]
-        gc_summary  = SENTIEON_DATAMETRICS.out.gc_summary.ifEmpty(null)  // channel: [ val(meta), path(gc_summary) ]
-        aln_metrics = SENTIEON_DATAMETRICS.out.aln_metrics.ifEmpty(null) // channel: [ val(meta), path(aln_metrics) ]
-        is_metrics  = SENTIEON_DATAMETRICS.out.is_metrics.ifEmpty(null)  // channel: [ val(meta), path(is_metrics) ]
-        publish = ch_publish                                              // channel: [ val(destination), val(value) ]
+        marked_bam              = SENTIEON_DEDUP.out.bam                             // channel: [ val(meta), path(bam) ]
+        marked_bai              = SENTIEON_DEDUP.out.bai                             // channel: [ val(meta), path(bai) ]
+        score                   = SENTIEON_DEDUP.out.score                           // channel: [ val(meta), path(score) ]
+        dedup_metrics           = SENTIEON_DEDUP.out.metrics                         // channel: [ val(meta), path(metrics) ]
+        dedup_metrics_multiqc   = SENTIEON_DEDUP.out.metrics_multiqc_tsv             // channel: [ val(meta), path(tsv) ]
+        mq_metrics              = SENTIEON_DATAMETRICS.out.mq_metrics.ifEmpty(null)  // channel: [ val(meta), path(mq_metrics) ]
+        qd_metrics              = SENTIEON_DATAMETRICS.out.qd_metrics.ifEmpty(null)  // channel: [ val(meta), path(qd_metrics) ]
+        gc_metrics              = SENTIEON_DATAMETRICS.out.gc_metrics.ifEmpty(null)  // channel: [ val(meta), path(gc_metrics) ]
+        gc_summary              = SENTIEON_DATAMETRICS.out.gc_summary.ifEmpty(null)  // channel: [ val(meta), path(gc_summary) ]
+        aln_metrics             = SENTIEON_DATAMETRICS.out.aln_metrics.ifEmpty(null) // channel: [ val(meta), path(aln_metrics) ]
+        is_metrics              = SENTIEON_DATAMETRICS.out.is_metrics.ifEmpty(null)  // channel: [ val(meta), path(is_metrics) ]
 }

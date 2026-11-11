@@ -15,15 +15,16 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
         ch_genome_fasta         // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_me_svdb_resources    // channel: [mandatory] [ path(csv) ]
         ch_vcf                  // channel: [mandatory] [ val(meta), path(vcf) ]
-        ch_vep_cache            // channel: [mandatory] [ path(cache) ]
+        ch_vep_cache            // channel: [mandatory] [ val(meta), path(cache) ]
         val_genome              // string: [mandatory] GRCh37 or GRCh38
         val_vep_cache_version   // string: [mandatory] default: 107
         ch_vep_extra_files      // channel: [mandatory] [ path(files) ]
+        ch_vep_gtf              // channel: [optional]  [ path(gtf) ]
 
     main:
         ch_svdb_dbs = channel.empty()
 
-        ch_me_svdb_resources
+        ch_svdb_dbs = ch_me_svdb_resources
             .multiMap { file, in_freq_info_key, in_allele_count_info_key, out_freq_info_key, out_allele_count_info_key ->
                 vcf_dbs:  file
                 in_frqs:  in_freq_info_key
@@ -31,7 +32,6 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
                 out_frqs: out_freq_info_key
                 out_occs: out_allele_count_info_key
             }
-            .set { ch_svdb_dbs }
 
         SVDB_QUERY_DB (
             ch_vcf,
@@ -48,9 +48,8 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
             ch_genome_fasta,
             ch_genome_dictionary
         )
-        .vcf
-        .map { meta, vcf -> return [meta, vcf, []] }
-        .set { ch_vep_in }
+        ch_vep_in = PICARD_SORTVCF.out.vcf
+            .map { meta, vcf -> return [meta, vcf, []] }
 
         ENSEMBLVEP_ME(
             ch_vep_in,
@@ -59,14 +58,14 @@ workflow ANNOTATE_MOBILE_ELEMENTS {
             val_vep_cache_version,
             ch_vep_cache,
             ch_genome_fasta,
-            ch_vep_extra_files
+            ch_vep_extra_files,
+            ch_vep_gtf
         )
 
-        ENSEMBLVEP_ME.out.vcf
+        ch_bcftools_filter_input = ENSEMBLVEP_ME.out.vcf
             .map { meta, vcf ->
                 [ meta, vcf, [] ]
             }
-            .set { ch_bcftools_filter_input }
 
         BCFTOOLS_VIEW_FILTER( ch_bcftools_filter_input, [], [], [] )
 

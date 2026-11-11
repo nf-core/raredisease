@@ -20,16 +20,13 @@ workflow SUBSAMPLE_MT_READS {
 
         GAWK(SAMTOOLS_COLLATE.out.sam, [], false)
 
-        GAWK.out.output.map {meta, sam -> return [meta, sam, []] }.set {ch_convert_to_bam}
+        ch_convert_to_bam = GAWK.out.output.map {meta, sam -> return [meta, sam, []] }
 
         SAM_TO_BAM(ch_convert_to_bam, [[:],[],[]], [], '')
 
         SAMTOOLS_SORT(SAM_TO_BAM.out.bam, [[:],[]], 'bai')
 
-        ch_publish = SAMTOOLS_SORT.out.bam
-            .mix(SAMTOOLS_SORT.out.bai)
-            .map { meta, value -> ['alignment/', [meta, value]] }
-
     emit:
-        publish = ch_publish // channel: [ val(destination), val(value) ]
+        bam = SAMTOOLS_SORT.out.bam // channel: [ val(meta), path(bam) ]
+        bai = SAMTOOLS_SORT.out.bai // channel: [ val(meta), path(bai) ]
 }
