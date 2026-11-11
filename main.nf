@@ -413,7 +413,9 @@ workflow NFCORE_RAREDISEASE {
             ", germlinecnvcaller) or set --skip_subworkflows sv_calling.")
     }
 
-    ch_svcaller_priority = channel.value(active_sv_callers.size() > 1 ? active_sv_callers : [])
+    // Always pass the full list of active callers, priority is decided
+    // at merge time (raredisease.nf), once "mitosalt" may have been appended by CALL_SV_MT.
+    ch_svcaller_priority = channel.value(active_sv_callers)
 
     //
     // Create chromosome bed and intervals for splitting and gathering operations
