@@ -9,25 +9,250 @@
         "properties": {
             "sample": {
                 "type": "string",
+                "meta": ["id", "sample"],
                 "pattern": "^\\S+$",
-                "errorMessage": "Sample name must be provided and cannot contain spaces",
-                "meta": ["id"]
+                "errorMessage": "Sample name must be provided and must be a string that cannot contain spaces"
+            },
+            "lane": {
+                "anyOf": [
+                    {
+                        "type": "integer"
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    }
+                ],
+                "meta": ["lane"],
+                "errorMessage": "Lane must be an interger or a string that cannot contain spaces"
             },
             "fastq_1": {
+                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$"
             },
             "fastq_2": {
+                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'",
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$"
+            },
+            "spring_1": {
+                "errorMessage": "Gzipped and spring-compressed FastQ file for reads 1 cannot contain spaces, has to exist and must have extension '.spring'",
+                "type": "string",
+                "pattern": "^\\S+.spring$",
+                "format": "file-path",
+                "exists": true
+            },
+            "spring_2": {
+                "errorMessage": "Gzipped and spring-compressed FastQ file for reads 2 has to exist, cannot contain spaces and must have extension '.spring'",
+                "type": "string",
+                "pattern": "^\\S+.spring$",
+                "format": "file-path",
+                "exists": true
+            },
+            "bam": {
+                "errorMessage": "BAM file must be duplicate-marked, cannot contain spaces, and must have extension '.bam'",
+                "type": "string",
+                "pattern": "^\\S+\\.bam$",
+                "format": "file-path",
+                "exists": true
+            },
+            "bai": {
+                "errorMessage": "BAM index file cannot contain spaces and must have extension '.bai'",
+                "type": "string",
+                "pattern": "^\\S+\\.bai$",
+                "format": "file-path",
+                "exists": true
+            },
+            "cram": {
+                "errorMessage": "CRAM file must be duplicate-marked, cannot contain spaces, and must have extension '.cram'",
+                "type": "string",
+                "pattern": "^\\S+\\.cram$",
+                "format": "file-path",
+                "exists": true
+            },
+            "crai": {
+                "errorMessage": "CRAM index file cannot contain spaces and must have extension '.crai'",
+                "type": "string",
+                "pattern": "^\\S+\\.crai$",
+                "format": "file-path",
+                "exists": true
+            },
+            "vcf": {
+                "errorMessage": "Precalled VCF must be bgzipped, cannot contain spaces, and must have extension '.vcf.gz'",
+                "type": "string",
+                "pattern": "^\\S+\\.vcf\\.gz$",
+                "format": "file-path",
+                "exists": true
+            },
+            "tbi": {
+                "errorMessage": "Precalled VCF index file cannot contain spaces and must have extension '.vcf.gz.tbi'",
+                "type": "string",
+                "pattern": "^\\S+\\.vcf\\.gz\\.tbi$",
+                "format": "file-path",
+                "exists": true
+            },
+            "type": {
+                "errorMessage": "Precalled VCF type must be one of 'snv', 'sv', 'mt', 'me', 'repeat'",
+                "type": "string",
+                "enum": ["snv", "sv", "mt", "me", "repeat"]
+            },
+            "sex": {
+                "anyOf": [
+                    {
+                        "type": "integer",
+                        "enum": [0, 1, 2]
+                    },
+                    {
+                        "type": "string",
+                        "enum": ["other"]
+                    }
+                ],
+                "meta": ["sex"],
+                "errorMessage": "Sex must be provided, has to be one of this values: '0, 1, 2, other' and cannot contain spaces"
+            },
+            "phenotype": {
+                "type": "integer",
+                "meta": ["phenotype"],
+                "enum": [0, 1, 2],
+                "exists": true,
+                "errorMessage": "Phenotype must be provided and cannot contain spaces"
+            },
+            "paternal_id": {
+                "errorMessage": "Paternal ID cannot contain spaces",
+                "meta": ["paternal"],
+                "default": "0",
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    },
+                    {
+                        "maxLength": 0
+                    }
+                ]
+            },
+            "maternal_id": {
+                "errorMessage": "Maternal ID cannot contain spaces",
+                "meta": ["maternal"],
+                "default": "0",
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    },
+                    {
+                        "maxLength": 0
+                    }
+                ]
+            },
+            "case_id": {
+                "type": "string",
+                "meta": ["case_id"],
+                "pattern": "^\\S+$",
+                "errorMessage": "Case name must be provided and cannot contain spaces"
+            },
+            "customer_id": {
+                "errorMessage": "Customer ID cannot contain spaces",
+                "meta": ["customer_id"],
+                "default": "",
+                "anyOf": [
+                    {
+                        "type": "integer"
+                    },
+                    {
+                        "type": "string",
+                        "pattern": "^\\S+$"
+                    },
+                    {
+                        "maxLength": 0
+                    }
+                ]
             }
         },
-        "required": ["sample", "fastq_1"]
+        "uniqueEntries": ["case_id"],
+        "anyOf": [
+            {
+                "dependentRequired": {
+                    "lane": ["fastq_1"]
+                }
+            },
+            {
+                "dependentRequired": {
+                    "lane": ["spring_1"]
+                }
+            }
+        ],
+        "oneOf": [
+            {
+                "required": ["fastq_1"],
+                "not": {
+                    "anyOf": [
+                        { "required": ["spring_1"] },
+                        { "required": ["bam"] },
+                        { "required": ["cram"] },
+                        { "required": ["vcf"] }
+                    ]
+                }
+            },
+            {
+                "required": ["spring_1"],
+                "not": {
+                    "anyOf": [
+                        { "required": ["fastq_1"] },
+                        { "required": ["bam"] },
+                        { "required": ["cram"] },
+                        { "required": ["vcf"] }
+                    ]
+                }
+            },
+            {
+                "required": ["bam"],
+                "not": {
+                    "anyOf": [
+                        { "required": ["fastq_1"] },
+                        { "required": ["spring_1"] },
+                        { "required": ["cram"] },
+                        { "required": ["vcf"] }
+                    ]
+                }
+            },
+            {
+                "required": ["cram"],
+                "not": {
+                    "anyOf": [
+                        { "required": ["fastq_1"] },
+                        { "required": ["spring_1"] },
+                        { "required": ["bam"] },
+                        { "required": ["vcf"] }
+                    ]
+                }
+            },
+            {
+                "required": ["vcf"],
+                "not": {
+                    "anyOf": [
+                        { "required": ["fastq_1"] },
+                        { "required": ["spring_1"] },
+                        { "required": ["bam"] },
+                        { "required": ["cram"] }
+                    ]
+                }
+            }
+        ],
+        "dependentRequired": {
+            "fastq_2": ["fastq_1"],
+            "spring_2": ["spring_1"],
+            "bam": ["bai"],
+            "cram": ["crai"],
+            "vcf": ["tbi", "type"],
+            "tbi": ["vcf", "type"],
+            "type": ["vcf", "tbi"]
+        },
+        "required": ["sample", "sex", "phenotype", "case_id"]
     }
 }

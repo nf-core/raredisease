@@ -1,0 +1,692 @@
+nextflow_workflow {
+
+    name "Test Workflow QC_BAM"
+    script "subworkflows/local/qc_bam/main.nf"
+    workflow "QC_BAM"
+
+    tag "subworkflows"
+    tag "qc_bam"
+
+    tag "picard/collectmultiplemetrics"
+    tag "picard/collecthsmetrics"
+    tag "chromograph"
+    tag "qualimap/bamqc"
+    tag "tiddit/cov"
+    tag "mosdepth"
+    tag "sambamba/depth"
+    tag "ucsc/wigtobigwig"
+    tag "picard/collectwgsmetrics"
+    tag "riker/multi"
+    tag "sentieon/wgsmetrics"
+    tag "ngsbits/samplegender"
+    tag "verifybamid/verifybamid2"
+
+    config "./nextflow.config"
+
+    test("QC_BAM - test, bwamem2") {
+
+        when {
+            params {
+                skip_tools = null
+                outdir     = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.resources_remapped + '/beds/intervals_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.empty()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = 'picard'
+                input[13] = params.resources_remapped + '/beds/target_bed.remapped.bed'
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.picard_collectmultiplemetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collectmultiplemetrics_pdf
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collecthsmetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.mosdepth_global_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_summary_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_csi
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_d4
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_wg
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_y
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_wig
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_cov
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ucsc_wigtobigwig_bw
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.chromograph_cov_plots
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.sambamba_depth_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.verifybamid_self_sm
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ngsbits_samplegender_tsv
+                            .collect { _meta, files -> file(files).name }
+                    ).match()
+                }
+            )
+        }
+
+    }
+
+    test("QC_BAM - test, riker") {
+
+        when {
+            params {
+                skip_tools    = null
+                outdir        = "$outputDir"
+                analysis_type = 'wgs'
+                target_bed    = params.resources_remapped + '/beds/target_bed.remapped.bed'
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.resources_remapped + '/beds/intervals_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.of(file(params.resources_remapped + '/beds/intervals_y.interval_list', checkIfExists: true)).collect()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = 'riker'
+                input[13] = params.resources_remapped + '/beds/target_bed.remapped.bed'
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.riker_alignment_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics_y
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_isize_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_hybcap_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_global_txt
+                            .collect { _meta, files -> file(files).name }
+                    ).match()
+                }
+            )
+        }
+
+    }
+
+    test("QC_BAM - test, riker, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                skip_tools = null
+                outdir     = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.resources_remapped + '/beds/intervals_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.of(file(params.resources_remapped + '/beds/intervals_y.interval_list', checkIfExists: true)).collect()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = 'riker'
+                input[13] = params.resources_remapped + '/beds/target_bed.remapped.bed'
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.riker_alignment_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics_y
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_isize_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_hybcap_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_global_txt
+                            .collect { _meta, files -> file(files).name }
+                    ).match()
+                }
+            )
+        }
+
+    }
+
+    test("QC_BAM - fails on unknown qc_metrics_tool") {
+        // The subworkflow must fail loud when qc_metrics_tool is neither 'picard' nor 'riker'
+        // rather than silently producing no metrics.
+
+        options "-stub"
+
+        when {
+            params {
+                skip_tools = null
+                outdir     = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.resources_remapped + '/beds/intervals_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.empty()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = 'bogus'
+                input[13] = params.resources_remapped + '/beds/target_bed.remapped.bed'
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert workflow.failed },
+                // The error() is raised during workflow composition, so it lands on stdout
+                // rather than in workflow.errorReport (which stays empty here).
+                { assert workflow.stdout.any { it.contains("Unknown qc_metrics_tool") } }
+            )
+        }
+
+    }
+
+    test("QC_BAM - test, riker, no target bed, stub") {
+        // Regression test: with no target bed, ch_bait_intervals/ch_target_intervals are empty
+        // channels. RIKER_MULTI must still run and emit metrics (hybcap excepted).
+
+        options "-stub"
+
+        when {
+            params {
+                skip_tools    = null
+                outdir        = "$outputDir"
+                analysis_type = 'wgs'
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.empty()
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.resources_remapped + '/beds/intervals_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.of(file(params.resources_remapped + '/beds/intervals_y.interval_list', checkIfExists: true)).collect()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.empty()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = 'riker'
+                input[13] = null
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert workflow.success },
+                // RIKER_MULTI ran despite no target bed / empty interval channels
+                { assert workflow.out.riker_alignment_metrics.size() == 1 },
+                { assert workflow.out.riker_isize_metrics.size() == 1 },
+                { assert workflow.out.riker_wgs_metrics.size() == 1 },
+                // chrY wgs pass runs for wgs + bwa-family (RIKER_MULTI_Y)
+                { assert workflow.out.riker_wgs_metrics_y.size() == 1 },
+                { assert workflow.out.riker_gcbias_summary.size() == 1 }
+            )
+        }
+
+    }
+
+    test("QC_BAM - test, riker, multi-sample, stub") {
+        // Regression test: the genome reference must broadcast to every sample. With two samples
+        // in, RIKER_MULTI must run twice. A bare ch_genome_fasta.join(ch_genome_fai) is a queue
+        // channel and would pair with only the first sample (size == 1); .first() restores value
+        // semantics so the reference reaches both (size == 2).
+
+        options "-stub"
+
+        when {
+            params {
+                skip_tools    = null
+                outdir        = "$outputDir"
+                analysis_type = 'wgs'
+                target_bed    = params.resources_remapped + '/beds/target_bed.remapped.bed'
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                    ],
+                    [
+                        ${TestData.sample('ACC13778A3')},
+                        [file(params.alignment + '/ACC13778A3_sorted_md.bam', checkIfExists: true)],
+                        [file(params.alignment + '/ACC13778A3_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.resources_remapped + '/beds/intervals_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.of(file(params.resources_remapped + '/beds/intervals_y.interval_list', checkIfExists: true)).collect()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = 'riker'
+                input[13] = params.resources_remapped + '/beds/target_bed.remapped.bed'
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert workflow.success },
+                // The reference broadcasts to both samples, so RIKER_MULTI runs twice.
+                { assert workflow.out.riker_alignment_metrics.size() == 2 },
+                { assert workflow.out.riker_isize_metrics.size() == 2 },
+                { assert workflow.out.riker_wgs_metrics.size() == 2 },
+                // chrY wgs pass runs once per sample for wgs + bwa-family (RIKER_MULTI_Y)
+                { assert workflow.out.riker_wgs_metrics_y.size() == 2 },
+                { assert workflow.out.riker_hybcap_metrics.size() == 2 },
+                { assert workflow.out.riker_gcbias_summary.size() == 2 }
+            )
+        }
+
+    }
+
+    test("QC_BAM - test, bwamem2, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                skip_tools = null
+                outdir     = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.resources_remapped + '/beds/intervals_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.empty()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'bwamem2'
+                input[12] = 'picard'
+                input[13] = params.resources_remapped + '/beds/target_bed.remapped.bed'
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert snapshot(
+                        workflow.out.picard_collectmultiplemetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collectmultiplemetrics_pdf
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collecthsmetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.mosdepth_global_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_summary_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_csi
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_d4
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_wg
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_y
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_wig
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_cov
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ucsc_wigtobigwig_bw
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.chromograph_cov_plots
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.sambamba_depth_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.verifybamid_self_sm
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ngsbits_samplegender_tsv
+                            .collect { _meta, files -> file(files).name }
+                    ).match()
+                }
+            )
+        }
+
+    }
+
+    test("QC_BAM - test, sentieon") {
+
+        when {
+            params {
+                outdir     = "$outputDir"
+                skip_tools = null
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.resources_remapped + '/beds/intervals_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.empty()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'sentieon'
+                input[12] = 'picard'
+                input[13] = params.resources_remapped + '/beds/target_bed.remapped.bed'
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.picard_collectmultiplemetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collectmultiplemetrics_pdf
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collecthsmetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.mosdepth_global_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_summary_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_csi
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_d4
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_wg
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_y
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_wig
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_cov
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ucsc_wigtobigwig_bw
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.chromograph_cov_plots
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.sambamba_depth_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.verifybamid_self_sm
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ngsbits_samplegender_tsv
+                            .collect { _meta, files -> file(files).name }
+                    ).match()
+                }
+            )
+        }
+    }
+
+    test("QC_BAM - test, sentieon, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                outdir     = "$outputDir"
+                skip_tools = null
+            }
+             workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.resources_remapped + '/beds/intervals_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.empty()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'sentieon'
+                input[12] = 'picard'
+                input[13] = params.resources_remapped + '/beds/target_bed.remapped.bed'
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                        workflow.out.picard_collectmultiplemetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collectmultiplemetrics_pdf
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.picard_collecthsmetrics_metrics
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.mosdepth_global_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_summary_txt
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_csi
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_per_base_d4
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_wg
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_y
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_wig
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.tiddit_cov_cov
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ucsc_wigtobigwig_bw
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.chromograph_cov_plots
+                            .collect { _meta, files -> files instanceof List ? files.collect { file(it).name }.sort() : file(files).name },
+                        workflow.out.sambamba_depth_bed
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.verifybamid_self_sm
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.ngsbits_samplegender_tsv
+                            .collect { _meta, files -> file(files).name }
+                    ).match()
+                }
+            )
+        }
+    }
+
+    test("QC_BAM - test, riker, sentieon, stub") {
+
+        options "-stub"
+
+        when {
+            params {
+                outdir        = "$outputDir"
+                skip_tools    = null
+                analysis_type = 'wgs'
+                aligner       = 'sentieon'
+                target_bed    = params.resources_remapped + '/beds/target_bed.remapped.bed'
+            }
+            workflow {
+                """
+                input[0] = channel.of(
+                    [
+                        ${TestData.sample('ACC13778A2')},
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam', checkIfExists: true)],
+                        [file(params.alignment + '/ACC13778A2_sorted_md.bam.bai', checkIfExists: true)]
+                    ]
+                )
+                input[1]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_bait.interval_list', checkIfExists: true)).collect()
+                input[2]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_chrom.sizes', checkIfExists: true)).collect()
+                input[3]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta.fai', checkIfExists: true)).collect()
+                input[4]  = channel.of([id:'genome'], file(params.reference_sliced + '/minimal_reference.fasta', checkIfExists: true)).collect()
+                input[5]  = channel.of(file(params.resources_remapped + '/beds/intervals_wgs.interval_list', checkIfExists: true)).collect()
+                input[6]  = channel.of(file(params.resources_remapped + '/beds/intervals_y.interval_list', checkIfExists: true)).collect()
+                input[7]  = channel.of('xy')
+                input[8]  = channel.empty()
+                input[9]  = channel.of(file(params.subworkflow_fixtures + '/minimal_reference_target.interval_list', checkIfExists: true)).collect()
+                input[10] = 'wgs'
+                input[11] = 'sentieon'
+                input[12] = 'riker'
+                input[13] = params.resources_remapped + '/beds/target_bed.remapped.bed'
+                input[14] = true
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert workflow.success },
+                // Gate check: with a sentieon aligner the WGS coverage comes from
+                // SENTIEON_WGSMETRICS, so riker's chrY wgs pass (RIKER_MULTI_Y) must NOT run.
+                { assert workflow.out.riker_wgs_metrics_y.size() == 0 },
+                { assert snapshot(
+                        workflow.out.riker_alignment_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_wgs_metrics_y
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_isize_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.riker_hybcap_metrics
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.wgsmetrics_wg
+                            .collect { _meta, files -> file(files).name },
+                        workflow.out.mosdepth_global_txt
+                            .collect { _meta, files -> file(files).name }
+                    ).match()
+                }
+            )
+        }
+    }
+}

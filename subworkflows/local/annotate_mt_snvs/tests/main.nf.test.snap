@@ -1,0 +1,128 @@
+{
+    "ANNOTATE_MT_SNVS - GRCh37, stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "amusingmarmoset",
+                            "case_id": "amusingmarmoset",
+                            "prefix": "amusingmarmoset_precalled_mt_vcfanno_vep"
+                        },
+                        "amusingmarmoset_precalled_mt_vcfanno_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "amusingmarmoset",
+                            "case_id": "amusingmarmoset",
+                            "prefix": "amusingmarmoset_precalled_mt_vcfanno_vep"
+                        },
+                        "amusingmarmoset_precalled_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "amusingmarmoset",
+                            "case_id": "amusingmarmoset",
+                            "prefix": "amusingmarmoset_precalled_mt_vcfanno_vep"
+                        },
+                        "ANNOTATE_MT_SNVS:ENSEMBLVEP_MT",
+                        "ensemblvep",
+                        "amusingmarmoset_precalled_mt_vcfanno_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "amusingmarmoset",
+                            "case_id": "amusingmarmoset",
+                            "prefix": "amusingmarmoset_precalled_mt_vcfanno_vep"
+                        },
+                        "amusingmarmoset_precalled_mt_vcfanno_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "4": [
+                    [
+                        {
+                            "id": "amusingmarmoset",
+                            "case_id": "amusingmarmoset",
+                            "prefix": "amusingmarmoset_precalled_mt_vcfanno_vep"
+                        },
+                        "amusingmarmoset_precalled_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "ensemblvep_mt_tbi": [
+                    [
+                        {
+                            "id": "amusingmarmoset",
+                            "case_id": "amusingmarmoset",
+                            "prefix": "amusingmarmoset_precalled_mt_vcfanno_vep"
+                        },
+                        "amusingmarmoset_precalled_mt_vcfanno_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "ensemblvep_mt_vcf": [
+                    [
+                        {
+                            "id": "amusingmarmoset",
+                            "case_id": "amusingmarmoset",
+                            "prefix": "amusingmarmoset_precalled_mt_vcfanno_vep"
+                        },
+                        "amusingmarmoset_precalled_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "report": [
+                    [
+                        {
+                            "id": "amusingmarmoset",
+                            "case_id": "amusingmarmoset",
+                            "prefix": "amusingmarmoset_precalled_mt_vcfanno_vep"
+                        },
+                        "ANNOTATE_MT_SNVS:ENSEMBLVEP_MT",
+                        "ensemblvep",
+                        "amusingmarmoset_precalled_mt_vcfanno_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "tbi": [
+                    [
+                        {
+                            "id": "amusingmarmoset",
+                            "case_id": "amusingmarmoset",
+                            "prefix": "amusingmarmoset_precalled_mt_vcfanno_vep"
+                        },
+                        "amusingmarmoset_precalled_mt_vcfanno_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "vcf_ann": [
+                    [
+                        {
+                            "id": "amusingmarmoset",
+                            "case_id": "amusingmarmoset",
+                            "prefix": "amusingmarmoset_precalled_mt_vcfanno_vep"
+                        },
+                        "amusingmarmoset_precalled_mt_vcfanno_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-08-27T15:49:11.290671667",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "ANNOTATE_MT_SNVS - GRCh38, minimal dataset": {
+        "content": [
+            "amusingmarmoset_precalled_mt_vcfanno_vep.vcf.gz:md5,8c46c7f39c6885f19b70507d8bf31017",
+            "VcfFile [chromosomes=[chrM], sampleCount=3, variantCount=61, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-08-21T10:50:16.55654118",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

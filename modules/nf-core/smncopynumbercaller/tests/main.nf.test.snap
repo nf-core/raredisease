@@ -1,0 +1,116 @@
+{
+    "test-smncopynumbercaller-stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.json:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        "SMNCOPYNUMBERCALLER",
+                        "smncopynumbercaller",
+                        "1.1.2"
+                    ]
+                ],
+                "run_metrics": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.json:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "smncopynumber": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions_smncopynumbercaller": [
+                    [
+                        "SMNCOPYNUMBERCALLER",
+                        "smncopynumbercaller",
+                        "1.1.2"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-11T21:26:46.783248"
+    },
+    "test-smncopynumbercaller": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.tsv:md5,0de62f196972c17e1701aa8cea0849f9"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.json:md5,95f026f441e81a4b345316d980c3570a"
+                    ]
+                ],
+                "2": [
+                    [
+                        "SMNCOPYNUMBERCALLER",
+                        "smncopynumbercaller",
+                        "1.1.2"
+                    ]
+                ],
+                "run_metrics": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.json:md5,95f026f441e81a4b345316d980c3570a"
+                    ]
+                ],
+                "smncopynumber": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.tsv:md5,0de62f196972c17e1701aa8cea0849f9"
+                    ]
+                ],
+                "versions_smncopynumbercaller": [
+                    [
+                        "SMNCOPYNUMBERCALLER",
+                        "smncopynumbercaller",
+                        "1.1.2"
+                    ]
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.3"
+        },
+        "timestamp": "2026-02-11T21:26:43.145754"
+    }
+}
