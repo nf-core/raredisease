@@ -151,7 +151,7 @@
                     "fastp": "1.0.1"
                 },
                 "FASTQC": {
-                    "fastqc": "0.12.1"
+                    "fastqc": "0.13.0"
                 },
                 "FILTERVEP": {
                     "filtervep": "1.0.0"
@@ -445,10 +445,10 @@
                 "TABIX_TABIX_MERGE": {
                     "tabix": 1.21
                 },
-                "TABIX_TABIX_MT2": {
+                "TABIX_TABIX_MT": {
                     "tabix": 1.21
                 },
-                "TABIX_TABIX_MT": {
+                "TABIX_TABIX_MT2": {
                     "tabix": 1.21
                 },
                 "TIDDIT_COV": {
@@ -4343,7 +4343,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-10-07T12:41:35.565212108",
+        "timestamp": "2026-10-28T10:06:21.380284484",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"
