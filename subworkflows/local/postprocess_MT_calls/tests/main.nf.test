@@ -10,6 +10,7 @@ nextflow_workflow {
     tag "gatk4/mergevcfs"
     tag "gatk4/variantfiltration"
     tag "bcftools/norm"
+    tag "bcftools/view"
     tag "tabix/tabix"
     tag "bcftools/merge"
     tag "picard/liftovervcf"

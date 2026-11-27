@@ -529,6 +529,8 @@ Mitochondrial analysis is run by default. If you want to turn off annotations se
 
 The pipeline for mitochondrial variant discovery, using Mutect2, uses a high sensitivity to low AF and separate alignments using opposite genome breakpoints to allow for the tracing of lineages of rare mitochondrial variants.
 
+Only PASS calls are kept in each sample. In cases with more than one sample this happens before the samples are merged, so a filtered call in one sample can neither remove a site in another sample nor make a filtered call appear as PASS. For these multi-sample cases, after merging and splitting multiallelic sites, only sites where an affected sample (phenotype `2`) carries a non-reference genotype are retained, since mitochondrial DNA is maternally inherited and variants seen only in unaffected relatives (e.g. the father) are not informative for the proband. If no sample in the case is affected, this last filter is skipped.
+
 - `call_snv/mitochondria`
   - `<case_id>_mitochondria.vcf.gz`: normalized vcf file containing MT variants.
   - `<case_id>_mitochondria.vcf.gz.tbi`: index of the vcf file containing MT variants.

@@ -221,6 +221,9 @@
                     "bgzip": 1.21,
                     "tabix": 1.21
                 },
+                "KEEP_PASS_MT": {
+                    "bcftools": 1.22
+                },
                 "LAST_INDEX_MT": {
                     "last": 1611
                 },
@@ -2265,7 +2268,7 @@
                 ]
             }
         ],
-        "timestamp": "2026-10-28T10:06:21.380284484",
+        "timestamp": "2026-11-23T16:10:44.786250178",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.6"

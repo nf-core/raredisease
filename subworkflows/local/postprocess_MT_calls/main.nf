@@ -8,8 +8,10 @@ include { BCFTOOLS_MERGE as BCFTOOLS_MERGE_MT                   } from '../../..
 include { BCFTOOLS_NORM as REMOVE_DUPLICATES_MT                 } from '../../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_MT               } from '../../../modules/nf-core/bcftools/norm/main'
 include { BCFTOOLS_NORM as SPLIT_MULTIALLELICS_POSTMERGE_MT     } from '../../../modules/nf-core/bcftools/norm/main'
+include { BCFTOOLS_VIEW as KEEP_PASS_MT                         } from '../../../modules/nf-core/bcftools/view/main'
 include { GATK4_MERGEVCFS as GATK4_MERGEVCFS_LIFT_UNLIFT_MT     } from '../../../modules/nf-core/gatk4/mergevcfs/main'
 include { GATK4_VARIANTFILTRATION as GATK4_VARIANTFILTRATION_MT } from '../../../modules/nf-core/gatk4/variantfiltration/main'
+include { KEEP_PROBAND_VARIANTS                                 } from '../../../modules/local/keep_proband_variants/main'
 include { PICARD_LIFTOVERVCF                                    } from '../../../modules/nf-core/picard/liftovervcf/main'
 include { TABIX_TABIX as TABIX_ANNOTATE                         } from '../../../modules/nf-core/tabix/tabix/main'
 include { TABIX_TABIX as TABIX_TABIX_MERGE                      } from '../../../modules/nf-core/tabix/tabix/main'
@@ -50,9 +52,15 @@ workflow POSTPROCESS_MT_CALLS {
             .join(GATK4_MERGEVCFS_LIFT_UNLIFT_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
         GATK4_VARIANTFILTRATION_MT (ch_filt_vcf, ch_genome_fasta, ch_genome_fai, ch_genome_dictionary, [[:],[]])
 
-        // Spliting multiallelic calls
-        ch_in_split = GATK4_VARIANTFILTRATION_MT.out.vcf
+        // Keep only PASS records in each sample before merging, so that a filtered call in one
+        // sample can neither remove nor rescue a site in another sample once the VCFs are merged
+        ch_in_pass = GATK4_VARIANTFILTRATION_MT.out.vcf
             .join(GATK4_VARIANTFILTRATION_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
+        KEEP_PASS_MT (ch_in_pass, [], [], [])
+
+        // Spliting multiallelic calls
+        ch_in_split = KEEP_PASS_MT.out.vcf
+            .join(KEEP_PASS_MT.out.tbi, failOnMismatch:true, failOnDuplicate:true)
         SPLIT_MULTIALLELICS_MT (ch_in_split, ch_genome_fasta)
         TABIX_TABIX_MT(SPLIT_MULTIALLELICS_MT.out.vcf)
 
@@ -94,7 +102,19 @@ workflow POSTPROCESS_MT_CALLS {
             ch_genome_fasta
         )
 
-        ch_addfoundintag_in = SPLIT_MULTIALLELICS_POSTMERGE_MT.out.vcf
+        // Keep only sites carried by an affected sample: mtDNA is maternally inherited, so a variant
+        // seen only in an unaffected relative should not become a candidate in the family VCF.
+        // Only relevant for merged multi-sample cases, and only possible when the case has affected samples.
+        ch_merged_vcf = SPLIT_MULTIALLELICS_POSTMERGE_MT.out.vcf
+            .branch { meta, _vcf ->
+                with_probands: meta.probands
+                without_probands: true
+            }
+
+        KEEP_PROBAND_VARIANTS(ch_merged_vcf.with_probands)
+
+        ch_addfoundintag_in = KEEP_PROBAND_VARIANTS.out.vcf
+            .mix(ch_merged_vcf.without_probands)
             .mix(ch_case_vcf.single)
 
         TABIX_TABIX_MERGE(ch_addfoundintag_in)
