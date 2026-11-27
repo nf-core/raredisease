@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Fixed`
 
+- Fix two parameter names in the docs: `fasta_fai` in `docs/usage.md` is `fai` in the schema, and `--skip_subworklows` in `docs/output.md` is `--skip_subworkflows` [PR #1073](https://github.com/nf-core/raredisease/pull/1073)
+
 ### Parameters
 
 | Old parameter | New parameter |
