@@ -440,7 +440,7 @@ We recommend using vcfanno to annotate SNVs with precomputed CADD scores (files 
 
 Based on VEP annotations, a custom script used by the pipeline further annotates each record with pli scores. The most severe consequence per variant is determined by GENMOD directly from VEP's `CSQ` annotation during scoring, rather than being pre-computed here.
 
-> **NB**: Output files described below do not include mitochondrial annotations only if --skip_subworklows includes mt_annotation.
+> **NB**: Output files described below do not include mitochondrial annotations only if `--skip_subworkflows` includes `mt_annotation`.
 
 <details markdown="1">
 <summary>Output files</summary>
