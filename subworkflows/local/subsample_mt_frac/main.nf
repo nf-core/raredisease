@@ -14,7 +14,7 @@ workflow SUBSAMPLE_MT_FRAC {
         val_mt_subsample_seed  // channel: [mandatory] [ val(seed) ]
 
     main:
-        ch_mt_bam_bai.map {meta, bam, _bai -> return [meta, bam, -1]}.set {ch_genomecov_in}
+        ch_genomecov_in = ch_mt_bam_bai.map {meta, bam, _bai -> return [meta, bam, -1]}
 
         BEDTOOLS_GENOMECOV (ch_genomecov_in, [], "genomecov", false)
 
@@ -23,19 +23,15 @@ workflow SUBSAMPLE_MT_FRAC {
             val_mt_subsample_rd,
             val_mt_subsample_seed
         )
-        .csv
-        .join(ch_mt_bam_bai, failOnMismatch:true)
-        .map{meta, seedfrac, bam, bai ->
-            return [meta + [seedfrac: file(seedfrac).text.readLines()[0]], bam, bai]
-        }
-        .set { ch_subsample_in }
+        ch_subsample_in = CALCULATE_SEED_FRACTION.out.csv
+            .join(ch_mt_bam_bai, failOnMismatch:true)
+            .map{meta, seedfrac, bam, bai ->
+                return [meta + [seedfrac: file(seedfrac).text.readLines()[0]], bam, bai]
+            }
 
         SAMTOOLS_VIEW(ch_subsample_in, [[:],[],[]], [], 'bai')
 
-        ch_publish = SAMTOOLS_VIEW.out.bam
-            .mix(SAMTOOLS_VIEW.out.bai)
-            .map { meta, value -> ['alignment/', [meta, value]] }
-
     emit:
-        publish = ch_publish // channel: [ val(destination), val(value) ]
+        bam = SAMTOOLS_VIEW.out.bam // channel: [ val(meta), path(bam) ]
+        bai = SAMTOOLS_VIEW.out.bai // channel: [ val(meta), path(bai) ]
 }

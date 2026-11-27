@@ -1,0 +1,4 @@
+sample,vcf,tbi,type,case_id
+proband,/fake/proband_snv.vcf.gz,/fake/proband_snv.vcf.gz.tbi,snv,fam1
+proband,/fake/proband_sv.vcf.gz,/fake/proband_sv.vcf.gz.tbi,sv,fam1
+proband,/fake/proband_mt.vcf.gz,/fake/proband_mt.vcf.gz.tbi,mt,fam1

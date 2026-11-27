@@ -6,6 +6,7 @@ include { BWAFASTALIGN_MEM                         } from '../../../modules/nf-c
 include { BWAMEM2_MEM                              } from '../../../modules/nf-core/bwamem2/mem/main'
 include { BWAMEME_MEM                              } from '../../../modules/nf-core/bwameme/mem/main'
 include { BWA_MEM as BWA                           } from '../../../modules/nf-core/bwa/mem/main'
+include { FASTDUP                                  } from '../../../modules/nf-core/fastdup/main'
 include { PICARD_MARKDUPLICATES as MARKDUPLICATES  } from '../../../modules/nf-core/picard/markduplicates/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_ALIGN   } from '../../../modules/nf-core/samtools/index/main'
 include { SAMTOOLS_INDEX as SAMTOOLS_INDEX_EXTRACT } from '../../../modules/nf-core/samtools/index/main'
@@ -25,6 +26,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         ch_genome_fasta        // channel: [mandatory] [ val(meta), path(fasta) ]
         ch_input_reads         // channel: [mandatory] [ val(meta), path(reads_input) ]
         val_aligner            // string:  'bwa', 'bwafastalign', 'bwamem2', or 'bwameme'
+        val_duplicates_marker  // string:  'markduplicates' or 'fastdup', default: 'markduplicates'
         val_extract_alignments // boolean
         val_platform           // string:  [mandatory] default: illumina
 
@@ -51,7 +53,7 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         SAMTOOLS_STATS ( bam_sorted_indexed, [[],[]] )
 
         // Merge multiple lane samples and index
-        ch_align
+        bams = ch_align
             .map{ meta, bam ->
                     def new_id   = meta.sample
                     def new_meta = meta + [id:new_id, read_group:"\'@RG\\tID:" + new_id + "\\tPL:" + val_platform + "\\tSM:" + new_id + "\'"] - meta.subMap('lane','data_type')
@@ -62,7 +64,6 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
                 single: bam.size() == 1
                 multiple: bam.size() > 1
                 }
-            .set{ bams }
 
         // If there are no samples to merge, skip the process
         SAMTOOLS_MERGE ( bams.multiple.map { it -> it + [[]] }, ch_genome_fasta.join(ch_genome_fai).map{meta,fasta,fai-> return [meta,fasta,fai,[]]}.collect())
@@ -77,19 +78,24 @@ workflow ALIGN_BWA_BWAMEM2_BWAMEME {
         }
 
         // Marking duplicates
-        MARKDUPLICATES ( prepared_bam , ch_genome_fasta, ch_genome_fai )
-        SAMTOOLS_INDEX_MARKDUP ( MARKDUPLICATES.out.bam )
+        if (val_duplicates_marker == "markduplicates") {
+            MARKDUPLICATES ( prepared_bam, ch_genome_fasta, ch_genome_fai )
+            SAMTOOLS_INDEX_MARKDUP ( MARKDUPLICATES.out.bam )
 
-        ch_publish = MARKDUPLICATES.out.bam
-            .mix(MARKDUPLICATES.out.metrics)
-            .mix(SAMTOOLS_INDEX_MARKDUP.out.bai)
-            .mix(SAMTOOLS_INDEX_MARKDUP.out.csi)
-            .map { meta, value -> ['alignment/', [meta, value]] }
+            ch_marked_bam      = MARKDUPLICATES.out.bam
+            ch_marked_bai      = SAMTOOLS_INDEX_MARKDUP.out.bai
+            ch_markdup_metrics = MARKDUPLICATES.out.metrics
+        } else {
+            FASTDUP ( prepared_bam )
+
+            ch_marked_bam      = FASTDUP.out.bam
+            ch_marked_bai      = FASTDUP.out.bai
+            ch_markdup_metrics = FASTDUP.out.metrics
+        }
 
     emit:
-        marked_bai  = SAMTOOLS_INDEX_MARKDUP.out.bai // channel: [ val(meta), path(bai) ]
-        marked_bam  = MARKDUPLICATES.out.bam         // channel: [ val(meta), path(bam) ]
-        metrics     = MARKDUPLICATES.out.metrics     // channel: [ val(meta), path(metrics) ]
-        stats       = SAMTOOLS_STATS.out.stats       // channel: [ val(meta), path(stats) ]
-        publish = ch_publish                         // channel: [ val(destination), val(value) ]
+        marked_bai      = ch_marked_bai            // channel: [ val(meta), path(bai) ]
+        marked_bam      = ch_marked_bam            // channel: [ val(meta), path(bam) ]
+        markdup_metrics = ch_markdup_metrics       // channel: [ val(meta), path(metrics) ]
+        stats           = SAMTOOLS_STATS.out.stats // channel: [ val(meta), path(stats) ]
 }

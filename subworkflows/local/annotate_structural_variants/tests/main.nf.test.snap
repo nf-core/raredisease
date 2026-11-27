@@ -1,4 +1,15 @@
 {
+    "ANNOTATE_STRUCTURAL_VARIANTS - minimal dataset": {
+        "content": [
+            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,5f02aac5bcc6d60bd915ad03f3e5293",
+            "VcfFile [chromosomes=[chr7, chr16, chr21, chr1, chr12, chrM, chr20], sampleCount=3, variantCount=31, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-10-03T22:28:54.175747753",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
     "ANNOTATE_STRUCTURAL_VARIANTS - no SVDB queries, stub": {
         "content": [
             [
@@ -6,31 +17,10 @@
                     "0",
                     [
                         [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -39,9 +29,9 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -50,41 +40,20 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ]
                 ],
                 [
-                    "publish",
+                    "report",
                     [
                         [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -93,9 +62,9 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -104,18 +73,29 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ]
                 ]
             ]
         ],
-        "timestamp": "2026-03-17T22:56:56.445250387",
+        "timestamp": "2026-08-26T11:05:33.04466467",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "ANNOTATE_STRUCTURAL_VARIANTS - skip_vep_sv": {
+        "content": [
+            "amusingmarmoset_view.vcf.gz:md5,e44b49690d9d29fe3317ea2fb0c74de5",
+            "VcfFile [chromosomes=[chr7, chr16, chr21, chr1, chr12, chrM, chr20], sampleCount=3, variantCount=31, phased=false, phasedAutodetect=false]"
+        ],
+        "timestamp": "2026-10-13T14:13:12.610223635",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     },
     "ANNOTATE_STRUCTURAL_VARIANTS - with SVDB_QUERY_DB, stub": {
@@ -125,31 +105,10 @@
                     "0",
                     [
                         [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -158,9 +117,9 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -169,41 +128,20 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ]
                 ],
                 [
-                    "publish",
+                    "report",
                     [
                         [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
-                        ],
-                        [
-                            "annotate_sv/",
-                            [
-                                {
-                                    "id": "test"
-                                },
-                                "test_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
-                            ]
+                            {
+                                "id": "amusingmarmoset"
+                            },
+                            "amusingmarmoset_svdbquery_vep_summary.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -212,9 +150,9 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -223,18 +161,18 @@
                     [
                         [
                             {
-                                "id": "test"
+                                "id": "amusingmarmoset"
                             },
-                            "test_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                            "amusingmarmoset_svdbquery_vep.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                         ]
                     ]
                 ]
             ]
         ],
-        "timestamp": "2026-03-17T22:57:23.293047427",
+        "timestamp": "2026-08-26T11:05:58.80980936",
         "meta": {
-            "nf-test": "0.9.4",
-            "nextflow": "25.10.4"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
         }
     }
 }

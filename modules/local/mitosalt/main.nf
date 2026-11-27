@@ -11,11 +11,11 @@ process MITOSALT {
     tuple val(meta), path(reads)
     path msconfig
     path chrsizes
-    tuple val(meta3), path(genomefai)
-    tuple val(meta2), path(hisat2index)
-    tuple val(meta5), path(mtfai)
-    tuple val(meta6), path(mtfasta)
-    tuple val(meta4), path(lastindex)
+    tuple val(meta2), path(genomefai)
+    tuple val(meta3), path(hisat2index)
+    tuple val(meta4), path(mtfai)
+    tuple val(meta5), path(mtfasta)
+    tuple val(meta6), path(lastindex)
 
     output:
     tuple val(meta), path("*breakpoint") , emit: breakpoint
@@ -23,11 +23,23 @@ process MITOSALT {
     tuple val("${task.process}"), val('mitosalt'), val("1.1.1"), topic: versions, emit: versions_mitosalt
 
     script:
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix  = task.ext.prefix ?: "${meta.id}"
+    // Heap for the reformat.sh (BBMap) JVM step, sized to what this task was actually
+    // given instead of the tool's own hardcoded -Xmx100g, which reserves more virtual
+    // memory than any real allocation provides and fails JVM startup outright.
+    def javamem = Math.max(1, (task.memory.toGiga() * 0.8) as int)
     """
-    cat $msconfig | sed "s/threads = 1/threads = ${task.cpus}/" > new-${msconfig}
+    cat $msconfig > new-${msconfig}
+    echo "threads = ${task.cpus}" >> new-${msconfig}
+    echo "javamem = ${javamem}" >> new-${msconfig}
     mkdir -p log indel bam tab bw plot
     MitoSAlt1.1.1.pl new-${msconfig} $reads $prefix
+
+    if grep -qiE "insufficient memory for the Java Runtime Environment|Native memory allocation \\(mmap\\) failed|Could not reserve enough space" log/${prefix}.log; then
+        echo "ERROR: Fatal error detected in MitoSAlt log" >&2
+        exit 137
+    fi
+
     mv indel/*.breakpoint ${prefix}.breakpoint
     mv indel/*.cluster ${prefix}.cluster
     """
@@ -35,7 +47,8 @@ process MITOSALT {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    cat $msconfig | sed "s/threads = 1/threads = ${task.cpus}/" > new-${msconfig}
+    cat $msconfig > new-${msconfig}
+    echo "threads = ${task.cpus}" >> new-${msconfig}
     touch ${prefix}.breakpoint
     echo 'cluster' > ${prefix}.cluster
     """
